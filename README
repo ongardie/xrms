@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.8 2004/06/21 14:23:07 braverock Exp $ **/
+/** $Id: README,v 1.9 2004/07/10 11:40:26 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -249,7 +249,7 @@ CONTRIBUTING to XRMS
 Many people have asked how they may contribute code back to XRMS.
 We'll try to address most of those questions here.
 
-If you wish to contribute documentation to XRMS, please contact the
+If you wish to contribute documentation to XRMS, please contact
 a member of the development team or post to the SourceForge Forums.
 
 If you wish to contribute code to XRMS, you should be working from
@@ -275,13 +275,13 @@ Change as required for your installation.
 Update your installation from CVS using the following command from the
 directory above your working directory:
 
-cvs -d :pserver:anonymous@cvs.sf.net:/cvsroot/xrms update xrms.devel/
+cvs -q -z3 -d :pserver:anonymous@cvs.sf.net:/cvsroot/xrms update xrms
 
 You will see cvs 'P' - Patch, 'U' Update, and 'M' Merge your files
 (vars.php, plugin-cfg.php, and include-locations.inc will most likely 'M' merge)
 
 'C' denotes a conflict.  You will need to examine the file with a conflict
-and resolve any problems.  If you anticipate conflicts (like its been weeks
+and resolve any problems.  If you anticipate conflicts (e.g. it has been weeks
 since you did a cvs update), you should probably call cvs with the -n flag,
 which will just report on what will happen when you actually update, so that
 you will be warned of conflicts in advance.
@@ -308,8 +308,9 @@ since the patch was generated.
 
 Post your patch with a description of the changes to the SourceForge
 Patches Forum.  It usually helps to submit both a patch file and a copy
-of the full,modified file.One of the XRMS developers will review it and
-commit your changes to CVS.
+of the full,modified file.
+
+One of the XRMS developers will review it and commit your changes to CVS.
 
 Thanks for your interest in contributing to XRMS!
 
@@ -359,6 +360,10 @@ To have a daily report of a single user's completed items report emailed:
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.9  2004/07/10 11:40:26  braverock
+ * - minor edits to cvs instructions
+ * - fixed typos
+ *
  * Revision 1.8  2004/06/21 14:23:07  braverock
  * - updated to reflect current state of multi-database conversion
  * - added more information for potential contributors
