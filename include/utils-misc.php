@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.61 2004/07/22 13:16:00 neildogg Exp $
+ * $Id: utils-misc.php,v 1.62 2004/07/22 13:25:39 neildogg Exp $
  */
 
 /**
@@ -663,10 +663,9 @@ function get_formatted_phone ($con, $address_id, $phone) {
 
     $pos = 0;
     $number_length = 0;
-    
-    $phone = preg_replace("|[^0-9]+|", "", $phone);
 
     if(strlen($expression)) {
+        $phone = preg_replace("|[^0-9]+|", "", $phone);
         preg_match_all("|[#]+|", $expression, $matched);
         $matched = $matched[0];
         foreach($matched as $match) {
@@ -963,6 +962,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.62  2004/07/22 13:25:39  neildogg
+ * - Won't strip formatting unless an expression exists
+ *
  * Revision 1.61  2004/07/22 13:16:00  neildogg
  * - Fixed bug, extension now happens if phone is larger than formatting
  *
