@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.36 2005/03/15 21:23:23 daturaarutad Exp $
+ * $Id: one.php,v 1.37 2005/03/15 21:37:07 daturaarutad Exp $
  */
 
 //include required files
@@ -125,6 +125,10 @@ and a.activity_record_status = 'a'";
     } else { $sql_activities .= ' AND 1 = 2 '; }
 
     // begin Activities Pager
+
+	// Save this for email/email.php is activities Mail Merge
+	$_SESSION["search_sql"]=$sql;
+
 
     $columns = array();
     $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '14');
@@ -442,6 +446,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.37  2005/03/15 21:37:07  daturaarutad
+ * fixed Mail Merge for activities pager
+ *
  * Revision 1.36  2005/03/15 21:23:23  daturaarutad
  * fixed Mail Merge for activities pager
  *
