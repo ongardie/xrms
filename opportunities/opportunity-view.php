@@ -2,7 +2,7 @@
 /**
  * View an opportunity
  *
- * $Id: opportunity-view.php,v 1.6 2004/07/20 19:38:31 introspectshun Exp $
+ * $Id: opportunity-view.php,v 1.7 2005/01/07 01:55:58 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -33,7 +33,7 @@ if ($rst) {
 $con->close();
 
 $page_title = _("View Opportunity Statuses");
-start_page($page_title);
+start_page($page_title, $show_navbar = false);
 
 ?>
 
@@ -68,6 +68,9 @@ end_page();
 
 /**
  * $Log: opportunity-view.php,v $
+ * Revision 1.7  2005/01/07 01:55:58  braverock
+ * - remove navebar from pop-up window
+ *
  * Revision 1.6  2004/07/20 19:38:31  introspectshun
  * - Localized strings for i18n/translation support
  *
