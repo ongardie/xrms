@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.13 2004/07/27 20:39:57 neildogg Exp $
+ * $Id: sidebar.php,v 1.14 2004/07/29 11:09:02 cpsource Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -24,71 +24,101 @@ $contact_block = '<table class=widget cellspacing=1 width="100%">
         <td class=widget_header colspan=5>' . _("Contact Information") . '</td>
     </tr>'."\n";
 
-if ($contact_id) {
-    $sql = "SELECT first_names, last_name, work_phone, address_id, email, cell_phone, company_id
-            FROM contacts
-            WHERE contact_id=$contact_id";
+if ( $contact_id ) {
+    $sql = "SELECT ct.first_names, ct.last_name, ct.work_phone, ct.address_id, ct.email, ct.cell_phone, ct.company_id
+            FROM contacts ct
+            WHERE ct.contact_id=$contact_id";
 
     $rst = $con->execute($sql);
-    
-    $sql = "SELECT default_primary_address
+
+    // database error ???
+    if ( !$rst ) {
+      // yes - database error
+      db_error_handler($con, $sql);
+    }
+    // any data ???
+    if ( !$rst->EOF ) {
+      // yes
+      $sql = "SELECT default_primary_address, company_name
             FROM companies
             WHERE company_id=" . $rst->fields['company_id'];
+      $rst2 = $con->execute($sql);
+      if ( !$rst2 ) {
+	db_error_handler($con, $sql);
+      }
+      if ( !$rst2->EOF ) {
+	$default_primary_address = $rst2->fields['default_primary_address'];
+	$company_name            = $rst2->fields['company_name'];
+      } else {
+	$default_primary_address = '';
+	$company_name            = '';
+      }
+      $rst2->close();
 
-    $rst2 = $con->execute($sql);
-    
-}
-
-if ($rst && $rst->RecordCount()>=1) {
-
-    $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
-                    . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a><br>"
-                    . '<a href="../companies/one.php?company_id=' . $rst->fields['company_id'] . '">'
-                    . $rst->fields['company_name'] . "</a></td>\n\t</tr>";
-    if($rst->fields['address_id'] != $rst2->fields['default_primary_address']) {
+      //
+      // build contact_block
+      //
+      $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+	. '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
+	. $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a><br>"
+	. '<a href="../companies/one.php?company_id=' . $rst->fields['company_id'] . '">'
+	. $company_name . "</a></td>\n\t</tr>";
+      if ( $rst->fields['address_id'] != $default_primary_address ) {
         $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                        . get_formatted_address ($con, $rst->fields['address_id'])
-                        . "</td>\n\t</tr>";
-    }
+	  . get_formatted_address ($con, $rst->fields['address_id'])
+	  . "</td>\n\t</tr>";
+      }
 
-    if ($rst->fields['cell_phone'] or $rst->fields['work_phone'] or $rst->fields['home_phone']) {
+      if ($rst->fields['cell_phone'] or $rst->fields['work_phone']) {
+
         $contact_block .= "<tr><td class=widget_content>";
-    }
-    
-    if ($rst->fields['cell_phone']) {
-        $contact_block .= _("Cell Phone") . ": <strong>"
-                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']) 
-                        . "</strong><br>";
-    }
-    
-    if ($rst->fields['work_phone']) {
-        $contact_block .= _("Work Phone") . ": <strong>"
-                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
-                        . "</strong><br>";
-    }
 
-    if ($rst->fields['cell_phone'] or $rst->fields['work_phone']) {
+	if ($rst->fields['cell_phone']) {
+	  $contact_block .= _("Cell Phone") . ": <strong>"
+	    . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']) 
+	    . "</strong><br>";
+	}
+	
+	if ($rst->fields['work_phone']) {
+	  $contact_block .= _("Work Phone") . ": <strong>"
+	    . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
+	    . "</strong><br>";
+	}
+
         $contact_block .= "</td>\n\t</tr>";
-    }
-
-    if ($rst->fields['email']) {
+      }
+    
+      if ($rst->fields['email']) {
         $contact_block .= "<tr>\n\t\t<td class=widget_content>"
-                        . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
-                        . $rst->fields['email'] . "</a></td>\n\t</tr>";
+	  . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
+	  . $rst->fields['email'] . "</a></td>\n\t</tr>";
+      }
+
+      $rst->close();
+
+    } else {
+      // no data
+      $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content colspan=5>"
+	. _("No Contact Selected.")
+	. "&nbsp; </td>\n\t</tr>";
     }
+} // if ( $contact_id ) ...
 
-    $rst->close();
-
-} else {
-    $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content colspan=5>"
-                    . _("No Contact Selected.")
-                    . "&nbsp; </td>\n\t</tr>";
-}
 $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.14  2004/07/29 11:09:02  cpsource
+ * - Fixed multiple errors that showed up because no one
+ *   checked for uninitialized variables.
+ *     default_primary_address and company_name were tried to retrieve
+ *     from the wrong database.
+ *   home_phone was retrieved but never used for anything, so it was removed
+ *     from the sql statement
+ *   awkward if else if else was removed
+ *   Proper checks of sql statements were made to see if errors/records
+ *     existed.
+ *
  * Revision 1.13  2004/07/27 20:39:57  neildogg
  * - Removed unnecessary tr's
  *
