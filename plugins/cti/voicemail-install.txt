@@ -1,0 +1,25 @@
+INSTALL
+XRMS Voice Mail Plugin
+
+Copyright 2004 Glenn Powers <glenn@net127.com>
+Licensed under the GPL
+
+
+ * Add an alias to your voicemail directory to your httpd.conf file
+(often /etc/httpd/conf/httpd.conf):
+(Remember to restart your web server when your done.)
+
+Alias /voicemail/ "/var/spool/asterisk/voicemail/"
+
+<Directory "/var/spool/asterisk/voicemail/">
+    Options Indexes MultiViews
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+
+ * Make your voice mail readable by your web server. EITHER use the chwon
+patch for Asterisk _OR_ add this ugly hack to root's crontab:
+
+* * * * * (cd /var/spool/asterisk/voicemail; chown -R apache.apache .)
+
