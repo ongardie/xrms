@@ -18,7 +18,7 @@
  * in another file.  It will improve the performance of the entire
  * system.
  *
- * $Id: setup.php,v 1.2 2004/03/20 22:43:02 braverock Exp $
+ * $Id: setup.php,v 1.3 2004/03/20 22:49:42 braverock Exp $
  */
 
 
@@ -29,12 +29,18 @@ function xrms_plugin_init_demo() {
 
 
 function demo() {
+
+    global $http_site_root;
+
     //Add Demo link to upper menu
     echo "&nbsp;<a href='$http_site_root/plugins/demo/demo.php'>Demo</a>&nbsp;&bull;\n";
 }
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.3  2004/03/20 22:49:42  braverock
+ * - need global $http_site_root in some cases
+ *
  * Revision 1.2  2004/03/20 22:43:02  braverock
  * - changed to use $http_site_root
  *
