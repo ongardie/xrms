@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.13 2005/03/07 16:31:02 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.14 2005/03/15 22:28:50 daturaarutad Exp $
  */
 
 
@@ -971,20 +971,8 @@ END;
 			$order_by = " order by " . implode(', ', $columns);
 
 		} else {
-			
-			$sql_query_column = 0;
 
-			foreach($this->column_info as $key => $pager_column) {
-
-				if($pager_column['index_sql']) {
-                	$sql_query_column++;
-                	if(!isset($pager_column['sql_sort_column'])) {
-                    	//echo "setting query col to $sql_query_column for {$pager_column['index_sql']}<br/>";
-                    	$this->column_info[$key]['sql_sort_column'] = $sql_query_column;
-                	}
-            	}
-			}
-			$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'] . " " . $this->sort_order;
+			$order_by = " order by " . $this->column_info[$this->sort_column-1]['index_sql'] . " " . $this->sort_order;
 		} 
 
 		$this->sql .= " $order_by";
@@ -994,6 +982,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.14  2005/03/15 22:28:50  daturaarutad
+ * default sql_sort_column to index_sql value if its not set already
+ *
  * Revision 1.13  2005/03/07 16:31:02  daturaarutad
  * fixed code for comma delimited sql_sort_column parameter
  *
