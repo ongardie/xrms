@@ -28,9 +28,10 @@ $tmp_upload_directory = "/full/path/to/xrms/tmp/";
 $file_storage_directory = "/full/path/to/xrms/files/storage/";
 
 // directory for exports
+// directory must be writable by apache, and should not be world readable (0700)
 // this needs to be relative to the xrms web root (browser needs to be able to see it)
 // (no trailing slash)
-$tmp_export_directory = "/relative/path/to/xrms/exports/";
+$tmp_export_directory = "/tmp";
 
 // accounting software integration is in the works, but for now
 $accounting_system = ''; // no integration
