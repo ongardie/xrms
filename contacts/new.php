@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.17 2004/10/18 03:31:54 gpowers Exp $
+ * $Id: new.php,v 1.18 2004/10/18 04:33:46 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -226,7 +226,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Edit Addres"); ?></td>
+                <td class=widget_label_right_166px><?php echo _("Edit Address"); ?></td>
                 <td class=widget_content_form_element><input type=checkbox name=edit_address></td>
             </tr>
             <tr>
@@ -262,6 +262,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.18  2004/10/18 04:33:46  gpowers
+ * - corrected spelling mistake
+ *
  * Revision 1.17  2004/10/18 03:31:54  gpowers
  * - added "edit address" option
  *
