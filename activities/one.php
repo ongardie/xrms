@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.74 2005/01/10 20:47:47 neildogg Exp $
+ * $Id: one.php,v 1.75 2005/01/10 21:43:32 vanmer Exp $
  */
 
 //include required files
@@ -174,28 +174,44 @@ else {
 //Check if activity is linked to something, then generate a SQL statement
 $table_status_id = '';
 if ($is_linked) {
+    switch ($table_name) {
+        case 'case':
+            $type_field="{$table_name}_type_id";
+            $type_field_limit=",{$on_what_table}.$type_field";
+        break;
+        default:
+            $type_field=false;
+            $type_field_limit='';
+       break;
+    }
     $sql = "select ".$table_name."_id,
             ".$table_name."_statuses.".$table_name."_status_pretty_name,
             ".$on_what_table.".".$table_name."_id,
             ".$on_what_table.".".$table_name."_status_id,
-            ".$table_name."_statuses.".$table_name."_status_id
+            ".$table_name."_statuses.".$table_name."_status_id 
+            $type_field_limit
             from ".$table_name."_statuses, ".$on_what_table."
             where ".$on_what_table.".".$table_name."_id=$on_what_id
             and ".$on_what_table.".".$table_name."_status_id=".$table_name."_statuses.".$table_name."_status_id";
-
     $rst = $con->execute($sql);
+    
     //If not empty, get pretty name and id
     if ($rst) {
         $table_status = $rst->fields[$table_name.'_status_pretty_name'];
         $table_status_id = $rst->fields[$table_name.'_status_id'];
+        if (!empty($type_field)) {
+            //if we have a type, use it to limit the statuses
+            $type_limit=" AND $type_field=" . $rst->fields[$type_field];
+        }
         $rst->close();
-    }
+    } else db_error_handler($con, $sql);
 
     //generate SQL for status combo box
     $sql = "select ".$table_name."_status_pretty_name,
             ".$table_name."_status_id
             from ".$table_name."_statuses
-            where ".$table_name."_status_record_status='a'
+            where ".$table_name."_status_record_status='a'           
+            $type_limit
             order by sort_order";
     $rst = $con->execute($sql);
 
@@ -476,6 +492,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.75  2005/01/10 21:43:32  vanmer
+ * - added types so that status dropdown can operate properly when activity is attached to a case with case types
+ *
  * Revision 1.74  2005/01/10 20:47:47  neildogg
  * - Changed to support new relationship sidebar variable requirement
  *
