@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.17 2004/06/11 21:20:11 introspectshun Exp $
+ * $Id: some.php,v 1.18 2004/06/12 18:15:59 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -47,7 +47,7 @@ if ($clear) {
     $contact = $_POST['contact'];
     $company = $_POST['company'];
     $owner = $_POST['owner'];
-    $date = $_POST['date'];
+    $search_date = $_POST['search_date'];
     $before_after = $_POST['before_after'];
     $activity_type_id = $_POST['activity_type_id'];
     $completed = $_POST['completed'];
@@ -61,7 +61,8 @@ if ($clear) {
     $contact = $_SESSION['activities_contact'];
     $company = $_SESSION['activities_company'];
     $owner = $_SESSION['activities_owner'];
-    $date = $_SESSION['activities_date'];
+    $search_date = date('Y-m-d', time());
+    //$search_date = $_SESSION['activities_date'];
     $before_after = $_SESSION['activities_before_after'];
     $activity_type_id = $_SESSION['activity_type_id'];
     $completed = $_SESSION['activities_completed'];
@@ -100,12 +101,15 @@ $_SESSION['activities_user_id'] = $user_id;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
+//uncomment this to see what's gonig on with the database
+//$con->debug=1;
+
 $sql = "SELECT
-  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->SQLDate('Y-m-d') . ") THEN 'Yes' ELSE '-' END) AS is_overdue," .
-  $con->Concat("'<a href=\"one.php?activity_id='", "CAST(activity_id AS VARCHAR(10))", "'&return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS 'Title',
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS is_overdue," .
+  $con->Concat("'<a href=\"one.php?activity_id='", "activity_id", "'&return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS 'Title',
   activity_type_pretty_name AS 'Type'," .
-  $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "CAST(cont.contact_id AS VARCHAR(10))", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
-  $con->Concat("'<a href=\"../companies/one.php?company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
+  $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
+  $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
   u.username AS 'Owner'," .
   $con->SQLDate('Y-m-d','scheduled_at') . " AS 'Scheduled'," .
   $con->SQLDate('Y-m-d','ends_at') . " AS 'Due'
@@ -148,12 +152,12 @@ if (strlen($completed) > 0 and $completed != "all") {
     $sql .= " and a.activity_status = " . $con->qstr($completed, get_magic_quotes_gpc());
 }
 
-if (strlen($date) > 0) {
+if (strlen($search_date) > 0) {
     $criteria_count++;
     if (!$before_after) {
-        $sql .= " and a.ends_at <= " . $con->qstr($date . " 23:59:59", get_magic_quotes_gpc());
+        $sql .= " and a.ends_at < " . $con->DBTimeStamp(strtotime($search_date));
     } else {
-        $sql .= " and a.ends_at >= " . $con->qstr($date . " 00:00:00", get_magic_quotes_gpc());
+        $sql .= " and a.ends_at > " . $con->DBTimeStamp(strtotime($search_date));
     }
 }
 
@@ -281,7 +285,7 @@ start_page($page_title, true, $msg);
                         <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
                         <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
                     </select>
-                    <input type=text ID="f_date_d" name=date size=12 value="<?php  echo date('Y-m-d'); ?>">
+                    <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
                 <td class=widget_content_form_element><?php  echo $type_menu; ?></td>
@@ -370,6 +374,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.18  2004/06/12 18:15:59  braverock
+ * - fix DBTimestamp errors after upgrade
+ * - remove CAST, as it is not standard across databases
+ *   - database should explicitly convert number to string for CONCAT
+ *
  * Revision 1.17  2004/06/11 21:20:11  introspectshun
  * - Now use ADODB Concat and Date functions.
  *
