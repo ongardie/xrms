@@ -1,5 +1,5 @@
 -- 
--- 5-cases.sql
+-- 5-opportunities.sql
 -- (sales) opportunities, as well as opportunity types, priorities, and categories
 -- last modified 2003-09-27 by Chris Woofter
 -- This software is licensed under the GNU General Public License.

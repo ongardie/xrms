@@ -1,4 +1,5 @@
 -- 
+-- 3-companies.sql
 -- where did each company come from?  how did they hear about us?  I like options like "trade show" and 
 -- "advertisement", but you could just as easily use more specific items -- e.g., "June Telemarketing" -- to track how 
 -- many leads are coming from each source.  These company sources are different from campaigns, which are only 
