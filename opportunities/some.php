@@ -1,12 +1,11 @@
-/** 
-Ê* opportunities/some.php - This file provides the opportunities search page 
-Ê* 
-Ê*  
-Ê* 
-Ê* $Id: some.php,v 1.7 2004/03/01 16:38:32 maulani Exp $ 
-Ê*/ 
-
 <?php
+/** 
+ * opportunities/some.php - This file provides the opportunities search page 
+ * 
+ *  
+ * 
+ * $Id: some.php,v 1.8 2004/03/04 00:16:24 maulani Exp $ 
+ */ 
 
 require_once('../include-locations.inc');
 
@@ -315,9 +314,12 @@ function resort(sortColumn) {
 end_page(); 
 
 /** 
-Ê* $Log: some.php,v $
-Ê* Revision 1.7  2004/03/01 16:38:32  maulani
-Ê* added phpdoc
-Ê* 
-Ê*/ 
+ * $Log: some.php,v $
+ * Revision 1.8  2004/03/04 00:16:24  maulani
+ *  - correct phpdoc entries
+ *
+ * Revision 1.7  2004/03/01 16:38:32  maulani
+ * added phpdoc
+ * 
+ */ 
 ?> 
