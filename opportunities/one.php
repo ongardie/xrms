@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.14 2004/04/17 15:59:59 maulani Exp $
+ * $Id: one.php,v 1.15 2004/04/25 22:45:19 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -297,7 +297,9 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel>E-Mail</td>
-                                    <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$opportunity_id&contact_id=$contact_id&on_what_table=opportunities&activity_title=email RE: $opportunity_title&company_id=$company_id&email=$email&return_url=/opportunities/one.php?opportunity_id=$opportunity_id'\" >" . htmlspecialchars($email); ?></a></td>
+                                    <td class=clear>
+                                        <a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$opportunity_id&contact_id=$contact_id&on_what_table=opportunities&activity_title=email RE: $opportunity_title&company_id=$company_id&email=$email&activity_status=c&return_url=/opportunities/one.php?opportunity_id=$opportunity_id'\" >" . htmlspecialchars($email); ?></a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
@@ -407,6 +409,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2004/04/25 22:45:19  braverock
+ * clean up formatting of email link
+ *
  * Revision 1.14  2004/04/17 15:59:59  maulani
  * - Add CSS2 positioning
  *
