@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.13 2004/06/21 15:40:02 gpowers Exp $
+ * $Id: index.php,v 1.14 2004/07/14 02:09:43 s-t Exp $
  */
 require_once('../include-locations.inc');
 
@@ -10,7 +10,6 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -34,10 +33,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td colspan=2 class=widget_header>Graphs</td>
+                <td colspan=2 class=widget_header>Reports</td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Company</td>
+                <td colspan=2 class=widget_label_center>Company Reports</td>
             </tr>
             <tr>
                 <td class=widget_content><a href="companies-by-crm-status.php">Companies by CRM Status</a></td>
@@ -52,7 +51,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content>How many of your accounts come from each source?</td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Opportunity</td>
+                <td colspan=2 class=widget_label_center>Opportunity Reports</td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -73,24 +72,11 @@ start_page($page_title, true, $msg);
                 <td class=widget_content>How much potential revenue is tied to companies in each industry?</td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Case</td>
+                <td colspan=2 class=widget_label_center>Case Reports</td>
             </tr>
             <tr>
                 <td class=widget_content><a href="cases-by-case-status.php">Cases by Status</a></td>
                 <td class=widget_content>How many cases are in each stage of the case resolution process?</td>
-            </tr>
-        </table>
-
-        <table class=widget cellspacing=1 width="100%">
-            <tr>
-                <td colspan=2 class=widget_header>Reports</td>
-            </tr>
-            <tr>
-                <td colspan=2 class=widget_label_center>Opportunity</td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="company-contacts-printout.php">Contacts at Companies</a></td>
-                <td class=widget_content>Printable contact summary information for Companies in search Results.</td>
             </tr>
             <tr>
                 <td colspan=2 class=widget_label_center>User Reports</td>
@@ -100,10 +86,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_content>
                     List Activiites by Start, End, and User (also shows Duration, Company and Contact)
                 </td>
-            </tr>
-            <tr>
-                <td class=widget_content><a href="overdue-items.php">Overdue Items</a></td>
-                <td class=widget_content>List Overdue Items by User and Type</td>
             </tr>
             <tr>
                 <td class=widget_content><a href="open-items.php">Open Items</a></td>
@@ -117,7 +99,11 @@ start_page($page_title, true, $msg);
                 <td class=widget_content><a href="audit-items.php">Audit Items</a></td>
                 <td class=widget_content>List Audit Items by Date and User</td>
             </tr>
-            <tr>
+                        <tr>
+                <td class=widget_content><a href="sales-automation.php">Sales Force Automation</a></td>
+                <td class=widget_content>Measure performance of users over a selectable timeframe</td>
+            </tr>
+                        <tr>
                 <td class=widget_content colspan="2">
                     <form action="user-activity.php" method=post>
                         Activity Report for <?php echo $user_menu; ?>
@@ -149,25 +135,14 @@ start_page($page_title, true, $msg);
 
 end_page();
 
+
 /**
  * $Log: index.php,v $
- * Revision 1.13  2004/06/21 15:40:02  gpowers
- * - added "overdue items" report
+ * Revision 1.14  2004/07/14 02:09:43  s-t
+ * cvs commit index.php
  *
- * Revision 1.12  2004/06/12 05:35:58  introspectshun
- * - Add adodb-params.php include for multi-db compatibility.
- * - Corrected order of arguments to implode() function.
- *
- * Revision 1.11  2004/06/07 16:39:53  gpowers
- * - Separated "Graphs" and "Reports"
- * - Correctly labelled graphs as "Graphs"
- *   (Users have reported being confused by the former label.)
- *
- * Revision 1.10  2004/06/05 16:03:39  braverock
- * - fixed typo in link
- *
- * Revision 1.9  2004/06/04 23:16:26  braverock
- * - add company contact summary printable report
+ * Revision 1.9 2004/07/13 Cartika
+ *- add SFA report
  *
  * Revision 1.8  2004/05/09 03:56:37  braverock
  * - add plugin hook for reports
