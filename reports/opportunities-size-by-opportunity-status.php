@@ -1,4 +1,10 @@
 <?php
+/**
+ *
+ * Opportunities size by opportunity status report.
+ *
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.3 2004/04/17 15:57:03 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -67,9 +73,8 @@ start_page($page_title, true, $msg);
 
 <script language="javascript" src="../js/graph.js"></script>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=75% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -96,16 +101,27 @@ start_page($page_title, true, $msg);
 
         </table>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=23% valign=top>
+    <div id="Sidebar">
 
-        </td>
-    </tr>
-</table>
+        &nbsp;
 
-<?php end_page(); ?>
+    </div>
+
+</div>
+
+<?php
+
+end_page();
+
+/**
+ * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.3  2004/04/17 15:57:03  maulani
+ * - Add CSS2 positioning
+ * - Add phpdoc
+ *
+ *
+ */
+?>
