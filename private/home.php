@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.35 2004/07/20 19:59:04 introspectshun Exp $
+ * $Id: home.php,v 1.36 2004/07/22 16:38:46 gpowers Exp $
  */
 
 // include the common files
@@ -464,6 +464,7 @@ start_page($page_title,true,$msg);
             <tr>
                 <td class=widget_label><a href="../doc/users/XRMS_User_Manual.pdf"><?php echo _("User Manual"); ?></a><?php echo _(" (PDF)"); ?></td>
             </tr>
+<?php echo do_hook_function('home_docs'); ?>
         </table>
 
             <!-- opportunities //-->
@@ -496,6 +497,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.36  2004/07/22 16:38:46  gpowers
+ * - added 'home_docs' plugin hook
+ *   - allows plugin documentation to appear on home page.
+ *
  * Revision 1.35  2004/07/20 19:59:04  introspectshun
  * - Localized button value for i18n/l10n support
  *
