@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.88 2005/01/28 23:05:57 braverock Exp $
+ * $Id: one.php,v 1.89 2005/01/31 17:22:43 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -195,7 +195,7 @@ TILLEND;
 
     $division_select.=$division_rst->getmenu2('division_id',$division_id, true, false, 1, "id=division_id onchange=javascript:restrictByDivision();");
     if ($division_id) {
-        $division_select.="&nbsp; <input class=button type=button value=\"". _("Administer Division")."\" onclick=\"javascript:location.href='http://localhost/xrms/companies/edit-division.php?company_id=$company_id&division_id=$division_id';\">";
+        $division_select.="&nbsp; <input class=button type=button value=\"". _("Administer Division")."\" onclick=\"javascript:location.href='".$http_site_root."/companies/edit-division.php?company_id=$company_id&division_id=$division_id';\">";
     }
 } else { $division_select=false; }
 //
@@ -830,6 +830,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.89  2005/01/31 17:22:43  braverock
+ * - Administer Divisions link hardcode to localhost - oops, fixed now
+ *
  * Revision 1.88  2005/01/28 23:05:57  braverock
  * - show the correct button for editing divisions depending on division scoping
  *
