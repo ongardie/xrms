@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.28 2004/07/26 13:10:20 braverock Exp $
+ * $Id: utils-interface.php,v 1.29 2004/07/29 23:49:01 maulani Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -102,35 +102,35 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-    <div id="page_header">$page_title</div>
+    <div id="page_header">$page_title</div>\n
 EOQ;
 
     if ($show_navbar) {
       $session_username = $_SESSION['username'];
       echo '<div id="navline"><span id="navbar">'
-           . "<a href=\"$http_site_root/private/home.php\">" . _("Home") . "</a> &bull; "
-           . "<a href=\"$http_site_root/activities/some.php\">" . _("Activities") . "</a> &bull; "
-           . "<a href=\"$http_site_root/companies/some.php\">" . _("Companies") . "</a> &bull; "
-           . "<a href=\"$http_site_root/contacts/some.php\">" . _("Contacts") . "</a> &bull; "
-           . "<a href=\"$http_site_root/campaigns/some.php\">" . _("Campaigns") . "</a> &bull; "
-           . "<a href=\"$http_site_root/opportunities/some.php\">" . _("Opportunities") . "</a> &bull; "
-           . "<a href=\"$http_site_root/cases/some.php\">" . _("Cases") . "</a> &bull; "
-           . "<a href=\"$http_site_root/files/some.php\">" . _("Files") . "</a> &bull; ";
+           . "<a href=\"$http_site_root/private/home.php\">" . _("Home") . "</a> &bull; \n"
+           . "<a href=\"$http_site_root/activities/some.php\">" . _("Activities") . "</a> &bull; \n"
+           . "<a href=\"$http_site_root/companies/some.php\">" . _("Companies") . "</a> &bull; \n"
+           . "<a href=\"$http_site_root/contacts/some.php\">" . _("Contacts") . "</a> &bull; \n"
+           . "<a href=\"$http_site_root/campaigns/some.php\">" . _("Campaigns") . "</a> &bull; \n"
+           . "<a href=\"$http_site_root/opportunities/some.php\">" . _("Opportunities") . "</a> &bull; \n"
+           . "<a href=\"$http_site_root/cases/some.php\">" . _("Cases") . "</a> &bull; \n"
+           . "<a href=\"$http_site_root/files/some.php\">" . _("Files") . "</a> &bull; \n";
 
       //place the menu_line hook before Reports and Adminstration link
       do_hook ('menuline');
 
-      echo "<a href=\"$http_site_root/reports/index.php\">" . _("Reports") . "</a> &bull; "
+      echo "<a href=\"$http_site_root/reports/index.php\">" . _("Reports") . "</a> &bull; \n"
            . "<a href=\"$http_site_root/admin/routing.php\">" . _("Administration") . "</a>"
            . '</span> <div id="loginbar">'
-           . _("Logged in as") . ': ' . $session_username . " &bull; <a href=\"$http_site_root/logout.php\">" . _("Logout") . "</a></div> "
-           . "</div>";
+           . _("Logged in as") . ': ' . $session_username . " &bull; \n<a href=\"$http_site_root/logout.php\">" . _("Logout") . "</a></div> "
+           . "</div>\n";
     }
 
     if (strlen($msg) > 0) echo <<<EOQ
         <div id="msg">
             {$msg}
-        </div>
+        </div>\n
 EOQ;
 } // end start_page fn
 
@@ -210,6 +210,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.29  2004/07/29 23:49:01  maulani
+ * - update html to improve formatting
+ *
  * Revision 1.28  2004/07/26 13:10:20  braverock
  * - added global $app_title to place it in function scope.
  *
