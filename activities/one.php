@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.53 2004/07/28 20:55:32 neildogg Exp $
+ * $Id: one.php,v 1.54 2004/07/29 09:35:47 cpsource Exp $
  */
 
 //include required files
@@ -211,6 +211,9 @@ if($on_what_table == 'opportunities') {
 
 $con->close();
 
+// load confGoTo.js
+confGoTo_includes();
+
 $page_title = _("Activity Details").': '.$activity_title;
 start_page($page_title, true, $msg);
 
@@ -413,6 +416,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.54  2004/07/29 09:35:47  cpsource
+ * - Seperate .js and .php for confGoTo for PHP V4 problems.
+ *
  * Revision 1.53  2004/07/28 20:55:32  neildogg
  * - Added parenthesis around save and next numbers
  *

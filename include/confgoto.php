@@ -1,16 +1,5 @@
 <?php
 // Allow a button click to be confirmed before a URL is executed
-?>
-<!-- confGoTo start -->
-<script language="JavaScript" type="text/javascript">
-function confGoTo(quest,dest) {
-  if ( confirm(quest) ) {
-    window.location = dest;
-  }
-}
-</script>
-<!-- confGoTo end -->
-<?php
 
 if ( !defined('IN_XRMS') )
 {
@@ -27,8 +16,25 @@ function confGoTo( $quest, $button, $to_url )
   echo '<input type=button class=button value="'.$button.'"'. $tmp.'>';
 }
 
+//
+// load the coresponding javascript
+//
+function confGoTo_includes() {
+
+    global $http_site_root;
+
+    echo <<<EOQ
+    <!-- confGoTo SCRIPT INCLUDES -->
+    <script type="text/javascript" src="$http_site_root/js/confgoto.js"></script>
+    <!-- confGoTo End SCRIPT INCLUDES -->
+EOQ;
+} //end
+
 /*
  * $Log: confgoto.php,v $
+ * Revision 1.2  2004/07/29 09:35:46  cpsource
+ * - Seperate .js and .php for confGoTo for PHP V4 problems.
+ *
  * Revision 1.1  2004/07/28 19:23:07  cpsource
  * - Handle all confGoTo processing that allows operator to give
  *   the OK before a button click is executed.
