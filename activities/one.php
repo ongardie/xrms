@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.68 2004/12/20 13:50:39 neildogg Exp $
+ * $Id: one.php,v 1.69 2004/12/20 21:50:51 neildogg Exp $
  */
 
 //include required files
@@ -359,7 +359,7 @@ function logTime() {
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
                     <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('Enter note', ''); document.forms[0].opportunity_description.value =
-                        logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page(); ?>'; document.forms[0].submit();">
+                        logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page() . '&fill_user'; ?>'; document.forms[0].submit();">
                     <?php do_hook('opportunity_notes_buttons'); ?>
                 </td>
             </tr>
@@ -462,6 +462,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.69  2004/12/20 21:50:51  neildogg
+ * - Updated to reflect new parameter passing
+ *
  * Revision 1.68  2004/12/20 13:50:39  neildogg
  * Added ability to select an empty user (allows an activity pool)
  *
