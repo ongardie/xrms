@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.22 2004/07/19 14:43:51 cpsource Exp $
+ * $Id: utils-interface.php,v 1.23 2004/07/21 23:50:36 introspectshun Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -35,13 +35,13 @@ function status_msg($msg) {
         case 'no_change':
             return _("Status not changed.") . ' ' . _("This activity is still open.");
 
-    // handle unknown messages
-    default:
-      if ( $msg ) {
-	// at least TRY to return a message
-	return _("$msg.");
-      }
-      break;
+        // handle unknown messages
+        default:
+            if ( $msg ) {
+	            // at least TRY to return a message
+	            return _("$msg.");
+            }
+            break;
     }
 } //end status_msg fn
 
@@ -76,30 +76,24 @@ EOQ;
 
     if ($show_navbar) {
       $session_username = $_SESSION['username'];
-      echo <<<EOQ
-    <div id="navline">
-        <span id="navbar">
-        <a href="$http_site_root/private/home.php">Home</a> &bull;
-        <a href="$http_site_root/activities/some.php">Activities</a> &bull;
-        <a href="$http_site_root/companies/some.php">Companies</a> &bull;
-        <a href="$http_site_root/contacts/some.php">Contacts</a> &bull;
-        <a href="$http_site_root/campaigns/some.php">Campaigns</a> &bull;
-        <a href="$http_site_root/opportunities/some.php">Opportunities</a> &bull;
-        <a href="$http_site_root/cases/some.php">Cases</a> &bull;
-        <a href="$http_site_root/files/some.php">Files</a> &bull;
-EOQ;
+      echo '<div id="navline"><span id="navbar">'
+           . "<a href=\"$http_site_root/private/home.php\">" . _("Home") . "</a> &bull; "
+           . "<a href=\"$http_site_root/activities/some.php\">" . _("Activities") . "</a> &bull; "
+           . "<a href=\"$http_site_root/companies/some.php\">" . _("Companies") . "</a> &bull; "
+           . "<a href=\"$http_site_root/contacts/some.php\">" . _("Contacts") . "</a> &bull; "
+           . "<a href=\"$http_site_root/campaigns/some.php\">" . _("Campaigns") . "</a> &bull; "
+           . "<a href=\"$http_site_root/opportunities/some.php\">" . _("Opportunities") . "</a> &bull; "
+           . "<a href=\"$http_site_root/cases/some.php\">" . _("Cases") . "</a> &bull; "
+           . "<a href=\"$http_site_root/files/some.php\">" . _("Files") . "</a> &bull; ";
 
-    //place the menu_line hook before Reports and Adminstration link
-    do_hook ('menuline');
+      //place the menu_line hook before Reports and Adminstration link
+      do_hook ('menuline');
 
-    echo <<<EOQ
-
-        <a href="$http_site_root/reports/index.php">Reports</a> &bull;
-        <a href="$http_site_root/admin/routing.php">Administration</a>
-        </span>
-        <div id="loginbar">Logged in as: $session_username &bull; <a href="$http_site_root/logout.php">Logout</a></div>
-    </div>
-EOQ;
+      echo "<a href=\"$http_site_root/reports/index.php\">" . _("Reports") . "</a> &bull; "
+           . "<a href=\"$http_site_root/admin/routing.php\">" . _("Administration") . "</a>"
+           . '</span> <div id="loginbar">'
+           . _("Logged in as") . ': ' . $session_username . " &bull; <a href=\"$http_site_root/logout.php\">" . _("Logout") . "</a></div> "
+           . "</div>";
     }
 
     if (strlen($msg) > 0) echo <<<EOQ
@@ -187,6 +181,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.23  2004/07/21 23:50:36  introspectshun
+ * - Finished localizing strings for i18n/l10n support
+ *
  * Revision 1.22  2004/07/19 14:43:51  cpsource
  * - Don't repeat status_msg message if unknown type.
  *
