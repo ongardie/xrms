@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.31 2004/06/15 14:03:18 gpowers Exp $
+ * $Id: utils-misc.php,v 1.32 2004/06/15 14:04:54 gpowers Exp $
  */
 
 /**
@@ -80,7 +80,7 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
     $rec['user_id'] = $user_id;
     $rec['on_what_table'] = $on_what_table;
     $rec['on_what_id'] = $on_what_id;
-    $rec['recent_item_timestamp'] = time());
+    $rec['recent_item_timestamp'] = time();
 
     $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
@@ -598,6 +598,10 @@ function get_formatted_address (&$con,$address_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.32  2004/06/15 14:04:54  gpowers
+ * - removed extra )
+ *   - second time is a charm? Arg.
+ *
  * Revision 1.31  2004/06/15 14:03:18  gpowers
  * - chagned dbtimestamp() to time()
  *   - b/c the quoted time didn't work with mysql
