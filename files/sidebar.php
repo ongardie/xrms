@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.13 2005/01/12 02:20:28 introspectshun Exp $
+ * $Id: sidebar.php,v 1.14 2005/04/05 19:41:54 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -71,14 +71,14 @@ if (strlen($rst->fields['username']) > 0) {
              <tr>";
         if ($rst->fields['file_size'] == "0")
           {
-          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$user_contact_id&amp;file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
+          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() ."'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($rst->fields['file_size']) . '</b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . $rst->fields['username'] . '</b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($rst->fields['entered_at']) . '</b></td>';
           }
         else
           {
-          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$user_contact_id&amp;file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
+          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() ."'>" . $rst->fields['file_pretty_name'] . '</a></td>';
           $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
           $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
           $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
@@ -113,6 +113,9 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.14  2005/04/05 19:41:54  daturaarutad
+ * now use current_page() to set return_url
+ *
  * Revision 1.13  2005/01/12 02:20:28  introspectshun
  * - Defined $file_limit_sql until ACL is implemented
  *
