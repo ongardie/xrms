@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.27 2004/07/14 18:33:28 neildogg Exp $
+ * $Id: edit-2.php,v 1.28 2004/07/14 18:34:15 braverock Exp $
  */
 
 //include required files
@@ -80,7 +80,7 @@ $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ?
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities = true ) {
-    if ($on_what_table=='contacts' or $on_what_table=='') {
+    if (($on_what_table=='contacts') or ($on_what_table=='')) {
         $opp_arr = array();
         $case_arr = array();
         $arr_count = 0;
@@ -379,6 +379,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.28  2004/07/14 18:34:15  braverock
+ * - fixed logic error that could result in assignment rather than comparison
+ *
  * Revision 1.27  2004/07/14 18:33:28  neildogg
  * - Found the correct logic error, thanks to Brian
  *

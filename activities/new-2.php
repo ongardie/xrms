@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.19 2004/07/13 20:52:33 braverock Exp $
+ * $Id: new-2.php,v 1.20 2004/07/14 18:34:15 braverock Exp $
  */
 
 //where do we include from
@@ -81,7 +81,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities = true ) {
-    if ($on_what_table='contacts' or $on_what_table='') {
+    if (($on_what_table=='contacts') or ($on_what_table=='')) {
         $opp_arr = array();
         $case_arr = array();
         $arr_count = 0;
@@ -185,6 +185,9 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.20  2004/07/14 18:34:15  braverock
+ *- fixed logic error that could result in assignment rather than comparison
+ *
  *Revision 1.19  2004/07/13 20:52:33  braverock
  *- removed debug echo
  *
