@@ -1,0 +1,784 @@
+<?php
+/**
+ * install/db_table_creation.php - This page creates the tables needed for xrms
+ *
+ * This file contains the routines that will create all of the xrms tables
+ * These routines are non-destructive, so this can be run over a functioning
+ * system without incident.
+ *
+ * These routines are called from the main installation file, which has already
+ * checked for proper variable and path setup, and that a database connection exists.
+ *
+ * @author Beth Macknik
+ * $Id: database.php,v 1.1 2004/03/18 01:07:18 maulani Exp $
+ */
+
+/**
+ * Create the miscellaneous tables.
+ *
+ */
+function misc_db_tables($con, $table_list) {
+    // recent_items
+    if (!in_array('recent_items',$table_list)) {
+        $sql ="create table recent_items (
+               recent_item_id                          int not null primary key auto_increment,
+               user_id                                 int not null default 0,
+               on_what_table                           varchar(100) not null default '',
+               on_what_id                              int not null default 0,
+               recent_item_timestamp                   timestamp
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // audit_items
+    if (!in_array('audit_items',$table_list)) {
+        $sql ="create table audit_items (
+               audit_item_id                           int not null primary key auto_increment,
+               user_id                                 int not null default 0,
+               audit_item_type                         varchar(50) default '',
+               on_what_table                           varchar(100) default '',
+               on_what_id                              varchar(10) default '',
+               audit_item_timestamp                    datetime,
+               audit_item_record_status                char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // files
+    if (!in_array('files',$table_list)) {
+        $sql ="create table files (
+               file_id                                 int not null primary key auto_increment,
+               file_pretty_name                        varchar(100) not null default '',
+               file_description                        text not null default '',
+               file_filesystem_name                    varchar(100) not null default '',
+               file_size                               int not null default 0,
+               file_type                               varchar(100) not null default '',
+               on_what_table                           varchar(100) not null default '',
+               on_what_id                              int not null default 0,
+               entered_at                              datetime,
+               entered_by                              int not null default 0,
+               file_record_status                      char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // notes
+    if (!in_array('notes',$table_list)) {
+        $sql ="create table notes (
+               note_id                                 int not null primary key auto_increment,
+               note_description                        text not null default '',
+               on_what_table                           varchar(100),
+               on_what_id                              int not null default 0,
+               entered_at                              datetime,
+               entered_by                              int not null default 0,
+               note_record_status                      char(1) not null default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // categories
+    if (!in_array('categories',$table_list)) {
+        $sql ="create table categories (
+               category_id                             int not null primary key auto_increment,
+               category_short_name                     varchar(10) not null default '',
+               category_pretty_name                    varchar(100) not null default '',
+               category_pretty_plural                  varchar(100) not null default '',
+               category_display_html                   varchar(100) not null default '',
+               category_record_status                  char(1) not null default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // category_scopes
+    if (!in_array('category_scopes',$table_list)) {
+        $sql ="create table category_scopes (
+               category_scope_id                       int not null primary key auto_increment,
+               category_scope_short_name               varchar(10) not null default '',
+               category_scope_pretty_name              varchar(100) not null default '',
+               category_scope_pretty_plural            varchar(100) not null default '',
+               category_scope_display_html             varchar(100) not null default '',
+               on_what_table                           varchar(100) not null default '',
+               category_scope_record_status            char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // category_category_scope_map
+    if (!in_array('category_category_scope_map',$table_list)) {
+        $sql ="create table category_category_scope_map (
+               category_id                             int not null default 0,
+               category_scope_id                       int not null default 0
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // entity_category_map
+    if (!in_array('entity_category_map',$table_list)) {
+        $sql ="create table entity_category_map (
+               category_id                             int not null default 0,
+               on_what_table                           varchar(100) not null default '',
+               on_what_id                              int not null default 0
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // countries
+    if (!in_array('countries',$table_list)) {
+        $sql ="create table countries (
+               country_id                              int not null primary key auto_increment,
+               address_format_string_id                int not null default 1,
+               country_name                            varchar(100) not null default '',
+               un_code                                 varchar(50) not null default '',
+               iso_code1                               varchar(50) not null default '',
+               iso_code2                               varchar(50) not null default '',
+               iso_code3                               varchar(50) not null default '',
+               telephone_code                          varchar(50) not null default '',
+               country_record_status                   char(1) not null default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // address_format_strings
+    if (!in_array('address_format_strings',$table_list)) {
+        $sql ="create table address_format_strings (
+               address_format_string_id                int not null primary key auto_increment,
+               address_format_string                   varchar(255),
+               address_format_string_record_status     char(1) not null default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+    
+} // end misc_db_tables fn
+
+
+
+/**
+ * Create the user tables.
+ *
+ */
+function user_db_tables($con, $table_list) {
+    // roles
+    if (!in_array('roles',$table_list)) {
+        $sql ="create table roles (
+               role_id                 int not null primary key auto_increment,
+               role_short_name         varchar(10) not null default '',
+               role_pretty_name        varchar(100) not null default '',
+               role_pretty_plural      varchar(100) not null default '',
+               role_display_html       varchar(100) not null default '',
+               role_record_status      char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+    
+    // users
+    if (!in_array('users',$table_list)) {
+        $sql ="create table users (
+               user_id             int not null primary key auto_increment,
+               role_id             int not null default 0,
+               username            varchar(100) not null default '' unique,
+               password            varchar(100) not null default '',
+               last_name           varchar(100) not null default '',
+               first_names         varchar(100) not null default '',
+               email               varchar(100) not null default '',
+               language            varchar(50) not null default 'english',
+               gmt_offset          int not null default 0,
+               last_hit            datetime,
+               user_record_status      char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+    
+} // end user_db_tables fn
+
+
+
+/**
+ * Create the company tables.
+ *
+ */
+function company_db_tables($con, $table_list) {
+    // company_sources
+    // where did each company come from?  how did they hear about us?  I like options like "trade show" and 
+    // "advertisement", but you could just as easily use more specific items -- e.g., "June Telemarketing" -- to track how 
+    // many leads are coming from each source.  These company sources are different from campaigns, which are only 
+    // associated with opportunities.  Of course, if you don't have any need to track this information, you can just rename 
+    // it and use the picklist to store another type of information entirely.
+    if (!in_array('company_sources',$table_list)) {
+        $sql ="create table company_sources (
+               company_source_id               int not null primary key auto_increment,
+               company_source_short_name   varchar(10) not null default '',
+               company_source_pretty_name  varchar(100) not null default '',
+               company_source_pretty_plural    varchar(100) not null default '',
+               company_source_display_html varchar(100) not null default '',
+               company_source_record_status    char(1) default 'a',
+               company_source_score_adjustment int not null
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // industries
+    // a user-readable list of industries -- by default I suggest things like "mining", "consulting", etc. But feel free 
+    // to modify this for your particular needs... if you deal with restaurants exclusively, you might want to use values 
+    // like "Mexican", "Thai", or "Caribbean".
+    if (!in_array('industries',$table_list)) {
+        $sql ="create table industries (
+               industry_id                 int not null primary key auto_increment,
+               industry_short_name     varchar(10) not null default '',
+               industry_pretty_name        varchar(100) not null default '',
+               industry_pretty_plural      varchar(100) not null default '',
+               industry_display_html       varchar(100) not null default '',
+               industry_record_status      char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // ratings
+    // I think it's helpful to have some record of how good/reliable each company in your system is... just a quick "good", 
+    // "fair", or "poor" is enough for me, but you might add "excellent" or "horrible" if you need more options.
+    if (!in_array('ratings',$table_list)) {
+        $sql ="create table ratings (
+               rating_id           int not null primary key auto_increment,
+               rating_short_name       varchar(10) not null default '',
+               rating_pretty_name      varchar(100) not null default '',
+               rating_pretty_plural        varchar (100) not null default '',
+               rating_display_html     varchar(100) not null default '',
+               rating_record_status        char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // account_statuses
+    // Some of you need to make sure that your customers have valid contracts, have paid their bills, aren't over their 
+    // credit limits, etc.
+    if (!in_array('account_statuses',$table_list)) {
+        $sql ="create table account_statuses (
+               account_status_id           int not null primary key auto_increment,
+               account_status_short_name       varchar(10) not null default '',
+               account_status_pretty_name      varchar(100) not null default '',
+               account_status_pretty_plural        varchar(100) not null default '',
+               account_status_display_html     varchar(100) not null default '',
+               account_status_record_status        char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // company_types
+    // Companies can belong to zero or more of these types, but this table is here to represent high-level relationships 
+    // with your organization: partner, vendor, customer, competitor, etc.  If you're just using XRMS to track customers, 
+    // you won't have much need for these and they can safely be ignored.
+    if (!in_array('company_types',$table_list)) {
+        $sql ="create table company_types (
+               company_type_id             int not null primary key auto_increment,
+               company_type_short_name         varchar(10) not null default '',
+               company_type_pretty_name        varchar(100) not null default '',
+               company_type_pretty_plural      varchar(100) not null default '',
+               company_type_display_html       varchar(100) not null default '',
+               company_type_record_status      char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // company_company_type_map
+    // one row per association between each company and each type
+    if (!in_array('company_company_type_map',$table_list)) {
+        $sql ="create table company_company_type_map (
+               company_id              int not null default 0,
+               company_type_id             int not null default 0
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // crm_statuses
+    // Did you just find out about this company, or is this an old, well-developed account?  I like traditional options here 
+    // such as Lead, Prospect, Developed, etc.  Eventually we'll probably add a crm_status_transitions table to keep 
+    // tabs on how well companies are moving along through the CRM process.
+    if (!in_array('crm_statuses',$table_list)) {
+        $sql ="create table crm_statuses (
+               crm_status_id               int not null primary key auto_increment,
+               crm_status_short_name           varchar(10) not null default '',
+               crm_status_pretty_name          varchar(100) not null default '',
+               crm_status_pretty_plural        varchar(100) not null default '',
+               crm_status_display_html         varchar(100) not null default '',
+               crm_status_record_status        char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // companies
+    // this is the Big Daddy table of companies/organizations.  Lots of references to the above-mentioned tables, a few 
+    // things that should probably be stored in other software (credit_limit, terms), and three "extref" columns to store 
+    // keys to link these companies with their representations in other software for reporting/integration purposes.
+    if (!in_array('companies',$table_list)) {
+        $sql ="create table companies (
+               company_id                       int not null primary key auto_increment,
+               user_id                          int not null default 0,
+               company_source_id                int not null default 0,
+               industry_id                      int not null default 0,
+               crm_status_id                    int not null default 0,
+               rating_id                        int not null default 0,
+               account_status_id                int not null default 0,
+               company_name                     varchar(100) not null default '',
+               company_code                     varchar(10) not null default '',
+               legal_name                       varchar(100) not null default '',
+               tax_id                           varchar(100) not null default '',
+               profile                          text not null default '',
+               phone                            varchar(50) not null default '',
+               phone2                           varchar(50) not null default '',
+               fax                              varchar(50) not null default '',
+               url                              varchar(50) not null default '',
+               employees                        varchar(50) not null default '',
+               revenue                          varchar(50) not null default '',
+               credit_limit                     int not null default 0,
+               terms                            int not null default 0,
+               entered_at                       datetime,
+               entered_by                       int not null default 0,
+               last_modified_at                 datetime,
+               last_modified_by                 int not null default 0,
+               default_primary_address          int not null default 0,
+               default_billing_address          int not null default 0,
+               default_shipping_address         int not null default 0,
+               default_payment_address          int not null default 0,
+               custom1                          varchar(100) not null default '',
+               custom2                          varchar(100) not null default '',
+               custom3                          varchar(100) not null default '',
+               custom4                          varchar(100) not null default '',
+               extref1                          varchar(50) not null default '',
+               extref2                          varchar(50) not null default '',
+               extref3                          varchar(50) not null default '',
+               company_record_status            char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // addresses
+    // each company can have one or more address (one gets automatically added with the company) -- and you can select via 
+    // radio button which one should be the default for billing, shipping, and payments.  I think this might be better as a 
+    // "facilities" table, with contacts belonging to one facility, but for now this should be good enough.
+    if (!in_array('addresses',$table_list)) {
+        $sql ="create table addresses (
+               address_id          int not null primary key auto_increment,
+               company_id          int not null default 0,
+               country_id          int not null default 1,
+               address_name            varchar(100) not null default '',
+               address_body            varchar(255) not null default '',
+               line1               varchar(255) not null default '',
+               line2               varchar(255) not null default '',
+               city                varchar(255) not null default '',
+               province            varchar(255) not null default '',
+               postal_code         varchar(255) not null default '',
+               use_pretty_address      char(1) not null default 'f',
+               address_record_status       char(1) not null default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // company_division
+    // each company can have zero or more divisions.  This is probably not usefult for small companies, so its use is optional.
+    if (!in_array('company_division',$table_list)) {
+        $sql ="create table company_division (
+               division_id                      int not null primary key auto_increment,
+               company_id                       int not null,
+               user_id                          int not null default 0,
+               company_source_id                int not null default 0,
+               industry_id                      int not null default 0,
+               division_name                    varchar(100) not null default '',
+               description                      text not null default '',
+               entered_at                       datetime,
+               entered_by                       int not null default 0,
+               last_modified_at                 datetime,
+               last_modified_by                 int not null default 0,
+               custom1                          varchar(100) not null default '',
+               custom2                          varchar(100) not null default '',
+               custom3                          varchar(100) not null default '',
+               custom4                          varchar(100) not null default '',
+               division_record_status           char(1) default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // contacts
+    // I could have made separate tables for titles ("President", "Marketing Director", etc.) and summaries 
+    // ("Decision Maker", "Influencer", etc.) but constraining these often seems to just get in the way.  If you'd 
+    // like to use specific values here, just come to some kind of agreement as to what they should be and have 
+    // your employees use them consistently.
+    if (!in_array('contacts',$table_list)) {
+        $sql ="create table contacts (
+               contact_id                      int not null primary key auto_increment,
+               company_id                      int not null default 0,
+               division_id                     int not null default 0,
+               address_id                      int not null default 0,
+               salutation                      varchar(20) not null default '',
+               last_name                       varchar(100) not null default '',
+               first_names                     varchar(100) not null default '',
+               gender                          char(1) not null default 'm',
+               date_of_birth                   varchar(100) not null default '',
+               summary                         varchar(100) not null default '',
+               title                           varchar(100) not null default '',
+               description                     varchar(100) not null default '',
+               email                           varchar(100) not null default '',
+               email_status                    char(1) default 'a',
+               work_phone                      varchar(50) not null default '',
+               cell_phone                      varchar(50) not null default '',
+               home_phone                      varchar(50) not null default '',
+               fax                             varchar(50) not null default '',
+               aol_name                        varchar(50) not null default '',
+               yahoo_name                      varchar(50) not null default '',
+               msn_name                        varchar(50) not null default '',
+               interests                       varchar(50) not null default '',
+               profile                         text not null default '',
+               custom1                         varchar(50) not null default '',
+               custom2                         varchar(50) not null default '',
+               custom3                         varchar(50) not null default '',
+               custom4                         varchar(50) not null default '',
+               entered_at                      datetime,
+               entered_by                      int not null default 0,
+               last_modified_at                datetime,
+               last_modified_by                int not null default 0,
+               contact_record_status           char(1) not null default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // email_templates
+    // for the bulk e-mail stuff, where you can store things like "Dear ##CONTACT_FIRST_NAMES## - " and the system will 
+    // replace the ##CONTACT_FIRST_NAMES## token with the contact's actual first names
+    if (!in_array('email_templates',$table_list)) {
+        $sql ="create table email_templates (
+               email_template_id                   int not null primary key auto_increment,
+               email_template_title                varchar(100) not null default '',
+               email_template_body                 text not null default '',
+               email_template_record_status        char(1) not null default 'a'
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // company_former_names
+    // Keep track of company name changes 
+    if (!in_array('company_former_names',$table_list)) {
+        $sql ="create table company_former_names (
+               company_id int(11) NOT NULL default '0',
+               namechange_at datetime NOT NULL default '0000-00-00 00:00:00',
+               former_name varchar(100) NOT NULL default '',
+               description varchar(100) default NULL,
+               KEY company_id (company_id)
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // company_relationship
+    // Track relationships between companies 
+    if (!in_array('company_relationship',$table_list)) {
+        $sql ="create table company_relationship (
+               company_from_id int(11) NOT NULL default '0',
+               relationship_type varchar(100) NOT NULL default '',
+               company_to_id int(11) NOT NULL default '0',
+               established_at datetime NOT NULL default '0000-00-00 00:00:00',
+               KEY company_from_id (company_from_id,company_to_id)
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+} // end company_db_tables fn
+
+/**
+ * Create the opportunity tables.
+ *
+ */
+function opportunity_db_tables($con, $table_list) {
+    // opportunities
+    if (!in_array('opportunities',$table_list)) {
+        $sql ="create table opportunities (
+               opportunity_id               int not null primary key auto_increment,
+               opportunity_status_id        int not null default 0,
+               campaign_id                  int,
+               company_id                   int not null default 0,
+               contact_id                   int not null default 0,
+               user_id                      int not null default 0,
+               opportunity_title            varchar(100) not null default '',
+               opportunity_description      text not null default '',
+               next_step                    varchar(100) not null default '',
+               size                         decimal(10,2) not null default 0,
+               probability                  int not null default 0,
+               close_at                     datetime,
+               entered_at                   datetime,
+               entered_by                   int not null default 0,
+               last_modified_at             datetime,
+               last_modified_by             int not null default 0,
+               owned_at                     datetime,
+               owned_by                     int not null default 0,
+               closed_at                    datetime,
+               closed_by                    int not null default 0,
+               opportunity_record_status    char(1) default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // opportunity_statuses
+    if (!in_array('opportunity_statuses',$table_list)) {
+        $sql ="create table opportunity_statuses (
+               opportunity_status_id            int not null primary key auto_increment,
+               sort_order                       tinyint default '1' not null,
+               status_open_indicator            char( 1 ) default 'o' not null,
+               opportunity_status_short_name    varchar(10) not null default '',
+               opportunity_status_pretty_name   varchar(100) not null default '',
+               opportunity_status_pretty_plural varchar(100) not null default '',
+               opportunity_status_display_html  varchar(100) not null default '',
+               opportunity_status_record_status char(1) not null default 'a',
+               opportunity_status_long_desc     varchar(255) not null default ''
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+} // end opportunity_db_tables fn
+
+
+/**
+ * Create the case tables.
+ *
+ */
+function case_db_tables($con, $table_list) {
+    // cases
+    if (!in_array('cases',$table_list)) {
+        $sql ="create table cases (
+               case_id             int not null primary key auto_increment,
+               case_type_id            int not null default 0,
+               case_status_id          int not null default 0,
+               case_priority_id        int not null default 0,
+               company_id          int not null default 0,
+               contact_id          int not null default 0,
+               user_id             int not null default 0,
+               priority            int not null default 0,
+               case_title          varchar(100) not null default '',
+               case_description        text not null default '',
+               due_at              datetime,
+               entered_at          datetime,
+               entered_by          int not null default 0,
+               last_modified_at        datetime,
+               last_modified_by        int not null default 0,
+               owned_at            datetime,
+               owned_by            int not null default 0,
+               closed_at           datetime,
+               closed_by           int not null default 0,
+               case_record_status      char(1) not null default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // case_types
+    if (!in_array('case_types',$table_list)) {
+        $sql ="create table case_types (
+               case_type_id            int not null primary key auto_increment,
+               case_type_short_name        varchar(10) not null default '',
+               case_type_pretty_name       varchar(100) not null default '',
+               case_type_pretty_plural     varchar(100) not null default '',
+               case_type_display_html      varchar(100) not null default '',
+               case_type_record_status     char(1) not null default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // case_statuses
+    if (!in_array('case_statuses',$table_list)) {
+        $sql ="create table case_statuses (
+               case_status_id              int not null primary key auto_increment,
+               sort_order                  tinyint default '1' not null,
+               status_open_indicator       char( 1 ) default 'o' not null,
+               case_status_short_name      varchar(10) not null default '',
+               case_status_pretty_name     varchar(100) not null default '',
+               case_status_pretty_plural   varchar(100) not null default '',
+               case_status_display_html    varchar(100) not null default '',
+               case_status_record_status   char(1) not null default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // case_priorities
+    if (!in_array('case_priorities',$table_list)) {
+        $sql ="create table case_priorities (
+               case_priority_id        int not null primary key auto_increment,
+               case_priority_short_name    varchar(10) not null default '',
+               case_priority_pretty_name   varchar(100) not null default '',
+               case_priority_pretty_plural varchar(100) not null default '',
+               case_priority_display_html  varchar(100) not null default '',
+               case_priority_record_status char(1) not null default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+} // end case_db_tables fn
+
+
+/**
+ * Create the campaign tables.
+ *
+ */
+function campaign_db_tables($con, $table_list) {
+    // campaign_types
+    if (!in_array('campaign_types',$table_list)) {
+        $sql ="create table campaign_types (
+               campaign_type_id                                            int not null primary key auto_increment,
+               campaign_type_short_name                                    varchar(10) not null default '',
+               campaign_type_pretty_name                                   varchar(100) not null default '',
+               campaign_type_pretty_plural                                 varchar(100) not null default '',
+               campaign_type_display_html                                  varchar(100) not null default '',
+               campaign_type_record_status                                 char(3) not null default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // campaign_statuses
+    if (!in_array('campaign_statuses',$table_list)) {
+        $sql ="create table campaign_statuses (
+               campaign_status_id                                          int not null primary key auto_increment,
+               campaign_status_short_name                                  varchar(10) not null default '',
+               campaign_status_pretty_name                                 varchar(100) not null default '',
+               campaign_status_pretty_plural                               varchar(100) not null default '',
+               campaign_status_display_html                                varchar(100) not null default '',
+               campaign_status_record_status                               char(3) not null default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // campaigns
+    if (!in_array('campaigns',$table_list)) {
+        $sql ="create table campaigns (
+               campaign_id                                                 int not null primary key auto_increment,
+               campaign_type_id                                            int not null default 0,
+               campaign_status_id                                          int not null default 0,
+               user_id                                                     int not null default 0,
+               campaign_title                                              varchar(100) not null default '',
+               campaign_description                                        text not null default '',
+               starts_at                                                   datetime,
+               ends_at                                                     datetime,
+               cost                                                        decimal(8,2) not null default 0.01,
+               entered_at                                                  datetime,
+               entered_by                                                  int not null default 0,
+               last_modified_at                                            datetime,
+               last_modified_by                                            int not null default 0,
+               campaign_record_status                                      char(1) not null default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+} // end campaign_db_tables fn
+
+
+/**
+ * Create the activity tables.
+ *
+ */
+function activity_db_tables($con, $table_list) {
+    // activity_types
+    // I've used default activity types like "call to," "call from," "e-mail to," "e-mail from," etc.  Using these, 
+    // you'd probably end up writing things like "Introduction," "Sent Marketing Materials," or "Received Bank/Trade 
+    // References" in the subject line for each activity.  If your organization has a more defined process for customer 
+    // relationships, you might change these to reflect stages of that process.  For example, you might insert activity types 
+    // like "Introduction," "Sent Marketing Materials," "Received Bank/Trade References," etc., in which case you could make 
+    // the subject lines even more descriptive.
+    if (!in_array('activity_types',$table_list)) {
+        $sql ="create table activity_types (
+               activity_type_id                   int not null primary key auto_increment,
+               activity_type_short_name           varchar(10) not null default '',
+               activity_type_pretty_name          varchar(100) not null default '',
+               activity_type_pretty_plural        varchar(100) not null default '',
+               activity_type_display_html         varchar(100) not null default '',
+               activity_type_score_adjustment     int not null default 0,
+               activity_type_record_status        char(1) not null default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    // activities
+    // Activities are assumed to belong to exactly one company, contact, opportunity, or case, because I think (hope) this 
+    // may be good enough.  The ideal data model should be more complicated, and an activity should probably be called 
+    // something like "work effort,"  but I can't find a data model that seems right.
+    if (!in_array('activities',$table_list)) {
+        $sql ="create table activities (
+               activity_id                     int not null primary key auto_increment,
+               activity_type_id                int not null default 0,
+               user_id                         int not null default 0,
+               company_id                      int not null default 0,
+               contact_id                      int not null default 0,
+               on_what_table                   varchar(100) not null default '',
+               on_what_id                      int not null default 0,
+               activity_title                  varchar(100) not null default '',
+               activity_description            text not null default '',
+               entered_at                      datetime,
+               entered_by                      int not null default 0,
+               scheduled_at                    datetime,
+               ends_at                         datetime,
+               completed_at                    datetime,
+               activity_status                 char(1) default 'o',
+               activity_record_status          char(1) default 'a'
+               )"; 
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+} // end activity_db_tables fn
+
+
+
+/**
+ * Create the tables.
+ *
+ */
+function create_db_tables($con) {
+    $table_list = list_db_tables($con);
+    misc_db_tables($con, $table_list);
+    user_db_tables($con, $table_list);
+    company_db_tables($con, $table_list);
+    opportunity_db_tables($con, $table_list);
+    case_db_tables($con, $table_list);
+    campaign_db_tables($con, $table_list);
+    activity_db_tables($con, $table_list);
+} // end create_db_tables fn
+
+
+/**
+ * $Log: database.php,v $
+ * Revision 1.1  2004/03/18 01:07:18  maulani
+ * - Create installation tests to check whether the include location and
+ *   vars.php have been configured.
+ * - Create PHP-based database installation to replace old SQL scripts
+ * - Create PHP-update routine to update users to latest schema/data as
+ *   XRMS evolves.
+ *
+ */
+?>
