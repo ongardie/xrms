@@ -106,7 +106,7 @@ if ($case_category_id > 0) {
 
 if (strlen($case_title) > 0) {
     $criteria_count++;
-    $where .= " and ca.case_title like " . $con->qstr($case_title . '%', get_magic_quotes_gpc());
+    $where .= " and ca.case_title like " . $con->qstr('%' . $case_title . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($company_code) > 0) {

@@ -99,12 +99,12 @@ $criteria_count = 0;
 
 if (strlen($last_name) > 0) {
     $criteria_count++;
-    $where .= " and cont.last_name like " . $con->qstr($last_name . '%', get_magic_quotes_gpc());
+    $where .= " and cont.last_name like " . $con->qstr('%' . $last_name . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($first_names) > 0) {
     $criteria_count++;
-    $where .= " and cont.first_names like " . $con->qstr($first_names . '%', get_magic_quotes_gpc());
+    $where .= " and cont.first_names like " . $con->qstr('%' . $first_names . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($title) > 0) {

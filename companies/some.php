@@ -118,7 +118,7 @@ if ($company_category_id > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr($company_name . '%', get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr('%'. $company_name . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($company_type_id) > 0) {

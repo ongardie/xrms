@@ -103,7 +103,7 @@ if ($campaign_category_id > 0) {
 
 if (strlen($campaign_title) > 0) {
     $criteria_count++;
-    $where .= " and cam.campaign_title like " . $con->qstr($campaign_title . '%', get_magic_quotes_gpc());
+    $where .= " and cam.campaign_title like " . $con->qstr('%' . $campaign_title . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($user_id) > 0) {

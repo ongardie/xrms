@@ -100,7 +100,7 @@ if ($opportunity_category_id > 0) {
 }
 
 if (strlen($opportunity_title) > 0) {
-    $where .= " and opp.opportunity_title like " . $con->qstr($opportunity_title . '%', get_magic_quotes_gpc());
+    $where .= " and opp.opportunity_title like " . $con->qstr('%' . $opportunity_title . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($company_name) > 0) {
