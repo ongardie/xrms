@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_Groups.php,v 1.1 2005/01/13 17:16:16 vanmer Exp $
+ * $Id: one_Groups.php,v 1.2 2005/03/05 00:34:52 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -45,13 +45,13 @@ global $symbol_precendence;
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'Groups');
+  $model->SetPrimaryKeyName('Group_id');
   $model->SetDisplayNames(array('Group_name' => 'Group Name')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
-  $model->SetForeignKeyField('data_source_id', 'Data Source', 'data_source', 'data_source_id', 'data_source_name');
 
   $view = new ADOdb_QuickForm_View($con, 'Groups');
   $view->SetReturnButton('Return to List', $return_url);
 
-  $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+  $controller = new ADOdb_QuickForm_Controller(array($model), $view);
   $form_html = $controller->ProcessAndRenderForm();
 
 	$con->close();
@@ -77,6 +77,9 @@ end_page();
 
 /**
  * $Log: one_Groups.php,v $
+ * Revision 1.2  2005/03/05 00:34:52  daturaarutad
+ * set primary key manually and remove reference for QF
+ *
  * Revision 1.1  2005/01/13 17:16:16  vanmer
  * - Initial Commit for ACL Administration interface
  *
