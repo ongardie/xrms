@@ -5,7 +5,7 @@
  * Design copyright 2004 Explorer Fund Advisors
  * All Rights Reserved
  *
- * $Id: xrms_acl_config.php,v 1.1 2005/01/13 17:07:17 vanmer Exp $
+ * $Id: xrms_acl_config.php,v 1.2 2005/01/25 06:07:16 vanmer Exp $
  */
 
 /**
@@ -20,6 +20,9 @@
  * After you've created the database and database user,
  * you can start setting up ACL privileges
  */
+ require_once ($include_directory.'vars.php');
+ require_once ($include_directory.'plugin.php');
+
  $xrms_acl_db_dbtype   = $xrms_db_dbtype;
  $xrms_acl_db_server   = $xrms_db_server;
  $xrms_acl_db_username = $xrms_db_username;
@@ -36,6 +39,12 @@
  $options['default']['db_password'] = $xrms_acl_db_password;
  $options['default']['db_dbname'] = $xrms_acl_db_dbname;
 
+
+ $plugin_options=do_hook_function('xrms_acl_database_access',$options);
+
+ if ($plugin_options) {
+ 	$options=array_merge($plugin_options, $options);
+ }
  $options['ACL_Test']=$options['default'];
  $options['ACL_Test']['db_dbname'] = $xrms_acl_test_db_dbname;
 
@@ -43,32 +52,13 @@
      $options['XRMS'] = $options['default'];
      $options['XRMS']['db_dbname'] = $xrms_db_dbname;
  }
- if (isset($portfolio_db_server)) {
-     $options['portfolio'] = $options['default'];
-     $options['portfolio']['db_server'] = $portfolio_db_server;
-     $options['portfolio']['db_username'] = $portfolio_db_username;
-     $options['portfolio']['db_password'] = $portfolio_db_password;
-     $options['portfolio']['db_dbname'] = $portfolio_db_dbname;
- }
-
- if (isset($tridenfs_site_db_server)) {
-     $options['tridentfs_site'] = $options['default'];
-     $options['tridentfs_site']['db_server'] = $tridentfs_site_db_server;
-     $options['tridentfs_site']['db_username'] = $tridentfs_site_db_username;
-     $options['tridentfs_site']['db_password'] = $tridentfs_site_db_password;
-     $options['tridentfs_site']['db_dbname'] = $tridentfs_site_db_dbname;
- }
-
- if (isset($trident_db_server)) {
-     $options['trident'] = $options['default'];
-     $options['trident']['db_server'] = $trident_db_server;
-     $options['trident']['db_username'] = $trident_db_username;
-     $options['trident']['db_password'] = $trident_db_password;
-     $options['trident']['db_dbname'] = $trident_db_dbname;
- }
 
 /**
  * $Log: xrms_acl_config.php,v $
+ * Revision 1.2  2005/01/25 06:07:16  vanmer
+ * - removed extraneous ACL configuration
+ * - added hook for plugins to define ACL authentication information
+ *
  * Revision 1.1  2005/01/13 17:07:17  vanmer
  * - Initial Revision of the ACL Install, Wrapper, Class and configuration files
  *
