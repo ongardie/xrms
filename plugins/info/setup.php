@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.7 2005/01/08 06:25:14 gpowers Exp $
+ * $Id: setup.php,v 1.8 2005/01/09 17:11:23 vanmer Exp $
  */
 
 
@@ -54,7 +54,7 @@ function info_setup() {
     echo "<tr><td class=widget_content>\n<a href='$http_site_root/plugins/info/admin/some.php'>Manage Info Types</a>\n</td>\n</tr>\n";
 }
 
-function company_content_bottom () {
+function company_content_bottom ($_sidebar) {
     global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
     include("info.inc");
     ob_start();
@@ -62,7 +62,7 @@ function company_content_bottom () {
     include("$xrms_file_root/plugins/info/sidebar.php");
     $sidebar_string = ob_get_contents();
     ob_end_clean();
-    return $sidebar_string;
+    return $_sidebar.$sidebar_string;
 }
 
 function company_accounting () {
