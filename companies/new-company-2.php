@@ -90,12 +90,12 @@ start_page($page_title, true, $msg);
     }
     echo "</select> &nbsp; \n";
 
-$search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
-if($search_on_last) {
-    $search_on_last = $con->qstr("%$search_on_last%", get_magic_quotes_gpc());
-}
-
 if(eregi("[a-zA-Z]", $search_on)) {
+    $search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
+    if($search_on_last) {
+        $search_on_last = $con->qstr("%$search_on_last%", get_magic_quotes_gpc());
+    }
+
     if($working_direction == "from") {
       $sql = "select c.company_id, c.company_name, a.city, a.province
         from companies as c, addresses as a
@@ -215,6 +215,9 @@ end_page();
 
 /**
  * $Log: new-company-2.php,v $
+ * Revision 1.4  2004/07/08 19:38:38  neildogg
+ * No need to add quotes or %% to ID search
+ *
  * Revision 1.3  2004/07/07 21:20:21  neildogg
  * - Added first/last name search\n- Implemented search by ID
  *
