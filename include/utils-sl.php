@@ -22,15 +22,26 @@ function add_accounting_vendor($con, $company_id, $company_name, $company_code, 
 	$sl_con = &adonewconnection($sl_db_dbtype);
 	$sl_con->connect($sl_db_server, $sl_db_username, $sl_db_password, $sl_db_dbname);
 	
-	$sql_insert_vendor = "insert into vendor (name, vendornumber) values (" . $sl_con->qstr($company_name, get_magic_quotes_gpc) . ", " . $sl_con->qstr($company_code, get_magic_quotes_gpc) . ")";	
+    //save to database
+    $rec = array();
+    $rec['name'] = $company_name;
+    $rec['vendornumber'] = $company_code;
+    
+    $tbl = 'vendor';
+    $sql_insert_vendor = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 	$sl_con->execute($sql_insert_vendor);
 	
 	$extref2 = $sl_con->insert_id();
 	
 	$sl_con->close();
 	
-	$sql_update_vendor_info = "update companies set extref2 = " . $con->qstr($extref2, get_magic_quotes_gpc()) . " where company_id = $company_id";
+    $sql_which_company = "SELECT * FROM companies WHERE company_id = $company_id";
+    $rst_which_company = $con->execute($sql_which_company);
 	
+    $rec = array();
+    $rec['extref2'] = $extref2;
+    
+	$sql_update_vendor_info = $con->GetUpdateSQL($rst_which_company, $rec, false, get_magic_quotes_gpc());
 	$con->execute($sql_update_vendor_info);
 	
 }
@@ -40,15 +51,26 @@ function add_accounting_customer($con, $company_id, $company_name, $company_code
 	$sl_con = &adonewconnection($sl_db_dbtype);
 	$sl_con->connect($sl_db_server, $sl_db_username, $sl_db_password, $sl_db_dbname);
 	
-	$sql_insert_customer = "insert into customer (name, customernumber) values (" . $sl_con->qstr($company_name, get_magic_quotes_gpc) . ", " . $sl_con->qstr($company_code, get_magic_quotes_gpc) . ")";	
+    //save to database
+    $rec = array();
+    $rec['name'] = $company_name;
+    $rec['customernumber'] = $company_code;
+    
+    $tbl = 'customer';
+    $sql_insert_customer = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 	$sl_con->execute($sql_insert_customer);
 	
 	$extref1 = $sl_con->insert_id();
 	
 	$sl_con->close();
 	
-	$sql_update_customer_info = "update companies set extref1 = " . $con->qstr($extref1, get_magic_quotes_gpc()) . " where company_id = $company_id";
+    $sql_which_company = "SELECT * FROM companies WHERE company_id = $company_id";
+    $rst_which_company = $con->execute($sql_which_company);
+    
+    $rec = array();
+    $rec['extref1'] = $extref1;
 	
+	$sql_update_customer_info = $con->GetUpdateSQL($rst_which_company, $rec, false, get_magic_quotes_gpc());
 	$con->execute($sql_update_customer_info);
 	
 }

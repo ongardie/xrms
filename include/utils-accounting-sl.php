@@ -136,7 +136,13 @@ function add_accounting_vendor($con, $company_id, $company_name, $company_code, 
 	$sl_con = &adonewconnection($sl_db_dbtype);
 	$sl_con->connect($sl_db_server, $sl_db_username, $sl_db_password, $sl_db_dbname);
 	
-	$sql_insert_vendor = "insert into vendor (name, vendornumber) values (" . $sl_con->qstr($company_name, get_magic_quotes_gpc) . ", " . $sl_con->qstr($company_code, get_magic_quotes_gpc) . ")";	
+    //save to database
+    $rec = array();
+    $rec['name'] = $company_name;
+    $rec['vendornumber'] = $company_code;
+
+    $tbl = 'vendor';
+    $sql_insert_vendor = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 	$sl_con->execute($sql_insert_vendor);
 	
 	$sql_which_vendor = "select max(id) as vendor_id from vendor";
@@ -145,8 +151,13 @@ function add_accounting_vendor($con, $company_id, $company_name, $company_code, 
 	$rst_which_vendor->close();
 	$sl_con->close();
 	
-	$sql_update_vendor_info = "update companies set extref2 = " . $con->qstr($extref2, get_magic_quotes_gpc()) . " where company_id = $company_id";
+    $sql_which_company = "SELECT * FROM companies WHERE company_id = $company_id";
+    $rst_which_company = $con->execute($sql_which_company);
 	
+    $rec = array();
+    $rec['extref2'] = $extref2;
+
+	$sql_update_vendor_info = $con->GetUpdateSQL($rst_which_company, $rec, false, get_magic_quotes_gpc());
 	$con->execute($sql_update_vendor_info);
 	
 }
@@ -162,7 +173,13 @@ function add_accounting_customer($con, $company_id, $company_name, $company_code
 	$sl_con = &adonewconnection($sl_db_dbtype);
 	$sl_con->connect($sl_db_server, $sl_db_username, $sl_db_password, $sl_db_dbname);
 	
-	$sql_insert_customer = "insert into customer (name, customernumber) values (" . $sl_con->qstr($company_name, get_magic_quotes_gpc) . ", " . $sl_con->qstr($company_code, get_magic_quotes_gpc) . ")";	
+    //save to database
+    $rec = array();
+    $rec['name'] = $company_name;
+    $rec['customernumber'] = $company_code;
+
+    $tbl = 'customer';
+    $sql_insert_customer = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 	$sl_con->execute($sql_insert_customer);
 	
 	$sql_which_customer = "select max(id) as customer_id from customer";
@@ -172,8 +189,13 @@ function add_accounting_customer($con, $company_id, $company_name, $company_code
 	
 	$sl_con->close();
 	
-	$sql_update_customer_info = "update companies set extref1 = " . $con->qstr($extref1, get_magic_quotes_gpc()) . " where company_id = $company_id";
+    $sql_which_company = "SELECT * FROM companies WHERE company_id = $company_id";
+    $rst_which_company = $con->execute($sql_which_company);
 	
+    $rec = array();
+    $rec['extref1'] = $extref1;
+
+	$sql_update_customer_info = $con->GetUpdateSQL($rst_which_company, $rec, false, get_magic_quotes_gpc());
 	$con->execute($sql_update_customer_info);
 	
 }
@@ -189,7 +211,13 @@ function update_vendor_account_information($extref2, $vendor_credit_limit, $vend
 	$sl_con = &adonewconnection($sl_db_dbtype);
 	$sl_con->connect($sl_db_server, $sl_db_username, $sl_db_password, $sl_db_dbname);
 	
-	$sql_update_vendor_info = "update vendor set terms = $vendor_terms where extref = $extref2";
+    $sql_which_vendor = "SELECT * FROM vendor WHERE extref = $extref2";
+    $rst_which_vendor = $sl_con->execute($sql_which_vendor);
+
+    $rec = array();
+    $rec['terms'] = $vendor_terms;
+
+	$sql_update_vendor_info = $sl_con->GetUpdateSQL($rst_which_vendor, $rec, false, get_magic_quotes_gpc());
 	$sl_con->execute($sql_update_vendor_info);
 	
 	$sl_con->close();
@@ -207,7 +235,14 @@ function update_customer_account_information($extref1, $customer_credit_limit, $
 	$sl_con = &adonewconnection($sl_db_dbtype);
 	$sl_con->connect($sl_db_server, $sl_db_username, $sl_db_password, $sl_db_dbname);
 	
-	$sql_update_customer_info = "update customer set terms = $customer_sterms, creditlimit = $customer_credit_limit where id = $extref1";
+    $sql_which_customer = "SELECT * FROM customer WHERE id = $extref1";
+    $rst_which_customer = $sl_con->execute($sql_which_customer);
+
+    $rec = array();
+    $rec['terms'] = $customer_sterms;
+    $rec['creditlimit'] = $customer_credit_limit;
+
+	$sql_update_customer_info = $sl_con->GetUpdateSQL($rst_which_customer, $rec, false, get_magic_quotes_gpc());
 	$sl_con->execute($sql_update_customer_info);
 	
 	$sl_con->close();
@@ -260,8 +295,22 @@ function add_sales_order_to_accounting_system($order_id) {
 	$rst_order_details->close();
 	
 	// insert those order details into SQL-Ledger
+    $rec = array();
+    $rec['ordnumber'] = $ordnumber;
+    $rec['transdate'] = $sl_con->dbdate($transdate);
+    $rec['vendor_id'] = $vendor_id;
+    $rec['customer_id'] = $customer_id;
+    $rec['amount'] = $amount;
+    $rec['netamount'] = $netamount;
+    $rec['reqdate'] = $sl_con->dbdate($reqdate);
+    $rec['taxincluded'] = $taxincluded;
+    $rec['shippingpoint'] = $shippingpoint;
+    $rec['notes'] = $notes;
+    $rec['curr'] = $curr;
+    $rec['closed'] = $closed;
 	
-	$sql_add_new_order = "insert into oe (ordnumber, transdate, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, curr, closed) values (" . $sl_con->qstr($ordnumber, get_magic_quotes_gpc()) . ", " . $sl_con->dbdate($transdate) . ", " . $vendor_id . ", " . $customer_id . ", " . $amount . ", " . $netamount . ", " . $sl_con->dbdate($reqdate) . ", " . $sl_con->qstr($taxincluded, get_magic_quotes_gpc()) . ", " . $sl_con->qstr($shippingpoint, get_magic_quotes_gpc()) . ", " . $sl_con->qstr($notes, get_magic_quotes_gpc()) . ", " . $sl_con->qstr($curr, get_magic_quotes_gpc()) . ", " . $sl_con->qstr($closed, get_magic_quotes_gpc()) . ")";
+    $tbl = 'oe';
+    $sql_add_new_order = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 	$sl_con->execute($sql_add_new_order);
 	
 	// fetch the new trans id
@@ -271,7 +320,13 @@ function add_sales_order_to_accounting_system($order_id) {
 	$transid = $rst_new_transid->fields['transid'];
 	$rst_new_transid->close();
 	
-	$sql_update_order_extref = "update orders set extref1 = " . $bs_con->qstr($transid, get_magic_quotes_gpc())  . " where order_id = $order_id";
+    $sql_which_order = "SELECT * FROM orders WHERE order_id = $order_id";
+    $rst_which_order = $bs_con->execute($sql_which_order);
+
+    $rec = array();
+    $rec['extref1'] = $transid;
+
+	$sql_update_order_extref = $bs_con->GetUpdateSQL($rst_which_order, $rec, false, get_magic_quotes_gpc());
 	$bs_con->execute($sql_update_order_extref);
 	
 	$sql_fetch_items_in_order = "select * from items_in_orders where order_id = $order_id";
@@ -293,8 +348,19 @@ function add_sales_order_to_accounting_system($order_id) {
 				$income_accno_id = fetch_income_accno_id($sl_con);
 				$expense_accno_id = fetch_expense_accno_id($sl_con);
 				$unit = '';
-				$sql_insert_part = "insert into parts (partnumber, unit, inventory_accno_id, income_accno_id, expense_accno_id) values (" . $sl_con->qstr($rst_items_in_order->fields['clean_pn'], get_magic_quotes_gpc()) . ", " . $sl_con->qstr($unit, get_magic_quotes_gpc()) . ", $inventory_accno_id, $income_accno_id, $expense_accno_id)";
+                
+                //save to database
+                $rec = array();
+                $rec['partnumber'] = $rst_items_in_order->fields['clean_pn'];
+                $rec['unit'] = $unit;
+                $rec['inventory_accno_id'] = $inventory_accno_id;
+                $rec['income_accno_id'] = $income_accno_id;
+                $rec['expense_accno_id'] = $expense_accno_id;
+                
+                $tbl = 'parts';
+                $sql_insert_part = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 				$sl_con->execute($sql_insert_part);
+                
 				$sql_fetch_new_part_id = "select max(id) as max_partid from parts";
 				$rst_new_part_id = $sl_con->execute($sql_fetch_new_part_id);
 				$part_id = $rst_new_part_id->fields['max_partid'];
@@ -302,8 +368,17 @@ function add_sales_order_to_accounting_system($order_id) {
 			}
 			
 			// we've got a part, now add the item to the order in SQL-Ledger
-			$sql_add_item_to_order = "insert into orderitems (trans_id, parts_id, description, qty, sellprice) values ($transid, $part_id, " . $sl_con->qstr($rst_items_in_order->fields['clean_pn'], get_magic_quotes_gpc()) . ", " . $rst_items_in_order->fields['qty'] . ", " . $rst_items_in_order->fields['price'] . ")";
+            $rec = array();
+            $rec['trans_id'] = $trans_id;
+            $rec['parts_id'] = $part_id;
+            $rec['description'] = $rst_items_in_order->fields['clean_pn'];
+            $rec['qty'] = $rst_items_in_order->fields['qty'];
+            $rec['sellprice'] = $rst_items_in_order->fields['price'];
+
+            $tbl = 'orderitems';
+            $sql_add_item_to_order = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 			$sl_con->execute($sql_add_item_to_order);
+            
 			$rst_items_in_order->movenext();
 		}
 		
@@ -363,8 +438,22 @@ function add_purchase_order_to_accounting_system($order_id) {
 	$rst_order_details->close();
 	
 	// insert those order details into SQL-Ledger
+    $rec = array();
+    $rec['ordnumber'] = $ordnumber;
+    $rec['transdate'] = $sl_con->dbdate($transdate);
+    $rec['vendor_id'] = $vendor_id;
+    $rec['customer_id'] = $customer_id;
+    $rec['amount'] = $amount;
+    $rec['netamount'] = $netamount;
+    $rec['reqdate'] = $sl_con->dbdate($reqdate);
+    $rec['taxincluded'] = $taxincluded;
+    $rec['shippingpoint'] = $shippingpoint;
+    $rec['notes'] = $notes;
+    $rec['curr'] = $curr;
+    $rec['closed'] = $closed;
 	
-	$sql_add_new_order = "insert into oe (ordnumber, transdate, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, curr, closed) values (" . $sl_con->qstr($ordnumber, get_magic_quotes_gpc()) . ", " . $sl_con->dbdate($transdate) . ", " . $vendor_id . ", " . $customer_id . ", " . $amount . ", " . $netamount . ", " . $sl_con->dbdate($reqdate) . ", " . $sl_con->qstr($taxincluded, get_magic_quotes_gpc()) . ", " . $sl_con->qstr($shippingpoint, get_magic_quotes_gpc()) . ", " . $sl_con->qstr($notes, get_magic_quotes_gpc()) . ", " . $sl_con->qstr($curr, get_magic_quotes_gpc()) . ", " . $sl_con->qstr($closed, get_magic_quotes_gpc()) . ")";
+    $tbl = 'oe';
+    $sql_add_new_order = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 	$sl_con->execute($sql_add_new_order);
 	
 	// fetch the new trans id
@@ -374,7 +463,13 @@ function add_purchase_order_to_accounting_system($order_id) {
 	$transid = $rst_new_transid->fields['transid'];
 	$rst_new_transid->close();
 	
-	$sql_update_order_extref = "update orders set extref1 = " . $bs_con->qstr($transid, get_magic_quotes_gpc())  . " where order_id = $order_id";
+    $sql_which_order = "SELECT * FROM orders WHERE order_id = $order_id";
+    $rst_which_order = $bs_con->execute($sql_which_order);
+
+    $rec = array();
+    $rec['extref1'] = $transid;
+
+	$sql_update_order_extref = $bs_con->GetUpdateSQL($rst_which_order, $rec, false, get_magic_quotes_gpc());
 	$bs_con->execute($sql_update_order_extref);
 	
 	$sql_fetch_items_in_order = "select * from items_in_orders where order_id = $order_id";
@@ -396,8 +491,19 @@ function add_purchase_order_to_accounting_system($order_id) {
 				$income_accno_id = fetch_income_accno_id($sl_con);
 				$expense_accno_id = fetch_expense_accno_id($sl_con);
 				$unit = '';
-				$sql_insert_part = "insert into parts (partnumber, unit, inventory_accno_id, income_accno_id, expense_accno_id) values (" . $sl_con->qstr($rst_items_in_order->fields['clean_pn'], get_magic_quotes_gpc()) . ", " . $sl_con->qstr($unit, get_magic_quotes_gpc()) . ", $inventory_accno_id, $income_accno_id, $expense_accno_id)";
+                
+                //save to database
+                $rec = array();
+                $rec['partnumber'] = $rst_items_in_order->fields['clean_pn'];
+                $rec['unit'] = $unit;
+                $rec['inventory_accno_id'] = $inventory_accno_id;
+                $rec['income_accno_id'] = $income_accno_id;
+                $rec['expense_accno_id'] = $expense_accno_id;
+                
+                $tbl = 'parts';
+                $sql_insert_part = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 				$sl_con->execute($sql_insert_part);
+                
 				$sql_fetch_new_part_id = "select max(id) as max_partid from parts";
 				$rst_new_part_id = $sl_con->execute($sql_fetch_new_part_id);
 				$part_id = $rst_new_part_id->fields['max_partid'];
@@ -405,8 +511,19 @@ function add_purchase_order_to_accounting_system($order_id) {
 			}
 			
 			// we've got a part, now add the item to the order in SQL-Ledger
-			$sql_add_item_to_order = "insert into orderitems (trans_id, parts_id, description, qty, sellprice) values ($transid, $part_id, " . $sl_con->qstr($rst_items_in_order->fields['clean_pn'], get_magic_quotes_gpc()) . ", " . $rst_items_in_order->fields['qty'] . ", " . $rst_items_in_order->fields['price'] . ")";
+            $sql_select_empty = "SELECT * FROM orderitems WHERE 1 = 2"; //select empty record as placeholder
+            $rst_select_empty = $sl_con->execute($sql_select_empty);
+            
+            $rec = array();
+            $rec['trans_id'] = $trans_id;
+            $rec['parts_id'] = $part_id;
+            $rec['description'] = $rst_items_in_order->fields['clean_pn'];
+            $rec['qty'] = $rst_items_in_order->fields['qty'];
+            $rec['sellprice'] = $rst_items_in_order->fields['price'];
+
+            $sql_add_item_to_order = $sl_con->GetInsertSQL($rst_select_empty, $rec, get_magic_quotes_gpc());
 			$sl_con->execute($sql_add_item_to_order);
+            
 			$rst_items_in_order->movenext();
 		}
 		
