@@ -14,6 +14,8 @@ class array_sorter
    var $sarray = false;
    var $sasc = true;
 
+   var $sort_is_numeric = true;
+
    /**
    * Constructor
    *
@@ -38,6 +40,17 @@ class array_sorter
    function sortit($remap=true)
    {
        $array = &$this->sarray;
+
+		foreach($array as $k => $v) {
+
+			// this should work for 0, '', and null as well (they shoudn't set 'is not numeric')
+			if($v[$this->skey] && !is_numeric($v[$this->skey])) {
+				//echo $v[$this->skey]  . " is not numeric!<br>";
+				$this->sort_is_numeric = false;
+				break;
+			}
+		}
+
        uksort($array, array($this, "_as_cmp"));
        if ($remap)
        {
@@ -70,14 +83,8 @@ class array_sorter
        //if string - use string comparision
 	   // justin changed to use is_numeric instead of ctype_digit, which fails on decimal points
        //if (!ctype_digit($a) && !ctype_digit($b))
-       if (!is_numeric($a) && !is_numeric($b))
-       {
-           if ($this->sasc)
-               return strcmp($a, $b);
-           else
-               return strcmp($b, $a);
-       }
-       else
+       //if (!is_numeric($a) && !is_numeric($b))
+	   if($this->sort_is_numeric)
        {
            if ($a == $b)
                return 0;
@@ -87,9 +94,20 @@ class array_sorter
            else
                return ($a > $b) ? 1 : -1;
        }
+       else
+       {
+           if ($this->sasc)
+               return strcmp($a, $b);
+           else
+               return strcmp($b, $a);
+       }
    }
 
 }//end of class
+
+/**
+* $ Log: $
+*/
 
 
 ?>
