@@ -30,6 +30,8 @@ $rec['case_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+add_audit_item($con, $session_user_id, 'deleted', 'cases', $case_id, 1);
+
 $con->close();
 
 header("Location: some.php?msg=case_deleted");

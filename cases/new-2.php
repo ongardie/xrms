@@ -2,7 +2,7 @@
 /**
  * Insert a new Case into the Database
  *
- * $Id: new-2.php,v 1.9 2005/01/13 18:13:12 vanmer Exp $
+ * $Id: new-2.php,v 1.10 2005/03/29 23:52:48 maulani Exp $
  */
  
 require_once('../include-locations.inc');
@@ -53,6 +53,8 @@ $con->execute($ins);
 
 $case_id = $con->insert_id();
 
+add_audit_item($con, $session_user_id, 'created', 'cases', $case_id, 1);
+
 //generate activities for the new case
 $on_what_table = "cases";
 $on_what_id = $case_id;
@@ -66,6 +68,9 @@ header("Location: one.php?msg=case_added&case_id=$case_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.10  2005/03/29 23:52:48  maulani
+ * - Add audit trail
+ *
  * Revision 1.9  2005/01/13 18:13:12  vanmer
  * - Basic ACL changes to allow create functionality to be restricted
  *

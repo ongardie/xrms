@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.39 2005/03/21 13:40:54 maulani Exp $
+ * $Id: one.php,v 1.40 2005/03/29 23:52:48 maulani Exp $
  */
 
 //include required files
@@ -249,6 +249,8 @@ if ($rst) {
    db_error_handler ($con,$sql);
 }
 
+add_audit_item($con, $session_user_id, 'viewed', 'cases', $case_id, 3);
+
 $con->close();
 
 $page_title = _("Case #") . $case_id . ": " . $case_title;
@@ -441,6 +443,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.40  2005/03/29 23:52:48  maulani
+ * - Add audit trail
+ *
  * Revision 1.39  2005/03/21 13:40:54  maulani
  * - Remove redundant code by centralizing common user menu call
  *

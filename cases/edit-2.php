@@ -91,6 +91,8 @@ if ( ! $no_update ) {
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
 
+    add_audit_item($con, $session_user_id, 'updated', 'cases', $case_id, 1);
+
     if (!$return_url) $return_url="one.php?msg=saved&case_id=$case_id";
     
     header("Location: $return_url");
