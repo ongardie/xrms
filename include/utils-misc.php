@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.102 2005/01/04 16:27:55 neildogg Exp $
+ * $Id: utils-misc.php,v 1.103 2005/01/08 23:32:40 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -984,13 +984,12 @@ function update_daylight_savings($con) {
  *
  * @author Neil Roberts
  */
-
 function current_page() {
     global $http_site_root;
     $page = '';
     $site_directories = explode('/', $http_site_root);
 
-    $request_uri = getenv("REQUEST_URI");
+    $request_uri = $_SERVER['REQUEST_URI'];
     $parts = explode('?', $request_uri, 2);
     $directories = explode('/', $parts[0]);
     foreach($directories as $directory) {
@@ -1407,6 +1406,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.103  2005/01/08 23:32:40  braverock
+ * - change current_page fn to use $_SERVER['REQUEST_URI'] instead of getenv('REQUEST_URI')
+ *   IIS doesn't allow getenv calls, so you need to use $_SERVER for portability
+ *
  * Revision 1.102  2005/01/04 16:27:55  neildogg
  * - Removed force index
  *
