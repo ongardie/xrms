@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.17 2004/07/10 13:51:18 braverock Exp $
+ * $Id: new-2.php,v 1.18 2004/07/13 19:52:37 braverock Exp $
  */
 
 //where do we include from
@@ -35,6 +35,7 @@ getGlobalVar($return_url , 'return_url');
 getGlobalVar($activity_type_id , 'activity_type_id');
 getGlobalVar($on_what_table , 'on_what_table');
 getGlobalVar($on_what_id , 'on_what_id');
+getGlobalVar($on_what_status , 'on_what_status');
 getGlobalVar($activity_title , 'activity_title');
 getGlobalVar($activity_description , 'activity_description');
 getGlobalVar($activity_status , 'activity_status');
@@ -55,6 +56,7 @@ if (!$scheduled_at) {
 }
 
 if ($followup) {
+    //set the time for the new activity if it isn't already set
     if ($default_followup_time) {
         $scheduled_at = date('Y-m-d', strtotime($default_followup_time) ) ;
     } else {
@@ -77,11 +79,80 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
+echo '<br>'.$associate_activities;
+
+//check to see if we need to associate with an opportunity or case
+if ($associate_activities = true ) {
+    if ($on_what_table='contacts' or $on_what_table='') {
+        $opp_arr = array();
+        $case_arr = array();
+        $arr_count = 0;
+
+        //get active case ids for this company
+        $case_sql = "select case_id from cases
+                     left join case_statuses using (case_status_id)
+                     where
+                     company_id = $company_id
+                     and status_open_indicator = 'o'
+                     and case_record_status='a'";
+        $case_rst = $con->execute($case_sql);
+        if ($case_rst) {
+            if ($case_rst->RecordCount()>=1){
+                while (!$case_rst->EOF) {
+                    $case_arr[]=$case_rst->fields['case_id'];
+                    $case_rst->movenext();
+                    $arr_count++;
+                }
+            }
+            $case_rst->close();
+        } else {
+            db_error_handler ($con,$case_sql);
+        }
+
+        //get active opportunity ids for this company
+        $opp_sql = "select opportunity_id from opportunities
+                    left join opportunity_statuses using (opportunity_status_id)
+                    where
+                    company_id = $company_id
+                    and status_open_indicator = 'o'
+                    and opportunity_record_status='a'";
+        $opp_rst = $con->execute($opp_sql);
+        if ($opp_rst) {
+            if ($opp_rst->RecordCount()>=1){
+                while (!$opp_rst->EOF) {
+                    $opp_arr[]=$opp_rst->fields['opportunity_id'];
+                    $opp_rst->movenext();
+                    $arr_count++;
+                }
+            }
+            $opp_rst->close();
+            //echo '<br><pre>Opp Arr:'.print_r($opp_arr).'</pre>';
+        } else {
+            db_error_handler ($con,$opp_sql);
+        }
+
+        //we can only guess at the association if there is only one item to associate to
+        if ($arr_count==1) {
+            if (count($case_arr)){
+                //echo '<pre>'.print_r($case_arr).'</pre>';
+                $on_what_table = 'cases';
+                $on_what_id    = $case_arr[0];
+            }
+            if (count($opp_arr)){
+                //echo '<pre>'.print_r($opp_arr).'</pre>';
+                $on_what_table = 'opportunities';
+                $on_what_id    = $opp_arr[0];
+            }
+        }
+    } //end empty on_what_table check
+} // end associate code
+
 //save to database
 $rec = array();
 $rec['user_id'] = (strlen($user_id) > 0) ? $user_id : $session_user_id;
 $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
 $rec['activity_status'] = (strlen($activity_status) > 0) ? $activity_status : "o";
+$rec['on_what_status'] = ($on_what_status > 0) ? $on_what_status : 0;
 $rec['activity_title'] = (strlen($activity_title) > 0) ? $activity_title : "[none]";
 $rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
 $rec['on_what_table'] = (strlen($on_what_table) > 0) ? $on_what_table : '';
@@ -108,7 +179,7 @@ if ($email) {
 }
 
 //now send them back where they came from
-if ($activities_default_behavior == "Fast") {
+if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
     header("Location: " . $http_site_root . $return_url);
 } else {  //If Long activities are the default, send them to edit the activity
     header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
@@ -116,6 +187,10 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.18  2004/07/13 19:52:37  braverock
+ *- add ability to process activity association to open Opportunity/Case
+ *  for unassociated activities based on $associate_activities global
+ *
  *Revision 1.17  2004/07/10 13:51:18  braverock
  *- improved date handling error checking
  *

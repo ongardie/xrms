@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.23 2004/07/10 13:51:18 braverock Exp $
+ * $Id: edit-2.php,v 1.24 2004/07/13 19:52:37 braverock Exp $
  */
 
 //include required files
@@ -74,29 +74,102 @@ $contact_id = ($contact_id > 0) ? $contact_id : 'NULL';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+//$con->debug = 1;
 
 // if it's closed but wasn't before, update the closed_at timestamp
 $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : 'NULL';
 
+//check to see if we need to associate with an opportunity or case
+if ($associate_activities = true ) {
+    if ($on_what_table='contacts' or $on_what_table='') {
+        $opp_arr = array();
+        $case_arr = array();
+        $arr_count = 0;
+
+        //get active case ids for this company
+        $case_sql = "select case_id from cases
+                     left join case_statuses using (case_status_id)
+                     where
+                     company_id = $company_id
+                     and status_open_indicator = 'o'
+                     and case_record_status='a'";
+        $case_rst = $con->execute($case_sql);
+        if ($case_rst) {
+            if ($case_rst->RecordCount()>=1){
+                while (!$case_rst->EOF) {
+                    $case_arr[]=$case_rst->fields['case_id'];
+                    $case_rst->movenext();
+                    $arr_count++;
+                }
+            }
+            $case_rst->close();
+        } else {
+            db_error_handler ($con,$case_sql);
+        }
+
+        //get active opportunity ids for this company
+        $opp_sql = "select opportunity_id from opportunities
+                    left join opportunity_statuses using (opportunity_status_id)
+                    where
+                    company_id = $company_id
+                    and status_open_indicator = 'o'
+                    and opportunity_record_status='a'";
+        $opp_rst = $con->execute($opp_sql);
+        if ($opp_rst) {
+            if ($opp_rst->RecordCount()>=1){
+                while (!$opp_rst->EOF) {
+                    $opp_arr[]=$opp_rst->fields['opportunity_id'];
+                    $opp_rst->movenext();
+                    $arr_count++;
+                }
+            }
+            $opp_rst->close();
+            //echo '<br><pre>Opp Arr:'.print_r($opp_arr).'</pre>';
+        } else {
+            db_error_handler ($con,$opp_sql);
+        }
+
+        //we can only guess at the association if there is only one item to associate to
+        if ($arr_count==1) {
+            if (count($case_arr)){
+                //echo '<pre>'.print_r($case_arr).'</pre>';
+                $on_what_table = 'cases';
+                $on_what_id    = $case_arr[0];
+            }
+            if (count($opp_arr)){
+                //echo '<pre>'.print_r($opp_arr).'</pre>';
+                $on_what_table = 'opportunities';
+                $on_what_id    = $opp_arr[0];
+            }
+        }
+    } //end empty on_what_table check
+} // end associate code
+
 $sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
 $rst = $con->execute($sql);
-//$con->debug = 1;
 
 $rec = array();
-$rec['activity_type_id'] = $activity_type_id;
-$rec['contact_id'] = $contact_id;
-$rec['activity_title'] = $activity_title;
+$rec['activity_type_id']     = $activity_type_id;
+$rec['contact_id']           = $contact_id;
+$rec['activity_title']       = $activity_title;
 $rec['activity_description'] = $activity_description;
-$rec['user_id'] = $user_id;
-$rec['scheduled_at'] = $scheduled_at;
-$rec['ends_at'] = $ends_at;
-$rec['completed_at'] = $completed_at;
-$rec['activity_status'] = $activity_status;
+$rec['user_id']              = $user_id;
+$rec['scheduled_at']         = $scheduled_at;
+$rec['ends_at']              = $ends_at;
+$rec['completed_at']         = $completed_at;
+$rec['activity_status']      = $activity_status;
+$rec['on_what_table']        = $on_what_table;
+$rec['on_what_id']           = $on_what_id;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
-$rst = $con->execute($upd);
+if (strlen($upd)>0) {
+    $rst = $con->execute($upd);
+    if (!$rst) {
+        db_error_handler ($con, $upd);
+    }
+}
 
-if($on_what_table == 'opportunities') {
+if($on_what_table == 'opportunities' and (strlen($opportunity_description)>0)) {
     //Update Opportunity Description
     $sql = "SELECT * FROM opportunities WHERE opportunity_id = " . $on_what_id;
     $rst = $con->execute($sql);
@@ -105,26 +178,35 @@ if($on_what_table == 'opportunities') {
     $rec['opportunity_description'] = $opportunity_description;
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq);
-    $rst = $con->execute($upd);
+    if (strlen($upd)>0) {
+        $desc_rst = $con->execute($upd);
+        if (!$desc_rst) {
+            db_error_handler ($con, $upd);
+        }
+    }
 }
 
-if($on_what_table == 'opportunities' and strlen ($probability)) {
+if($on_what_table == 'opportunities' and (strlen($probability)>0)) {
     //Need old probability to see if pos should actually move
-    $sql = "select probability
+    $prob_sql = "select probability
         from opportunities
         where opportunity_id = $on_what_id";
     $prob_rst = $con->execute($sql);
-    $old_probability = $prob_rst->fields['probability'];
-    $prob_rst->close();
+    if ($prob_rst) {
+        $old_probability = $prob_rst->fields['probability'];
+        $prob_rst->close();
+    } else {
+        db_error_handler ($con, $prob_sql);
+    }
 
-    $sql = "SELECT * FROM opportunities WHERE opportunity_id = $on_what_id";
+    $opp_sql = "SELECT * FROM opportunities WHERE opportunity_id = $on_what_id";
     $rst = $con->execute($sql);
 
     $rec = array();
     $rec['probability'] = $probability;
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
-    if (strlen($upd)) {
+    if (strlen($upd)>0) {
         //update the probability
         $prob_rst= $con->execute($upd);
         if (!$prob_rst) {
@@ -285,7 +367,7 @@ if ($email_to) {
 }
 
 if ($followup) {
-    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( 'Follow-up ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&return_url=$return_url&followup=true" );
+    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( 'Follow-up ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&on_what_status=$old_status&return_url=$return_url&followup=true" );
 } elseif($saveandnext) {
     header("Location: browse-next.php?activity_id=$activity_id");
 } else {
@@ -294,6 +376,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.24  2004/07/13 19:52:37  braverock
+ * - add ability to process activity association to open Opportunity/Case
+ *   for unassociated activities based on $associate_activities global
+ *
  * Revision 1.23  2004/07/10 13:51:18  braverock
  * - improved date handling error checking
  *
