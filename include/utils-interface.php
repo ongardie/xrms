@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.32 2004/08/06 16:54:20 braverock Exp $
+ * $Id: utils-interface.php,v 1.33 2004/08/12 11:10:19 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -10,6 +10,9 @@ if ( !defined('IN_XRMS') )
   die('Hacking attempt');
   exit;
 }
+
+//include utils-misc if it isn't already defined, solves PHP 5 error
+require_once($include_directory . 'utils-misc.php');
 
 /**
  * Include the i18n files, as every file with output will need them
@@ -232,6 +235,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.33  2004/08/12 11:10:19  braverock
+ * - add require_once for utils-misc.php to solve SF bug 1005069
+ *
  * Revision 1.32  2004/08/06 16:54:20  braverock
  * - pull i18n vars definitions in a 'global' in start_page fn
  *
