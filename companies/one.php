@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.86 2005/01/24 02:49:35 braverock Exp $
+ * $Id: one.php,v 1.87 2005/01/25 21:56:01 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -730,7 +730,7 @@ function openNewsWindow() {
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
 
-        <input type=hidden name=return_url value="/companies/one.php%3Fcompany_id=<?php  echo $company_id; ?><?php echo ($division_id) ? "%26division_id=" . $division_id : ''; ?>">
+        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?><?php echo ($division_id) ? "%26division_id=" . $division_id : ''; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
         <input type=hidden name=use_post_vars value="1">
@@ -823,6 +823,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.87  2005/01/25 21:56:01  daturaarutad
+ * fixed bug when adding an activity to a company
+ *
  * Revision 1.86  2005/01/24 02:49:35  braverock
  * - properly urlencode return_url strings
  * - add check for division_id before includign it in return_url
