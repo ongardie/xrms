@@ -26,7 +26,7 @@
  *
  * @example Pager_Columns.doc.1.php check out 
  *
- * $Id: Pager_Columns.php,v 1.5 2005/03/10 20:38:09 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.6 2005/03/15 22:28:05 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -42,18 +42,11 @@ class Pager_Columns {
 
 
 		$columns = array();
+
 		// internally we always refer to the thing by the value
-
-		$sql_query_column = 0;
-
 		foreach($pager_columns as $pager_column) { 
 
 			if($pager_column['index_sql']) {
-				$sql_query_column++;
-				if(!isset($pager_column['sql_sort_column'])) {
-					//echo "settin query col to $sql_query_column for {$pager_column['index_sql']}<br/>";
-					$pager_column['sql_sort_column'] = $sql_query_column;
-				}
 				$columns[$pager_column['index_sql']] = $pager_column; 
 			} elseif($pager_column['index_calc']) {
 				$columns[$pager_column['index_calc']] = $pager_column; 
@@ -256,6 +249,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.6  2005/03/15 22:28:05  daturaarutad
+ * removed setting of sql_sort_column, its now it GUP_Pager::SetUpSQLOrderByClause
+ *
  * Revision 1.5  2005/03/10 20:38:09  daturaarutad
  * no longer require default_columns
  *
