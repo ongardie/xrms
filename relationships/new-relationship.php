@@ -1,10 +1,10 @@
 <?php
 /**
- * Associated Relationships
+ * new_relationship.php
  *
- * Submit from new-relationship.php to initiate name search (code exceptions as needed).
+ * First page in sequence to create a new relationship between two entities
  *
- * @author Neil Roberts
+ * @author Aaron van Meerten
  */
 
 
@@ -18,156 +18,89 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$on_what_id = $_POST['on_what_id'];
-$working_direction = $_POST['working_direction'];
-$return_url = $_POST['return_url'];
-$relationship_name = $_POST['relationship_name'];
+GetGlobalVar($on_what_id,'on_what_id');
+
+//GetGlobalVar($working_direction = $_POST['working_direction'];
+GetGlobalVar($return_url,'return_url');
+GetGlobalVar($on_what_table,'on_what_table');
+GetGlobalVar($msg, 'msg');
+
+//$relationship_name = $_POST['relationship_name'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT from_what_table, to_what_table
-        FROM relationship_types
-        WHERE relationship_name='$relationship_name'";
-$rst = $con->execute($sql);
+$singular_table=make_singular($on_what_table);
 
-if($working_direction == "from") {
-    $opposite_direction = "to";
-}
-else {
-    $opposite_direction = "from";
-}
+        //Create query to get the name of the entity, either contact first/last name or _name
+        $name_order = implode(', ', array_reverse(table_name($on_what_table)));
+        $name_concat = $con->Concat(implode(', \' \', ', table_name($on_what_table)));    
+        $namesql = "SELECT $name_concat as name FROM $on_what_table WHERE $singular_table" . "_id=$on_what_id";
 
-if($working_direction == "both") {
-    $working_table = $rst->fields['from_what_table'];
-    $what_table = false;
-}
-else {
-    $working_table = $rst->fields[$working_direction . '_what_table'];
-    $what_table = $rst->fields[$opposite_direction . '_what_table'];
-}
-$display_name = ucfirst(make_singular($working_table));
+    $namerst = $con->execute($namesql);
+    if (!$namerst) { db_error_handler($con, $namesql); }
+    elseif ($namerst->numRows()>0) { 
+        $entityName = $namerst->fields["name"];
+    } else { $entityName = $singular_table; }
 
-if($working_table == "companies" and $what_table == "contacts") {
-    $sql = "(SELECT 'Enter other contact' AS name,
-            0 AS contact_id)
-            UNION
-            (SELECT " .
-            $con->Concat("first_names", "' '", "last_name") . " AS name,
-            contact_id
-            FROM contacts
-            WHERE company_id=" . $on_what_id . "
-            AND contact_record_status='a')
-            ORDER BY name";
-
+$directions=array('from','to');
+$optionsarray=array();
+//loop over the possible directions between relationships
+foreach ($directions as $direction) {
+    //search for this table in relationships in this direction
+    $sql="SELECT *
+    FROM relationship_types
+    WHERE $direction"."_what_table = " . $con->qstr($on_what_table);
+    
     $rst = $con->execute($sql);
-    
-    $contact_menu = $rst->getmenu2('possible_id', ' ', false);
-
-}
-elseif($working_table == "contacts" and $working_direction == "both") {
-    $sql = "(SELECT 'Enter other contact' AS name,
-            0 AS contact_id)
-            UNION
-            (SELECT " .
-            $con->Concat("c2.first_names", "' '", "c2.last_name") . " AS name,
-            c2.contact_id
-            FROM contacts c, contacts c2
-            WHERE c.contact_id=" . $on_what_id . "
-            AND c2.contact_id!=" . $on_what_id . "
-            AND c.company_id=c2.company_id
-            AND c2.contact_record_status='a')
-            ORDER BY name";
-            
-    $rst = $con->execute($sql);
-    
-    $contact_menu = $rst->getmenu2('possible_id', ' ', false);
+    if ($direction=='from') { $opposite='to'; } else { $opposite='from'; }
+    if (!$rst) { db_error_handler($con, $sql); }
+    if ($rst->numRows()>0) {
+        while (!$rst->EOF) {
+            //make array keyed on text (should be unique), and set to relationship_type,direction
+            $optionsarray[strtolower($rst->fields[$direction.'_what_text']).' '.                    make_singular($rst->fields[$opposite.'_what_table'])]=$rst->fields['relationship_type_id'].','.$direction;
+            $rst->movenext();
+        }
+    }
     
 }
+        $options='';        
 
-$con->close();
-$page_title = _("Add " . $display_name);
+        ksort($optionsarray);
+        reset($optionsarray);
+        
+        //options should be look like: <option value="2,from">Retains consultant contact</option>
+        foreach ($optionsarray as $text=>$type) {
+            $options.='<option value="'. $type. '">'.$text."</option";
+        }
+
+$display_name = ucfirst($singular_table);
+
+$page_title = _("Add Relationship for ") . $display_name;
 
 start_page($page_title, true, $msg);
-
 ?>
-
 <div id="Main">
     <div id="Content">
 
         <form action=new-relationship-2.php method=post>
-        <input type="hidden" name="relationship_name" value="<?php echo $relationship_name; ?>">
         <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
-        <input type="hidden" name="working_direction" value="<?php echo $working_direction; ?>">
+        <input type="hidden" name="on_what_table" value="<?php echo $on_what_table; ?>">
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
         <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header><?php echo _("Search for ".$display_name); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Name or ID"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element>
-                    <?php
-                        if($contact_menu) {
-                            echo $contact_menu;
-                        }
-                    ?>
-                    <input type=text size=18 maxlength=100 name="search_on"> <?php  echo $required_indicator ?>
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input class=button type=submit value="<?php echo _("Search"); ?>"></td>
-            </tr>
+            <tr><td class=widget_content_form_element><?php echo $display_name . ': ' .$entityName; ?> <select name=relationship_type_direction><?php echo $options; ?></select>
+                <input type=text size=8 name=search_on>
+            </td></tr>
+            <tr><td class=widget_content_form_element><input type=submit class=button name=relSearch value="<?php echo _("Search"); ?>"></td></tr>
         </table>
         </form>
-
-    </div>
-
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
-</div>
-
 <?php
-
-end_page();
-
-/**
+/*
  * $Log: new-relationship.php,v $
- * Revision 1.7  2004/09/13 23:41:12  introspectshun
- * - Made queries multi-db compatible.
- * - When using ORDER BY with a UNION, use column alias not column name or position (deprecated forms)
+ * Revision 1.8  2004/12/01 18:33:41  vanmer
+ * - New revision of the new-relationship.php page to more generally create relationships between entities
+ * - Starts the creation process by selecting the relationship_type and direction
+ * - adds search terms to allow restriction of the list of the other side of the relationship
  *
- * Revision 1.6  2004/07/30 15:03:50  neildogg
- * - Cleaned up code and gave contact menu to contacts/both
- *
- * Revision 1.5  2004/07/28 17:59:39  neildogg
- * - Added drop down box if added a contact to a company
- *
- * Revision 1.4  2004/07/25 22:48:30  johnfawcett
- * - updated gettext strings
- *
- * Revision 1.2  2004/07/18 18:10:22  braverock
- * - convert all strings for i18n/translation
- *   - applies i18n patch contributed by John Fawcett
- *
- * Revision 1.1  2004/07/14 14:08:53  neildogg
- * - Add new relationship now in /relationships directory
- *
- * Revision 1.3  2004/07/07 21:19:38  neildogg
- * -Added first/last name search
- *
- * Revision 1.2  2004/07/05 22:13:27  introspectshun
- * - Include adodb-params.php
- *
- * Revision 1.1  2004/07/01 19:48:10  braverock
- * - add new configurable relationships code
- *   - adapted from patches submitted by Neil Roberts
  *
  */
 ?>
-
