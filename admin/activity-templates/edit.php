@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.4 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: edit.php,v 1.5 2004/07/25 17:24:19 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,7 +44,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = _("Activity Template: ") . ucwords($activity_title);
+$page_title = _("Activity Template Details") .': ' .ucwords($activity_title);
 start_page($page_title);
 
 ?>
@@ -97,13 +97,12 @@ start_page($page_title);
              </tr>
              <tr>
                    <td class=widget_content>
-                   <?php echo _("Click the button below to remove this")
-                            . '<br> '
-                            . _("activity template from the system.")
+                   <?php echo _("Click the button below to permanently remove this item.")
                             . '<p>'
-                            . _("Note: This action CANNOT be undone!");
+                            . _("Note: This action CANNOT be undone!")
+                            . '</p>';
                    ?>
-                   <p><input class=button type=submit value="<?php echo _("Delete Activity Template"); ?>">
+					<p><input class=button type=submit value="<?php echo _("Delete"); ?>">
                    </td>
              </tr>
         </table>
@@ -118,6 +117,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.5  2004/07/25 17:24:19  johnfawcett
+ * - standardized page title
+ * - standardized delete text and button
+ *
  * Revision 1.4  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *
