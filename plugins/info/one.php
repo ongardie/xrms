@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.14 2005/03/18 20:54:37 gpowers Exp $
+ * $Id: one.php,v 1.15 2005/04/01 21:50:14 ycreddy Exp $
  *
  */
 
@@ -70,11 +70,26 @@ if (!$rst) {
   exit;
 }
 
-# Build an array of this server's elements indexed by element_id
+# Build an array of this server's elements with potential multiple values
+# for each element indexed by element_id. The value of this array
+# is itself an array containing info values.
 $this_info = array();
 if(!$rst->EOF) {
     while (!$rst->EOF) {
-        $this_info[$rst->fields['element_id']] = $rst->fields['value'];
+    	$elem_id = $rst->fields['element_id'];
+	$value = $rst->fields['value'];
+	// get the values array for this element
+	$values = $this_info[$elem_id]; 
+	// if it exists, add it at the end
+	if ($values) {
+		$values[count($values) + 1] = $value;
+		$this_info[$elem_id] = $values;
+	} else {
+		// create a new values array and add the value
+		$values = array();
+		$values[1] = $value;
+		$this_info[$elem_id] = $values;
+	}
         $rst->movenext();
     }
 }
@@ -87,28 +102,39 @@ while (!$all_elements->EOF) {
   $element_id = $all_elements->fields['element_id'];
   $column = $all_elements->fields['element_column'];
 
-  # If this server doesn't have this element defined, use default value
-  $value = (array_key_exists($element_id, $this_info)) ?
-    $this_info[$element_id] : $all_elements->fields['element_default_value'];
-
-  # Use words for checkbox status
-  if ($all_elements->fields['element_type'] == "checkbox") {
-    $print_value = (1 == $value) ? $checkbox_set : $checkbox_clear;
+  # Get the values array for this element id and built html for each
+  # instance of an element.
+  if (isset($this_info[$element_id])) {
+    $values = $this_info[$element_id];
   }
   else {
-    $print_value = $value;
-  }
-  // Don't show the Name element 
-  if ( $all_elements->fields['element_label'] != 'Name' ) {
-  	$data[$column] .= "<tr>\n";
-  	$data[$column] .= "\t<td class=sublabel>".$all_elements->fields['element_label']."</td>\n";
-  	$data[$column] .= "\t<td class=clear>".$print_value."</td>\n";
-  	$data[$column] .= "</tr>\n";
+    // Trick to eliminate the duplication of code when the value is not set
+    // Can't use false here and using spaces since these would never be
+    // stored as values by XRMS.
+    $values[1] = '    ';
   }
 
-  if ($all_elements->fields['element_label'] == 'Name') {
-    $item_name = $print_value;
-  }
+  foreach ($values as $value) {
+      	#If this element is not defined, use default value
+	if ($value == '    ') {
+      		$value = $all_elements->fields['element_default_value'];
+	}
+		
+     	# Use words for checkbox status
+     	if ($all_elements->fields['element_type'] == "checkbox") {
+            $print_value = (1 == $value) ? $checkbox_set : $checkbox_clear;
+     	}
+        else {
+           $print_value = $value;
+        }
+        // Don't show the Name element 
+        if ( $all_elements->fields['element_label'] != 'Name' ) {
+   	   $data[$column] .= "<tr>\n";
+  	   $data[$column] .= "\t<td class=sublabel>".$all_elements->fields['element_label']."</td>\n";
+  	   $data[$column] .= "\t<td class=clear>".$print_value."</td>\n";
+  	   $data[$column] .= "</tr>\n";
+        } 
+     }
   $all_elements->movenext();
 }
 
@@ -196,6 +222,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2005/04/01 21:50:14  ycreddy
+ * Added changes to handle  multiple instance values for an element type
+ *
  * Revision 1.14  2005/03/18 20:54:37  gpowers
  * - added support for inline (custom fields) info
  *
