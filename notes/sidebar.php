@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.15 2004/09/28 20:43:28 introspectshun Exp $
+ * $Id: sidebar.php,v 1.16 2004/10/01 19:19:49 introspectshun Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -34,11 +34,15 @@ $note_rows = '<div id="note_sidebar">
 
 //build the notes sql query
 if (strlen($on_what_table)>0){
+  $where = '';
+  if (isset($on_what_id)) {
+    $where = "and on_what_id = '$on_what_id'";
+  }
   $note_sql = "select note_id, note_description, entered_by, entered_at, username, user_contact_id
             from notes, users
             where notes.entered_by = users.user_id
             and on_what_table = '$on_what_table'
-            and on_what_id = '$on_what_id'
+            " . $where . "
             and note_record_status = 'a'
             order by entered_at desc";
   $rst = $con->execute($note_sql);
@@ -224,6 +228,9 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.16  2004/10/01 19:19:49  introspectshun
+ * - If on_what_id isn't set, pull it from the sql statement
+ *
  * Revision 1.15  2004/09/28 20:43:28  introspectshun
  * - Added closing <font> tags to <td>s.
  * - Value of $on_what_table is not overwritten in the while loop
