@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.74 2005/03/22 21:55:12 gpowers Exp $
+ * $Id: one.php,v 1.75 2005/04/04 18:11:40 ycreddy Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -69,42 +69,21 @@ and contact_id = $contact_id";
 $rst = $con->execute($sql);
 
 if ($rst) {
-    $company_id = $rst->fields['company_id'];
-    $address_id = $rst->fields['address_id'];
-    $home_address_id = $rst->fields['home_address_id'];
-    $company_name = $rst->fields['company_name'];
-    $company_code = $rst->fields['company_code'];
-    $division_id  = $rst->fields['division_id'];
-    $crm_status_display_html = $rst->fields['crm_status_display_html'];
-    $account_status_display_html = $rst->fields['account_status_display_html'];
-    $account_owner = $rst->fields['account_owner'];
-    $last_name = $rst->fields['last_name'];
-    $first_names = $rst->fields['first_names'];
-    $salutation = $rst->fields['salutation'];
-    $date_of_birth = $con->userdate($rst->fields['date_of_birth']);
-    $gender = $rst->fields['gender'];
-    $summary = $rst->fields['summary'];
-    $title = $rst->fields['title'];
-    $description = $rst->fields['description'];
-    $profile = $rst->fields['profile'];
+
+    // Instantiating variables for each contact field, so that custom fields
+    // added to the contacts table are accessible to plugin code without
+    // an extra read from database.
+    foreach ($rst->fields as $contact_field => $contact_field_value ) {
+    	$$contact_field = $contact_field_value;
+    }
+
     $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
-    $email = $rst->fields['email'];
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
     $cell_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']);
     $home_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone']);
     $fax = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['fax']);
-    $aol_name = $rst->fields['aol_name'];
-    $yahoo_name = $rst->fields['yahoo_name'];
-    $msn_name = $rst->fields['msn_name'];
-    $interests = $rst->fields['interests'];
-    $custom1 = $rst->fields['custom1'];
-    $custom2 = $rst->fields['custom2'];
-    $custom3 = $rst->fields['custom3'];
-    $custom4 = $rst->fields['custom4'];
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
-    $entered_by = $rst->fields['entered_by_username'];
-    $last_modified_by = $rst->fields['last_modified_by_username'];
     $rst->close();
 }
 
@@ -283,7 +262,6 @@ if ($rst) {
 
 add_audit_item($con, $session_user_id, 'viewed', 'contacts', $contact_id, 3);
 
-$con->close();
 
 $page_title = _("Contact Details").': '.$first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
@@ -608,10 +586,15 @@ Calendar.setup({
 
 <?php
 
+$con->close();
+
 end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.75  2005/04/04 18:11:40  ycreddy
+ * Instantiated variable for each contact field for plugin access without an extra read and also moved ->close() to the end of the page for plugin use without creating a new DB connection
+ *
  * Revision 1.74  2005/03/22 21:55:12  gpowers
  * - moved up one_contact_buttons hook
  *   - it's now called before the db connection is closed
