@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.16 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: some.php,v 1.17 2004/06/20 19:44:22 braverock Exp $
  */
 
 //include the standard files
@@ -104,8 +104,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "CAST(cont.contact_id AS VARCHAR(10))", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS 'Name', "
-       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "CAST(cont.contact_id AS CHAR)", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS 'Name', "
+       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
        company_code AS 'Code',
        title AS 'Title',
        description AS 'Description',
@@ -345,6 +345,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2004/06/20 19:44:22  braverock
+ * - change CAST to CAST as CHAR for broader compatibility
+ *
  * Revision 1.16  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
