@@ -10,7 +10,7 @@ Please keep this file's interface and behavior synchronized with Array_Pager!
 */
 
 
-class XRMS_Pager extends ADODB_Pager {
+class XRMS_Pager {
 
 	var $SubtotalColumns;
 	var $TotalColumns;
@@ -43,6 +43,10 @@ class XRMS_Pager extends ADODB_Pager {
     var $cache = 0;  #secs to cache with CachePageExecute()
     var $how_many_rows;
 	// adodb_pager code end
+
+    var $pager_id;
+    var $EndRows;
+
 
 
 
@@ -94,7 +98,7 @@ class XRMS_Pager extends ADODB_Pager {
         $descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
         $this->pretty_sort_order = ($this->sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-        $order_by = $this->sort_column;
+        $order_by = " order by " . $this->sort_column;
 
         $order_by .= " " . $this->sort_order;
 
@@ -133,8 +137,8 @@ class XRMS_Pager extends ADODB_Pager {
       	$this->id = $table_id;
       	$this->db = $db;
       	$this->showPageLinks = true;
-      	$this->selected_column = $this->current_sort_column-1;
-      	$this->selected_column_html = $pretty_sort_order;
+      	$this->selected_column = $this->sort_column-1;
+      	$this->selected_column_html = $this->pretty_sort_order;
 
 		// adodb_pager code end
 
@@ -147,7 +151,7 @@ class XRMS_Pager extends ADODB_Pager {
     {
       global $PHP_SELF;
       if ($anchor) {
-        echo '<a href="javascript: submitForm(1);"> ' . $this->first . '</a> &nbsp;';
+        echo '<a href="javascript: ' . $this->pager_id . '_submitForm(1);"> ' . $this->first . '</a> &nbsp;';
       } else {
         print "$this->first &nbsp; ";
       }
@@ -160,7 +164,7 @@ class XRMS_Pager extends ADODB_Pager {
       global $PHP_SELF;
 
       if ($anchor) {
-        echo '<a href="javascript: submitForm('. ($this->rs->AbsolutePage() + 1) . ');">' . $this->next . '</a> &nbsp;';
+        echo '<a href="javascript: ' . $this->pager_id . '_submitForm('. ($this->rs->AbsolutePage() + 1) . ');">' . $this->next . '</a> &nbsp;';
       } else {
         print "$this->next &nbsp; ";
       }
@@ -179,7 +183,7 @@ class XRMS_Pager extends ADODB_Pager {
       if (!$this->db->pageExecuteCountRows) return;
 
       if ($anchor) {
-        echo '<a href="javascript: submitForm(' . $this->rs->LastPageNo() . ');">' . $this->last . '</a> &nbsp;';
+        echo '<a href="javascript: ' . $this->pager_id . '_submitForm(' . $this->rs->LastPageNo() . ');">' . $this->last . '</a> &nbsp;';
       } else {
         print "$this->last &nbsp; ";
       }
@@ -189,7 +193,7 @@ class XRMS_Pager extends ADODB_Pager {
 
     //---------------------------------------------------
     // original code by "Pablo Costa" <pablo@cbsp.com.br>
-    function render_pagelinks()
+    function Render_PageLinks()
     {
       global $PHP_SELF;
       $pages        = $this->rs->LastPageNo();
@@ -203,25 +207,25 @@ class XRMS_Pager extends ADODB_Pager {
       }
       $numbers = '';
       $end = $start+$linksperpage-1;
-      $link = $this->id . "_next_page";
+      $link = $this->pager_id . '_' . $this->id . "_next_page";
       if($end > $pages) $end = $pages;
 
 
       if ($this->startLinks && $start > 1) {
         $pos = $start - 1;
-        $numbers .= "<a href='javascript: submitForm(" . $pos . ");'>" . $this->startLinks . "</a> ";
+        $numbers .= "<a href='javascript: ' . $this->pager_id . '_submitForm(" . $pos . ");'>" . $this->startLinks . "</a> ";
       }
 
       for($i=$start; $i <= $end; $i++) {
         if ($this->rs->AbsolutePage() == $i)
         $numbers .= "<font color=$this->linkSelectedColor><b>$i</b></font>  ";
         else
-        $numbers .= "<a href='javascript: submitForm(" . $i . ");'>" . $i . "</a> ";
+        $numbers .= "<a href='javascript: ' . $this->pager_id . '_submitForm(" . $i . ");'>" . $i . "</a> ";
         // $numbers .= "<a href=$PHP_SELF?$link=$i>$i</a>  ";
 
       }
       if ($this->moreLinks && $end < $pages){
-        $numbers .= "<a href='javascript: submitForm(" . $i . ");'>" . $this->moreLinks . "</a>  ";
+        $numbers .= "<a href='javascript: ' . $this->pager_id . '_submitForm(" . $i . ");'>" . $this->moreLinks . "</a>  ";
       }
       print $numbers . ' &nbsp; ';
     }
@@ -230,7 +234,7 @@ class XRMS_Pager extends ADODB_Pager {
     {
       global $PHP_SELF;
       if ($anchor) {
-        echo '<a href="javascript: submitForm(' . ($this->rs->AbsolutePage() - 1) . ' );"> '.  $this->prev . '</a> &nbsp;';
+        echo '<a href="javascript: ' . $this->pager_id . '_submitForm(' . ($this->rs->AbsolutePage() - 1) . ' );"> '.  $this->prev . '</a> &nbsp;';
       } else {
         print "$this->prev &nbsp; ";
       }
@@ -255,7 +259,8 @@ class XRMS_Pager extends ADODB_Pager {
       	include_once(ADODB_DIR.'/tohtml.inc.php');
       	ob_start();
       	$gSQLBlockRows = $this->rows;
-      	rs2html($this->rs,$this->gridAttributes,$this->gridHeader,$this->htmlSpecialChars,$this->selected_column,$this->selected_column_html);
+
+      	rs2html($this->rs,$this->gridAttributes,$this->gridHeader,$this->htmlSpecialChars,$this->selected_column,$this->selected_column_html, $this->pager_id . '_');
 
 		// Now we output our subtotal rows 
         $this->RenderTotals('Subtotals this page:', $this->SubtotalColumns);
@@ -338,6 +343,8 @@ class XRMS_Pager extends ADODB_Pager {
 		return $s;
 	}
 
+
+
     //-------------------------------------------------------
     // Navigation bar
     //
@@ -404,11 +411,13 @@ class XRMS_Pager extends ADODB_Pager {
 
 		if($this->EndRows) { echo $this->EndRows; }
 
+/*
         if ($this->how_many_rows > 0)
         {
             echo "<tr><td class=widget_content_form_element colspan=50><input type=button class=button onclick=\"javascript: exportIt();\" value='Export'> ";
             echo "<input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
         }
+*/
 
         echo "</table>";
     }
@@ -416,36 +425,35 @@ class XRMS_Pager extends ADODB_Pager {
 	function Render($rows=10) {
 
 		$next_page_varname = $this->next_page_varname;
-		
 
-		echo <<<END
-<script language="JavaScript" type="text/javascript">
-<!--
+        echo <<<END
+            <script language="JavaScript" type="text/javascript">
+            <!--
 
-function submitForm(nextPage) {
-    document.forms[0].$next_page_varname.value = nextPage;
-    document.forms[0].submit();
-}
+            function {$this->pager_id}_submitForm(nextPage) {
+                document.{$this->form_id}.{$this->pager_id}_next_page.value = nextPage;
+                document.{$this->form_id}.submit();
+            }
 
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].$next_page_varname.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
+            function {$this->pager_id}_resort(sortColumn) {
+                document.{$this->form_id}.{$this->pager_id}_sort_column.value = sortColumn + 1;
+                document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
+                document.{$this->form_id}.{$this->pager_id}_resort.value = 1;
+                document.{$this->form_id}.submit();
+            }
 
-//-->
-</script>
+            //-->
+            </script>
 
-<input type=hidden name=use_post_vars value=1>
-<input type=hidden name=$next_page_varname value="{$this->next_page}">
-<input type=hidden name=resort value="0">
-<input type=hidden name=current_sort_column value="{$this->sort_column}">
-<input type=hidden name=sort_column value="{$this->sort_column}">
-<input type=hidden name=current_sort_order value="{$this->sort_order}">
-<input type=hidden name=sort_order value="{$this->sort_order}">
-
+            <input type=hidden name={$this->pager_id}_use_post_vars value=1>
+            <input type=hidden name={$this->pager_id}_next_page value="{$this->next_page}">
+            <input type=hidden name={$this->pager_id}_resort value="0">
+            <input type=hidden name={$this->pager_id}_current_sort_column value="{$this->sort_column}">
+            <input type=hidden name={$this->pager_id}_sort_column value="{$this->sort_column}">
+            <input type=hidden name={$this->pager_id}_current_sort_order value="{$this->sort_order}">
+            <input type=hidden name={$this->pager_id}_sort_order value="{$this->sort_order}">
 END;
+
 
 		// adodb_pager code begin
         global $ADODB_COUNTRECS;
