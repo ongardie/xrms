@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.5 2004/03/23 21:46:57 braverock Exp $
+ * $Id: index.php,v 1.6 2004/04/12 18:59:01 maulani Exp $
  */
 
 //include required stuff
@@ -45,10 +45,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content><a href="reports/dashboard.php">Digital Dashboard</a></td>
             </tr>
             <tr>
-                <td class=widget_content>&nbsp;</td>
+                <td class=widget_content><a href="update.php">Database Structure Update</a></td>
             </tr>
             <tr>
-                <td class=widget_content>&nbsp;</td>
+                <td class=widget_content><a href="data_clean.php">Data Cleanup</a></td>
             </tr>
             <tr>
                 <td class=widget_content>&nbsp;</td>
@@ -172,6 +172,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.6  2004/04/12 18:59:01  maulani
+ * - Make database structure and data cleanup available withing Admin interface
+ *
  * Revision 1.5  2004/03/23 21:46:57  braverock
  * -remove (somewhat broken right now)
  *  SF bug 921912
