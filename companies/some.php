@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.40 2004/08/18 00:06:16 niclowe Exp $
+ * $Id: some.php,v 1.41 2004/08/19 12:01:53 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -72,7 +72,7 @@ u.username AS '"._("User")."',
 industry_pretty_name as '"._("Industry")."',
 crm_status_pretty_name AS '"._("CRM Status")."',
 as1.account_status_display_html AS '"._("Account Status")."',
-r.rating_display_html AS '"._("Rating")."'";
+r.rating_display_html AS '"._("Rating")."' ";
 
 $criteria_count = 0;
 
@@ -184,7 +184,7 @@ and r.on_what_table = 'companies'
 and r.recent_action = ''
 and r.on_what_id = c.company_id
 and c.company_record_status = 'a'
-group by company_id, 
+group by company_id,
 c.company_name,
 c.company_code
 order by lasttime desc";
@@ -379,13 +379,13 @@ function exportIt() {
     //document.forms[0].submit();
     // reset the form so that post-export searches work
     //document.forms[0].action = "some.php";
-		alert('Export functionality hasnt been implemented yet for multiple companies')
+                alert('Export functionality hasnt been implemented yet for multiple companies')
 }
 
 function bulkEmail() {
 //    document.forms[0].action = "../email/email.php";
 //    document.forms[0].submit();
-		alert('Mail Merge functionality hasnt been implemented yet for multiple companies')
+                alert('Mail Merge functionality hasnt been implemented yet for multiple companies')
 }
 
 function clearSearchCriteria() {
@@ -408,6 +408,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.41  2004/08/19 12:01:53  braverock
+ * - added space after Rating so that the $from clause wouldn't collide
+ *   - fixes SF bug 996549 using suggestion from Roberto Durrer (durrer)
+ *
  * Revision 1.40  2004/08/18 00:06:16  niclowe
  * Fixed bug 941839 - Mail Merge not working
  *
