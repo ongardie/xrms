@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.56 2004/08/18 06:08:14 niclowe Exp $
+ * $Id: some.php,v 1.57 2004/08/19 20:37:20 neildogg Exp $
  */
 
 // handle includes
@@ -32,6 +32,8 @@ $arr_vars = array ( // local var name       // session variable name
            'delete_saved'       => arr_vars_POST_UNDEF,
            'browse'             => arr_vars_POST_UNDEF,
            );
+           
+$advanced_search = (isset($_GET['advanced_search'])) ? true : false;
 
 // get all passed in variables
 arr_vars_post_with_cmd ( $arr_vars );
@@ -80,8 +82,11 @@ $arr_vars = array ( // local var name       // session variable name
                    'sort_order'          => array ( 'activities_sort_order', arr_vars_SESSION ) ,
                    'current_sort_order'  => array ( 'activities_current_sort_order', arr_vars_SESSION ) ,
                    'title'               => array ( 'activities_title', arr_vars_SESSION ) ,
+                   'template_title'      => array ( 'activities_template_title', arr_vars_SESSION ) ,
                    'contact'             => array ( 'activities_contact', arr_vars_SESSION ) ,
+                   'contact_id'          => array ( 'activities_contect_id', arr_vars_SESSION ) ,
                    'company'             => array ( 'activities_company', arr_vars_SESSION ) ,
+                   'company_id'          => array ( 'activities_company_id', arr_vars_SESSION ) ,
 		   // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
                    'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
                    'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
@@ -91,6 +96,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'search_date'         => array ( 'activities_date', arr_vars_SESSION ) ,
                    'time_zone_between'   => array ( 'time_zone_between', arr_vars_SESSION ) ,
                    'time_zone_between2'  => array ( 'time_zone_between2', arr_vars_SESSION ) ,
+                   'opportunity_status_id' => array ( 'opportunity_status_id', arr_vars_SESSION ) ,
                    );
 
 // get all passed in variables
@@ -127,6 +133,9 @@ if (!($sort_column == $current_sort_column)) {
     $sort_order = "asc";
 }
 
+//If advanced search template title is on, it should override normal title
+$title = ($template_title) ? $template_title : $title;
+
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 $ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
@@ -158,14 +167,27 @@ $sql = "SELECT
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS '" . _("Scheduled") . "', "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS '" . _("Due") . "', "
   . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS '" . _("Company") . "',
-  u.username AS '" . _("Owner") . "'
-  FROM companies c, users u, activity_types at, activities a, addresses addr";
+  u.username AS '" . _("Owner") . "', ";
+if($sort_column == 9) {
+    $sql .= " o.probability AS '" . _("%") . "' ";
+}
+else {
+    $sql .= " 'n/a' AS '" . _("%") . "' ";
+}
+$sql .= "FROM companies c, users u, activity_types at, activities a, addresses addr";
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     $sql .= ", time_daylight_savings tds";
 }
+if($opportunity_status_id or $sort_column == 9) {
+    $sql .= ", opportunities o";
+}
 $sql .= " LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
-  WHERE a.company_id = c.company_id
-  AND a.activity_record_status = 'a'
+  WHERE a.company_id = c.company_id";
+if($sort_column == 9) {
+    $sql .= " AND a.on_what_table='opportunities'
+  AND a.on_what_id=o.opportunity_id ";
+}
+$sql .= " AND a.activity_record_status = 'a'
   AND at.activity_type_id = a.activity_type_id
   AND a.user_id = u.user_id
   AND c.default_primary_address=addr.address_id";
@@ -182,9 +204,19 @@ if (strlen($contact) > 0) {
     $sql .= " and cont.last_name like " . $con->qstr('%' . $contact . '%', get_magic_quotes_gpc());
 }
 
+if (strlen($contact_id)) {
+    $criteria_count++;
+    $sql .= " and cont.contact_id = " . $contact_id;
+}
+
 if (strlen($company) > 0) {
     $criteria_count++;
     $sql .= " and c.company_name like " . $con->qstr('%' . $company . '%', get_magic_quotes_gpc());
+}
+
+if (strlen($company_id)) {
+    $criteria_count++;
+    $sql .= " and c.company_id = " . $company_id;
 }
 
 if (strlen($user_id) > 0) {
@@ -219,6 +251,10 @@ if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     $sql .= " and hour(ends_at) + tds.current_hour_shift + addr.offset + " . date('Z')/3600 . " <= " . $time_zone_between2;
 }
 
+if($opportunity_status_id) {
+    $sql .= " and a.on_what_table='opportunities' and a.on_what_id=o.opportunity_id and o.opportunity_status_id=" . $opportunity_status_id;
+}
+
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $sql .= " and 1 = 2";
 }
@@ -240,6 +276,8 @@ if ($sort_column == 1) {
     $order_by = "c.company_name";
 } elseif ($sort_column == 8) {
     $order_by = "owner";
+} elseif ($sort_column == 9) {
+    $order_by = "o.probability";
 } else {
     $order_by = $sort_column;
 }
@@ -250,11 +288,31 @@ $order_by .= " $sort_order";
 $sql .= " order by $order_by"; // is_overdue desc, a.scheduled_at, a.entered_at desc";
 //activities Pager table is rendered below by ADOdb pager
 
+if($advanced_search) {
+    //get activities from templates
+    $sql2 = "SELECT activity_title, activity_title as activity_title2 
+            FROM activity_templates 
+            WHERE activity_template_record_status='a' 
+            AND on_what_table = 'opportunity_statuses'
+            GROUP BY activity_title 
+            ORDER BY activity_title";
+    $rst = $con->execute($sql2);
+    $activity_menu = $rst->getmenu2('template_title', $template_title, true);
+    $rst->close();
+}
+
 //get menu for users
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql2);
 $user_menu = $rst->getmenu2('user_id', $user_id, true);
 $rst->close();
+
+if($advanced_search) {
+    //get menu for opportunity_statuses
+    $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status='a'";
+    $rst = $con->execute($sql2);
+    $opportunity_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, true);
+}
 
 //get activity type menu
 $sql_type = "select activity_type_pretty_name, activity_type_id
@@ -382,6 +440,21 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name="company" size=15 value="<?php  echo $company; ?>">
                 </td>
             </tr>
+<?php if($advanced_search) { ?>
+            <tr>
+                <td colspan="2" class=widget_label><?php echo _("Template Titles"); ?></td>
+                <td class=widget_label><?php echo _("Contact ID"); ?></td>
+                <td class=widget_label><?php echo _("Company ID"); ?></td>
+            </tr>
+            <tr>
+                <td colspan="2" class=widget_content_form_element><?php echo $activity_menu; ?>
+                </td>
+                <td class=widget_content_form_element><input type=text name="contact_id" size=12 value="<?php  echo $contact_id; ?>">
+                </td>
+                <td class=widget_content_form_element><input type=text name="company_id" size=15 value="<?php  echo $company_id; ?>">
+                </td>
+            </tr>
+<?php } ?>
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
                 <td class=widget_label><?php echo _("End/Due Date"); ?></td>
@@ -411,11 +484,13 @@ start_page($page_title, true, $msg);
                     </select>
                 </td>
             </tr>
+<?php if($advanced_search) { ?>
             <tr>
-                <td class=widget_label colspan="4"><?php echo _("Local Time Between"); ?></td>
+                <td class=widget_label colspan="2"><?php echo _("Local Time Between"); ?></td>
+                <td class=widget_label colspan="2"><?php echo _("Opportunity Status"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan="4">
+                <td class=widget_content_form_element colspan="2">
 <?php
                     $sql2 = "SELECT " . $con->concat("(CASE WHEN country_id%25 < 24 THEN lpad(country_id%25, 2, '0') ELSE '00' END)", "':00:00'") . " as counter, country_id%25 as counter2 from countries group by counter2 order by counter2";
                     $rst = $con->execute($sql2);
@@ -430,7 +505,11 @@ start_page($page_title, true, $msg);
                     print $rst->getmenu2('time_zone_between2', $time_zone_between2, true);
                 ?>
                 </td>
+                <td class=widget_content_form_element colspan="2">
+                    <?php echo $opportunity_menu; ?>
+                </td>
             </tr>
+<? } ?>
             <tr>
                 <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
                 <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
@@ -456,8 +535,11 @@ start_page($page_title, true, $msg);
                     <?php
                         if ($company_count > 0) {
                             echo "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";
-                        };
+                        }
+                        if(!$advanced_search) {
                     ?>
+                    <input name="advanced_search" type=button class=button onclick="javascript: location.href='some.php?advanced_search=true';" value="<?php echo _("Advanced Search"); ?>">
+                    <?php } ?>
                 </td>
             </tr>
     </table>
@@ -534,6 +616,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.57  2004/08/19 20:37:20  neildogg
+ * - Added many advanced search features
+ *  - Search by template title, contact ID, company ID
+ *  - Search by opportunity status
+ *  - Moved local time to advanced search
+ *
  * Revision 1.56  2004/08/18 06:08:14  niclowe
  * Merged 1.54 neildogg chnages into 1.55 niclowe changes due to incorrect commit. by niclowe
  *
