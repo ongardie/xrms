@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.31 2005/02/24 18:36:49 vanmer Exp $
+ * $Id: sidebar.php,v 1.32 2005/03/01 15:11:11 vanmer Exp $
  */
 
 require_once('relationship_functions.php');
@@ -295,7 +295,6 @@ $relationship_link_rows = '';
                         <tr>
                             <td class=widget_label colspan=2 align=center>" . _("Add Relationship") . "</td>";
             }
-	}
 	    $relationship_link_rows .= "
                         <tr>
                         <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
@@ -308,7 +307,8 @@ $relationship_link_rows = '';
                                 <input type=submit class=button value=\""._("New Relationship")."\">
                             </td>
                         </form>
-                        </tr><!-- Form End -->";
+                        </tr><!-- Form End -->";            
+	}
             
             $relationship_link_rows .= "        <!-- Content End --></table>\n";
 
@@ -316,6 +316,9 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.32  2005/03/01 15:11:11  vanmer
+ * - changed to show New Relationship button for each type of relationship on a page
+ *
  * Revision 1.31  2005/02/24 18:36:49  vanmer
  * - added conditional to only show relationships if data is returned
  * - allow relationship table to display with only new relationship button if no relationships on entity already exist
