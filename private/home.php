@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.21 2004/06/16 20:38:20 gpowers Exp $
+ * $Id: home.php,v 1.22 2004/06/21 16:02:18 braverock Exp $
  */
 
 // include the common files
@@ -57,7 +57,7 @@ SELECT
   c.company_name, cont.contact_id, cont.first_names as contact_first_names,
   cont.last_name as contact_last_name,
 CASE
-  WHEN ((a.activity_status = 'o') AND (a.ends_at < " . time() . ")) THEN 1
+  WHEN ((a.activity_status = 'o') AND (a.ends_at <  ". $con->DBTimeStamp(time()) . " )) THEN 1
   ELSE 0
 END AS is_overdue
 FROM activity_types at, companies c, activities a
@@ -474,6 +474,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.22  2004/06/21 16:02:18  braverock
+ * - fixed timestamp to be in proper database compliant mode
+ *
  * Revision 1.21  2004/06/16 20:38:20  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5
