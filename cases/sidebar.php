@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.4 2004/04/10 15:20:52 braverock Exp $
+ * $Id: sidebar.php,v 1.5 2004/06/12 06:33:16 introspectshun Exp $
  */
 
 $case_rows = "<div id='case_sidebar'>
@@ -25,14 +25,13 @@ $cases_sql = "select * from cases, case_priorities, users, case_statuses
                 and cases.case_status_id = case_statuses.case_status_id
                 and case_statuses.status_open_indicator = 'o'
                 $case_limit_sql
-                order by due_at
-                limit 5";
+                order by due_at";
 
 //uncomment the debug line to see what's going on with the query
 //$con->debug=1;
 
 //execute our query
-$rst = $con->execute($cases_sql);
+$rst = $con->SelectLimit($cases_sql, 5, 0);
 
 if (strlen($rst->fields['username'])>0) {
     while (!$rst->EOF) {
@@ -76,6 +75,9 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.5  2004/06/12 06:33:16  introspectshun
+ * - Now use ADODB SelectLimit function.
+ *
  * Revision 1.4  2004/04/10 15:20:52  braverock
  * - display only open Cases on Cases sidebar
  *   - apply SF patch 931251 submitted by Glenn Powers
