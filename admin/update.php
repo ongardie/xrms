@@ -7,12 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.13 2004/06/26 13:11:29 braverock Exp $
- */
-
-/**
- * Confirm that the table does not currently have any records.
- *
+ * $Id: update.php,v 1.14 2004/06/28 14:30:01 maulani Exp $
  */
 
 // where do we include from
@@ -34,7 +29,6 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 $msg = '';
-
 
 // Make sure that there is an admin record in roles
 $sql = "select count(*) as recCount from roles where role_short_name='Admin'";
@@ -235,6 +229,291 @@ $sql = "create table if not exists activity_templates (
         //execute
         $rst = $con->execute($sql);
 
+
+
+// Make sure that the additional address format strings are added
+$sql = "select count(*) as recCount from address_format_strings";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount <16) {
+    $msg .= 'Added additional address format strings.<BR><BR>';
+    
+    define('ADODB_FORCE_NULLS', 0);
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 0;
+    $rec['address_format_string'] = '';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 2;
+    $rec['address_format_string'] = '$lines<br>$postal_code $city<br>$province<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 3;
+    $rec['address_format_string'] = '$lines<br>$postal_code $city $province<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 4;
+    $rec['address_format_string'] = '$lines<br>$city $province $postal_code<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 5;
+    $rec['address_format_string'] = '$lines<br>$postal_code $province<br>$city<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 6;
+    $rec['address_format_string'] = '$lines<br>$postal_code $city<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 7;
+    $rec['address_format_string'] = '$postal_code $city<br>$lines<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 8;
+    $rec['address_format_string'] = '$lines<br>$province<br>$city $postal_code<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 9;
+    $rec['address_format_string'] = '$lines<br>$city<br>$province $postal_code<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 10;
+    $rec['address_format_string'] = '$postal_code<br>$province $city<br>$lines<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 11;
+    $rec['address_format_string'] = '$lines<br>$city $province<br>$postal_code<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 12;
+    $rec['address_format_string'] = '$country $postal_code<br>$province $city<br>$lines';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 13;
+    $rec['address_format_string'] = '$lines<br>$city<br>$province<br>$postal_code<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 14;
+    $rec['address_format_string'] = '$lines<br>$city $postal_code<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 15;
+    $rec['address_format_string'] = '$lines<br>$city, $province $postal_code<br>$country';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Argentina', 'Kuwait', 'Oman', 'Poland')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 2;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Brazil', 'China', 'Italy', 'Mexico', 'Portugal', 'Spain')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 3;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Australia', 'Canada', 'Hong Kong Special Administrative Region of China', 'Ireland', 'Taiwan')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 4;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Denmark')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 5;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+
+	$sql = "SELECT * FROM countries WHERE country_name in ('Austria', 'Bahrain', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Czech Republic', 'Egypt', 'Finland', 'France', 'France, metropolitan', 'Germany', 'Greece', 'Greenland', 'Iceland', 'Israel', 'Jordan', 'Lebanon', 'Luxembourg', 'Netherlands', 'Norway', 'Qatar', 'Romania', 'Saudi Arabia', 'Singapore', 'Slovakia', 'Slovenia', 'Sweden', 'Switzerland', 'Syrian Arab Republic', 'Turkey', 'Yemen')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 6;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Hungary')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 7;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('India', 'New Zealand')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 8;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Indonesia')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 9;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Japan')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 10;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Republic of Korea', 'Ukraine')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 11;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('Russian Federation')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 12;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('South Africa', 'United Kingdom')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 13;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('The former Yugoslav Republic of Macedonia')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 14;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+    
+	$sql = "SELECT * FROM countries WHERE country_name in ('United States', 'United States Virgin Islands')";
+	$rst = $con->execute($sql);
+	
+	$rec = array();
+	$rec['address_format_string_id'] = 15;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
+}
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -256,6 +535,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.14  2004/06/28 14:30:01  maulani
+ * - add address format strings for many countries
+ *
  * Revision 1.13  2004/06/26 13:11:29  braverock
  * - execute sql for sort order on activity types
  *   - applies SF patch #979564 by Marc Spoorendonk (grmbl)
