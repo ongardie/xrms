@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.15 2004/07/01 12:56:33 braverock Exp $
+ * $Id: update.php,v 1.16 2004/07/01 15:23:06 braverock Exp $
  */
 
 // where do we include from
@@ -246,26 +246,45 @@ $sql ="CREATE TABLE relationship_types (
         $rst = $con->execute($sql);
 
 if (confirm_no_records($con, 'relationship_types')) {
-    $sql = "INSERT INTO relationship_types VALUES
-            (1,'company relationships','companies','companies','Acquired','Acquired by','a',NULL,NULL)";
+    $sql = "INSERT INTO relationship_types
+            (relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+            VALUES
+            ('company relationships','companies','companies','Acquired','Acquired by','a',NULL,NULL)";
     $rst = $con->execute($sql);
-    $sql = "INSERT INTO relationship_types VALUES
-            (2,'company relationships','companies','companies','Retains Consultant','Consultant for','a',NULL,NULL)";
+    $sql = "INSERT INTO relationship_types
+            (relationship_type_id,relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+            VALUES
+            ('company relationships','companies','companies','Retains Consultant','Consultant for','a',NULL,NULL)";
     $rst = $con->execute($sql);
-    $sql = "INSERT INTO relationship_types VALUES
-            (3,'company relationships','companies','companies','Manufactures for','Uses Manufacturer','a',NULL,NULL)";
+    $sql = "INSERT INTO relationship_types
+            (relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+            VALUES
+            ('company relationships','companies','companies','Manufactures for','Uses Manufacturer','a',NULL,NULL)";
     $rst = $con->execute($sql);
-    $sql = "INSERT INTO relationship_types VALUES
-            (4,'company relationships','companies','companies','Parent Company of','Subsidiary of','a',NULL,NULL)";
+    $sql = "INSERT INTO relationship_types
+            (relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+            VALUES
+            ('company relationships','companies','companies','Parent Company of','Subsidiary of','a',NULL,NULL)";
     $rst = $con->execute($sql);
-    $sql = "INSERT INTO relationship_types VALUES
-            (5,'company relationships','companies','companies','Uses Supplier','Supplier for','a',NULL,NULL)";
+    $sql = "INSERT INTO relationship_types
+            (relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+            VALUES
+            ('company relationships','companies','companies','Uses Supplier','Supplier for','a',NULL,NULL)";
     $rst = $con->execute($sql);
-    $sql = "INSERT INTO relationship_types VALUES
-            (6,'company link','contacts','companies','Owns','Owned By','a','<b>','</b>')";
+    $sql = "INSERT INTO relationship_types
+            (relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+            VALUES
+            ('company link','contacts','companies','Owns','Owned By','a','<b>','</b>')";
     $rst = $con->execute($sql);
-    $sql = "INSERT INTO relationship_types VALUES
-            (7,'company link','contacts','companies','Manages','Managed By','a',NULL,NULL)";
+    $sql = "INSERT INTO relationship_types
+            (relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+            VALUES
+            ('company link','contacts','companies','Manages','Managed By','a',NULL,NULL)";
+    $rst = $con->execute($sql);
+    $sql = "INSERT INTO relationship_types
+            (relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+            VALUES
+            ('company link','contacts','companies','Consultant for','Retains Consultant','a',NULL,NULL)";
     $rst = $con->execute($sql);
 }
 
@@ -589,6 +608,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.16  2004/07/01 15:23:06  braverock
+ * - update default data for relationship_types table
+ * - use NAMES -> VALUES SQL construction to be safe
+ *
  * Revision 1.15  2004/07/01 12:56:33  braverock
  * - add relationships and relationship_types tables and data to install and update
  *
