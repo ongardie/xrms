@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.9 2004/02/13 16:40:35 maulani Exp $
+ * $Id: new-2.php,v 1.10 2004/02/15 02:13:59 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -63,14 +63,14 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = 'insert into companies set
-                    crm_status_id = '. $con->qstr($crm_status_id, get_magic_quotes_gpc()). ',
-                    company_source_id = '. $con->qstr($company_source_id, get_magic_quotes_gpc()). ',
-                    industry_id = '. $con->qstr($industry_id, get_magic_quotes_gpc()) ",
+$sql = "insert into companies set
+                    crm_status_id = $crm_status_id, 
+                    company_source_id = $company_source_id,
+                    industry_id = $industry_id,
                     user_id = $user_id,
-                    account_status_id = ". $con->qstr($account_status_id, get_magic_quotes_gpc()). ',
-                    rating_id = '. $con->qstr($rating_id, get_magic_quotes_gpc()). ',
-                    company_name = '. $con->qstr($company_name, get_magic_quotes_gpc()). ',
+                    account_status_id = $account_status_id,
+                    rating_id = $rating_id,
+                    company_name = ". $con->qstr($company_name, get_magic_quotes_gpc()). ',
                     legal_name = ' . $con->qstr($legal_name, get_magic_quotes_gpc()) . ',
                     company_code = '. $con->qstr($company_code, get_magic_quotes_gpc()) . ',
                     phone = '. $con->qstr($phone, get_magic_quotes_gpc()) . ',
@@ -151,6 +151,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.10  2004/02/15 02:13:59  maulani
+ * remove quotes from integer values in sql
+ *
  * Revision 1.9  2004/02/13 16:40:35  maulani
  * Correct field on contact insert
  *
