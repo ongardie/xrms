@@ -2,7 +2,7 @@
 /**
  * Search and view summary information on multiple companies and thier contacts for printing.
  *
- * $Id: company-contacts-printout.php,v 1.4 2004/06/16 20:40:23 gpowers Exp $
+ * $Id: company-contacts-printout.php,v 1.5 2004/07/20 18:38:04 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -88,7 +88,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
 
-$sql = "select concat('<a href=\"one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as Company,c.company_id,c.default_primary_address \n" ;
+$sql = "select " . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS Company, c.company_id, c.default_primary_address \n" ;
 
 $criteria_count = 0;
 
@@ -176,7 +176,7 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
 }
 
-$page_title = "Contact Call List";
+$page_title = _("Contact Call List");
 
 
 if ($printer_friendly) {
@@ -223,10 +223,10 @@ start_page($page_title, $show_navbar, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=4>
-                    <input class=button type=submit value="Search">
+                    <input class=button type=submit value="<?php echo _("Search"); ?>">
                 </td>
                 <td class=widget_content_form_element>
-                    <input type="checkbox" name="printer_friendly" value="true" checked>Format for Printer
+                    <input type="checkbox" name="printer_friendly" value="true" checked><?php echo ("Format for Printer"); ?>
                 </td>
             </tr>
 
@@ -237,12 +237,12 @@ start_page($page_title, $show_navbar, $msg);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=3>Contacts for Companies</td>
+                <td class=widget_header colspan=3><?php echo _("Contacts for Companies"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Company Name</td>
-                <td class=widget_label>Contacts</td>
-                <td class=widget_label>Primary Address</td>
+                <td class=widget_label><?php echo _("Company Name"); ?></td>
+                <td class=widget_label><?php echo _("Contacts"); ?></td>
+                <td class=widget_label><?php echo _("Primary Address"); ?></td>
             </tr>
 
 <?php
@@ -338,6 +338,11 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.5  2004/07/20 18:38:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Now use ADODB Concat function
+ * - Fixed URL to ../companies/one.php in report output
+ *
  * Revision 1.4  2004/06/16 20:40:23  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5
