@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.11 2005/03/14 23:06:51 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.12 2005/03/15 23:13:49 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -1460,6 +1460,7 @@ class xrms_acl {
      *
      **/
     function get_restricted_object_list($ControlledObject_id, $User_id, $Permission_id=false) {
+//        echo "SEARCHING FOR OBJECTS OF TYPE $ControlledObject_id for $User_id to $Permission_id";
         $con=$this->DBConnection;
         //default to search for read permission
         if (!$Permission_id) { $Permission_id=1; }
@@ -1583,63 +1584,48 @@ class xrms_acl {
 //        echo "LOOPING PARENTS<br>";
         //Loop on relationships, find parent objects   
         foreach ($ControlledObjectRelationships as $Relationship) {
+//            $fieldRestrict=array();
             $ParentObject = $Relationship['ParentControlledObject_id'];
-                //This recursively calls same function
+            //check to see that we have a parent object
             if ($ParentObject) {
 //                echo "<br>Recursing to parent $ParentObject<br>";
+                //This recursively calls same function
                 $recurse = $this->get_restricted_object_list($ParentObject, $User_id, $Permission_id);
+                
                 if ($recurse) {
 //                    echo "Results: <pre>"; print_r($recurse); echo "</pre>";
-                    //if we found all parent objects, return all children
-                    if ($recurse['ALL']) {
- //                       echo "FOUND ALL PARENTS in $ParentObject<pre>"; print_r($Relationship); echo "</pre>";
-                        if ($Relationship['singular']==1) {
-                            $fieldRestrict=array();
-                            $fieldRestrict['on_what_table']=$con->qstr($Relationship['parent_table']);
-                            //get the list of objects who are owned by this parent table
-//                            echo "GETTING LIST SINGULAR WITH ALL"; print_r($fieldRestrict);
-                            $ParentList=$this->get_field_list($ControlledObject_id, $fieldRestrict);
-//                            echo "ALREADY FOUND: <pre>"; print_r($objectsFound); echo "</pre>";
-//                            print_r($ParentList);
-                            if ($ParentList) {
-                                $objectsFound=array_unique(array_merge($objectsFound, $ParentList));
-/* COMMENTED BECAUSE WE LONGER HAVE A COMPLETE LIST TO COMPARE AGAINST */                                  
-/*
-                                $objectsLeft = array_diff($ControlledObjectCompleteList, $objectsFound);
-                                if (count($objectsLeft)==0) {
-                                    $ret=array();
-                                    $ret['controlled_objects']=$ControlledObjectCompleteList;
-                                    $ret['ALL']=true;
-                                    $ret['groups']=$recurse['groups'];
-                                    $ret['roles']=$recurse['roles'];
-                                    return $ret;
-                                }
-*/                                
-                            }
-                        } else {
-//                            $ret['controlled_objects']=$ControlledObjectCompleteList;
+                    //if we found any objects, get IDs
+                    $ParentIDs = $recurse['controlled_objects'];
+                    //check if relationship is singular (is only a child on one of its possible relationships)
+                    if ($Relationship['singular']==1) {
+                        $on_what_child_field='on_what_id';
+                        $on_what_table=false;
+                        $find_field=false;
+                        //set on_what_table in child table to value of parent
+                        $fieldRestrict['on_what_table']=$con->qstr($Relationship['parent_table']);
+                        if ($recurse['ALL']) {
+                            //if we found all parent objects of this type, clear parent object restrict (allow all of them)
+                            $ParentIDs=false;
+                        }
+                    } else {
+                        //relationship is not singular, check if we found all
+                        if ($recurse['ALL']) {
+                            //if all parents are found, and relationship isn't singular, then return all children
                             $ret['ALL']=true;
                             $ret['groups']=$recurse['groups'];
                             $ret['roles']=$recurse['roles'];
                             return $ret;
                         }
-                    }
-                    if ($recurse['ALL']) {
-                        $ParentIDs = $recurse['controlled_objects'];
-                    } else $ParentIDs=false;                
-                    //walk to the top level, stop when we have no parent
-                    $fieldRestrict=array();
-                    if ($Relationship['singular']==1) {
-                        $on_what_child_field='on_what_id';
-                        $fieldRestrict['on_what_table']=$con->qstr($Relationship['parent_table']);
-                    } else {
+                        //not all parents found, so look for children of these parents
                         if ($ParentObject AND ($ParentObject>0)) {
+                            //get child field name from relationship, to use in restricting child table
                             if (!trim($Relationship['on_what_child_field'])) {
                                 $on_what_child_field=$Relationship['parent_field'];
                             } else {
                                 $on_what_child_field=$Relationship['on_what_child_field'];
                             }
                             if (trim($Relationship['cross_table'])) {
+                                //use cross table to find relationships between parent and child
                                 $on_what_table=$Relationship['cross_table'];
                                 $find_field=$on_what_child_field;
                                 $on_what_child_field=$Relationship['on_what_parent_field'];
@@ -1648,32 +1634,20 @@ class xrms_acl {
                                 $find_field=false;
                             }
                         }
-                    }
+                    }                    
                     //Use parent restricted list to find all controlled object IDs to which this object is a child
                     if ($ParentIDs) {
                         $fieldRestrict[$on_what_child_field]=$ParentIDs;
                     }
                     $ParentList=$this->get_field_list($ControlledObject_id, $fieldRestrict, $find_field, $on_what_table);
-//                    echo "<p>$ParentList=\$this->get_field_list($ControlledObject_id, $fieldRestrict, $find_field, $on_what_table)";
+  //                  echo "<p>$ParentList=\$this->get_field_list($ControlledObject_id, $fieldRestrict, $find_field, $on_what_table)";
                     if ($ParentList) {
                         $objectsFound=array_merge($objectsFound, $ParentList);
-/* COMMENTED BECAUSE WE LONGER HAVE A COMPLETE LIST TO COMPARE AGAINST */                                  
-/*
-                        $objectsLeft = array_diff($ControlledObjectCompleteList, $objectsFound);
-                        if (count($objectsLeft)==0) {
-                            $ret=array();
-                            $ret['controlled_objects']=$ControlledObjectCompleteList;
-                            $ret['ALL']=true;
-                            $ret['groups']=$recurse['groups'];
-                            $ret['roles']=$recurse['roles'];
-                            return $ret;
-                        }
-*/                        
-                    }
-                }
-            }
-        }
-        
+                    } //end check of parent list
+                } //end check for return from recursive call
+            } //end check for parent object 
+        } //end loop on parent controlled objects
+//        print_r($objectsFound);
         if (count($objectsFound)>0) {        
             $ret=array();
             $ret['controlled_objects']=$objectsFound;
@@ -2089,6 +2063,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.12  2005/03/15 23:13:49  vanmer
+ * - changed logic of restricted object search to better reflect new walk of parent object tree
+ * - removed no longer needed codeblocks
+ *
  * Revision 1.11  2005/03/14 23:06:51  vanmer
  * - re-added qstr that was removed and broke the insert statement on mysql
  *
