@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.9 2004/05/07 16:15:48 braverock Exp $
+ * $Id: edit-2.php,v 1.10 2004/05/07 16:17:10 braverock Exp $
  */
 
 //include required files
@@ -147,6 +147,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.10  2004/05/07 16:17:10  braverock
+ * - remove trailing whitespace added by Glenn's editor
+ *
  * Revision 1.9  2004/05/07 16:15:48  braverock
  * - fixed multiple bugs with date-time formatting in activities
  * - correctly use dbtimestamp() date() and strtotime() fns
