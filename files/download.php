@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to 
  * the user's default location.
  * 
- * $Id: download.php,v 1.6 2004/08/03 16:54:14 cpsource Exp $
+ * $Id: download.php,v 1.7 2005/01/09 02:32:28 vanmer Exp $
  */ 
 
 require_once('../include-locations.inc');
@@ -17,10 +17,12 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'mime/mime-array.php');
 
+$file_id = $_GET['file_id'];
+$on_what_id=$file_id;
+
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$file_id = $_GET['file_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -68,31 +70,21 @@ $disposition = "attachment"; // "inline" to view file in browser or "attachment"
 $file_to_open = $file_storage_directory . $file_filesystem_name;
 $file_original_name = str_replace($file_id . '_', '', $file_filesystem_name);
 
-if (isset($_SERVER["HTTPS"])) {
-	header("Pragma: ");
-	header("Cache-Control: ");
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-	header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
-	header("Cache-Control: post-check=0, pre-check=0", false);
-} else if ($disposition == "attachment") {
-	header("Cache-control: private");
-} else {
-	header("Cache-Control: no-cache, must-revalidate");
-	header("Pragma: no-cache");
-}
+//split up mimetype into greater/less mimetypes for use in SendDownloadHeaders
+$mime_type_array=explode('/',$file_type);
 
-header("Content-Disposition:$disposition; filename=\"".trim(htmlentities($file_original_name))."\"");
-header("Content-Description: ".trim(htmlentities($file_original_name)));
-header("Content-Length: ".(string)(filesize($file_to_open)));
-header("Content-Type: $file_type");
-
+//send download headers, do not force pop-up download dialog on browser
+SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name, false, filesize($file_to_open));
+//open and output file contents
 $fp = fopen($file_to_open, 'rb');
 fpassthru($fp);
 exit();
 
 /** 
  * $Log: download.php,v $
+ * Revision 1.7  2005/01/09 02:32:28  vanmer
+ * - changed to use SendDownloadHeaders function instead of custom headers
+ *
  * Revision 1.6  2004/08/03 16:54:14  cpsource
  * - Check for errors in database fetch
  *   Support proper mime type for file download if it's unspecified
