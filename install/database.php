@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.19 2004/08/11 16:56:01 gpowers Exp $
+ * $Id: database.php,v 1.20 2004/08/19 21:52:07 neildogg Exp $
  */
 
 /**
@@ -467,6 +467,8 @@ function company_db_tables($con, $table_list) {
                province            varchar(255) not null default '',
                postal_code         varchar(255) not null default '',
                use_pretty_address      char(1) not null default 'f',
+               offset               float,
+               daylight_savings_id     int unsigned,
                address_record_status       char(1) not null default 'a',
                INDEX company_id (company_id),
                INDEX address_record_status (address_record_status)
@@ -585,6 +587,7 @@ function company_db_tables($con, $table_list) {
                 on_what_id              int not null default 0,
                 activity_title          varchar(100) not null default '',
                 activity_description    text not null default '',
+                default_text            text,
                 duration                varchar(20) default 1 not null,
                 sort_order              tinyint not null default 1,
                 activity_template_record_status         char not null default 'a'
@@ -1056,6 +1059,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.20  2004/08/19 21:52:07  neildogg
+ * - Adds field to activity templates for default text
+ *
  * Revision 1.19  2004/08/11 16:56:01  gpowers
  * - Removed extra }'s
  *   - missing 'if' statements?

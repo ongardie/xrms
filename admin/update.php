@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.31 2004/08/16 16:08:45 neildogg Exp $
+ * $Id: update.php,v 1.32 2004/08/19 21:49:53 neildogg Exp $
  */
 
 // where do we include from
@@ -2203,6 +2203,12 @@ if($recCount == 0) {
     $con->execute($sql);
 }
 
+//Update address table
+$sql = "alter table addresses add offset float";
+$con->execute($sql);
+$sql = "alter table addresses add daylight_savings_id int unsigned";
+$con->execute($sql);
+
 //Go through each address to insert daylight savings
 $sql = 'SELECT *
         FROM addresses
@@ -2230,6 +2236,10 @@ else {
     }
 }
 
+//Add default text to activity templates table
+$sql = "alter table activity_templates add default_text text after activity_description";
+$con->execute($sql);
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -2251,6 +2261,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.32  2004/08/19 21:49:53  neildogg
+ * - Adds field to activity templates for default text
+ *
  * Revision 1.31  2004/08/16 16:08:45  neildogg
  * - Updates addresses to daylight savings
  *  - (will work for future time_zone database additions)
