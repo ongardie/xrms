@@ -2,7 +2,7 @@
 /**
  * Edit the information for a system parameter
  *
- * $Id: one.php,v 1.3 2005/02/05 14:25:56 maulani Exp $
+ * $Id: one.php,v 1.4 2005/02/05 16:39:38 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -86,7 +86,7 @@ if ($rst) {
   if ( $rst->RecordCount() > 0 ) {
 	// yes - they were found
     $options = true;
-    $options_menu = $rst->getmenu2($type, $my_val, false);
+    $options_menu = $rst->getmenu($type, $my_val, false);
     $rst->close();
   }
 } else {
@@ -97,6 +97,7 @@ $con->close();
 
 if ($options) {
 	$field = $options_menu;
+	$field = str_replace($type, "param_value", $field);
 } else {
 	$field = "<input type=text size=40 name=param_value value=\"$my_val\">";
 }
@@ -137,6 +138,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.4  2005/02/05 16:39:38  maulani
+ * - Fix field name
+ *
  * Revision 1.3  2005/02/05 14:25:56  maulani
  * - Use popup menu for entry of parameters that have a discrete list of
  *   options
