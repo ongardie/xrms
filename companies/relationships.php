@@ -4,7 +4,7 @@
  *
  * @todo put back in established at date picker in form
  *
- * $Id: relationships.php,v 1.8 2004/07/01 19:48:10 braverock Exp $
+ * $Id: relationships.php,v 1.9 2004/07/02 18:04:57 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -60,7 +60,7 @@ if ($rst) {
             . '<a href="delete-relationship.php?to_what_id=' . $rst->fields['to_what_id']
             . '&from_what_id=' . $rst->fields['from_what_id']
             . '&relationship_type_id=' . $rst->fields['relationship_type_id']
-            . '&return_url=/companies/relationships.php?company_id=' . $company_id . '">(Delete)</a>'
+            . '&return_url=/companies/relationships.php&company_id=' . $company_id . '">(Delete)</a>'
             . '</td>';
         $relationship_rows .= '</tr>';
         $rst->movenext();
@@ -146,6 +146,9 @@ end_page();
 
 /**
  * $Log: relationships.php,v $
+ * Revision 1.9  2004/07/02 18:04:57  neildogg
+ * - Changed ? to & in URL to transfer variable properly.
+ *
  * Revision 1.8  2004/07/01 19:48:10  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts
