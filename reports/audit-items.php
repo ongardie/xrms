@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.3 2004/04/23 17:29:17 gpowers Exp $
+ * $Id: audit-items.php,v 1.4 2004/05/07 15:12:38 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -127,7 +127,7 @@ if ($user_id) {
                 echo "<td><a href=$http_site_root/contacts/one.php?contact_id=" .
                      $rst->fields['on_what_id'] .
                      ">" . $rst2->fields['last_name'] . ", " .
-                     $rst2->fields['last_name'] . "</a>&nbsp;&nbsp;&nbsp;</td>\n";
+                     $rst2->fields['first_names'] . "</a>&nbsp;&nbsp;&nbsp;</td>\n";
             }
             elseif ($rst->fields['on_what_table'] == "activities") {
                 $sql2 = "SELECT  activity_title from activities where activity_id=" . $rst->fields['on_what_id'];
@@ -176,6 +176,10 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.4  2004/05/07 15:12:38  maulani
+ * - Fix bug 949440 Audit Items report showing contact entries with the last
+ *   name repeated instead of last name, first name.
+ *
  * Revision 1.3  2004/04/23 17:29:17  gpowers
  * Sorry that this is the third commit in a row. I noticed a <tr> that should
  * have been a </tr> in the last xrms-cvs list message. I also removed
