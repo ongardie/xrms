@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.33 2005/01/13 18:55:43 vanmer Exp $
+ * $Id: some.php,v 1.34 2005/01/25 04:12:04 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,44 +13,25 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/XRMS_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+
 
 $on_what_table='opportunities';
 $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-           'sort_column'             => array ( 'opportunities_sort_column', arr_vars_SESSION ),
-           'current_sort_column'     => array ( 'opportunities_current_sort_column', arr_vars_SESSION ),
-           'sort_order'              => array ( 'opportunities_sort_order', arr_vars_SESSION ),
-           'current_sort_order'      => array ( 'opportunities_current_sort_order', arr_vars_SESSION ),
-           'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
-           'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
-           'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
-           'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_SESSION ),
-           'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
-           );
+		   'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
+		   'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
+		   'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
+		   'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_SESSION ),
+		   'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
+		   );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
-
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-    $current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 // set all session variables
 arr_vars_session_set ( $arr_vars );
@@ -131,14 +112,8 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     } else { $where .= ' AND 1 = 2 '; }
 }
 
-if ($sort_column == 1) {
-    $order_by = "opportunity_title";
-} else {
-    $order_by = $sort_column;
-}
 
-$order_by .= " $sort_order";
-$sql .= $from . $where . " order by $order_by";
+$sql .= $from . $where;
 
 
 $sql_recently_viewed = "select * from recent_items r, companies c, opportunities opp, opportunity_statuses os
@@ -216,7 +191,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post>
+        <form action=some.php method=post name="OpportunityData">
         <input type=hidden name=scope value="opportunities">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=opportunities_next_page value="<?php  echo $opportunities_next_page; ?>">
@@ -251,15 +226,50 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";}; ?> </td>
             </tr>
         </table>
-        </form>
 <?php
 $_SESSION["search_sql"]=$sql;
-$pager = new Opportunities_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
-$pager->render($rows_per_page=$system_rows_per_page);
+
+
+
+$columns = array();
+$columns[] = array('name' => 'Opportunity', 'index' => 'Opportunity');
+$columns[] = array('name' => 'Company', 'index' => 'Company');
+$columns[] = array('name' => 'Owner', 'index' => 'Owner');
+$columns[] = array('name' => 'Opportunity Size', 'index' => 'Opportunity Size');
+$columns[] = array('name' => 'Weighted Size', 'index' => 'Weighted Size');
+$columns[] = array('name' => 'Status', 'index' => 'Status');
+$columns[] = array('name' => 'Close Date', 'index' => 'Close Date');
+
+
+
+// selects the columns this user is interested in
+$default_columns =  array('Opportunity', 'Company', 'Owner', 'Opportunity Size', 'Weighted Size', 'Status', 'Close Date');
+
+$pager_columns = new Pager_Columns('Opportunity', $columns, $default_columns, 'OpportunityData');
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+			$pager_columns_button
+			<input type=button class=button onclick=\"javascript: exportIt();\" value='Export'>
+			<input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+ 
+echo $pager_columns_selects;
+
+
+
+$pager = new XRMS_Pager($con, $sql, _('Search Results'), 'OpportunityData', 'OpportunityPager', $columns);
+$pager->AddEndRows($endrows);
+$pager->Render($system_rows_per_page);
 $con->close();
 
 ?>
 
+        </form>
     </div>
 
         <!-- right column //-->
@@ -307,18 +317,6 @@ function clearSearchCriteria() {
     location.href = "some.php?clear=1";
 }
 
-function submitForm(adodbNextPage) {
-    document.forms[0].opportunities_next_page.value = adodbNextPage;
-    document.forms[0].submit();
-}
-
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].opportunities_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
-
 //-->
 </script>
 
@@ -329,6 +327,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.34  2005/01/25 04:12:04  daturaarutad
+ * updated to use new XRMS_Pager and Pager_Columns to implement selectable columns
+ *
  * Revision 1.33  2005/01/13 18:55:43  vanmer
  * - ACL restriction on list when searching
  *
