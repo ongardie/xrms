@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.43 2004/07/21 11:48:47 cpsource Exp $
+ * $Id: one.php,v 1.44 2004/07/21 13:00:54 neildogg Exp $
  */
 
 //include required files
@@ -362,10 +362,6 @@ function logTime() {
 
     </div>
 
-<?php
-		// stub out nonsense code
-		if ( 0 ) { 
-		  echo '
     <!-- right column //-->
     <div id="Sidebar">
         <!-- company information block //-->
@@ -374,10 +370,8 @@ function logTime() {
         <?php echo $contact_block; ?>
         <!-- sidebar plugins //-->
         <?php echo $relationship_link_rows; ?>
-    </div>';
-		}
-?>
-
+    </div>
+    
 </div>
 
 <script type="text/javascript">
@@ -410,6 +404,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.44  2004/07/21 13:00:54  neildogg
+ * - Rolling back previous erroneous commit to reactivate sidebars
+ *  - Sidebar variables are declared in the sidebar requires
+ *
  * Revision 1.43  2004/07/21 11:48:47  cpsource
  * - Stub out unused right sidebar.
  *
