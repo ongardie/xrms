@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.16 2004/07/30 11:32:01 cpsource Exp $
+ * $Id: new.php,v 1.17 2004/10/18 03:31:54 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -226,6 +226,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
             </tr>
             <tr>
+                <td class=widget_label_right_166px><?php echo _("Edit Addres"); ?></td>
+                <td class=widget_content_form_element><input type=checkbox name=edit_address></td>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add Contact"); ?>"></td>
             </tr>
         </table>
@@ -258,6 +262,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.17  2004/10/18 03:31:54  gpowers
+ * - added "edit address" option
+ *
  * Revision 1.16  2004/07/30 11:32:01  cpsource
  * - Define msg properly
  *   Fix bug with new.php wereby division_id and address_id were

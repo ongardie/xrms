@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.14 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: new-2.php,v 1.15 2004/10/18 03:32:26 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -43,6 +43,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
 		   'custom2' => array ( 'custom2' , arr_vars_SESSION ),
 		   'custom3' => array ( 'custom3' , arr_vars_SESSION ),
 		   'custom4' => array ( 'custom4' , arr_vars_SESSION ),
+		   'edit_address' => array ( 'edit_address' , arr_vars_SESSION ),
 		   );
 
 // get all posted in variables
@@ -94,12 +95,21 @@ $tbl = 'contacts';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
+$contact_id = $con->Insert_ID();
+
 $con->close();
 
-header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id");
+if ($edit_address == "on") {
+	header("Location: edit-address.php?msg=contact_added&contact_id=$contact_id");
+	} else {
+	header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id");
+}
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.15  2004/10/18 03:32:26  gpowers
+ * - added "edit address" option
+ *
  * Revision 1.14  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'
