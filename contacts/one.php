@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.22 2004/05/21 12:23:26 braverock Exp $
+ * $Id: one.php,v 1.23 2004/05/21 13:06:10 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -29,19 +29,15 @@ update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
 $sql = "select cont.*,
 c.company_id, company_name, company_code,
-line1, line2, addresses.city, province, addresses.postal_code, address_body, use_pretty_address, iso_code3, address_format_string,
 u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner,
 account_status_display_html, crm_status_display_html
-from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm, addresses, countries, address_format_strings afs
+from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm 
 where cont.company_id = c.company_id
 and cont.entered_by = u1.user_id
 and cont.last_modified_by = u2.user_id
 and c.user_id = u3.user_id
 and c.account_status_id = as1.account_status_id
 and c.crm_status_id = crm.crm_status_id
-and countries.country_id = addresses.country_id
-and countries.address_format_string_id = afs.address_format_string_id
-and addresses.address_id = cont.address_id
 and contact_id = $contact_id";
 
 $rst = $con->execute($sql);
@@ -77,15 +73,6 @@ if ($rst) {
     $custom2 = $rst->fields['custom2'];
     $custom3 = $rst->fields['custom3'];
     $custom4 = $rst->fields['custom4'];
-    $line1 = $rst->fields['line1'];
-    $line2 = $rst->fields['line2'];
-    $city = $rst->fields['city'];
-    $province = $rst->fields['province'];
-    $postal_code = $rst->fields['postal_code'];
-    $address_body = $rst->fields['address_body'];
-    $use_pretty_address = $rst->fields['use_pretty_address'];
-    $country = $rst->fields['iso_code3'];
-    $address_format_string = $rst->fields['address_format_string'];
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
     $entered_by = $rst->fields['entered_by_username'];
@@ -109,13 +96,7 @@ switch ($gender) {
         break;
 }
 
-if ($use_pretty_address == 't') {
-    $address_to_display = $address_body;
-} else {
-    $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
-    eval("\$address_to_display = \"$address_format_string\";");
-    // eval ("\$str = \"$str\";");
-}
+$address_to_display = get_formatted_address($con, $address_id);
 
 // most recent activities
 $sql_activities = "select activity_id,
@@ -559,6 +540,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.23  2004/05/21 13:06:10  maulani
+ * - Create get_formatted_address function which centralizes the address
+ *   formatting code into one routine in utils-misc.
+ *
  * Revision 1.22  2004/05/21 12:23:26  braverock
  * - add todo item to break out address query
  *

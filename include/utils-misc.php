@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.21 2004/05/13 16:40:06 braverock Exp $
+ * $Id: utils-misc.php,v 1.22 2004/05/21 13:06:11 maulani Exp $
  */
 
 /**
@@ -458,7 +458,48 @@ function db_error_handler (&$con,$sql) {
 } //end fn db_error_handler
 
 /**
+ * function get_formatted_address : get the address and format it
+ *
+ * @author Beth Macknik
+ *
+ * @param handle &$con handle to the database connection
+ * @param int $address_id id of the address to be retrieved
+ */
+function get_formatted_address (&$con,$address_id) {
+    $sql = "select a.address_body, a.line1, a.line2, a.city, a.province, a.postal_code, a.use_pretty_address, ";
+    $sql .= 'afs.address_format_string, c.country_name ';
+    $sql .= 'from addresses a, address_format_strings afs, countries c ';
+    $sql .= "where a.address_id=$address_id ";
+    $sql .= 'and a.country_id=c.country_id ';
+    $sql .= 'and c.address_format_string_id=afs.address_format_string_id';
+    $rst = $con->execute($sql);
+    
+    $address_body = $rst->fields['address_body'];
+    $line1 = $rst->fields['line1'];
+    $line2 = $rst->fields['line2'];
+    $city = $rst->fields['city'];
+    $province = $rst->fields['province'];
+    $postal_code = $rst->fields['postal_code'];
+    $use_pretty_address = $rst->fields['use_pretty_address'];
+    $address_format_string = $rst->fields['address_format_string'];
+    $country = $rst->fields['country_name'];
+    
+    if ($use_pretty_address == 't') {
+        $address_to_display = nl2br($address_body);
+    } else {
+        $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
+        eval("\$address_to_display = \"$address_format_string\";");
+        // eval ("\$str = \"$str\";");
+    }
+    return $address_to_display;
+} //end fn get_formatted_address
+
+/**
  * $Log: utils-misc.php,v $
+ * Revision 1.22  2004/05/21 13:06:11  maulani
+ * - Create get_formatted_address function which centralizes the address
+ *   formatting code into one routine in utils-misc.
+ *
  * Revision 1.21  2004/05/13 16:40:06  braverock
  * - modified system prefs functions to pass database conection by reference
  * - modified system prefs functions to use db_error_handler_fn

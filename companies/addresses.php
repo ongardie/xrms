@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.8 2004/04/16 22:19:38 maulani Exp $
+ * $Id: addresses.php,v 1.9 2004/05/21 13:06:09 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,11 +23,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $company_name = fetch_company_name($con, $company_id);
 
-$sql = "select * from companies c, addresses a, countries, address_format_strings afs
-where a.country_id = countries.country_id
-and a.address_record_status = 'a'
+$sql = "select * from companies c, addresses a
+where a.address_record_status = 'a'
 and c.company_id = a.company_id
-and countries.address_format_string_id = afs.address_format_string_id
 and c.company_id = $company_id";
 
 $rst = $con->execute($sql);
@@ -36,17 +34,8 @@ if ($rst) {
     while (!$rst->EOF) {
         $addresses .= '<tr>';
         $addresses .= "<td class=widget_label_right_91px><a href=edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a></td>';
-        if ($rst->fields['use_pretty_address'] == 't') {
-            $addresses .= '<td class=widget_content>' . nl2br($rst->fields['address_body']) . '</td>';
-        } else {
-            $addresses .= '<td class=widget_content>'
-                         . $rst->fields['line1'] . '<br>'
-                         . $rst->fields['line2'] . '<br>'
-                         . $rst->fields['city'] . ' , '
-                         . $rst->fields['province'] . ' , '
-                         . $rst->fields['postal_code']
-                         . '</td>';
-        }
+        $address_to_display = get_formatted_address($con, $rst->fields['address_id']);
+        $addresses .= "<td class=widget_content>$address_to_display</td>";
 
         $addresses .= "<td class=widget_content><input type=radio name=default_primary_address value=" . $rst->fields['address_id'];
 
@@ -184,6 +173,10 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.9  2004/05/21 13:06:09  maulani
+ * - Create get_formatted_address function which centralizes the address
+ *   formatting code into one routine in utils-misc.
+ *
  * Revision 1.8  2004/04/16 22:19:38  maulani
  * - Add CSS2 positioning
  *
