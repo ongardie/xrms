@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer.php,v 1.3 2004/07/06 17:25:22 braverock Exp $
+ * $Id: transfer.php,v 1.4 2004/07/19 22:18:09 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,7 +16,6 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 $contact_id = $_GET['contact_id'];
-$address_id = $_GET['address_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -29,12 +28,6 @@ $rst = $con->execute($sql);
 $contact_name = $rst->fields['first_names'] . ' ' . $rst->fields['last_name'];
 $company_id =  $rst->fields['company_id'];
 
-$sql = "select company_name, company_id from companies where company_record_status = 'a' order by company_name";
-$rst = $con->execute($sql);
-
-$company_menu = $rst->getmenu2('company_id', $company_id, false);
-$rst->close();
-
 $con->close();
 
 $page_title = $contact_name . " - Transfer to Another Company";
@@ -46,18 +39,21 @@ start_page($page_title, true, $msg);
     <div id="Content">
 
         <form action=transfer-2.php method=post>
+        <input type=hidden name=msg value="<?php echo $msg; ?>">
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Transfer to Another Company</td>
+                <td class=widget_header colspan=2>Search for Company</td>
             </tr>
             <tr>
-                <td class=widget_label>New Company</td>
-                <td class=widget_content><?php  echo $company_menu; ?></a></td>
+                <td class=widget_label>Name or ID</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="company_name"> <img height=12 width=12 alt=required src=https://68.162.84.101/xrms/img/required.gif></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <input class=button type=submit value="Save">
+                    <input class=button type=submit value="Search">
                 </td>
             </tr>
 
@@ -80,6 +76,10 @@ end_page();
 
 /**
  * $Log: transfer.php,v $
+ * Revision 1.4  2004/07/19 22:18:09  neildogg
+ * - Added company search box
+ *  - Added move all records with contact
+ *
  * Revision 1.3  2004/07/06 17:25:22  braverock
  * - fixed sort order on transfer
  *   - resolves SF bug 978438 reported by Walt Pennington
