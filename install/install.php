@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.9 2004/08/02 08:49:55 maulani Exp $
+ * $Id: install.php,v 1.10 2004/08/02 08:51:24 maulani Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -178,6 +178,18 @@ if (!file_exists ($tmp_upload_directory) ) {
     install_fatal_error($problem);
 }
 
+// Is register_globals on.  This should be off--it is a security hole and causes a large
+// number of problems for XRMS
+if (ini_get ('register_globals' ) != '' ) {
+    // Oops!  Register globals is on
+    // Now instruct the user in how to turn it off
+    $problem = 'Register_globals is currently on for your server.  It must be turned off for XRMS.<BR><BR>';
+    $problem .= "(It is obsolete, and a security hole that causes problems for XRMS.)<BR><BR>";
+    $problem .= 'Modify your php.ini file to turn off register_globals.<BR><BR>';
+
+    install_fatal_error($problem);
+}
+
 // more tests on the vars.php variables should exist here
 // optimally, all variables would be tested.
 
@@ -202,6 +214,8 @@ if (!$connectiontest) {
 
     install_fatal_error($problem);
 }
+
+
 // if you can make a database connection make sure that you are running at least version 4 of MYSQL
 // otherwise alert the user to potential problems
 if($xrms_db_dbtype="mysql"){
@@ -255,6 +269,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.10  2004/08/02 08:51:24  maulani
+ *- Add test to check register_globals
+ *
  *Revision 1.9  2004/08/02 08:49:55  maulani
  *- Add test to check register_globals
  *
