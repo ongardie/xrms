@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.36 2004/07/16 11:11:48 cpsource Exp $
+ * $Id: some.php,v 1.37 2004/07/21 20:32:19 neildogg Exp $
  */
 
 // handle includes
@@ -19,6 +19,35 @@ require_once($include_directory . 'adodb-params.php');
 
 // create session
 $session_user_id = session_check();
+
+// Start connection
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+// check for saved search
+$arr_vars = array ( // local var name       // session variable name
+           'saved_id'           => array ( 'saved_id', arr_vars_SESSION ) ,
+           'saved_title'         => array ( 'saved_title', arr_vars_SESSION ) ,
+           'group_item'          => array ( 'group_item', arr_vars_SESSION ) ,
+           );
+
+arr_vars_get_all ( $arr_vars );
+
+if($saved_id) {
+    $sql = "SELECT saved_data
+            FROM saved_actions
+            WHERE saved_id=" . $saved_id . "
+            AND (user_id=" . $session_user_id . "
+            OR group_item=1)
+            AND saved_status='a'";
+    $rst = $con->execute($sql);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif($rst->rowcount()) {
+        $_POST = unserialize($rst->fields['saved_data']);
+    }
+}
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -42,7 +71,17 @@ $arr_vars = array ( // local var name       // session variable name
 arr_vars_get_all ( $arr_vars );
 
 // TBD - BUG - search date hack !!!
-$search_date = date('Y-m-d', time());
+// $search_date = date('Y-m-d', time());     
+// I don't know what the bug is, but this creates a relative search
+//  so that it can be used as a recurring search. Neat, huh?
+$day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
+$offset = " curdate() ";
+if($day_diff > 0) {
+    $offset .= " + interval " . $day_diff . " day ";
+}
+elseif($day_diff < 0) {
+    $offset .= " - interval " . -$day_diff . " day ";
+}
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -65,9 +104,6 @@ $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descendi
 
 // set all session variables
 arr_vars_session_set ( $arr_vars );
-
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 //uncomment this to see what's gonig on with the database
 //$con->debug=1;
@@ -133,9 +169,9 @@ if (strlen($completed) > 0 and $completed != "all") {
 if (strlen($search_date) > 0) {
     $criteria_count++;
     if (!$before_after) {
-        $sql .= " and a.ends_at < " . $con->qstr($search_date, get_magic_quotes_gpc());
+        $sql .= " and a.ends_at < " . $offset;
     } else {
-        $sql .= " and a.ends_at > " . $con->qstr($search_date, get_magic_quotes_gpc());
+        $sql .= " and a.ends_at > " . $offset;
     }
 }
 
@@ -183,6 +219,53 @@ order by activity_type_pretty_name";
 $rst = $con->execute($sql_type);
 $type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, true);
 $rst->close();
+
+// save search
+$saved_data = $_POST;
+$saved_data["sql"] = $sql;
+
+$rec = array();
+$rec['saved_title'] = $saved_title;
+$rec['group_item'] = round($group_item);
+$rec['on_what_table'] = "activities";
+$rec['saved_action'] = "search";
+$rec['user_id'] = $session_user_id;
+$rec['saved_data'] = str_replace("'", "\\'", serialize($saved_data));
+
+if($saved_title) {
+    $sql_saved = "SELECT *
+            FROM saved_actions
+            WHERE (user_id=" . $session_user_id . "
+            OR group_item=1)
+            AND saved_title='" . $saved_title . "'
+            AND saved_status='a'";
+    $rst = $con->execute($sql_saved);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif($rst->rowcount()) {
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
+    }
+    else {
+        $tbl = "saved_actions";
+        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
+    }
+}
+
+//get saved searches
+$sql_saved = "SELECT saved_title, saved_id
+        FROM saved_actions
+        WHERE (user_id=$session_user_id
+        OR group_item=1)
+        AND on_what_table='activities'
+        AND saved_action='search'
+        AND saved_status='a'";
+$rst = $con->execute($sql_saved);
+if($rst->rowcount()) {
+    $saved_menu = $rst->getmenu2('saved_id', 0, true);
+}
 
 // Stub out $open_activities is never used. The ENTIRE code base
 // was searched and $open_activities NEVER appears outside what
@@ -305,6 +388,15 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
+                <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
+                <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan="2"><?php echo ($saved_menu) ? $saved_menu : "No saved searches"; ?>
+                </td>
+                <td class=widget_content_form_element colspan="2"> <input type=text name="saved_title" size=24> Add to Everyone <input type=checkbox name="group_item" value=1>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
                     <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";}; ?>
@@ -386,6 +478,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.37  2004/07/21 20:32:19  neildogg
+ * - Added ability to save searches
+ *  - Any improvements welcome
+ *
  * Revision 1.36  2004/07/16 11:11:48  cpsource
  * - Remove unused $open_activities variable.
  *   Add a programming note on how to efficiently tell if string length is 0
