@@ -107,7 +107,7 @@ if ($rst) {
 $con->close();
 
 if (!strlen($activity_rows) > 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=6>No open activities</td></tr>";
+    $activity_rows = "<tr><td class=widget_content colspan=7>No open activities</td></tr>";
 }
 
 $page_title = "Home";
