@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: overdue-items.php,v 1.6 2005/02/05 16:44:19 maulani Exp $
+ * $Id: overdue-items.php,v 1.7 2005/02/09 19:20:54 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -25,14 +25,14 @@ $display = $_GET['display'];
 $starting = $_GET['starting'];
 $ending = $_GET['ending'];
 
-$use_hr = get_system_parameter($con, 'Reports--Use Horizontal Rule');
-$say_no_when_none = get_system_parameter($con, 'Reports--Show No Items Found');
-
 $userArray = array();
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
+
+$use_hr = get_system_parameter($con, 'Reports--Use Horizontal Rule');
+$say_no_when_none = get_system_parameter($con, 'Reports--Show No Items Found');
 
 if (!$starting) {
     $starting = "-1 hour";
@@ -400,6 +400,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: overdue-items.php,v $
+ * Revision 1.7  2005/02/09 19:20:54  maulani
+ * - fix parameter call to occur after database connection established
+ *
  * Revision 1.6  2005/02/05 16:44:19  maulani
  * - Change report options to use system parameters
  *

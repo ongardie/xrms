@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.14 2005/02/05 16:44:19 maulani Exp $
+ * $Id: completed-items.php,v 1.15 2005/02/09 19:20:54 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -26,9 +26,6 @@ $send_email = $_GET['send_email'];
 $send_email_to = $_GET['send_email_to'];
 $all_users = $_GET['all_users'];
 $display = $_GET['display'];
-
-$use_hr = get_system_parameter($con, 'Reports--Use Horizontal Rule');
-$say_no_when_none = get_system_parameter($con, 'Reports--Show No Items Found');
 
 $userArray = array();
 
@@ -52,6 +49,9 @@ if (($display) || (!$friendly)) {
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
+
+$use_hr = get_system_parameter($con, 'Reports--Use Horizontal Rule');
+$say_no_when_none = get_system_parameter($con, 'Reports--Show No Items Found');
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
@@ -389,6 +389,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.15  2005/02/09 19:20:54  maulani
+ * - fix parameter call to occur after database connection established
+ *
  * Revision 1.14  2005/02/05 16:44:19  maulani
  * - Change report options to use system parameters
  *
