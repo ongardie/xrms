@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.23 2004/05/21 13:06:10 maulani Exp $
+ * $Id: one.php,v 1.24 2004/05/27 20:23:15 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -31,7 +31,7 @@ $sql = "select cont.*,
 c.company_id, company_name, company_code,
 u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner,
 account_status_display_html, crm_status_display_html
-from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm 
+from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm
 where cont.company_id = c.company_id
 and cont.entered_by = u1.user_id
 and cont.last_modified_by = u2.user_id
@@ -454,7 +454,9 @@ function markComplete() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';"></td>
+                <td class=widget_content_form_element>
+                    <input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=button value="<?php  echo 'Vcard'; ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';"></td>
             </tr>
         </table>
      <script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
@@ -540,6 +542,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.24  2004/05/27 20:23:15  gpowers
+ * Added "Vcard": Export one contact to a Vcard
+ * Patch [ 951084 ] Export VCARD
+ * Submitted By: frenchman
+ *
  * Revision 1.23  2004/05/21 13:06:10  maulani
  * - Create get_formatted_address function which centralizes the address
  *   formatting code into one routine in utils-misc.
