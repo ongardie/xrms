@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.10 2004/08/14 21:26:13 niclowe Exp $
+ * $Id: some-advanced.php,v 1.11 2004/08/14 21:41:51 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -359,9 +359,9 @@ start_page($page_title, true, $msg);
 
 <div id="Main">
     <div id="Content">
-		<form action=some-advanced.php method=post name="advsearch">
+		<form action=some-advanced.php method=post>
 		  <input type=hidden name=use_post_vars value=1>
-		  <input type=hidden name=companies_next_page value="<?php  //echo $companies_next_page; ?>">
+		  <input type=hidden name=companies_next_page value="<?php  echo $companies_next_page; ?>">
       <input type=hidden name=resort value="0">
       <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
       <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
@@ -436,6 +436,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.11  2004/08/14 21:41:51  niclowe
+ * added adodb pager to advanced search - fixed minor incorrect, non bug inducing form parameters
+ *
  * Revision 1.10  2004/08/14 21:26:13  niclowe
  * added adodb pager to advanced search
  *
