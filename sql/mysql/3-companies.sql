@@ -166,46 +166,46 @@ insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_sta
 -- 
 
 create table companies (
-	company_id                                          int not null primary key auto_increment,
-	user_id                                             int not null default 0,
-	company_source_id                                   int not null default 0,
-	industry_id                                         int not null default 0,
-	crm_status_id                                       int not null default 0,
-	rating_id                                           int not null default 0,
-	account_status_id                                   int not null default 0,
-	company_name                                        varchar(100) not null default '',
-	company_code                                        varchar(10) not null default '',
-    legal_name                                          varchar(100) not null default '',
-    tax_id                                              varchar(100) not null default '',
-	profile                                             text not null default '',
-	phone                                               varchar(50) not null default '',
-	phone2                                              varchar(50) not null default '',
-	fax                                                 varchar(50) not null default '',
-	url                                                 varchar(50) not null default '',
-	employees                                           varchar(50) not null default '',
-	revenue                                             varchar(50) not null default '',
-	credit_limit                                        int not null default 0,
-	terms                                               int not null default 0,
-	entered_at                                          datetime,
-	entered_by                                          int not null default 0,
-	last_modified_at                                    datetime,
-	last_modified_by                                    int not null default 0,
-	default_primary_address                             int not null default 0,
-	default_billing_address                             int not null default 0,
-	default_shipping_address                            int not null default 0,
-	default_payment_address                             int not null default 0,
-	custom1                                             varchar(100) not null default '',
-	custom2                                             varchar(100) not null default '',
-	custom3                                             varchar(100) not null default '',
-	custom4                                             varchar(100) not null default '',
-	extref1                                             varchar(50) not null default '',
-	extref2                                             varchar(50) not null default '',
-	extref3                                             varchar(50) not null default '',
-	company_record_status                               char(1) default 'a'
+	company_id                       int not null primary key auto_increment,
+	user_id                          int not null default 0,
+	company_source_id                int not null default 0,
+	industry_id                      int not null default 0,
+	crm_status_id                    int not null default 0,
+	rating_id                        int not null default 0,
+	account_status_id                int not null default 0,
+	company_name                     varchar(100) not null default '',
+	company_code                     varchar(10) not null default '',
+        legal_name                       varchar(100) not null default '',
+        tax_id                           varchar(100) not null default '',
+	profile                          text not null default '',
+	phone                            varchar(50) not null default '',
+	phone2                           varchar(50) not null default '',
+	fax                              varchar(50) not null default '',
+	url                              varchar(50) not null default '',
+	employees                        varchar(50) not null default '',
+	revenue                          varchar(50) not null default '',
+	credit_limit                     int not null default 0,
+	terms                            int not null default 0,
+	entered_at                       datetime,
+	entered_by                       int not null default 0,
+	last_modified_at                 datetime,
+	last_modified_by                 int not null default 0,
+	default_primary_address          int not null default 0,
+	default_billing_address          int not null default 0,
+	default_shipping_address         int not null default 0,
+	default_payment_address          int not null default 0,
+	custom1                          varchar(100) not null default '',
+	custom2                          varchar(100) not null default '',
+	custom3                          varchar(100) not null default '',
+	custom4                          varchar(100) not null default '',
+	extref1                          varchar(50) not null default '',
+	extref2                          varchar(50) not null default '',
+	extref3                          varchar(50) not null default '',
+	company_record_status            char(1) default 'a'
 );
 
 
--- each company can have one or more of these (one gets automatically added with the company) -- and you can select via 
+-- each company can have one or more address (one gets automatically added with the company) -- and you can select via 
 -- radio button which one should be the default for billing, shipping, and payments.  I think this might be better as a 
 -- "facilities" table, with contacts belonging to one facility, but for now this should be good enough.
 
@@ -224,6 +224,30 @@ create table addresses (
 	address_record_status		char(1) not null default 'a'
 );
 
+
+-- each company can have zero or more divisions.  This is probably not usefult for small companies, so its use is optional.
+
+create table company_division (
+	division_id                      int not null primary key auto_increment,
+	company_id                       int not null,
+	user_id                          int not null default 0,
+	company_source_id                int not null default 0,
+	industry_id                      int not null default 0,
+	division_name                    varchar(100) not null default '',
+	description                      text not null default '',
+	entered_at                       datetime,
+	entered_by                       int not null default 0,
+	last_modified_at                 datetime,
+	last_modified_by                 int not null default 0,
+	custom1                          varchar(100) not null default '',
+	custom2                          varchar(100) not null default '',
+	custom3                          varchar(100) not null default '',
+	custom4                          varchar(100) not null default '',
+	division_record_status           char(1) default 'a'
+);
+
+
+
 -- 
 -- I could have made separate tables for titles ("President", "Marketing Director", etc.) and summaries 
 -- ("Decision Maker", "Influencer", etc.) but constraining these often seems to just get in the way.  If you'd 
@@ -234,12 +258,13 @@ create table addresses (
 create table contacts (
 	contact_id                      int not null primary key auto_increment,
 	company_id                      int not null default 0,
+	division_id                     int not null default 0,
 	address_id                      int not null default 0,
-    salutation                      varchar(20) not null default '',
+        salutation                      varchar(20) not null default '',
 	last_name                       varchar(100) not null default '',
 	first_names                     varchar(100) not null default '',
-    gender                          char(1) not null default 'm',
-    date_of_birth                   varchar(100) not null default '',
+        gender                          char(1) not null default 'm',
+        date_of_birth                   varchar(100) not null default '',
 	summary                         varchar(100) not null default '',
 	title                           varchar(100) not null default '',
 	description                     varchar(100) not null default '',
