@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.15 2004/07/07 21:53:13 introspectshun Exp $
+ * $Id: new-2.php,v 1.16 2004/07/16 10:52:14 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -93,7 +93,10 @@ $rec['last_modified_at'] = time();
 
 $tbl = 'companies';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con->execute($ins);
+$rst = $con->execute($ins);
+if (!$rst) {
+    db_error_handler ($con, $ins);
+}
 
 $company_id = $con->insert_id();
 
@@ -107,7 +110,12 @@ if (strlen($company_code) == 0) {
     $rec['company_code'] = $company_code;
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    $con->execute($upd);
+    if ($upd) {
+        $upd_rst = $con->execute($upd);
+        if (!$upd_rst) {
+            db_error_handler ($con, $upd);
+        }
+    }
 }
 
 // insert an address
@@ -125,7 +133,10 @@ $rec['use_pretty_address'] = $use_pretty_address;
 
 $tbl = 'addresses';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con->execute($ins);
+$adr_rst = $con->execute($ins);
+if (!$adr_rst) {
+    db_error_handler ($con, $ins);
+}
 
 
 // make that address the default, and set the customer and vendor references
@@ -133,6 +144,9 @@ $address_id = $con->insert_id();
 
 $sql = "SELECT * FROM companies WHERE company_id = $company_id";
 $rst = $con->execute($sql);
+if (!$rst) {
+    db_error_handler ($con, $sql);
+}
 
 $rec = array();
 $rec['default_primary_address'] = $address_id;
@@ -141,7 +155,10 @@ $rec['default_shipping_address'] = $address_id;
 $rec['default_payment_address'] = $address_id;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+$upd_rst = $con->execute($upd);
+if (!$upd_rst) {
+    db_error_handler ($con, $upd);
+}
 
 
 // insert a contact
@@ -160,7 +177,10 @@ $rec['last_modified_at'] = time();
 
 $tbl = 'contacts';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con->execute($ins);
+$con_rst = $con->execute($ins);
+if (!$con_rst) {
+    db_error_handler ($con, $ins);
+}
 
 if (strlen($accounting_system) > 0) {
     add_accounting_customer($con, $company_id, $company_name, $company_code, $customer_credit_limit, $customer_terms);
@@ -176,6 +196,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.16  2004/07/16 10:52:14  braverock
+ * - add db_error_handler fn calls around all SQL queries for more error feedback
+ *
  * Revision 1.15  2004/07/07 21:53:13  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
