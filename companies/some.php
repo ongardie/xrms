@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.61 2005/03/21 13:40:55 maulani Exp $
+ * $Id: some.php,v 1.62 2005/03/30 17:29:21 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -288,7 +288,7 @@ $columns[] = array('name' => _("User"), 'index_sql' => 'user');
 $columns[] = array('name' => _("Industry"), 'index_sql' => 'industry');
 $columns[] = array('name' => _("CRM Status"), 'index_sql' => 'crm_status');
 $columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status');
-$columns[] = array('name' => _("Rating"), 'index_sql' => 'Rating');
+$columns[] = array('name' => _("Rating"), 'index_sql' => 'rating');
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
@@ -391,6 +391,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.62  2005/03/30 17:29:21  daturaarutad
+ * s/Rating/rating/ in $columns
+ *
  * Revision 1.61  2005/03/21 13:40:55  maulani
  * - Remove redundant code by centralizing common user menu call
  *
