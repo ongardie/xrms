@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.11 2004/07/30 10:18:00 cpsource Exp $
+ * $Id: new.php,v 1.12 2004/08/13 13:35:54 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -45,7 +45,7 @@ $rst = $con->execute($sql2);
 if ( $rst && !$rst->EOF ) {
   $case_priority_id = $rst->fields['case_priority_id'];
 } else {
-  $case_priority_id = '';
+  $case_priority_id = 0;
 }
 
 $case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, false);
@@ -60,14 +60,14 @@ $rst = $con->execute($sql2);
 if ( $rst && !$rst->EOF ) {
   $case_type_id = $rst->fields['case_type_id'];
 } else {
-  $case_type_id = '';
+  $case_type_id = 0;
 }
 
 $case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false);
 $rst->close();
 
 //get case status menu
-$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by sort_order";
+$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by case_status_id";
 $rst = $con->execute($sql2);
 
 // defining case_status_id before the call to getmenu2 means that this
@@ -75,7 +75,7 @@ $rst = $con->execute($sql2);
 if ( $rst && !$rst->EOF ) {
   $case_status_id = $rst->fields['case_status_id'];
 } else {
-  $case_status_id = '';
+  $case_status_id = 0;
 }
 
 $case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, false);
@@ -196,6 +196,12 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.12  2004/08/13 13:35:54  maulani
+ * - Fix bug 1008689
+ *  - Correct errant sql sort order.
+ *  - Correct errant variable set.  case_priority_id, case_type_id, and case_status_id
+ *    are all integers.  They were erroneously set to blank strings.
+ *
  * Revision 1.11  2004/07/30 10:18:00  cpsource
  * - Fix (yet again) three (more) bugs that were masked by undefined
  *   variables:
