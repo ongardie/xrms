@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.6 2004/06/14 22:50:14 introspectshun Exp $
+ * $Id: some.php,v 1.7 2004/06/29 15:32:38 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -73,7 +73,7 @@ start_page($page_title);
     <div id="Sidebar">
 
         <!-- right column //-->
-        <form action=add-2.php method=post>
+        <form action="add-2.php" onsubmit="javascript: return validate();" method=post>
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2>Add New User</td>
@@ -84,23 +84,23 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right>Last Name</td>
-                <td class=widget_content_form_element><input type=text name=last_name size=30></td>
+                <td class=widget_content_form_element><input type=text name=last_name> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>First Names</td>
-                <td class=widget_content_form_element><input type=text name=first_names size=30></td>
+                <td class=widget_content_form_element><input type=text name=first_names></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Username</td>
-                <td class=widget_content_form_element><input type=text name=new_username></td>
+                <td class=widget_content_form_element><input type=text name=new_username> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Password</td>
-                <td class=widget_content_form_element><input type=password name=password size=30></td>
+                <td class=widget_content_form_element><input type=password name=password> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>E-Mail</td>
-                <td class=widget_content_form_element><input type=text name=email size=30></td>
+                <td class=widget_content_form_element><input type=text name=email></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Language</td>
@@ -108,7 +108,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right>GMT Offset</td>
-                <td class=widget_content_form_element><input type=text size=5 name=gmt_offset></td>
+                <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value=<?php  echo $default_gst; ?>></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Allow Access</td>
@@ -124,12 +124,48 @@ start_page($page_title);
 
 </div>
 
+<script language=javascript type="text/javascript" >
+
+function validate() {
+
+    var numberOfErrors = 0;
+    var msgToDisplay = '';
+
+    if (document.forms[0].new_username.value == '') {
+        numberOfErrors ++;
+        msgToDisplay += 'You must enter a username.';
+    }
+
+    if (document.forms[0].new_lastname.value == '') {
+        numberOfErrors ++;
+        msgToDisplay += '\nYou must enter a last name.';
+    }
+
+    if (document.forms[0].new_lastname.value == '') {
+        numberOfErrors ++;
+        msgToDisplay += '\nYou must enter a password.';
+    }
+
+    if (numberOfErrors > 0) {
+        alert(msgToDisplay);
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
+</script>
+
 <?php
 
 end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/06/29 15:32:38  maulani
+ * - Make username, lastname, and password required fields for new users.
+ *
  * Revision 1.6  2004/06/14 22:50:14  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
