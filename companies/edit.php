@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.6 2004/02/14 15:27:19 braverock Exp $
+ * $Id: edit.php,v 1.7 2004/02/18 21:30:53 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -35,6 +35,7 @@ if ($rst) {
     $user_id = $rst->fields['user_id'];
     $company_source_id = $rst->fields['company_source_id'];
     $industry_id = $rst->fields['industry_id'];
+    $rating_id = $rst->fields ['rating_id'];
     $profile = $rst->fields['profile'];
     $phone = $rst->fields['phone'];
     $phone2 = $rst->fields['phone2'];
@@ -76,7 +77,7 @@ $rst->close();
 
 $sql2 = "select rating_pretty_name, rating_id from ratings where rating_record_status = 'a' order by rating_pretty_name";
 $rst = $con->execute($sql2);
-$rating_menu = $rst->getmenu2('rating_id', $rating_id, true);
+$rating_menu = $rst->getmenu2('rating_id', $rating_id, false);
 $rst->close();
 
 $con->close();
@@ -222,6 +223,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.7  2004/02/18 21:30:53  braverock
+ * fixed rating so it populates correctly
+ *
  * Revision 1.6  2004/02/14 15:27:19  braverock
  * - add ratings to the editing of companies
  *
