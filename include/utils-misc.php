@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.106 2005/01/09 17:02:57 vanmer Exp $
+ * $Id: utils-misc.php,v 1.107 2005/01/10 15:52:08 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -987,7 +987,7 @@ function update_daylight_savings($con) {
  *
  * @author Neil Roberts
  */
-function current_page() {
+function current_page($vars = false) {
     global $http_site_root;
     $page = '';
     $site_directories = explode('/', $http_site_root);
@@ -1004,10 +1004,20 @@ function current_page() {
         }
     }
     if(count($parts)) {
-        return $page . '?' . $parts[1];
+        if($vars) {
+            return $page . '?' . $parts[1] . '&' . $vars;
+        }
+        else {
+            return $page . '?' . $parts[1];
+        }
     }
     else {
-        return $page;
+        if($vars) {
+            return $page . '?' . $vars;
+        }
+        else {
+            return $page;
+        }
     }
 }
 
@@ -1412,6 +1422,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.107  2005/01/10 15:52:08  neildogg
+ * - Can now pass variables to tack on to the end of current_page
+ *
  * Revision 1.106  2005/01/09 17:02:57  vanmer
  * - added optional action parameter to session check, for ACL permissions
  * - checking in now to allow other ACL-related changes to operate properly before ACL is checked in
