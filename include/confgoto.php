@@ -32,6 +32,11 @@ EOQ;
 
 /*
  * $Log: confgoto.php,v $
+ * Revision 1.3  2004/07/29 12:23:03  neildogg
+ * - Removed extra lines from EOF
+ *  - that prevent cookies being sent in
+ *  - non-output-buffering environment
+ *
  * Revision 1.2  2004/07/29 09:35:46  cpsource
  * - Seperate .js and .php for confGoTo for PHP V4 problems.
  *
@@ -41,4 +46,3 @@ EOQ;
  *
  */
 ?>
-
