@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.41 2005/01/09 17:04:54 vanmer Exp $
+ * $Id: utils-interface.php,v 1.42 2005/01/09 18:04:55 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -361,10 +361,10 @@ function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=
     global $on_what_id;
     if ($_table) $table=$_table;
     else $table=$on_what_table;
-    if ($_id) $id=$_id;
-    else $id=$on_what_id;
+    if ($_id) $cid=$_id;
+    else $cid=$on_what_id;
     
-    if (!check_permission_bool($session_user_id, false, $id, 'Update',$table))
+    if (!check_permission_bool($session_user_id, false, $cid, 'Update',$table))
         return false;
     return render_button($text, $type, $onclick, $name, $id);
 }
@@ -375,9 +375,10 @@ function render_delete_button($text='Delete', $type='submit', $onclick=false, $n
     global $on_what_id;
     if ($_table) $table=$_table;
     else $table=$on_what_table;
-    if ($_id) $id=$_id;
-    else $id=$on_what_id;
-    if (!check_permission_bool($session_user_id, false, $id, 'Delete',$table))
+    if ($_id) $cid=$_id;
+    else $cid=$on_what_id;
+    
+    if (!check_permission_bool($session_user_id, false, $cid, 'Delete',$table))
         return false;
     return render_button($text, $type, $onclick, $name, $id);
 }
@@ -388,10 +389,10 @@ function render_read_button($text='Read', $type='submit', $onclick=false, $name=
     global $on_what_id;
     if ($_table) $table=$_table;
     else $table=$on_what_table;
-    if ($_id) $id=$_id;
-    else $id=$on_what_id;
+    if ($_id) $cid=$_id;
+    else $cid=$on_what_id;
     
-    if (!check_permission_bool($session_user_id, false, $id, 'Read',$table))
+    if (!check_permission_bool($session_user_id, false, $cid, 'Read',$table))
         return false;
     return render_button($text, $type, $onclick, $name, $id);
 }
@@ -402,10 +403,10 @@ function render_create_button($text='Create', $type='submit', $onclick=false, $n
     global $on_what_id;
     if ($_table) $table=$_table;
     else $table=$on_what_table;
-    if ($_id) $id=$_id;
-    else $id=$on_what_id;
+    if ($_id) $cid=$_id;
+    else $cid=$on_what_id;
 
-    if (!check_permission_bool($session_user_id, false, $id, 'Create',$table))
+    if (!check_permission_bool($session_user_id, false, $cid, 'Create',$table))
         return false;
     return render_button($text, $type, $onclick, $name, $id);
 }
@@ -431,6 +432,9 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.42  2005/01/09 18:04:55  vanmer
+ * - changed database ID to cid to avoid conflict with id for HTML element in all render_ button functions
+ *
  * Revision 1.41  2005/01/09 17:04:54  vanmer
  * - added needed defaults to optional parameters in ACL stub functions
  * - added Preferences link to take a user to their own edit page
