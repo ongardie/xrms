@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.8 2004/02/01 22:05:48 braverock Exp $
+ * $Id: utils-misc.php,v 1.9 2004/02/04 18:38:11 braverock Exp $
  */
 
 /**
@@ -136,6 +136,8 @@ function pretty_filesize($file_size) {
  * @param  char    $enclosure      are the fields enclosed in anything (like quotes)
  *
  * @return array   $result         array in the form of rows with keys and values
+ *
+ * @todo to support MS Outlook import, revise the $keys array to rtrim,strtolower, and str_replace space with underscore
  */
 function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure='') {
     $result_arr = Array();
@@ -144,6 +146,7 @@ function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure=
     $handle = fopen($file, 'r');
 
     if ($hasFieldNames) $keys = fgetcsv($handle, 4096, $delimiter);
+    //add trim,strtolower, and strreplace here for Outlook support
 
     while ($row = fgetcsv($handle, 4096, $delimiter))
     {
@@ -269,7 +272,7 @@ function fetch_default_address($con, $company_id) {
 function fetch_division_id($con, $division_name, $company_id) {
 
     $sql_fetch_division_id = 'select division_id from company_division where
-                             division_name = ' . $con->qstr($company_name, get_magic_quotes_gpc()) . ",
+                             division_name = ' . $con->qstr($company_name, get_magic_quotes_gpc()) . "
                              and company_id = $company_id";
 
     $rst_division_id = $con->execute($sql_fetch_division_id);
@@ -287,6 +290,9 @@ function fetch_division_id($con, $division_name, $company_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.9  2004/02/04 18:38:11  braverock
+ * -minor fixes to CSVtoArray and fetch_division_if fns
+ *
  * Revision 1.8  2004/02/01 22:05:48  braverock
  * - clean up CSVtoArray fn
  * - add get_division_id fn
