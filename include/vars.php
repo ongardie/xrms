@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.20 2004/07/07 23:05:11 d2uhlman Exp $
+ * $Id: vars.php,v 1.21 2004/07/07 23:09:32 d2uhlman Exp $
  */
 
 /**
@@ -173,7 +173,7 @@ $xrms_use_ldap = false; //set to true if you want ldap authenthication
 
     //reference context used by export code when creating export hierarchy
     //export will look like ou=[company name],[value supplied below]
-    $xrms_ldap["reference_context"] = "dc=rwm";
+    $xrms_ldap["reference_context"] = "dc=Contacts,dc=mycompany,dc=com";
 
 /*** Language settings ***/
 /**
