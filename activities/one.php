@@ -2,7 +2,9 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.57 2004/08/04 15:31:12 neildogg Exp $
+ * @todo Fix fields to use CSS instead of absolute positioning
+ *
+ * $Id: one.php,v 1.58 2004/08/04 15:58:05 maulani Exp $
  */
 
 //include required files
@@ -322,7 +324,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Activity Notes"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=90 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=80 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <?php
             if($on_what_table == 'opportunities') {
@@ -423,6 +425,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.58  2004/08/04 15:58:05  maulani
+ * - Narrow textarea so it will fit on 1024 x 768 screen
+ * - todo to make relative positioning so adjusts for larger screens.
+ *
  * Revision 1.57  2004/08/04 15:31:12  neildogg
  * - Added more plugin support
  *
