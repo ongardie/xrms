@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.78 2004/12/26 19:41:06 braverock Exp $
+ * $Id: some.php,v 1.79 2004/12/26 21:58:18 braverock Exp $
  */
 
 // handle includes
@@ -301,7 +301,7 @@ if ($sort_column == 1) {
 } elseif ($sort_column == 7) {
     $order_by = "c.company_name";
 } elseif ($sort_column == 8) {
-    $order_by = "owner";
+    $order_by = $con->qstr(_("Owner"),get_magic_quotes_gpc());
 } elseif ($sort_column == 9) {
     $order_by = "o.probability";
 } else {
@@ -673,6 +673,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.79  2004/12/26 21:58:18  braverock
+ * - fix string quoting to resolve problems with French translation
+ *
  * Revision 1.78  2004/12/26 19:41:06  braverock
  * - fix string quoting to resolve problems with French translation
  *
