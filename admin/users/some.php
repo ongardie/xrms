@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.9 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: some.php,v 1.10 2004/12/09 22:29:12 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,16 +21,16 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "select * from users, roles
 where users.role_id = roles.role_id
-and user_record_status = 'a' order by username";
+and user_record_status = 'a' order by last_name, first_names";
 $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
-        $table_rows .= '<td class=widget_content>' . $rst->fields['role_pretty_name'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['role_pretty_name'] . '</td>';
+        $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -60,10 +60,10 @@ start_page($page_title);
                 <td class=widget_header colspan=4><?php echo _("Users"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Username"); ?></td>
-                <td class=widget_label><?php echo _("Role"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("E-Mail"); ?></td>
+                <td class=widget_label><?php echo _("Role"); ?></td>
+                <td class=widget_label><?php echo _("Username"); ?></td>
             </tr>
             <?php echo $table_rows;; ?>
         </table>
@@ -163,6 +163,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/12/09 22:29:12  braverock
+ * - rearrange output to order by name and place the userid link in the last column of the table
+ *
  * Revision 1.9  2004/07/16 23:51:38  cpsource
  * - require session_check ( 'Admin' )
  *
