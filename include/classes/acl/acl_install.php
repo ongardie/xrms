@@ -63,6 +63,7 @@ function install_acl_users($con) {
 }
 
 function install_acl($con) {
+    $return9=install_data_sources($con);
     $return1=install_controlled_objects($con);
     $return2=install_controlled_object_relationships($con);
     $return3=install_groups($con);
@@ -71,7 +72,6 @@ function install_acl($con) {
     $return6=install_role_permissions($con);
     $return7=install_group_users($con);
     $return8=install_group_members($con);
-    $return9=install_data_sources($con);
     return ($return1 AND $return2 AND $return3 AND $return4 AND $return5 AND $return6 AND $return7 AND $return8 AND $return9);
 }
 
@@ -101,20 +101,20 @@ TILLEND;
     }
     if ($crst->numRows()==0) {
         $sql=<<<TILLEND
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (1, 1, 1, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (2, 1, 1, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (3, 1, 1, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (4, 1, 1, 'World', 4);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (5, 2, 1, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (6, 2, 1, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (7, 2, 1, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (8, 2, 2, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (9, 2, 2, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (10, 2, 2, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (11, 1, 2, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (12, 1, 2, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (13, 1, 2, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (14, 1, 2, 'World', 4);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (1, 2, 1, 'World', 1);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (2, 2, 1, 'World', 2);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (3, 2, 1, 'World', 3);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (4, 2, 1, 'World', 4);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (5, 1, 1, 'World', 1);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (6, 1, 1, 'World', 2);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (7, 1, 1, 'World', 3);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (8, 1, 2, 'World', 1);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (9, 1, 2, 'World', 2);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (10, 1, 2, 'World', 3);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (11, 2, 2, 'World', 1);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (12, 2, 2, 'World', 2);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (13, 2, 2, 'World', 3);
+INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (14, 2, 2, 'World', 4);
 INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (15, 2, 21, 'World', 1);
 INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (16, 2, 21, 'World', 2);
 INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `ControlledObjectRelationship_id`, `Scope`, `Permission_id`) VALUES (17, 2, 21, 'World', 3);
