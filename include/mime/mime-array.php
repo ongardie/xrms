@@ -9,6 +9,8 @@ if ( !defined('IN_XRMS') )
 // find and return the mime type
 function mime_get_type ( $file_system_name )
 {
+  global $mime_array;
+
   $tmp = substr(strrchr(strtolower($file_system_name),'.'),1);
 
   if ( isset($mime_array[$tmp]) ) {
@@ -621,6 +623,9 @@ $mime_array = array ( // ext => type
 
 /*
  * $Log: mime-array.php,v $
+ * Revision 1.3  2004/08/03 18:04:57  cpsource
+ * - Global our main array
+ *
  * Revision 1.2  2004/08/03 16:52:06  cpsource
  * - Create function mime_get_type to return the mime type from
  *   the system file name.
