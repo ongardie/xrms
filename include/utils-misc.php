@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.38 2004/07/02 18:54:34 neildogg Exp $
+ * $Id: utils-misc.php,v 1.39 2004/07/06 21:28:40 neildogg Exp $
  */
 
 /**
@@ -571,29 +571,57 @@ function db_error_handler (&$con,$sql,$colspan=20) {
 } //end fn db_error_handler
 
 /**
- * function get_formatted_phone : get the phone number and format it
+ * function get_formatted_phone : get the phone number and format it based on the country
  *
  * A hook exists here that can override the phone formatting, for any desired reason.
- * e.g. If we don't implement foreign phone formatting here, it can be in a plug in.
+ * The plugin will take the raw and formatted phone number as parameters
  *
  * @author Neil Roberts
  *
+ * @param object $con Database connection
+ * @param int $address_id Address ID tied to the account tied to the number
  * @param int $phone Phone number to be formatted
  *
  * @return string $phone_to_display
  */
-function get_formatted_phone ($phone) {
-    global $default_country_id;
-    $phone_to_display = do_hook_function('data_format_phone', $phone);
-    if(!$phone_to_display) {
-        if(($default_country_id == 218) and (strlen($phone) == 10)) {
-            $phone_to_display = "(" . substr($phone, 0, 3) . ") " . substr($phone, 3, 3) . "-" . substr($phone, 6);
+function get_formatted_phone ($con, $address_id, $phone) {
+    $phone_to_display = $phone;
+    $sql = "select
+                c.phone_format
+            from
+                addresses a,
+                countries c
+            where
+                a.address_id='$address_id'
+            and
+                a.country_id=c.country_id";
+    $rst = $con->execute($sql);
+    $expression = $rst->fields['phone_format'];
+    $rst->close();
+
+    $pos = 0;
+    $number_length = 0;
+    list($phone, $extra) = split(" ", $phone, 2);
+
+    if(strlen($expression)) {
+        preg_match_all("|[#]+|", $expression, $matched);
+        $matched = $matched[0];
+        foreach($matched as $match) {
+            $number_length += strlen($match);
         }
-        else {
-            $phone_to_display = $phone;
+        if(strlen($phone) == $number_length) {
+            foreach($matched as $match) {
+                $expression = substr_replace($expression, substr($phone, $pos, strlen($match)), strpos($expression, $match), strlen($match));
+                $pos += strlen($match);
+            }
+            $phone_to_display = $expression;
         }
-    } 
-    return $phone_to_display;
+    }
+    $temp_phone = do_hook_function("data_format_phone", $phone, $phone_to_display); 
+    if($temp_phone) {
+        $phone_to_display = $temp_phone;
+    }
+    return $phone_to_display . " " . $extra;
 }
 
 /**
@@ -657,6 +685,11 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.39  2004/07/06 21:28:40  neildogg
+ * - Now supports multiple formatting, based on country
+ * - New column in countries specifies format, e.g. (###) ###-####
+ * - Hook passes unformatted and formatted phone numbers
+ *
  * Revision 1.38  2004/07/02 18:54:34  neildogg
  * - Added get_formatted_phone to misc utils
  * - Supports hook to override default formatting types.
