@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.13 2005/01/25 06:04:39 vanmer Exp $
+ * $Id: install.php,v 1.14 2005/01/28 15:34:43 braverock Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -180,7 +180,8 @@ if (!file_exists ($tmp_upload_directory) ) {
 
 // Is register_globals on.  This should be off--it is a security hole and causes a large
 // number of problems for XRMS
-if (ini_get ('register_globals' ) != '' ) {
+$rg = ini_get ('register_globals' );
+if ($rg) {
     // Oops!  Register globals is on
     // Now instruct the user in how to turn it off
     $problem = 'Register_globals is currently on for your server.  It must be turned off for XRMS.<BR><BR>';
@@ -275,6 +276,11 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.14  2005/01/28 15:34:43  braverock
+ *- fix problem with some PHP versions where register_globals check may return 0
+ *  (others return an empty string) - new test catches either
+ *  credit Ingo Hoff for reporting the problem
+ *
  *Revision 1.13  2005/01/25 06:04:39  vanmer
  *- added hook for plugins to run at xrms install
  *
