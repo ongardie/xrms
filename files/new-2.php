@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.9 2004/07/07 22:06:16 introspectshun Exp $
+ * $Id: new-2.php,v 1.10 2004/07/10 13:37:43 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -41,7 +41,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 if ($file_entered_at == "")
   { $file_entered_at = time(); }
 else
-  { $file_entered_at = strtotime($file_entered_at . ' 23:59:59'); }
+  { $file_entered_at = strtotime($file_entered_at); }
 
 //save to database
 $rec = array();
@@ -113,6 +113,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.10  2004/07/10 13:37:43  braverock
+ * - fixed timestamp on new file attach
+ *
  * Revision 1.9  2004/07/07 22:06:16  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
