@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.91 2004/08/30 14:50:08 neildogg Exp $
+ * $Id: utils-misc.php,v 1.92 2004/09/02 12:05:04 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -813,7 +813,7 @@ function time_zone_offset($con, $address_id) {
         }
         elseif(!$rst->EOF) {
             $confirmed = $rst->fields['confirmed'];
-            if($only_confirmed_time_zones == 'n' or ($only_confirmed_time_zones == 'y' and $confirmed_time_zones == 'y')) {
+            if($only_confirmed_time_zones == 'n' or ($only_confirmed_time_zones == 'y' and $confirmed == 'y')) {
                 $daylight_savings_id = $rst->fields['daylight_savings_id'];
                 $offset = $rst->fields['offset'];
 
@@ -1275,6 +1275,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.92  2004/09/02 12:05:04  neildogg
+ * - Fixed variable typo
+ *
  * Revision 1.91  2004/08/30 14:50:08  neildogg
  * - Time zone now functions properly on missing variable
  *
