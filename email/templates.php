@@ -4,22 +4,32 @@
  *
  * Email templates
  *
- * $Id: templates.php,v 1.2 2004/04/16 22:19:58 maulani Exp $
+ * $Id: templates.php,v 1.3 2004/06/14 16:54:37 introspectshun Exp $
  */
 
-require_once('/demo/include/vars.php');
-require_once('/demo/include/utils-interface.php');
-require_once('/demo/include/utils-misc.php');
-require_once('/demo/include/adodb/adodb.inc.php');
-require_once('/demo/include/adodb/adodb-pager.inc.php');
+require_once('../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-$con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
+$sql = "SELECT * FROM users WHERE user_id = $session_user_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['last_hit'] = time();
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 $sql = "select * from email_templates";
 
@@ -74,6 +84,11 @@ end_page();
 
 /**
  * $Log: templates.php,v $
+ * Revision 1.3  2004/06/14 16:54:37  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.2  2004/04/16 22:19:58  maulani
  * - Add CSS2 positioning
  *

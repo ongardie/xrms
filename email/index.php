@@ -3,13 +3,16 @@
  *
  * Email.
  *
- * $Id: index.php,v 1.3 2004/04/17 16:00:36 maulani Exp $
+ * $Id: index.php,v 1.4 2004/06/14 16:54:37 introspectshun Exp $
  */
 
-require_once('vars.php');
-require_once('utils-interface.php');
-require_once('utils-misc.php');
-require_once('adodb/adodb.inc.php');
+require_once('../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -18,7 +21,15 @@ $array_of_companies = unserialize($_SESSION['array_of_companies']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-$con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
+
+$sql = "SELECT * FROM users WHERE user_id = $session_user_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['last_hit'] = $time();
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 $sql = "select * from email_templates where email_template_record_status = 'act' order by email_template_title";
 
@@ -83,6 +94,11 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.4  2004/06/14 16:54:37  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.3  2004/04/17 16:00:36  maulani
  * - Add CSS2 positioning
  *

@@ -3,7 +3,7 @@
  *
  * Email.
  *
- * $Id: email.php,v 1.4 2004/04/17 16:00:36 maulani Exp $
+ * $Id: email.php,v 1.5 2004/06/14 16:54:37 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -130,6 +131,11 @@ end_page();
 
 /**
  * $Log: email.php,v $
+ * Revision 1.5  2004/06/14 16:54:37  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.4  2004/04/17 16:00:36  maulani
  * - Add CSS2 positioning
  *
