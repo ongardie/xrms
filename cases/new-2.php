@@ -2,7 +2,7 @@
 /**
  * Insert a new Case into the Database
  *
- * $Id: new-2.php,v 1.8 2005/01/10 23:32:32 braverock Exp $
+ * $Id: new-2.php,v 1.9 2005/01/13 18:13:12 vanmer Exp $
  */
  
 require_once('../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('','Create');
 
 $case_type_id = $_POST['case_type_id'];
 $case_status_id = $_POST['case_status_id'];
@@ -66,6 +66,9 @@ header("Location: one.php?msg=case_added&case_id=$case_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.9  2005/01/13 18:13:12  vanmer
+ * - Basic ACL changes to allow create functionality to be restricted
+ *
  * Revision 1.8  2005/01/10 23:32:32  braverock
  * - add phpdoc
  *

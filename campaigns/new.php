@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.10 2004/07/30 10:52:47 cpsource Exp $
+ * $Id: new.php,v 1.11 2005/01/13 18:09:01 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -25,8 +25,9 @@ function local_get ( $con, $sql, $nam )
   
   return $tmp;
 }
+$on_what_table='campaigns';
+$session_user_id = session_check('','Create');
 
-$session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -176,6 +177,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.11  2005/01/13 18:09:01  vanmer
+ * - Basic ACL changes to allow create functionality to be restricted
+ *
  * Revision 1.10  2004/07/30 10:52:47  cpsource
  * - Remove unused company_id from processing.
  *   Cleanup repetative operations by adding a subroutine.

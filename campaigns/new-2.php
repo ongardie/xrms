@@ -8,7 +8,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$on_what_table='campaigns';
+$session_user_id = session_check('','Create');
 
 $campaign_type_id = $_POST['campaign_type_id'];
 $campaign_status_id = $_POST['campaign_status_id'];
