@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.11 2004/10/22 21:09:45 introspectshun Exp $
+ * $Id: sidebar.php,v 1.12 2005/01/09 02:34:25 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -10,8 +10,12 @@ if ( !defined('IN_XRMS') )
   die(_('Hacking attempt'));
   exit;
 }
-
-
+/*
+COMMENTED until ACL is integrated
+$fileList=get_list($session_user_id, 'Read', false, 'files');
+if (!$fileList) { $file_rows=''; return false; }
+else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN ($fileList) "; }
+*/
 $file_rows = "<div id='file_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
@@ -34,6 +38,7 @@ if (strlen($on_what_table)>0){
             and on_what_table = '$on_what_table'
             and on_what_id = '$on_what_id'
             and file_record_status = 'a'
+            $file_limit_sql           
             order by entered_at";
     $rst = $con->execute($file_sql);
 } else {
@@ -41,6 +46,7 @@ if (strlen($on_what_table)>0){
             files.entered_by = '$session_user_id'
             and files.entered_by = users.user_id
             and file_record_status = 'a'
+            $file_limit_sql
             order by entered_at";
     $rst = $con->SelectLimit($file_sql, 5, 0);
 }
@@ -84,14 +90,15 @@ if (strlen($rst->fields['username']) > 0) {
 
 //put in the new button
 if (strlen($on_what_table)>0){
+    $new_file_button=render_create_button('New', 'submit');
     $file_rows .= "
             <tr>
             <form action='".$http_site_root."/files/new.php' method='post'>
                 <td class=widget_content_form_element colspan=4>
                         <input type=hidden name=on_what_table value='$on_what_table'>
                         <input type=hidden name=on_what_id value='$on_what_id'>
-                        <input type=hidden name=return_url value='/".$on_what_table."/one.php?".$on_what_string."_id=".$on_what_id."'>
-                        <input type=submit class=button value='"._("New")."'>
+                        <input type=hidden name=return_url value='/".$on_what_table."/one.php?".make_singular($on_what_table)."_id=".$on_what_id."'>
+                        $new_file_button
                 </td>
             </form>
             </tr>";
@@ -102,6 +109,11 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.12  2005/01/09 02:34:25  vanmer
+ * - added commented ACL restriction on files
+ * - added make_singular call instead of using $on_what_string for file sidebar
+ * - changed to use render_button functions
+ *
  * Revision 1.11  2004/10/22 21:09:45  introspectshun
  * - Localized strings, various fixes
  *
