@@ -7,12 +7,12 @@
  * It is used with screen media only.
  */
 /** ----------
- * FOREGROUND COLORS - black by default (body) 
+ * FOREGROUND COLORS - black by default (body)
  */
 body {
     color: #000;
 }
-table.widget td { 
+table.widget td {
     color: #333;
 }
 table.widget .sublabel {
@@ -22,13 +22,13 @@ table.widget .sublabel {
 #loginbar a,
 #page_header,
 table.widget .widget_header,
-table.widget .widget_content_graph, 
+table.widget .widget_content_graph,
 table.widget .overdue_activity,
 table.widget .non_uploaded_file  {
   color: #ffe;
 }
 /** --------
- * ANCHOR TAGS - colors/decorations 
+ * ANCHOR TAGS - colors/decorations
  */
 a {
     color: #33f;
@@ -37,7 +37,7 @@ a:hover {
     text-decoration: none;
 }
 /** --------
- * BACKGROUND COLORS - light gray by default (body) 
+ * BACKGROUND COLORS - light gray by default (body)
  */
 body {
     background-color: #eee;
@@ -50,7 +50,7 @@ input.button {
 }
 #navline,
 table.widget th,
-table.widget td { 
+table.widget td {
     background-color: #fff;
 }
 table.widget .closed_activity {
@@ -59,7 +59,7 @@ table.widget .closed_activity {
 #msg {
     background-color: #fee;
 }
-table.widget .widget_content_alt, 
+table.widget .widget_content_alt,
 table.widget .widget_content_market2 {
     background-color: #ffe;
 }
@@ -81,14 +81,14 @@ table.widget .widget_header  {
     background-color: rgb(20%,40%,60%);
 }
 /** -------
- * BACKGROUND/BORDER SETTINGS 
- * Specified URIs are relative to the stylesheet, not the loaded page 
+ * BACKGROUND/BORDER SETTINGS
+ * Specified URIs are relative to the stylesheet, not the loaded page
  */
 #page_header {
     border: 1px solid Gainsboro;
     background-image: url(../../img/page_title_background.gif);
     background-repeat: repeat-x;
-    line-height: 65px;   /* set line height for image */
+    line-height: 40px;   /* set line height for image */
 }
 #msg {
     background-image: url(../../img/msg_background.gif);
@@ -119,7 +119,7 @@ table.widget .widget_label_right_166px {
     background-repeat: no-repeat;
     background-position: top right;
 }
-/** 
+/**
  * PADDING
  */
 #page_header,
