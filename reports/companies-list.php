@@ -33,6 +33,7 @@ $pdf = $_REQUEST['pdf'];
 $name = $_REQUEST['name'];
 $user_id = $_REQUEST['user_id'];
 $company_category_id = $_REQUEST['company_category_id'];
+$company_source_id = $_REQUEST['company_source_id'];
 $crm_status_id = $_REQUEST['crm_status_id'];
 $city = $_REQUEST['city'];
 $state = $_REQUEST['state'];
@@ -55,7 +56,8 @@ if ($pdf)
     $pdf=new PDF('L'); // landscape format
     $pdf->AddPage();
     $pdf->SetFont('Arial','',8); // font Arial 8
-    $pdf->WriteHTML(companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_category_id,$crm_status_id));
+    $pdf->WriteHTML(companies_list($con,$pdf,$name,$city,$state,$country,$user_id,
+                $company_category_id,$company_source_id,$crm_status_id));
     $pdf->Output();
     exit;
 }
@@ -85,6 +87,13 @@ $rst = $con->execute($sql);
 $company_category_menu = $rst->getmenu2('company_category_id', $company_category_id, true);
 $rst->close();
 
+// set up Company Source selection menu
+$sql = "select company_source_pretty_name, company_source_id from
+company_sources where company_source_record_status = 'a' order by company_source_id";
+$rst = $con->execute($sql);
+$company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, true);
+$rst->close();
+
 // set up CRM Status selection menu
 $sql = "select crm_status_pretty_name, crm_status_id from
 crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
@@ -94,42 +103,49 @@ $rst->close();
 ?>
 
 <table>
-    <t>
+    <form action="companies-list.php" method=get>
+    <tr>
         <td><?php echo _("Company Name"); ?></td>
         <td><?php echo _("Owner"); ?></td>
         <td><?php echo _("Category"); ?></td>
+        <td><?php echo _("Source"); ?></td>
         <td><?php echo _("CRM Status"); ?></td>
         <td><?php echo _("City"); ?></td>
         <td><?php echo _("State"); ?></td>
         <td><?php echo _("Country"); ?></td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</tr>
     </tr>
     <tr>
-        <form action="companies-list.php" method=get>
             <td><input type=text name=name value="<?php echo $name; ?>"></td>
             <td><?php echo $user_menu; ?></td>
             <td><?php echo $company_category_menu; ?></td>
+            <td><?php echo $company_source_menu; ?></td>
             <td><?php echo $crm_status_menu; ?></td>
             <td><input type=text name=city value="<?php echo $city; ?>"></td>
             <td><input type=text name=state value="<?php echo $state; ?>"></td>
             <td><input type=text name=country value="<?php echo $country; ?>"></td>
-            <td><input class=button type=submit name="go" value="<?php echo _("Go"); ?>"></td>
-            <td><input class=button type=submit name="pdf" value="<?php echo _("PDF"); ?>"></td>
-        </form>
     </tr>
+    <tr>
+        <td colspan="8" align="left">
+            <input class=button type=submit name="go" value="<?php echo _("Go"); ?>">
+            &nbsp;&nbsp;&nbsp;
+            <input class=button type=submit name="pdf" value="<?php echo _("PDF"); ?>">
+        </td>
+    </tr>
+    </form>
 </table>
 <?php
 if ($go)
 {
-    echo companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_category_id,$crm_status_id);
+    echo companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_category_id,
+            $company_source_id,$crm_status_id);
 }
 end_page();
 exit;
 
 // function that returns the html to be printed or converted to pdf
 
-function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_category_id,$crm_status_id)
+function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_category_id,
+        $company_source_id,$crm_status_id)
 {
     if ($pdf)
     {
@@ -189,6 +205,10 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
     if($user_id)
     {
         $sql2 .= "and u.user_id ='$user_id' ";
+    }
+    if($company_source_id)
+    {
+        $sql2 .= "and c.company_source_id = $company_source_id ";
     }
     if($crm_status_id)
     {
@@ -308,6 +328,11 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.6  2004/12/31 15:35:16  braverock
+ * - add company source to search
+ * - move buttons to be more visible
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.5  2004/12/30 21:43:13  braverock
  * - localize strings
  *
