@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.16 2004/10/01 19:19:49 introspectshun Exp $
+ * $Id: sidebar.php,v 1.17 2004/10/01 20:04:46 introspectshun Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -208,6 +208,15 @@ if ( strlen( $on_what_table ) > 0 ) {
         break;
     }
   }
+  // $notes_ vars will be set if calling page needs to override form values (see private/home.php)
+  if ( isset($notes_on_what_id) ) {
+    $on_what_id = $notes_on_what_id;
+  }
+  if ( isset($notes_return_url) ) {
+    $return_url = $notes_return_url;
+  } else {
+    $return_url = '/'.$on_what_table.'/one.php?'.$on_what_string.'_id='.$on_what_id;
+  }
 
   // use single quote as string delimiter so that variables stand out with color editor
   $note_rows .= '
@@ -216,7 +225,7 @@ if ( strlen( $on_what_table ) > 0 ) {
                 <td class=widget_content_form_element colspan=4>
                         <input type=hidden name=on_what_table value="'.$on_what_table.'">
                         <input type=hidden name=on_what_id value="'.$on_what_id.'">
-                        <input type=hidden name=return_url value="/'.$on_what_table.'/one.php?'.$on_what_string.'_id='.$on_what_id.'">
+                        <input type=hidden name=return_url value="'.$return_url.'">
                         <input type=submit class=button value="'._("New").'">
                 </td>
             </form>
@@ -228,6 +237,10 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.17  2004/10/01 20:04:46  introspectshun
+ * - Calling page can now override on_what_id, return_url
+ *   - Allows for plugins to use notes table easily
+ *
  * Revision 1.16  2004/10/01 19:19:49  introspectshun
  * - If on_what_id isn't set, pull it from the sql statement
  *
