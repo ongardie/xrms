@@ -21,19 +21,17 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
-$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, addresses.*, iso_code3, address_format_string 
-        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses, countries, address_format_strings afs 
-        where c.account_status_id = as1.account_status_id 
-        and c.industry_id = i.industry_id 
-        and c.rating_id = r.rating_id 
-        and c.company_source_id = cs2.company_source_id 
-        and c.crm_status_id = cs.crm_status_id 
-        and c.user_id = u1.user_id 
-		and c.entered_by = u2.user_id 
-		and c.last_modified_by = u3.user_id 
-		and c.default_primary_address = addresses.address_id 
-		and addresses.country_id = countries.country_id 
-		and countries.address_format_string_id = afs.address_format_string_id 
+$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, addresses.*, iso_code3, address_format_string
+        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses, countries, address_format_strings afs
+        where c.account_status_id = as1.account_status_id
+        and c.industry_id = i.industry_id
+        and c.rating_id = r.rating_id
+        and c.company_source_id = cs2.company_source_id
+        and c.crm_status_id = cs.crm_status_id
+        and c.user_id = u1.user_id
+        and c.default_primary_address = addresses.address_id
+        and addresses.country_id = countries.country_id
+        and countries.address_format_string_id = afs.address_format_string_id
         and c.company_id = $company_id";
 
 $rst = $con->execute($sql);
@@ -52,9 +50,9 @@ if ($rst) {
     $province = $rst->fields['province'];
     $postal_code = $rst->fields['postal_code'];
     $address_body = $rst->fields['address_body'];
-	$use_pretty_address = $rst->fields['use_pretty_address'];
-	$country = $rst->fields['iso_code3'];
-	$address_format_string = $rst->fields['address_format_string'];
+    $use_pretty_address = $rst->fields['use_pretty_address'];
+    $country = $rst->fields['iso_code3'];
+    $address_format_string = $rst->fields['address_format_string'];
     $phone = $rst->fields['phone'];
     $phone2 = $rst->fields['phone2'];
     $fax = $rst->fields['fax'];
@@ -83,11 +81,11 @@ $credit_limit = number_format($credit_limit, 2);
 $current_credit_limit = fetch_current_customer_credit_limit($extref1);
 
 if ($use_pretty_address == 't') {
-	$address_to_display = $address_body;
+    $address_to_display = $address_body;
 } else {
-	$lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
-	eval("\$address_to_display = \"$address_format_string\";");
-	// eval ("\$str = \"$str\";");
+    $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
+    eval("\$address_to_display = \"$address_format_string\";");
+    // eval ("\$str = \"$str\";");
 }
 
 if (strlen($url) > 0) {
@@ -98,23 +96,23 @@ if (strlen($url) > 0) {
 //  list of most recent activities
 //
 
-$sql_activities = "select activity_id, 
-activity_title, 
-scheduled_at, 
-on_what_table, 
-on_what_id, 
-a.entered_at, 
-activity_status, 
-at.activity_type_pretty_name, 
-cont.first_names as contact_first_names, 
-cont.last_name as contact_last_name, 
-u.username, 
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue 
-from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id 
-where a.company_id = $company_id 
-and a.user_id = u.user_id 
-and a.activity_type_id = at.activity_type_id 
-and a.activity_record_status = 'a' 
+$sql_activities = "select activity_id,
+activity_title,
+scheduled_at,
+on_what_table,
+on_what_id,
+a.entered_at,
+activity_status,
+at.activity_type_pretty_name,
+cont.first_names as contact_first_names,
+cont.last_name as contact_last_name,
+u.username,
+if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
+where a.company_id = $company_id
+and a.user_id = u.user_id
+and a.activity_type_id = at.activity_type_id
+and a.activity_record_status = 'a'
 order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
@@ -480,12 +478,12 @@ function openNewsWindow() {
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-				<input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
-				<input class=button type=button value="<?php echo $strCompaniesOneAdminButton; ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';"> <input class=button type=button value="<?php echo $strCompaniesOneCloneButton; ?>" onclick="javascript: location.href='new.php?clone_id=<?php $company_id ?>';">
-				<input class=button type=button value="<?php echo $strCompaniesOneMailMergeButton; ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
-				<input class=button type=button value="<?php echo $strCompaniesOneNewsButton; ?>" onclick="javascript: openNewsWindow();">
-				<input class=button type=button value="<?php echo $strCompaniesOneAddressesButton; ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
-				</td>
+                <input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo $strCompaniesOneAdminButton; ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';"> <input class=button type=button value="<?php echo $strCompaniesOneCloneButton; ?>" onclick="javascript: location.href='new.php?clone_id=<?php $company_id ?>';">
+                <input class=button type=button value="<?php echo $strCompaniesOneMailMergeButton; ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo $strCompaniesOneNewsButton; ?>" onclick="javascript: openNewsWindow();">
+                <input class=button type=button value="<?php echo $strCompaniesOneAddressesButton; ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
+                </td>
             </tr>
         </table>
 
