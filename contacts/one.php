@@ -4,7 +4,10 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.21 2004/05/10 13:07:22 maulani Exp $
+ * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
+ *       to make the entire process more resilient.
+ *
+ * $Id: one.php,v 1.22 2004/05/21 12:23:26 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -556,6 +559,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.22  2004/05/21 12:23:26  braverock
+ * - add todo item to break out address query
+ *
  * Revision 1.21  2004/05/10 13:07:22  maulani
  * - Add level to audit trail
  * - Clean up audit trail text
