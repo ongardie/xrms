@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.47 2005/03/30 19:47:51 gpowers Exp $
+ * $Id: some.php,v 1.48 2005/04/01 22:06:18 ycreddy Exp $
  */
 
 require_once('../include-locations.inc');
@@ -158,11 +158,9 @@ if ($rst) {
 
 //get campaign titles
 $sql2 = "SELECT campaign_title, campaign_id
-         FROM
-           campaigns AS c
-           JOIN campaign_statuses AS cs USING (campaign_status_id)
-         WHERE
-           c.campaign_record_status = 'a'
+         FROM campaigns c, campaign_statuses cs 
+         WHERE c.campaign_status_id = cs.campaign_status_id
+           AND c.campaign_record_status = 'a'
            AND campaign_status_record_status = 'a'
            AND status_open_indicator = 'o'
            ";
@@ -370,6 +368,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.48  2005/04/01 22:06:18  ycreddy
+ * Modified the INNER JOIN to a portable syntax
+ *
  * Revision 1.47  2005/03/30 19:47:51  gpowers
  * - added Campaigns to search/display (patch by glasshut@sf)
  *
