@@ -11,7 +11,7 @@
  * status = open or scheduled or overdue or closed or current (open or closed).  Default all.
  * type = limit activity type.  Default all.
  *
- * $Id: activities.php,v 1.2 2005/02/10 14:15:25 maulani Exp $
+ * $Id: activities.php,v 1.3 2005/03/07 11:51:15 maulani Exp $
  */
 
 //include required files
@@ -148,7 +148,7 @@ if ($type != '') {
 }
 
 $sql = "SELECT a.activity_id, a.activity_title, a.activity_description, a.activity_status, 
-a.ends_at, c.company_name 
+a.ends_at, a.last_modified_at , c.company_name 
 FROM activities a, companies c
 WHERE a.company_id=c.company_id AND a.activity_record_status = 'a' ";
 
@@ -164,29 +164,32 @@ if ($assigned != '') {
 	$sql .= "AND a.user_id = $assigned_user_id ";
 }
 
-switch ($status) {
-case "open":
-	$sql .= "AND a.activity_status = 'o' and a.scheduled_at <= NOW() ";
-	break;
-case "scheduled":
-	$sql .= "AND a.activity_status = 'o' and a.scheduled_at > NOW() ";
-	break;
-case "overdue":
-	$sql .= "AND a.activity_status = 'o' and a.ends_at < NOW() ";
-	break;
-case "closed":
-	$sql .= "AND a.activity_status = 'c' ";
-	break;
-case "current":
-	$sql .= "AND a.scheduled_at <= NOW() ";
-	break;
-}
-
 if ($type != 'all') {
 	$sql .= "AND a.activity_type_id = $activity_type_id ";
 }
 
-$sql .= 'ORDER BY a.scheduled_at DESC';
+switch ($status) {
+case "open":
+	$sql .= "AND a.activity_status = 'o' and a.scheduled_at <= NOW() ";
+	$sql .= 'ORDER BY a.last_modified_at DESC';
+	break;
+case "scheduled":
+	$sql .= "AND a.activity_status = 'o' and a.scheduled_at > NOW() ";
+	$sql .= 'ORDER BY a.scheduled_at ASC';
+	break;
+case "overdue":
+	$sql .= "AND a.activity_status = 'o' and a.ends_at < NOW() ";
+	$sql .= 'ORDER BY a.ends_at ASC';
+	break;
+case "closed":
+	$sql .= "AND a.activity_status = 'c' ";
+	$sql .= 'ORDER BY a.last_modified_at DESC';
+	break;
+case "current":
+	$sql .= "AND a.scheduled_at <= NOW() ";
+	$sql .= 'ORDER BY a.last_modified_at DESC';
+	break;
+}
 
 $items_text = '';
 $rst = $con->selectlimit($sql, $max);
@@ -198,8 +201,8 @@ if ($rst) {
 		$activity_description = str_replace("&", "&amp;", htmlentities($rst->fields['activity_description'], ENT_COMPAT, 'UTF-8'));
 		$activity_status = $rst->fields['activity_status'];
 		$ends_at = $rst->fields['ends_at'];
-		//$last_modified_at = $rst->fields['last_modified_at'];
-		$pub_date = date("r", strtotime($ends_at));
+		$last_modified_at = $rst->fields['last_modified_at'];
+		$pub_date = date("r", strtotime($last_modified_at));
 		$company_name = $rst->fields['company_name'];
 		$description = "&lt;p&gt;&lt;b&gt;$company_name&lt;/b&gt;&lt;/p&gt;" . $activity_description;
 		$items_text .= "      <item>\n";
@@ -220,7 +223,6 @@ $con->close();
 $feed_location = $http_site_root . '/rss/activities.php';
 $now = date("r");
 
-//show_test_values ($num_activities,$activity_id,$activity_title,$activity_description,$activity_status);
 header("Content-Type: text/xml");
 
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
@@ -244,12 +246,14 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: activities.php,v $
+ * Revision 1.3  2005/03/07 11:51:15  maulani
+ * - Improve sort based on activity status
+ *
  * Revision 1.2  2005/02/10 14:15:25  maulani
  * - Change SQL to use SelectLimit
  *
  * Revision 1.1  2005/02/05 23:11:30  maulani
  * - Provide RSS Feed for activities
- *
  *
  */
 ?>
