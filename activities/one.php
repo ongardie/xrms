@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.12 2004/04/27 16:42:07 gpowers Exp $
+ * $Id: one.php,v 1.13 2004/05/07 16:15:48 braverock Exp $
  */
 
 //include required files
@@ -41,8 +41,8 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $on_what_table = $rst->fields['on_what_table'];
     $on_what_id = $rst->fields['on_what_id'];
-    $scheduled_at = $rst->usertimestamp($rst->fields['scheduled_at'], "Y-m-d h:i A");
-    $ends_at = $rst->usertimestamp($rst->fields['ends_at'], "Y-m-d h:i A");
+    $scheduled_at = date('Y-m-d H:i:s', strtotime($rst->fields['scheduled_at']));
+    $ends_at = date('Y-m-d H:i:s', strtotime($rst->fields['ends_at']));
     $activity_status = $rst->fields['activity_status'];
     $rst->close();
 }
@@ -204,17 +204,23 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2004/05/07 16:15:48  braverock
+ * - fixed multiple bugs with date-time formatting in activities
+ * - correctly use dbtimestamp() date() and strtotime() fns
+ * - add support for $default_followup_time config var
+ *   - fixes SF bug  949779 reported by miguel Gonçalves (mig77)
+ *
  * Revision 1.12  2004/04/27 16:42:07  gpowers
- * fixed usertimestamp
+ * - fixed usertimestamp
  *
  * Revision 1.11  2004/04/27 16:28:39  gpowers
- * added support for activity times.
- * NOTE: usertimestamp doesn't appear to work. I don't know why.
- * (The unformatted time works fine with MySQL, but may not with other DBs.)
- * added support for activity emails.
+ * - added support for activity times.
+ *   NOTE: usertimestamp doesn't appear to work. I don't know why.
+ *   (The unformatted time works fine with MySQL, but may not with other DBs.)
+ * - added support for activity emails.
  *
  * Revision 1.10  2004/04/26 01:54:45  braverock
- * add ability to schedule a followup activity based on the current activity
+ * - add ability to schedule a followup activity based on the current activity
  *
  * Revision 1.9  2004/04/19 22:21:15  maulani
  * - Correct javascript syntax

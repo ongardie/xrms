@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.9 2004/05/04 15:13:21 maulani Exp $
+ * $Id: new-2.php,v 1.10 2004/05/07 16:15:48 braverock Exp $
  */
 
 //where do we include from
@@ -43,6 +43,7 @@ getGlobalVar($company_id , 'company_id');
 getGlobalVar($contact_id , 'contact_id');
 getGlobalVar($user_id    , 'user_id');
 getGlobalVar($email , 'email');
+getGlobalVar($followup , 'followup');
 
 //set defaults if we didn't get values
 $user_id = (strlen($user_id) > 0) ? $user_id : $session_user_id;
@@ -60,7 +61,15 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 
 if (!$scheduled_at) {
-    $scheduled_at = $con->dbtimestamp(mktime());
+    $scheduled_at = date('Y-m-d H:i:s');
+}
+
+if ($followup) {
+    if ($default_followup_time) {
+        $scheduled_at = date('Y-m-d', strtotime($default_followup_time) ) ;
+    } else {
+        $scheduled_at = date('Y-m-d', strtotime('+1 week') );
+    }
 }
 
 if (!$ends_at) {
@@ -79,12 +88,12 @@ $sql = "insert into activities
         on_what_table = ". $con->qstr($on_what_table, get_magic_quotes_gpc()) . ',
         activity_title = '. $con->qstr($activity_title, get_magic_quotes_gpc()) . ',
         activity_description = '. $con->qstr($activity_note, get_magic_quotes_gpc()) . ',
-        entered_at = '. $con->dbtimestamp(mktime()) .',
-        scheduled_at = ' . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($scheduled_at))) . ',
-        ends_at = ' . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($ends_at))) . ',
+        entered_at = '. $con->DBTimeStamp(mktime()) .',
+        scheduled_at = ' . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($scheduled_at))) . ',
+        ends_at = ' . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($ends_at))) . ',
         activity_status = ' . $con->qstr($activity_status, get_magic_quotes_gpc());
 
-//insert it aready
+//insert it already
 $con->execute($sql);
 
 $activity_id = $con->insert_id();
@@ -107,23 +116,29 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.10  2004/05/07 16:15:48  braverock
+ *- fixed multiple bugs with date-time formatting in activities
+ *- correctly use dbtimestamp() date() and strtotime() fns
+ *- add support for $default_followup_time config var
+ *  - fixes SF bug  949779 reported by miguel Gonçalves (mig77)
+ *
  *Revision 1.9  2004/05/04 15:13:21  maulani
  *- Database connection object was called before being created.  Reorganized
  *  code to prevent fatal crash.
  *
  *Revision 1.8  2004/04/27 15:17:08  gpowers
- *added support for activity times
- *added support passing ends_at (defaults to scheduled_at)
- *added audit item
+ *- added support for activity times
+ *- added support passing ends_at (defaults to scheduled_at)
+ *- added audit item
  *
  *Revision 1.7  2004/04/26 01:54:45  braverock
- *add ability to schedule a followup activity based on the current activity
+ *- add ability to schedule a followup activity based on the current activity
  *
  *Revision 1.6  2004/02/10 16:19:34  maulani
- *Make default activity creation behavior configurable
+ *- Make default activity creation behavior configurable
  *
  *Revision 1.5  2004/02/06 22:47:36  maulani
- *Use ends_at to determine if activity is overdue
+ *- Use ends_at to determine if activity is overdue
  *
  *Revision 1.4  2004/01/26 19:26:32  braverock
  *- modified to use getGlobalVar fn

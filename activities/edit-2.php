@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.8 2004/04/27 16:29:34 gpowers Exp $
+ * $Id: edit-2.php,v 1.9 2004/05/07 16:15:48 braverock Exp $
  */
 
 //include required files
@@ -39,7 +39,7 @@ if ($followup) { $activity_status = 'c'; }
 
 //set scheduled_at to today if it is empty
 if (!$scheduled_at) {
-    $scheduled_at = date ("y-m-d");
+    $scheduled_at = date ('Y-m-d');
 }
 
 // set ends_at to scheduled_at if it is empty
@@ -65,9 +65,9 @@ $sql = "update activities set
         activity_title = " . $con->qstr($activity_title, get_magic_quotes_gpc()) . ",
         activity_description = " . $con->qstr($activity_description, get_magic_quotes_gpc()) . ",
         user_id = " . $con->qstr($user_id, get_magic_quotes_gpc()) . ",
-        scheduled_at = " . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($scheduled_at))) . ",
-        ends_at = " . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($ends_at))) . ",
-        completed_at = " . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($completed_at))) . ",
+        scheduled_at = " . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($scheduled_at))) . ",
+        ends_at = " . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($ends_at))) . ",
+        completed_at = " . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($completed_at))) . ",
         activity_status = " . $con->qstr($activity_status, get_magic_quotes_gpc()) . "
         where activity_id = $activity_id";
 
@@ -140,13 +140,19 @@ if ($email_to) {
 }
 
 if ($followup) {
-    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars('Follow-up '.$activity_title)."&company_id=$company_id&activity_status=o&return_url=$return_url" );
+    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( 'Follow-up ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&return_url=$return_url&followup=true" );
 } else {
     header("Location: " . $http_site_root . $return_url);
 }
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.9  2004/05/07 16:15:48  braverock
+ * - fixed multiple bugs with date-time formatting in activities
+ * - correctly use dbtimestamp() date() and strtotime() fns
+ * - add support for $default_followup_time config var
+ *   - fixes SF bug  949779 reported by miguel Gonçalves (mig77)
+ *
  * Revision 1.8  2004/04/27 16:29:34  gpowers
  * added support for activity emails.
  *
