@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.81 2004/08/06 14:47:07 braverock Exp $
+ * $Id: utils-misc.php,v 1.82 2004/08/09 19:22:02 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -761,7 +761,7 @@ function get_formatted_address (&$con,$address_id) {
  * @return boolean False if no records
  */
 
-function time_zone_offet($con, $address_id) {
+function time_zone_offset($con, $address_id) {
     global $only_confirmed_time_zones;
     $sql = "SELECT country_id, province, city, postal_code
             FROM addresses
@@ -1244,6 +1244,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.82  2004/08/09 19:22:02  neildogg
+ * - Fixed spelling error in function name
+ *
  * Revision 1.81  2004/08/06 14:47:07  braverock
  * - push in changes to turn on i18n gettext
  *
