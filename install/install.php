@@ -5,26 +5,25 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.7 2004/07/28 17:25:33 braverock Exp $
+ * $Id: install.php,v 1.8 2004/08/02 01:31:19 maulani Exp $
  */
 
 if (!defined('IN_XRMS')) {
     define('IN_XRMS', true);
 }
 
+$install_notes='';
+
 // include the installation utility routines
 require_once('install-utils.inc');
 require_once('database.php');
 require_once('data.php');
 
+// make sure that the file does not end with whitespace
+check_extra_whitespace("../", "include-locations.inc");
+
 // where do we include from
 require_once('../include-locations.inc');
-
-// get message
-$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-
-$page_title = "Installation Complete";
-start_page($page_title, false, $msg);
 
 
 // now check to make sure that the include-locations file has been setup for use
@@ -59,6 +58,10 @@ if (!file_exists ($include_directory) ) {
 
 // get required common files
 // vars.php sets all of the installation-specific variables
+
+// make sure that the file does not end with whitespace
+check_extra_whitespace($include_directory, "vars.php");
+
 require_once($include_directory . 'vars.php');
 
 // now check to make sure that the vars.php file has been setup for use
@@ -209,13 +212,11 @@ if($xrms_db_dbtype="mysql"){
   if (version_compare($ver,"4.0.2")<0){
     // Ooops! you are not running a compliant version of mysql
     // Now instruct the user in how to fix this problem
-    $problem = '<p>WARNING: XRMS strongly recommends MySQL version 4.0.2 or above. <BR>';
-                $problem .='You are currently running MySQL Server version '.$ver.'<BR>';
-    $problem .= 'At the moment, MySQL version 3.23.x seems to work, but are not supported by the XRMS development team.</p>';
-
-    $problem .= '<p>Please install version 4.0.2 or greater of MySQL, available here:
-                 <a href="http://dev.mysql.com/downloads/">MySQL Downloads</a></p>';
-    install_fatal_error($problem, false);
+    $install_notes .= "<p>WARNING: XRMS strongly recommends MySQL version 4.0.2 or above. <BR>\n";
+    $install_notes .='You are currently running MySQL Server version ' . $ver . "<BR>\n";
+    $install_notes .= "At the moment, MySQL version 3.23.x seems to work, but is not supported by the XRMS development team.</p>\n";
+    $install_notes .= "<p>Please install version 4.0.2 or greater of MySQL, available here: ";
+    $install_notes .= "<a href=\"http://dev.mysql.com/downloads/\">MySQL Downloads</a></p>\n";
 
   };
 }
@@ -229,6 +230,13 @@ create_db_data($con);
 //close the connection
 $con->close();
 
+
+// get message
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+
+$page_title = "Installation Complete";
+start_page($page_title, false, $msg);
+echo $install_notes;
 ?>
 
 <BR>
@@ -248,6 +256,10 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.8  2004/08/02 01:31:19  maulani
+ *- Add ending whitespace check to include-locations.inc and vars.php.
+ *- Fix bugs involving dependency on general system includes
+ *
  *Revision 1.7  2004/07/28 17:25:33  braverock
  *- turned MySQL version check into a non-fatal warning
  *

@@ -6,35 +6,30 @@
  *
  * @author Beth Macknik
  *
- * $Id: install-utils.inc,v 1.6 2004/07/31 03:17:42 maulani Exp $
+ * $Id: install-utils.inc,v 1.7 2004/08/02 01:31:19 maulani Exp $
  */
 
 /**
  * Stop everything and display the error.
  *
  * @param string $error_msg
- * @param boolean $fatal If fatal is true, stops installation.
  */
-function install_fatal_error($error_msg = '', $fatal=true ) {
+function install_fatal_error($error_msg = '') {
 
     echo <<<EOQ
-    <table>
-        <tr>
-            <td class=widget_header>
-EOQ;
-    echo _("Test Results");
-    echo <<<EOQ
-            </td>
-        </tr>
-        <tr>
-            <td class=widget_error>
-                $error_msg
-            </td>
-        </tr>
-    </table>
+     <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+     <html>
+     <head>
+     <title>Test Results</title>
+     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+     </head>
+     <body>
+ $error_msg<BR>
+     </body>
+     </html>
 EOQ;
 
-    if ($fatal) { exit; };
+    exit;
 
 } // end install_fatal_error fn
 
@@ -49,15 +44,11 @@ function check_extra_whitespace($path, $filename) {
     fclose($fp);
     $endchars = substr($contents, -2);
     if($endchars != "?>") {
-        $failuremsg = _("The file ");
-        $failuremsg .= " ";
+        $failuremsg = "The file  ";
         $failuremsg .= $filename;
-        $failuremsg .= " ";
-        $failuremsg .= _("does not end with the characters ?>.");
-        $failuremsg .= " ";
-        $failuremsg .= _("You probably have added extra whitespace to the end.");
-        $failuremsg .= " ";
-        $failuremsg .= _("Please remove the extra characters and run install again.");
+        $failuremsg .= " does not end with the characters ?>. ";
+        $failuremsg .= "You probably have added extra whitespace to the end. ";
+        $failuremsg .= "Please remove the extra characters and run install again.";
         install_fatal_error($failuremsg);
     }
 } // end check_extra_whitespace fn
@@ -65,6 +56,10 @@ function check_extra_whitespace($path, $filename) {
 
 /**
  * $Log: install-utils.inc,v $
+ * Revision 1.7  2004/08/02 01:31:19  maulani
+ * - Add ending whitespace check to include-locations.inc and vars.php.
+ * - Fix bugs involving dependency on general system includes
+ *
  * Revision 1.6  2004/07/31 03:17:42  maulani
  * - Add a function to check include files for trailing whitespace
  *
