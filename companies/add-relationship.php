@@ -2,7 +2,7 @@
 /**
  * Add Relationship
  *
- * $Id: add-relationship.php,v 1.5 2004/06/12 17:10:24 gpowers Exp $
+ * $Id: add-relationship.php,v 1.6 2004/06/15 14:17:01 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -51,7 +51,7 @@ $rec = array();
 $rec['company_from_id'] = $company2_id;
 $rec['relationship_type'] = $relation_array[$relation2];
 $rec['company_to_id'] = $company_id;
-$rec['established_at'] = $con->dbtimestamp(mktime());
+$rec['established_at'] = time();
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
@@ -64,6 +64,9 @@ header("Location: relationships.php?company_id=$company_id");
 
 /**
  * $Log: add-relationship.php,v $
+ * Revision 1.6  2004/06/15 14:17:01  gpowers
+ * - correct time formats
+ *
  * Revision 1.5  2004/06/12 17:10:24  gpowers
  * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
  *   GetUpdateSQL()
