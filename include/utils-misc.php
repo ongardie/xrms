@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.94 2004/09/02 14:58:05 neildogg Exp $
+ * $Id: utils-misc.php,v 1.95 2004/09/02 15:19:13 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -800,39 +800,39 @@ function time_zone_offset($con, $address_id) {
         $city = $rst->fields['city'];
         $postal_code = $rst->fields['postal_code'];
 
+        //This can be applied to other countries that always will have provinces
         if($country_id == 218) {
             $sql = "SELECT daylight_savings_id, offset, confirmed,
-                        (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
-                        (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
-                    FROM time_zones
-                    WHERE country_id=" . $country_id . "
-                    AND province = '" . $province . "'
-                    ORDER BY has_city, has_postal_code";
+                            (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
+                            (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
+                            (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
+                        FROM time_zones
+                        FORCE INDEX (country_id, province)
+                        WHERE country_id=" . $country_id . "
+                        AND province = '" . $province . "'";
         }
         else {
             $sql = "SELECT daylight_savings_id, offset, confirmed,
-                        (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
-                        (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
-                        (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
-                    FROM time_zones
-                    WHERE country_id=" . $country_id . "
-                    ORDER BY has_province, has_city, has_postal_code";
+                            (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
+                            (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
+                            (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
+                        FROM time_zones
+                        WHERE country_id=" . $country_id;
         }
+        if($only_confirmed_time_zones == 'y') {
+            $sql .= " AND confirmed = 'y' ";
+        }
+        $sql .= " ORDER BY has_province, has_city, has_postal_code";
         $rst = $con->SelectLimit($sql, 1);
         if(!$rst) {
             db_error_handler($con, $sql);
         }
         elseif(!$rst->EOF) {
             $confirmed = $rst->fields['confirmed'];
-            if($only_confirmed_time_zones == 'n' or ($only_confirmed_time_zones == 'y' and $confirmed == 'y')) {
-                $daylight_savings_id = $rst->fields['daylight_savings_id'];
-                $offset = $rst->fields['offset'];
+            $daylight_savings_id = $rst->fields['daylight_savings_id'];
+            $offset = $rst->fields['offset'];
 
-                return array("daylight_savings_id" => $daylight_savings_id, "offset" => $offset);
-            }
-            else {
-                return false;
-            }
+            return array("daylight_savings_id" => $daylight_savings_id, "offset" => $offset);
         }
         else {
             return false;
@@ -1286,6 +1286,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.95  2004/09/02 15:19:13  neildogg
+ * - Significantly faster time zone queries
+ *
  * Revision 1.94  2004/09/02 14:58:05  neildogg
  * - Errant bracket close
  *
