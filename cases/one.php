@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.25 2005/01/09 16:58:00 braverock Exp $
+ * $Id: one.php,v 1.26 2005/01/09 17:23:19 vanmer Exp $
  */
 
 //include required files
@@ -103,7 +103,17 @@ where a.on_what_table = 'cases'
 and a.on_what_id = $case_id
 and a.user_id = u.user_id
 and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'
+and a.activity_record_status = 'a'";
+/*
+    COMMENTED until ACL is fully integrated    
+    $list=get_list($session_user_id, 'Read', false, 'activities');
+    //print_r($list);
+    if ($list) {
+        $list=implode(",",$list);
+        $sql_activities .= " and a.activity_id IN ($list) ";
+    } else { $sql_activities .= ' AND 1 = 2 '; }
+*/
+$sql_activities.=" 
 order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
@@ -311,13 +321,22 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?case_id=<?php  echo $case_id; ?>';"></td>
+                <td class=widget_content_form_element><?php echo render_edit_button("Edit", 'button',"javascript: location.href='edit.php?case_id=$case_id';"); ?></td>
             </tr>
         </table>
 
+        <script language="JavaScript" type="text/javascript">
+        <!--
+        function markComplete() {
+            document.forms[0].activity_status.value = "c";
+            document.forms[0].submit();
+        }
+        //-->
+        </script>
+
         <!-- activities //-->
         <form action="../activities/new-2.php" method="POST">
-        <input type=hidden name=return_url value="/cases/one.php%3Fcase_id=<?php  echo $case_id; ?>">
+        <input type=hidden name=return_url value="/cases/one.php?case_id=<?php  echo $case_id; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=on_what_table value="cases">
         <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
@@ -338,7 +357,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="<?php echo _("Add"); ?>"> <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>"></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> 
+                    <?php echo render_create_button("Add"); ?>
+                    <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
+                 </td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -367,6 +389,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.26  2005/01/09 17:23:19  vanmer
+ * - added javascript needed for marking an activity as done on entry
+ * - switched interface buttons from html to calling render_button functions
+ * - added commented ACL restriction on activities
+ * - changed return_url to use ? instead of %3F, as it was failing on redirect (treated like a URL instead of parameter)
+ *
  * Revision 1.25  2005/01/09 16:58:00  braverock
  * - add db_error_handler to all queries
  * - set activity_contact_id correctly for links to Activities
