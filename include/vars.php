@@ -1,4 +1,4 @@
-<?
+<?php
 
 //
 // system configuration file
@@ -6,9 +6,9 @@
 
 
 // database connection info for XRMS system
-// eventually there will be a nice, pretty web-based way to install XRMS, but for now you've got to create the db 
-// yourself and run the xrms-initialization scripts (*.sql) found in the [xrms_root]/sql/mysql directory to create the 
-// appropriate tables and insert some sample/default data 
+// eventually there will be a nice, pretty web-based way to install XRMS, but for now you've got to create the db
+// yourself and run the xrms-initialization scripts (*.sql) found in the [xrms_root]/sql/mysql directory to create the
+// appropriate tables and insert some sample/default data
 
 $xrms_db_dbtype = 'mysql';
 $xrms_db_server = 'localhost';
@@ -19,22 +19,30 @@ $xrms_db_dbname = 'your_mysql_database';
 // where is this application, web-wise? (no trailing slash)
 $http_site_root = "http://www.yoursitename.com/xrms";
 
+//where is the appliation in the filesystem (no trailing slash)
+$xrms_file_root = "/full/path/to/xrms";
+
 // directory where uploaded files should go
 $max_file_size = 200000;
 $tmp_upload_directory = "/full/path/to/xrms/tmp/";
 $file_storage_directory = "/full/path/to/xrms/files/storage/";
 
+// directory for exports
+// this needs to be relative to the xrms web root (browser needs to be able to see it)
+// (no trailing slash)
+$tmp_export_directory = "/relative/path/to/xrms/exports/";
+
 // accounting software integration is in the works, but for now
 $accounting_system = ''; // no integration
 
-// if you have more than one XRMS installation, these need to be unique so that users logged in to one 
+// if you have more than one XRMS installation, these need to be unique so that users logged in to one
 // application can't just start using the other one.  This variable sets "scope" to the user's login.
 $xrms_system_id = "XRMS";
 
 // what should this application be called?
 $app_title = 'XRMS';
 
-// replace this with your organization's name 
+// replace this with your organization's name
 $system_company_name = 'Acme Distribution';
 
 // so that order numbers can be continuous with whatever you're using now
