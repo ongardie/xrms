@@ -101,7 +101,11 @@ start_page($page_title, true, $msg);
                 <td class=widget_header colspan=2>New Address</td>
             </tr>
             <tr>
-                <td class=widget_label_right>Name</td>
+                <td class=widget_label_right>Company</td>
+                <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Address Name</td>
                 <td class=widget_content_form_element><input type=text name=address_name size=30></td>
             </tr>
             <tr>
