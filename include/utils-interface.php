@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.18 2004/07/10 13:07:58 braverock Exp $
+ * $Id: utils-interface.php,v 1.19 2004/07/13 15:44:03 maulani Exp $
  */
 
 require_once ($include_directory.'plugin.php');
@@ -62,7 +62,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     <title>$page_title</title>
     <link rel=stylesheet href="$stylesheet">
     <link rel=stylesheet  type="text/css" href="$http_site_root/js/jscalendar/calendar-blue.css">
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
     <div id="page_header">$page_title</div>
@@ -180,6 +180,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.19  2004/07/13 15:44:03  maulani
+ * - Make Unicode the default character set for XRMS
+ *
  * Revision 1.18  2004/07/10 13:07:58  braverock
  * - change $include_locations to $include_direcectory
  *   - applies SF patch 976192 submitted by cpsource
