@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.10 2004/07/13 14:51:07 braverock Exp $
+ * $Id: login-2.php,v 1.11 2004/07/14 12:14:43 cpsource Exp $
  */
 require_once('include-locations.inc');
 
@@ -101,7 +101,7 @@ if ($rst && !$rst->EOF && $ldapok) {
     $language = $rst->fields['language'];
     $gmt_offset = $rst->fields['gmt_offset'];
     $rst->close();
-    session_start();
+    //session_start();
     $_SESSION['session_user_id'] = $session_user_id;
     $_SESSION['xrms_system_id'] = $xrms_system_id;
     $_SESSION['role_id'] = $role_id;
@@ -116,6 +116,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.11  2004/07/14 12:14:43  cpsource
+ * - Remove extraneous session_start()
+ *
  * Revision 1.10  2004/07/13 14:51:07  braverock
  * - change user_type_id to role_id
  *
