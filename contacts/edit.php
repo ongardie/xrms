@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.22 2004/07/30 09:45:24 cpsource Exp $
+ * $Id: edit.php,v 1.23 2005/01/13 18:42:54 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -16,10 +16,12 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
-$session_user_id = session_check();
+$contact_id = $_GET['contact_id'];
+$on_what_id=$contact_id;
+
+$session_user_id = session_check('','Update');
 
 $msg        = isset($_GET['msg']) ? $_GET['msg'] : '';
-$contact_id = $_GET['contact_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -266,6 +268,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.23  2005/01/13 18:42:54  vanmer
+ * - Basic ACL changes to allow edit functionality to be restricted
+ *
  * Revision 1.22  2004/07/30 09:45:24  cpsource
  * - Place confGoTo setup later in startup sequence.
  *
