@@ -28,8 +28,12 @@
     //address info
     $address_name        = $row['address_name'];
 
-    $null                = $row['public/private'];
-    $null                = $row['record_manager'];
+   if ($row['public/private']) {
+      $company_profile        .= "Public/Private: " . $row['public/private'] . "\n";
+   }
+   if ($row['record_manager']) {
+      $company_profile        .= "Record Manager: " . $row['record_manager'] . "\n";
+   }
     $company_name        = $row['company'];
     $legal_name          = $row['company'];
 
@@ -42,80 +46,192 @@
     }
     $address_line1       = $row['address_1'];
     $address_line2       = $row['address_2'];
-    $null                = $row['address_3'];
+   if ($row['address_3']) {
+      $company_profile        .= "Address 3: " . $row['address_3'] . "\n";
+   }
     $address_city        = $row['city'];
     $address_state       = $row['state'];
     $address_postal_code = $row['zip'];
-    $null                = $row['country'];
-    $null                = $row['id/status'];
+   $address_country    = $row['country'];
+   if ($row['id/status']) {
+      $company_profile        .= "ID/Status: " . $row['id/status'] . "\n";
+   }
     $company_phone       = $row['phone'];
     $contact_work_phone  = $row['phone'];
     $company_fax         = $row['fax'];
     $contact_fax         = $row['fax'];
     $contact_home_phone  = $row['home_phone'];
-    $null                = $row['mobile_phone'];
-    $null                = $row['pager'];
-    $null                = $row['salutation'];
-    $null                = $row['last_meeting'];
-    $null                = $row['last_reach'];
-    $null                = $row['last_attempt'];
-    $null                = $row['letter_date'];
-    $null                = $row['title'];
-    $null                = $row['assistant'];
-    $null                = $row['last_results'];
-    $null                = $row['referred_by'];
+   $contact_cell_phone    = $row['mobile_phone'];
+   if ($row['pager']) {
+      $company_profile        .= "Pager: " . $row['pager'] . "\n";
+   }
+   $contact_salutation    = $row['salutation'];
+   if ($row['last_meeting']) {
+      $company_profile        .= "Last Meeting: " . $row['last_meeting'] . "\n";
+   }
+   if ($row['last_reach']) {
+      $company_profile        .= "Last Reach: " . $row['last_reach'] . "\n";
+   }
+   if ($row['last_attempt']) {
+      $company_profile        .= "Last Attempt: " . $row['last_attempt'] . "\n";
+   }
+   if ($row['letter_date']) {
+      $company_profile        .= "Letter Date: " . $row['letter_date'] . "\n";
+   }
+   $contact_title    = $row['title'];
+   if ($row['assistant']) {
+      $company_profile        .= "Assistant: " . $row['assistant'] . "\n";
+   }
+   if ($row['last_results']) {
+      $company_profile        .= "Last Results: " . $row['last_results'] . "\n";
+   }
+   if ($row['referred_by']) {
+      $company_profile        .= "Referred By: " . $row['referred_by'] . "\n";
+   }
     $contact_custom1     = $row['user_1'];
     $contact_custom2     = $row['user_2'];
     $contact_custom3     = $row['user_3'];
     $contact_custom4     = $row['user_4'];
-    $null                = $row['user_5'];
-    $null                = $row['user_6'];
-    $null                = $row['user_7'];
-    $null                = $row['user_8'];
-    $null                = $row['user_9'];
-    $null                = $row['user_10'];
-    $null                = $row['user_11'];
-    $null                = $row['user_12'];
-    $null                = $row['user_13'];
-    $null                = $row['user_14'];
-    $null                = $row['user_15'];
-    $null                = $row['home_address_1'];
-    $null                = $row['home_address_2'];
-    $null                = $row['home_city'];
-    $null                = $row['home_state'];
-    $null                = $row['home_zip'];
-    $null                = $row['home_country'];
+   if ($row['user_5']) {
+      $company_profile        .= "User 5: " . $row['user_5'] . "\n";
+   }
+   if ($row['user_6']) {
+      $company_profile        .= "User 6: " . $row['user_6'] . "\n";
+   }
+   if ($row['user_7']) {
+      $company_profile        .= "User 7: " . $row['user_7'] . "\n";
+   }
+   if ($row['user_8']) {
+      $company_profile        .= "User 8: " . $row['user_8'] . "\n";
+   }
+   if ($row['user_9']) {
+      $company_profile        .= "User 9: " . $row['user_9'] . "\n";
+   }
+   if ($row['user_10']) {
+      $company_profile        .= "User 10: " . $row['user_10'] . "\n";
+   }
+   if ($row['user_11']) {
+      $company_profile        .= "User 11: " . $row['user_11'] . "\n";
+   }
+   if ($row['user_12']) {
+      $company_profile        .= "User 12: " . $row['user_12'] . "\n";
+   }
+   if ($row['user_13']) {
+      $company_profile        .= "User 13: " . $row['user_13'] . "\n";
+   }
+   if ($row['user_14']) {
+      $company_profile        .= "User 14: " . $row['user_14'] . "\n";
+   }
+   if ($row['user_15']) {
+      $company_profile        .= "User 15: " . $row['user_15'] . "\n";
+   }
+   if ($row['home_address_1']) {
+      $company_profile        .= "Home Address 1: " . $row['home_address_1'] . "\n";
+   }
+   if ($row['home_address_2']) {
+      $company_profile        .= "Home Address 2: " . $row['home_address_2'] . "\n";
+   }
+   if ($row['home_city']) {
+      $company_profile        .= "Home City: " . $row['home_city'] . "\n";
+   }
+   if ($row['home_state']) {
+      $company_profile        .= "Home State: " . $row['home_state'] . "\n";
+   }
+   if ($row['home_zip']) {
+      $company_profile        .= "Home Zip: " . $row['home_zip'] . "\n";
+   }
+   if ($row['home_country']) {
+      $company_profile        .= "Home Country: " . $row['home_country'] . "\n";
+   }
     $company_phone2      = $row['alt_phone'];
-    $null                = $row['2nd_contact'];
-    $null                = $row['2nd_title'];
-    $null                = $row['2nd_phone'];
-    $null                = $row['3rd_contact'];
-    $null                = $row['3rd_title'];
-    $null                = $row['3rd_phone'];
-    $null                = $row['phone_ext.'];
-    $null                = $row['fax_ext.'];
-    $null                = $row['alt_phone_ext.'];
-    $null                = $row['2nd_phone_ext.'];
-    $null                = $row['3rd_phone_ext.'];
-    $null                = $row['asst._title'];
-    $null                = $row['asst._phone'];
-    $null                = $row['asst._phone_ext.'];
+   if ($row['2nd_contact']) {
+      $company_profile        .= "2nd Contact: " . $row['2nd_contact'] . "\n";
+   }
+   if ($row['2nd_title']) {
+      $company_profile        .= "2nd Title: " . $row['2nd_title'] . "\n";
+   }
+   if ($row['2nd_phone']) {
+      $company_profile        .= "2nd Phone: " . $row['2nd_phone'] . "\n";
+   }
+   if ($row['3rd_contact']) {
+      $company_profile        .= "3rd Contact: " . $row['3rd_contact'] . "\n";
+   }
+   if ($row['3rd_title']) {
+      $company_profile        .= "3rd Title: " . $row['3rd_title'] . "\n";
+   }
+   if ($row['3rd_phone']) {
+      $company_profile        .= "3rd Phone: " . $row['3rd_phone'] . "\n";
+   }
+   if ($row['first_name']) {
+      $company_profile        .= "First Name: " . $row['first_name'] . "\n";
+   }
+   if ($row['last_name']) {
+      $company_profile        .= "Last Name: " . $row['last_name'] . "\n";
+   }
+   if ($row['phone_ext.']) {
+      $company_profile        .= "Phone Ext: " . $row['phone_ext.'] . "\n";
+   }
+   if ($row['fax_ext.']) {
+      $company_profile        .= "FAX Ext: " . $row['fax_ext.'] . "\n";
+   }
+   if ($row['alt_phone_ext.']) {
+      $company_profile        .= "Alt Phone Ext: " . $row['alt_phone_ext.'] . "\n";
+   }
+   if ($row['2nd_phone_ext.']) {
+      $company_profile        .= "2nd Phone Ext: " . $row['2nd_phone_ext.'] . "\n";
+   }
+   if ($row['3rd_phone_ext.']) {
+      $company_profile        .= "3rd Phone Ext: " . $row['3rd_phone_ext.'] . "\n";
+   }
+   if ($row['asst._title']) {
+      $company_profile        .= "Asst. Title: " . $row['asst._title'] . "\n";
+   }
+   if ($row['asst._phone']) {
+      $company_profile        .= "Asst. Phone: " . $row['asst._phone'] . "\n";
+   }
+   if ($row['asst._phone_ext.']) {
+      $company_profile        .= "Asst. Phone Ext: " . $row['asst._phone_ext.'] . "\n";
+   }
     $division_name       = $row['department'];
-    $null                = $row['spouse'];
-    $null                = $row['record_creator'];
-    $null                = $row['owner'];
-    $null                = $row['2nd_last_reach'];
-    $null                = $row['3rd_last_reach'];
-    $company_website     = $row['web_site'];
-    $null                = $row['ticker_symbol'];
-    $null                = $row['create_date'];
-    $null                = $row['edit_date'];
-    $null                = $row['merge_date'];
-    $contact_email       = $row['e-mail_login'];
-    $null                = $row['e-mail_system'];
+   if ($row['spouse']) {
+      $company_profile        .= "Spouse: " . $row['spouse'] . "\n";
+   }
+   if ($row['record_creator']) {
+      $company_profile        .= "Record Creator: " . $row['record_creator'] . "\n";
+   }
+   if ($row['owner']) {
+      $company_profile        .= "Owner: " . $row['owner'] . "\n";
+   }
+   if ($row['2nd_last_reach']) {
+      $company_profile        .= "2nd Last Reach: " . $row['2nd_last_reach'] . "\n";
+   }
+   if ($row['3rd_last_reach']) {
+      $company_profile        .= "3rd Last Reach: " . $row['3rd_last_reach'] . "\n";
+   }
+   $company_website    = $row['web_site'];
+   if ($row['ticker_symbol']) {
+      $company_profile        .= "Ticker Symbol: " . $row['ticker_symbol'] . "\n";
+   }
+   if ($row['create_date']) {
+      $company_profile        .= "Create Date: " . $row['create_date'] . "\n";
+   }
+   if ($row['edit_date']) {
+      $company_profile        .= "Edit Date: " . $row['edit_date'] . "\n";
+   }
+   if ($row['merge_date']) {
+      $company_profile        .= "Merge Date: " . $row['merge_date'] . "\n";
+   }
+   $contact_email    = $row['e-mail_login'];
+   if ($row['e-mail_system']) {
+      $company_profile        .= "E-Mail System: " . $row['e-mail_system'] . "\n";
+   }
 
 /**
  * $Log: import-template-act2000.php,v $
+ * Revision 1.2  2004/05/06 20:04:47  braverock
+ * - update templates to capture more fields
+ *   - makes use of material from SF patch 938836 by Glenn Powers
+ *
  * Revision 1.1  2004/04/19 14:21:54  braverock
  * - add additional look-ups and tests on import
  * - improve error reporting
