@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.10 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: one.php,v 1.11 2004/07/25 18:26:22 johnfawcett Exp $
  */
 
 //uinclude required common files
@@ -111,7 +111,7 @@ $rst->close();
 $con->close();
 
 
-$page_title = _("Opportunity Status : ").$opportunity_status_pretty_name;
+$page_title = _("Opportunity Status Details").': '.$opportunity_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -205,17 +205,17 @@ start_page($page_title);
     <!-- right column //-->
     <div id="Sidebar">
 
-        <form action=delete.php method=post>
-        <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Opportunity Status?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Opportunity Status?"); ?>');">
+        <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Opportunity Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
-                <?php echo _("Click the button below to remove this"); ?><br><?php echo _("opportunity status from the system."); ?>
-                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
-                <p><input class=button type=submit value="<?php echo _("Delete Opportunity Status"); ?>">
+                <?php echo _("Click the button below to remove this company source from the system."); ?>
+                <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                 </td>
             </tr>
         </table>
@@ -232,6 +232,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2004/07/25 18:26:22  johnfawcett
+ * - standardized page title
+ * - standardized delete text and button
+ * - added delete confirm (call to javascript)
+ *
  * Revision 1.10  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *
