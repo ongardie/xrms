@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.93 2005/02/15 20:52:00 vanmer Exp $
+ * $Id: some.php,v 1.94 2005/02/25 03:41:02 daturaarutad Exp $
  */
 
 // handle includes
@@ -15,7 +15,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-require_once($include_directory . 'classes/Pager/XRMS_Pager.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 // create session
@@ -672,7 +672,7 @@ $columns[] = array('name' => _('%'), 'index' => '%');
 // selects the columns this user is interested in
 $default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner', '%');
 
-$pager_columns = new Pager_Columns('ActivitiesPager', $columns, $default_columns, 'ActivitiesData');
+$pager_columns = new Pager_Columns('SomeActivitiesPager', $columns, $default_columns, 'ActivitiesData');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
 $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
@@ -687,15 +687,11 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
 
 echo $pager_columns_selects;
 
-
-
-$pager = new XRMS_Pager($con, $sql, _('Search Results'), 'ActivitiesData', 'ActivitiesPager', $columns);
+// caching is disabled for this pager (since it's all sql)
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'ActivitiesData', 'SomeActivitiesPager', $columns, false);
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
-
-//$pager = new Activities_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
-//$pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
 ?>
@@ -767,6 +763,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.94  2005/02/25 03:41:02  daturaarutad
+ * updated to use GUP_Pager class
+ *
  * Revision 1.93  2005/02/15 20:52:00  vanmer
  * - removed broken cast statement from activities user list sql
  * - added order by statement to activities user list sql
