@@ -1,5 +1,11 @@
 <?php
 
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /*
 
 function widget($header = 'header', $content = 'content') {

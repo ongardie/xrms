@@ -1,4 +1,11 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * plugin.php
  *
@@ -12,7 +19,7 @@
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.4 2004/07/06 21:19:00 neildogg Exp $
+ * $Id: plugin.php,v 1.5 2004/07/14 11:50:50 cpsource Exp $
  * @package xrms
  */
 
@@ -232,6 +239,9 @@ if (isset($plugins) && is_array($plugins)) {
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.5  2004/07/14 11:50:50  cpsource
+ * - Added security feature IN_XRMS
+ *
  * Revision 1.4  2004/07/06 21:19:00  neildogg
  * - Allows for multi-parameter passing
  * - ie do_hook_function("plugin_name", $param, $param2, ...)

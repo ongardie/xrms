@@ -1,4 +1,11 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * functions/i18n.php
  *
@@ -12,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.2 2004/06/21 15:40:31 braverock Exp $
+ * @version $Id: i18n.php,v 1.3 2004/07/14 11:50:50 cpsource Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -936,6 +943,9 @@ function is_conversion_safe($input_charset) {
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.3  2004/07/14 11:50:50  cpsource
+ * - Added security feature IN_XRMS
+ *
  * Revision 1.2  2004/06/21 15:40:31  braverock
  * - modified i18n files to better integrate with XRMS
  *

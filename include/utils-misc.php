@@ -1,4 +1,11 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * utils-misc.php - this file contains non-UI utility functions for XRMS
  *
@@ -8,7 +15,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.44 2004/07/13 22:57:36 cpsource Exp $
+ * $Id: utils-misc.php,v 1.45 2004/07/14 11:50:50 cpsource Exp $
  */
 
 /**
@@ -688,6 +695,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.45  2004/07/14 11:50:50  cpsource
+ * - Added security feature IN_XRMS
+ *
  * Revision 1.44  2004/07/13 22:57:36  cpsource
  * - Coded noew session_startup() routine to create session
  *   Modified session_check() to make it run faster and

@@ -7,8 +7,14 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.3 2004/07/09 15:36:34 neildogg Exp $
+ * $Id: utils-database.php,v 1.4 2004/07/14 11:50:50 cpsource Exp $
  */
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
 
 /**
  * Create the array of existing tables.
@@ -88,6 +94,9 @@ function table_name($table) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.4  2004/07/14 11:50:50  cpsource
+ * - Added security feature IN_XRMS
+ *
  * Revision 1.3  2004/07/09 15:36:34  neildogg
  * Returns array of values of usable names in a table
  *

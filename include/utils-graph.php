@@ -1,5 +1,11 @@
 <?php
 
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 function stacked_graph_values($clean_pn = '', $anr = 'n') {
 	
 	global $db_dbtype, $db_server, $db_username, $db_password, $db_dbname;

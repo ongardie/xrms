@@ -1,5 +1,11 @@
 <?php
 
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 $inventory_account_number = '1520';
 $income_account_number = '4020';
 $expense_account_number = '5010';

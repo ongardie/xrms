@@ -1,11 +1,18 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * XRMS system configuration file
  *
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.25 2004/07/13 18:24:47 braverock Exp $
+ * $Id: vars.php,v 1.26 2004/07/14 11:50:50 cpsource Exp $
  */
 
 /**

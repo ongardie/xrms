@@ -1,5 +1,11 @@
 <?php
 
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 function fetch_current_customer_credit_limit($extref1) {
 }
 

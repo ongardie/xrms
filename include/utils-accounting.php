@@ -1,5 +1,11 @@
 <?php
 
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 global $accounting_system;
 
 switch($accounting_system) {

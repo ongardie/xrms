@@ -2,8 +2,14 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.19 2004/07/13 15:44:03 maulani Exp $
+ * $Id: utils-interface.php,v 1.20 2004/07/14 11:50:50 cpsource Exp $
  */
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
 
 require_once ($include_directory.'plugin.php');
 
@@ -44,14 +50,10 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
     global $page_title_height;
     global $http_site_root;
-    $session_username = $_SESSION['username'];
 
     $msg = status_msg($msg);
 
     $stylesheet = "$http_site_root/stylesheet.css";
-
-
-
 
     echo <<<EOQ
     <!DOCTYPE HTML PUBLIC
@@ -69,7 +71,8 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 EOQ;
 
     if ($show_navbar) {
-        echo <<<EOQ
+      $session_username = $_SESSION['username'];
+      echo <<<EOQ
     <div id="navline">
         <span id="navbar">
         <a href="$http_site_root/private/home.php">Home</a> &bull;
@@ -180,6 +183,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.20  2004/07/14 11:50:50  cpsource
+ * - Added security feature IN_XRMS
+ *
  * Revision 1.19  2004/07/13 15:44:03  maulani
  * - Make Unicode the default character set for XRMS
  *
