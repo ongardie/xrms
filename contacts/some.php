@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.43 2005/01/25 17:25:40 daturaarutad Exp $
+ * $Id: some.php,v 1.44 2005/01/25 22:04:16 daturaarutad Exp $
  */
 
 //include the standard files
@@ -14,18 +14,15 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/XRMS_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 $on_what_table='contacts';
 $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name             // session variable name, flag
-                    'sort_column'        => array ( 'contacts_sort_column', arr_vars_SESSION ),
-                    'current_sort_column'=> array ( 'contacts_current_sort_column', arr_vars_SESSION ),
-                    'sort_order'         => array ( 'contacts_sort_order', arr_vars_SESSION ),
-                    'current_sort_order' => array ( 'contacts_current_sort_order', arr_vars_SESSION ),
                     'last_name'          => array ( 'contacts_last_name', arr_vars_SESSION ),
                     'first_names'        => array ( 'contacts_first_names', arr_vars_SESSION ),
                     'title'              => array ( 'contacts_title', arr_vars_SESSION ),
@@ -40,23 +37,6 @@ $arr_vars = array ( // local var name             // session variable name, flag
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
 
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-    $current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
@@ -66,8 +46,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS " . $con->qstr(_("Name"),get_magic_quotes_gpc())
-       .' ,' . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS " . $con->qstr(_("Company"),get_magic_quotes_gpc());
+$sql = "SELECT " . $con->Concat("'<a id='", "cont.last_name", "'_'", "cont.first_names", "' href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS " . $con->qstr(_("Name"),get_magic_quotes_gpc())
+       .' ,' . $con->Concat("'<a id='", "c.company_name",  "'href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS " . $con->qstr(_("Company"),get_magic_quotes_gpc());
 if (strlen($email) > 0) {
     $sql .= "\n, cont.email AS " . $con->qstr(_("Email"),get_magic_quotes_gpc());
 }
@@ -169,7 +149,7 @@ if(strlen($first_names)) {
 
 $order_by .= " $sort_order";
 
-$sql .= $from . $where . " order by $order_by";
+$sql .= $from . $where;
 
 $sql_recently_viewed = "select
 cont.contact_id,
@@ -247,14 +227,8 @@ if(!isset($contacts_next_page)) {
 <div id="Main">
     <div id="Content">
 
-    <form action=some.php method=post>
+    <form action=some.php method=post name="ContactForm">
         <input type=hidden name=use_post_vars value=1>
-        <input type=hidden name=contacts_next_page value="<?php  echo $contacts_next_page; ?>">
-        <input type=hidden name=resort value="0">
-        <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-        <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-        <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-        <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
@@ -311,7 +285,6 @@ if(!isset($contacts_next_page)) {
                 </td>
             </tr>
         </table>
-    </form>
 
 <?php
       if ( $use_self_contacts ) {
@@ -324,12 +297,43 @@ if(!isset($contacts_next_page)) {
                   </table>';
       }
 $_SESSION["search_sql"]=$sql;
-$pager = new Contacts_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
-$pager->render($rows_per_page=$system_rows_per_page);
+
+$columns = array();
+$columns[] = array('name' => 'Name', 'index' => 'Name');
+$columns[] = array('name' => 'Company', 'index' => 'Company');
+$columns[] = array('name' => 'Owner', 'index' => 'Owner');
+
+
+
+// selects the columns this user is interested in
+$default_columns =  array('Name', 'Company', 'Owner');
+
+$pager_columns = new Pager_Columns('ContactPager', $columns, $default_columns, 'ContactForm');
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            <input type=button class=button onclick=\"javascript: exportIt();\" value='Export'>
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+
+echo $pager_columns_selects;
+
+
+
+$pager = new XRMS_Pager($con, $sql, _('Search Results'), 'ContactForm', 'ContactPager', $columns);
+$pager->AddEndRows($endrows);
+$pager->Render($system_rows_per_page);
+
 $con->close();
 
 ?>
 
+    </form>
     </div>
 
         <!-- right column //-->
@@ -400,6 +404,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.44  2005/01/25 22:04:16  daturaarutad
+ * updated to use new XRMS_Pager and Pager_Columns to implement selectable columns
+ *
  * Revision 1.43  2005/01/25 17:25:40  daturaarutad
  * fixed broken query (needed a whitespace)
  *

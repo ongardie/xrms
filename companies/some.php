@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.48 2005/01/13 18:28:06 vanmer Exp $
+ * $Id: some.php,v 1.49 2005/01/25 22:01:54 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,17 +13,14 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/XRMS_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-                   'sort_column'         => array('companies_sort_column',arr_vars_SESSION),
-                   'current_sort_column' => array('companies_current_sort_column',arr_vars_SESSION),
-                   'sort_order'          => array('companies_sort_order',arr_vars_SESSION),
-                   'current_sort_order'  => array('companies_current_sort_order',arr_vars_SESSION),
                    'company_name'        => array('companies_company_name',arr_vars_SESSION),
                    'company_type_id'     => array('companies_company_type_id',arr_vars_SESSION),
                    'company_category_id' => array('companies_company_category_id',arr_vars_SESSION),
@@ -38,24 +35,6 @@ $arr_vars = array ( // local var name       // session variable name
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
 
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-    $current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 alt="" src=../img/asc.gif>';
-$descending_order_image = ' <img border=0 height=10 width=10 alt="" src=../img/desc.gif>';
-
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
@@ -66,7 +45,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 
 $sql = "
-SELECT " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '"._("Company Name")."',
+SELECT " . $con->Concat("'<a id=\"'" , "c.company_name", "'\" href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '"._("Company Name")."',
 c.company_code AS '"._("Company Code")."',
 u.username AS '"._("User")."',
 industry_pretty_name as '"._("Industry")."',
@@ -156,15 +135,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     } else { $where .= ' AND 1 = 2 '; }
 }
 
-if ($sort_column == 1) {
-    $order_by = "company_name";
-} else {
-    $order_by = $sort_column;
-}
-
-$order_by .= " $sort_order";
-
-$sql .= $from . $where . " order by $order_by";
+$sql .= $from . $where;
 
 // note: $sql is the list of companies we will be selecting
 // we need to determine the $company_count from it.
@@ -254,7 +225,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post>
+        <form action=some.php method=post name="CompanyForm">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=resort value="0">
         <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
@@ -325,20 +296,49 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
       </table>
-  </form>
 
 <?php
 //Nic - I did this different than the other some.phps because it is a more complex sql you have to write to retrieve company email records
 $_SESSION["search_sql"]["from"]=$from;
 $_SESSION["search_sql"]["where"]=$where;
-$_SESSION["search_sql"]["order"]=" order by $order_by";
 
-$pager = new Companies_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
-$pager->render($rows_per_page=$system_rows_per_page);
+$columns = array();
+$columns[] = array('name' => _('Company Name'), 'index' => 'Company Name');
+$columns[] = array('name' => _('Company Code'), 'index' => 'Company Code');
+$columns[] = array('name' => _('User'), 'index' => 'User');
+$columns[] = array('name' => _('Industry'), 'index' => 'Industry');
+$columns[] = array('name' => _('CRM Status'), 'index' => 'CRM Status');
+$columns[] = array('name' => _('Account Status'), 'index' => 'Account Status');
+$columns[] = array('name' => _('Rating'), 'index' => 'Rating');
+
+// selects the columns this user is interested in
+$default_columns =  array('Company Name', 'Company Code', 'User', 'Industry', 'CRM Status', 'Account Status', 'Rating');
+
+$pager_columns = new Pager_Columns('CompanyPager', $columns, $default_columns, 'CompanyForm');
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            <input type=button class=button onclick=\"javascript: exportIt();\" value='Export'>
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+
+echo $pager_columns_selects;
+
+
+$pager = new XRMS_Pager($con, $sql, _('Search Results'), 'CompanyForm', 'CompanyPager', $columns);
+$pager->AddEndRows($endrows);
+$pager->Render($system_rows_per_page);
+
 $con->close();
 
 ?>
 
+  	</form>
     </div>
 
         <!-- right column //-->
@@ -400,12 +400,6 @@ function clearSearchCriteria() {
     location.href = "some.php?clear=1";
 }
 
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].companies_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
 
 //-->
 </script>
@@ -416,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.49  2005/01/25 22:01:54  daturaarutad
+ * updated to use new XRMS_Pager and Pager_Columns to implement selectable columns
+ *
  * Revision 1.48  2005/01/13 18:28:06  vanmer
  * - ACL restriction on search
  *
