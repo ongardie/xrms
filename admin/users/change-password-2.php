@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.3 2004/03/12 16:20:58 maulani Exp $
+ * $Id: change-password-2.php,v 1.4 2004/03/12 16:34:31 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,6 +13,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+
+$session_user_id = session_check();
 
 $user_id = $_POST['user_id'];
 $password = $_POST['password'];
@@ -28,6 +30,8 @@ if ($password == $confirm_password) {
     
     $con->execute($sql);
     
+    add_audit_item($con, $session_user_id, 'change password', 'users', $user_id);
+
     $con->close();
     
     header("Location: " . $http_site_root . "/admin/routing.php");
@@ -37,8 +41,9 @@ if ($password == $confirm_password) {
 
 /**
  *$Log: change-password-2.php,v $
- *Revision 1.3  2004/03/12 16:20:58  maulani
- *- correct redirect URL
+ *Revision 1.4  2004/03/12 16:34:31  maulani
+ *- Add audit trail
+ *- Add phpdoc
  *
  *Revision 1.2  2004/03/12 15:37:07  maulani
  *- Require new passwords be entered twice for validation
