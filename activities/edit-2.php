@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.6 2004/04/26 01:54:45 braverock Exp $
+ * $Id: edit-2.php,v 1.7 2004/04/27 15:18:04 gpowers Exp $
  */
 
 //include required files
@@ -64,14 +64,15 @@ $sql = "update activities set
         activity_title = " . $con->qstr($activity_title, get_magic_quotes_gpc()) . ",
         activity_description = " . $con->qstr($activity_description, get_magic_quotes_gpc()) . ",
         user_id = " . $con->qstr($user_id, get_magic_quotes_gpc()) . ",
-        scheduled_at = " . $con->dbtimestamp($scheduled_at . ' 23:59:59') . ",
-        ends_at = " . $con->dbtimestamp($ends_at . ' 23:59:59') . ",
-        completed_at = " . $con->dbdate($completed_at) . ",
+        scheduled_at = " . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($scheduled_at))) . ",
+        ends_at = " . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($ends_at))) . ",
+        completed_at = " . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($completed_at))) . ",
         activity_status = " . $con->qstr($activity_status, get_magic_quotes_gpc()) . "
         where activity_id = $activity_id";
 
 //$con->debug = 1;
 $con->execute($sql);
+add_audit_item($con, $session_user_id, 'updated', 'activity', $activity_id);
 $con->close();
 
 if ($followup) {
@@ -82,6 +83,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.7  2004/04/27 15:18:04  gpowers
+ * added support for activity times
+ * added audit item
+ *
  * Revision 1.6  2004/04/26 01:54:45  braverock
  * add ability to schedule a followup activity based on the current activity
  *
