@@ -134,7 +134,6 @@ else
         }
         //If you want to make this work for other tables, you should be able to edit utils-database.php with the proper names
         $name_order = implode(', ', array_reverse(table_name($what_table)));
-        $name_concat = $con->Concat(implode(', \' \', ', table_name($what_table)));
 
         /**
         * SQL Compatibility Changes 
@@ -145,8 +144,18 @@ else
         *       having firstnames, lastname like $search_on 
         *       SQL clause to
         *       having (firstnames like $search_on) OR (lastname like $search_on)
+        * 3. Adjust so order by clause will use 'name' for contacts,
+        *       and table_name($what_table) for non-concat'd fields
         **/
-        $sql = "SELECT " . $name_concat . " as name, " . $what_table_singular . "_id
+        if ($what_table=='contacts') {
+            $name_concat = $con->Concat(implode(', \' \', ', table_name($what_table))) . 'as name';
+            $search_name = 'name';
+        } else {
+            $name_concat = implode(', \' \', ',table_name($what_table));
+            $search_name = implode(', \' \', ',table_name($what_table));
+        }
+        
+        $sql = "SELECT " . $name_concat . ', ' . $what_table_singular . "_id
                 FROM " . $what_table . "
                 WHERE " . $what_table_singular . "_record_status='a'
                 GROUP BY " . $what_table_singular . "_id, " . $name_order;
@@ -157,8 +166,10 @@ else
             $sql.= " HAVING " . $name_order . " LIKE " . $search_on;
         }
 
-        $sql.="        order by " . $name_order;
+        $sql.="        order by " . $search_name;
 
+
+        //$con->debug=1;
         $rst = $con->execute($sql);
         if ($rst) {
             if($rst->rowcount()) {
@@ -221,6 +232,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.19  2005/01/08 19:18:59  braverock
+ * - add more portable handling of single field order by, group by
+ *
  * Revision 1.18  2005/01/07 21:14:24  braverock
  * - sql portability change for HAVING clause on name search
  *
