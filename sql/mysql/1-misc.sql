@@ -119,7 +119,6 @@ insert into category_category_scope_map (category_id, category_scope_id) values 
 
 insert into countries (address_format_string_id, country_name, iso_code1, iso_code2, iso_code3, telephone_code) values (1, ' ', '', '', '', '');
 
-Expr1000
 insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_code) values ('Afghanistan', '004', 'AF', 'AFG', '93');
 insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_code) values ('Albania', '008', 'AL', 'ALB', '355');
 insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_code) values ('Algeria', '012', 'DZ', 'DZA', '213');
