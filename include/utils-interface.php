@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.39 2005/01/03 03:23:42 ebullient Exp $
+ * $Id: utils-interface.php,v 1.40 2005/01/06 15:41:57 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -198,6 +198,51 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 <?php
   // Show navbar..
   if ($show_navbar) {
+    render_nav_line();
+  }
+
+  // Show $msg, if present
+  if (strlen($msg) > 0) {
+    echo '  <div id="msg">'. $msg ."</div>\n";
+  }
+} // end start_page fn
+
+
+//hack to fake ACL authentication until acl is completely integrated
+if (!function_exists('check_object_permission_bool')) {
+    function check_object_permission_bool($user, $object, $action, $table) {
+        return true;
+    }
+}
+
+//hack to fake ACL authentication until acl is completely integrated
+if (!function_exists('check_permission_bool')) {
+    function check_permission_bool($user, $object, $id, $action, $table) {
+        return true;
+    }
+}
+
+//hack to fake ACL authentication until acl is completely integrated
+if (!function_exists('get_list')) {
+    function get_list($user, $object) {
+        for ($i=0; $i<2000; $i++) {
+            $ret[]=$i;
+        }
+        return $ret;
+    }
+}
+
+/**
+ * function render_nav_line
+ *
+ * This function closes off the page structure.
+ *
+ * This function also contains the end_page hook to allow
+ * for adding stuff to the page footer via a hook.
+ *
+ * Any common page footer would end this.
+ */
+function render_nav_line() {
     $session_username = $_SESSION['username'];
 ?>
   <div id="loginbar">
@@ -209,31 +254,27 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     ?>
   </div>
   <div id="navline">
+               
       <?php echo http_root_href('/private/home.php',       _("Home")); ?> &bull;
-      <?php echo http_root_href('/activities/some.php',    _("Activities")); ?> &bull;
-      <?php echo http_root_href('/companies/some.php',     _("Companies")); ?> &bull;
-      <?php echo http_root_href('/contacts/some.php',      _("Contacts")); ?> &bull;
-      <?php echo http_root_href('/campaigns/some.php',     _("Campaigns")); ?> &bull;
-      <?php echo http_root_href('/opportunities/some.php', _("Opportunities")); ?> &bull;
-      <?php echo http_root_href('/cases/some.php',         _("Cases")); ?> &bull;
-      <?php echo http_root_href('/files/some.php',         _("Files")); ?> &bull;
+      
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'activities')) echo http_root_href('/activities/some.php',    _("Activities")). ' &bull; '; ?> 
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'companies')) echo http_root_href('/companies/some.php',     _("Companies")).' &bull; '; ?>
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'contacts')) echo http_root_href('/contacts/some.php',      _("Contacts")).' &bull; '; ?>
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'campaigns')) echo http_root_href('/campaigns/some.php',     _("Campaigns")).' &bull; '; ?>
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'opportunities')) echo http_root_href('/opportunities/some.php', _("Opportunities")).' &bull; '; ?>
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'cases')) echo http_root_href('/cases/some.php',         _("Cases")).' &bull; '; ?>
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'files')) echo http_root_href('/files/some.php',         _("Files")).' &bull; '; ?>
 
 <?php
     //place the menu_line hook before Reports and Adminstration link
     do_hook ('menuline');
 ?>
-      <?php echo http_root_href('/reports/index.php',      _("Reports")); ?> &bull;
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, false, 'Read', 'reports')) echo http_root_href('/reports/index.php',      _("Reports")); ?> &bull;
       <?php echo http_root_href('/admin/routing.php',      _("Administration")); ?>
   </div><!-- end of navline -->
 <?php
-  }
 
-  // Show $msg, if present
-  if (strlen($msg) > 0) {
-    echo '  <div id="msg">'. $msg ."</div>\n";
-  }
-} // end start_page fn
-
+}
 /**
  * function end_page
  *
@@ -313,8 +354,88 @@ EOQ;
 
 } //end jscalendar_includes fn
 
+function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
+    global $on_what_table;
+    global $session_user_id;
+    global $on_what_id;
+    if ($_table) $table=$_table;
+    else $table=$on_what_table;
+    if ($_id) $id=$_id;
+    else $id=$on_what_id;
+    
+    if (!check_permission_bool($session_user_id, false, $id, 'Update',$table))
+        return false;
+    return render_button($text, $type, $onclick, $name, $id);
+}
+
+function render_delete_button($text='Delete', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
+    global $on_what_table;
+    global $session_user_id;
+    global $on_what_id;
+    if ($_table) $table=$_table;
+    else $table=$on_what_table;
+    if ($_id) $id=$_id;
+    else $id=$on_what_id;
+    if (!check_permission_bool($session_user_id, false, $id, 'Delete',$table))
+        return false;
+    return render_button($text, $type, $onclick, $name, $id);
+}
+
+function render_read_button($text='Read', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
+    global $on_what_table;
+    global $session_user_id;
+    global $on_what_id;
+    if ($_table) $table=$_table;
+    else $table=$on_what_table;
+    if ($_id) $id=$_id;
+    else $id=$on_what_id;
+    
+    if (!check_permission_bool($session_user_id, false, $id, 'Read',$table))
+        return false;
+    return render_button($text, $type, $onclick, $name, $id);
+}
+
+function render_create_button($text='Create', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
+    global $on_what_table;
+    global $session_user_id;
+    global $on_what_id;
+    if ($_table) $table=$_table;
+    else $table=$on_what_table;
+    if ($_id) $id=$_id;
+    else $id=$on_what_id;
+
+    if (!check_permission_bool($session_user_id, false, $id, 'Create',$table))
+        return false;
+    return render_button($text, $type, $onclick, $name, $id);
+}
+
+function render_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false) {        
+    $text=_($text);
+    $ret= "<input class=button value=\"$text\"";
+    if ($name) {
+        $ret.=" name=\"$name\"";
+    }
+    if ($id) {
+        $ret .= " id=\"$id\"";
+    }
+    if ($onclick) {
+        $ret .= " onclick=\"$onclick\"";
+    }
+    if ($type) {
+        $ret .= " type=\"$type\"";
+    }
+    $ret .=">";
+    return $ret;
+}
+
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.40  2005/01/06 15:41:57  vanmer
+ * - split up navigation line into seperate function from start_page
+ * - added fake ACL functions to allow ACL integration to continue without breaking existing systems
+ * - added functions to render navigation buttons (read, create, delete, update)
+ * - added ACL checks to restrict navigation bar and button display
+ *
  * Revision 1.39  2005/01/03 03:23:42  ebullient
  * additional theme (green), make User Manual link not a "header"
  *
