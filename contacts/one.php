@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.19 2004/04/19 22:19:54 maulani Exp $
+ * $Id: one.php,v 1.20 2004/04/27 15:12:59 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -496,7 +496,7 @@ function markComplete() {
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php echo date('Y-m-d'); ?>">               <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a>
+                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php echo date('Y-m-d H:i:s'); ?>">               <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a>
 <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
             </tr>
             <?php  echo $activity_rows; ?>
@@ -556,6 +556,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.20  2004/04/27 15:12:59  gpowers
+ * added support for activity times
+ *
  * Revision 1.19  2004/04/19 22:19:54  maulani
  * - Adjust table for CSS2 positioning
  *
