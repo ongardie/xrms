@@ -18,448 +18,453 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.18 2004/12/30 20:12:55 vanmer Exp $
+ * $Id: sidebar.php,v 1.19 2005/01/10 20:31:21 neildogg Exp $
  */
 
-global $relationship_entries;
-if ((!$relationship_entries) OR count($relationship_entries)==0) {
-    $relationship_entries=array($on_what_table=>$overall_id);
+if(empty($relationships)) {
+    $relationships = array();
 }
-
-$expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
-$found = 0;
-$orig_working_direction = $working_direction;
-
-$sql = "SELECT from_what_table, to_what_table
-        FROM relationship_types
-        WHERE relationship_name='$relationship_name'";
-$rst = $con->execute($sql);
-
-$what_table['from']          = $rst->fields['from_what_table'];
-
-$what_table_singular['from'] = make_singular($what_table['from']);
-$what_table['to']            = $rst->fields['to_what_table'];
-$what_table_singular['to']   = make_singular($what_table['to']);
-//$on_what_table=$what_table['to'];
-
-$rst->close();
-
-/*
-$loop = 0;
-if($working_direction == "from") {
-    $opposite_direction = "to";
+if(empty($ori_relationships)) {
+    $ori_relationships = $relationships;
 }
-elseif($working_direction == "to") {
-    $opposite_direction = "from";
+$expand = 0;
+if(isset($_GET['expand'])) {
+    $expand = 1;
 }
-else {
-    $working_direction = "from";
-    $opposite_direction = "to";
-    $loop = 1;
-}
-*/
-global $relationship_link_rows;
-if (!$directions) { $directions=array('to', 'from'); }
-$display_name          = ucfirst($what_table[$working_direction]);
-$display_name_singular = ucfirst($what_table_singular[$working_direction]);
-$opposite_name         = ucfirst($what_table[$opposite_direction]);
+$current_ids = array(-1);
+$relationship_link_rows = '';
 
-foreach ($relationship_entries as $relationship_on_what_table=>$relationship_on_what_id) {
-    foreach ($directions as $working_direction) {
-        if($working_direction == "from") {
-            $opposite_direction = "to";
+for($j = 0; $j <= $expand; $j++) {
+    $made_rows = false;
+
+    if($j == 1) {
+        $relationships = array($_GET['expand'] => $_GET['id']);
+    }
+
+    foreach($relationships as $key => $value) {
+        if(empty($value)) {
+            unset($relationships[$key]);
         }
-        elseif($working_direction == "to") {
-            $opposite_direction = "from";
-        }
-        $sql = "SELECT * FROM relationship_types WHERE (({$working_direction}_what_table=".$con->qstr($on_what_table) . ") AND (relationship_status='a'))"; 
-        $typerst=$con->execute($sql);
-        if (!$typerst) { db_error_handler($con, $sql); }
-        elseif ($typerst->numRows()>0) {
-        
-            if (!(isset($relationship_link_rows) && $relationship_link_rows)) {
-                //build the table heading
-                $relationship_link_rows = "        <div id='company_link_sidebar'>
-                    <table class=widget cellspacing=1 width=\"100%\">
-                        <tr>
-                            <td colspan=2 class=widget_header colspan=4>"._("Relationships")."</td>
-                        </tr>
-                        <!-- Content Start -->";
-            }
-            else {
-                list($relationship_link_rows,) = split('<!-- Content End -->', $relationship_link_rows, 2);
-            }
+    }
     
-            $relationship_type_ids = array();
-            $relationship_arr=array();
-            while(!$typerst->EOF) {
-                $relationship_type_id = $typerst->fields['relationship_type_id'];
-                $what_table['from']          = $typerst->fields['from_what_table'];
-                
-                $what_table_singular['from'] = make_singular($what_table['from']);
-                $what_table['to']            = $typerst->fields['to_what_table'];
-                $what_table_singular['to']   = make_singular($what_table['to']);
-        
-                $relationship_arr[$relationship_type_id]['pre_formatting'] = $typerst->fields['pre_formatting'];
-                $relationship_arr[$relationship_type_id]['post_formatting'] = $typerst->fields['post_formatting'];
-                $relationship_arr[$relationship_type_id]['from_what_text'] = $typerst->fields['from_what_text'];
-                $relationship_arr[$relationship_type_id]['to_what_text'] = $typerst->fields['to_what_text'];
-                $relationship_arr[$relationship_type_id]['what_table']=$what_table;
-                $relationship_arr[$relationship_type_id]['what_table_singular']=$what_table_singular;
-                $relationship_type_ids[] = $typerst->fields['relationship_type_id'];
-                
-                $typerst->movenext();
+    $sql = "SELECT relationship_type_id, relationship_name, from_what_table, to_what_table
+            FROM relationship_types
+            WHERE (from_what_table IN ('" . implode("', '", array_keys($relationships)) . "')
+                OR to_what_table IN ('" . implode("', '", array_keys($relationships)) . "'))
+            AND relationship_status = 'a'
+            GROUP BY relationship_name
+            ORDER BY relationship_type_id";
+    $rst = $con->execute($sql);
+    
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif(!$rst->EOF) {
+        while(!$rst->EOF) {
+            $sql = "SELECT *
+                    FROM relationship_types
+                    WHERE relationship_name = '{$rst->fields['relationship_name']}'
+                    AND relationship_status = 'a'";
+            $rst2 = $con->execute($sql);
+            if(!$rst2) {
+                db_error_handler($con, $sql);
             }
-            $typerst->close();
-            foreach ($relationship_arr as $relationship_type_id=>$relationship_info) {
-                //build the relationships sql query
-                $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($relationship_info['what_table'][$opposite_direction])));
-                $sql = "SELECT r.*, c." . $relationship_info['what_table_singular'][$opposite_direction] . "_id, " . $name_to_get . " as name
-                        FROM relationships as r, " . $relationship_info['what_table'][$opposite_direction] . " as c
-                        WHERE r." . $working_direction . "_what_id=" . $relationship_on_what_id . "
-                        AND r.relationship_type_id = $relationship_type_id 
-                        AND r.relationship_status='a'
-                        AND r." . $opposite_direction . "_what_id=" . $relationship_info['what_table_singular'][$opposite_direction] . "_id
-                        /* GROUP BY c." . $relationship_info['what_table_singular'][$opposite_direction] . "_id */";
+            elseif(!$rst2->EOF) {
+                $what['from']['table'] = $rst->fields['from_what_table'];
+                $what['from']['singular'] = make_singular($rst->fields['from_what_table']);
+                $what['to']['table'] = $rst->fields['to_what_table'];
+                $what['to']['singular'] = make_singular($rst->fields['to_what_table']);
                 
-                //uncomment the debug line to see what's going on with the query
-                //$con->debug=1;
-                $rst = $con->execute($sql);
-                if(!$rst) {
-                    db_error_handler($con, $sql);
+                $both = 0; //If it's a relationship from a table on itself, we need to check both directions
+                if(in_array($what['from']['table'], array_keys($relationships)) && in_array($what['to']['table'], array_keys($relationships))) {
+                    $working_direction = 'from';
+                    $opposite_direction = 'to';
+                    $both = 1;
                 }
-                elseif($rst->rowcount()) {
-                    if($i == 0) {
-                        $relationship_link_rows .= "<tr>
-                            <td class=widget_label>" . _($opposite_name) . "</td>
-                            <td align=right class=widget_label>" . _("Other ". $display_name) . "</td>
-                        </tr>\n";
+                elseif(in_array($what['from']['table'], array_keys($relationships))) {
+                    $working_direction = 'from';
+                    $opposite_direction = 'to';
+                }
+                else {
+                    $working_direction = 'to';
+                    $opposite_direction = 'from';
+                }
+                
+                $relationship_type_ids = array();
+                while(!$rst2->EOF) {
+                    $relationship_type_ids[] = $rst2->fields['relationship_type_id'];
+                    $rst2->movenext();
+                }
+                $rst2->close();
+                
+                for($i = 0; $i <= $both; $i++) {
+                
+                    $display_name = ucfirst($what[$working_direction]['table']);
+                    $display_singular = ucfirst($what[$working_direction]['singular']);
+                    $opposite_name = ucfirst($what[$opposite_direction]['table']);
+                            
+                    $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($what[$opposite_direction]['table'])));
+        
+                    $sql = "SELECT rt.*, r.*, c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get . " as name
+                            FROM relationship_types as rt, relationships as r, " . $what[$opposite_direction]['table'] . " as c
+                            WHERE {$working_direction}_what_id = {$relationships[$what[$working_direction]['table']]}
+                            AND r.relationship_type_id in (" . implode(',', $relationship_type_ids) . ")
+                            AND r.relationship_status='a'
+                            AND r." . $opposite_direction . "_what_id=" . $what[$opposite_direction]['singular'] . "_id
+                            AND r.relationship_type_id = rt.relationship_type_id
+                            AND r.{$opposite_direction}_what_id NOT IN (" . implode(', ', $current_ids) . ")
+                            GROUP BY c." . $what[$opposite_direction]['singular'] . "_id";
+
+                    $rst2 = $con->execute($sql);
+                    if(!$rst2) {
+                        db_error_handler($con, $sql);
                     }
-                    $found += $rst->rowcount();
-                    while(!$rst->EOF) {
-                        $current_id = $rst->fields[$relationship_info['what_table_singular'][$opposite_direction] . '_id'];
-                        // $current_ids used later to make sure there aren't duplicate names
-                        $current_ids[] = $current_id;
-            
-                        $agent_count = 0;
-                        $address = "";
-                        if($relationship_info['what_table'][$opposite_direction] == "companies") {
-                            $sql = "SELECT count(contact_id) as agent_count
-                                    FROM contacts
-                                    WHERE company_id = " . $current_id . "
-                                    GROUP BY company_id";
-                            $extra_rst = $con->execute($sql);
-                            $agent_count = $extra_rst->fields['agent_count'];
-                            $extra_rst->close();
-                            $sql = "SELECT line1, city, province
-                                    FROM addresses
-                                    WHERE company_id = " . $current_id;
-                            $extra_rst = $con->execute($sql);
-                            $address = explode(" ", $extra_rst->fields['line1']);
-                            while(count($address) > 3) {
-                                array_pop($address);
+                    elseif(!$rst2->EOF) {
+                        if(!$made_rows) {
+                            if($j == 0) {
+                                $relationship_title = 'Relationships';
                             }
-                            $address = implode(" ", $address) . ", " 
-                                . $extra_rst->fields['city'] . ", " 
-                                . $extra_rst->fields['province'];
-                            $extra_rst->close();
-                        }
-                        $opportunity_id = 0;
-                        if(($relationship_info['what_table'][$opposite_direction] == "companies") or ($relationship_info['what_table'][$opposite_direction] == "contacts")) {
-                            $sql = "SELECT opportunity_id
-                                    FROM opportunities
-                                    WHERE " . $relationship_info['what_table_singular'][$opposite_direction] . "_id = " . $current_id;
-                            $opportunity_rst = $con->execute($sql);
-                            $opportunity_id = $opportunity_rst->fields['opportunity_id'];
-                            $opportunity_rst->close();
+                            else {
+                                $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($what[$working_direction]['table'])));
+                            
+                                $sql = "SELECT $name_to_get AS name
+                                        FROM {$what[$working_direction]['table']} AS c
+                                        WHERE {$what[$working_direction]['singular']}_id = {$_GET['id']}";
+                                $rst3 = $con->execute($sql);
+                                if(!$rst3) {
+                                    db_error_handler($con, $sql);
+                                }
+                                elseif(!$rst3->EOF) {
+                                    $relationship_title = $rst3->fields['name'];
+                                }
+                                $relationship_link_rows .= '
+                        <a name="associated" id="associated">';
+                            }
+                        
+                            $made_rows = true;
+                            $relationship_link_rows .= '
+                        <div id="company_link_sidebar">
+                        <table class=widget cellspacing=1 width="100%">
+                            <tr>
+                                <td colspan=2 class=widget_header colspan=4>' . _($relationship_title) . '</td>
+                            </tr>
+                            <!-- Content Start -->';
                         }
                     
-                        // Create the Initial entry
-                        $relationship_link_rows .= "<tr><td class=widget_content colspan=2 align=left>\n"
-                            . $relationship_arr[$rst->fields['relationship_type_id']][$working_direction . '_what_text'].":<br>"
-                            . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting'];
-                        if($opportunity_id) {
-                            $relationship_link_rows .= "*";
+                        $relationship_link_rows .= "
+                        <tr>
+                            <td class=widget_label colspan=2 align=center>" . _($rst->fields['relationship_name']) . "</td>
+                        </tr>
+                        <tr>";
+                        if($j == 0) {
+                            $relationship_link_rows .= "
+                            <td class=widget_label>" . _($opposite_name) . "</td>";
+                            if(in_array($_GET['other'], $relationship_type_ids)) {
+                                $relationship_link_rows .= "
+                                <td align=right class=widget_label>" . _("Other ". $display_name) . "</td>";
+                            }
+                            else {
+                                $relationship_link_rows .= "
+                                <td align=right class=widget_label><a href=\"$http_site_root" . current_page("other={$rst->fields['relationship_type_id']}") . "\">" . _("Other ". $display_name) . "</a></td>";
+                            }
                         }
-                        $relationship_link_rows .= "<a href='$http_site_root/{$relationship_info['what_table'][$opposite_direction]}/one.php?{$relationship_info['what_table_singular'][$opposite_direction]}_id="
-                            . $current_id . "'>" 
-                            . $rst->fields['name']
-                            . "</a> ";
-                        if($agent_count) {
-                            $relationship_link_rows .= " (" . $agent_count . ") ";
+                        else {
+                            $relationship_link_rows .= "
+                            <td class=widget_label colspan=2>" . _($opposite_name) . "</td>";
                         }
-                        $relationship_link_rows .= $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "\n"
-                            . " &bull;"
-                            . " <a href='$http_site_root/relationships/edit.php?working_direction=$opposite_direction"
-                            . "&on_what_table=" . $relationship_info['what_table'][$opposite_direction]
-                            . "&relationship_id=" . $rst->fields['relationship_id']
-                            . "&return_url=" . $relationship_info['what_table'][$working_direction]
-                            . "/one.php?{$relationship_info['what_table_singular'][$working_direction]}_id=$overall_id"
-                            . "'>"._("Edit")."</a>";
-                        if($address) {
-                            $relationship_link_rows .= "<br>" . $address;
-                        }
-                        $relationship_link_rows .= "</td></tr>\n";
-            
-                        $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($relationship_info['what_table'][$working_direction])));
-                        // Create the shared association entries
-                        $sql = "SELECT r.*, " . $name_to_get . " as name, c." . $relationship_info['what_table_singular'][$working_direction] . "_id
-                                FROM relationships as r, " . $relationship_info['what_table'][$working_direction] . " as c
-                                WHERE r." . $opposite_direction . "_what_id=" . $current_id . "
-                                AND relationship_type_id in (" . implode(',', $relationship_type_ids) . ")
-                                AND r." . $working_direction . "_what_id!=" . $overall_id . "
-                                AND r." . $working_direction . "_what_id=c." . $relationship_info['what_table_singular'][$working_direction] . "_id
-                                AND r.relationship_status='a'";
-                        $rst2 = $con->execute($sql);
-                        if(!$rst2) {    
-                            db_error_handler($con, $sql);
-                        } 
-                        elseif($rst2->rowcount()) {
-                            while(!$rst2->EOF) {
-                                $current_id2 = $rst2->fields[$relationship_info['what_table_singular'][$working_direction] . '_id'];
-                                // Find out how many relationships exist below this user
-                                $sql = "SELECT " . $opposite_direction . "_what_id
-                                    FROM relationships
-                                    WHERE " . $working_direction . "_what_id=" . $rst2->fields[$relationship_info['what_table_singular'][$working_direction] . '_id'] . "
-                                    AND " . $opposite_direction . "_what_id!=" . $current_id . "
-                                    AND relationship_type_id IN (" . implode(',', $relationship_type_ids) . ")
-                                    AND relationship_status='a'";
-                                $rst3 = $con->execute($sql);
-                                $count = $rst3->rowcount();
-                                $rst3->close();
-            
-                                $agent_count = 0;
-                                $address = "";
-                                if($relationship_info['what_table'][$working_direction] == "companies") {
-                                    $sql = "SELECT count(contact_id) as agent_count
+                        $relationship_link_rows .= "
+                        </tr>";
+                        
+                        while(!$rst2->EOF) {
+                            $current_id = $rst2->fields[$what[$opposite_direction]['singular'] . '_id'];
+                            $current_ids[] = $current_id;
+        
+                            $agent_count = 0;
+                            if($what[$opposite_direction]['table'] == "companies") {
+                                $sql = "SELECT COUNT(contact_id) as agent_count
                                         FROM contacts
-                                        WHERE company_id = " . $current_id2 . "
+                                        WHERE company_id = " . $relationships['companies'] . "
                                         GROUP BY company_id";
-                                    $extra_rst = $con->execute($sql);
-                                    $agent_count = $extra_rst->fields['agent_count'];
-                                    $extra_rst->close();
-                                    $sql = "SELECT line1, city, province
-                                            FROM addresses
-                                            WHERE company_id = " . $current_id2;
-                                    $extra_rst = $con->execute($sql);
-                                    $address = explode(" ", $extra_rst->fields['line1']);
+                                $rst3 = $con->execute($sql);
+                                if(!$rst3) {
+                                    db_error_handler($con, $sql);
+                                }
+                                elseif(!$rst3->EOF) {
+                                    $agent_count = $rst3->fields['agent_count'];
+                                    $rst3->close();
+                                }
+        
+                                $sql = "SELECT line1, city, province
+                                        FROM addresses
+                                        WHERE company_id = " . $relationships['companies'];
+                                $rst3 = $con->execute($sql);
+                                if(!$rst3) {
+                                    db_error_handler($con, $sql);
+                                }
+                                elseif(!$rst3->EOF) {
+                                    $address = explode(" ", $rst3->fields['line1']);
                                     while(count($address) > 3) {
                                         array_pop($address);
                                     }
                                     $address = implode(" ", $address) . ", " 
-                                        . $extra_rst->fields['city'] . ", " 
-                                        . $extra_rst->fields['province'];
-                                    $extra_rst->close();
+                                        . $rst3->fields['city'] . ", " 
+                                        . $rst3->fields['province'];
+                                    $rst3->close();
                                 }
-                                $opportunity_id = 0;
-                                if(($relationship_info['what_table'][$working_direction] == "companies") or ($relationship_info['what_table'][$working_direction] == "contacts")) {
-                                    $sql = "SELECT opportunity_id
-                                            FROM opportunities
-                                            WHERE " . $relationship_info['what_table_singular'][$working_direction] . "_id = " . $current_id2;
-                                    $opportunity_rst = $con->execute($sql);
-                                    $opportunity_id = $opportunity_rst->fields['opportunity_id'];
-                                    $opportunity_rst->close();
-                                }   
-            
-                                $relationship_link_rows .= "<tr><td class=widget_content colspan=2 align=right>\n"
-                                    . $relationship_arr[$rst2->fields['relationship_type_id']][$opposite_direction . '_what_text'].":<br>"
-                                    . $relationship_arr[$rst2->fields['relationship_type_id']]['pre_formatting'];
-                                if($opportunity_id) {
-                                    $relationship_link_rows .= "*";
-                                }
-                                $relationship_link_rows .= "<a href='$http_site_root/{$relationship_info['what_table'][$working_direction]}/one.php?{$relationship_info['what_table_singular'][$working_direction]}_id="
-                                    . $current_id2 . "'>" 
-                                    . $rst2->fields['name'] 
-                                    . "</a>";
-                                if($agent_count) {
-                                    $relationship_link_rows .= " (" . $agent_count . ") ";
-                                }
-                                $relationship_link_rows .= $relationship_arr[$rst2->fields['relationship_type_id']]['post_formatting'] . "\n";
-                                if($count > 0) {
-                                    $relationship_link_rows .= " &bull;"
-                                    . " <a href='one.php?{$relationship_info['what_table_singular'][$working_direction]}_id=$overall_id&expand_id=" . $rst2->fields[$relationship_info['what_table_singular'][$working_direction] . '_id'] . "#associated'>"
-                                    . "$count other";
-                                    if($count > 1) {
-                                        $relationship_link_rows .= "s";
-                                    }
-                                }
-                                $relationship_link_rows .= "</a>";
-                                if($address) {
-                                    $relationship_link_rows .= "<br>" . $address;
-                                }
-                                $relationship_link_rows .= "</td></tr>\n";
-                                $rst2->movenext();
                             }
-                            $rst2->close();
+        
+                            $opportunity_id = '';
+                            if(($what[$opposite_direction]['table'] == "companies") || ($what[$opposite_direction]['table'] == "contacts")) {
+                                $sql = "SELECT opportunity_id
+                                        FROM opportunities
+                                        WHERE " . $what[$opposite_direction]['singular'] . "_id = " . $current_id;
+                                $rst3 = $con->execute($sql);
+                                if(!$rst3) {
+                                    db_error_handler($con, $sql);
+                                }
+                                elseif(!$rst3->EOF) {
+                                    $opportunity_id = $rst3->fields['opportunity_id'];
+                                    $rst3->close();
+                                }
+                            }
+        
+                            $relationship_link_rows .= "
+                        <tr><td class=widget_content colspan=2 align=left>
+                            {$rst2->fields[$working_direction . '_what_text']}:<br>
+                            {$rst2->fields['pre_formatting']}";
+                            if($opportunity_id) {
+                                $relationship_link_rows .= "*";
+                            }
+                            $relationship_link_rows .= "<a href='$http_site_root/{$what[$opposite_direction]['table']}/one.php?{$what[$opposite_direction]['singular']}_id="
+                                . $current_id . "'>" 
+                                . $rst2->fields['name']
+                                . "</a> ";
+                            if($agent_count) {
+                                $relationship_link_rows .= " (" . $agent_count . ") ";
+                            }
+                            $relationship_link_rows .= $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "\n"
+                                . "                &bull;"
+                                . " <a href='$http_site_root/relationships/edit.php?working_direction=$opposite_direction"
+                                . "&on_what_table=" . $what[$opposite_direction]['table']
+                                . "&relationship_id=" . $rst2->fields['relationship_id']
+                                . "&return_url=" . urlencode(current_page())
+                                . "'>" . _("Edit") . "</a>";
+                        
+                            if($address) {
+                                $relationship_link_rows .= "<br>" . $address;
+                            }
+                            $relationship_link_rows .= "
+                            </td>
+                        </tr>\n";
+    
+                            if($j == 0 && in_array($_GET['other'], $relationship_type_ids)) {
+                                $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($what[$working_direction]['table'])));
+                    
+                                // Create the shared association entries
+                                $sql = "SELECT rt.*, r.*, " . $name_to_get . " as name, c." . $what[$working_direction]['singular'] . "_id
+                                        FROM relationship_types as rt, relationships as r, " . $what[$working_direction]['table'] . " as c
+                                        WHERE r.relationship_type_id in (" . implode(',', $relationship_type_ids) . ")
+                                        AND r.{$opposite_direction}_what_id = {$current_id}
+                                        AND r.{$working_direction}_what_id != {$relationships[$what[$working_direction]['table']]}
+                                        AND r." . $working_direction . "_what_id=" . $what[$working_direction]['singular'] . "_id
+                                        AND r.relationship_type_id = rt.relationship_type_id
+                                        AND r.relationship_status='a'";
+            
+                                $rst3 = $con->execute($sql);
+    
+                                if(!$rst3) {
+                                    db_error_handler($con, $sql);
+                                }
+                                elseif(!$rst3->EOF) {                    
+                                    while(!$rst3->EOF) {
+                                        $current_id2 = $rst3->fields[$working_direction . '_what_id'];
+    
+                                        $agent_count = 0;
+                                        if($what[$working_direction]['table'] == "companies") {
+                                            $sql = "SELECT COUNT(contact_id) as agent_count
+                                                    FROM contacts
+                                                    WHERE company_id = $current_id2
+                                                    GROUP BY company_id";
+                                            $rst4 = $con->execute($sql);
+                                            if(!$rst4) {
+                                                db_error_handler($con, $sql);
+                                            }
+                                            elseif(!$rst4->EOF) {
+                                                $agent_count = $rst4->fields['agent_count'];
+                                                $rst4->close();
+                                            }
+                    
+                                            $sql = "SELECT line1, city, province
+                                                    FROM addresses
+                                                    WHERE company_id = $current_id2";
+                                            $rst4 = $con->execute($sql);
+                                            if(!$rst4) {
+                                                db_error_handler($con, $sql);
+                                            }
+                                            elseif(!$rst4->EOF) {
+                                                $address = explode(" ", $rst4->fields['line1']);
+                                                while(count($address) > 3) {
+                                                    array_pop($address);
+                                                }
+                                                $address = implode(" ", $address) . ", " 
+                                                    . $rst4->fields['city'] . ", " 
+                                                    . $rst4->fields['province'];
+                                                $rst4->close();
+                                            }
+                                        }
+                    
+                                        $opportunity_id = 0;
+                                        if(($what[$working_direction]['table'] == "companies") || ($what[$working_direction]['table'] == "contacts")) {
+                                            $sql = "SELECT opportunity_id
+                                                    FROM opportunities
+                                                    WHERE {$what[$working_direction]['singular']}_id = $current_id2
+                                                    AND opportunity_record_status = 'a'";
+                                            $rst4 = $con->execute($sql);
+                                            if(!$rst4) {
+                                                db_error_handler($con, $sql);
+                                            }
+                                            elseif(!$rst4->EOF) {
+                                                $opportunity_id = $rst4->fields['opportunity_id'];
+                                                $rst4->close();
+                                            }
+                                        } 
+                    
+                                        $relationship_link_rows .= "<tr><td class=widget_content colspan=2 align=right>\n"
+                                            . $rst3->fields[$opposite_direction . '_what_text'].":<br>"
+                                            . $rst3->fields['pre_formatting'];
+                                        if($opportunity_id) {
+                                            $relationship_link_rows .= "*";
+                                        }
+                                        $relationship_link_rows .= "<a href='$http_site_root/{$what[$working_direction]['table']}/one.php?{$what[$working_direction]['singular']}_id="
+                                            . $current_id2 . "'>" 
+                                            . $rst3->fields['name'] 
+                                            . "</a>";
+                                        if($agent_count) {
+                                            $relationship_link_rows .= " (" . $agent_count . ") ";
+                                        }
+                                        $relationship_link_rows .= $rst3->fields['post_formatting'] . "\n";
+                                        
+                                        $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($what[$opposite_direction]['table'])));
+                            
+                                        $sql = "SELECT rt.*, r.*, c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get . " as name
+                                                FROM relationship_types as rt, relationships as r, " . $what[$opposite_direction]['table'] . " as c
+                                                WHERE {$working_direction}_what_id = {$current_id2}
+                                                AND {$opposite_direction}_what_id != {$current_id}
+                                                AND r.relationship_type_id in (" . implode(',', $relationship_type_ids) . ")
+                                                AND r.relationship_status='a'
+                                                AND r." . $opposite_direction . "_what_id=" . $what[$opposite_direction]['singular'] . "_id
+                                                AND r.relationship_type_id = rt.relationship_type_id
+                                                GROUP BY c." . $what[$opposite_direction]['singular'] . "_id";
+    
+                                        $rst4 = $con->execute($sql);
+                                        if(!$rst4) {
+                                            db_error_handler($con, $sql);
+                                        }
+                                        elseif(!$rst4->EOF) {
+                                            $relationship_link_rows .= " &bull;"
+                                            . " <a href=\"$http_site_root" . current_page("expand={$what[$working_direction]['table']}&id=$current_id2", "associated") . "\">"
+                                            . $rst4->rowcount() . " other";
+                                            if($rst4->rowcount() > 1) {
+                                                $relationship_link_rows .= "s";
+                                            }
+                                        }
+                                        $relationship_link_rows .= "</a>";
+                                        if($address) {
+                                            $relationship_link_rows .= "<br>" . $address;
+                                        }
+                                        $relationship_link_rows .= "</td></tr>\n";
+                                        $rst3->movenext();
+                                    }
+                                    $rst3->close();
+                                }
+                            }
+                            $rst2->movenext();
                         }
-                        $rst->movenext();
                     }
-                    $rst->close();
-                }
-            
-            }
-            // This is pretty ugly, meaninng that it's very pretty for how ugly it should be
-            // Basically, it means that a sidebar can be included a whole heck
-            // of a lot of times and it will still have only one bottom bar.
-            // Since it makes $relationship_link_rows global, it can be included as a plugin.
-            if(preg_match("|<!-- Form Start -->([^\e]*)<!-- Form End -->|", $relationship_link_rows, $matched)) {
-                $relationship_link_rows = str_replace($matched[0], '', $relationship_link_rows);
-                $old_rows = $matched[1];
-                preg_match_all("|(<input type=hidden[^\e]*>)|U", $old_rows, $matched);
-                $amount = count($matched[0]) / 4;
-            }
-            else {
-                $old_rows = '';
-            }
-            if(!(isset($amount) and $amount)) {
-                $amount = 1;
-            }
-            if(isset($old_rows) and $old_rows) {
-                preg_match("|<!-- Start Inputs -->([^\e]*)<!-- End Inputs -->|", $old_rows, $matched);
-                $old_inputs = $matched[1];
-            }
-            else {
-                $old_inputs = '';
-            }
-            $new_rows = "<!-- Start Inputs -->                    " . $old_inputs . "
-                                <input type=hidden name=relationship_name_" . $amount . " value='" . $relationship_name . "'>
-                                <input type=hidden name=on_what_id_" . $amount . " value='$overall_id'>
-                                <input type=hidden name=working_direction_" . $amount . " value='$orig_working_direction'>
-                                <input type=hidden name=return_url_" . $amount . " value='/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id=$overall_id'><!-- End Inputs -->";
-            if(preg_match("|<!-- Start Options -->([^\e]*)<!-- End Options -->|", $old_rows, $matched)) {
-                $old_options = $matched[1];
-            }
-            else {
-                $old_options = '';
-            }
-            $new_options = "<!-- Start Options -->                    " . $old_options . "
-                                <option>" . _($what_table[$opposite_direction] . "/" . $what_table[$working_direction]) . "</option><!-- End Options -->";
-            
-            //put in the new button
-            $table_singular=make_singular($on_what_table);
-            $returnurl="&return_url=/" . $on_what_table
-                            . "/one.php?$table_singular"."_id=$overall_id";
-        }    
-    }
-        if (count($relationship_type_ids)>0) {                                       
-            $relationship_link_rows .= "\n<tr><td class=widget_content colspan=2><input type=button class=button value=\""._("Add Relationship")."\" name=AddRelationship onclick=\"javascript:location.href='$http_site_root/relationships/new-relationship.php?on_what_table=$on_what_table&on_what_id=$overall_id"."$returnurl'\"></td></tr>\n";       
-        }
-    /*
-    $relationship_link_rows .= "<!-- Form Start --></table>\n</div>
-            <div id='expanded_associated_by_sidebar'>
-            <table class=widget cellspacing=1 width=\"100%\">
-                <tr>
-                    <td class=widget_header><a name=associated></a>"._("Add Relationship")."</td>
-                </tr>
-                <tr>
-                <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
-                    <td class=widget_content_form_element colspan=2>
-                        <input type=hidden name=relationship_name value=''>
-                        <input type=hidden name=on_what_id value=''>
-                        <input type=hidden name=working_direction value=''>
-                        <input type=hidden name=return_url value=''>
-                        " . $new_rows . "
-                        <select onchange=\"if(this.selectedIndex > 0) { 
-                                            this.form.relationship_name.value = eval('this.form.relationship_name_' + this.selectedIndex + '.value');
-                                            this.form.on_what_id.value = eval('this.form.on_what_id_' + this.selectedIndex + '.value');
-                                            this.form.working_direction.value = eval('this.form.working_direction_' + this.selectedIndex + '.value');
-                                            this.form.return_url.value = eval('this.form.return_url_' + this.selectedIndex + '.value'); }\">
-                        <option>"._("Choose a relationship")."</option>
-                        " . $new_options . "
-                        </select>
-                        <input type=submit class=button value=\""._("Next")."\">
-                    </td>
-                </form>
-                </tr><!-- Form End -->";
-    */                    
-    
-    $relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
-    
-    // If the table is intended to be expanded, show all companies associated relationships (if they don't exist)
-    if($expand_id) {
-        $name_to_get = $con->Concat("o." . implode(", ' ' , o.", table_name($what_table[$opposite_direction])));
-        $name_to_get2 = $con->Concat("c." . implode(", ' ' , c.", table_name($what_table[$working_direction])));
-        $sql = "SELECT r.relationship_type_id, o." . $what_table_singular[$opposite_direction] . "_id, 
-                        " . $name_to_get . " as name,
-                        " . $name_to_get2 . " as name2
-                    FROM relationships as r, " . $what_table[$opposite_direction] . " as o, " . $what_table[$working_direction] . " as c
-                    WHERE c." . $what_table_singular[$working_direction] . "_id='$expand_id' 
-                    AND relationship_type_id in (".implode(',', $relationship_type_ids).")
-                    AND o." . $what_table_singular[$opposite_direction] . "_id=r." . $opposite_direction . "_what_id
-                    AND c." . $what_table_singular[$working_direction] . "_id=r." . $working_direction . "_what_id
-                    AND r.relationship_status = 'a'";
-        $rst = $con->execute($sql);
-        $relationship_link_rows .= "<div id='expanded_associated_by_sidebar'>
-            <table class=widget cellspacing=1 width=\"100%\">
-                <tr>
-                    <td class=widget_header><a name=associated></a>" . $rst->fields['name2'] . "</td>
-                </tr>
-                <tr>
-                    <td class=widget_label>$opposite_name</td>
-                </tr>\n";
-    
-        while(!$rst->EOF) {
-            if(!in_array($rst->fields[$what_table_singular[$opposite_direction] . '_id'], $current_ids)) {
-            
-                $agent_count = 0;
-                $address = "";
-                if($what_table[$opposite_direction] == "companies") {
-                    $sql = "SELECT count(contact_id) as agent_count
-                        FROM contacts
-                        WHERE company_id = " . $rst->fields['company_id'] . "
-                        GROUP BY company_id";
-                    $extra_rst = $con->execute($sql);
-                    $agent_count = $extra_rst->fields['agent_count'];
-                    $extra_rst->close();
-                    $sql = "SELECT line1, city, province
-                            FROM addresses
-                            WHERE company_id = " . $rst->fields['company_id'];
-                    $extra_rst = $con->execute($sql);
-                    $address = explode(" ", $extra_rst->fields['line1']);
-                    while(count($address) > 3) {
-                        array_pop($address);
+                    if(($both || $i) && $working_direction == 'from') {
+                        $working_direction = 'to';
+                        $opposite_direction = 'from';
                     }
-                    $address = implode(" ", $address) . ", " 
-                        . $extra_rst->fields['city'] . ", " 
-                        . $extra_rst->fields['province'];
-                    $extra_rst->close();
+                    elseif($both || $i) {
+                        $working_direction = 'from';
+                        $opposite_direction = 'to';
+                    }
                 }
-                $opportunity_id = 0;
-                if(($what_table[$opposite_direction] == "companies") or ($what_table[$opposite_direction] == "contacts")) {
-                    $sql = "SELECT opportunity_id
-                            FROM opportunities
-                            WHERE " . $what_table_singular[$opposite_direction] . "_id = " . $rst->fields[$what_table_singular[$opposite_direction] . '_id'];
-                    $opportunity_rst = $con->execute($sql);
-                    $opportunity_id = $opportunity_rst->fields['opportunity_id'];
-                }
-            
-                $relationship_link_rows .= "<tr><td class=widget_content>"
-                    . $relationship_arr[$rst->fields['relationship_type_id']][$working_direction . '_what_text'].":<br>"
-                    . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting'];
-                if($opportunity_id) {
-                    $relationship_link_rows .= "*";
-                }
-                $relationship_link_rows .= "<a href='$http_site_root/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id="
-                    . $rst->fields[$what_table_singular[$opposite_direction] . '_id'] . "'>"
-                    . $rst->fields['name'] . "</a>";
-                if($agent_count) {
-                    $relationship_link_rows .= " (" . $agent_count . ") ";
-                }
-                $relationship_link_rows .= $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "\n";
-                if($address) {
-                    $relationship_link_rows .= "<br>" . $address;
-                }
-                $relationship_link_rows .= "</td></tr>\n";
             }
             $rst->movenext();
         }
-        $relationship_link_rows .= '        </table>
-            </div>';
-    
     }
+    
+    if(!empty($relationship_link_rows)) {
+        $relationship_link_rows .= "
+              </table>\n</div>";
+    }
+
 }
+
+$relationships = $ori_relationships;
+
+//put in the new button
+$relationship_link_rows .= "
+        <div id='expanded_associated_by_sidebar'>
+        <table class=widget cellspacing=1 width=\"100%\">
+            <tr>
+                <td class=widget_header>"._("Add Relationship")."</td>
+            </tr>
+            <tr>
+            <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
+                <input type=hidden name=on_what_id>
+                <input type=hidden name=return_url value=\"" . current_page() . "\">
+                <td class=widget_content_form_element colspan=2>";
+
+$sql = "SELECT relationship_name, relationship_type_id, from_what_table, to_what_table
+        FROM relationship_types
+        WHERE (from_what_table IN ('" . implode("', '", array_keys($relationships)) . "')
+            OR to_what_table IN ('" . implode("', '", array_keys($relationships)) . "'))
+        AND relationship_status = 'a'
+        GROUP BY relationship_name
+        ORDER BY relationship_type_id";
+$rst = $con->execute($sql);
+if(!$rst) {
+    db_error_handler($con, $sql);
+}
+else {
+    $relationship_link_rows .= "
+                <select name=relationships>";
+    while(!$rst->EOF) {
+        if($rst->fields['from_what_table'] == $rst->fields['to_what_table']) {
+            $relationship_link_rows .= "
+                  <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=both&relationship_type_id={$rst->fields['relationship_type_id']}\">{$rst->fields['relationship_name']}</option>";            
+        }
+        else {
+            if($relationships[$rst->fields['from_what_table']]) {
+                $relationship_link_rows .= "
+                  <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=from&relationship_type_id={$rst->fields['relationship_type_id']}\">{$rst->fields['relationship_name']} ({$rst->fields['from_what_table']} -&gt; {$rst->fields['to_what_table']})</option>";
+            }
+            if($relationships[$rst->fields['to_what_table']]) {            
+                $relationship_link_rows .= "
+                  <option value=\"on_what_id={$relationships[$rst->fields['to_what_table']]}&working_direction=to&relationship_type_id={$rst->fields['relationship_type_id']}\">{$rst->fields['relationship_name']} ({$rst->fields['to_what_table']} -&gt; {$rst->fields['from_what_table']})</option>";
+            }
+        }
+        $rst->movenext();
+    }
+    $relationship_link_rows .= "
+                </select>";
+}
+
+$relationship_link_rows .= "
+                    <input type=submit class=button value=\""._("Next")."\">
+                </td>
+            </form>
+            </tr><!-- Form End -->";
+
+$relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
+
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.19  2005/01/10 20:31:21  neildogg
+ * - Relationships sidebar now takes array, requires no code change, supports any available tables, decreases space usage
+ *
  * Revision 1.18  2004/12/30 20:12:55  vanmer
  * - refined search for relationships, no longer displays incorrect linkages
  * - displays all types of relationships for an entity
