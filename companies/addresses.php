@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.19 2005/04/01 23:06:19 daturaarutad Exp $
+ * $Id: addresses.php,v 1.20 2005/04/05 18:09:07 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -28,14 +28,18 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $company_name = fetch_company_name($con, $company_id);
 
-$sql = "select a.address_name, a.address_id, c.default_primary_address, c.default_billing_address, c.default_shipping_address, c.default_payment_address from companies c, addresses a
+ $addresses .= "<td class=widget_label_right_91px><a href=edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a></td>';
+
+$sql = "select " . 
+$con->Concat($con->qstr('<a href="edit-address.php?company_id=' . $company_id . '&address_id='), 'a.address_id', $con->qstr('">'), 'a.address_name', $con->qstr('</a>')) . " as address_link,
+a.address_name, a.address_id, c.default_primary_address, c.default_billing_address, c.default_shipping_address, c.default_payment_address from companies c, addresses a
 where a.address_record_status = 'a'
 and c.company_id = a.company_id
 and c.company_id = $company_id";
 
 
 $columns=array();
-$columns[] = array('name' => _('Address Name'), 'index_sql' => 'address_name', 'sql_sort_column' => 'a.address_name');
+$columns[] = array('name' => _('Address Name'), 'index_sql' => 'address_link', 'sql_sort_column' => 'a.address_name');
 $columns[] = array('name' => _('Used By Contacts'), 'index_calc' => 'used_by_contacts');
 $columns[] = array('name' => _('Formatted Address'), 'index_calc' => 'formatted_address');
 $columns[] = array('name' => _('Primary Default'), 'index_calc' => 'primary_default', 'not_sortable' => 'true', 'css_classname' => 'center');
@@ -184,6 +188,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.20  2005/04/05 18:09:07  daturaarutad
+ * fixed missing edit link
+ *
  * Revision 1.19  2005/04/01 23:06:19  daturaarutad
  * moved address listing into a GUP_Pager
  *
