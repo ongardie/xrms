@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.10 2005/03/04 23:39:47 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.11 2005/03/14 23:06:51 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -1019,7 +1019,7 @@ class xrms_acl {
         
         $RolePermissionRow['Role_id']=$Role_id;
         $RolePermissionRow['CORelationship_id']=$CORelationship_id;
-        $RolePermissionRow['Scope']=$Scope;    
+	$RolePermissionRow['Scope']=$con->qstr($Scope, get_magic_quotes_gpc());
         $RolePermissionRow['Permission_id']=$Permission_id;        
         
         //Create insert statement
@@ -2089,6 +2089,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.11  2005/03/14 23:06:51  vanmer
+ * - re-added qstr that was removed and broke the insert statement on mysql
+ *
  * Revision 1.10  2005/03/04 23:39:47  vanmer
  * - added trim to checks on data coming from the database, to deal with MSSQL returning a space instead of NULL for empty
  * fields
