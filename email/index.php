@@ -3,7 +3,7 @@
  *
  * Email.
  *
- * $Id: index.php,v 1.6 2004/08/18 00:06:17 niclowe Exp $
+ * $Id: index.php,v 1.7 2005/01/09 01:06:52 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -21,6 +21,9 @@ $array_of_companies = unserialize($_SESSION['array_of_companies']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    
+    //hack to not show continue button if no templates are found
+    $show_continue=true; 
 
 $sql = "SELECT * FROM users WHERE user_id = $session_user_id";
 $rst = $con->execute($sql);
@@ -50,7 +53,8 @@ if ($rst) {
 }
 
 if (strlen($tablerows) == 0) {
-	$tablerows = '<tr><td class=widget_content colspan=1>' . _("No e-mail templates") . '</td></tr>';
+	$tablerows = '<tr><td class=widget_content colspan=20>' . _("No e-mail templates") . '</td></tr>';
+        $show_continue=false;
 }
 
 $page_title = _("Bulk E-Mail");
@@ -72,7 +76,7 @@ start_page($page_title, true, $msg);
 			</tr>
             <?php  echo $tablerows ?>
 			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"></td>
+                        <?php if ($show_continue) { ?> <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"></td> <?php } ?>
 			</tr>
 		</table>
         </form>
@@ -94,6 +98,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.7  2005/01/09 01:06:52  vanmer
+ * - added check to see if templates exist.  If not, do not show continue button
+ *
  * Revision 1.6  2004/08/18 00:06:17  niclowe
  * Fixed bug 941839 - Mail Merge not working
  *

@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.9 2004/08/26 22:55:26 niclowe Exp $
+  * $Id: email.php,v 1.10 2005/01/09 01:05:02 vanmer Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -32,6 +32,11 @@
   $con = &adonewconnection($xrms_db_dbtype);
   $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
+
+    //hack to not show continue button if no templates are found
+    $show_continue=true; 
+
+
 
   switch ($scope) {
     case "company":
@@ -96,9 +101,10 @@
       }
       $rst->close();
     }
-
+    
     if (strlen($tablerows) == 0) {
-      $tablerows = '<tr><td class=widget_content colspan=1>' . _("No e-mail templates") . '</td></tr>';
+      $tablerows = '<tr><td class=widget_content colspan=20>' . _("No e-mail templates") . '</td></tr>';
+      $show_continue=false;
     }
 
     $con->close();
@@ -122,7 +128,7 @@
 			</tr>
             <?php  echo $tablerows ?>
 			<tr>
-<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"></td>
+<?php if ($show_continue) { ?> <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"></td> <?php } ?>
     </tr>
     </table>
     </form>
@@ -144,6 +150,9 @@
 
     /**
     * $Log: email.php,v $
+    * Revision 1.10  2005/01/09 01:05:02  vanmer
+    * - added check to see if templates exist.  If not, do not show continue button
+    *
     * Revision 1.9  2004/08/26 22:55:26  niclowe
     * Enabled mail merge functionality for companies/some.php
     * Sorted pre-sending email checkbox page by company then contact lastname
