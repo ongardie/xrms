@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.41 2004/09/16 21:52:54 vanmer Exp $
+ * $Id: update.php,v 1.42 2004/12/07 21:27:13 vanmer Exp $
  */
 
 // where do we include from
@@ -188,6 +188,10 @@ $rst = $con->execute($sql);
 $sql = "ALTER TABLE countries ADD phone_format VARCHAR(25) NOT NULL DEFAULT '' AFTER country_record_status";
 $rst = $con->execute($sql);
 
+//add currency code to countries
+$sql = "ALTER TABLE `countries` ADD `currency_code` VARCHAR( 3 )";
+$rst = $con->execute($sql);
+
 //add user contact id to users
 $sql = "ALTER TABLE users ADD user_contact_id int(11) NOT NULL DEFAULT 0 AFTER user_id";
 $rst = $con->execute($sql);
@@ -344,6 +348,10 @@ $sql ="CREATE TABLE relationship_types (
                 )";
         //execute
         $rst = $con->execute($sql);
+
+//relationship status does not exist in old tables, add it
+$sql ="ALTER TABLE relationship_type ADD relationship_status char(1) NOT NULL default 'a'";
+	$rst = $con->execute($sql);
 
 // create the saved_actions table if we need it
 $sql = "CREATE TABLE saved_actions (
@@ -2293,6 +2301,1528 @@ else {
 $sql = "alter table activity_templates add default_text text after activity_description";
 $con->execute($sql);
 
+
+//update countries table with currency_code for each country
+
+$sql="SELECT currency_code from countries WHERE currency_code IS NOT NULL";
+$rst=$con->execute($sql);
+
+if ($rst->NumRows()==0) {
+
+    $sql="UPDATE countries set currency_code='AFN' WHERE iso_code2='AF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ALL' WHERE iso_code2='AL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DZD' WHERE iso_code2='DZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='AS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='AD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AOA' WHERE iso_code2='AO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='AI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='AG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ARS' WHERE iso_code2='AR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AMD' WHERE iso_code2='AM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AWG' WHERE iso_code2='AW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='AU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='AT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AZM' WHERE iso_code2='AZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BSD' WHERE iso_code2='BS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BHD' WHERE iso_code2='BH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BDT' WHERE iso_code2='BD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BBD' WHERE iso_code2='BB'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BYR' WHERE iso_code2='BY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='BE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BZD' WHERE iso_code2='BZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='BJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BMD' WHERE iso_code2='BM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='INR' WHERE iso_code2='BT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BTN' WHERE iso_code2='BT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BOB' WHERE iso_code2='BO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BOV' WHERE iso_code2='BO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BAM' WHERE iso_code2='BA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BWP' WHERE iso_code2='BW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NOK' WHERE iso_code2='BV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BRL' WHERE iso_code2='BR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='IO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BND' WHERE iso_code2='BN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BGN' WHERE iso_code2='BG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='BF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BIF' WHERE iso_code2='BI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KHR' WHERE iso_code2='KH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='CM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CAD' WHERE iso_code2='CA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CVE' WHERE iso_code2='CV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KYD' WHERE iso_code2='KY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='CF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='TD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CLP' WHERE iso_code2='CL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CLF' WHERE iso_code2='CL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CNY' WHERE iso_code2='CN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='CX'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='CC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='COP' WHERE iso_code2='CO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='COU' WHERE iso_code2='CO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KMF' WHERE iso_code2='KM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='CG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CDF' WHERE iso_code2='CD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='CK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CRC' WHERE iso_code2='CR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='CI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HRK' WHERE iso_code2='HR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CUP' WHERE iso_code2='CU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CYP' WHERE iso_code2='CY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CZK' WHERE iso_code2='CZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DKK' WHERE iso_code2='DK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DJF' WHERE iso_code2='DJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='DM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DOP' WHERE iso_code2='DO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='EC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EGP' WHERE iso_code2='EG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SVC' WHERE iso_code2='SV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='SV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='GQ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ERN' WHERE iso_code2='ER'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EEK' WHERE iso_code2='EE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ETB' WHERE iso_code2='ET'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='FKP' WHERE iso_code2='FK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DKK' WHERE iso_code2='FO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='FJD' WHERE iso_code2='FJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='FI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='FR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='GF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XPF' WHERE iso_code2='PF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='TF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='GA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GMD' WHERE iso_code2='GM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GEL' WHERE iso_code2='GE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='DE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GHC' WHERE iso_code2='GH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GIP' WHERE iso_code2='GI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='GR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DKK' WHERE iso_code2='GL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='GD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='GP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='GU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GTQ' WHERE iso_code2='GT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GNF' WHERE iso_code2='GN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GWP' WHERE iso_code2='GW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='GW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GYD' WHERE iso_code2='GY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HTG' WHERE iso_code2='HT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='HT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='HM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='VA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HNL' WHERE iso_code2='HN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HKD' WHERE iso_code2='HK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HUF' WHERE iso_code2='HU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ISK' WHERE iso_code2='IS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='INR' WHERE iso_code2='IN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='IDR' WHERE iso_code2='ID'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='IRR' WHERE iso_code2='IR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='IQD' WHERE iso_code2='IQ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='IE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ILS' WHERE iso_code2='IL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='IT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='JMD' WHERE iso_code2='JM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='JPY' WHERE iso_code2='JP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='JOD' WHERE iso_code2='JO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KZT' WHERE iso_code2='KZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KES' WHERE iso_code2='KE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='KI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KPW' WHERE iso_code2='KP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KRW' WHERE iso_code2='KR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KWD' WHERE iso_code2='KW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KGS' WHERE iso_code2='KG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LAK' WHERE iso_code2='LA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LVL' WHERE iso_code2='LV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LBP' WHERE iso_code2='LB'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZAR' WHERE iso_code2='LS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LSL' WHERE iso_code2='LS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LRD' WHERE iso_code2='LR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LYD' WHERE iso_code2='LY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CHF' WHERE iso_code2='LI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LTL' WHERE iso_code2='LT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='LU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MOP' WHERE iso_code2='MO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MKD' WHERE iso_code2='MK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MGA' WHERE iso_code2='MG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MGF' WHERE iso_code2='MG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MWK' WHERE iso_code2='MW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MYR' WHERE iso_code2='MY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MVR' WHERE iso_code2='MV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='ML'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MTL' WHERE iso_code2='MT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='MH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='MQ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MRO' WHERE iso_code2='MR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MUR' WHERE iso_code2='MU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='YT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MXN' WHERE iso_code2='MX'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MXV' WHERE iso_code2='MX'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='FM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MDL' WHERE iso_code2='MD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='MC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MNT' WHERE iso_code2='MN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='MS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MAD' WHERE iso_code2='MA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MZM' WHERE iso_code2='MZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MMK' WHERE iso_code2='MM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZAR' WHERE iso_code2='NA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NAD' WHERE iso_code2='NA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='NR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NPR' WHERE iso_code2='NP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='NL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ANG' WHERE iso_code2='AN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XPF' WHERE iso_code2='NC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='NZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NIO' WHERE iso_code2='NI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='NE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NGN' WHERE iso_code2='NG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='NU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='NF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='MP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NOK' WHERE iso_code2='NO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='OMR' WHERE iso_code2='OM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PKR' WHERE iso_code2='PK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='PW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PAB' WHERE iso_code2='PA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='PA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PGK' WHERE iso_code2='PG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PYG' WHERE iso_code2='PY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PEN' WHERE iso_code2='PE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PHP' WHERE iso_code2='PH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='PN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PLN' WHERE iso_code2='PL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='PT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='PR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='QAR' WHERE iso_code2='QA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='RE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ROL' WHERE iso_code2='RO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='RUR' WHERE iso_code2='RU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='RUB' WHERE iso_code2='RU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='RWF' WHERE iso_code2='RW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SHP' WHERE iso_code2='SH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='KN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='LC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='PM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='VC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='WST' WHERE iso_code2='WS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='SM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='STD' WHERE iso_code2='ST'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SAR' WHERE iso_code2='SA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='SN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='CS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CSD' WHERE iso_code2='CS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SCR' WHERE iso_code2='SC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SLL' WHERE iso_code2='SL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SGD' WHERE iso_code2='SG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SKK' WHERE iso_code2='SK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SIT' WHERE iso_code2='SI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SBD' WHERE iso_code2='SB'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SOS' WHERE iso_code2='SO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZAR' WHERE iso_code2='ZA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='ES'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LKR' WHERE iso_code2='LK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SDD' WHERE iso_code2='SD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SRD' WHERE iso_code2='SR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NOK' WHERE iso_code2='SJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SZL' WHERE iso_code2='SZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SEK' WHERE iso_code2='SE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CHF' WHERE iso_code2='CH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SYP' WHERE iso_code2='SY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TWD' WHERE iso_code2='TW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TJS' WHERE iso_code2='TJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TZS' WHERE iso_code2='TZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='THB' WHERE iso_code2='TH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='TL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='TG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='TK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TOP' WHERE iso_code2='TO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TTD' WHERE iso_code2='TT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TND' WHERE iso_code2='TN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TRL' WHERE iso_code2='TR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TMM' WHERE iso_code2='TM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='TC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='TV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='UGX' WHERE iso_code2='UG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='UAH' WHERE iso_code2='UA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AED' WHERE iso_code2='AE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GBP' WHERE iso_code2='GB'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='US'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USS' WHERE iso_code2='US'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USN' WHERE iso_code2='US'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='UM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='UYU' WHERE iso_code2='UY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='UZS' WHERE iso_code2='UZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='VUV' WHERE iso_code2='VU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='VEB' WHERE iso_code2='VE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='VND' WHERE iso_code2='VN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='VG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='VI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XPF' WHERE iso_code2='WF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MAD' WHERE iso_code2='EH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='YER' WHERE iso_code2='YE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZMK' WHERE iso_code2='ZM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZWD' WHERE iso_code2='ZW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AFN' WHERE iso_code2='AF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ALL' WHERE iso_code2='AL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DZD' WHERE iso_code2='DZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='AS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='AD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AOA' WHERE iso_code2='AO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='AI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='AG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ARS' WHERE iso_code2='AR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AMD' WHERE iso_code2='AM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AWG' WHERE iso_code2='AW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='AU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='AT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AZM' WHERE iso_code2='AZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BSD' WHERE iso_code2='BS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BHD' WHERE iso_code2='BH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BDT' WHERE iso_code2='BD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BBD' WHERE iso_code2='BB'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BYR' WHERE iso_code2='BY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='BE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BZD' WHERE iso_code2='BZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='BJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BMD' WHERE iso_code2='BM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='INR' WHERE iso_code2='BT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BTN' WHERE iso_code2='BT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BOB' WHERE iso_code2='BO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BOV' WHERE iso_code2='BO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BAM' WHERE iso_code2='BA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BWP' WHERE iso_code2='BW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NOK' WHERE iso_code2='BV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BRL' WHERE iso_code2='BR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='IO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BND' WHERE iso_code2='BN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BGN' WHERE iso_code2='BG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='BF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='BIF' WHERE iso_code2='BI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KHR' WHERE iso_code2='KH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='CM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CAD' WHERE iso_code2='CA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CVE' WHERE iso_code2='CV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KYD' WHERE iso_code2='KY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='CF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='TD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CLP' WHERE iso_code2='CL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CLF' WHERE iso_code2='CL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CNY' WHERE iso_code2='CN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='CX'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='CC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='COP' WHERE iso_code2='CO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='COU' WHERE iso_code2='CO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KMF' WHERE iso_code2='KM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='CG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CDF' WHERE iso_code2='CD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='CK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CRC' WHERE iso_code2='CR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='CI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HRK' WHERE iso_code2='HR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CUP' WHERE iso_code2='CU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CYP' WHERE iso_code2='CY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CZK' WHERE iso_code2='CZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DKK' WHERE iso_code2='DK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DJF' WHERE iso_code2='DJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='DM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DOP' WHERE iso_code2='DO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='EC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EGP' WHERE iso_code2='EG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SVC' WHERE iso_code2='SV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='SV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='GQ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ERN' WHERE iso_code2='ER'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EEK' WHERE iso_code2='EE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ETB' WHERE iso_code2='ET'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='FKP' WHERE iso_code2='FK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DKK' WHERE iso_code2='FO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='FJD' WHERE iso_code2='FJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='FI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='FR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='GF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XPF' WHERE iso_code2='PF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='TF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XAF' WHERE iso_code2='GA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GMD' WHERE iso_code2='GM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GEL' WHERE iso_code2='GE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='DE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GHC' WHERE iso_code2='GH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GIP' WHERE iso_code2='GI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='GR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='DKK' WHERE iso_code2='GL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='GD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='GP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='GU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GTQ' WHERE iso_code2='GT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GNF' WHERE iso_code2='GN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GWP' WHERE iso_code2='GW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='GW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GYD' WHERE iso_code2='GY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HTG' WHERE iso_code2='HT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='HT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='HM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='VA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HNL' WHERE iso_code2='HN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HKD' WHERE iso_code2='HK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='HUF' WHERE iso_code2='HU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ISK' WHERE iso_code2='IS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='INR' WHERE iso_code2='IN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='IDR' WHERE iso_code2='ID'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='IRR' WHERE iso_code2='IR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='IQD' WHERE iso_code2='IQ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='IE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ILS' WHERE iso_code2='IL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='IT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='JMD' WHERE iso_code2='JM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='JPY' WHERE iso_code2='JP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='JOD' WHERE iso_code2='JO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KZT' WHERE iso_code2='KZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KES' WHERE iso_code2='KE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='KI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KPW' WHERE iso_code2='KP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KRW' WHERE iso_code2='KR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KWD' WHERE iso_code2='KW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='KGS' WHERE iso_code2='KG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LAK' WHERE iso_code2='LA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LVL' WHERE iso_code2='LV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LBP' WHERE iso_code2='LB'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZAR' WHERE iso_code2='LS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LSL' WHERE iso_code2='LS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LRD' WHERE iso_code2='LR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LYD' WHERE iso_code2='LY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CHF' WHERE iso_code2='LI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LTL' WHERE iso_code2='LT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='LU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MOP' WHERE iso_code2='MO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MKD' WHERE iso_code2='MK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MGA' WHERE iso_code2='MG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MGF' WHERE iso_code2='MG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MWK' WHERE iso_code2='MW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MYR' WHERE iso_code2='MY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MVR' WHERE iso_code2='MV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='ML'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MTL' WHERE iso_code2='MT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='MH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='MQ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MRO' WHERE iso_code2='MR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MUR' WHERE iso_code2='MU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='YT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MXN' WHERE iso_code2='MX'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MXV' WHERE iso_code2='MX'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='FM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MDL' WHERE iso_code2='MD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='MC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MNT' WHERE iso_code2='MN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='MS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MAD' WHERE iso_code2='MA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MZM' WHERE iso_code2='MZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MMK' WHERE iso_code2='MM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZAR' WHERE iso_code2='NA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NAD' WHERE iso_code2='NA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='NR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NPR' WHERE iso_code2='NP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='NL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ANG' WHERE iso_code2='AN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XPF' WHERE iso_code2='NC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='NZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NIO' WHERE iso_code2='NI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='NE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NGN' WHERE iso_code2='NG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='NU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='NF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='MP'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NOK' WHERE iso_code2='NO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='OMR' WHERE iso_code2='OM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PKR' WHERE iso_code2='PK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='PW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PAB' WHERE iso_code2='PA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='PA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PGK' WHERE iso_code2='PG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PYG' WHERE iso_code2='PY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PEN' WHERE iso_code2='PE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PHP' WHERE iso_code2='PH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='PN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='PLN' WHERE iso_code2='PL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='PT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='PR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='QAR' WHERE iso_code2='QA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='RE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ROL' WHERE iso_code2='RO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='RUR' WHERE iso_code2='RU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='RUB' WHERE iso_code2='RU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='RWF' WHERE iso_code2='RW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SHP' WHERE iso_code2='SH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='KN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='LC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='PM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XCD' WHERE iso_code2='VC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='WST' WHERE iso_code2='WS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='SM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='STD' WHERE iso_code2='ST'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SAR' WHERE iso_code2='SA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='SN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='CS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CSD' WHERE iso_code2='CS'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SCR' WHERE iso_code2='SC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SLL' WHERE iso_code2='SL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SGD' WHERE iso_code2='SG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SKK' WHERE iso_code2='SK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SIT' WHERE iso_code2='SI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SBD' WHERE iso_code2='SB'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SOS' WHERE iso_code2='SO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZAR' WHERE iso_code2='ZA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='EUR' WHERE iso_code2='ES'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='LKR' WHERE iso_code2='LK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SDD' WHERE iso_code2='SD'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SRD' WHERE iso_code2='SR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NOK' WHERE iso_code2='SJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SZL' WHERE iso_code2='SZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SEK' WHERE iso_code2='SE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='CHF' WHERE iso_code2='CH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='SYP' WHERE iso_code2='SY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TWD' WHERE iso_code2='TW'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TJS' WHERE iso_code2='TJ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TZS' WHERE iso_code2='TZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='THB' WHERE iso_code2='TH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='TL'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XOF' WHERE iso_code2='TG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='NZD' WHERE iso_code2='TK'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TOP' WHERE iso_code2='TO'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TTD' WHERE iso_code2='TT'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TND' WHERE iso_code2='TN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TRL' WHERE iso_code2='TR'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='TMM' WHERE iso_code2='TM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='TC'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AUD' WHERE iso_code2='TV'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='UGX' WHERE iso_code2='UG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='UAH' WHERE iso_code2='UA'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='AED' WHERE iso_code2='AE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='GBP' WHERE iso_code2='GB'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='US'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USS' WHERE iso_code2='US'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USN' WHERE iso_code2='US'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='UM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='UYU' WHERE iso_code2='UY'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='UZS' WHERE iso_code2='UZ'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='VUV' WHERE iso_code2='VU'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='VEB' WHERE iso_code2='VE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='VND' WHERE iso_code2='VN'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='VG'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='USD' WHERE iso_code2='VI'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='XPF' WHERE iso_code2='WF'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='MAD' WHERE iso_code2='EH'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='YER' WHERE iso_code2='YE'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZMK' WHERE iso_code2='ZM'";
+    $con->execute($sql);
+    
+    $sql="UPDATE countries set currency_code='ZWD' WHERE iso_code2='ZW'";
+    $con->execute($sql);
+
+} //end check for currency codes
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -2314,6 +3844,11 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.42  2004/12/07 21:27:13  vanmer
+ * - added field relationship_status to relationship_type table, since it is missing on older installs
+ * - added currency_code field to keep track of currencies for a country
+ * - added currencies for known countries
+ *
  * Revision 1.41  2004/09/16 21:52:54  vanmer
  * -removed ALTER table to add a key in time_zones, as this is done differently later in the code
  *
