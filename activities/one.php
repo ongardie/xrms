@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.61 2004/08/25 14:34:53 neildogg Exp $
+ * $Id: one.php,v 1.62 2004/08/26 14:41:31 neildogg Exp $
  */
 
 //include required files
@@ -29,6 +29,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 
 update_recent_items($con, $session_user_id, "activities", $activity_id);
+update_daylight_savings($con);
 
 $sql = "select a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name
 from companies c, activities a, addresses addr
@@ -219,8 +220,6 @@ if($on_what_table == 'opportunities') {
     $rst->close();
 }
 
-update_daylight_savings($con);
-
 $con->close();
 
 $page_title = _("Activity Details").': '.$activity_title;
@@ -343,7 +342,7 @@ function logTime() {
                     <?php do_hook('opportunity_notes_buttons'); ?>
                 </td>
             </tr>
-            <?php } ?>
+            <?php } if($local_time) { ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Local Time"); ?></td>
                 <td class=widget_content_form_element>
@@ -352,6 +351,8 @@ function logTime() {
                         echo gmdate('Y-m-d H:i:s', $local_time); 
                     ?>
                 </td>
+            </tr>
+            <?php } ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Starts"); ?></td>
                 <td class=widget_content_form_element>
@@ -438,6 +439,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.62  2004/08/26 14:41:31  neildogg
+ * - Display nothing if no daylight savings in address
+ *
  * Revision 1.61  2004/08/25 14:34:53  neildogg
  * - Displays local time
  *  - Change position as you see fit
