@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.7 2004/04/22 17:13:13 gpowers Exp $
+ * $Id: index.php,v 1.8 2004/05/09 03:56:37 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -54,7 +54,9 @@ start_page($page_title, true, $msg);
                 <td colspan=2 class=widget_label_center>Opportunity Reports</td>
             </tr>
             <tr>
-                <td class=widget_content><a href="opportunities-quantity-by-opportunity-status.php">Quantity by Status</a></td>
+                <td class=widget_content>
+                    <a href="opportunities-quantity-by-opportunity-status.php">Quantity by Status</a>
+                </td>
                 <td class=widget_content>How many opportunities are in each stage of the sales closing process?</td>
             </tr>
             <tr>
@@ -105,6 +107,14 @@ start_page($page_title, true, $msg);
                     </form>
                 </td>
             </tr>
+            <tr>
+                <td colspan=2 class=widget_label_center>Custom Reports</td>
+            </tr>
+            <?php
+                // allow plugins to insert thier own reports on the main reports page
+                do_hook ('reports_bottom');
+                // eventually, this will need to be one hook per report section, as more reports are created
+            ?>
         </table>
 
     </div>
@@ -123,6 +133,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.8  2004/05/09 03:56:37  braverock
+ * - add plugin hook for reports
+ *
  * Revision 1.7  2004/04/22 17:13:13  gpowers
  * Added Audit Items Report
  *
