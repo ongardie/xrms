@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.63 2004/07/22 13:27:59 neildogg Exp $
+ * $Id: utils-misc.php,v 1.64 2004/07/22 14:34:07 cpsource Exp $
  */
 
 /**
@@ -688,7 +688,7 @@ function get_formatted_phone ($con, $address_id, $phone) {
     if($temp_phone) {
         $phone_to_display = $temp_phone;
     }
-    if($extra) {
+    if(isset($extra) && $extra) {
         $phone_to_display .= " x" . $extra;
     }
     
@@ -963,6 +963,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.64  2004/07/22 14:34:07  cpsource
+ * - Fixed bug with get_formatted_phone whereby $extra
+ *   was sometimes used uninitialized.
+ *
  * Revision 1.63  2004/07/22 13:27:59  neildogg
  * - Ignore me. It only strips formatting on a non-output variable
  *
