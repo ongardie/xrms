@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single case
  *
- * $Id: one.php,v 1.7 2004/07/25 15:46:19 johnfawcett Exp $
+ * $Id: one.php,v 1.8 2004/07/25 17:56:23 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -73,17 +73,17 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action=delete.php method=post>
-        <input type=hidden name=case_type_id value="<?php  echo $case_type_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Case Type").'?'; ?>');">
+        <form action=delete.php method=post  onsubmit="javascript: return confirm('<?php echo _("Delete Case Type?"); ?>');">
+        <input type=hidden name=case_type_id value="<?php  echo $case_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Case Type"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
-                <?php echo _("Click the button below to remove this case type from the system."); ?>
-                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
-                <p><input class=button type=submit value="<?php echo _("Delete Case Type"); ?>">
+                <?php echo _("Click the button below to permanently remove this item."); ?>
+                <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                 </td>
             </tr>
         </table>
@@ -105,6 +105,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 17:56:23  johnfawcett
+ * - reinserted ? in gettex string - needed by some languages
+ * - corrected bug: did not ask for confirm on delete
+ * - standardized delete text and button
+ *
  * Revision 1.7  2004/07/25 15:46:19  johnfawcett
  * - unified page title
  * - removed punctuation from gettext strings
