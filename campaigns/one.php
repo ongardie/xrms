@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.18 2005/01/13 18:19:09 vanmer Exp $
+ * $Id: one.php,v 1.19 2005/01/13 19:05:15 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -38,12 +38,6 @@ and cam.entered_by = u1.user_id
 and cam.last_modified_by = u2.user_id
 and cam.user_id = u3.user_id
 and cam.campaign_id = '$campaign_id'";
-
-    $list=get_list($session_user_id, 'Read', false, 'campaigns');    
-    if ($list) {
-        $list=implode(",",$list);
-        $sql .= " and cam.campaign_id IN ($list) ";
-    } else { $sql .= ' AND 1 = 2 '; }
 
 $rst = $con->execute($sql);
 
@@ -183,6 +177,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.19  2005/01/13 19:05:15  vanmer
+ * - removed unneeded ACL restriction
+ *
  * Revision 1.18  2005/01/13 18:19:09  vanmer
  * - ACL restriction on activity list
  *
