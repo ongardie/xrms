@@ -1,6 +1,6 @@
 <?
 
 // include trailing slash
-$include_directory = "/web/xrms/include/";
+$include_directory = "/full/path/to/xrms/include/";
 
 ?>
