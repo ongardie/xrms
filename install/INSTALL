@@ -1,0 +1,63 @@
+XRMS Installation READ_ME
+
+Author: Beth Macknik (maulani)
+$Id: INSTALL,v 1.1 2004/03/22 15:30:12 braverock Exp $
+
+INSTALLATION
+============
+
+To install XRMS, you need to place the main installation directory in a 
+location where your web server can access it.  For greater security, you 
+can move the include directory to another location that is not accessible 
+by your web server.
+
+You must also have access to a mySQL database for your data.  
+(Support for other databases are planned in the future, but 
+mySQL is required for now.)
+
+Create a MySQL database to hold the XRMS tables, and pick a valid MySQL 
+account for XRMS to use.
+
+The include_locations.inc file is located at the top level of your 
+XRMS directory.  This file records where the include folder is located.
+You should open this file with a text editor and follow 
+the instructions in the file.
+
+The vars.php file is located within the include folder.  
+It contains all of the implementation specific variables such as database 
+location and password.  Edit this file to set these items.
+
+Now, to setup the database schema and basic dataset, point your web browser to:
+
+http://www.yourserver.com/path_to_xrms/install/install.php
+
+The install code will do some basic checks on your include_locations.inc and 
+vars.php files.  It will then verify that it can communicate with the database.  
+If everything is good, it will connect to the database and setup the appropriate 
+schema and basic dataset.  
+
+If no errors are detected, it will then ask if you wish to create some sample data.  
+This is optional, and you can move directly to using xrms if you wish.
+
+Please note that all of the installation code is non-destructive.  
+If you mistakenly run this over a live database, your data will not be harmed.
+
+
+
+UPDATE
+======
+
+To update XRMS from a previous version, point your web browser to:
+
+http://www.yourserver.com/path_to_xrms/install/update.php
+
+This is a non-destructive routine to bring your database up to date.  
+(If you were up to date (CVS) as of 3/17/04 or later.) 
+
+/**
+ * Change Log for INSTALL file
+ * $Log: INSTALL,v $
+ * Revision 1.1  2004/03/22 15:30:12  braverock
+ * Initial Revision of INSTALL file copied from READ_ME to conform better to established conventions
+ *
+ */
