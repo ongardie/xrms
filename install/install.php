@@ -5,10 +5,12 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.5 2004/07/14 19:14:40 braverock Exp $
+ * $Id: install.php,v 1.6 2004/07/19 21:14:24 maulani Exp $
  */
 
-define('IN_XRMS', true);
+if (!defined('IN_XRMS')) { 
+    define('IN_XRMS', true); 
+}
 
 // include the installation utility routines
 require_once('install-utils.inc');
@@ -181,8 +183,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 // can we make a database connection?
 $con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-if (!$con) {
+$connectiontest = $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+if (!$connectiontest) {
     // Oops!  We do not have a valid database connection
     // Now instruct the user in how to fix this problem
     $problem = 'We cannot connect to the database.  Check the database ';
@@ -243,6 +245,11 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.6  2004/07/19 21:14:24  maulani
+ *- Add check to make sure that IN_XRMS is defined only once
+ *- Fix database connection test with solution posed by Brian Peterson (braverock)
+ *  in RFE 946911
+ *
  *Revision 1.5  2004/07/14 19:14:40  braverock
  *- add IN_XRMS to support secure use in installation.
  *
