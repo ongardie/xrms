@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.20 2004/07/10 13:02:52 braverock Exp $
+ * $Id: some.php,v 1.21 2004/07/13 14:18:58 neildogg Exp $
  */
 
 //include the standard files
@@ -303,7 +303,7 @@ start_page($page_title, true, $msg);
           </td>
         </tr>
         <tr>
-          <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search">
+          <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="Search">
             <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
             <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
           </td>
@@ -385,6 +385,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.21  2004/07/13 14:18:58  neildogg
+ * - Changed submit button name to another name
+ *   - resolves SF bug 9888931 reported by braverock
+ *
  * Revision 1.20  2004/07/10 13:02:52  braverock
  * - applied undefined variables patch
  *   - applies SF patch 976204 submitted by cpsource

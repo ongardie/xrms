@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.31 2004/07/11 12:32:48 braverock Exp $
+ * $Id: some.php,v 1.32 2004/07/13 14:18:19 neildogg Exp $
  */
 
 // handle includes
@@ -317,7 +317,7 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search">
+            <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="Search">
                 <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
                 <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
             </td>
@@ -398,6 +398,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.32  2004/07/13 14:18:19  neildogg
+ * - Changed submit button name to another name
+ *   - resolves SF bug 9888931 reported by braverock
+ *
  * Revision 1.31  2004/07/11 12:32:48  braverock
  * - eliminate manual table generation in favor of pager object
  * - rearrange column order based on input from Walt Pennington
