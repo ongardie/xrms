@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to 
  * the user's default location.
  * 
- * $Id: download.php,v 1.7 2005/01/09 02:32:28 vanmer Exp $
+ * $Id: download.php,v 1.8 2005/03/02 21:23:25 vanmer Exp $
  */ 
 
 require_once('../include-locations.inc');
@@ -73,8 +73,8 @@ $file_original_name = str_replace($file_id . '_', '', $file_filesystem_name);
 //split up mimetype into greater/less mimetypes for use in SendDownloadHeaders
 $mime_type_array=explode('/',$file_type);
 
-//send download headers, do not force pop-up download dialog on browser
-SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name, false, filesize($file_to_open));
+//send download headers, force pop-up download dialog on browser
+SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name, true, filesize($file_to_open));
 //open and output file contents
 $fp = fopen($file_to_open, 'rb');
 fpassthru($fp);
@@ -82,6 +82,9 @@ exit();
 
 /** 
  * $Log: download.php,v $
+ * Revision 1.8  2005/03/02 21:23:25  vanmer
+ * - changed to force pop-up of download dialogue, instead of showing attachment inline
+ *
  * Revision 1.7  2005/01/09 02:32:28  vanmer
  * - changed to use SendDownloadHeaders function instead of custom headers
  *
