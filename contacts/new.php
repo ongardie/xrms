@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.11 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: new.php,v 1.12 2004/06/15 20:41:58 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -154,10 +154,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=interests size=35></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Profile</td>
-                <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
-            </tr>
-            <tr>
                 <td class=widget_label_right><?php  echo $contact_custom1_label; ?></td>
                 <td class=widget_content_form_element><input type=text name=custom1 size=35></td>
             </tr>
@@ -172,6 +168,10 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php  echo $contact_custom4_label; ?></td>
                 <td class=widget_content_form_element><input type=text name=custom4 size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right_166px>Profile</td>
+                <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add Contact"></td>
@@ -206,6 +206,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.12  2004/06/15 20:41:58  gpowers
+ * - moved Profile textbox below Custom Fields to match contacts/edit.php
+ *
  * Revision 1.11  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
