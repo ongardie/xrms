@@ -2,7 +2,7 @@
 /**
 * Manage Case Statuses
 *
-* $Id: some.php,v 1.10 2005/01/10 21:40:46 vanmer Exp $
+* $Id: some.php,v 1.11 2005/02/10 01:57:32 braverock Exp $
 *
 * @todo manage case statuses by type
 *       will require working on creating the rows by type,
@@ -103,18 +103,18 @@ start_page($page_title);
                         <td class=widget_content><?php echo $type_menu; ?></td>
                     </tr>
                 </table>
-		<table class=widget cellspacing=1>
-			<tr>
-				<td class=widget_header colspan=3><?php echo _("Case Statuses"); ?></td>
-			</tr>
-			<tr>
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=3><?php echo _("Case Statuses"); ?></td>
+            </tr>
+            <tr>
             <!-- <td class=widget_label><?php echo _("Type"); ?></td> -->
-				<td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
             <td class=widget_label width=50%><?php echo _("Description"); ?></td>
-				<td class=widget_label width=15%><?php echo _("Move"); ?></td>
-			</tr>
-			<?php  echo $table_rows; ?>
-		</table>
+                <td class=widget_label width=15%><?php echo _("Move"); ?></td>
+            </tr>
+            <?php  echo $table_rows; ?>
+        </table>
 
    </div>
 
@@ -122,46 +122,46 @@ start_page($page_title);
    <div id="Sidebar">
 
 <?php if ($acase_type_id) { ?>    
-	<form action=new-2.php method=post>
+    <form action=new-2.php method=post>
         <input type=hidden name=case_type_id value="<?php echo $acase_type_id; ?>">
-	<table class=widget cellspacing=1>
-		<tr>
-			<td class=widget_header colspan=2>
+    <table class=widget cellspacing=1>
+        <tr>
+            <td class=widget_header colspan=2>
             <?php echo _("Add New Case Status"); ?>
          </td>
-		</tr>
-		<tr>
-			<td class=widget_label_right>
+        </tr>
+        <tr>
+            <td class=widget_label_right>
             <?php echo _("Short Name"); ?>
          </td>
-			<td class=widget_content_form_element>
+            <td class=widget_content_form_element>
             <input type=text name=case_status_short_name size=10>
          </td>
-		</tr>
-		<tr>
-			<td class=widget_label_right>
+        </tr>
+        <tr>
+            <td class=widget_label_right>
             <?php echo _("Full Name"); ?>
          </td>
-			<td class=widget_content_form_element>
+            <td class=widget_content_form_element>
             <input type=text name=case_status_pretty_name size=20>
          </td>
-		</tr>
-		<tr>
-			<td class=widget_label_right>
+        </tr>
+        <tr>
+            <td class=widget_label_right>
             <?php echo _("Full Plural Name"); ?>
          </td>
-			<td class=widget_content_form_element>
+            <td class=widget_content_form_element>
             <input type=text name=case_status_pretty_plural size=20>
          </td>
-		</tr>
-		<tr>
-			<td class=widget_label_right>
+        </tr>
+        <tr>
+            <td class=widget_label_right>
             <?php echo _("Display HTML"); ?>
          </td>
-			<td class=widget_content_form_element>
+            <td class=widget_content_form_element>
             <input type=text name=case_status_display_html size=30>
          </td>
-		</tr>
+        </tr>
       <tr>
          <td class=widget_label_right>
             <?php echo _("Description"); ?>
@@ -171,13 +171,13 @@ start_page($page_title);
          </td>
       </tr>
       
-		<tr>
-			<td class=widget_content_form_element colspan=2>
+        <tr>
+            <td class=widget_content_form_element colspan=2>
             <input class=button type=submit value="<?php echo _("Add"); ?>">
          </td>
-		</tr>
-	</table>
-	</form>
+        </tr>
+    </table>
+    </form>
 <?php } ?>
    </div>
 </div>
@@ -188,6 +188,10 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.11  2005/02/10 01:57:32  braverock
+* - clean up code formatting
+* - make sure only active statuses are shown
+*
 * Revision 1.10  2005/01/10 21:40:46  vanmer
 * - added case_type, needed for distinguishing between statuses
 * - added dropdown for selecting type, for use in creating new status
