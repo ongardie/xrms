@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.5 2004/06/14 17:41:36 introspectshun Exp $
+ * $Id: new-2.php,v 1.6 2004/06/21 03:54:22 braverock Exp $
  */
 
 //include common files
@@ -47,7 +47,8 @@ $rec['opportunity_title'] = $opportunity_title;
 $rec['opportunity_description'] = $opportunity_description;
 $rec['size'] = $size;
 $rec['probability'] = $probability;
-$rec['close_at'] = $con->dbdate($close_at . ' 23:59:59');
+//should modify opportunities/cases/etc to use a 'date' type for these fields.
+$rec['close_at'] = strtotime("+23 hours 59 minutes",strtotime($close_at));
 $rec['entered_at'] = time();
 $rec['entered_by'] = $session_user_id;
 $rec['last_modified_at'] = time();
@@ -72,6 +73,9 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.6  2004/06/21 03:54:22  braverock
+ * - fixed timestamp for new opportunity
+ *
  * Revision 1.5  2004/06/14 17:41:36  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
