@@ -41,6 +41,7 @@ $sql = "select to_what_id
     and $opposite_direction" . "_what_id=$on_what_id2
     and relationship_status='a'";
 $rst = $con->execute($sql);
+//$con->debug=1;
 
 if ($rst) {
     if($rst->rowcount() == 0) {
@@ -54,7 +55,6 @@ if ($rst) {
         $tbl = 'relationships';
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
-        // $con->debug=1;
 
     }
 } else {
