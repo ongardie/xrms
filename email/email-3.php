@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.5 2004/06/14 16:54:37 introspectshun Exp $
+ * $Id: email-3.php,v 1.6 2004/07/03 15:03:52 metamedia Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,19 +20,25 @@ $msg = $_GET['msg'];
 $email_template_title = $_POST['email_template_title'];
 $email_template_body = $_POST['email_template_body'];
 
+$_SESSION['email_template_title'] = serialize($email_template_title);
 $_SESSION['email_template_body'] = serialize($email_template_body);
 
 $array_of_contacts = unserialize($_SESSION['array_of_contacts']);
-
+if (is_array($array_of_contacts))
+	$imploded_contacts = implode(',', $array_of_contacts);
+else
+	echo "WARNING: No array of contacts!<br>";
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 
-$sql = "select cont.contact_id, cont.email, cont.first_names, cont.last_name, c.company_name, u.username 
-from contacts cont, companies c, users u 
-where c.company_id = cont.company_id 
-and c.user_id = u.user_id 
-and c.company_id in (" . implode(',', $array_of_contacts) . ") and length(cont.email) > 0 and contact_record_status = 'a'";
+$sql = "select cont.contact_id, cont.email, cont.first_names, cont.last_name, c.company_name, u.username
+from contacts cont, companies c, users u
+where c.company_id = cont.company_id
+and c.user_id = u.user_id
+and cont.contact_id in ($imploded_contacts)
+and length(cont.email) > 0
+and contact_record_status = 'a'";
 
 $rst = $con->execute($sql);
 if ($rst) {
@@ -46,7 +52,7 @@ if ($rst) {
         $contact_rows .= "</tr>\n";
         $rst->movenext();
     }
-    
+
     $rst->close();
 }
 
@@ -96,6 +102,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.6  2004/07/03 15:03:52  metamedia
+ * Minor bug fixes so that a mail merge from company/one.php (and hopefully other pages) will work.
+ *
  * Revision 1.5  2004/06/14 16:54:37  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
