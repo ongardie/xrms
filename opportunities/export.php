@@ -2,7 +2,7 @@
 /**
  * Export Search Results from opportunities/some.php
  *
- * $Id: export.php,v 1.8 2004/08/25 18:28:43 braverock Exp $
+ * $Id: export.php,v 1.9 2005/01/09 01:15:52 braverock Exp $
  */
 
 
@@ -83,29 +83,34 @@ if (!$rst) {
 
 $filename =  'opportunities_' . time() . '.csv';
 
-$fp = fopen($xrms_file_root.$tmp_export_directory.'/'.$filename, 'w');
-
-if (($fp) && ($rst)) {
-    rs2csvfile($rst, $fp);
+if ($rst) {
+    $csvdata= rs2csv($rst);
+    if ($csvdata) {
+      $filesize = strlen($csvdata);
+    }  
     $rst->close();
-    fclose($fp);
 } else {
     echo "<p>" . _("There was a problem with your export") . ":\n";
-    if (!$fp) {
-        echo "<br>" . _("Unable to open file") . ": $xrms_file_root.$tmp_export_directory/$filename \n";
+    if (!$csvdata) {
+        echo "<br>" . _("Unable to create file") . ": $xrms_file_root.$tmp_export_directory/$filename \n";
     }
     if (!$rst) {
-        echo "<br>" . _("No results returned from database by query") . ": \n";
-        echo "<br> $sql \n";
+        db_error_handler($con,$sql);
     }
 }
 
 $con->close();
 
-header("Location: {$http_site_root}{$tmp_export_directory}/{$filename}");
+SendDownloadHeaders('text', 'csv', $filename, true, $filesize);
+echo $csvdata;
 
 /**
  *$Log: export.php,v $
+ *Revision 1.9  2005/01/09 01:15:52  braverock
+ *- changed to use string instead of an actual file
+ *- updated to use SendDownLoadHeaders for broader browser (eg - IE) compatibility
+ *- updated to use db_error_handler if we don't have a result set
+ *
  *Revision 1.8  2004/08/25 18:28:43  braverock
  *- make paths relative to vars.php variables
  *- add phpdoc
