@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.18 2005/01/06 20:50:06 vanmer Exp $
+ * $Id: edit.php,v 1.19 2005/01/11 23:15:20 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -176,7 +176,8 @@ confGoTo_includes();
             <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?>
-                &nbsp;<a href='opportunity-view.php' target=new><?php echo _("View Statuses"); ?></a></td>
+                &nbsp;
+                <a href="#" onclick="javascript:window.open('opportunity-view.php');"><?php echo _("Status Definitions"); ?></a>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Owner"); ?></td>
@@ -287,6 +288,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.19  2005/01/11 23:15:20  braverock
+ * - removed bad javascript window.open hack - now set empty anchor on current page
+ *
  * Revision 1.18  2005/01/06 20:50:06  vanmer
  * - added retrieve/display of division_id to edit and new pages
  *
