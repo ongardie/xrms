@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.25 2004/11/26 17:31:38 braverock Exp $
+ * $Id: some.php,v 1.26 2005/01/13 18:47:30 vanmer Exp $
  */
 
 //include required files
@@ -15,6 +15,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
+$on_what_table='files';
 $session_user_id = session_check();
 
 // declare passed in variables
@@ -201,6 +202,13 @@ if (strlen($user_id) > 0) {
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
+} else {
+    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    //print_r($list);
+    if ($list) {
+        $list=implode(",",$list);
+        $where .= " and f.file_id IN ($list) ";
+    } else { $where .= ' AND 1 = 2 '; }
 }
 
 if ($sort_column == 6) {
@@ -410,6 +418,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.26  2005/01/13 18:47:30  vanmer
+ * - Basic ACL changes to allow display functionality to be restricted
+ *
  * Revision 1.25  2004/11/26 17:31:38  braverock
  * - fix syntax error where f.description should have been f.file_description
  *

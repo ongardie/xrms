@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.12 2004/07/30 12:59:19 cpsource Exp $
+ * $Id: one.php,v 1.13 2005/01/13 18:47:28 vanmer Exp $
  */
 
 //include required files
@@ -14,6 +14,9 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+$file_id = $_GET['file_id'];
+$on_what_id=$file_id;
+
 $session_user_id = session_check();
 // get call arguments
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -24,7 +27,6 @@ if ( isset($_GET['return_url']) ) {
     $return_url = '';
 }
 
-$file_id = $_GET['file_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -91,7 +93,9 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=file name=file1></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input type=submit class=button value="<?php echo _("Save Changes");?>"> <input type=button class=button onclick="javascript: location.href='download.php?file_id=<?php  echo $file_id ?>';" value="<?php echo _("Download"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo $return_url; ?>&file_id=<?php echo $file_id; ?>';" value="<?php echo _("Delete"); ?>"></td>
+                <td class=widget_content_form_element colspan=2> <?php echo render_edit_button("Save Changes", 'submit'); ?>
+ <?php echo render_read_button("Download",'button',"javascript: location.href='download.php?file_id=$file_id';") ?> 
+ <?php echo render_delete_button("Delete",'button',"javascript: location.href='delete.php?return_url=$return_url&file_id=$file_id';") ?></td>
             </tr>
         </table>
         </form>
@@ -152,6 +156,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.13  2005/01/13 18:47:28  vanmer
+ *- Basic ACL changes to allow display functionality to be restricted
+ *
  *Revision 1.12  2004/07/30 12:59:19  cpsource
  *- Handle $msg in the standard way
  *  Fix problem with Date field displaying garbage because

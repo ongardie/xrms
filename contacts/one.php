@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.54 2005/01/11 13:36:35 braverock Exp $
+ * $Id: one.php,v 1.55 2005/01/13 18:43:59 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -16,6 +16,9 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+$contact_id = $_GET['contact_id'];
+global $on_what_id;
+$on_what_id=$contact_id;
 
 $session_user_id = session_check();
 
@@ -132,7 +135,14 @@ LEFT OUTER JOIN users u ON (a.user_id = u.user_id)
 WHERE a.contact_id = $contact_id
   AND a.contact_id = cont.contact_id
   AND a.activity_type_id = at.activity_type_id
-  AND a.activity_record_status = 'a'
+  AND a.activity_record_status = 'a'";
+    $list=get_list($session_user_id, 'Read', false, 'activities');
+    //print_r($list);
+    if ($list) {
+        $list=implode(",",$list);
+        $sql_activities .= " and a.activity_id IN ($list) ";
+    } else { $sql_activities .= ' AND 1 = 2 '; }
+$sql_activities.=" 
 ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
 ";
 
@@ -451,7 +461,7 @@ function markComplete() {
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                    <input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';">
+                <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?contact_id=$contact_id';"); ?>
                     <?php do_hook('one_contact_buttons'); ?>
                 </td>
             </tr>
@@ -482,8 +492,8 @@ function markComplete() {
                 <td colspan=2 class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
-                    <input class=button type=submit value="<?php echo _("Add"); ?>">
-                    <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
+                    <?php echo render_create_button("Add"); ?>
+                    <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
                 </td>
             </tr>
 <?php /* removed this functionality because it *breaks* the auto-association code.
@@ -551,6 +561,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.55  2005/01/13 18:43:59  vanmer
+ * - Basic ACL changes to allow display functionality to be restricted
+ *
  * Revision 1.54  2005/01/11 13:36:35  braverock
  * - removed on_what_string hack, changed to use make_singular function
  *
