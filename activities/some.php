@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.40 2004/07/22 18:06:40 introspectshun Exp $
+ * $Id: some.php,v 1.41 2004/07/22 19:57:49 neildogg Exp $
  */
 
 // handle includes
@@ -173,7 +173,7 @@ if (strlen($user_id) > 0) {
 
 if (strlen($activity_type_id) > 0) {
     $criteria_count++;
-    $sql .= " and a.activity_type_id like " . $con->qstr('%' . $activity_type_id . '%', get_magic_quotes_gpc());
+    $sql .= " and a.activity_type_id = " $activity_type_id . " ";
 }
 
 if (strlen($completed) > 0 and $completed != "all") {
@@ -496,6 +496,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.41  2004/07/22 19:57:49  neildogg
+ * - activity_type_id is an ID
+ *
  * Revision 1.40  2004/07/22 18:06:40  introspectshun
  * - Localized "Add to Everyone"
  *
