@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.1 2004/06/03 16:26:14 braverock Exp $
+ * $Id: sidebar.php,v 1.2 2004/06/03 16:57:23 gpowers Exp $
  */
 
 //add contact information block on sidebar
@@ -26,7 +26,7 @@ $sql = "select
 
 $rst = $con->execute($sql);
 
-if ($rst) {
+if (!$rst->EOF) {
 
     $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
                     . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</td>\n\t</tr>"
@@ -38,16 +38,18 @@ if ($rst) {
     $rst->close();
 
 } else {
-    // database error, return some useful information.
-    ob_start();
-    db_error_handler ($con,$sql);
-    $contact_block .= ob_get_contents();
-    ob_end_clean();
+    $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content colspan=5>"
+                    . "No Contact Selected."
+                    . "&nbsp; </td>\n\t</tr>";
 }
 $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.2  2004/06/03 16:57:23  gpowers
+ * If no contact is associated with the activity,
+ * return "No Contact Selected." instead of long error message.
+ *
  * Revision 1.1  2004/06/03 16:26:14  braverock
  * - add sidebar functionality to activities
  *   - modified from functionality contributed by Brad Marshall
