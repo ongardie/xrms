@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.92 2004/09/02 12:05:04 neildogg Exp $
+ * $Id: utils-misc.php,v 1.93 2004/09/02 14:49:29 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -800,13 +800,25 @@ function time_zone_offset($con, $address_id) {
         $city = $rst->fields['city'];
         $postal_code = $rst->fields['postal_code'];
 
-        $sql = "SELECT daylight_savings_id, offset, confirmed,
-                    (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
-                    (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
-                    (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
-                FROM time_zones
-                WHERE country_id=" . $country_id . "
-                ORDER BY has_province, has_city, has_postal_code";
+        if($country_id == 218) {
+            $sql = "SELECT daylight_savings_id, offset, confirmed,
+                        (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
+                        (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
+                    FROM time_zones
+                    WHERE country_id=" . $country_id . "
+                    AND province = '" . $province . "'
+                    ORDER BY has_city, has_postal_code";
+        }
+        else {
+            $sql = "SELECT daylight_savings_id, offset, confirmed,
+                        (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
+                        (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
+                        (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
+                    FROM time_zones
+                    WHERE country_id=" . $country_id . "
+                    ORDER BY has_province, has_city, has_postal_code";
+            }
+        }
         $rst = $con->SelectLimit($sql, 1);
         if(!$rst) {
             db_error_handler($con, $sql);
@@ -1275,6 +1287,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.93  2004/09/02 14:49:29  neildogg
+ * - Significantly speed up calls for US time zones
+ *
  * Revision 1.92  2004/09/02 12:05:04  neildogg
  * - Fixed variable typo
  *
