@@ -53,9 +53,6 @@ table.widget th,
 table.widget td {
     background-color: #fff;
 }
-table.widget .closed_activity {
-    background-color: #dcdcdc;
-}
 #msg {
     background-color: #fee;
 }
@@ -63,15 +60,18 @@ table.widget .widget_content_alt,
 table.widget .widget_content_market2 {
     background-color: #ffe;
 }
-table.widget .scheduled_activity {
-    background-color: #eef;
-}
 table.widget .widget_content_graph {
     background-color: #fff;
 }
+table.widget .closed_activity {
+    background-color: #dcdcdc ! important;
+}
+table.widget .scheduled_activity {
+    background-color: #eef ! important;
+}
 table.widget .non_uploaded_file,
 table.widget .overdue_activity {
-    background-color: #f77;
+    background-color: #f77 ! important;
 }
 #page_header,
 table.widget .widget_header,
