@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.112 2005/01/12 02:46:06 introspectshun Exp $
+ * $Id: utils-misc.php,v 1.113 2005/01/12 20:08:41 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -722,11 +722,19 @@ function get_formatted_phone ($con, $address_id, $phone) {
  * @author Beth Macknik
  *
  * @param handle &$con handle to the database connection
- * @param int $address_id id of the address to be retrieved
+ * @param int $address_id id of the address to be retrieved (optional, use either address_id or company_id)
+ * @param int $company_id optionally specify company to retrieve primary address for company
+ * @param bool $single_line conditional to indicate if output should be restricted to one line (false by default)
  *
  * @return string $address_to_display
+ * @todo turn mapquest/whereis links into plugin hook
  */
-function get_formatted_address (&$con,$address_id) {
+function get_formatted_address (&$con,$address_id=false, $company_id=false, $single_line=false) {
+    if (!$address_id) {
+        if (!$company_id) return false;
+        $address_id=fetch_default_address($con, $company_id);
+    }
+    if (!$address_id) return false;
     $sql = "select a.address_body, a.line1, a.line2, a.city, a.province, a.postal_code, a.use_pretty_address, ";
     $sql .= 'afs.address_format_string, c.country_name, c.iso_code2 ';
     $sql .= 'from addresses a, address_format_strings afs, countries c ';
@@ -747,16 +755,31 @@ function get_formatted_address (&$con,$address_id) {
         $GLOBALS["country_name"] = $country = $rst->fields['country_name'];
         $GLOBALS["iso_code2"] = $iso_code2 = $rst->fields['iso_code2'];
 
-        if ($use_pretty_address == 't') {
-            $address_to_display = nl2br($address_body);
+        if (!$single_line) {
+            if ($use_pretty_address == 't') {
+                $address_to_display = nl2br($address_body);
+            } else {
+                $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
+                eval("\$address_to_display = \"$address_format_string\";");
+                // eval ("\$str = \"$str\";");
+                // Remove lines that contain only a comma (fixes SF Bug #1028807)
+                $address_to_display = preg_replace("/<br>, +<br>/", "<br>", $address_to_display);
+                // Remove blank lines (double <br>s)
+                $address_to_display = preg_replace("/<br>(\s+)<br>/", "<br>", $address_to_display);
+            }
         } else {
-            $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
-            eval("\$address_to_display = \"$address_format_string\";");
-            // eval ("\$str = \"$str\";");
-            // Remove lines that contain only a comma (fixes SF Bug #1028807)
-            $address_to_display = preg_replace("/<br>, +<br>/", "<br>", $address_to_display);
-            // Remove blank lines (double <br>s)
-            $address_to_display = preg_replace("/<br>(\s+)<br>/", "<br>", $address_to_display);
+            if ($line1) 
+                $address_array[]=$line1;
+            if ($city)
+                $address_array[]=$city;
+            if ($province)
+                $address_array[]=$province;
+            /* uncomment to add country name to single line address output            
+            if ($country_name)
+                $address_array[]=$country;
+           */
+           $address_to_display=implode(", ",$address_array);
+           
         }
     } else {
         // database error, return some useful information.
@@ -784,6 +807,7 @@ function get_formatted_address (&$con,$address_id) {
         }
     }
 } //end fn get_formatted_address
+
 
 /**
  * Time zone offset
@@ -1434,6 +1458,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.113  2005/01/12 20:08:41  vanmer
+ * - added optional parameters to formatted_address function to look up company address, also provides one line output
+ *
  * Revision 1.112  2005/01/12 02:46:06  introspectshun
  * - Check to make sure count($parts) > 1 before using $parts[1]
  *
