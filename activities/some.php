@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.80 2004/12/27 13:15:54 braverock Exp $
+ * $Id: some.php,v 1.81 2005/01/07 14:20:54 neildogg Exp $
  */
 
 // handle includes
@@ -42,23 +42,18 @@ arr_vars_post_with_cmd ( $arr_vars );
 // arr_vars_session_get ( $arr_vars );
 
 if($saved_id) {
-    $sql = "SELECT saved_data, saved_status
+    $sql = "SELECT saved_data, saved_status, user_id
             FROM saved_actions
             WHERE saved_id=" . $saved_id . "
-            AND (user_id=" . $session_user_id;
-    if($_SESSION['role_short_name'] === 'Admin') {
-        $sql .= " OR group_item=1)";
-    }
-    else {
-        $sql .= " AND group_item=0)";
-    }
-    $sql .= "AND saved_status='a'";
+            AND (user_id=" . $session_user_id . "
+              OR group_item = 1)
+            AND saved_status='a'";
     $rst = $con->execute($sql);
     if(!$rst) {
         db_error_handler($con, $sql);
     }
     elseif($rst->rowcount()) {
-        if($delete_saved) {
+        if($delete_saved && ($_SESSION['role_short_name'] === 'Admin' || $rst->fields['user_id'] == $session_user_id)) {
             $rec = array();
             $rec['saved_status'] = 'd';
 
@@ -689,6 +684,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.81  2005/01/07 14:20:54  neildogg
+ * - Saved search was being incorrectly called, moved restrictions to deletion only
+ *
  * Revision 1.80  2004/12/27 13:15:54  braverock
  * - add additional database error handling to several of the search parameters
  * - fix problem with CURRENT_USER on some browsers
