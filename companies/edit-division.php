@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.7 2005/01/13 18:22:23 vanmer Exp $
+ * $Id: edit-division.php,v 1.8 2005/01/25 00:05:29 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -43,6 +43,10 @@ $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
 
+$sidebar='';
+$sidebar=do_hook_function('division_sidebar_bottom',$sidebar);
+
+if (!$sidebar) $sidebar = '&nbsp';
 
 $con->close();
 
@@ -91,7 +95,7 @@ start_page($page_title, true, $msg);
         <!-- right column //-->
     <div id="Sidebar">
 
-        &nbsp;
+       <?php echo $sidebar; ?>
 
     </div>
 </div>
@@ -102,6 +106,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.8  2005/01/25 00:05:29  vanmer
+ * - added hook for a division sidebar
+ * - added output for sidebar
+ *
  * Revision 1.7  2005/01/13 18:22:23  vanmer
  * - Basic ACL changes to allow display functionality to be restricted
  *
