@@ -10,7 +10,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-sidebar.php,v 1.6 2004/07/21 22:21:41 neildogg Exp $
+ * $Id: browse-sidebar.php,v 1.7 2004/07/21 22:53:34 neildogg Exp $
  */
 
 //add contact information block on sidebar
@@ -36,7 +36,7 @@ if(!$rst) {
      db_error_handler($con, $sql);
 }
 elseif($rst->rowcount() > 0) {
-    $browse_block .= $rst->getmenu2('activity_type_id', 0, false) . " <input type=submit value=Browse>";
+    $browse_block .= $rst->getmenu2('activity_type_id', 0, false) . " <input type=submit class=button value=Browse>";
 } else {
     $browse_block .= _("No Activities Types");
 }
@@ -68,7 +68,7 @@ $sql_saved = "SELECT saved_title, saved_id
         AND saved_status='a'";
 $rst = $con->execute($sql_saved);
 if($rst->rowcount()) {
-    $browse_block .= $rst->getmenu2('saved_id', 0, false) . " <input type=submit value=Browse>";
+    $browse_block .= $rst->getmenu2('saved_id', 0, false) . " <input type=submit class=button value=Browse>";
 }
 else {
     $browse_block .= _("No Saved Searches");
@@ -82,6 +82,9 @@ $browse_block .= '</td>
 
 /**
  * $Log: browse-sidebar.php,v $
+ * Revision 1.7  2004/07/21 22:53:34  neildogg
+ * - Style sheet button
+ *
  * Revision 1.6  2004/07/21 22:21:41  neildogg
  * - Rearranged sidebar
  *  - Now can browse saved searches
