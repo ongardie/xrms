@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.12 2004/03/22 15:37:06 braverock Exp $
+ * $Id: vars.php,v 1.13 2004/03/22 22:10:23 braverock Exp $
  */
 
 /**
@@ -63,6 +63,10 @@ $xrms_system_id = "XRMS";
 
 // what should this application be called?
 $app_title = 'XRMS';
+
+// set the default country
+// 218 is usally the United States, for example
+$default_country_id = 218;
 
 // replace this with your organization's name
 $system_company_name = 'XRMS';
