@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.73 2005/01/09 18:08:57 vanmer Exp $
+ * $Id: one.php,v 1.74 2005/01/10 20:47:47 neildogg Exp $
  */
 
 //include required files
@@ -223,12 +223,6 @@ if($on_what_table == 'opportunities') {
 /*********************************/
 /*** Include the sidebar boxes ***/
 
-//set up our substitution variables for use in the sidebars
-$ori_on_what_table = $on_what_table;
-$ori_on_what_id = $on_what_id;
-$on_what_table = 'activities';
-$on_what_id = $activity_id;
-$on_what_string = 'activity';
 
 if ($contact_id) {
     // include the contact sidebar code
@@ -243,12 +237,11 @@ if ($company_id) {
 }
 
 //include the contacts-companies sidebar
-if ($contact_id) {
-    $relationship_name = "activity link";
-    $working_direction = "to";
-    $overall_id = $activity_id;
-    require("../relationships/sidebar.php");
+$relationships = array('contacts' => $contact_id, 'companies' => $company_id, 'activities' => $activity_id);
+if(!empty($on_what_table)) {
+    $relationships[$on_what_table] = $on_what_id;
 }
+require("../relationships/sidebar.php");
 
 //include the files sidebar
 require_once( '../files/sidebar.php');
@@ -256,9 +249,6 @@ require_once( '../files/sidebar.php');
 //Add optional tables
 $sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom');
 
-//set on_what_table back to what it was before the sidebar includes
-$on_what_table = $ori_on_what_table;
-$on_what_id    = $ori_on_what_id;
 /** End of the sidebar includes **/
 /*********************************/
 
@@ -486,6 +476,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.74  2005/01/10 20:47:47  neildogg
+ * - Changed to support new relationship sidebar variable requirement
+ *
  * Revision 1.73  2005/01/09 18:08:57  vanmer
  * - moved definition activity_id to above session_check (for ACL)
  * - added default return_url if none is defined

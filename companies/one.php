@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.79 2005/01/09 00:27:17 braverock Exp $
+ * $Id: one.php,v 1.80 2005/01/10 20:47:48 neildogg Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -356,9 +356,7 @@ if ($division_id) { $opportunity_limit_sql .=" AND opportunities.division_id=$di
 require_once("../opportunities/sidebar.php");
 
 //include the contacts-companies sidebar
-$relationship_name = "company link";
-$working_direction = "to";
-$overall_id = $company_id;
+$relationships = array('companies' => $company_id);
 require_once("../relationships/sidebar.php");
 
 // include the files sidebar
@@ -806,6 +804,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.80  2005/01/10 20:47:48  neildogg
+ * - Changed to support new relationship sidebar variable requirement
+ *
  * Revision 1.79  2005/01/09 00:27:17  braverock
  * - change company_content_bottom hook to us $bottom rows instead of the incorrect $sidebar_rows
  *

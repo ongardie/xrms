@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.51 2004/12/24 16:20:17 braverock Exp $
+ * $Id: one.php,v 1.52 2005/01/10 20:47:48 neildogg Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -228,9 +228,7 @@ $opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id
 require_once( $include_locations_location . 'opportunities/sidebar.php');
 
 //include the contacts-companies sidebar
-$working_direction = "from";
-$relationship_name = "company link";
-$overall_id = $contact_id;
+$relationships = array('contacts' => $contact_id);
 require_once( $include_locations_location . 'relationships/sidebar.php');
 
 //include the files sidebar
@@ -564,6 +562,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.52  2005/01/10 20:47:48  neildogg
+ * - Changed to support new relationship sidebar variable requirement
+ *
  * Revision 1.51  2004/12/24 16:20:17  braverock
  * - removed opportunity status code becasue it breaks existing $associate_activities code
  * - fixed formatting problems

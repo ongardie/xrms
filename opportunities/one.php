@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.28 2005/01/07 01:55:07 braverock Exp $
+ * $Id: one.php,v 1.29 2005/01/10 20:48:03 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -213,12 +213,8 @@ require_once("../files/sidebar.php");
 require_once("../notes/sidebar.php");
 
 //include the relationships sidebar
-$relationship_name = "opportunity link";
-$working_direction = "both";
-$overall_id = $opportunity_id;
-$saved_opportunity_id = $opportunity_id;
+$relationships = array('opportunities' => $opportunity_id);
 require("../relationships/sidebar.php");
-$opportunity_id = $saved_opportunity_id;
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -460,6 +456,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.29  2005/01/10 20:48:03  neildogg
+ * - Changed to support new relationship sidebar variable requirement
+ *
  * Revision 1.28  2005/01/07 01:55:07  braverock
  * - add Status definitions link
  *
