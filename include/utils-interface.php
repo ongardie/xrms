@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.37 2004/12/23 20:05:29 daturaarutad Exp $
+ * $Id: utils-interface.php,v 1.38 2004/12/27 17:32:30 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -99,7 +99,7 @@ function http_root_href($url, $text, $title = NULL) {
     return '<a title="'.$title.'" href="'.$http_site_root.$url.'">'.$text.'</a>';
 }
 
-function css_link($url, $name = null, $alt = true, $mtype = 'screen') { 
+function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
     global $http_site_root;
 
     if ( empty($url) )
@@ -107,12 +107,12 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
 
     $onlyIE = strpos($url, '-ie') !== false;
     $ie1 = ( $onlyIE ) ? "<!--[if IE]>\n" : '';
-    $ie2 = ( $onlyIE ) ? "<![endif]-->\n" : ''; 
+    $ie2 = ( $onlyIE ) ? "<![endif]-->\n" : '';
 
     if ( strpos($url, 'print') !== false )
         $mtype = 'print';
 
-    $href  = 'href="'.$url.'" '; 
+    $href  = 'href="'.$url.'" ';
     $media = 'media="'.$mtype.'" ';
 
     if ( empty($name) ) {
@@ -139,11 +139,11 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
     global $http_site_root;
     global $app_title;
-	global $css_theme;
+    global $css_theme;
 
     $msg = status_msg($msg);
 
-   	$curtheme = empty($css_theme) ? 'basic' : $css_theme;
+    $curtheme = empty($css_theme) ? 'basic' : $css_theme;
     $cssroot = $http_site_root.'/css/';
 
 
@@ -152,29 +152,29 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     // If a particular style requires multiple files, specify them as a nested array
     //    array('multi' => array('first.css','second.css','third.css'));
     $cssthemes = array(
-        'basic'      => array($cssroot.'basic/basic.css', 
+        'basic'      => array($cssroot.'basic/basic.css',
                               $http_site_root.'/js/jscalendar/calendar-blue.css'),
         'basic-left' => array($cssroot.'basic/basic-left.css',
                               $cssroot.'basic/basic-left-ie.css',
                               $http_site_root.'/js/jscalendar/calendar-blue.css'),
                       );
 ?>
-<!DOCTYPE HTML PUBLIC 
+<!DOCTYPE HTML PUBLIC
     "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd" />
 <html>
 <head>
   <title><?php echo "$app_title : $page_title"; ?></title>
-<?php 
+<?php
     // CSS styles that apply to all media: basic layout and font/size attributes
     echo css_link($cssroot.'layout.css', null, false, 'all');
-    echo css_link($cssroot.'style.css', null, false, 'all'); 
+    echo css_link($cssroot.'style.css', null, false, 'all');
     // CSS styles that apply only to printed page - should after any 'all' media
-    echo css_link($cssroot.'print.css'); 
-    // CSS styles that apply only to screen rendering 
-    echo css_link($cssroot.'xrmsstyle.css'); 
+    echo css_link($cssroot.'print.css');
+    // CSS styles that apply only to screen rendering
+    echo css_link($cssroot.'xrmsstyle.css');
     // base layout and style mods for display in IE
-    echo css_link($cssroot.'xrmsstyle-ie.css'); 
+    echo css_link($cssroot.'xrmsstyle-ie.css');
 
     // Add stylesheets for defined themes (see comment above, re: $cssthemes)
     // If the URI contains -ie, treat as an ie-only stylesheet
@@ -193,14 +193,18 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 </head>
 <body>
   <div id="page_header"><?php echo $page_title; ?></div>
-<?php 
+<?php
   // Show navbar..
   if ($show_navbar) {
     $session_username = $_SESSION['username'];
 ?>
   <div id="loginbar">
-    <?php echo _("Logged in as") .': ' . $session_username .' &bull; '
-               . http_root_href('/logout.php',             _("Logout")); ?>
+    <?php
+        echo _("Logged in as") .': ' . $session_username .' &bull; '
+               . http_root_href('/logout.php',             _("Logout"))
+               . '<br>';
+        do_hook('loginbar');
+    ?>
   </div>
   <div id="navline">
       <?php echo http_root_href('/private/home.php',       _("Home")); ?> &bull;
@@ -212,7 +216,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
       <?php echo http_root_href('/cases/some.php',         _("Cases")); ?> &bull;
       <?php echo http_root_href('/files/some.php',         _("Files")); ?> &bull;
 
-<?php   
+<?php
     //place the menu_line hook before Reports and Adminstration link
     do_hook ('menuline');
 ?>
@@ -223,7 +227,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
   }
 
   // Show $msg, if present
-  if (strlen($msg) > 0) {  
+  if (strlen($msg) > 0) {
     echo '  <div id="msg">'. $msg ."</div>\n";
   }
 } // end start_page fn
@@ -292,23 +296,26 @@ function jscalendar_includes() {
 
     global $http_site_root;
 
-		global $jscalendar_included;
+        global $jscalendar_included;
 
-		if(!isset($jscalendar_included)) {
-    	echo <<<EOQ
+        if(!isset($jscalendar_included)) {
+        echo <<<EOQ
     <!-- JSCALENDAR SCRIPT INCLUDES -->
     <script type="text/javascript" src="$http_site_root/js/jscalendar/calendar.js"></script>
     <script type="text/javascript" src="$http_site_root/js/jscalendar/lang/calendar-en.js"></script>
     <script type="text/javascript" src="$http_site_root/js/jscalendar/calendar-setup.js"></script>
     <!-- JSEND CALENDAR SCRIPT INCLUDES -->
 EOQ;
-			$jscalendar_included = true;
-		}
+            $jscalendar_included = true;
+        }
 
 } //end jscalendar_includes fn
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.38  2004/12/27 17:32:30  braverock
+ * - added hook 'loginbar' for plugins to reference near the logged in user text.
+ *
  * Revision 1.37  2004/12/23 20:05:29  daturaarutad
  * added check for globally defined CSS theme ($css_theme) to start_page()
  *
