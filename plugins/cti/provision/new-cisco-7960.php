@@ -36,8 +36,8 @@ $mac = $_POST['mac'];
 $vm_password = $_POST['vm_password'];
 
 // DEFAULTS
-$proxy_server = "127.0.0.1";
-$password = "TEST"; // replace with dynamically generated passwords
+$proxy_server = "127.0.0.1"; // CHANGE THIS!
+$telnet_password = "TEST"; // REPLACE THIS!
 
 if (check_object_permission_bool($_SESSION['session_user_id'], 'cti_sip_admin', 'Create')) {
  
@@ -49,37 +49,37 @@ $rec['proxy1_address'] = $proxy_server;
 $rec['line1_name'] = $username . "-1";
 $rec['line1_displayname'] = $username . "-1";
 $rec['line1_authname'] = $username . "-1";
-$rec['line1_password'] = $password;
+$rec['line1_password'] = mt_rand(10000000,99999999);
 
 $rec['proxy2_address'] = $proxy_server;
 $rec['line2_name'] = $username . "-2";
 $rec['line2_displayname'] = $username . "-2";
 $rec['line2_authname'] = $username . "-2";
-$rec['line2_password'] = $password;
+$rec['line2_password'] = mt_rand(10000000,99999999);
 
 $rec['proxy3_address'] = $proxy_server;
 $rec['line3_name'] = $username . "-3";
 $rec['line3_displayname'] = $username . "-3";
 $rec['line3_authname'] = $username . "-3";
-$rec['line3_password'] = $password;
+$rec['line3_password'] = mt_rand(10000000,99999999);
 
 $rec['proxy4_address'] = $proxy_server;
 $rec['line4_name'] = $username . "-4";
 $rec['line4_displayname'] = $username . "-4";
 $rec['line4_authname'] = $username . "-4";
-$rec['line4_password'] = $password;
+$rec['line4_password'] = mt_rand(10000000,99999999);
 
 $rec['proxy5_address'] = $proxy_server;
 $rec['line5_name'] = $username . "-5";
 $rec['line5_displayname'] = $username . "-5";
 $rec['line5_authname'] = $username . "-5";
-$rec['line5_password'] = $password;
+$rec['line5_password'] = mt_rand(10000000,99999999);
 
 $rec['proxy6_address'] = $proxy_server;
 $rec['line6_name'] = $username . "-6";
 $rec['line6_displayname'] = $username . "-6";
 $rec['line6_authname'] = $username . "-6";
-$rec['line6_password'] = $password;
+$rec['line6_password'] = mt_rand(10000000,99999999);
 
 $rec['proxy_emergency'] = "";
 $rec['proxy_emergency_port'] = "";
@@ -104,7 +104,7 @@ $rec['time_zone'] = "EST";
 $rec['telnet_level'] = "2";
 
 $rec['phone_prompt'] = "cisco";
-$rec['phone_password'] = "oliver";
+$rec['phone_password'] = $telnet_password;
 
 $rec['enable_vad'] = "0";
 
@@ -129,6 +129,10 @@ header("Location: " . $http_site_root . "/plugins/cti/provision/new-cisco-7960-2
 
 /**
  * $Log: new-cisco-7960.php,v $
+ * Revision 1.2  2005/04/03 19:18:45  gpowers
+ * - updated to use mt_rand(10000000,99999999) for sip passwords
+ *   - this should be good enough for phones on private LANs.
+ *
  * Revision 1.1  2005/03/31 22:39:59  gpowers
  * - basic Cisco 7960 CNF file setup
  * - asterisk sip.conf config
