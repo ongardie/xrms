@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.99 2004/10/26 17:29:02 introspectshun Exp $
+ * $Id: utils-misc.php,v 1.100 2004/11/10 15:10:18 maulani Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -564,7 +564,7 @@ function set_system_parameter(&$con, $param, $new_val) {
         $datetime_val = $sysst->fields['datetime_val'];
         if (!is_null($string_val)) {
             $my_field='string_val';
-            $set_val = "'" . $new_val . "'";
+            $set_val = $new_val;
         } elseif (!is_null($int_val)) {
             $my_field='int_val';
             $set_val = $new_val;
@@ -1299,6 +1299,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.100  2004/11/10 15:10:18  maulani
+ * - Fix bug introduced when update sql changed to use GetUpdateSQL routine.
+ *   Quotes will no longer be added to string system parameters
+ *
  * Revision 1.99  2004/10/26 17:29:02  introspectshun
  * - Remove blank lines in address by getting rid of double BRs (fixed)
  *   - couldn't match BR at beginning of string due to nl2br call earlier
