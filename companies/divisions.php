@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.9 2005/01/13 18:22:50 vanmer Exp $
+ * $Id: divisions.php,v 1.10 2005/01/25 23:30:57 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -54,6 +54,7 @@ $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
 
 $con->close();
+$new_division_form = do_hook_function('new_division_form', &$new_division_form_extra);
 
 $page_title = $company_name . " - " . _("Divisions");
 start_page($page_title, true, $msg);
@@ -85,6 +86,7 @@ start_page($page_title, true, $msg);
 			<td class=widget_label><?php echo _("Division Description"); ?></td>
 			<td class=widget_content_form_element><textarea rows=8 cols=80 name=description></textarea></td>
 		</tr>
+                <?php echo $new_division_form_extra; ?>
 		<tr>
 			<td class=widget_content_form_element colspan=2><?php echo render_create_button('Add'); ?></td>
 		</tr>
@@ -110,6 +112,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.10  2005/01/25 23:30:57  vanmer
+ * - added new hook for addition to form for adding new division
+ *
  * Revision 1.9  2005/01/13 18:22:50  vanmer
  * - Basic ACL changes to allow display functionality to be restricted
  *
