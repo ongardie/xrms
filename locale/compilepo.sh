@@ -12,7 +12,7 @@ MONAME=xrms.mo
 # ** Philipe Mingo <mingo@rotedic.com>
 # ** Konstantin Riabitsev <icon@duke.edu>
 # **
-# **  $Id: compilepo.sh,v 1.2 2004/08/20 15:29:41 braverock Exp $
+# **  $Id: compilepo.sh,v 1.3 2004/08/21 20:12:39 johnfawcett Exp $
 
 if [ -z "$1" ]; then
  echo "USAGE: compilepo [localename]"
@@ -20,7 +20,7 @@ if [ -z "$1" ]; then
 fi
 
 WORKDIR=../locale
-LOCALEDIR=$WORKDIR/LC_MESSAGES/$1
+LOCALEDIR=$WORKDIR/$1/LC_MESSAGES
 
 if [ ! -d $LOCALEDIR ]; then
  # lessee if it's been renamed.
