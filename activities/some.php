@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.94 2005/02/25 03:41:02 daturaarutad Exp $
+ * $Id: some.php,v 1.95 2005/02/28 22:18:38 daturaarutad Exp $
  */
 
 // handle includes
@@ -657,15 +657,15 @@ start_page($page_title, true, $msg);
 $_SESSION["search_sql"]=$sql;
 
 $columns = array();
-$columns[] = array('name' => _('Overdue'), 'index' => 'overdue');
-$columns[] = array('name' => _('Type'), 'index' => 'type');
-$columns[] = array('name' => _('Contact'), 'index' => 'contact');
-$columns[] = array('name' => _('Title'), 'index' => 'title');
-$columns[] = array('name' => _('Scheduled'), 'index' => 'scheduled');
-$columns[] = array('name' => _('Due'), 'index' => 'due');
-$columns[] = array('name' => _('Company'), 'index' => 'company');
-$columns[] = array('name' => _('Owner'), 'index' => 'owner');
-$columns[] = array('name' => _('%'), 'index' => '%');
+$columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'type');
+$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact');
+$columns[] = array('name' => _('Title'), 'index_sql' => 'title');
+$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled');
+$columns[] = array('name' => _('Due'), 'index_sql' => 'due');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
+$columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
+$columns[] = array('name' => _('%'), 'index_sql' => '%');
 
 
 
@@ -763,6 +763,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.95  2005/02/28 22:18:38  daturaarutad
+ * changed columns to be index_sql so that the pager knows it doesnt have to get the whole data set
+ *
  * Revision 1.94  2005/02/25 03:41:02  daturaarutad
  * updated to use GUP_Pager class
  *
