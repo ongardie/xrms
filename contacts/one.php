@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.60 2005/02/10 04:35:19 braverock Exp $
+ * $Id: one.php,v 1.61 2005/02/10 19:41:28 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -34,7 +34,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
 $sql = "select cont.*,
-c.company_id, company_name, company_code, home_address_id
+c.company_id, company_name, company_code, home_address_id,
 u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner,
 account_status_display_html, crm_status_display_html
 from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm
@@ -588,6 +588,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.61  2005/02/10 19:41:28  braverock
+ * - add missing comma
+ *
  * Revision 1.60  2005/02/10 04:35:19  braverock
  * - add display support for home_address_id
  * - hide seldom used and custom fields if they don't have values
