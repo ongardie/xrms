@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.23 2004/07/27 13:13:30 braverock Exp $
+ * $Id: index.php,v 1.24 2004/08/17 17:31:45 gpowers Exp $
  */
 
 //include required stuff
@@ -128,8 +128,25 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
-                    <a href="plugin/plugin-admin.php"><?php echo _("Plugin Administration"); ?></a>
+                    <a href="country-address-format/index.php"><?php echo _("Country Localization Formats"); ?></a>
                 </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="activity-templates/some.php"><?php echo _("Activity Templates"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="system-parameters/some.php"><?php echo ("System Parameters"); ?></a>
+                </td>
+            </tr>
+        </table>
+
+        <!-- types and statusest //-->
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header><?php echo _("Types and Statuses"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -206,23 +223,19 @@ start_page($page_title, true, $msg);
                     <a href="campaign-statuses/some.php"><?php echo _("Campaign Statuses"); ?></a>
                 </td>
             </tr>
+        </table>
+
+        <!-- plugins //-->
+        <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_content>
-                    <a href="country-address-format/index.php"><?php echo _("Country Localization Formats"); ?></a>
-                </td>
-            </tr>
-                <tr>
-                <td class=widget_content>
-                    <a href="activity-templates/some.php"><?php echo _("Activity Templates"); ?></a>
-                </td>
+                <td class=widget_header><?php echo _("Plugins"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
-                    <a href="system-parameters/some.php"><?php echo ("System Parameters"); ?></a>
+                    <a href="plugin/plugin-admin.php"><?php echo _("Plugin Activation"); ?></a>
                 </td>
             </tr>
-
-
+            <?php do_hook ('plugin_admin'); ?>
         </table>
 
     </div>
@@ -235,6 +248,12 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.24  2004/08/17 17:31:45  gpowers
+ * - added sidebar section headings: Manage, Types and Statuses, Plugins
+ * - changed "Plugin Administration" to "Plugin Activation"
+ *   - each plugin should provide it's own "Administration"
+ * - added 'plugin_admin' hook in "Plugins" section
+ *
  * Revision 1.23  2004/07/27 13:13:30  braverock
  * - add export-company-address and export-companies-ldap to the list
  *
