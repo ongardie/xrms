@@ -1,0 +1,1 @@
+update activities set ends_at = scheduled_at where ends_at is null;
