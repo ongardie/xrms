@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.45 2004/06/16 20:41:07 gpowers Exp $
+ * $Id: one.php,v 1.46 2004/06/28 20:04:21 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -546,6 +546,11 @@ function openNewsWindow() {
         </table>
 
         <?php jscalendar_includes(); ?>
+<?php
+    //place the plug-in hook before the Activities
+    do_hook ('company_detail');
+?>
+
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
@@ -637,6 +642,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.46  2004/06/28 20:04:21  maulani
+ * - Add plug-in hook similar to hook on opportunities page
+ *
  * Revision 1.45  2004/06/16 20:41:07  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5
