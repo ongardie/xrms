@@ -46,7 +46,7 @@ start_page($page_title, true, $msg);
 		<td class=lcol width=65% valign=top>
 
         <form action=email-2.php method=post>
-		<table class=widget cellspacing=1 width=100%>
+		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=20>E-Mail Templates</td>
 			</tr>

@@ -2,7 +2,7 @@
 /**
  * Edit company relationships
  *
- * $Id: relationships.php,v 1.2 2004/04/08 17:00:59 maulani Exp $
+ * $Id: relationships.php,v 1.3 2004/04/16 22:19:38 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -87,14 +87,13 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <!-- former name //-->
         <form action=add-former-name.php method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Former Names</td>
             </tr>
@@ -118,7 +117,7 @@ start_page($page_title, true, $msg);
 
         <form action=add-relationship.php method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=3>Relationships</td>
             </tr>
@@ -138,17 +137,15 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
-        <!-- right column //-->
-        <td class=rcol width=34% valign=top>
+    </div>
 
-        </td>
-    </tr>
-</table>
+        <!-- right column //-->
+    <div id="Sidebar">
+
+        &nbsp;
+
+    </div>
+</div>
 
 <?php
 
@@ -156,10 +153,12 @@ end_page();
 
 /**
  * $Log: relationships.php,v $
+ * Revision 1.3  2004/04/16 22:19:38  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.2  2004/04/08 17:00:59  maulani
  * - Update javascript declaration
  * - Add phpdoc
- *
  *
  */
 ?>

@@ -2,7 +2,7 @@
 /**
  * Create a note
  *
- * $Id: new.php,v 1.2 2004/04/08 16:59:47 maulani Exp $
+ * $Id: new.php,v 1.3 2004/04/16 22:22:26 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -37,7 +37,7 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="on_what_table" value="<?php echo $on_what_table; ?>">
         <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Attach Note</td>
             </tr>
@@ -63,9 +63,8 @@ start_page($page_title, true, $msg);
 
         &nbsp;
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -73,6 +72,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.3  2004/04/16 22:22:26  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.2  2004/04/08 16:59:47  maulani
  * - Update javascript declaration
  * - Add phpdoc

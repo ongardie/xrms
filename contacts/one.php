@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.16 2004/04/12 16:20:38 maulani Exp $
+ * $Id: one.php,v 1.17 2004/04/16 22:20:55 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -313,7 +313,7 @@ function markComplete() {
     <tr>
         <td class=lcol width=70% valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Contact Details</td>
             </tr>
@@ -481,7 +481,7 @@ function markComplete() {
         <input type=hidden name=company_id value="<?php echo $company_id; ?>">
         <input type=hidden name=contact_id value="<?php echo $contact_id; ?>">
         <input type=hidden name=activity_status value="o">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=6>Activities</td>
             </tr>
@@ -513,7 +513,7 @@ function markComplete() {
         <td class=rcol width=29% valign=top>
 
         <!-- categories //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Categories</td>
             </tr>
@@ -560,6 +560,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.17  2004/04/16 22:20:55  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.16  2004/04/12 16:20:38  maulani
  * - Fix bug where check was erroneously made for $rst instead of $rst2
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.3 2004/04/08 16:58:23 maulani Exp $
+ * $Id: edit.php,v 1.4 2004/04/16 22:20:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -69,7 +69,7 @@ start_page($page_title, true, $msg);
 
         <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=campaign_id value=<?php  echo $campaign_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Campaign Details</td>
             </tr>
@@ -111,17 +111,15 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
-        <!-- right column //-->
-        <td class=rcol width=43% valign=top>
+    </div>
 
-        </td>
-    </tr>
-</table>
+        <!-- right column //-->
+    <div id="Sidebar">
+
+        &nbsp;
+
+    </div>
+</div>
 
 <script language="JavaScript" type="text/javascript">
 
@@ -173,6 +171,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.4  2004/04/16 22:20:55  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.3  2004/04/08 16:58:23  maulani
  * - Update javascript declaration
  * - Add phpdoc

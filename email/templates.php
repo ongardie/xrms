@@ -1,4 +1,11 @@
 <?php
+/**
+ * /email/templates.php
+ *
+ * Email templates
+ *
+ * $Id: templates.php,v 1.2 2004/04/16 22:19:58 maulani Exp $
+ */
 
 require_once('/demo/include/vars.php');
 require_once('/demo/include/utils-interface.php');
@@ -38,11 +45,10 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=20>E-Mail Templates</td>
             </tr>
@@ -52,16 +58,25 @@ start_page($page_title, true, $msg);
             <?php  echo $tablerows ?>
         </table>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=33% valign=top>
+    <div id="Sidebar">
 
-        </td>
-    </tr>
-</table>
+        &nbsp;
 
-<?php end_page(); ?>
+    </div>
+</div>
+
+<?php
+
+end_page();
+
+/**
+ * $Log: templates.php,v $
+ * Revision 1.2  2004/04/16 22:19:58  maulani
+ * - Add CSS2 positioning
+ *
+ *
+ */
+?>

@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.1 2004/01/26 19:18:02 braverock Exp $
+ * $Id: edit-division.php,v 1.2 2004/04/16 22:19:38 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -39,14 +39,13 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=55% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=edit-division-2.php method=post>
         <input type=hidden name=company_id value=<?php echo $company_id; ?>>
         <input type=hidden name=division_id value=<?php echo $division_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Edit Division</td>
             </tr>
@@ -68,17 +67,15 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
-        <!-- right column //-->
-        <td class=rcol width=43% valign=top>
+    </div>
 
-        </td>
-    </tr>
-</table>
+        <!-- right column //-->
+    <div id="Sidebar">
+
+        &nbsp;
+
+    </div>
+</div>
 
 <?php
 
@@ -86,6 +83,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.2  2004/04/16 22:19:38  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.1  2004/01/26 19:18:02  braverock
  * - added company division pages and fields
  * - added phpdoc

@@ -2,7 +2,7 @@
 /**
  * Create a graph of activity for the requested user.
  *
- * $Id: user-activity.php,v 1.2 2004/01/26 15:52:42 braverock Exp $
+ * $Id: user-activity.php,v 1.3 2004/04/16 22:21:32 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -75,7 +75,7 @@ start_page($page_title, true, $msg);
     <tr>
         <td class=lcol width=75% valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Activity Summary</td>
             </tr>
@@ -108,9 +108,8 @@ start_page($page_title, true, $msg);
         <!-- right column //-->
         <td class=rcol width=23% valign=top>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -118,6 +117,9 @@ end_page();
 
 /**
  * $Log: user-activity.php,v $
+ * Revision 1.3  2004/04/16 22:21:32  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.2  2004/01/26 15:52:42  braverock
  * - fixed short tags
  * - added phpdoc

@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.6 2004/03/22 22:44:29 braverock Exp $
+ * $Id: one.php,v 1.7 2004/04/16 22:21:19 maulani Exp $
  */
 
 //include required files
@@ -95,7 +95,7 @@ start_page($page_title, true, $msg);
 
 <script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<table border=0 cellpadding=0 cellspacing=0>
     <tr>
         <td class=lcol width=45% valign=top>
 
@@ -103,7 +103,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
         <input type=hidden name=current_activity_status value="<?php  echo $activity_status; ?>">
         <input type=hidden name=activity_id value="<?php  echo $activity_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>About This Activity</td>
             </tr>
@@ -193,6 +193,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/04/16 22:21:19  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.6  2004/03/22 22:44:29  braverock
  * - add htmlspecialchars around activity_title and activity_description
  *   - fixes SF bug 921295

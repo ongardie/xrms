@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.5 2004/04/08 17:00:11 maulani Exp $
+ * $Id: one.php,v 1.6 2004/04/16 22:22:06 maulani Exp $
  */
 
 //include required files
@@ -52,7 +52,7 @@ start_page($page_title, true, $msg);
         <form enctype="multipart/form-data" action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=return_url value="<?php  echo $return_url ?>">
         <input type=hidden name=file_id value="<?php  echo $file_id ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>File Information</td>
             </tr>
@@ -144,6 +144,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.6  2004/04/16 22:22:06  maulani
+ *- Add CSS2 positioning
+ *
  *Revision 1.5  2004/04/08 17:00:11  maulani
  *- Update javascript declaration
  *- Add phpdoc

@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.4 2004/04/08 17:00:11 maulani Exp $
+ * $Id: new.php,v 1.5 2004/04/16 22:22:06 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -58,7 +58,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=on_what_table value="<?php  echo $on_what_table ?>">
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id ?>">
         <input type=hidden name=return_url value="<?php  echo $return_url ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>File Information</td>
             </tr>
@@ -127,6 +127,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.5  2004/04/16 22:22:06  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.4  2004/04/08 17:00:11  maulani
  * - Update javascript declaration
  * - Add phpdoc

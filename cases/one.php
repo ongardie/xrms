@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.9 2004/04/10 14:59:47 braverock Exp $
+ * $Id: one.php,v 1.10 2004/04/16 22:21:59 maulani Exp $
  */
 
 //include required files
@@ -212,7 +212,7 @@ start_page($page_title, true, $msg);
     <tr>
         <td class=lcol width=70% valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Case Details</td>
             </tr>
@@ -315,7 +315,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=on_what_table value="cases">
         <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
         <input type=hidden name=activity_status value="o">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=6>Activities</td>
             </tr>
@@ -346,7 +346,7 @@ start_page($page_title, true, $msg);
         <td class=rcol width=29% valign=top>
 
         <!-- categories //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Categories</td>
             </tr>
@@ -364,9 +364,8 @@ start_page($page_title, true, $msg);
         <!-- files //-->
         <?php echo $file_rows; ?>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -374,6 +373,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2004/04/16 22:21:59  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.9  2004/04/10 14:59:47  braverock
  * - display Case Id on Case details screen
  *   - apply SF patch 925619 submitted by Glenn Powers

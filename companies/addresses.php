@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.7 2004/04/08 17:00:59 maulani Exp $
+ * $Id: addresses.php,v 1.8 2004/04/16 22:19:38 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -94,14 +94,13 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <!-- new address //-->
         <form action=add-address.php method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>New Address</td>
             </tr>
@@ -149,7 +148,7 @@ start_page($page_title, true, $msg);
 
         <form action=set-address-defaults.php method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=6>Addresses</td>
             </tr>
@@ -169,17 +168,15 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
-        <!-- right column //-->
-        <td class=rcol width=34% valign=top>
+    </div>
 
-        </td>
-    </tr>
-</table>
+        <!-- right column //-->
+    <div id="Sidebar">
+
+        &nbsp;
+
+    </div>
+</div>
 
 <?php
 
@@ -187,6 +184,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.8  2004/04/16 22:19:38  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.7  2004/04/08 17:00:59  maulani
  * - Update javascript declaration
  * - Add phpdoc

@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.24 2004/04/10 16:12:29 braverock Exp $
+ * $Id: one.php,v 1.25 2004/04/16 22:19:38 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -373,7 +373,7 @@ function openNewsWindow() {
     <tr>
         <td class=lcol width=70% valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header><?php  echo $strCompaniesOneCompanyDetailsTitle; ?></td>
             </tr>
@@ -538,7 +538,7 @@ function openNewsWindow() {
         </table>
 
         <!-- contacts //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=6><?php  echo $strCompaniesOneContactsTitle; ?></td>
             </tr>
@@ -562,7 +562,7 @@ function openNewsWindow() {
         <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=7><?php  echo $strCompaniesOneActivitiesTitle; ?></td>
             </tr>
@@ -600,7 +600,7 @@ function openNewsWindow() {
 
         <!-- categories //-->
         <div id='category_sidebar'>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header><?php  echo $strCompaniesOneCategoriesTitle; ?></td>
             </tr>
@@ -648,6 +648,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.25  2004/04/16 22:19:38  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.24  2004/04/10 16:12:29  braverock
  * - add calendar pop-up to date entry in new activity
  *   - apply SF patch 927141 submitted by "s-t"

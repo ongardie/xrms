@@ -2,7 +2,7 @@
 /**
  * View an opportunity
  *
- * $Id: opportunity-view.php,v 1.2 2004/04/08 17:13:06 maulani Exp $
+ * $Id: opportunity-view.php,v 1.3 2004/04/16 22:22:41 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -40,7 +40,7 @@ start_page($page_title);
     <tr>
         <td class=lcol width=100% valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Opportunity Statuses</td>
             </tr>
@@ -69,6 +69,9 @@ end_page();
 
 /**
  * $Log: opportunity-view.php,v $
+ * Revision 1.3  2004/04/16 22:22:41  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.2  2004/04/08 17:13:06  maulani
  * - Update javascript declaration
  * - Add phpdoc

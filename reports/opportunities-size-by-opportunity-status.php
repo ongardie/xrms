@@ -71,7 +71,7 @@ start_page($page_title, true, $msg);
     <tr>
         <td class=lcol width=75% valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Opportunities (Size) by Status</td>
             </tr>

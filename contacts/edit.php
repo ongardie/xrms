@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.7 2004/01/26 19:13:34 braverock Exp $
+ * $Id: edit.php,v 1.8 2004/04/16 22:20:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -112,7 +112,7 @@ start_page($page_title, true, $msg);
 
         <form action=edit-2.php method=post>
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Contact Information</td>
             </tr>
@@ -236,9 +236,8 @@ start_page($page_title, true, $msg);
         <!-- right column //-->
         <td class=rcol width=68% valign=top>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -246,6 +245,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.8  2004/04/16 22:20:55  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.7  2004/01/26 19:13:34  braverock
  * - added company division fields
  * - added phpdoc

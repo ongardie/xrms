@@ -2,7 +2,7 @@
 /**
  * Edit a campaign
  *
- * $Id: one.php,v 1.6 2004/04/08 16:58:23 maulani Exp $
+ * $Id: one.php,v 1.7 2004/04/16 22:20:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -129,7 +129,7 @@ start_page($page_title, true, $msg);
     <tr>
         <td class=lcol width=70% valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Campaign Details</td>
             </tr>
@@ -198,7 +198,7 @@ start_page($page_title, true, $msg);
         <td class=rcol width=29% valign=top>
 
         <!-- categories //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Categories</td>
             </tr>
@@ -215,7 +215,7 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="on_what_table" value="campaigns">
         <input type="hidden" name="on_what_id" value="<?php echo $campaign_id ?>">
         <input type="hidden" name="return_url" value="/campaigns/one.php?campaign_id=<?php echo $campaign_id ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Notes</td>
             </tr>
@@ -231,7 +231,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=on_what_table value="campaigns">
         <input type=hidden name=on_what_id value="<?php  echo $campaign_id; ?>">
         <input type=hidden name=return_url value="/campaigns/one.php?campaign_id=<?php  echo $campaign_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=5>Files</td>
             </tr>
@@ -249,9 +249,8 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -259,6 +258,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/04/16 22:20:55  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.6  2004/04/08 16:58:23  maulani
  * - Update javascript declaration
  * - Add phpdoc

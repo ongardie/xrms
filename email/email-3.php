@@ -55,7 +55,7 @@ start_page($page_title, true, $msg);
 		<td class=lcol width=55% valign=top>
 
         <form action=email-4.php method=post>
-		<table class=widget cellspacing=1 width=100%>
+		<table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=5>Confirm Recipients</td>
             </tr>

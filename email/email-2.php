@@ -51,7 +51,7 @@ function saveAsNewTemplate() {
 		<td class=lcol width=55% valign=top>
 
         <form action=email-3.php method=post>
-		<table class=widget cellspacing=1 width=100%>
+		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=2>Edit Message - <?php  echo $email_template_title ?></td>
 			</tr>

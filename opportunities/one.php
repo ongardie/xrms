@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.12 2004/04/08 17:13:06 maulani Exp $
+ * $Id: one.php,v 1.13 2004/04/16 22:22:41 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -227,7 +227,7 @@ function markComplete() {
     <tr>
         <td class=lcol width=70% valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Opportunity Details</td>
             </tr>
@@ -353,7 +353,7 @@ function markComplete() {
         <input type=hidden name=on_what_table value="opportunities">
         <input type=hidden name=on_what_id value="<?php  echo $opportunity_id; ?>">
         <input type=hidden name=activity_status value="o">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=6>Activities</td>
             </tr>
@@ -384,7 +384,7 @@ function markComplete() {
         <td class=rcol width=29% valign=top>
 
         <!-- categories //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header>Categories</td>
             </tr>
@@ -402,9 +402,8 @@ function markComplete() {
         <!-- files //-->
         <?php echo $file_rows; ?>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -412,6 +411,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2004/04/16 22:22:41  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.12  2004/04/08 17:13:06  maulani
  * - Update javascript declaration
  * - Add phpdoc

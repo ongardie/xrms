@@ -52,48 +52,45 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+	
+	<!-- new division //-->
+	<form action=add-division.php method=post>
+	<input type=hidden name=company_id value=<?php  echo $company_id; ?>>
+	<table class=widget cellspacing=1>
+		<tr>
+			<td class=widget_header colspan=2>New Division</td>
+		</tr>
+		<tr>
+			<td class=widget_label>Company</td>
+			<td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
+		</tr>
+		<tr>
+			<td class=widget_label>Division Name</td>
+			<td class=widget_content_form_element><input type=text name=division_name size=30></td>
+		</tr>
+		<tr>
+			<td class=widget_label>Division Description</td>
+			<td class=widget_content_form_element><textarea rows=8 cols=80 name=description></textarea></td>
+		</tr>
+		<tr>
+			<td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+		</tr>
+	</table>
+	</form>
+	
+	<table class=widget cellspacing=1>
+		<tr>
+			<td class=widget_header colspan=2>Divisions</td>
+		</tr>
+		<tr>
+			<td class=widget_label>Name</td>
+			<td class=widget_label>Description</td>
+		</tr>
+		<?php  echo $division_html; ?>
+	</table>
 
-        <!-- new division //-->
-        <form action=add-division.php method=post>
-        <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header colspan=2>New Division</td>
-            </tr>
-            <tr>
-                <td class=widget_label>Company</td>
-                <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
-            </tr>
-            <tr>
-                <td class=widget_label>Division Name</td>
-                <td class=widget_content_form_element><input type=text name=division_name size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label>Division Description</td>
-                <td class=widget_content_form_element><textarea rows=8 cols=80 name=description></textarea></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
-            </tr>
-        </table>
-        </form>
-
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header colspan=2>Divisions</td>
-            </tr>
-            <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Description</td>
-            </tr>
-            <?php  echo $division_html; ?>
-        </table>
-
-    </tr>
-</table>
+</div>
 
 <?php
 
@@ -101,6 +98,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.2  2004/04/16 22:19:38  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.1  2004/01/26 19:18:02  braverock
  * - added company division pages and fields
  * - added phpdoc

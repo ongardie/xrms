@@ -2,7 +2,7 @@
 /**
  * Set admin items for a company
  *
- * $Id: admin.php,v 1.3 2004/04/08 17:00:59 maulani Exp $
+ * $Id: admin.php,v 1.4 2004/04/16 22:19:38 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -60,13 +60,12 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=25% valign=top>
+<div id="Main">
+    <div id="Content">
 
 		<form action=admin-2.php method=post>
 		<input type=hidden name=company_id value=<?php echo $company_id; ?>>
-		<table class=widget cellspacing=1 width=100%>
+		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=2>Edit Account Information</td>
 			</tr>
@@ -106,7 +105,7 @@ start_page($page_title, true, $msg);
 
 		<form action="delete.php" method=post onsubmit="javascript: return confirm('Delete Company?');">
 		<input type=hidden name=company_id value="<?php echo $company_id; ?>">
-		<table class=widget cellspacing=1 width=100%>
+		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=4>Delete Company</td>
 			</tr>
@@ -119,17 +118,15 @@ start_page($page_title, true, $msg);
 		</table>
 		</form>
 
-		</td>
-		<!-- gutter //-->
-		<td class=gutter width=2%>
-		&nbsp;
-		</td>
-		<!-- right column //-->
-		<td class=rcol width=73% valign=top>		
+    </div>
+
+        <!-- right column //-->
+    <div id="Sidebar">
+
         &nbsp;
-		</td>
-	</tr>
-</table>
+        
+    </div>
+</div>
 
 <?php
 
@@ -137,6 +134,9 @@ end_page();
 
 /**
  * $Log: admin.php,v $
+ * Revision 1.4  2004/04/16 22:19:38  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.3  2004/04/08 17:00:59  maulani
  * - Update javascript declaration
  * - Add phpdoc

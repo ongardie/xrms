@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.5 2004/04/08 17:13:06 maulani Exp $
+ * $Id: edit.php,v 1.6 2004/04/16 22:22:41 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -150,7 +150,7 @@ start_page($page_title, true, $msg);
 
         <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=opportunity_id value=<?php  echo $opportunity_id; ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Opportunity Details</td>
             </tr>
@@ -272,6 +272,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.6  2004/04/16 22:22:41  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.5  2004/04/08 17:13:06  maulani
  * - Update javascript declaration
  * - Add phpdoc

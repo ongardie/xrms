@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.6 2004/04/16 14:46:28 maulani Exp $
+ * $Id: some.php,v 1.7 2004/04/16 22:22:06 maulani Exp $
  */
 
 //include required files
@@ -301,7 +301,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-        <table class=widget cellspacing=1 width="100%">
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=7>Search Criteria</td>
             </tr>
@@ -353,7 +353,7 @@ $con->close();
     <div id="Sidebar">
 
         <!-- recently viewed support items //-->
-        <table class=widget cellspacing=1 width="100%">
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Recently Viewed</td>
             </tr>
@@ -408,6 +408,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/04/16 22:22:06  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.6  2004/04/16 14:46:28  maulani
  * - Clean HTML so page will validate
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.3 2004/04/08 16:58:23 maulani Exp $
+ * $Id: new.php,v 1.4 2004/04/16 22:20:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -48,7 +48,7 @@ start_page($page_title, true, $msg);
 
         <form action=new-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id ?>>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Campaign Details</td>
             </tr>
@@ -152,6 +152,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.4  2004/04/16 22:20:55  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.3  2004/04/08 16:58:23  maulani
  * - Update javascript declaration
  * - Add phpdoc
