@@ -8,7 +8,7 @@
  *
  * @todo Move variable substitutions for actvity templates into a user-definable table.
  *
- * $Id: workflow-activities.php,v 1.7 2004/08/19 21:41:50 neildogg Exp $
+ * $Id: workflow-activities.php,v 1.8 2004/09/17 20:02:15 neildogg Exp $
  */
 
 $sql = "select * from activity_templates
@@ -21,13 +21,14 @@ $rst = $con->execute($sql);
 
 //generates insert statement to add activities to the current list
 $cnt = 0;
-if(!$activity_record_status) {
+if(empty($activity_record_status)) {
     $activity_record_status = 'a';
 }
 if ($rst) {
     while (!$rst->EOF) {
 
         //get the field values from the next record in the query
+        $activity_template_id = $rst->fields['activity_template_id'];
         $activity_type_id = $rst->fields['activity_type_id'];
         $activity_title = $rst->fields['activity_title'];
         $default_text = $rst->fields['default_text'];
@@ -99,6 +100,8 @@ if ($rst) {
         $tbl = 'activities';
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
+        
+        do_hook_function('workflow_addition', $activity_template_id);
 
         $rst->movenext();
     }
@@ -107,6 +110,10 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.8  2004/09/17 20:02:15  neildogg
+ * - Remove uninitialized values
+ *  - Added hook
+ *
  * Revision 1.7  2004/08/19 21:41:50  neildogg
  * - Allows a default description added to
  *  - auto created activities
