@@ -35,7 +35,7 @@ $no_update = false;
 $sql = "select opportunity_status_id from opportunities where opportunity_id=$opportunity_id";
 $rst = $con->execute($sql);
 
-                                                                                                                         
+
 $old_status = $rst->fields['opportunity_status_id'];
 if ($old_status != $opportunity_status_id) {
 
@@ -43,16 +43,16 @@ if ($old_status != $opportunity_status_id) {
     $on_what_id_template = $opportunity_status_id;
     $on_what_table_template = "opportunity_statuses";
 
-    //check to see if there are open activities 
+    //check to see if there are open activities
     //  from the previous status
-    $sql = "select * from activities 
-	where on_what_status=$old_status 
-	and on_what_table='$on_what_table' 
-	and on_what_id=$on_what_id
-	and contact_id=$contact_id
-	and company_id=$company_id
-	and activity_status='o'
-	and activity_record_status='a'";
+    $sql = "select * from activities
+        where on_what_status=$old_status
+        and on_what_table='$on_what_table'
+        and on_what_id=$on_what_id
+        and contact_id=$contact_id
+        and company_id=$company_id
+        and activity_status='o'
+        and activity_record_status='a'";
 
     $rst = $con->execute($sql);
     $activity_id = $rst->fields['activity_id'];
@@ -60,13 +60,13 @@ if ($old_status != $opportunity_status_id) {
     //if there is only one field, the result set is empty (no old activities)
     //  otherwise prompt the user
     if (count($rst->fields) > 1) {
-	header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id");
-	$no_update = true;
+        header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id");
+        $no_update = true;
     }
     $rst->close();
 
     if (!$no_update) {
-	require_once("../activities/workflow-activities.php");
+        require_once("../activities/workflow-activities.php");
     }
 }
 
@@ -84,7 +84,7 @@ if (!$no_update) {
     $rec['probability'] = $probability;
     $rec['opportunity_title'] = $opportunity_title;
     $rec['opportunity_description'] = $opportunity_description;
-    $rec['close_at'] = $con->DBDate($close_at . ' 23:59:59');
+    $rec['close_at'] = strtotime('+23 hours 59 minutes',strtotime($close_at));
     $rec['last_modified_at'] = time();
     $rec['last_modified_by'] = $session_user_id;
 
