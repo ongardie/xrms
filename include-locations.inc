@@ -1,40 +1,40 @@
 <?php
 /**
- * This file is defines where the include directory for XRMS is, 
+ * This file is defines where the include directory for XRMS is,
  * and sets the error reporting level.
  *
  * Ideally, your include directory will be outside of the web server document root.
  *
  * The include directory needs to have the trailing slash to the directory.
  *
- * If you are running the webserver in a chroot environment, the first 
+ * If you are running the webserver in a chroot environment, the first
  * slash in the include path will be relative to the chroot path.
  *
- * The error reporting level for XRMS is intentionally set to 
- * E_ALL and not E_NOTICE.  This should allow all real errors and warnings to 
- * show up without bothering us with notices about variables that are assumed to 
+ * The error reporting level for XRMS is intentionally set to
+ * E_ALL and not E_NOTICE.  This should allow all real errors and warnings to
+ * show up without bothering us with notices about variables that are assumed to
  * be inititalized to NULL values.
- * 
+ *
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.13 2004/08/06 14:47:08 braverock Exp $
+ * $Id: include-locations.inc,v 1.14 2004/08/06 15:47:40 braverock Exp $
  */
 
 //
 // A security feature that helps prevent malicious users
 // from attempting to execute scripts out of order
 //
-if (!defined('IN_XRMS')) { 
-    define('IN_XRMS', true); 
+if (!defined('IN_XRMS')) {
+    define('IN_XRMS', true);
 }
 
 // include trailing slash in path
-$include_directory = "/var/www/html/xrms/include/";
+$include_directory = "/full/path/to/xrms/include/";
 
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
-error_reporting(E_ALL ^E_NOTICE);
+// error_reporting(E_ALL ^E_NOTICE);
 
 //uncomment the next line to turn notices on
 //error_reporting(E_ALL);
@@ -42,6 +42,9 @@ error_reporting(E_ALL ^E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.14  2004/08/06 15:47:40  braverock
+ * - roll back previous errant commit
+ *
  * Revision 1.13  2004/08/06 14:47:08  braverock
  * - push in changes to turn on i18n gettext
  *
