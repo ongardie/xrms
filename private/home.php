@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.40 2004/08/23 01:47:50 d2uhlman Exp $
+ * $Id: home.php,v 1.41 2004/10/01 20:09:39 introspectshun Exp $
  */
 
 // include the common files
@@ -44,7 +44,6 @@ require_once("../cases/sidebar.php");
 
 //include the opportunities sidebar
 $opportunity_limit_sql = "and opportunities.user_id = $session_user_id \nand status_open_indicator = 'o'";
-
 require_once("../opportunities/sidebar.php");
 
 //include the files sidebar
@@ -52,6 +51,10 @@ $on_what_table = ''; // cause all file records to be selected by ../files/sideba
 require_once("../files/sidebar.php");
 
 //include the notes sidebar
+$on_what_table = 'users'; // only show personal notes
+// override notes sidebar to return new notes to this page
+$notes_return_url = '/private/home.php';
+$notes_on_what_id = $session_user_id;
 require_once("../notes/sidebar.php");
 
 //call the sidebar hook
@@ -482,12 +485,6 @@ start_page($page_title,true,$msg);
 
             <!-- notes //-->
             <?php  echo $note_rows; ?>
-            <form action="../notes/new.php" method="post">
-                <input type="hidden" name="on_what_table" value="users">
-                <input type="hidden" name="on_what_id" value=<?php echo $session_user_id ?>>
-                <input type="hidden" name="return_url" value="/private/home.php">
-                <input type="submit" class=button value="<?php echo _("New Personal Note"); ?>">
-            </form>
 
         <!-- sidebar plugins //-->
         <?php echo $sidebar_rows; ?>
@@ -501,6 +498,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.41  2004/10/01 20:09:39  introspectshun
+ * - Now only shows personal notes (should be user-configurable someplace?)
+ * - Now uses notes sidebar form to create personal notes rather than "New Personal Note" form
+ *
  * Revision 1.40  2004/08/23 01:47:50  d2uhlman
  * check for MMP in user header and if so redirect to phone plugin
  *
