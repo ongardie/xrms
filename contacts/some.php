@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.35 2004/08/18 00:06:16 niclowe Exp $
+ * $Id: some.php,v 1.36 2004/08/19 13:12:15 maulani Exp $
  */
 
 //include the standard files
@@ -14,7 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
@@ -313,7 +313,7 @@ start_page($page_title, true, $msg);
 
 <?php
 $_SESSION["search_sql"]=$sql;
-$pager = new ADODB_Pager($con, $sql, 'contacts', false, $sort_column-1, $pretty_sort_order);
+$pager = new Contacts_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
@@ -385,6 +385,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.36  2004/08/19 13:12:15  maulani
+ * - Add specific pager to override formatting
+ *
  * Revision 1.35  2004/08/18 00:06:16  niclowe
  * Fixed bug 941839 - Mail Merge not working
  *
