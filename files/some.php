@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.16 2004/07/14 13:14:37 cpsource Exp $
+ * $Id: some.php,v 1.17 2004/07/14 20:19:50 cpsource Exp $
  */
 
 //include required files
@@ -314,6 +314,18 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'files', '', 4);
 }
 
+// get company_count
+$rst = $con->execute($sql);
+$company_count = 0;
+if ( $rst ) {
+  while (!$rst->EOF) {
+    $company_count += 1;
+    break;                // we only care if we have more than 0, so stop here
+    $rst->movenext();
+  }
+  $rst->close();
+}
+
 $page_title = 'Files';
 start_page($page_title, true, $msg);
 
@@ -383,8 +395,6 @@ start_page($page_title, true, $msg);
         <p>
 <?php
 
-	  // TBD - BUG - $company_count is undefined above
-
 $pager = new ADODB_Pager($con, $sql, 'files', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
@@ -452,6 +462,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2004/07/14 20:19:50  cpsource
+ * - Resolved $company_count not being set properly
+ *   opportunities/some.php tried to set $this which can't be done in PHP V5
+ *
  * Revision 1.16  2004/07/14 13:14:37  cpsource
  * - Fixed numerous undefined variable usages
  *

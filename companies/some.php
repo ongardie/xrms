@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.27 2004/07/14 16:06:55 cpsource Exp $
+ * $Id: some.php,v 1.28 2004/07/14 20:19:50 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -243,6 +243,7 @@ $company_count = 0;
 if ( $rst ) {
   while (!$rst->EOF) {
     $company_count += 1;
+    break;                // we only care if we have more than 0, so stop here
     $rst->movenext();
   }
   $rst->close();
@@ -477,6 +478,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.28  2004/07/14 20:19:50  cpsource
+ * - Resolved $company_count not being set properly
+ *   opportunities/some.php tried to set $this which can't be done in PHP V5
+ *
  * Revision 1.27  2004/07/14 16:06:55  cpsource
  * - Fix numerous undefined variable usages, including a database
  *   loop to determine $company_count.

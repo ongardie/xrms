@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.18 2004/07/14 02:06:30 s-t Exp $
+ * $Id: some.php,v 1.19 2004/07/14 20:19:50 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,8 +16,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 
 //set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$tmp = $_SERVER['REQUEST_URI'];
+$session_user_id = session_check( $tmp );
 
 $msg = $_GET['msg'];
 $offset = $_POST['offset'];
@@ -201,6 +201,18 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'opportunities', '', 4);
 }
 
+// get company_count
+$rst = $con->execute($sql);
+$company_count = 0;
+if ( $rst ) {
+  while (!$rst->EOF) {
+    $company_count += 1;
+    break;                // we only care if we have more than 0, so stop here
+    $rst->movenext();
+  }
+  $rst->close();
+}
+
 $page_title = 'Opportunities';
 start_page($page_title, true, $msg);
 
@@ -349,6 +361,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.19  2004/07/14 20:19:50  cpsource
+ * - Resolved $company_count not being set properly
+ *   opportunities/some.php tried to set $this which can't be done in PHP V5
+ *
  * Revision 1.18  2004/07/14 02:06:30  s-t
  * cvs commit opportunities.php
  *

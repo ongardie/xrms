@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.14 2004/07/09 18:36:45 introspectshun Exp $
+ * $Id: some.php,v 1.15 2004/07/14 20:19:49 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,11 +15,20 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
-$offset = $_POST['offset'];
-$clear = ($_GET['clear'] == 1) ? 1 : 0;
-$use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-$resort = $_POST['resort'];
+
+$msg    = isset($_GET['msg']) ? $_GET['msg'] : '';
+$offset = isset($_POST['offset']) ? $_POST['offset'] : '';
+if ( isset($_GET['clear']) ) {
+  $clear = ($_GET['clear'] == 1) ? 1 : 0;
+} else {
+  $clear = 0;
+}
+if ( isset($_POST['use_post_vars']) ) {
+  $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
+} else {
+  $use_post_vars = 0;
+}
+$resort = isset($_POST['resort']) ? $_POST['resort'] : '';
 
 if ($clear) {
     $sort_column = '';
@@ -53,11 +62,11 @@ if ($clear) {
     $current_sort_order = $_SESSION['cases_current_sort_order'];
     $case_title = $_SESSION['cases_case_title'];
     $case_id = $_SESSION['cases_case_id'];
-    $company_code = (strlen($_GET['company_code']) > 0) ? $_GET['company_code'] : $_SESSION['cases_company_code'];
     $company_type_id = $_SESSION['cases_company_type_id'];
     $user_id = $_SESSION['cases_user_id'];
     $case_status_id = $_SESSION['cases_case_status_id'];
     $case_category_id = $_SESSION['cases_case_category_id'];
+    $company_code = (strlen($_GET['company_code']) > 0) ? $_GET['company_code'] : $_SESSION['cases_company_code'];
 }
 
 if (!strlen($sort_column) > 0) {
@@ -222,6 +231,18 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'cases', '', 4);
 }
 
+// get company_count
+$rst = $con->execute($sql);
+$company_count = 0;
+if ( $rst ) {
+  while (!$rst->EOF) {
+    $company_count += 1;
+    break;                // we only care if we have more than 0, so stop here
+    $rst->movenext();
+  }
+  $rst->close();
+}
+
 $page_title = 'Cases';
 start_page($page_title, true, $msg);
 
@@ -339,6 +360,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2004/07/14 20:19:49  cpsource
+ * - Resolved $company_count not being set properly
+ *   opportunities/some.php tried to set $this which can't be done in PHP V5
+ *
  * Revision 1.14  2004/07/09 18:36:45  introspectshun
  * - Removed CAST(x AS CHAR) for wider database compatibility
  * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings

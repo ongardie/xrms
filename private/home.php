@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.30 2004/07/14 19:02:04 gpowers Exp $
+ * $Id: home.php,v 1.31 2004/07/14 20:19:51 cpsource Exp $
  */
 
 // include the common files
@@ -44,6 +44,7 @@ $opportunity_limit_sql = "and opportunities.user_id = $session_user_id \nand sta
 require_once("../opportunities/sidebar.php");
 
 //include the files sidebar
+$on_what_table = ''; // cause all file records to be selected by ../files/sidebar.php (Why are 'files' displayed here anyway???)
 require_once("../files/sidebar.php");
 
 //include the notes sidebar
@@ -492,6 +493,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.31  2004/07/14 20:19:51  cpsource
+ * - Resolved $company_count not being set properly
+ *   opportunities/some.php tried to set $this which can't be done in PHP V5
+ *
  * Revision 1.30  2004/07/14 19:02:04  gpowers
  * - added 'private_sidebar_bottom' plugin hook
  *   - for info plugin

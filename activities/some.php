@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.32 2004/07/13 14:18:19 neildogg Exp $
+ * $Id: some.php,v 1.33 2004/07/14 20:19:49 cpsource Exp $
  */
 
 // handle includes
@@ -252,6 +252,18 @@ if (!strlen($open_activities) > 0) {
 }
 add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 
+// get company_count
+$rst = $con->execute($sql);
+$company_count = 0;
+if ( $rst ) {
+  while (!$rst->EOF) {
+    $company_count += 1;
+    break;                // we only care if we have more than 0, so stop here
+    $rst->movenext();
+  }
+  $rst->close();
+}
+
 $page_title = "Open Activities";
 start_page($page_title, true, $msg);
 
@@ -398,6 +410,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.33  2004/07/14 20:19:49  cpsource
+ * - Resolved $company_count not being set properly
+ *   opportunities/some.php tried to set $this which can't be done in PHP V5
+ *
  * Revision 1.32  2004/07/13 14:18:19  neildogg
  * - Changed submit button name to another name
  *   - resolves SF bug 9888931 reported by braverock

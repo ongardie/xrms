@@ -9,14 +9,8 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.6 2004/07/14 14:49:27 cpsource Exp $
+ * $Id: sidebar.php,v 1.7 2004/07/14 20:19:50 cpsource Exp $
  */
-
-if ( !defined('IN_XRMS') )
-{
-  die('Hacking attempt');
-  exit;
-}
 
 $file_rows = "<div id='file_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
@@ -98,6 +92,10 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.7  2004/07/14 20:19:50  cpsource
+ * - Resolved $company_count not being set properly
+ *   opportunities/some.php tried to set $this which can't be done in PHP V5
+ *
  * Revision 1.6  2004/07/14 14:49:27  cpsource
  * - All sidebar.php's now support IN_XRMS security feature.
  *
