@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.15 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: new.php,v 1.16 2004/07/30 11:32:01 cpsource Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -65,6 +65,11 @@ if ( isset($company_id) ) {
         division_record_status = 'a'";
   $rst = $con->execute($sql);
   if ($rst) {
+    if ( !$rst->EOF ) {
+      $division_id = $rst->fields['division_id'];
+    } else {
+      $division_id = '';
+    }
     $division_menu = $rst->getmenu2('division_id', $division_id, true);
     $rst->close();
   }
@@ -84,6 +89,11 @@ if ( isset($company_id) ) {
   $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
   $rst = $con->execute($sql);
   if ($rst) {
+    if ( !$rst->EOF ) {
+      $address_id = $rst->fields['address_id'];
+    } else {
+      $address_id = '';
+    }
     $address_menu = $rst->getmenu2('address_id', $address_id, false);
     $rst->close();
   }
@@ -248,6 +258,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.16  2004/07/30 11:32:01  cpsource
+ * - Define msg properly
+ *   Fix bug with new.php wereby division_id and address_id were
+ *     not set properly for getmenu2.
+ *
  * Revision 1.15  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'
