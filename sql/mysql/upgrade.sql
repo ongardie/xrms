@@ -23,6 +23,10 @@ alter table addresses add postal_code varchar(255) not null;
 alter table addresses add use_pretty_address char(1) not null;
 alter table addresses alter column use_pretty_address set default 'f';
 
+update companies set default_primary_address = default_billing_address;
+update addresses set country_id = 1;
+update contacts set address_id = 1;
+
 create table countries (
 	country_id													int not null primary key auto_increment,
 	address_format_string_id									int not null default 1,
