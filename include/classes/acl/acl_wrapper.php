@@ -6,15 +6,32 @@ require_once(ACL_PATH.'xrms_acl_config.php');
 require_once(ACL_PATH.'acl_install.php');
 $acl_options=$options;
 
-function get_group_users($acl_group) {
+function get_group_users($acl_group, $acl_role = false) {
     global $acl_options;
     $acl = new xrms_acl($acl_options);
     $group_id=get_group_id($acl, $acl_group);
     if (!$group_id) {
         echo "Failed to find group $acl_group in security system<br>"; return false;
-    }    
-    $ret = $acl->get_group_user($group_id, false, false, NULL);
-    return $ret;
+    }
+    if ($acl_role) {
+        $role_id = get_role_id($acl, $acl_role);
+        if (!$role_id) {
+            echo "Failed to find role $role in security system<br>"; return false;
+        }
+    } else { $role_id=false; }
+    
+    $ret = $acl->get_group_user($group_id, false, $role_id, NULL);
+    // Make sure we get something
+    if ( $ret )
+    {
+        $aryUserList=array();
+        // pull out just the user_ids for this list
+        foreach ($aryGroupList as $key => $value)
+            $aryUserList[] = $value['user_id'];
+            
+        return $aryUserList;
+    }  
+    return false;
 }
 
 function check_role_access($acl=false, $user_id) {
