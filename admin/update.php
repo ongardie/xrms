@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.18 2004/07/01 20:14:28 braverock Exp $
+ * $Id: update.php,v 1.19 2004/07/07 20:48:16 neildogg Exp $
  */
 
 // where do we include from
@@ -123,6 +123,10 @@ $con->execute($upd);
 //add sort order to activity types
 //should put a test here, but alter table is non-destructive
 $sql = "ALTER TABLE activity_types ADD sort_order TINYINT NOT NULL DEFAULT '1' AFTER activity_type_record_status";
+$rst = $con->execute($sql);
+
+//add phone format to countries
+$sql = "ALTER TABLE countries ADD phone_format VARCHAR(25) NOT NULL DEFAULT '' AFTER country_record_status";
 $rst = $con->execute($sql);
 
 //make sure that there is connection detail columns in the audit_items table
@@ -659,6 +663,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.19  2004/07/07 20:48:16  neildogg
+ * - Added database structure changes
+ *
  * Revision 1.18  2004/07/01 20:14:28  braverock
  * - changed relationship update script to avoid duplicate entries and correct  from/to order
  *

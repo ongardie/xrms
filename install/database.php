@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.10 2004/07/01 12:56:34 braverock Exp $
+ * $Id: database.php,v 1.11 2004/07/07 20:48:16 neildogg Exp $
  */
 
 /**
@@ -154,7 +154,8 @@ function misc_db_tables($con, $table_list) {
                iso_code2                               varchar(50) not null default '',
                iso_code3                               varchar(50) not null default '',
                telephone_code                          varchar(50) not null default '',
-               country_record_status                   char(1) not null default 'a'
+               country_record_status                   char(1) not null default 'a',
+               phone_format                            varchar(25) not null default ''
                )";
         //execute
         $rst = $con->execute($sql);
@@ -849,6 +850,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.11  2004/07/07 20:48:16  neildogg
+ * - Added database structure changes
+ *
  * Revision 1.10  2004/07/01 12:56:34  braverock
  * - add relationships and relationship_types tables and data to install and update
  *

@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.7 2004/07/05 21:03:04 introspectshun Exp $
+ * $Id: data.php,v 1.8 2004/07/07 20:48:16 neildogg Exp $
  */
 
 /**
@@ -518,7 +518,7 @@ function misc_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (1, 'United Republic of Tanzania', '834', 'TZ', 'TZA', '255')";
         $rst = $con->execute($sql);
-        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (15, 'United States', '840', 'US', 'USA', '1')";
+        $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code, phone_format) values (15, 'United States', '840', 'US', 'USA', '1', '(###) ###-####')";
         $rst = $con->execute($sql);
         $sql ="insert into countries (address_format_string_id, country_name, un_code, iso_code2, iso_code3, telephone_code) values (15, 'United States Virgin Islands', '850', 'VI', 'VIR', '1 340')";
         $rst = $con->execute($sql);
@@ -941,6 +941,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.8  2004/07/07 20:48:16  neildogg
+ * - Added database structure changes
+ *
  * Revision 1.7  2004/07/05 21:03:04  introspectshun
  * - Removed relationship_type_id field for data-to-column consistency
  *
