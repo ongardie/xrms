@@ -171,6 +171,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=custom4 size=35 value="<?php  echo $custom4; ?>"></td>
             </tr>
             <tr>
+                <td class=widget_label_right_166px>Profile</td>
+                <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php  echo $profile; ?></textarea></td>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit
 value="Save"> <input class=button type=button value="Mail Merge" onclick="javascript:
 location.href='../email/email.php?scope=contact&contact_id=<?php  echo $contact_id; ?>';"><?php if ($contact_count > 1)
