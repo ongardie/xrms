@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.5 2004/04/13 15:47:12 maulani Exp $
+ * $Id: database.php,v 1.6 2004/05/04 23:48:03 maulani Exp $
  */
 
 /**
@@ -18,6 +18,19 @@
  *
  */
 function misc_db_tables($con, $table_list) {
+    // system_parameters
+    if (!in_array('system_parameters',$table_list)) {
+        $sql ="create table system_parameters (
+               param_id                                varchar(40) not null unique,
+               string_val                              varchar(100),
+               int_val                                 int,
+               float_val                               float,
+               datetime_val                            datetime
+               )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
     // recent_items
     if (!in_array('recent_items',$table_list)) {
         $sql ="create table recent_items (
@@ -779,6 +792,14 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.6  2004/05/04 23:48:03  maulani
+ * - Added a system parameters table to the database.  This table can be used
+ *   for items that would otherwise be dumped into the vars.php file. These
+ *   include config items that are not required for database connectivity nor
+ *   have access speed performance implications.  Accessor and setor functions
+ *   added to utils-misc.
+ * - Still need to create editing screen in admin section
+ *
  * Revision 1.5  2004/04/13 15:47:12  maulani
  * - add data integrity check so all companies have addresses
  *

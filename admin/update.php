@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.7 2004/04/25 23:09:56 braverock Exp $
+ * $Id: update.php,v 1.8 2004/05/04 23:48:02 maulani Exp $
  */
 
 /**
@@ -146,6 +146,25 @@ $rst = $con->execute($sql);
 $sql = "alter table companies change company_legal_name legal_name varchar( 100 ) not null";
 $rst = $con->execute($sql);
 
+// Add the system_parameters table
+$sql = 'create table if not exists system_parameters (';
+$sql .= 'param_id       varchar(40) not null unique,';
+$sql .= 'string_val     varchar(100),';
+$sql .= 'int_val        int,';
+$sql .= 'float_val      float,';
+$sql .= 'datetime_val   datetime';
+$sql .= ')';
+$rst = $con->execute($sql);
+
+// Make sure that there is an default GST offset in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='Default GST Offset'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= 'Added a default GST offset.<BR><BR>';
+    $sql ="insert into system_parameters (param_id, int_val) values ('Default GST Offset', -5)";
+    $rst = $con->execute($sql);
+}
 
 //close the database connection, because we don't need it anymore
 $con->close();
@@ -168,6 +187,14 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.8  2004/05/04 23:48:02  maulani
+ * - Added a system parameters table to the database.  This table can be used
+ *   for items that would otherwise be dumped into the vars.php file. These
+ *   include config items that are not required for database connectivity nor
+ *   have access speed performance implications.  Accessor and setor functions
+ *   added to utils-misc.
+ * - Still need to create editing screen in admin section
+ *
  * Revision 1.7  2004/04/25 23:09:56  braverock
  * add division_id alter table command to resolve problems from upgrading from 12Jan
  *

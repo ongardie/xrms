@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.17 2004/04/23 17:14:57 gpowers Exp $
+ * $Id: utils-misc.php,v 1.18 2004/05/04 23:48:02 maulani Exp $
  */
 
 /**
@@ -341,9 +341,75 @@ EOQ;
 exit;
 } // end show_test_values fn
 
+/**
+ * Retrieve a value from the system_parameters.
+ *
+ */
+function get_system_parameter($con, $param) {
+
+    $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
+    $sysst = $con->execute($sql);
+    $string_val = $sysst->fields['string_val'];
+    $int_val = $sysst->fields['int_val'];
+    $float_val = $sysst->fields['float_val'];
+    $datetime_val = $sysst->fields['datetime_val'];
+    if (!is_null($string_val)) {
+        $my_val=$string_val;
+    } elseif (!is_null($int_val)) {
+        $my_val=$int_val;
+    } elseif (!is_null($float_val)) {
+        $my_val=$float_val;
+    } elseif (!is_null($datetime_val)) {
+        $my_val=$datetime_val;
+    }
+    $sysst->close();
+
+    return $my_val;
+} //get_system_parameter
+
+/**
+ * Set a value in the system_parameters.
+ *
+ */
+function set_system_parameter($con, $param, $new_val) {
+
+    // First, determine which field is appropriate for the set.
+    $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
+    $sysst = $con->execute($sql);
+    $string_val = $sysst->fields['string_val'];
+    $int_val = $sysst->fields['int_val'];
+    $float_val = $sysst->fields['float_val'];
+    $datetime_val = $sysst->fields['datetime_val'];
+    if (!is_null($string_val)) {
+        $my_field='string_val';
+        $set_val = "'" . $new_val . "'";
+    } elseif (!is_null($int_val)) {
+        $my_field='int_val';
+        $set_val = $new_val;
+    } elseif (!is_null($float_val)) {
+        $my_field='float_val';
+        $set_val = $new_val;
+    } elseif (!is_null($datetime_val)) {
+        $my_field='datetime_val';
+        $set_val = $new_val;
+    }
+    $sysst->close();
+
+    $sql ="update system_parameters set $myfield=$set_val where param_id='$param'";
+    $con->execute($sql);
+} //set_system_parameter
+
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.18  2004/05/04 23:48:02  maulani
+ * - Added a system parameters table to the database.  This table can be used
+ *   for items that would otherwise be dumped into the vars.php file. These
+ *   include config items that are not required for database connectivity nor
+ *   have access speed performance implications.  Accessor and setor functions
+ *   added to utils-misc.
+ * - Still need to create editing screen in admin section
+ *
  * Revision 1.17  2004/04/23 17:14:57  gpowers
  * Removed http_user_agent from audit_items table. It is space consuming and
  * redundant, as most httpd servers can be configured to log this information.

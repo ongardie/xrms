@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.2 2004/03/25 15:08:58 maulani Exp $
+ * $Id: data.php,v 1.3 2004/05/04 23:48:03 maulani Exp $
  */
 
 /**
@@ -18,6 +18,12 @@
  *
  */
 function misc_db_data($con) {
+    // system_parameters
+    if (confirm_no_records($con, 'system_parameters')) {
+        $sql ="insert into system_parameters (param_id, int_val) values ('Default GST Offset', -5)";
+        $rst = $con->execute($sql);
+    }
+
     // categories
     if (confirm_no_records($con, 'categories')) {
         $sql ="insert into categories (category_short_name, category_pretty_name, category_pretty_plural, category_display_html) values ('TEST1', 'Test Category 1', 'Test Category 1', 'Test Category 1')";
@@ -864,6 +870,14 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.3  2004/05/04 23:48:03  maulani
+ * - Added a system parameters table to the database.  This table can be used
+ *   for items that would otherwise be dumped into the vars.php file. These
+ *   include config items that are not required for database connectivity nor
+ *   have access speed performance implications.  Accessor and setor functions
+ *   added to utils-misc.
+ * - Still need to create editing screen in admin section
+ *
  * Revision 1.2  2004/03/25 15:08:58  maulani
  * - Repair bug 922629 reported by evergreencp (Addresses not displayed
  *   for companies)  The install script did not properly create the
