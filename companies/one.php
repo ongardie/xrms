@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.52 2004/07/14 23:19:47 neildogg Exp $
+ * $Id: one.php,v 1.53 2004/07/15 13:05:08 cpsource Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -22,10 +22,9 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
-
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $company_id = $_GET['company_id'];
 
@@ -678,6 +677,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.53  2004/07/15 13:05:08  cpsource
+ * - Add arr_vars sub-system for passing variables between code streams.
+ *
  * Revision 1.52  2004/07/14 23:19:47  neildogg
  * - Mistyped
  *

@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.46 2004/07/14 16:21:23 maulani Exp $
+ * $Id: utils-misc.php,v 1.47 2004/07/15 13:05:09 cpsource Exp $
  */
 
 /**
@@ -682,6 +682,131 @@ function get_formatted_address (&$con,$address_id) {
 } //end fn get_formatted_address
 
 /**
+ * The arr_vars sub-system
+ *
+ * This is an attempt to simplify processing of passing variables in and
+ * out of modules.
+ *
+ * THE PROBLEM
+ * -----------
+ *
+ * Typically, you have:
+ *
+ * if ($clear) {
+ *   $sort_column = '';
+ *   ...
+ *  } elseif ($use_post_vars) {
+ *   $sort_column = $_POST['sort_column'];
+ *   ...
+ *  } else {
+ *    $sort_column = $_SESSION['companies_sort_column'];
+ *    ...
+ *  }
+ *
+ * The trouble with this construction is that it's error prone - 
+ * you have to make sure all variables are listed multiple times.
+ *
+ * THE SOLUTION
+ * ------------
+ *
+ * Instead, just build an array as follows:
+ *
+ * $ary = array ( 'sort_column' => array ('companies_sort_column', behavior),
+ *                ...
+ *              )
+ *
+ * and then call arr_vars_get_all ( $ary );
+ *
+ * The index into the array is the local and post variable name,
+ * and the value of the index is the name used in the session.
+ *
+ * Later, when you want to set all session variables,
+ * just call arr_vars_session_set ( $ary );
+ *
+ */
+
+// determine BEHAVIOR for getting data when !$clear && !$use_post_vars
+define ( "arr_vars_SESSION"    , 0 );  // just try a SESSION
+define ( "arr_vars_GET"        , 1 );  // just try a GET
+define ( "arr_vars_GET_SESSION", 2 );  // try a GET first, and then if it fails, do a SESSION
+
+// get all variables
+function arr_vars_get_all ( $ary )
+{
+  global $clear;
+  global $use_post_vars;
+  global $msg;
+
+  $msg    = isset($_GET['msg'])     ? $_GET['msg']     : '';
+
+  if ( isset($_GET['clear']) ) {
+    $clear = ($_GET['clear'] == 1) ? 1 : 0;
+  } else {
+    $clear = 0;
+  }
+  if ( isset($_POST['use_post_vars']) ) {
+    $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
+  } else {
+    $use_post_vars = 0;
+  }
+
+  if ( $clear ) {
+    arr_vars_clear ( $ary );
+  } elseif ( $use_post_vars ) {
+    arr_vars_post_get ( $ary );
+  } else {
+    arr_vars_session_get ( $ary );
+  }
+}
+// clear all variables
+function arr_vars_clear ( $ary )
+{
+  foreach ($ary as $key => $value) {
+    $GLOBALS[$key] = '';
+  }
+}
+// get variables from session
+function arr_vars_session_get ( $ary )
+{
+  foreach ($ary as $key => $value) {
+
+    $flag = $value[1];
+    switch ( $flag )
+      {
+      case arr_vars_SESSION:      // just try a SESSION
+	$GLOBALS[$key] = isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+	break;
+
+      case arr_vars_GET:         // just try a GET
+	$GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : '';
+	break;
+
+      case arr_vars_GET_SESSION:  // try a GET first, and then if it fails, do a SESSION
+	$GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+	break;
+
+      default:
+	echo "utils-misc.php::arr_vars_session_get: unknown flag = $flag<br>";
+	exit;
+      }
+  }
+}
+// set all session variables
+function arr_vars_session_set ( $ary )
+{
+  foreach ($ary as $key => $value) {
+    $_SESSION["$value[0]"] = $GLOBALS[$key];
+  }
+}
+// get all posted variables
+function arr_vars_post_get ( $ary )
+{
+  foreach ($ary as $key => $value) {
+    $GLOBALS[$key] = $_POST["$key"];
+  }
+}
+
+/**
  * Include the i18n files, as every file with output will need them
  *
  * @todo sort out a better include strategy to simplify it across
@@ -695,6 +820,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.47  2004/07/15 13:05:09  cpsource
+ * - Add arr_vars sub-system for passing variables between code streams.
+ *
  * Revision 1.46  2004/07/14 16:21:23  maulani
  * - Fix sql bug (typo) in set_system_parameters routine
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.24 2004/07/14 12:51:50 cpsource Exp $
+ * $Id: some.php,v 1.25 2004/07/15 13:05:09 cpsource Exp $
  */
 
 //include the standard files
@@ -20,94 +20,30 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 
 // get call arguments
-if ( isset($_GET['msg']) ) {
-    $msg = $_GET['msg'];
-} else {
-    $msg = '';
-}
-
-if ( isset($_POST['offset']) ) {
-    $offset = $_POST['offset'];
-} else {
-    $offset = '';
-}
-
-if ( isset($_GET['clear']) ) {
-    $clear = ($_GET['clear'] == 1) ? 1 : 0;
-} else {
-    $clear = 0;
-}
-
-if ( isset($_POST['use_post_vars']) ) {
-    $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-} else {
-    $use_post_vars = 0;
-}
-
 if ( isset($_POST['resort']) ) {
     $resort = $_POST['resort'];
 } else {
     $resort = '';
 }
 
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $last_name = '';
-    $first_names = '';
-    $title = '';
-    $description = '';
-    $company_name = '';
-    $company_code = '';
-    $category_id = '';
-    $user_id = '';
-} elseif ($use_post_vars) {
-    $sort_column = $_POST['sort_column'];
-    $current_sort_column = $_POST['current_sort_column'];
-    $sort_order = $_POST['sort_order'];
-    $current_sort_order = $_POST['current_sort_order'];
-    $last_name = $_POST['last_name'];
-    $first_names = $_POST['first_names'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $company_name = $_POST['company_name'];
-    $company_code = $_POST['company_code'];
-    $category_id = $_POST['category_id'];
-    $user_id = $_POST['user_id'];
-} else {
+// declare passed in variables
+$arr_vars = array ( // local var name             // session variable name, flag
+                   'sort_column'        => array ( 'contacts_sort_column', arr_vars_SESSION ),
+		   'current_sort_column'=> array ( 'contacts_current_sort_column', arr_vars_SESSION ),
+		   'sort_order'         => array ( 'contacts_sort_order', arr_vars_SESSION ),
+		   'current_sort_order' => array ( 'contacts_current_sort_order', arr_vars_SESSION ),
+		   'last_name'          => array ( 'contacts_last_name', arr_vars_SESSION ),
+		   'first_names'        => array ( 'contacts_first_names', arr_vars_SESSION ),
+		   'title'              => array ( 'contacts_title', arr_vars_SESSION ),
+		   'description'        => array ( 'contacts_description', arr_vars_SESSION ),
+		   'category_id'        => array ( 'category_id', arr_vars_SESSION ),
+		   'user_id'            => array ( 'contacts_user_id', arr_vars_SESSION ),
+		   'company_name'       => array ( 'contacts_company_name', arr_vars_GET_SESSION ),
+		   'company_code'       => array ( 'contacts_company_code', arr_vars_GET_SESSION )
+		   );
 
-  // first time through ???
-  if ( isset($_SESSION['contacts_sort_column']) ) {
-    // no - get from session
-    $sort_column = $_SESSION['contacts_sort_column'];
-    $current_sort_column = $_SESSION['contacts_current_sort_column'];
-    $sort_order = $_SESSION['contacts_sort_order'];
-    $current_sort_order = $_SESSION['contacts_current_sort_order'];
-    $last_name = $_SESSION['contacts_last_name'];
-    $first_names = $_SESSION['contacts_first_names'];
-    $title = $_SESSION['contacts_title'];
-    $description = $_SESSION['contacts_description'];
-    $category_id = $_SESSION['category_id'];
-    $user_id = $_SESSION['contacts_user_id'];
-  } else {
-    // yes - just reset variables
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $last_name = '';
-    $first_names = '';
-    $title = '';
-    $description = '';
-    $category_id = '';
-    $user_id = '';
-  }
-
-  $company_name = isset($_GET['company_name']) ? $_GET['company_name'] : isset($_SESSION['contacts_company_name']) ? $_SESSION['contacts_company_name'] : '' ;
-  $company_code = isset($_GET['company_code']) ? $_GET['company_code'] : isset($_SESSION['contacts_company_code']) ? $_SESSION['contacts_company_code'] : '' ;
-}
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -126,18 +62,8 @@ $ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif"
 $descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-$_SESSION['contacts_sort_column'] = $sort_column;
-$_SESSION['contacts_current_sort_column'] = $sort_column;
-$_SESSION['contacts_sort_order'] = $sort_order;
-$_SESSION['contacts_current_sort_order'] = $sort_order;
-$_SESSION['contacts_company_name'] = $company_name;
-$_SESSION['contacts_company_code'] = $company_code;
-$_SESSION['contacts_last_name'] = $last_name;
-$_SESSION['contacts_first_names'] = $first_names;
-$_SESSION['contacts_title'] = $title;
-$_SESSION['contacts_description'] = $description;
-$_SESSION['category_id'] = $category_id;
-$_SESSION['contacts_user_id'] = $user_id;
+// set all session variables
+arr_vars_session_set ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -412,6 +338,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.25  2004/07/15 13:05:09  cpsource
+ * - Add arr_vars sub-system for passing variables between code streams.
+ *
  * Revision 1.24  2004/07/14 12:51:50  cpsource
  * - Removed company_type_id handling as it was unused
  *   Session variables are cleared the first time in, as they were unset.

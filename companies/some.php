@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.28 2004/07/14 20:19:50 cpsource Exp $
+ * $Id: some.php,v 1.29 2004/07/15 13:05:08 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,87 +20,30 @@ require_once($include_directory . 'adodb-params.php');
 $_SESSION['language'] = 'english';
 
 $session_user_id = session_check();
-
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
-$msg    = isset($_GET['msg'])     ? $_GET['msg']     : '';
 $offset = isset($_POST['offset']) ? $_POST['offset'] : '';
 $resort = isset($_POST['resort']) ? $_POST['resort'] : '';
-if ( isset($_GET['clear']) ) {
-  $clear = ($_GET['clear'] == 1) ? 1 : 0;
-} else {
-  $clear = 0;
-}
-if ( isset($_POST['use_post_vars']) ) {
-  $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-} else {
-  $use_post_vars = 0;
-}
 
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $company_name = '';
-    $company_type_id = '';
-    $company_category_id = '';
-    $company_code = '';
-    $user_id = '';
-    $crm_status_id = '';
-    $industry_id = '';
-    $city = '';
-    $state = '';
-} elseif ($use_post_vars) {
-    $sort_column = $_POST['sort_column'];
-    $current_sort_column = $_POST['current_sort_column'];
-    $sort_order = $_POST['sort_order'];
-    $current_sort_order = $_POST['current_sort_order'];
-    $company_name = $_POST['company_name'];
-    $company_type_id = $_POST['company_type_id'];
-    $company_category_id = $_POST['company_category_id'];
-    $company_code = $_POST['company_code'];
-    $city = $_POST ['city'];
-    $state = $_POST ['state'];
-    $user_id = $_POST['user_id'];
-    $crm_status_id = $_POST['crm_status_id'];
-    $industry_id = $_POST['industry_id'];
-} else {
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+		   'sort_column'         => array('companies_sort_column',arr_vars_SESSION),
+		   'current_sort_column' => array('companies_current_sort_column',arr_vars_SESSION),
+		   'sort_order'          => array('companies_sort_order',arr_vars_SESSION),
+		   'current_sort_order'  => array('companies_current_sort_order',arr_vars_SESSION),
+		   'company_name'        => array('companies_company_name',arr_vars_SESSION),
+		   'company_type_id'     => array('companies_company_type_id',arr_vars_SESSION),
+		   'company_category_id' => array('companies_company_category_id',arr_vars_SESSION),
+		   'company_code'        => array('companies_company_code',arr_vars_SESSION),
+		   'user_id'             => array('companies_user_id',arr_vars_SESSION),
+		   'crm_status_id'       => array('companies_crm_status_id',arr_vars_SESSION),
+		   'industry_id'         => array('industry_id',arr_vars_SESSION),
+		   'city'                => array('city',arr_vars_SESSION),
+		   'state'               => array('state',arr_vars_SESSION)
+		   );
 
-  // first time in ???
-  if ( isset($_SESSION['companies_sort_column']) ) {
-    // no - get from session
-    $sort_column = $_SESSION['companies_sort_column'];
-    $current_sort_column = $_SESSION['companies_current_sort_column'];
-    $sort_order = $_SESSION['companies_sort_order'];
-    $current_sort_order = $_SESSION['companies_current_sort_order'];
-    $company_name = $_SESSION['companies_company_name'];
-    $company_type_id = $_SESSION['companies_company_type_id'];
-    $company_category_id = $_SESSION['companies_company_category_id'];
-    $company_code = $_SESSION['companies_company_code'];
-    $user_id = $_SESSION['companies_user_id'];
-    $crm_status_id = $_SESSION['companies_crm_status_id'];
-    $industry_id = $_SESSION['industry_id'];
-    $city = $_SESSION['city'];
-    $state = $_SESSION['state'];
-  } else {
-    // yes - clear
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $company_name = '';
-    $company_type_id = '';
-    $company_category_id = '';
-    $company_code = '';
-    $user_id = '';
-    $crm_status_id = '';
-    $industry_id = '';
-    $city = '';
-    $state = '';
-  }
-
-}
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -120,19 +63,8 @@ $descending_order_image = ' <img border=0 height=10 width=10 alt="" src=../img/d
 
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-$_SESSION['companies_company_type_id'] = $company_type_id;
-$_SESSION['companies_sort_column'] = $sort_column;
-$_SESSION['companies_current_sort_column'] = $sort_column;
-$_SESSION['companies_sort_order'] = $sort_order;
-$_SESSION['companies_current_sort_order'] = $sort_order;
-$_SESSION['companies_company_name'] = $company_name;
-$_SESSION['companies_company_category_id'] = $company_category_id;
-$_SESSION['companies_company_code'] = $company_code;
-$_SESSION['companies_user_id'] = $user_id;
-$_SESSION['companies_crm_status_id'] = $crm_status_id;
-$_SESSION['industry_id'] = $industry_id;
-$_SESSION['city'] = $city;
-$_SESSION['state'] = $state;
+// set all session variables
+arr_vars_session_set ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -478,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.29  2004/07/15 13:05:08  cpsource
+ * - Add arr_vars sub-system for passing variables between code streams.
+ *
  * Revision 1.28  2004/07/14 20:19:50  cpsource
  * - Resolved $company_count not being set properly
  *   opportunities/some.php tried to set $this which can't be done in PHP V5
