@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.24 2004/06/25 03:12:09 braverock Exp $
+ * $Id: some.php,v 1.25 2004/06/26 15:17:14 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -265,9 +265,9 @@ start_page($page_title, true, $msg);
 <?php jscalendar_includes(); ?>
 
 <div id="Main">
-    <div >
+    <div id="Content">
 
-        <form action=some.php method=post>
+    <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=activities_next_page value="<?php  echo $activities_next_page; ?>">
         <input type=hidden name=resort value="0">
@@ -277,44 +277,58 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=8>Search Criteria</td>
+                <td class=widget_header colspan=5>Search Criteria</td>
             </tr>
-            <tr>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>Contact</td>
-                <td class=widget_label>Company</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>End/Due Date</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Completed</td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name="title" size="10%" value="<?php  echo $title; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="contact" size="15%" value="<?php  echo $contact; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company" size="20%" value="<?php  echo $company; ?>"></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element>
-                    <select name="before_after">
-                        <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
-                        <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
-                    </select>
-                    <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
-                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
-                </td>
-                <td class=widget_content_form_element><?php  echo $type_menu; ?></td>
-                <td class=widget_content_form_element>
-                    <select name="completed">
-                        <option value="all"<?php if ($completed == "all") { print " selected"; } ?>>All</option>
-                        <option value="o"<?php if ($completed == "o" or !$completed) { print " selected"; } ?>>Non-Completed</option>
-                        <option value="c"<?php if ($completed == "c") { print " selected"; } ?>>Completed</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=8><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
-            </tr>
-        </table>
-        </form>
+        <tr>
+            <td colspan="2" class=widget_label>Title</td>
+            <td width="22%" class=widget_label>Contact</td>
+            <td width="26%" class=widget_label>Company</td>
+        </tr>
+        <tr>
+            <td colspan="2" class=widget_content_form_element> <input type=text name="title" size=24 value="<?php  echo $title; ?>">
+            </td>
+            <td class=widget_content_form_element><input type=text name="contact" size=12 value="<?php  echo $contact; ?>">
+            </td>
+            <td class=widget_content_form_element><input type=text name="company" size=15 value="<?php  echo $company; ?>">
+            </td>
+        </tr>
+        <tr>
+            <td width="18%" class=widget_label>Owner</td>
+            <td width="34%" class=widget_label>End/Due Date</td>
+            <td class=widget_label>Type</td>
+            <td colspan=2 class=widget_label>Completed</td>
+        </tr>
+        <tr>
+            <td width="18%" class=widget_content_form_element>
+                <?php  echo $user_menu; ?>
+            </td>
+            <td width="34%" class=widget_content_form_element>
+                <select name="before_after">
+                    <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
+                    <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
+                </select>
+                <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
+                <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
+            </td>
+            <td width="22%" class=widget_content_form_element>
+                <?php  echo $type_menu; ?>
+            </td>
+            <td colspan=2 class=widget_content_form_element>
+                <select name="completed">
+                    <option value="all"<?php if ($completed == "all") { print " selected"; } ?>>All</option>
+                    <option value="o"<?php if ($completed == "o" or !$completed) { print " selected"; } ?>>Non-Completed</option>
+                    <option value="c"<?php if ($completed == "c") { print " selected"; } ?>>Completed</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class=widget_content_form_element colspan=5><input name="submit" type=submit class=button value="Search">
+                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
+                <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
+            </td>
+        </tr>
+    </table>
+    </form>
 
 <?php
 
@@ -390,6 +404,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.25  2004/06/26 15:17:14  braverock
+ * - change search layout to two pages to improve CSS positioning
+ *   - applied modified version of SF patch # 971474submitted by s-t
+ *
  * Revision 1.24  2004/06/25 03:12:09  braverock
  * - make default search for open activities only
  *
