@@ -17,6 +17,25 @@ $return_url = $_POST['return_url'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
+if ($on_what_table == 'opportunities') {
+    $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
+} elseif ($on_what_table == 'cases') {
+    $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
+} elseif ($on_what_table == 'companies') {
+    $sql = "select company_name as attached_to_name from companies where company_id = $on_what_id";
+} elseif ($on_what_table == 'contacts') {
+    $sql = "select concat(first_names, ' ', last_name) as attached_to_name from contacts where contact_id = $on_what_id";
+} elseif ($on_what_table == 'campaigns') {
+    $sql = "select campaign_title as attached_to_name from campaigns where campaign_id = $on_what_id";
+}
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    $attached_to_name = $rst->fields['attached_to_name'];
+    $rst->close();
+}
+
 $con->close();
 
 $page_title = "Attach File";
@@ -36,6 +55,10 @@ start_page($page_title, true, $msg);
 		<table class=widget cellspacing=1 width=100%>
 			<tr>
 				<td class=widget_header colspan=2>File Information</td>
+			</tr>
+			<tr>
+				<td class=widget_label_right>Attached&nbsp;To</td>
+				<td class=widget_content_form_element><?php echo $attached_to_name; ?></td>
 			</tr>
 			<tr>
 				<td class=widget_label_right>File&nbsp;Name</td>
