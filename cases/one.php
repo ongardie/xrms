@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.24 2005/01/07 01:58:52 braverock Exp $
+ * $Id: one.php,v 1.25 2005/01/09 16:58:00 braverock Exp $
  */
 
 //include required files
@@ -25,6 +25,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "cases", $case_id);
 
+//get case details
 $sql = "select ca.*, c.company_id, c.company_name, c.company_code,
 d.division_name,
 cont.first_names, cont.last_name, cont.work_phone, cont.email,
@@ -78,6 +79,8 @@ if ($rst) {
     $entered_by = $rst->fields['entered_by_username'];
     $last_modified_by = $rst->fields['last_modified_by_username'];
     $rst->close();
+} else {
+    db_error_handler ($con, $sql);
 }
 
 // most recent activities
@@ -115,6 +118,8 @@ if ($rst) {
         $is_overdue = $rst->fields['is_overdue'];
         $on_what_table = $rst->fields['on_what_table'];
         $on_what_id = $rst->fields['on_what_id'];
+        $activity_contact_id = $rst->fields['contact_id'];
+
 
         if ($open_p == 'o') {
             if ($is_overdue) {
@@ -127,7 +132,7 @@ if ($rst) {
         }
 
         $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$activity_contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . "</td>";
@@ -136,6 +141,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+   db_error_handler($con,$sql_activities);
 }
 
 /*********************************/
@@ -168,13 +175,21 @@ require_once("../notes/sidebar.php");
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-$rst->close();
+if ($rst) {
+   $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
+   $rst->close();
+} else {
+   db_error_handler ($con,$sql);
+}
 
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
 $rst = $con->execute($sql);
-$activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
-$rst->close();
+if ($rst) {
+   $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+   $rst->close();
+} else {
+   db_error_handler ($con,$sql);
+}
 
 $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . ", contact_id, address_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a' ORDER BY last_name";
 $rst = $con->execute($sql);
@@ -183,6 +198,8 @@ if ($rst) {
     $address_id = $rst->fields['address_id'];
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $work_phone);
     $rst->close();
+} else {
+   db_error_handler ($con,$sql);
 }
 
 $con->close();
@@ -299,8 +316,8 @@ start_page($page_title, true, $msg);
         </table>
 
         <!-- activities //-->
-        <form action="../activities/new-2.php" method=post>
-        <input type=hidden name=return_url value="/cases/one.php?case_id=<?php  echo $case_id; ?>">
+        <form action="../activities/new-2.php" method="POST">
+        <input type=hidden name=return_url value="/cases/one.php%3Fcase_id=<?php  echo $case_id; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=on_what_table value="cases">
         <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
@@ -350,6 +367,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.25  2005/01/09 16:58:00  braverock
+ * - add db_error_handler to all queries
+ * - set activity_contact_id correctly for links to Activities
+ *
  * Revision 1.24  2005/01/07 01:58:52  braverock
  * - add link to case status pop-up
  *
