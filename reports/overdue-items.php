@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: overdue-items.php,v 1.2 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: overdue-items.php,v 1.3 2004/09/07 03:57:26 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -168,7 +168,7 @@ if (($user_id) && (!$all_users)) {
 }
 
 if ($all_users) {
-    $sql = "select user_id from users";
+    $sql = "select user_id from users where user_record_status = 'a' order by last_name, first_names";
     $rst = $con->execute($sql);
     while (!$rst->EOF) {
         array_push($userArray, $rst->fields['user_id']);
@@ -180,7 +180,7 @@ if ($all_users) {
 if ($userArray) {
 foreach ($userArray as $key => $user_id) {
 
-    $sql = "select * from users where user_id = $user_id";
+    $sql = "select username, email, first_names, last_name from users where user_id = $user_id";
     $rst = $con->execute($sql);
     $username = $rst->fields['username'];
     $email = $rst->fields['email'];
@@ -188,7 +188,7 @@ foreach ($userArray as $key => $user_id) {
     $rst->close();
 
     if (($type == "activities") || ($type == "all")) {
-        $sql = "SELECT * from activities where activity_status = 'o' and activity_record_status = 'a' and ends_at > '" . $time_window . "' and ends_at < '" . $time_now . "' and $user_id = $user_id order by entered_at ";
+        $sql = "SELECT * from activities where activity_status = 'o' and activity_record_status = 'a' and ends_at > '" . $time_window . "' and ends_at < '" . $time_now . "' and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
 
         if (($rst) && (!$rst->EOF)) {
@@ -276,11 +276,13 @@ foreach ($userArray as $key => $user_id) {
     }
     } // End Campaigns Type
     if (($type == "opportunities") || ($type == "all")) {
-        $sql = "SELECT * from opportunities, opportunity_statuses where
-                status_open_indicator = 'o'
-                and opportunity_record_status = 'a'
-                and opportunity_statuses.opportunity_status_id = opportunities.opportunity_status_id
-                and user_id = $user_id
+        $sql = "SELECT o.opportunity_id, o.company_id, o.contact_id, o.opportunity_title, 
+                o.entered_at, s.opportunity_status_pretty_name
+                from opportunities o, opportunity_statuses s
+                where s.status_open_indicator = 'o'
+                and o.opportunity_record_status = 'a'
+                and s.opportunity_status_id = o.opportunity_status_id
+                and o.user_id = $user_id
                 and closed_at > '" . $time_window . "' and closed_at < '" . $time_now . "'
                 order by entered_at ";
 
@@ -291,7 +293,7 @@ foreach ($userArray as $key => $user_id) {
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
             $output .= "        <th align=left>" . _("Entered") . "</th>";
-            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Status") . "</th>";
             $output .= "        <th align=left>" . _("Company") . "</th>";
             $output .= "        <th align=left>" . _("Contact") . "</th>";
             $output .= "        <th align=left>" . _("Opportunity") . "</th>";
@@ -300,17 +302,14 @@ foreach ($userArray as $key => $user_id) {
             while (!$rst->EOF) {
             $overdue = 1;
                 $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td>" . $rst->fields['ends_at'] . "&nbsp;&nbsp;</td>\n";
-                $sql4 = "SELECT opportunity_type_pretty_name from campaign_types where opportunity_type_id = " . $rst->fields['opportunity_type_id'];
-                $rst4 = $con->execute($sql4);
-                $output .= "<td>" . $rst4->fields['opportunity_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
+                $output .= "<td>" . $rst->fields['opportunity_status_pretty_name'] . "&nbsp;&nbsp;</td>\n";
                 $sql5 = "SELECT company_name from companies where company_id = " . $rst->fields['company_id'];
                 $rst5 = $con->execute($sql5);
                 $output .= "<td>" . $rst5->fields['company_name'] . "&nbsp;&nbsp;&nbsp;</td>\n";
                 $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
                 $rst6 = $con->execute($sql6);
                 $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"../opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=4><hr></td></tr>\n";
                 }
@@ -326,11 +325,12 @@ foreach ($userArray as $key => $user_id) {
     }
     } // End Opportunities Type
     if (($type == "cases") || ($type == "all")) {
-        $sql = "SELECT * from cases, case_statuses where
-                status_open_indicator = 'o'
-                and case_record_status = 'a'
-                and case_statuses.case_status_id = cases.case_status_id
-                and user_id = $user_id
+        $sql = "SELECT c.entered_at, c.due_at, c.company_id, c.contact_id, c.case_id, c.case_title
+                from cases c, case_statuses s
+                where s.status_open_indicator = 'o'
+                and c.case_record_status = 'a'
+                and s.case_status_id = c.case_status_id
+                and c.user_id = $user_id
                 and closed_at > '" . $time_window . "' and closed_at < '" . $time_now . "'
                 order by entered_at ";
 
@@ -399,6 +399,11 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: overdue-items.php,v $
+ * Revision 1.3  2004/09/07 03:57:26  maulani
+ * - Cleaned up SQL
+ * - Fixed copy & paste bugs
+ * - Eliminated deleted users from the all users report
+ *
  * Revision 1.2  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *
