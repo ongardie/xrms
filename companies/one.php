@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.62 2004/07/26 03:59:23 braverock Exp $
+ * $Id: one.php,v 1.63 2004/07/28 13:15:49 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -667,11 +667,11 @@ function openNewsWindow() {
         <input type=hidden name=on_what_table        value="<?php echo $on_what_table; ?>">
         <input type=hidden name=on_what_id           value="<?php echo $on_what_id; ?>">
         <input type=hidden name=on_what_string       value="<?php echo $on_what_string; ?>">
-        <input type=hidden name=activity_description value="''">
-        <input type=hidden name=email                value="''">
-        <input type=hidden name=followup             value="''">
-        <input type=hidden name=on_what_status       value="''">
-        <input type=hidden name=ends_at              value="''">
+        <input type=hidden name=activity_description value="">
+        <input type=hidden name=email                value="">
+        <input type=hidden name=followup             value="">
+        <input type=hidden name=on_what_status       value="">
+        <input type=hidden name=ends_at              value="">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -762,6 +762,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.63  2004/07/28 13:15:49  maulani
+ * - Fixed bug 999352 where new activity was always created as completed.
+ *   Multiple variables were passed incorrectly on creation.
+ *
  * Revision 1.62  2004/07/26 03:59:23  braverock
  * - sort contact list in Activities menu by last name
  *   - implements SF feature request 925618 submitted by gpowers
