@@ -1,4 +1,5 @@
 update activities set ends_at = scheduled_at where ends_at is null;
+update activities set ends_at = scheduled_at where ends_at = " ";
 
 CREATE TABLE `company_former_names` (
   `company_id` int(11) NOT NULL default '0',
@@ -41,3 +42,14 @@ create table company_division (
 ALTER TABLE `contacts` ADD `division_id` INT NOT NULL AFTER `company_id` ;
 
 ALTER TABLE `files` ADD `file_type` varchar(100) NOT NULL default '' AFTER `file_size` ;
+
+-- add open status and sort order to case statuses and opportunity statuses
+ALTER TABLE `opportunity_statuses` ADD `sort_order` TINYINT DEFAULT '1' NOT NULL AFTER `opportunity_status_id` ,
+ADD `status_open_indicator` CHAR( 1 ) DEFAULT 'o' NOT NULL AFTER `sort_order` ;
+
+update opportunity_statuses set sort_order = opportunity_status_id;
+
+ALTER TABLE `case_statuses` ADD `sort_order` TINYINT DEFAULT '1' NOT NULL AFTER `case_status_id` ,
+ADD `status_open_indicator` CHAR( 1 ) DEFAULT 'o' NOT NULL AFTER `sort_order` ;
+
+update case_statuses set sort_order = case_status_id;
