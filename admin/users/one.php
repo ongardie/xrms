@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.7 2004/06/14 22:50:14 introspectshun Exp $
+ * $Id: one.php,v 1.8 2004/07/13 13:24:05 braverock Exp $
  */
 
 //include required files
@@ -26,7 +26,6 @@ $rst = $con->execute($sql);
 
 if ($rst) {
 
-    $user_type_id = $rst->fields['user_type_id'];
     $new_username = $rst->fields['username'];
     $first_names = $rst->fields['first_names'];
     $last_name = $rst->fields['last_name'];
@@ -127,6 +126,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/13 13:24:05  braverock
+ * - change user_type_id to role_id
+ *
  * Revision 1.7  2004/06/14 22:50:14  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

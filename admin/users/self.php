@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.5 2004/06/14 22:50:14 introspectshun Exp $
+ * $Id: self.php,v 1.6 2004/07/13 13:24:05 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,7 +26,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
 
-    $user_type_id = $rst->fields['user_type_id'];
+    $role_id = $rst->fields['role_id'];
     $username = $rst->fields['username'];
     $first_names = $rst->fields['first_names'];
     $last_name = $rst->fields['last_name'];
@@ -101,6 +101,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.6  2004/07/13 13:24:05  braverock
+ *- change user_type_id to role_id
+ *
  *Revision 1.5  2004/06/14 22:50:14  introspectshun
  *- Add adodb-params.php include for multi-db compatibility.
  *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.
