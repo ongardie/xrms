@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.52 2004/07/20 10:43:16 cpsource Exp $
+ * $Id: utils-misc.php,v 1.53 2004/07/20 14:04:41 cpsource Exp $
  */
 
 /**
@@ -288,6 +288,12 @@ function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure=
  * Returns FALSE if variable is not found.
  * Returns TRUE if it is.
  */
+
+//
+// WARNING - This function is deprecated by the
+// arr_vars sub-system and will be gradually
+// replaced.
+//
 function getGlobalVar( &$value, $name ) {
 
     if( isset($_SESSION[$name]) ) {
@@ -869,6 +875,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.53  2004/07/20 14:04:41  cpsource
+ * - Deprecated getGlobalVars. It's replaced by the arr_vars sub-system.
+ *
  * Revision 1.52  2004/07/20 10:43:16  cpsource
  * - Moved SESSION['role'] to SESSION['role_short_name']
  *   role is now set in login-2.php instead of admin/routing.php
