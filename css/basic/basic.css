@@ -78,10 +78,6 @@ table.widget .widget_header,
 table.widget .widget_label {
     background-color: rgb(20%,40%,60%);
 }
-table.widget .widget_label {
-	text-align: center; 
-	padding: 0em 0.5em 0em 0.5em;
-}
 /** -------
  * BACKGROUND/BORDER SETTINGS
  * Specified URIs are relative to the stylesheet, not the loaded page
@@ -131,6 +127,10 @@ table.widget .widget_label_right_166px {
 table.widget .widget_header {
     padding: 4px;
 }
+table.widget .widget_label_center {
+	padding: 0em 0.5em 0em 0.5em;
+}
 input.button {
     margin: 2px 1px;
 }
+
