@@ -1,4 +1,9 @@
 <?php
+/**
+ * Edit a relationship type
+ *
+ * $Id: edit-2.php,v 1.2 2004/09/29 14:38:38 braverock Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -44,5 +49,14 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: one.php?relationship_type_id=$relationship_type_id");
+header("Location: some.php");
+
+/**
+ * $Log: edit-2.php,v $
+ * Revision 1.2  2004/09/29 14:38:38  braverock
+ * - add phpdoc
+ * - rationalize indentation
+ * - fix return url after edit
+ *
+ */
 ?>
