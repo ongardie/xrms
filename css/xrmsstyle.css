@@ -1,0 +1,41 @@
+/**
+ * XRMS font, margin, and padding adjustments for 
+ * better display on screen
+ */
+#page_header {
+    font-size: xx-large;
+}
+#msg,
+#loginbar,
+#navline,
+input,
+input.button,
+select,
+textarea,
+table.widget .small,
+table.widget .widget_label,
+table.widget .widget_label_right,
+table.widget .widget_label_center,
+table.widget .widget_content_form_element,
+table.widget .widget_content_form_element_center,
+table.widget input.button {
+    font-size: small;
+}
+#Sidebar table.widget {
+    font-size: small;
+}
+/* reset to medium, they're covered by #Sidebar table.widget */
+#Sidebar table.widget .widget_header {
+    font-size: medium;
+}
+#Sidebar input,
+#Sidebar input.button,
+#Sidebar table.widget .small, 
+#Sidebar table.widget .widget_label,
+#Sidebar table.widget .widget_label_right,
+#Sidebar table.widget .widget_label_center,
+#Sidebar table.widget .widget_content_form_element,
+#Sidebar table.widget .widget_content_form_element_center {
+    font-size: x-small;
+}
+

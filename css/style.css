@@ -1,0 +1,99 @@
+/**
+ * XRMS 
+ *
+ * Stylesheet for basic/default style attributes.
+ * Override/extend these in themed stylesheets
+ */
+/** 
+ * default font settings for entire document 
+ */
+body {
+    font-family: arial, sans-serif;
+    font-weight: normal;
+    color: black;
+    background-color: white;
+}
+/** --------------------
+ * PADDING / MARGINS 
+ * for evenness, padding is in multiples of 2 with the exception
+ * of a few tiny cell elements that need a boost of 1
+ */
+form,
+img,
+input,
+input.button,
+select,
+textarea {
+    margin: 0px;
+}
+table.widget {
+    margin: 0px auto 4px auto;
+    width: 100%;
+}
+table.widget .sublabel {
+    padding-right: 4px;
+}
+#loginbar,
+#msg,
+#navline {
+    padding: 2px 4px;
+}
+#Main,
+#Main #Sidebar {
+    padding-top: 4px;
+}
+/** -------
+ * FONT/TEXT SETTINGS 
+ */
+td.monospace,
+input.monospace, 
+select.monospace, 
+textarea.monospace {
+    font-family: courier, monospace;
+}
+/** 
+ * font weights 
+ */
+table.widget .widget_header,
+#page_header,
+#msg {
+    font-weight: bold;
+}
+/**
+ * text alignment 
+ */
+#msg,
+table.widget .center,
+table.widget .widget_label_center,
+table.widget .widget_content_center,
+table.widget .widget_content_graph,
+table.widget .widget_content_form_element_center {
+    text-align: center;
+}
+#loginbar,
+table.widget .sublabel,
+table.widget .right,
+table.widget .widget_content_right,
+table.widget .widget_label_right,
+table.widget .widget_label_right_91px,
+table.widget .widget_label_right_166px {
+    text-align: right;
+}
+/** ----------
+ * OTHER - WIDGETS/TABLES/FORMS 
+ */
+form { 
+	display: inline;
+}
+table.widget .sublabel,
+table.widget .nowrap {
+    white-space: nowrap;
+}
+table.widget th,
+table.widget td {
+    vertical-align: top;
+}
+table.widget .widget_label,
+table.widget .widget_label_right {
+    vertical-align: middle;
+}

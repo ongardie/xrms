@@ -1,0 +1,131 @@
+/**
+ * Basic XRMS theme
+ *
+ * This style sheet overlays the default XRMS sheets:
+ *    xrmsstyle.css, xrmsstyle-ie.css (if IE), and xrmsstyle-screen.css
+ *
+ * It is used with screen media only.
+ */
+/** ----------
+ * FOREGROUND COLORS - black by default (body) 
+ */
+body {
+    color: #000;
+}
+table.widget td { 
+    color: #333;
+}
+table.widget .sublabel {
+    color: #999;
+}
+#loginbar,
+#loginbar a,
+#page_header,
+table.widget .widget_header,
+table.widget .widget_content_graph, 
+table.widget .overdue_activity,
+table.widget .non_uploaded_file  {
+  color: #ffe;
+}
+/** --------
+ * ANCHOR TAGS - colors/decorations 
+ */
+a {
+    color: #33f;
+}
+a:hover {
+    text-decoration: none;
+}
+/** --------
+ * BACKGROUND COLORS - light gray by default (body) 
+ */
+body {
+    background-color: #eee;
+}
+table.widget {
+    background-color: #ddd;
+}
+input.button {
+    background-color: #fc9;
+}
+#navline,
+table.widget th,
+table.widget td { 
+    background-color: #fff;
+}
+table.widget .closed_activity {
+    background-color: #dcdcdc;
+}
+#msg {
+    background-color: #fee;
+}
+table.widget .widget_content_alt, 
+table.widget .widget_content_market2 {
+    background-color: #ffe;
+}
+table.widget .scheduled_activity {
+    background-color: #eef;
+}
+table.widget .widget_content_graph {
+    background-color: #bbb;
+}
+table.widget .non_uploaded_file,
+table.widget .overdue_activity {
+    background-color: #f77;
+}
+#page_header,
+table.widget .widget_label {
+    background-color: rgb(20%,40%,60%);
+}
+table.widget .widget_header  {
+    background-color: rgb(20%,40%,60%);
+}
+/** -------
+ * BACKGROUND/BORDER SETTINGS 
+ * Specified URIs are relative to the stylesheet, not the loaded page 
+ */
+#page_header {
+    border: 1px solid Gainsboro;
+    background-image: url(../../img/page_title_background.gif);
+    background-repeat: repeat-x;
+    line-height: 65px;   /* set line height for image */
+}
+#msg {
+    background-image: url(../../img/msg_background.gif);
+    border: 1px solid #ccc;
+}
+input.button {
+    border: 1px solid #999;
+}
+table.widget {
+    border: 1px solid Gainsboro;
+}
+table.widget .widget_label {
+    background-image: url(../../img/widget_label_background.gif);
+}
+table.widget .widget_header {
+    background-image: url(../../img/widget_header_background.gif);
+}
+table.widget .widget_label_right {
+    background-image: url(../../img/widget_label_right_background.gif);
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+table.widget .widget_label_right_91px {
+    background-image: url("img/widget_label_91px.gif");
+}
+table.widget .widget_label_right_166px {
+    background-image: url("img/widget_label_background_large.gif");
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+/** 
+ * PADDING
+ */
+#page_header,
+table.widget .widget_header {
+    padding: 4px;
+}
+input.button {
+    margin: 2px 1px;
+}

@@ -1,0 +1,72 @@
+/**
+ * XRMS
+ * CSS styles for the printed page (and print preview)
+ * 
+ * Any block element that should not be printed can use
+ * the noprint class to hide when the page is printed:
+ *    <div id="optional" class="noprint">
+ * or <div class="otherclass noprint">
+ */
+body {
+    background-color: white;
+    color: black;
+    font-size: 10pt;
+}
+/* Hide elements that should not print */
+form,
+#msg,
+#loginbar,
+div.noprint,
+input.button,
+#navline {
+    display: none;
+}
+/* Make Sidebar follow Content */
+#Main #Content {
+    width: auto;
+    margin: 2px;
+}
+#Main #Sidebar {
+    position: relative;
+    width: auto;
+    margin: 2px;
+}
+/* Adjust display attributes for better printing... */
+a {
+    text-decoration: none;
+    color: black;
+}
+#page_header {
+    font-size: large;
+    margin: 2px;
+    padding: 0px;
+    border: none;
+    border-bottom: 1px solid gray;
+}
+table.widget {
+    margin: 0px 0px 10px 0px;
+    padding: 4px;
+    border: 1px solid gray; 
+    page-break-inside: avoid;
+}
+table.widget td {
+    padding: 2px;
+}
+table.widget td.widget_label,
+table.widget td.widget_label_center,
+table.widget td.widget_label_right {
+    border: 1px solid #ccc;
+    color: gray;
+}
+table.widget td.sublabel {
+    color: gray;
+    font-weight: normal;
+    border-right: 1px solid #ccc;
+    padding: 2px 6px 2px 2px;
+}
+table.widget th.widget_header,
+table.widget td.widget_header {
+    border-bottom: 1px solid blue;
+    padding: 4px 2px;
+}
+table.widget 
