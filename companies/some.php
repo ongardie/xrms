@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.59 2005/03/15 22:48:04 daturaarutad Exp $
+ * $Id: some.php,v 1.60 2005/03/20 01:50:35 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -81,11 +81,6 @@ if ($company_category_id > 0) {
 if (strlen($company_name) > 0) {
     $criteria_count++;
     $where .= " and c.company_name like " . $con->qstr('%'. $company_name . '%', get_magic_quotes_gpc());
-}
-
-if (strlen($company_type_id) > 0) {
-    $criteria_count++;
-    $where .= " and c.company_id in (select company_id from company_company_type_map where company_type_id = $company_type_id)";
 }
 
 if (strlen($user_id) > 0) {
@@ -191,11 +186,6 @@ and category_record_status =  'a'
 order by category_pretty_name";
 $rst = $con->execute($sql2);
 $company_category_menu = $rst->getmenu2('company_category_id', $company_category_id, true);
-$rst->close();
-
-$sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_pretty_name";
-$rst = $con->execute($sql2);
-$company_type_menu = translate_menu($rst->getmenu2('company_type_id', $company_type_id, true));
 $rst->close();
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_pretty_name";
@@ -404,6 +394,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.60  2005/03/20 01:50:35  maulani
+ * - Remove reference to company_company_type_map
+ *
  * Revision 1.59  2005/03/15 22:48:04  daturaarutad
  * pager tuning sql_sort_column
  *
