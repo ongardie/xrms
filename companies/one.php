@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.54 2004/07/15 17:29:08 cpsource Exp $
+ * $Id: one.php,v 1.55 2004/07/15 17:39:13 cpsource Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -116,6 +116,7 @@ ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
 
+$activity_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
 
@@ -176,14 +177,11 @@ $sql = "select * from contacts where company_id = $company_id
 $rst = $con->execute($sql);
 
 $contacts = $rst->rowcount();
+
+$contact_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
-        // make sure $contact_rows is set for later
-        if ( !isset($contact_rows) ) {
-            $contact_rows = '';
-        }
 	$contact_id = $rst->fields['contact_id'];
-
         $contact_rows .= "\n<tr>";
         $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
                         . $contact_id . "'>"
@@ -214,6 +212,7 @@ $sql = "select * from company_former_names where company_id = $company_id order 
 
 $rst = $con->execute($sql);
 
+$former_name_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
         $former_name_rows .= '<tr><td class=sublabel>Former Name</td>';
@@ -242,6 +241,7 @@ $sql = "select rt.from_what_text, rt.to_what_text, r.established_at,
 
 $rst = $con->execute($sql);
 
+$relationship_rows = '';
 $linecounter = 0;
 if ($rst) {
     while (!$rst->EOF) {
@@ -315,12 +315,16 @@ $overall_id = $company_id;
 require_once("../relationships/sidebar.php");
 
 
-//include the files sidebar
+// include the files sidebar
 require_once("../files/sidebar.php");
 
-//include the notes sidebar
+// include the notes sidebar
 require_once("../notes/sidebar.php");
 
+// make sure $sidebar_rows is defined
+if ( !isset($sidebar_rows) ) {
+  $sidebar_rows = '';
+}
 //call the sidebar hook
 $sidebar_rows = do_hook_function('company_sidebar_bottom', $sidebar_rows);
 
@@ -678,6 +682,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.55  2004/07/15 17:39:13  cpsource
+ * - Fix undefines: former_name_rows, relationship_rows, activity_rows,
+ *   sidebar_rows
+ *
  * Revision 1.54  2004/07/15 17:29:08  cpsource
  * - Fix $contact_id undefines
  *
