@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.6 2004/12/31 22:54:18 gpowers Exp $
+ * $Id: sidebar.php,v 1.7 2005/01/03 16:52:38 gpowers Exp $
  */
 
 // $con->debug = 1;
@@ -114,7 +114,7 @@ if ($toprst) {
                 $rst2 = $con->execute($sql2);
                 if ($rst2) {
                   if (!$rst2->EOF) {
-                    $server_link .= "<tr><td class=sublabel>" . $field . "</td><td class=clear>"
+                    $server_link .= "<tr><td class=sublabel>" . $field . "</td><td class=widget_content>"
                         . $rst2->fields['value'] . "</td></tr>";
                   }
                 }
