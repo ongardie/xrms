@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.13 2004/06/03 16:11:01 braverock Exp $
+ * $Id: some.php,v 1.14 2004/06/04 16:03:59 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -243,7 +243,7 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+<?php jscalendar_includes(); ?>
 
 <div id="Main">
     <div id="Content">
@@ -279,7 +279,8 @@ start_page($page_title, true, $msg);
                         <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
                         <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
                     </select>
-                    <input type=text name="date" size=20 value="<?php  echo $date; ?>"> <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif" alt=""></a>
+                    <input type=text ID="f_date_d" name=date value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
                 <td class=widget_content_form_element><?php  echo $type_menu; ?></td>
                 <td class=widget_content_form_element>
@@ -349,15 +350,16 @@ function resort(sortColumn) {
     document.forms[0].submit();
 }
 
-// create calendar object(s) just after form tag closed
-// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
-// note: you can have as many calendar objects as you need for your application
+Calendar.setup({
+        inputField     :    "f_date_d",      // id of the input field
+        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
+        showsTime      :    true,            // will display a time selector
+        button         :    "f_trigger_d",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
 
-    var cal1 = new calendar1(document.forms[0].elements['date']);
-    cal1.year_scroll = false;
-    cal1.time_comp = false;
-
-//-->
 </script>
 
 <?php
@@ -366,6 +368,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.14  2004/06/04 16:03:59  gpowers
+ * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
+ * w/minor changes: changed includes to function, used complete php tags
+ *
  * Revision 1.13  2004/06/03 16:11:01  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
