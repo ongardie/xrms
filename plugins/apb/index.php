@@ -11,6 +11,7 @@
 //####################################################################
 
 include_once('apb.php');
+include_once('options_box.php');
 
 $page_title = _("Bookmarks");
 start_page($page_title, true, $msg);
@@ -38,17 +39,7 @@ if ($number_of_bookmarks == 0) {
     <table cellpadding="0" cellspacing="0" border="0" width="70%">
     <tr>
       <td>
-
-      <p><b>This message will disappear once you've added your first bookmark.</b>
-
-      <p>There are no bookmarks in APB right now.  You can
-      <a href='quickadd.php'>create a button</a> in your browser that will aid
-      in adding bookmarks to APB.  We highly recommend that you do this.
-      If you don't do this now, you can always do it later in the
-      '<a href='tools.php'>Setup</a>' section.
-
-      <?php if (!$APB_SETTINGS['auth_user_id']) { echo "<p><font color='red'>By the way, you can't really do anything until you're logged in.</font>"; } ?>
-
+      <p><?php echo _("There are no bookmarks."); ?></p>
       </td>
     </tr>
     </table>
@@ -62,33 +53,68 @@ if ($number_of_bookmarks == 0) {
 $directory_view = directory_view();
 // $top_groups = top_groups(5,5,14);
 
-?>
+echo "
 
 <div id=Main>
   <div id=Content>
     <table class=widget>
+
+            <tr>
+                <td class=widget_header>Search</td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                <form method=get action=\"search.php\">
+                <input name=\"keywords\" value=\"\" size=\"25\">
+                <input type=\"submit\" name=\"submit\" value=\"" . _("Search") . "\">
+                </form>
+                </td>
+            </tr>
+
+    </table>
+    <table class=widget>
         <tr>
-            <td class=widget_header><?php echo  _("Groups"); ?></td>
+            <td class=widget_header>" .   _("Groups") . "</td>
         </tr>
         <tr>
             <td class=widget_content>
-                <?php echo $directory_view; ?>
+                " .  $directory_view . "
             </td>
         </tr>
     </table>
   </div>
-  <div id=Sidebar>
-    <?php echo $top_groups; ?>
-  </div>
 
-<?php
-
-apb_foot();
-
-echo "</div>";
+";
 
 }
 
-end_page();
-
 ?>
+
+  <!-- right column //-->
+    <div id="Sidebar">
+
+<?php echo $options_box; ?>
+
+<table class=widget cellspacing=1 width="100%">
+<tr>
+  <td class=widget_header>
+    <?php echo _("QuickAdd"); ?>
+  </td>
+</tr>
+
+<tr>
+  <td class=widget_content>
+
+    <?php echo _("Drag the following link to your browser's toolbar, or add this link to your browser's favorites. You can then use this link to automatically add any site that you're viewing to these bookmarks."); ?> 
+
+    <?php echo "<p align=\"center\"><a href=\"javascript:document.location = '" . $APB_SETTINGS['apb_url'] . "add_bookmark.php?form_title=' + escape(document.title) + '&form_url=' + escape(document.location)\" onClick=\"javascript:alert('" . _("You must drag this link to your browser\'s toolbar or add it to your favorites.") . "'); return false\">" . _("Add to Bookmarks") . "</a>"; ?>
+
+  </td>
+</tr>
+
+</table>
+
+  </div>
+</div>
+
+<?php end_page(); ?>

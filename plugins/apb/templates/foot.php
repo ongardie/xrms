@@ -29,17 +29,6 @@ if ($edit_mode) {  echo "<h2 class='warning'>Edit Mode</h2>"; }
 
 ?>
 
-<?php if ($APB_SETTINGS['allow_search_box']) { ?>
-
-    <p>
-    <form method='get' action='search.php'>
-    <input name='keywords' value='' size='25'>
-    <input type='submit' name='submit' value='Search'>
-    </form>
-    </p>
-
-<?php } ?>
-
 <p>
 <table cellpadding="5" align="center" cellspacing="0" border="0">
 <tr>

@@ -36,13 +36,6 @@ $html_title = "";
 // If you want to create your own design for APB, change the head_design.php file
 include($APB_SETTINGS['template_path'] . "head_design.php");
 
-?>
-
-<center>
-<h1><?php echo $html_title ?></h1>
-
-<?
-
 if ($edit_mode) {  echo "<h2 class='warning'>Edit Mode</h2>"; }
 
 ?>

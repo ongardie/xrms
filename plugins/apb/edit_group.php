@@ -14,46 +14,37 @@
 
 include_once('apb.php');
 
-//echo "[".$APB_SETTINGS['auth_user_id']."]";
+$id = $_GET['id'];
 
-if ($APB_SETTINGS['auth_user_id']) {
-
-    // We have an authenticated user.
-
-    print "<h2>Edit Group</h2>\n";
+$page_title = _("Bookmarks") .  " - " .  _("Edit Group");
+start_page($page_title, true, $msg);
 
     // We're actually editing the group.
-    if ($action == "edit_group" && $id && $form_title)
-    {
-        $query = "
-            UPDATE apb_groups
-               SET group_parent_id = $form_group_parent_id,
-                   group_title = '$form_title'
-             WHERE group_id = $id
-               AND user_id = ".$APB_SETTINGS['auth_user_id']."
-             LIMIT 1
-        ";
-//        echo "<p><pre>$query</pre><p>\n";
-        $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-        if ($result)
-        {
+    if (($action == "edit_group") && $id && $form_title) {
+
+    $sql = "SELECT * FROM apb_groups WHERE group_id = '" . $id . "' AND user_id = '" . $APB_SETTINGS['auth_user_id'] . " LIMIT 1";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['group_parent_id'] = $form_group_parent_id;
+    $rec['group_title'] = $form_title;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    if ($upd) {
+        $upd_rst = $con->execute($upd);
+        if (!$upd_rst) {
+            db_error_handler ($con, $upd);
+        }  else { 
             $g = apb_group($id);
 
             echo "<p>" . _("Group updated!") . "</p>"
                 . "<p>" . $g->print_group_path() . "</p>"
                 . "<p><a href='" . $back_url . "'>"
-                . _("Go Back to Editing") . "</a></p>"
-        }
-        else
-        {
-            error( _("Group edit failed!!") );
+                . _("Go Back to Editing") . "</a></p>";
         }
     }
+    } else {
     // We're not doing the SQL editing (updating) yet, so display the form page.
-    else
-    {
-//        Turned this off for the time being [LBS]
-//        set_magic_quotes_runtime(0);
 
         if ($id) {
 
@@ -71,13 +62,17 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             ?>
 
-            <p><?php echo $g->print_group_path() ?>
+            <table class=widget>
+                <tr>
+                    <td class=widget_header>
+                        <?php echo $g->print_group_path() ?>
+                    </td>
+                </tr>
 
             <p>
             <form action="<?php echo $SCRIPT_NAME ?>?action=edit_group" method="post">
             <input type='hidden' name='back_url' value='<?php echo $HTTP_REFERER ?>'>
             <?php if ($id) { print "<input type='hidden' name='id' value='$id'>\n"; } ?>
-            <table>
             <tr>
             <td>
                 <table width='100%'>
@@ -118,12 +113,7 @@ if ($APB_SETTINGS['auth_user_id']) {
 
     }
 
-} else {
 
-    print "<p><b>" . _("You must be logged in to edit groups.") . "</b></p>\n";
-
-}
-
-apb_foot();
+end_page();
 
 ?>

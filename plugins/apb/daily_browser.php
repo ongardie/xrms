@@ -25,6 +25,9 @@ $APB_SETTINGS['allow_search_box'] = 1;
 
 $date = $_GET['date'];
 
+$page_title = "Bookmarks - Daily Browsings";
+start_page($page_title, true, $msg);
+
 ?>
 
 <p>
@@ -34,8 +37,6 @@ $date = $_GET['date'];
   <td valign='top'>
 
 <?php
-
-if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']) {
 
 	$today =  date("Y-m-d");
 
@@ -129,7 +130,7 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
 	/* Display The Days Browsing */
 
 	print "<p>\n";
-	print "<b>" . _("Bookmarks Used by")  . return_username($APB_SETTINGS['user_id']) . "</b><p>\n";
+	print "<b>" . _("Bookmarks Used by ")  . return_username($APB_SETTINGS['user_id']) . "</b><p>\n";
 
 	$query = "
 		SELECT b.*, g.*, DATE_FORMAT(h.hit_date, '%H:%i:%s') as hit_date
@@ -159,7 +160,7 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
 	/* Display The Days Browsing by Visitors*/
 
 	print "<p>\n";
-	print "<b>" . _("Bookmarks Used by Visitors") . "</b><p>\n";
+	print "<b>" . _("Bookmarks Used by Others") . "</b><p>\n";
 
 	$query = "
 		SELECT b.*, g.*, DATE_FORMAT(h.hit_date, '%H:%i:%s') as hit_date, h.hit_ip
@@ -188,14 +189,6 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
 
     echo "<br>";
 
-} else {
-
-?>
-
-<center><p><?php echo _("Daily bookmark browsing is not enabled for non-authenticated users."); ?></center>
-
-<?php
-}
 ?>
 
   </td>
@@ -203,5 +196,5 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
 </table>
 
 <?php
-apb_foot();
+end_page();
 ?>

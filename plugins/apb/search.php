@@ -12,6 +12,7 @@
 //####################################################################
 
 include_once('apb.php');
+include_once('options_box.php');
 
 $keywords = $_GET['keywords'];
 
@@ -79,8 +80,6 @@ foreach ($words as $search_string) {
              $private_sql
         ";
 
-        #print "<p><pre>$query</pre><p>\n\n";
-
         $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
         $total_rows = mysql_num_rows($result);
 
@@ -98,37 +97,48 @@ foreach ($words as $search_string) {
 $keyword = htmlspecialchars(stripslashes($keyword));
 $number_of_results = count($results) + count($group_results);
 
-print "<h2>" . _("Search Results") . "</h2>";
 if ($number_of_results == 1) { $s = _("result"); }
 else { $s = _("results"); }
 
-// Added all the entities stripslashes stuff to the search results. [LBS 20020211]
-print "<p><b>$number_of_results</b> " . $s . " " . _("for")
-    . " \"<b>" . htmlentities(stripslashes($keywords)) . "</b>\"";
+$msg = "$number_of_results " . $s . " " . _("for")
+    . " \"" . htmlentities(stripslashes($keywords)) . "\"";
+
+$page_title = _("Bookmarks") . " - " . _("Search Results");
+start_page($page_title, true, $msg);
 
 ?>
+
    <!-- Search Box -->
 
-   <p>
-   <form>
-   <input type='hidden' name='action' value='search'>
-   <input name='keywords' value="<?php echo htmlentities(stripslashes($keywords)) ?>">
-   <input type='submit' name='Submit' value='Search'>
-   </form>
-<?php
+<div id="Main">
+    <div id="Content">
+        <table class=widget>
+            <tr>
+                <td class=widget_header>Search</td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                <form method='get' action='search.php'>
+                    <input name='keywords' value="<?php echo htmlentities(stripslashes($keywords)) ?>" size='25'>
+                    <br />
+                    <input type='submit' name='submit' value='<?php echo _("Search"); ?>'>
+                </form>
+                </td>
+            </tr>
+    </table>
 
-print "<p><table align='center' cellpadding='0' cellspacing='0' border='0'><tr><td>\n";
+<?php
 
 if ($group_results) {
 
-    print "<p><b>" . _("Group Matches") . "</b></p>\n\n";
+    print "<table class=widget><tr><td class=widget_header>" . _("Group Matches") . "</td></tr>\n\n";
 
-    echo "<ul>";
+    echo "<tr><td class=widget_content>\n<ul>";
 	while(list($id, $score) = each ($group_results)) {
         $g = apb_group($id);
         print "<li>";
-        #print $g->link();
-        #print " (Home :: " . $g->get_group_path() . ")";
+        print $g->link();
+        print " (Home :: " . $g->get_group_path() . ")";
         $g->print_group_path();
 
         if ($g->description()) {
@@ -136,7 +146,7 @@ if ($group_results) {
         }
         print "\n";
 	}
-    echo "</ul>";
+    echo "</ul></td></tr></table>";
 
 }
 
@@ -144,9 +154,9 @@ if ($results) {
 	arsort($results);
 	reset($results);
 
-    print "<p><b>" . _("Site Matches") . "</b></p>\n\n";
+    print "<table class=widget><tr><td class=widget_header>" . _("Site Matches") . "</td></tr>\n\n";
 
-    echo "<ul>";
+    echo "<tr><td class=widget_content>\n<ul>";
 	while(list($id, $score) = each ($results)) {
         $b = apb_bookmark($id);
         $g = apb_group($b->group_id());
@@ -158,11 +168,18 @@ if ($results) {
         }
         print "\n";
 	}
-    echo "</ul>";
+    echo "</ul></td></tr></table>";
 }
-
-print "</td></tr></table>\n\n";
-
-apb_foot();
-
 ?>
+
+    </div>
+
+  <!-- right column //-->
+    <div id="Sidebar">
+
+<?php echo $options_box; ?>
+
+    </div>
+</div>
+
+<?php end_page(); ?>

@@ -32,34 +32,25 @@ $form_url = $_POST['form_url'];
 $form_description = $_POST['form_description'];
 $form_private = $_POST['form_private'];
 
-
-$page_title = _("Bookmarks : Add");
-start_page($page_title, true, $msg);
-
     // If we're going to insert, we need to have a URL. [LBS 20020211]
     if ($action == 'insert_bookmark' && $form_url) {
 
         // We're inserting a new bookmark.
         if ($form_group_type == 'new' && $form_group_title) {
 
-            // INSERT new group
-            $query = "
-                INSERT INTO apb_groups
-                (group_parent_id, group_title, user_id, group_creation_date)
-                VALUES
-                ('$form_group_parent_id', '$form_group_title', '".$APB_SETTINGS['auth_user_id']."', NOW())
-            ";
-            $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
+            //save to database
+            $rec = array();
+            $rec['group_parent_id'] = $form_group_parent_id;
+            $rec['group_title'] = $form_group_title;
+            $rec['user_id'] = $APB_SETTINGS['auth_user_id'];
+            $rec['group_creation_date'] = time();
 
-
-            // Groups have to be unique accross group_title and
-            // user_id, so we just do the previous insert blindly
-            // and now query the db for the group_id of the group
-            // which we'll use in our bookmark insert.  If the last
-            // insert failed, it's because the group already
-            // existed for that user_id, which doesn't prohibit us
-            // from just going ahead and using the existing group
-            // for the bookmark insert.
+            $tbl = 'apb_groups';
+            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            $rst = $con->execute($ins);
+            if (!$rst) {
+                db_error_handler ($con, $ins);
+            }
 
             $query = "
                 SELECT group_id
@@ -68,28 +59,37 @@ start_page($page_title, true, $msg);
                    AND user_id = '".$APB_SETTINGS['auth_user_id']."'
             ";
 
-            $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-            $row = mysql_fetch_assoc($result);
-            $form_group_id = $row['group_id'];
+            $row=$con->execute($query);
+            if ($rst) {
+                if (!$row -> EOF) {
+                    $form_group_id = $row['group_id'];
+                }
+            }
 
         }
 
         // UPDATE bokmark
         if ($form_id) {
             if (1) {
-                $query = "
-                    UPDATE apb_bookmarks
-                       SET group_id = '$form_group_id',
-                           bookmark_title = '$form_title',
-                           bookmark_url = '$form_url',
-                           bookmark_description = '$form_description',
-                           bookmark_private = '$form_private'
-                     WHERE bookmark_id = $form_id
-                       AND user_id = '".$APB_SETTINGS['auth_user_id']."'
-                     LIMIT 1
-                ";
-                $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-                if ($result) {
+                 $rec = array();
+                 $rec['group_id'] = $form_group_id;
+                 $rec['bookmark_title'] = $form_title;
+                 $rec['bookmark_url'] = $form_url;
+                 $rec['bookmark_description'] = $form_description;
+                 $rec['bookmark_private'] = $form_private;
+
+    $sql = "SELECT * FROM apb_bookmarks WHERE bookmark_id = $form_id AND user_id = '" . $APB_SETTINGS['auth_user_id'] . "' LIMIT 1";
+    $rst = $con->execute($sql);
+
+    if (!$rst) {
+        db_error_handler ($con, $sql);
+    }
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $upd_rst = $con->execute($upd);
+    if (!$upd_rst) {
+        db_error_handler ($con, $ins);
+    } else {
 
                     $b = apb_bookmark($form_id);
                     $g = apb_group($b->group_id());
@@ -97,10 +97,8 @@ start_page($page_title, true, $msg);
                     echo "<p>" . _("Bookmark saved!") . "</p>"
                         . "<p>" . $g->print_group_path() . "</p>"
                         . "<p>" . $b->link() . "</p>"
-                        . "<p><a href='" . $back_url . "'>"
+                        . "<p><a href=\"" . $back_url . "\">"
                         . _("Go Back to Editing") . "</a>";
-                } else {
-                    error( _("Bookmark edit failed!!") );
                 }
             } else {
                 error( _("You don't have permission to edit this bookmark.") );
@@ -108,19 +106,22 @@ start_page($page_title, true, $msg);
 
         // INSERT bookmark
         } else {
-            $query = "
-                INSERT INTO apb_bookmarks
-                    (group_id, bookmark_title, bookmark_url, bookmark_description,
-                     bookmark_creation_date, bookmark_private, user_id)
-                    VALUES
-                    ('$form_group_id', '$form_title', '$form_url', '$form_description',
-                     now(), '$form_private', '".$APB_SETTINGS['auth_user_id']."')
-            ";
 
-            // print "<p>QUERY<pre>$query</pre><p>\n";
-            $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-
-            if ($result) {
+                 $rec = array();
+                 $rec['group_id'] = $form_group_id;
+                 $rec['bookmark_title'] = $form_title;
+                 $rec['bookmark_url'] = $form_url;
+                 $rec['bookmark_description'] = $form_description;
+                 $rec['bookmark_creation_date'] = time();
+                 $rec['bookmark_private'] = $form_private;
+                 $rec['user_id'] = $APB_SETTINGS['auth_user_id'];
+ 
+            $tbl = 'apb_bookmarks';
+            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            $rst = $con->execute($ins);
+            if (!$rst) {
+                db_error_handler ($con, $ins);
+            } else {
 
                 $b = apb_bookmark(mysql_insert_id());
                 $g = apb_group($b->group_id());
@@ -128,24 +129,29 @@ start_page($page_title, true, $msg);
                 echo "<p>" . _("Bookmark saved!") . "</p>"
                     . "<p>" . $g->print_group_path() . "</p>"
                     . "<p>" . $b->link() . "</p>";
-
-            } else {
-                error( _("Bookmark add failed!!") );
             }
         }
 
     } elseif ($action == 'delete_bookmark') {
         $b = apb_bookmark($bookmark_id);
         if ($b->user_id() == $APB_SETTINGS['auth_user_id']) {
-            $query = "
-                UPDATE apb_bookmarks
-                   SET bookmark_deleted = '1'
-                 WHERE bookmark_id = $bookmark_id
-                 LIMIT 1
-            ";
-            debug($query, 3);
-            $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-            print _("Bookmark Deleted") . "<br>\n";
+
+            $sql = "SELECT * FROM apb_bookamrks WHERE bookamrk_id = $bookmark_id LIMIT 1";
+            $rst = $con->execute($sql);
+            if (!$rst) {
+                db_error_handler ($con, $sql);
+            }
+
+            $rec = array();
+            $rec['bookamrk_deleted'] = 1;
+
+            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            $upd_rst = $con->execute($upd);
+            if (!$upd_rst) {
+                db_error_handler ($con, $upd);
+            } else {
+                print _("Bookmark Deleted") . "<br>\n";
+            }
 
             ?>
 
@@ -271,10 +277,8 @@ start_page($page_title, true, $msg);
                     <tr>
                         <td><?php echo _("Private"); ?>:</td>
                         <td>
-                            <?php echo _("No"); ?> <input type='radio' name='form_private' value='0' <?php
-                                (($form_private == '1') ? '' : ' CHECKED' ); ?> >
-                            <?php echo _("Yes"); ?> <input type='radio' name='form_private' value='1' <?php
-                                (($form_private == '1') ? ' CHECKED' : '' ); ?> >
+                            <?php echo _("No"); ?> <input type='radio' name='form_private' value='0' CHECKED>
+                            <?php echo _("Yes"); ?> <input type='radio' name='form_private' value='1'>
                         </td>
                     </tr>
                 </table>
@@ -301,8 +305,6 @@ start_page($page_title, true, $msg);
 
     }
 
-
-apb_foot();
 end_page();
 
 ?>

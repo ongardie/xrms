@@ -131,25 +131,23 @@ class Group {
 
     function load_vars ($id) {
         global $APB_SETTINGS;
+        global $con;
 
         if (!$id) { return 0; }
 
-        $query = "SELECT * FROM apb_groups WHERE group_id = $id";
-        $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
+        $sql = "SELECT * FROM apb_groups WHERE group_id = $id";
+            $rst = $con->execute($sql);
+            if (($rst) && (!$rst->EOF)) {
 
-        if ($result) {
-            $row = mysql_fetch_assoc($result);
-
-            $this->id            = $row['group_id'];
-            $this->parent_id     = $row['group_parent_id'];
-            $this->title         = htmlentities($row['group_title'], ENT_QUOTES);
-            $this->description   = htmlentities($row['group_description'], ENT_QUOTES);
-            $this->user_id       = $row['user_id'];
-            $this->private       = $row['group_private'];
-            $this->creation_date = $row['group_creation_date'];
+            $this->id            = $rst->fields['group_id'];
+            $this->parent_id     = $rst->fields['group_parent_id'];
+            $this->title         = htmlentities($rst->fields['group_title'], ENT_QUOTES);
+            $this->description   = htmlentities($rst->fields['group_description'], ENT_QUOTES);
+            $this->user_id       = $rst->fields['user_id'];
+            $this->private       = $rst->fields['group_private'];
+            $this->creation_date = $rst->fields['group_creation_date'];
         } else {
-            error("Creating Group $id: ".mysql_error());
-            error("SQL: $query");
+            db_error_handler ($con, $rst);
         }
     }
 
@@ -158,27 +156,28 @@ class Group {
     function get_group_path () {
 
         global $APB_SETTINGS;
+        global $con;
 
         $string   = $this->title();
         $group_id = $this->parent_id();
 
         while ($group_id > 0) {
 
-            $query = "
+            $sql = "
                 SELECT g.group_id #, g.group_parent_id, g.group_title
                   FROM apb_groups g
                  WHERE g.group_id = $group_id
                    AND g.user_id = " . $APB_SETTINGS['user_id'] . "
             ";
 
-            $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-            $row = mysql_fetch_assoc($result);
-
-            $g = apb_group($row['group_id']);
-
-            $string = $g->title() . " :: " . $string;
-
-            $group_id = $g->parent_id();
+            $rst = $con->execute($sql);
+            if (($rst) && (!$rst->EOF)) {
+                $g = apb_group($rst->fields['group_id']);
+                $string = $g->title() . " :: " . $string;
+                $group_id = $g->parent_id();
+            } else {
+                db_error_handler ($con, $rst);
+            }
         }
 
         return $string;
@@ -188,6 +187,7 @@ class Group {
     function print_group_path () {
 
         global $APB_SETTINGS;
+        global $con;
 
         $group_id = $this->parent_id();
 
@@ -195,19 +195,19 @@ class Group {
 
         while ($group_id > 0) {
 
-            $query = "
-                SELECT g.group_id #, g.group_parent_id, g.group_title
+            $sql = "SELECT g.group_id #, g.group_parent_id, g.group_title
                   FROM apb_groups g
                  WHERE g.group_id = $group_id
-                   AND g.user_id = " . $APB_SETTINGS['user_id'] . "
-            ";
+                   AND g.user_id = " . $APB_SETTINGS['user_id'] . "";
 
-            $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-            $row = mysql_fetch_assoc($result);
-
-            $g = apb_group($row['group_id']);
-            $string =  " : " . $g->title . $string;
-            $group_id = $g->parent_id();
+            $rst = $con->execute($sql);
+            if (($rst) && (!$rst->EOF)) {
+                $g = apb_group($rst->fields['group_id']);
+                $string =  " : " . $g->title . $string;
+                $group_id = $g->parent_id();
+            } else {
+                db_error_handler ($con, $rst);
+            }
         }
 
         return $string;
@@ -217,6 +217,7 @@ class Group {
     function print_group_children () {
 
         global $APB_SETTINGS;
+        global $con;
 
         $group_id = $this->id();
 

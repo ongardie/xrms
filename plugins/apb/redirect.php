@@ -39,14 +39,23 @@ else {
         $user_id = 0;
     }
 
-    $query = "
-        INSERT INTO apb_hits
-        (bookmark_id, user_id, hit_date, hit_ip)
-        VALUES
-        ('$id', '$user_id', NOW(), '$REMOTE_ADDR')
-    ";
-
-    $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
+    $con = &adonewconnection($xrms_db_dbtype);
+    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    // $con->debug = 1;
+    
+    //save to database
+    $rec = array();
+    $rec['bookmark_id'] = $id;
+    $rec['user_id'] = $user_id;
+    $rec['hit_date'] = time();
+    $rec['hit_ip'] = $_SERVER['REMOTE_ADDR'];
+    
+    $tbl = 'apb_hits';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $rst = $con->execute($ins);
+    if (!$rst) {
+        db_error_handler ($con, $ins);
+    }
 
     header ("Location: ".$bm->url());
 }

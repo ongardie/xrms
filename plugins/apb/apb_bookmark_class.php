@@ -154,18 +154,18 @@ class Bookmark {
 
     function load_vars ($id) {
         global $APB_SETTINGS;
+        global $con;
 
-        #debug("Using <b>SQL</b> to load variables for bookmark_id $id");
 
-        $query = "SELECT * FROM apb_bookmarks WHERE bookmark_id = $id";
-        $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
 
-        $row = mysql_fetch_assoc($result);
+        $sql = "SELECT * FROM apb_bookmarks WHERE bookmark_id = $id";
+        $rst = $con->execute($sql);
 
-        $this->id            = $row['bookmark_id'];
-        $this->group_id      = $row['group_id'];
-        $this->title         = htmlentities($row['bookmark_title'], ENT_QUOTES);
-        $this->url           = $row['bookmark_url'];
+      if (($rst) && (!$rst -> EOF)) {
+        $this->id            = $rst->fiedls['bookmark_id'];
+        $this->group_id      = $rst->fiedls['group_id'];
+        $this->title         = htmlentities($rst->fields['bookmark_title'], ENT_QUOTES);
+        $this->url           = $rst->fiedls['bookmark_url'];
         // Clean up blank bookmark bug. [LBS 20020211]
         if (!$this->url) { $this->url = "https://"; }
         // Clean up blank bookmark bug. [LBS 20020211]
@@ -175,10 +175,11 @@ class Bookmark {
         // Bug-fix to previous line of code... this way internal links, such
         // as "/documents/foo.txt", won't get an "http://" added to them work. [LBS 20020306]
         if (!preg_match ("/^[a-zA-Z]+\:/", $this->url) && preg_match ("/^[^\/]+\./", $this->url)) { $this->url = "http://".$this->url; }
-        $this->description   = htmlentities($row['bookmark_description'], ENT_QUOTES);
-        $this->creation_date = $row['bookmark_creation_date'];
-        $this->private       = $row['bookmark_private'];
-        $this->user_id       = $row['user_id'];
+        $this->description   = htmlentities($rst->fields['bookmark_description'], ENT_QUOTES);
+        $this->creation_date = $rst->fields['bookmark_creation_date'];
+        $this->private       = $rst->fields['bookmark_private'];
+        $this->user_id       = $rst->fields['user_id'];
+      }
     }
 
 }
