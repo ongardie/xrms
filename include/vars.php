@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.17 2004/04/29 00:42:16 braverock Exp $
+ * $Id: vars.php,v 1.18 2004/04/29 20:19:13 braverock Exp $
  */
 
 /**
@@ -35,6 +35,24 @@ $http_site_root = "http://www.yoursitename.com/xrms";
 //where is the appliation in the filesystem (no trailing slash)
 $xrms_file_root = "/full/path/to/xrms";
 
+
+/***  File Upload controls ***/
+/**
+ * These settings for XRMS are complimentary to settings in your php.ini
+ * file.  Your PHP .ini file needs the following three variables
+ * to appropriate values:
+ *
+ * ;Whether to allow HTTP file uploads.
+ * file_uploads = On
+ *
+ * ;Temporary directory for HTTP uploaded files
+ * ;(will use system default if not specified).
+ * upload_tmp_dir = /tmp/apache
+ *
+ * ;Maximum allowed size for uploaded files.
+ * upload_max_filesize = 1M
+ * ;set the upload_max_filesize to a number larger than the $max_file_size below
+ */
 // directory where uploaded files should go
 // make sure these directories are writable by the apache user
 $max_file_size = 200000;
