@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.9 2004/07/07 22:51:03 introspectshun Exp $
+ * $Id: login-2.php,v 1.10 2004/07/13 14:51:07 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -74,7 +74,7 @@ if ($xrms_use_ldap) {
                $rec['email'] = $info[0]['mail'][0];
                $rec['gmt_offset'] = $xrms_ldap['default_gmt_offset'];
                $rec['language'] = 'english';
-               
+
                $tbl = 'users';
                $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
                $con->execute($ins);
@@ -96,7 +96,7 @@ if ($xrms_use_ldap) {
 
 if ($rst && !$rst->EOF && $ldapok) {
     $session_user_id = $rst->fields['user_id'];
-    $user_type_id = $rst->fields['user_type_id'];
+    $role_id = $rst->fields['role_id'];
     $username = $rst->fields['username'];
     $language = $rst->fields['language'];
     $gmt_offset = $rst->fields['gmt_offset'];
@@ -104,7 +104,7 @@ if ($rst && !$rst->EOF && $ldapok) {
     session_start();
     $_SESSION['session_user_id'] = $session_user_id;
     $_SESSION['xrms_system_id'] = $xrms_system_id;
-    $_SESSION['user_type_id'] = $user_type_id;
+    $_SESSION['role_id'] = $role_id;
     $_SESSION['username'] = $username;
     $_SESSION['language'] = $language;
     $_SESSION['gmt_offset'] = $gmt_offset;
@@ -116,6 +116,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.10  2004/07/13 14:51:07  braverock
+ * - change user_type_id to role_id
+ *
  * Revision 1.9  2004/07/07 22:51:03  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
