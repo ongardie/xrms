@@ -1,7 +1,7 @@
 XRMS Installation READ_ME
 
 Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.6 2004/09/09 12:26:52 braverock Exp $
+$Id: INSTALL,v 1.7 2004/09/21 17:48:44 braverock Exp $
 
 INSTALLATION
 ============
@@ -45,6 +45,11 @@ The install code will do some basic checks on your include_locations.inc and
 vars.php files.  It will then verify that it can communicate with the database.
 If everything is good, it will connect to the database and setup the appropriate
 schema and basic dataset.
+
+Once you've run the install script, it is recommended that you run the
+Administration -> Database Structure Update
+Administration -> Data Cleanup
+to avoid possible errors when using features.
 
 If no errors are detected, it will then ask if you wish to create some sample data.
 This is optional, and you can move directly to using xrms if you wish.
@@ -122,6 +127,10 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.7  2004/09/21 17:48:44  braverock
+ * - make Database Structure Update and Data Cleanup recommendations explicit on install
+ *   credit Walt Pennington for the suggestion
+ *
  * Revision 1.6  2004/09/09 12:26:52  braverock
  * - add note about setting write permissions on temp, storage, and export directories
  *
