@@ -10,7 +10,7 @@
  * Read the entire license text here: http://www.gnu.org/licenses/lgpl.html
  */
 
-// $Id: calendar.js,v 1.1 2004/06/04 15:53:30 gpowers Exp $
+// $Id: calendar.js,v 1.2 2004/07/02 14:59:04 maulani Exp $
 
 /** The Calendar object constructor. */
 Calendar = function (firstDayOfWeek, dateStr, onSelected, onClose) {
@@ -1684,7 +1684,7 @@ Date.prototype.print = function (str) {
 	s["%%"] = "%";		// a literal '%' character
 
 	var re = /%./g;
-	if (!Calendar.is_ie5)
+	if (!Calendar.is_ie5 && !Calendar.is_khtml)
 		return str.replace(re, function (par) { return s[par] || par; });
 
 	var a = str.match(re);
