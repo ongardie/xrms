@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.14 2004/06/04 15:54:26 gpowers Exp $
+ * $Id: utils-interface.php,v 1.15 2004/06/21 15:50:57 braverock Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -15,23 +15,23 @@ require_once ($include_locations.'plugin.php');
 function status_msg($msg) {
     switch ($msg) {
         case 'noauth':
-            return "We could not authenticate you.  Please try again.";
+            return _("We could not authenticate you.") . ' ' . _("Please try again.");
             break;
         case 'saved':
-            return "Changes saved.";
+            return _("Changes saved.");
             break;
         case 'activity_added':
-            return "Activity added.";
+            return _("Activity added.");
             break;
         case 'contact_added':
-            return "Contact added.";
+            return _("Contact added.");
             break;
         case 'company_added':
-            return "Company added.";
+            return _("Company added.");
             break;
-	case 'no_change':
-	    return "Status not changed.  This activity is still open.";
-	    break;
+        case 'no_change':
+            return _("Status not changed.") . ' ' . _("This activity is still open.");
+            break;
     }
 } //end status_msg fn
 
@@ -176,6 +176,9 @@ function jscalendar_includes() {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.15  2004/06/21 15:50:57  braverock
+ * - localized strings for i18n/internationalization/translation support
+ *
  * Revision 1.14  2004/06/04 15:54:26  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * (This code was orginially placed in vars.php)
