@@ -10,16 +10,16 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-sidebar.php,v 1.4 2004/07/02 17:57:57 neildogg Exp $
+ * $Id: browse-sidebar.php,v 1.5 2004/07/16 04:53:51 introspectshun Exp $
  */
 
 //add contact information block on sidebar
 $browse_block = '<table class=widget cellspacing=1 width="100%">
     <tr>
-        <td class=widget_header colspan=5>Browse</td>
+        <td class=widget_header colspan=5>' . _("Browse") . '</td>
     </tr>
     <tr>
-        <td class=widget_label>Activity Types</td>
+        <td class=widget_label>' . _("Activity Types") . '</td>
     </tr>';
 
 $sql = "select activity_type_id, activity_type_display_html
@@ -40,7 +40,7 @@ elseif($rst->rowcount() > 0) {
     }
 } else {
     $browse_block .= "<tr><td class=widget_content>"
-        . "No Activities Types"
+        . _("No Activities Types")
         . "</td>\n\t</tr>";
 }
 
@@ -49,6 +49,9 @@ $rst->close();
 
 /**
  * $Log: browse-sidebar.php,v $
+ * Revision 1.5  2004/07/16 04:53:51  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.4  2004/07/02 17:57:57  neildogg
  * Now works for all activity types. Sort by reimplemented in SQL call.
  *

@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.34 2004/07/15 14:07:38 cpsource Exp $
+ * $Id: some.php,v 1.35 2004/07/16 04:53:51 introspectshun Exp $
  */
 
 // handle includes
@@ -82,15 +82,15 @@ require_once("browse-sidebar.php");
 //*********************************/
 
 $sql = "SELECT
-  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS is_overdue,"
-  ." at.activity_type_pretty_name AS 'Type',"
-  . $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact',"
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS '" . _("is_overdue") . "',"
+  ." at.activity_type_pretty_name AS '" . _("Type") . "',"
+  . $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS '" . _("Contact") . "',"
   . $con->Concat("'<a href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
-  . " AS 'Title', "
-  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS 'Scheduled', "
-  . $con->SQLDate('Y-m-d','a.ends_at') . " AS 'Due', "
-  . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
-  u.username AS 'Owner'
+  . " AS '" . _("Title") . "', "
+  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS '" . _("Scheduled") . "', "
+  . $con->SQLDate('Y-m-d','a.ends_at') . " AS '" . _("Due") . "', "
+  . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS '" . _("Company") . "',
+  u.username AS '" . _("Owner") . "'
   FROM companies c, users u, activity_types at, activities a
   LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
   WHERE a.company_id = c.company_id
@@ -145,7 +145,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 
 
 if ($sort_column == 1) {
-    $order_by = "is_overdue";
+    $order_by = _("is_overdue");
 } elseif ($sort_column == 2) {
     $order_by = "activity_type_pretty_name";
 } elseif ($sort_column == 3) {
@@ -153,9 +153,9 @@ if ($sort_column == 1) {
 } elseif ($sort_column == 4) {
     $order_by = "activity_title";
 } elseif ($sort_column == 5) {
-    $order_by = "Scheduled";
+    $order_by = _("Scheduled");
 } elseif ($sort_column == 6) {
-    $order_by = "Due";
+    $order_by = "a.ends_at";
 } elseif ($sort_column == 7) {
     $order_by = "c.company_name";
 } elseif ($sort_column == 8) {
@@ -202,7 +202,7 @@ if ( $rst ) {
   $rst->close();
 }
 
-$page_title = "Open Activities";
+$page_title = _("Open Activities");
 start_page($page_title, true, $msg);
 
 ?>
@@ -222,56 +222,56 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4>Search Criteria</td>
+                <td class=widget_header colspan=4><?php echo _("Search Criteria"); ?></td>
             </tr>
-        <tr>
-            <td colspan="2" class=widget_label>Title</td>
-            <td class=widget_label>Contact</td>
-            <td class=widget_label>Company</td>
-        </tr>
-        <tr>
-            <td colspan="2" class=widget_content_form_element> <input type=text name="title" size=24 value="<?php  echo $title; ?>">
-            </td>
-            <td class=widget_content_form_element><input type=text name="contact" size=12 value="<?php  echo $contact; ?>">
-            </td>
-            <td class=widget_content_form_element><input type=text name="company" size=15 value="<?php  echo $company; ?>">
-            </td>
-        </tr>
-        <tr>
-            <td class=widget_label>Owner</td>
-            <td class=widget_label>End/Due Date</td>
-            <td class=widget_label>Type</td>
-            <td class=widget_label>Completed</td>
-        </tr>
-        <tr>
-            <td class=widget_content_form_element>
-                <?php  echo $user_menu; ?>
-            </td>
-            <td class=widget_content_form_element>
-                <select name="before_after">
-                    <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
-                    <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
-                </select>
-                <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
-                <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif" alt="">
-            </td>
-            <td class=widget_content_form_element>
-                <?php  echo $type_menu; ?>
-            </td>
-            <td class=widget_content_form_element>
-                <select name="completed">
-                    <option value="all"<?php if ($completed == "all") { print " selected"; } ?>>All</option>
-                    <option value="o"<?php if ($completed == "o" or !$completed) { print " selected"; } ?>>Non-Completed</option>
-                    <option value="c"<?php if ($completed == "c") { print " selected"; } ?>>Completed</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="Search">
-                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
-                <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="2" class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Contact"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+            </tr>
+            <tr>
+                <td colspan="2" class=widget_content_form_element> <input type=text name="title" size=24 value="<?php  echo $title; ?>">
+                </td>
+                <td class=widget_content_form_element><input type=text name="contact" size=12 value="<?php  echo $contact; ?>">
+                </td>
+                <td class=widget_content_form_element><input type=text name="company" size=15 value="<?php  echo $company; ?>">
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
+                <td class=widget_label><?php echo _("End/Due Date"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Completed"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element>
+                    <?php  echo $user_menu; ?>
+                </td>
+                <td class=widget_content_form_element>
+                    <select name="before_after">
+                        <option value=""<?php if (!$before_after) { print " selected"; } ?>><?php echo _("Before"); ?></option>
+                        <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>><?php echo _("After"); ?></option>
+                    </select>
+                    <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
+                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif" alt="">
+                </td>
+                <td class=widget_content_form_element>
+                    <?php  echo $type_menu; ?>
+                </td>
+                <td class=widget_content_form_element>
+                    <select name="completed">
+                        <option value="all"<?php if ($completed == "all") { print " selected"; } ?>><?php echo _("All"); ?></option>
+                        <option value="o"<?php if ($completed == "o" or !$completed) { print " selected"; } ?>><?php echo _("Non-Completed"); ?></option>
+                        <option value="c"<?php if ($completed == "c") { print " selected"; } ?>><?php echo _("Completed"); ?></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
+                    <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
+                    <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";}; ?>
+                </td>
+            </tr>
     </table>
     </form>
 
@@ -348,6 +348,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.35  2004/07/16 04:53:51  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.34  2004/07/15 14:07:38  cpsource
  * - Ported arr_vars sub-system.
  *

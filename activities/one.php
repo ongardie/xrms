@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.38 2004/07/15 22:57:20 cpsource Exp $
+ * $Id: one.php,v 1.39 2004/07/16 04:53:51 introspectshun Exp $
  */
 
 //include required files
@@ -134,7 +134,7 @@ if ($company_id) {
 }
 
 //include the contacts-companies sidebar
-if($contact_id) {
+if ($contact_id) {
     $relationship_name = "company link";
     $working_direction = "from";
     $overall_id = $contact_id;
@@ -254,38 +254,38 @@ function logTime() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>About This Activity</td>
+                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company</td>
+                <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content>
                     <?php echo '<a href="../companies/one.php?company_id='.$company_id.'">'.$company_name; ?></a>
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Contact</td>
+                <td class=widget_label_right><?php echo _("Contact"); ?></td>
                 <td class=widget_content><?php echo $contact_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Attached&nbsp;To</td>
+                <td class=widget_label_right><?php echo _("Attached") . "&nbsp;" . _("To"); ?></td>
                 <td class=widget_content>
                     <?php  echo $attached_to_link;
                         if ($table_name != "Attached To") {
-                            echo " &nbsp; Status &nbsp; ";
+                            echo " &nbsp; " . _("Status") . " &nbsp; ";
                             echo $table_menu;
                         }
                     ?>
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Activity&nbsp;Type</td>
+                <td class=widget_label_right><?php echo _("Activity") . "&nbsp;" . _("Type"); ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
             </tr>
            <?php
                 if($on_what_table == 'opportunities') {
            ?>
            <tr>
-                <td class=widget_label_right>Probability&nbsp;(%)</td>
+                <td class=widget_label_right><?php echo _("Probability") . "&nbsp;" . _("(%)"); ?></td>
                 <td class=widget_content_form_element>
                 <select name=probability>
                     <?php
@@ -300,33 +300,33 @@ function logTime() {
                 } //end if on_what_table=opportunities check
             ?>
             <tr>
-                <td class=widget_label_right>Title</td>
+                <td class=widget_label_right><?php echo _("Title"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text size=50 name=activity_title value="<?php  echo htmlspecialchars($activity_title); ?>">
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>User</td>
+                <td class=widget_label_right><?php echo _("User"); ?></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Activity Notes</td>
+                <td class=widget_label_right_166px><?php echo _("Activity Notes"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=90 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <?php
             if($on_what_table == 'opportunities') {
             ?>
             <tr>
-                <td class=widget_label_right_166px>Opportunity Notes</td>
+                <td class=widget_label_right_166px><?php echo _("Opportunity Notes"); ?></td>
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=90 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
-                    <input class=button value="Insert Log" type=button onclick="document.forms[0].opportunity_description.value =
+                    <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="document.forms[0].opportunity_description.value =
                         logTime() + ' by ' + document.forms[0].user_id.options[form.user_id.selectedIndex].text + ': \n\n' + document.forms[0].opportunity_description.value">
                 </td>
             </tr>
             <?php } ?>
             <tr>
-                <td class=widget_label_right>Starts</td>
+                <td class=widget_label_right><?php echo _("Starts"); ?></td>
                 <td class=widget_content_form_element>
                     <?php jscalendar_includes(); ?>
                     <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo $scheduled_at; ?>">
@@ -334,7 +334,7 @@ function logTime() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Ends</td>
+                <td class=widget_label_right><?php echo _("Ends"); ?></td>
                 <td class=widget_content_form_element>
                     <?php jscalendar_includes(); ?>
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>">
@@ -342,19 +342,19 @@ function logTime() {
                 </td>
            </tr>
             <tr>
-                <td class=widget_label_right>Email This To</td>
+                <td class=widget_label_right><?php echo _("Email This To"); ?></td>
                 <td class=widget_content_form_element><input type=text name=email_to></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Completed?</td>
+                <td class=widget_label_right><?php echo _("Completed?"); ?></td>
                 <td class=widget_content_form_element><input type=checkbox name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <input class=button type=submit name="save" value="Save Changes">
-                    <input class=button type=submit name="saveandnext" value="Save and Next">
-                    <input class=button type=submit name="followup" value="Schedule Followup">
-                    <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='Delete Activity' onclick="javascript: return confirm('Delete Activity?');">
+                    <input class=button type=submit name="save" value="<?php echo _("Save Changes"); ?>">
+                    <input class=button type=submit name="saveandnext" value="<?php echo _("Save and Next"); ?>">
+                    <input class=button type=submit name="followup" value="<?php echo _("Schedule Followup"); ?>">
+                    <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='<?php echo _("Delete Activity"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Activity?"); ?>');">
                 </td>
             </tr>
         </table>
@@ -404,6 +404,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.39  2004/07/16 04:53:51  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.38  2004/07/15 22:57:20  cpsource
  * - Post $opportunity_description
  *

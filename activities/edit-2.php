@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.29 2004/07/14 22:54:39 introspectshun Exp $
+ * $Id: edit-2.php,v 1.30 2004/07/16 04:53:51 introspectshun Exp $
  */
 
 //include required files
@@ -160,7 +160,7 @@ $rec['activity_status']      = $activity_status;
 $rec['on_what_table']        = $on_what_table;
 $rec['on_what_id']           = $on_what_id;
 
-$upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 if (strlen($upd)>0) {
     $rst = $con->execute($upd);
     if (!$rst) {
@@ -314,7 +314,7 @@ if ($table_name != "attached to") {
             $rec = array();
             $rec[$table_name . "_status_id"] = $table_status_id;
 
-            $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
+            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 
             if (strlen($upd)>0) {
                 //update the records
@@ -391,6 +391,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.30  2004/07/16 04:53:51  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.29  2004/07/14 22:54:39  introspectshun
  * - Altered LEFT JOINs to use standard ON syntax rather than USING
  * - Statuses SQL update query now uses GetUpdateSQL
