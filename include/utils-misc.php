@@ -6,9 +6,17 @@
  * Almost all files in the system include this file.
  *
  * @author Chris Woofter
+ * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.22 2004/05/21 13:06:11 maulani Exp $
+ * $Id: utils-misc.php,v 1.23 2004/05/21 14:04:01 braverock Exp $
  */
+
+/**
+ * strip any tags added to the url from PHP_SELF.
+ *  This fixes hand crafted url XXS expoits for any
+ *  page that uses PHP_SELF as the FORM action
+ */
+$_SERVER['PHP_SELF'] = strip_tags($_SERVER['PHP_SELF']);
 
 /**
  * Check to see if there is a session initialized, and send to logon if there isn't one.
@@ -28,7 +36,15 @@ function session_check($target='') {
     }
     $target=urlencode($target);
 
-    session_start();
+    /**
+    * Verify a session has been started.  If it hasn't, start a session up.
+    * php.net doesn't tell you that $_SESSION (even though autoglobal),
+    * is not created unless a session is started, unlike $_POST, $_GET and such
+    */
+    $sessid = session_id();
+    if ( empty( $sessid ) ) {
+        session_start();
+    }
 
     if ((!$_SESSION['session_user_id'] > 0) || (strcmp($_SESSION['xrms_system_id'], $xrms_system_id) != 0)) {
         header("Location: $http_site_root" . "/login.php?target=$target");
@@ -256,6 +272,60 @@ function getGlobalVar( &$value, $name ) {
 }
 
 /**
+ * Add a variable to the session.
+ *
+ * modified from Squirrelmail
+ *
+ * @param mixed $var the variable to register
+ * @param string $name the name to refer to this variable
+ * @return void
+ */
+function xrms_session_register ($var, $name) {
+
+    session_check();
+
+    $_SESSION["$name"] = $var;
+
+    session_register("$name");
+}
+
+/**
+ * Delete a variable from the session.
+ *
+ * modified from Squirrelmail
+ *
+ * @param string $name the name of the var to delete
+ * @return void
+ */
+function xrms_session_unregister ($name) {
+
+    session_check();
+
+    unset($_SESSION[$name]);
+
+    session_unregister("$name");
+}
+
+/**
+ * Checks to see if a variable has already been registered in the session.
+ *
+ * modified from Squirrelmail
+ *
+ * @param string $name the name of the var to check
+ * @return bool whether the var has been registered
+ */
+function xrms_session_is_registered ($name) {
+    $test_name = &$name;
+    $result = false;
+
+    if (isset($_SESSION[$test_name])) {
+        $result = true;
+    }
+
+    return $result;
+}
+
+/**
  * Find company id from company name
  * to see if the company exists before adding it
  *
@@ -473,29 +543,40 @@ function get_formatted_address (&$con,$address_id) {
     $sql .= 'and a.country_id=c.country_id ';
     $sql .= 'and c.address_format_string_id=afs.address_format_string_id';
     $rst = $con->execute($sql);
-    
-    $address_body = $rst->fields['address_body'];
-    $line1 = $rst->fields['line1'];
-    $line2 = $rst->fields['line2'];
-    $city = $rst->fields['city'];
-    $province = $rst->fields['province'];
-    $postal_code = $rst->fields['postal_code'];
-    $use_pretty_address = $rst->fields['use_pretty_address'];
-    $address_format_string = $rst->fields['address_format_string'];
-    $country = $rst->fields['country_name'];
-    
-    if ($use_pretty_address == 't') {
-        $address_to_display = nl2br($address_body);
+
+    if ($rst) {
+        $address_body = $rst->fields['address_body'];
+        $line1 = $rst->fields['line1'];
+        $line2 = $rst->fields['line2'];
+        $city = $rst->fields['city'];
+        $province = $rst->fields['province'];
+        $postal_code = $rst->fields['postal_code'];
+        $use_pretty_address = $rst->fields['use_pretty_address'];
+        $address_format_string = $rst->fields['address_format_string'];
+        $country = $rst->fields['country_name'];
+
+        if ($use_pretty_address == 't') {
+            $address_to_display = nl2br($address_body);
+        } else {
+            $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
+            eval("\$address_to_display = \"$address_format_string\";");
+            // eval ("\$str = \"$str\";");
+        }
     } else {
-        $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
-        eval("\$address_to_display = \"$address_format_string\";");
-        // eval ("\$str = \"$str\";");
+        // database error, return some useful information.
+        ob_start();
+        db_error_handler (&$con,$sql);
+        $address_to_display = ob_get_contents();
+        ob_get_clean();
     }
     return $address_to_display;
 } //end fn get_formatted_address
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.23  2004/05/21 14:04:01  braverock
+ * - added db_error_handler code to get_formatted_address fn
+ *
  * Revision 1.22  2004/05/21 13:06:11  maulani
  * - Create get_formatted_address function which centralizes the address
  *   formatting code into one routine in utils-misc.
