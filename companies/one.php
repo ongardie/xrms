@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.72 2005/01/03 16:26:46 gpowers Exp $
+ * $Id: one.php,v 1.73 2005/01/03 16:42:45 gpowers Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -320,6 +320,13 @@ if ( !isset($sidebar_rows) ) {
 }
 //call the sidebar hook
 $sidebar_rows = do_hook_function('company_sidebar_bottom', $sidebar_rows);
+
+// make sure $sidebar_rows is defined
+if ( !isset($bottom_rows) ) {
+  $sidebar_rows = '';
+}
+//call the sidebar hook
+$bottom_rows = do_hook_function('company_content_bottom', $sidebar_rows);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -638,6 +645,9 @@ function openNewsWindow() {
         </table>
         </form>
 
+        <!-- company content bottom plugins //-->
+        <?php echo $bottom_rows; ?>
+
     </div>
 
         <!-- right column //-->
@@ -686,6 +696,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.73  2005/01/03 16:42:45  gpowers
+ * - added company_content_bottom plugin hook
+ *
  * Revision 1.72  2005/01/03 16:26:46  gpowers
  * - added company_accounting plugin hook
  *
