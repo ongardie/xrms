@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.19 2004/06/13 09:15:07 braverock Exp $
+ * $Id: some.php,v 1.20 2004/06/15 14:13:36 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -105,7 +105,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug=1;
 
 $sql = "SELECT
-  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS is_overdue," .
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . time() . ") THEN 'Yes' ELSE '-' END) AS is_overdue," .
   $con->Concat("'<a href=\"one.php?activity_id='", "activity_id", "'&return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS 'Title',
   activity_type_pretty_name AS 'Type'," .
   $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
@@ -155,9 +155,9 @@ if (strlen($completed) > 0 and $completed != "all") {
 if (strlen($search_date) > 0) {
     $criteria_count++;
     if (!$before_after) {
-        $sql .= " and a.ends_at < " . $con->DBTimeStamp(strtotime($search_date));
+        $sql .= " and a.ends_at < " . strtotime($search_date);
     } else {
-        $sql .= " and a.ends_at > " . $con->DBTimeStamp(strtotime($search_date));
+        $sql .= " and a.ends_at > " . strtotime($search_date);
     }
 }
 
@@ -374,6 +374,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.20  2004/06/15 14:13:36  gpowers
+ * - corrected time formats: changed DBTimeStamp(time()) to time()
+ *   -  DBTimeStamp(time()) does not work with MySQL
+ *
  * Revision 1.19  2004/06/13 09:15:07  braverock
  * - add Save & Next functionality
  *   - code contributed by Neil Roberts
