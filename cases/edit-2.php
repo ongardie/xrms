@@ -78,7 +78,7 @@ if (!$no_update) {
     $rec['user_id'] = $user_id;
     $rec['case_title'] = $case_title;
     $rec['case_description'] = $case_description;
-    $rec['due_at'] = $con->DBDate($due_at . ' 23:59:59');
+    $rec['due_at'] = strtotime('+23 hours 59 minutes',strtotime($due_at));
     $rec['last_modified_at'] = time();
     $rec['last_modified_by'] = $session_user_id;
 
