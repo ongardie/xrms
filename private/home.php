@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.33 2004/07/16 07:27:39 introspectshun Exp $
+ * $Id: home.php,v 1.34 2004/07/20 11:40:53 cpsource Exp $
  */
 
 // include the common files
@@ -425,7 +425,7 @@ if (!strlen($activity_rows) > 0) {
 }
 
 $page_title = _("Home");
-start_page($page_title);
+start_page($page_title,true,$msg);
 
 ?>
 
@@ -496,6 +496,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.34  2004/07/20 11:40:53  cpsource
+ * - Added support for $msg
+ *
  * Revision 1.33  2004/07/16 07:27:39  introspectshun
  * - Localized strings for i18n/translation support
  *
