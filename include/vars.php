@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.30 2004/08/03 16:26:03 cpsource Exp $
+ * $Id: vars.php,v 1.31 2004/08/04 13:12:32 cpsource Exp $
  */
 
 /**
@@ -310,5 +310,18 @@ $use_self_contacts = false;
  * Define the meaning of a newline
  */
 $NEWLINE = "\n\r";
+
+/**
+ * use_owl - provide an experimental link to OWL, a file
+ * management system.
+ *
+ * OWL is a file management system that supports more features,
+ * including revisions, than xrms.
+ *
+ * To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl, then
+ * set the following variable to true. You'll get a link
+ * from the 'files' menu (xrms/files/some.php) in xrms to OWL.
+ */
+$use_owl = false;
 
 ?>
