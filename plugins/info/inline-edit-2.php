@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: inline-edit-2.php,v 1.1 2005/03/21 15:11:01 gpowers Exp $
+ * $Id: inline-edit-2.php,v 1.2 2005/04/01 20:08:21 ycreddy Exp $
  */
 
 
@@ -31,8 +31,7 @@ if (!$contact_id) {
     $sql = "SELECT info_type_id ";
     $sql .= "FROM info_display_map ";
     $sql .= "WHERE display_on = '" . $display_on . "' ";
-    $sql .= "LIMIT 1";
-    $rst = $con->execute($sql);
+    $rst = $con->SelectLimit($sql);
 
     if ($rst) {
         if (!$rst->EOF) {
@@ -157,6 +156,9 @@ else {
 
 /**
  * $Log: inline-edit-2.php,v $
+ * Revision 1.2  2005/04/01 20:08:21  ycreddy
+ * Used the portable SelectLimit in place of LIMIT
+ *
  * Revision 1.1  2005/03/21 15:11:01  gpowers
  * - inline display/edit of info items
  *

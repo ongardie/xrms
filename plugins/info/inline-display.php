@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: inline-display.php,v 1.2 2005/03/24 17:42:07 gpowers Exp $
+ * $Id: inline-display.php,v 1.3 2005/04/01 20:07:31 ycreddy Exp $
  */
 
 global $company_id, $contact_id;
@@ -14,9 +14,8 @@ global $company_id, $contact_id;
     if (!$company_id) {
     	    $sql = "SELECT company_id
             FROM contacts
-            WHERE contact_id = '" . $contact_id . "'
-            LIMIT 1";
-    $rst = $con->execute($sql);
+            WHERE contact_id = '" . $contact_id . "'";
+    $rst = $con->SelectLimit($sql, 1);
     $company_id = $rst->fields['company_id'];
     }
     
@@ -25,9 +24,8 @@ global $company_id, $contact_id;
     $sql = "SELECT info_type_id
             FROM info_display_map
             WHERE display_on = '" . $display_on . "'
-        	AND record_status = 'a'
-            LIMIT 1";
-    $rst = $con->execute($sql);
+        	AND record_status = 'a'";
+    $rst = $con->SelectLimit($sql, 1);
 
     if ($rst) {
         if (!$rst->EOF) {
@@ -77,8 +75,8 @@ global $company_id, $contact_id;
         $sql .= "AND info_map.division_id = '' ";
     }
 
-    $sql .= "AND info.info_record_status='a' LIMIT 1";
-    $rst = $con->execute($sql);
+    $sql .= "AND info.info_record_status='a'";
+    $rst = $con->SelectLimit($sql,1);
 
     if (!$rst) {
         db_error_handler ($con, $sql);
