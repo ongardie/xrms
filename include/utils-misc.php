@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.117 2005/03/04 23:18:53 vanmer Exp $
+ * $Id: utils-misc.php,v 1.118 2005/03/07 00:58:44 maulani Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -473,11 +473,17 @@ function fetch_division_id($con, $division_name, $company_id) {
 function show_test_values($param1 = '', $param2 = '', $param3 = '', $param4 = '', $param5 = '') {
 
     $session_username = $_SESSION['username'];
-    $p1 = htmlentities ($param1, ENT_QUOTES );
-    $p2 = htmlentities ($param2, ENT_QUOTES );
-    $p3 = htmlentities ($param3, ENT_QUOTES );
-    $p4 = htmlentities ($param4, ENT_QUOTES );
-    $p5 = htmlentities ($param5, ENT_QUOTES );
+	$p1 = print_r($param1, true);
+	$p2 = print_r($param2, true);
+	$p3 = print_r($param3, true);
+	$p4 = print_r($param4, true);
+	$p5 = print_r($param5, true);
+    
+    $p1 = htmlentities ($p1, ENT_QUOTES );
+    $p2 = htmlentities ($p2, ENT_QUOTES );
+    $p3 = htmlentities ($p3, ENT_QUOTES );
+    $p4 = htmlentities ($p4, ENT_QUOTES );
+    $p5 = htmlentities ($p5, ENT_QUOTES );
 
     echo <<<EOQ
     <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
@@ -1476,6 +1482,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.118  2005/03/07 00:58:44  maulani
+ * - Show_test_values will now display arrays and objects
+ *
  * Revision 1.117  2005/03/04 23:18:53  vanmer
  * - added changed to current_page to be able to operate on IIS
  *
