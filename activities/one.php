@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.51 2004/07/27 19:50:41 neildogg Exp $
+ * $Id: one.php,v 1.52 2004/07/28 19:24:21 cpsource Exp $
  */
 
 //include required files
@@ -13,6 +13,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'confgoto.php');
 
 $session_user_id = session_check();
 
@@ -210,26 +211,12 @@ if($on_what_table == 'opportunities') {
 
 $con->close();
 
-// generate html code to ask a quest(ion) with a button about
-// going to a to_url. If the answer is TRUE, goto the URL, else
-// don't do anything.
-function confGoTo( $quest, $button, $to_url )
-{
-  $tmp    = ' onclick="javascript: confGoTo(\''.$quest.'\',\''.$to_url.'\')"';
-  echo '<input type=button class=button value="'.$button.'"'. $tmp.'>';
-}
-
 $page_title = _("Activity Details").': '.$activity_title;
 start_page($page_title, true, $msg);
 
 ?>
 
 <script language="JavaScript" type="text/javascript">
-function confGoTo(quest,dest) {
-  if ( confirm(quest) ) {
-    window.location = dest;
-  }
-}
 
 function logTime() {
     var date = new Date();
@@ -426,6 +413,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.52  2004/07/28 19:24:21  cpsource
+ * - Move confGoTo sub-system out into a seperate file for
+ *   a more structured, and general implementation.
+ *
  * Revision 1.51  2004/07/27 19:50:41  neildogg
  * - Major changes to browse functionality
  *  - Removal of sidebar for "browse" button
