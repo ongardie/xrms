@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.2 2004/01/26 19:34:48 braverock Exp $
+ * $Id: new-2.php,v 1.3 2004/04/13 15:08:37 maulani Exp $
  */
 
 //include common files
@@ -47,7 +47,7 @@ $sql = "insert into opportunities set
         entered_at = " . $con->dbtimestamp(mktime()) . ",
         entered_by = $session_user_id,
         last_modified_at = " . $con->dbtimestamp(mktime()) . ",
-        last_modified_by = $session_user_id;"
+        last_modified_by = $session_user_id"
         ;
 
 $con->execute($sql);
@@ -60,6 +60,9 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.3  2004/04/13 15:08:37  maulani
+ * - cleanup sql
+ *
  * Revision 1.2  2004/01/26 19:34:48  braverock
  * - cleaned up sql
  * - added phpdoc
