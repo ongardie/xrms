@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.16 2005/03/25 23:49:38 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.17 2005/04/04 15:19:29 daturaarutad Exp $
  */
 
 
@@ -575,12 +575,20 @@ END;
                 //echo $this->pretty_sort_order;
 				 $selected_column_header_html = $this->pretty_sort_order;
             }
+			if($this->column_info[$i]['not_sortable']) {
+				$header_text = '<b>' . $this->column_info[$i]['name'] . '</b>';
+			} else {
+				$header_text = "<a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
+			}
 
         	if($group_html || $i == ($this->sort_column-1)) {
-            	$hdr .= "<td class=widget_label_center><table cellpadding=0 cellspacing=0><tr><td class=widget_label><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a></td>";
-            	$hdr .= "<td class=widget_label>$selected_column_header_html</td><td class=widget_label> $group_html</td></tr></table></td>";
+            	$hdr .= "<td class=widget_label_center>
+							<table cellpadding=0 cellspacing=0><tr><td class=widget_label>$header_text</td>
+            					<td class=widget_label>$selected_column_header_html</td><td class=widget_label> $group_html</td></tr>
+							</table>
+						</td>";
         	} else {
-            	$hdr .= "<td class=widget_label_center><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
+            	$hdr .= "<td class=widget_label_center>$header_text</td>";
         	}
 
 			// set the column css
@@ -967,6 +975,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.17  2005/04/04 15:19:29  daturaarutad
+ * added not_sortable flag for columns
+ *
  * Revision 1.16  2005/03/25 23:49:38  daturaarutad
  * Added ModifyData callback
  * fixed up some of the caching
