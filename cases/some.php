@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.18 2004/07/20 21:32:50 cpsource Exp $
+ * $Id: some.php,v 1.19 2004/07/20 22:08:24 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -25,7 +25,7 @@ $arr_vars = array ( // local var name       // session variable name
 		   'case_title'          => array ( 'cases_case_title', arr_vars_SESSION ),
 		   'case_id'             => array ( 'cases_case_id', arr_vars_SESSION ),
 		   'company_code'        => array ( 'cases_company_code', arr_vars_GET_STRLEN_SESSION ),
-		   'company_type_id'     => array ( 'cases_company_type_id', arr_vars_SESSION ),
+		   // unused // 'company_type_id'     => array ( 'cases_company_type_id', arr_vars_SESSION ),
 		   'case_type_id'        => array ( 'case_type_id', arr_vars_SESSION ),
 		   'user_id'             => array ( 'cases_user_id', arr_vars_SESSION ),
 		   'case_status_id'      => array ( 'cases_case_status_id', arr_vars_SESSION ),
@@ -322,6 +322,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.19  2004/07/20 22:08:24  cpsource
+ * - get rid of company_type_id as it's unused
+ *
  * Revision 1.18  2004/07/20 21:32:50  cpsource
  * - Set case_priority_id
  *
