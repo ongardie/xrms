@@ -20,6 +20,8 @@ $company_source_score_adjustment = ($company_source_score_adjustment > 0) ? $com
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
+// $con->debug=1;
+
 $sql = "insert into company_sources (company_source_short_name, company_source_pretty_name, company_source_pretty_plural, company_source_display_html, company_source_score_adjustment) values (" . $con->qstr($company_source_short_name, get_magic_quotes_gpc()) . ", " . $con->qstr($company_source_pretty_name, get_magic_quotes_gpc()) . ", " . $con->qstr($company_source_pretty_plural, get_magic_quotes_gpc()) . ", " . $con->qstr($company_source_display_html, get_magic_quotes_gpc()) . ", $company_source_score_adjustment)";
 $con->execute($sql);
 
