@@ -1,7 +1,7 @@
 XRMS Installation READ_ME
 
 Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.3 2004/07/13 14:05:41 cpsource Exp $
+$Id: INSTALL,v 1.4 2004/07/25 19:29:43 braverock Exp $
 
 INSTALLATION
 ============
@@ -49,15 +49,36 @@ If you mistakenly run this over a live database, your data will not be harmed.
 
 
 
-UPDATE
-======
+UPDATE/UPGRADE
+==============
 
-To update XRMS from a previous version, point your web browser to:
+To update/upgrade XRMS from a previous version:
 
-http://www.yourserver.com/path_to_xrms/install/update.php
+Here is the process, in a nutshell.
 
-This is a non-destructive routine to bring your database up to date.
-(If you were up to date (CVS) as of 3/17/04 or later.)
+- make a copy of your vars.php and include-locations.inc files so that
+you can preserve your settings
+
+- untar the new distribution
+
+- merge your include-locations.inc and vars.php file with the vars.php
+file in the new release tarball.  The new release has additional options
+that you will need for full functionality.
+
+- log in as an administrative user
+
+- run the 'Database Structure Update' and 'Data Cleanup' scripts from
+the 'Administration' menu.
+
+That should be it.  The developers have worked pretty hard to make sure
+that upgrades go smoothly, because we are all running current CVS in
+production at our current companies.  If we didn't automate this, our
+installations would break as well.
+
+This is a non-destructive routine to bring your system up to date.
+(If you were up to date (CVS) as of 2004-03-17 or later.) If you are
+starting from code older than the March date above, contact the
+development team for assistance, as the process is more complicated.
 
 MISC
 ====
@@ -69,6 +90,9 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.4  2004/07/25 19:29:43  braverock
+ * - added more explicit instructions on Upgrading
+ *
  * Revision 1.3  2004/07/13 14:05:41  cpsource
  * - Produce Useful Info About PHP
  *
