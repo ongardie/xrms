@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.43 2005/03/11 21:49:18 daturaarutad Exp $
+ * $Id: some.php,v 1.44 2005/03/15 21:49:48 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -231,7 +231,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";}; ?> </td>
+                <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> </td>
             </tr>
         </table>
 <?php
@@ -272,7 +272,7 @@ $columns = $pager_columns->GetUserColumns('default');
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value="._("Mail Merge")."></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
  
 echo $pager_columns_selects;
 
@@ -343,6 +343,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.44  2005/03/15 21:49:48  daturaarutad
+ * fixed Mail Merge
+ *
  * Revision 1.43  2005/03/11 21:49:18  daturaarutad
  * added industry_id as a search criteria for linking with reports/graphs
  *
