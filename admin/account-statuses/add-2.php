@@ -17,16 +17,15 @@ $account_status_display_html = $_POST['account_status_display_html'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM account_statuses WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['account_status_short_name'] = $account_status_short_name;
 $rec['account_status_pretty_name'] = $account_status_pretty_name;
 $rec['account_status_pretty_plural'] = $account_status_pretty_plural;
 $rec['account_status_display_html'] = $account_status_display_html;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = "account_statuses";
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
