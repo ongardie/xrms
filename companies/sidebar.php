@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.1 2004/06/03 16:26:05 braverock Exp $
+ * $Id: sidebar.php,v 1.2 2004/06/03 17:09:28 gpowers Exp $
  */
 
 // add company information block on sidebar
@@ -32,6 +32,7 @@ if ($rst) {
     $phone = $rst->fields['phone'];
     $phone2 = $rst->fields['phone2'];
     $fax = $rst->fields['fax'];
+    $url = $rst->fields['url'];
 
     // this phone number formatting will not be appropriate for non-US phones...
     // $phone = "(" . substr($phone, 0, 3) . ") " . substr($phone, 3, 3) . "-" . substr($phone, 6, 4);
@@ -39,13 +40,23 @@ if ($rst) {
     // $fax = "(" . substr($fax, 0, 3) . ") " . substr($fax, 3, 3) . "-" . substr($fax, 6, 4);
 
     $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . $rst->fields['company_name'] . "</td>\n\t</tr>"
-                    . "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . "Phone: " . $phone . "&nbsp;" . $phone2 . "</td>\n\t</tr>"
-                    . "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . "Fax: " . $fax . "</td>\n\t</tr>"
-                    . "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . $rst->fields['url'] . "</td>\n\t</tr>";
+                    . $rst->fields['company_name'] . "</td>\n\t</tr>";
+
+    if ($phone) {
+        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+                        . "Phone: " . $phone . "&nbsp;" . $phone2 . "</td>\n\t</tr>";
+    };
+
+    if ($fax) {
+        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+                        . "Fax: " . $fax . "</td>\n\t</tr>";
+    }
+
+    if ($url) {
+        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+                    . "<a href=\"" . $url . "\" target=\"_new\">"
+                    . $url . "</a></td>\n\t</tr>";
+    }
 
     $rst->close();
 
@@ -61,6 +72,10 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.2  2004/06/03 17:09:28  gpowers
+ * - only display phone/fax/url if they exist
+ * - make url a link and open it in a new window (on click)
+ *
  * Revision 1.1  2004/06/03 16:26:05  braverock
  * - add sidebar functionality to activities
  *   - modified from functionality contributed by Brad Marshall
