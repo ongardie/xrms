@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single case
  *
- * $Id: one.php,v 1.6 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: one.php,v 1.7 2004/07/25 15:46:19 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -37,7 +37,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Case Type : ").$case_type_pretty_name;
+$page_title = _("Case Type Details").': '.$case_type_pretty_name;
 start_page($page_title);
 
 ?>
@@ -74,7 +74,7 @@ start_page($page_title);
         </form>
 
         <form action=delete.php method=post>
-        <input type=hidden name=case_type_id value="<?php  echo $case_type_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Case Type?"); ?>');">
+        <input type=hidden name=case_type_id value="<?php  echo $case_type_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Case Type").'?'; ?>');">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Case Type"); ?></td>
@@ -105,6 +105,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/25 15:46:19  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext strings
+ *
  * Revision 1.6  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *
