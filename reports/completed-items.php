@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.5 2004/04/23 15:43:17 gpowers Exp $
+ * $Id: completed-items.php,v 1.6 2004/04/28 15:46:02 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -21,8 +21,15 @@ $ending = $_GET['ending'];
 $user_id = $_GET['user_id'];
 $type = $_GET['type'];
 $friendly = $_GET['friendly'];
-$use_hr = 1; // comment this out to remove <hr>'s from between lines
 $send_email = $_GET['send_email'];
+$send_email_to = $_GET['send_email_to'];
+$all_users = $_GET['all_users'];
+$display = $_GET['display'];
+
+$use_hr = 1; // comment this out to remove <hr>'s from between lines
+$say_no_when_none = 1; // display "NO (CASES|ACTIVITIES|CAMPAIGNS|OPPORTUNITES} for First_Names Last_Name"
+
+$userArray = array();
 
 if (!$starting) {
     $starting = date("Y-m-d") . " 00:00:00";
@@ -32,12 +39,12 @@ if (!$ending) {
     $ending = date("Y-m-d") . " 23:59:59";
     }
 
-if ($send_email) {
-    $friendly = "y";
-}
+if ($friendly) {
+    $display = "";
+    }
 
 $page_title = "Completed Items";
-if ($friendly != "y") {
+if (($display) || (!$friendly)) {
     start_page($page_title, true, $msg);
 }
 
@@ -52,9 +59,12 @@ $rst->close();
 ?>
 
 <?php
-if ($friendly != "y") {
-    $output .= "
+if (($display) || (!$friendly)) {
+    echo "
+<p>&nbsp;</p>
 <table>
+    <form action=completed-items.php method=get>
+    <input type=hidden name=display value=y>
     <tr>
         <th align=left>Start</th>
         <th align=left>End</th>
@@ -63,40 +73,123 @@ if ($friendly != "y") {
         <th align=left></th>
     </tr>
         <tr>
-            <form action=completed-items.php method=get>
-                <td><input type=text name=starting value=\"" . $starting . "\"></td>
-                <td><input type=text name=ending value=\"" . $ending . "\"></td>
-                <td>" . $user_menu . "</td>
-                <td><select name=type>
-                    <option value=all>All</option>
-                    <option value=activities>Activities</option>
-                    <option value=campaigns>Campaigns</option>
-                    <option value=opportunities>Opportunities</option>
-                    <option value=cases>Cases</option>
-                    </select></td>
-                <td><input class=button type=submit value=Go></td>
-            </form>
+            <td><input type=text name=starting value=\"" . $starting . "\"></td>
+            <td><input type=text name=ending value=\"" . $ending . "\"></td>
+            <td>" . $user_menu . "</td>
+            <td>
+                <select name=type>
+                    <option value=all";
+
+    if ($type == "all") {
+        echo " selected ";
+    }
+
+    echo ">All</option>
+                    <option value=activities";
+
+    if ($type == "activities") {
+        echo " selected ";
+    }
+
+    echo ">Activities</option>
+                    <option value=campaigns";
+
+    if ($type == "campaigns") {
+        echo " selected ";
+    }
+
+    echo ">Campaigns</option>
+                    <option value=opportunities";
+
+    if ($type == "opportunities") {
+        echo " selected ";
+    }
+
+    echo ">Opportunities</option>
+                    <option value=cases";
+
+    if ($type == "cases") {
+        echo " selected ";
+    }
+
+    echo ">Cases</option>
+                </select></td>
+            <td>
+                <input class=button type=submit value=Go>
+            </td>
         </tr>
-</table>
-<p>&nbsp;</p>
+        <tr>
+
+            <td align=right>
+                <input name=send_email type=checkbox ";
+
+    if ($send_email) {
+        echo "checked";
+    }
+
+    echo ">Send Email To: 
+            </td>
+            <td>
+                <input name=send_email_to type=text value=" . $send_email_to . ">
+            </td>
+            <td>
+                <input name=all_users type=checkbox ";
+
+    if ($all_users) {
+        echo "checked";
+    }
+
+    echo ">All Users
+            </td>
+            <td>
+                <input name=friendly type=checkbox ";
+
+    if ($friendly) {
+        echo "checked";
+    }
+
+    echo ">Printer Friendly
+            </td>
+            </td>
+            <td>
+            </td>
+        </tr>
+    </table>
+    <p>&nbsp;</p>
     ";
 }
 ?>
 
 <?php
-if ($user_id) {
 
-    $sql = "select username, email from users where user_id = $user_id";
+if (($user_id) && (!$all_users)) {
+    $userArray = array($user_id);
+}
+
+if ($all_users) {
+    $sql = "select user_id from users";
+    $rst = $con->execute($sql);
+    while (!$rst->EOF) {
+        array_push($userArray, $rst->fields['user_id']);
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+if ($userArray) {
+foreach ($userArray as $key => $user_id) {
+    $sql = "select * from users where user_id = $user_id";
     $rst = $con->execute($sql);
     $username = $rst->fields['username'];
     $email = $rst->fields['email'];
+    $name =  $rst->fields['first_names'] . " " . $rst->fields['last_name'];
     $rst->close();
     if (($type == "activities") || ($type == "all")) {
         $sql = "SELECT * from activities where activity_status = 'c' and activity_record_status = 'a' and user_id = $user_id and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc()) . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . "order by entered_at ";
         $rst = $con->execute($sql);
 
-        if ($rst) {
-            $output .= "<p><font size=+2><b>COMPLETED ACTIVITIES for $username<b></font><br></p>\n";
+        if (!$rst->EOF) {
+            $output .= "<p><font size=+2><b>COMPLETED ACTIVITIES for $name<b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -131,10 +224,11 @@ if ($user_id) {
         $output .= "</table>";
         }
     else {
-        $output .= "<p><b>NO COMPLETED ACTIVITIES for $username<b><br></p>\n";
+        if ($say_no_when_none) {
+            $output .= "<p><b>NO COMPLETED ACTIVITIES for $name<b><br></p>\n";
+        }
     }
-
-    } // End Activity Type
+    } // End Activities
     if (($type == "campaigns") || ($type == "all")) {
          $sql = "SELECT * from campaign_statuses, campaigns where
                 campaign_statuses.campaign_status_id = campaigns.campaign_status_id
@@ -145,8 +239,8 @@ if ($user_id) {
                 and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
                 order by entered_at ";
         $rst = $con->execute($sql);
-        if ($rst) {
-            $output .= "<p><font size=+2><b>COMPLETED CAMPAIGNS for $username<b></font><br></p>\n";
+        if (!$rst->EOF) {
+            $output .= "<p><font size=+2><b>COMPLETED CAMPAIGNS for $name<b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -171,7 +265,12 @@ if ($user_id) {
             $rst->close();
             $output .= "</table>";
         }
-    } // End Campaigns Type
+    else {
+        if ($say_no_when_none) {
+            $output .= "<p><b>NO COMPLETED CAMPAIGNS for $name<b><br></p>\n";
+        }
+    }
+    } // End Campaigns
     if (($type == "opportunities") || ($type == "all")) {
         $sql = "SELECT * from opportunities, opportunity_statuses where
                 opportunity_statuses.status_open_indicator != 'o'
@@ -182,8 +281,8 @@ if ($user_id) {
               . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
                 order by entered_at";
         $rst = $con->execute($sql);
-        if ($rst) {
-            $output .= "<p><font size=+2><b>COMPLETED OPPORTUNITIES for $username<b></font><br></p>\n";
+        if (!$rst->EOF) {
+            $output .= "<p><font size=+2><b>COMPLETED OPPORTUNITIES for $name<b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -215,7 +314,12 @@ if ($user_id) {
             $rst->close();
             $output .= "</table>";
         }
-    } // End Opportunities Type
+    else {
+        if ($say_no_when_none) {
+            $output .= "<p><b>NO COMPLETED OPPORTUNITIES for $name<b><br></p>\n";
+        }
+    }
+    } // End Opportunities
     if (($type == "cases") || ($type == "all")) {
         $sql = "SELECT * from cases, case_statuses where
                 status_open_indicator = 'c'
@@ -225,10 +329,9 @@ if ($user_id) {
                 and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc())
               . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
               order by entered_at";
-
         $rst = $con->execute($sql);
-        if ($rst) {
-            $output .= "<p><font size=+2><b>COMPLETED CASES for $username<b></font><br></p>\n";
+        if (!$rst->EOF) {
+            $output .= "<p><font size=+2><b>COMPLETED CASES for $name<b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -258,26 +361,40 @@ if ($user_id) {
             $output .= "</table>";
         }
         else {
-            $output .= "<p><b>NO COMPLETED CASES for $username<b><br></p>\n";
+            if ($say_no_when_none) {
+                $output .= "<p><b>NO COMPLETED CASES for $name<b><br></p>\n";
+            }
         }
     } // End Cases Type
-
-    //$rst->close();
-} // End If User
+} // End Foreach User
+} // End If UserArray
 
 $con->close();
-if ($send_email == "y") {
+if ($send_email) {
     $headers  = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
     mail($email, "$app_title: $page_title", $output, $headers);
+    if (($display) || ($friendly)) {
+        echo $output;
+    }
 }
 else {
     echo $output;
 }
-end_page();
+if (($display) || (!$friendly)) {
+    end_page();
+}
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.6  2004/04/28 15:46:02  gpowers
+ * added $say_no_when_none - shows "NO .. for .. " when no items present
+ * added no_items for opportunities and campaigns
+ * added send_email_to support on web form.
+ * changed from showing username to showing user's first_names last_name
+ * changed display html / display friendly / send email logic
+ * menu selections are now persistent across page loads
+ *
  * Revision 1.5  2004/04/23 15:43:17  gpowers
  * fixed select on campaigns and opportunities
  *
