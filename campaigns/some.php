@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.22 2004/08/19 13:14:04 maulani Exp $
+ * $Id: some.php,v 1.23 2004/10/22 20:51:38 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -59,8 +59,8 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$starts_at = $con->SQLDate('Y-M-D', 'starts_at');
-$ends_at = $con->SQLDate('Y-M-D', 'ends_at');
+$starts_at = $con->SQLDate('Y-m-d', 'cam.starts_at');
+$ends_at = $con->SQLDate('Y-m-d', 'cam.ends_at');
 
 $sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "cam.campaign_id", "'\">'" , "cam.campaign_title", "'</a>'") . " AS '" . _("Campaign") . "',
   camt.campaign_type_pretty_name AS '" . _("Type") . "', cams.campaign_status_pretty_name AS '" . _("Status") . "', u.username AS '" . _("Owner") . "',
@@ -123,7 +123,7 @@ where r.user_id = $session_user_id
 and cam.campaign_type_id = camt.campaign_type_id
 and cam.campaign_status_id = cams.campaign_status_id
 and r.on_what_table = 'campaigns'
-and r.recent_action = 'view'
+and r.recent_action = ''
 and r.on_what_id = cam.campaign_id
 and campaign_record_status = 'a'
 order by r.recent_item_timestamp desc";
@@ -282,7 +282,7 @@ $con->close();
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Status"); ?></td>
             </tr>
-            <?php  echo $recently_viewed_table_rows ?>
+            <?php  echo $recently_viewed_table_rows; ?>
         </table>
 
     </div>
@@ -327,6 +327,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.23  2004/10/22 20:51:38  introspectshun
+ * - Updated date format for app consistency
+ * - 'Recently Viewed' works again
+ *
  * Revision 1.22  2004/08/19 13:14:04  maulani
  * - Add specific type pager to ease overriding of layout function
  *
