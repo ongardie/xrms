@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.22 2004/07/13 16:46:54 braverock Exp $
+ * $Id: vars.php,v 1.23 2004/07/13 18:08:52 cpsource Exp $
  */
 
 /**
@@ -276,5 +276,16 @@ $use_php_recode = false;
 $use_php_iconv = false;
 
 /*** End Language settings ***/
+
+/**
+ * If use_self_contacts is true, contacts can be managed
+ * independent of companies, and are assigned automatically
+ * to company 'Self'.
+ *
+ * To use the feature, first create a company called 'Self',
+ * then set use_self_contacts to true.
+ *
+ */
+$use_self_contacts = false;
 
 ?>
