@@ -4,7 +4,7 @@
  *
  * List account-status
  *
- * $Id: some.php,v 1.5 2004/07/15 20:00:00 introspectshun Exp $
+ * $Id: some.php,v 1.6 2004/07/15 20:17:53 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -79,7 +79,7 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text name=account_status_display_html size=30></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -93,6 +93,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2004/07/15 20:17:53  introspectshun
+ * - Localized button value string
+ *
  * Revision 1.5  2004/07/15 20:00:00  introspectshun
  * - Localized strings for i18n/translation support
  *
