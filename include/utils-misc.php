@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.49 2004/07/15 22:35:30 introspectshun Exp $
+ * $Id: utils-misc.php,v 1.50 2004/07/16 16:35:47 cpsource Exp $
  */
 
 /**
@@ -45,10 +45,10 @@ function session_startup () {
  *
  * Otherwise, we return the session id to our current caller.
  *
- * @param string $target the page the user was trying to go to
+ * @param string $c_role - the user's role
  * @return integer user_id of the logged in user
  */
-function session_check($target='') {
+function session_check($c_role='') {
 
     global $http_site_root;
     global $xrms_system_id;
@@ -63,9 +63,28 @@ function session_check($target='') {
     // make sure the session has started
     session_startup();
 
+    // make sure we have a role to do this
+    $role_ok = true;
+    if ( $c_role ) {
+      $s_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+      if ( 0 == strcmp($s_role, $c_role) ) {
+	// yes
+	$role_ok = true;
+      } else {
+	// no
+	$role_ok = false;
+      }
+    }
+
     // make sure we've logged in
     if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
-      // we are logged in - just return our current session id
+      // we are logged in
+      if ( !$role_ok ) {
+	// we are logged in, go straight to logout.php
+	header("Location: $http_site_root" . "/logout.php?msg=noauth");
+	//exit;
+      }
+      // just return our current session id
       return $_SESSION['session_user_id'];
     }
 
@@ -842,6 +861,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.50  2004/07/16 16:35:47  cpsource
+ * - Add argument to session_check to accept a minimum role.
+ *
  * Revision 1.49  2004/07/15 22:35:30  introspectshun
  * - set_system_parameter() now uses GetUpdateSQL
  *
