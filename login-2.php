@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.14 2004/07/19 21:59:42 maulani Exp $
+ * $Id: login-2.php,v 1.15 2004/07/19 22:26:59 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -26,10 +26,12 @@ $connectiontest = $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_pas
 if (!$connectiontest) {
     // Oops!  We do not have a valid database connection
     // Now instruct the user in how to fix this problem
-    $problem = 'XRMS cannot connect to the database.  Have the administrator check the database ';
-    $problem .= 'parameters in vars.php to make sure they are correct.  ';
-    $problem .= 'Also make sure the database is running and can accept a connection ';
-    $problem .= 'from this server. <BR><BR>';
+    $problem = _("The system cannot connect to the database.")
+             . '&nbsp;'
+             . _("Have the administrator check the database parameters in vars.php to make sure they are correct.")
+             . _("Also make sure the database is running and can accept a connection from this server.")
+             . '<BR><BR>';
+
         echo <<<EOQ
         <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
         <html>
@@ -137,6 +139,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.15  2004/07/19 22:26:59  braverock
+ * - localize $problem message for i18n
+ *
  * Revision 1.14  2004/07/19 21:59:42  maulani
  * - Remove errant cut and paste code and assumption of vars.php location
  *
