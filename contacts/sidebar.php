@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.18 2004/08/25 15:26:50 neildogg Exp $
+ * $Id: sidebar.php,v 1.19 2004/12/27 14:21:50 braverock Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -40,13 +40,13 @@ if($new_cell_phone or $new_home_phone or $new_work_phone or $new_email) {
                 FROM contacts
                 WHERE contact_id=" . $contact_id;
         $rst = $con->execute($sql);
-        
+
         $rec = array();
         if($new_cell_phone) {
             $rec['cell_phone'] = $new_cell_phone;
         }
         elseif($new_home_phone) {
-            $rec['home_phone'] = $new_home_phone;        
+            $rec['home_phone'] = $new_home_phone;
         }
         elseif($new_work_phone) {
             $rec['work_phone'] = $new_work_phone;
@@ -54,7 +54,7 @@ if($new_cell_phone or $new_home_phone or $new_work_phone or $new_email) {
         elseif($new_email) {
             $rec['email'] = $new_email;
         }
-        
+
         $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
         $con->execute($upd);
         $con->close();
@@ -86,13 +86,13 @@ $contact_block = '<script language="JavaScript" type="text/javascript">
             setTimeout("document.forms[0].submit()", 500);
         }
     }
-    
+
     function isChanged() {
         if(!(temp.complete && (temp.src == newsrc))) {
             setTimeout("isChanged()", 500);
         }
     }
-            
+
 </script>';
 
 //add contact information block on sidebar
@@ -110,92 +110,93 @@ if ( $contact_id ) {
 
     // database error ???
     if ( !$rst ) {
-      // yes - database error
+      // no result set - database error
       db_error_handler($con, $sql);
     }
     // any data ???
     if ( !$rst->EOF ) {
-      // yes
-      $sql = "SELECT default_primary_address, company_name
-            FROM companies
-            WHERE company_id=" . $rst->fields['company_id'];
-      $rst2 = $con->execute($sql);
-      if ( !$rst2 ) {
-	db_error_handler($con, $sql);
-      }
-      if ( !$rst2->EOF ) {
-	$default_primary_address = $rst2->fields['default_primary_address'];
-	$company_name            = $rst2->fields['company_name'];
-      } else {
-	$default_primary_address = '';
-	$company_name            = '';
-      }
-      $rst2->close();
+        // yes
+        $sql = "SELECT default_primary_address, company_name
+                FROM companies
+                WHERE company_id=" . $rst->fields['company_id'];
+        $rst2 = $con->execute($sql);
+        if ( !$rst2 ) {
+            db_error_handler($con, $sql);
+        }
+        if ( !$rst2->EOF ) {
+            $default_primary_address = $rst2->fields['default_primary_address'];
+            $company_name            = $rst2->fields['company_name'];
+        } else {
+            $default_primary_address = '';
+            $company_name            = '';
+        }
+        $rst2->close();
 
-      //
-      // build contact_block
-      //
-      $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-	. '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
-	. $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a></td>\n\t</tr>";
-      if ( $rst->fields['address_id'] != $default_primary_address ) {
+        //
+        // build contact_block
+        //
         $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-	  . get_formatted_address ($con, $rst->fields['address_id'])
-	  . "</td>\n\t</tr>";
-      }
+                            . '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
+                            . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a></td>\n\t</tr>";
+        if ( $rst->fields['address_id'] != $default_primary_address ) {
+            $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+                            . get_formatted_address ($con, $rst->fields['address_id'])
+                            . "</td>\n\t</tr>";
+        }
+
+        if ($rst->fields['email']) {
+            $contact_block .= "<tr>\n\t\t<td class=widget_content>"
+                            . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
+                            . $rst->fields['email'] . "</a></td>\n\t</tr>";
+        }
+        else {
+            $contact_block .= "<tr>\n\t\t<td class=widget_content>"
+                            . "<a href=\"javascript: updateVariable('Enter Email', 'email', 'contact_id=" . $contact_id . "');\">"
+                            . _("Enter Email Address") . "</a></td>\n\t</tr>";
+        }
 
     $contact_block .= "<tr><td class=widget_content>";
 
-    if ($rst->fields['cell_phone']) {
-        $contact_block .= _("Cell Phone") . ": <strong>"
-                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']) 
-                        . "</strong><br>";
-    }
-    else {
-        $contact_block .= "<a href=\"javascript: updateVariable('Enter Cell Phone', 'cell_phone', 'contact_id=" . $contact_id . "');\">"
-                       . _("Enter Cell") . "</a><br>";
-    }
-    
-    if ($rst->fields['work_phone']) {
-        $contact_block .= _("Work Phone") . ": <strong>"
-                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
-                        . "</strong><br>";
-    }
-    else {
-        $contact_block .= "<a href=\"javascript: updateVariable('Enter Work Phone', 'work_phone', 'contact_id=" . $contact_id . "');\">"
-                       . _("Enter Work Phone") . "</a><br>";
-    }
-    
-    if ($rst->fields['home_phone']) {
-        $contact_block .= _("Home Phone") . ": <strong>"
-                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone']) 
-                        . "</strong><br>";
-    }
-    else {
-        $contact_block .= "<a href=\"javascript: updateVariable('Enter Home Phone', 'home_phone', 'contact_id=" . $contact_id . "');\">"
-                       . _("Enter Home Phone") . "</a><br>";
-    }
+        if ($rst->fields['work_phone']) {
+            $contact_block .= _("Work Phone") . ": <strong>"
+                            . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone'])
+                            . "</strong><br>";
+        }
+        else {
+            $contact_block .= "<a href=\"javascript: updateVariable('"._("Enter Work Phone")."', 'work_phone', 'contact_id=" . $contact_id . "');\">"
+                           . _("Enter Work Phone") . "</a><br>";
+        }
 
-    $contact_block .= "</td>\n\t</tr>";
+        if ($rst->fields['cell_phone']) {
+            $contact_block .= _("Cell Phone") . ": <strong>"
+                            . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone'])
+                            . "</strong><br>";
+        }
+        else {
+            $contact_block .= "<a href=\"javascript: updateVariable('"._("Enter Cell Phone")."', 'cell_phone', 'contact_id=" . $contact_id . "');\">"
+                           . _("Enter Cell") . "</a><br>";
+        }
 
-    if ($rst->fields['email']) {
-        $contact_block .= "<tr>\n\t\t<td class=widget_content>"
-	  . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
-	  . $rst->fields['email'] . "</a></td>\n\t</tr>";
-      }
-    else {
-        $contact_block .= "<tr>\n\t\t<td class=widget_content>"
-      . "<a href=\"javascript: updateVariable('Enter Email', 'email', 'contact_id=" . $contact_id . "');\">"
-                       . _("Enter Email Address") . "</a></td>\n\t</tr>";
-    }
+        if ($rst->fields['home_phone']) {
+            $contact_block .= _("Home Phone") . ": <strong>"
+                            . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone'])
+                            . "</strong><br>";
+        }
+        else {
+            $contact_block .= "<a href=\"javascript: updateVariable('"._("Enter Home Phone")."', 'home_phone', 'contact_id=" . $contact_id . "');\">"
+                           . _("Enter Home Phone") . "</a><br>";
+        }
 
-      $rst->close();
+        $contact_block .= "</td>\n\t</tr>";
+
+
+        $rst->close();
 
     } else {
-      // no data
-      $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content colspan=5>"
-	. _("No Contact Selected.")
-	. "&nbsp; </td>\n\t</tr>";
+        // no data
+        $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content colspan=5>"
+                          . _("No Contact Selected.")
+                          . "&nbsp; </td>\n\t</tr>";
     }
 } // if ( $contact_id ) ...
 
@@ -203,6 +204,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.19  2004/12/27 14:21:50  braverock
+ * - localized untranslated strings
+ *
  * Revision 1.18  2004/08/25 15:26:50  neildogg
  * - Fixed misnamed variables
  *
