@@ -1,16 +1,16 @@
 <?php
+/**
+ * Sidebar box for Categories
+ *
+ * $Id: categories-sidebar.php,v 1.2 2005/01/11 13:03:32 braverock Exp $
+ */
 
-if ( !defined('IN_XRMS') )
+ if ( !defined('IN_XRMS') )
 {
   die(_('Hacking attempt'));
   exit;
 }
 
-/**
- * Sidebar box for Categories
- *
- * $Id: categories-sidebar.php,v 1.1 2004/10/22 20:44:29 introspectshun Exp $
- */
 
 $category_rows = "<div id='category_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
@@ -58,12 +58,15 @@ $category_rows .= "
                 <td class=widget_content>" . $categories . "</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick=\"javascript: location.href='categories.php?" . $on_what_string . "_id=" . $on_what_id . "';\" value=\"". _("Manage") . "\"></td>
+                <td class=widget_content_form_element><input type=button class=button onclick=\"javascript: location.href='categories.php?" . make_singular($on_what_table) . "_id=" . $on_what_id . "';\" value=\"". _("Manage") . "\"></td>
             </tr>
         </table>\n</div>";
 
 /**
  * $Log: categories-sidebar.php,v $
+ * Revision 1.2  2005/01/11 13:03:32  braverock
+ * - removed on_what_string hack, changed to use standard make_singular function
+ *
  * Revision 1.1  2004/10/22 20:44:29  introspectshun
  * - Centralize category handling as sidebar
  *
