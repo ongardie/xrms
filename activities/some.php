@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.23 2004/06/24 19:58:47 braverock Exp $
+ * $Id: some.php,v 1.24 2004/06/25 03:12:09 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -73,6 +73,9 @@ if (!strlen($sort_column) > 0) {
     $sort_column = 1;
     $current_sort_column = $sort_column;
     $sort_order = "asc";
+}
+if (!strlen($completed) > 0) {
+    $completed ='o';
 }
 
 if (!($sort_column == $current_sort_column)) {
@@ -387,6 +390,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.24  2004/06/25 03:12:09  braverock
+ * - make default search for open activities only
+ *
  * Revision 1.23  2004/06/24 19:58:47  braverock
  * - committing enhancements to Save&Next functionality
  *   - patches submitted by Neil Roberts
