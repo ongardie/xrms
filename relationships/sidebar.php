@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.22 2005/01/11 17:19:00 neildogg Exp $
+ * $Id: sidebar.php,v 1.23 2005/01/11 20:51:23 neildogg Exp $
  */
 
 if(empty($relationships)) {
@@ -185,10 +185,11 @@ for($j = 0; $j <= $expand; $j++) {
                             $relationship_ids[] = $rst2->fields['relationship_id'];
         
                             $agent_count = 0;
-                            if($what[$opposite_direction]['table'] == "companies" && !empty($relationships['companies'])) {
+                            $address = '';
+                            if($what[$opposite_direction]['table'] == "companies") {
                                 $sql = "SELECT COUNT(contact_id) as agent_count
                                         FROM contacts
-                                        WHERE company_id = " . $relationships['companies'] . "
+                                        WHERE company_id = $current_id
                                         GROUP BY company_id";
                                 $rst3 = $con->execute($sql);
                                 if(!$rst3) {
@@ -201,7 +202,7 @@ for($j = 0; $j <= $expand; $j++) {
         
                                 $sql = "SELECT line1, city, province
                                         FROM addresses
-                                        WHERE company_id = " . $relationships['companies'];
+                                        WHERE company_id = " . $current_id;
                                 $rst3 = $con->execute($sql);
                                 if(!$rst3) {
                                     db_error_handler($con, $sql);
@@ -285,6 +286,7 @@ for($j = 0; $j <= $expand; $j++) {
                                         $current_id2 = $rst3->fields[$working_direction . '_what_id'];
     
                                         $agent_count = 0;
+                                        $address = '';
                                         if($what[$working_direction]['table'] == "companies") {
                                             $sql = "SELECT COUNT(contact_id) as agent_count
                                                     FROM contacts
@@ -399,23 +401,25 @@ for($j = 0; $j <= $expand; $j++) {
             $rst->movenext();
         }
     }
-    
-    if(!empty($relationship_link_rows)) {
-        $relationship_link_rows .= "
-              </table>\n</div>";
-    }
-
 }
 
 $relationships = $ori_relationships;
 
 //put in the new button
-$relationship_link_rows .= "
+if(empty($relationship_link_rows)) {
+    $relationship_link_rows .= "
         <div id='expanded_associated_by_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
-                <td class=widget_header>"._("Add Relationship")."</td>
-            </tr>
+                <td class=widget_header colspan=2>" . _("Add Relationship") . "</td>
+            </tr>";
+}
+else {
+    $relationship_link_rows .= "
+            <tr>
+                <td class=widget_label colspan=2 align=center>" . _("Add Relationship") . "</td>";
+}
+$relationship_link_rows .= "
             <tr>
             <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
                 <input type=hidden name=on_what_id>
@@ -481,6 +485,9 @@ $relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.23  2005/01/11 20:51:23  neildogg
+ * - Combined Relationships bars, fixed incorrect ID passed to create company address
+ *
  * Revision 1.22  2005/01/11 17:19:00  neildogg
  * - Avoid duplicating relationships
  *
