@@ -1,4 +1,9 @@
 <?php
+/**
+ * Sidebar box for Files
+ *
+ * $Id: sidebar.php,v 1.10 2004/08/05 15:21:56 braverock Exp $
+ */
 
 if ( !defined('IN_XRMS') )
 {
@@ -6,11 +11,6 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
-/**
- * Sidebar box for Files
- *
- * $Id: sidebar.php,v 1.9 2004/08/03 18:05:56 cpsource Exp $
- */
 
 $file_rows = "<div id='file_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
@@ -55,20 +55,20 @@ if (strlen($rst->fields['username']) > 0) {
     while (!$rst->EOF) {
 
       // get contact id
-      $contact_id = $rst->fields['user_contact_id'];
+      $user_contact_id = $rst->fields['user_contact_id'];
 
         $file_rows .= "
              <tr>";
         if ($rst->fields['file_size'] == "0")
           {
-          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&amp;file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
+          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$user_contact_id&amp;file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($rst->fields['file_size']) . '</b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . $rst->fields['username'] . '</b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($rst->fields['entered_at']) . '</b></td>';
           }
         else
           {
-          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&amp;file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
+          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$user_contact_id&amp;file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
           $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
           $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
           $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
@@ -102,6 +102,9 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.10  2004/08/05 15:21:56  braverock
+ * - fixed bug where contact_id was overwritten before being needed by including file
+ *
  * Revision 1.9  2004/08/03 18:05:56  cpsource
  * - Set mime type when database entry is created
  *
