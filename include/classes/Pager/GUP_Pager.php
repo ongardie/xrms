@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.7 2005/02/24 23:53:26 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.8 2005/02/25 03:42:33 daturaarutad Exp $
  */
 
 
@@ -139,6 +139,8 @@ class GUP_Pager {
 		getGlobalVar($refresh, $this->pager_id . '_refresh');
 
 		if($refresh) { $this->use_cached	= false; }
+		// don't use the cache if we are in sql-only mode (no data or callbacks)
+		if(!isset($data)) { $this->use_cached	= false; }
 
 		if(!is_numeric($this->group_mode)) { unset($this->group_mode); }
 		if(isset($this->group_mode)) { $this->maximize = true; }
@@ -925,6 +927,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.8  2005/02/25 03:42:33  daturaarutad
+ * don't use the cache if we are in sql-only mode (no data or callbacks)
+ *
  * Revision 1.7  2005/02/24 23:53:26  daturaarutad
  * allow empty $data to be passed in, showing No Matches
  *
