@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.66 2005/02/25 03:39:57 daturaarutad Exp $
+ * $Id: one.php,v 1.67 2005/03/07 16:48:53 daturaarutad Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -134,8 +134,8 @@ $opportunity_status_rows = $rst->GetMenu2('opportunity_status_id', null, true);
 // most recent activities
 $sql_activities = "SELECT " . 
 $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/contacts/one.php%3Fcontact_id=$contact_id\">'", "activity_title", "'</a>'") .
-" AS activity_title, u.username, at.activity_type_pretty_name, " . 
-"a.scheduled_at, a.entered_at, a.on_what_table, a.on_what_id, a.activity_status, 
+" AS activity_title_link, u.username, at.activity_type_pretty_name, 
+a.scheduled_at, a.entered_at, a.on_what_table, a.on_what_id, a.activity_status, a.activity_title, 
   cont.contact_id, 
 CASE
   WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
@@ -158,13 +158,13 @@ WHERE a.contact_id = $contact_id
 
     // begin Activities Pager
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title');
+    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '9');
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
-    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at');
+    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => '4');
 
-    $default_columns = array('activity_status', 'activity_title', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
+    $default_columns = array('activity_status', 'activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
 
     // selects the columns this user is interested in
@@ -585,6 +585,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.67  2005/03/07 16:48:53  daturaarutad
+ * updated to speed up sql sorts in the pager using sql_sort_column
+ *
  * Revision 1.66  2005/02/25 03:39:57  daturaarutad
  * updated to use GUP_Pager for activities listing
  *
