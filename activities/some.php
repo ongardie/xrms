@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.68 2004/12/18 20:25:47 neildogg Exp $
+ * $Id: some.php,v 1.69 2004/12/18 21:21:31 neildogg Exp $
  */
 
 // handle includes
@@ -87,6 +87,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'contact_id'          => array ( 'activities_contact_id', arr_vars_SESSION ) ,
                    'company'             => array ( 'activities_company', arr_vars_SESSION ) ,
                    'company_id'          => array ( 'activities_company_id', arr_vars_SESSION ) ,
+                   'campaign_id'          => array ( 'activities_campaign_id', arr_vars_SESSION ) ,
            // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
                    'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
                    'start_end'        => array ( 'activities_start_end', arr_vars_SESSION ) ,                   
@@ -178,12 +179,12 @@ $sql .= "FROM companies c, users u, activity_types at, addresses addr, activitie
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     $sql .= ", time_daylight_savings tds";
 }
-if($opportunity_status_id or $sort_column == 9) {
+if($opportunity_status_id || $sort_column == 9 || $campaign_id) {
     $sql .= ", opportunities o";
 }
 $sql .= " LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
   WHERE a.company_id = c.company_id";
-if($sort_column == 9) {
+if($sort_column == 9 || $campaign_id) {
     $sql .= " AND a.on_what_table='opportunities'
   AND a.on_what_id=o.opportunity_id ";
 }
@@ -265,6 +266,10 @@ if($opportunity_status_id) {
     $sql .= " and a.on_what_table='opportunities' and a.on_what_id=o.opportunity_id and o.opportunity_status_id=" . $opportunity_status_id;
 }
 
+if($campaign_id) {
+    $sql .= " AND o.campaign_id = " . $campaign_id;
+}
+
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $sql .= " and 1 = 2";
 }
@@ -310,6 +315,16 @@ if($advanced_search) {
     $activity_menu = $rst->getmenu2('template_title', $template_title, true);
     $rst->close();
 }
+
+if($advanced_search) {
+    //get campaign titles
+    $sql2 = "SELECT campaign_title, campaign_id
+             FROM campaigns
+             WHERE campaign_record_status = 'a'";
+    $rst = $con->execute($sql2);
+    $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
+    $rst->close();
+}            
 
 //get menu for users
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -464,6 +479,12 @@ start_page($page_title, true, $msg);
                 </td>
                 <td class=widget_content_form_element><input type=text name="company_id" size=15 value="<?php  echo $company_id; ?>">
                 </td>
+            </tr>
+            <tr>
+                <td colspan="4" class=widget_label><?php echo _("Campaigns"); ?></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="widget_content_form_element"><?php echo $campaign_menu; ?></td>
             </tr>
 <?php } //end if advanced search ?>
             <tr>
@@ -633,6 +654,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.69  2004/12/18 21:21:31  neildogg
+ * Added advanced search by Campaign
+ *
  * Revision 1.68  2004/12/18 20:25:47  neildogg
  * Added Search by All Dates
  *
