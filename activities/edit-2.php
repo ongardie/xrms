@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.7 2004/04/27 15:18:04 gpowers Exp $
+ * $Id: edit-2.php,v 1.8 2004/04/27 16:29:34 gpowers Exp $
  */
 
 //include required files
@@ -32,6 +32,7 @@ $followup   = $_POST['followup'];
 $on_what_table = $_POST['on_what_table'];
 $on_what_id = $_POST['on_what_id'];
 $company_id = $_POST['company_id'];
+$email_to = $_POST['email_to'];
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -73,7 +74,70 @@ $sql = "update activities set
 //$con->debug = 1;
 $con->execute($sql);
 add_audit_item($con, $session_user_id, 'updated', 'activity', $activity_id);
+
+$sql = "select username from users where user_id = $user_id limit 1";
+$rst = $con->execute($sql);
+if ($rst) { $username = $rst->fields['username']; }
+$rst -> close();
+
+$sql = "select company_name, phone from companies where company_id = $company_id limit 1";
+$rst = $con->execute($sql);
+if ($rst) {
+    $company_name = $rst->fields['company_name'];
+    $company_phone = $rst->fields['phone'];
+    $rst -> close();
+}
+
+$sql = "select activity_type_pretty_name from activity_types where activity_type_id = $activity_type_id limit 1";
+$rst = $con->execute($sql);
+if ($rst) {
+    $activity_type = $rst->fields['activity_type_pretty_name'];
+    $rst->close();
+}
+
+$sql = "select concat(first_names, ' ', last_name) as contact_name, work_phone from contacts where contact_id = $contact_id limit 1";
+$rst = $con->execute($sql);
+if ($rst) {
+    $contact_name = $rst->fields['contact_name'];
+    $contact_phone = $rst->fields['work_phone'];
+    $rst->close();
+}
+
+if ($activity_status == 'o') {
+    $activity_status_long = "Open";
+}
+
+if ($activity_status == 'c') {
+    $activity_status_long = "Closed";
+}
+
+$email_message="
+This is an UPDATED $app_title activity:
+
+$http_site_root/activities/one.php?return_url=/companies/one.php?company_id=$company_id&activity_id=$activity_id
+
+Title: $activity_title
+Description: $activity_description
+
+Contact: $contact_name
+Contact Phone: $contact_phone
+
+Company: $company_name
+Company Phone: $company_phone
+
+User: $username
+Type: $activity_type
+Status: $activity_status_long
+Scheduled At: $scheduled_at
+Ends At: $ends_at
+
+";
+
 $con->close();
+
+if ($email_to) {
+    mail($email_to, "$app_title: $activity_title", $email_message);
+}
 
 if ($followup) {
     header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars('Follow-up '.$activity_title)."&company_id=$company_id&activity_status=o&return_url=$return_url" );
@@ -83,6 +147,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.8  2004/04/27 16:29:34  gpowers
+ * added support for activity emails.
+ *
  * Revision 1.7  2004/04/27 15:18:04  gpowers
  * added support for activity times
  * added audit item
