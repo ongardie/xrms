@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.28 2004/07/15 21:27:06 maulani Exp $
+ * $Id: vars.php,v 1.29 2004/08/03 16:03:46 neildogg Exp $
  */
 
 /**
@@ -157,6 +157,14 @@ $activities_default_behavior = "Fast";
 // *one* open Opportunity or Case
 $associate_activities = true;
 
+// Time Zone Behavior
+// If this is set to 'n' then it will make a best guess
+// at the time zone offset and daylight savings format
+// for a given address. As more accurate data is put
+// into the database, it will give a better result.
+// If it's set to 'y' then only time zones that are
+// confirmed will be used in calculations
+$only_confirmed_time_zones = 'y';
 
 /** Optional LDAP configuration parameters **/
 /**
