@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.9 2005/02/10 21:49:14 maulani Exp $
+ * $Id: audit-items.php,v 1.10 2005/03/21 13:40:58 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -33,10 +33,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id);
 ?>
 <form action="audit-items.php" method=get>
 <table>
@@ -180,6 +177,9 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.10  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.9  2005/02/10 21:49:14  maulani
  * - Default to current user instead of first alphabetically
  *

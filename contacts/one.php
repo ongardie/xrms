@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.71 2005/03/18 20:53:32 gpowers Exp $
+ * $Id: one.php,v 1.72 2005/03/21 13:40:55 maulani Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -262,12 +262,7 @@ $sidebar_rows_bottom = do_hook_function('contact_sidebar_bottom', $sidebar_rows_
 /** End of the sidebar includes **/
 /*********************************/
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-if ($rst) {
-    $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-    $rst->close();
-}
+$user_menu = get_user_menu($con, $session_user_id);
 
 $sql = "SELECT activity_type_pretty_name, activity_type_id
         FROM activity_types
@@ -606,6 +601,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.72  2005/03/21 13:40:55  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.71  2005/03/18 20:53:32  gpowers
  * - added hooks for inline info plugin
  *

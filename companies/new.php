@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.13 2005/01/13 18:20:28 vanmer Exp $
+ * $Id: new.php,v 1.14 2005/03/21 13:40:55 maulani Exp $
  */
 
 /* Include required files */
@@ -65,10 +65,7 @@ if ($clone_id > 0) {
 
 $user_id = ($user_id > 0) ? $user_id : $session_user_id;
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id);
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
 $rst = $con->execute($sql2);
@@ -293,6 +290,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.14  2005/03/21 13:40:55  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.13  2005/01/13 18:20:28  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

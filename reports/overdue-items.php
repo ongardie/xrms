@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: overdue-items.php,v 1.7 2005/02/09 19:20:54 maulani Exp $
+ * $Id: overdue-items.php,v 1.8 2005/03/21 13:40:58 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -54,10 +54,7 @@ if (($display) || (!$friendly)) {
     start_page($page_title, true, $msg);
 }
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', '', false);
-$rst->close();
+$user_menu = get_user_menu($con);
 ?>
 
 <?php
@@ -400,6 +397,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: overdue-items.php,v $
+ * Revision 1.8  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.7  2005/02/09 19:20:54  maulani
  * - fix parameter call to occur after database connection established
  *

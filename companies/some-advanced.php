@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.19 2005/03/20 01:49:45 maulani Exp $
+ * $Id: some-advanced.php,v 1.20 2005/03/21 13:40:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -343,24 +343,6 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = "<tr><td class=widget_content colspan=3>" . _("No recently viewed companies") . "</td></tr>";
 }
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$user_menu = check_and_get($con,$sql2,'user_id');
-
-$sql2 = "select category_pretty_name, c.category_id
-from categories c, category_scopes cs, category_category_scope_map ccsm
-where c.category_id = ccsm.category_id
-and cs.on_what_table =  'companies'
-and ccsm.category_scope_id = cs.category_scope_id
-and category_record_status =  'a'
-order by category_pretty_name";
-$company_category_menu = check_and_get($con,$sql2,'category_id');
-
-$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
-$crm_status_menu = check_and_get($con,$sql2,'crm_status_id');
-
-$sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
-$industry_menu = check_and_get($con,$sql2,'industry_id');
-
 if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
 }
@@ -452,6 +434,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.20  2005/03/21 13:40:55  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.19  2005/03/20 01:49:45  maulani
  * - Remove obsolete code
  *

@@ -3,7 +3,7 @@
  *
  * Companies by crm status report.
  *
- * $Id: companies-by-crm-status.php,v 1.10 2005/03/15 01:28:56 daturaarutad Exp $
+ * $Id: companies-by-crm-status.php,v 1.11 2005/03/21 13:40:58 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -36,11 +36,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-// JNH add for change user
-$sqljnh = "select username, user_id from users where user_record_status = 'a' order by username";
-$rstjnh = $con->execute($sqljnh);
-$user_menu = $rstjnh->getmenu2('user_id',$user_id, false);
-$rstjnh->close();
+$user_menu = get_user_menu($con, $user_id);
 
 
 $map_and_image = GetCompaniesByCRMStatusGraph($con, $user_id, $all_users);
@@ -198,6 +194,9 @@ function GetCompaniesByCRMStatusGraph($con, $user_id, $all_users) {
 
 /**
  * $Log: companies-by-crm-status.php,v $
+ * Revision 1.11  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.10  2005/03/15 01:28:56  daturaarutad
  * moved graphing code back into original files
  *

@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.77 2005/02/10 21:16:43 maulani Exp $
+ * $Id: one.php,v 1.78 2005/03/21 13:40:51 maulani Exp $
  */
 
 //include required files
@@ -51,6 +51,9 @@ if ($rst) {
     $activity_description = $rst->fields['activity_description'];
     $user_id = $rst->fields['user_id'];
     $entered_by = $rst->fields['entered_by'];
+    $entered_at = date('Y-m-d H:i:s', strtotime($rst->fields['entered_at']));
+    $last_modified_by = $rst->fields['last_modified_by'];
+    $last_modified_at = date('Y-m-d H:i:s', strtotime($rst->fields['last_modified_at']));
     $company_id = $rst->fields['company_id'];
     $company_name = $rst->fields['company_name'];
     $contact_id = $rst->fields['contact_id'];
@@ -102,12 +105,9 @@ if ($rst) {
     $rst->close();
 }
 
-//get user menu
-$sql = "select username, user_id from users where user_record_status = 'a'";
-$rst = $con->execute($sql);
-//There is a blank user here ON PURPOSE.
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id, true);
+
+$activity_id_text = _("Activity ID:") . ' ' . $activity_id;
 
 //get user info for who entered the activity
 $sql = "select first_names, last_name from users where user_id = $entered_by";
@@ -115,11 +115,22 @@ $rst = $con->execute($sql);
 if ($rst) {
     $entered_by_firstname = $rst->fields['first_names'];
     $entered_by_lastname = $rst->fields['last_name'];
-    if ($entered_by_lastname != '') {
-         $entered_by_text = _("Entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname;
-    } else {
-         $entered_by_text = '';
-    }
+    $history_text = _("ID") . ' ' . $activity_id . ' ' . 
+					_("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' . 
+					_("at") . ' ' . $entered_at . '. ';
+    $rst->close();
+} else {
+    db_error_handler($con, $sql);
+}
+
+//get user info for who modified the activity
+$sql = "select first_names, last_name from users where user_id = $last_modified_by";
+$rst = $con->execute($sql);
+if ($rst) {
+    $last_modified_by_firstname = $rst->fields['first_names'];
+    $last_modified_by_lastname = $rst->fields['last_name'];
+	$history_text .= _("Last modified by") . ' ' . $last_modified_by_firstname . ' ' . $last_modified_by_lastname . ' ' . 
+					 _("at") . ' ' . $last_modified_at . '.';
     $rst->close();
 } else {
     db_error_handler($con, $sql);
@@ -378,7 +389,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("User"); ?></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?> <?php  echo $entered_by_text; ?></td>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Activity Notes"); ?></td>
@@ -448,6 +459,9 @@ function logTime() {
 
                 </td>
             </tr>
+           <tr>
+                <td class=widget_content colspan=2> <?php  echo $history_text; ?> </td>
+           </tr>
         </table>
         </form>
 
@@ -498,6 +512,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.78  2005/03/21 13:40:51  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.77  2005/02/10 21:16:43  maulani
  * - Add audit trail entries
  *

@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.21 2005/02/10 03:52:47 braverock Exp $
+ * $Id: index.php,v 1.22 2005/03/21 13:40:58 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -19,10 +19,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', '', false);
-$rst->close();
+$user_menu = get_user_menu($con);
 
 $con->close();
 
@@ -157,6 +154,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.22  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.21  2005/02/10 03:52:47  braverock
  * - remove sales-automation link until we can rewrite the dashboard report
  *

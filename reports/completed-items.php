@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.15 2005/02/09 19:20:54 maulani Exp $
+ * $Id: completed-items.php,v 1.16 2005/03/21 13:40:58 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -53,10 +53,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $use_hr = get_system_parameter($con, 'Reports--Use Horizontal Rule');
 $say_no_when_none = get_system_parameter($con, 'Reports--Show No Items Found');
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', '', false);
-$rst->close();
+$user_menu = get_user_menu($con);
 ?>
 
 <?php
@@ -389,6 +386,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.16  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.15  2005/02/09 19:20:54  maulani
  * - fix parameter call to occur after database connection established
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.29 2005/03/15 22:36:46 daturaarutad Exp $
+ * $Id: some.php,v 1.30 2005/03/21 13:40:53 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -131,10 +131,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed campaigns") . '</td></tr>';
 }
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id, true);
 
 $sql2 = "select campaign_type_pretty_name, campaign_type_id from campaign_types where campaign_type_record_status = 'a' order by campaign_type_pretty_name";
 $rst = $con->execute($sql2);
@@ -328,6 +325,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.30  2005/03/21 13:40:53  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.29  2005/03/15 22:36:46  daturaarutad
  * pager tuning sql_sort_column
  *

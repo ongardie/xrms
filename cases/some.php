@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.28 2005/03/11 17:28:19 daturaarutad Exp $
+ * $Id: some.php,v 1.29 2005/03/21 13:40:54 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -174,10 +174,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed cases") . '</td></tr>';
 }
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id, true);
 
 $sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by case_status_id";
 $rst = $con->execute($sql2);
@@ -357,6 +354,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.29  2005/03/21 13:40:54  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.28  2005/03/11 17:28:19  daturaarutad
  * added GET to cases_case_status_id for linking to reports/graphs
  *

@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.45 2005/03/15 22:29:34 daturaarutad Exp $
+ * $Id: some.php,v 1.46 2005/03/21 13:40:57 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -154,10 +154,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed opportunities") . '</td></tr>';
 }
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id, true);
 
 $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by opportunity_status_id";
 $rst = $con->execute($sql2);
@@ -345,6 +342,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.46  2005/03/21 13:40:57  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.45  2005/03/15 22:29:34  daturaarutad
  * pager tuning sql_sort_column
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.20 2005/01/13 19:08:56 vanmer Exp $
+ * $Id: edit.php,v 1.21 2005/03/21 13:40:56 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -106,11 +106,7 @@ $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
 
-//users menu
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id);
 
 //campaign menu
 $sql2 = "select campaign_title, campaign_id from campaigns where campaign_record_status = 'a' order by campaign_title";
@@ -289,6 +285,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.21  2005/03/21 13:40:56  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.20  2005/01/13 19:08:56  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

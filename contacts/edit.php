@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.24 2005/03/18 20:53:32 gpowers Exp $
+ * $Id: edit.php,v 1.25 2005/03/21 13:40:55 maulani Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -93,10 +93,7 @@ $rst = $con->execute($sql);
 $contact_count = $rst->fields['contact_count'];
 $rst->close();
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $session_user_id);
 
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
 $rst = $con->execute($sql);
@@ -273,6 +270,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.25  2005/03/21 13:40:55  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.24  2005/03/18 20:53:32  gpowers
  * - added hooks for inline info plugin
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: index.php,v 1.1 2004/08/23 01:44:58 d2uhlman Exp $
+ * $Id: index.php,v 1.2 2005/03/21 13:40:57 maulani Exp $
  */
 
 //include the standard files
@@ -232,10 +232,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed contacts</td></tr>';
 }
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id, true);
 
 $sql_category = "select category_pretty_name, c.category_id
 from categories c, category_scopes cs, category_category_scope_map ccsm
@@ -393,6 +390,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.2  2005/03/21 13:40:57  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.1  2004/08/23 01:44:58  d2uhlman
  * very basic screens to access contact, company, search by phone plugin, need feedback, no entry possible yet
  *

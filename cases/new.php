@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.17 2005/03/01 18:51:39 niclowe Exp $
+ * $Id: new.php,v 1.18 2005/03/21 13:40:54 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -33,11 +33,7 @@ $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false, false, 1, 'id=contact_id');
 $rst->close();
 
-//get username menu
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $session_user_id);
 
 //division menu
 $sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
@@ -230,6 +226,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.18  2005/03/21 13:40:54  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.17  2005/03/01 18:51:39  niclowe
  * Added error trap where there are no case statuses set for a particular case type
  *

@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: companies_one.php,v 1.1 2004/08/23 01:44:58 d2uhlman Exp $
+ * $Id: companies_one.php,v 1.2 2005/03/21 13:40:57 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -397,14 +397,7 @@ if ($rst) {
     db_error_handler ($con, $sql);
 }
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-if ($rst) {
-    $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
-}
+$user_menu = get_user_menu($con, $session_user_id);
 
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
 $rst = $con->execute($sql);
@@ -771,6 +764,9 @@ end_page();
 
 /**
  * $Log: companies_one.php,v $
+ * Revision 1.2  2005/03/21 13:40:57  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.1  2004/08/23 01:44:58  d2uhlman
  * very basic screens to access contact, company, search by phone plugin, need feedback, no entry possible yet
  *

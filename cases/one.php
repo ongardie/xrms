@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.38 2005/03/15 22:41:03 daturaarutad Exp $
+ * $Id: one.php,v 1.39 2005/03/21 13:40:54 maulani Exp $
  */
 
 //include required files
@@ -224,14 +224,7 @@ require_once("../notes/sidebar.php");
 /** End of the sidebar includes **/
 /*********************************/
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-if ($rst) {
-   $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-   $rst->close();
-} else {
-   db_error_handler ($con,$sql);
-}
+$user_menu = get_user_menu($con, $session_user_id);
 
 $sql = "SELECT activity_type_pretty_name, activity_type_id
         FROM activity_types
@@ -448,6 +441,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.39  2005/03/21 13:40:54  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.38  2005/03/15 22:41:03  daturaarutad
  * pager tuning sql_sort_column
  *

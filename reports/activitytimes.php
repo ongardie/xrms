@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.7 2005/01/08 06:47:18 gpowers Exp $
+ * $Id: activitytimes.php,v 1.8 2005/03/21 13:40:57 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -40,10 +40,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id);
 ?>
 
 <form action="activitytimes.php" method=post>
@@ -181,6 +178,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.8  2005/03/21 13:40:57  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.7  2005/01/08 06:47:18  gpowers
  * - fixed formatting
  *

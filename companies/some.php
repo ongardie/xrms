@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.60 2005/03/20 01:50:35 maulani Exp $
+ * $Id: some.php,v 1.61 2005/03/21 13:40:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -172,10 +172,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = "<tr><td class=widget_content colspan=3>"._("No recently viewed companies")."</td></tr>";
 }
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id, true);
 
 $sql2 = "select category_pretty_name, c.category_id
 from categories c, category_scopes cs, category_category_scope_map ccsm
@@ -394,6 +391,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.61  2005/03/21 13:40:55  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.60  2005/03/20 01:50:35  maulani
  * - Remove reference to company_company_type_map
  *

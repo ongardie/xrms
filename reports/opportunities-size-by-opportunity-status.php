@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.10 2005/03/11 21:24:27 daturaarutad Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.11 2005/03/21 13:40:58 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -37,11 +37,7 @@ if (strlen($hide_closed_opps) > 0) {
 }
 else $hide_closed_opps = false;
 
-// JNH add for change user
-$sqljnh = "select username, user_id from users where user_record_status = 'a' order by username";
-$rstjnh = $con->execute($sqljnh);
-$user_menu = $rstjnh->getmenu2('user_id',$user_id, false);
-$rstjnh->close();
+$user_menu = get_user_menu($con, $user_id);
 
 $page_title = _("Opportunities (Size) by Status");
 start_page($page_title, true, $msg);
@@ -225,6 +221,9 @@ function GetOpportunitiesSizeByOpportunityStatusGraph($con, $user_id, $all_users
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.11  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.10  2005/03/11 21:24:27  daturaarutad
  * updated to support client side image maps
  *

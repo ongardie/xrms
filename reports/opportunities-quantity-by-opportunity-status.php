@@ -3,7 +3,7 @@
  *
  * Opportunities quanity by opportunity status report.
  *
- * $Id: opportunities-quantity-by-opportunity-status.php,v 1.9 2005/03/11 20:58:56 daturaarutad Exp $
+ * $Id: opportunities-quantity-by-opportunity-status.php,v 1.10 2005/03/21 13:40:58 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -37,11 +37,7 @@ else $hide_closed_opps = false;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-// JNH add for change user
-$sqljnh = "select username, user_id from users where user_record_status = 'a' order by username";
-$rstjnh = $con->execute($sqljnh);
-$user_menu = $rstjnh->getmenu2('user_id',$user_id, false);
-$rstjnh->close();
+$user_menu = get_user_menu($con, $user_id);
 
 $page_title = _("Opportunities by Status");
 start_page($page_title, true, $msg);
@@ -211,6 +207,9 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con, $user_id, $all_u
 
 /**
  * $Log: opportunities-quantity-by-opportunity-status.php,v $
+ * Revision 1.10  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.9  2005/03/11 20:58:56  daturaarutad
  * updated to support client side image maps
  *

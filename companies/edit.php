@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.15 2005/03/18 20:53:29 gpowers Exp $
+ * $Id: edit.php,v 1.16 2005/03/21 13:40:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -59,10 +59,7 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id);
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
 $rst = $con->execute($sql2);
@@ -229,6 +226,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.16  2005/03/21 13:40:55  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.15  2005/03/18 20:53:29  gpowers
  * - added hooks for inline info plugin
  *

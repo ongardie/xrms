@@ -4,7 +4,7 @@
  *
  * This is the advanced screen that allows many more search fields
  *
- * $Id: advanced-search.php,v 1.9 2005/03/20 01:45:09 maulani Exp $
+ * $Id: advanced-search.php,v 1.10 2005/03/21 13:40:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -93,8 +93,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //uncomment this line if you suspect a problem with the SQL query
 // $con->debug = 1;
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$user_menu = check_and_get($con,$sql2,'user_id',$user_id);
+$user_menu = get_user_menu($con, $user_id, true);
 
 //This is not used
 //$sql2 = "select category_pretty_name, c.category_id
@@ -310,6 +309,9 @@ end_page();
 
 /**
  * $Log: advanced-search.php,v $
+ * Revision 1.10  2005/03/21 13:40:55  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.9  2005/03/20 01:45:09  maulani
  * - Remove obsolete code
  *

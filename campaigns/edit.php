@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.13 2005/03/15 22:17:24 vanmer Exp $
+ * $Id: edit.php,v 1.14 2005/03/21 13:40:53 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -41,10 +41,7 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id);
 
 $sql2 = "select campaign_type_pretty_name, campaign_type_id from campaign_types where campaign_type_record_status = 'a' order by campaign_type_pretty_name";
 $rst = $con->execute($sql2);
@@ -189,6 +186,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.14  2005/03/21 13:40:53  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.13  2005/03/15 22:17:24  vanmer
  * - changed to use render_delete_button infrastructure for showing/hiding buttons based on ACL
  *

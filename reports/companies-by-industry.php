@@ -3,7 +3,7 @@
  *
  * Companies by industry report.
  *
- * $Id: companies-by-industry.php,v 1.9 2005/03/11 19:33:04 daturaarutad Exp $
+ * $Id: companies-by-industry.php,v 1.10 2005/03/21 13:40:58 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -36,12 +36,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 
-// JNH add for change user
-$sqljnh = "select username, user_id from users where user_record_status = 'a' order by username";
-$rstjnh = $con->execute($sqljnh);
-$user_menu = $rstjnh->getmenu2('user_id',$user_id, false);
-$rstjnh->close();
-
+$user_menu = get_user_menu($con, $user_id);
 
 $map_and_image = GetCompaniesByIndustryGraph($con, $user_id, $all_users);
 
@@ -205,6 +200,9 @@ function GetCompaniesByIndustryGraph($con, $user_id, $all_users) {
 
 /**
  * $Log: companies-by-industry.php,v $
+ * Revision 1.10  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.9  2005/03/11 19:33:04  daturaarutad
  * updated to support client side image maps
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.11 2005/01/13 18:09:01 vanmer Exp $
+ * $Id: new.php,v 1.12 2005/03/21 13:40:53 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -33,8 +33,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$user_menu             = local_get ( $con,
-				     "select username, user_id from users where user_record_status = 'a' order by username", 'user_id' );
+$user_menu = get_user_menu($con, $user_id);
 
 $campaign_type_menu    = local_get ( $con,
 				     "select campaign_type_pretty_name, campaign_type_id from campaign_types where campaign_type_record_status = 'a' order by campaign_type_pretty_name",
@@ -177,6 +176,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.12  2005/03/21 13:40:53  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.11  2005/01/13 18:09:01  vanmer
  * - Basic ACL changes to allow create functionality to be restricted
  *

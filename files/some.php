@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.30 2005/03/15 22:54:38 daturaarutad Exp $
+ * $Id: some.php,v 1.31 2005/03/21 13:40:56 maulani Exp $
  */
 
 //include required files
@@ -244,10 +244,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed file") . '</td></tr>';
 }
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id, true);
 
 if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'files', '', 4);
@@ -406,6 +403,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.31  2005/03/21 13:40:56  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.30  2005/03/15 22:54:38  daturaarutad
  * pager tuning sql_sort_column
  *

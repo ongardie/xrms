@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.13 2005/01/13 19:08:56 vanmer Exp $
+ * $Id: new.php,v 1.14 2005/03/21 13:40:56 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -48,11 +48,7 @@ $rst = $con->execute($sql2);
 $division_menu = $rst->getmenu2('division_id', $division_id, true);
 $rst->close();
 
-//get a username menu
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $session_user_id);
 
 //get the opportunity status menu
 $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
@@ -203,6 +199,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.14  2005/03/21 13:40:56  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.13  2005/01/13 19:08:56  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

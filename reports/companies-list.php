@@ -69,11 +69,7 @@ start_page($page_title, true, $msg);
 
 // $con->debug = 1;
 
-// set up the user selection menu
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = get_user_menu($con, $user_id, true);
 
 // set up the categories selection menu
 $sql = "select category_pretty_name, c.category_id
@@ -330,6 +326,9 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.9  2005/03/21 13:40:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.8  2005/03/16 15:34:23  niclowe
  * added html link to company one.php so you can use this report to go to the company details.
  *
