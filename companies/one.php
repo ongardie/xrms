@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.63 2004/07/28 13:15:49 maulani Exp $
+ * $Id: one.php,v 1.64 2004/07/29 23:52:08 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -470,16 +470,16 @@ function openNewsWindow() {
             <tr>
                 <td class=widget_content>
 
-                    <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                    <table border=0 cellpadding=0 cellspacing=0 width="100%">
                         <tr>
-                            <td width=50% class=clear align=left valign=top>
-                                <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                            <td width="50%" class=clear align=left valign=top>
+                                <table border=0 cellpadding=0 cellspacing=0 width="100%">
                                 <tr>
-                                    <td width=1% class=sublabel><?php echo _("Company Name"); ?></td>
+                                    <td width="1%" class=sublabel><?php echo _("Company Name"); ?></td>
                                     <td class=clear><?php  echo $company_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td width=1% class=sublabel><?php echo _("Legal Name"); ?></td>
+                                    <td width="1%" class=sublabel><?php echo _("Legal Name"); ?></td>
                                     <td class=clear><?php  echo $legal_name; ?></td>
                                 </tr>
                                 <?php  echo $former_name_rows; ?>
@@ -762,6 +762,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.64  2004/07/29 23:52:08  maulani
+ * -refine html to validate
+ *
  * Revision 1.63  2004/07/28 13:15:49  maulani
  * - Fixed bug 999352 where new activity was always created as completed.
  *   Multiple variables were passed incorrectly on creation.
