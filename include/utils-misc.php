@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.104 2005/01/09 00:30:33 braverock Exp $
+ * $Id: utils-misc.php,v 1.105 2005/01/09 02:46:06 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -991,6 +991,9 @@ function current_page() {
     $page = '';
     $site_directories = explode('/', $http_site_root);
 
+    if(!isset($_SERVER['REQUEST_URI'])) {
+      $_SERVER['REQUEST_URI'] = substr($_SERVER['argv'][0], strpos($_SERVER['argv'][0], ';') + 1);
+    }  
     $request_uri = $_SERVER['REQUEST_URI'];
     $parts = explode('?', $request_uri, 2);
     $directories = explode('/', $parts[0]);
@@ -1408,6 +1411,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.105  2005/01/09 02:46:06  braverock
+ * - added additional test for $_SERVER['REQUEST_URI'] to handle IIS on XP lack of setting var
+ *
  * Revision 1.104  2005/01/09 00:30:33  braverock
  * - change data_format_phone hook to pass an array instead of multiple params
  *   'eval' call in do_hook_function to support multiple parameters
