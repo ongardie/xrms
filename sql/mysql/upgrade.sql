@@ -29,21 +29,21 @@ update addresses set country_id = 1;
 update contacts set address_id = 1;
 
 create table countries (
-	country_id													int not null primary key auto_increment,
-	address_format_string_id									int not null default 1,
-	country_name												varchar(100) not null default '',
-	un_code														varchar(50) not null default '',
-	iso_code1													varchar(50) not null default '',
-	iso_code2													varchar(50) not null default '',
-	iso_code3													varchar(50) not null default '',
-	telephone_code												varchar(50) not null default '',
-	country_record_status										char(1) not null default 'a'
+	country_id			int not null primary key auto_increment,
+	address_format_string_id	int not null default 1,
+	country_name			varchar(100) not null default '',
+	un_code				varchar(50) not null default '',
+	iso_code1			varchar(50) not null default '',
+	iso_code2			varchar(50) not null default '',
+	iso_code3			varchar(50) not null default '',
+	telephone_code			varchar(50) not null default '',
+	country_record_status		char(1) not null default 'a'
 );
 
 create table address_format_strings (
-	address_format_string_id									int not null primary key auto_increment,
-	address_format_string										varchar(255),
-	address_format_string_record_status							char(1) not null default 'a'
+	address_format_string_id		int not null primary key auto_increment,
+	address_format_string			varchar(255),
+	address_format_string_record_status	char(1) not null default 'a'
 );
 
 insert into countries (address_format_string_id, country_name, iso_code1, iso_code2, iso_code3, telephone_code) values (1, ' ', '', '', '', '');
@@ -278,3 +278,4 @@ insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_co
 
 insert into address_format_strings (address_format_string) values ('$lines<br>$city, $province $postal_code<br>$country');
 
+alter table `company_sources` add `company_source_score_adjustment` int not null ;
