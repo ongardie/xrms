@@ -222,6 +222,14 @@ td.widget_content_center {
   color: #333333;
   text-align: center;
 }
+td.widget_content_right {
+  padding: 5px;
+  background-color: White;
+  font-family: arial;
+  font-size: 9pt;
+  color: #333333;
+  text-align: right;
+}
 td.widget_content_graph {
   padding: 5px;
   background-color: #bbbbbb;
