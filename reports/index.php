@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.18 2004/07/21 11:59:29 cpsource Exp $
+ * $Id: index.php,v 1.19 2004/07/25 19:31:11 johnfawcett Exp $
  */
 require_once('../include-locations.inc');
 
@@ -67,7 +67,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content><?php echo _("How much potential revenue is in each stage of the sales closing process?"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="opportunities-quantity-by-industry.php"><?php echo _("Quantity by Industry<"); ?>/a></td>
+                <td class=widget_content><a href="opportunities-quantity-by-industry.php"><?php echo _("Quantity by Industry"); ?></a></td>
                 <td class=widget_content><?php echo _("How many opportunities are tied to companies in each industry?"); ?></td>
             </tr>
             <tr>
@@ -161,6 +161,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.19  2004/07/25 19:31:11  johnfawcett
+ * - corrected gettext string
+ *
  * Revision 1.18  2004/07/21 11:59:29  cpsource
  * - Define $msg from GET
  *
