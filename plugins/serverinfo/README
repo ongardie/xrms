@@ -1,4 +1,19 @@
-$Id: README,v 1.1 2004/07/06 19:57:02 gpowers Exp $
+$Id: README,v 1.2 2004/07/06 21:09:41 gpowers Exp $
+
+
+
+*** WARNING WARNING WARNING ***
+
+This plugin is under *ACTIVE* development.
+Things will change. Often. Database table names
+will change THIS WEEK (by 7/12/04). If this plugin
+interests you, PLEASE HELP DEVELOP IT!  Contact
+keith@midnighthax.com AND gpowers@users.sourceforge.net
+to keep up with the changes and make suggests!
+
+*** WARNING WARNING WARNING ***
+
+
 
 Contents
 ========
@@ -78,13 +93,13 @@ servers's IP address. Click on the "Add new element" button, which will
 display a new line for us to define the "IP address" element.
 
 4. Fill in the new line as follows:
- 
+
  Label: IP address
- 
+
  Leave the rest of the row as it is, and click "Save changes".
- 
+
  The list of elements will now include one labelled "IP address"
- 
+
 5. Repeat the "Edit element definitions" and "Add new element", and
 define the "Case" element as follows:
 
@@ -92,20 +107,20 @@ define the "Case" element as follows:
  Type: radio
  Default value: rack
  Possible values: tower,rack
- 
+
  ...and save changes. Add the remaining elements in the same way with
  the following values:
- 
+
  Label: Supplier
  Type: combo
  Possible values: Dell,HP,IBM
- 
+
  Label: 24hr support?
  Type: checkbox
- 
+
  Label: Notes
  Type: textarea
- 
+
 6. You should now have a form with elements for Name, IP address, Case,
 Supplier, 24hr support and Notes. Fill in some values and click "Save
 Changes". You'll be returned to the Company Information page, but at the
@@ -123,7 +138,7 @@ follwoing changes:
  and change all other values to "2". Click on Save Changes, and then
  Save Changes (again) from the next page. You'll see that the display
  has been changed.
- 
+
 8. You can define as many columns as you like, and they can be given any
 name you like. Columns will be displayed in alphabetical order, so "8"
 comes before "9", "10" comes before "2", and "middle" comes after
@@ -156,6 +171,6 @@ Reading, UK
 keith@midnighthax.com
 
 ----------------------------------------------------------------------
-  Small business computer support: http://www.tiger-computing.co.uk   
+  Small business computer support: http://www.tiger-computing.co.uk
        Linux consultancy: http://www.TheLinuxConsultancy.co.uk
 ----------------------------------------------------------------------
