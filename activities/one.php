@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.22 2004/06/10 20:30:07 braverock Exp $
+ * $Id: one.php,v 1.23 2004/06/11 21:20:11 introspectshun Exp $
  */
 
 //include required files
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
@@ -97,7 +98,12 @@ $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, fals
 $rst->close();
 
 //get contact name menu
-$sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
+$sql = "
+SELECT " . $con->Concat("first_names","' '","last_name") . " AS contact_name, contact_id
+FROM contacts
+WHERE company_id = $company_id
+  AND contact_record_status = 'a'
+";
 $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
@@ -337,6 +343,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.23  2004/06/11 21:20:11  introspectshun
+ * - Now use ADODB Concat and Date functions.
+ *
  * Revision 1.22  2004/06/10 20:30:07  braverock
  * - added ability to edit probability on linked opportunity
  *   - code contributed by Neil Roberts

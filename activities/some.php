@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.16 2004/06/04 16:43:17 braverock Exp $
+ * $Id: some.php,v 1.17 2004/06/11 21:20:11 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -99,20 +100,21 @@ $_SESSION['activities_user_id'] = $user_id;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "select
- if(activity_status = 'o' and ends_at < now(), 'Yes', '-') as is_overdue,
- concat('<a href=\"one.php?activity_id=', activity_id, '&return_url=/activities/some.php\">', activity_title, '</a>') as 'Title',
- activity_type_pretty_name as 'Type',
- concat('<a href=\"../contacts/one.php?contact_id=', cont.contact_id, '\">', cont.first_names, ' ', cont.last_name, '</a>') as 'Contact',
- concat('<a href=\"../companies/one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',
- u.username as 'Owner',
- date_format(scheduled_at, '%Y-%m-%d') as 'Scheduled',
- date_format(ends_at, '%Y-%m-%d') as 'Due'
-from companies c, users u, activity_types at, activities a left outer join contacts cont on cont.contact_id = a.contact_id
-where a.company_id = c.company_id
-and a.activity_record_status = 'a'
-and at.activity_type_id = a.activity_type_id
-and a.user_id = u.user_id";
+$sql = "SELECT
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->SQLDate('Y-m-d') . ") THEN 'Yes' ELSE '-' END) AS is_overdue," .
+  $con->Concat("'<a href=\"one.php?activity_id='", "CAST(activity_id AS VARCHAR(10))", "'&return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS 'Title',
+  activity_type_pretty_name AS 'Type'," .
+  $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "CAST(cont.contact_id AS VARCHAR(10))", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
+  $con->Concat("'<a href=\"../companies/one.php?company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
+  u.username AS 'Owner'," .
+  $con->SQLDate('Y-m-d','scheduled_at') . " AS 'Scheduled'," .
+  $con->SQLDate('Y-m-d','ends_at') . " AS 'Due'
+  FROM companies c, users u, activity_types at, activities a
+  LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
+  WHERE a.company_id = c.company_id
+  AND a.activity_record_status = 'a'
+  AND at.activity_type_id = a.activity_type_id
+  AND a.user_id = u.user_id";
 
 $criteria_count = 0;
 
@@ -368,6 +370,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2004/06/11 21:20:11  introspectshun
+ * - Now use ADODB Concat and Date functions.
+ *
  * Revision 1.16  2004/06/04 16:43:17  braverock
  * - adjusted size of input boxes on search
  * - removed unecessary sidebar whitespace on this page, since it is not used
