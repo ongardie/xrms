@@ -66,7 +66,7 @@ fwrite($fp, '/**
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: getdatastrings.php,v 1.3 2004/08/19 19:55:46 johnfawcett Exp $
+ * $Id: getdatastrings.php,v 1.4 2005/01/29 13:28:53 braverock Exp $
  */'."\n");
 foreach ($output_strings as $s)
 {
