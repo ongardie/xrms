@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: delete-item-2.php,v 1.2 2004/07/22 18:29:58 gpowers Exp $
+ * $Id: delete-item-2.php,v 1.3 2005/01/08 07:55:55 gpowers Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -15,7 +15,7 @@ require_once($include_directory . 'utils-accounting.php');
 require_once('info.inc');
 
 $this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $msg = $_GET['msg'];
 
