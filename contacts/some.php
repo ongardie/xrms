@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.48 2005/02/14 21:44:11 vanmer Exp $
+ * $Id: some.php,v 1.49 2005/02/25 03:37:59 daturaarutad Exp $
  */
 
 //include the standard files
@@ -15,7 +15,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-require_once($include_directory . 'classes/Pager/XRMS_Pager.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 $on_what_table='contacts';
@@ -46,22 +46,10 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "SELECT " . $con->Concat("'<a id='", "cont.last_name", "'_'", "cont.first_names", "' href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS " . $con->qstr(_("Name"),get_magic_quotes_gpc())
-       .' ,' . $con->Concat("'<a id='", "c.company_name",  "'href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS " . $con->qstr(_("Company"),get_magic_quotes_gpc());
-if (strlen($email) > 0) {
-    $sql .= "\n, cont.email AS " . $con->qstr(_("Email"),get_magic_quotes_gpc());
-}
-if (strlen($company_code) > 0) {
-    $sql .= "\n, company_code AS " . $con->qstr(_("Code"),get_magic_quotes_gpc());
-}
-if (strlen($title) > 0) {
-    $sql .= "\n, title AS " . $con->qstr(_("Title"),get_magic_quotes_gpc());
-}
-if (strlen($description) > 0) {
-    $sql .= "\n, description AS " . $con->qstr(_("Description"),get_magic_quotes_gpc());
-}
-
-$sql .= "\n ,u.username AS " . $con->qstr(_("Owner"),get_magic_quotes_gpc());
+$sql = "SELECT " . 
+	$con->Concat($con->qstr('<a id="'), "cont.last_name", $con->qstr('_'), "cont.first_names", $con->qstr('" href="one.php?contact_id='), "cont.contact_id", $con->qstr('">'), "cont.last_name", "', '", "cont.first_names", $con->qstr('</a>')) . " AS name," . 
+	$con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
+	"company_code, title, description, u.username, cont.email, cont.contact_id"; 
 
 $from = " from contacts cont, companies c, users u ";
 
@@ -301,14 +289,17 @@ if(!isset($contacts_next_page)) {
 $_SESSION["search_sql"]=$sql;
 
 $columns = array();
-$columns[] = array('name' => _("Name"), 'index' => 'Name');
-$columns[] = array('name' => _("Company"), 'index' => 'Company');
-$columns[] = array('name' => _("Owner"), 'index' => 'Owner');
+$columns[] = array('name' => _("Name"), 'index' => 'name');
+$columns[] = array('name' => _("Company"), 'index' => 'company');
+$columns[] = array('name' => _("Code"), 'index' => 'company_code');
+$columns[] = array('name' => _("Title"), 'index' => 'title');
+$columns[] = array('name' => _("Description"), 'index' => 'description');
+$columns[] = array('name' => _("Owner"), 'index' => 'username');
 
 
 
 // selects the columns this user is interested in
-$default_columns =  array(_("Name"),_("Company"),_("Owner"));
+$default_columns =  array('name','company','company_code','title','description','username');
 
 $pager_columns = new Pager_Columns('ContactPager', $columns, $default_columns, 'ContactForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -327,7 +318,7 @@ echo $pager_columns_selects;
 
 
 
-$pager = new XRMS_Pager($con, $sql, _('Search Results'), 'ContactForm', 'ContactPager', $columns);
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'ContactForm', 'ContactPager', $columns, false);
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
@@ -385,17 +376,6 @@ function exportIt() {
     document.forms[0].action = "some.php";
 }
 
-function submitForm(adodbNextPage) {
-    document.forms[0].contacts_next_page.value = adodbNextPage;
-    document.forms[0].submit();
-}
-
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].contacts_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
 
 //-->
 </script>
@@ -406,6 +386,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.49  2005/02/25 03:37:59  daturaarutad
+ * updated to use GUP_Pager, removed unused JS for sorting
+ *
  * Revision 1.48  2005/02/14 21:44:11  vanmer
  * - updated to reflect speed changes in ACL operation
  *
