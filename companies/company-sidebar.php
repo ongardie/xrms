@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: company-sidebar.php,v 1.2 2004/07/02 18:03:24 neildogg Exp $
+ * $Id: company-sidebar.php,v 1.3 2004/07/07 20:55:39 neildogg Exp $
  */
 
 $what_table['from'] = "contacts";
@@ -122,7 +122,8 @@ if($rst->rowcount()) {
                 where r.to_what_id=$current_id";
                 $sql .= " and relationship_type_id in (".implode(',', $relationship_type_ids).")";
                 $sql .= "and r.from_what_id!=$from_what_id
-                and r.from_what_id=c.contact_id";
+                and r.from_what_id=c.contact_id
+                and r.relationship_status='a'";
         }
         else {
             // Grab the name and ID of all the companies associated with this user
@@ -303,6 +304,9 @@ if($expand_id) {
 
 /**
  * $Log: company-sidebar.php,v $
+ * Revision 1.3  2004/07/07 20:55:39  neildogg
+ * - Was missing a deleted item check
+ *
  * Revision 1.2  2004/07/02 18:03:24  neildogg
  * Some light bug fixes and added relationship text around all entries.
  *
