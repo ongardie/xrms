@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.42 2004/12/20 13:58:37 neildogg Exp $
+ * $Id: edit-2.php,v 1.43 2004/12/20 15:30:41 neildogg Exp $
  */
 
 //include required files
@@ -179,7 +179,14 @@ $rec['activity_type_id']     = $activity_type_id;
 $rec['contact_id']           = $contact_id;
 $rec['activity_title']       = $activity_title;
 $rec['activity_description'] = $activity_description;
-$rec['user_id']              = $user_id;
+if(empty($user_id) && strstr($return_url, 'one.php')) {
+    //If the user ID was empty and we're returning to the same activity page
+    // then we're going to assume that the user has taken over the activity.
+    $rec['user_id']          = $session_user_id;
+}
+else {
+    $rec['user_id']          = $user_id;
+}
 $rec['scheduled_at']         = $scheduled_at;
 $rec['ends_at']              = $ends_at;
 $rec['completed_at']         = $completed_at;
@@ -435,6 +442,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.43  2004/12/20 15:30:41  neildogg
+ * - If the user was empty and the Insert Log button was used, move it to the session user
+ *
  * Revision 1.42  2004/12/20 13:58:37  neildogg
  * This isn't even used anywhere, but it's fixed anyway
  *
