@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.15 2004/07/19 22:26:59 braverock Exp $
+ * $Id: login-2.php,v 1.16 2004/07/20 10:43:16 cpsource Exp $
  */
 require_once('include-locations.inc');
 
@@ -116,22 +116,47 @@ if ($xrms_use_ldap) {
 }
 
 
-
 if ($rst && !$rst->EOF && $ldapok) {
+
+    // get variables
     $session_user_id = $rst->fields['user_id'];
-    $role_id = $rst->fields['role_id'];
-    $username = $rst->fields['username'];
-    $language = $rst->fields['language'];
-    $gmt_offset = $rst->fields['gmt_offset'];
+    $role_id         = $rst->fields['role_id'];
+    $username        = $rst->fields['username'];
+    $language        = $rst->fields['language'];
+    $gmt_offset      = $rst->fields['gmt_offset'];
+
+    // close result set
     $rst->close();
+
+    // get role_short_name from table 'roles'
+    $sql = "select r.role_short_name as role
+        from roles r, users u
+        where u.role_id=r.role_id
+        and u.user_id = $session_user_id";
+    $role_short_name = '';
+    $rst = $con->execute($sql);
+    if ($rst) {
+      while (!$rst->EOF) {
+	$role_short_name = $rst->fields['role'];
+	break;
+      }
+      $rst->close();
+    }
+
+    // make sure we have a session, and place variables in it
     session_startup();
     $_SESSION['session_user_id'] = $session_user_id;
-    $_SESSION['xrms_system_id'] = $xrms_system_id;
-    $_SESSION['role_id'] = $role_id;
-    $_SESSION['username'] = $username;
-    $_SESSION['language'] = $language;
-    $_SESSION['gmt_offset'] = $gmt_offset;
+    $_SESSION['xrms_system_id']  = $xrms_system_id;
+    $_SESSION['role_id']         = $role_id;
+    $_SESSION['username']        = $username;
+    $_SESSION['language']        = $language;
+    $_SESSION['gmt_offset']      = $gmt_offset;
+    $_SESSION['role_short_name'] = $role_short_name;
+
+    // audit
     add_audit_item($con, $session_user_id, 'login', '', '', 2);
+
+    // redirect
     header("Location: $target");
 } else {
     header("Location: $http_site_root/login.php?msg=noauth");
@@ -139,6 +164,11 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.16  2004/07/20 10:43:16  cpsource
+ * - Moved SESSION['role'] to SESSION['role_short_name']
+ *   role is now set in login-2.php instead of admin/routing.php
+ *   utils-misc.php updated to check session with role_short_name
+ *
  * Revision 1.15  2004/07/19 22:26:59  braverock
  * - localize $problem message for i18n
  *

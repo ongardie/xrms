@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.5 2004/07/16 18:52:43 cpsource Exp $
+ * $Id: routing.php,v 1.6 2004/07/20 10:43:16 cpsource Exp $
  */
 
 //where do we include from
@@ -30,16 +30,21 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 //$con->debug = 1;
 
-// define our query
-$sql = "select r.role_short_name as role
+if ( 0 ) {
+  //
+  // depricated - role_short_name now set by login-2.php
+  //
+
+  // define our query
+  $sql = "select r.role_short_name as role
         from roles r, users u
         where u.role_id=r.role_id
         and u.user_id = $session_user_id";
 
-// execute - get role
-$role = '';
-$rst = $con->execute($sql);
-if ($rst) {
+  // execute - get role
+  $role = '';
+  $rst = $con->execute($sql);
+  if ($rst) {
     while (!$rst->EOF) {
       // get our role
       $role = $rst->fields['role'];
@@ -47,25 +52,37 @@ if ($rst) {
     }
     // close the result set
     $rst->close();
-}
+  }
 
-// add role to session
-$_SESSION['role'] = $role;
+  // add role to session
+  $_SESSION['role'] = $role;
 
-// close the database connection
-$con->close();
-
-//if this is a mailto link, try to open the user's default mail application
-if ($role == 'Admin') {
-    header("Location: " . $http_site_root . "/admin/index.php");
-} elseif ($role == 'Developer') {
-    header("Location: " . $http_site_root . "/admin/index.php");
+  // close the database connection
+  $con->close();
 } else {
+
+  // close the database connection
+  $con->close();
+
+  $role = $_SESSION['role_short_name'];
+
+  //if this is a mailto link, try to open the user's default mail application
+  if ($role == 'Admin') {
+    header("Location: " . $http_site_root . "/admin/index.php");
+  } elseif ($role == 'Developer') {
+    header("Location: " . $http_site_root . "/admin/index.php");
+  } else {
     header("Location: " . $http_site_root . "/admin/users/self.php");
+  }
 }
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.6  2004/07/20 10:43:16  cpsource
+ *- Moved SESSION['role'] to SESSION['role_short_name']
+ *  role is now set in login-2.php instead of admin/routing.php
+ *  utils-misc.php updated to check session with role_short_name
+ *
  *Revision 1.5  2004/07/16 18:52:43  cpsource
  *- Add role check inside of session_check
  *

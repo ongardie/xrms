@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.51 2004/07/19 14:24:18 cpsource Exp $
+ * $Id: utils-misc.php,v 1.52 2004/07/20 10:43:16 cpsource Exp $
  */
 
 /**
@@ -66,7 +66,7 @@ function session_check($c_role='') {
     // make sure we have a role to do this
     $role_ok = true;
     if ( $c_role ) {
-      $s_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+      $s_role = isset($_SESSION['role_short_name']) ? $_SESSION['role_short_name'] : '';
       if ( 0 == strcmp($s_role, $c_role) ) {
 	// yes
 	$role_ok = true;
@@ -869,6 +869,11 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.52  2004/07/20 10:43:16  cpsource
+ * - Moved SESSION['role'] to SESSION['role_short_name']
+ *   role is now set in login-2.php instead of admin/routing.php
+ *   utils-misc.php updated to check session with role_short_name
+ *
  * Revision 1.51  2004/07/19 14:24:18  cpsource
  * - Add override of $use_post_vars in arr_vars_get_all
  *
