@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Add Former Name
+ *
+ * $Id: add-former-name.php,v 1.2 2004/03/26 20:55:59 maulani Exp $
+ */
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -19,8 +23,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "insert into company_former_names (company_id, namechange_at, former_name) values ($company_id, now(), " . $con->qstr($former_name, get_magic_quotes_gpc()) . ")";
 
 $con->execute($sql);
+
+add_audit_item($con, $session_user_id, 'add former name', 'companies', $company_id);
+
 $con->close();
 
 header("Location: relationships.php?company_id=$company_id");
 
+/**
+ * $Log: add-former-name.php,v $
+ * Revision 1.2  2004/03/26 20:55:59  maulani
+ * - Add audit trail to company-related items
+ * - Add phpdoc
+ *
+ *
+ */
 ?>

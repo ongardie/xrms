@@ -1,4 +1,9 @@
 <?php
+/**
+ * Add an address
+ *
+ * $Id: add-address.php,v 1.4 2004/03/26 20:55:59 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -29,9 +34,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body, use_pretty_address) values ($company_id, $country_id, " . $con->qstr($address_name, get_magic_quotes_gpc()) . ", " . $con->qstr($line1, get_magic_quotes_gpc()) . ", " . $con->qstr($line2, get_magic_quotes_gpc()) . ", " . $con->qstr($city, get_magic_quotes_gpc()) . ", " . $con->qstr($province, get_magic_quotes_gpc()) . ", " . $con->qstr($postal_code, get_magic_quotes_gpc()) . ", " . $con->qstr($address_body, get_magic_quotes_gpc()) . ", $use_pretty_address)";
 
+add_audit_item($con, $session_user_id, 'add address', 'companies', $company_id);
+
 $con->execute($sql);
 $con->close();
 
 header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
+/**
+ * $Log: add-address.php,v $
+ * Revision 1.4  2004/03/26 20:55:59  maulani
+ * - Add audit trail to company-related items
+ * - Add phpdoc
+ *
+ *
+ */
 ?>

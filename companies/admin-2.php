@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Insert company admin items into the database
+ *
+ * $Id: admin-2.php,v 1.3 2004/03/26 20:55:59 maulani Exp $
+ */
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -34,6 +38,8 @@ $extref1 = $rst->fields['extref1'];
 $extref2 = $rst->fields['extref2'];
 $rst->close();
 
+add_audit_item($con, $session_user_id, 'edit company admin', 'companies', $company_id);
+
 $con->close();
 
 update_vendor_account_information($extref2, $vendor_credit_limit, $vendor_terms);
@@ -41,4 +47,12 @@ update_customer_account_information($extref1, $customer_credit_limit, $customer_
 
 header("Location: one.php?msg=saved&company_id=$company_id");
 
+/**
+ * $Log: admin-2.php,v $
+ * Revision 1.3  2004/03/26 20:55:59  maulani
+ * - Add audit trail to company-related items
+ * - Add phpdoc
+ *
+ *
+ */
 ?>

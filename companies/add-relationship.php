@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Add Relationship
+ *
+ * $Id: add-relationship.php,v 1.2 2004/03/26 20:55:59 maulani Exp $
+ */
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -31,8 +35,18 @@ $con->execute($sql);
 $sql = "insert into company_relationship (company_from_id, relationship_type, company_to_id, established_at) values (" . $company2_id . ", '" . $relation_array[$relation2] . "', " . $company_id . ", now())";
 $con->execute($sql);
 
+add_audit_item($con, $session_user_id, 'add relationship', 'companies', $company_id);
+
 $con->close();
 
 header("Location: relationships.php?company_id=$company_id");
 
+/**
+ * $Log: add-relationship.php,v $
+ * Revision 1.2  2004/03/26 20:55:59  maulani
+ * - Add audit trail to company-related items
+ * - Add phpdoc
+ *
+ *
+ */
 ?>
