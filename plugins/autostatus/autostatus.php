@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: autostatus.php,v 1.2 2004/06/16 21:00:36 gpowers Exp $
+ * $Id: autostatus.php,v 1.3 2004/07/22 13:15:30 gpowers Exp $
  */
 
 // include the common files
@@ -26,12 +26,32 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //uncomment the debug line to see what's going on with the query
 // $con->debug = 1;
 
+/*********************************/
+/*** Include the sidebar boxes ***/
+//include the Cases sidebar
+$case_limit_sql = "and cases.user_id = $session_user_id";
+require_once($xrms_file_root."/cases/sidebar.php");
+
+//include the opportunities sidebar
+$opportunity_limit_sql = "and opportunities.user_id = $session_user_id \nand status_open_indicator = 'o'";
+
+require_once($xrms_file_root."/opportunities/sidebar.php");
+
+//include the files sidebar
+require_once($xrms_file_root."/files/sidebar.php");
+
+//include the notes sidebar
+require_once($xrms_file_root."/notes/sidebar.php");
+
+/** End of the sidebar includes **/
+/*********************************/
+
 //You would define any SQL you needed from the XRMS database here and execute it...
 
 //close the database connection, as we are done with it.
 $con->close();
 
-$page_title = "Server Status";
+$page_title = _("Server Status");
 start_page($page_title);
 
 ?>
@@ -42,31 +62,41 @@ start_page($page_title);
     </div>
 </div>
 
+        <!-- right column //-->
+    <div id="Sidebar">
+
+            <!-- opportunities //-->
+            <?php  echo $opportunity_rows; ?>
+
+            <!-- cases //-->
+            <?php  echo $case_rows; ?>
+
+            <!-- files //-->
+            <?php  echo $file_rows; ?>
+
+            <!-- notes //-->
+            <?php  echo $note_rows; ?>
+
+    </div>
+</div>
+
 <?php
 
 end_page();
 
 /**
  * $Log: autostatus.php,v $
+ * Revision 1.3  2004/07/22 13:15:30  gpowers
+ * - added sidebars
+ * - i18n'ed page_title
+ * - removed unrelated phpdoc notes
+ *
  * Revision 1.2  2004/06/16 21:00:36  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5
  *
  * Revision 1.1  2004/05/06 14:30:14  gpowers
  * This is a simple plugin for including an Autostatus page in XRMS.
- *
- * Revision 1.1  2004/05/06 14:10:43  gpowers
- * This is a simple plugin for including an MRTG page in XRMS.
- *
- * Revision 1.3  2004/05/04 23:55:30  maulani
- * - Add CSS2 positioning to plugin demo.
- *
- * Revision 1.2  2004/03/29 13:26:57  maulani
- * - patch #922717 submitted by Glenn Powers (gpowers)
- * - fix table formatting
- *
- * Revision 1.1  2004/03/20 20:09:35  braverock
- * Initial Revision of Demo plugin to demonstrate using hooks
  *
  */
 ?>
