@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.17 2004/07/16 07:11:17 introspectshun Exp $
+ * $Id: some.php,v 1.18 2004/07/20 21:32:50 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -174,6 +174,7 @@ $rst->close();
 
 $sql2 = "select case_priority_pretty_name, case_priority_id from case_priorities where case_priority_record_status = 'a' order by case_priority_pretty_name";
 $rst = $con->execute($sql2);
+$case_priority_id = $rst->fields['case_priority_id'];
 $case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, true);
 $rst->close();
 
@@ -321,6 +322,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.18  2004/07/20 21:32:50  cpsource
+ * - Set case_priority_id
+ *
  * Revision 1.17  2004/07/16 07:11:17  introspectshun
  * - Localized strings for i18n/translation support
  *
