@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.8 2004/04/17 16:02:40 maulani Exp $
+ * $Id: one.php,v 1.9 2004/04/19 22:21:15 maulani Exp $
  */
 
 //include required files
@@ -93,11 +93,11 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 
 <table border=0 cellpadding=0 cellspacing=0>
     <tr>
-        <td class=lcol width=45% valign=top>
+        <td class=lcol width="45%" valign=top>
 
         <form action=edit-2.php method=post>
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
@@ -166,7 +166,7 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<script language="javascript">
+<script language="JavaScript" type="text/javascript">
 <!--
 
 // create calendar object(s) just after form tag closed
@@ -190,6 +190,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/04/19 22:21:15  maulani
+ * - Correct javascript syntax
+ *
  * Revision 1.8  2004/04/17 16:02:40  maulani
  * - Add CSS2 positioning
  *
