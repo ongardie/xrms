@@ -7,7 +7,7 @@
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: datastrings.php,v 1.4 2005/01/29 13:29:37 braverock Exp $
+ * $Id: datastrings.php,v 1.5 2005/01/29 13:35:58 braverock Exp $
  */
 $s=_('Activities Default Behavior');
 $s=_('Advertisement');
@@ -103,7 +103,7 @@ $s=_('Vendors');
 $s=_('Version of the LDAP server.  Will usually be 2 or 3.');
 $s=_('Web Site');
 $s=_('Web Sites');
-$s=_('What level of audit logging should be performed.  0 - no logging);
+$s=_('What level of audit logging should be performed.  0 - no logging');
 $s=_('Word of Mouth');
 $s=_('call from');
 $s=_('call to');
@@ -121,8 +121,8 @@ $s=_('internal');
 $s=_('letter from');
 $s=_('letter to');
 $s=_('process');
-$s=_(1 - inserts & updates);
-$s=_(2 - and login/logout);
-$s=_(3 - and views);
-$s=_(4 - and searches');
+$s=_('1 - inserts & updates');
+$s=_('2 - and login/logout');
+$s=_('3 - and views');
+$s=_('4 - and searches');
 ?>
