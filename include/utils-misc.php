@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.116 2005/01/29 17:20:14 braverock Exp $
+ * $Id: utils-misc.php,v 1.117 2005/03/04 23:18:53 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -1027,11 +1027,15 @@ function current_page($vars = false, $anchor = false) {
     global $http_site_root;
     $page = '';
     $site_directories = explode('/', $http_site_root);
-
-    if(!isset($_SERVER['REQUEST_URI'])) {
-      $_SERVER['REQUEST_URI'] = substr($_SERVER['argv'][0], strpos($_SERVER['argv'][0], ';') + 1);
-    }
-    $request_uri = $_SERVER['REQUEST_URI'];
+    if(!trim($_SERVER['REQUEST_URI'])) {
+    	if (array_key_exists('argv',$_SERVER)) {
+      		$request_uri = substr($_SERVER['argv'][0], strpos($_SERVER['argv'][0], ';') + 1);
+	} else {
+		$request_uri=$_SERVER['URL'] . '?'.$_SERVER['QUERY_STRING'];
+	}
+    } else {
+    	$request_uri = $_SERVER['REQUEST_URI'];
+    } 
     $parts = explode('?', $request_uri, 2);
     $directories = explode('/', $parts[0]);
     foreach($directories as $directory) {
@@ -1472,6 +1476,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.117  2005/03/04 23:18:53  vanmer
+ * - added changed to current_page to be able to operate on IIS
+ *
  * Revision 1.116  2005/01/29 17:20:14  braverock
  * - fixed problem with single line address formatting in get_formatted_address fn
  *
