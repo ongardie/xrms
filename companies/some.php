@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.54 2005/02/25 03:43:43 daturaarutad Exp $
+ * $Id: some.php,v 1.55 2005/02/28 22:41:49 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -307,13 +307,13 @@ $searchsql['where'] = $where;
 $_SESSION['search_sql'] = $searchsql;
 
 $columns = array();
-$columns[] = array('name' => _("Company Name"), 'index' => 'name');
-$columns[] = array('name' => _("Company Code"), 'index' => 'code');
-$columns[] = array('name' => _("User"), 'index' => 'user');
-$columns[] = array('name' => _("Industry"), 'index' => 'industry');
-$columns[] = array('name' => _("CRM Status"), 'index' => 'crm_status');
-$columns[] = array('name' => _("Account Status"), 'index' => 'account_status');
-$columns[] = array('name' => _("Rating"), 'index' => 'Rating');
+$columns[] = array('name' => _("Company Name"), 'index_sql' => 'name');
+$columns[] = array('name' => _("Company Code"), 'index_sql' => 'code');
+$columns[] = array('name' => _("User"), 'index_sql' => 'user');
+$columns[] = array('name' => _("Industry"), 'index_sql' => 'industry');
+$columns[] = array('name' => _("CRM Status"), 'index_sql' => 'crm_status');
+$columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status');
+$columns[] = array('name' => _("Rating"), 'index_sql' => 'Rating');
 
 // selects the columns this user is interested in
 $default_columns =  array("name","code","user","industry","crm_status","account_status","rating");
@@ -414,6 +414,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.55  2005/02/28 22:41:49  daturaarutad
+ * changed columns to be index_sql so that the pager knows it doesnt have to get the whole data set
+ *
  * Revision 1.54  2005/02/25 03:43:43  daturaarutad
  * fixed search_sql for email, updated to use GUP_Pager
  *

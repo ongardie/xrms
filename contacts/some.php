@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.49 2005/02/25 03:37:59 daturaarutad Exp $
+ * $Id: some.php,v 1.50 2005/02/28 22:42:32 daturaarutad Exp $
  */
 
 //include the standard files
@@ -289,12 +289,12 @@ if(!isset($contacts_next_page)) {
 $_SESSION["search_sql"]=$sql;
 
 $columns = array();
-$columns[] = array('name' => _("Name"), 'index' => 'name');
-$columns[] = array('name' => _("Company"), 'index' => 'company');
-$columns[] = array('name' => _("Code"), 'index' => 'company_code');
-$columns[] = array('name' => _("Title"), 'index' => 'title');
-$columns[] = array('name' => _("Description"), 'index' => 'description');
-$columns[] = array('name' => _("Owner"), 'index' => 'username');
+$columns[] = array('name' => _("Name"), 'index_sql' => 'name');
+$columns[] = array('name' => _("Company"), 'index_sql' => 'company');
+$columns[] = array('name' => _("Code"), 'index_sql' => 'company_code');
+$columns[] = array('name' => _("Title"), 'index_sql' => 'title');
+$columns[] = array('name' => _("Description"), 'index_sql' => 'description');
+$columns[] = array('name' => _("Owner"), 'index_sql' => 'username');
 
 
 
@@ -386,6 +386,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.50  2005/02/28 22:42:32  daturaarutad
+ * changed columns to be index_sql so that the pager knows it doesnt have to get the whole data set
+ *
  * Revision 1.49  2005/02/25 03:37:59  daturaarutad
  * updated to use GUP_Pager, removed unused JS for sorting
  *
