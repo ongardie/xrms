@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.49 2005/01/13 17:26:18 vanmer Exp $
+ * $Id: update.php,v 1.50 2005/01/13 21:55:48 vanmer Exp $
  */
 
 // where do we include from
@@ -2337,10 +2337,8 @@ $con->execute($sql);
 
 //update countries table with currency_code for each country
 
-$sql="SELECT currency_code from countries WHERE currency_code IS NOT NULL";
-$rst=$con->execute($sql);
-
-if ($rst->NumRows()==0) {
+$currency=$con->getone("SELECT currency_code from countries");
+if ($currency) {
 
     $sql="UPDATE countries set currency_code='AFN' WHERE iso_code2='AF'";
     $con->execute($sql);
@@ -3854,7 +3852,7 @@ if ($rst->NumRows()==0) {
     $sql="UPDATE countries set currency_code='ZWD' WHERE iso_code2='ZW'";
     $con->execute($sql);
 
-} //end check for currency codes
+}
 
 //add division_id to opportunities table (for use in scoping opportunities by division)
 $sql = "ALTER TABLE `opportunities` ADD `division_id` INT UNSIGNED AFTER `company_id`";
@@ -3891,6 +3889,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.50  2005/01/13 21:55:48  vanmer
+ * - altered currency SQL with IS NULL to simply check for the first record, and update only if it is blank
+ *
  * Revision 1.49  2005/01/13 17:26:18  vanmer
  * - added ACL install to update script
  *
