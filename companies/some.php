@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.32 2004/07/19 02:21:56 braverock Exp $
+ * $Id: some.php,v 1.33 2004/07/25 12:43:25 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,7 +17,6 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -405,6 +404,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.33  2004/07/25 12:43:25  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.32  2004/07/19 02:21:56  braverock
  * - localize all strings for i18n
  *

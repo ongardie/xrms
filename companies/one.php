@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.60 2004/07/22 14:50:38 cpsource Exp $
+ * $Id: one.php,v 1.61 2004/07/25 12:43:25 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -22,7 +22,6 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
@@ -758,6 +757,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.61  2004/07/25 12:43:25  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.60  2004/07/22 14:50:38  cpsource
  * - Allow for possibility that company won't be found.
  *
