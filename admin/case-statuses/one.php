@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.9 2004/12/31 17:52:21 braverock Exp $
+ * $Id: one.php,v 1.10 2005/01/10 21:39:45 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -31,6 +31,7 @@ if ($rst) {
         $case_status_pretty_plural = $rst->fields['case_status_pretty_plural'];
         $case_status_long_desc = $rst->fields['case_status_long_desc'];
         $case_status_display_html = $rst->fields['case_status_display_html'];
+        $case_type_id = $rst->fields['case_type_id'];
 
         $rst->close();
 } else {
@@ -116,6 +117,7 @@ start_page($page_title);
 
         <form action=edit-2.php method=post>
         <input type=hidden name=case_status_id value="<?php  echo $case_status_id; ?>">
+        <input type=hidden name=case_type_id value="<?php  echo $case_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Edit Case Status Information"); ?></td>
@@ -215,6 +217,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2005/01/10 21:39:45  vanmer
+ * - added case_type, needed for distinguishing between statuses
+ *
  * Revision 1.9  2004/12/31 17:52:21  braverock
  * - add description for consistency
  *

@@ -2,7 +2,7 @@
 /**
  * Insert the updated information into the database
  *
- * $Id: edit-2.php,v 1.5 2004/12/31 17:52:56 braverock Exp $
+ * $Id: edit-2.php,v 1.6 2005/01/10 21:38:56 vanmer Exp $
  */
 
 // include required files
@@ -21,6 +21,7 @@ $case_status_pretty_name = $_POST['case_status_pretty_name'];
 $case_status_pretty_plural = $_POST['case_status_pretty_plural'];
 $case_status_display_html = $_POST['case_status_display_html'];
 $case_status_long_desc = $_POST['case_status_long_desc'];
+$case_type_id = $_POST['case_type_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -40,11 +41,14 @@ $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
 $con->close();
-
-header("Location: some.php");
+if (!$return_url) $return_url="some.php?acase_type_id=$case_type_id";
+header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.6  2005/01/10 21:38:56  vanmer
+ * - added case_type, needed for distinguishing between statuses
+ *
  * Revision 1.5  2004/12/31 17:52:56  braverock
  * - add description for consistency
  *
