@@ -9,20 +9,19 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.11 2005/01/09 15:54:43 maulani Exp $
+ * $Id: data_clean.php,v 1.12 2005/01/23 21:47:58 maulani Exp $
  */
 
 // where do we include from
 require_once('../include-locations.inc');
 
 // get required common files
+// vars.php sets all of the installation-specific variables
+require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-
-// vars.php sets all of the installation-specific variables
-require_once($include_directory . 'vars.php');
 
 $session_user_id = session_check( 'Admin' );
 
@@ -368,6 +367,11 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.12  2005/01/23 21:47:58  maulani
+ * - Move vars.php to load earlier in the file to address bug 1105960.
+ *   For an unknown reason, vars.php must load before the utils and adodb
+ *   files.
+ *
  * Revision 1.11  2005/01/09 15:54:43  maulani
  * - Set a company name for all companies that have a blank name
  *
