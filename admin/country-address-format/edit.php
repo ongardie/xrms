@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: edit.php,v 1.3 2004/06/16 20:57:25 gpowers Exp $
+ * $Id: edit.php,v 1.4 2004/07/16 13:51:57 braverock Exp $
  */
 
 //include required files
@@ -29,7 +29,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-$page_title = "Edit Address Country Format";
+$page_title = _("Edit Address Country Format");
 start_page($page_title, true, $msg);
 
 
@@ -42,7 +42,7 @@ $sql = "select country_id, country_name, countries.address_format_string_id, afs
 $rst = $con->execute($sql);
 
 if ($rst) {
-    echo "<p>Country: " . $rst->fields['country_name'] . "<br></p>
+    echo "<p>"._("Country:"). $rst->fields['country_name'] . "<br></p>
     <form action=edit-2.php method=get>
     <input type=hidden name=country_id value=$country_id>
     <input type=hidden name=address_format_string_id value=$address_format_string_id>
@@ -57,28 +57,32 @@ if ($rst) {
                 . $rst2->fields['address_format_string_id'] . "><br>"
                 . $rst2->fields['address_format_string'] . "<br>"
                 . "<a href=delete.php?address_format_string_id="
-                . $rst2->fields['address_format_string_id'] . ">(DELETE)</a><br><hr><br>";
+                . $rst2->fields['address_format_string_id'] . ">"._("Delete")."</a><br><hr><br>";
         $rst2->movenext();
         }
     }
     echo "
-<input class=button type=submit value=Change>
-</form><br><br>";
-echo "<b>OR</b> Enter New format:
+<input class=button type=submit value="._("Change")."></form><br><br>";
+
+echo "<b> "._("OR ")."</b>"._("Enter New format:")."
 <form action=new.php method=post>
 <input type=hidden name=country_id value=$country_id>
 <textarea rows=5 cols=40 name=address_format_string></textarea><br>
-<input class=button type=submit value=New>
+<input class=button type=submit value="._("New").">
 </form>";
     $rst->close();
 } else {
-echo "Error. No Data.";
+echo _("Error. No Data.");
 };
 
 end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.4  2004/07/16 13:51:57  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.3  2004/06/16 20:57:25  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5

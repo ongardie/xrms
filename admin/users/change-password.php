@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.5 2004/06/14 22:50:14 introspectshun Exp $
+ * $Id: change-password.php,v 1.6 2004/07/16 13:55:07 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -19,7 +19,7 @@ $session_user_id = session_check();
 
 $edit_user_id = $_GET['edit_user_id'];
 
-$page_title = "Change Password";
+$page_title = _("Change Password");
 start_page($page_title);
 
 ?>
@@ -31,18 +31,18 @@ start_page($page_title);
                 <input type=hidden name=edit_user_id value="<?php echo $edit_user_id; ?>">
                 <table class=widget cellspacing=1>
                         <tr>
-                                <td class=widget_header colspan=4>Change Password</td>
+                                <td class=widget_header colspan=4><?php echo _("Change Password"); ?></td>
                         </tr>
                         <tr>
-                                <td class=widget_label_right>New Password</td>
+                                <td class=widget_label_right><?php echo _("New Password"); ?></td>
                                 <td class=widget_content_form_element><input type=password size=30 name=password></td>
                         </tr>
                         <tr>
-                                <td class=widget_label_right>Confirm New Password</td>
+                                <td class=widget_label_right><?php echo _("Confirm New Password"); ?></td>
                                 <td class=widget_content_form_element><input type=password size=30 name=confirm_password></td>
                         </tr>
                         <tr>
-                                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
                         </tr>
                 </table>
                 </form>
@@ -63,6 +63,10 @@ end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.6  2004/07/16 13:55:07  braverock
+ *- localize strings for i18n translation support
+ *  - applies modified patches from Sebastian Becker (hyperpac)
+ *
  *Revision 1.5  2004/06/14 22:50:14  introspectshun
  *- Add adodb-params.php include for multi-db compatibility.
  *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.

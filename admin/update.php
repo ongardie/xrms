@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.21 2004/07/15 21:26:20 maulani Exp $
+ * $Id: update.php,v 1.22 2004/07/16 13:52:00 braverock Exp $
  */
 
 // where do we include from
@@ -222,7 +222,7 @@ $sql = "select count(*) as recCount from system_parameters where param_id='Audit
 $rst = $con->execute($sql);
 $recCount = $rst->fields['recCount'];
 if ($recCount == 0) {
-    $msg .= 'Added an Audit Level.<BR><BR>';
+    $msg .= _("Added an Audit Level.").'<BR><BR>';
     $sql = "SELECT * FROM system_parameters WHERE 1 = 2"; //select empty record as placeholder
     $rst = $con->execute($sql);
 
@@ -666,14 +666,14 @@ if ($recCount <16) {
 //close the database connection, because we don't need it anymore
 $con->close();
 
-$page_title = "Update Complete";
+$page_title = _("Update Complete");
 start_page($page_title, true, $msg);
 
 echo $msg;
 ?>
 
 <BR>
-Your database has been updated.
+<?php echo _("Your database has been updated."); ?>
 <BR><BR>
 
 
@@ -684,6 +684,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.22  2004/07/16 13:52:00  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.21  2004/07/15 21:26:20  maulani
  * - Add Audit Level as a system parameter
  *

@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.8 2004/06/24 20:06:19 braverock Exp $
+ * $Id: one.php,v 1.9 2004/07/16 13:51:59 braverock Exp $
  */
 
 //uinclude required common files
@@ -111,7 +111,7 @@ $rst->close();
 $con->close();
 
 
-$page_title = "Opportunity Status : $opportunity_status_pretty_name";
+$page_title = _("Opportunity Status : ").$opportunity_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -123,41 +123,41 @@ start_page($page_title);
         <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Edit Opportunity Status Information</td>
+                <td class=widget_header colspan=4><?php echo _("Edit Opportunity Status Information"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Short Name</td>
+                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=10 name=opportunity_status_short_name value="<?php  echo $opportunity_status_short_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Name</td>
+                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=opportunity_status_pretty_name value="<?php  echo $opportunity_status_pretty_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Plural</td>
+                <td class=widget_label_right><?php echo _("Full Plural"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=opportunity_status_pretty_plural value="<?php  echo $opportunity_status_pretty_plural; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Display HTML</td>
+                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
                 <td class=widget_content_form_element><input type=text size=60 name=opportunity_status_display_html value="<?php  echo $opportunity_status_display_html; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Long Description</td>
+                <td class=widget_label_right><?php echo _("Long Description"); ?></td>
                 <td class=widget_content_form_element><input type=text size=80 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Open Status</td>
+                <td class=widget_label_right><?php echo _("Open Status"); ?></td>
                 <td class=widget_content_form_element>
                 <select name="status_open_indicator">
-                    <option value="o" <?php if (($status_open_indicator == "o") or ($status_open_indicator == '')) {print " selected ";} ?>>Open
-                    <option value="w" <?php if ($status_open_indicator == "w") {print " selected ";} ?>>Closed/Won
-                    <option value="l" <?php if ($status_open_indicator == "l") {print " selected ";} ?>>Closed/Lost
+                    <option value="o" <?php if (($status_open_indicator == "o") or ($status_open_indicator == '')) {print " selected ";} ?>><?php echo _("Open"); ?>
+                    <option value="w" <?php if ($status_open_indicator == "w") {print " selected ";} ?>><?php echo _("Closed/Won"); ?>
+                    <option value="l" <?php if ($status_open_indicator == "l") {print " selected ";} ?>><?php echo _("Closed/Lost"); ?>
                 </select>
                 </td>
             </tr>
 
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
 
         </table>
@@ -170,11 +170,11 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=3>Link Activity To Opportunity Status</td>
+                <td class=widget_header colspan=3><?php echo _("Link Activity To Opportunity Status"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>Duration<br>(defaults to days)</td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Duration"); ?><br><?php echo _("(defaults to days)"); ?></td>
                 <td class=widget_label>Type</td>
             <tr>
                 <td class=widget_content_form_element><input type=text size=40 name="title"></td>
@@ -183,7 +183,7 @@ start_page($page_title);
                     <?php
                         echo $activity_type_menu;
                     ?>
-                    &nbsp; <input class=button type=submit value="Add">
+                    &nbsp; <input class=button type=submit value="<?php echo _("Add"); ?>">
                 </td>
             </tr>
             <?php
@@ -191,7 +191,7 @@ start_page($page_title);
                     echo $activity_rows;
                 } else {
                     echo "<tr>\n";
-                    echo "\t\t<td class=widget_content_form_element colspan=3>No linked activities</td>\n";
+                    echo "\t\t<td class=widget_content_form_element colspan=3>"._("No linked activities")."</td>\n";
                     echo "\t</tr>\n";
                 }
             ?>
@@ -206,16 +206,16 @@ start_page($page_title);
     <div id="Sidebar">
 
         <form action=delete.php method=post>
-        <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>" onsubmit="javascript: return confirm('Delete Opportunity Status?');">
+        <input type=hidden name=opportunity_status_id value="<?php  echo $opportunity_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Opportunity Status?"); ?>');">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Delete Opportunity Status</td>
+                <td class=widget_header colspan=4><?php echo _("Delete Opportunity Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
-                Click the button below to remove this opportunity status from the system.
-                <p>Note: This action CANNOT be undone!
-                <p><input class=button type=submit value="Delete Opportunity Status">
+                <?php echo _("Click the button below to remove this"); ?><br><?php echo _("opportunity status from the system."); ?>
+                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
+                <p><input class=button type=submit value="<?php echo _("Delete Opportunity Status"); ?>">
                 </td>
             </tr>
         </table>
@@ -232,6 +232,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/07/16 13:51:59  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.8  2004/06/24 20:06:19  braverock
  * - add sort order to activity templates
  *   - patch provided by Neil Roberts

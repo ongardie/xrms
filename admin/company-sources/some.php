@@ -4,7 +4,7 @@
  *
  * List company sources
  *
- * $Id: some.php,v 1.4 2004/06/14 21:55:05 introspectshun Exp $
+ * $Id: some.php,v 1.5 2004/07/16 13:51:56 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -36,7 +36,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Manage Company Sources";
+$page_title = _("Manage Company Sources");
 start_page($page_title);
 
 ?>
@@ -46,10 +46,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Company Sources</td>
+                <td class=widget_header colspan=4><?php echo _("Company Sources"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -62,30 +62,30 @@ start_page($page_title);
         <form action="add-2.php" method=post>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Add New Company Source</td>
+                <td class=widget_header colspan=2><?php echo _("Add New Company Source"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Short Name</td>
+                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=company_source_short_name size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Name</td>
+                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=company_source_pretty_name size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Plural Name</td>
+                <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=company_source_pretty_plural size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Display HTML</td>
+                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
                 <td class=widget_content_form_element><input type=text name=company_source_display_html size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Score Adjustment</td>
+                <td class=widget_label_right><?php echo _("Score Adjustment"); ?></td>
                 <td class=widget_content_form_element><input type=text name=company_source_score_adjustment size=5></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -99,6 +99,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2004/07/16 13:51:56  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.4  2004/06/14 21:55:05  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.9 2004/07/13 18:16:16 neildogg Exp $
+ * $Id: one.php,v 1.10 2004/07/16 13:55:08 braverock Exp $
  */
 
 //include required files
@@ -56,7 +56,7 @@ if($my_company_id) {
 
 $con->close();
 
-$page_title = "One User : $first_names $last_name";
+$page_title = _("One User :").$first_names $last_name;
 start_page($page_title);
 
 ?>
@@ -68,65 +68,65 @@ start_page($page_title);
         <input type=hidden name=edit_user_id value="<?php  echo $edit_user_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Edit User Information</td>
+                <td class=widget_header colspan=4><?php echo _("Edit User Information"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Role</td>
+                <td class=widget_label_right><?php echo _("Role"); ?></td>
                 <td class=widget_content_form_element><?php  echo $role_menu; ?></td>
             </tr>
 <?php
     if($my_company_id) {
 ?>
             <tr>
-                <td class=widget_label_right>Contact</td>
+                <td class=widget_label_right><?php echo _("Contact"); ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
             </tr>
 <?php 
     }
  ?>
             <tr>
-                <td class=widget_label_right>Last Name</td>
+                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=last_name value="<?php  echo $last_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>First Names</td>
+                <td class=widget_label_right><?php echo _("First Names"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=first_names value="<?php  echo $first_names; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Username</td>
+                <td class=widget_label_right><?php echo _("Username"); ?></td>
                 <td class=widget_content_form_element><input type=text name=new_username value="<?php  echo $new_username; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>E-Mail</td>
+                <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=email value="<?php  echo $email; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Language</td>
+                <td class=widget_label_right><?php echo _("Language"); ?></td>
                 <td class=widget_content_form_element>English</td></td>
             </tr>
             <tr>
-                <td class=widget_label_right>GMT Offset</td>
+                <td class=widget_label_right><?php echo _("GMT Offset"); ?></td>
                 <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes">
-                    <input class=button type=button onclick="javascript: location.href='change-password.php?edit_user_id=<?php echo $edit_user_id ?>';" value="Change Password">
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+                    <input class=button type=button onclick="javascript: location.href='change-password.php?edit_user_id=<?php echo $edit_user_id ?>';" value="<?php echo _("Change Password"); ?>">
                 </td>
             </tr>
         </table>
         </form>
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('Delete User?');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete User?"); ?>');">
         <input type=hidden name=edit_user_id value="<?php  echo $edit_user_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Delete User</td>
+                <td class=widget_header colspan=4><?php echo _("Delete User"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
-                Click the button below to remove this user from the system.
-                <p>Note: This action CANNOT be undone!
-                <p><input class=button type=submit value="Delete User">
+                <?php echo _("Click the button below to remove this user from the system."); ?>
+                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
+                <p><input class=button type=submit value="<?php echo _("Delete User"); ?>">
                 </td>
             </tr>
         </table>
@@ -148,6 +148,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2004/07/16 13:55:08  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.9  2004/07/13 18:16:16  neildogg
  * - Add admin support to allow a contact to be tied to the user
  *

@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.5 2004/06/14 21:37:55 introspectshun Exp $
+ * $Id: one.php,v 1.6 2004/07/16 13:51:54 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -103,7 +103,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = "Case Status : $case_status_pretty_name";
+$page_title = _("Case Status : ").$case_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -115,26 +115,26 @@ start_page($page_title);
         <input type=hidden name=case_status_id value="<?php  echo $case_status_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Edit Case Status Information</td>
+                <td class=widget_header colspan=4><?php echo _("Edit Case Status Information"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Short Name</td>
+                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=10 name=case_status_short_name value="<?php  echo $case_status_short_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Name</td>
+                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=case_status_pretty_name value="<?php  echo $case_status_pretty_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Plural</td>
+                <td class=widget_label_right><?php echo _("Full Plural"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=case_status_pretty_plural value="<?php  echo $case_status_pretty_plural; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Display HTML</td>
+                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
                 <td class=widget_content_form_element><input type=text size=60 name=case_status_display_html value="<?php  echo $case_status_display_html; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
         </table>
     </form>
@@ -147,11 +147,11 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=3>Link Activity To Case Status</td>
+                <td class=widget_header colspan=3><?php echo _("Link Activity To Case Status"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>Duration<br>(defaults to days)</td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Duration"); ?><br> <?php echo _("(defaults to days)"); ?></td>
                 <td class=widget_label>Type</td>
             <tr>
                 <td class=widget_content_form_element><input type=text size=40 name="title"></td>
@@ -160,7 +160,7 @@ start_page($page_title);
                     <?php
                         echo $activity_type_menu;
                     ?>
-                    &nbsp; <input class=button type=submit value="Add">
+                    &nbsp; <input class=button type=submit value="<?php echo _("Add"); ?>">
                 </td>
             </tr>
             <?php
@@ -168,7 +168,7 @@ start_page($page_title);
                     echo $activity_rows;
                 } else {
                     echo "<tr>\n";
-                    echo "\t\t<td class=widget_content_form_element colspan=3>No linked activities</td>\n";
+                    echo "\t\t".'<td class=widget_content_form_element colspan=3>'._("No linked activities")."</td>\n";
                     echo "\t</tr>\n";
                 }
             ?>
@@ -183,16 +183,16 @@ start_page($page_title);
     <div id="Sidebar">
 
         <form action=delete.php method=post>
-        <input type=hidden name=case_status_id value="<?php  echo $case_status_id; ?>" onsubmit="javascript: return confirm('Delete Case Status?');">
+        <input type=hidden name=case_status_id value="<?php  echo $case_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Case Status?"); ?>');">
         <table class=widget cellspacing=1>
              <tr>
-                   <td class=widget_header colspan=4>Delete Case Status</td>
+                   <td class=widget_header colspan=4><?php echo _("Delete Case Status"); ?></td>
              </tr>
              <tr>
                    <td class=widget_content>
-                       Click the button below to remove this case status from the system.
-                       <p>Note: This action CANNOT be undone!
-                       <p><input class=button type=submit value="Delete Case Status">
+                       <?php echo _("Click the button below to remove this"); ?><br><?php echo _("case status from the system."); ?>
+                       <p><?php echo _("Note: This action CANNOT be undone!"); ?>
+                       <p><input class=button type=submit value="<?php echo _("Delete Case Status"); ?>">
                    </td>
              </tr>
         </table>
@@ -208,6 +208,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.6  2004/07/16 13:51:54  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.5  2004/06/14 21:37:55  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

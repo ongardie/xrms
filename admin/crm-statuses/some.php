@@ -2,7 +2,7 @@
 /**
  * Show and edit the details for all crm statuses
  *
- * $Id: some.php,v 1.5 2004/06/14 22:14:42 introspectshun Exp $
+ * $Id: some.php,v 1.6 2004/07/16 13:51:57 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -37,7 +37,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Manage CRM Statuses";
+$page_title = _("Manage CRM Statuses");
 start_page($page_title);
 
 ?>
@@ -47,10 +47,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Existing CRM Statuses</td>
+                <td class=widget_header colspan=4><?php echo _("Existing CRM Statuses"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -63,26 +63,26 @@ start_page($page_title);
         <form action=add-2.php method=post>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Add New CRM Status</td>
+                <td class=widget_header colspan=2><?php echo _("Add New CRM Status"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Short Name</td>
+                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=crm_status_short_name size=10></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Name</td>
+                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=crm_status_pretty_name size=20></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Plural Name</td>
+                <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=crm_status_pretty_plural size=20></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Display HTML</td>
+                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
                 <td class=widget_content_form_element><input type=text name=crm_status_display_html size=30></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -96,6 +96,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2004/07/16 13:51:57  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.5  2004/06/14 22:14:42  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

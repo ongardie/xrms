@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: some.php,v 1.5 2004/06/14 21:37:55 introspectshun Exp $
+ * $Id: some.php,v 1.6 2004/07/16 13:51:55 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -39,12 +39,12 @@ if ($rst) {
                 if ($sort_order != $cnt) {
                     $table_rows .= '<a href="' . $http_site_root
                     . '/admin/sort.php?direction=up&sort_order='
-                    . $sort_order . '&table_name=case_status&return_url=/admin/case-statuses/some.php">up</a> &nbsp; ';
+                    . $sort_order . '&table_name=case_status&return_url=/admin/case-statuses/some.php">'._("up").'</a> &nbsp; ';
                 }
 		if ($sort_order != $maxcnt) {
                     $table_rows .= '<a href="' . $http_site_root
                     . '/admin/sort.php?direction=down&sort_order='
-                    . $sort_order . '&table_name=case_status&return_url=/admin/case-statuses/some.php">down</a>';
+                    . $sort_order . '&table_name=case_status&return_url=/admin/case-statuses/some.php">'._("down").'</a>';
 		}		
 		$table_rows .= '</td></tr>';
 		
@@ -55,7 +55,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Manage Case Statuses";
+$page_title = _("Manage Case Statuses");
 start_page($page_title);
 
 ?>
@@ -65,11 +65,11 @@ start_page($page_title);
 
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=4>Case Statuses</td>
+				<td class=widget_header colspan=4><?php echo _("Case Statuses"); ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label>Name</td>
-				<td class=widget_label width=15%>Move</td>
+				<td class=widget_label><?php echo _("Name"); ?></td>
+				<td class=widget_label width=15%><?php echo _("Move"); ?></td>
 			</tr>
 			<?php  echo $table_rows; ?>
 		</table>
@@ -82,26 +82,26 @@ start_page($page_title);
 	<form action=new-2.php method=post>
 	<table class=widget cellspacing=1>
 		<tr>
-			<td class=widget_header colspan=2>Add New Case Status</td>
+			<td class=widget_header colspan=2><?php echo _("Add New Case Status"); ?></td>
 		</tr>
 		<tr>
-			<td class=widget_label_right>Short Name</td>
+			<td class=widget_label_right><?php echo _("Short Name"); ?> </td>
 			<td class=widget_content_form_element><input type=text name=case_status_short_name size=10></td>
 		</tr>
 		<tr>
-			<td class=widget_label_right>Full Name</td>
+			<td class=widget_label_right><?php echo _("Full Name"); ?></td>
 			<td class=widget_content_form_element><input type=text name=case_status_pretty_name size=20></td>
 		</tr>
 		<tr>
-			<td class=widget_label_right>Full Plural Name</td>
+			<td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
 			<td class=widget_content_form_element><input type=text name=case_status_pretty_plural size=20></td>
 		</tr>
 		<tr>
-			<td class=widget_label_right>Display HTML</td>
+			<td class=widget_label_right><?php echo _("Display HTML"); ?></td>
 			<td class=widget_content_form_element><input type=text name=case_status_display_html size=30></td>
 		</tr>
 		<tr>
-			<td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+			<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
 		</tr>
 	</table>
 	</form>
@@ -115,6 +115,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2004/07/16 13:51:55  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.5  2004/06/14 21:37:55  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.6 2004/04/19 14:21:54 braverock Exp $
+ * $Id: import-companies.php,v 1.7 2004/07/16 13:51:58 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -24,7 +24,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 
-$page_title = 'Import';
+$page_title = _("Import");
 start_page($page_title, true, $msg);
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -81,22 +81,22 @@ $con->close();
         <form action="import-companies-2.php" method=post enctype="multipart/form-data">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Import Companies</td>
+                <td class=widget_header colspan=2><?php echo _("Import Companies"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>File</td>
+                <td class=widget_label_right><?php echo _("File"); ?></td>
                 <td class=widget_content_form_element><input type=file name=file1></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Field Delimiter</td>
+                <td class=widget_label_right><?php echo _("Field Delimiter"); ?></td>
                 <td class=widget_content_form_element>
-                    <input type=radio name=delimiter value=comma checked>comma
-                    <input type=radio name=delimiter value=tab>tab
-                    <input type=radio name=delimiter value=pipe>pipe
-                    <input type=radio name=delimiter value='semi-colon'>semi-colon</td>
+                    <input type=radio name=delimiter value=comma checked><?php echo _("comma"); ?>
+                    <input type=radio name=delimiter value=tab><?php echo _("tab"); ?>
+                    <input type=radio name=delimiter value=pipe><?php echo _("pipe"); ?>
+                    <input type=radio name=delimiter value='semi-colon'><?php echo _("semi-colon"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>File Format</td>
+                <td class=widget_label_right><?php echo _("File Format"); ?></td>
                 <td class=widget_content_form_element><select name="file_format">
 <?php
 if ($handle = opendir('.')) {
@@ -112,35 +112,35 @@ if ($handle = opendir('.')) {
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Acct. Owner</td>
+                <td class=widget_label_right><?php echo _("Acct. Owner"); ?></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>CRM Status</td>
+                <td class=widget_label_right><?php echo _("CRM Status"); ?></td>
                 <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company Source</td>
+                <td class=widget_label_right><?php echo _("Company Source"); ?></td>
                 <td class=widget_content_form_element><?php  echo $company_source_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Category</td>
+                <td class=widget_label_right><?php echo _("Category"); ?></td>
                 <td class=widget_content_form_element><?php  echo $category_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Industry</td>
+                <td class=widget_label_right><?php echo _("Industry"); ?></td>
                 <td class=widget_content_form_element><?php  echo $industry_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Account Status</td>
+                <td class=widget_label_right><?php echo _("Account Status"); ?></td>
                 <td class=widget_content_form_element><?php  echo $account_status_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Rating</td>
+                <td class=widget_label_right><?php echo _("Rating"); ?></td>
                 <td class=widget_content_form_element><?php  echo $rating_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Import"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Import"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -160,6 +160,10 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.7  2004/07/16 13:51:58  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.6  2004/04/19 14:21:54  braverock
  * - add additional look-ups and tests on import
  * - improve error reporting

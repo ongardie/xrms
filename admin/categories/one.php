@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.9 2004/06/16 20:55:58 gpowers Exp $
+ * $Id: one.php,v 1.10 2004/07/16 13:51:56 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -76,7 +76,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "One Category : $category_pretty_name";
+$page_title = _("One Category :").$category_pretty_name;
 start_page($page_title);
 
 ?>
@@ -88,26 +88,26 @@ start_page($page_title);
                 <input type=hidden name=category_id value="<?php  echo $category_id; ?>">
                 <table class=widget cellspacing=1>
                         <tr>
-                                <td class=widget_header colspan=4>Edit Category Information</td>
+                                <td class=widget_header colspan=4><?php echo _("Edit Category Information"); ?></td>
                         </tr>
                         <tr>
-                                <td class=widget_label_right>Short Name</td>
+                                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
                                 <td class=widget_content><input type=text name=category_short_name value="<?php  echo $category_short_name; ?>"></td>
                         </tr>
                         <tr>
-                                <td class=widget_label_right>Full Name</td>
+                                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
                                 <td class=widget_content><input type=text name=category_pretty_name value="<?php  echo $category_pretty_name; ?>"></td>
                         </tr>
                         <tr>
-                                <td class=widget_label_right>Full Plural</td>
+                                <td class=widget_label_right><?php echo _("Full Plural"); ?></td>
                                 <td class=widget_content><input type=text name=category_pretty_plural value="<?php  echo $category_pretty_plural; ?>"></td>
                         </tr>
                         <tr>
-                                <td class=widget_label_right>Display HTML</td>
+                                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
                                 <td class=widget_content><input type=text name=category_display_html value="<?php  echo $category_display_html; ?>"></td>
                         </tr>
                         <tr>
-                                <td class=widget_content colspan=2><input class=button type=submit value="Save Changes"></td>
+                                <td class=widget_content colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
                         </tr>
                 </table>
                 </form>
@@ -116,13 +116,13 @@ start_page($page_title);
                 <input type=hidden name=category_id value="<?php  echo $category_id; ?>">
                 <table class=widget cellspacing=1>
                         <tr>
-                                <td class=widget_header colspan=4>Delete Category</td>
+                                <td class=widget_header colspan=4><?php echo _("Delete Category"); ?></td>
                         </tr>
                         <tr>
                                 <td class=widget_content>
-                                Click the button below to remove this category from the system.
-                                <p>Note: This action CANNOT be undone!
-                                <p><input class=button type=submit value="Delete">
+                                <?php echo _("Click the button below to remove this category from the system."); ?>
+                                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
+                                <p><input class=button type=submit value="<?php echo _("Delete"); ?>">
                                 </td>
                         </tr>
                 </table>
@@ -136,11 +136,11 @@ start_page($page_title);
                 <!-- category scopes //-->
                 <table class=widget cellspacing=1>
                         <tr>
-                                <td class=widget_header colspan=2>Category Scopes</td>
+                                <td class=widget_header colspan=2><?php echo _("Category Scopes"); ?></td>
                         </tr>
                         <tr>
-                                <td class=widget_label>Associated With</td>
-                                <td class=widget_label>Not Associated With</td>
+                                <td class=widget_label><?php echo _("Associated With"); ?></td>
+                                <td class=widget_label><?php echo _("Not Associated With"); ?></td>
                         </tr>
                         <tr>
                                 <td class=widget_content><?php  echo $associated_with; ?></td>
@@ -158,6 +158,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2004/07/16 13:51:56  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.9  2004/06/16 20:55:58  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5

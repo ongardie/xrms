@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.7 2004/06/14 18:13:51 introspectshun Exp $
+ * $Id: data_clean.php,v 1.8 2004/07/16 13:52:00 braverock Exp $
  */
 
 // where do we include from
@@ -320,14 +320,14 @@ if ($companies_to_fix > 0) {
 //close the database connection, because we don't need it anymore
 $con->close();
 
-$page_title = "Database Cleanup Complete";
+$page_title = _("Database Cleanup Complete");
 start_page($page_title, true, $msg);
 
 echo $msg;
 ?>
 
 <BR>
-Your database has been cleaned.
+<?php echo _("Your database has been cleaned."); ?>
 <BR><BR>
 
 
@@ -337,6 +337,10 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.8  2004/07/16 13:52:00  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.7  2004/06/14 18:13:51  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

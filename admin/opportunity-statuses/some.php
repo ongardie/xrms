@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.7 2004/06/14 22:36:43 introspectshun Exp $
+ * $Id: some.php,v 1.8 2004/07/16 13:51:59 braverock Exp $
  */
 
 //include required XRMS common files
@@ -75,7 +75,7 @@ if ($rst) {
 $con->close();
 
 
-$page_title = "Manage Opportunity Statuses";
+$page_title = _("Manage Opportunity Statuses");
 start_page($page_title);
 
 ?>
@@ -86,12 +86,12 @@ start_page($page_title);
 	<form action=../sort.php method=post>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Opportunity Statuses</td>
+                <td class=widget_header colspan=4><?php echo _("Opportunity Statuses"); ?></td>
             </tr>
             <tr>
-		<td class=widget_label>Name</td>
-		<td class=widget_label width=50%>Description</td>
-                <td class=widget_label width=15%>Move</td>
+		<td class=widget_label><?php echo _("Name"); ?></td>
+		<td class=widget_label width=50%><?php echo _("Description"); ?></td>
+                <td class=widget_label width=15%><?php echo _("Move"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -105,40 +105,40 @@ start_page($page_title);
         <form action=new-2.php method=post>
         <table class=widget cellspacing=1>
 	    <tr>
-                <td class=widget_header colspan=2>Add New Opportunity Status</td>
+                <td class=widget_header colspan=2><?php echo _("Add New Opportunity Status"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Short Name</td>
+                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=opportunity_status_short_name size=10></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Name</td>
+                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=opportunity_status_pretty_name size=20></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Plural Name</td>
+                <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=opportunity_status_pretty_plural size=20></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Display HTML</td>
+                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
                 <td class=widget_content_form_element><input type=text name=opportunity_status_display_html size=30></td>
             </tr>            
             <tr>
-                <td class=widget_label_right>Description</td>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Open Status</td>
+                <td class=widget_label_right><?php echo _("Open Status"); ?></td>
                 <td class=widget_content_form_element>
                 <select name="status_open_indicator">
-                    <option value="o"  selected >Open
-                    <option value="w"           >Closed/Won
-                    <option value="l"           >Closed/Lost
+                    <option value="o"  selected ><?php echo _("Open"); ?>
+                    <option value="w"           ><?php echo _("Closed/Won"); ?>
+                    <option value="l"           ><?php echo _("Closed/Lost"); ?>
                 </select>
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -152,6 +152,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/07/16 13:51:59  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.7  2004/06/14 22:36:43  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

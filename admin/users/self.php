@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.6 2004/07/13 13:24:05 braverock Exp $
+ * $Id: self.php,v 1.7 2004/07/16 13:55:08 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -38,7 +38,7 @@ if ($rst) {
 }
 //show_test_values($username, $last_name, $first_names, $session_user_id, $user_id);
 
-$page_title = "One User : $first_names $last_name";
+$page_title = _("One User :")."$first_names $last_name";
 start_page($page_title);
 
 ?>
@@ -50,37 +50,37 @@ start_page($page_title);
         <input type=hidden name=edit_user_id value="<?php  echo $session_user_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Edit User Information</td>
+                <td class=widget_header colspan=4><?php echo _("Edit User Information"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Last Name</td>
+                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=last_name value="<?php  echo $last_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>First Names</td>
+                <td class=widget_label_right><?php echo _("First Names"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=first_names value="<?php  echo $first_names; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Username</td>
+                <td class=widget_label_right><?php echo _("Username"); ?></td>
                 <td class=widget_content_form_element><?php  echo $username; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>E-Mail</td>
+                <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text size=40 name=email value="<?php  echo $email; ?>">
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Language</td>
-                <td class=widget_content_form_element>English</td>
+                <td class=widget_label_right><?php echo _("Language"); ?></td>
+                <td class=widget_content_form_element><?php echo _("English"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>GMT Offset</td>
+                <td class=widget_label_right><?php echo _("GMT Offset"); ?></td>
                 <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <input class=button type=submit value="Save Changes"> <input class=button type=button onclick="javascript: location.href='change-password.php?edit_user_id=<?php echo $session_user_id ?>';" value="Change Password">
+                    <input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input class=button type=button onclick="javascript: location.href='change-password.php?edit_user_id=<?php echo $session_user_id ?>';" value="<?php echo _("Change Password"); ?>">
                 </td>
             </tr>
         </table>
@@ -101,6 +101,10 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.7  2004/07/16 13:55:08  braverock
+ *- localize strings for i18n translation support
+ *  - applies modified patches from Sebastian Becker (hyperpac)
+ *
  *Revision 1.6  2004/07/13 13:24:05  braverock
  *- change user_type_id to role_id
  *

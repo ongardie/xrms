@@ -15,7 +15,7 @@
  * @author Philippe Mingo
  * @author Brian Peterson
  *
- * $Id: plugin-admin.php,v 1.2 2004/06/28 13:55:06 gpowers Exp $
+ * $Id: plugin-admin.php,v 1.3 2004/07/16 13:51:59 braverock Exp $
  * @package xrms
  * @subpackage plugins
  */
@@ -167,7 +167,7 @@ function parseConfig( $cfg_file ) {
 
 $cfgfile = $include_directory.'/plugin-cfg.php';
 
-$page_title = "Plugin Administration";
+$page_title = _("Plugin Administration");
 start_page($page_title);
 
 $newcfg = array();
@@ -229,7 +229,7 @@ echo "<tr bgcolor=\"$color[0]\"><th colspan=2>" .
             $i++;
         }
       }
-      echo "<tr><td colspan=2><input type=hidden name=plg value=on><center><table><tr><td>";
+      echo '<tr><td colspan=2><input type=hidden name=plg value=on><center><table><tr><td>';
       foreach ( $op_plugin as $plg ) {
         if ( in_array( $plg, $plugins ) ) {
             $sw = ' checked';
@@ -240,10 +240,10 @@ echo "<tr bgcolor=\"$color[0]\"><th colspan=2>" .
              "<td>$plg</td><td><input$sw type=checkbox name=plgs_$plg></td>".
              "</tr>\n";
       }
-      echo '<tr><td><input type=submit value=Submit></td></tr>';
+      echo '<tr><td><input type=submit value='._("Submit").'></td></tr>';
       echo '</table>';
   } else {
-      echo '<tr><td colspan=2 align="center">Plugin directory could not be found: ' . $plugpath . "</td></tr>\n";
+      echo '<tr><td colspan=2 align="center">'._("Plugin directory could not be found: ") . $plugpath . "</td></tr>\n";
   }
 
 if ($plugin_submit == 'true') {
@@ -277,13 +277,13 @@ if ($plugin_submit == 'true') {
         fclose( $fp );
         echo '<tr><td class=widget_content>'.
              '<font size=+1><br>'.
-             "plugin-cfg.php Config written successfully.".
+             'plugin-cfg.php '._("Config written successfully.").
              '</font>'.
              '</td></tr>';
     } else {
         echo '<tr><td class=widget_content>'.
              '<font size=+1><br>'.
-             "plugin-cfg.php Config file can't be opened. Please check vars.php.".
+             'plugin-cfg.php '._("Config file can't be opened. Please check vars.php.").
              '</font>'.
              '</td></tr>';
     }
@@ -293,6 +293,10 @@ echo '</table></form></p>';
 
 /**
  * $Log: plugin-admin.php,v $
+ * Revision 1.3  2004/07/16 13:51:59  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.2  2004/06/28 13:55:06  gpowers
  * - HTML layout changes, to improve rendering
  *   - removed outer of two nested tables

@@ -6,7 +6,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: index.php,v 1.4 2004/07/07 20:46:26 neildogg Exp $
+ * $Id: index.php,v 1.5 2004/07/16 13:51:57 braverock Exp $
  */
 
 //include required files
@@ -31,7 +31,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$page_title = "Country Localization Formats";
+$page_title = _("Country Localization Formats");
 start_page($page_title, true, $msg);
 
 
@@ -42,9 +42,9 @@ $rst = $con->execute($sql);
 if ($rst) {
     echo "<table align=center>
 <tr>
-<td class=widget_header>Country</td>
-<td class=widget_header>Phone Format</td>
-<td class=widget_header>Address Format</td>
+<td class=widget_header>"._("Country")."</td>
+<td class=widget_header>"._("Phone Format")."</td>
+<td class=widget_header>"._("Address Format")."</td>
 <td class=widget_header></td>
 </tr>
 ";
@@ -59,10 +59,10 @@ if ($rst) {
 <td class=widget_content nowrap><form method=post action=edit-2.php>
     <input type=hidden name=country_id value=$country_id>
     <input size=18 maxlength=100 name=phone_format value='$phone_format'>
-    <input type=submit value=Update class=button>
+    <input type=submit value="._("Update")." class=button>
 </form></td>
 <td class=widget_content>$address_format_string</td>
-<td class=widget_content><a href=edit.php?address_format_string_id=" . $address_format_string_id ."&country_id=" . $country_id . ">EDIT</a></td>
+<td class=widget_content><a href=edit.php?address_format_string_id=" . $address_format_string_id ."&country_id=" . $country_id . ">"._("Edit")."</a></td>
 </tr>";
         $rst->movenext();
     }
@@ -74,6 +74,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.5  2004/07/16 13:51:57  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.4  2004/07/07 20:46:26  neildogg
  * - Added support for phone format editing
  *

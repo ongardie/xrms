@@ -2,7 +2,7 @@
 /**
  * Manage Categories
  *
- * $Id: some.php,v 1.6 2004/06/16 20:55:58 gpowers Exp $
+ * $Id: some.php,v 1.7 2004/07/16 13:51:56 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,7 +33,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Manage Categories";
+$page_title = _("Manage Categories");
 start_page($page_title);
 
 ?>
@@ -43,10 +43,10 @@ start_page($page_title);
 
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=4>Categories</td>
+				<td class=widget_header colspan=4><?php echo _("Categories"); ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label>Name</td>
+				<td class=widget_label><?php echo _("Name"); ?></td>
 			</tr>
 			<?php  echo $table_rows; ?>
 		</table>
@@ -59,26 +59,26 @@ start_page($page_title);
 		<form action=add-2.php method=post>
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=2>Add New Category</td>
+				<td class=widget_header colspan=2><?php echo _("Add New Category"); ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Short Name</td>
+				<td class=widget_label_right><?php echo _("Short Name"); ?></td>
 				<td class=widget_content_form_element><input type=text name=category_short_name size=30></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Full Name</td>
+				<td class=widget_label_right><?php echo _("Full Name"); ?></td>
 				<td class=widget_content_form_element><input type=text name=category_pretty_name size=30></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Full Plural Name</td>
+				<td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
 				<td class=widget_content_form_element><input type=text name=category_pretty_plural size=30></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Display HTML</td>
+				<td class=widget_label_right><?php echo _("Display HTML"); ?></td>
 				<td class=widget_content_form_element><input type=text name=category_display_html size=30></td>
 			</tr>
 			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+				<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
 			</tr>
 		</table>
 		</form>
@@ -92,6 +92,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/07/16 13:51:56  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.6  2004/06/16 20:55:58  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5

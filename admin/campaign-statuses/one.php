@@ -4,7 +4,7 @@
  *
  * Edit campaign-statuses
  *
- * $Id: one.php,v 1.4 2004/06/14 21:09:56 introspectshun Exp $
+ * $Id: one.php,v 1.5 2004/07/16 13:51:53 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -38,7 +38,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "One Campaign Status : $campaign_status_pretty_name";
+$page_title = _("One Campaign Status : ").$campaign_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -50,51 +50,51 @@ start_page($page_title);
         <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Edit Campaign Status Information</td>
+                <td class=widget_header colspan=4><?php echo _("Edit Campaign Status Information"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Short Name</td>
+                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=10 name=campaign_status_short_name value="<?php  echo $campaign_status_short_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Name</td>
+                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=campaign_status_pretty_name value="<?php  echo $campaign_status_pretty_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Full Plural</td>
+                <td class=widget_label_right><?php echo _("Full Plural"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=campaign_status_pretty_plural value="<?php  echo $campaign_status_pretty_plural; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Display HTML</td>
+                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=campaign_status_display_html value="<?php  echo $campaign_status_display_html; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Open Status</td>
+                <td class=widget_label_right><?php echo _("Open Status"); ?></td>
                 <td class=widget_content_form_element>
                 <select name="status_open_indicator">
-                    <option value="o"  <?php if ($status_open_indicator == 'o') {echo "selected"; } ?> >Open
-                    <option value="c"  <?php if ($status_open_indicator != 'o') {echo "selected"; } ?> >Closed
+                    <option value="o"  <?php if ($status_open_indicator == 'o') {echo "selected"; } ?> ><?php echo _("Open"); ?>
+                    <option value="c"  <?php if ($status_open_indicator != 'o') {echo "selected"; } ?> ><?php echo _("Closed"); ?>
                 </select>
                 </td>
             </tr>
 
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
         </table>
         </form>
 
         <form action=delete.php method=post>
-        <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>" onsubmit="javascript: return confirm('Delete Opportunity Status?');">
+        <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Opportunity Status?"); ?>');">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Delete Opportunity Status</td>
+                <td class=widget_header colspan=4><?php echo _("Delete Opportunity Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
-                Click the button below to remove this account status from the system.
-                <p>Note: This action CANNOT be undone!
-                <p><input class=button type=submit value="Delete Opportunity Status">
+                <?php echo _("Click the button below to remove this account status from the system."); ?>
+                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
+                <p><input class=button type=submit value="<?php echo _("Delete Opportunity Status"); ?>">
                 </td>
             </tr>
         </table>
@@ -116,6 +116,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.5  2004/07/16 13:51:53  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.4  2004/06/14 21:09:56  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.7 2004/06/29 15:32:38 maulani Exp $
+ * $Id: some.php,v 1.8 2004/07/16 13:55:08 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -36,7 +36,7 @@ if ($rst) {
     }
     $rst->close();
 } else {
-    $table_rows = '<tr><td> Unable to get data from database </td> </tr>';
+    $table_rows = '<tr><td>'._("Unable to get data from database").'</td> </tr>';
 }
 
 $sql2 = "select role_pretty_name, role_id from roles where role_record_status = 'a' order by role_id";
@@ -47,7 +47,7 @@ $rst->close();
 $default_gst = get_system_parameter($con, 'Default GST Offset');
 $con->close();
 
-$page_title = "Manage Users";
+$page_title = _("Manage Users");
 start_page($page_title);
 
 ?>
@@ -57,13 +57,13 @@ start_page($page_title);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4>Users</td>
+                <td class=widget_header colspan=4><?php echo _("Users"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Username</td>
-                <td class=widget_label>Role</td>
-                <td class=widget_label>Full Name</td>
-                <td class=widget_label>E-Mail</td>
+                <td class=widget_label><?php echo _("Username"); ?></td>
+                <td class=widget_label><?php echo _("Role"); ?></td>
+                <td class=widget_label><?php echo _("Full Name"); ?></td>
+                <td class=widget_label><?php echo _("E-Mail"); ?></td>
             </tr>
             <?php echo $table_rows;; ?>
         </table>
@@ -76,46 +76,46 @@ start_page($page_title);
         <form action="add-2.php" onsubmit="javascript: return validate();" method=post>
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=2>Add New User</td>
+                <td class=widget_header colspan=2><?php echo _("Add New User"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Role</td>
+                <td class=widget_label_right><?php echo _("Role"); ?></td>
                 <td class=widget_content_form_element><?php  echo $role_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Last Name</td>
+                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=last_name> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>First Names</td>
+                <td class=widget_label_right><?php echo _("First Names"); ?></td>
                 <td class=widget_content_form_element><input type=text name=first_names></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Username</td>
+                <td class=widget_label_right><?php echo _("Username"); ?></td>
                 <td class=widget_content_form_element><input type=text name=new_username> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Password</td>
+                <td class=widget_label_right><?php echo _("Password"); ?></td>
                 <td class=widget_content_form_element><input type=password name=password> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>E-Mail</td>
+                <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
                 <td class=widget_content_form_element><input type=text name=email></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Language</td>
-                <td class=widget_content_form_element>English</td>
+                <td class=widget_label_right><?php echo _("Language"); ?></td>
+                <td class=widget_content_form_element><?php echo _("English"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>GMT Offset</td>
+                <td class=widget_label_right><?php echo _("GMT Offset"); ?></td>
                 <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value=<?php  echo $default_gst; ?>></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Allow Access</td>
+                <td class=widget_label_right><?php echo _("Allow Access"); ?></td>
                 <td class=widget_content_form_element><input type=checkbox name=allowed_p checked></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -133,17 +133,17 @@ function validate() {
 
     if (document.forms[0].new_username.value == '') {
         numberOfErrors ++;
-        msgToDisplay += 'You must enter a username.';
+        msgToDisplay += '<?php echo _("You must enter a username."); ?>';
     }
 
     if (document.forms[0].new_lastname.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter a last name.';
+        msgToDisplay += '\n<?php echo _("You must enter a last name."); ?>';
     }
 
     if (document.forms[0].new_lastname.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter a password.';
+        msgToDisplay += '\n<?php echo _("You must enter a password."); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -163,6 +163,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/07/16 13:55:08  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.7  2004/06/29 15:32:38  maulani
  * - Make username, lastname, and password required fields for new users.
  *

@@ -96,7 +96,7 @@ if (($fp)) {
     $rst->close();
     fclose($fp);
 } else {
-    echo "<br><h1>Unable to Open file for writing.</h1>";
+    echo '<br><h1>'._("Unable to Open file for writing.").'</h1>';
     $con->close();
     exit;
 }
@@ -107,6 +107,10 @@ header("Location: {$http_site_root}/tmp/contacts-export.csv");
 
 /**
  * $Log: export-companies.php,v $
+ * Revision 1.5  2004/07/16 13:51:58  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.4  2004/06/14 22:24:40  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  *
