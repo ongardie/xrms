@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.72 2005/03/21 13:40:55 maulani Exp $
+ * $Id: one.php,v 1.73 2005/03/22 00:06:51 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -312,6 +312,7 @@ function markComplete() {
 
                     <table border=0 cellpadding=0 cellspacing=0 width=100%>
                         <tr>
+                            <!-- Contact Details left Column -->
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
@@ -370,7 +371,7 @@ function markComplete() {
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
-                                <?php if ($yahoo_name) { ?>
+                                <?php if (trim($yahoo_name)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Yahoo! IM"); ?></td>
                                     <td class=clear>
@@ -378,14 +379,14 @@ function markComplete() {
                                     </td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($msn_name) { ?>
+                                <?php if (trim($msn_name)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("MSN IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($msn_name) > 0) {echo("<a href=\"javascript: openMsnSession('$msn_name');\">$msn_name</a>");}; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($aol_name) { ?>
+                                <?php if (trim($aol_name)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("AOL IM"); ?></td>
                                     <td class=clear>
@@ -393,10 +394,12 @@ function markComplete() {
                                     </td>
                                 </tr>
                                 <?php }; ?>
+                                <?php do_hook('one_contact_left'); ?>
                                 </table>
 
                             </td>
 
+                            <!-- Contact Details Right Column -->
                             <td width=50% class=clear align=left valign=top>
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
@@ -438,25 +441,25 @@ function markComplete() {
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
-                                <?php if ($custom1) { ?>
+                                <?php if (trim($custom1)) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _($contact_custom1_label); ?></td>
                                     <td class=clear><?php  echo $custom1; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($custom2) { ?>
+                                <?php if (trim($custom2)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($contact_custom2_label); ?></td>
                                     <td class=clear><?php  echo $custom2; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($custom3) { ?>
+                                <?php if (trim($custom3)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($contact_custom3_label); ?></td>
                                     <td class=clear><?php  echo $custom3; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($custom4) { ?>
+                                <?php if (trim($custom4)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($contact_custom4_label); ?></td>
                                     <td class=clear><?php  echo $custom4; ?></td>
@@ -474,19 +477,20 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
                                 </tr>
+                                <?php do_hook('one_contact_right'); ?>
                             </table>
 
                             </td>
                         </tr>
                     </table>
 
-                    <p><?php  echo $profile; ?>
+                    <p><?php echo $profile; ?>
 
                 </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?contact_id=$contact_id';"); ?>
+                    <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?contact_id=$contact_id';"); ?>
                     <?php do_hook('one_contact_buttons'); ?>
                 </td>
             </tr>
@@ -601,6 +605,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.73  2005/03/22 00:06:51  braverock
+ * - add trim around if checks in details table to decide whether to print empty data
+ *
  * Revision 1.72  2005/03/21 13:40:55  maulani
  * - Remove redundant code by centralizing common user menu call
  *
