@@ -4,7 +4,7 @@
  *
  * List campaign-statuses
  *
- * $Id: some.php,v 1.2 2004/04/16 22:18:23 maulani Exp $
+ * $Id: some.php,v 1.3 2004/04/23 16:30:55 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -78,6 +78,16 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text name=campaign_status_display_html size=30></td>
             </tr>
             <tr>
+            <tr>
+                <td class=widget_label_right>Open Status</td>
+                <td class=widget_content_form_element>
+                <select name="status_open_indicator">
+                    <option value="o"  selected >Open
+                    <option value="c"           >Closed
+                </select>
+                </td>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
             </tr>
         </table>
@@ -91,6 +101,14 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.3  2004/04/23 16:30:55  gpowers
+ * added support for status_open_indicator,
+ *     which is needed for reports/open-items.php and
+ *     reports/completed-items.php
+ * currently, there are two open statuses: open & closed
+ * to add additional status, edit the HTML in this file.
+ * 'o' means open, anything else means closed
+ *
  * Revision 1.2  2004/04/16 22:18:23  maulani
  * - Add CSS2 Positioning
  *
