@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.9 2004/03/07 14:09:14 braverock Exp $
+ * $Id: home.php,v 1.10 2004/03/07 17:47:10 braverock Exp $
  */
 
 // include the common files
@@ -72,7 +72,7 @@ and a.activity_status = 'o'
 and a.activity_record_status = 'a'
 order by is_overdue desc, a.scheduled_at, a.entered_at";
 
-$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
+$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_home_page);
 
 if ($rst) {
     while (!$rst->EOF) {
@@ -202,6 +202,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.10  2004/03/07 17:47:10  braverock
+ * -changed to use $display_how_many_activities_on_home_page
+ *
  * Revision 1.9  2004/03/07 14:09:14  braverock
  * - use centralized side-bar code in advance of i18n conversion
  *
