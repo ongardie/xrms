@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.12 2004/07/21 12:23:07 cpsource Exp $
+ * $Id: sidebar.php,v 1.13 2004/07/21 13:12:50 cpsource Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -167,19 +167,14 @@ if (strlen($rst->fields['username']) > 0) {
 
 // put in the new button
 
-//
-// BUG - TBD - The 'new' function is stubbed out here as
-//   $on_what_table
-//   $on_what_id
-//   $on_what_string
-// all depend on which row above you are working with.
-//
-// Therefore, you can't pass anything reliable to
-// notes/new.php, therefore, the code was
-// removed until someone comes along and fixes the design.
-//
+if ( strlen( $on_what_table ) > 0 ) {
 
-if ( 0 && strlen( $on_what_table ) > 0 ) {
+  if ( !isset($on_what_id) ) {
+    $on_what_id = '';
+  }
+  if ( !isset($on_what_string) ) {
+    $on_what_string = '';
+  }
 
   if ( 1 ) {
     // use single quote as string delimeter so that variables stand out with color editor
@@ -214,6 +209,9 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.13  2004/07/21 13:12:50  cpsource
+ * - Allow 'new'
+ *
  * Revision 1.12  2004/07/21 12:23:07  cpsource
  * - Stubbed out 'new' function, as design is bogus.
  *
