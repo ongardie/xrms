@@ -1,4 +1,11 @@
 <?php
+/**
+ * /admin/campaign-statuses/one.php
+ *
+ * Edit campaign-statuses
+ *
+ * $Id: one.php,v 1.2 2004/04/16 22:18:23 maulani Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -34,13 +41,12 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=25% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=edit-2.php method=post>
         <input type=hidden name=campaign_status_id value="<?php  echo $account_status_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Edit Campaign Status Information</td>
             </tr>
@@ -68,7 +74,7 @@ start_page($page_title);
 
         <form action=delete.php method=post>
         <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>" onsubmit="javascript: return confirm('Delete Opportunity Status?');">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Delete Opportunity Status</td>
             </tr>
@@ -82,20 +88,25 @@ start_page($page_title);
         </table>
         </form>
 
-        </td>
-
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
 
         <!-- right column //-->
+    <div id="Sidebar">
 
-        <td class=rcol width=73% valign=top>
         &nbsp;
-        </td>
 
-    </tr>
-</table>
+    </div>
+</div>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: one.php,v $
+ * Revision 1.2  2004/04/16 22:18:23  maulani
+ * - Add CSS2 Positioning
+ *
+ *
+ */
+?>

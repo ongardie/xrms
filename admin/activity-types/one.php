@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.2 2004/03/24 18:12:45 maulani Exp $
+ * $Id: one.php,v 1.3 2004/04/16 22:18:23 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -43,13 +43,12 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=25% valign=top>
-        
+<div id="Main">
+    <div id="Content">
+
         <form action="edit-2.php" method=post>
         <input type=hidden name=activity_type_id value="<?php  echo $activity_type_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Edit Activity Type Information</td>
             </tr>
@@ -81,7 +80,7 @@ start_page($page_title);
 
         <form action="delete.php" method=post onsubmit="javascript: return confirm('Delete Activity Type?');">
         <input type=hidden name=activity_type_id value="<?php  echo $activity_type_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Delete Activity Type</td>
             </tr>
@@ -94,22 +93,16 @@ start_page($page_title);
             </tr>
         </table>
         </form>
-        
-        </td>
-        
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
-        
+
+    </div>
+
         <!-- right column //-->
-        
-        <td class=rcol width=73% valign=top>
+    <div id="Sidebar">
+
         &nbsp;
-        </td>
-        
-    </tr>
-</table>
+
+    </div>
+</div>
 
 <?php
 
@@ -117,9 +110,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.3  2004/04/16 22:18:23  maulani
+ * - Add CSS2 Positioning
+ *
  * Revision 1.2  2004/03/24 18:12:45  maulani
  * - add phpdoc
- *
  *
  */
 ?>

@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.4 2004/04/09 22:08:30 braverock Exp $
+ * $Id: import-companies.php,v 1.5 2004/04/16 22:18:25 maulani Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -79,7 +79,7 @@ $con->close();
         <td class=lcol width=35% valign=top>
 
         <form action="import-companies-2.php" method=post enctype="multipart/form-data">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Import Companies</td>
             </tr>
@@ -144,6 +144,9 @@ $con->close();
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.5  2004/04/16 22:18:25  maulani
+ * - Add CSS2 Positioning
+ *
  * Revision 1.4  2004/04/09 22:08:30  braverock
  * - allow import of all fields in the XRMS database
  * - integrated patches provided by Olivier Colonna of Fontaine Consulting

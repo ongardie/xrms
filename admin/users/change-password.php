@@ -3,8 +3,9 @@
  * admin/users/change-password.php - Save new password
  *
  * Form to enter a new password for a user
+ * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.2 2004/03/12 15:37:07 maulani Exp $
+ * $Id: change-password.php,v 1.3 2004/04/16 22:18:26 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,23 +18,17 @@ $session_user_id = session_check();
 
 $user_id = $_GET['user_id'];
 
-// $con = &adonewconnection($xrms_db_dbtype);
-// $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-// $con->close();
-
 $page_title = "Change Password";
 start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=35% valign=top>
-		
+<div id="Main">
+    <div id="Content">
+
 		<form action="change-password-2.php" method="post">
 		<input type=hidden name=user_id value="<?php echo $user_id; ?>">
-		<table class=widget cellspacing=1 width=100%>
+		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=4>Change Password</td>
 			</tr>
@@ -51,32 +46,28 @@ start_page($page_title);
 		</table>
 		</form>
 
-		</td>
-		
-		<!-- gutter //-->
-		<td class=gutter width=1%>
-		&nbsp;
-		</td>
-		
-		<!-- right column //-->
-		
-		<td class=rcol width=64% valign=top>
-		&nbsp;
-		</td>
-		
-	</tr>
-</table>
+    </div>
 
-<?php 
+        <!-- right column //-->
+    <div id="Sidebar">
+
+		&nbsp;
+
+    </div>
+</div>
+
+<?php
 
 end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.3  2004/04/16 22:18:26  maulani
+ *- Add CSS2 Positioning
+ *
  *Revision 1.2  2004/03/12 15:37:07  maulani
  *- Require new passwords be entered twice for validation
  *- Add phpdoc
- *
  *
  */
 ?>

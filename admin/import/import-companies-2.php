@@ -18,7 +18,7 @@
  *
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-2.php,v 1.4 2004/04/09 22:08:38 braverock Exp $
+ * $Id: import-companies-2.php,v 1.5 2004/04/16 22:18:25 maulani Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -59,7 +59,7 @@ echo <<<TILLEND
         <input type=hidden name=industry_id value="$industry_id">
         <input type=hidden name=account_status_id value="$account_status_id">
         <input type=hidden name=rating_id value="$rating_id">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=54>Preview Data</td>
             </tr>
@@ -352,6 +352,9 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.5  2004/04/16 22:18:25  maulani
+ * - Add CSS2 Positioning
+ *
  * Revision 1.4  2004/04/09 22:08:38  braverock
  * - allow import of all fields in the XRMS database
  * - integrated patches provided by Olivier Colonna of Fontaine Consulting

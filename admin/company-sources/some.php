@@ -1,4 +1,11 @@
 <?php
+/**
+ * /admin/company-sources/some.php
+ *
+ * List company sources
+ *
+ * $Id: some.php,v 1.3 2004/04/16 22:18:25 maulani Exp $
+ */
 
 require_once('../../include-locations.inc');
 
@@ -33,11 +40,10 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Company Sources</td>
             </tr>
@@ -47,19 +53,13 @@ start_page($page_title);
             <?php  echo $table_rows; ?>
         </table>
 
-        </td>
-
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
 
         <!-- right column //-->
-
-        <td class=rcol width=33% valign=top>
+    <div id="Sidebar">
 
         <form action="add-2.php" method=post>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Add New Company Source</td>
             </tr>
@@ -89,8 +89,18 @@ start_page($page_title);
         </table>
         </form>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.3  2004/04/16 22:18:25  maulani
+ * - Add CSS2 Positioning
+ *
+ *
+ */
+?>

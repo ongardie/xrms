@@ -2,7 +2,7 @@
 /**
  * Display all case priorities
  *
- * $Id: some.php,v 1.2 2004/03/22 02:14:45 braverock Exp $
+ * $Id: some.php,v 1.3 2004/04/16 22:18:24 maulani Exp $
  */
 
 //include required files
@@ -38,11 +38,10 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Case Priorities</td>
             </tr>
@@ -52,19 +51,13 @@ start_page($page_title);
             <?php  echo $table_rows; ?>
         </table>
 
-        </td>
-
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
 
         <!-- right column //-->
-
-        <td class=rcol width=33% valign=top>
+    <div id="Sidebar">
 
         <form action="add-2.php" method=post>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Add New Priority Type</td>
             </tr>
@@ -94,9 +87,8 @@ start_page($page_title);
         </table>
         </form>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -104,6 +96,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.3  2004/04/16 22:18:24  maulani
+ * - Add CSS2 Positioning
+ *
  * Revision 1.2  2004/03/22 02:14:45  braverock
  * - debug SF bug 906413
  * - add phpdoc
