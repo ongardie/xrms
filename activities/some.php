@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.48 2004/07/26 16:13:00 neildogg Exp $
+ * $Id: some.php,v 1.49 2004/07/27 10:21:50 cpsource Exp $
  */
 
 // handle includes
@@ -26,14 +26,14 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 // check for saved search
 $arr_vars = array ( // local var name       // session variable name
-           'saved_id'           => array ( 'saved_id', arr_vars_SESSION ) ,
-           'saved_title'        => array ( 'saved_title', arr_vars_SESSION ) ,
-           'group_item'         => array ( 'group_item', arr_vars_SESSION ) ,
-           'delete_saved'       => array ( 'delete_saved', arr_vars_SESSION ) ,
+           'saved_id'           => arr_vars_POST_UNDEF,
+           'saved_title'        => arr_vars_POST_UNDEF,
+           'group_item'         => arr_vars_POST_UNDEF,
+           'delete_saved'       => arr_vars_POST_UNDEF,
            );
 
 // get all passed in variables
-arr_vars_get_all ( $arr_vars );
+arr_vars_post_with_cmd ( $arr_vars );
 
 // get SESSION variables for saved search
 // arr_vars_session_get ( $arr_vars );
@@ -479,6 +479,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.49  2004/07/27 10:21:50  cpsource
+ * - Fix some undefs
+ *
  * Revision 1.48  2004/07/26 16:13:00  neildogg
  * - Now it actually defines an undefined variable
  *  - instead of assigning it an empty string

@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.66 2004/07/27 10:02:15 cpsource Exp $
+ * $Id: utils-misc.php,v 1.67 2004/07/27 10:21:50 cpsource Exp $
  */
 
 /**
@@ -290,11 +290,6 @@ function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure=
  * Returns TRUE if it is.
  */
 
-//
-// WARNING - This function is deprecated by the
-// arr_vars sub-system and will be gradually
-// replaced.
-//
 function getGlobalVar( &$value, $name ) {
 
     if( isset($_SESSION[$name]) ) {
@@ -1011,6 +1006,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.67  2004/07/27 10:21:50  cpsource
+ * - Fix some undefs
+ *
  * Revision 1.66  2004/07/27 10:02:15  cpsource
  * - Add routine arr_vars_post_with_cmd and test.
  *
