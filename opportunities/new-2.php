@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.8 2005/01/06 20:48:19 vanmer Exp $
+ * $Id: new-2.php,v 1.9 2005/01/13 19:08:56 vanmer Exp $
  */
 
 //include common files
@@ -15,7 +15,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 //check security
-$session_user_id = session_check();
+$session_user_id = session_check('','Create');
 
 $opportunity_status_id = $_POST['opportunity_status_id'];
 $size = $_POST['size'];
@@ -74,6 +74,9 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.9  2005/01/13 19:08:56  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.8  2005/01/06 20:48:19  vanmer
  * - added retrieve/save of division_id to edit and new pages
  *

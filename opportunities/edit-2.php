@@ -8,9 +8,10 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
-
 $opportunity_id = $_POST['opportunity_id'];
+$on_what_id=$opportunity_id;
+$session_user_id = session_check('','Update');
+
 $opportunity_status_id = $_POST['opportunity_status_id'];
 $contact_id = $_POST['contact_id'];
 $division_id = $_POST['division_id'];

@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.12 2005/01/11 23:13:35 braverock Exp $
+ * $Id: new.php,v 1.13 2005/01/13 19:08:56 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('','Create');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $company_id = $_POST['company_id'];
@@ -203,6 +203,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.13  2005/01/13 19:08:56  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.12  2005/01/11 23:13:35  braverock
  * - removed bad javascript window.open hack, now set empty anchor on current page
  *

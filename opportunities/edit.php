@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.19 2005/01/11 23:15:20 braverock Exp $
+ * $Id: edit.php,v 1.20 2005/01/13 19:08:56 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,10 +14,11 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
-$session_user_id = session_check();
+$opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
+$on_what_id=$opportunity_id;
+$session_user_id = session_check('','Update');
 
 $msg            = isset($_GET['msg'])            ? $_GET['msg'] : '';
-$opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -288,6 +289,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.20  2005/01/13 19:08:56  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.19  2005/01/11 23:15:20  braverock
  * - removed bad javascript window.open hack - now set empty anchor on current page
  *

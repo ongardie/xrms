@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.33 2005/01/13 18:55:08 vanmer Exp $
+ * $Id: one.php,v 1.34 2005/01/13 19:08:56 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -144,9 +144,17 @@ LEFT JOIN users u ON a.user_id = u.user_id
 WHERE a.on_what_table = 'opportunities'
   AND a.on_what_id = $opportunity_id
   AND a.activity_type_id = at.activity_type_id
-  AND a.activity_record_status = 'a'
-ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
-";
+  AND a.activity_record_status = 'a'";
+    
+    $list=get_list($session_user_id, 'Read', false, 'activities');
+    //print_r($list);
+    if ($list) {
+        $list=implode(",",$list);
+        $sql_activities .= " and a.activity_id IN ($list) ";
+    } else { $sql_activities .= ' AND 1 = 2 '; }
+
+
+$sql.="ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
 
@@ -452,6 +460,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.34  2005/01/13 19:08:56  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.33  2005/01/13 18:55:08  vanmer
  * - Basic ACL changes to allow display functionality to be restricted
  *
