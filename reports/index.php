@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.6 2004/04/20 13:34:42 braverock Exp $
+ * $Id: index.php,v 1.7 2004/04/22 17:13:13 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -94,6 +94,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content>List Completed Items by Date Range, User and Type</td>
             </tr>
             <tr>
+                <td class=widget_content><a href="audit-items.php">Audit Items</a></td>
+                <td class=widget_content>List Audit Items by Date and User</td>
+            </tr>
+            <tr>
                 <td class=widget_content colspan="2">
                     <form action="user-activity.php" method=post>
                         Activity Report for <?php echo $user_menu; ?>
@@ -119,6 +123,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.7  2004/04/22 17:13:13  gpowers
+ * Added Audit Items Report
+ *
  * Revision 1.6  2004/04/20 13:34:42  braverock
  * - add activity times report
  * - add open items report
