@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.7 2004/06/03 16:28:23 braverock Exp $
+ * $Id: one.php,v 1.8 2004/06/14 21:52:23 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( $this );
 
@@ -59,7 +60,7 @@ if ($rst) {
 
 $sql = "select category_scope_id, category_scope_pretty_plural
 from category_scopes cs
-where category_scope_id not in (" . implode($array_of_category_scopes, ',') . ")
+where category_scope_id not in (" . implode(',', $array_of_category_scopes) . ")
 and category_scope_record_status = 'a'
 order by category_scope_pretty_name";
 
@@ -157,6 +158,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/06/14 21:52:23  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.7  2004/06/03 16:28:23  braverock
  * - remove newline at end of file
  *

@@ -2,7 +2,7 @@
 /**
  * Manage Categories
  *
- * $Id: some.php,v 1.4 2004/04/23 15:30:11 gpowers Exp $
+ * $Id: some.php,v 1.5 2004/06/14 21:52:23 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( $this );
 
@@ -91,6 +92,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2004/06/14 21:52:23  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.4  2004/04/23 15:30:11  gpowers
  * added session_check
  *

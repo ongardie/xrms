@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $category_short_name = $_POST['category_short_name'];
 $category_pretty_name = $_POST['category_pretty_name'];
@@ -17,8 +18,17 @@ $session_user_id = session_check( $this );
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "insert into categories (category_short_name, category_pretty_name, category_pretty_plural, category_display_html) values (" . $con->qstr($category_short_name, get_magic_quotes_gpc()) . ", " . $con->qstr($category_pretty_name, get_magic_quotes_gpc()) . ", " . $con->qstr($category_pretty_plural, get_magic_quotes_gpc()) . ", " . $con->qstr($category_display_html, get_magic_quotes_gpc()) . ")";
-$con->execute($sql);
+$sql = "SELECT * FROM categories WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['category_short_name'] = $category_short_name;
+$rec['category_pretty_name'] = $category_pretty_name;
+$rec['category_pretty_plural'] = $category_pretty_plural;
+$rec['category_display_html'] = $category_display_html;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $con->close();
 

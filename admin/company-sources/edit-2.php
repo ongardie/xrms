@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -21,8 +22,18 @@ $company_source_score_adjustment = ($company_source_score_adjustment > 0) ? $com
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update company_sources set company_source_short_name = " . $con->qstr($company_source_short_name, get_magic_quotes_gpc()) . ", company_source_pretty_name = " . $con->qstr($company_source_pretty_name, get_magic_quotes_gpc()) . ", company_source_pretty_plural = " . $con->qstr($company_source_pretty_plural, get_magic_quotes_gpc()) . ", company_source_display_html = " . $con->qstr($company_source_display_html, get_magic_quotes_gpc()) . ", company_source_score_adjustment = $company_source_score_adjustment where company_source_id = $company_source_id";
-$con->execute($sql);
+$sql = "SELECT * FROM company_sources WHERE company_source_id = $company_source_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['company_source_short_name'] = $company_source_short_name;
+$rec['company_source_pretty_name'] = $company_source_pretty_name;
+$rec['company_source_pretty_plural'] = $company_source_pretty_plural;
+$rec['company_source_display_html'] = $company_source_display_html;
+$rec['company_source_score_adjustment'] = $company_source_score_adjustment;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 $con->close();
 

@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -20,8 +21,15 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "delete from category_category_scope_map where category_id = $category_id and category_scope_id = $category_scope_id";
 $con->execute($sql);
 
-$sql = "insert into category_category_scope_map (category_id, category_scope_id) values ($category_id, $category_scope_id)";
-$con->execute($sql);
+$sql = "SELECT * FROM category_category_scope_map WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['category_id'] = $category_id;
+$rec['category_scope_id'] = $category_scope_id;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $con->close();
 
