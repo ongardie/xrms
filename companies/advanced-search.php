@@ -4,7 +4,7 @@
  *
  * This is the advanced screen that allows many more search fields
  *
- * $Id: advanced-search.php,v 1.3 2004/07/21 19:17:56 introspectshun Exp $
+ * $Id: advanced-search.php,v 1.4 2004/07/31 11:10:02 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,9 +17,33 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 //set the language
-$_SESSION['language'] = 'english';
+//$_SESSION['language'] = 'english';
+
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+
+// a helper routine to retrieve one field from a table
+function check_and_get ( $con, $sql, $nam )
+{
+  $rst = $con->execute($sql);
+
+  if ( !$rst ) {
+    db_error_handler($con, $sql);
+  }
+  if ( !$rst->EOF ) {
+    $GLOBALS[$nam] = $rst->fields[$nam];
+  } else {
+    $GLOBALS[$nam] = '';
+  }
+
+  $tmp = $rst->getmenu2($nam, $GLOBALS[$nam], true);
+  $rst->close();
+
+  return $tmp;
+}
 
 $session_user_id = session_check();
+
+$company_name = '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -28,9 +52,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = check_and_get($con,$sql2,'user_id');
 
 $sql2 = "select category_pretty_name, c.category_id
 from categories c, category_scopes cs, category_category_scope_map ccsm
@@ -39,34 +61,22 @@ and cs.on_what_table =  'companies'
 and ccsm.category_scope_id = cs.category_scope_id
 and category_record_status =  'a'
 order by category_pretty_name";
-$rst = $con->execute($sql2);
-$company_category_menu = $rst->getmenu2('company_category_id', $company_category_id, true);
-$rst->close();
+$company_category_menu = check_and_get($con,$sql2,'category_id');
 
 $sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
-$rst = $con->execute($sql2);
-$company_type_menu = $rst->getmenu2('company_type_id', $company_type_id, true);
-$rst->close();
+$company_type_menu = check_and_get($con,$sql2,'company_type_id');
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
-$rst = $con->execute($sql2);
-$crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, true);
-$rst->close();
+$crm_status_menu = check_and_get($con,$sql2,'crm_status_id');
 
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
-$rst = $con->execute($sql2);
-$company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, true);
-$rst->close();
+$company_source_menu = check_and_get($con,$sql2,'company_source_id');
 
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
-$rst = $con->execute($sql2);
-$industry_menu = $rst->getmenu2('industry_id', $industry_id, true);
-$rst->close();
+$industry_menu = check_and_get($con,$sql2,'industry_id');
 
-$sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
-$rst = $con->execute($sql);
-$country_menu = $rst->getmenu2('country_id', $country_id, true);
-$rst->close();
+$sql2 = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
+$country_menu = check_and_get($con,$sql2,'country_id');
 
 $page_title = _("Companies");
 start_page($page_title, true, $msg);
@@ -81,7 +91,6 @@ start_page($page_title, true, $msg);
     <tr>
         <td class=lcol width="55%" valign=top>
 
-
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Company Information"); ?></td>
@@ -91,7 +100,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text size=50 name=company_name value="<?php  echo $company_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Legal Name"); ?>/td>
+                <td class=widget_label_right><?php echo _("Legal Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=50 name=legal_name value="<?php echo $company_name; ?>"></td>
             </tr>
             <tr>
@@ -249,6 +258,12 @@ end_page();
 
 /**
  * $Log: advanced-search.php,v $
+ * Revision 1.4  2004/07/31 11:10:02  cpsource
+ * - Fix lots and lots of errors that were masked by using undefined
+ *     variables.
+ *   Fix HTML syntax error
+ *   Define msg properly
+ *
  * Revision 1.3  2004/07/21 19:17:56  introspectshun
  * - Localized strings for i18n/l10n support
  *
