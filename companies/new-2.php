@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.19 2004/08/25 14:18:56 neildogg Exp $
+ * $Id: new-2.php,v 1.20 2005/01/09 14:49:56 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -41,6 +41,8 @@ $account_status_id = 1;
 $rating_id = 1;
 
 $legal_name = (strlen($legal_name) > 0) ? $legal_name : $company_name;
+
+$company_name = (strlen($company_name) > 0) ? $company_name : _("[none]");
 
 $country_id = $_POST['country_id'];
 $address_name = $_POST['address_name'];
@@ -217,6 +219,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.20  2005/01/09 14:49:56  braverock
+ * - set company_name to [none] if no company name is provided.
+ *
  * Revision 1.19  2004/08/25 14:18:56  neildogg
  * - Daylight savings now applied to all new addresses
  *
