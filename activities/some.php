@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.82 2005/01/07 15:55:56 braverock Exp $
+ * $Id: some.php,v 1.83 2005/01/11 01:06:51 braverock Exp $
  */
 
 // handle includes
@@ -567,20 +567,65 @@ start_page($page_title, true, $msg);
                 <td class=widget_label colspan="2"><?php echo _("Opportunity Status"); ?></td>
             </tr>
             <tr>
+                <!-- Time Zone Handling Selects -->
                 <td class=widget_content_form_element colspan="2">
-            <?php
-                    //time zone handling code
-                    $sql2 = "SELECT " . $con->concat("(CASE WHEN country_id%25 < 24 THEN lpad(country_id%25, 2, '0') ELSE '00' END)", "':00:00'") . " as counter, country_id%25 as counter2 from countries group by counter2 order by counter2";
-                    $rst = $con->execute($sql2);
-                    if(!$rst) {
-                        db_error_handler($con, $sql2);
-                    }
-                    print $rst->getmenu2('time_zone_between', $time_zone_between, true);
-                    echo ' and ';
-                    $rst->movefirst();
-                    print $rst->getmenu2('time_zone_between2', $time_zone_between2, true);
-                    //end timezone handling code
-            ?>
+                     <select name="time_zone_between" >
+                        <option></option>
+                        <option value='0'>00:00:00</option>
+                        <option value='1'>01:00:00</option>
+                        <option value='2'>02:00:00</option>
+                        <option value='3'>03:00:00</option>
+                        <option value='4'>04:00:00</option>
+                        <option value='5'>05:00:00</option>
+                        <option value='6'>06:00:00</option>
+                        <option value='7'>07:00:00</option>
+                        <option value='8'>08:00:00</option>
+                        <option value='9'>09:00:00</option>
+                        <option value='10'>10:00:00</option>
+                        <option value='11'>11:00:00</option>
+                        <option value='12'>12:00:00</option>
+                        <option value='13'>13:00:00</option>
+                        <option value='14'>14:00:00</option>
+                        <option value='15'>15:00:00</option>
+                        <option value='16'>16:00:00</option>
+                        <option value='17'>17:00:00</option>
+                        <option value='18'>18:00:00</option>
+                        <option value='19'>19:00:00</option>
+                        <option value='20'>20:00:00</option>
+                        <option value='21'>21:00:00</option>
+                        <option value='22'>22:00:00</option>
+                        <option value='23'>23:00:00</option>
+                        <option value='24'>00:00:00</option>
+                     </select>
+                     <?php echo "\n"._("and")."\n"; ?>
+                     <select name="time_zone_between2" >
+                        <option></option>
+                        <option value='0'>00:00:00</option>
+                        <option value='1'>01:00:00</option>
+                        <option value='2'>02:00:00</option>
+                        <option value='3'>03:00:00</option>
+                        <option value='4'>04:00:00</option>
+                        <option value='5'>05:00:00</option>
+                        <option value='6'>06:00:00</option>
+                        <option value='7'>07:00:00</option>
+                        <option value='8'>08:00:00</option>
+                        <option value='9'>09:00:00</option>
+                        <option value='10'>10:00:00</option>
+                        <option value='11'>11:00:00</option>
+                        <option value='12'>12:00:00</option>
+                        <option value='13'>13:00:00</option>
+                        <option value='14'>14:00:00</option>
+                        <option value='15'>15:00:00</option>
+                        <option value='16'>16:00:00</option>
+                        <option value='17'>17:00:00</option>
+                        <option value='18'>18:00:00</option>
+                        <option value='19'>19:00:00</option>
+                        <option value='20'>20:00:00</option>
+                        <option value='21'>21:00:00</option>
+                        <option value='22'>22:00:00</option>
+                        <option value='23'>23:00:00</option>
+                        <option value='24'>00:00:00</option>
+                  </select>
                 </td>
                 <td class=widget_content_form_element colspan="2">
                     <?php echo $opportunity_menu; ?>
@@ -698,6 +743,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.83  2005/01/11 01:06:51  braverock
+ * - remove lpad database query and replace with hard-coded select statements
+ * - lpad isn't portable SQL, and we didn't need two extra queries there to make a list
+ *
  * Revision 1.82  2005/01/07 15:55:56  braverock
  * - convert search params for UNION to string, int types
  *   enhances SQL portability across databases that require compatible types
