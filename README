@@ -1,5 +1,6 @@
 XRMS - README
 
+/** $Id: README,v 1.3 2004/03/08 14:09:17 braverock Exp $ **/
 ---
 
 SUMMARY
@@ -50,7 +51,7 @@ http://www.softcomplex.com/
 
 REQUIREMENTS
 
-Currently, you'll need MySQL v4.0 and PHP v4.2 (or higher) for XRMS.
+Currently, you'll need MySQL v 3.23 (v4.0 recommended) and PHP v4.2 (or higher) for XRMS.
 
 I like Red Hat machines, but XRMS should work just fine on Apple and Microsoft systems, too.  
 
@@ -67,7 +68,9 @@ INSTALLATION
    Alternately, you may just 'source xrms-init-all.sql' which will source all the 
    other files.
 
-   If you are upgrading from version .8b or similar, you will 'source upgrade.sql' instead   
+   If you are upgrading from a previous version, you will need to examine the 
+   various upgrade scripts to determine which one or more of them you may need 
+   to apply.
 
 3. Modify the file [xrms_root]/include/vars.php as appropriate for your company.  
    This is the primary XRMS configuration file. Make sure that your web server 
