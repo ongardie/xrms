@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.36 2004/07/22 16:38:46 gpowers Exp $
+ * $Id: home.php,v 1.37 2004/07/25 14:13:54 johnfawcett Exp $
  */
 
 // include the common files
@@ -462,7 +462,7 @@ start_page($page_title,true,$msg);
                 <td class=widget_header><?php echo _("Documentation"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><a href="../doc/users/XRMS_User_Manual.pdf"><?php echo _("User Manual"); ?></a><?php echo _(" (PDF)"); ?></td>
+                <td class=widget_label><a href="../doc/users/XRMS_User_Manual.pdf"><?php echo _("User Manual"); ?></a> (PDF)</td>
             </tr>
 <?php echo do_hook_function('home_docs'); ?>
         </table>
@@ -497,6 +497,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.37  2004/07/25 14:13:54  johnfawcett
+ * - removed PDF from translated text
+ *
  * Revision 1.36  2004/07/22 16:38:46  gpowers
  * - added 'home_docs' plugin hook
  *   - allows plugin documentation to appear on home page.
