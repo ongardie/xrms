@@ -35,6 +35,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
+<script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
         <td class=lcol width=55% valign=top>
@@ -129,15 +131,14 @@ initialize();
 // note: you can have as many calendar objects as you need for your application
 
     var cal1 = new calendar1(document.forms[0].elements['starts_at']);
-    cal1.year_scroll = false;
+    cal1.year_scroll = true;
     cal1.time_comp = false;
 
     var cal2 = new calendar1(document.forms[0].elements['ends_at']);
-    cal2.year_scroll = false;
+    cal2.year_scroll = true;
     cal2.time_comp = false;
 
 //-->
-
 </script>
 
 <?php end_page(); ?>
