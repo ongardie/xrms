@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupUser.php,v 1.2 2005/02/28 21:45:13 vanmer Exp $
+ * $Id: one_GroupUser.php,v 1.3 2005/03/05 00:52:34 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -72,6 +72,7 @@ global $symbol_precendence;
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'GroupUser');
+  $model->SetPrimaryKeyName('GroupUser_id');
   $model->SetDisplayNames(array('Group_name' => 'Group Name')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
   $model->SetForeignKeyField('user_id', 'User', 'users', 'user_id', $xcon->CONCAT('first_names',"' '",'last_name'),$xcon,array('' => ' Select One'));
   $model->SetForeignKeyField('Group_id', 'Group', 'Groups', 'Group_id', 'Group_name', null, array('' => ' Select One'));
@@ -107,6 +108,9 @@ end_page();
 
 /**
  * $Log: one_GroupUser.php,v $
+ * Revision 1.3  2005/03/05 00:52:34  daturaarutad
+ * manually setting primary keys until mssql driver supports metacolumns fully
+ *
  * Revision 1.2  2005/02/28 21:45:13  vanmer
  * - added error checking to not allow broken records to be added to the group user table
  *

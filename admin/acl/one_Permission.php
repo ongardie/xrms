@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_Permission.php,v 1.1 2005/01/13 17:16:16 vanmer Exp $
+ * $Id: one_Permission.php,v 1.2 2005/03/05 00:52:34 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -46,6 +46,7 @@ global $symbol_precendence;
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'Permission');
+  $model->SetPrimaryKeyName('Permission_id');
   $model->SetDisplayNames(array('Permission_name' => 'Permission Name', 'Permission_abbr' => 'Abbreviation', 'Permission_filter' => 'Filter'));
 
   $view = new ADOdb_QuickForm_View($con, 'Permission');
@@ -77,6 +78,9 @@ end_page();
 
 /**
  * $Log: one_Permission.php,v $
+ * Revision 1.2  2005/03/05 00:52:34  daturaarutad
+ * manually setting primary keys until mssql driver supports metacolumns fully
+ *
  * Revision 1.1  2005/01/13 17:16:16  vanmer
  * - Initial Commit for ACL Administration interface
  *

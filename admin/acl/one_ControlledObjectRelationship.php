@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_ControlledObjectRelationship.php,v 1.2 2005/02/28 21:44:36 vanmer Exp $
+ * $Id: one_ControlledObjectRelationship.php,v 1.3 2005/03/05 00:52:34 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -59,7 +59,7 @@ global $symbol_precendence;
         }
 
 
-	$page_title = 'Manage Controlled Objects';
+	$page_title = 'Manage Controlled Object Relationships';
 
         $css_theme='basic-left';
 	start_page($page_title, true, $msg);
@@ -67,11 +67,12 @@ global $symbol_precendence;
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'ControlledObjectRelationship');
+  $model->SetPrimaryKeyName('CORelationship_id');
   $model->SetDisplayNames(array('ControlledObjectRelationship_name' => 'Controlled Object Name', 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
   $model->SetForeignKeyField('ChildControlledObject_id', 'Child Controlled Object', 'ControlledObject', 'ControlledObject_id', 'ControlledObject_name');
   $model->SetForeignKeyField('ParentControlledObject_id', 'Parent Controlled Object', 'ControlledObject', 'ControlledObject_id', 'ControlledObject_name', null, array('NULL' => ' Select One'));
 
-  $view = new ADOdb_QuickForm_View($con, 'Controlled Objects');
+  $view = new ADOdb_QuickForm_View($con, 'Controlled Object Relationships');
   $view->SetReturnButton('Return to List', $return_url);
 
   $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
@@ -100,6 +101,9 @@ end_page();
 
 /**
  * $Log: one_ControlledObjectRelationship.php,v $
+ * Revision 1.3  2005/03/05 00:52:34  daturaarutad
+ * manually setting primary keys until mssql driver supports metacolumns fully
+ *
  * Revision 1.2  2005/02/28 21:44:36  vanmer
  * - added cases to check for simple and not-so-simple errors when creating controlled object relationship
  *

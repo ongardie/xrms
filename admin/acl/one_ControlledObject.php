@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_ControlledObject.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: one_ControlledObject.php,v 1.2 2005/03/05 00:52:34 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -45,6 +45,7 @@ global $symbol_precendence;
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'ControlledObject');
+  $model->SetPrimaryKeyName('ControlledObject_id');
   $model->SetDisplayNames(array('ControlledObject_name' => 'Object Name', 'on_what_table' => 'Source Table', 'on_what_field' => 'Identifying Field', 'data_source_id' => 'Data Source'));
   $model->SetForeignKeyField('data_source_id', 'Data Source', 'data_source', 'data_source_id', 'data_source_name', null, array(null=> 'Select One'));
 
@@ -77,6 +78,9 @@ end_page();
 
 /**
  * $Log: one_ControlledObject.php,v $
+ * Revision 1.2  2005/03/05 00:52:34  daturaarutad
+ * manually setting primary keys until mssql driver supports metacolumns fully
+ *
  * Revision 1.1  2005/01/13 17:16:15  vanmer
  * - Initial Commit for ACL Administration interface
  *

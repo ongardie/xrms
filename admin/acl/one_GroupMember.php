@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupMember.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: one_GroupMember.php,v 1.2 2005/03/05 00:52:34 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -45,6 +45,7 @@ global $symbol_precendence;
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'GroupMember');
+  $model->SetPrimaryKeyName('GroupMember_id');
   $model->SetDisplayNames(array('Group_name' => 'Group Name', 'on_what_id'=>'Object ID')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
   $model->SetForeignKeyField('ControlledObject_id', 'Controlled Object', 'ControlledObject', 'ControlledObject_id', 'ControlledObject_name');
   $model->SetForeignKeyField('Group_id', 'Group', 'Groups', 'Group_id', 'Group_name');
@@ -78,6 +79,9 @@ end_page();
 
 /**
  * $Log: one_GroupMember.php,v $
+ * Revision 1.2  2005/03/05 00:52:34  daturaarutad
+ * manually setting primary keys until mssql driver supports metacolumns fully
+ *
  * Revision 1.1  2005/01/13 17:16:15  vanmer
  * - Initial Commit for ACL Administration interface
  *

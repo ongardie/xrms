@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_Role.php,v 1.1 2005/01/13 17:16:16 vanmer Exp $
+ * $Id: one_Role.php,v 1.2 2005/03/05 00:52:34 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,6 +44,7 @@ global $symbol_precendence;
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'Role');
+  $model->SetPrimaryKeyName('Role_id');
   $model->SetDisplayNames(array('Role_name' => 'Role Name'));
 
   $view = new ADOdb_QuickForm_View($con, 'Role');
@@ -75,6 +76,9 @@ end_page();
 
 /**
  * $Log: one_Role.php,v $
+ * Revision 1.2  2005/03/05 00:52:34  daturaarutad
+ * manually setting primary keys until mssql driver supports metacolumns fully
+ *
  * Revision 1.1  2005/01/13 17:16:16  vanmer
  * - Initial Commit for ACL Administration interface
  *

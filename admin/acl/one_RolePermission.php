@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_RolePermission.php,v 1.2 2005/02/15 19:51:58 vanmer Exp $
+ * $Id: one_RolePermission.php,v 1.3 2005/03/05 00:52:34 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -56,6 +56,8 @@ global $symbol_precendence;
              
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'RolePermission');
+  $model->SetPrimaryKeyName('RolePermission_id');
+
   $model->SetDisplayNames(array('Group_name' => 'Group Name')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
 
   $model->SetForeignKeyField('CORelationship_id', 'Controlled Object Relationship', null, null, null, null, $relationships);
@@ -91,6 +93,9 @@ end_page();
 
 /**
  * $Log: one_RolePermission.php,v $
+ * Revision 1.3  2005/03/05 00:52:34  daturaarutad
+ * manually setting primary keys until mssql driver supports metacolumns fully
+ *
  * Revision 1.2  2005/02/15 19:51:58  vanmer
  * - updated to reflect new fieldnames
  *
