@@ -1,0 +1,19 @@
+<h2>This Plugin Requires <a href="http://sourceforge.net/projects/autostatus/">Autostatus</a>.</h2>
+Autostatus does <em>not</em> require any patches to work with XRMS.<br>
+Simple make these settings to your autostatus/config file:<br>
+
+<pre>
+statusfile /PATH/TO/autostatus/local.status
+hostfile /PATH/TO/autostatus/hosts
+baseurl https://SERVER.DOMAIN.COM/xrms/plugins/autostatus
+iconurl https://SERVER.DOMAIN.COM/xrms/plugins/autostatus/icons
+outpage /PATH/TO/xrms/plugins/autostatus/index.html
+email YOUR@EMAIL.COM
+emerg YOUR@EMAIL.COM
+content_subject on
+</pre>
+
+<ul>
+<li>You may need to change "https" to "http"</li>
+<li>Be sure to copy the icons directory to xrms/plugins/autostatus/icons</li>
+</ul>
