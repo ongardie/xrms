@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.11 2005/01/12 12:43:32 braverock Exp $
+ * $Id: install.php,v 1.12 2005/01/13 17:32:43 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -241,6 +241,10 @@ create_db_tables($con);
 // create the database data
 create_db_data($con);
 
+// install ACL data
+install_upgrade_acl($con);
+
+
 //close the connection
 $con->close();
 
@@ -269,6 +273,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.12  2005/01/13 17:32:43  vanmer
+ **** empty log message ***
+ *
  *Revision 1.11  2005/01/12 12:43:32  braverock
  *- replace erroneous assignment operator in xrms_db_dbtype check
  *
