@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: data_clean.php,v 1.3 2004/04/12 14:35:19 maulani Exp $
+ * $Id: data_clean.php,v 1.4 2004/04/12 16:21:58 maulani Exp $
  */
 
 // where do we include from
@@ -21,12 +21,13 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 // vars.php sets all of the installation-specific variables
 require_once($include_directory . 'vars.php');
 
-// include the installation utility routines
-require_once('install-utils.inc');
+$session_user_id = session_check();
 
 // make a database connection
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+$msg = '';
 
 // Make sure that there is a last name for every contact
 $sql = "update contacts set last_name='[last name]' where last_name=''";
@@ -42,6 +43,24 @@ $sql .= "FROM companies ";
 $sql .= "LEFT JOIN contacts ON companies.company_id = contacts.company_id ";
 $sql .= "WHERE contacts.company_id IS NULL";
 $rst = $con->execute($sql);
+if ($rst) {
+    $msg .= 'Need to create contacts for x companies<BR><BR>';
+    while (!$rst->EOF) {
+        $company_id = $rst->fields['company_id'];
+		$sql = "insert into contacts set
+				company_id = $company_id,
+				last_name = 'Contact',
+				first_names = 'Default',
+				entered_by = $session_user_id,
+				entered_at = " . $con->dbtimestamp(mktime()) . ",
+				last_modified_at = " . $con->dbtimestamp(mktime()) . ",
+				last_modified_by = $session_user_id"
+				;
+        $con->execute($sql);
+
+        $rst->movenext();
+    }
+}
 
 //close the database connection, because we don't need it anymore
 $con->close();
@@ -63,6 +82,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.4  2004/04/12 16:21:58  maulani
+ * - Add check to insure that all companies have at least one contact
+ *
  * Revision 1.3  2004/04/12 14:35:19  maulani
  * - move structure change to update.php
  *
