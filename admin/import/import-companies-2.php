@@ -17,7 +17,7 @@
  * @author Brian Peterson
  *
  *
- * $Id: import-companies-2.php,v 1.6 2004/04/19 14:21:53 braverock Exp $
+ * $Id: import-companies-2.php,v 1.7 2004/07/08 22:15:15 introspectshun Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -25,6 +25,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -297,6 +298,9 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.7  2004/07/08 22:15:15  introspectshun
+ * - Include adodb-params.php
+ *
  * Revision 1.6  2004/04/19 14:21:53  braverock
  * - add additional look-ups and tests on import
  * - improve error reporting
