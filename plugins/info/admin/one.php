@@ -2,7 +2,7 @@
 /**
  * Edit info item types
  *
- * $Id: one.php,v 1.3 2005/02/11 00:54:55 braverock Exp $
+ * $Id: one.php,v 1.4 2005/04/01 20:15:03 ycreddy Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -32,9 +32,8 @@ if ($rst) {
 }
 
        $sql2 = "select * from info_display_map
-                 where info_type_id = " . $rst->fields['info_type_id']
-             . " limit 1";
-        $rst2 = $con->execute($sql2);
+                 where info_type_id = " . $rst->fields['info_type_id'];
+        $rst2 = $con->SelectLimit($sql2, 1);
         if ($rst2) {
             while (!$rst2->EOF) {
                 $display_on .= $rst2->fields['display_on'];
@@ -111,6 +110,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.4  2005/04/01 20:15:03  ycreddy
+ * Replaced LIMIT with the portable SelectLimit
+ *
  * Revision 1.3  2005/02/11 00:54:55  braverock
  * - add phpdoc where neccessary
  * - fix code formatting and comments
