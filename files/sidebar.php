@@ -2,12 +2,12 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.10 2004/08/05 15:21:56 braverock Exp $
+ * $Id: sidebar.php,v 1.11 2004/10/22 21:09:45 introspectshun Exp $
  */
 
 if ( !defined('IN_XRMS') )
 {
-  die('Hacking attempt');
+  die(_('Hacking attempt'));
   exit;
 }
 
@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
 $file_rows = "<div id='file_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
-                <td class=widget_header colspan=4>Files</td>
+                <td class=widget_header colspan=4>"._("Files")."</td>
             </tr>
             <tr>
                 <td class=widget_label>"._("Name")."</td>
@@ -32,7 +32,7 @@ if (strlen($on_what_table)>0){
     $file_sql = "select * from files, users where
             files.entered_by = users.user_id
             and on_what_table = '$on_what_table'
-            and on_what_id = $on_what_id
+            and on_what_id = '$on_what_id'
             and file_record_status = 'a'
             order by entered_at";
     $rst = $con->execute($file_sql);
@@ -102,6 +102,9 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.11  2004/10/22 21:09:45  introspectshun
+ * - Localized strings, various fixes
+ *
  * Revision 1.10  2004/08/05 15:21:56  braverock
  * - fixed bug where contact_id was overwritten before being needed by including file
  *
