@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.12 2004/06/04 13:23:45 braverock Exp $
+ * $Id: new-2.php,v 1.13 2004/06/11 21:18:39 introspectshun Exp $
  */
 
 //where do we include from
@@ -22,6 +22,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 //check to make sure we are logged on
 $session_user_id = session_check();
@@ -45,26 +46,12 @@ getGlobalVar($user_id    , 'user_id');
 getGlobalVar($email , 'email');
 getGlobalVar($followup , 'followup');
 
-//set defaults if we didn't get values
-$user_id = (strlen($user_id) > 0) ? $user_id : $session_user_id;
-$activity_status = (strlen($activity_status) > 0) ? $activity_status : "o";
-$activity_title = (strlen($activity_title) > 0) ? $activity_title : "[none]";
-$activity_description = (strlen($activity_description) > 0) ? $activity_description : "[none]";
-$on_what_table = (strlen($on_what_table) > 0) ? $on_what_table : '';
-$on_what_id = ($on_what_id > 0) ? $on_what_id : 0;
-$company_id = ($company_id > 0) ? $company_id : 0;
-$contact_id = ($contact_id > 0) ? $contact_id : 0;
 
 //mark completed if it is an email
 if ($email) { $activity_status = 'c'; };
 
-//make our database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-//$con->debug = 1;
-
 if (!$scheduled_at) {
-    $scheduled_at = "now";
+    $scheduled_at = date('Y-m-d H:i:s');
 }
 
 if ($followup) {
@@ -79,25 +66,32 @@ if (!$ends_at) {
     $ends_at = $scheduled_at;
 }
 
-// define our query
-$sql = "insert into activities
-        set
-        activity_type_id  = $activity_type_id,
-        user_id = $user_id,
-        company_id = $company_id,
-        contact_id = $contact_id,
-        on_what_id = $on_what_id,
-        entered_by = $session_user_id,
-        on_what_table = ". $con->qstr($on_what_table, get_magic_quotes_gpc()) . ',
-        activity_title = '. $con->qstr($activity_title, get_magic_quotes_gpc()) . ',
-        activity_description = '. $con->qstr($activity_note, get_magic_quotes_gpc()) . ',
-        entered_at = '. $con->DBTimeStamp(mktime()) .',
-        scheduled_at = ' . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($scheduled_at))) . ',
-        ends_at = ' . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($ends_at))) . ',
-        activity_status = ' . $con->qstr($activity_status, get_magic_quotes_gpc());
+//make our database connection
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+//$con->debug = 1;
 
-//insert it already
-$con->execute($sql);
+$sql = "SELECT * FROM activities WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+//initialize array to hold data to insert
+//set defaults if we didn't get values
+$rec = array();
+$rec['user_id'] = (strlen($user_id) > 0) ? $user_id : $session_user_id;
+$rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
+$rec['activity_status'] = (strlen($activity_status) > 0) ? $activity_status : "o";
+$rec['activity_title'] = (strlen($activity_title) > 0) ? $activity_title : "[none]";
+$rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "[none]";
+$rec['on_what_table'] = (strlen($on_what_table) > 0) ? $on_what_table : '';
+$rec['on_what_id'] = ($on_what_id > 0) ? $on_what_id : 0;
+$rec['company_id'] = ($company_id > 0) ? $company_id : 0;
+$rec['contact_id'] = ($contact_id > 0) ? $contact_id : 0;
+$rec['entered_at'] = $con->DBTimeStamp(mktime());
+$rec['scheduled_at'] = $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($scheduled_at)));
+$rec['ends_at'] = $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($ends_at)));
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $activity_id = $con->insert_id();
 add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
@@ -119,6 +113,9 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.13  2004/06/11 21:18:39  introspectshun
+ *- Now use ADODB GetInsertSQL and GetUpdateSQL functions.
+ *
  *Revision 1.12  2004/06/04 13:23:45  braverock
  *- fix date bug that would create invalid datestamp
  *- mark new emails from mailto link as completed

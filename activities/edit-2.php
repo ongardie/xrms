@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.14 2004/06/11 16:18:15 braverock Exp $
+ * $Id: edit-2.php,v 1.15 2004/06/11 21:18:39 introspectshun Exp $
  */
 
 //include required files
@@ -16,6 +16,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -44,7 +45,7 @@ if ($followup) { $activity_status = 'c'; }
 
 //set scheduled_at to today if it is empty
 if (!$scheduled_at) {
-    $scheduled_at = date ('Y-m-d');
+    $scheduled_at = date('Y-m-d');
 }
 
 // set ends_at to scheduled_at if it is empty
@@ -56,28 +57,35 @@ if (!$ends_at) {
 $activity_status = ($activity_status == 'on') ? 'c' : 'o';
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
-// if it's closed but wasn't before, update the closed_at timestamp
-$completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? date('Y-m-d h:i:s') : 'NULL';
+
+
 
 $contact_id = ($contact_id > 0) ? $contact_id : 'NULL';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+// if it's closed but wasn't before, update the closed_at timestamp
+$completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? $con->DBTimeStamp(date('Y-m-d H:i:s')) : 'NULL';
+
+$sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
+$rst = $con->execute($sql);
 //$con->debug = 1;
 
-$sql = "update activities set
-        activity_type_id = $activity_type_id,
-        contact_id = $contact_id,
-        activity_title = " . $con->qstr($activity_title, get_magic_quotes_gpc()) . ",
-        activity_description = " . $con->qstr($activity_description, get_magic_quotes_gpc()) . ",
-        user_id = " . $con->qstr($user_id, get_magic_quotes_gpc()) . ",
-        scheduled_at = " . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($scheduled_at))) . ",
-        ends_at = " . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($ends_at))) . ",
-        completed_at = " . $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($completed_at))) . ",
-        activity_status = " . $con->qstr($activity_status, get_magic_quotes_gpc()) . "
-        where activity_id = $activity_id";
+//initialize array for updating db
+$rec = array();
+$rec['activity_type_id'] = $activity_type_id;
+$rec['contact_id'] = $contact_id;
+$rec['activity_title'] = $activity_title;
+$rec['activity_description'] = $activity_description;
+$rec['user_id'] = $user_id;
+$rec['scheduled_at'] = $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($scheduled_at)));
+$rec['ends_at'] = $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($ends_at)));
+$rec['completed_at'] = $completed_at;
+$rec['activity_status'] = $activity_status;
 
-$con->execute($sql);
+$upd = $con->GetUpdateSQL($rst, $rec, $forceUpdate=false, $magicq=get_magic_quotes_gpc());
+$rst = $con->execute($upd);
 
 if($on_what_table == 'opportunities' and strlen ($probability)) {
     $sql = "update opportunities set
@@ -92,30 +100,31 @@ add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1)
 
 
 //get sort_order field
-$sql = "select sort_order from " . strtolower($table_name) . "_statuses where " . strtolower($table_name) ."_status_id=$table_status_id limit 1";
+$sql = "select sort_order from " . strtolower($table_name) . "_statuses where " . strtolower($table_name) ."_status_id=$table_status_id";
+$rst = $con->SelectLimit($sql, 1, 0);
 $rst = $con->execute($sql);
 if ($rst) {
     $sort_order = $rst->fields['sort_order'];
-    $rst -> close();
+    $rst->close();
 }
 
 //get current username
-$sql = "select username from users where user_id = $user_id limit 1";
-$rst = $con->execute($sql);
+$sql = "select username from users where user_id = $user_id";
+$rst = $con->SelectLimit($sql, 1, 0);
 if ($rst) { $username = $rst->fields['username']; }
-$rst -> close();
+$rst->close();
 
 //get current company name and phone
-$sql = "select company_name, phone from companies where company_id = $company_id limit 1";
-$rst = $con->execute($sql);
+$sql = "select company_name, phone from companies where company_id = $company_id";
+$rst = $con->SelectLimit($sql, 1, 0);
 if ($rst) {
     $company_name = $rst->fields['company_name'];
     $company_phone = $rst->fields['phone'];
-    $rst -> close();
+    $rst->close();
 }
 
-$sql = "select activity_type_pretty_name from activity_types where activity_type_id = $activity_type_id limit 1";
-$rst = $con->execute($sql);
+$sql = "select activity_type_pretty_name from activity_types where activity_type_id = $activity_type_id";
+$rst = $con->SelectLimit($sql, 1, 0);
 if ($rst) {
     $activity_type = $rst->fields['activity_type_pretty_name'];
     $rst->close();
@@ -192,8 +201,8 @@ if ($table_name != "attached to") {
 
 
 //get data for generated email
-$sql = "select concat(first_names, ' ', last_name) as contact_name, work_phone from contacts where contact_id = $contact_id limit 1";
-$rst = $con->execute($sql);
+$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, work_phone FROM contacts WHERE contact_id = $contact_id";
+$rst = $con->SelectLimit($sql, 1, 0);
 if ($rst) {
     $contact_name = $rst->fields['contact_name'];
     $contact_phone = $rst->fields['work_phone'];
@@ -244,6 +253,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.15  2004/06/11 21:18:39  introspectshun
+ * - Now use ADODB GetInsertSQL and GetUpdateSQL functions.
+ *
  * Revision 1.14  2004/06/11 16:18:15  braverock
  * - added more checking around activity_edit_id
  *
