@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.60 2005/02/10 14:29:29 maulani Exp $
+ * $Id: update.php,v 1.61 2005/02/10 20:07:28 braverock Exp $
  */
 
 // where do we include from
@@ -4130,6 +4130,10 @@ $con->execute($sql);
 //add address_id to the company_division table (for use in assigning addresses to a division)
 $sql="ALTER TABLE `company_division` ADD `address_id` INT UNSIGNED AFTER `company_id`";
 $con->execute($sql);
+
+//add home_address_id to the contacts table (for use in assigning addresses to a division)
+$sql="ALTER TABLE `contacts` ADD `home_address_id` INT UNSIGNED AFTER `address_id`";
+$con->execute($sql);
     
     $table_list = list_db_tables($con);
     if (!in_array('user_preference_types',$table_list)) {
@@ -4213,6 +4217,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.61  2005/02/10 20:07:28  braverock
+ * - add home_address_id to contacts table
+ *
  * Revision 1.60  2005/02/10 14:29:29  maulani
  * - Add last modified timestamp and user fields to activities
  *
