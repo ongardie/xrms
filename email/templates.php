@@ -4,10 +4,10 @@
  *
  * Email templates
  *
- * $Id: templates.php,v 1.3 2004/06/14 16:54:37 introspectshun Exp $
+ * $Id: templates.php,v 1.4 2004/08/04 21:46:42 introspectshun Exp $
  */
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -47,10 +47,10 @@ if ($rst) {
 }
 
 if (strlen($tablerows) == 0) {
-    $tablerows = '<tr><td class=widget_content colspan=1>No e-mail templates</td></tr>';
+    $tablerows = '<tr><td class=widget_content colspan=1>' _("No e-mail templates") . '</td></tr>';
 }
 
-$page_title = 'E-Mail Templates';
+$page_title = _("E-Mail Templates");
 start_page($page_title, true, $msg);
 
 ?>
@@ -60,10 +60,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=20>E-Mail Templates</td>
+                <td class=widget_header colspan=20><?php echo  _("E-Mail Templates"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
             </tr>
             <?php  echo $tablerows ?>
         </table>
@@ -84,6 +84,10 @@ end_page();
 
 /**
  * $Log: templates.php,v $
+ * Revision 1.4  2004/08/04 21:46:42  introspectshun
+ * - Localized strings for i18n/l10n support
+ * - All paths now relative to include-locations-location.inc
+ *
  * Revision 1.3  2004/06/14 16:54:37  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

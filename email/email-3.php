@@ -3,10 +3,10 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.7 2004/07/04 07:51:33 metamedia Exp $
+ * $Id: email-3.php,v 1.8 2004/08/04 21:46:42 introspectshun Exp $
  */
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -33,7 +33,7 @@ $array_of_contacts = unserialize($_SESSION['array_of_contacts']);
 if (is_array($array_of_contacts))
 	$imploded_contacts = implode(',', $array_of_contacts);
 else
-	echo "WARNING: No array of contacts!<br>";
+	echo _("WARNING: No array of contacts!") . "<br>";
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
@@ -64,7 +64,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Confirm Recipients";
+$page_title = _("Confirm Recipients");
 start_page($page_title, true, $msg);
 
 ?>
@@ -75,18 +75,18 @@ start_page($page_title, true, $msg);
         <form action=email-4.php method=post>
 		<table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=5>Confirm Recipients</td>
+                <td class=widget_header colspan=5><?php echo _("Confirm Recipients"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label>&nbsp;</td>
-                <td class=widget_label>Company</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Contact</td>
-                <td class=widget_label>E-Mail</td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
+                <td class=widget_label><?php echo _("Contact"); ?></td>
+                <td class=widget_label><?php echo _("E-Mail"); ?></td>
             </tr>
             <?php  echo $contact_rows ?>
             <tr>
-                <td class=widget_content_form_element colspan=5><input type=submit class=button value="Continue"></td>
+                <td class=widget_content_form_element colspan=5><input type=submit class=button value="<?php echo _("Continue"); ?>"></td>
             </tr>
 		</table>
         </form>
@@ -108,6 +108,10 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.8  2004/08/04 21:46:42  introspectshun
+ * - Localized strings for i18n/l10n support
+ * - All paths now relative to include-locations-location.inc
+ *
  * Revision 1.7  2004/07/04 07:51:33  metamedia
  * Minor changes and bug fixes to ensure that a mail merge from companies/one.php works.
  *

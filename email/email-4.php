@@ -3,10 +3,10 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.6 2004/07/04 07:51:33 metamedia Exp $
+* $Id: email-4.php,v 1.7 2004/08/04 21:46:42 introspectshun Exp $
 */
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -58,7 +58,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = 'Messages Sent';
+$page_title = _("'Messages Sent");
 start_page($page_title, true, $msg);
 
 ?>
@@ -68,20 +68,18 @@ start_page($page_title, true, $msg);
 
 		<table class=widget cellspacing=1>
 	<tr>
-		<td class=widget_header>Messages Sent</td>
+                 <td class=widget_header><?php echo _("'Messages Sent"); ?></td>
 	</tr>
 	<tr>
-		<td class=widget_content>The bulk e-mail sub-system has sent:<br>
+                <td class=widget_content><?php echo _("The bulk e-mail sub-system has sent"); ?>:<br>
 		<?php echo $feedback;?>
 		</td>
 	</tr>
-
-
 		</table>
 
 </div>
 
-	<!-- right column //-->
+<!-- right column //-->
 <div id="Sidebar">
 
 		&nbsp;
@@ -96,6 +94,10 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.7  2004/08/04 21:46:42  introspectshun
+* - Localized strings for i18n/l10n support
+* - All paths now relative to include-locations-location.inc
+*
 * Revision 1.6  2004/07/04 07:51:33  metamedia
 * Minor changes and bug fixes to ensure that a mail merge from companies/one.php works.
 *

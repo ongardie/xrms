@@ -1,6 +1,12 @@
 <?php
+/**
+ *
+ * Email 2.
+ *
+ * $Id: email-2.php,v 1.7 2004/08/04 21:46:42 introspectshun Exp $
+ */
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -34,7 +40,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = 'Edit Message';
+$page_title = _("Edit Message");
 start_page($page_title, true, $msg);
 
 ?>
@@ -61,31 +67,31 @@ function saveAsNewTemplate() {
         <form action=email-3.php onsubmit="javascript: return validate();" method=post>
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=2>Edit Message - <?php  echo $email_template_title ?></td>
+				<td class=widget_header colspan=2><?php echo _("Edit Message"); ?> - <?php  echo $email_template_title ?></td>
 			</tr>
 			<tr>
-                		<td class=widget_label_right width="1%" nowrap>From:</td>
+                		<td class=widget_label_right width="1%" nowrap><?php echo _("From"); ?>:</td>
 				<td class=widget_content_form_element><input type=text name="sender_name" size=50 value=""><?php echo $required_indicator; ?></td>
 			</tr>
 			<tr>
-                		<td class=widget_label_right width="1%" nowrap>Reply to:</td>
+                		<td class=widget_label_right width="1%" nowrap><?php echo _("Reply to"); ?>:</td>
 				<td class=widget_content_form_element><input type=text name="sender_address" size=50 value=""><?php echo $required_indicator; ?></td>
 			</tr>
 			<tr>
-                		<td class=widget_label_right width="1%" nowrap>Bcc:</td>
+                		<td class=widget_label_right width="1%" nowrap><?php echo _("Bcc"); ?>:</td>
 				<td class=widget_content_form_element><input type=text name="bcc_address" size=50 value=""></td>
 			</tr>
 			<tr>
                 		
 			<tr>
-                <td class=widget_label_right width="1%" nowrap>Subject:</td>
+                <td class=widget_label_right width="1%" nowrap><?php echo _("Subject"); ?>:</td>
 				<td class=widget_content_form_element><input type=text name=email_template_title size=50 value="<?php  echo $email_template_title ?>"></td>
 			</tr>
 			<tr>
 				<td class=widget_content_form_element colspan=2><textarea class=monospace rows=20 cols=80 name=email_template_body><?php  echo $email_template_body ?></textarea></td>
 			</tr>
 			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Continue"> <input class=button onclick="javascript: updateTemplate();" type=button value="Update Template"> <input class=button type=button onclick="javascript: saveAsNewTemplate();" value="Save as New Template"></td>
+				<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"> <input class=button onclick="javascript: updateTemplate();" type=button value="<?php echo _("Update Template"); ?>"> <input class=button type=button onclick="javascript: saveAsNewTemplate();" value="<?php echo _("Save as New Template"); ?>"></td>
 			</tr>
 		</table>
         </form>
@@ -126,12 +132,12 @@ function validate() {
 
     if (document.forms[0].email_from.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter a name to let the recipient know who the email is from.';
+        msgToDisplay += '\n<?php echo _("You must enter a name to let the recipient know who the email is from."); ?>';
     }
 
     if (document.forms[0].email_reply_to.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter an reply address so the recipient can reply to the message.';
+        msgToDisplay += '\n<?php echo _("You must enter an reply address so the recipient can reply to the message."); ?>';
     }
     
     if (numberOfErrors > 0) {
@@ -147,4 +153,15 @@ initialize();
 
 </script>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: email-2.php,v $
+ * Revision 1.7  2004/08/04 21:46:42  introspectshun
+ * - Localized strings for i18n/l10n support
+ * - All paths now relative to include-locations-location.inc
+ *
+ */
+?>

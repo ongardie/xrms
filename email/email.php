@@ -3,10 +3,10 @@
  *
  * Email.
  *
- * $Id: email.php,v 1.6 2004/07/03 14:48:52 metamedia Exp $
+ * $Id: email.php,v 1.7 2004/08/04 21:46:42 introspectshun Exp $
  */
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -87,12 +87,12 @@ if ($rst) {
 }
 
 if (strlen($tablerows) == 0) {
-	$tablerows = '<tr><td class=widget_content colspan=1>No e-mail templates</td></tr>';
+	$tablerows = '<tr><td class=widget_content colspan=1>' . _("No e-mail templates") . '</td></tr>';
 }
 
 $con->close();
 
-$page_title = 'Bulk E-Mail';
+$page_title = _("Bulk E-Mail");
 start_page($page_title, true, $msg);
 
 ?>
@@ -103,15 +103,15 @@ start_page($page_title, true, $msg);
         <form action=email-2.php method=post>
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=20>E-Mail Templates</td>
+				<td class=widget_header colspan=20><?php echo _("E-Mail Templates"); ?></td>
 			</tr>
 			<tr>
 				<td class=widget_label width=1%>&nbsp;</td>
-				<td class=widget_label>Template</td>
+				<td class=widget_label><?php echo _("Template"); ?></td>
 			</tr>
             <?php  echo $tablerows ?>
 			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Continue"></td>
+				<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"></td>
 			</tr>
 		</table>
         </form>
@@ -133,6 +133,10 @@ end_page();
 
 /**
  * $Log: email.php,v $
+ * Revision 1.7  2004/08/04 21:46:42  introspectshun
+ * - Localized strings for i18n/l10n support
+ * - All paths now relative to include-locations-location.inc
+ *
  * Revision 1.6  2004/07/03 14:48:52  metamedia
  * Minor bug fixes so that the "mail merge" from a company work.
  *
