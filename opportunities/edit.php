@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.14 2004/07/28 19:39:57 cpsource Exp $
+ * $Id: edit.php,v 1.15 2004/07/29 09:39:48 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -147,6 +147,9 @@ $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_
 $rst->close();
 
 $con->close();
+
+// include confgoto.js
+confGoTo_includes();
 
 $page_title = _("Opportunity") . " : " . $opportunity_title;
 start_page($page_title, true, $msg);
@@ -297,6 +300,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.15  2004/07/29 09:39:48  cpsource
+ * - Seperate .js from .php for confGoTo for PHP V4 problems.
+ *
  * Revision 1.14  2004/07/28 19:39:57  cpsource
  * - Add confGoTo for Delete confirm question
  *   Fix some undefined variable usages
