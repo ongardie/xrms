@@ -31,7 +31,18 @@ if ($rst) {
     while (!$rst->EOF) {
         $addresses .= '<tr>';
         $addresses .= "<td class=widget_label_right_91px><a href=edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a></td>';
-        $addresses .= '<td class=widget_content>' . nl2br($rst->fields['address_body']) . '</td>';
+        if ($rst->fields['use_pretty_address'] == 't') {
+            $addresses .= '<td class=widget_content>' . nl2br($rst->fields['address_body']) . '</td>';
+        } else {
+            $addresses .= '<td class=widget_content>'
+                         . $rst->fields['line1'] . '<br>'
+                         . $rst->fields['line2'] . '<br>'
+                         . $rst->fields['city'] . ' , '
+                         . $rst->fields['province'] . ' , '
+                         . $rst->fields['postal_code']
+                         . '</td>';
+        }
+
         $addresses .= "<td class=widget_content><input type=radio name=default_primary_address value=" . $rst->fields['address_id'];
 
         if ($rst->fields['default_primary_address'] == $rst->fields['address_id']) {
