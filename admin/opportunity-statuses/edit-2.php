@@ -1,8 +1,8 @@
 <?php
 /**
- * update an opportunity status after editing it.
+ * save an updated an opportunity status  to database after editing it.
  *
- * $Id: edit-2.php,v 1.3 2004/01/25 18:39:35 braverock Exp $
+ * $Id: edit-2.php,v 1.4 2004/03/15 16:49:55 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -19,6 +19,7 @@ $opportunity_status_pretty_name = $_POST['opportunity_status_pretty_name'];
 $opportunity_status_pretty_plural = $_POST['opportunity_status_pretty_plural'];
 $opportunity_status_display_html = $_POST['opportunity_status_display_html'];
 $opportunity_status_long_desc = $_POST['opportunity_status_long_desc'];
+$status_open_indicator = $_POST['status_open_indicator'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -30,7 +31,8 @@ $sql = "update opportunity_statuses set
         opportunity_status_pretty_name = " . $con->qstr($opportunity_status_pretty_name, get_magic_quotes_gpc()) . ",
         opportunity_status_pretty_plural = " . $con->qstr($opportunity_status_pretty_plural, get_magic_quotes_gpc()) . ",
         opportunity_status_display_html = " . $con->qstr($opportunity_status_display_html, get_magic_quotes_gpc()) . ",
-        opportunity_status_long_desc = " . $con->qstr($opportunity_status_long_desc, get_magic_quotes_gpc()) . "
+        opportunity_status_long_desc = " . $con->qstr($opportunity_status_long_desc, get_magic_quotes_gpc()) . ",
+        status_open_indicator = " . $con->qstr($status_open_indicator , get_magic_quotes_gpc()) . "
         WHERE opportunity_status_id = $opportunity_status_id";
 
 $con->execute($sql);
@@ -42,8 +44,11 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.4  2004/03/15 16:49:55  braverock
+ * - add sort_order and open status indicator to opportunity statuses
+ *
  * Revision 1.3  2004/01/25 18:39:35  braverock
- * - fixed insert bugs so long_desc will be disoplayed and inserted properly
+ * - fixed insert bugs so long_desc will be displayed and inserted properly
  * - added phpdoc
  *
  */

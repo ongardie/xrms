@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.3 2004/01/25 18:39:41 braverock Exp $
+ * $Id: one.php,v 1.4 2004/03/15 16:49:56 braverock Exp $
  */
 
 //uinclude required common files
@@ -24,11 +24,15 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "select * from opportunity_statuses where opportunity_status_id = $opportunity_status_id";
 
+//$con->debug=1;
+
 $rst = $con->execute($sql);
 
 if ($rst) {
 
     $opportunity_status_id = $rst->fields['opportunity_status_id'];
+    $sort_order = $rst->fields['sort_order'];
+    $status_open_indicator = $rst->fields['status_open_indicator'];
     $opportunity_status_short_name = $rst->fields['opportunity_status_short_name'];
     $opportunity_status_pretty_name = $rst->fields['opportunity_status_pretty_name'];
     $opportunity_status_pretty_plural = $rst->fields['opportunity_status_pretty_plural'];
@@ -39,6 +43,7 @@ if ($rst) {
 }
 
 $con->close();
+
 
 $page_title = "One Opportunity Status : $opportunity_status_pretty_name";
 start_page($page_title);
@@ -76,8 +81,20 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text size=80 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
             </tr>
             <tr>
+                <td class=widget_label_right>Open Status</td>
+                <td class=widget_content_form_element>
+                <select name="status_open_indicator">
+                    <option value="o" <?php if (($status_open_indicator == "o") or ($status_open_indicator == '')) {print " selected ";} ?>>Open
+                    <option value="w" <?php if ($status_open_indicator == "w") {print " selected ";} ?>>Closed/Won
+                    <option value="l" <?php if ($status_open_indicator == "l") {print " selected ";} ?>>Closed/Lost
+                </select>
+                </td>
+            </tr>
+
+            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
             </tr>
+
         </table>
         </form>
 
@@ -119,6 +136,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.4  2004/03/15 16:49:56  braverock
+ * - add sort_order and open status indicator to opportunity statuses
+ *
  * Revision 1.3  2004/01/25 18:39:41  braverock
  * - fixed insert bugs so long_desc will be disoplayed and inserted properly
  * - added phpdoc

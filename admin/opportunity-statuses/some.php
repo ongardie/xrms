@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.3 2004/01/25 18:39:41 braverock Exp $
+ * $Id: some.php,v 1.4 2004/03/15 16:49:56 braverock Exp $
  */
 
 //include required XRMS common files
@@ -22,7 +22,7 @@ $session_user_id = session_check();
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "select * from opportunity_statuses where opportunity_status_record_status = 'a' order by opportunity_status_id";
+$sql = "select * from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order, opportunity_status_id";
 $rst = $con->execute($sql);
 
 if ($rst) {
@@ -51,6 +51,7 @@ if ($rst) {
 }
 
 $con->close();
+
 
 $page_title = "Manage Opportunity Statuses";
 start_page($page_title);
@@ -109,6 +110,16 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text size=60 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
             </tr>
             <tr>
+                <td class=widget_label_right>Open Status</td>
+                <td class=widget_content_form_element>
+                <select name="status_open_indicator">
+                    <option value="o"  selected >Open
+                    <option value="w"           >Closed/Won
+                    <option value="l"           >Closed/Lost
+                </select>
+                </td>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
             </tr>
         </table>
@@ -124,6 +135,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.4  2004/03/15 16:49:56  braverock
+ * - add sort_order and open status indicator to opportunity statuses
+ *
  * Revision 1.3  2004/01/25 18:39:41  braverock
  * - fixed insert bugs so long_desc will be disoplayed and inserted properly
  * - added phpdoc
