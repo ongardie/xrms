@@ -2,7 +2,7 @@
 /**
  * Add Former Name
  *
- * $Id: add-former-name.php,v 1.2 2004/03/26 20:55:59 maulani Exp $
+ * $Id: add-former-name.php,v 1.3 2004/05/06 13:33:39 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -28,10 +28,13 @@ add_audit_item($con, $session_user_id, 'add former name', 'companies', $company_
 
 $con->close();
 
-header("Location: relationships.php?company_id=$company_id");
+header("Location: former-names.php?company_id=$company_id");
 
 /**
  * $Log: add-former-name.php,v $
+ * Revision 1.3  2004/05/06 13:33:39  gpowers
+ * changed return URL to former-names.php
+ *
  * Revision 1.2  2004/03/26 20:55:59  maulani
  * - Add audit trail to company-related items
  * - Add phpdoc
