@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.19 2004/07/23 03:59:00 braverock Exp $
+ * $Id: some.php,v 1.20 2004/07/25 14:29:34 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -210,7 +210,7 @@ start_page($page_title, true, $msg);
             <td class=widget_header colspan=3><?php echo _("Search Criteria"); ?></td>
         </tr>
         <tr>
-            <td width="36%" class=widget_label><?php echo _("Campaign Name<"); ?>/td>
+            <td width="36%" class=widget_label><?php echo _("Campaign Name"); ?></td>
             <td width="35%" class=widget_label><?php echo _("Type"); ?></td>
             <td width="29%" class=widget_label><?php echo _("Owner"); ?></td>
         </tr>
@@ -326,6 +326,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.20  2004/07/25 14:29:34  johnfawcett
+ * - corrected gettext call
+ *
  * Revision 1.19  2004/07/23 03:59:00  braverock
  * - resolve JS error when button is named 'submit'
  *
