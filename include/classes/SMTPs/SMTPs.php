@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.1 2005/03/17 20:40:57 jswalter Exp $
+// $Id: SMTPs.php,v 1.2 2005/03/21 05:10:45 jswalter Exp $
 
   /**
    * Class SMTPs
@@ -38,7 +38,7 @@
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    * @contributors name <email address> description
    *
-   * @version $Revision: 1.1 $
+   * @version $Revision: 1.2 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -302,7 +302,7 @@ class SMTPs
     * @since 1.0
     *
     */
-    var $_aryPriority = array ('Bulk', 'Low', 'Medium', 'Normal', 'Not Defined', 'High' );
+    var $_aryPriority = array ('Bulk', 'Highest', 'High', 'Normal', 'Low', 'Lowest' );
 
 
    /**
@@ -1446,9 +1446,12 @@ class SMTPs
     *
     * Message Content Priority
     * Message Priority values:
-    *   - [0] normal - default
-    *   - [1] urgent
-    *   - [2] non-urgent
+    *  - [0] 'Bulk'
+    *  - [1] 'Highest'
+    *  - [2] 'High'
+    *  - [3] 'Normal' - default
+    *  - [4] 'Low'
+    *  - [5] 'Lowest'
     *
     * @name setPriority()
     *
@@ -1472,9 +1475,12 @@ class SMTPs
     *
     * Message Content Priority
     * Message Priority values:
-    *   - [0] normal - default
-    *   - [1] urgent
-    *   - [2] non-urgent
+    *  - [0] 'Bulk'
+    *  - [1] 'Highest'
+    *  - [2] 'High'
+    *  - [3] 'Normal' - default
+    *  - [4] 'Low'
+    *  - [5] 'Lowest'
     *
     * @name getPriority()
     *
@@ -1628,6 +1634,9 @@ function server_parse($socket, $response)
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.2  2005/03/21 05:10:45  jswalter
+  *  - modified '$_aryPriority[]' to proper values
+  *
   * Revision 1.1  2005/03/17 20:40:57  jswalter
   *  - initial commit
   *  - cloned from PHP-YACS site
