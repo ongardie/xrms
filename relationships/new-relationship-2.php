@@ -107,11 +107,11 @@ else
         $name_order = implode(', ', array_reverse(table_name($what_table)));
         $name_concat = $con->Concat(implode(', \' \', ', table_name($what_table)));
 
-        $sql = "select " . $name_concat . " as name, " . $what_table_singular . "_id
+        $sql = "select " . $what_table_singular . "_name as name, " . $what_table_singular . "_id
                 from " . $what_table . "
                 where " . $what_table_singular . "_record_status='a'
-                group by " . $name_concat . ", " . $what_table_singular . "_id, " . $name_order . "
-                having " . $what_table_singular . "_name like " . $search_on . "
+                and ". $what_table_singular . "_name like " . $search_on . "
+                group by " . $what_table_singular . "_name , " . $what_table_singular . "_id, " . $name_order . "
                 order by " . $name_order;
         $rst = $con->execute($sql);
         if ($rst) {
@@ -175,6 +175,11 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.14  2004/09/29 15:20:55  braverock
+ * - removed other unecessary uses of concat
+ * - removed having clause in favor of simple 'and' in where clause
+ * - left 'group by' in case it is still needed by mssql
+ *
  * Revision 1.13  2004/09/29 14:55:17  braverock
  * - fix incorrect use of concat when it should have been $what_table_singular.'_name'
  *
