@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.7 2004/03/18 12:48:42 braverock Exp $
+ * $Id: some.php,v 1.8 2004/04/07 22:53:15 maulani Exp $
  */
 
 //include the standard files
@@ -230,9 +230,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
@@ -251,18 +250,18 @@ start_page($page_title, true, $msg);
                 <td class=widget_label>First Names</td>
                 <td class=widget_label>Title</td>
                 <td class=widget_label>Company</td>
-                <td class=widget_label>Company Code</td>
+                <td class=widget_label>Code</td>
                 <td class=widget_label>Description</td>
                 <td class=widget_label>Category</td>
                 <td class=widget_label>Owner</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name="last_name" size=12 value="<?php  echo $last_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="first_names" size=12 value="<?php  echo $first_names; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="title" size=15 value="<?php  echo $title; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_code" size=5 value="<?php  echo $company_code; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="description" size=15 value="<?php  echo $description; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="last_name" size=10 maxlength=100 value="<?php  echo $last_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="first_names" size=10 maxlength=100 value="<?php  echo $first_names; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="title" size=5 maxlength=100 value="<?php  echo $title; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_name" size=10 maxlength=100 value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_code" size=5 maxlength=10 value="<?php  echo $company_code; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="description" size=10 maxlength=100 value="<?php  echo $description; ?>"></td>
                 <td class=widget_content_form_element><?php  echo $contact_category_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
@@ -280,14 +279,10 @@ $con->close();
 
 ?>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
-        <!-- right column //-->
-        <td class=rcol width=34% valign=top>
+    </div>
 
+        <!-- right column //-->
+    <div id="Sidebar">
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width=100%>
             <tr>
@@ -301,11 +296,10 @@ $con->close();
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function initialize() {
@@ -344,6 +338,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/04/07 22:53:15  maulani
+ * - Update layout to use CSS2
+ * - Make HTML validate
+ *
  * Revision 1.7  2004/03/18 12:48:42  braverock
  * - patch for Category search provided by Fontaine Consulting (France)
  *
