@@ -2,7 +2,7 @@
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.5 2004/06/05 15:29:53 braverock Exp $
+ * $Id: sidebar.php,v 1.6 2004/06/12 06:26:27 introspectshun Exp $
  */
 
 $note_rows = "<div id='note_sidebar'>
@@ -25,13 +25,14 @@ if (strlen($on_what_table)>0){
             and on_what_id = $on_what_id
             and note_record_status = 'a'
             order by entered_at desc";
+    $rst = $con->execute($note_sql);
 } else {
     $note_sql = "select note_id, note_description, entered_by, entered_at, on_what_table, on_what_id, username from notes, users
             where notes.entered_by = '$session_user_id'
             and notes.entered_by = users.user_id
             and note_record_status = 'a'
-            order by entered_at
-            limit 5";
+            order by entered_at";
+    $rst = $con->SelectLimit($note_sql, 5, 0);
 }
 
 //uncomment the debug line to see what's going on with the query
@@ -54,14 +55,29 @@ if (strlen($rst->fields['username']) > 0) {
         }
         if (strlen($rst->fields['on_what_table']) > 0) {
             switch ($rst->fields['on_what_table']) {
-                case 'companies': $on_what_table = 'company'; break;
+                case 'companies':
+                    $on_what_table = 'company';
+                    break;
                 case 'contacts':
                     $on_what_table = 'contact';
-                    $on_what_name = " concat(last_name,', ',first_names) as on_what_name ";
+                    $on_what_name = " " . $con->Concat("last_name","', '","first_names") . " AS on_what_name ";
                     break;
-                case 'opporunities': $on_what_table = 'opportunity'; break;
-                case 'cases': $on_what_table = 'ccase'; break;
-                case 'campaigns': $on_what_table = 'ccampaign'; break;
+                case 'opportunities':
+                    $on_what_table = 'opportunity';
+                    $on_what_name = 'opportunity_title AS on_what_name ';
+                    break;
+                case 'cases':
+                    $on_what_table = 'case';
+                    $on_what_name = 'case_title AS on_what_name ';
+                    break;
+                case 'campaigns':
+                    $on_what_table = 'campaign';
+                    $on_what_name = 'campaign_title AS on_what_name ';
+                    break;
+                case 'users':
+                    $on_what_table = 'user';
+                    $on_what_name = 'username AS on_what_name ';
+                    break;
             }
             if (!$on_what_name) { $on_what_name = $on_what_table.'_name as on_what_name '; }
             $attached_sql = 'select '
@@ -69,9 +85,8 @@ if (strlen($rst->fields['username']) > 0) {
                            . $on_what_table.'_id '
                            . ' from '.$rst->fields['on_what_table']
                            . ' where '
-                           . $on_what_table.'_id = '. $rst->fields['on_what_id']
-                           . ' limit 1';
-            $attached_rst = $con->execute($attached_sql);
+                           . $on_what_table.'_id = '. $rst->fields['on_what_id'];
+            $attached_rst = $con->SelectLimit($attached_sql, 1, 0);
             if ($attached_rst) {
                 $attached_to_link = "<a href=\"$http_site_root/". $rst->fields['on_what_table']
                                         .'/one.php?'. $on_what_table.'_id='
@@ -131,6 +146,10 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.6  2004/06/12 06:26:27  introspectshun
+ * - Now use ADODB Concat & SelectLimit functions.
+ * - Updated 'on_what_table' switch with $on_what_name values for opportunites, cases, campaigns and users.
+ *
  * Revision 1.5  2004/06/05 15:29:53  braverock
  * - cleaned up table headers
  * - fixed sql error handling
