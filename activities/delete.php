@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * 'Delete' an activity
+ *
+ * $Id: delete.php,v 1.4 2005/01/29 13:12:38 braverock Exp $
+ */
+  
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -15,6 +20,7 @@ $on_what_id=$activity_id;
 $session_user_id = session_check('','Delete');
 
 $return_url = $_GET['return_url'];
+$save_and_next = $_GET['save_and_next'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -31,6 +37,17 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: {$http_site_root}{$return_url}");
+if($save_and_next) {
+    header("Location: browse-next.php?activity_id=$activity_id");
+} else {
+    header("Location: " . $http_site_root . $return_url);
+}
 
+/**
+ * $Log: delete.php,v $
+ * Revision 1.4  2005/01/29 13:12:38  braverock
+ * - add 'Save and Next' browse support to delete
+ *   resolves SF bug 1103958 reported by proto23
+ *
+ */
 ?>
