@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.10 2004/07/25 19:19:38 johnfawcett Exp $
+ * $Id: edit.php,v 1.11 2004/07/30 09:55:34 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,10 +12,11 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'confgoto.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
 
+$msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
 $campaign_id = $_GET['campaign_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -59,6 +60,9 @@ $con->close();
 
 $page_title = _("Edit Campaign") .': '. $campaign_title;
 start_page($page_title, true, $msg);
+
+// setup confGoTo
+confGoTo_includes();
 
 ?>
 
@@ -112,7 +116,13 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=campaign_description><?php  echo $campaign_description; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?campaign_id=<?php  echo $campaign_id; ?>';" value='<?php echo _("Delete"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Campaign?"); ?>');"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+<?php
+		$quest = _('Delete Campaign?');
+                $button = _('Delete');
+                $to_url = 'delete.php?campaign_id='.$campaign_id;
+                confGoTo( $quest, $button, $to_url );
+?>
             </tr>
         </table>
         </form>
@@ -183,6 +193,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.11  2004/07/30 09:55:34  cpsource
+ * - Add confGoTo sub-system
+ *   Make msg defined to '' if not passed in
+ *
  * Revision 1.10  2004/07/25 19:19:38  johnfawcett
  * - reinserted ? in gettext string - needed for some languages
  * - standardized delete button
