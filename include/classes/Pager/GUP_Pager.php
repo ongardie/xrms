@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.11 2005/03/01 21:58:36 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.12 2005/03/04 17:55:47 daturaarutad Exp $
  */
 
 
@@ -147,9 +147,17 @@ class GUP_Pager {
 
 		// begin sort stuff
         if (!strlen($this->sort_column) > 0) {
-            $this->sort_column = 1;
+			for($i=0; $i<count($this->column_info); $i++) {
+				if($this->column_info[$i]['default_sort']) {
+            		$this->sort_column = $i+1;
+            		$this->sort_order = $this->column_info[$i]['default_sort'];
+				}
+			}
+			if (!strlen($this->sort_column) > 0) {
+            	$this->sort_column = 1;
+            	$this->sort_order = "asc";
+			}
             $this->current_sort_column = $this->sort_column;
-            $this->sort_order = "asc";
         }
 
         if (!($this->sort_column == $this->current_sort_column)) {
@@ -370,7 +378,7 @@ class GUP_Pager {
 					} 
 				} else {
 					while (!$rs->EOF) {
-            			$this->data[] =& $rs->fields;
+            			$this->data[] = $rs->fields;
 						$rs->MoveNext();
 					}
 				}
@@ -976,6 +984,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.12  2005/03/04 17:55:47  daturaarutad
+ * added code to handle default_sort in column_info
+ *
  * Revision 1.11  2005/03/01 21:58:36  daturaarutad
  * added functionality to specify CSS classes for rows/columns in pager
  *
