@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.17 2004/06/20 19:44:22 braverock Exp $
+ * $Id: some.php,v 1.18 2004/06/26 15:42:57 braverock Exp $
  */
 
 //include the standard files
@@ -250,24 +250,38 @@ start_page($page_title, true, $msg);
                 <td class=widget_label>First Names</td>
                 <td class=widget_label>Title</td>
                 <td class=widget_label>Company</td>
+        </tr>
+        <tr>
+          <td class=widget_content_form_element><input type=text name="last_name" size=18 maxlength=100 value="<?php  echo $last_name; ?>"></td>
+          <td class=widget_content_form_element><input type=text name="first_names" size=12 maxlength=100 value="<?php  echo $first_names; ?>"></td>
+          <td class=widget_content_form_element><input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>"></td>
+          <td class=widget_content_form_element><input type=text name="company_name" size=18 maxlength=100 value="<?php  echo $company_name; ?>">
+          </td>
+        </tr>
+        <tr>
                 <td class=widget_label>Code</td>
                 <td class=widget_label>Description</td>
                 <td class=widget_label>Category</td>
                 <td class=widget_label>Owner</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name="last_name" size=9 maxlength=100 value="<?php  echo $last_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="first_names" size=9 maxlength=100 value="<?php  echo $first_names; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="title" size=4 maxlength=100 value="<?php  echo $title; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_name" size=9 maxlength=100 value="<?php  echo $company_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="description" size=4 maxlength=100 value="<?php  echo $description; ?>"></td>
-                <td class=widget_content_form_element><?php  echo $contact_category_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=8><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
-            </tr>
+          <td width="25%" class=widget_content_form_element>
+<input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
+          <td width="25%" class=widget_content_form_element>
+<input type=text name="description" size=12 maxlength=100 value="<?php  echo $description; ?>"></td>
+          <td width="25%" class=widget_content_form_element>
+            <?php  echo $contact_category_menu; ?>
+          </td>
+          <td width="25%" class=widget_content_form_element>
+            <?php  echo $user_menu; ?>
+          </td>
+        </tr>
+        <tr>
+          <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search">
+            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
+            <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
+          </td>
+        </tr>
         </table>
         </form>
 
@@ -345,6 +359,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.18  2004/06/26 15:42:57  braverock
+ * - change search layout to two rows to improve CSS positioning
+ *   - applied modified version of SF patch #971474 submitted by s-t
+ *
  * Revision 1.17  2004/06/20 19:44:22  braverock
  * - change CAST to CAST as CHAR for broader compatibility
  *
