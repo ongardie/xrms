@@ -1,4 +1,9 @@
 <?php
+/**
+ * View a single Sales Opportunity
+ *
+ * $Id: one.php,v 1.6 2004/01/26 19:35:25 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -55,7 +60,7 @@ if ($rst) {
     $opportunity_status_display_html = $rst->fields['opportunity_status_display_html'];
     $opportunity_owner_username = $rst->fields['opportunity_owner_username'];
     $account_owner_username = $rst->fields['account_owner_username'];
-    $opportunity_title = $rst->fields['opportunity_title'];
+    $opportunity_title = htmlspecialchars($rst->fields['opportunity_title']);
     $opportunity_description = $rst->fields['opportunity_description'];
     $size = $rst->fields['size'];
     $probability = $rst->fields['probability'];
@@ -69,26 +74,26 @@ if ($rst) {
 
 // most recent activities
 
-$sql_activities = "select activity_id, 
-activity_title, 
-scheduled_at, 
-a.entered_at, 
-a.on_what_table,
-a.on_what_id,
-activity_status, 
-at.activity_type_pretty_name, 
-cont.contact_id, 
-cont.first_names as contact_first_names, 
-cont.last_name as contact_last_name, 
-u.username, 
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
-from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
-where a.on_what_table = 'opportunities'
-and a.on_what_id = $opportunity_id
-and a.user_id = u.user_id
-and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'
-order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
+$sql_activities = "select activity_id,
+    activity_title,
+    scheduled_at,
+    a.entered_at,
+    a.on_what_table,
+    a.on_what_id,
+    activity_status,
+    at.activity_type_pretty_name,
+    cont.contact_id,
+    cont.first_names as contact_first_names,
+    cont.last_name as contact_last_name,
+    u.username,
+    if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+    from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
+    where a.on_what_table = 'opportunities'
+    and a.on_what_id = $opportunity_id
+    and a.user_id = u.user_id
+    and a.activity_type_id = at.activity_type_id
+    and a.activity_record_status = 'a'
+    order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
 
@@ -100,7 +105,7 @@ if ($rst) {
         $is_overdue = $rst->fields['is_overdue'];
         $on_what_table = $rst->fields['on_what_table'];
         $on_what_id = $rst->fields['on_what_id'];
-		
+
         if ($open_p == 'o') {
             if ($is_overdue) {
                 $classname = 'overdue_activity';
@@ -110,7 +115,7 @@ if ($rst) {
         } else {
             $classname = 'closed_activity';
         }
-		
+
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
@@ -123,16 +128,16 @@ if ($rst) {
     $rst->close();
 }
 
-$categories_sql = "select category_pretty_name 
-from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
-where ecm.on_what_table = 'opportunities'
-and ecm.on_what_id = $opportunity_id
-and ecm.category_id = c.category_id
-and cs.category_scope_id = ccsm.category_scope_id
-and c.category_id = ccsm.category_id
-and cs.on_what_table = 'opportunities'
-and category_record_status = 'a'
-order by category_pretty_name";
+$categories_sql = "select category_pretty_name
+    from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
+    where ecm.on_what_table = 'opportunities'
+    and ecm.on_what_id = $opportunity_id
+    and ecm.category_id = c.category_id
+    and cs.category_scope_id = ccsm.category_scope_id
+    and c.category_id = ccsm.category_id
+    and cs.on_what_table = 'opportunities'
+    and category_record_status = 'a'
+    order by category_pretty_name";
 
 $rst = $con->execute($categories_sql);
 $categories = array();
@@ -193,8 +198,11 @@ $rst->close();
 
 $sql = "select concat(first_names, ' ', last_name), contact_id from contacts where company_id = $company_id and contact_record_status = 'a' order by last_name";
 $rst = $con->execute($sql);
-$contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
-$rst->close();
+if ($rst) {
+    $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
+    $rst->close();
+}
+
 
 $con->close();
 
@@ -294,7 +302,7 @@ start_page($page_title, true, $msg);
                                 </tr>
                                 <tr>
                                     <td class=sublabel>E-Mail</td>
-                                    <td class=clear><a href="mailto:<?php  echo $email; ?>"><?php  echo $email; ?></a></td>
+                                    <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$opportunity_id&contact_id=$contact_id&on_what_table=opportunities&activity_title=email RE: $opportunity_title&company_id=$company_id&email=$email&return_url=/opportunities/one.php?opportunity_id=$opportunity_id'\" >" . htmlspecialchars($email); ?></a></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
@@ -322,7 +330,13 @@ start_page($page_title, true, $msg);
                         </tr>
                     </table>
 
-                    <p><?php  echo $opportunity_description; ?>
+                    <p>
+                    <?php
+                        // clean this up for display
+                        $opportunity_description = htmlspecialchars ($opportunity_description);
+                        $opportunity_description = str_replace("\n", '<br>', $opportunity_description);
+                        echo $opportunity_description;
+                    ?>
 
                 </td>
             </tr>
@@ -424,4 +438,11 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log:
+ */
+?>

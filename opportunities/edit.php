@@ -202,7 +202,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Description</td>
-                <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description><?php  echo $opportunity_description; ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input type=button class=button onclick="javascript: location.href='delete.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value='Delete Opportunity' onclick="javascript: return confirm('Delete Opportunity?');"></td>
