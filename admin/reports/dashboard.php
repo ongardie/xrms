@@ -4,7 +4,7 @@
  * 
  * Displays Audit entries and new activity counts.  Needs work.
  * 
- * $Id: dashboard.php,v 1.2 2004/03/09 15:21:59 maulani Exp $ 
+ * $Id: dashboard.php,v 1.3 2004/03/31 18:47:19 maulani Exp $ 
  */ 
 
 require_once('../../include-locations.inc');
@@ -48,7 +48,7 @@ $first_day_week = $rst->fields['first_day_week'] . ' 00:00:00';
 $rst->close();
 
 // What is the first day of the month
-$sql = 'Select DATE_SUB(CURRENT_DATE,INTERVAL (DAYOFWEEK(CURRENT_DATE)-1) DAY) AS first_day_month';
+$sql = 'Select DATE_SUB(CURRENT_DATE,INTERVAL (DAYOFMONTH(CURRENT_DATE)-1) DAY) AS first_day_month';
 $rst = $con->execute($sql);
 $first_day_month = $rst->fields['first_day_month'] . ' 00:00:00';
 $rst->close();
@@ -267,6 +267,10 @@ end_page();
 
 /** 
  * $Log: dashboard.php,v $
+ * Revision 1.3  2004/03/31 18:47:19  maulani
+ * - Fix bug 926884 this month column of dashboard summary was displaying
+ *   this weeks values
+ *
  * Revision 1.2  2004/03/09 15:21:59  maulani
  * - Added phpdoc
  * - Widened Audit Items layout to display date on one line
