@@ -3,7 +3,7 @@
 * 
 * Email 2. 
 * 
-* $Id: email-2.php,v 1.10 2004/12/02 18:21:37 niclowe Exp $ 
+* $Id: email-2.php,v 1.11 2005/01/25 03:55:25 braverock Exp $ 
 */ 
  
 require_once('include-locations-location.inc'); 
@@ -73,11 +73,11 @@ document.forms[2].submit();
 </tr> 
 <tr> 
 <td class=widget_label_right width="1%" nowrap><?php echo _("From"); ?>:</td> 
-<td class=widget_content_form_element><input type=text name="sender_name" size=50 value="<? echo $default_user ?>"><?php echo $required_indicator; ?></td> 
+<td class=widget_content_form_element><input type=text name="sender_name" size=50 value="<?php echo $default_user ?>"><?php echo $required_indicator; ?></td> 
 </tr> 
 <tr> 
 <td class=widget_label_right width="1%" nowrap><?php echo _("Reply to"); ?>:</td> 
-<td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<? echo $default_user ?>"><?php echo $required_indicator; ?></td> 
+<td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<?php echo $default_user ?>"><?php echo $required_indicator; ?></td> 
 </tr> 
 <tr> 
 <td class=widget_label_right width="1%" nowrap><?php echo _("Bcc"); ?>:</td> 
@@ -161,6 +161,9 @@ end_page();
  
 /** 
 * $Log: email-2.php,v $
+* Revision 1.11  2005/01/25 03:55:25  braverock
+* - remove errant short tags
+*
 * Revision 1.10  2004/12/02 18:21:37  niclowe
 * added default email origination from user table, added completed activity when a bulk email is sent
 *
