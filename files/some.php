@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.28 2005/02/14 21:46:59 vanmer Exp $
+ * $Id: some.php,v 1.29 2005/03/02 22:57:37 daturaarutad Exp $
  */
 
 //include required files
@@ -14,16 +14,15 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+
 
 $on_what_table='files';
 $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-           'sort_column'        => array ( 'files_sort_column', arr_vars_SESSION ),
-           'current_sort_column'=> array ( 'files_current_sort_column', arr_vars_SESSION ),
-           'sort_order'         => array ( 'files_sort_order', arr_vars_SESSION ),
-           'current_sort_order' => array ( 'files_current_sort_order', arr_vars_SESSION ),
            'file_id'            => array ( 'file_id', arr_vars_SESSION ),
            'file_name'          => array ( 'file_name', arr_vars_SESSION ),
            'file_description'   => array ( 'file_description', arr_vars_SESSION ),
@@ -36,23 +35,6 @@ $arr_vars = array ( // local var name       // session variable name
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
 
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-    $current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
@@ -60,49 +42,66 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
+
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
+$f_contact 		= false;
+$f_campaign 	= false;
+$f_company 		= false;
+$f_opportunity 	= false;
+$f_case 		= false;
+
 $sql = "SELECT "
-      . $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&amp;file_id='","file_id","'\">'","file_pretty_name", "'</a>'")
-      . " AS '" . _("Name") . "', file_description as '" . _("Description") . "',";
+      . $con->Concat($con->qstr('<a id="'), 'file_pretty_name', $con->qstr('" href="' . $http_site_root . '/files/one.php?return_url=/private/home.php&amp;file_id='), 'file_id', $con->qstr('">'), "file_pretty_name", "'</a>'")
+      . " AS name, file_description as description,";
 
 switch ($file_on_what) {
     case "contacts" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&amp;contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS '" . _("Contact") . "',"
+              . " AS contact,"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '" . _("Company") . "',";
+              . " AS company,";
+		$f_contact = true;
+		$f_company = true;
         break;
     }
     case "contacts_of_companies" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&amp;contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS '" . _("Contact") . "',"
+              . " AS contact,"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '" . _("Company") . "',";
+              . " AS company,";
+		$f_contact = true;
+		$f_company = true;
         break;
     }
     case "companies" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '" . _("Company") . "',";
+              . " AS company,";
+		$f_company = true;
         break;
     }
     case "campaigns" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&amp;campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
-              . " AS '" . _("Campaign") . "',";
+              . " AS campaign,";
+		$f_campaign = true;
         break;
     }
     case "opportunities" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&amp;opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
-              . " AS '" . _("Opportunity") . "',"
+              . " AS opportunity,"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '" . _("Company") . "',";
+              . " AS company,";
+		$f_opportunity	= true;
+		$f_company 		= true;
         break;
     }
     case "cases" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&amp;case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
-              . " AS '" . _("Case") . "',"
+        $sql .= ' '.$con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&amp;case_id='", "cases.case_id", "'\">'", "cases.case_title", "'</a>'")
+              . " AS case_name, "
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '" . _("Company") . "',";
+              . " AS company, ";
+		$f_case		= true;
+		$f_company 	= true;
         break;
     }
     default : {
@@ -110,8 +109,8 @@ switch ($file_on_what) {
         }
 }
 
-$sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS '" . _("Date") . "'," .
-        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&amp;file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS '" . _("ID") . "' ";
+$sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS date," .
+        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&amp;file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS ID ";
 
 $from = "from ";
 switch ($file_on_what) {
@@ -120,7 +119,7 @@ switch ($file_on_what) {
     case "companies" : { $from .= "companies c, "; break; }
     case "campaigns" : { $from .= "campaigns camp, "; break; }
     case "opportunities" : { $from .= "opportunities opp, companies c, "; break; }
-    case "cases" : { $from .= "cases cases, companies c, "; break; }
+    case "cases" : { $from .= " cases, companies c, "; break; }
 }
 $from .= "files f, users u ";
 
@@ -213,21 +212,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     } else { $where .= ' AND 1 = 2 '; }
 }
 
-if ($sort_column == 6) {
-    $order_by = "f.file_id";
-} elseif ($sort_column == 1) {
-    $order_by = "f.file_pretty_name";
-} elseif ($sort_column == 2) {
-    $order_by = "f.file_description";
-} elseif ($sort_column == 5) {
-    $order_by = "f.entered_at";
-} else {
-    $order_by = $sort_column;
-}
-
-$order_by .= " $sort_order";
-
-$sql .= $from . $where . " order by $order_by";
+$sql .= $from . $where;
 
 $sql_recently_viewed = "select * from recent_items r, files f
 where r.user_id = $session_user_id
@@ -268,18 +253,6 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'files', '', 4);
 }
 
-// get company_count
-$rst = $con->execute($sql);
-$company_count = 0;
-if ( $rst ) {
-  while (!$rst->EOF) {
-    $company_count += 1;
-    break;                // we only care if we have more than 0, so stop here
-    $rst->movenext();
-  }
-  $rst->close();
-}
-
 $page_title = _("Files");
 start_page($page_title, true, $msg);
 
@@ -288,14 +261,8 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post>
+        <form action=some.php method=post name="FileForm">
         <input type=hidden name=use_post_vars value=1>
-        <input type=hidden name=files_next_page value="<?php  echo $files_next_page; ?>">
-        <input type=hidden name=resort value="0">
-        <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-        <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-        <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-        <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1>
         <tr>
                 <td class=widget_header colspan=7><?php echo _("Search Criteria"); ?></td>
@@ -336,11 +303,9 @@ start_page($page_title, true, $msg);
                 <td colspan=4 class=widget_content_form_element>
                     <input class=button type=submit value="<?php echo _("Search"); ?>">
                     <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
-                    <?php if ($company_count > 0) {echo "<input class=button type=button onclick='javascript: bulkEmail()' value='"._("Bulk E-Mail")."'>";}; ?>
           </td>
         </tr>
       </table>
-        </form>
         <p>
 <?php
 
@@ -348,12 +313,33 @@ if ( $use_owl ) {
   echo "<input class=button type=button onclick='javascript: owl()' value='"._("Owl File Management")."'><br><br>";
 }
 
-$pager = new Files_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
-$pager->render($rows_per_page=$system_rows_per_page);
+
+$columns = array();
+$columns[] = array('name' => _("Name"), 'index_sql' => 'name');
+$columns[] = array('name' => _("Description"), 'index_sql' => 'description');
+
+if($f_contact) $columns[] = array('name' => _("Contact"), 'index_sql' => 'contact');
+if($f_campaign) $columns[] = array('name' => _("Campaign"), 'index_sql' => 'campaign');
+if($f_opportunity) $columns[] = array('name' => _("Opportunity"), 'index_sql' => 'opportunity');
+if($f_case) $columns[] = array('name' => _("Case"), 'index_sql' => 'case_name');
+if($f_company) $columns[] = array('name' => _("Company"), 'index_sql' => 'company');
+
+$columns[] = array('name' => _("Date"), 'index_sql' => 'date');
+$columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
+    
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FilePager', $columns, false);
+$pager->AddEndRows($endrows);
+$pager->Render($system_rows_per_page);
+
 $con->close();
 
 ?>
 
+    </form>
     </div>
 
         <!-- right column //-->
@@ -420,6 +406,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.29  2005/03/02 22:57:37  daturaarutad
+ * updated to use the GUP_Pager class
+ *
  * Revision 1.28  2005/02/14 21:46:59  vanmer
  * - updated to reflect speed changes in ACL operation
  *
