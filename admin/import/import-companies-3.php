@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.16 2004/04/19 19:36:16 braverock Exp $
+ * $Id: import-companies-3.php,v 1.17 2004/04/21 05:02:48 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -643,6 +643,9 @@ $con->close();
         </td>
     </tr>
 </table>
+<form action=../data_clean.php method=get>
+    <input class=button type=submit value="Run Data Cleanup">
+</form>
 
 TILLEND;
 
@@ -650,6 +653,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.17  2004/04/21 05:02:48  braverock
+ * - add data cleanup button to end of import process
+ *
  * Revision 1.16  2004/04/19 19:36:16  braverock
  * - fix syntax of address_country checks
  *
