@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to 
  * the user's default location.
  * 
- * $Id: download.php,v 1.5 2004/07/30 12:59:19 cpsource Exp $
+ * $Id: download.php,v 1.6 2004/08/03 16:54:14 cpsource Exp $
  */ 
 
 require_once('../include-locations.inc');
@@ -15,6 +15,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'mime/mime-array.php');
 
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -28,18 +29,38 @@ $sql = "select * from files where file_id = $file_id";
 
 $rst = $con->execute($sql);
 
+// database errors ???
 if ($rst) {
-	$file_pretty_name = $rst->fields['file_pretty_name'];
-	$file_filesystem_name = $rst->fields['file_filesystem_name'];
-	$file_description = $rst->fields['file_description'];
-	$file_type = $rst->fields['file_type'];
-	$entered_at = $con->userdate($rst->fields['entered_at']);
-	$username = $rst->fields['username'];
-	$file_size = pretty_filesize($rst->fields['file_size']);
-	$rst->close();
+  // no database errors
+  if ( !$rst->EOF ) {
+    $file_pretty_name = $rst->fields['file_pretty_name'];
+    $file_filesystem_name = $rst->fields['file_filesystem_name'];
+    $file_description = $rst->fields['file_description'];
+    $file_type = $rst->fields['file_type'];
+    $entered_at = $con->userdate($rst->fields['entered_at']);
+    $entered_by = $con->userdate($rst->fields['entered_by']);
+    $file_size = pretty_filesize($rst->fields['file_size']);
+  } else {
+    $file_pretty_name = '';
+    $file_filesystem_name = '';
+    $file_description = '';
+    $file_type = '';
+    $entered_at = '';
+    $entered_by = '';
+    $file_size = '';
+  }
+  $rst->close();
+} else {
+  // yes - log database errors
+  db_error_handler($con, $sql);
 }
 
 $con->close();
+
+// make sure we have a proper mime type
+if ( !$file_type ) {
+  $file_type = mime_get_type ( $file_filesystem_name );
+}
 
 $disposition = "attachment"; // "inline" to view file in browser or "attachment" to download to hard disk
 
@@ -72,6 +93,12 @@ exit();
 
 /** 
  * $Log: download.php,v $
+ * Revision 1.6  2004/08/03 16:54:14  cpsource
+ * - Check for errors in database fetch
+ *   Support proper mime type for file download if it's unspecified
+ *     in database via new routine mime_get_type
+ *   Change undefined user to entered_by
+ *
  * Revision 1.5  2004/07/30 12:59:19  cpsource
  * - Handle $msg in the standard way
  *   Fix problem with Date field displaying garbage because
