@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.8 2004/06/11 20:46:04 introspectshun Exp $
+ * $Id: login-2.php,v 1.9 2004/07/07 22:51:03 introspectshun Exp $
  */
 require_once('include-locations.inc');
 
@@ -41,7 +41,7 @@ if ($xrms_use_ldap) {
 
           if ($info[0]["dn"] != "") {  //If we found a user (we assume that usernames are unique)
                $r=ldap_bind($ds, $info[0]["dn"], $password);
-               //Try to authenthenticate using the password provided
+               //Try to authenticate using the password provided
                if ($r) {
                   $ldapok = true;  //Password check was successfull
                }
@@ -65,9 +65,6 @@ if ($xrms_use_ldap) {
                }
           } else {
                // if the user does not exist in the database but we were able to authenticate him, we create it automatically in the database
-               $sql = "SELECT * FROM users WHERE 1 = 2"; //select empty record as placeholder
-               $rst = $con->execute($sql);
-               
                $rec = array();
                $rec['role_id'] = $xrms_ldap['default_role_id'];
                $rec['last_name'] = $info[0]['sn'][0];
@@ -78,7 +75,8 @@ if ($xrms_use_ldap) {
                $rec['gmt_offset'] = $xrms_ldap['default_gmt_offset'];
                $rec['language'] = 'english';
                
-               $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+               $tbl = 'users';
+               $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
                $con->execute($ins);
 
                // and now pull the data we just inserted
@@ -118,6 +116,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.9  2004/07/07 22:51:03  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.8  2004/06/11 20:46:04  introspectshun
  * - Now use ADODB GetInsertSQL function.
  *
