@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.46 2005/02/09 23:54:54 braverock Exp $
+ * $Id: some.php,v 1.47 2005/02/09 23:58:15 braverock Exp $
  */
 
 //include the standard files
@@ -319,7 +319,7 @@ $columns = $pager_columns->GetUserColumns('default');
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value="._("Mail Merge")."></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
 
 echo $pager_columns_selects;
 
@@ -404,6 +404,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.47  2005/02/09 23:58:15  braverock
+ * - quote the Mail MErge button so both words show
+ *
  * Revision 1.46  2005/02/09 23:54:54  braverock
  * - fix missing . concatenate operator in Mail Merge button
  *
