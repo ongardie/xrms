@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.119 2005/03/10 18:09:32 ycreddy Exp $
+ * $Id: utils-misc.php,v 1.120 2005/03/11 16:58:59 daturaarutad Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -1240,7 +1240,7 @@ function arr_vars_session_get ( $ary )
 
 
       case arr_vars_GET_SESSION:  // try a GET first, and then if it fails, do a SESSION
-        $GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+        $GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : (isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '');
         break;
 
       case arr_vars_REQUEST:         // just try a REQUEST
@@ -1248,7 +1248,7 @@ function arr_vars_session_get ( $ary )
         break;
 
       case arr_vars_REQUEST_SESSION:  // try a GET first, and then if it fails, do a SESSION
-        $GLOBALS[$key] = isset($_REQUEST["$value[0]"]) ? $_REQUEST["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+        $GLOBALS[$key] = isset($_REQUEST["$value[0]"]) ? $_REQUEST["$value[0]"] : (isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '');
         break;
 
       case arr_vars_GET_STRLEN_SESSION:  // try a GET first with length > 0, and then if it fails, do a SESSION
@@ -1482,6 +1482,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.120  2005/03/11 16:58:59  daturaarutad
+ * fixed order of operations bug in arr_vars_get_all by adding ()
+ *
  * Revision 1.119  2005/03/10 18:09:32  ycreddy
  * Using trim on phone_format to fix the empty string problem with SQL server
  *
