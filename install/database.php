@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.28 2005/01/24 00:17:19 maulani Exp $
+ * $Id: database.php,v 1.29 2005/01/25 06:03:56 vanmer Exp $
  */
 
 /**
@@ -222,8 +222,7 @@ function misc_db_tables($con, $table_list) {
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
-    }
-
+    }    
 } // end misc_db_tables fn
 
 
@@ -273,6 +272,46 @@ function user_db_tables($con, $table_list) {
         }
     }
 
+    if (!in_array('user_preference_types',$table_list)) {
+        $sql="CREATE TABLE `user_preference_types` (
+        `user_preference_type_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+        `user_preference_name` VARCHAR( 64 ) NOT NULL ,
+        `user_preference_pretty_name` VARCHAR( 128 ) NOT NULL ,
+        `user_preference_description` VARCHAR( 255 ) NOT NULL ,
+        `allow_multiple_flag` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+        `allow_user_edit_flag` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+        `user_preference_type_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
+        `preference_type_created_on` DATETIME NOT NULL ,
+        `user_preference_type_modified_on` DATETIME NOT NULL ,
+        `user_preference_created_by` INT NOT NULL ,
+        `user_preference_modified_by` INT NOT NULL ,
+        PRIMARY KEY ( `user_preference_type_id` )
+        )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
+    if (!in_array('user_preferences',$table_list)) {
+        $sql="CREATE TABLE `user_preferences` (
+        `user_preference_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+        `user_id` INT NOT NULL,
+        `user_preference_type_id` INT UNSIGNED NOT NULL ,
+        `user_preference_name` VARCHAR( 255 ) ,
+        `user_preference_value` LONGTEXT NOT NULL ,
+        `user_preference_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
+        `user_preference_modified_on` DATETIME NOT NULL ,
+        PRIMARY KEY ( `user_preference_id` ) ,
+        INDEX ( `user_preference_type_id` )
+        );";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
 } // end user_db_tables fn
 
 
@@ -1068,6 +1107,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.29  2005/01/25 06:03:56  vanmer
+ * - added tables for user preferences to install
+ *
  * Revision 1.28  2005/01/24 00:17:19  maulani
  * - Add description to system parameters
  *
