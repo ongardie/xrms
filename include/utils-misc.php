@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.28 2004/06/07 18:44:30 maulani Exp $
+ * $Id: utils-misc.php,v 1.29 2004/06/08 02:21:56 braverock Exp $
  */
 
 /**
@@ -513,6 +513,7 @@ function set_system_parameter(&$con, $param, $new_val) {
  *
  * @param handle &$con handle to the database connection
  * @param string $sql SQL that was attempted
+ * @param optional integer $colspan
  *
  * @example
  * <code><pre>
@@ -528,11 +529,11 @@ function set_system_parameter(&$con, $param, $new_val) {
  * </pre></code>
  *
  */
-function db_error_handler (&$con,$sql) {
+function db_error_handler (&$con,$sql,$colspan=20) {
         $error = $con->ErrorMsg();
         // figure out where to print this out.
         if ($error) {
-            echo "\n<tr>\n\t<td class=widget_error>"
+            echo "\n<tr>\n\t<td class=widget_error colspan=$colspan>"
                  ."\t<br> Unable to execute your query.  Please correct this error.<br>"
                  . htmlspecialchars($error)
                  ."\t<br> I tried to execute: <br>"
@@ -590,6 +591,9 @@ function get_formatted_address (&$con,$address_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.29  2004/06/08 02:21:56  braverock
+ * - add optional $colspan parameter to db_error_handler fn for better formatting
+ *
  * Revision 1.28  2004/06/07 18:44:30  maulani
  * - Remove cities check because it invalidates pretty addresses and some
  *   international addresses
