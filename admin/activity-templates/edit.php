@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.5 2004/07/25 17:24:19 johnfawcett Exp $
+ * $Id: edit.php,v 1.6 2004/08/19 21:55:09 neildogg Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,6 +30,7 @@ if ($rst) {
 	
 	$activity_title = $rst->fields['activity_title'];
 	$activity_description = $rst->fields['activity_description'];
+        $default_text = $rst->fields['default_text'];
 	$activity_type_id = $rst->fields['activity_type_id'];
 	$duration = $rst->fields['duration'];	
 	
@@ -41,7 +42,6 @@ $sql = "select activity_type_pretty_name, activity_type_id from activity_types w
 $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
 $rst->close();
-
 $con->close();
 
 $page_title = _("Activity Template Details") .': ' .ucwords($activity_title);
@@ -74,6 +74,10 @@ start_page($page_title);
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
 				<td class=widget_content_form_element><textarea rows=8 cols=100 name="activity_description"><?php echo $activity_description ?></textarea></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right_166px><?php echo _("Default Text"); ?></td>
+                <td class=widget_content_form_element><textarea rows=8 cols=100 name="default_text"><?php echo $default_text; ?></textarea></td>
             </tr>
 			<tr>
 				<td class=widget_content colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
@@ -117,6 +121,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.6  2004/08/19 21:55:09  neildogg
+ * - Adds input for default text in templated activity
+ *
  * Revision 1.5  2004/07/25 17:24:19  johnfawcett
  * - standardized page title
  * - standardized delete text and button

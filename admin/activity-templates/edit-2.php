@@ -2,7 +2,7 @@
 /**
  * save an updated an activity template to database after editing it.
  *
- * $Id: edit-2.php,v 1.3 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: edit-2.php,v 1.4 2004/08/19 21:55:09 neildogg Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,6 +17,7 @@ $session_user_id = session_check( 'Admin' );
 $activity_template_id = $_POST['activity_template_id'];
 $activity_type_id = $_POST['activity_type_id'];
 $activity_description = $_POST['activity_description'];
+$default_text = $_POST['default_text'];
 $activity_title = $_POST['activity_title'];
 $duration = $_POST['duration'];
 $return_url = $_POST['return_url'];
@@ -35,6 +36,7 @@ $rst = $con->execute($sql);
 $rec = array();
 $rec['activity_type_id'] = $activity_type_id;
 $rec['activity_description'] = $activity_description;
+$rec['default_text'] = $default_text;
 $rec['activity_title'] = $activity_title;
 $rec['duration'] = $duration;
 
