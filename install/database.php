@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.6 2004/05/04 23:48:03 maulani Exp $
+ * $Id: database.php,v 1.7 2004/05/14 18:46:54 braverock Exp $
  */
 
 /**
@@ -448,7 +448,7 @@ function company_db_tables($con, $table_list) {
                salutation                      varchar(20) not null default '',
                last_name                       varchar(100) not null default '',
                first_names                     varchar(100) not null default '',
-               gender                          char(1) not null default 'm',
+               gender                          char(1) not null default 'u',
                date_of_birth                   varchar(100) not null default '',
                summary                         varchar(100) not null default '',
                title                           varchar(100) not null default '',
@@ -792,6 +792,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.7  2004/05/14 18:46:54  braverock
+ * - change default gender to 'u'
+ *
  * Revision 1.6  2004/05/04 23:48:03  maulani
  * - Added a system parameters table to the database.  This table can be used
  *   for items that would otherwise be dumped into the vars.php file. These
