@@ -247,6 +247,7 @@ td.sublabel {
   color: #666666;
   font-weight: bold;
   text-align: right;
+  white-space: nowrap;
 }
 td.clear {
   vertical-align: top;
