@@ -1,12 +1,12 @@
 <?php
 /** 
-Ê* files/new-2.php - This file uploads new files to the server 
-Ê* 
-Ê* Files that are uploaded to the server are moved to the 
+ * files/new-2.php - This file uploads new files to the server 
+ * 
+ * Files that are uploaded to the server are moved to the 
  * correct folder and a database entry is made.
-Ê* 
-Ê* $Id: new-2.php,v 1.2 2004/03/03 23:53:42 maulani Exp $
-Ê*/ 
+ * 
+ * $Id: new-2.php,v 1.3 2004/03/04 00:05:13 maulani Exp $
+ */ 
 
 require_once('../include-locations.inc');
 
@@ -53,12 +53,15 @@ $con->close();
 header("Location: " . $http_site_root . $return_url);
 
 /** 
-Ê* $Log: new-2.php,v $
-Ê* Revision 1.2  2004/03/03 23:53:42  maulani
-Ê* - changed to record file type (mime)
-Ê* -Â Usestype when downloading file
-Ê* - add phpdoc
-Ê*
-Ê* 
-Ê*/ 
+ * $Log: new-2.php,v $
+ * Revision 1.3  2004/03/04 00:05:13  maulani
+ * *** empty log message ***
+ *
+ * Revision 1.2  2004/03/03 23:53:42  maulani
+ * - changed to record file type (mime)
+ * - Usestype when downloading file
+ * - add phpdoc
+ *
+ * 
+ */ 
 ?> 

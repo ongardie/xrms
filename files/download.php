@@ -1,12 +1,12 @@
 <?php
 /** 
-Ê* files/download.php - This file downloads files from server 
-Ê* 
-Ê* Files that have been stored on the server are downloaded to 
+ * files/download.php - This file downloads files from server 
+ * 
+ * Files that have been stored on the server are downloaded to 
  * the user's default location.
-Ê* 
-Ê* $Id: download.php,v 1.2 2004/03/03 23:53:42 maulani Exp $
-Ê*/ 
+ * 
+ * $Id: download.php,v 1.3 2004/03/04 00:05:13 maulani Exp $
+ */ 
 
 require_once('../include-locations.inc');
 
@@ -70,12 +70,15 @@ fpassthru($fp);
 exit();
 
 /** 
-Ê* $Log: download.php,v $
-Ê* Revision 1.2  2004/03/03 23:53:42  maulani
-Ê* - changed to record file type (mime)
-Ê* -Â Usestype when downloading file
-Ê* - add phpdoc
-Ê*
-Ê* 
-Ê*/ 
+ * $Log: download.php,v $
+ * Revision 1.3  2004/03/04 00:05:13  maulani
+ * *** empty log message ***
+ *
+ * Revision 1.2  2004/03/03 23:53:42  maulani
+ * - changed to record file type (mime)
+ * - Usestype when downloading file
+ * - add phpdoc
+ *
+ * 
+ */ 
 ?> 
