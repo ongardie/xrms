@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.10 2005/02/10 14:40:03 maulani Exp $
+* $Id: email-4.php,v 1.11 2005/03/17 20:05:26 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -35,21 +35,60 @@ $sql = "select * from contacts where contact_id in (" . implode(',', $array_of_c
 $rst = $con->execute($sql);
 
 if ($rst) {
-	$msg_body = stripslashes($email_template_body);
-	$title = stripslashes($email_template_title);
-	$headers  = "MIME-Version: 1.0\r\n";
-	$headers .= "Content-type: text/plain; charset=iso-8859-1\r\n";
-	$headers .= "From: $sender_name <$sender_address>\r\n";
-	$headers .= "Bcc: $bcc_address\r\n";
-	while (!$rst->EOF) {
-		$contactName = $rst->fields['first_names'];
-		$output = "Dear $contactName \r\n\r\n$msg_body";
-		if (!mail($rst->fields['email'], $title, $output, $headers)) {
-			echo "<font color=red>There was an error sending email</font>";
+
+    require_once ( $include_directory . 'classes/SMTPs/SMTPs.php' );
+
+    $msg_body = stripslashes($email_template_body);
+
+    while (!$rst->EOF)
+    {
+
+        $_email_addr = $rst->fields['email'];
+
+        $_full_name = '';
+
+        if ( $rst->fields['first_names'] )
+            $_full_name .= $rst->fields['first_names'] . ' ';
+
+        $_full_name .= $rst->fields['last_name'];
+
+        if ( $_full_name )
+        {
+            if ( $rst->fields['salutation'] )
+                $_sal = 'Dear ' . $rst->fields['salutation'] . ' ' . $_full_name . ',' . "\r\n\r\n";
+
+            $_email_full = '"' . $_full_name . '" <' . $_email_addr . '>';
+        }
+        else
+        {
+            $_sal = '';
+
+            $_email_full = '<' . $_email_addr . '>';
+        }
+
+        $objSMTP = new SMTPs ();
+
+        $objSMTP->setConfig( './SMTPs.ini.php');
+
+        $objSMTP->setFrom ( '<' . $sender_name . '>' );
+        $objSMTP->setSubject ( stripslashes($email_template_title) );
+        $objSMTP->setTo ( $_email_full );
+        $objSMTP->setSensitivity(1);
+
+        $output = $_sal . $msg_body;
+
+        $objSMTP->setBodyContent ( $output );
+
+        $objSMTP->sendMsg ();
+
+/*
+        if (!mail($rst->fields['email'], $title, $output, $headers)) {
+            echo "<font color=red>There was an error sending email</font>";
             $feedback .= "<font color=red><li>" . $rst->fields['email'] ." FAILED</li></font>";
-						//exit();
-		} else{
-		$feedback .= "<li>" . $rst->fields['email'] ."</li>";
+                        //exit();
+        } else{
+*/
+        $feedback .= "<li>" . $rst->fields['email'] ."</li>";
         //add activity
         $sql_insert_activity = "insert into activities set
                         activity_type_id = 3,
@@ -63,15 +102,15 @@ if ($rst) {
                         last_modified_by = $session_user_id,
                         scheduled_at=".$con->dbtimestamp(mktime()).",
                         ends_at=".$con->dbtimestamp(mktime()).",
-						activity_status ='c',
+                        activity_status ='c',
                         entered_by = $session_user_id;";
                         $con->execute($sql_insert_activity);
-        }
-		$rst->movenext();
-	}
-	$feedback .= "<br><br>".nl2br(htmlspecialchars($headers))."<br><br>Dear XXXXXX<br>";
-	$feedback .= nl2br(htmlspecialchars($msg_body));
-	$rst->close();
+        //}
+        $rst->movenext();
+    }
+    $feedback .= "<hr />Dear [first] [lastname],<p>";
+    $feedback .= nl2br(htmlspecialchars($msg_body));
+    $rst->close();
 }
 
 $con->close();
@@ -84,31 +123,31 @@ start_page($page_title, true, $msg);
 <div id="Main">
 <div id="Content">
 
-		<table class=widget cellspacing=1>
-	<tr>
+        <table class=widget cellspacing=1>
+    <tr>
                  <td class=widget_header><?php echo _("Messages Sent"); ?></td>
-	</tr>
-	<tr>
+    </tr>
+    <tr>
                 <td class=widget_content><?php echo _("The bulk e-mail sub-system has sent"); ?>:<br>
-		<?php echo $feedback;?>
-		</td>
-	</tr>
-	<tr>
+        <?php echo $feedback;?>
+        </td>
+    </tr>
+    <tr>
                  <td class=widget_header><?php echo _("WARNING"); ?></td>
-	</tr>
-	<tr>
+    </tr>
+    <tr>
                 <td class=widget_content><?php echo _("DO NOT RELOAD THIS PAGE! If you do, your message will be sent again."); ?>:<br>
-		</td>
-	</tr>
+        </td>
+    </tr>
 
-		</table>
+        </table>
 
 </div>
 
 <!-- right column //-->
 <div id="Sidebar">
 
-		&nbsp;
+        &nbsp;
 
 </div>
 
@@ -120,6 +159,11 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.11  2005/03/17 20:05:26  jswalter
+*  - revamped sendmail operation completly
+*  - removed the use of internal PHP 'mail()' call
+*  - uses new SMTPs.php class object to handle mail
+*
 * Revision 1.10  2005/02/10 14:40:03  maulani
 * - Set last modified info when creating activities
 *
