@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.75 2005/01/10 21:43:32 vanmer Exp $
+ * $Id: one.php,v 1.76 2005/01/22 15:07:14 braverock Exp $
  */
 
 //include required files
@@ -126,7 +126,10 @@ if ($rst) {
 }
 
 //get activity type menu
-$sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
+$sql = "SELECT activity_type_pretty_name, activity_type_id
+        FROM activity_types
+        WHERE activity_type_record_status = 'a'
+        ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
 $rst->close();
@@ -433,13 +436,20 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <?php echo render_edit_button("Save Changes",'submit',false,'save'); ?>
-                    <?php if($save_and_next) { ?>
-                    <input class=button type=submit name="saveandnext" value="<?php echo _("Save and Next"); ?>">
-                    <?php } ?>
-                    <?php echo render_create_button("Schedule Followup",'submit',false,'followup'); ?>
+                    <?php
 
-<?php echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id); ?>
+                        echo render_edit_button("Save Changes",'submit',false,'save');
+                                                
+                        if($save_and_next) {
+                            echo '<input class=button type=submit name="saveandnext" value="'._("Save and Next").'"';
+                            $save_and_next="&save_and_next=true";
+                        }
+                        
+                        echo render_create_button("Schedule Followup",'submit',false,'followup');
+
+                        echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
+                    ?>
+
                 </td>
             </tr>
         </table>
@@ -492,6 +502,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.76  2005/01/22 15:07:14  braverock
+ * - add sort order to activity_types menu
+ *
  * Revision 1.75  2005/01/10 21:43:32  vanmer
  * - added types so that status dropdown can operate properly when activity is attached to a case with case types
  *

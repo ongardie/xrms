@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.34 2005/01/13 19:08:56 vanmer Exp $
+ * $Id: one.php,v 1.35 2005/01/22 15:07:26 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -229,7 +229,10 @@ if ($rst) {
 }
 
 //get activity type menu
-$sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
+$sql = "SELECT activity_type_pretty_name, activity_type_id
+        FROM activity_types
+        WHERE activity_type_record_status = 'a'
+        ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql);
 if ($rst) {
     $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
@@ -460,6 +463,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.35  2005/01/22 15:07:26  braverock
+ * - add sort order to activity_types menu
+ *
  * Revision 1.34  2005/01/13 19:08:56  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

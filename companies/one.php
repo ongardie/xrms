@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.84 2005/01/21 14:48:53 braverock Exp $
+ * $Id: one.php,v 1.85 2005/01/22 15:07:25 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -419,7 +419,10 @@ if ($rst) {
     db_error_handler ($con, $sql);
 }
 
-$sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
+$sql = "SELECT activity_type_pretty_name, activity_type_id
+        FROM activity_types
+        WHERE activity_type_record_status = 'a'
+        ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql);
 if ($rst) {
     $activity_type_menu = $rst->getmenu2('activity_type_id', '', false, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
@@ -818,6 +821,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.85  2005/01/22 15:07:25  braverock
+ * - add sort order to activity_types menu
+ *
  * Revision 1.84  2005/01/21 14:48:53  braverock
  * - only add 'active' divisions to the select list
  *

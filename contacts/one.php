@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.56 2005/01/22 14:35:59 braverock Exp $
+ * $Id: one.php,v 1.57 2005/01/22 15:07:25 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -109,14 +109,14 @@ if ( $address_id ) {
   $address_to_display = '';
 }
 
-$sql_activity_types = "
+$sql_opportunity_types = "
 SELECT
   opportunity_status_pretty_name, opportunity_status_id
 FROM opportunity_statuses
 WHERE opportunity_status_record_status = 'a'
 ORDER by sort_order
 ";
-$rst = $con->execute($sql_activity_types);
+$rst = $con->execute($sql_opportunity_types);
 $opportunity_status_rows = $rst->GetMenu2('opportunity_status_id', null, true);
 
 // most recent activities
@@ -264,7 +264,10 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
+$sql = "SELECT activity_type_pretty_name, activity_type_id
+        FROM activity_types
+        WHERE activity_type_record_status = 'a'
+        ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql);
 if ($rst) {
     $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
@@ -561,6 +564,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.57  2005/01/22 15:07:25  braverock
+ * - add sort order to activity_types menu
+ *
  * Revision 1.56  2005/01/22 14:35:59  braverock
  * - fixed mis-assignment of title to $e instead of $title, looks like a cut and paste error
  *   Resolves SF Bug #1106290 reported by fu22ba55

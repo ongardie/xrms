@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.85 2005/01/13 22:35:34 vanmer Exp $
+ * $Id: some.php,v 1.86 2005/01/22 15:07:24 braverock Exp $
  */
 
 // handle includes
@@ -389,9 +389,10 @@ if($advanced_search) {
 }
 
 //get activity type menu
-$sql_type = "select activity_type_pretty_name, activity_type_id
-from activity_types at
-order by activity_type_pretty_name";
+$sql_type = "SELECT activity_type_pretty_name, activity_type_id
+             FROM activity_types
+             WHERE activity_type_record_status = 'a'
+             ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql_type);
 $type_menu = translate_menu($rst->getmenu2('activity_type_id', $activity_type_id, true));
 $rst->close();
@@ -753,6 +754,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.86  2005/01/22 15:07:24  braverock
+ * - add sort order to activity_types menu
+ *
  * Revision 1.85  2005/01/13 22:35:34  vanmer
  * - removed HOUR sql code to allow compliance with other database servers
  *

@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.29 2005/01/13 18:19:46 vanmer Exp $
+ * $Id: one.php,v 1.30 2005/01/22 15:07:26 braverock Exp $
  */
 
 //include required files
@@ -182,7 +182,10 @@ if ($rst) {
    db_error_handler ($con,$sql);
 }
 
-$sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
+$sql = "SELECT activity_type_pretty_name, activity_type_id
+        FROM activity_types
+        WHERE activity_type_record_status = 'a'
+        ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql);
 if ($rst) {
    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
@@ -379,6 +382,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.30  2005/01/22 15:07:26  braverock
+ * - add sort order to activity_types menu
+ *
  * Revision 1.29  2005/01/13 18:19:46  vanmer
  * - ACL restriction on activity list
  *
