@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.11 2004/05/04 20:51:26 braverock Exp $
+ * $Id: some.php,v 1.12 2004/05/10 13:07:20 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -233,6 +233,7 @@ $rst->close();
 if (!strlen($open_activities) > 0) {
     $open_activities = "<tr><td class=widget_content colspan=5>No open activities</td></tr>";
 }
+add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 
 $page_title = "Open Activities";
 start_page($page_title);
@@ -361,6 +362,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2004/05/10 13:07:20  maulani
+ * - Add level to audit trail
+ * - Clean up audit trail text
+ *
  * Revision 1.11  2004/05/04 20:51:26  braverock
  * -set return_url on title link.
  *   - fixes SF bug 947755 reported by Beth Macknik (maulani)

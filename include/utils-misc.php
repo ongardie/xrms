@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.19 2004/05/07 21:30:39 maulani Exp $
+ * $Id: utils-misc.php,v 1.20 2004/05/10 13:07:21 maulani Exp $
  */
 
 /**
@@ -93,15 +93,16 @@ function current_audit_level() {
  * @return void
  */
 function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_what_id, $level=4) {
-    if ( $level <= current_audit_level() ) {
+    $log_level = current_audit_level();
+    if ( $level <= $log_level ) {
 		$sql = "insert into audit_items set
 				user_id = $user_id,
 				audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
 				on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
 				on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
-				remote_addr = \"" . $_SERVER['REMOTE_ADDR'] . "\",
-				remote_port = \"" . $_SERVER['REMOTE_PORT'] . "\",
-				session_id = \"" . $_COOKIE['PHPSESSID'] . "\",
+				remote_addr = '" . $_SERVER['REMOTE_ADDR'] . "',
+				remote_port = '" . $_SERVER['REMOTE_PORT'] . "',
+				session_id = '" . $_COOKIE['PHPSESSID'] . "',
 				audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
 	
 		//$con->debug=1
@@ -420,6 +421,10 @@ function set_system_parameter($con, $param, $new_val) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.20  2004/05/10 13:07:21  maulani
+ * - Add level to audit trail
+ * - Clean up audit trail text
+ *
  * Revision 1.19  2004/05/07 21:30:39  maulani
  * - Add audit-level to allow different levels of audit-logging
  *

@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.4 2004/03/12 16:34:31 maulani Exp $
+ * $Id: change-password-2.php,v 1.5 2004/05/10 13:07:20 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,7 +30,7 @@ if ($password == $confirm_password) {
     
     $con->execute($sql);
     
-    add_audit_item($con, $session_user_id, 'change password', 'users', $user_id);
+    add_audit_item($con, $session_user_id, 'change password', 'users', $user_id, 1);
 
     $con->close();
     
@@ -41,6 +41,10 @@ if ($password == $confirm_password) {
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.5  2004/05/10 13:07:20  maulani
+ *- Add level to audit trail
+ *- Clean up audit trail text
+ *
  *Revision 1.4  2004/03/12 16:34:31  maulani
  *- Add audit trail
  *- Add phpdoc

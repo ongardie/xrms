@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.13 2004/04/20 12:32:43 braverock Exp $
+ * $Id: some.php,v 1.14 2004/05/10 13:07:22 maulani Exp $
  */
 
 //include the standard files
@@ -221,7 +221,7 @@ $contact_category_menu = $rst->getmenu2('category_id', $category_id, true);
 $rst->close();
 
 if ($criteria_count > 0) {
-    add_audit_item($con, $session_user_id, 'search contacts', '', '');
+    add_audit_item($con, $session_user_id, 'searched', 'contacts', '', 4);
 }
 
 $page_title = 'Contacts';
@@ -344,6 +344,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.14  2004/05/10 13:07:22  maulani
+ * - Add level to audit trail
+ * - Clean up audit trail text
+ *
  * Revision 1.13  2004/04/20 12:32:43  braverock
  * - add export function for contacts
  *   - apply SF patch 938388 submitted by frenchman

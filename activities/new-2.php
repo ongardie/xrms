@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.10 2004/05/07 16:15:48 braverock Exp $
+ * $Id: new-2.php,v 1.11 2004/05/10 13:07:20 maulani Exp $
  */
 
 //where do we include from
@@ -97,7 +97,7 @@ $sql = "insert into activities
 $con->execute($sql);
 
 $activity_id = $con->insert_id();
-add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id);
+add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
 
 //close the connection
 $con->close();
@@ -116,6 +116,10 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.11  2004/05/10 13:07:20  maulani
+ *- Add level to audit trail
+ *- Clean up audit trail text
+ *
  *Revision 1.10  2004/05/07 16:15:48  braverock
  *- fixed multiple bugs with date-time formatting in activities
  *- correctly use dbtimestamp() date() and strtotime() fns

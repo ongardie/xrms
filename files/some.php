@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.7 2004/04/16 22:22:06 maulani Exp $
+ * $Id: some.php,v 1.8 2004/05/10 13:07:21 maulani Exp $
  */
 
 //include required files
@@ -282,7 +282,7 @@ $user_menu = $rst->getmenu2('user_id', $user_id, true);
 $rst->close();
 
 if ($criteria_count > 0) {
-    add_audit_item($con, $session_user_id, 'search files', '', '');
+    add_audit_item($con, $session_user_id, 'searched', 'files', '', 4);
 }
 
 $page_title = 'Files';
@@ -408,6 +408,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/05/10 13:07:21  maulani
+ * - Add level to audit trail
+ * - Clean up audit trail text
+ *
  * Revision 1.7  2004/04/16 22:22:06  maulani
  * - Add CSS2 positioning
  *

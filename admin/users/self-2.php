@@ -4,7 +4,7 @@
  *
  * Save the changes from a user-level self-change
  *
- * $Id: self-2.php,v 1.1 2004/03/12 16:34:31 maulani Exp $
+ * $Id: self-2.php,v 1.2 2004/05/10 13:07:20 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,7 +27,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "update users set last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ", first_names = " . $con->qstr($first_names, get_magic_quotes_gpc()) . ", email = " . $con->qstr($email, get_magic_quotes_gpc()) . ", gmt_offset = $gmt_offset where user_id = $user_id";
 $con->execute($sql);
 
-add_audit_item($con, $user_id, 'change user', 'users', $user_id);
+add_audit_item($con, $user_id, 'updated', 'users', $user_id, 1);
 
 $con->close();
 
@@ -35,6 +35,10 @@ header("Location: " . $http_site_root . "/admin/routing.php");
 
 /**
  *$Log: self-2.php,v $
+ *Revision 1.2  2004/05/10 13:07:20  maulani
+ *- Add level to audit trail
+ *- Clean up audit trail text
+ *
  *Revision 1.1  2004/03/12 16:34:31  maulani
  *- Add audit trail
  *- Add phpdoc

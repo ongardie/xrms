@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.4 2004/05/07 15:12:38 maulani Exp $
+ * $Id: audit-items.php,v 1.5 2004/05/10 13:07:22 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -168,7 +168,7 @@ if ($user_id) {
     else {
         echo "No Activity.";
     }
-    add_audit_item($con, $session_user_id, 'read', 'audit_items', '');
+    add_audit_item($con, $session_user_id, 'read', 'audit_items', '', 1);
     $con->close();
 }
 
@@ -176,6 +176,10 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.5  2004/05/10 13:07:22  maulani
+ * - Add level to audit trail
+ * - Clean up audit trail text
+ *
  * Revision 1.4  2004/05/07 15:12:38  maulani
  * - Fix bug 949440 Audit Items report showing contact entries with the last
  *   name repeated instead of last name, first name.

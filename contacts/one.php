@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.20 2004/04/27 15:12:59 gpowers Exp $
+ * $Id: one.php,v 1.21 2004/05/10 13:07:22 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -279,7 +279,7 @@ if ($rst) {
     $rst->close();
 }
 
-add_audit_item($con, $session_user_id, 'view contact', 'contacts', $contact_id);
+add_audit_item($con, $session_user_id, 'viewed', 'contacts', $contact_id, 3);
 
 $con->close();
 
@@ -537,7 +537,7 @@ function markComplete() {
 
 </div>
 
-<script>
+<script language="JavaScript" type="text/javascript">
 <!--
 
 // create calendar object(s) just after form tag closed
@@ -556,6 +556,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.21  2004/05/10 13:07:22  maulani
+ * - Add level to audit trail
+ * - Clean up audit trail text
+ *
  * Revision 1.20  2004/04/27 15:12:59  gpowers
  * added support for activity times
  *
