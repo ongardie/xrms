@@ -4,7 +4,7 @@
  * 
  * Displays Audit entries and new activity counts.  Needs work.
  * 
- * $Id: dashboard.php,v 1.3 2004/03/31 18:47:19 maulani Exp $ 
+ * $Id: dashboard.php,v 1.4 2004/04/08 18:13:28 maulani Exp $ 
  */ 
 
 require_once('../../include-locations.inc');
@@ -62,109 +62,109 @@ $begin_month = $con->dbdate(date($first_day_month));
 
 
 // how many activities were created today
-$sql = "select count(*) as activity_count from activities where entered_at >= " . $begin_today;
+$sql = "select count(*) as activity_count from activities where activity_record_status='a' and entered_at >= " . $begin_today;
 $rst = $con->execute($sql);
 $activity_count_today = $rst->fields['activity_count'];
 $rst->close();
 
 // how many activities were created this week
-$sql = "select count(*) as activity_count from activities where entered_at >= " . $begin_week;
+$sql = "select count(*) as activity_count from activities where activity_record_status='a' and entered_at >= " . $begin_week;
 $rst = $con->execute($sql);
 $activity_count_week = $rst->fields['activity_count'];
 $rst->close();
 
 // how many activities were created this month
-$sql = "select count(*) as activity_count from activities where entered_at >= " . $begin_month;
+$sql = "select count(*) as activity_count from activities where activity_record_status='a' and entered_at >= " . $begin_month;
 $rst = $con->execute($sql);
 $activity_count_month = $rst->fields['activity_count'];
 $rst->close();
 
 // how many companies were created today
-$sql = "select count(*) as company_count from companies where entered_at >= " . $begin_today;
+$sql = "select count(*) as company_count from companies where company_record_status='a' and entered_at >= " . $begin_today;
 $rst = $con->execute($sql);
 $company_count_today = $rst->fields['company_count'];
 $rst->close();
 
 // how many companies were created this week
-$sql = "select count(*) as company_count from companies where entered_at >= " . $begin_week;
+$sql = "select count(*) as company_count from companies where company_record_status='a' and entered_at >= " . $begin_week;
 $rst = $con->execute($sql);
 $company_count_week = $rst->fields['company_count'];
 $rst->close();
 
 // how many companies were created this month
-$sql = "select count(*) as company_count from companies where entered_at >= " . $begin_month;
+$sql = "select count(*) as company_count from companies where company_record_status='a' and entered_at >= " . $begin_month;
 $rst = $con->execute($sql);
 $company_count_month = $rst->fields['company_count'];
 $rst->close();
 
 // how many contacts were created today
-$sql = "select count(*) as contact_count from contacts where entered_at >= " . $begin_today;
+$sql = "select count(*) as contact_count from contacts where contact_record_status='a' and entered_at >= " . $begin_today;
 $rst = $con->execute($sql);
 $contact_count_today = $rst->fields['contact_count'];
 $rst->close();
 
 // how many contacts were created this week
-$sql = "select count(*) as contact_count from contacts where entered_at >= " . $begin_week;
+$sql = "select count(*) as contact_count from contacts where contact_record_status='a' and entered_at >= " . $begin_week;
 $rst = $con->execute($sql);
 $contact_count_week = $rst->fields['contact_count'];
 $rst->close();
 
 // how many contacts were created this month
-$sql = "select count(*) as contact_count from contacts where entered_at >= " . $begin_month;
+$sql = "select count(*) as contact_count from contacts where contact_record_status='a' and entered_at >= " . $begin_month;
 $rst = $con->execute($sql);
 $contact_count_month = $rst->fields['contact_count'];
 $rst->close();
 
 // how many opportunities were created today
-$sql = "select count(*) as opportunity_count from opportunities where entered_at >= " . $begin_today;
+$sql = "select count(*) as opportunity_count from opportunities where opportunity_record_status='a' and entered_at >= " . $begin_today;
 $rst = $con->execute($sql);
 $opportunity_count_today = $rst->fields['opportunity_count'];
 $rst->close();
 
 // how many opportunities were created this week
-$sql = "select count(*) as opportunity_count from opportunities where entered_at >= " . $begin_week;
+$sql = "select count(*) as opportunity_count from opportunities where opportunity_record_status='a' and entered_at >= " . $begin_week;
 $rst = $con->execute($sql);
 $opportunity_count_week = $rst->fields['opportunity_count'];
 $rst->close();
 
 // how many opportunities were created this month
-$sql = "select count(*) as opportunity_count from opportunities where entered_at >= " . $begin_month;
+$sql = "select count(*) as opportunity_count from opportunities where opportunity_record_status='a' and entered_at >= " . $begin_month;
 $rst = $con->execute($sql);
 $opportunity_count_month = $rst->fields['opportunity_count'];
 $rst->close();
 
 // how much were those opportunities worth today?
-$sql = "select sum(size) as opportunity_total from opportunities where entered_at >= " . $begin_today;
+$sql = "select sum(size) as opportunity_total from opportunities where opportunity_record_status='a' and entered_at >= " . $begin_today;
 $rst = $con->execute($sql);
 $opportunity_total_today = '$' . number_format($rst->fields['opportunity_total'], 2);
 $rst->close();
 
 // how much were those opportunities worth this week?
-$sql = "select sum(size) as opportunity_total from opportunities where entered_at >= " . $begin_week;
+$sql = "select sum(size) as opportunity_total from opportunities where opportunity_record_status='a' and entered_at >= " . $begin_week;
 $rst = $con->execute($sql);
 $opportunity_total_week = '$' . number_format($rst->fields['opportunity_total'], 2);
 $rst->close();
 
 // how much were those opportunities worth this month?
-$sql = "select sum(size) as opportunity_total from opportunities where entered_at >= " . $begin_month;
+$sql = "select sum(size) as opportunity_total from opportunities where opportunity_record_status='a' and entered_at >= " . $begin_month;
 $rst = $con->execute($sql);
 $opportunity_total_month = '$' . number_format($rst->fields['opportunity_total'], 2);
 $rst->close();
 
 // how many cases were created today
-$sql = "select count(*) as case_count from cases where entered_at >= " . $begin_today;
+$sql = "select count(*) as case_count from cases where case_record_status='a' and entered_at >= " . $begin_today;
 $rst = $con->execute($sql);
 $case_count_today = $rst->fields['case_count'];
 $rst->close();
 
 // how many cases were created this week
-$sql = "select count(*) as case_count from cases where entered_at >= " . $begin_week;
+$sql = "select count(*) as case_count from cases where case_record_status='a' and entered_at >= " . $begin_week;
 $rst = $con->execute($sql);
 $case_count_week = $rst->fields['case_count'];
 $rst->close();
 
 // how many cases were created this month
-$sql = "select count(*) as case_count from cases where entered_at >= " . $begin_month;
+$sql = "select count(*) as case_count from cases where case_record_status='a' and entered_at >= " . $begin_month;
 $rst = $con->execute($sql);
 $case_count_month = $rst->fields['case_count'];
 $rst->close();
@@ -267,6 +267,9 @@ end_page();
 
 /** 
  * $Log: dashboard.php,v $
+ * Revision 1.4  2004/04/08 18:13:28  maulani
+ * - Ignore deleted records in new counts
+ *
  * Revision 1.3  2004/03/31 18:47:19  maulani
  * - Fix bug 926884 this month column of dashboard summary was displaying
  *   this weeks values
