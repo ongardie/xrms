@@ -1,2 +1,4 @@
 2004-06-09 gpowers added contact address editing
 2004-06-09 gpowers added contact transfer to new company
+2004-06-16 gpowers removed $this from session_check()
+    for PHP5 compatiblity, bug noted by odcm (alex)
