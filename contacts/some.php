@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.39 2004/10/26 18:40:54 introspectshun Exp $
+ * $Id: some.php,v 1.40 2004/11/29 12:31:04 braverock Exp $
  */
 
 //include the standard files
@@ -21,19 +21,20 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name             // session variable name, flag
-                   'sort_column'        => array ( 'contacts_sort_column', arr_vars_SESSION ),
-		   'current_sort_column'=> array ( 'contacts_current_sort_column', arr_vars_SESSION ),
-		   'sort_order'         => array ( 'contacts_sort_order', arr_vars_SESSION ),
-		   'current_sort_order' => array ( 'contacts_current_sort_order', arr_vars_SESSION ),
-		   'last_name'          => array ( 'contacts_last_name', arr_vars_SESSION ),
-		   'first_names'        => array ( 'contacts_first_names', arr_vars_SESSION ),
-		   'title'              => array ( 'contacts_title', arr_vars_SESSION ),
-		   'description'        => array ( 'contacts_description', arr_vars_SESSION ),
-		   'category_id'        => array ( 'category_id', arr_vars_SESSION ),
-		   'user_id'            => array ( 'contacts_user_id', arr_vars_SESSION ),
-		   'company_name'       => array ( 'contacts_company_name', arr_vars_GET_SESSION ),
-		   'company_code'       => array ( 'contacts_company_code', arr_vars_GET_SESSION )
-		   );
+                    'sort_column'        => array ( 'contacts_sort_column', arr_vars_SESSION ),
+                    'current_sort_column'=> array ( 'contacts_current_sort_column', arr_vars_SESSION ),
+                    'sort_order'         => array ( 'contacts_sort_order', arr_vars_SESSION ),
+                    'current_sort_order' => array ( 'contacts_current_sort_order', arr_vars_SESSION ),
+                    'last_name'          => array ( 'contacts_last_name', arr_vars_SESSION ),
+                    'first_names'        => array ( 'contacts_first_names', arr_vars_SESSION ),
+                    'title'              => array ( 'contacts_title', arr_vars_SESSION ),
+                    'description'        => array ( 'contacts_description', arr_vars_SESSION ),
+                    'category_id'        => array ( 'category_id', arr_vars_SESSION ),
+                    'user_id'            => array ( 'contacts_user_id', arr_vars_SESSION ),
+                    'company_name'       => array ( 'contacts_company_name', arr_vars_GET_SESSION ),
+                    'company_code'       => array ( 'contacts_company_code', arr_vars_GET_SESSION ),
+                    'email'              => array ( 'contacts_email', arr_vars_GET_SESSION )
+                   );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
@@ -64,12 +65,22 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS '" . _("Name") . "', "
-       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS '" . _("Company") . "',
-       company_code AS '" . _("Code") . "',
-       title AS '" . _("Title") . "',
-       description AS '" . _("Description") . "',
-       u.username AS '" . _("Owner") . "' ";
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS " . $con->qstr(_("Name"),get_magic_quotes_gpc())
+       .' ,' . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS " . $con->qstr(_("Company"),get_magic_quotes_gpc());
+if (strlen($email) > 0) {
+    $sql .= "\n, cont.email AS " . $con->qstr(_("Email"),get_magic_quotes_gpc());
+}
+if (strlen($company_code) > 0) {
+    $sql .= "\n, company_code AS " . $con->qstr(_("Code"),get_magic_quotes_gpc());
+}
+if (strlen($title) > 0) {
+    $sql .= "\n, title AS " . $con->qstr(_("Title"),get_magic_quotes_gpc());
+}
+if (strlen($description) > 0) {
+    $sql .= "\n, description AS " . $con->qstr(_("Description"),get_magic_quotes_gpc());
+}
+
+$sql .= "\n ,u.username AS " . $con->qstr(_("Owner"),get_magic_quotes_gpc());
 
 $from = "from contacts cont, companies c, users u ";
 
@@ -102,6 +113,11 @@ if (strlen($description) > 0) {
 if (strlen($company_name) > 0) {
     $criteria_count++;
     $where .= " and c.company_name like " . $con->qstr($company_name . '%', get_magic_quotes_gpc());
+}
+
+if (strlen($email) > 0) {
+    $criteria_count++;
+    $where .= " and cont.email like " . $con->qstr('%' . $email . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($company_code) > 0) {
@@ -146,7 +162,7 @@ $order_by .= " $sort_order";
 
 $sql .= $from . $where . $group_by . " order by $order_by";
 
-$sql_recently_viewed = "select 
+$sql_recently_viewed = "select
 cont.contact_id,
 cont.first_names,
 cont.last_name,
@@ -222,7 +238,7 @@ if(!isset($contacts_next_page)) {
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post>
+    <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=contacts_next_page value="<?php  echo $contacts_next_page; ?>">
         <input type=hidden name=resort value="0">
@@ -236,54 +252,68 @@ if(!isset($contacts_next_page)) {
                 <td class=widget_header colspan=8><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Last Name"); ?></td>
+                <td class=widget_label colspan="2"><?php echo _("Last Name"); ?></td>
                 <td class=widget_label><?php echo _("First Names"); ?></td>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Company"); ?></td>
-        </tr>
-        <tr>
-          <td class=widget_content_form_element><input type=text name="last_name" size=18 maxlength=100 value="<?php  echo $last_name; ?>"></td>
-          <td class=widget_content_form_element><input type=text name="first_names" size=12 maxlength=100 value="<?php  echo $first_names; ?>"></td>
-          <td class=widget_content_form_element><input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>"></td>
-          <td class=widget_content_form_element><input type=text name="company_name" size=18 maxlength=100 value="<?php  echo $company_name; ?>">
-          </td>
-        </tr>
-        <tr>
+            </tr>
+            <tr>
+                <td width="25%" class=widget_content_form_element colspan="2">
+                    <input type=text name="last_name" size=18 maxlength=100 value="<?php  echo $last_name; ?>">
+                </td>
+                <td width="25%" class=widget_content_form_element>
+                    <input type=text name="first_names" size=12 maxlength=100 value="<?php  echo $first_names; ?>">
+                </td>
+                <td width="25%" class=widget_content_form_element>
+                    <input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>">
+                </td>
+                <td width="25%" class=widget_content_form_element>
+                    <input type=text name="company_name" size=18 maxlength=100 value="<?php  echo $company_name; ?>">
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label><?php echo _("Email"); ?></td>
                 <td class=widget_label><?php echo _("Code"); ?></td>
                 <td class=widget_label><?php echo _("Description"); ?></td>
                 <td class=widget_label><?php echo _("Category"); ?></td>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
             </tr>
             <tr>
-          <td width="25%" class=widget_content_form_element><input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
-          <td width="25%" class=widget_content_form_element><input type=text name="description" size=12 maxlength=100 value="<?php  echo $description; ?>"></td>
-          <td width="25%" class=widget_content_form_element>
-            <?php  echo $contact_category_menu; ?>
-          </td>
-          <td width="25%" class=widget_content_form_element>
-            <?php  echo $user_menu; ?>
-          </td>
-        </tr>
-
-        <tr>
-          <td class=widget_content_form_element colspan=4>
-           <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
-           <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
-          </td>
-        </tr>
+                <td width="25%" class=widget_content_form_element>
+                    <input type=text name="email" size=12 maxlength=40 value="<?php  echo $email; ?>">
+                </td>
+                <td width="10%" class=widget_content_form_element>
+                    <input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>">
+                </td>
+                <td width="25%" class=widget_content_form_element>
+                    <input type=text name="description" size=12 maxlength=50 value="<?php  echo $description; ?>">
+                </td>
+                <td width="25%" class=widget_content_form_element>
+                    <?php  echo $contact_category_menu; ?>
+                </td>
+                <td width="15%" class=widget_content_form_element>
+                    <?php  echo $user_menu; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=5>
+                    <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
+                    <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
+                </td>
+            </tr>
         </table>
-        </form>
+    </form>
 
 <?php
-	  if ( $use_self_contacts ) {
-	    echo '<table class=widget cellspacing=1 width="100%">
+      if ( $use_self_contacts ) {
+        echo '<table class=widget cellspacing=1 width="100%">
                     <tr>
                       <td class=widget_content_form_element colspan=4>
                        <input class=button type=button onclick="javascript: createContact();" value="' . _('Create Contact for \'Self\'') . '">
                       </td>
                     </tr>
                   </table>';
-	  }
+      }
 $_SESSION["search_sql"]=$sql;
 $pager = new Contacts_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
@@ -361,6 +391,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.40  2004/11/29 12:31:04  braverock
+ * - fixed i18n localization quoting problems in SQL
+ * - modified sql to not contain seldom used search fields if search term not present
+ *    - this modification should cut down on IE DIV positioning errors
+ * - added email as search criteria based on patch by Ignatius Reilly
+ *
  * Revision 1.39  2004/10/26 18:40:54  introspectshun
  * - Fixed Recent Items query for db compatibility
  *
