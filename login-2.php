@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.18 2004/07/22 17:22:04 introspectshun Exp $
+ * $Id: login-2.php,v 1.19 2005/01/09 15:50:29 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -101,11 +101,17 @@ if ($xrms_use_ldap) {
 
                $tbl = 'users';
                $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-               $con->execute($ins);
-
+               $rst = $con->execute($ins);
+               if (!$rst) {
+                  db_error_handler ($con,$sql);
+               }
                // and now pull the data we just inserted
                $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc());
                $rst = $con->execute($sql);
+
+               if (!$rst) {
+                  db_error_handler ($con,$sql);
+               }
           }
      }
 
@@ -114,6 +120,9 @@ if ($xrms_use_ldap) {
      $password = md5($password);
      $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc()) . " AND password = " . $con->qstr($password, get_magic_quotes_gpc()) . " AND user_record_status = 'a'";
      $rst = $con->execute($sql);
+     if (!$rst) {
+         db_error_handler ($con,$sql);
+     }
 }
 
 
@@ -138,10 +147,12 @@ if ($rst && !$rst->EOF && $ldapok) {
     $rst = $con->execute($sql);
     if ($rst) {
       while (!$rst->EOF) {
-	$role_short_name = $rst->fields['role'];
-	break;
+         $role_short_name = $rst->fields['role'];
+         break;
       }
       $rst->close();
+    } else {
+      db_error_handler($con,$sql);
     }
 
     // make sure we have a session, and place variables in it
@@ -165,6 +176,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.19  2005/01/09 15:50:29  braverock
+ * - add db_error_handler on all queries
+ *
  * Revision 1.18  2004/07/22 17:22:04  introspectshun
  * - Made connectiontest doc title a GetText string
  * - Corrected LDAP authentication to use $xrms_ldap['search_pw'] instead of
