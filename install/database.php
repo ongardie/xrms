@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.20 2004/08/19 21:52:07 neildogg Exp $
+ * $Id: database.php,v 1.21 2004/08/21 01:41:09 d2uhlman Exp $
  */
 
 /**
@@ -754,26 +754,6 @@ function opportunity_db_tables($con, $table_list) {
         }
     }
 
-    // time_daylight_savings
-    if (!in_array('opportunity_statuses',$table_list)) {
-        $sql ="create table opportunity_statuses (
-               opportunity_status_id            int not null primary key auto_increment,
-               sort_order                       tinyint default '1' not null,
-               status_open_indicator            char( 1 ) default 'o' not null,
-               opportunity_status_short_name    varchar(10) not null default '',
-               opportunity_status_pretty_name   varchar(100) not null default '',
-               opportunity_status_pretty_plural varchar(100) not null default '',
-               opportunity_status_display_html  varchar(100) not null default '',
-               opportunity_status_record_status char(1) not null default 'a',
-               opportunity_status_long_desc     varchar(255) not null default ''
-               )";
-        //execute
-        $rst = $con->execute($sql);
-        if (!$rst) {
-            db_error_handler ($con, $sql);
-        }
-    }
-
     // create the time_daylight_savings table if we need it
         $sql ="CREATE TABLE time_daylight_savings (
                daylight_savings_id              int(11) NOT NULL auto_increment,
@@ -785,7 +765,7 @@ function opportunity_db_tables($con, $table_list) {
                end_month                        int(2) NOT NULL default '0',
                hour_shift                       float NOT NULL default '0',
                last_update                      date NOT NULL default '0000-00-00',
-               current_hour_shift               float NOT NULL default '0'
+               current_hour_shift               float NOT NULL default '0',
                PRIMARY KEY (daylight_savings_id)
                )";
         //execute
@@ -1059,6 +1039,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.21  2004/08/21 01:41:09  d2uhlman
+ * bad cut and paste job, missing comma on install sql
+ *
  * Revision 1.20  2004/08/19 21:52:07  neildogg
  * - Adds field to activity templates for default text
  *
