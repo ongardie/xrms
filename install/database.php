@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.2 2004/03/22 02:05:07 braverock Exp $
+ * $Id: database.php,v 1.3 2004/04/12 14:34:02 maulani Exp $
  */
 
 /**
@@ -387,7 +387,8 @@ function company_db_tables($con, $table_list) {
                province            varchar(255) not null default '',
                postal_code         varchar(255) not null default '',
                use_pretty_address      char(1) not null default 'f',
-               address_record_status       char(1) not null default 'a'
+               address_record_status       char(1) not null default 'a',
+               INDEX company_id (company_id)
                )";
         //execute
         $rst = $con->execute($sql);
@@ -456,7 +457,8 @@ function company_db_tables($con, $table_list) {
                entered_by                      int not null default 0,
                last_modified_at                datetime,
                last_modified_by                int not null default 0,
-               contact_record_status           char(1) not null default 'a'
+               contact_record_status           char(1) not null default 'a',
+               INDEX company_id (company_id)
                )";
         //execute
         $rst = $con->execute($sql);
@@ -774,6 +776,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.3  2004/04/12 14:34:02  maulani
+ * - Add indexes for foreign key company_id
+ *
  * Revision 1.2  2004/03/22 02:05:07  braverock
  * - add case_priority_score_adjustment to fix SF bug 906413
  *

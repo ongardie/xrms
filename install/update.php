@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.5 2004/03/26 16:17:00 maulani Exp $
+ * $Id: update.php,v 1.6 2004/04/12 14:34:02 maulani Exp $
  */
 
 /**
@@ -70,9 +70,6 @@ if ($recCount == 0) {
 //should put a test here, but alter table is non-destructive
 $sql = "alter table case_priorities add case_priority_score_adjustment int not null after case_priority_display_html";
 $rst = $con->execute($sql);
-if ($rst) {
-    $rst->close();
-}
 // end case_priority_display_html
 
 // Fix problem introduced by buggy Mar 19, 2004 install code
@@ -82,6 +79,16 @@ $sql .= '$lines<br>$city, $province $postal_code<br>$country';
 $sql .= "' where address_format_string!='";
 $sql .= '$lines<br>$city, $province $postal_code<br>$country';
 $sql .= "' and address_format_string_id=1";
+$rst = $con->execute($sql);
+
+// Add indexes on the company_id field so data integrity checks take a reasonable about of time
+$sql = "create index company_id on addresses (company_id)";
+$rst = $con->execute($sql);
+$sql = "create index company_id on contacts (company_id)";
+$rst = $con->execute($sql);
+
+// Make sure that the database has the correct legal_name column
+$sql = "alter table companies change company_legal_name legal_name varchar( 100 ) not null";
 $rst = $con->execute($sql);
 
 
@@ -105,6 +112,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.6  2004/04/12 14:34:02  maulani
+ * - Add indexes for foreign key company_id
+ *
  * Revision 1.5  2004/03/26 16:17:00  maulani
  * - Cleanup formatting
  *
