@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.42 2005/01/09 18:04:55 vanmer Exp $
+ * $Id: utils-interface.php,v 1.43 2005/01/25 06:01:27 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -13,6 +13,7 @@ if ( !defined('IN_XRMS') )
 
 //include utils-misc if it isn't already defined, solves PHP 5 error
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-preferences.php');
 
 /**
  * Include the i18n files, as every file with output will need them
@@ -136,13 +137,27 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
  * @param string  $msg         error or other notification message
  */
 function start_page($page_title = '', $show_navbar = true, $msg = '') {
-
     global $http_site_root;
     global $app_title;
     global $css_theme;
+    
+    if (!$xcon) {
+        global $xrms_db_dbtype;
+        global $xrms_db_server;
+        global $xrms_db_username;
+        global $xrms_db_password;
+        global $xrms_db_dbname;
+        $xcon = &adonewconnection($xrms_db_dbtype);
+        $xcon->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    }
+    $user_id=$_SESSION['session_user_id'];
 
+    
     $msg = status_msg($msg);
-
+    if ($user_id) {
+        $css_theme = get_user_preference($xcon, $user_id, 'css_theme');
+    }
+//    echo "    $css_theme = get_user_preference($con, $user_id, 'css_theme');";
     $curtheme = empty($css_theme) ? 'basic' : $css_theme;
     $cssroot = $http_site_root.'/css/';
 
@@ -356,34 +371,22 @@ EOQ;
 } //end jscalendar_includes fn
 
 function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
-    global $on_what_table;
-    global $session_user_id;
-    global $on_what_id;
-    if ($_table) $table=$_table;
-    else $table=$on_what_table;
-    if ($_id) $cid=$_id;
-    else $cid=$on_what_id;
-    
-    if (!check_permission_bool($session_user_id, false, $cid, 'Update',$table))
-        return false;
-    return render_button($text, $type, $onclick, $name, $id);
+    return render_ACL_button('Update', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
 
 function render_delete_button($text='Delete', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
-    global $on_what_table;
-    global $session_user_id;
-    global $on_what_id;
-    if ($_table) $table=$_table;
-    else $table=$on_what_table;
-    if ($_id) $cid=$_id;
-    else $cid=$on_what_id;
-    
-    if (!check_permission_bool($session_user_id, false, $cid, 'Delete',$table))
-        return false;
-    return render_button($text, $type, $onclick, $name, $id);
+    return render_ACL_button('Delete', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
 
 function render_read_button($text='Read', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
+    return render_ACL_button('Read', $text, $type, $onclick, $name, $id, $_table, $_id);
+}
+
+function render_create_button($text='Create', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
+    return render_ACL_button('Create', $text, $type, $onclick, $name, $id, $_table, $_id);
+}
+
+function render_ACL_button($action, $text='Create', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     global $on_what_table;
     global $session_user_id;
     global $on_what_id;
@@ -392,22 +395,13 @@ function render_read_button($text='Read', $type='submit', $onclick=false, $name=
     if ($_id) $cid=$_id;
     else $cid=$on_what_id;
     
-    if (!check_permission_bool($session_user_id, false, $cid, 'Read',$table))
-        return false;
-    return render_button($text, $type, $onclick, $name, $id);
-}
-
-function render_create_button($text='Create', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
-    global $on_what_table;
-    global $session_user_id;
-    global $on_what_id;
-    if ($_table) $table=$_table;
-    else $table=$on_what_table;
-    if ($_id) $cid=$_id;
-    else $cid=$on_what_id;
-
-    if (!check_permission_bool($session_user_id, false, $cid, 'Create',$table))
-        return false;
+    if (!$cid) { 
+        if (!check_object_permission_bool($session_user_id, false, $action, $table))
+            return false;
+    } else {
+        if (!check_permission_bool($session_user_id, false, $cid, $action,$table))
+            return false;
+    }
     return render_button($text, $type, $onclick, $name, $id);
 }
 
@@ -432,6 +426,10 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.43  2005/01/25 06:01:27  vanmer
+ * - added check for user preference of css theme if set
+ * - altered ACL button functions to call centralized function
+ *
  * Revision 1.42  2005/01/09 18:04:55  vanmer
  * - changed database ID to cid to avoid conflict with id for HTML element in all render_ button functions
  *
