@@ -12,27 +12,27 @@
 
 $xrms_db_dbtype = 'mysql';
 $xrms_db_server = 'localhost';
-$xrms_db_username = 'xrms_dev';
-$xrms_db_password = 'andthe04';
-$xrms_db_dbname = 'xrms_dev';
+$xrms_db_username = 'your_mysql_username';
+$xrms_db_password = 'your_mysql_password';
+$xrms_db_dbname = 'your_mysql_database';
 
 // where is this application, web-wise? (no trailing slash)
-$http_site_root = "http://www.cdwtech.com:8083";
+$http_site_root = "http://www.yoursitename.com/xrms";
 
 // directory where uploaded files should go
 $max_file_size = 200000;
-$tmp_upload_directory = "/web/xrms/tmp/";
-$file_storage_directory = "/web/xrms/files/storage/";
+$tmp_upload_directory = "/full/path/to/xrms/tmp/";
+$file_storage_directory = "/full/path/to/xrms/files/storage/";
 
 // accounting software integration is in the works, but for now
 $accounting_system = ''; // no integration
 
 // if you have more than one XRMS installation, these need to be unique so that users logged in to one 
 // application can't just start using the other one.  This variable sets "scope" to the user's login.
-$xrms_system_id = "XRMS DEV";
+$xrms_system_id = "XRMS";
 
 // what should this application be called?
-$app_title = 'XRMS Dev';
+$app_title = 'XRMS';
 
 // replace this with your organization's name 
 $system_company_name = 'Acme Distribution';
