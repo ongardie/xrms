@@ -139,7 +139,9 @@ if ($rst) {
         $open_p = $rst->fields['activity_status'];
         $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
         $is_overdue = $rst->fields['is_overdue'];
-
+        $on_what_table = $rst->fields['on_what_table'];
+        $on_what_id = $rst->fields['on_what_id'];
+        
         if ($open_p == 'o') {
             if ($is_overdue) {
                 $classname = 'overdue_activity';
