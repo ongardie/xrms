@@ -22,6 +22,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_name = $rst->fields['company_name'];
+    $company_legal_name = $rst->fields['company_legal_name'];
     $company_code = $rst->fields['company_code'];
     $crm_status_id = $rst->fields['crm_status_id'];
     $user_id = $rst->fields['user_id'];
@@ -85,71 +86,75 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Company&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text size=40 name=company_name value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=40 name=company_name value="<?php echo $company_name; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Legal&nbsp;Name</td>
+                <td class=widget_content_form_element><input type=text size=40 name=company_legal_name value="<?php echo $company_legal_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Company&nbsp;Code</td>
-                <td class=widget_content_form_element><input type=text size=10 name=company_code value="<?php  echo $company_code; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=10 name=company_code value="<?php echo $company_code; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>CRM&nbsp;Status</td>
-                <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $crm_status_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Owner</td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $user_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Company Source</td>
-                <td class=widget_content_form_element><?php  echo $company_source_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $company_source_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Industry</td>
-                <td class=widget_content_form_element><?php  echo $industry_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $industry_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Phone</td>
-                <td class=widget_content_form_element><input type=text name=phone value="<?php  echo $phone; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=phone value="<?php echo $phone; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Alt.&nbsp;Phone</td>
-                <td class=widget_content_form_element><input type=text name=phone2 value="<?php  echo $phone2; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=phone2 value="<?php echo $phone2; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Fax</td>
-                <td class=widget_content_form_element><input type=text name=fax value="<?php  echo $fax; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=fax value="<?php echo $fax; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>URL</td>
-                <td class=widget_content_form_element><input type=text name=url size=40 value="<?php  echo $url; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=url size=40 value="<?php echo $url; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Employees</td>
-                <td class=widget_content_form_element><input type=text name=employees size=10 value="<?php  echo $employees; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=employees size=10 value="<?php echo $employees; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Revenue</td>
-                <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php  echo $revenue; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php echo $revenue; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom1_label ?></td>
-                <td class=widget_content_form_element><input type=text name=custom1 size=30 value="<?php  echo $custom1; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=custom1 size=30 value="<?php echo $custom1; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom2_label ?></td>
-                <td class=widget_content_form_element><input type=text name=custom2 size=30 value="<?php  echo $custom2; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=custom2 size=30 value="<?php echo $custom2; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom3_label ?></td>
-                <td class=widget_content_form_element><input type=text name=custom3 size=30 value="<?php  echo $custom3; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=custom3 size=30 value="<?php echo $custom3; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom4_label ?></td>
-                <td class=widget_content_form_element><input type=text name=custom4 size=30 value="<?php  echo $custom4; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=custom4 size=30 value="<?php echo $custom4; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Profile</td>
-                <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php  echo $profile; ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>

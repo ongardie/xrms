@@ -12,6 +12,7 @@ $session_user_id = session_check();
 
 $company_id = $_POST['company_id'];
 $company_name = $_POST['company_name'];
+$company_legal_name = $_POST['company_legal_name'];
 $company_code = $_POST['company_code'];
 $crm_status_id = $_POST['crm_status_id'];
 $company_source_id = $_POST['company_source_id'];
@@ -32,7 +33,7 @@ $custom4 = $_POST['custom4'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update companies set crm_status_id = $crm_status_id, company_source_id = $company_source_id, industry_id = $industry_id, user_id = $user_id, last_modified_by = $session_user_id, company_name = " . $con->qstr($company_name, get_magic_quotes_gpc()) . ", company_code = " . $con->qstr($company_code, get_magic_quotes_gpc()) . ", phone = " . $con->qstr($phone, get_magic_quotes_gpc()) . ", phone2 = " . $con->qstr($phone2, get_magic_quotes_gpc()) . ", fax = " . $con->qstr($fax, get_magic_quotes_gpc()) . ", url = " . $con->qstr($url, get_magic_quotes_gpc()) . ", employees = " . $con->qstr($employees, get_magic_quotes_gpc()) . ", revenue = " . $con->qstr($revenue, get_magic_quotes_gpc()) . ", custom1 = " . $con->qstr($custom1, get_magic_quotes_gpc()) . ", custom2 = " . $con->qstr($custom2, get_magic_quotes_gpc()) . ", custom3 = " . $con->qstr($custom3, get_magic_quotes_gpc()) . ", custom4 = " . $con->qstr($custom4, get_magic_quotes_gpc()) . ", profile = " . $con->qstr($profile, get_magic_quotes_gpc()) . " WHERE company_id = $company_id";
+$sql = "update companies set crm_status_id = $crm_status_id, company_source_id = $company_source_id, industry_id = $industry_id, user_id = $user_id, last_modified_by = $session_user_id, company_name = " . $con->qstr($company_name, get_magic_quotes_gpc()) . ", company_legal_name = " . $con->qstr($company_legal_name, get_magic_quotes_gpc()) . ", company_code = " . $con->qstr($company_code, get_magic_quotes_gpc()) . ", phone = " . $con->qstr($phone, get_magic_quotes_gpc()) . ", phone2 = " . $con->qstr($phone2, get_magic_quotes_gpc()) . ", fax = " . $con->qstr($fax, get_magic_quotes_gpc()) . ", url = " . $con->qstr($url, get_magic_quotes_gpc()) . ", employees = " . $con->qstr($employees, get_magic_quotes_gpc()) . ", revenue = " . $con->qstr($revenue, get_magic_quotes_gpc()) . ", custom1 = " . $con->qstr($custom1, get_magic_quotes_gpc()) . ", custom2 = " . $con->qstr($custom2, get_magic_quotes_gpc()) . ", custom3 = " . $con->qstr($custom3, get_magic_quotes_gpc()) . ", custom4 = " . $con->qstr($custom4, get_magic_quotes_gpc()) . ", profile = " . $con->qstr($profile, get_magic_quotes_gpc()) . " WHERE company_id = $company_id";
 $con->execute($sql);
 
 header("Location: one.php?msg=saved&company_id=$company_id");

@@ -12,6 +12,7 @@ $session_user_id = session_check();
 
 $company_id = $_POST['company_id'];
 $account_status_id = $_POST['account_status_id'];
+$tax_id = $_POST['tax_id'];
 $credit_limit = $_POST['credit_limit'];
 $rating_id = $_POST['rating_id'];
 $terms = $_POST['terms'];
@@ -24,7 +25,7 @@ $terms = ($terms > 0) ? $terms : 0;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update companies set account_status_id = $account_status_id, credit_limit = " . $con->qstr($credit_limit, get_magic_quotes_gpc()) . ", rating_id = $rating_id, terms = $terms, extref1 = " . $con->qstr($extref1, get_magic_quotes_gpc()) . ", extref2 = " . $con->qstr($extref2, get_magic_quotes_gpc()) . " where company_id = $company_id";
+$sql = "update companies set account_status_id = $account_status_id, tax_id = " . $con->qstr($tax_id, get_magic_quotes_gpc()) . ", credit_limit = " . $con->qstr($credit_limit, get_magic_quotes_gpc()) . ", rating_id = $rating_id, terms = $terms, extref1 = " . $con->qstr($extref1, get_magic_quotes_gpc()) . ", extref2 = " . $con->qstr($extref2, get_magic_quotes_gpc()) . " where company_id = $company_id";
 $con->execute($sql);
 
 $sql = "select extref1, extref2 from companies where company_id = $company_id";

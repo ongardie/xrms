@@ -38,6 +38,8 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_name = $rst->fields['company_name'];
+    $company_legal_name = $rst->fields['company_legal_name'];
+    $tax_id = $rst->fields['tax_id'];
     $company_code = $rst->fields['company_code'];
     $crm_status_pretty_name = $rst->fields['crm_status_pretty_name'];
     $company_source = $rst->fields['company_source_display_html'];
@@ -388,8 +390,8 @@ function openNewsWindow() {
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel>Name</td>
-                                    <td class=clear><?php  echo $company_name; ?></td>
+                                    <td width=1% class=sublabel>Legal Name</td>
+                                    <td class=clear><?php  echo $company_legal_name; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Code</td>
@@ -451,20 +453,24 @@ function openNewsWindow() {
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyAccountStatusLabel; ?></td>
-                                    <td class=clear><?php  echo $account_status; ?></td>
+                                    <td class=sublabel>Account&nbsp;Status</td>
+                                    <td class=clear><?php echo $account_status; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCreditLimitLabel; ?></td>
-                                    <td class=clear>$<?php  echo $credit_limit; ?> <?php echo $current_credit_limit; ?></td>
+                                    <td class=sublabel>Tax ID</td>
+                                    <td class=clear><?php echo $tax_id; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyRatingLabel; ?></td>
-                                    <td class=clear><?php  echo $rating; ?></td>
+                                    <td class=sublabel>Credit&nbsp;Limit</td>
+                                    <td class=clear>$<?php echo $credit_limit; ?> <?php echo $current_credit_limit; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyTermsLabel; ?></td>
-                                    <td class=clear><?php  echo $terms; ?> days</td>
+                                    <td class=sublabel>Rating</td>
+                                    <td class=clear><?php echo $rating; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Terms</td>
+                                    <td class=clear><?php echo $terms; ?> days</td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
