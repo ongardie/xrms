@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.20 2004/07/01 13:21:06 braverock Exp $
+ * $Id: some.php,v 1.21 2004/07/01 13:37:25 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -277,7 +277,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=companies_next_page>
         <table class=widget cellspacing=1 width="100%">
             <tr>
-          <td class=widget_header colspan=4>
+          <td class=widget_header colspan=6>
             <?php  echo $strCompaniesSomeSearchCriteriaTitle; ?>
           </td>
         </tr>
@@ -286,31 +286,13 @@ start_page($page_title, true, $msg);
             <?php  echo $strCompaniesSomeCompanyNameLabel; ?>
           </td>
           <td class=widget_label>
-            <?php  echo $strCompaniesSomeCompanyCodeLabel; ?>
-          </td>
-          <td class=widget_label>
             <?php  echo $strCompaniesSomeCompanyUserLabel; ?>
           </td>
           <td class=widget_label>
             <?php  echo $strCompaniesSomeCompanyCategoryLabel; ?>
           </td>
-        </tr>
-        <tr>
-          <td class=widget_content_form_element><input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>"></td>
-          <td class=widget_content_form_element><input type=text name="company_code" size=4 value="<?php  echo $company_code; ?>"></td>
-          <td class=widget_content_form_element>
-            <?php  echo $user_menu; ?>
-          </td>
-          <td class=widget_content_form_element>
-            <?php  echo $company_category_menu; ?>
-          </td>
-        </tr>
-        <tr>
           <td class=widget_label>
             <?php  echo $strCompaniesSomeCompanyIndustrylabel; ?>
-          </td>
-          <td class=widget_label>
-            <?php  echo $strCompaniesSomeCompanyCRMStatusLabel; ?>
           </td>
           <td class=widget_label>
             <?php  echo $strCompaniesSomeCompanyCityLabel; ?>
@@ -320,26 +302,39 @@ start_page($page_title, true, $msg);
           </td>
         </tr>
         <tr>
-          <td width="25%" class=widget_content_form_element>
-            <?php  echo $industry_menu; ?>
-          </td>
-          <td width="25%" class=widget_content_form_element>
-            <?php  echo $crm_status_menu; ?>
-          </td>
-          <td width="25%" class=widget_content_form_element>
-<input type=text name="city" size=10 value="<?php  echo $city; ?>"></td>
-          <td width="25%" class=widget_content_form_element>
-<input type=text name="state" size=5 value="<?php echo $state; ?>"></td>
+            <td class=widget_content_form_element>
+                <input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>">
+            </td>
+            <td class=widget_content_form_element>
+                <?php  echo $user_menu; ?>
+            </td>
+            <td class=widget_content_form_element>
+                <?php  echo $company_category_menu; ?>
+            </td>
+            <td width="25%" class=widget_content_form_element>
+                <?php  echo $industry_menu; ?>
+            </td>
+            <td width="25%" class=widget_content_form_element>
+                <input type=text name="city" size=10 value="<?php  echo $city; ?>">
+            </td>
+            <td width="25%" class=widget_content_form_element>
+                <input type=text name="state" size=5 value="<?php echo $state; ?>">
+            </td>
         </tr>
         <tr>
-          <td class=widget_content_form_element colspan=4><input name="submit_form" type=submit class=button value="Search">
-            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
-            <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
-            <input type=button class=button onclick="javascript: location.href='advanced-search.php';" value="Advanced Search">
-          </td>
+            <td class=widget_content_form_element colspan=6>
+                <input name="submit_form" type=submit class=button value="Search">
+                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
+                <?php
+                    if ($company_count > 0) {
+                        print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";
+                    };
+                ?>
+                <input type=button class=button onclick="javascript: location.href='advanced-search.php';" value="Advanced Search">
+            </td>
         </tr>
       </table>
-        </form>
+  </form>
 
 <?php
 
@@ -417,6 +412,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.21  2004/07/01 13:37:25  braverock
+ * - compress quick search back onto one line now that advanced search exists
+ *   - @todo add Category search to Advanced search
+ *
  * Revision 1.20  2004/07/01 13:21:06  braverock
  * - change name of submit to submit_form to not conflict with js
  *   - patch supplied by David Uhlman
