@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.15 2004/04/19 14:21:54 braverock Exp $
+ * $Id: import-companies-3.php,v 1.16 2004/04/19 19:36:16 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -382,12 +382,12 @@ foreach ($filearray as $row) {
             if (!$address_id and $company_id) {
                 //figure out a country, because country seems to be required as well
                 if ($address_country) {
-                    if !is_numeric($address_country)){
+                    if (!is_numeric($address_country)){
                         $country_sql = "select country_name, country_id from countries
                             where country_record_status = 'a' and
                             country name like "
                             . $con->qstr('%' .$address_country.'%', get_magic_quotes_gpc())
-                            " limit 1";
+                            . " limit 1";
                         $addrrst = $con->execute($sql);
                         if ($addrrst){
                             $address_country = $addrrst->fields('country_id');
@@ -650,6 +650,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.16  2004/04/19 19:36:16  braverock
+ * - fix syntax of address_country checks
+ *
  * Revision 1.15  2004/04/19 14:21:54  braverock
  * - add additional look-ups and tests on import
  * - improve error reporting
