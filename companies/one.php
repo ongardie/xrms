@@ -8,7 +8,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$session_user_id = session_check();
+$this = $_SERVER['REQUEST_URI'];
+$session_user_id = session_check( $this );
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
@@ -21,8 +22,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
-$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, addresses.*, iso_code3, address_format_string
-        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses, countries, address_format_strings afs
+$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, iso_code3, address_format_string
+        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, countries, address_format_strings afs
         where c.account_status_id = as1.account_status_id
         and c.industry_id = i.industry_id
         and c.rating_id = r.rating_id
