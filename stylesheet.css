@@ -3,7 +3,7 @@ body {
   background-color: #eeeeee;
   margin: 1px;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
 }
 
 #page_header {
@@ -27,7 +27,7 @@ body {
   padding: 5px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: normal;
 }
 
@@ -98,7 +98,7 @@ td.widget_header {
   background-color: rgb(20%,40%,60%);
   color: #ffffee;
   font-family: verdana, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: bold;
   background-image: url("img/widget_header_background.gif");
 }
@@ -107,7 +107,7 @@ td.widget_label {
   padding: 5px;
   background-color: #eeeeee;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: normal;
   color: #333333;
   background-image: url("img/widget_label_background.gif");
@@ -116,7 +116,7 @@ td.widget_label_right {
   padding: 8px;
   background-color: #eeeeee;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: normal;
   color: #333333;
   text-align: right;
@@ -128,7 +128,7 @@ td.widget_label_center {
   padding: 5px;
   background-color: #eeeeee;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: normal;
   color: #333333;
   text-align: center;
@@ -139,7 +139,7 @@ td.widget_label_right_91px {
   padding: 4px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: normal;
   color: #333333;
   text-align: right;
@@ -149,7 +149,7 @@ td.widget_label_right_166px {
   padding: 4px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: normal;
   color: #333333;
   text-align: right;
@@ -162,7 +162,7 @@ td.widget_content {
   padding: 5px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
   vertical-align: top;
 }
@@ -171,7 +171,7 @@ td.widget_content_nowrap {
   padding: 5px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
   vertical-align: top;
   white-space: nowrap;
@@ -180,7 +180,7 @@ td.widget_content_center {
   padding: 5px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
   text-align: center;
 }
@@ -188,7 +188,7 @@ td.widget_content_right {
   padding: 5px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
   text-align: right;
 }
@@ -197,7 +197,7 @@ td.widget_content_graph {
   padding: 5px;
   background-color: #bbbbbb;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #ffffee;
   text-align: center;
 }
@@ -206,7 +206,7 @@ td.widget_content_market1 {
   padding: 5px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
 }
 
@@ -214,7 +214,7 @@ td.widget_content_alt, widget_content_market2 {
   padding: 5px;
   background-color: #ffffee;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
 }
 
@@ -223,7 +223,7 @@ td.widget_content_form_element {
   vertical-align: middle;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
 }
 
@@ -232,7 +232,7 @@ td.widget_content_form_element_center {
   vertical-align: middle;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
   text-align: center;
 }
@@ -243,7 +243,7 @@ td.sublabel {
   padding-top: 1px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #666666;
   font-weight: bold;
   text-align: right;
@@ -254,7 +254,7 @@ td.clear {
   padding-top: 1px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: normal;
   color: #333333;
 }
@@ -263,21 +263,21 @@ td.open_activity {
   padding: 5px;
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
 }
 td.closed_activity {
   padding: 5px;
   background-color: #dcdcdc;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #333333;
 }
 td.overdue_activity {
   padding: 5px;
   background-color: #ff7777;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #ffffee;
 }
 
@@ -293,7 +293,7 @@ td.non_uploaded_file {
   padding: 5px;
   background-color: #ff7777;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: #ffffee;
 }
 
@@ -345,14 +345,14 @@ td.widget_header_warning {
   background-color: #ff3333;
   color: White;
   font-family: verdana, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: bold;
 }
 td.widget_content_warning {
   padding: 3px;
   background-color: #eeeeee;
   font-family: verdana, sans-serif;
-  font-size: x-small;
+  font-size: small;
   font-weight: bold;
   color: #ff3333;
   text-align: center;
@@ -370,7 +370,7 @@ a:hover {
 
 /* a.new {
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   color: White;
   text-decoration: none;
 } */
@@ -385,18 +385,18 @@ td.rcol {
 input, select, textarea {
   background-color: White;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   margin: 0px;
 }
 input.monospace, select.monospace, textarea.monospace {
   font-family: courier, monospace;
-  font-size: x-small;
+  font-size: small;
 }
 input.button {
   border: 1px solid #999999;
   background-color: #ffcc99;
   font-family: arial, sans-serif;
-  font-size: x-small;
+  font-size: small;
   margin: 0px;
 }
 
