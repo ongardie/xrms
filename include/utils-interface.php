@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.33 2004/08/12 11:10:19 braverock Exp $
+ * $Id: utils-interface.php,v 1.34 2004/08/16 20:02:22 johnfawcett Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -23,6 +23,9 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'i18n.php');
 
 require_once ($include_directory.'plugin.php');
+
+//set up internationalization
+set_up_language($xrms_default_language, true, true);
 
 /**
  * function status_msg
@@ -104,17 +107,10 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     global $http_site_root;
     global $app_title;
 
-    //i18n globals
-    global $use_gettext, $languages,
-           $xrms_language, $xrms_default_language,
-           $xrms_notAlias, $userid, $data_dir;
-
     $msg = status_msg($msg);
 
     $stylesheet = "$http_site_root/stylesheet.css";
 
-    //set up internationalization
-    set_up_language($xrms_default_language, true, true);
 
     echo <<<EOQ
     <!DOCTYPE HTML PUBLIC
@@ -235,6 +231,11 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.34  2004/08/16 20:02:22  johnfawcett
+ * - moved set_up_language() call into global scope to pick up strings that
+ *   were not being translated because the gettext calls were done before
+ *   the language had been setup.
+ *
  * Revision 1.33  2004/08/12 11:10:19  braverock
  * - add require_once for utils-misc.php to solve SF bug 1005069
  *
