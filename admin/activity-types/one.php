@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.7 2004/07/19 21:30:16 introspectshun Exp $
+ * $Id: one.php,v 1.8 2004/07/25 15:05:00 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -39,7 +39,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Activity Type : ").$activity_type_pretty_name;
+$page_title = _("Activity Type Details").': '.$activity_type_pretty_name;
 start_page($page_title);
 
 ?>
@@ -79,7 +79,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Activity Type?"); ?>');">
+        <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Activity Type").'?'; ?>');">
         <input type=hidden name=activity_type_id value="<?php  echo $activity_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -112,6 +112,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 15:05:00  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext string
+ *
  * Revision 1.7  2004/07/19 21:30:16  introspectshun
  * - Added space to correct display of page title
  *
