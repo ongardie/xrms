@@ -26,6 +26,9 @@ select,
 textarea {
     margin: 0px;
 }
+input.button {
+    padding: 0px;
+}
 table.widget {
     margin: 0px auto 4px auto;
     width: 100%;
