@@ -1,5 +1,11 @@
 <?php
+/**
+ * Insert the updated information into the database
+ *
+ * $Id: edit-2.php,v 1.2 2004/03/22 02:52:36 braverock Exp $
+ */
 
+// include required files
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -22,6 +28,12 @@ $con->execute($sql);
 
 $con->close();
 
-header("Location: one.php?crm_status_id=$crm_status_id");
+header("Location: some.php");
 
+/**
+ * $Log: edit-2.php,v $
+ * Revision 1.2  2004/03/22 02:52:36  braverock
+ * - redirect to some.php
+ *
+ */
 ?>
