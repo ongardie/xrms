@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.8 2005/02/25 03:42:33 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.9 2005/02/28 00:00:17 daturaarutad Exp $
  */
 
 
@@ -522,7 +522,9 @@ class GUP_Pager {
             <input type=hidden name={$this->pager_id}_refresh value="">
 END;
 	}
-
+    /**
+	* private method to render the data portion of the table
+	*/
     function RenderGrid()
     {
         ob_start();
@@ -634,7 +636,7 @@ END;
         	$this->RenderTotals(_('Subtotals this page:'), $this->SubtotalColumns);
         	$this->RenderTotals(_('Totals:'), $this->TotalColumns);
 		} else {
-			echo '<tr><td colspan="' . $column_count . '" class="widget_content">' . _('No Matches') . '</td></tr>';
+			echo '<tr><td colspan="' . $column_count . '" class="widget_content">' . _('No matches') . '</td></tr>';
 		}
 
         $s = ob_get_contents();
@@ -645,10 +647,9 @@ END;
 
 
 
-    //-------------------------------------------------------
-    // Navigation bar
-    //
-    // we use output buffering to keep the code easy to read.
+    /**
+	* private method to render the top navigation bar
+	*/
     function RenderNav()
     {
       ob_start();
@@ -666,6 +667,10 @@ END;
 
       return $s;
     }
+
+    /**
+	* private method to render this part:  |< < 1 2 3 ... > >|
+	*/
     function Render_PageLinks()
     {
 
@@ -703,8 +708,9 @@ END;
 	}
 
 
-
-    // Display link to first page
+    /**
+	* private method to Display link to first page
+	*/
     function Render_First()
     {
       if(!$this->AtFirstPage) {
@@ -713,7 +719,9 @@ END;
         print "$this->first &nbsp; ";
       }
     }
-    // Link to previous page
+    /**
+	* private method to display Link to previous page
+	*/
     function Render_Prev($anchor=true)
     {
       if(!$this->AtFirstPage) {
@@ -723,7 +731,9 @@ END;
       }
     }
 
-    // Display link to next page
+    /**
+	* private method to display Link to next page
+	*/
     function Render_Next()
     {
       if (!$this->AtLastPage) {
@@ -732,12 +742,12 @@ END;
         print "$this->next &nbsp; ";
       }
     }
-    //------------------
-    // Link to last page
-    //
-    // for better performance with large recordsets, you can set
-    // $this->db->pageExecuteCountRows = false, which disables
-    // last page counting.
+    /**
+	* private method to display Link to last page
+    * for better performance with large recordsets, you can set
+    * $this->db->pageExecuteCountRows = false, which disables
+    * last page counting.
+	*/
     function Render_Last($anchor=true)
     {
       if (!$this->db->pageExecuteCountRows) return;
@@ -749,8 +759,9 @@ END;
       }
     }
 
-    //-------------------
-    // This is the page_count
+    /**
+    * This is the page_count
+	*/
     function RenderPageCount()
     {
       if (!$this->db->pageExecuteCountRows) return '';
@@ -765,7 +776,6 @@ END;
     }
 	
 
-    //------------------------------------------------------
 	/**
 	* this function assembles the html elements for final composition of the pager
 	*/
@@ -819,11 +829,17 @@ END;
     }
 
 
-
+	/**
+	* public method allows users to add HTML to the bottom of the pager
+	* @param string html to append
+	*/
     function AddEndRows($html) {
         $this->EndRows = $html;
     }
 
+	/**
+	* private method to calculate the totals and subtotals columns
+	*/
 	function CalculateTotals() {
         $rs = $this->rs;
 
@@ -843,6 +859,9 @@ END;
         return $s;
 	}
 
+	/**
+	* private method to render the totals and subtotals columns
+	*/
     function RenderTotals($caption, $values) {
         if(0 != count($values)) {
 
@@ -865,13 +884,25 @@ END;
             echo "</tr>";
         }
     }
+	/**
+	* public method to cause the data to be recalculated
+	*/
 	function FlushCache() {
 		$this->use_cached = false;
 	}
+	/**
+	* public method to force the entire dataset to be retrieved
+	*/
 	function ForceGetAll() {
 		$this->get_only_visible = false;
 	}
-	// if any of these variables change from page to page, we flush the cache.
+	/**
+	* public method to render the totals and subtotals columns
+	* This function takes a CGI variable name and handles the 'watching' by comparing with
+	* the values in $_SESSION
+	* 
+	* @param array plain array of CGI variable names
+	*/
 	function CheckCacheWatchedCGIVars($vars) {
 		$prepend = $this->pager_id . '_pager_session_cache_';
 		
@@ -886,6 +917,13 @@ END;
 			$_SESSION[$prepend . $var] = $v;
 		}
 	}
+	/**
+	* public method to render the totals and subtotals columns
+	* This function takes a variable name and a value and handles the 'watching' by comparing with
+	* the values in $_SESSION
+	* 
+	* @param array assoc array of variable names and their values
+	*/
 	function CheckCacheWatchedLocalVar($varname, $value) {
 		$prepend = $this->pager_id . '_pager_session_cache_';
 		
@@ -899,6 +937,9 @@ END;
 		}
 		$_SESSION[$prepend . $varname] = $value;
 	}
+	/**
+	*  Private function to append the order by clause to the SQL query
+	*/
 	function SetUpSQLOrderByClause() {
 	
 		// set up an order by clause if the sort column is coming from SQL
@@ -927,6 +968,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.9  2005/02/28 00:00:17  daturaarutad
+ * comments on all functions
+ *
  * Revision 1.8  2005/02/25 03:42:33  daturaarutad
  * don't use the cache if we are in sql-only mode (no data or callbacks)
  *
