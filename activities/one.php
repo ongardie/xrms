@@ -18,9 +18,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "activities", $activity_id);
 
-$sql = "select a.*, c.company_id, c.company_name, cont.first_names, cont.last_name 
-from companies c, activities a left join contacts cont on a.contact_id = cont.contact_id 
-where a.company_id = c.company_id 
+$sql = "select a.*, c.company_id, c.company_name, cont.first_names, cont.last_name
+from companies c, activities a left join contacts cont on a.contact_id = cont.contact_id
+where a.company_id = c.company_id
 and activity_id = $activity_id";
 
 $rst = $con->execute($sql);
@@ -30,9 +30,9 @@ if ($rst) {
     $activity_title = $rst->fields['activity_title'];
     $activity_description = $rst->fields['activity_description'];
     $user_id = $rst->fields['user_id'];
-	$company_id = $rst->fields['company_id'];
-	$company_name = $rst->fields['company_name'];
-	$contact_id = $rst->fields['contact_id'];
+    $company_id = $rst->fields['company_id'];
+    $company_name = $rst->fields['company_name'];
+    $contact_id = $rst->fields['contact_id'];
     $on_what_table = $rst->fields['on_what_table'];
     $on_what_id = $rst->fields['on_what_id'];
     $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
@@ -52,14 +52,14 @@ if ($on_what_table == 'opportunities') {
     $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
 } else {
     $attached_to_link = "N/A";
-	$sql = "select * from companies where 1 = 2";
+    $sql = "select * from companies where 1 = 2";
 }
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     $attached_to_name = $rst->fields['attached_to_name'];
-	$attached_to_link .= $attached_to_name . "</a>";
+    $attached_to_link .= $attached_to_name . "</a>";
     $rst->close();
 }
 
@@ -75,8 +75,10 @@ $rst->close();
 
 $sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
-$contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
-$rst->close();
+if ($rst) {
+    $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
+    $rst->close();
+}
 
 $con->close();
 
