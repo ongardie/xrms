@@ -14,6 +14,9 @@
  * Copyright (c) 2004 XRMS Development Team
  */
 
+    // clear $company_profile
+    $company_profile = "";
+
     //company info
     $company_taxid       = $row['tax_id'];
     $extref1             = $row['extref1'];
@@ -228,6 +231,9 @@
 
 /**
  * $Log: import-template-act2000.php,v $
+ * Revision 1.4  2005/01/07 20:00:07  gpowers
+ * - cleared $company_profile at start
+ *
  * Revision 1.3  2004/09/22 22:08:19  introspectshun
  * - Updated array keys to eliminate periods (.) and dashes (-)
  *   - Now works in conjunction with CSVtoArray fn in utils-misc.php
