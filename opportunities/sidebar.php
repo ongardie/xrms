@@ -2,11 +2,11 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.3 2004/04/07 13:50:54 maulani Exp $
+ * $Id: sidebar.php,v 1.4 2004/04/07 19:38:26 maulani Exp $
  */
 
 $opportunity_rows = "<div id='opportunity_sidebar'>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width=\"100%\">
             <tr>
                 <td class=widget_header colspan=4>Opportunities</td>
             </tr>
@@ -74,6 +74,10 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.4  2004/04/07 19:38:26  maulani
+ * - Add CSS2 positioning
+ * - Repair HTML to meet validation
+ *
  * Revision 1.3  2004/04/07 13:50:54  maulani
  * - Set CSS2 positioning for the home page
  *

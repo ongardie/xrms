@@ -2,7 +2,7 @@
 /**
  * Display login screen
  *
- * $Id: login.php,v 1.5 2004/04/06 21:59:12 maulani Exp $
+ * $Id: login.php,v 1.6 2004/04/07 19:38:25 maulani Exp $
  */
 require_once('include-locations.inc');
 
@@ -36,7 +36,6 @@ start_page($page_title, false, $msg);
 ?>
 
 <div style="position: absolute; width: 240px; height: 140px; left: 50%; top: 50%; margin-left: -120px; margin-top: -70px;">
-<p>
 <form action=login-2.php method=post>
 <input type=hidden name=target value="<?php echo $target; ?>" >
 <table class=widget cellspacing=1>
@@ -56,7 +55,6 @@ start_page($page_title, false, $msg);
 	</tr>
 </table>
 </form>
-</p>
 </div>
 
 <script type="text/javascript">
@@ -77,6 +75,10 @@ end_page();
 
 /**
  * $Log: login.php,v $
+ * Revision 1.6  2004/04/07 19:38:25  maulani
+ * - Add CSS2 positioning
+ * - Repair HTML to meet validation
+ *
  * Revision 1.5  2004/04/06 21:59:12  maulani
  * - Begin conversion of positioning tables to CSS
  *   - Remove tables from all page headers

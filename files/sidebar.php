@@ -2,20 +2,19 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.3 2004/04/07 13:50:53 maulani Exp $
+ * $Id: sidebar.php,v 1.4 2004/04/07 19:38:26 maulani Exp $
  */
 
 $file_rows = "<div id='file_sidebar'>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width=\"100%\">
             <tr>
-                <td class=widget_header colspan=5>Files</td>
+                <td class=widget_header colspan=4>Files</td>
             </tr>
             <tr>
                 <td class=widget_label>Name</td>
                 <td class=widget_label>Size</td>
                 <td class=widget_label>Owner</td>
                 <td class=widget_label>Date</td>
-                <td class=widget_label>File Id</td>
             </tr>\n";
 
 //build the files sql query
@@ -46,19 +45,17 @@ if (strlen($rst->fields['username']) > 0) {
              <tr>";
         if ($rst->fields['file_size'] == "0")
           {
-          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
+          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&amp;file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($rst->fields['file_size']) . '</b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . $rst->fields['username'] . '</b></td>';
           $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($rst->fields['entered_at']) . '</b></td>';
-          $file_rows .= '<td class=non_uploaded_file><b>' . $rst->fields['file_id'] . '</b></td>';
           }
         else
           {
-          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
+          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&amp;file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
           $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
           $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
           $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
-          $file_rows .= '<td class=widget_content>' . $rst->fields['file_id'] . '</td>';
           }
         $file_rows .= "
              </tr>";
@@ -66,7 +63,7 @@ if (strlen($rst->fields['username']) > 0) {
     }
     $rst->close();
 } else {
-    $file_rows .= "            <tr> <td class=widget_content colspan=5> No attached files </td> </tr>\n";
+    $file_rows .= "            <tr> <td class=widget_content colspan=4> No attached files </td> </tr>\n";
 }
 
 //put in the new button
@@ -74,7 +71,7 @@ if (strlen($on_what_table)>0){
     $file_rows .= "
             <tr>
             <form action='".$http_site_root."/files/new.php' method='post'>
-                <td class=widget_content_form_element colspan=5>
+                <td class=widget_content_form_element colspan=4>
                         <input type=hidden name=on_what_table value='$on_what_table'>
                         <input type=hidden name=on_what_id value='$on_what_id'>
                         <input type=hidden name=return_url value='/".$on_what_table."/one.php?".$on_what_string."_id=".$on_what_id."'>
@@ -89,6 +86,10 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.4  2004/04/07 19:38:26  maulani
+ * - Add CSS2 positioning
+ * - Repair HTML to meet validation
+ *
  * Revision 1.3  2004/04/07 13:50:53  maulani
  * - Set CSS2 positioning for the home page
  *

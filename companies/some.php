@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.8 2004/03/09 13:47:42 braverock Exp $
+ * $Id: some.php,v 1.9 2004/04/07 19:38:25 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -79,8 +79,9 @@ if (!($sort_column == $current_sort_column)) {
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 
-$ascending_order_image = " <img border=0 height=10 width=10 src=../img/asc.gif>";
-$descending_order_image = " <img border=0 height=10 width=10 src=../img/desc.gif>";
+$ascending_order_image = ' <img border=0 height=10 width=10 alt="" src=../img/asc.gif>';
+$descending_order_image = ' <img border=0 height=10 width=10 alt="" src=../img/desc.gif>';
+
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 $_SESSION['companies_sort_column'] = $sort_column;
@@ -196,7 +197,7 @@ $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href=one.php?company_id=' . $rst->fields['company_id'] . '>' . $rst->fields['company_name'] . ' (' . $rst->fields['company_code'] . ')</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?company_id=' . $rst->fields['company_id'] . '">' . $rst->fields['company_name'] . ' (' . $rst->fields['company_code'] . ')</a></td>';
         $recently_viewed_table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -242,9 +243,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
@@ -254,7 +254,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=companies_next_page>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=7><?php  echo $strCompaniesSomeSearchCriteriaTitle; ?></td>
             </tr>
@@ -275,8 +275,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $company_category_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
                 <td class=widget_content_form_element><input type=text name="city" size=10 value="<?php  echo $city; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="state" size=10 value="<?php
-echo $state; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="state" size=10 value="<?php echo $state; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=7><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
@@ -292,16 +291,13 @@ $con->close();
 
 ?>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=34% valign=top>
+    <div id="Sidebar">
 
         <!-- new company //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2>Company Options</td>
             </tr>
@@ -311,7 +307,7 @@ $con->close();
         </table>
 
         <!-- recently viewed companies //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header>Recently Viewed</td>
             </tr>
@@ -321,11 +317,10 @@ $con->close();
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function initialize() {
@@ -364,6 +359,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2004/04/07 19:38:25  maulani
+ * - Add CSS2 positioning
+ * - Repair HTML to meet validation
+ *
  * Revision 1.8  2004/03/09 13:47:42  braverock
  * - fixed duplicate city,state display when both are in search terms
  *

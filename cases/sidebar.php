@@ -2,11 +2,11 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.2 2004/04/07 13:50:52 maulani Exp $
+ * $Id: sidebar.php,v 1.3 2004/04/07 19:38:25 maulani Exp $
  */
 
 $case_rows = "<div id='case_sidebar'>
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width=\"100%\">
             <tr>
                 <td class=widget_header colspan=5>Cases</td>
             </tr>
@@ -74,6 +74,10 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.3  2004/04/07 19:38:25  maulani
+ * - Add CSS2 positioning
+ * - Repair HTML to meet validation
+ *
  * Revision 1.2  2004/04/07 13:50:52  maulani
  * - Set CSS2 positioning for the home page
  *
