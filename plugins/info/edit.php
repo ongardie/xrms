@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.1 2004/07/14 16:50:16 gpowers Exp $
+ * $Id: edit.php,v 1.2 2004/07/22 18:18:19 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,6 +14,10 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'utils-accounting.php');
 
 require_once('info.inc');
+
+$session_user_id = session_check();
+
+$msg = $_GET['msg'];
 
 function show_element ($element_id, $element_value, $element_possvals) {
   # returns HTML to edit element
@@ -76,11 +80,6 @@ function show_element ($element_id, $element_value, $element_possvals) {
   $html .= "</td>";
   return $html;
 }
-
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
-
-$msg = $_GET['msg'];
 
 # Always retrieve, and pass on, server and company ID
 $info_id = $_GET['info_id'];

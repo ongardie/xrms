@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.2 2004/07/14 19:03:27 gpowers Exp $
+ * $Id: sidebar.php,v 1.3 2004/07/22 18:18:19 gpowers Exp $
  */
 
 //$con->debug = 1;
@@ -56,9 +56,11 @@ if ($toprst) {
         #//build the info sql query
         $sql = "SELECT info.value, info.info_id FROM info, info_map ";
         $sql .= "WHERE info.info_id=info_map.info_id ";
-if ($company_id) {
-        $sql .= "AND info_map.company_id=$company_id ";
-}
+        if ($company_id) {
+            $sql .= "AND info_map.company_id=$company_id ";
+        } else {
+            $company_id = 0;
+        }
         $sql .= "AND info_map.info_type_id=$info_type_id  ";
 if ($name_element_id) {
         $sql .= "AND info.element_id=$name_element_id ";

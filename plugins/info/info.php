@@ -2,7 +2,7 @@
 /**
  * The main page for the info plugin
  *
- * $Id: info.php,v 1.1 2004/07/14 16:50:16 gpowers Exp $
+ * $Id: info.php,v 1.2 2004/07/22 18:18:19 gpowers Exp $
  */
 
 // include the common files
@@ -16,8 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once('info.inc');
 
 //set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $msg = $_GET['msg'];
 

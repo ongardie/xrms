@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.2 2004/07/22 17:37:10 gpowers Exp $
+ * $Id: one.php,v 1.3 2004/07/22 18:18:19 gpowers Exp $
  *
  */
 
@@ -327,12 +327,9 @@ function openNewsWindow() {
       <tr>
         <td class=widget_content_form_element>
           <input class=button type=button value="Edit"
-            onclick="javascript: location.href='<?php echo
-
-"edit.php?info_id=$info_id&company_id=$company_id&return_url=$return_url"; ?>';">
+            onclick="javascript: location.href='<?php echo "edit.php?info_id=$info_id&company_id=$company_id&return_url=$return_url"; ?>';">
           <input class=button type=button value="New"
-            onclick="javascript: location.href='<?php echo
-            "edit.php?info_id=0&company_id=$company_id&return_url=$return_url"; ?>';">
+            onclick="javascript: location.href='<?php echo "edit.php?info_id=0&company_id=$company_id&return_url=$return_url"; ?>';">
         </td>
       </tr>
     </table>
