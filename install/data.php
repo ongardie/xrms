@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.1 2004/03/18 01:07:18 maulani Exp $
+ * $Id: data.php,v 1.2 2004/03/25 15:08:58 maulani Exp $
  */
 
 /**
@@ -538,7 +538,7 @@ function misc_db_data($con) {
 
     // address_format_strings
     if (confirm_no_records($con, 'address_format_strings')) {
-        $sql ="insert into address_format_strings (address_format_string) values ('$lines<br>$city, $province $postal_code<br>$country')";
+        $sql ="insert into address_format_strings (address_format_string) values ('" . '$lines<br>$city, $province $postal_code<br>$country' . "')";
         $rst = $con->execute($sql);
     }
     
@@ -864,6 +864,11 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.2  2004/03/25 15:08:58  maulani
+ * - Repair bug 922629 reported by evergreencp (Addresses not displayed
+ *   for companies)  The install script did not properly create the
+ *   address format string record.
+ *
  * Revision 1.1  2004/03/18 01:07:18  maulani
  * - Create installation tests to check whether the include location and
  *   vars.php have been configured.
