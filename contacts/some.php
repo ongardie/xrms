@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.36 2004/08/19 13:12:15 maulani Exp $
+ * $Id: some.php,v 1.37 2004/08/22 23:54:03 niclowe Exp $
  */
 
 //include the standard files
@@ -19,80 +19,24 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-// get call arguments
-if ( isset($_GET['msg']) ) {
-    $msg = $_GET['msg'];
-} else {
-    $msg = '';
-}
+// declare passed in variables
+$arr_vars = array ( // local var name             // session variable name, flag
+                   'sort_column'        => array ( 'contacts_sort_column', arr_vars_SESSION ),
+		   'current_sort_column'=> array ( 'contacts_current_sort_column', arr_vars_SESSION ),
+		   'sort_order'         => array ( 'contacts_sort_order', arr_vars_SESSION ),
+		   'current_sort_order' => array ( 'contacts_current_sort_order', arr_vars_SESSION ),
+		   'last_name'          => array ( 'contacts_last_name', arr_vars_SESSION ),
+		   'first_names'        => array ( 'contacts_first_names', arr_vars_SESSION ),
+		   'title'              => array ( 'contacts_title', arr_vars_SESSION ),
+		   'description'        => array ( 'contacts_description', arr_vars_SESSION ),
+		   'category_id'        => array ( 'category_id', arr_vars_SESSION ),
+		   'user_id'            => array ( 'contacts_user_id', arr_vars_SESSION ),
+		   'company_name'       => array ( 'contacts_company_name', arr_vars_GET_SESSION ),
+		   'company_code'       => array ( 'contacts_company_code', arr_vars_GET_SESSION )
+		   );
 
-if ( isset($_POST['offset']) ) {
-    $offset = $_POST['offset'];
-} else {
-    $offset = '';
-}
-
-if ( isset($_GET['clear']) ) {
-    $clear = ($_GET['clear'] == 1) ? 1 : 0;
-} else {
-    $clear = 0;
-}
-
-if ( isset($_POST['use_post_vars']) ) {
-    $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-} else {
-    $use_post_vars = 0;
-}
-
-if ( isset($_POST['resort']) ) {
-    $resort = $_POST['resort'];
-} else {
-    $resort = '';
-}
-
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $last_name = '';
-    $first_names = '';
-    $title = '';
-    $description = '';
-    $company_name = '';
-    $company_code = '';
-    $company_type_id = '';
-    $category_id = '';
-    $user_id = '';
-} elseif ($use_post_vars) {
-    $sort_column = $_POST['sort_column'];
-    $current_sort_column = $_POST['current_sort_column'];
-    $sort_order = $_POST['sort_order'];
-    $current_sort_order = $_POST['current_sort_order'];
-    $last_name = $_POST['last_name'];
-    $first_names = $_POST['first_names'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $company_name = $_POST['company_name'];
-    $company_code = $_POST['company_code'];
-    $company_type_id = $_POST['company_type_id'];
-    $category_id = $_POST['category_id'];
-    $user_id = $_POST['user_id'];
-} else {
-    $sort_column = $_SESSION['contacts_sort_column'];
-    $current_sort_column = $_SESSION['contacts_current_sort_column'];
-    $sort_order = $_SESSION['contacts_sort_order'];
-    $current_sort_order = $_SESSION['contacts_current_sort_order'];
-    $last_name = $_SESSION['contacts_last_name'];
-    $first_names = $_SESSION['contacts_first_names'];
-    $title = $_SESSION['contacts_title'];
-    $description = $_SESSION['contacts_description'];
-    $company_name = (strlen($_GET['company_name']) > 0) ? $_GET['company_name'] : $_SESSION['contacts_company_name'];
-    $company_code = (strlen($_GET['company_code']) > 0) ? $_GET['company_code'] : $_SESSION['contacts_company_code'];
-    $company_type_id = $_SESSION['contacts_company_type_id'];
-    $category_id = $_SESSION['category_id'];
-    $user_id = $_SESSION['contacts_user_id'];
-}
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -111,18 +55,8 @@ $ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif"
 $descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-$_SESSION['contacts_sort_column'] = $sort_column;
-$_SESSION['contacts_current_sort_column'] = $sort_column;
-$_SESSION['contacts_sort_order'] = $sort_order;
-$_SESSION['contacts_current_sort_order'] = $sort_order;
-$_SESSION['contacts_company_name'] = $company_name;
-$_SESSION['contacts_company_code'] = $company_code;
-$_SESSION['contacts_last_name'] = $last_name;
-$_SESSION['contacts_first_names'] = $first_names;
-$_SESSION['contacts_title'] = $title;
-$_SESSION['contacts_description'] = $description;
-$_SESSION['category_id'] = $category_id;
-$_SESSION['contacts_user_id'] = $user_id;
+// set all session variables
+arr_vars_session_set ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -130,16 +64,16 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS 'Name', "
-       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
-       company_code AS 'Code',
-       title AS 'Title',
-       description AS 'Description',
-       u.username AS 'Owner' ";
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS '" . _("Name") . "', "
+       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS '" . _("Company") . "',
+       company_code AS '" . _("Code") . "',
+       title AS '" . _("Title") . "',
+       description AS '" . _("Description") . "',
+       u.username AS '" . _("Owner") . "' ";
 
 $from = "from contacts cont, companies c, users u ";
 
-$where .= "where c.company_id = cont.company_id ";
+$where  = "where c.company_id = cont.company_id ";
 $where .= "and c.user_id = u.user_id ";
 $where .= "and contact_record_status = 'a'";
 
@@ -191,7 +125,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 
-$group_by .= " group by contact_id";
+$group_by = " group by contact_id";
 
 if ($sort_column == 1) {
     $order_by = "cont.last_name";
@@ -201,34 +135,59 @@ if ($sort_column == 1) {
     $order_by = $sort_column;
 }
 
+if(strlen($last_name)) {
+    $order_by .= ", (CASE WHEN (cont.last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ") THEN 0 ELSE 1 END) ";
+}
+if(strlen($first_names)) {
+    $order_by .= ", (CASE WHEN (cont.first_names = " . $con->qstr($first_names, get_magic_quotes_gpc()) . ") THEN 0 ELSE 1 END) ";
+}
+
 $order_by .= " $sort_order";
 
 $sql .= $from . $where . $group_by . " order by $order_by";
 
-$sql_recently_viewed = "select * from recent_items r, contacts cont, companies c
+$sql_recently_viewed = "select 
+cont.contact_id,
+cont.first_names,
+cont.last_name,
+c.company_id,
+c.company_name,
+cont.address_id,
+cont.work_phone,
+max(r.recent_item_timestamp) as lasttime
+from recent_items r, contacts cont, companies c
 where r.user_id = $session_user_id
 and r.on_what_table = 'contacts'
+and r.recent_action = ''
 and c.company_id = cont.company_id
 and r.on_what_id = cont.contact_id
 and contact_record_status = 'a'
-order by r.recent_item_timestamp desc";
+group by cont.contact_id,
+cont.first_names,
+cont.last_name,
+c.company_name,
+cont.address_id,
+cont.work_phone
+order by lasttime desc";
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
+$recently_viewed_table_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
-        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
-        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['work_phone'] . '</td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">';
+        $recently_viewed_table_rows .= $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="../companies/one.php?company_id=' . $rst->fields['company_id'] . '">' . $rst->fields['company_name'] . '</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content>' . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) . '</td>';
         $recently_viewed_table_rows .= '</tr>';
         $rst->movenext();
     }
     $rst->close();
 }
 
-if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed contacts</td></tr>';
+if ( !$recently_viewed_table_rows ) {
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed contacts") . '</td></tr>';
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -251,8 +210,11 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'contacts', '', 4);
 }
 
-$page_title = 'Contacts';
+$page_title = _("Contacts");
 start_page($page_title, true, $msg);
+if(!isset($contacts_next_page)) {
+    $contacts_next_page = '';
+}
 
 ?>
 
@@ -267,15 +229,16 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
+
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=8>Search Criteria</td>
+                <td class=widget_header colspan=8><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Last Name</td>
-                <td class=widget_label>First Names</td>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>Company</td>
+                <td class=widget_label><?php echo _("Last Name"); ?></td>
+                <td class=widget_label><?php echo _("First Names"); ?></td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
         </tr>
         <tr>
           <td class=widget_content_form_element><input type=text name="last_name" size=18 maxlength=100 value="<?php  echo $last_name; ?>"></td>
@@ -285,16 +248,14 @@ start_page($page_title, true, $msg);
           </td>
         </tr>
         <tr>
-                <td class=widget_label>Code</td>
-                <td class=widget_label>Description</td>
-                <td class=widget_label>Category</td>
-                <td class=widget_label>Owner</td>
+                <td class=widget_label><?php echo _("Code"); ?></td>
+                <td class=widget_label><?php echo _("Description"); ?></td>
+                <td class=widget_label><?php echo _("Category"); ?></td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
             </tr>
             <tr>
-          <td width="25%" class=widget_content_form_element>
-<input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
-          <td width="25%" class=widget_content_form_element>
-<input type=text name="description" size=12 maxlength=100 value="<?php  echo $description; ?>"></td>
+          <td width="25%" class=widget_content_form_element><input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
+          <td width="25%" class=widget_content_form_element><input type=text name="description" size=12 maxlength=100 value="<?php  echo $description; ?>"></td>
           <td width="25%" class=widget_content_form_element>
             <?php  echo $contact_category_menu; ?>
           </td>
@@ -302,16 +263,26 @@ start_page($page_title, true, $msg);
             <?php  echo $user_menu; ?>
           </td>
         </tr>
+
         <tr>
-          <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="Search">
-            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
-            <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
+          <td class=widget_content_form_element colspan=4>
+           <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
+           <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
           </td>
         </tr>
         </table>
         </form>
 
 <?php
+	  if ( $use_self_contacts ) {
+	    echo '<table class=widget cellspacing=1 width="100%">
+                    <tr>
+                      <td class=widget_content_form_element colspan=4>
+                       <input class=button type=button onclick="javascript: createContact();" value="' . _('Create Contact for \'Self\'') . '">
+                      </td>
+                    </tr>
+                  </table>';
+	  }
 $_SESSION["search_sql"]=$sql;
 $pager = new Contacts_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
@@ -326,12 +297,12 @@ $con->close();
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5>Recently Viewed</td>
+                <td class=widget_header colspan=5><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Contact</td>
-                <td class=widget_label>Company</td>
-                <td class=widget_label>Work Phone</td>
+                <td class=widget_label><?php echo _("Contact"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Work Phone"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
@@ -355,6 +326,10 @@ function bulkEmail() {
 
 function clearSearchCriteria() {
     location.href = "some.php?clear=1";
+}
+
+function createContact() {
+    location.href = "new.php";
 }
 
 function exportIt() {
@@ -385,11 +360,62 @@ end_page();
 
 /**
  * $Log: some.php,v $
- * Revision 1.36  2004/08/19 13:12:15  maulani
- * - Add specific pager to override formatting
+ * Revision 1.37  2004/08/22 23:54:03  niclowe
+ * Fixed blown edit caused by niclowe merged changes since 1.34 into this version
+ * it should restore the following functionality:
  *
- * Revision 1.35  2004/08/18 00:06:16  niclowe
- * Fixed bug 941839 - Mail Merge not working
+ * 1. Localisation
+ * 2. Arr_vars
+ *
+ * See thread http://sourceforge.net/forum/forum.php?thread_id=1131805&forum_id=305411
+ *
+ * Revision 1.34  2004/08/14 00:41:46  gpowers
+ * - made Company Name a link, under "Recently Viewed"
+ *
+ * Revision 1.33  2004/08/06 15:58:25  neildogg
+ * - Now adds exact match sort AFTER chosen sort
+ *
+ * Revision 1.32  2004/08/06 14:21:16  neildogg
+ * - Now puts exact name matches at the top of the array
+ *  - Removed some undefined variables
+ *
+ * Revision 1.31  2004/08/03 20:31:06  maulani
+ * - Fix recently viewed items to remove duplicates
+ * - Optimize SQL for recently viewed items to remove unused columns
+ *
+ * Revision 1.30  2004/07/28 20:43:49  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
+ * Revision 1.29  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
+ * Revision 1.28  2004/07/21 21:06:08  neildogg
+ * - Added get_formatted_phone
+ *
+ * Revision 1.27  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
+ * Revision 1.26  2004/07/15 13:49:53  cpsource
+ * - Added arr_vars sub-system.
+ *
+ * Revision 1.25  2004/07/15 13:05:09  cpsource
+ * - Add arr_vars sub-system for passing variables between code streams.
+ *
+ * Revision 1.24  2004/07/14 12:51:50  cpsource
+ * - Removed company_type_id handling as it was unused
+ *   Session variables are cleared the first time in, as they were unset.
+ *
+ * Revision 1.23  2004/07/13 21:09:29  braverock
+ * -removed obsolete Bulk Email code. this code was moved to the adodb pager file long ago
+ *
+ * Revision 1.22  2004/07/13 18:05:59  cpsource
+ * - Add feature use_self_contacts
+ *   fix misc unitialized variables
  *
  * Revision 1.21  2004/07/13 14:18:58  neildogg
  * - Changed submit button name to another name
