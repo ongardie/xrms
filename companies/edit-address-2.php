@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.5 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: edit-address-2.php,v 1.6 2004/06/16 18:30:22 gpowers Exp $
  */
 
 
@@ -32,6 +32,7 @@ $use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+// $con->debug=1;
 
 $sql = "SELECT * FROM addresses WHERE address_id = $address_id";
 $rst = $con->execute($sql);
@@ -56,6 +57,9 @@ header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.6  2004/06/16 18:30:22  gpowers
+ * - added (commented out) debug line
+ *
  * Revision 1.5  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.
