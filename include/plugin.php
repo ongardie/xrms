@@ -12,7 +12,7 @@
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.3 2004/03/20 20:01:57 braverock Exp $
+ * $Id: plugin.php,v 1.4 2004/07/06 21:19:00 neildogg Exp $
  * @package xrms
  */
 
@@ -84,8 +84,11 @@ function do_hook ($name) {
  * @param mixed param the parameters to pass to the hook function
  * @return mixed the return value of the hook function
  */
-function do_hook_function($name,$parm=NULL) {
+function do_hook_function($name) {
     global $xrms_plugin_hooks;
+    $parm = func_get_args();
+    array_shift($parm);
+    $parm = '"' . join('", "', $parm) . '"';
     $ret = '';
 
     if (isset($xrms_plugin_hooks[$name])
@@ -93,7 +96,7 @@ function do_hook_function($name,$parm=NULL) {
         foreach ($xrms_plugin_hooks[$name] as $function) {
             /* Add something to set correct gettext domain for plugin. */
             if (function_exists($function)) {
-                $ret = $function($parm);
+                eval("\$ret = $function($parm);");
             }
         }
     }
@@ -229,6 +232,12 @@ if (isset($plugins) && is_array($plugins)) {
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.4  2004/07/06 21:19:00  neildogg
+ * - Allows for multi-parameter passing
+ * - ie do_hook_function("plugin_name", $param, $param2, ...)
+ * - instead of do_hook_function("plugin_name", $param)
+ * - Transparent to existing methods
+ *
  * Revision 1.3  2004/03/20 20:01:57  braverock
  *  - comment out one of the debug statements (sorry)
  *
