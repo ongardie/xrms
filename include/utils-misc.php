@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.35 2004/06/28 11:59:43 braverock Exp $
+ * $Id: utils-misc.php,v 1.36 2004/06/28 18:53:57 gpowers Exp $
  */
 
 /**
@@ -29,12 +29,16 @@ function session_check($target='') {
     global $http_site_root;
     global $xrms_system_id;
 
+/* This code should not be nessacary
     if ($target= '') {
         $target=$http_site_root.'/private/home.php';
     } else {
         $target=$http_site_root.$target;
     }
     $target=urlencode($target);
+*/
+
+    $target = urlencode($_SERVER["REQUEST_URI"]);
 
     /**
     * Verify a session has been started.  If it hasn't, start a session up.
@@ -623,6 +627,10 @@ require_once($include_directory . 'i18n.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.36  2004/06/28 18:53:57  gpowers
+ * - commented out null target checking code
+ *   - it does not appear to be nessacary
+ *
  * Revision 1.35  2004/06/28 11:59:43  braverock
  * - comment out exit in session_check function because it causes problems in some installations
  *   - credit to Nic Lowe for spotting the workaround to problem reported on SF
