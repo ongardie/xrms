@@ -1,4 +1,4 @@
-<?
+<?php
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
 //
@@ -14,31 +14,26 @@
 include_once('apb.php');
 apb_head();
 
-?>
+echo "<h2>" . _("Setup QuickAdd") . "</h2>";
 
-<h2>Setup QuickAdd</h2>
+if ($APB_SETTINGS['auth_user_id']) {
 
-<?php if ($APB_SETTINGS['auth_user_id']) { ?>
+echo "<p>
 
-<p><table cellpadding="0" cellspacing="0" width="70%" align="center" border="0">
+<table cellpadding=\"0\" cellspacing=\"0\" width=\"70%\" align=\"center\" border=\"0\">
 <tr>
   <td>
 
-  <p>Drag the following link to your browser's toolbar, or add this link to your browser's "favorites".
-  You can then use this link to <b>automatically add any site that you're viewing</b> to APB.
+  <p>" . _("Drag the following link to your browser's toolbar, or add this link to your browser's favorites. You can then use this link to automatically add any site that you're viewing to APB.") 
 
-  <p align="center"><a href="javascript:document.location = '<?php echo $APB_SETTINGS['apb_url'] ?>add_bookmark.php?form_title=' + escape(document.title) + '&form_url=' + escape(document.location)" onClick="javascript:alert('You must drag this link to your browser\'s toolbar or add it to your favorites.'); return false">Add to Bookmarks</a>
+    . "  <p align=\"center\"><a href=\"javascript:document.location = '" . $APB_SETTINGS['apb_url'] . "add_bookmark.php?form_title=' + escape(document.title) + '&form_url=' + escape(document.location)\" onClick=\"javascript:alert('" . _("You must drag this link to your browser\'s toolbar or add it to your favorites.") . "'); return false\">" . _("Add to Bookmarks") . "</a>
 
   </td>
 </tr>
-</table>
+</table>";
 
-<?php } else { ?>
-
-<p>You must be logged into access this feature of APB.
-
-<?
-
+} else {
+    echo "<p>" . _("You must be logged into access this feature.");
 }
 
 apb_foot();
