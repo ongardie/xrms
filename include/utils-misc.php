@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.110 2005/01/10 17:52:31 neildogg Exp $
+ * $Id: utils-misc.php,v 1.111 2005/01/10 19:46:29 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -989,7 +989,7 @@ function update_daylight_savings($con) {
  */
 function current_page($vars = false, $anchor = false) {
     global $http_site_root;
-    $page = $http_site_root;
+    $page = '';
     $site_directories = explode('/', $http_site_root);
 
     if(!isset($_SERVER['REQUEST_URI'])) {
@@ -1434,6 +1434,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.111  2005/01/10 19:46:29  neildogg
+ * - I remember why I left off the http_site_root
+ *
  * Revision 1.110  2005/01/10 17:52:31  neildogg
  * - Allows an anchor name to be used
  *
