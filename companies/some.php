@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.17 2004/06/23 21:50:53 braverock Exp $
+ * $Id: some.php,v 1.18 2004/06/26 15:36:03 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -277,33 +277,67 @@ start_page($page_title, true, $msg);
         <input type=hidden name=companies_next_page>
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=8><?php  echo $strCompaniesSomeSearchCriteriaTitle; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyNameLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCodeLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyUserLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCategoryLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyIndustrylabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCRMStatusLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCityLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyStateLabel; ?></td>
-
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_code" size=4 value="<?php  echo $company_code; ?>"></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $company_category_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $industry_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
-                <td class=widget_content_form_element><input type=text name="city" size=10 value="<?php  echo $city; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="state" size=5 value="<?php echo $state; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=8><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
-            </tr>
-        </table>
+          <td class=widget_header colspan=4>
+            <?php  echo $strCompaniesSomeSearchCriteriaTitle; ?>
+          </td>
+        </tr>
+        <tr>
+          <td class=widget_label>
+            <?php  echo $strCompaniesSomeCompanyNameLabel; ?>
+          </td>
+          <td class=widget_label>
+            <?php  echo $strCompaniesSomeCompanyCodeLabel; ?>
+          </td>
+          <td class=widget_label>
+            <?php  echo $strCompaniesSomeCompanyUserLabel; ?>
+          </td>
+          <td class=widget_label>
+            <?php  echo $strCompaniesSomeCompanyCategoryLabel; ?>
+          </td>
+        </tr>
+        <tr>
+          <td class=widget_content_form_element><input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>"></td>
+          <td class=widget_content_form_element><input type=text name="company_code" size=4 value="<?php  echo $company_code; ?>"></td>
+          <td class=widget_content_form_element>
+            <?php  echo $user_menu; ?>
+          </td>
+          <td class=widget_content_form_element>
+            <?php  echo $company_category_menu; ?>
+          </td>
+        </tr>
+        <tr>
+          <td class=widget_label>
+            <?php  echo $strCompaniesSomeCompanyIndustrylabel; ?>
+          </td>
+          <td class=widget_label>
+            <?php  echo $strCompaniesSomeCompanyCRMStatusLabel; ?>
+          </td>
+          <td class=widget_label>
+            <?php  echo $strCompaniesSomeCompanyCityLabel; ?>
+          </td>
+          <td class=widget_label>
+            <?php  echo $strCompaniesSomeCompanyStateLabel; ?>
+          </td>
+        </tr>
+        <tr>
+          <td width="25%" class=widget_content_form_element>
+            <?php  echo $industry_menu; ?>
+          </td>
+          <td width="25%" class=widget_content_form_element>
+            <?php  echo $crm_status_menu; ?>
+          </td>
+          <td width="25%" class=widget_content_form_element>
+<input type=text name="city" size=10 value="<?php  echo $city; ?>"></td>
+          <td width="25%" class=widget_content_form_element>
+<input type=text name="state" size=5 value="<?php echo $state; ?>"></td>
+        </tr>
+        <tr>
+          <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search">
+            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
+            <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
+          </td>
+        </tr>
+      </table>
         </form>
 
 <?php
@@ -382,6 +416,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.18  2004/06/26 15:36:03  braverock
+ * - change search layout to two rows to improve CSS positioning
+ *   - applied modified version of SF patch #971474 submitted by s-t
+ *
  * Revision 1.17  2004/06/23 21:50:53  braverock
  * - use join to find address so that even companies without addr will display
  *   - patch submitted by David Uhlman
