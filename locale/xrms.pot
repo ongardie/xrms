@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-29 07:34-0600\n"
+"POT-Creation-Date: 2005-03-06 08:35-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,15 +16,19 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: activities/some.php:169 activities/some.php:172 activities/some.php:664
+#: opportunities/one.php:308
+msgid "$"
+msgstr ""
+
+#: activities/some.php:650
 msgid "%"
 msgstr ""
 
-#: email/email-4.php:77
+#: email/email-4.php:79
 msgid "'Messages Sent"
 msgstr ""
 
-#: activities/one.php:363
+#: activities/one.php:359
 msgid "(%)"
 msgstr ""
 
@@ -32,11 +36,11 @@ msgstr ""
 msgid "(defaults to days)"
 msgstr ""
 
-#: include/utils-misc.php:539
+#: admin/system-parameters/one.php:55 include/utils-misc.php:539
 msgid ".  Make sure you have run the administration update."
 msgstr ""
 
-#: include/utils-misc.php:532
+#: admin/system-parameters/one.php:49 include/utils-misc.php:532
 msgid ".  The data entry appears to be corrupted."
 msgstr ""
 
@@ -60,7 +64,7 @@ msgstr ""
 msgid "ACL"
 msgstr ""
 
-#: contacts/one.php:383 plugins/phone/contacts_one.php:411
+#: contacts/one.php:381 plugins/phone/contacts_one.php:411
 msgid "AOL IM"
 msgstr ""
 
@@ -68,27 +72,27 @@ msgstr ""
 msgid "AOL Name"
 msgstr ""
 
-#: companies/one.php:762 contacts/one.php:487 plugins/info/one.php:369
-#: plugins/phone/companies_one.php:694 plugins/phone/contacts_one.php:518
-#: private/home.php:483
+#: companies/one.php:251 companies/one.php:738 contacts/one.php:164
+#: contacts/one.php:498 plugins/phone/companies_one.php:694
+#: plugins/phone/contacts_one.php:518 private/home.php:483
 msgid "About"
 msgstr ""
 
-#: activities/one.php:323
+#: activities/one.php:319
 msgid "About This Activity"
 msgstr ""
 
-#: admin/import/import-companies.php:118 cases/one.php:295
-#: companies/one.php:528 contacts/one.php:404 opportunities/one.php:369
+#: admin/import/import-companies.php:118 cases/one.php:340
+#: companies/one.php:517 contacts/one.php:403 opportunities/one.php:374
 #: plugins/phone/companies_one.php:506 plugins/phone/contacts_one.php:431
 msgid "Account Owner"
 msgstr ""
 
-#: admin/import/import-companies.php:138 cases/one.php:303
-#: companies/admin.php:74 companies/one.php:585
-#: companies/some-advanced.php:139 companies/some.php:53
-#: companies/some.php:311 contacts/one.php:412 opportunities/one.php:377
-#: plugins/phone/companies_one.php:554 plugins/phone/contacts_one.php:443
+#: admin/import/import-companies.php:138 cases/one.php:348
+#: companies/admin.php:74 companies/one.php:574
+#: companies/some-advanced.php:139 companies/some.php:297 contacts/one.php:411
+#: opportunities/one.php:382 plugins/phone/companies_one.php:554
+#: plugins/phone/contacts_one.php:443
 msgid "Account Status"
 msgstr ""
 
@@ -104,11 +108,12 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: cases/one.php:339 companies/one.php:755 contacts/one.php:481
-#: include/utils-interface.php:277 opportunities/one.php:417
-#: plugins/info/one.php:362 plugins/phone/companies_one.php:687
-#: plugins/phone/contacts_one.php:512 reports/completed-items.php:95
-#: reports/open-items.php:78 reports/overdue-items.php:92
+#: cases/one.php:151 cases/one.php:384 companies/one.php:268
+#: contacts/one.php:183 include/utils-interface.php:280
+#: opportunities/one.php:193 opportunities/one.php:422
+#: plugins/phone/companies_one.php:687 plugins/phone/contacts_one.php:512
+#: reports/completed-items.php:94 reports/open-items.php:78
+#: reports/overdue-items.php:92
 msgid "Activities"
 msgstr ""
 
@@ -116,8 +121,8 @@ msgstr ""
 msgid "Activities Default Behavior"
 msgstr ""
 
-#: activities/one.php:356 private/home.php:479 reports/activitytimes.php:79
-#: reports/completed-items.php:202 reports/open-items.php:189
+#: activities/one.php:352 private/home.php:479 reports/activitytimes.php:79
+#: reports/completed-items.php:201 reports/open-items.php:189
 #: reports/overdue-items.php:204
 msgid "Activity"
 msgstr ""
@@ -130,11 +135,11 @@ msgstr ""
 msgid "Activity Deleted."
 msgstr ""
 
-#: activities/one.php:276
+#: activities/one.php:272
 msgid "Activity Details"
 msgstr ""
 
-#: activities/one.php:388
+#: activities/one.php:384
 msgid "Activity Notes"
 msgstr ""
 
@@ -170,13 +175,13 @@ msgstr ""
 #: admin/account-statuses/some.php:82 admin/activity-types/some.php:94
 #: admin/campaign-statuses/some.php:92 admin/campaign-types/some.php:80
 #: admin/case-priorities/some.php:86 admin/case-statuses/one.php:187
-#: admin/case-statuses/some.php:176 admin/case-types/some.php:80
+#: admin/case-statuses/some.php:182 admin/case-types/some.php:80
 #: admin/categories/some.php:81 admin/company-sources/some.php:88
 #: admin/company-types/some.php:79 admin/crm-statuses/some.php:85
 #: admin/industries/some.php:79 admin/opportunity-statuses/one.php:188
 #: admin/opportunity-statuses/some.php:144 admin/ratings/some.php:83
 #: admin/relationship-types/some.php:99 admin/roles/some.php:82
-#: admin/users/some.php:118 companies/addresses.php:171
+#: admin/users/some.php:121 companies/addresses.php:171
 #: plugins/phone/companies_one.php:706 plugins/phone/contacts_one.php:529
 msgid "Add"
 msgstr ""
@@ -197,6 +202,10 @@ msgstr ""
 msgid "Add New Account Status"
 msgstr ""
 
+#: companies/one.php:731
+msgid "Add New Activity"
+msgstr ""
+
 #: admin/activity-types/some.php:71
 msgid "Add New Activity Type"
 msgstr ""
@@ -205,7 +214,7 @@ msgstr ""
 msgid "Add New CRM Status"
 msgstr ""
 
-#: campaigns/some.php:279
+#: campaigns/some.php:270
 msgid "Add New Campaign"
 msgstr ""
 
@@ -217,7 +226,7 @@ msgstr ""
 msgid "Add New Campaign Type"
 msgstr ""
 
-#: admin/case-statuses/some.php:130
+#: admin/case-statuses/some.php:136
 msgid "Add New Case Status"
 msgstr ""
 
@@ -257,12 +266,12 @@ msgstr ""
 msgid "Add New Role"
 msgstr ""
 
-#: admin/users/some.php:79
+#: admin/users/some.php:82
 msgid "Add New User"
 msgstr ""
 
-#: companies/relationships.php:126 relationships/sidebar.php:389
-#: relationships/sidebar.php:395
+#: companies/relationships.php:126 relationships/sidebar.php:290
+#: relationships/sidebar.php:296
 msgid "Add Relationship"
 msgstr ""
 
@@ -271,7 +280,7 @@ msgstr ""
 msgid "Add Relationship for "
 msgstr ""
 
-#: activities/some.php:630
+#: activities/some.php:619
 msgid "Add to Everyone"
 msgstr ""
 
@@ -283,41 +292,55 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: admin/update.php:425
+#: admin/update.php:477
 msgid "Added Activities Default Behavior system parameters options."
 msgstr ""
 
-#: admin/update.php:389
+#: admin/update.php:441
 msgid "Added Audit Level system parameters options."
 msgstr ""
 
-#: admin/update.php:446
+#: admin/update.php:498
 msgid "Added LDAP Version system parameters options."
 msgstr ""
 
-#: admin/update.php:363
+#: admin/update.php:389
 msgid "Added RSS Feeds Enabled and Maximum RSS Feed Entries system parameters."
 msgstr ""
 
-#: admin/update.php:467
+#: admin/update.php:519
 msgid "Added RSS Feeds Enabled system parameters options."
 msgstr ""
 
-#: admin/update.php:331
+#: admin/update.php:561
+msgid "Added Reports--Show No Items Found system parameters options."
+msgstr ""
+
+#: admin/update.php:415
+msgid ""
+"Added Reports--Use Horizontal Rule and Reports--Show No Items Found system "
+"parameters."
+msgstr ""
+
+#: admin/update.php:540
+msgid "Added Reports--Use Horizontal Rule system parameters options."
+msgstr ""
+
+#: admin/update.php:351
 msgid "Added an Activities Default Behavior system parameter."
 msgstr ""
 
-#: admin/update.php:314
+#: admin/update.php:333
 msgid "Added an Audit Level."
 msgstr ""
 
-#: admin/update.php:347
+#: admin/update.php:372
 msgid "Added an LDAP Version system parameter."
 msgstr ""
 
 #: companies/advanced-search.php:234 companies/divisions.php:82
-#: companies/edit-division.php:77 companies/new.php:198 companies/one.php:562
-#: contacts/edit.php:138 contacts/new.php:130 contacts/one.php:420
+#: companies/edit-division.php:80 companies/new.php:198 companies/one.php:551
+#: contacts/edit.php:138 contacts/new.php:130
 #: plugins/phone/companies_one.php:536 plugins/phone/contacts_one.php:449
 #: reports/companies-list.php:184
 msgid "Address"
@@ -346,24 +369,24 @@ msgid "Address Name"
 msgstr ""
 
 #: companies/addresses.php:95 companies/addresses.php:108
-#: companies/one.php:695 plugins/phone/companies_one.php:639
+#: companies/one.php:683 plugins/phone/companies_one.php:639
 msgid "Addresses"
 msgstr ""
 
-#: companies/admin.php:58 companies/one.php:691
+#: companies/admin.php:58 companies/one.php:680
 #: plugins/phone/companies_one.php:634
 msgid "Admin"
 msgstr ""
 
-#: companies/one.php:198
+#: companies/one.php:207
 msgid "Administer Division"
 msgstr ""
 
-#: admin/index.php:37 include/utils-interface.php:290
+#: admin/index.php:37 include/utils-interface.php:293
 msgid "Administration"
 msgstr ""
 
-#: activities/some.php:645 companies/some.php:295
+#: activities/some.php:631 companies/some.php:279
 msgid "Advanced Search"
 msgstr ""
 
@@ -379,30 +402,26 @@ msgstr ""
 msgid "Advertising"
 msgstr ""
 
-#: activities/some.php:530
+#: activities/some.php:519
 msgid "After"
 msgstr ""
 
-#: activities/some.php:541 reports/completed-items.php:88
+#: activities/some.php:530 reports/completed-items.php:87
 #: reports/open-items.php:71 reports/overdue-items.php:85
 msgid "All"
 msgstr ""
 
-#: activities/some.php:526 reports/audit-items.php:55
+#: activities/some.php:515 reports/audit-items.php:57
 msgid "All Dates"
 msgstr ""
 
-#: reports/completed-items.php:143 reports/open-items.php:113
-#: reports/overdue-items.php:128
+#: reports/companies-by-crm-status.php:88 reports/completed-items.php:142
+#: reports/open-items.php:113 reports/overdue-items.php:128
 msgid "All Users"
 msgstr ""
 
-#: admin/users/some.php:114
-msgid "Allow Access"
-msgstr ""
-
 #: companies/advanced-search.php:182 companies/edit.php:136
-#: companies/new.php:143 companies/one.php:540
+#: companies/new.php:143 companies/one.php:529
 #: plugins/phone/companies_one.php:518
 msgid "Alt. Phone"
 msgstr ""
@@ -445,7 +464,7 @@ msgstr ""
 msgid "Attach Note"
 msgstr ""
 
-#: activities/one.php:345
+#: activities/one.php:341
 msgid "Attached"
 msgstr ""
 
@@ -461,11 +480,11 @@ msgstr ""
 msgid "Audit Level"
 msgstr ""
 
-#: reports/audit-items.php:27
+#: reports/audit-items.php:29
 msgid "Audit Log"
 msgstr ""
 
-#: plugins/info/one.php:347 plugins/radtest/radtest.php:48
+#: plugins/info/one.php:175 plugins/radtest/radtest.php:48
 msgid "Back"
 msgstr ""
 
@@ -477,7 +496,7 @@ msgstr ""
 msgid "Bcc"
 msgstr ""
 
-#: activities/some.php:529
+#: activities/some.php:518
 msgid "Before"
 msgstr ""
 
@@ -489,7 +508,7 @@ msgstr ""
 msgid "Billing Default"
 msgstr ""
 
-#: activities/some.php:638
+#: activities/some.php:627
 msgid "Browse"
 msgstr ""
 
@@ -501,34 +520,37 @@ msgstr ""
 msgid "Bugs"
 msgstr ""
 
-#: activities/some.php:642 campaigns/some.php:254 cases/some.php:271
-#: companies/some.php:292 email/email.php:112 email/index.php:60
-#: files/some.php:337 opportunities/some.php:226
+#: cases/some.php:273 email/email.php:112 email/index.php:60
+#: opportunities/some.php:229
 msgid "Bulk E-Mail"
 msgstr ""
 
-#: reports/completed-items.php:193
+#: contacts/one.php:419
+msgid "Business Address"
+msgstr ""
+
+#: reports/completed-items.php:192
 msgid "COMPLETED ACTIVITIES for"
 msgstr ""
 
-#: reports/completed-items.php:244
+#: reports/completed-items.php:243
 msgid "COMPLETED CAMPAIGNS for"
 msgstr ""
 
-#: reports/completed-items.php:335
+#: reports/completed-items.php:334
 msgid "COMPLETED CASES for"
 msgstr ""
 
-#: reports/completed-items.php:286
+#: reports/completed-items.php:285
 msgid "COMPLETED OPPORTUNITIES for"
 msgstr ""
 
-#: admin/import/import-companies.php:122 cases/one.php:299
+#: admin/import/import-companies.php:122 cases/one.php:344
 #: companies/advanced-search.php:162 companies/edit.php:116
-#: companies/new.php:123 companies/one.php:522 companies/some-advanced.php:138
-#: companies/some.php:52 companies/some.php:310 contacts/one.php:408
-#: opportunities/one.php:373 plugins/phone/companies_one.php:500
-#: plugins/phone/contacts_one.php:437 reports/companies-list.php:111
+#: companies/new.php:123 companies/one.php:511 companies/some-advanced.php:138
+#: companies/some.php:296 contacts/one.php:407 opportunities/one.php:378
+#: plugins/phone/companies_one.php:500 plugins/phone/contacts_one.php:437
+#: reports/companies-list.php:111
 msgid "CRM Status"
 msgstr ""
 
@@ -548,10 +570,10 @@ msgstr ""
 msgid "Call%20To%20"
 msgstr ""
 
-#: campaigns/some.php:66 campaigns/some.php:289 files/some.php:91
+#: campaigns/some.php:226 campaigns/some.php:280 files/some.php:322
 #: opportunities/edit.php:174 opportunities/new.php:99
-#: opportunities/one.php:298 private/home.php:316
-#: reports/completed-items.php:251 reports/open-items.php:236
+#: opportunities/one.php:303 private/home.php:316
+#: reports/completed-items.php:250 reports/open-items.php:236
 #: reports/overdue-items.php:253
 msgid "Campaign"
 msgstr ""
@@ -569,7 +591,7 @@ msgstr ""
 msgid "Campaign Details"
 msgstr ""
 
-#: campaigns/some.php:222
+#: campaigns/some.php:185
 msgid "Campaign Name"
 msgstr ""
 
@@ -593,19 +615,19 @@ msgstr ""
 msgid "Campaign Types"
 msgstr ""
 
-#: activities/some.php:506 campaigns/some.php:201 files/some.php:317
-#: include/utils-interface.php:280 reports/completed-items.php:102
+#: activities/some.php:495 campaigns/some.php:164 files/some.php:286
+#: include/utils-interface.php:283 reports/completed-items.php:101
 #: reports/open-items.php:85 reports/overdue-items.php:99
 msgid "Campaigns"
 msgstr ""
 
-#: cases/some.php:64 cases/some.php:295 files/some.php:103
+#: cases/some.php:64 cases/some.php:297 files/some.php:324
 #: reports/index.php:79 reports/open-items.php:330
 #: reports/overdue-items.php:347
 msgid "Case"
 msgstr ""
 
-#: cases/one.php:210
+#: cases/one.php:255
 msgid "Case #"
 msgstr ""
 
@@ -617,15 +639,15 @@ msgstr ""
 msgid "Case Deleted."
 msgstr ""
 
-#: cases/edit.php:198 cases/new.php:124 cases/one.php:220
+#: cases/edit.php:198 cases/new.php:127 cases/one.php:265
 msgid "Case Details"
 msgstr ""
 
-#: cases/some.php:249
+#: cases/some.php:251
 msgid "Case Name"
 msgstr ""
 
-#: cases/some.php:250
+#: cases/some.php:252
 msgid "Case Number"
 msgstr ""
 
@@ -641,11 +663,11 @@ msgstr ""
 msgid "Case Status Details"
 msgstr ""
 
-#: admin/index.php:208 admin/case-statuses/some.php:108
+#: admin/index.php:208 admin/case-statuses/some.php:114
 msgid "Case Statuses"
 msgstr ""
 
-#: cases/edit.php:201 cases/export.php:33 cases/new.php:127
+#: cases/edit.php:201 cases/export.php:33 cases/new.php:130
 msgid "Case Title"
 msgstr ""
 
@@ -657,8 +679,8 @@ msgstr ""
 msgid "Case Types"
 msgstr ""
 
-#: cases/some.php:228 files/some.php:319 include/utils-interface.php:282
-#: reports/completed-items.php:116 reports/open-items.php:99
+#: cases/some.php:230 files/some.php:288 include/utils-interface.php:285
+#: reports/completed-items.php:115 reports/open-items.php:99
 #: reports/overdue-items.php:113
 msgid "Cases"
 msgstr ""
@@ -669,15 +691,14 @@ msgid "Cases by Status"
 msgstr ""
 
 #: admin/index.php:153 admin/categories/some.php:46
-#: include/categories-sidebar.php:18 plugins/info/one.php:397
-#: plugins/phone/companies_one.php:723 plugins/phone/contacts_one.php:545
-#: reports/companies-list.php:189
+#: include/categories-sidebar.php:18 plugins/phone/companies_one.php:723
+#: plugins/phone/contacts_one.php:545 reports/companies-list.php:189
 msgid "Categories"
 msgstr ""
 
-#: admin/import/import-companies.php:130 campaigns/some.php:236
-#: cases/some.php:260 companies/some.php:254 contacts/some.php:261
-#: opportunities/some.php:217 reports/companies-list.php:109
+#: admin/import/import-companies.php:130 campaigns/some.php:199
+#: cases/some.php:262 companies/some.php:243 contacts/some.php:251
+#: opportunities/some.php:220 reports/companies-list.php:109
 msgid "Category"
 msgstr ""
 
@@ -689,13 +710,9 @@ msgstr ""
 msgid "Category Scopes"
 msgstr ""
 
-#: contacts/edit.php:188 contacts/new.php:180 contacts/one.php:356
+#: contacts/edit.php:188 contacts/new.php:180 contacts/one.php:349
 #: contacts/sidebar.php:171 plugins/phone/contacts_one.php:378
 msgid "Cell Phone"
-msgstr ""
-
-#: plugins/censusfactsheet/setup.php:24
-msgid "Census Fact Sheet"
 msgstr ""
 
 #: admin/country-address-format/edit.php:63
@@ -710,13 +727,14 @@ msgstr ""
 msgid "Change File"
 msgstr ""
 
+#: reports/companies-by-crm-status.php:77
 #: reports/opportunities-quantity-by-opportunity-status.php:104
 #: reports/opportunities-size-by-opportunity-status.php:115
 msgid "Change Graph"
 msgstr ""
 
 #: admin/users/change-password.php:30 admin/users/change-password.php:42
-#: admin/users/one.php:119 admin/users/self.php:92
+#: admin/users/one.php:125 admin/users/self.php:92
 msgid "Change Password"
 msgstr ""
 
@@ -730,16 +748,16 @@ msgstr ""
 
 #: companies/addresses.php:151 companies/advanced-search.php:249
 #: companies/edit-address.php:85 companies/new.php:213 companies/some.php:101
-#: companies/some.php:111 companies/some.php:260 contacts/edit-address.php:202
+#: companies/some.php:111 companies/some.php:249 contacts/edit-address.php:202
 #: reports/companies-list.php:112 reports/companies-list.php:186
 #: reports/company-contacts-printout.php:126
 #: reports/company-contacts-printout.php:136
 msgid "City"
 msgstr ""
 
-#: activities/some.php:639 campaigns/some.php:253 cases/some.php:271
-#: companies/advanced-search.php:271 companies/some.php:289
-#: contacts/some.php:284 files/some.php:336 opportunities/some.php:226
+#: activities/some.php:628 campaigns/some.php:216 cases/some.php:273
+#: companies/advanced-search.php:271 companies/some.php:278
+#: contacts/some.php:274 files/some.php:305 opportunities/some.php:229
 msgid "Clear Search"
 msgstr ""
 
@@ -751,7 +769,7 @@ msgstr ""
 #: admin/company-types/one.php:81 admin/crm-statuses/one.php:82
 #: admin/industries/one.php:81 admin/opportunity-statuses/one.php:218
 #: admin/ratings/one.php:81 admin/relationship-types/one.php:99
-#: admin/roles/one.php:84 admin/users/one.php:133
+#: admin/roles/one.php:84 admin/users/one.php:139
 msgid "Click the button below to permanently remove this item."
 msgstr ""
 
@@ -761,15 +779,16 @@ msgid ""
 "activities, opportunities, cases, etc.) from the system."
 msgstr ""
 
-#: companies/one.php:692 plugins/phone/companies_one.php:635
+#: companies/one.php:681 plugins/phone/companies_one.php:635
 msgid "Clone"
 msgstr ""
 
 #: opportunities/edit.php:210 opportunities/new.php:134
-#: opportunities/some.php:58 opportunities/some.php:287
+#: opportunities/some.php:252 opportunities/some.php:298
 msgid "Close Date"
 msgstr ""
 
+#: activities/activities-pager-functions.php:26
 #: admin/campaign-statuses/one.php:76 admin/campaign-statuses/some.php:87
 #: locale/datastrings.php:22
 msgid "Closed"
@@ -793,11 +812,11 @@ msgstr ""
 msgid "Closed/Won"
 msgstr ""
 
-#: opportunities/one.php:321
+#: opportunities/one.php:326
 msgid "Closes"
 msgstr ""
 
-#: companies/one.php:510 contacts/some.php:55 contacts/some.php:259
+#: companies/one.php:499 contacts/some.php:249 contacts/some.php:294
 #: plugins/phone/companies_one.php:488 reports/companies-list.php:182
 msgid "Code"
 msgstr ""
@@ -806,8 +825,8 @@ msgstr ""
 msgid "Communications"
 msgstr ""
 
-#: companies/advanced-search.php:130 files/some.php:316 include/strings.php:31
-#: include/utils-interface.php:278
+#: companies/advanced-search.php:130 files/some.php:285 include/strings.php:31
+#: include/utils-interface.php:281
 msgid "Companies"
 msgstr ""
 
@@ -815,8 +834,9 @@ msgstr ""
 msgid "Companies List"
 msgstr ""
 
-#: reports/companies-by-crm-status.php:58
-#: reports/companies-by-crm-status.php:70 reports/index.php:46
+#: reports/companies-by-crm-status.php:28
+#: reports/companies-by-crm-status.php:49 reports/index.php:46
+#: reports/jpgraph-companies-by-crm-status.php:39
 msgid "Companies by CRM Status"
 msgstr ""
 
@@ -830,24 +850,23 @@ msgstr ""
 msgid "Companies by Source"
 msgstr ""
 
-#: activities/associate-activities.php:33 activities/one.php:326
-#: activities/some.php:166 activities/some.php:481 activities/some.php:662
-#: cases/edit.php:205 cases/export.php:34 cases/one.php:287 cases/some.php:65
-#: cases/some.php:251 cases/some.php:296 companies/addresses.php:135
-#: companies/divisions.php:74 companies/edit-address.php:69
-#: companies/edit-division.php:69 companies/former-names.php:81
-#: companies/relationships.php:115 contacts/edit.php:130 contacts/one.php:396
-#: contacts/some.php:50 contacts/some.php:241 contacts/some.php:348
-#: email/email-3.php:85 files/some.php:74 files/some.php:81 files/some.php:86
-#: files/some.php:98 files/some.php:105 opportunities/edit.php:162
-#: opportunities/one.php:361 opportunities/some.php:209
-#: opportunities/some.php:285 plugins/phone/contacts_one.php:419
+#: activities/associate-activities.php:33 activities/one.php:322
+#: activities/some.php:470 activities/some.php:648 cases/edit.php:205
+#: cases/export.php:34 cases/one.php:332 cases/some.php:65 cases/some.php:253
+#: cases/some.php:298 companies/addresses.php:135 companies/divisions.php:74
+#: companies/edit-address.php:69 companies/edit-division.php:72
+#: companies/former-names.php:81 companies/relationships.php:115
+#: contacts/edit.php:130 contacts/one.php:395 contacts/some.php:231
+#: contacts/some.php:293 contacts/some.php:341 email/email-3.php:85
+#: files/some.php:325 opportunities/edit.php:162 opportunities/one.php:366
+#: opportunities/some.php:212 opportunities/some.php:247
+#: opportunities/some.php:296 plugins/phone/contacts_one.php:419
 #: private/home.php:263 private/home.php:297 private/home.php:304
 #: private/home.php:311 private/home.php:323 private/home.php:330
 #: private/home.php:481 reports/activitytimes.php:77
 #: reports/company-contacts-printout.php:94
-#: reports/company-contacts-printout.php:288 reports/completed-items.php:200
-#: reports/completed-items.php:292 reports/index.php:43
+#: reports/company-contacts-printout.php:288 reports/completed-items.php:199
+#: reports/completed-items.php:291 reports/index.php:43
 #: reports/open-items.php:187 reports/open-items.php:328
 #: reports/overdue-items.php:202 reports/overdue-items.php:297
 #: reports/overdue-items.php:345
@@ -867,8 +886,8 @@ msgid "Company City"
 msgstr ""
 
 #: companies/advanced-search.php:158 companies/edit.php:112
-#: companies/new.php:119 companies/some-advanced.php:135 companies/some.php:49
-#: companies/some.php:307
+#: companies/new.php:119 companies/some-advanced.php:135
+#: companies/some.php:293
 msgid "Company Code"
 msgstr ""
 
@@ -876,12 +895,12 @@ msgstr ""
 msgid "Company Deleted."
 msgstr ""
 
-#: companies/one.php:458 companies/one.php:488
+#: companies/one.php:454 companies/one.php:477
 #: plugins/phone/companies_one.php:441 plugins/phone/companies_one.php:468
 msgid "Company Details"
 msgstr ""
 
-#: activities/some.php:495
+#: activities/some.php:484
 msgid "Company ID"
 msgstr ""
 
@@ -894,16 +913,16 @@ msgid "Company List"
 msgstr ""
 
 #: companies/advanced-search.php:150 companies/edit.php:104
-#: companies/new.php:111 companies/one.php:498 companies/some-advanced.php:134
-#: companies/some-advanced.php:418 companies/some.php:48
-#: companies/some.php:248 companies/some.php:306 companies/some.php:363
+#: companies/new.php:111 companies/one.php:487 companies/some-advanced.php:134
+#: companies/some-advanced.php:420 companies/some.php:237
+#: companies/some.php:292 companies/some.php:349
 #: plugins/phone/companies_one.php:474 reports/companies-list.php:107
 #: reports/companies-list.php:183 reports/company-contacts-printout.php:212
 #: reports/company-contacts-printout.php:245
 msgid "Company Name"
 msgstr ""
 
-#: companies/some-advanced.php:405 companies/some.php:350
+#: companies/some-advanced.php:407 companies/some.php:336
 msgid "Company Options"
 msgstr ""
 
@@ -912,7 +931,7 @@ msgid "Company Reports"
 msgstr ""
 
 #: admin/import/import-companies.php:126 companies/advanced-search.php:166
-#: companies/edit.php:124 companies/new.php:127 companies/one.php:621
+#: companies/edit.php:124 companies/new.php:127 companies/one.php:610
 #: plugins/phone/companies_one.php:584
 msgid "Company Source"
 msgstr ""
@@ -949,15 +968,15 @@ msgstr ""
 msgid "Competitors"
 msgstr ""
 
-#: activities/some.php:516 activities/some.php:543
+#: activities/some.php:505 activities/some.php:532
 msgid "Completed"
 msgstr ""
 
-#: reports/completed-items.php:48 reports/index.php:121
+#: reports/completed-items.php:44 reports/index.php:121
 msgid "Completed Items"
 msgstr ""
 
-#: activities/one.php:434
+#: activities/one.php:430
 msgid "Completed?"
 msgstr ""
 
@@ -981,7 +1000,7 @@ msgstr ""
 msgid "Confirm Recipients"
 msgstr ""
 
-#: reports/audit-items.php:57
+#: reports/audit-items.php:59
 msgid "Connection Details"
 msgstr ""
 
@@ -993,19 +1012,19 @@ msgstr ""
 msgid "Consulting"
 msgstr ""
 
-#: activities/one.php:332 activities/some.php:160 activities/some.php:480
-#: activities/some.php:658 admin/users/one.php:87 cases/edit.php:213
-#: cases/new.php:135 cases/one.php:271 cases/one.php:345 companies/one.php:710
-#: companies/one.php:761 contacts/edit-address.php:186 contacts/some.php:347
-#: email/email-3.php:87 files/some.php:72 files/some.php:79
-#: opportunities/edit.php:170 opportunities/new.php:95
-#: opportunities/one.php:343 opportunities/one.php:423
-#: plugins/info/one.php:368 plugins/phone/companies_one.php:648
-#: plugins/phone/companies_one.php:693 private/home.php:482
-#: reports/activitytimes.php:78 reports/completed-items.php:201
-#: reports/completed-items.php:293 reports/open-items.php:188
-#: reports/open-items.php:329 reports/overdue-items.php:203
-#: reports/overdue-items.php:298 reports/overdue-items.php:346
+#: activities/one.php:328 activities/some.php:469 activities/some.php:644
+#: admin/users/one.php:89 cases/edit.php:213 cases/new.php:138
+#: cases/one.php:133 cases/one.php:316 cases/one.php:390 companies/one.php:250
+#: companies/one.php:737 contacts/edit-address.php:186 contacts/some.php:340
+#: email/email-3.php:87 files/some.php:321 opportunities/edit.php:170
+#: opportunities/new.php:95 opportunities/one.php:174
+#: opportunities/one.php:348 opportunities/one.php:428
+#: plugins/phone/companies_one.php:648 plugins/phone/companies_one.php:693
+#: private/home.php:482 reports/activitytimes.php:78
+#: reports/completed-items.php:200 reports/completed-items.php:292
+#: reports/open-items.php:188 reports/open-items.php:329
+#: reports/overdue-items.php:203 reports/overdue-items.php:298
+#: reports/overdue-items.php:346
 msgid "Contact"
 msgstr ""
 
@@ -1021,12 +1040,12 @@ msgstr ""
 msgid "Contact Deleted."
 msgstr ""
 
-#: contacts/one.php:279 contacts/one.php:306
+#: contacts/one.php:272 contacts/one.php:299
 #: plugins/phone/contacts_one.php:287 plugins/phone/contacts_one.php:314
 msgid "Contact Details"
 msgstr ""
 
-#: activities/some.php:494
+#: activities/some.php:483
 msgid "Contact ID"
 msgstr ""
 
@@ -1035,9 +1054,9 @@ msgstr ""
 msgid "Contact Information"
 msgstr ""
 
-#: companies/one.php:710 companies/some-advanced.php:141
-#: companies/some-advanced.php:306 contacts/some.php:219 files/some.php:314
-#: include/strings.php:30 include/utils-interface.php:279
+#: companies/one.php:332 companies/some-advanced.php:141
+#: companies/some-advanced.php:308 contacts/some.php:209 files/some.php:283
+#: include/strings.php:30 include/utils-interface.php:282
 #: plugins/phone/companies_one.php:648
 #: reports/company-contacts-printout.php:246
 msgid "Contacts"
@@ -1051,7 +1070,7 @@ msgstr ""
 msgid "Contacts for Companies"
 msgstr ""
 
-#: files/some.php:315
+#: files/some.php:284
 msgid "Contacts of Companies"
 msgstr ""
 
@@ -1076,7 +1095,7 @@ msgstr ""
 msgid "Country Localization Formats"
 msgstr ""
 
-#: contacts/some.php:294
+#: contacts/some.php:284
 msgid "Create Contact for 'Self'"
 msgstr ""
 
@@ -1088,13 +1107,13 @@ msgstr ""
 msgid "Create a New Address?"
 msgstr ""
 
-#: campaigns/one.php:126 cases/one.php:257 companies/one.php:671
-#: contacts/one.php:448 opportunities/one.php:329
+#: campaigns/one.php:126 cases/one.php:302 companies/one.php:660
+#: contacts/one.php:459 opportunities/one.php:334
 #: plugins/phone/companies_one.php:542 plugins/phone/contacts_one.php:479
 msgid "Created"
 msgstr ""
 
-#: companies/admin.php:82 companies/one.php:597
+#: companies/admin.php:82 companies/one.php:586
 #: plugins/phone/companies_one.php:566
 msgid "Credit Limit"
 msgstr ""
@@ -1103,7 +1122,7 @@ msgstr ""
 msgid "Critical"
 msgstr ""
 
-#: activities/some.php:340
+#: activities/some.php:344
 msgid "Current User"
 msgstr ""
 
@@ -1123,7 +1142,7 @@ msgstr ""
 msgid "Customers"
 msgstr ""
 
-#: email/email-4.php:98
+#: email/email-4.php:100
 msgid "DO NOT RELOAD THIS PAGE! If you do, your message will be sent again."
 msgstr ""
 
@@ -1140,12 +1159,12 @@ msgid "Database Structure Update"
 msgstr ""
 
 #: companies/relationships.php:116 files/new.php:86 files/sidebar.php:32
-#: files/some.php:113 files/some.php:325 files/some.php:368
+#: files/some.php:294 files/some.php:327 files/some.php:356
 #: notes/sidebar.php:25 private/home.php:264
 msgid "Date"
 msgstr ""
 
-#: contacts/edit.php:164 contacts/new.php:156 contacts/one.php:336
+#: contacts/edit.php:164 contacts/new.php:156 contacts/one.php:329
 #: plugins/phone/contacts_one.php:351
 msgid "Date of Birth"
 msgstr ""
@@ -1162,7 +1181,7 @@ msgstr ""
 msgid "Default timezone offset"
 msgstr ""
 
-#: activities/some.php:430 admin/account-statuses/one.php:94
+#: activities/some.php:434 admin/account-statuses/one.php:94
 #: admin/activity-templates/edit.php:114 admin/activity-types/one.php:94
 #: admin/campaign-statuses/one.php:97 admin/campaign-types/one.php:84
 #: admin/case-priorities/one.php:91 admin/case-statuses/one.php:219
@@ -1171,9 +1190,9 @@ msgstr ""
 #: admin/country-address-format/edit.php:58 admin/crm-statuses/one.php:84
 #: admin/industries/one.php:83 admin/opportunity-statuses/one.php:220
 #: admin/ratings/one.php:83 admin/relationship-types/one.php:102
-#: admin/roles/one.php:86 admin/users/one.php:135 campaigns/edit.php:122
+#: admin/roles/one.php:86 admin/users/one.php:141 campaigns/edit.php:122
 #: cases/edit.php:253 contacts/edit.php:242 notes/edit.php:41
-#: opportunities/edit.php:227 plugins/info/one.php:343
+#: opportunities/edit.php:227 plugins/info/one.php:171
 msgid "Delete"
 msgstr ""
 
@@ -1341,11 +1360,11 @@ msgstr ""
 msgid "Delete Role?"
 msgstr ""
 
-#: admin/users/one.php:129
+#: admin/users/one.php:135
 msgid "Delete User"
 msgstr ""
 
-#: admin/users/one.php:125
+#: admin/users/one.php:131
 msgid "Delete User?"
 msgstr ""
 
@@ -1353,21 +1372,21 @@ msgstr ""
 msgid "Deleted"
 msgstr ""
 
-#: admin/activity-templates/edit.php:76 admin/case-statuses/some.php:113
-#: admin/case-statuses/some.php:167 admin/opportunity-statuses/some.php:96
+#: admin/activity-templates/edit.php:76 admin/case-statuses/some.php:119
+#: admin/case-statuses/some.php:173 admin/opportunity-statuses/some.php:96
 #: admin/opportunity-statuses/some.php:130 campaigns/edit.php:115
 #: campaigns/new.php:104 cases/case-status-view.php:49 cases/edit.php:246
-#: cases/new.php:165 companies/divisions.php:102
-#: companies/edit-division.php:81 companies/one.php:716 contacts/edit.php:176
-#: contacts/new.php:168 contacts/one.php:332 contacts/some.php:61
-#: contacts/some.php:260 files/new.php:82 files/one.php:81 files/some.php:67
+#: cases/new.php:168 companies/divisions.php:102
+#: companies/edit-division.php:84 companies/one.php:292 contacts/edit.php:176
+#: contacts/new.php:168 contacts/one.php:325 contacts/some.php:250
+#: contacts/some.php:296 files/new.php:82 files/one.php:81 files/some.php:319
 #: opportunities/edit.php:218 opportunities/new.php:141
 #: opportunities/opportunity-view.php:49 plugins/phone/contacts_one.php:345
 #: private/home.php:261
 msgid "Description"
 msgstr ""
 
-#: plugins/info/one.php:319
+#: plugins/info/one.php:148
 msgid "Details"
 msgstr ""
 
@@ -1400,7 +1419,7 @@ msgstr ""
 #: admin/campaign-statuses/one.php:68 admin/campaign-statuses/some.php:78
 #: admin/campaign-types/one.php:65 admin/campaign-types/some.php:76
 #: admin/case-priorities/one.php:68 admin/case-priorities/some.php:78
-#: admin/case-statuses/one.php:142 admin/case-statuses/some.php:159
+#: admin/case-statuses/one.php:142 admin/case-statuses/some.php:165
 #: admin/case-types/one.php:67 admin/case-types/some.php:76
 #: admin/categories/one.php:106 admin/categories/some.php:77
 #: admin/company-sources/one.php:70 admin/company-sources/some.php:80
@@ -1417,10 +1436,10 @@ msgstr ""
 msgid "Distribution"
 msgstr ""
 
-#: cases/edit.php:209 cases/new.php:131 cases/one.php:291
-#: contacts/edit.php:134 contacts/new.php:126 contacts/one.php:400
+#: cases/edit.php:209 cases/new.php:134 cases/one.php:336
+#: contacts/edit.php:134 contacts/new.php:126 contacts/one.php:399
 #: opportunities/edit.php:166 opportunities/new.php:91
-#: opportunities/one.php:365 plugins/phone/contacts_one.php:425
+#: opportunities/one.php:370 plugins/phone/contacts_one.php:425
 msgid "Division"
 msgstr ""
 
@@ -1432,11 +1451,11 @@ msgstr ""
 msgid "Division Description"
 msgstr ""
 
-#: companies/divisions.php:78 companies/edit-division.php:73
+#: companies/divisions.php:78 companies/edit-division.php:76
 msgid "Division Name"
 msgstr ""
 
-#: companies/divisions.php:59 companies/divisions.php:98 companies/one.php:700
+#: companies/divisions.php:59 companies/divisions.php:98 companies/one.php:688
 #: plugins/phone/companies_one.php:640
 msgid "Divisions"
 msgstr ""
@@ -1449,14 +1468,13 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#: include/utils-interface.php:333
+#: include/utils-interface.php:336
 msgid "Dr."
 msgstr ""
 
-#: activities/some.php:164 activities/some.php:661 cases/sidebar.php:29
-#: cases/some.php:66 cases/some.php:298 opportunities/sidebar.php:30
-#: private/home.php:485 reports/open-items.php:327
-#: reports/overdue-items.php:344
+#: activities/some.php:647 cases/sidebar.php:32 cases/some.php:66
+#: cases/some.php:300 opportunities/sidebar.php:30 private/home.php:485
+#: reports/open-items.php:327 reports/overdue-items.php:344
 msgid "Due"
 msgstr ""
 
@@ -1464,7 +1482,7 @@ msgstr ""
 msgid "Due At"
 msgstr ""
 
-#: cases/edit.php:236 cases/new.php:158
+#: cases/edit.php:236 cases/new.php:161
 msgid "Due By"
 msgstr ""
 
@@ -1477,11 +1495,11 @@ msgstr ""
 msgid "Duration"
 msgstr ""
 
-#: admin/users/one.php:106 admin/users/self.php:76 admin/users/some.php:64
-#: admin/users/some.php:102 cases/one.php:279 companies/new.php:250
-#: companies/one.php:718 contacts/edit.php:180 contacts/new.php:172
-#: contacts/one.php:340 email/email-3.php:88 locale/datastrings.php:40
-#: opportunities/one.php:351 plugins/phone/contacts_one.php:357
+#: admin/users/one.php:108 admin/users/self.php:76 admin/users/some.php:67
+#: admin/users/some.php:105 cases/one.php:324 companies/new.php:250
+#: companies/one.php:294 contacts/edit.php:180 contacts/new.php:172
+#: contacts/one.php:333 email/email-3.php:88 locale/datastrings.php:40
+#: opportunities/one.php:356 plugins/phone/contacts_one.php:357
 msgid "E-Mail"
 msgstr ""
 
@@ -1490,9 +1508,9 @@ msgstr ""
 msgid "E-Mail Templates"
 msgstr ""
 
-#: admin/country-address-format/index.php:63 plugins/info/one.php:341
+#: admin/country-address-format/index.php:63 plugins/info/one.php:169
 #: plugins/phone/companies_one.php:633 plugins/phone/contacts_one.php:498
-#: relationships/sidebar.php:243
+#: relationships/sidebar.php:166
 msgid "Edit"
 msgstr ""
 
@@ -1522,7 +1540,7 @@ msgstr ""
 msgid "Edit Address Country Format"
 msgstr ""
 
-#: relationships/edit.php:29
+#: relationships/edit.php:33
 msgid "Edit Association"
 msgstr ""
 
@@ -1562,7 +1580,7 @@ msgstr ""
 msgid "Edit Company Type Information"
 msgstr ""
 
-#: companies/edit-division.php:53 companies/edit-division.php:66
+#: companies/edit-division.php:56 companies/edit-division.php:69
 msgid "Edit Division"
 msgstr ""
 
@@ -1603,7 +1621,7 @@ msgstr ""
 msgid "Edit Role Information"
 msgstr ""
 
-#: admin/users/one.php:77 admin/users/self.php:61
+#: admin/users/one.php:79 admin/users/self.php:61
 msgid "Edit User Information"
 msgstr ""
 
@@ -1617,29 +1635,33 @@ msgstr ""
 msgid "Education"
 msgstr ""
 
-#: contacts/some.php:52 contacts/some.php:258
+#: contacts/some.php:248
 msgid "Email"
 msgstr ""
 
-#: activities/one.php:430
+#: activities/one.php:426
 msgid "Email This To"
 msgstr ""
 
 #: companies/advanced-search.php:194 companies/edit.php:148
-#: companies/new.php:155 companies/one.php:627
+#: companies/new.php:155 companies/one.php:616
 #: plugins/phone/companies_one.php:590
 msgid "Employees"
 msgstr ""
 
+#: admin/users/one.php:120 admin/users/some.php:65 admin/users/some.php:117
+msgid "Enabled"
+msgstr ""
+
 #: reports/activitytimes.php:53 reports/activitytimes.php:74
-#: reports/audit-items.php:43 reports/completed-items.php:71
-#: reports/completed-items.php:198 reports/completed-items.php:249
+#: reports/audit-items.php:45 reports/completed-items.php:70
+#: reports/completed-items.php:197 reports/completed-items.php:248
 #: reports/open-items.php:185 reports/open-items.php:234
 #: reports/overdue-items.php:200 reports/overdue-items.php:251
 msgid "End"
 msgstr ""
 
-#: activities/one.php:423 campaigns/one.php:118 campaigns/some.php:68
+#: activities/one.php:419 campaigns/one.php:118 campaigns/some.php:231
 msgid "Ends"
 msgstr ""
 
@@ -1647,11 +1669,11 @@ msgstr ""
 msgid "Ends On"
 msgstr ""
 
-#: activities/some.php:524
+#: activities/some.php:513
 msgid "Ends/Due"
 msgstr ""
 
-#: admin/users/self.php:83 admin/users/some.php:107
+#: admin/users/self.php:83 admin/users/some.php:110
 msgid "English"
 msgstr ""
 
@@ -1679,7 +1701,7 @@ msgstr ""
 msgid "Enter Work Phone"
 msgstr ""
 
-#: reports/completed-items.php:290 reports/open-items.php:326
+#: reports/completed-items.php:289 reports/open-items.php:326
 #: reports/overdue-items.php:295 reports/overdue-items.php:343
 msgid "Entered"
 msgstr ""
@@ -1705,8 +1727,10 @@ msgstr ""
 msgid "Existing CRM Statuses"
 msgstr ""
 
-#: activities/pager.php:49 activities/some.php:681 cases/pager.php:49
-#: companies/pager.php:49
+#: activities/pager.php:49 activities/some.php:667 cases/one.php:148
+#: cases/pager.php:49 companies/pager.php:49 companies/some.php:313
+#: contacts/one.php:179 contacts/some.php:314 files/some.php:331
+#: opportunities/one.php:189 opportunities/some.php:269
 msgid "Export"
 msgstr ""
 
@@ -1722,10 +1746,11 @@ msgstr ""
 msgid "Export Companies/Contacts as LDAP/LDIF"
 msgstr ""
 
-#: admin/users/edit-2.php:39 admin/users/edit-2.php:41
+#: admin/users/edit-2.php:42 admin/users/edit-2.php:44
 msgid "Failed to add user to group."
 msgstr ""
 
+#: admin/system-parameters/one.php:49 admin/system-parameters/one.php:55
 #: include/utils-misc.php:532 include/utils-misc.php:539
 msgid "Failure to get system parameter "
 msgstr ""
@@ -1739,8 +1764,8 @@ msgid "Fast"
 msgstr ""
 
 #: companies/advanced-search.php:186 companies/edit.php:140
-#: companies/new.php:147 companies/one.php:546 companies/sidebar.php:61
-#: contacts/edit.php:196 contacts/new.php:188 contacts/one.php:360
+#: companies/new.php:147 companies/one.php:535 companies/sidebar.php:61
+#: contacts/edit.php:196 contacts/new.php:188 contacts/one.php:353
 #: plugins/phone/companies_one.php:524 plugins/phone/contacts_one.php:384
 msgid "Fax"
 msgstr ""
@@ -1753,7 +1778,7 @@ msgstr ""
 msgid "Feature Requests"
 msgstr ""
 
-#: contacts/edit.php:159 contacts/new.php:151 contacts/one.php:93
+#: contacts/edit.php:159 contacts/new.php:151 contacts/one.php:100
 #: plugins/phone/contacts_one.php:90
 msgid "Female"
 msgstr ""
@@ -1766,7 +1791,7 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: files/some.php:304
+#: files/some.php:273
 msgid "File Description"
 msgstr ""
 
@@ -1778,7 +1803,7 @@ msgstr ""
 msgid "File Format"
 msgstr ""
 
-#: files/some.php:302 files/some.php:369 private/home.php:265
+#: files/some.php:271 files/some.php:357 private/home.php:265
 msgid "File ID"
 msgstr ""
 
@@ -1786,11 +1811,11 @@ msgstr ""
 msgid "File Information"
 msgstr ""
 
-#: files/new.php:78 files/one.php:69 files/some.php:303
+#: files/new.php:78 files/one.php:69 files/some.php:272
 msgid "File Name"
 msgstr ""
 
-#: files/sidebar.php:26 files/some.php:281 include/utils-interface.php:283
+#: files/sidebar.php:26 files/some.php:256 include/utils-interface.php:286
 msgid "Files"
 msgstr ""
 
@@ -1804,13 +1829,13 @@ msgstr ""
 msgid "Finished"
 msgstr ""
 
-#: admin/users/one.php:98 admin/users/self.php:68 admin/users/some.php:90
+#: admin/users/one.php:100 admin/users/self.php:68 admin/users/some.php:93
 #: companies/new.php:242 contacts/edit.php:146 contacts/new.php:138
-#: contacts/some.php:239
+#: contacts/some.php:229
 msgid "First Names"
 msgstr ""
 
-#: activities/edit-2.php:470
+#: activities/edit-2.php:472
 msgid "Follow-up"
 msgstr ""
 
@@ -1826,7 +1851,7 @@ msgstr ""
 msgid "Formatting"
 msgstr ""
 
-#: companies/former-names.php:89 companies/one.php:346
+#: companies/former-names.php:89 companies/one.php:348
 #: plugins/phone/companies_one.php:267
 msgid "Former Name"
 msgstr ""
@@ -1853,7 +1878,7 @@ msgstr ""
 #: admin/campaign-statuses/one.php:60 admin/campaign-statuses/some.php:70
 #: admin/campaign-types/one.php:57 admin/campaign-types/some.php:68
 #: admin/case-priorities/one.php:60 admin/case-priorities/some.php:70
-#: admin/case-statuses/one.php:134 admin/case-statuses/some.php:143
+#: admin/case-statuses/one.php:134 admin/case-statuses/some.php:149
 #: admin/case-types/one.php:59 admin/case-types/some.php:68
 #: admin/categories/one.php:98 admin/categories/some.php:69
 #: admin/company-sources/one.php:62 admin/company-sources/some.php:72
@@ -1863,7 +1888,7 @@ msgstr ""
 #: admin/opportunity-statuses/one.php:134
 #: admin/opportunity-statuses/some.php:118 admin/ratings/one.php:56
 #: admin/ratings/some.php:71 admin/roles/one.php:59 admin/roles/some.php:70
-#: admin/users/some.php:63
+#: admin/users/some.php:66
 msgid "Full Name"
 msgstr ""
 
@@ -1880,7 +1905,7 @@ msgstr ""
 
 #: admin/account-statuses/some.php:74 admin/activity-types/some.php:82
 #: admin/campaign-statuses/some.php:74 admin/campaign-types/some.php:72
-#: admin/case-priorities/some.php:74 admin/case-statuses/some.php:151
+#: admin/case-priorities/some.php:74 admin/case-statuses/some.php:157
 #: admin/case-types/some.php:72 admin/categories/some.php:73
 #: admin/company-sources/some.php:76 admin/company-types/some.php:71
 #: admin/crm-statuses/some.php:77 admin/industries/some.php:71
@@ -1889,17 +1914,17 @@ msgstr ""
 msgid "Full Plural Name"
 msgstr ""
 
-#: admin/users/one.php:114 admin/users/self.php:86 admin/users/some.php:110
+#: admin/users/one.php:116 admin/users/self.php:86 admin/users/some.php:113
 msgid "GMT Offset"
 msgstr ""
 
-#: contacts/edit.php:154 contacts/new.php:146 contacts/one.php:320
+#: contacts/edit.php:154 contacts/new.php:146 contacts/one.php:313
 #: plugins/phone/contacts_one.php:327
 msgid "Gender"
 msgstr ""
 
-#: reports/activitytimes.php:62 reports/audit-items.php:59
-#: reports/companies-list.php:128 reports/completed-items.php:119
+#: reports/activitytimes.php:62 reports/audit-items.php:61
+#: reports/companies-list.php:128 reports/completed-items.php:118
 #: reports/index.php:136 reports/open-items.php:102
 #: reports/overdue-items.php:117
 msgid "Go"
@@ -1920,7 +1945,8 @@ msgstr ""
 #: activities/pager.php:12 cases/pager.php:12 companies/pager.php:12
 #: contacts/sidebar.php:71 files/sidebar.php:10
 #: include/categories-sidebar.php:10 include/utils-misc.php:16
-#: notes/sidebar.php:9 relationships/sidebar.php:5
+#: notes/sidebar.php:9 relationships/relationship_functions.php:5
+#: relationships/sidebar.php:5
 msgid "Hacking attempt"
 msgstr ""
 
@@ -1944,11 +1970,15 @@ msgstr ""
 msgid "Hold"
 msgstr ""
 
-#: include/utils-interface.php:275 private/home.php:465
+#: include/utils-interface.php:278 private/home.php:465
 msgid "Home"
 msgstr ""
 
-#: contacts/edit.php:192 contacts/new.php:184 contacts/one.php:352
+#: contacts/one.php:423
+msgid "Home Address"
+msgstr ""
+
+#: contacts/edit.php:192 contacts/new.php:184 contacts/one.php:345
 #: contacts/sidebar.php:181 plugins/phone/contacts_one.php:372
 msgid "Home Phone"
 msgstr ""
@@ -1993,7 +2023,7 @@ msgstr ""
 msgid "I tried to execute:"
 msgstr ""
 
-#: files/some.php:114
+#: files/some.php:328
 msgid "ID"
 msgstr ""
 
@@ -2026,10 +2056,9 @@ msgid "Industries"
 msgstr ""
 
 #: admin/import/import-companies.php:134 companies/advanced-search.php:170
-#: companies/edit.php:128 companies/new.php:131 companies/one.php:516
-#: companies/some-advanced.php:137 companies/some.php:51
-#: companies/some.php:257 companies/some.php:309
-#: plugins/phone/companies_one.php:494
+#: companies/edit.php:128 companies/new.php:131 companies/one.php:505
+#: companies/some-advanced.php:137 companies/some.php:246
+#: companies/some.php:295 plugins/phone/companies_one.php:494
 msgid "Industry"
 msgstr ""
 
@@ -2037,7 +2066,7 @@ msgstr ""
 msgid "Industry Details"
 msgstr ""
 
-#: activities/one.php:398
+#: activities/one.php:394
 msgid "Insert Log"
 msgstr ""
 
@@ -2045,7 +2074,7 @@ msgstr ""
 msgid "Insurance"
 msgstr ""
 
-#: contacts/edit.php:212 contacts/new.php:204 contacts/one.php:364
+#: contacts/edit.php:212 contacts/new.php:204 contacts/one.php:357
 #: plugins/phone/contacts_one.php:390
 msgid "Interests"
 msgstr ""
@@ -2054,19 +2083,19 @@ msgstr ""
 msgid "LDAP Version"
 msgstr ""
 
-#: admin/users/one.php:110 admin/users/self.php:82 admin/users/some.php:106
+#: admin/users/one.php:112 admin/users/self.php:82 admin/users/some.php:109
 msgid "Language"
 msgstr ""
 
-#: campaigns/one.php:130 cases/one.php:261 companies/one.php:675
-#: contacts/one.php:452 opportunities/one.php:333
+#: campaigns/one.php:130 cases/one.php:306 companies/one.php:664
+#: contacts/one.php:463 opportunities/one.php:338
 #: plugins/phone/companies_one.php:548 plugins/phone/contacts_one.php:485
 msgid "Last Modified"
 msgstr ""
 
-#: admin/users/one.php:94 admin/users/self.php:64 admin/users/some.php:86
+#: admin/users/one.php:96 admin/users/self.php:64 admin/users/some.php:89
 #: companies/new.php:246 contacts/edit.php:150 contacts/new.php:142
-#: contacts/some.php:238
+#: contacts/some.php:228
 msgid "Last Name"
 msgstr ""
 
@@ -2083,12 +2112,12 @@ msgid "Legal"
 msgstr ""
 
 #: companies/advanced-search.php:154 companies/edit.php:108
-#: companies/new.php:115 companies/one.php:503
+#: companies/new.php:115 companies/one.php:492
 #: plugins/phone/companies_one.php:480
 msgid "Legal Name"
 msgstr ""
 
-#: reports/audit-items.php:92
+#: reports/audit-items.php:94
 msgid "Line"
 msgstr ""
 
@@ -2112,7 +2141,7 @@ msgstr ""
 msgid "Link Activity To Opportunity Status"
 msgstr ""
 
-#: relationships/sidebar.php:171 relationships/sidebar.php:175
+#: relationships/sidebar.php:106
 msgid "Linked Relationships"
 msgstr ""
 
@@ -2146,19 +2175,19 @@ msgstr ""
 msgid "List of companies, addresses and phone numbers"
 msgstr ""
 
-#: activities/one.php:405
+#: activities/one.php:401
 msgid "Local Time"
 msgstr ""
 
-#: activities/some.php:549
+#: activities/some.php:538
 msgid "Local Time Between"
 msgstr ""
 
-#: include/utils-interface.php:267
+#: include/utils-interface.php:270
 msgid "Logged in as"
 msgstr ""
 
-#: include/utils-interface.php:268
+#: include/utils-interface.php:271
 msgid "Logout"
 msgstr ""
 
@@ -2178,7 +2207,7 @@ msgstr ""
 msgid "MRTG"
 msgstr ""
 
-#: contacts/one.php:378 plugins/phone/contacts_one.php:404
+#: contacts/one.php:374 plugins/phone/contacts_one.php:404
 msgid "MSN IM"
 msgstr ""
 
@@ -2194,13 +2223,16 @@ msgstr ""
 msgid "Mail"
 msgstr ""
 
-#: activities/pager.php:50 activities/some.php:682 cases/pager.php:50
-#: companies/one.php:693 companies/pager.php:50 contacts/edit.php:238
-#: plugins/phone/companies_one.php:636
+#: activities/pager.php:50 activities/some.php:668 campaigns/some.php:247
+#: cases/one.php:149 cases/pager.php:50 companies/one.php:266
+#: companies/one.php:312 companies/one.php:682 companies/pager.php:50
+#: companies/some.php:314 contacts/edit.php:238 contacts/one.php:180
+#: contacts/some.php:315 files/some.php:332 opportunities/one.php:190
+#: opportunities/some.php:270 plugins/phone/companies_one.php:636
 msgid "Mail Merge"
 msgstr ""
 
-#: contacts/edit.php:158 contacts/new.php:150 contacts/one.php:96
+#: contacts/edit.php:158 contacts/new.php:150 contacts/one.php:103
 #: plugins/phone/contacts_one.php:93
 msgid "Male"
 msgstr ""
@@ -2238,7 +2270,7 @@ msgstr ""
 msgid "Manage Case Priorities"
 msgstr ""
 
-#: admin/case-statuses/some.php:83
+#: admin/case-statuses/some.php:89
 msgid "Manage Case Statuses"
 msgstr ""
 
@@ -2286,7 +2318,7 @@ msgstr ""
 msgid "Manage System Parameters"
 msgstr ""
 
-#: admin/users/some.php:50
+#: admin/users/some.php:52
 msgid "Manage Users"
 msgstr ""
 
@@ -2306,7 +2338,7 @@ msgstr ""
 msgid "Measure performance of users over a selectable timeframe"
 msgstr ""
 
-#: campaigns/some.php:237
+#: campaigns/some.php:200
 msgid "Media"
 msgstr ""
 
@@ -2314,11 +2346,11 @@ msgstr ""
 msgid "Medium"
 msgstr ""
 
-#: email/email-4.php:87
+#: email/email-4.php:89
 msgid "Messages Sent"
 msgstr ""
 
-#: include/utils-interface.php:333
+#: include/utils-interface.php:336
 msgid "Miss"
 msgstr ""
 
@@ -2330,20 +2362,20 @@ msgstr ""
 msgid "More Info"
 msgstr ""
 
-#: admin/activity-types/some.php:58 admin/case-statuses/some.php:114
+#: admin/activity-types/some.php:58 admin/case-statuses/some.php:120
 #: admin/opportunity-statuses/some.php:97
 msgid "Move"
 msgstr ""
 
-#: include/utils-interface.php:333
+#: include/utils-interface.php:336
 msgid "Mr."
 msgstr ""
 
-#: include/utils-interface.php:333
+#: include/utils-interface.php:336
 msgid "Mrs."
 msgstr ""
 
-#: include/utils-interface.php:333
+#: include/utils-interface.php:336
 msgid "Ms."
 msgstr ""
 
@@ -2351,24 +2383,24 @@ msgstr ""
 msgid "Multi Router Traffic Grapher"
 msgstr ""
 
-#: contacts/one.php:180 locale/datastrings.php:71
+#: activities/activities-pager-functions.php:40 locale/datastrings.php:71
 #: plugins/phone/contacts_one.php:160
 msgid "N/A"
 msgstr ""
 
-#: reports/completed-items.php:229
+#: reports/completed-items.php:228
 msgid "NO COMPLETED ACTIVITIES for"
 msgstr ""
 
-#: reports/completed-items.php:271
+#: reports/completed-items.php:270
 msgid "NO COMPLETED CAMPAIGNS for"
 msgstr ""
 
-#: reports/completed-items.php:366
+#: reports/completed-items.php:365
 msgid "NO COMPLETED CASES for"
 msgstr ""
 
-#: reports/completed-items.php:320
+#: reports/completed-items.php:319
 msgid "NO COMPLETED OPPORTUNITIES for"
 msgstr ""
 
@@ -2406,21 +2438,21 @@ msgstr ""
 
 #: admin/account-statuses/some.php:50 admin/activity-templates/some.php:62
 #: admin/activity-types/some.php:57 admin/campaign-statuses/some.php:50
-#: admin/case-priorities/some.php:50 admin/case-statuses/some.php:112
+#: admin/case-priorities/some.php:50 admin/case-statuses/some.php:118
 #: admin/case-types/some.php:48 admin/categories/some.php:49
 #: admin/company-sources/some.php:52 admin/company-types/some.php:47
 #: admin/crm-statuses/some.php:53 admin/industries/some.php:47
 #: admin/opportunity-statuses/some.php:95 admin/ratings/some.php:51
 #: admin/relationship-types/some.php:52 admin/roles/some.php:50
-#: cases/case-status-view.php:48 cases/sidebar.php:26
-#: companies/divisions.php:101 companies/one.php:713 contacts/one.php:316
-#: contacts/some.php:49 email/templates.php:66 files/sidebar.php:29
-#: files/some.php:67 files/some.php:366 opportunities/opportunity-view.php:48
-#: opportunities/sidebar.php:27 plugins/phone/companies_one.php:651
-#: plugins/phone/contacts_one.php:321 private/home.php:260
-#: private/home.php:295 private/home.php:302 private/home.php:309
-#: private/home.php:321 private/home.php:328 relationships/edit.php:52
-#: reports/audit-items.php:97
+#: cases/case-status-view.php:48 cases/sidebar.php:29
+#: companies/divisions.php:101 companies/one.php:289 contacts/one.php:309
+#: contacts/some.php:292 email/templates.php:66 files/sidebar.php:29
+#: files/some.php:318 files/some.php:354 opportunities/opportunity-view.php:48
+#: opportunities/sidebar.php:27 plugins/info/edit-definitions-2.php:77
+#: plugins/phone/companies_one.php:651 plugins/phone/contacts_one.php:321
+#: private/home.php:260 private/home.php:295 private/home.php:302
+#: private/home.php:309 private/home.php:321 private/home.php:328
+#: relationships/edit.php:59 reports/audit-items.php:99
 msgid "Name"
 msgstr ""
 
@@ -2433,9 +2465,13 @@ msgid "Negotiation"
 msgstr ""
 
 #: admin/country-address-format/edit.php:69 locale/datastrings.php:73
-#: notes/sidebar.php:200 plugins/info/one.php:345 plugins/info/sidebar.php:152
+#: notes/sidebar.php:200 plugins/info/one.php:173 plugins/info/sidebar.php:178
 #: plugins/phone/companies_one.php:658
 msgid "New"
+msgstr ""
+
+#: contacts/one.php:492
+msgid "New Activities"
 msgstr ""
 
 #: companies/addresses.php:132
@@ -2446,11 +2482,11 @@ msgstr ""
 msgid "New Campaign"
 msgstr ""
 
-#: cases/new.php:97
+#: cases/new.php:100
 msgid "New Case"
 msgstr ""
 
-#: companies/new.php:95 companies/some-advanced.php:408 companies/some.php:353
+#: companies/new.php:95 companies/some-advanced.php:410 companies/some.php:339
 msgid "New Company"
 msgstr ""
 
@@ -2470,19 +2506,19 @@ msgstr ""
 msgid "New Password"
 msgstr ""
 
-#: relationships/sidebar.php:407
+#: relationships/sidebar.php:307
 msgid "New Relationship"
 msgstr ""
 
-#: companies/one.php:694 plugins/phone/companies_one.php:637
+#: plugins/phone/companies_one.php:637
 msgid "News"
 msgstr ""
 
-#: companies/one.php:442 plugins/phone/companies_one.php:422
+#: plugins/phone/companies_one.php:422
 msgid "No Activities"
 msgstr ""
 
-#: reports/audit-items.php:170
+#: reports/audit-items.php:172
 msgid "No Activity."
 msgstr ""
 
@@ -2494,15 +2530,15 @@ msgstr ""
 msgid "No Contact Selected."
 msgstr ""
 
-#: companies/one.php:446 plugins/phone/companies_one.php:426
+#: plugins/phone/companies_one.php:426
 msgid "No Contacts"
 msgstr ""
 
-#: activities/some.php:624
+#: activities/some.php:613
 msgid "No Saved Searches"
 msgstr ""
 
-#: opportunities/one.php:257
+#: opportunities/one.php:262
 msgid "No activities"
 msgstr ""
 
@@ -2550,7 +2586,7 @@ msgstr ""
 msgid "No open activities"
 msgstr ""
 
-#: cases/sidebar.php:60
+#: cases/sidebar.php:64
 msgid "No open cases"
 msgstr ""
 
@@ -2562,31 +2598,31 @@ msgstr ""
 msgid "No open opportunities"
 msgstr ""
 
-#: campaigns/some.php:156
+#: campaigns/some.php:131
 msgid "No recently viewed campaigns"
 msgstr ""
 
-#: cases/some.php:172
+#: cases/some.php:174
 msgid "No recently viewed cases"
 msgstr ""
 
-#: companies/some-advanced.php:341 companies/some.php:182
+#: companies/some-advanced.php:343 companies/some.php:171
 msgid "No recently viewed companies"
 msgstr ""
 
-#: contacts/some.php:196
+#: contacts/some.php:186
 msgid "No recently viewed contacts"
 msgstr ""
 
-#: files/some.php:257
+#: files/some.php:244
 msgid "No recently viewed file"
 msgstr ""
 
-#: opportunities/some.php:146
+#: opportunities/some.php:149
 msgid "No recently viewed opportunities"
 msgstr ""
 
-#: admin/case-statuses/some.php:77
+#: admin/case-statuses/some.php:83
 msgid "No statuses defined for specified status type"
 msgstr ""
 
@@ -2594,7 +2630,7 @@ msgstr ""
 msgid "Non Uploaded Files"
 msgstr ""
 
-#: activities/some.php:542
+#: activities/some.php:531
 msgid "Non-Completed"
 msgstr ""
 
@@ -2612,7 +2648,7 @@ msgstr ""
 msgid "Not Coded Yet"
 msgstr ""
 
-#: activities/some.php:342
+#: activities/some.php:346
 msgid "Not Set"
 msgstr ""
 
@@ -2628,7 +2664,7 @@ msgstr ""
 #: admin/company-types/one.php:82 admin/crm-statuses/one.php:83
 #: admin/industries/one.php:82 admin/opportunity-statuses/one.php:219
 #: admin/ratings/one.php:82 admin/relationship-types/one.php:101
-#: admin/roles/one.php:85 admin/users/one.php:134
+#: admin/roles/one.php:85 admin/users/one.php:140
 msgid "Note: This action CANNOT be undone!"
 msgstr ""
 
@@ -2668,16 +2704,21 @@ msgstr ""
 msgid "OVERDUE OPPORTUNITIES for"
 msgstr ""
 
-#: activities/some.php:531 cases/one.php:346 contacts/one.php:488
-#: opportunities/one.php:424 plugins/phone/contacts_one.php:519
+#: admin/acl/one_ControlledObjectRelationship.php:50
+msgid "Object/Child Object combination fails recursion check."
+msgstr ""
+
+#: activities/some.php:520 cases/one.php:134 cases/one.php:391
+#: contacts/one.php:165 contacts/one.php:499 opportunities/one.php:175
+#: opportunities/one.php:429 plugins/phone/contacts_one.php:519
 msgid "On"
 msgstr ""
 
-#: files/some.php:305 private/home.php:262
+#: files/some.php:274 private/home.php:262
 msgid "On What"
 msgstr ""
 
-#: files/some.php:324
+#: files/some.php:293
 msgid "On what Name"
 msgstr ""
 
@@ -2689,21 +2730,22 @@ msgstr ""
 msgid "Only show completed activities"
 msgstr ""
 
+#: activities/activities-pager-functions.php:22
 #: admin/campaign-statuses/one.php:75 admin/campaign-statuses/some.php:86
 #: admin/case-statuses/one.php:153 admin/opportunity-statuses/one.php:153
 #: admin/opportunity-statuses/some.php:137 locale/datastrings.php:75
 msgid "Open"
 msgstr ""
 
-#: activities/some.php:455 private/home.php:476
+#: activities/some.php:444 private/home.php:476
 msgid "Open Activities"
 msgstr ""
 
-#: cases/sidebar.php:23
+#: cases/sidebar.php:26
 msgid "Open Cases"
 msgstr ""
 
-#: reports/index.php:117 reports/open-items.php:35
+#: reports/index.php:117 reports/open-items.php:32
 msgid "Open Items"
 msgstr ""
 
@@ -2713,9 +2755,9 @@ msgstr ""
 msgid "Open Status"
 msgstr ""
 
-#: files/some.php:318 include/utils-interface.php:281
-#: opportunities/sidebar.php:24 opportunities/some.php:186
-#: reports/completed-items.php:109 reports/open-items.php:92
+#: files/some.php:287 include/utils-interface.php:284
+#: opportunities/sidebar.php:24 opportunities/some.php:189
+#: reports/completed-items.php:108 reports/open-items.php:92
 #: reports/overdue-items.php:106
 msgid "Opportunities"
 msgstr ""
@@ -2744,8 +2786,8 @@ msgstr ""
 msgid "Opportunities by Status"
 msgstr ""
 
-#: files/some.php:96 opportunities/edit.php:135 opportunities/some.php:47
-#: opportunities/some.php:284 reports/completed-items.php:294
+#: files/some.php:323 opportunities/edit.php:135 opportunities/some.php:246
+#: opportunities/some.php:295 reports/completed-items.php:293
 #: reports/index.php:58 reports/overdue-items.php:299
 msgid "Opportunity"
 msgstr ""
@@ -2759,23 +2801,23 @@ msgid "Opportunity Deleted."
 msgstr ""
 
 #: opportunities/edit.php:155 opportunities/new.php:84
-#: opportunities/one.php:260 opportunities/one.php:280
+#: opportunities/one.php:265 opportunities/one.php:285
 msgid "Opportunity Details"
 msgstr ""
 
-#: opportunities/some.php:208
+#: opportunities/some.php:211
 msgid "Opportunity Name"
 msgstr ""
 
-#: activities/one.php:395
+#: activities/one.php:391
 msgid "Opportunity Notes"
 msgstr ""
 
-#: opportunities/some.php:52
+#: opportunities/some.php:249
 msgid "Opportunity Size"
 msgstr ""
 
-#: activities/some.php:550
+#: activities/some.php:539
 msgid "Opportunity Status"
 msgstr ""
 
@@ -2792,7 +2834,7 @@ msgstr ""
 msgid "Opportunity Title"
 msgstr ""
 
-#: campaigns/some.php:276
+#: campaigns/some.php:267
 msgid "Options"
 msgstr ""
 
@@ -2808,7 +2850,7 @@ msgstr ""
 msgid "Other Contacts"
 msgstr ""
 
-#: activities/some.php:157 activities/some.php:656
+#: activities/activities-pager-functions.php:19 activities/some.php:642
 msgid "Overdue"
 msgstr ""
 
@@ -2821,21 +2863,21 @@ msgstr ""
 msgid "Override Address"
 msgstr ""
 
-#: files/some.php:346
+#: files/some.php:313
 msgid "Owl File Management"
 msgstr ""
 
-#: activities/some.php:167 activities/some.php:513 activities/some.php:663
-#: campaigns/edit.php:93 campaigns/new.php:82 campaigns/some.php:67
-#: campaigns/some.php:224 cases/edit.php:232 cases/export.php:35
-#: cases/new.php:154 cases/one.php:238 cases/sidebar.php:27 cases/some.php:65
-#: cases/some.php:259 companies/advanced-search.php:174 companies/edit.php:120
-#: companies/new.php:135 companies/some.php:251 contacts/some.php:64
-#: contacts/some.php:262 email/email-3.php:86 files/sidebar.php:31
-#: files/some.php:326 notes/sidebar.php:28 opportunities/edit.php:184
-#: opportunities/new.php:108 opportunities/one.php:294
-#: opportunities/sidebar.php:28 opportunities/some.php:48
-#: opportunities/some.php:216 reports/companies-list.php:108
+#: activities/some.php:502 activities/some.php:649 campaigns/edit.php:93
+#: campaigns/new.php:82 campaigns/some.php:187 campaigns/some.php:229
+#: cases/edit.php:232 cases/export.php:35 cases/new.php:157 cases/one.php:283
+#: cases/sidebar.php:30 cases/some.php:65 cases/some.php:261
+#: companies/advanced-search.php:174 companies/edit.php:120
+#: companies/new.php:135 companies/some.php:240 contacts/some.php:252
+#: contacts/some.php:297 email/email-3.php:86 files/sidebar.php:31
+#: files/some.php:295 notes/sidebar.php:28 opportunities/edit.php:184
+#: opportunities/new.php:108 opportunities/one.php:299
+#: opportunities/sidebar.php:28 opportunities/some.php:219
+#: opportunities/some.php:248 reports/companies-list.php:108
 msgid "Owner"
 msgstr ""
 
@@ -2855,7 +2897,7 @@ msgstr ""
 msgid "Partners"
 msgstr ""
 
-#: admin/users/some.php:98
+#: admin/users/some.php:101
 msgid "Password"
 msgstr ""
 
@@ -2871,16 +2913,8 @@ msgstr ""
 msgid "Payment Default"
 msgstr ""
 
-#: plugins/journal/index.php:27
-msgid "Personal Journal"
-msgstr ""
-
-#: plugins/journal/install.php:20
-msgid "Personal Journal - INSTALL "
-msgstr ""
-
 #: companies/advanced-search.php:178 companies/edit.php:132
-#: companies/new.php:139 companies/one.php:534 companies/one.php:717
+#: companies/new.php:139 companies/one.php:293 companies/one.php:523
 #: companies/sidebar.php:55 locale/datastrings.php:79
 #: plugins/phone/companies_one.php:512 plugins/phone/companies_one.php:654
 msgid "Phone"
@@ -2894,8 +2928,18 @@ msgstr ""
 msgid "Please correct this error."
 msgstr ""
 
+#: admin/acl/one_ControlledObjectRelationship.php:45
+msgid "Please select a Parent/Child controlled object combination"
+msgstr ""
+
 #: admin/acl/index.php:57
 msgid "Please select a section to manage from the sidebar"
+msgstr ""
+
+#: admin/acl/one_GroupUser.php:46
+msgid ""
+"Please select either a User/Group/Role combination or a Group/Child Group "
+"combination"
 msgstr ""
 
 #: include/utils-interface.php:80
@@ -2944,7 +2988,7 @@ msgstr ""
 msgid "Pre-Text Formatting"
 msgstr ""
 
-#: include/utils-interface.php:291
+#: include/utils-interface.php:294
 msgid "Preferences"
 msgstr ""
 
@@ -2964,17 +3008,17 @@ msgstr ""
 msgid "Printable contact summary information for Companies in search Results."
 msgstr ""
 
-#: reports/completed-items.php:152 reports/open-items.php:122
+#: reports/completed-items.php:151 reports/open-items.php:122
 #: reports/overdue-items.php:137
 msgid "Printer Friendly"
 msgstr ""
 
-#: cases/edit.php:228 cases/export.php:36 cases/new.php:150 cases/one.php:249
-#: cases/sidebar.php:28 cases/some.php:65
+#: cases/edit.php:228 cases/export.php:36 cases/new.php:153 cases/one.php:294
+#: cases/sidebar.php:31 cases/some.php:65
 msgid "Priority"
 msgstr ""
 
-#: activities/one.php:363 opportunities/new.php:116 opportunities/one.php:306
+#: activities/one.php:359 opportunities/new.php:116 opportunities/one.php:311
 msgid "Probability"
 msgstr ""
 
@@ -3024,9 +3068,9 @@ msgid "Radius Test"
 msgstr ""
 
 #: admin/import/import-companies.php:142 companies/admin.php:86
-#: companies/edit.php:156 companies/one.php:603
-#: companies/some-advanced.php:140 companies/some.php:54
-#: companies/some.php:312 plugins/phone/companies_one.php:572
+#: companies/edit.php:156 companies/one.php:592
+#: companies/some-advanced.php:140 companies/some.php:298
+#: plugins/phone/companies_one.php:572
 msgid "Rating"
 msgstr ""
 
@@ -3042,9 +3086,9 @@ msgstr ""
 msgid "Real Estate"
 msgstr ""
 
-#: campaigns/some.php:286 cases/some.php:292 companies/some-advanced.php:415
-#: companies/some.php:360 contacts/some.php:344 files/some.php:363
-#: opportunities/some.php:281
+#: campaigns/some.php:277 cases/some.php:294 companies/some-advanced.php:417
+#: companies/some.php:346 contacts/some.php:337 files/some.php:351
+#: opportunities/some.php:292
 msgid "Recently Viewed"
 msgstr ""
 
@@ -3069,16 +3113,20 @@ msgstr ""
 msgid "Relationships"
 msgstr ""
 
+#: relationships/sidebar.php:77
+msgid "Relationships for "
+msgstr ""
+
 #: reports/opportunities-size-by-industry.php:94
 #: reports/opportunities-size-by-opportunity-status.php:104
 msgid "Remainder"
 msgstr ""
 
-#: reports/audit-items.php:102
+#: reports/audit-items.php:104
 msgid "Remote Addr"
 msgstr ""
 
-#: reports/audit-items.php:103
+#: reports/audit-items.php:105
 msgid "Remote Port"
 msgstr ""
 
@@ -3086,7 +3134,7 @@ msgstr ""
 msgid "Reply to"
 msgstr ""
 
-#: include/utils-interface.php:289 reports/index.php:29 reports/index.php:90
+#: include/utils-interface.php:292 reports/index.php:29 reports/index.php:90
 msgid "Reports"
 msgstr ""
 
@@ -3094,7 +3142,7 @@ msgstr ""
 msgid "Restaurant"
 msgstr ""
 
-#: companies/one.php:572
+#: companies/one.php:561
 msgid "Restrict by Division"
 msgstr ""
 
@@ -3102,17 +3150,17 @@ msgstr ""
 msgid "Retail"
 msgstr ""
 
-#: include/utils-interface.php:333
+#: include/utils-interface.php:336
 msgid "Rev."
 msgstr ""
 
 #: companies/advanced-search.php:198 companies/edit.php:152
-#: companies/new.php:159 companies/one.php:633
+#: companies/new.php:159 companies/one.php:622
 #: plugins/phone/companies_one.php:596
 msgid "Revenue"
 msgstr ""
 
-#: admin/users/one.php:80 admin/users/some.php:65 admin/users/some.php:82
+#: admin/users/one.php:82 admin/users/some.php:68 admin/users/some.php:85
 msgid "Role"
 msgstr ""
 
@@ -3145,8 +3193,8 @@ msgstr ""
 #: admin/industries/one.php:68 admin/opportunity-statuses/one.php:161
 #: admin/ratings/one.php:68 admin/relationship-types/one.php:86
 #: admin/roles/one.php:71 admin/users/change-password.php:53
-#: admin/users/one.php:118 admin/users/self.php:91 campaigns/edit.php:119
-#: campaigns/new.php:108 cases/edit.php:250 cases/new.php:169
+#: admin/users/one.php:124 admin/users/self.php:91 campaigns/edit.php:119
+#: campaigns/new.php:108 cases/edit.php:250 cases/new.php:172
 #: companies/admin.php:102 companies/edit-address.php:107
 #: companies/edit.php:180 companies/new.php:183 contacts/edit-address.php:223
 #: notes/edit.php:40 notes/new.php:50 opportunities/edit.php:223
@@ -3158,7 +3206,7 @@ msgstr ""
 msgid "Save Defaults"
 msgstr ""
 
-#: activities/one.php:444
+#: activities/one.php:440
 msgid "Save and Next"
 msgstr ""
 
@@ -3170,11 +3218,11 @@ msgstr ""
 msgid "Save as New Template"
 msgstr ""
 
-#: activities/some.php:619
+#: activities/some.php:608
 msgid "Saved Searches"
 msgstr ""
 
-#: activities/some.php:163 activities/some.php:525 activities/some.php:660
+#: activities/some.php:514 activities/some.php:646 companies/one.php:252
 #: private/home.php:484
 msgid "Scheduled"
 msgstr ""
@@ -3185,27 +3233,27 @@ msgstr ""
 msgid "Score Adjustment"
 msgstr ""
 
-#: activities/some.php:637 campaigns/some.php:252 cases/sidebar.php:80
-#: cases/sidebar.php:88 cases/some.php:271 companies/advanced-search.php:270
-#: companies/some.php:288 contacts/some.php:283 contacts/transfer.php:56
-#: files/some.php:335 opportunities/sidebar.php:74
-#: opportunities/sidebar.php:82 opportunities/some.php:226
+#: activities/some.php:626 campaigns/some.php:215 cases/sidebar.php:87
+#: cases/sidebar.php:95 cases/some.php:273 companies/advanced-search.php:270
+#: companies/some.php:277 contacts/some.php:273 contacts/transfer.php:56
+#: files/some.php:304 opportunities/sidebar.php:74
+#: opportunities/sidebar.php:82 opportunities/some.php:229
 #: relationships/new-relationship.php:143
 #: reports/company-contacts-printout.php:228
 msgid "Search"
 msgstr ""
 
-#: activities/some.php:514
+#: activities/some.php:503
 msgid "Search By Date"
 msgstr ""
 
-#: companies/some-advanced.php:369 companies/some.php:220
+#: companies/some-advanced.php:371 companies/some.php:209
 msgid "Search Companies"
 msgstr ""
 
-#: activities/some.php:476 campaigns/some.php:219 cases/some.php:246
-#: companies/some.php:243 contacts/some.php:235 files/some.php:299
-#: opportunities/some.php:205 reports/company-contacts-printout.php:209
+#: activities/some.php:465 campaigns/some.php:182 cases/some.php:248
+#: companies/some.php:232 contacts/some.php:225 files/some.php:268
+#: opportunities/some.php:208 reports/company-contacts-printout.php:209
 msgid "Search Criteria"
 msgstr ""
 
@@ -3217,14 +3265,15 @@ msgstr ""
 msgid "Search Engines"
 msgstr ""
 
-#: activities/pager.php:35 activities/some.php:688 cases/pager.php:35
-#: companies/pager.php:35 companies/some.php:333 contacts/some.php:328
+#: activities/pager.php:35 activities/some.php:673 campaigns/some.php:252
+#: cases/pager.php:35 companies/pager.php:35 companies/some.php:319
+#: contacts/some.php:321 files/some.php:334
 #: include/adodb/adodb-pager.inc.php:287 opportunities/pager.php:35
-#: opportunities/some.php:265
+#: opportunities/some.php:276
 msgid "Search Results"
 msgstr ""
 
-#: activities/some.php:620
+#: activities/some.php:609
 msgid "Search Title"
 msgstr ""
 
@@ -3236,7 +3285,7 @@ msgstr ""
 msgid "Search for Contact"
 msgstr ""
 
-#: admin/case-statuses/some.php:80
+#: admin/case-statuses/some.php:86
 msgid "Select a status type"
 msgstr ""
 
@@ -3248,12 +3297,12 @@ msgstr ""
 msgid "Seminars"
 msgstr ""
 
-#: reports/completed-items.php:131 reports/open-items.php:136
+#: reports/completed-items.php:130 reports/open-items.php:136
 #: reports/overdue-items.php:151
 msgid "Send Email To"
 msgstr ""
 
-#: reports/audit-items.php:104
+#: reports/audit-items.php:106
 msgid "Session Id"
 msgstr ""
 
@@ -3270,7 +3319,7 @@ msgstr ""
 #: admin/campaign-statuses/one.php:56 admin/campaign-statuses/some.php:66
 #: admin/campaign-types/one.php:53 admin/campaign-types/some.php:64
 #: admin/case-priorities/one.php:56 admin/case-priorities/some.php:66
-#: admin/case-statuses/one.php:130 admin/case-statuses/some.php:135
+#: admin/case-statuses/one.php:130 admin/case-statuses/some.php:141
 #: admin/case-types/one.php:55 admin/case-types/some.php:64
 #: admin/categories/one.php:94 admin/categories/some.php:65
 #: admin/company-sources/one.php:58 admin/company-sources/some.php:68
@@ -3283,8 +3332,8 @@ msgstr ""
 msgid "Short Name"
 msgstr ""
 
-#: files/one.php:77 files/sidebar.php:30 files/some.php:367
-#: opportunities/one.php:302
+#: files/one.php:77 files/sidebar.php:30 files/some.php:355
+#: opportunities/one.php:307
 msgid "Size"
 msgstr ""
 
@@ -3313,16 +3362,15 @@ msgid "Special"
 msgstr ""
 
 #: reports/activitytimes.php:52 reports/activitytimes.php:73
-#: reports/audit-items.php:42 reports/completed-items.php:70
-#: reports/completed-items.php:197 reports/completed-items.php:248
+#: reports/audit-items.php:44 reports/completed-items.php:69
+#: reports/completed-items.php:196 reports/completed-items.php:247
 #: reports/open-items.php:184 reports/open-items.php:233
 #: reports/overdue-items.php:199 reports/overdue-items.php:250
 msgid "Start"
 msgstr ""
 
-#: activities/one.php:415 campaigns/one.php:114 campaigns/some.php:68
-#: companies/one.php:763 plugins/info/one.php:370
-#: plugins/phone/companies_one.php:695
+#: activities/one.php:411 campaigns/one.php:114 campaigns/some.php:230
+#: companies/one.php:739 plugins/phone/companies_one.php:695
 msgid "Starts"
 msgstr ""
 
@@ -3330,7 +3378,7 @@ msgstr ""
 msgid "Starts On"
 msgstr ""
 
-#: companies/some.php:103 companies/some.php:113 companies/some.php:263
+#: companies/some.php:103 companies/some.php:113 companies/some.php:252
 #: reports/companies-list.php:113 reports/company-contacts-printout.php:128
 #: reports/company-contacts-printout.php:138
 msgid "State"
@@ -3342,25 +3390,25 @@ msgstr ""
 msgid "State/Province"
 msgstr ""
 
-#: activities/one.php:349 admin/activity-templates/some.php:63
+#: activities/one.php:345 admin/activity-templates/some.php:63
 #: campaigns/edit.php:89 campaigns/new.php:78 campaigns/one.php:106
-#: campaigns/some.php:67 campaigns/some.php:238 campaigns/some.php:291
-#: cases/edit.php:221 cases/export.php:38 cases/new.php:143 cases/one.php:242
-#: cases/some.php:66 cases/some.php:262 cases/some.php:297
+#: campaigns/some.php:201 campaigns/some.php:228 campaigns/some.php:282
+#: cases/edit.php:221 cases/export.php:38 cases/new.php:146 cases/one.php:287
+#: cases/some.php:66 cases/some.php:264 cases/some.php:299
 #: opportunities/edit.php:178 opportunities/new.php:103
-#: opportunities/one.php:314 opportunities/sidebar.php:29
-#: opportunities/some.php:57 opportunities/some.php:218
-#: opportunities/some.php:286 reports/overdue-items.php:296
+#: opportunities/one.php:319 opportunities/sidebar.php:29
+#: opportunities/some.php:221 opportunities/some.php:251
+#: opportunities/some.php:297 reports/overdue-items.php:296
 msgid "Status"
 msgstr ""
 
-#: cases/edit.php:224 cases/new.php:146 cases/one.php:245
+#: cases/edit.php:224 cases/new.php:149 cases/one.php:290
 #: opportunities/edit.php:181 opportunities/new.php:105
-#: opportunities/one.php:317
+#: opportunities/one.php:322
 msgid "Status Definitions"
 msgstr ""
 
-#: admin/case-statuses/some.php:100
+#: admin/case-statuses/some.php:106
 msgid "Status Type"
 msgstr ""
 
@@ -3376,12 +3424,12 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: companies/one.php:714 contacts/edit.php:168 contacts/new.php:160
-#: contacts/one.php:324 plugins/phone/contacts_one.php:333
+#: companies/one.php:290 contacts/edit.php:168 contacts/new.php:160
+#: contacts/one.php:317 plugins/phone/contacts_one.php:333
 msgid "Summary"
 msgstr ""
 
-#: activities/one.php:338
+#: activities/one.php:334
 msgid "Switch Opportunity"
 msgstr ""
 
@@ -3397,7 +3445,7 @@ msgstr ""
 msgid "TOTAL"
 msgstr ""
 
-#: reports/audit-items.php:96
+#: reports/audit-items.php:98
 msgid "Table"
 msgstr ""
 
@@ -3405,7 +3453,7 @@ msgstr ""
 msgid "Tables"
 msgstr ""
 
-#: companies/admin.php:78 companies/one.php:591
+#: companies/admin.php:78 companies/one.php:580
 #: plugins/phone/companies_one.php:560
 msgid "Tax ID"
 msgstr ""
@@ -3430,16 +3478,16 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-#: activities/some.php:493
+#: activities/some.php:482
 msgid "Template Titles"
 msgstr ""
 
-#: companies/admin.php:90 companies/one.php:609
+#: companies/admin.php:90 companies/one.php:598
 #: plugins/phone/companies_one.php:578
 msgid "Terms"
 msgstr ""
 
-#: email/email-4.php:90
+#: email/email-4.php:92
 msgid "The bulk e-mail sub-system has sent"
 msgstr ""
 
@@ -3468,7 +3516,7 @@ msgstr ""
 msgid "This is the Access Control List system for XRMS"
 msgstr ""
 
-#: reports/audit-items.php:93
+#: reports/audit-items.php:95
 msgid "Time"
 msgstr ""
 
@@ -3480,20 +3528,20 @@ msgstr ""
 msgid "Timesheets"
 msgstr ""
 
-#: activities/one.php:378 activities/some.php:162 activities/some.php:479
-#: activities/some.php:659 admin/activity-templates/edit.php:64
-#: admin/case-statuses/one.php:176 admin/opportunity-statuses/one.php:177
-#: campaigns/one.php:98 cases/one.php:230 cases/one.php:342
-#: companies/one.php:715 companies/one.php:758 contacts/edit.php:172
-#: contacts/new.php:164 contacts/one.php:328 contacts/one.php:484
-#: contacts/some.php:58 contacts/some.php:240 opportunities/one.php:290
-#: opportunities/one.php:420 plugins/info/one.php:365
-#: plugins/phone/companies_one.php:690 plugins/phone/contacts_one.php:339
-#: plugins/phone/contacts_one.php:515
+#: activities/one.php:374 activities/some.php:468 activities/some.php:645
+#: admin/activity-templates/edit.php:64 admin/case-statuses/one.php:176
+#: admin/opportunity-statuses/one.php:177 campaigns/one.php:98
+#: cases/one.php:130 cases/one.php:275 cases/one.php:387 companies/one.php:247
+#: companies/one.php:291 companies/one.php:734 contacts/edit.php:172
+#: contacts/new.php:164 contacts/one.php:161 contacts/one.php:321
+#: contacts/one.php:495 contacts/some.php:230 contacts/some.php:295
+#: opportunities/one.php:171 opportunities/one.php:295
+#: opportunities/one.php:425 plugins/phone/companies_one.php:690
+#: plugins/phone/contacts_one.php:339 plugins/phone/contacts_one.php:515
 msgid "Title"
 msgstr ""
 
-#: activities/one.php:345
+#: activities/one.php:341
 msgid "To"
 msgstr ""
 
@@ -3526,18 +3574,18 @@ msgstr ""
 msgid "Transfer to Another Company"
 msgstr ""
 
-#: activities/one.php:356 activities/some.php:158 activities/some.php:515
-#: activities/some.php:657 admin/activity-templates/edit.php:72
-#: admin/case-statuses/some.php:111 campaigns/edit.php:85 campaigns/new.php:74
-#: campaigns/one.php:102 campaigns/some.php:67 campaigns/some.php:223
-#: campaigns/some.php:290 cases/edit.php:217 cases/export.php:37
-#: cases/new.php:139 cases/one.php:234 cases/one.php:344 cases/some.php:65
-#: cases/some.php:261 companies/one.php:760 contacts/one.php:486
-#: opportunities/one.php:422 plugins/info/one.php:367
+#: activities/one.php:352 activities/some.php:504 activities/some.php:643
+#: admin/activity-templates/edit.php:72 admin/case-statuses/some.php:117
+#: campaigns/edit.php:85 campaigns/new.php:74 campaigns/one.php:102
+#: campaigns/some.php:186 campaigns/some.php:227 campaigns/some.php:281
+#: cases/edit.php:217 cases/export.php:37 cases/new.php:142 cases/one.php:132
+#: cases/one.php:279 cases/one.php:389 cases/some.php:65 cases/some.php:263
+#: companies/one.php:249 companies/one.php:736 contacts/one.php:163
+#: contacts/one.php:497 opportunities/one.php:173 opportunities/one.php:427
 #: plugins/phone/companies_one.php:692 plugins/phone/contacts_one.php:517
-#: private/home.php:480 reports/audit-items.php:95
-#: reports/completed-items.php:73 reports/completed-items.php:199
-#: reports/completed-items.php:250 reports/completed-items.php:291
+#: private/home.php:480 reports/audit-items.php:97
+#: reports/completed-items.php:72 reports/completed-items.php:198
+#: reports/completed-items.php:249 reports/completed-items.php:290
 #: reports/open-items.php:58 reports/open-items.php:186
 #: reports/open-items.php:235 reports/overdue-items.php:71
 #: reports/overdue-items.php:201 reports/overdue-items.php:252
@@ -3549,7 +3597,7 @@ msgid "Types and Statuses"
 msgstr ""
 
 #: companies/advanced-search.php:190 companies/edit.php:144
-#: companies/new.php:151 companies/one.php:552
+#: companies/new.php:151 companies/one.php:541
 #: plugins/phone/companies_one.php:530
 msgid "URL"
 msgstr ""
@@ -3580,7 +3628,7 @@ msgstr ""
 msgid "Unable to execute your query."
 msgstr ""
 
-#: admin/users/some.php:41
+#: admin/users/some.php:43
 msgid "Unable to get data from database"
 msgstr ""
 
@@ -3588,12 +3636,12 @@ msgstr ""
 msgid "Unable to open file"
 msgstr ""
 
-#: relationships/edit.php:60
+#: relationships/edit.php:67
 msgid "Unassociate"
 msgstr ""
 
-#: contacts/edit.php:157 contacts/new.php:149 contacts/one.php:99
-#: contacts/one.php:102 plugins/phone/contacts_one.php:96
+#: contacts/edit.php:157 contacts/new.php:149 contacts/one.php:106
+#: contacts/one.php:109 plugins/phone/contacts_one.php:96
 #: plugins/phone/contacts_one.php:99
 msgid "Unknown"
 msgstr ""
@@ -3602,7 +3650,7 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: admin/update.php:4089
+#: admin/update.php:4202
 msgid "Update Complete"
 msgstr ""
 
@@ -3631,19 +3679,20 @@ msgstr ""
 msgid "Used by Contacts"
 msgstr ""
 
-#: activities/one.php:384 cases/one.php:343 companies/one.php:759
-#: companies/some-advanced.php:136 companies/some.php:50
-#: companies/some.php:308 contacts/one.php:485 opportunities/one.php:421
-#: plugins/info/one.php:366 plugins/phone/companies_one.php:691
-#: plugins/phone/contacts_one.php:516 reports/activitytimes.php:54
-#: reports/activitytimes.php:76 reports/audit-items.php:44
-#: reports/audit-items.php:94 reports/companies-list.php:190
-#: reports/completed-items.php:72 reports/open-items.php:57
+#: activities/one.php:380 cases/one.php:131 cases/one.php:388
+#: companies/one.php:248 companies/one.php:735 companies/some-advanced.php:136
+#: companies/some.php:294 contacts/one.php:162 contacts/one.php:496
+#: opportunities/one.php:172 opportunities/one.php:426
+#: plugins/phone/companies_one.php:691 plugins/phone/contacts_one.php:516
+#: reports/activitytimes.php:54 reports/activitytimes.php:76
+#: reports/audit-items.php:46 reports/audit-items.php:96
+#: reports/companies-by-crm-status.php:71 reports/companies-list.php:190
+#: reports/completed-items.php:71 reports/open-items.php:57
 #: reports/overdue-items.php:70
 msgid "User"
 msgstr ""
 
-#: admin/users/one.php:61
+#: admin/users/one.php:63
 msgid "User Details"
 msgstr ""
 
@@ -3655,12 +3704,12 @@ msgstr ""
 msgid "User Reports"
 msgstr ""
 
-#: admin/users/one.php:102 admin/users/self.php:72 admin/users/some.php:66
-#: admin/users/some.php:94
+#: admin/users/one.php:104 admin/users/self.php:72 admin/users/some.php:69
+#: admin/users/some.php:97
 msgid "Username"
 msgstr ""
 
-#: admin/index.php:126 admin/users/some.php:60
+#: admin/index.php:126 admin/users/some.php:62
 msgid "Users"
 msgstr ""
 
@@ -3700,7 +3749,7 @@ msgstr ""
 msgid "Voice Mail"
 msgstr ""
 
-#: email/email-4.php:95
+#: email/email-4.php:97
 msgid "WARNING"
 msgstr ""
 
@@ -3729,7 +3778,7 @@ msgstr ""
 msgid "Weighted"
 msgstr ""
 
-#: opportunities/one.php:310 opportunities/some.php:56
+#: opportunities/one.php:315 opportunities/some.php:250
 msgid "Weighted Size"
 msgstr ""
 
@@ -3741,17 +3790,17 @@ msgstr ""
 msgid "Word of Mouth"
 msgstr ""
 
-#: cases/one.php:275 contacts/edit.php:184 contacts/new.php:176
-#: contacts/one.php:348 contacts/sidebar.php:161 contacts/some.php:349
-#: opportunities/one.php:347 plugins/phone/contacts_one.php:366
+#: cases/one.php:320 contacts/edit.php:184 contacts/new.php:176
+#: contacts/one.php:341 contacts/sidebar.php:161 contacts/some.php:342
+#: opportunities/one.php:352 plugins/phone/contacts_one.php:366
 msgid "Work Phone"
 msgstr ""
 
-#: reports/open-items.php:369
+#: reports/open-items.php:370
 msgid "XRMS: Open Items"
 msgstr ""
 
-#: reports/overdue-items.php:386
+#: reports/overdue-items.php:387
 msgid "XRMS: Overdue Items"
 msgstr ""
 
@@ -3759,11 +3808,11 @@ msgstr ""
 msgid "Yahoo Name"
 msgstr ""
 
-#: contacts/one.php:372 plugins/phone/contacts_one.php:396
+#: contacts/one.php:366 plugins/phone/contacts_one.php:396
 msgid "Yahoo! IM"
 msgstr ""
 
-#: activities/some.php:156
+#: activities/some.php:156 plugins/info/edit-definitions.php:135
 msgid "Yes"
 msgstr ""
 
@@ -3771,7 +3820,7 @@ msgstr ""
 msgid "You must enter a campaign title."
 msgstr ""
 
-#: cases/edit.php:286 cases/new.php:198
+#: cases/edit.php:286 cases/new.php:201
 msgid "You must enter a case title."
 msgstr ""
 
@@ -3779,7 +3828,7 @@ msgstr ""
 msgid "You must enter a company name."
 msgstr ""
 
-#: admin/users/some.php:141
+#: admin/users/some.php:144
 msgid "You must enter a last name."
 msgstr ""
 
@@ -3787,11 +3836,11 @@ msgstr ""
 msgid "You must enter a name to let the recipient know who the email is from."
 msgstr ""
 
-#: admin/users/some.php:146
+#: admin/users/some.php:149
 msgid "You must enter a password."
 msgstr ""
 
-#: admin/users/some.php:136
+#: admin/users/some.php:139
 msgid "You must enter a username."
 msgstr ""
 
@@ -3814,7 +3863,7 @@ msgstr ""
 msgid "Your database has been cleaned."
 msgstr ""
 
-#: admin/update.php:4096
+#: admin/update.php:4209
 msgid "Your database has been updated."
 msgstr ""
 
@@ -3824,7 +3873,7 @@ msgid ""
 "customer development process?"
 msgstr ""
 
-#: activities/new-2.php:164 activities/new-2.php:172 companies/new-2.php:45
+#: activities/new-2.php:166 activities/new-2.php:174 companies/new-2.php:45
 msgid "[none]"
 msgstr ""
 
@@ -3836,7 +3885,7 @@ msgstr ""
 msgid "activities"
 msgstr ""
 
-#: activities/some.php:583
+#: activities/some.php:572
 msgid "and"
 msgstr ""
 
@@ -3856,7 +3905,7 @@ msgstr ""
 msgid "calls to"
 msgstr ""
 
-#: cases/sidebar.php:53
+#: cases/sidebar.php:57
 msgid "case_priority_pretty_name"
 msgstr ""
 
@@ -3884,11 +3933,11 @@ msgstr ""
 msgid "crm_status_pretty_name"
 msgstr ""
 
-#: companies/one.php:610 plugins/phone/companies_one.php:581
+#: companies/one.php:599 plugins/phone/companies_one.php:581
 msgid "days"
 msgstr ""
 
-#: admin/activity-types/some.php:35 admin/case-statuses/some.php:69
+#: admin/activity-types/some.php:35 admin/case-statuses/some.php:75
 msgid "down"
 msgstr ""
 
@@ -3960,6 +4009,6 @@ msgstr ""
 msgid "tab"
 msgstr ""
 
-#: admin/activity-types/some.php:31 admin/case-statuses/some.php:64
+#: admin/activity-types/some.php:31 admin/case-statuses/some.php:70
 msgid "up"
 msgstr ""
