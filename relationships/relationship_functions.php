@@ -11,7 +11,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: relationship_functions.php,v 1.1 2005/02/10 02:31:13 vanmer Exp $
+ * $Id: relationship_functions.php,v 1.2 2005/02/10 04:10:05 vanmer Exp $
  */
  
 /*****************************************************************************/
@@ -48,42 +48,47 @@ function get_relationships($con, $_on_what_table, $_on_what_id, $relationship_ty
             $working_direction = 'to';
             $opposite_direction = 'from';
         }
-                        
-        for($i = 0; $i <= $both; $i++) {
-                            
-            $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($relationship_type_data[$opposite_direction.'_what_table'])));
-            $sql = "SELECT r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status,
-                        c." . $relationship_type_data[$opposite_direction.'_what_table_singular'] . "_id, " . $name_to_get . " as name, r.relationship_type_id 
-                    FROM relationships as r, " . $relationship_type_data[$opposite_direction.'_what_table'] . " as c
-                    WHERE {$working_direction}_what_id = $_on_what_id 
-                    AND r.relationship_type_id = $relationship_type_id 
-                    AND r.relationship_status='a'
-                    AND r." . $opposite_direction . "_what_id=" . $relationship_type_data[$opposite_direction.'_what_table_singular'] . "_id";
-                    if ($exclude_relationships) {
-                     $sql.=" AND r.relationship_id NOT IN ($exclude_relationships)";
-                    }
-//           echo "<br>$sql<br>";
-            $rst2 = $con->execute($sql);
-            if(!$rst2) {
-                db_error_handler($con, $sql);
-            }
-            elseif(!$rst2->EOF) {
-                while (!$rst2->EOF) {
-                    $relationships[$rst2->fields['relationship_id']]=$rst2->fields;
-                    $relationships[$rst2->fields['relationship_id']]['relationship_type_data']=$relationship_type_data;
+                                                    
+        $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($relationship_type_data[$opposite_direction.'_what_table'])));
+        $sql = "SELECT r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status,
+                    c." . $relationship_type_data[$opposite_direction.'_what_table_singular'] . "_id, " . $name_to_get . " as name, r.relationship_type_id 
+                FROM relationships as r, " . $relationship_type_data[$opposite_direction.'_what_table'] . " as c
+                WHERE 
+                r.relationship_type_id = $relationship_type_id 
+                AND r.relationship_status='a'
+                AND (({$working_direction}_what_id = $_on_what_id AND r." . $opposite_direction . "_what_id=" . $relationship_type_data[$opposite_direction.'_what_table_singular'] . "_id";
+                if ($both==1) {
+                    $sql .= ") OR ({$opposite_direction}_what_id = $_on_what_id AND r." . $working_direction . "_what_id=" . $relationship_type_data[$working_direction.'_what_table_singular'] . "_id))";
+                } else $sql.="))";
+                if ($exclude_relationships) {
+                    $sql.=" AND r.relationship_id NOT IN ($exclude_relationships)";
+                }
+        //echo "<br>$sql<br>";
+        $rst2 = $con->execute($sql);
+        if(!$rst2) {
+            db_error_handler($con, $sql);
+        }
+        elseif(!$rst2->EOF) {
+            while (!$rst2->EOF) {
+                $relationships[$rst2->fields['relationship_id']]=$rst2->fields;
+                $relationships[$rst2->fields['relationship_id']]['relationship_type_data']=$relationship_type_data;
+                if ($rst2->fields[$working_direction.'_what_id']==$_on_what_id) {
                     $relationships[$rst2->fields['relationship_id']]['working_direction']=$working_direction;
                     $relationships[$rst2->fields['relationship_id']]['opposite_direction']=$opposite_direction;
-                    $rst2->movenext();
-                }
+                } else {
+                    $relationships[$rst2->fields['relationship_id']]['working_direction']=$opposite_direction;
+                    $relationships[$rst2->fields['relationship_id']]['opposite_direction']=$working_direction;
+                }                
+                $rst2->movenext();
             }
-            if(($both || $i) && $working_direction == 'from') {
-                $working_direction = 'to';
-                $opposite_direction = 'from';
-            }
-            elseif($both || $i) {
-                $working_direction = 'from';
-                $opposite_direction = 'to';
-            }
+        }
+        if(($both || $i) && $working_direction == 'from') {
+            $working_direction = 'to';
+            $opposite_direction = 'from';
+        }
+        elseif($both || $i) {
+            $working_direction = 'from';
+            $opposite_direction = 'to';
         }
     }
     if (count($relationships)>0) {
@@ -159,6 +164,9 @@ function get_agent_count($con, $company_id) {
 }
  /**
   * $Log: relationship_functions.php,v $
+  * Revision 1.2  2005/02/10 04:10:05  vanmer
+  * - modified to use a single query for each relationship type
+  *
   * Revision 1.1  2005/02/10 02:31:13  vanmer
   * - Initial revision of a collection of functions for manipulating and returning relationships
   *
