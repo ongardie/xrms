@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.29 2004/07/10 12:14:53 braverock Exp $
+ * $Id: some.php,v 1.30 2004/07/10 12:24:59 braverock Exp $
  */
 
 // handle includes
@@ -152,7 +152,8 @@ $sql = "SELECT
   $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
   u.username AS 'Owner'," .
   $con->SQLDate('Y-m-d','a.scheduled_at') . " AS 'Scheduled'," .
-  $con->SQLDate('Y-m-d','a.ends_at') . " AS 'Due'
+  $con->SQLDate('Y-m-d','a.ends_at') . " AS 'Due',
+  a.activity_id
   FROM companies c, users u, activity_types at, activities a
   LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
   WHERE a.company_id = c.company_id
@@ -253,7 +254,7 @@ if ($rst) {
 
         $open_activities .= '<tr>';
         $open_activities .= '<td class=' . $classname . '><a href=one.php?activity_id=' . $rst->fields['activity_id'] . '>' . $rst->fields['Title'] . '</a></td>';
-        $open_activities .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
+        $open_activities .= '<td class=' . $classname . '>' . $rst->fields['Type'] . '</td>';
         $open_activities .= '<td class=' . $classname . '>' . $rst->fields['Company'] . '</td>';
         $open_activities .= '<td class=' . $classname . '>' . $rst->fields['Contact'] . '</td>';
         $open_activities .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['Scheduled']) . '</td>';
@@ -430,6 +431,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.30  2004/07/10 12:24:59  braverock
+ * - fixed undefined activity_id
+ * - fixed misdefined activity_type_pretty_name
+ *   - fixes SF bugs reported by cpsource
+ *
  * Revision 1.29  2004/07/10 12:14:53  braverock
  * - applied patch for undefined variables
  *   - modified from SF patch 979124 supplied by cpsource
