@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.15 2004/07/14 02:04:12 s-t Exp $
+ * $Id: some.php,v 1.16 2004/07/14 13:14:37 cpsource Exp $
  */
 
 //include required files
@@ -15,11 +15,20 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
-$offset = $_POST['offset'];
-$clear = ($_GET['clear'] == 1) ? 1 : 0;
-$use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-$resort = $_POST['resort'];
+
+$msg    = isset($_GET['msg'])     ? $_GET['msg'] : '';
+$offset = isset($_POST['offset']) ? $_POST['offset'] : '';
+if ( isset($_GET['clear']) ) {
+  $clear = ($_GET['clear'] == 1) ? 1 : 0;
+} else {
+  $clear = 0;
+}
+if ( isset($_POST['use_post_vars']) ) {
+  $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
+} else {
+  $use_post_vars = 0;
+}
+$resort = isset($_POST['resort']) ? $_POST['resort'] : '';
 
 if ($clear) {
     $sort_column = '';
@@ -46,6 +55,10 @@ if ($clear) {
     $file_date= $_POST['file_date'];
     $user_id = $_POST['user_id'];
 } else {
+
+  // first time in ???
+  if ( isset( $_SESSION['files_sort_column'] ) ) {
+    // no - get from session
     $sort_column = $_SESSION['files_sort_column'];
     $current_sort_column = $_SESSION['files_current_sort_column'];
     $sort_order = $_SESSION['files_sort_order'];
@@ -57,6 +70,21 @@ if ($clear) {
     $file_on_what_name= $_SESSION['file_on_what_name'];
     $file_date= $_SESSION['file_date'];
     $user_id = $_SESSION['file_user_id'];
+  } else {
+    // yes - clear
+    $sort_column = '';
+    $current_sort_column = '';
+    $sort_order = '';
+    $current_sort_order = '';
+    $file_id= '';
+    $file_name= '';
+    $file_description= '';
+    $file_on_what= '';
+    $file_on_what_name= '';
+    $file_date= '';
+    $user_id = '';
+  }
+
 }
 
 if (!strlen($sort_column) > 0) {
@@ -257,6 +285,7 @@ order by r.recent_item_timestamp desc";
 
 //$con->debug=1;
 
+$recently_viewed_table_rows = '';
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
 if ($rst) {
@@ -354,6 +383,8 @@ start_page($page_title, true, $msg);
         <p>
 <?php
 
+	  // TBD - BUG - $company_count is undefined above
+
 $pager = new ADODB_Pager($con, $sql, 'files', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
@@ -421,6 +452,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.16  2004/07/14 13:14:37  cpsource
+ * - Fixed numerous undefined variable usages
+ *
  * Revision 1.15  2004/07/14 02:04:12  s-t
  * cvs commit some.php
  *
