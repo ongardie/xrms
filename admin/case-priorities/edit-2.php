@@ -1,4 +1,11 @@
 <?php
+/**
+ * Update database with changes to Case Priority
+ *
+ * $Id: edit-2.php,v 1.2 2004/03/22 02:14:45 braverock Exp $
+ */
+
+//include required files
 
 require_once('../../include-locations.inc');
 
@@ -28,4 +35,11 @@ $con->close();
 
 header("Location: one.php?case_priority_id=$case_priority_id");
 
+/**
+ * $Log: edit-2.php,v $
+ * Revision 1.2  2004/03/22 02:14:45  braverock
+ * - debug SF bug 906413
+ * - add phpdoc
+ *
+ */
 ?>

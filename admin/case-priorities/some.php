@@ -1,5 +1,11 @@
 <?php
+/**
+ * Display all case priorities
+ *
+ * $Id: some.php,v 1.2 2004/03/22 02:14:45 braverock Exp $
+ */
 
+//include required files
 require_once('../../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -92,4 +98,15 @@ start_page($page_title);
     </tr>
 </table>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.2  2004/03/22 02:14:45  braverock
+ * - debug SF bug 906413
+ * - add phpdoc
+ *
+ */
+?>

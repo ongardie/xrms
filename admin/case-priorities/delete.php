@@ -1,4 +1,11 @@
 <?php
+/**
+ * Delete (set status to 'd') a single case priority
+ *
+ * $Id: delete.php,v 1.2 2004/03/22 02:14:45 braverock Exp $
+ */
+
+//include required files
 
 require_once('../../include-locations.inc');
 
@@ -21,4 +28,11 @@ $con->close();
 
 header("Location: some.php");
 
+/**
+ * $Log: delete.php,v $
+ * Revision 1.2  2004/03/22 02:14:45  braverock
+ * - debug SF bug 906413
+ * - add phpdoc
+ *
+ */
 ?>
