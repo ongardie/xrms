@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.32 2004/07/15 17:44:05 cpsource Exp $
+ * $Id: home.php,v 1.33 2004/07/16 07:27:39 introspectshun Exp $
  */
 
 // include the common files
@@ -231,15 +231,15 @@ if ($rst->rowcount()>0) {
     $nu_file_rows = "
         <table class=widget cellspacing=1 width='100%'>
             <tr>
-                <td class=widget_header colspan=6>Non Uploaded Files</td>
+                <td class=widget_header colspan=6>" . _("Non Uploaded Files") . "</td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Description</td>
-                <td class=widget_label>On What</td>
-                <td class=widget_label>Company</td>
-                <td class=widget_label>Date</td>
-                <td class=widget_label>File ID</td>
+                <td class=widget_label>" . _("Name") . "</td>
+                <td class=widget_label>" . _("Description") . "</td>
+                <td class=widget_label>" . _("On What") . "</td>
+                <td class=widget_label>" . _("Company") . "</td>
+                <td class=widget_label>" . _("Date") . "</td>
+                <td class=widget_label>" . _("File ID") . "</td>
             </tr>
         </table>";
 
@@ -269,42 +269,42 @@ if ($rst->rowcount()>0) {
         switch ($file_on_what) {
             case "contacts" : {
                 $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
-                       . " AS 'Name',"
+                       . " AS '" . _("Name") . "',"
                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS 'Company',";
+                       . " AS '" . _("Company") . "',";
                 break;
             }
             case "contacts_of_companies" : {
                 $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-                      . " AS 'Name',"
+                      . " AS '" . _("Name") . "',"
                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                      . " AS 'Company',";
+                      . " AS '" . _("Company") . "',";
                 break;
             }
             case "companies" : {
                 $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS 'Name',"
+                       . " AS '" . _("Name") . "',"
                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS 'Company',";
+                       . " AS '" . _("Company") . "',";
                 break;
             }
             case "campaigns" : {
                 $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
-                       . " AS 'Campaign',";
+                       . " AS '" . _("Campaign") . "',";
                 break;
             }
             case "opportunities" : {
                 $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
-                       . " AS 'Name',"
+                       . " AS '" . _("Name") . "',"
                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS 'Company',";
+                       . " AS '" . _("Company") . "',";
                 break;
             }
             case "cases" : {
                 $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
-                       . " AS 'Name',"
+                       . " AS '" . _("Name") . "',"
                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS 'Company',";
+                       . " AS '" . _("Company") . "',";
                 break;
             }
             default : {
@@ -414,17 +414,17 @@ if ($rst->rowcount()>0) {
 $con->close();
 
 if (!strlen($files_rows) > 0) {
-    $files_rows = "<tr><td class=widget_content colspan=7>No open files</td></tr>";
+    $files_rows = "<tr><td class=widget_content colspan=7>" . _("No open files") . "</td></tr>";
 }
 
 //close the database connection, as we are done with it.
 $con->close();
 
 if (!strlen($activity_rows) > 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=7>No open activities</td></tr>";
+    $activity_rows = "<tr><td class=widget_content colspan=7>" . _("No open activities") . "</td></tr>";
 }
 
-$page_title = "Home";
+$page_title = _("Home");
 start_page($page_title);
 
 ?>
@@ -435,16 +435,16 @@ start_page($page_title);
         <!-- Activity Rows //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=7>Open Activities</td>
+                <td class=widget_header colspan=7><?php echo _("Open Activities"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Activity</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Company</td>
-                <td class=widget_label>Contact</td>
-                <td class=widget_label>About</td>
-                <td class=widget_label>Scheduled</td>
-                <td class=widget_label>Due</td>
+                <td class=widget_label><?php echo _("Activity"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Contact"); ?></td>
+                <td class=widget_label><?php echo _("About"); ?></td>
+                <td class=widget_label><?php echo _("Scheduled"); ?></td>
+                <td class=widget_label><?php echo _("Due"); ?></td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -459,10 +459,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header>Documentation</td>
+                <td class=widget_header><?php echo _("Documentation"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><a href="../doc/users/XRMS_User_Manual.pdf">User Manual</a> (PDF)</td>
+                <td class=widget_label><a href="../doc/users/XRMS_User_Manual.pdf"><?php echo _("User Manual"); ?></a><?php echo _(" (PDF)"); ?></td>
             </tr>
         </table>
 
@@ -496,6 +496,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.33  2004/07/16 07:27:39  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.32  2004/07/15 17:44:05  cpsource
  * - Resolve undef sidebar_rows
  *
