@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.111 2005/01/10 19:46:29 neildogg Exp $
+ * $Id: utils-misc.php,v 1.112 2005/01/12 02:46:06 introspectshun Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1003,7 +1003,7 @@ function current_page($vars = false, $anchor = false) {
             $page .= '/' . $directory;
         }
     }
-    if(count($parts)) {
+    if(count($parts) > 1) {
         parse_str($vars, $vars);
         if(!$anchor) {
             list($parts[1], $anchor) = split('#', $parts[1], 2);
@@ -1434,6 +1434,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.112  2005/01/12 02:46:06  introspectshun
+ * - Check to make sure count($parts) > 1 before using $parts[1]
+ *
  * Revision 1.111  2005/01/10 19:46:29  neildogg
  * - I remember why I left off the http_site_root
  *
