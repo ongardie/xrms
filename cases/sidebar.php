@@ -1,16 +1,15 @@
 <?php
-
+/**
+ * Sidebar box for Cases
+ *
+ * $Id: sidebar.php,v 1.11 2005/01/11 22:30:28 braverock Exp $
+ */
 if ( !defined('IN_XRMS') )
 {
   die('Hacking attempt');
   exit;
 }
 
-/**
- * Sidebar box for Cases
- *
- * $Id: sidebar.php,v 1.10 2005/01/10 21:53:50 vanmer Exp $
- */
 /*
 Commented until ACL system is fully implemented
 $caseList=get_list($session_user_id, 'Read', false, 'cases');
@@ -65,7 +64,7 @@ if (strlen($rst->fields['username'])>0) {
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0))) {
     $new_case_button=render_create_button("New",'submit');
     if ($new_case_button) {
-        $case_type_sql = "select case_type_short_name, case_type_id FROM case_types"; 
+        $case_type_sql = "select case_type_pretty_name, case_type_id FROM case_types";
         $type_rst=$con->execute($case_type_sql);
         $new_case_types=$type_rst->getmenu2('case_type_id', '', false);
         $new_case_button=$new_case_types.$new_case_button; 
@@ -96,6 +95,9 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.11  2005/01/11 22:30:28  braverock
+ * - update to use case_type_pretty_name instead of case_type_short_name in new dropdown
+ *
  * Revision 1.10  2005/01/10 21:53:50  vanmer
  * - added short name for case type when adding a new case
  *
