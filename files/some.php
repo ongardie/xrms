@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.21 2004/07/28 20:44:06 neildogg Exp $
+ * $Id: some.php,v 1.22 2004/08/04 13:05:18 cpsource Exp $
  */
 
 //include required files
@@ -334,6 +334,10 @@ start_page($page_title, true, $msg);
         <p>
 <?php
 
+if ( $use_owl ) {
+  echo "<input class=button type=button onclick='javascript: owl()' value='"._("Owl File Management")."'><br><br>";
+}
+
 $pager = new ADODB_Pager($con, $sql, 'files', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
@@ -371,6 +375,11 @@ function initialize() {
 
 initialize();
 
+function owl() {
+    document.forms[0].action = "../owl/index.php";
+    document.forms[0].submit();
+}
+
 function bulkEmail() {
     document.forms[0].action = "../email/index.php";
     document.forms[0].submit();
@@ -401,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.22  2004/08/04 13:05:18  cpsource
+ * - Add hook to OWL.
+ *
  * Revision 1.21  2004/07/28 20:44:06  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
