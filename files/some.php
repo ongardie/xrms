@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.5 2004/04/15 22:04:39 maulani Exp $
+ * $Id: some.php,v 1.6 2004/04/16 14:46:28 maulani Exp $
  */
 
 //include required files
@@ -262,7 +262,7 @@ $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href=one.php?file_id=' . $rst->fields['file_id'] . '>' . $rst->fields['file_pretty_name'] . '</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?file_id=' . $rst->fields['file_id'] . '">' . $rst->fields['file_pretty_name'] . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['file_id'] . '</td>';
@@ -408,6 +408,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2004/04/16 14:46:28  maulani
+ * - Clean HTML so page will validate
+ *
  * Revision 1.5  2004/04/15 22:04:39  maulani
  * - Change to CSS2 positioning
  * - Clean HTML to achieve validation

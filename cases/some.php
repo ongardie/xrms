@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.7 2004/04/15 22:04:38 maulani Exp $
+ * $Id: some.php,v 1.8 2004/04/16 14:46:27 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -164,7 +164,7 @@ $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href='.$http_site_root.'/cases/one.php?case_id=' . $rst->fields['case_id'] . '>' . $rst->fields['case_title'] . '</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="'.$http_site_root.'/cases/one.php?case_id=' . $rst->fields['case_id'] . '">' . $rst->fields['case_title'] . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_code'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['case_status_pretty_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['due_at']) . '</td>';
@@ -330,6 +330,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/04/16 14:46:27  maulani
+ * - Clean HTML so page will validate
+ *
  * Revision 1.7  2004/04/15 22:04:38  maulani
  * - Change to CSS2 positioning
  * - Clean HTML to achieve validation

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.8 2004/04/15 22:04:38 maulani Exp $
+ * $Id: some.php,v 1.9 2004/04/16 14:46:27 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -155,7 +155,7 @@ $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href=one.php?campaign_id=' . $rst->fields['campaign_id'] . '>' . $rst->fields['campaign_title'] . '</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?campaign_id=' . $rst->fields['campaign_id'] . '">' . $rst->fields['campaign_title'] . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['campaign_type_pretty_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['campaign_status_pretty_name'] . '</td>';
         $recently_viewed_table_rows .= '</tr>';
@@ -318,6 +318,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2004/04/16 14:46:27  maulani
+ * - Clean HTML so page will validate
+ *
  * Revision 1.8  2004/04/15 22:04:38  maulani
  * - Change to CSS2 positioning
  * - Clean HTML to achieve validation
