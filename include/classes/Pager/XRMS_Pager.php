@@ -143,7 +143,6 @@ class XRMS_Pager {
 
 		// adodb_pager code begin
       	$this->sql = $sql;
-      	$this->id = $table_id;
       	$this->db = $db;
       	$this->showPageLinks = true;
       	$this->selected_column = $this->sort_column-1;
@@ -216,7 +215,7 @@ class XRMS_Pager {
       }
       $numbers = '';
       $end = $start+$linksperpage-1;
-      $link = $this->pager_id . '_' . $this->id . "_next_page";
+      $link = $this->pager_id . '_' . "_next_page";
       if($end > $pages) $end = $pages;
 
 
@@ -270,8 +269,9 @@ class XRMS_Pager {
       	$this->rs2html($this->rs,$this->gridAttributes,$this->gridHeader,$this->htmlSpecialChars,$this->selected_column,$this->selected_column_html, $this->pager_id . '_');
 
 		// Now we output our subtotal rows 
+		$this->CalculateTotals();
         $this->RenderTotals('Subtotals this page:', $this->SubtotalColumns);
-        $this->RenderTotals('Totals:', $this->TotalColumns);
+        //$this->RenderTotals('Totals:', $this->TotalColumns);
 
       	$s = ob_get_contents();
       	ob_end_clean();
@@ -279,6 +279,49 @@ class XRMS_Pager {
 
 		$rs = $this->rs;
 		return $s;
+	}
+
+	function CalculateTotals() {
+        $rs = $this->rs;
+
+        // Now we output our subtotal rows 
+        if(is_array($this->SubtotalColumns)) {
+
+            // reset the record set pointer
+            $rs->Move(0);
+
+            $s .= "<tr>";
+
+            while(!$rs->EOF) {
+
+                foreach($this->SubtotalColumns as $fieldname => $v) {
+                    $this->SubtotalColumns[$fieldname] += $rs->Fields($fieldname);
+                }
+                $rs->MoveNext();
+            }
+        }
+/* disabled for now
+        if(is_array($this->TotalColumns)) {
+
+            //$s .= "<tr>";
+
+            foreach($this->TotalColumns as $fieldname => $tablename) {
+                $sql = "SELECT SUM($fieldname) FROM $tablename";
+                $rs2 = $this->db->execute($sql);
+
+                if ($rs2) {
+                    $this->TotalColumns[$fieldname] = $rs2->Fields(0);
+                    $rs2->close();
+                } else {
+                    db_error_handler($this->db, $sql);
+                }
+            }
+        }
+		*/
+        return $s;
+
+
+
 	}
 
 
@@ -335,13 +378,14 @@ class XRMS_Pager {
     // overridden to add export and mail merge
     function RenderLayout($header,$grid,$footer,$attributes='class=widget cellspacing=1 cellpadding=0 border=0 width="100%"')
     {
+		$colspan = count($this->column_info);
 		if($this->maximize) {
-        	echo "<table {$attributes} ><tr><td colspan=0 class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_unmaximize();>(show paged)</a></td></tr>\n";
+        	echo "<table {$attributes} ><tr><td colspan=$colspan class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_unmaximize();>(show paged)</a></td></tr>\n";
 		} else {
-        	echo "<table {$attributes} ><tr><td colspan=0 class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_maximize();>(show all)</a></td></tr>\n";
+        	echo "<table {$attributes} ><tr><td colspan=$colspan class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_maximize();>(show all)</a></td></tr>\n";
 		}
         if ($header != '&nbsp;') {
-            echo "<tr><td colspan=0>".
+            echo "<tr><td colspan=$colspan>".
             "<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
             "<tr><td class=widget_label> $footer </td><td align=right class=widget_label> $header </td></tr>".
             "</table>".
@@ -620,7 +664,7 @@ function rs2html(&$rs,$ztabhtml=false,$zheaderarray=false,$htmlspecialchars=true
     } // end while
 
     if (strlen($s) == 0) {
-        $s = "<tr><td colspan=13 class=widget_content>"._("No matches")."</td></tr>";
+        $s = "<tr><td colspan=$ncols class=widget_content>"._("No matches")."</td></tr>";
     }
     // if ($docnt) print "<H2>".$rows." Rows</H2>";
 
