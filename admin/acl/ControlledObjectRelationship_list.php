@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: ControlledObjectRelationship_list.php,v 1.1 2005/01/13 17:16:13 vanmer Exp $
+ * $Id: ControlledObjectRelationship_list.php,v 1.2 2005/02/14 23:43:49 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat('"<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_ControlledObjectRelationship.php?form_action=edit&return_url=ControlledObjectRelationship_list.php&ControlledObjectRelationship_id="', 'ControlledObjectRelationship_id', '"\'\">"') . "AS LINK, 
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_ControlledObjectRelationship.php?form_action=edit&return_url=ControlledObjectRelationship_list.php&ControlledObjectRelationship_id="), 'ControlledObjectRelationship_id', $con->qstr("'\">")) . "AS LINK, 
 ControlledObjectRelationship_id as ID,
 Child.ControlledObject_name as 'Child Object', 
 Parent.ControlledObject_name as 'Parent Object' 
@@ -122,6 +122,9 @@ end_page();
 
 /**
  * $Log: ControlledObjectRelationship_list.php,v $
+ * Revision 1.2  2005/02/14 23:43:49  vanmer
+ * -requoted strings in sql statement
+ *
  * Revision 1.1  2005/01/13 17:16:13  vanmer
  * - Initial Commit for ACL Administration interface
  *
