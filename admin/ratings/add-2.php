@@ -2,7 +2,7 @@
 /**
  * Insert a new rating
  *
- * $Id: add-2.php,v 1.3 2004/06/14 22:38:46 introspectshun Exp $
+ * $Id: add-2.php,v 1.4 2004/07/15 22:16:18 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,16 +26,15 @@ if (!strlen(rating_display_html) > 0)  { $rating_display_html  = $rating_pretty_
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM ratings WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['rating_short_name'] = $rating_short_name;
 $rec['rating_pretty_name'] = $rating_pretty_name;
 $rec['rating_pretty_plural'] = $rating_pretty_plural;
 $rec['rating_display_html'] = $rating_display_html;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'ratings';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
@@ -44,6 +43,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.4  2004/07/15 22:16:18  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.3  2004/06/14 22:38:46  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

@@ -23,9 +23,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 // $con->debug=1;
 
-$sql = "SELECT * FROM company_sources WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['company_source_short_name'] = $company_source_short_name;
 $rec['company_source_pretty_name'] = $company_source_pretty_name;
@@ -33,7 +31,8 @@ $rec['company_source_pretty_plural'] = $company_source_pretty_plural;
 $rec['company_source_display_html'] = $company_source_display_html;
 $rec['company_source_score_adjustment'] = $company_source_score_adjustment;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = "company_sources";
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();

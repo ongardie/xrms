@@ -20,9 +20,7 @@ $post_formatting = $_POST['post_formatting'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM relationship_types WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['relationship_name'] = $relationship_name;
 $rec['from_what_table'] = $from_what_table;
@@ -32,7 +30,8 @@ $rec['to_what_text'] = $to_what_text;
 $rec['pre_formatting'] = $pre_formatting;
 $rec['post_formatting'] = $post_formatting;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'relationship_types';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();

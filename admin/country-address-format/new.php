@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: new.php,v 1.3 2004/06/16 20:57:25 gpowers Exp $
+ * $Id: new.php,v 1.4 2004/07/15 22:03:11 introspectshun Exp $
  */
 
 //include required files
@@ -30,14 +30,13 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 if ($address_format_string) {
-    $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
-    $rst = $con->execute($sql);
-
+    //save to database
     $rec = array();
     $rec['address_format_string'] = $address_format_string;
     $rec['address_format_string_record_status'] = 'a';
 
-    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $tbl = "address_format_strings";
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
 }
 
@@ -63,6 +62,9 @@ $return_url = "/admin/country-address-format/index.php";
 header("Location: {$http_site_root}/{$return_url}");
 /**
  * $Log: new.php,v $
+ * Revision 1.4  2004/07/15 22:03:11  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.3  2004/06/16 20:57:25  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5

@@ -2,7 +2,7 @@
 /**
  * commit a new user to the Database
  *
- * $Id: add-2.php,v 1.5 2004/06/14 22:50:14 introspectshun Exp $
+ * $Id: add-2.php,v 1.6 2004/07/15 22:23:53 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -28,9 +28,7 @@ $password = md5($password);
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM users WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['role_id'] = $role_id;
 $rec['last_name'] = $last_name;
@@ -41,7 +39,8 @@ $rec['email'] = $email;
 $rec['gmt_offset'] = $gmt_offset;
 $rec['language'] = 'english';
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'users';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
@@ -50,6 +49,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.6  2004/07/15 22:23:53  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.5  2004/06/14 22:50:14  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

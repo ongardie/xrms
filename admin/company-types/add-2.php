@@ -18,16 +18,15 @@ $company_type_display_html = $_POST['company_type_display_html'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM company_types WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['company_type_short_name'] = $company_type_short_name;
 $rec['company_type_pretty_name'] = $company_type_pretty_name;
 $rec['company_type_pretty_plural'] = $company_type_pretty_plural;
 $rec['company_type_display_html'] = $company_type_display_html;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = "company_types";
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 header("Location: some.php");

@@ -17,20 +17,18 @@ $crm_status_display_html = $_POST['crm_status_display_html'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM crm_statuses WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['crm_status_short_name'] = $crm_status_short_name;
 $rec['crm_status_pretty_name'] = $crm_status_pretty_name;
 $rec['crm_status_pretty_plural'] = $crm_status_pretty_plural;
 $rec['crm_status_display_html'] = $crm_status_display_html;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'crm_statuses';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
 
 header("Location: some.php");
-
 ?>

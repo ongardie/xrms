@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity status into the database
  *
- * $Id: new-2.php,v 1.6 2004/06/14 22:36:43 introspectshun Exp $
+ * $Id: new-2.php,v 1.7 2004/07/15 22:13:43 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -42,9 +42,7 @@ $sql = "select sort_order from opportunity_statuses where opportunity_status_rec
 $rst = $con->execute($sql);
 $sort_order = $rst->fields['sort_order'] + 1;
 
-$sql = "SELECT * FROM opportunity_statuses WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['opportunity_status_short_name'] = $opportunity_status_short_name;
 $rec['opportunity_status_pretty_name'] = $opportunity_status_pretty_name;
@@ -54,7 +52,8 @@ $rec['opportunity_status_long_desc'] = $opportunity_status_long_desc;
 $rec['status_open_indicator'] = $status_open_indicator;
 $rec['sort_order'] = $sort_order;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'opportunity_statuses';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
@@ -64,6 +63,9 @@ header("Location: some.php");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.7  2004/07/15 22:13:43  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.6  2004/06/14 22:36:43  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
