@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.19 2004/06/12 16:46:55 braverock Exp $
+ * $Id: home.php,v 1.20 2004/06/15 14:18:04 gpowers Exp $
  */
 
 // include the common files
@@ -58,7 +58,7 @@ SELECT
   c.company_name, cont.contact_id, cont.first_names as contact_first_names,
   cont.last_name as contact_last_name,
 CASE
-  WHEN ((a.activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ")) THEN 1
+  WHEN ((a.activity_status = 'o') AND (a.ends_at < " . time() . ")) THEN 1
   ELSE 0
 END AS is_overdue
 FROM activity_types at, companies c, activities a
@@ -475,6 +475,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.20  2004/06/15 14:18:04  gpowers
+ * - corrected time formats
+ *
  * Revision 1.19  2004/06/12 16:46:55  braverock
  * - remove CAST on CONCAT
  *    - databases should implicitly convert numeric to string and
