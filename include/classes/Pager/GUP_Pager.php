@@ -34,7 +34,7 @@
  * @example GUP_Pager.doc.6.php Another pager example showing Grouping of SQL and Calculated data
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.4 2005/02/15 23:52:17 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.5 2005/02/17 07:59:22 daturaarutad Exp $
  */
 
 
@@ -76,6 +76,7 @@ class GUP_Pager {
 	var $use_cached = true; 	// whether or not to use the cache
 	var $using_cached = false;	// whether or not we are currently using cached data
 	var $group_mode = false;
+	var $buffer_output;
 
 
     /**
@@ -97,7 +98,7 @@ class GUP_Pager {
     *   total = true will total all columns 
 	*
     */
-    function GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true)
+    function GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true, $buffer_output = false)
     {
         global $http_site_root;
 
@@ -105,6 +106,7 @@ class GUP_Pager {
 			echo _('Warning: GUP_Pager must be passed either an SQL query or a data array');
 			return false;
 		}
+
 
       	$this->db 			= $db;
       	$this->sql 			= $sql;
@@ -115,6 +117,8 @@ class GUP_Pager {
         $this->column_info 	= $column_info;
 		$this->use_cached	= $use_cached;
  		$this->page			= _('Page');
+		$this->buffer_output=$buffer_output;
+
         // get CGI vars
         getGlobalVar($this->sort_column, $pager_id . '_sort_column');
         getGlobalVar($this->current_sort_column, $pager_id . '_current_sort_column');
@@ -208,6 +212,10 @@ class GUP_Pager {
 	*/
 	function Render($rows=10) {
 
+		if($this->buffer_output) {
+			ob_start();
+		}
+
 		echo "<a name=\"{$this->pager_id}\"></a>\n";
 
 		// output the Javascript functions for sorting and submitting
@@ -250,6 +258,12 @@ class GUP_Pager {
 
 		// add the hook to include the JS for the tooltips
 		$xrms_plugin_hooks['end_page']['pager'] = 'javascript_tooltips_include';
+
+		if($this->buffer_output) {
+			$s =  ob_get_contents();
+			ob_end_clean();
+			return $s;
+		}
 	}
 
 
@@ -437,7 +451,7 @@ class GUP_Pager {
 			foreach($unique_ids as $id => $v) {
 
             	if(!isset($this->group_id)) {
-					echo "setting manually to $id";
+					//echo "setting manually to $id";
                 	$this->group_id = $id;
             	}
 
@@ -886,6 +900,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.5  2005/02/17 07:59:22  daturaarutad
+ * added output buffering to capture echos
+ *
  * Revision 1.4  2005/02/15 23:52:17  daturaarutad
  * fixed a small bug with grouping for calculated data
  * added a warning if $sql and $data are both empty
