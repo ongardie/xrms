@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.8 2004/06/12 04:08:06 introspectshun Exp $
+ * $Id: new.php,v 1.9 2004/07/16 07:11:17 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -56,7 +56,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = "New Case";
+$page_title = _("New Case");
 start_page($page_title, true, $msg);
 
 ?>
@@ -70,45 +70,45 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php  echo $company_id ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Case Details</td>
+                <td class=widget_header colspan=2><?php echo _("Case Details"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Case Title</td>
+                <td class=widget_label_right><?php echo _("Case Title"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=case_title> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Contact</td>
+                <td class=widget_label_right><?php echo _("Contac"); ?>t</td>
                 <td class=widget_content_form_element><?php  echo $contact_menu ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Type</td>
+                <td class=widget_label_right><?php echo _("Type"); ?></td>
                 <td class=widget_content_form_element><?php  echo $case_type_menu ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Status</td>
+                <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element><?php  echo $case_status_menu ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Priority</td>
+                <td class=widget_label_right><?php echo _("Priority"); ?></td>
                 <td class=widget_content_form_element><?php  echo $case_priority_menu ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Owner</td>
+                <td class=widget_label_right><?php echo _("Owner"); ?></td>
                 <td class=widget_content_form_element><?php  echo $user_menu ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Due By</td>
+                <td class=widget_label_right><?php echo _("Due By"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_d" name=due_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Description</td>
+                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=case_description></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -137,7 +137,7 @@ function validate() {
 
     if (document.forms[0].case_title.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter a case title.';
+        msgToDisplay += '\n<?php echo _("You must enter a case title."); ?>"); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -169,6 +169,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.9  2004/07/16 07:11:17  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.8  2004/06/12 04:08:06  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

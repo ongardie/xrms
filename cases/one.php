@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.14 2004/06/12 04:08:06 introspectshun Exp $
+ * $Id: one.php,v 1.15 2004/07/16 07:11:17 introspectshun Exp $
  */
 
 //include required files
@@ -204,7 +204,7 @@ if (strlen($categories) == 0) {
     $categories = "No categories";
 }
 
-$page_title = "Case #$case_id: $case_title";
+$page_title = _("Case #") . $case_id . _(": ") . $case_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -214,7 +214,7 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Case Details</td>
+                <td class=widget_header><?php echo _("Case Details"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -224,23 +224,23 @@ start_page($page_title, true, $msg);
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel>Title</td>
+                                    <td width=1% class=sublabel><?php echo _("Title"); ?></td>
                                     <td class=clear><?php  echo $case_title; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Type</td>
+                                    <td class=sublabel><?php echo _("Type"); ?></td>
                                     <td class=clear><?php  echo $case_type_display_html; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Owner</td>
+                                    <td class=sublabel><?php echo _("Owner"); ?></td>
                                     <td class=clear><?php  echo $case_owner_username; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Status</td>
+                                    <td class=sublabel><?php echo _("Status"); ?></td>
                                     <td class=clear><?php  echo $case_status_display_html; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Priority</td>
+                                    <td class=sublabel><?php echo _("Priority"); ?></td>
                                     <td class=clear><?php  echo $case_priority_display_html; ?></td>
                                 </tr>
                                 <tr>
@@ -248,11 +248,11 @@ start_page($page_title, true, $msg);
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Created</td>
+                                    <td class=sublabel><?php echo _("Created"); ?></td>
                                     <td class=clear><?php  echo $entered_at; ?> (<?php  echo $entered_by; ?>)</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Last Modified</td>
+                                    <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
                                 </tr>
                                 </table>
@@ -262,15 +262,15 @@ start_page($page_title, true, $msg);
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel>Contact</td>
+                                    <td width=1% class=sublabel><?php echo _("Contact"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/contacts/one.php?contact_id=<?php  echo $contact_id; ?>"><?php  echo $first_names; ?> <?php  echo $last_name; ?></a></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Work Phone</td>
+                                    <td class=sublabel><?php echo _("Work Phone"); ?></td>
                                     <td class=clear><?php  echo $work_phone; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>E-Mail</td>
+                                    <td class=sublabel><?php echo _("E-Mail"); ?></td>
                                     <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$case_id&contact_id=$contact_id&on_what_table=cases&activity_title=email RE: $case_title&company_id=$company_id&email=$email&return_url=/cases/one.php?case_id=$case_id'\" >" . htmlspecialchars($email); ?></a></td>
                                 </tr>
                                 <tr>
@@ -278,19 +278,19 @@ start_page($page_title, true, $msg);
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Company</td>
+                                    <td class=sublabel><?php echo _("Company"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a> (<?php  echo $company_code; ?>)</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Acct. Owner</td>
+                                    <td class=sublabel><?php echo _("Acct. Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner_username; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>CRM Status</td>
+                                    <td class=sublabel><?php echo _("CRM Status"); ?></td>
                                     <td class=clear><?php  echo $crm_status_display_html; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Account Status</td>
+                                    <td class=sublabel><?php echo _("Account Status"); ?></td>
                                     <td class=clear><?php  echo $account_status_display_html; ?></td>
                                 </tr>
                             </table>
@@ -304,7 +304,7 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?case_id=<?php  echo $case_id; ?>';"></td>
+                <td class=widget_content_form_element><input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?case_id=<?php  echo $case_id; ?>';"></td>
             </tr>
         </table>
 
@@ -317,21 +317,21 @@ start_page($page_title, true, $msg);
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6>Activities</td>
+                <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>User</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Contact</td>
-                <td colspan=2 class=widget_label>On</td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("User"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Contact"); ?></td>
+                <td colspan=2 class=widget_label><?php echo _("On"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="<?php echo _("Add"); ?>"> <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>"></td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -345,13 +345,13 @@ start_page($page_title, true, $msg);
         <!-- categories //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Categories</td>
+                <td class=widget_header><?php echo _("Categories"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content><?php  echo $categories; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?case_id=<?php  echo $case_id; ?>';" value="Manage"></td>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?case_id=<?php  echo $case_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
             </tr>
         </table>
 
@@ -370,6 +370,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2004/07/16 07:11:17  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.14  2004/06/12 04:08:06  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

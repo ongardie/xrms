@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.16 2004/07/15 13:49:53 cpsource Exp $
+ * $Id: some.php,v 1.17 2004/07/16 07:11:17 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -60,9 +60,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS 'Case',
-c.company_code AS 'Company', u.username AS 'Owner', cat.case_type_pretty_name AS 'Type', cap.case_priority_pretty_name AS 'Priority',
-cas.case_status_pretty_name AS 'Status', " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS 'Due At' ";
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS '" . _("Case") . "',
+c.company_code AS '" . _("Company") . "', u.username AS '" . _("Owner") . "', cat.case_type_pretty_name AS '" . _("Type") . "', cap.case_priority_pretty_name AS '" . _("Priority") . "',
+cas.case_status_pretty_name AS '" . _("Status") . "', " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS '" . _("Due") . "' ";
 
 if ($case_category_id > 0) {
     $from = "from companies c, cases ca, case_types cat, case_priorities cap, case_statuses cas, users u, entity_category_map ecm ";
@@ -154,7 +154,7 @@ if ($rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed cases</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed cases") . '</td></tr>';
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -204,7 +204,7 @@ if ( $rst ) {
   $rst->close();
 }
 
-$page_title = 'Cases';
+$page_title = _("Cases");
 start_page($page_title, true, $msg);
 
 ?>
@@ -222,12 +222,12 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order ?>">
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4>Search Criteria</td>
+                <td class=widget_header colspan=4><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label colspan=2>Case Name</td>
-                <td class=widget_label>Case Number</td>
-                <td class=widget_label>Company</td>
+                <td class=widget_label colspan=2><?php echo _("Case Name"); ?></td>
+                <td class=widget_label><?php echo _("Case Number"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input type=text name="case_title" size=20 value="<?php  echo $case_title ?>"></td>
@@ -235,10 +235,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name="company_code" size=6 value="<?php  echo $company_code ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Category</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Status</td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
+                <td class=widget_label><?php echo _("Category"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><?php  echo $user_menu ?></td>
@@ -247,7 +247,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $case_status_menu ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=6><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";} ?> </td>
+                <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";} ?> </td>
             </tr>
         </table>
         </form>
@@ -268,13 +268,13 @@ $con->close();
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5>Recently Viewed</td>
+                <td class=widget_header colspan=5><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Case</td>
-                <td class=widget_label>Company</td>
-                <td class=widget_label>Status</td>
-                <td class=widget_label>Due</td>
+                <td class=widget_label><?php echo _("Case"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Status"); ?></td>
+                <td class=widget_label><?php echo _("Due"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows ?>
         </table>
@@ -321,6 +321,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2004/07/16 07:11:17  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.16  2004/07/15 13:49:53  cpsource
  * - Added arr_vars sub-system.
  *
