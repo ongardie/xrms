@@ -2,7 +2,7 @@
 /**
  * Edit company relationships
  *
- * $Id: relationships.php,v 1.4 2004/05/06 13:33:04 gpowers Exp $
+ * $Id: relationships.php,v 1.5 2004/05/27 15:04:34 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -36,7 +36,8 @@ if ($rst) {
         $established_at = $con->userdate($rst->fields['established_at']);
         $relationship_rows .= '<tr>';
         $relationship_rows .= '<td class=widget_content_form_element>' . $rst->fields['relationship_type'] . '</td>';
-        $relationship_rows .= '<td class=widget_content_form_element>' . $rst->fields['company_name'] . '</td>';
+        $relationship_rows .= '<td class=widget_content_form_element><a href="one.php?company_id='
+            . $rst->fields['company_to_id'] . '">' . $rst->fields['company_name'] . '</a></td>';
         $relationship_rows .= '<td class=widget_content_form_element>' . $established_at . '</td>';
         $relationship_rows .= '<td class=widget_content_form_element>' 
             . '<a href="delete-relationship.php?company_to_id=' . $rst->fields['company_to_id']
@@ -118,6 +119,9 @@ end_page();
 
 /**
  * $Log: relationships.php,v $
+ * Revision 1.5  2004/05/27 15:04:34  gpowers
+ * Added a link to company page on company name.
+ *
  * Revision 1.4  2004/05/06 13:33:04  gpowers
  * removed "Former Names". This is now a separate screen.
  *
