@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Details about One Company
+ *
+ * Usually called from companies/some.php, but also linked to from many
+ * other places in the XRMS UI.
+ *
+ * $Id: one.php,v 1.16 2004/01/26 19:18:02 braverock Exp $
+ */
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -392,6 +399,10 @@ function openNewsWindow() {
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
+                                    <td width=1% class=sublabel>Company Name</td>
+                                    <td class=clear><?php  echo $company_name; ?></td>
+                                </tr>
+                                <tr>
                                     <td width=1% class=sublabel>Legal Name</td>
                                     <td class=clear><?php  echo $legal_name; ?></td>
                                 </tr>
@@ -532,6 +543,7 @@ function openNewsWindow() {
                 <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="News" onclick="javascript: openNewsWindow();">
                 <input class=button type=button value="Addresses" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="Divisions" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
                 </td>
             </tr>
         </table>
@@ -690,4 +702,15 @@ function openNewsWindow() {
     </tr>
 </table>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: one.php,v $
+ * Revision 1.16  2004/01/26 19:18:02  braverock
+ * - added company division pages and fields
+ * - added phpdoc
+ *
+ */
+?>
