@@ -1,4 +1,9 @@
 <?php
+/**
+ * Form for creating a new file
+ *
+ * $Id: new.php,v 1.3 2004/03/24 12:28:01 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -43,61 +48,89 @@ start_page($page_title, true, $msg);
 
 ?>
 
+<script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=55% valign=top>
+    <tr>
+        <td class=lcol width=55% valign=top>
 
-		<form enctype="multipart/form-data" action=new-2.php method=post>
-		<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_file_size; ?>">
-		<input type=hidden name=on_what_table value="<?php  echo $on_what_table ?>">
-		<input type=hidden name=on_what_id value="<?php  echo $on_what_id ?>">
-		<input type=hidden name=return_url value="<?php  echo $return_url ?>">
-		<table class=widget cellspacing=1 width=100%>
-			<tr>
-				<td class=widget_header colspan=2>File Information</td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Attached&nbsp;To</td>
-				<td class=widget_content_form_element><?php echo $attached_to_name; ?></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>File&nbsp;Name</td>
-				<td class=widget_content_form_element><input type=text size=40 name=file_pretty_name></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right_166px>Description</td>
-				<td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description></textarea></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Upload</td>
-				<td class=widget_content_form_element><input type=file name=file1></td>
-			</tr>
-			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Upload"></td>
-			</tr>
-		</table>
-		</form>
+        <form enctype="multipart/form-data" action=new-2.php method=post>
+        <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_file_size; ?>">
+        <input type=hidden name=on_what_table value="<?php  echo $on_what_table ?>">
+        <input type=hidden name=on_what_id value="<?php  echo $on_what_id ?>">
+        <input type=hidden name=return_url value="<?php  echo $return_url ?>">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=2>File Information</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Attached&nbsp;To</td>
+                <td class=widget_content_form_element><?php echo $attached_to_name; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>File&nbsp;Name</td>
+                <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right_166px>Description</td>
+                <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description></textarea></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Date</td>
+                <td class=widget_content_form_element><input type=text name=file_entered_at value="<?php  echo $file_entered_at; ?>"> <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Upload</td>
+                <td class=widget_content_form_element><input type=file name=file1></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Upload"></td>
+            </tr>
+        </table>
+        </form>
 
-		</td>
-		<!-- gutter //-->
-		<td class=gutter width=2%>
-		&nbsp;
-		</td>
-		<!-- right column //-->
-		<td class=rcol width=43% valign=top>
-		
-		</td>
-	</tr>
+        </td>
+        <!-- gutter //-->
+        <td class=gutter width=2%>
+        &nbsp;
+        </td>
+        <!-- right column //-->
+        <td class=rcol width=43% valign=top>
+
+        </td>
+    </tr>
 </table>
 
 <script language=javascript>
 
 function initialize() {
-	document.forms[0].file_pretty_name.focus();
+    document.forms[0].file_pretty_name.focus();
 }
 
 initialize();
 
+<!--
+
+// create calendar object(s) just after form tag closed
+// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
+// note: you can have as many calendar objects as you need for your application
+
+    var cal1 = new calendar1(document.forms[0].elements['file_entered_at']);
+    cal1.year_scroll = false;
+    cal1.time_comp = false;
+
+//-->
 </script>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: new.php,v $
+ * Revision 1.3  2004/03/24 12:28:01  braverock
+ * - allow editing of more file proprerties
+ * - updated code provided by Olivier Colonna of Fontaine Consulting
+ * - add phpdoc
+ *
+ */
+?>
