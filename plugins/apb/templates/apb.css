@@ -1,0 +1,60 @@
+body
+{
+   font-family:verdana, arial, helvetica, sans-serif;
+}
+
+h1
+{
+   font-size: 22px;
+   color: #666677;
+}
+
+h2
+{
+   font-size: 20px;
+   color: #666677;
+}
+
+h2.warning
+{
+   font-size: 20px;
+   color: #FF0000;
+}
+
+h3
+{
+   font-size: 17px;
+   color: #666677;
+}
+
+p
+{
+   line-height: 140%;
+   font-size: 9pt;
+}
+
+li
+{
+   line-height: 140%;
+   font-size: 9pt;
+}
+
+td
+{
+   line-height: 140%;
+   font-size: 9pt;
+}
+
+ul
+{
+   margin-top: .5em;
+   line-height: 140%;
+   font-size: 9pt;
+}
+
+ol
+{
+   margin-top: .5em;
+   line-height: 140%;
+   font-size: 9pt;
+}

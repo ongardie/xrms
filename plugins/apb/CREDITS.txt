@@ -1,0 +1,19 @@
+######################################################################
+Active PHP Bookmarks - lbstone.com/apb/
+
+Filename:   CREDITS.txt
+Author:     L. Brandon Stone (lbstone.com)
+
+2003-03-31  Reworded some things. [LBS]
+2001-07-24  File created. [LBS]
+######################################################################
+
+-------------------------------Credits--------------------------------
+L. Brandon Stone [LBS] - lbstone.com
+-   Program creation, coding, documentation.
+
+Nathan Hendler [NPH] - retards.org
+-   Coding, documentation.
+
+Geoff Stearns - www.deconcept.com
+-   Thought of quick-add bookmarklet feature.

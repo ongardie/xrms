@@ -1,0 +1,1 @@
+"<tt>".$row['h_date'] . " " . $row['h_time']."</tt> " .$b->link()." (".$g->link().") <br>\n";

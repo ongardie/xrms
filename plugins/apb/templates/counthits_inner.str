@@ -1,0 +1,1 @@
+"<tt>".$row['total']."</tt> " .$b->link()." (".$g->link().") <br>\n";
