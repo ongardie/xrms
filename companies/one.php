@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.29 2004/04/26 13:32:28 braverock Exp $
+ * $Id: one.php,v 1.30 2004/04/27 13:20:29 gpowers Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -585,7 +585,7 @@ function openNewsWindow() {
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at value="<?php echo date('Y-m-d'); ?>">
+                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at value="<?php echo date('Y-m-d H:i:s'); ?>">
               <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a>
 <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
             </tr>
@@ -649,6 +649,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.30  2004/04/27 13:20:29  gpowers
+ * added support for activity times.
+ * start and end time default to current time.
+ *
  * Revision 1.29  2004/04/26 13:32:28  braverock
  * break \n's into <br> tags in profile
  *
