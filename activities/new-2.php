@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.18 2004/07/13 19:52:37 braverock Exp $
+ * $Id: new-2.php,v 1.19 2004/07/13 20:52:33 braverock Exp $
  */
 
 //where do we include from
@@ -78,8 +78,6 @@ if ($scheduled_at > $ends_at) {
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
-
-echo '<br>'.$associate_activities;
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities = true ) {
@@ -187,6 +185,9 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.19  2004/07/13 20:52:33  braverock
+ *- removed debug echo
+ *
  *Revision 1.18  2004/07/13 19:52:37  braverock
  *- add ability to process activity association to open Opportunity/Case
  *  for unassociated activities based on $associate_activities global
