@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.10 2004/07/25 14:35:47 johnfawcett Exp $
+ * $Id: new.php,v 1.11 2004/07/30 10:18:00 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,8 +14,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
 
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_POST['company_id'];
 $contact_id = $_POST['contact_id'];
 
@@ -39,21 +39,48 @@ $rst->close();
 //get case priority menu
 $sql2 = "select case_priority_pretty_name, case_priority_id from case_priorities where case_priority_record_status = 'a' order by case_priority_id";
 $rst = $con->execute($sql2);
+
+// defining case_priority_id before the call to getmenu2 means that this
+// option will be selected when the menu is generated.
+if ( $rst && !$rst->EOF ) {
+  $case_priority_id = $rst->fields['case_priority_id'];
+} else {
+  $case_priority_id = '';
+}
+
 $case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, false);
 $rst->close();
 
 //get case name menu
 $sql2 = "select case_type_pretty_name, case_type_id from case_types where case_type_record_status = 'a' order by case_type_id";
 $rst = $con->execute($sql2);
+
+// defining case_type_id before the call to getmenu2 means that this
+// option will be selected when the menu is generated.
+if ( $rst && !$rst->EOF ) {
+  $case_type_id = $rst->fields['case_type_id'];
+} else {
+  $case_type_id = '';
+}
+
 $case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false);
 $rst->close();
 
 //get case status menu
 $sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
-$case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, false);
-$rst->close();
 
+// defining case_status_id before the call to getmenu2 means that this
+// option will be selected when the menu is generated.
+if ( $rst && !$rst->EOF ) {
+  $case_status_id = $rst->fields['case_status_id'];
+} else {
+  $case_status_id = '';
+}
+
+$case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, false);
+
+$rst->close();
 $con->close();
 
 $page_title = _("New Case");
@@ -169,6 +196,14 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.11  2004/07/30 10:18:00  cpsource
+ * - Fix (yet again) three (more) bugs that were masked by undefined
+ *   variables:
+ *     case_priority_id
+ *     case_type_id
+ *     case_status_id
+ *   whereby getmenu2 was not selecting them as the default properly.
+ *
  * Revision 1.10  2004/07/25 14:35:47  johnfawcett
  * - corrected gettext call
  *
