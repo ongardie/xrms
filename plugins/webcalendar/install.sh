@@ -18,6 +18,6 @@ echo "Waiting for you to read this."
 sleep 5
 vi src/tools/send_reminders.php
 echo "Copying patched files to src. I'm not making a backup. You have the tarball."
-cp config.php src/include
-cp user-xrms.php src/include
-cp init.php src/include
+cp config.php src/includes
+cp user-xrms.php src/includes
+cp init.php src/includes
