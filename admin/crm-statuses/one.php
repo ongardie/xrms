@@ -2,7 +2,7 @@
 /**
  * Manage crm statuses
  *
- * $Id: one.php,v 1.7 2004/07/25 15:08:45 johnfawcett Exp $
+ * $Id: one.php,v 1.8 2004/07/25 15:18:21 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -35,7 +35,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("CRM Status Details").' '.$crm_status_pretty_name;
+$page_title = _("CRM Status Details").': '.$crm_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -103,6 +103,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 15:18:21  johnfawcett
+ * - added punctuation which I removed instead of moving
+ *
  * Revision 1.7  2004/07/25 15:08:45  johnfawcett
  * - unified page title
  * - removed punctuation from gettext call
