@@ -9,9 +9,10 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
-$contact_id = $_GET['contact_id'];
+$msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
+$contact_id  = $_GET['contact_id'];
 $category_id = $_GET['category_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -27,5 +28,14 @@ $con->execute($sql);
 $con->close();
 
 header("Location: categories.php?contact_id=$contact_id");
+
+/**
+ * $Log: remove-category.php,v $
+ * Revision 1.3  2004/07/13 16:21:42  cpsource
+ * - don't use uninitialized variables
+ *   do language processing
+ *   add cvs revision history to bottom
+ *
+ */
 
 ?>
