@@ -275,5 +275,5 @@ insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_co
 insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_code) values ('Zambia', '894', 'ZM', 'ZMB', '260');
 insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_code) values ('Zimbabwe', '716', 'ZW', 'ZWE', '263');
 
-insert into address_format_strings (address_format_string) values ('$lines<br>$city, $state $postal_code<br>$country');
+insert into address_format_strings (address_format_string) values ('$lines<br>$city, $province $postal_code<br>$country');
 
