@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.15 2004/05/27 18:10:47 gpowers Exp $
+ * $Id: home.php,v 1.16 2004/05/27 20:45:36 gpowers Exp $
  */
 
 // include the common files
@@ -435,6 +435,16 @@ start_page($page_title);
         <!-- right column //-->
     <div id="Sidebar">
 
+
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header>Documentation</td>
+            </tr>
+            <tr>
+                <td class=widget_label><a href="../doc/users/xrms_user_manual.pdf">User Manual</a> (PDF)</td>
+            </tr>
+        </table>
+
             <!-- opportunities //-->
             <?php  echo $opportunity_rows; ?>
 
@@ -462,6 +472,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.16  2004/05/27 20:45:36  gpowers
+ * Added "Documentation" Sidebar box with link to User Manual (PDF)
+ *
  * Revision 1.15  2004/05/27 18:10:47  gpowers
  * Applied Patch [ 957550 ] Scheduled activities with different colour
  * submitted by miguel Gonçves - mig77
