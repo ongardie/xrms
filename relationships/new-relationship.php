@@ -29,7 +29,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "SELECT rt2.from_what_table, rt2.to_what_table
         FROM relationship_types AS rt, relationship_types AS rt2
         WHERE rt.relationship_type_id = $relationship_type_id
-        AND rt.relationship_name = rt2.relationship_name
+        AND rt.from_what_table = rt2.from_what_table
+        AND rt.to_what_table = rt2.to_what_table
         AND rt2.relationship_status = 'a'";
 $rst = $con->execute($sql);
 
@@ -129,6 +130,9 @@ start_page($page_title, true, $msg);
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.12  2005/01/10 22:17:29  neildogg
+ * - Adding a relationship now works without a relationship name
+ *
  * Revision 1.11  2005/01/10 20:40:02  neildogg
  * - Supports parameter passing after the sidebar update
  *

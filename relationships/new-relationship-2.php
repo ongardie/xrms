@@ -45,14 +45,14 @@ else {
 $sql = "SELECT rt2.from_what_table, rt2.to_what_table, rt2.relationship_name
         FROM relationship_types AS rt, relationship_types AS rt2
         WHERE rt.relationship_type_id = $relationship_type_id
-        AND rt.relationship_name = rt2.relationship_name
+        AND rt.from_what_table = rt2.from_what_table
+        AND rt.to_what_table = rt2.to_what_table
         AND rt2.relationship_status = 'a'";
 $rst = $con->execute($sql);
 if(!$rst) {
     db_error_handler($con, $sql);
 }
 elseif(!$rst->EOF) {
-    $relationship_name = $rst->fields['relationship_name'];
     $what_table = $rst->fields[$opposite_direction . '_what_table'];
     $what_table_singular = make_singular($what_table);
 
@@ -65,18 +65,21 @@ if (!$relationship_type) {
     if($working_direction == "both") {
         $sql = "SELECT from_what_text, relationship_type_id
                 FROM relationship_types
-                WHERE relationship_name='" . $relationship_name . "'
+                WHERE from_what_table='$from_what_table'
+                AND to_what_table = '$to_what_table'
                 AND relationship_status='a'
                 UNION
                 SELECT to_what_text, relationship_type_id
                 FROM relationship_types
-                WHERE relationship_name='" . $relationship_name . "'
+                WHERE from_what_table='$from_what_table'
+                AND to_what_table = '$to_what_table'
                 AND relationship_status='a'";
     }
     else {
         $sql = "SELECT " . $working_direction . "_what_text, relationship_type_id
                 FROM relationship_types
-                WHERE relationship_name='" . $relationship_name . "'
+                WHERE from_what_table='$from_what_table'
+                AND to_what_table = '$to_what_table'
                 AND relationship_status='a'";
     }
     $rst = $con->execute($sql);
@@ -237,6 +240,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.21  2005/01/10 22:17:29  neildogg
+ * - Adding a relationship now works without a relationship name
+ *
  * Revision 1.20  2005/01/10 20:40:02  neildogg
  * - Supports parameter passing after the sidebar update
  *
