@@ -2,7 +2,7 @@
 /**
  * Commit the new Activity Type to the database
  *
- * $Id: add-2.php,v 1.1 2004/11/10 07:27:49 gpowers Exp $
+ * $Id: add-2.php,v 1.2 2004/11/12 06:36:37 gpowers Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -16,6 +16,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check( 'Admin' );
 
 $info_type_name = $_POST['info_type_name'];
+$display_on = $_POST['display_on'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -41,7 +42,7 @@ $rec = array();
 
 //set the other variables
 $rec['info_type_id'] = $info_type_id;
-$rec['display_on'] = "private_sidebar";
+$rec['display_on'] = $display_on;
 
 //commit it
 $tbl = "info_display_map";
@@ -57,6 +58,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.2  2004/11/12 06:36:37  gpowers
+ * - added support for single display_on add/edit/delete/show
+ *
  * Revision 1.1  2004/11/10 07:27:49  gpowers
  * - added admin screens for info types
  *

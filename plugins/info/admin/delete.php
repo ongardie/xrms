@@ -24,6 +24,15 @@ $rec['info_type_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+$sql = "SELECT * FROM info_display_map WHERE info_type_id = $info_type_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['record_status'] = 'd';
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+
 $con->close();
 
 header("Location: some.php");

@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.1 2004/11/10 07:27:49 gpowers Exp $
+ * $Id: one.php,v 1.2 2004/11/12 06:36:37 gpowers Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -33,6 +33,17 @@ if ($rst) {
     $rst->close();
 }
 
+       $sql2 = "select * from info_display_map
+                 where info_type_id = " . $rst->fields['info_type_id']
+             . " limit 1";
+        $rst2 = $con->execute($sql2);
+        if ($rst2) {
+            while (!$rst2->EOF) {
+                $display_on .= $rst2->fields['display_on'];
+                $rst2->movenext();
+            }
+        }
+
 $con->close();
 
 $page_title = _("Infoy Type Details") . ': ' . $info_type_name;
@@ -52,6 +63,14 @@ start_page($page_title);
             <tr>
                 <td class=widget_label_right><?php echo _("Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=info_type_name value="<?php  echo $info_type_name; ?>"></td>
+            <tr>
+                <td class=widget_label_right>
+                    <?php echo _("Display On"); ?>
+                </td>
+                <td>
+                    <?php echo display_on_menu(); ?>
+                </td>
+            </tr>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
@@ -94,6 +113,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.2  2004/11/12 06:36:37  gpowers
+ * - added support for single display_on add/edit/delete/show
+ *
  * Revision 1.1  2004/11/10 07:27:49  gpowers
  * - added admin screens for info types
  *
