@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.21 2004/07/19 14:40:12 cpsource Exp $
+ * $Id: utils-interface.php,v 1.22 2004/07/19 14:43:51 cpsource Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -39,7 +39,7 @@ function status_msg($msg) {
     default:
       if ( $msg ) {
 	// at least TRY to return a message
-	return _("$msg.") . ' ' . _("$msg.");
+	return _("$msg.");
       }
       break;
     }
@@ -187,6 +187,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.22  2004/07/19 14:43:51  cpsource
+ * - Don't repeat status_msg message if unknown type.
+ *
  * Revision 1.21  2004/07/19 14:40:12  cpsource
  * - Remove unnecessary 'break' from status_msg
  *   Allow status_msg to at least TRY to return an error message
