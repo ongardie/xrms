@@ -2,7 +2,7 @@
 /**
  * Associated Companies Sidebar
  *
- * Include this file anywhere you want to show other companies/customers tied to this contact
+ * Include this file anywhere you want to show other relationships
  *
  * @param string $relationship_name Name of the relationship as named in relationship_types
  * @param string $working_direction From or To: Starting point as shown in relationships table
@@ -11,7 +11,7 @@
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.2 2004/07/13 16:00:57 cpsource Exp $
+ * $Id: sidebar.php,v 1.3 2004/07/14 14:08:53 neildogg Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -171,11 +171,10 @@ else {
 //put in the new button
 $relationship_link_rows .= "
             <tr>
-            <form action='" . $http_site_root . "/companies/new-company.php' method='post'>
+            <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
                 <td class=widget_content_form_element colspan=2>
-                    <input type=hidden name=from_what_id value='$from_what_id'>
                     <input type=hidden name=relationship_name value='company link'>
-                    <input type=hidden name=to_what_id value='$to_what_id'>
+                    <input type=hidden name=on_what_id value='$overall_id'>
                     <input type=hidden name=working_direction value='$working_direction'>
                     <input type=hidden name=return_url value='/$what_table[$working_direction]/one.php?$what_table_singular[$working_direction]_id=$overall_id'>
                     <input type=submit class=button value='New'>
@@ -229,6 +228,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.3  2004/07/14 14:08:53  neildogg
+ * - Add new relationship now in /relationships directory
+ *
  * Revision 1.2  2004/07/13 16:00:57  cpsource
  * - Get rid of some undefined variable usages.
  *
