@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.11 2004/04/17 16:02:41 maulani Exp $
+ * $Id: one.php,v 1.12 2004/05/04 15:30:33 gpowers Exp $
  */
 
 //include required files
@@ -64,6 +64,7 @@ if ($rst) {
     $case_status_display_html = $rst->fields['case_status_display_html'];
     $case_priority_display_html = $rst->fields['case_priority_display_html'];
     $case_type_display_html = $rst->fields['case_type_display_html'];
+    $case_description = $rst->fields['case_description'];
     $account_owner_username = $rst->fields['account_owner_username'];
     $case_title = $rst->fields['case_title'];
     $case_description = $rst->fields['case_description'];
@@ -298,7 +299,7 @@ start_page($page_title, true, $msg);
                         </tr>
                     </table>
 
-                    <p><?php  echo $profile; ?>
+                    <p><?php  echo $case_description; ?></p>
 
                 </td>
             </tr>
@@ -369,6 +370,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2004/05/04 15:30:33  gpowers
+ * Changed display of $profile (which was undefined) to $case_description
+ *
  * Revision 1.11  2004/04/17 16:02:41  maulani
  * - Add CSS2 positioning
  *
