@@ -4,7 +4,7 @@
  *
  * Edit campaign-statuses
  *
- * $Id: one.php,v 1.2 2004/04/16 22:18:23 maulani Exp $
+ * $Id: one.php,v 1.3 2004/04/23 16:49:27 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,6 +30,7 @@ if ($rst) {
     $campaign_status_pretty_name = $rst->fields['campaign_status_pretty_name'];
     $campaign_status_pretty_plural = $rst->fields['campaign_status_pretty_plural'];
     $campaign_status_display_html = $rst->fields['campaign_status_display_html'];
+    $status_open_indicator = $rst->fields['status_open_indicator'];
 
     $rst->close();
 }
@@ -45,7 +46,7 @@ start_page($page_title);
     <div id="Content">
 
         <form action=edit-2.php method=post>
-        <input type=hidden name=campaign_status_id value="<?php  echo $account_status_id; ?>">
+        <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Edit Campaign Status Information</td>
@@ -66,6 +67,16 @@ start_page($page_title);
                 <td class=widget_label_right>Display HTML</td>
                 <td class=widget_content_form_element><input type=text size=30 name=campaign_status_display_html value="<?php  echo $campaign_status_display_html; ?>"></td>
             </tr>
+            <tr>
+                <td class=widget_label_right>Open Status</td>
+                <td class=widget_content_form_element>
+                <select name="status_open_indicator">
+                    <option value="o"  <?php if ($status_open_indicator == 'o') {echo "selected"; } ?> >Open
+                    <option value="c"  <?php if ($status_open_indicator != 'o') {echo "selected"; } ?> >Closed
+                </select>
+                </td>
+            </tr>
+
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
             </tr>
@@ -104,6 +115,16 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.3  2004/04/23 16:49:27  gpowers
+ * changed "echo $account_status_id;" to "echo $campaign_status_id;"
+ *     this appears to have been a bug
+ * added support for status_open_indicator,
+ *     which is needed for reports/open-items.php and
+ *     reports/completed-items.php
+ * currently, there are two open statuses: open & closed
+ * to add additional status, edit the HTML in this file AND some.php
+ * 'o' means open, anything else means closed
+ *
  * Revision 1.2  2004/04/16 22:18:23  maulani
  * - Add CSS2 Positioning
  *
