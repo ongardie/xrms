@@ -6,7 +6,7 @@
 *	creating bar charts.
 *
 *	@author daturaarutad
-*	$Id: BarGraph.php,v 1.4 2005/03/17 19:59:13 daturaarutad Exp $
+*	$Id: BarGraph.php,v 1.5 2005/03/17 21:02:31 daturaarutad Exp $
 */
 
 global $jpgraph_include_directory;
@@ -179,10 +179,12 @@ function InitGraph() {
 	$this->graph->xaxis->SetPos($this->graph_info['xaxis_position']);
 
 	// Note: we use the first item for csim targets!
-	if(is_array($this->graph_info['csim_targets'][0])) {
-		$this->graph->xaxis->SetCSIMTargets($this->graph_info['csim_targets'][0], $this->graph_info['csim_alts'][0]); 
-	} else {
-		$this->graph->xaxis->SetCSIMTargets($this->graph_info['csim_targets'], $this->graph_info['csim_alts']); 
+	if(method_exists($this->graph->xaxis, SetCSIMTargets)) {
+		if(is_array($this->graph_info['csim_targets'][0])) {
+			$this->graph->xaxis->SetCSIMTargets($this->graph_info['csim_targets'][0], $this->graph_info['csim_alts'][0]); 
+		} else {
+			$this->graph->xaxis->SetCSIMTargets($this->graph_info['csim_targets'], $this->graph_info['csim_alts']); 
+		}
 	}
 
 	// Set up Y-axis
@@ -351,6 +353,9 @@ function DisplayCSIM($url, $filename, $map_name, $border = 0) {
 
 /**
 * $Log: BarGraph.php,v $
+* Revision 1.5  2005/03/17 21:02:31  daturaarutad
+* check if Axis::SetCSIMTargets exists before calling it
+*
 * Revision 1.4  2005/03/17 19:59:13  daturaarutad
 * added multi-line type and a few assorted tweaks
 *
