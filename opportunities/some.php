@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.30 2004/11/21 17:29:43 braverock Exp $
+ * $Id: some.php,v 1.31 2004/12/02 03:14:05 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -73,7 +73,7 @@ $sql = "SELECT "
     ELSE 0
   END AS " . $con->qstr(_("Weighted Size"),get_magic_quotes_gpc()) . ",
   os.opportunity_status_pretty_name AS " . $con->qstr( _("Status"), get_magic_quotes_gpc()) . ","
-  . " $close_at AS " . $con->qstr( _("Close Date"),get_magic_quotes_gpc());
+  . " $close_at AS " . $con->qstr( _("Close Date"),get_magic_quotes_gpc()) . ' ';
 
 
 if ($opportunity_category_id > 0) {
@@ -321,6 +321,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.31  2004/12/02 03:14:05  vanmer
+ * - added space to main opportunity query to fix pager page display bug
+ *
  * Revision 1.30  2004/11/21 17:29:43  braverock
  * - fix select to use $con->qstr so that translations work
  *
