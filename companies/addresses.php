@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.10 2004/06/04 15:47:15 braverock Exp $
+ * $Id: addresses.php,v 1.11 2004/06/09 18:05:56 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -36,6 +36,15 @@ if ($rst) {
         $addresses .= "<td class=widget_label_right_91px><a href=edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a></td>';
         $address_to_display = get_formatted_address($con, $rst->fields['address_id']);
         $addresses .= "<td class=widget_content>$address_to_display</td>";
+
+        $sql2 = "select contact_id, address_id, last_name, first_names  from contacts
+        where address_id = " . $rst->fields['address_id'];
+        $rst2 = $con->execute($sql2);
+
+        $addresses .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
+                    . $rst2->fields['contact_id'] . "'>"
+                    . $rst2->fields['first_names'] . " "
+                    . $rst2->fields['last_name'] . "</a></td>";
 
         $addresses .= "<td class=widget_content><input type=radio name=default_primary_address value=" . $rst->fields['address_id'];
 
@@ -91,11 +100,12 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6>Addresses</td>
+                <td class=widget_header colspan=7>Addresses</td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Body</td>
+                <td class=widget_label>Address Name</td>
+                <td class=widget_label>Used by Contacts</td>
+                <td class=widget_label>Formatted Address</td>
                 <td class=widget_label>Primary Default</td>
                 <td class=widget_label>Billing Default</td>
                 <td class=widget_label>Shipping Default</td>
@@ -104,7 +114,7 @@ start_page($page_title, true, $msg);
             <?php  echo $addresses; ?>
             </tr>
             </tr>
-                <td class=widget_content_form_element colspan=6><input class=button type=submit value="Save Defaults"></td>
+                <td class=widget_content_form_element colspan=7><input class=button type=submit value="Save Defaults"></td>
             </tr>
         </table>
         </form>
@@ -174,6 +184,11 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.11  2004/06/09 18:05:56  gpowers
+ * - added "Used by Contacts" which lists which contacts are using each
+ *   address, this also allows Billing/Shipping/Payment address for a
+ *   company to be changed to the address of a contact of the company
+ *
  * Revision 1.10  2004/06/04 15:47:15  braverock
  * - move current addresses to top of screen, because this is the most used functionality
  *
