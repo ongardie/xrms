@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.14 2004/08/05 15:12:31 neildogg Exp $
+ * $Id: sidebar.php,v 1.15 2004/08/21 20:13:48 johnfawcett Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -326,14 +326,14 @@ else {
     $old_options = '';
 }
 $new_options = "<!-- Start Options -->                    " . $old_options . "
-                    <option>" . $what_table[$opposite_direction] . "/" . $what_table[$working_direction] . "</option><!-- End Options -->";
+                    <option>" . _($what_table[$opposite_direction] . "/" . $what_table[$working_direction]) . "</option><!-- End Options -->";
 
 //put in the new button
 $relationship_link_rows .= "<!-- Form Start --></table>\n</div>
         <div id='expanded_associated_by_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
-                <td class=widget_header><a name=associated></a>Add Relationship</td>
+                <td class=widget_header><a name=associated></a>"._("Add Relationship")."</td>
             </tr>
             <tr>
             <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
@@ -348,10 +348,10 @@ $relationship_link_rows .= "<!-- Form Start --></table>\n</div>
                                            this.form.on_what_id.value = eval('this.form.on_what_id_' + this.selectedIndex + '.value');
                                            this.form.working_direction.value = eval('this.form.working_direction_' + this.selectedIndex + '.value');
                                            this.form.return_url.value = eval('this.form.return_url_' + this.selectedIndex + '.value'); }\">
-                    <option>Choose a relationship</option>
+                    <option>"._("Choose a relationship")."</option>
                     " . $new_options . "
                     </select>
-                    <input type=submit value=Next>
+                    <input type=submit value=\""._("Next")."\">
                 </td>
             </form>
             </tr><!-- Form End -->";
@@ -444,6 +444,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.15  2004/08/21 20:13:48  johnfawcett
+ * - added gettext calls to new strings
+ *
  * Revision 1.14  2004/08/05 15:12:31  neildogg
  * - Allows multiple relationships on one sidebar
  *
