@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.14 2004/05/10 13:07:22 maulani Exp $
+ * $Id: some.php,v 1.15 2004/05/13 12:07:40 braverock Exp $
  */
 
 //include the standard files
@@ -94,7 +94,7 @@ $_SESSION['contacts_last_name'] = $last_name;
 $_SESSION['contacts_first_names'] = $first_names;
 $_SESSION['contacts_title'] = $title;
 $_SESSION['contacts_description'] = $description;
-$_SESSION['category_id'] = $description;
+$_SESSION['category_id'] = $category_id;
 $_SESSION['contacts_user_id'] = $user_id;
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -344,6 +344,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2004/05/13 12:07:40  braverock
+ * - fix a category_id bug
+ *   - fixes SF bug 952536
+ *
  * Revision 1.14  2004/05/10 13:07:22  maulani
  * - Add level to audit trail
  * - Clean up audit trail text
