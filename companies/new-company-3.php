@@ -13,6 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -50,14 +51,19 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     if($rst->rowcount() == 0) {
-        $sql = "insert into relationships set
-            $working_direction" . "_what_id = $overall_id,
-            $opposite_direction" . "_what_id = $on_what_id,
-            relationship_type_id = $relationship_type_id,
-            established_at = now()";
+        $sql = "SELECT * FROM relationships WHERE 1 = 2"; //select empty record as placeholder
+        $rst = $con->execute($sql);
+
+        $rec = array();
+        $rec["$working_direction" . "_what_id"] = $overall_id;
+        $rec["$opposite_direction" . "_what_id"] = $on_what_id;
+        $rec['relationship_type_id'] = $relationship_type_id;
+        $rec['established_at'] = time();
+
+        $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
         // $con->debug=1;
 
-        $con->execute($sql);
     }
 } else {
     db_error_handler ($con, $sql);
@@ -69,6 +75,10 @@ header("Location: .." . $return_url);
 
 /**
  * $Log: new-company-3.php,v $
+ * Revision 1.2  2004/07/05 22:13:54  introspectshun
+ * - Now uses GetInsertSQL
+ * - Include adodb-params.php
+ *
  * Revision 1.1  2004/07/01 19:48:10  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts
