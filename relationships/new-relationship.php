@@ -32,7 +32,8 @@ $sql = "SELECT rt2.from_what_table, rt2.to_what_table
         AND rt.from_what_table = rt2.from_what_table
         AND rt.to_what_table = rt2.to_what_table
         AND rt2.relationship_status = 'a'
-        GROUP BY rt2.from_what_table, rt2.to_what_table";
+        GROUP BY rt2.from_what_table, rt2.to_what_table
+        ORDER BY rt2.relationship_type_id";
 $rst = $con->execute($sql);
 
 if(!$rst) {
@@ -61,6 +62,7 @@ elseif(!$rst->EOF) {
     
     $display_name = ucfirst(make_singular($working_table));
     
+    $contact_rows = '';
     if($working_table == "companies" and $what_table == "contacts") {
         $sql = "(SELECT 'Enter other contact' AS name,
                 0 AS contact_id)
@@ -72,52 +74,78 @@ elseif(!$rst->EOF) {
                 WHERE company_id=" . $on_what_id . "
                 AND contact_record_status='a'
                 ORDER BY last_name)";
-    
-            //Create query to get the name of the entity, either contact first/last name or _name
-            $name_order = implode(', ', array_reverse(table_name($on_what_table)));
-            $name_concat = $con->Concat(implode(', \' \', ', table_name($on_what_table)));    
-            $namesql = "SELECT $name_concat as name FROM $on_what_table WHERE $singular_table" . "_id=$on_what_id";
-    
-        $namerst = $con->execute($namesql);
-        if (!$namerst) { db_error_handler($con, $namesql); }
-        elseif ($namerst->numRows()>0) { 
-            $entityName = $namerst->fields["name"];
-        } else { $entityName = $singular_table; }
+        $rst2 = $con->execute($sql);
+        if(!$rst2) {
+            db_error_handler($con, $sql);
+        }
+        elseif(!$rst2->EOF) {
+            $contact_rows = $rst2->GetMenu2('possible_id', null, false);
+        }
     }
     
-    $directions=array('from','to');
-    $optionsarray=array();
-    //loop over the possible directions between relationships
-    foreach ($directions as $direction) {
-        //search for this table in relationships in this direction
-        $sql="SELECT *
-        FROM relationship_types
-        WHERE from_what_table = '{$rst->fields['from_what_table']}'
-        AND to_what_table = '{$rst->fields['to_what_table']}'
-        AND relationship_status='a'";
-        
-        $rst = $con->execute($sql);
-        if ($direction=='from') { $opposite='to'; } else { $opposite='from'; }
-        if (!$rst) { db_error_handler($con, $sql); }
-        if ($rst->numRows()>0) {
-            while (!$rst->EOF) {
+    //Create query to get the name of the entity, either contact first/last name or _name
+    $name_to_get = $con->Concat(implode(", ' ' , ", table_name($on_what_table)));
+    $sql = "SELECT $name_to_get AS name
+            FROM $on_what_table
+            WHERE $singular_table" . "_id = $on_what_id";
+
+    $rst2 = $con->execute($sql);
+    if (!$rst2) {
+        db_error_handler($con, $sql);
+    }
+    elseif(!$rst2->EOF) { 
+        $name = $rst2->fields["name"];
+        $rst2->close();
+    }
+    else {
+        $name = $singular_table;
+        $rst2->close();
+    }
+    
+    if($working_direction == 'both') {
+        $directions = array('from', 'to');
+    }
+    else {
+        $directions = array($working_direction);
+    }
+
+    $optionsarray = array();
+    //search for this table in relationships in this direction
+    $sql = "SELECT *
+            FROM relationship_types
+            WHERE from_what_table = '{$rst->fields['from_what_table']}'
+            AND to_what_table = '{$rst->fields['to_what_table']}'
+            AND relationship_status='a'
+            ORDER BY relationship_type_id";
+    $rst2 = $con->execute($sql);
+    if(!$rst2) {
+        db_error_handler($con, $sql);
+    }
+    elseif(!$rst2->EOF) {
+        while (!$rst2->EOF) {
+            //loop over the possible directions between relationships
+            foreach ($directions as $direction) {
+                if($direction == 'from') {
+                    $opposite = 'to';
+                }
+                else {
+                  $opposite = 'from';
+                }
+
                 //make array keyed on text (should be unique), and set to relationship_type,direction
-                $optionsarray[strtolower($rst->fields[$direction.'_what_text']).' '.                    make_singular($rst->fields[$opposite.'_what_table'])]=$rst->fields['relationship_type_id'].','.$direction;
-                $rst->movenext();
+                $optionsarray[strtolower($rst2->fields[$direction . '_what_text']) . ' ' . make_singular($rst2->fields[$opposite . '_what_table'])] = $rst2->fields['relationship_type_id'] . ',' . $direction;
             }
+            $rst2->movenext();
         }
-        
     }
 }
 
-$options='';        
-
-ksort($optionsarray);
-reset($optionsarray);
+$options = '';
 
 //options should be look like: <option value="2,from">Retains consultant contact</option>
-foreach ($optionsarray as $text=>$type) {
-    $options.='<option value="'. $type. '">'.$text."</option>";
+foreach ($optionsarray as $text => $type) {
+    $options .= "
+                    <option value=\"$type\">$text</option>";
 }
 
 $display_name = ucfirst($singular_table);
@@ -128,22 +156,28 @@ start_page($page_title, true, $msg);
 ?>
 <div id="Main">
     <div id="Content">
-
         <form action=new-relationship-2.php method=post>
-        <input type="hidden" name="relationship_type_id" value="<?php echo $relationship_type_id; ?>">
         <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
         <input type="hidden" name="on_what_table" value="<?php echo $on_what_table; ?>">
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
         <table class=widget cellspacing=1>
-            <tr><td class=widget_content_form_element><?php echo $display_name . ': ' .$entityName; ?> <select name=relationship_type_direction><?php echo $options; ?></select>
-                <input type=text size=8 name=search_on>
-            </td></tr>
+            <tr>
+                <td class=widget_content_form_element><?php echo $display_name . ': ' .$name; ?>
+                    <select name=relationship_type_direction><?php echo $options; ?>
+
+                    </select>
+                    <?php print $contact_rows; ?>
+                    <input type=text size=8 name=search_on>
+                </td></tr>
             <tr><td class=widget_content_form_element><input type=submit class=button name=relSearch value="<?php echo _("Search"); ?>"></td></tr>
         </table>
         </form>
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.14  2005/01/11 17:19:33  neildogg
+ * - Fairly large update to make it work as it should
+ *
  * Revision 1.13  2005/01/10 22:59:27  neildogg
  * - Fixed bugs in code relating to dropdown
  *
