@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.75 2005/01/06 15:47:22 vanmer Exp $
+ * $Id: one.php,v 1.76 2005/01/06 18:37:13 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -19,7 +19,10 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
+
 $company_id = $_GET['company_id'];
+$division_id=$_GET['division_id'];
+
 global $on_what_id;
 $on_what_id=$company_id;
 $session_user_id = session_check();
@@ -152,6 +155,35 @@ if (strlen($url) > 0) {
     $url = "<a target='_new' href='" . $url . "'>$url</a>";
 }
 
+//if division_id is specified, look up the name
+if ($division_id) {
+    $sql = "SELECT division_name FROM company_division WHERE division_id=$division_id";
+    $rst=$con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    } else {
+        $division_name=$rst->fields['division_name'];
+    }
+}
+//list and create division select box
+$sql = "SELECT division_name, division_id FROM company_division WHERE company_id=$company_id";
+$division_rst=$con->execute($sql);
+if (!$division_rst) { db_error_handler($con, $sql); }
+elseif ($division_rst->numRows()>0) {
+    $division_select=<<<TILLEND
+    <script language=JavaScript>
+    <!--
+        function restrictByDivision() {
+            select=document.getElementById('division_id');
+            location.href = 'one.php?company_id=$company_id&division_id=' + select.value;
+        }
+     //-->
+    </script>
+TILLEND;
+
+    $division_select.=$division_rst->getmenu2('division_id',$division_id, true, false, 1, "id=division_id onchange=javascript:restrictByDivision();");
+} else { $division_select=false; }
+
 //
 //  list of most recent activities
 //
@@ -166,7 +198,12 @@ WHERE a.company_id = $company_id
   AND a.user_id = u.user_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'
-ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
+";
+if ($division_id) {
+    $sql_activities.=" AND a.on_what_table='company_division' AND a.on_what_id=$division_id";
+}
+$sql_activities.="
+    ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
 ";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
@@ -211,7 +248,7 @@ if ($rst) {
         }
 
         $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php?company_id=$company_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php%3Fcompany_id=$company_id%26division_id=$division_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . '</td>';
@@ -229,6 +266,11 @@ if ($rst) {
 
 $sql = "select * from contacts where company_id = $company_id
         and contact_record_status = 'a'
+";
+if ($division_id) {
+    $sql .=" AND division_id=$division_id";
+}
+$sql .="
         order by last_name";
 
 $rst = $con->execute($sql);
@@ -382,7 +424,11 @@ if (!$relationship_rows) {
     $relationship_rows = "";
 }
 
-$page_title = _("Company Details") . ' : ' . $company_name;
+if (!$division_name) {
+    $page_title = _("Company Details") . ' : ' . $company_name;
+} else {
+    $page_title = $company_name . ' : ' . $division_name;
+}
 start_page($page_title, true, $msg);
 
 ?>
@@ -422,63 +468,81 @@ function openNewsWindow() {
                                     <td width="1%" class=sublabel><?php echo _("Company Name"); ?></td>
                                     <td class=clear><?php  echo $company_name; ?></td>
                                 </tr>
+                                <?php if ($legal_name) { ?>
                                 <tr>
                                     <td width="1%" class=sublabel><?php echo _("Legal Name"); ?></td>
                                     <td class=clear><?php  echo $legal_name; ?></td>
                                 </tr>
+                                <?php }; ?>
                                 <?php  echo $former_name_rows; ?>
+                                <?php if ($company_code) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Code"); ?></td>
                                     <td class=clear><?php  echo $company_code; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($industry_pretty_name) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Industry"); ?></td>
                                     <td class=clear><?php  echo $industry_pretty_name; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($crm_status_pretty_name) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("CRM Status"); ?></td>
                                     <td class=clear><?php  echo $crm_status_pretty_name; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($owner_username) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $owner_username; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($phone) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Phone"); ?></td>
                                     <td class=clear><?php  echo $phone; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($phone2) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Alt. Phone"); ?></td>
                                     <td class=clear><?php  echo $phone2; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($fax) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Fax"); ?></td>
                                     <td class=clear><?php  echo $fax; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($url) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("URL"); ?></td>
                                     <td class=clear><?php echo $url; ?></td>
                                 </tr>
+                                <?php }; ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
+                                <?php if ($address_to_display) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Address"); ?></td>
                                     <td class=clear><?php echo $address_to_display ?></td>
                                 </tr>
+                                <?php }; ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
+                                <?php if ($division_select) { ?>
                                 <tr>
-                                    <td class=sublabel><?php echo _("Created"); ?></td>
-                                    <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by; ?></td>
+                                    <td class=sublabel><?php echo _("Restrict by Division"); ?></td>
+                                    <td class=clear><?php echo $division_select; ?>
                                 </tr>
-                                <tr>
-                                    <td class=sublabel><?php echo _("Last Modified"); ?></td>
-                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
-                                </tr>
+                                <?php }; ?>
                                 </table>
 
                             </td>
@@ -486,69 +550,101 @@ function openNewsWindow() {
                             <td width=50% class=clear align=left valign=top>
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                                <?php if ($account_status) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Account Status"); ?></td>
                                     <td class=clear><?php echo $account_status; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($tax_id) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Tax ID"); ?></td>
                                     <td class=clear><?php echo $tax_id; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($credit_limit OR $current_credit_limit) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Credit Limit"); ?></td>
                                     <td class=clear>$<?php echo $credit_limit; ?> <?php echo $current_credit_limit; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($rating) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Rating"); ?></td>
                                     <td class=clear><?php echo $rating; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($terms) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Terms"); ?></td>
                                     <td class=clear><?php echo $terms; ?> <?php echo _("days"); ?></td>
                                 </tr>
+                                <?php }; ?>
                                 <!-- accounting plugin -->
                                 <?php echo $accounting_rows; ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
+                                <?php if ($company_source) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _("Company Source"); ?></td>
                                     <td class=clear><?php echo $company_source; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($employees) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Employees"); ?></td>
                                     <td class=clear><?php  echo $employees; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($revenue) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Revenue"); ?></td>
                                     <td class=clear><?php echo $revenue; ?></td>
                                 </tr>
+                                <?php }; ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
+                                <?php if ($custom1) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _($company_custom1_label); ?></td>
                                     <td class=clear><?php  echo $custom1; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($custom2) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom2_label); ?></td>
                                     <td class=clear><?php  echo $custom2; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($custom3) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom3_label); ?></td>
                                     <td class=clear><?php  echo $custom3; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($custom4) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom4_label); ?></td>
                                     <td class=clear><?php  echo $custom4; ?></td>
                                 </tr>
+                                <?php }; ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                     <?php echo $relationship_rows; ?>
+                                <tr>
+                                    <td class=sublabel><?php echo _("Created"); ?></td>
+                                    <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php echo _("Last Modified"); ?></td>
+                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
+                                </tr>                                    
                             </table>
 
                             </td>
@@ -588,7 +684,11 @@ function openNewsWindow() {
             </tr>
             <?php  echo $contact_rows; ?>
             <tr>
-                <td class=widget_content_form_element colspan=6><input type=button class=button onclick="location.href='../contacts/new.php?company_id=<?php echo $company_id; ?>';" value="<?php echo _("New"); ?>"></td>
+                <td class=widget_content_form_element colspan=6>
+                    <?php $new_contact_location="../contacts/new.php?company_id=$company_id";
+                            if ($division_id) $new_contact_location.= "&division_id=$division_id"; ?>
+                    <?php echo render_create_button("New",'button',"location.href='$new_contact_location';"); ?>
+            </td>
             </tr>
         </table>
 
@@ -602,11 +702,11 @@ function openNewsWindow() {
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
 
-        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
+        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>&division_id=<?php echo $division_id; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
         <input type=hidden name=use_post_vars value="1">
-
+        <?php if ($division_id) { $on_what_table='company_division'; $on_what_id=$division_id; } ?>
         <input type=hidden name=on_what_table        value="<?php echo $on_what_table; ?>">
         <input type=hidden name=on_what_id           value="<?php echo $on_what_id; ?>">
         <input type=hidden name=on_what_string       value="<?php echo $on_what_string; ?>">
@@ -696,6 +796,13 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.76  2005/01/06 18:37:13  vanmer
+ * - added restriction by division to one company page
+ * - added code to hide company fields which have not been set
+ * - added code to restrict contacts and activities by division_id, when set
+ * - added code to add contact with correct division, when restricted by division
+ * - added code to add activity setting table/id to company_division/division_id
+ *
  * Revision 1.75  2005/01/06 15:47:22  vanmer
  * - added style entries to activity top row in one company view, to shrink activities so that they do not overlap the sidebars
  * - replaced edit buttons with new render button functions (allows for ACL control of the display of buttons)
