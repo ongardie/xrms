@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.2 2004/04/23 17:14:14 gpowers Exp $
+ * $Id: audit-items.php,v 1.3 2004/04/23 17:29:17 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -97,10 +97,10 @@ if ($user_id) {
         echo "    </tr>";
         if ($connection_details) {
             echo "    <tr>";
+            echo "        <th align=left></th>";
             echo "        <th align=left>Remote Addr</th>";
             echo "        <th align=left>Remote Port</th>";
-            echo "        <th align=left colspan=2>Session Id</th>";
-            echo "        <th align=left colspan=2>HTTP User Agent</th>";
+            echo "        <th align=left colspan=3>Session Id</th>";
             echo "    </tr>";
             echo "    <tr><td colspan=6><hr></td></tr>";
         }
@@ -151,12 +151,13 @@ if ($user_id) {
             echo "<tr>\n";
             if ($connection_details) {
                 echo "<tr>\n";
+                echo "<td></td>\n";
                 echo "<td><a href=http://ws.arin.net/cgi-bin/whois.pl?queryinput=" .
                      $rst->fields['remote_addr'] . ">" . $rst->fields['remote_addr'] . "</a>" . 
                      "&nbsp;&nbsp;&nbsp;</td>\n";
                 echo "<td>" . $rst->fields['remote_port'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                echo "<td colspan=4>" . $rst->fields['session_id'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                echo "<tr>\n";
+                echo "<td colspan=3>" . $rst->fields['session_id'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                echo "</tr>\n";
                 echo "<tr><td colspan=6><hr></td></tr>\n";
             }
             $rst->movenext();
@@ -175,6 +176,12 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.3  2004/04/23 17:29:17  gpowers
+ * Sorry that this is the third commit in a row. I noticed a <tr> that should
+ * have been a </tr> in the last xrms-cvs list message. I also removed
+ * http_user_agent from the header (oops) and slightly changed the format
+ * of the conneciton details output (indented line).
+ *
  * Revision 1.2  2004/04/23 17:14:14  gpowers
  * Removed http_user_agent from audit_items table. It is space consuming and
  * redundant, as most httpd servers can be configured to log this information.
