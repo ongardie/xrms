@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.49 2004/11/09 00:07:47 gpowers Exp $
+ * $Id: one.php,v 1.50 2004/12/20 20:12:15 neildogg Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -127,10 +127,10 @@ CASE
   WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
   ELSE 0
 END AS is_overdue
-FROM activity_types at, users u, activities a, contacts cont
+FROM activity_types at, activities a, contacts cont
+LEFT OUTER JOIN users u ON (a.user_id = u.user_id)
 WHERE a.contact_id = $contact_id
   AND a.contact_id = cont.contact_id
-  AND a.user_id = u.user_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'
 ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
@@ -563,6 +563,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.50  2004/12/20 20:12:15  neildogg
+ * - Left join allows empty user
+ *
  * Revision 1.49  2004/11/09 00:07:47  gpowers
  * - Corrected display of newlines in profile
  *
