@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.14 2004/06/04 16:03:59 gpowers Exp $
+ * $Id: some.php,v 1.15 2004/06/04 16:28:44 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -279,7 +279,7 @@ start_page($page_title, true, $msg);
                         <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
                         <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
                     </select>
-                    <input type=text ID="f_date_d" name=date value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <input type=text ID="f_date_d" name=date value="<?php  echo date('Y-m-d'); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
                 <td class=widget_content_form_element><?php  echo $type_menu; ?></td>
@@ -352,8 +352,8 @@ function resort(sortColumn) {
 
 Calendar.setup({
         inputField     :    "f_date_d",      // id of the input field
-        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
-        showsTime      :    true,            // will display a time selector
+        ifFormat       :    "%Y-%m-%d",       // format of the input field
+        showsTime      :    false,            // will display a time selector
         button         :    "f_trigger_d",   // trigger for the calendar (button ID)
         singleClick    :    false,           // double-click mode
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
@@ -368,6 +368,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2004/06/04 16:28:44  gpowers
+ * Removed time selection from calendar applet settings
+ *
  * Revision 1.14  2004/06/04 16:03:59  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags
