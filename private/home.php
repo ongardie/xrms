@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.11 2004/03/15 16:41:21 braverock Exp $
+ * $Id: home.php,v 1.12 2004/03/24 15:02:11 braverock Exp $
  */
 
 // include the common files
@@ -139,6 +139,261 @@ if ($rst) {
     $rst->close();
 }
 
+///////////////////////////////////
+// Show contacts non-uploaded files
+$sql_files = "select * from files f, contacts cont where file_size = 0 and f.entered_by = ".$session_user_id . " and f.on_what_id = cont.contact_id and f.on_what_table = 'contacts' order by file_id asc";
+
+$rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
+
+$classname = 'non_uploaded_file';
+
+if ($rst) {
+    while (!$rst->EOF) {
+
+        $file_id = $rst->fields['file_id'];
+        $file_name = $rst->fields['file_pretty_name'];
+        $file_description = $rst->fields['file_description'];
+        $file_on_what_table = $rst->fields['on_what_table'];
+        $file_on_what_name = $rst->fields['last_name']." ".$rst->fields['first_names'];
+        $file_on_what_name_id = $rst->fields['contact_id'];
+        $file_date = $rst->fields['entered_at'];
+
+        $files_rows .= '<tr>';
+        $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
+        $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/contacts/one.php?contact_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+        $files_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+////////////////////////////////////
+// Show companies non-uploaded files
+$sql_files = "select * from files f, companies c where file_size = 0 and f.entered_by = ".$session_user_id . " and f.on_what_id = c.company_id and f.on_what_table = 'companies' order by file_id asc";
+
+$rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
+
+$classname = 'non_uploaded_file';
+
+if ($rst) {
+
+    while (!$rst->EOF) {
+
+        $file_id = $rst->fields['file_id'];
+        $file_name = $rst->fields['file_pretty_name'];
+        $file_description = $rst->fields['file_description'];
+        $file_on_what_table = $rst->fields['on_what_table'];
+        $file_on_what_name = $rst->fields['company_name'];
+        $file_on_what_name_id = $rst->fields['company_id'];
+        $file_date = $rst->fields['entered_at'];
+
+        $files_rows .= '<tr>';
+        $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
+        $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/companies/one.php?company_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+        $files_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+////////////////////////////////////
+// Show campaigns non-uploaded files
+$sql_files = "select * from files f, where file_size = 0 and f.entered_by = ".$session_user_id . " order by file_id asc";
+
+$rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
+
+$classname = 'non_uploaded_file';
+
+if ($rst) {
+    $nu_file_rows = "
+        <table class=widget cellspacing=1 width='100%'>
+            <tr>
+                <td class=widget_header colspan=6>Non Uploaded Files</td>
+            </tr>
+            <tr>
+                <td class=widget_label>Name</td>
+                <td class=widget_label>Description</td>
+                <td class=widget_label>On What</td>
+                <td class=widget_label>Company</td>
+                <td class=widget_label>Date</td>
+                <td class=widget_label>File ID</td>
+            </tr>
+        </table>";
+
+
+
+    while (!$rst->EOF) {
+
+        $file_id = $rst->fields['file_id'];
+        $file_name = $rst->fields['file_pretty_name'];
+        $file_description = $rst->fields['file_description'];
+        $file_on_what = $rst->fields['on_what_table'];
+        $on_what_id = $rst->fields['on_what_id'];
+        $file_date = $rst->fields['entered_at'];
+
+
+        //add switches for 'on what' here
+        $fsql = "select ";
+        $fsql .= "from files f, users u ";
+        switch ($file_on_what) {
+            case "contacts" : { $fsql .= "contacts cont, companies c, "; break; }
+            case "contacts_of_companies" : { $fsql .= "contacts cont, companies c, "; break; }
+            case "companies" : { $fsql .= "companies c, "; break; }
+            case "campaigns" : { $fsql .= "campaigns camp, "; break; }
+            case "opportunities" : { $fsql .= "opportunities opp, companies c, "; break; }
+            case "cases" : { $fsql .= "cases cases, companies c, "; break; }
+        }
+        switch ($file_on_what) {
+            case "contacts" : {
+                $fsql .= "
+                concat('<a href=$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '>', cont.first_names, ' ', cont.last_name, '</a>') as 'Name',
+                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                break;
+            }
+            case "contacts_of_companies" : {
+                $fsql .= "
+                concat('<a href=$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '>', cont.last_name, ' ', cont.first_names, '</a>') as 'Name',
+                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                break;
+            }
+            case "companies" : {
+                $fsql .= "
+                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Name',
+                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                break;
+            }
+            case "campaigns" : {
+                $fsql .= "
+                concat('<a href=$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id=', camp.campaign_id, '>', camp.campaign_title, '</a>') as 'Campaign',";
+                break;
+            }
+            case "opportunities" : {
+                $fsql .= "
+                concat('<a href=$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id=', opportunity_id, '>', opp.opportunity_title, '</a>') as 'Name',
+                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                break;
+            }
+            case "cases" : {
+                $fsql .= "
+                concat('<a href=$http_site_root/cases/one.php?return_url=/private/home.php&case_id=', case_id, '>', cases.case_title, '</a>') as 'Name',
+                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                break;
+            }
+            default : {
+                $fsql .= "";
+                }
+        }
+        $where = "where f.entered_by = $session_user_id ";
+        switch ($file_on_what) {
+            case "contacts" : { $where .= "and f.on_what_table = 'contacts' and cont.contact_id = $on_what_id and cont.company_id = c.company_id "; break; }
+            case "contacts_of_companies" : { $where .= "and f.on_what_table = 'contacts' and cont.contact_id = $on_what_id and cont.company_id = c.company_id "; break; }
+            case "companies" : { $where .= "and f.on_what_table = 'companies' and c.company_id = $on_what_id "; break; }
+            case "campaigns" : { $where .= "and f.on_what_table = 'campaigns' and camp.campaign_id = $on_what_id  "; break; }
+            case "opportunities" : { $where .= "and f.on_what_table = 'opportunities' and opp.opportunity_id = $on_what_id and opp.company_id = c.company_id "; break; }
+            case "cases" : { $where .= "and f.on_what_table = 'cases' and cases.case_id = $on_what_id and cases.company_id = c.company_id "; break; }
+        }
+        $where .= "and file_record_status = 'a'";
+
+        $fsql .= $where;
+        $frst = $con->execute($fsql);
+
+        //now build the file row
+        $nu_file_rows .= '<tr>';
+        $nu_file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
+        $nu_file_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+        $nu_file_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+        if ($frst) {
+           $nu_file_rows .= '<td class=' . $classname . '>' . $frst->fields['Name'] . '</td>';
+           $nu_file_rows .= '<td class=' . $classname . '>' . $frst->fields['Company'] . '</td>';
+        } else {
+           $nu_file_rows .= "<td></td>\n<td></td>\n";
+        }
+        $nu_file_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+        $nu_file_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+        $nu_file_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+////////////////////////////////////
+// Show opportunities non-uploaded files
+$sql_files = "select * from files f, opportunities opp where file_size = 0 and f.entered_by = ".$session_user_id . " and f.on_what_id = opp.opportunity_id and f.on_what_table = 'opportunities' order by file_id asc";
+
+$rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
+
+$classname = 'non_uploaded_file';
+
+if ($rst) {
+    while (!$rst->EOF) {
+
+        $file_id = $rst->fields['file_id'];
+        $file_name = $rst->fields['file_pretty_name'];
+        $file_description = $rst->fields['file_description'];
+        $file_on_what_table = $rst->fields['on_what_table'];
+        $file_on_what_name = $rst->fields['opportunity_title'];
+        $file_on_what_name_id = $rst->fields['opportunity_id'];
+        $file_date = $rst->fields['entered_at'];
+
+        $files_rows .= '<tr>';
+        $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
+        $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/opportunities/one.php?opportunity_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+        $files_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+////////////////////////////////////
+// Show cases non-uploaded files
+$sql_files = "select * from files f, cases where file_size = 0 and f.entered_by = ".$session_user_id . " and f.on_what_id = cases.case_id and f.on_what_table = 'cases' order by file_id asc";
+
+$rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
+
+$classname = 'non_uploaded_file';
+
+if ($rst) {
+    while (!$rst->EOF) {
+
+        $file_id = $rst->fields['file_id'];
+        $file_name = $rst->fields['file_pretty_name'];
+        $file_description = $rst->fields['file_description'];
+        $file_on_what_table = $rst->fields['on_what_table'];
+        $file_on_what_name = $rst->fields['case_title'];
+        $file_on_what_name_id = $rst->fields['case_id'];
+        $file_date = $rst->fields['entered_at'];
+
+        $files_rows .= '<tr>';
+        $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
+        $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/cases/one.php?case_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
+        $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+        $files_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$con->close();
+
+if (!strlen($files_rows) > 0) {
+    $files_rows = "<tr><td class=widget_content colspan=7>No open files</td></tr>";
+}
+
 //close the database connection, as we are done with it.
 $con->close();
 
@@ -155,6 +410,7 @@ start_page($page_title);
     <tr>
         <td class=lcol width="75%" valign=top>
 
+        <!-- Activity Rows //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=7>Open Activities</td>
@@ -168,8 +424,10 @@ start_page($page_title);
                 <td class=widget_label>Scheduled</td>
                 <td class=widget_label>Due</td>
             </tr>
-            <?php  echo $activity_rows ?>
+            <?php  echo $activity_rows; ?>
         </table>
+        <!-- Non-Uploaded Files //-->
+            <?php  echo $nu_file_rows; ?>
 
         </td>
 
@@ -203,6 +461,11 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.12  2004/03/24 15:02:11  braverock
+ * - add non-uploaded files dsplay on home page
+ * - only display if the user has 'non-uploaded' files
+ * - modified from code provided by Olivier Colonna of Fontaine Consulting
+ *
  * Revision 1.11  2004/03/15 16:41:21  braverock
  * - show only open opportunities on the home page
  *
