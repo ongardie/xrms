@@ -83,7 +83,7 @@ $rst = $con->execute($sql);
 $rec = array();
 $rec['sort_order'] = $source_sort_order;
 
-$upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
 
@@ -93,7 +93,7 @@ $rst = $con->execute($sql);
 $rec = array();
 $rec['sort_order'] = $dest_sort_order;
 
-$upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
 //reload the page to see the new order
@@ -101,6 +101,9 @@ header ('Location: ' . $http_site_root . $return_url);
 
 /**
  * $Log: sort.php,v $
+ * Revision 1.3  2004/07/15 21:11:58  introspectshun
+ * - Minor tweaks for consistency
+ *
  * Revision 1.2  2004/06/14 21:06:33  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

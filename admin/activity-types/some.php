@@ -2,7 +2,7 @@
 /**
  * Manage Activity Types
  *
- * $Id: some.php,v 1.6 2004/06/24 20:09:25 braverock Exp $
+ * $Id: some.php,v 1.7 2004/07/15 21:11:58 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -39,7 +39,6 @@ if ($rst) {
         }
         $rst->close();
 }
-$rst->close();
 $con->close();
 
 $page_title = "Manage Activity Types";
@@ -105,6 +104,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/07/15 21:11:58  introspectshun
+ * - Minor tweaks for consistency
+ *
  * Revision 1.6  2004/06/24 20:09:25  braverock
  * - use sort order when displaying activity types
  *   - patch provided by Neil Roberts
