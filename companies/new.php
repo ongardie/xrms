@@ -49,6 +49,11 @@ $rst = $con->execute($sql2);
 $industry_menu = $rst->getmenu2('industry_id', $industry_id, false);
 $rst->close();
 
+$sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
+$rst = $con->execute($sql);
+$country_menu = $rst->getmenu2('country_id', $default_country_id, false);
+$rst->close();
+
 $con->close();
 
 $page_title = "New Company";
@@ -56,19 +61,23 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<form action="new-2.php" onsubmit="javascript: return validate();" method=post>
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
     <tr>
-        <td class=lcol width=55% valign=top>
+        <td class=lcol width="55%" valign=top>
 
-        <form action=new-2.php onsubmit="javascript: return validate();" method=post>
-        <table class=widget cellspacing=1 width=100%>
+
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2>Company Information</td>
             </tr>
             <tr>
                 <td class=widget_label_right>Company&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text size=50 name=company_name
-value="<?php  echo $company_name; ?>"> <?php echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type=text size=50 name=company_name value="<?php  echo $company_name; ?>"> <?php echo $required_indicator; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Legal&nbsp;Name</td>
+                <td class=widget_content_form_element><input type=text size=50 name=company_legal_name value="<?php echo $company_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Company&nbsp;Code</td>
@@ -132,27 +141,83 @@ value="<?php  echo $company_name; ?>"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Profile</td>
-                <td class=widget_content_form_element><textarea rows=10 cols=100 name=profile></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=70 name=profile></textarea></td>
             </tr>
-            <tr>
+             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
             </tr>
         </table>
-        </form>
 
         </td>
         <!-- gutter //-->
-        <td class=gutter width=2%>
+        <td class=gutter width="1%">
         &nbsp;
         </td>
         <!-- right column //-->
-        <td class=rcol width=43% valign=top>
+        <td class=rcol width="44%" valign=top>
 
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header colspan=2>Address</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Address&nbsp;Name</td>
+                <td class=widget_content_form_element><input type=text name=address_name size=30 value="Main"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Line 1</td>
+                <td class=widget_content_form_element><input type=text name=line1 size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Line 2</td>
+                <td class=widget_content_form_element><input type=text name=line2 size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>City</td>
+                <td class=widget_content_form_element><input type=text name=city size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>State/Province</td>
+                <td class=widget_content_form_element><input type=text name=province size=20></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Postal Code</td>
+                <td class=widget_content_form_element><input type=text name=postal_code size=10></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Country</td>
+                <td class=widget_content_form_element><?php echo $country_menu ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right_91px>Override&nbsp;Address</td>
+                <td class=widget_content_form_element><textarea rows=5 cols=40 name=address_body></textarea><br><input type="checkbox" name="use_pretty_address"> Use</td>
+            </tr>
+        </table>
+
+        <table class=widget cellspacing=1 width="100%">
+			<tr>
+				<td class=widget_header colspan=2>Contact Information</td>
+			</tr>
+			<tr>
+				<td class=widget_label_right>First&nbsp;Names</td>
+				<td class=widget_content_form_element><input type=text name=first_names size=30 value="Default"></td>
+			</tr>
+			<tr>
+				<td class=widget_label_right>Last&nbsp;Name</td>
+				<td class=widget_content_form_element><input type=text name=last_name size=30 value="Contact"></td>
+			</tr>
+			<tr>
+				<td class=widget_label_right>E-Mail</td>
+				<td class=widget_content_form_element><input type=text name=email size=30></td>
+			</tr>
+        </table>
+        
         </td>
     </tr>
 </table>
+</form>
 
-<script language=javascript>
+<script language=javascript type="text/javascript" >
 
 function initialize() {
     document.forms[0].company_name.select();
@@ -183,3 +248,4 @@ initialize();
 </script>
 
 <?php end_page();; ?>
+
