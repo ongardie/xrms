@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.3 2005/02/15 19:51:39 vanmer Exp $
+ * $Id: acl_results.php,v 1.4 2005/03/04 23:20:44 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -199,7 +199,7 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false) {
                 $sql .= " order by $order_by";
             }
             if ($extrafield) {
-                $radiofield=$ret['con']->qstr("<input type=radio name=on_what_id value=$on_what_field>") ." as on_what_id";
+                $radiofield=$ret['con']->CONCAT($ret['con']->qstr("<input type=radio name=on_what_id value=\""),$on_what_field,$ret['con']->qstr("\">")) ." as on_what_id";
                 if(preg_match("|SELECT([^\e]*)FROM([^\e]*)|", $sql, $matched)) {
                     $fields = trim($matched[1]);
                     if ($fields=='*') {
@@ -242,6 +242,9 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.4  2005/03/04 23:20:44  vanmer
+  * - quoted to allow permission check to correctly create radio buttons
+  *
   * Revision 1.3  2005/02/15 19:51:39  vanmer
   * - updated to reflect new fieldnames
   *
