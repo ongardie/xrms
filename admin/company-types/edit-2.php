@@ -31,6 +31,6 @@ $rec['company_type_display_html'] = $company_type_display_html;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
-header("Location: one.php?company_type_id=$company_type_id");
+header("Location: some.php");
 
 ?>

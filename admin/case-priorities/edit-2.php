@@ -2,7 +2,7 @@
 /**
  * Update database with changes to Case Priority
  *
- * $Id: edit-2.php,v 1.4 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: edit-2.php,v 1.5 2004/12/31 15:31:59 braverock Exp $
  */
 
 //include required files
@@ -44,10 +44,14 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: one.php?case_priority_id=$case_priority_id");
+header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.5  2004/12/31 15:31:59  braverock
+ * - return to some.php after change
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.4  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *

@@ -32,6 +32,6 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: one.php?campaign_type_id=$campaign_type_id");
+header("Location: some.php");
 
 ?>
