@@ -1,4 +1,11 @@
 <?php
+/**
+ * Search for and Display Campaigns
+ *
+ * This is the main interface for locating Campaigns in XRMS
+ *
+ * $Id: some.php,v 1.7 2004/04/08 16:58:23 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -196,9 +203,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
@@ -242,13 +248,10 @@ $con->close();
 
 ?>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=34% valign=top>
+    <div id="Sidebar">
 
         <!-- new campaign //-->
         <table class=widget cellspacing=1 width=100%>
@@ -273,11 +276,10 @@ $con->close();
             <?php  echo $recently_viewed_table_rows ?>
         </table>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function initialize() {
@@ -310,4 +312,16 @@ function resort(sortColumn) {
 //-->
 </script>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.7  2004/04/08 16:58:23  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>

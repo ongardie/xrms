@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file allows the searching of cases
+ *
+ * $Id: some.php,v 1.5 2004/04/08 16:59:15 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -277,7 +282,7 @@ $con->close();
     </tr>
 </table>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function initialize() {
@@ -310,4 +315,16 @@ function resort(sortColumn) {
 //-->
 </script>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.5  2004/04/08 16:59:15  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>

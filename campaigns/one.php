@@ -1,4 +1,9 @@
 <?php
+/**
+ * Edit a campaign
+ *
+ * $Id: one.php,v 1.6 2004/04/08 16:58:23 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -248,4 +253,17 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: one.php,v $
+ * Revision 1.6  2004/04/08 16:58:23  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>
+

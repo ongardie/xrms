@@ -1,4 +1,9 @@
 <?php
+/**
+ * Create a note
+ *
+ * $Id: new.php,v 1.2 2004/04/08 16:59:47 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -62,4 +67,17 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: new.php,v $
+ * Revision 1.2  2004/04/08 16:59:47  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>
+

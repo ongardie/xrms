@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.7 2004/02/18 21:30:53 braverock Exp $
+ * $Id: edit.php,v 1.8 2004/04/08 17:00:59 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -191,7 +191,7 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function validate() {
@@ -223,6 +223,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.8  2004/04/08 17:00:59  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
  * Revision 1.7  2004/02/18 21:30:53  braverock
  * fixed rating so it populates correctly
  *

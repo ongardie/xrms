@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.3 2004/03/24 12:31:52 braverock Exp $
+ * $Id: some.php,v 1.4 2004/04/08 17:00:11 maulani Exp $
  */
 
 //include required files
@@ -374,7 +374,7 @@ $con->close();
     </tr>
 </table>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function initialize() {
@@ -413,6 +413,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.4  2004/04/08 17:00:11  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
  * Revision 1.3  2004/03/24 12:31:52  braverock
  * - improve search
  * - display recently viewed items

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Manage Case Statuses
+ *
+ * $Id: some.php,v 1.2 2004/04/08 16:56:47 maulani Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -87,4 +92,16 @@ start_page($page_title);
 	</tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.2  2004/04/08 16:56:47  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>

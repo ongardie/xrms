@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.3 2004/03/24 12:28:01 braverock Exp $
+ * $Id: new.php,v 1.4 2004/04/08 17:00:11 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -100,7 +100,7 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 
 function initialize() {
     document.forms[0].file_pretty_name.focus();
@@ -127,6 +127,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.4  2004/04/08 17:00:11  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
  * Revision 1.3  2004/03/24 12:28:01  braverock
  * - allow editing of more file proprerties
  * - updated code provided by Olivier Colonna of Fontaine Consulting

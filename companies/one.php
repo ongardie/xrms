@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.22 2004/04/07 13:50:54 maulani Exp $
+ * $Id: one.php,v 1.23 2004/04/08 17:00:59 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centalized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -352,7 +352,7 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 function markComplete() {
     document.forms[0].activity_status.value = "c";
@@ -632,6 +632,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.23  2004/04/08 17:00:59  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
  * Revision 1.22  2004/04/07 13:50:54  maulani
  * - Set CSS2 positioning for the home page
  *

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Edit address for a company
+ *
+ * $Id: edit-address.php,v 1.4 2004/04/08 17:00:59 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -110,4 +115,16 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: edit-address.php,v $
+ * Revision 1.4  2004/04/08 17:00:59  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>

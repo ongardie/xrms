@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file allows the creation of campaigns
+ *
+ * $Id: new.php,v 1.3 2004/04/08 16:58:23 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -97,7 +102,7 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 
 function initialize() {
     document.forms[0].campaign_title.focus();
@@ -141,4 +146,16 @@ initialize();
 //-->
 </script>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: new.php,v $
+ * Revision 1.3  2004/04/08 16:58:23  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>
