@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.18 2005/02/05 16:44:18 maulani Exp $
+ * $Id: data.php,v 1.19 2005/03/20 16:56:23 maulani Exp $
  */
 
 /**
@@ -37,6 +37,10 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters (param_id, string_val, description) values ('Reports--Use Horizontal Rule', 'y', 'Use horizontal rule on reports.')";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters (param_id, string_val, description) values ('Reports--Show No Items Found', 'n', 'Show text for items with no result on reports.')";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('Allow Unassigned Activities', 'n', 'Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.')";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('Display Item Technical Details', 'n', 'Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.')";
         $rst = $con->execute($sql);
     }
 
@@ -71,6 +75,14 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Show No Items Found', 'n', 1)";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Show No Items Found', 'y', 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Allow Unassigned Activities', 'n', 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Allow Unassigned Activities', 'y', 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Display Item Technical Details', 'n', 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Display Item Technical Details', 'y', 2)";
         $rst = $con->execute($sql);
     }
 
@@ -2447,6 +2459,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.19  2005/03/20 16:56:23  maulani
+ * - add new system parameters
+ *
  * Revision 1.18  2005/02/05 16:44:18  maulani
  * - Change report options to use system parameters
  *

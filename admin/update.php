@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.62 2005/03/07 18:34:38 vanmer Exp $
+ * $Id: update.php,v 1.63 2005/03/20 16:56:23 maulani Exp $
  */
 
 // where do we include from
@@ -433,6 +433,32 @@ if ($recCount == 0) {
     $con->execute($ins);
 }
 
+// Make sure that there is Allow Unassigned Activities and Display Item Technical Details Found in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='Allow Unassigned Activities'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Allow Unassigned Activities and Display Item Technical Details system parameters.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Allow Unassigned Activities';
+    $rec['string_val'] = 'y';
+    $rec['description'] = 'Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.';
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $rec = array();
+    $rec['param_id'] = 'Display Item Technical Details';
+    $rec['string_val'] = 'n';
+    $rec['description'] = 'Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.';
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
 // Make sure that there is options for the Audit Level in system_parameters_options
 $sql = "select count(*) as recCount from system_parameters_options where param_id='Audit Level'";
 $rst = $con->execute($sql);
@@ -562,6 +588,48 @@ if ($recCount == 0) {
 
     $rec = array();
     $rec['param_id'] = 'Reports--Show No Items Found';
+    $rec['string_val'] = 'n';
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters_options';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['string_val'] = 'y';
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the Allow Unassigned Activities in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='Allow Unassigned Activities'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Allow Unassigned Activities system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Allow Unassigned Activities';
+    $rec['string_val'] = 'n';
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters_options';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['string_val'] = 'y';
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the Display Item Technical Details in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='Display Item Technical Details'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Display Item Technical Details system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Display Item Technical Details';
     $rec['string_val'] = 'n';
     $rec['sort_order'] = 1;
     $tbl = 'system_parameters_options';
@@ -4218,6 +4286,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.63  2005/03/20 16:56:23  maulani
+ * - add new system parameters
+ *
  * Revision 1.62  2005/03/07 18:34:38  vanmer
  * - moved connection close to after hook function for upgrade script
  * - changed upgrade hook to reflect standard naming 'xrms_update' and 'xrms_install'
