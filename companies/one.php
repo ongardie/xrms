@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.100 2005/03/18 20:53:29 gpowers Exp $
+ * $Id: one.php,v 1.101 2005/03/22 21:51:07 gpowers Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -53,6 +53,13 @@ if ( !isset($accounting_rows) ) {
 }
 //call the accounting hook
 $accounting_rows = do_hook_function('company_accounting_inline_display', $accounting_rows);
+
+// make sure $company_buttons is defined
+if ( !isset($company_buttons) ) {
+  $company_button = '';
+}
+//call the copmany_buttons hook
+$company_buttons = do_hook_function('company_buttons', $company_buttons);
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
@@ -691,7 +698,7 @@ function markComplete() {
                 ?>    
                 <input class=button type=button value="<?php echo _("Divisions"); ?>" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
                 <?php } //end Division button check ?>
-                <?php do_hook('company_buttons'); ?>
+                <?php echo $company_buttons; ?>
                 </td>
             </tr>
         </table>
@@ -826,6 +833,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.101  2005/03/22 21:51:07  gpowers
+ * - moved up company_buttons hook
+ *   - it's now called before the db connection is closed
+ *   - now it's in the same area as the company_accounting hook
+ *
  * Revision 1.100  2005/03/18 20:53:29  gpowers
  * - added hooks for inline info plugin
  *
