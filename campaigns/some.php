@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.24 2005/01/13 18:11:27 vanmer Exp $
+ * $Id: some.php,v 1.25 2005/02/10 01:21:14 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -306,7 +306,7 @@ function initialize() {
 initialize();
 
 function bulkEmail() {
-    document.forms[0].action = "/email/index.php";
+    document.forms[0].action = <?php echo '"'.$http_site_root.'/email/index.php"'; ?>;
     document.forms[0].submit();
 }
 
@@ -335,6 +335,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.25  2005/02/10 01:21:14  braverock
+ * fix Bulk Email button to use $http_site_root
+ *
  * Revision 1.24  2005/01/13 18:11:27  vanmer
  * - Basic ACL changes to allow view functionality to be restricted
  *
