@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.19 2004/07/07 16:32:59 maulani Exp $
+ * $Id: vars.php,v 1.20 2004/07/07 23:05:11 d2uhlman Exp $
  */
 
 /**
@@ -170,6 +170,10 @@ $xrms_use_ldap = false; //set to true if you want ldap authenthication
     $xrms_ldap["default_role_id"] = "1";
     //time zone for new users added via LDAP
     $xrms_ldap["default_gmt_offset"] = "-6";
+
+    //reference context used by export code when creating export hierarchy
+    //export will look like ou=[company name],[value supplied below]
+    $xrms_ldap["reference_context"] = "dc=rwm";
 
 /*** Language settings ***/
 /**
