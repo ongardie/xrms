@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.3 2004/04/12 14:34:02 maulani Exp $
+ * $Id: database.php,v 1.4 2004/04/13 15:06:42 maulani Exp $
  */
 
 /**
@@ -364,7 +364,8 @@ function company_db_tables($con, $table_list) {
                extref1                          varchar(50) not null default '',
                extref2                          varchar(50) not null default '',
                extref3                          varchar(50) not null default '',
-               company_record_status            char(1) default 'a'
+               company_record_status            char(1) default 'a',
+               INDEX company_record_status (company_record_status)
                )";
         //execute
         $rst = $con->execute($sql);
@@ -458,7 +459,8 @@ function company_db_tables($con, $table_list) {
                last_modified_at                datetime,
                last_modified_by                int not null default 0,
                contact_record_status           char(1) not null default 'a',
-               INDEX company_id (company_id)
+               INDEX company_id (company_id),
+               INDEX contact_record_status (contact_record_status)
                )";
         //execute
         $rst = $con->execute($sql);
@@ -776,6 +778,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.4  2004/04/13 15:06:42  maulani
+ * - Add active contact data integrity check to database cleanup
+ *
  * Revision 1.3  2004/04/12 14:34:02  maulani
  * - Add indexes for foreign key company_id
  *

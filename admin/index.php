@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.6 2004/04/12 18:59:01 maulani Exp $
+ * $Id: index.php,v 1.7 2004/04/13 15:06:41 maulani Exp $
  */
 
 //include required stuff
@@ -39,7 +39,7 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header>Reports</td>
+                <td class=widget_header>System Administration</td>
             </tr>
             <tr>
                 <td class=widget_content><a href="reports/dashboard.php">Digital Dashboard</a></td>
@@ -172,6 +172,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.7  2004/04/13 15:06:41  maulani
+ * - Add active contact data integrity check to database cleanup
+ *
  * Revision 1.6  2004/04/12 18:59:01  maulani
  * - Make database structure and data cleanup available withing Admin interface
  *

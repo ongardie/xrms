@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.1 2004/04/12 18:59:01 maulani Exp $
+ * $Id: update.php,v 1.2 2004/04/13 15:06:41 maulani Exp $
  */
 
 /**
@@ -85,10 +85,14 @@ $sql .= '$lines<br>$city, $province $postal_code<br>$country';
 $sql .= "' and address_format_string_id=1";
 $rst = $con->execute($sql);
 
-// Add indexes on the company_id field so data integrity checks take a reasonable about of time
+// Add indexes so data integrity checks take a reasonable about of time
 $sql = "create index company_id on addresses (company_id)";
 $rst = $con->execute($sql);
 $sql = "create index company_id on contacts (company_id)";
+$rst = $con->execute($sql);
+$sql = "create index company_record_status on companies (company_record_status)";
+$rst = $con->execute($sql);
+$sql = "create index contact_record_status on contacts (contact_record_status)";
 $rst = $con->execute($sql);
 
 // Make sure that the database has the correct legal_name column
@@ -117,27 +121,11 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.2  2004/04/13 15:06:41  maulani
+ * - Add active contact data integrity check to database cleanup
+ *
  * Revision 1.1  2004/04/12 18:59:01  maulani
  * - Make database structure and data cleanup available withing Admin interface
- *
- * Revision 1.6  2004/04/12 14:34:02  maulani
- * - Add indexes for foreign key company_id
- *
- * Revision 1.5  2004/03/26 16:17:00  maulani
- * - Cleanup formatting
- *
- * Revision 1.3  2004/03/23 14:34:05  braverock
- * - add check for result set before closing rst
- *
- * Revision 1.2  2004/03/22 02:05:08  braverock
- * - add case_priority_score_adjustment to fix SF bug 906413
- *
- * Revision 1.1  2004/03/18 01:07:18  maulani
- * - Create installation tests to check whether the include location and
- *   vars.php have been configured.
- * - Create PHP-based database installation to replace old SQL scripts
- * - Create PHP-update routine to update users to latest schema/data as
- *   XRMS evolves.
  *
  */
 ?>
