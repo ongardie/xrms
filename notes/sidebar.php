@@ -2,7 +2,7 @@
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.7 2004/06/21 14:25:00 braverock Exp $
+ * $Id: sidebar.php,v 1.8 2004/06/28 16:23:25 gpowers Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -55,11 +55,11 @@ if (strlen($rst->fields['username']) > 0) {
         $on_what_table    ='';
 
         if ($contact_id) {
-            $return_url = "&return_url=$http_site_root/contacts/one.php?contact_id=" . $contact_id;
+            $return_url = "&return_url=/contacts/one.php?contact_id=" . $contact_id;
         } elseif ($company_id) {
-            $return_url = "&return_url=$http_site_root/companies/one.php?company_id=" . $company_id;
+            $return_url = "&return_url=/companies/one.php?company_id=" . $company_id;
         } else {
-            $return_url = "&return_url=$http_site_root/private/home.php";
+            $return_url = "&return_url=/private/home.php";
         }
         if (strlen($rst->fields['on_what_table']) > 0) {
             switch ($rst->fields['on_what_table']) {
@@ -158,6 +158,11 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.8  2004/06/28 16:23:25  gpowers
+ * - removed $http_site_root from return_url
+ *   - $http_site_root is added to the Location: header in notes/delete.php
+ *     and notes/edit-2.php
+ *
  * Revision 1.7  2004/06/21 14:25:00  braverock
  * - localized strings for i18n/internationalization/translation support
  *
