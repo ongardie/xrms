@@ -34,7 +34,7 @@ $sql = " SELECT
   cont.yahoo_name AS 'Yahoo',
   cont.msn_name AS 'MSN',
   cont.interests AS 'Interests',
-  cont.profile AS 'Profile',
+  cont.profile AS 'Contact Profile',
   cont.custom1 AS 'Custom1',
   cont.custom2 AS 'Custom2',
   cont.custom3 AS 'Custom3',
@@ -43,7 +43,7 @@ $sql = " SELECT
   c.company_name AS 'Company',
   c.legal_name AS 'Legal Name',
   c.tax_id AS 'Tax',
-  c.profile AS 'Profile',
+  c.profile AS 'Company Profile',
   c.phone AS 'Company Phone',
   c.phone2 AS 'Alt. Company Phone',
   c.fax AS 'Company Fax',
@@ -62,7 +62,7 @@ $sql = " SELECT
   a.address_body AS 'Address Body',
   a.line1 AS 'Address Line 1',
   a.line2 AS 'Address Line 2',
-  a.city AS 'City',
+ 	a.city AS 'City',
   a.province AS 'Province',
   a.postal_code AS 'Postal Code',
   a.use_pretty_address AS 'Use Pretty Address',
@@ -107,6 +107,9 @@ header("Location: {$http_site_root}/tmp/contacts-export.csv");
 
 /**
  * $Log: export-companies.php,v $
+ * Revision 1.6  2005/03/30 03:47:34  niclowe
+ * renamed ambiguous contact and company 'profile' field to 'contact profile' and 'company profile' as it caused abberant behaviour on import of field data (second profile data record not recorded)
+ *
  * Revision 1.5  2004/07/16 13:51:58  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)
