@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.29 2004/06/09 16:51:24 gpowers Exp $
+ * $Id: one.php,v 1.30 2004/06/09 19:25:49 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -455,6 +455,7 @@ function markComplete() {
                 <td class=widget_content_form_element>
                     <input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';">
                     <input class=button type=button value="<?php  echo 'Vcard'; ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=button value="Transfer" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
                     <input class=button type=button value="Edit Address" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
                 </td>
             </tr>
@@ -547,6 +548,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.30  2004/06/09 19:25:49  gpowers
+ * - added "Transfer" button to enable transfer of contact to new company
+ *
  * Revision 1.29  2004/06/09 16:51:24  gpowers
  * Added a button to "Edit Address"
  *
