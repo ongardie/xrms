@@ -2,7 +2,7 @@
 /**
  * Edit a campaign
  *
- * $Id: one.php,v 1.13 2004/07/25 20:51:34 braverock Exp $
+ * $Id: one.php,v 1.14 2004/07/30 10:30:44 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $campaign_id = $_GET['campaign_id'];
 
@@ -257,6 +257,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.14  2004/07/30 10:30:44  cpsource
+ * - Make sure msg can be optionally used.
+ *
  * Revision 1.13  2004/07/25 20:51:34  braverock
  * - added semicolons to some echo statements that were missing them
  *

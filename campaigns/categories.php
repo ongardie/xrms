@@ -2,7 +2,7 @@
 /**
  * List categories for a campaign
  *
- * $Id: categories.php,v 1.5 2004/07/16 05:28:14 introspectshun Exp $
+ * $Id: categories.php,v 1.6 2004/07/30 10:30:44 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,7 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $campaign_id = $_GET['campaign_id'];
 
@@ -124,6 +124,9 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.6  2004/07/30 10:30:44  cpsource
+ * - Make sure msg can be optionally used.
+ *
  * Revision 1.5  2004/07/16 05:28:14  introspectshun
  * - Localized strings for i18n/translation support
  *

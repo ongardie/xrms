@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.8 2004/07/16 05:28:14 introspectshun Exp $
+ * $Id: new.php,v 1.9 2004/07/30 10:30:44 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -163,6 +163,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.9  2004/07/30 10:30:44  cpsource
+ * - Make sure msg can be optionally used.
+ *
  * Revision 1.8  2004/07/16 05:28:14  introspectshun
  * - Localized strings for i18n/translation support
  *
