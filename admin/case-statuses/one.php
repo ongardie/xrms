@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.11 2005/01/10 23:34:21 vanmer Exp $
+ * $Id: one.php,v 1.12 2005/01/11 22:25:11 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -66,6 +66,7 @@ $maxcnt = $rst->rowcount();
 if ($rst) {
     while (!$rst->EOF) {
         $sort_order = $rst->fields['sort_order'];
+        $activity_template_id=$rst->fields['activity_template_id'];
         $activity_rows .= '<tr>';
 //        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_title'] . '</td>';
         $activity_rows .= "<td class='$classname'>"
@@ -75,25 +76,27 @@ if ($rst) {
 	     . $case_status_id . "'>" 
 	     . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['duration'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>'
+        $activity_rows .= '<td class=' . $classname . '>'. $rst->fields['activity_type_pretty_name'] . '</td>';
+        $activity_rows .= '<td class='. $classname .' align=left>'
                 . '<table width=100% cellpadding=0 border=0 cellspacing=0>'
-                . '<tr><td>' . $rst->fields['activity_type_pretty_name'] . '</td>'
+                . '<tr><td>' . $sort_order . '</td>'
                 . '<td align=right>';
         if ($sort_order != $cnt) {
             $activity_rows .= '<a href="' . $http_site_root
-            . '/admin/sort.php?direction=up&sort_order='
-            . $sort_order . '&table_name=case_status&on_what_id=' . $case_status_id
+            . '/admin/sort.php?allowMultiple=1&direction=up&sort_order='
+            . $sort_order . '&table_name=case_status&resort_id='.$activity_template_id.'&on_what_id=' . $case_status_id
             . '&return_url=/admin/case-statuses/one.php?case_status_id='
-            . $case_status_id . '&activity_template=1">up</a> &nbsp; ';
+             . $case_status_id . '&activity_template=1">up</a> <br>';
         }
         if ($sort_order != $maxcnt) {
             $activity_rows .= '<a href="' . $http_site_root
-            . '/admin/sort.php?direction=down&sort_order='
-            . $sort_order . '&table_name=case_status&on_what_id=' . $case_status_id
+            . '/admin/sort.php?allowMultiple=1&direction=down&sort_order='
+            . $sort_order . '&table_name=case_status&resort_id='.$activity_template_id.'&on_what_id=' . $case_status_id
             . '&return_url=/admin/case-statuses/one.php?case_status_id='
             . $case_status_id . '&activity_template=1">down</a>';
         }
-        $activity_rows .= '</td></tr></table></td></tr>';
+        $activity_rows .= '</td></tr></table>';
+        $activity_rows .= '</td></tr>';
         $rst->movenext();
     }
     $rst->close();
@@ -167,16 +170,17 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=3><?php echo _("Link Activity To Case Status"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Link Activity To Case Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Duration"); ?><br> <?php echo _("(defaults to days)"); ?></td>
                 <td class=widget_label>Type</td>
+                <td class=widget_label>Sort Order</td>
             <tr>
                 <td class=widget_content_form_element><input type=text size=40 name="title"></td>
                 <td class=widget_content_form_element><input type=text name="duration"></td>
-                <td class=widget_content_form_element>
+                <td class=widget_content_form_element colspan=2>
                     <?php
                         echo $activity_type_menu;
                     ?>
@@ -188,7 +192,7 @@ start_page($page_title);
                     echo $activity_rows;
                 } else {
                     echo "<tr>\n";
-                    echo "\t\t".'<td class=widget_content_form_element colspan=3>'._("No linked activities")."</td>\n";
+                    echo "\t\t".'<td class=widget_content_form_element colspan=4>'._("No linked activities")."</td>\n";
                     echo "\t</tr>\n";
                 }
             ?>
@@ -228,8 +232,8 @@ end_page();
 
 /**
  * $Log: one.php,v $
- * Revision 1.11  2005/01/10 23:34:21  vanmer
- * - added widget for status indicator
+ * Revision 1.12  2005/01/11 22:25:11  vanmer
+ * - altered to allow activities to exist at the same sort_order in case-statuses
  *
  * Revision 1.10  2005/01/10 21:39:45  vanmer
  * - added case_type, needed for distinguishing between statuses
