@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.33 2004/06/21 15:43:01 braverock Exp $
+ * $Id: utils-misc.php,v 1.34 2004/06/24 23:08:39 braverock Exp $
  */
 
 /**
@@ -47,8 +47,19 @@ function session_check($target='') {
     }
 
     if ((!$_SESSION['session_user_id'] > 0) || (strcmp($_SESSION['xrms_system_id'], $xrms_system_id) != 0)) {
-        header("Location: $http_site_root" . "/login.php?target=$target");
-        exit;
+        //this hack prevents the login script from recursively calling itself
+        $spath = $_SERVER['PHP_SELF'];
+        $i = strlen($spath);
+        for ($j = $i-1;$j>=0;$j--)
+            { if ($spath[$j] == '/') { break; } }
+
+        $justfile = substr($spath,$j+1);
+
+        if($justfile=="login.php"){//do nothing
+        } else {
+            header("Location: $http_site_root" . "/login.php?target=$target");
+            exit;
+        }
     }
 
     return $_SESSION['session_user_id'];
@@ -611,6 +622,9 @@ require_once($include_directory . 'i18n.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.34  2004/06/24 23:08:39  braverock
+ * - add patch to prevent recursive call to session_check
+ *
  * Revision 1.33  2004/06/21 15:43:01  braverock
  * - modified i18n files to better integrate with XRMS
  *
