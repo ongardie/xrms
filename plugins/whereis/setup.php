@@ -1,4 +1,4 @@
-  <?php
+<?php
   /*
   *
   * Mapquest XRMS Plugin v0.1
