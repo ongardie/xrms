@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.69 2004/12/20 21:50:51 neildogg Exp $
+ * $Id: one.php,v 1.70 2004/12/27 15:57:21 braverock Exp $
  */
 
 //include required files
@@ -300,9 +300,16 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
-                <td class=widget_content><?php echo $contact_menu; if($on_what_table == "opportunities") { ?>
-                    &nbsp; Switch Opportunity <input type=checkbox name=switch_opportunity value=on>
-                    <?php } ?></td>
+                <td class=widget_content>
+                    <?php
+                        echo $contact_menu;
+                        if($on_what_table == "opportunities") {
+                            echo '&nbsp; '
+                                . _("Switch Opportunity")
+                                .'<input type="checkbox" name="switch_opportunity" value="off">';
+                        }
+                    ?>
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Attached") . "&nbsp;" . _("To"); ?></td>
@@ -406,9 +413,9 @@ function logTime() {
                     <input class=button type=submit name="followup" value="<?php echo _("Schedule Followup"); ?>">
 
 <?php
-        confGoTo ( _('Delete Activity?'),
-               _('Delete'),
-               'delete.php?activity_id='.$activity_id.'&return_url='.urlencode($return_url));
+        confGoTo ( _("Delete Activity?"),
+                   _("Delete"),
+                   'delete.php?activity_id='.$activity_id.'&return_url='.urlencode($return_url));
 ?>
                 </td>
             </tr>
@@ -462,6 +469,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.70  2004/12/27 15:57:21  braverock
+ * - localize "Switch Opportunity"
+ *
  * Revision 1.69  2004/12/20 21:50:51  neildogg
  * - Updated to reflect new parameter passing
  *
