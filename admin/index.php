@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.22 2004/07/16 18:52:43 cpsource Exp $
+ * $Id: index.php,v 1.23 2004/07/27 13:13:30 braverock Exp $
  */
 
 //include required stuff
@@ -97,6 +97,16 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content>
                     <a href="export/export-companies.php"><?php echo _("Export Companies/Contacts"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="export/export-companies-ldap.php"><?php echo _("Export Companies/Contacts as LDAP/LDIF"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="export/export-company-address.php"><?php echo _("Export Companies with address and phone info"); ?></a>
                 </td>
             </tr>
         </table>
@@ -201,7 +211,7 @@ start_page($page_title, true, $msg);
                     <a href="country-address-format/index.php"><?php echo _("Country Localization Formats"); ?></a>
                 </td>
             </tr>
-	        <tr>
+                <tr>
                 <td class=widget_content>
                     <a href="activity-templates/some.php"><?php echo _("Activity Templates"); ?></a>
                 </td>
@@ -225,6 +235,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.23  2004/07/27 13:13:30  braverock
+ * - add export-company-address and export-companies-ldap to the list
+ *
  * Revision 1.22  2004/07/16 18:52:43  cpsource
  * - Add role check inside of session_check
  *
