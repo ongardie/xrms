@@ -2,7 +2,7 @@
 /**
  * Manage crm statuses
  *
- * $Id: one.php,v 1.6 2004/07/16 23:51:36 cpsource Exp $
+ * $Id: one.php,v 1.7 2004/07/25 15:08:45 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -35,7 +35,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One CRM Status : ").$crm_status_pretty_name;
+$page_title = _("CRM Status Details").' '.$crm_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -71,7 +71,7 @@ start_page($page_title);
 		</table>
 		</form>
 
-		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete CRM Status?"); ?>');">
+		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete CRM Status").'?'; ?>');">
 		<input type=hidden name="crm_status_id" value="<?php  echo $crm_status_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
@@ -103,6 +103,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/25 15:08:45  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext call
+ *
  * Revision 1.6  2004/07/16 23:51:36  cpsource
  * - require session_check ( 'Admin' )
  *
