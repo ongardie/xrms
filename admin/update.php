@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.51 2005/01/23 18:48:57 maulani Exp $
+ * $Id: update.php,v 1.52 2005/01/24 00:17:18 maulani Exp $
  */
 
 // where do we include from
@@ -268,7 +268,24 @@ $sql .= 'param_id       varchar(40) not null unique,';
 $sql .= 'string_val     varchar(100),';
 $sql .= 'int_val        int,';
 $sql .= 'float_val      float,';
-$sql .= 'datetime_val   datetime';
+$sql .= 'datetime_val   datetime,';
+$sql .= 'description    varchar(255)';
+$sql .= ')';
+$rst = $con->execute($sql);
+
+//add description to system_parameters table
+//should put a test here, but alter table is non-destructive
+$sql = "alter table system_parameters add description varchar(255) after datetime_val";
+$rst = $con->execute($sql);
+
+// Add the system_parameters_options table
+$sql = 'create table system_parameters_options (';
+$sql .= 'param_id       varchar(40) not null unique,';
+$sql .= 'string_val     varchar(100),';
+$sql .= 'int_val        int,';
+$sql .= 'float_val      float,';
+$sql .= 'datetime_val   datetime,';
+$sql .= 'sort_order     int';
 $sql .= ')';
 $rst = $con->execute($sql);
 
@@ -347,7 +364,8 @@ if ($recCount == 0) {
 
     $rec = array();
     $rec['param_id'] = 'RSS Feeds Enabled';
-    $rec['int_val'] = 'No';
+    $rec['string_val'] = 'n';
+    $rec['description'] = 'Provide RSS Feeds.  y or n.';
 
     $tbl = 'system_parameters';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -355,12 +373,141 @@ if ($recCount == 0) {
 
     $rec = array();
     $rec['param_id'] = 'Maximum RSS Feed Entries';
-    $rec['int_val'] = 50;
+    $rec['int_val'] = 15;
+    $rec['description'] = 'Maximum number of entries to include in any RSS feed.';
 
     $tbl = 'system_parameters';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
 }
+
+// Make sure that there is options for the Audit Level in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='Audit Level'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Audit Level system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Audit Level';
+    $rec['int_val'] = 0;
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['int_val'] = 1;
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['int_val'] = 2;
+    $rec['sort_order'] = 3;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['int_val'] = 3;
+    $rec['sort_order'] = 4;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['int_val'] = 4;
+    $rec['sort_order'] = 5;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the Activities Default Behavior in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='Activities Default Behavior'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Activities Default Behavior system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Activities Default Behavior';
+    $rec['string_val'] = 'Fast';
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['string_val'] = 'Long';
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the LDAP Version in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='LDAP Version'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added LDAP Version system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'LDAP Version';
+    $rec['int_val'] = 2;
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['int_val'] = 3;
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the RSS Feeds Enabled in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='RSS Feeds Enabled'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added RSS Feeds Enabled system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'RSS Feeds Enabled';
+    $rec['string_val'] = 'n';
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['string_val'] = 'y';
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+$sql = "SELECT * FROM system_parameters WHERE param_id='Default GST Offset'";
+$rst = $con->execute($sql);
+$rec = array();
+$rec['description'] = 'Default timezone offset';
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+
+$sql = "SELECT * FROM system_parameters WHERE param_id='Audit Level'";
+$rst = $con->execute($sql);
+$rec = array();
+$rec['description'] = 'What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches';
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+
+$sql = "SELECT * FROM system_parameters WHERE param_id='Activities Default Behavior'";
+$rst = $con->execute($sql);
+$rec = array();
+$rec['description'] = 'How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.';
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+
+$sql = "SELECT * FROM system_parameters WHERE param_id='LDAP Version'";
+$rst = $con->execute($sql);
+$rec = array();
+$rec['description'] = 'Version of the LDAP server.  Will usually be 2 or 3.';
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+
 
 //add statuses to activities
 $sql = "alter table activities add on_what_status int not null default 0 after on_what_id";
@@ -3913,6 +4060,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.52  2005/01/24 00:17:18  maulani
+ * - Add description to system parameters
+ *
  * Revision 1.51  2005/01/23 18:48:57  maulani
  * - Add system parameters required for RSS feeds
  *

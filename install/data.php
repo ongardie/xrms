@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.15 2005/01/23 18:49:03 maulani Exp $
+ * $Id: data.php,v 1.16 2005/01/24 00:17:19 maulani Exp $
  */
 
 /**
@@ -20,17 +20,43 @@
 function misc_db_data($con) {
     // system_parameters
     if (confirm_no_records($con, 'system_parameters')) {
-        $sql ="insert into system_parameters (param_id, int_val) values ('Default GST Offset', -5)";
+        $sql ="insert into system_parameters (param_id, int_val, description) values ('Default GST Offset', -5, 'Default timezone offset')";
         $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, int_val) values ('Audit Level', 4)";
+        $sql ="insert into system_parameters (param_id, int_val, description) values ('Audit Level', 4, 'What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches')";
         $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, string_val) values ('Activities Default Behavior', 'Fast')";
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('Activities Default Behavior', 'Fast', 'How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.')";
         $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, int_val) values ('LDAP Version', 2)";
+        $sql ="insert into system_parameters (param_id, int_val, description) values ('LDAP Version', 2, 'Version of the LDAP server.  Will usually be 2 or 3.')";
         $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, int_val) values ('RSS Feeds Enabled', 'No')";
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('RSS Feeds Enabled', 'n', 'Provide RSS Feeds.  y or n.')";
         $rst = $con->execute($sql);
-        $sql ="insert into system_parameters (param_id, int_val) values ('Maximum RSS Feed Entries', 50)";
+        $sql ="insert into system_parameters (param_id, int_val, description) values ('Maximum RSS Feed Entries', 15, 'Maximum number of entries to include in any RSS feed.')";
+        $rst = $con->execute($sql);
+    }
+
+    // system_parameters_options
+    if (confirm_no_records($con, 'system_parameters_options')) {
+        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 0, 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 1, 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 2, 3)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 3, 4)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('Audit Level', 4, 5)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Activities Default Behavior', 'Fast', 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Activities Default Behavior', 'Long', 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('LDAP Version', 2, 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, int_val, sort_order) values ('LDAP Version', 3, 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('RSS Feeds Enabled', 'n', 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('RSS Feeds Enabled', 'y', 2)";
         $rst = $con->execute($sql);
     }
 
@@ -2407,6 +2433,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.16  2005/01/24 00:17:19  maulani
+ * - Add description to system parameters
+ *
  * Revision 1.15  2005/01/23 18:49:03  maulani
  * - Add system parameters required for RSS feeds
  *

@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.27 2005/01/09 18:27:59 braverock Exp $
+ * $Id: database.php,v 1.28 2005/01/24 00:17:19 maulani Exp $
  */
 
 /**
@@ -25,7 +25,25 @@ function misc_db_tables($con, $table_list) {
                string_val                              varchar(100),
                int_val                                 int,
                float_val                               float,
-               datetime_val                            datetime
+               datetime_val                            datetime,
+               description                             varchar(255)
+               )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+    
+    // system_parameters_options
+    if (!in_array('system_parameters_options',$table_list)) {
+        $sql ="create table system_parameters_options (
+               param_id                                varchar(40) not null,
+               string_val                              varchar(100),
+               int_val                                 int,
+               float_val                               float,
+               datetime_val                            datetime,
+               sort_order                              int
                )";
         //execute
         $rst = $con->execute($sql);
@@ -1050,6 +1068,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.28  2005/01/24 00:17:19  maulani
+ * - Add description to system parameters
+ *
  * Revision 1.27  2005/01/09 18:27:59  braverock
  * - add test on time_zones and time_daylight_savings table creation
  *   resolves SF bug 1023849
