@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.4 2004/04/22 19:29:22 gpowers Exp $
+ * $Id: open-items.php,v 1.5 2004/04/22 22:30:56 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -33,7 +33,7 @@ if ($friendly != "y") {
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-/// $con->debug = 1;
+// $con->debug = 1;
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
@@ -122,11 +122,9 @@ if ($user_id) {
 
     } // End Activity Type
     if (($type == "campaigns") || ($type == "all")) {
-        $sql = "SELECT * from campaigns, campaign_statuses where
-                status_open_indicator = 'o'
-                and campaign_record_status = 'a'
-                and user_id = $user_id
-                order by entered_at ";
+         $sql = "SELECT * from campaigns where campaign_status_id IN ('1','2','3')
+                 and campaign_record_status = 'a'
+                 and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
         if ($rst) {
             $output .= "<p><font size=+2><b>OPEN CAMPAIGNS for $username<b></font><br></p>\n";
@@ -159,6 +157,7 @@ if ($user_id) {
         $sql = "SELECT * from opportunities, opportunity_statuses where
                 status_open_indicator = 'o'
                 and opportunity_record_status = 'a'
+                and opportunity_statuses.opportunity_status_id = opportunities.opportunity_status_id 
                 and user_id = $user_id
                 order by entered_at ";
 
@@ -201,6 +200,7 @@ if ($user_id) {
         $sql = "SELECT * from cases, case_statuses where
                 status_open_indicator = 'o'
                 and case_record_status = 'a'
+                and case_statuses.case_status_id = cases.case_status_id
                 and user_id = $user_id
                 order by entered_at ";
 
@@ -256,8 +256,8 @@ end_page();
 
 /**
  * $Log: open-items.php,v $
- * Revision 1.4  2004/04/22 19:29:22  gpowers
- * added audit items report
+ * Revision 1.5  2004/04/22 22:30:56  gpowers
+ * fixed duplicate lines in report
  *
  * Revision 1.3  2004/04/20 19:37:28  braverock
  * - cleaned up sql formatting to handle more cases and be less error prone

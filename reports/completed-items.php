@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.2 2004/04/20 19:37:27 braverock Exp $
+ * $Id: completed-items.php,v 1.3 2004/04/22 22:34:17 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -136,7 +136,13 @@ if ($user_id) {
 
     } // End Activity Type
     if (($type == "campaigns") || ($type == "all")) {
-        $sql = "SELECT * from campaigns where campaign_status_id IN ('4') and campaign_record_status = 'a' and user_id = $user_id and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc()) . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . " order by entered_at ";
+        $sql = "SELECT * from campaigns
+                where campaign_status_id IN ('4')
+                and campaign_record_status = 'a'
+                and user_id = $user_id and entered_at between "
+                . $con->qstr($starting, get_magic_quotes_gpc()) . "
+                and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
+                order by entered_at ";
         $rst = $con->execute($sql);
         if ($rst) {
             $output .= "<p><font size=+2><b>COMPLETED CAMPAIGNS for $username<b></font><br></p>\n";
@@ -169,6 +175,7 @@ if ($user_id) {
         $sql = "SELECT * from opportunities, opportunity_statuses where
                 status_open_indicator = 'c'
                 and opportunity_record_status = 'a'
+                and opportunity_statuses.opportunity_status_id = opportunities.opportunity_status_id
                 and user_id = $user_id
                 and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc())
               . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
@@ -212,6 +219,7 @@ if ($user_id) {
         $sql = "SELECT * from cases, case_statuses where
                 status_open_indicator = 'c'
                 and case_record_status = 'a'
+                and case_statuses.case_status_id = cases.case_status_id
                 and user_id = $user_id
                 and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc())
               . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
@@ -269,6 +277,9 @@ end_page();
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.3  2004/04/22 22:34:17  gpowers
+ * fixed duplicate lines in report
+ *
  * Revision 1.2  2004/04/20 19:37:27  braverock
  * - cleaned up sql formatting to handle more cases and be less error prone
  *   - partially fixes SF bugs 938616 & 938620
