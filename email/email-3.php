@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.6 2004/07/03 15:03:52 metamedia Exp $
+ * $Id: email-3.php,v 1.7 2004/07/04 07:51:33 metamedia Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,9 +17,15 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
+$sender_name = $_POST['sender_name'];
+$sender_address = $_POST['sender_address'];
+$bcc_address = $_POST['bcc_address'];
 $email_template_title = $_POST['email_template_title'];
 $email_template_body = $_POST['email_template_body'];
 
+$_SESSION['sender_name'] = serialize($sender_name);
+$_SESSION['sender_address'] = serialize($sender_address);
+$_SESSION['bcc_address'] = serialize($bcc_address);
 $_SESSION['email_template_title'] = serialize($email_template_title);
 $_SESSION['email_template_body'] = serialize($email_template_body);
 
@@ -102,6 +108,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.7  2004/07/04 07:51:33  metamedia
+ * Minor changes and bug fixes to ensure that a mail merge from companies/one.php works.
+ *
  * Revision 1.6  2004/07/03 15:03:52  metamedia
  * Minor bug fixes so that a mail merge from company/one.php (and hopefully other pages) will work.
  *

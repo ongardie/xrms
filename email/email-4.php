@@ -1,10 +1,10 @@
 <?php
 /**
- *
- * Show email messages not sent.
- *
- * $Id: email-4.php,v 1.5 2004/06/14 16:54:37 introspectshun Exp $
- */
+*
+* Show email messages not sent.
+*
+* $Id: email-4.php,v 1.6 2004/07/04 07:51:33 metamedia Exp $
+*/
 
 require_once('../include-locations.inc');
 
@@ -18,52 +18,75 @@ $session_user_id = session_check();
 $msg = $_GET['msg'];
 
 $array_of_contacts = $_POST['array_of_contacts'];
+
+$sender_name = unserialize($_SESSION['sender_name']);
+$sender_address = unserialize($_SESSION['sender_address']);
+$bcc_address = unserialize($_SESSION['bcc_address']);
+$email_template_title = unserialize($_SESSION['email_template_title']);
 $email_template_body = unserialize($_SESSION['email_template_body']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-// loop through the contacts and send each one a copy of the message
+// loop through the contacts and send each one a copy of the message with a personalised "Dear contact" 
 
-$sql = "select email from contacts where contact_id in (" . implode(',', $array_of_contacts) . ")";
+$sql = "select * from contacts where contact_id in (" . implode(',', $array_of_contacts) . ")";
 $rst = $con->execute($sql);
 
 if ($rst) {
-    while (!$rst->EOF) {
-        $message .= "<li>" . $rst->fields['email'] . " - " . $email_template_body;
-        $rst->movenext();
-    }
-    $rst->close();
+	$msg_body = stripslashes($email_template_body);
+	$title = stripslashes($email_template_title);
+	$headers  = "MIME-Version: 1.0\r\n";
+	$headers .= "Content-type: text/plain; charset=iso-8859-1\r\n";
+	$headers .= "From: $sender_name <$sender_address>\r\n";
+	$headers .= "Bcc: $bcc_address\r\n";
+	while (!$rst->EOF) {
+		$contactName = $rst->fields['first_names'];
+		$output = "Dear $contactName \r\n\r\n $msg_body";
+		if (!mail($rst->fields['email'], $title, $output, $headers)) {
+			echo "There was an error sending email";
+			exit();
+		}
+		$feedback .= "<li>" . $rst->fields['email'] ."</li>";
+		$rst->movenext();
+	}
+	$feedback .= "<br><br>".nl2br(htmlspecialchars($headers))."<br><br>Dear XXXXXX<br>";
+	$feedback .= nl2br(htmlspecialchars($msg_body));
+	$rst->close();
 }
 
 $con->close();
 
-$page_title = 'Messages Not Sent';
+$page_title = 'Messages Sent';
 start_page($page_title, true, $msg);
 
 ?>
 
 <div id="Main">
-    <div id="Content">
+<div id="Content">
 
 		<table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header>Messages Not Sent</td>
-            </tr>
-            <tr>
-                <td class=widget_content>These messages have not been sent, because bulk e-mail has not been enabled on this system.</td>
-            </tr>
+	<tr>
+		<td class=widget_header>Messages Sent</td>
+	</tr>
+	<tr>
+		<td class=widget_content>The bulk e-mail sub-system has sent:<br>
+		<?php echo $feedback;?>
+		</td>
+	</tr>
+
+
 		</table>
 
-    </div>
+</div>
 
-        <!-- right column //-->
-    <div id="Sidebar">
+	<!-- right column //-->
+<div id="Sidebar">
 
 		&nbsp;
 
-    </div>
+</div>
 
 </div>
 
@@ -72,15 +95,18 @@ start_page($page_title, true, $msg);
 end_page();
 
 /**
- * $Log: email-4.php,v $
- * Revision 1.5  2004/06/14 16:54:37  introspectshun
- * - Add adodb-params.php include for multi-db compatibility.
- * - Corrected order of arguments to implode() function.
- * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
- *
- * Revision 1.4  2004/04/17 16:00:36  maulani
- * - Add CSS2 positioning
- *
- *
- */
+* $Log: email-4.php,v $
+* Revision 1.6  2004/07/04 07:51:33  metamedia
+* Minor changes and bug fixes to ensure that a mail merge from companies/one.php works.
+*
+* Revision 1.5  2004/06/14 16:54:37  introspectshun
+* - Add adodb-params.php include for multi-db compatibility.
+* - Corrected order of arguments to implode() function.
+* - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+*
+* Revision 1.4  2004/04/17 16:00:36  maulani
+* - Add CSS2 positioning
+*
+*
+*/
 ?>

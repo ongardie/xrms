@@ -58,13 +58,27 @@ function saveAsNewTemplate() {
 <div id="Main">
     <div id="Content">
 
-        <form action=email-3.php method=post>
+        <form action=email-3.php onsubmit="javascript: return validate();" method=post>
 		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=2>Edit Message - <?php  echo $email_template_title ?></td>
 			</tr>
 			<tr>
-                <td class=widget_label_right width="1%">Subject:</td>
+                		<td class=widget_label_right width="1%" nowrap>From:</td>
+				<td class=widget_content_form_element><input type=text name="sender_name" size=50 value=""><?php echo $required_indicator; ?></td>
+			</tr>
+			<tr>
+                		<td class=widget_label_right width="1%" nowrap>Reply to:</td>
+				<td class=widget_content_form_element><input type=text name="sender_address" size=50 value=""><?php echo $required_indicator; ?></td>
+			</tr>
+			<tr>
+                		<td class=widget_label_right width="1%" nowrap>Bcc:</td>
+				<td class=widget_content_form_element><input type=text name="bcc_address" size=50 value=""></td>
+			</tr>
+			<tr>
+                		
+			<tr>
+                <td class=widget_label_right width="1%" nowrap>Subject:</td>
 				<td class=widget_content_form_element><input type=text name=email_template_title size=50 value="<?php  echo $email_template_title ?>"></td>
 			</tr>
 			<tr>
@@ -97,5 +111,40 @@ function saveAsNewTemplate() {
 <input type=hidden name=email_template_title>
 <input type=hidden name=email_template_body>
 </form>
+
+<script language=javascript type="text/javascript" >
+
+function initialize() {
+    document.forms[0].email_from.select();
+    // document.forms[0].company_name.focus();
+}
+
+function validate() {
+
+    var numberOfErrors = 0;
+    var msgToDisplay = '';
+
+    if (document.forms[0].email_from.value == '') {
+        numberOfErrors ++;
+        msgToDisplay += '\nYou must enter a name to let the recipient know who the email is from.';
+    }
+
+    if (document.forms[0].email_reply_to.value == '') {
+        numberOfErrors ++;
+        msgToDisplay += '\nYou must enter an reply address so the recipient can reply to the message.';
+    }
+    
+    if (numberOfErrors > 0) {
+        alert(msgToDisplay);
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
+initialize();
+
+</script>
 
 <?php end_page(); ?>
