@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * companies/new-2.php - Insert the new company, contact, and address into the database.
+ *
+ * This page actually does the inserts.
+ *
+ * @todo add more error handling and feedback here
+ *
+ * $Id: new-2.php,v 1.8 2004/02/11 15:26:58 braverock Exp $
+ */
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -55,27 +63,80 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "insert into companies (crm_status_id, company_source_id, industry_id, user_id, account_status_id, rating_id, company_name, legal_name, company_code, phone, phone2, fax, url, employees, revenue, custom1, custom2, custom3, custom4, profile, entered_at, entered_by, last_modified_at, last_modified_by)
-        values ($crm_status_id, $company_source_id, $industry_id, $user_id, $account_status_id, $rating_id, " . $con->qstr($company_name, get_magic_quotes_gpc()) . ", " . $con->qstr($legal_name, get_magic_quotes_gpc()) . ", " . $con->qstr($company_code, get_magic_quotes_gpc()) . ", " . $con->qstr($phone, get_magic_quotes_gpc()) . ", " . $con->qstr($phone2, get_magic_quotes_gpc()) . ", " . $con->qstr($fax, get_magic_quotes_gpc()) . ", " . $con->qstr($url, get_magic_quotes_gpc()) . ", " . $con->qstr($employees, get_magic_quotes_gpc()) . ", " . $con->qstr($revenue, get_magic_quotes_gpc()) . ", " . $con->qstr($custom1, get_magic_quotes_gpc()) . ", " . $con->qstr($custom2, get_magic_quotes_gpc()) . ", " . $con->qstr($custom3, get_magic_quotes_gpc()) . ", " .$con->qstr($custom4, get_magic_quotes_gpc()) . ", " . $con->qstr($profile, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
+$sql = 'insert into companies set
+                    crm_status_id = '. $con->qstr($crm_status_id, get_magic_quotes_gpc()). ',
+                    company_source_id = '. $con->qstr($company_source_id, get_magic_quotes_gpc()). ',
+                    industry_id = '. $con->qstr($industry_id, get_magic_quotes_gpc()) ",
+                    user_id = $user_id,
+                    account_status_id = ". $con->qstr($account_status_id, get_magic_quotes_gpc()). ',
+                    rating_id = '. $con->qstr($rating_id, get_magic_quotes_gpc()). ',
+                    company_name = '. $con->qstr($company_name, get_magic_quotes_gpc()). ',
+                    legal_name = ' . $con->qstr($legal_name, get_magic_quotes_gpc()) . ',
+                    company_code = '. $con->qstr($company_code, get_magic_quotes_gpc()) . ',
+                    phone = '. $con->qstr($phone, get_magic_quotes_gpc()) . ',
+                    phone2 = '. $con->qstr($phone2, get_magic_quotes_gpc()) .',
+                    fax = '. $con->qstr($fax, get_magic_quotes_gpc()) .',
+                    url = '. $con->qstr($url, get_magic_quotes_gpc()) .',
+                    employees = '. $con->qstr($employees, get_magic_quotes_gpc()) .',
+                    revenue = '. $con->qstr($revenue, get_magic_quotes_gpc()) .',
+                    custom1 = '. $con->qstr($custom1, get_magic_quotes_gpc()) .',
+                    custom2 = '. $con->qstr($custom2, get_magic_quotes_gpc()) .',
+                    custom3 = '. $con->qstr($custom3, get_magic_quotes_gpc()) .',
+                    custom4 = '. $con->qstr($custom4, get_magic_quotes_gpc()) .',
+                    profile = '. $con->qstr($profile, get_magic_quotes_gpc()) .',
+                    entered_at = '. $con->dbtimestamp(mktime()) .",
+                    entered_by = $session_user_id,
+                    last_modified_by = $session_user_id,
+                    last_modified_at = " . $con->dbtimestamp(mktime());
+
 $con->execute($sql);
 $company_id = $con->insert_id();
 
 // if no code was provided, set a default company code
 if (strlen($company_code) == 0) {
     $company_code = 'C' . $company_id;
-    $con->execute("update companies set company_code = " . $con->qstr($company_code, get_magic_quotes_gpc()) . " where company_id = $company_id");
+    $con->execute("update companies set
+                          company_code = " . $con->qstr($company_code, get_magic_quotes_gpc()) . "
+                          where company_id = $company_id");
 }
 
 // insert an address
-$sql = "insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body, use_pretty_address) values ($company_id, $country_id, " . $con->qstr($address_name, get_magic_quotes_gpc()) . ", " . $con->qstr($line1, get_magic_quotes_gpc()) . ", " . $con->qstr($line2, get_magic_quotes_gpc()) . ", " . $con->qstr($city, get_magic_quotes_gpc()) . ", " . $con->qstr($province, get_magic_quotes_gpc()) . ", " . $con->qstr($postal_code, get_magic_quotes_gpc()) . ", " . $con->qstr($address_body, get_magic_quotes_gpc()) . ", $use_pretty_address)";
+$sql = "insert into addresses set
+               company_id = $company_id,
+               country_id = $country_id,
+               address_name = " . $con->qstr($address_name, get_magic_quotes_gpc()) . ',
+               line1 = '. $con->qstr($line1, get_magic_quotes_gpc()) . ',
+               line2 = '. $con->qstr($line2, get_magic_quotes_gpc()) . ',
+               city = '. $con->qstr($city, get_magic_quotes_gpc()) . ',
+               province = '. $con->qstr($province, get_magic_quotes_gpc()) .',
+               postal_code = '. $con->qstr($postal_code, get_magic_quotes_gpc()) . ',
+               address_body = '. $con->qstr($address_body, get_magic_quotes_gpc()) .",
+               use_pretty_address  = $use_pretty_address";
+
 $con->execute($sql);
 
 // make that address the default, and set the customer and vendor references
 $address_id = $con->insert_id();
-$con->execute("update companies set default_primary_address = $address_id, default_billing_address = $address_id, default_shipping_address = $address_id, default_payment_address = $address_id where company_id = $company_id");
+$con->execute("update companies set default_primary_address = $address_id,
+                                    default_billing_address = $address_id,
+                                    default_shipping_address = $address_id,
+                                    default_payment_address = $address_id
+                                    where company_id = $company_id");
 
 // insert a contact
-$sql_insert_contact = "insert into contacts (company_id, address_id, first_names, last_name, email, work_phone, fax, entered_at, entered_by, last_modified_at, last_modified_by) values ($company_id, $address_id, " . $con->qstr($first_names, get_magic_quotes_gpc()) . ", " . $con->qstr($last_name, get_magic_quotes_gpc()) . ", " . $con->qstr($email, get_magic_quotes_gpc()) . ", " . $con->qstr($phone, get_magic_quotes_gpc()) . ", " . $con->qstr($fax, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
+$sql_insert_contact = "insert into contacts set
+                              company_id = $company_id,
+                              address_id = $address_id,
+                              first_names = ". $con->qstr($first_names, get_magic_quotes_gpc()) .',
+                              last_name = '. $con->qstr($last_name, get_magic_quotes_gpc()) .',
+                              email = '. $con->qstr($email, get_magic_quotes_gpc()) .',
+                              work_phone = '. $con->qstr($phone, get_magic_quotes_gpc()) .',
+                              fax = '. $con->qstr($fax, get_magic_quotes_gpc()) .',
+                              entered_at = '. $con->dbtimestamp(mktime()) .",
+                              entered_by = $session_user_id,
+                              last_modified_by = $session_user_id,
+                              last_modified_by = " . $con->dbtimestamp(mktime());
+
 $con->execute($sql_insert_contact);
 
 if (strlen($accounting_system) > 0) {
@@ -88,4 +149,12 @@ $con->close();
 // redirect
 header("Location: one.php?msg=company_added&company_id=$company_id");
 
+/**
+ * $Log: new-2.php,v $
+ * Revision 1.8  2004/02/11 15:26:58  braverock
+ * - added qstr around some optional fields
+ * - changed sql queries to name=value notation for easier debugging
+ * - add phpdoc
+ *
+ */
 ?>
