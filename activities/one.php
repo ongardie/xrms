@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.33 2004/07/09 19:41:02 neildogg Exp $
+ * $Id: one.php,v 1.34 2004/07/11 15:12:40 braverock Exp $
  */
 
 //include required files
@@ -304,7 +304,7 @@ function logTime() {
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Description</td>
+                <td class=widget_label_right_166px>Activity Notes</td>
                 <td class=widget_content_form_element><textarea rows=10 cols=90 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <?php
@@ -398,6 +398,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.34  2004/07/11 15:12:40  braverock
+ * - Change 'Description' to 'Activity Notes' for consistency
+ *
  * Revision 1.33  2004/07/09 19:41:02  neildogg
  * - Now matches normal description textarea width\n- Break before Insert button
  *
