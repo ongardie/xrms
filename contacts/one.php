@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.48 2004/10/26 16:37:55 introspectshun Exp $
+ * $Id: one.php,v 1.49 2004/11/09 00:07:47 gpowers Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -63,6 +63,7 @@ if ($rst) {
     $title = $rst->fields['title'];
     $description = $rst->fields['description'];
     $profile = $rst->fields['profile'];
+    $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
     $email = $rst->fields['email'];
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
     $cell_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']);
@@ -562,6 +563,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.49  2004/11/09 00:07:47  gpowers
+ * - Corrected display of newlines in profile
+ *
  * Revision 1.48  2004/10/26 16:37:55  introspectshun
  * - Centralized category handling as sidebar
  *

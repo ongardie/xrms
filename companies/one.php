@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.68 2004/10/22 21:06:15 introspectshun Exp $
+ * $Id: one.php,v 1.69 2004/11/09 00:06:53 gpowers Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -75,7 +75,7 @@ if ($rst) {
     $rating = $rst->fields['rating_display_html'];
     $terms = $rst->fields['terms'];
     $profile = $rst->fields['profile'];
-    $profile = str_replace ("\n","<br>\n",$profile);
+    $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
     $entered_by = $rst->fields['entered_by'];
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_by = $rst->fields['last_modified_by'];
@@ -579,7 +579,7 @@ function openNewsWindow() {
                         </tr>
                     </table>
 
-                    <p><?php echo htmlspecialchars($profile); ?>
+                    <p><?php echo $profile; ?>
 
                 </td>
             </tr>
@@ -718,6 +718,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.69  2004/11/09 00:06:53  gpowers
+ * - Corrected display of newlines in profile
+ *
  * Revision 1.68  2004/10/22 21:06:15  introspectshun
  * - Centralized category handling as sidebar
  *
