@@ -6,7 +6,7 @@
 *	creating bar charts.
 *
 *	@author daturaarutad
-*	$Id: BarGraph.php,v 1.6 2005/04/01 23:00:12 daturaarutad Exp $
+*	$Id: BarGraph.php,v 1.7 2005/04/02 00:10:13 daturaarutad Exp $
 */
 
 global $jpgraph_include_directory;
@@ -227,11 +227,9 @@ function InitPlots() {
 			if('single_bar' == $this->graph_info['graph_type']) {
 				require_once($jpgraph_include_directory . 'jpgraph_bar.php');
 				$plot = new BarPlot($this->graph_info['data']);
-				$plottype = 'bar';
 			} elseif('single_line' == $this->graph_info['graph_type']) {
 				require_once($jpgraph_include_directory . 'jpgraph_line.php');
 				$plot = new LinePlot($this->graph_info['data']);
-				$plottype = 'line';
 			}
 
 			if(is_array($this->graph_info['legend'])) {
@@ -255,22 +253,23 @@ function InitPlots() {
 			if(is_array($this->graph_info['data'])) {
 				$i=0;
 				foreach($this->graph_info['data'] as $plot_data) {
-					$plot = $this->PlotFactory('bar', $plot_data);
-					$plot->SetFillColor($this->graph_info['bar_colors'][$i]);
+
+					require_once($jpgraph_include_directory . 'jpgraph_bar.php');
+					$plots[$i] = new BarPlot($plot_data);
+					$plots[$i]->SetFillColor($this->graph_info['bar_colors'][$i]);
 
 					if(is_array($this->graph_info['legend'])) {
-						$plot->SetLegend($this->graph_info['legend'][$i]);
+						$plots[$i]->SetLegend($this->graph_info['legend'][$i]);
 					}
 
 					// Set up CSIM stuff
 					if($this->graph_info['csim_targets'] || $this->graph_info['csim_alts']) {
-						$plot->SetCSIMTargets($this->graph_info['csim_targets'][$i], $this->graph_info['csim_alts'][$i]);
+						$plots[$i]->SetCSIMTargets($this->graph_info['csim_targets'][$i], $this->graph_info['csim_alts'][$i]);
 
 						if(is_array($this->graph_info['legend'])) {
 						}
 					} else {
 					}
-					$plots[] = $plot;
 					$i++;
 				}
 				if('grouped_bar' == $this->graph_info['graph_type']) {
@@ -287,9 +286,8 @@ function InitPlots() {
 			if(is_array($this->graph_info['data'])) {
 				$i=0;
 				foreach($this->graph_info['data'] as $plot_data) {
-
-
-					$plots[$i] = $this->PlotFactory('line', $plot_data);
+					require_once($jpgraph_include_directory . 'jpgraph_line.php');
+					$plots[$i] = new LinePlot($plot_data);
 					$plots[$i]->SetColor($this->graph_info['bar_colors'][$i]);
 
 					if(is_array($this->graph_info['legend'])) {
@@ -344,6 +342,9 @@ function DisplayCSIM($url, $filename, $map_name, $border = 0) {
 
 /**
 * $Log: BarGraph.php,v $
+* Revision 1.7  2005/04/02 00:10:13  daturaarutad
+* really removed PlotFactory this time and other simplifications
+*
 * Revision 1.6  2005/04/01 23:00:12  daturaarutad
 * removed PlotFactory()
 *
