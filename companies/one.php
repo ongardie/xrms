@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.76 2005/01/06 18:37:13 vanmer Exp $
+ * $Id: one.php,v 1.77 2005/01/06 20:41:45 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -194,13 +194,18 @@ SELECT a.activity_id, a.activity_title, a.scheduled_at, a.on_what_table, a.on_wh
   (CASE WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1 ELSE 0 END) AS is_overdue
 FROM activity_types at, users u, activities a
 LEFT JOIN contacts cont ON cont.contact_id = a.contact_id
+LEFT JOIN opportunities o ON o.opportunity_id=a.on_what_id
+LEFT JOIN cases cas ON cas.case_id=a.on_what_id
 WHERE a.company_id = $company_id
   AND a.user_id = u.user_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'
 ";
 if ($division_id) {
-    $sql_activities.=" AND a.on_what_table='company_division' AND a.on_what_id=$division_id";
+    $sql_activities.=" AND (a.on_what_table='company_division' AND a.on_what_id=$division_id";
+    $sql_activities.=" OR a.on_what_table='opportunities' AND o.division_id=$division_id";
+    $sql_activities.=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
+    
 }
 $sql_activities.="
     ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
@@ -331,17 +336,18 @@ if ($rst) {
 //set up our substitution variables for use in the sidebars
 $on_what_table = 'companies';
 $on_what_id = $company_id;
-$on_what_string = 'company';
 
 //include the categories sidebar
 require_once($include_directory . 'categories-sidebar.php');
 
 //include the Cases sidebar
-$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
+$case_limit_sql = "and cases.".make_singular($on_what_table)."_id = $on_what_id";
+if ($division_id) { $case_limit_sql .=" AND cases.division_id=$division_id"; }
 require_once("../cases/sidebar.php");
 
 //include the opportunities sidebar
-$opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
+$opportunity_limit_sql = "and opportunities.".make_singular($on_what_table)."_id = $on_what_id";
+if ($division_id) { $opportunity_limit_sql .=" AND opportunities.division_id=$division_id"; }
 require_once("../opportunities/sidebar.php");
 
 //include the contacts-companies sidebar
@@ -709,7 +715,6 @@ function openNewsWindow() {
         <?php if ($division_id) { $on_what_table='company_division'; $on_what_id=$division_id; } ?>
         <input type=hidden name=on_what_table        value="<?php echo $on_what_table; ?>">
         <input type=hidden name=on_what_id           value="<?php echo $on_what_id; ?>">
-        <input type=hidden name=on_what_string       value="<?php echo $on_what_string; ?>">
         <input type=hidden name=activity_description value="">
         <input type=hidden name=email                value="">
         <input type=hidden name=followup             value="">
@@ -796,6 +801,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.77  2005/01/06 20:41:45  vanmer
+ * - added division scoping of activities to include cases/opportunities which match the division specified
+ * - removed on_what_string hack, changed to use standard make_singular function
+ *
  * Revision 1.76  2005/01/06 18:37:13  vanmer
  * - added restriction by division to one company page
  * - added code to hide company fields which have not been set
