@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.28 2004/04/19 22:19:54 maulani Exp $
+ * $Id: one.php,v 1.29 2004/04/26 13:32:28 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -72,6 +72,7 @@ if ($rst) {
     $rating = $rst->fields['rating_display_html'];
     $terms = $rst->fields['terms'];
     $profile = $rst->fields['profile'];
+    $profile = str_replace ("\n","<br>\n",$profile);
     $entered_by = $rst->fields['entered_by'];
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_by = $rst->fields['last_modified_by'];
@@ -648,6 +649,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.29  2004/04/26 13:32:28  braverock
+ * break \n's into <br> tags in profile
+ *
  * Revision 1.28  2004/04/19 22:19:54  maulani
  * - Adjust table for CSS2 positioning
  *
