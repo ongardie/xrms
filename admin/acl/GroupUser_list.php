@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.5 2005/03/08 21:51:41 daturaarutad Exp $
+ * $Id: GroupUser_list.php,v 1.6 2005/03/21 15:56:11 ycreddy Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -64,7 +64,7 @@ $order_by .= " $sort_order";
 
 $sql="SELECT " . 
 $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_GroupUser.php?form_action=edit&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'Group', " . 
-$con->Concat('users.last_name', $con->qstr(', '), 'users.first_names') . ' AS User, ' .  
+$con->Concat('users.last_name', $con->qstr(', '), 'users.first_names') . " AS 'User', " .  
 "Role_name as Role, ChildGroup.Group_name as 'Child Group' FROM GroupUser JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Role on Role.Role_id=GroupUser.Role_id LEFT OUTER JOIN Groups as ChildGroup ON ChildGroup.Group_id=GroupUser.ChildGroup_id LEFT OUTER JOIN users on users.user_id=GroupUser.user_id order by $order_by";
 
 $css_theme='basic-left';
@@ -119,6 +119,9 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.6  2005/03/21 15:56:11  ycreddy
+ * Added a quote for AS User to make it compatible with SQL Server
+ *
  * Revision 1.5  2005/03/08 21:51:41  daturaarutad
  * fixed query to join user table in order to display user names instead of user ids
  *
