@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.85 2004/08/14 00:43:23 gpowers Exp $
+ * $Id: utils-misc.php,v 1.86 2004/08/16 16:06:11 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -802,7 +802,7 @@ function time_zone_offset($con, $address_id) {
 
         $sql = "SELECT daylight_savings_id, offset, confirmed,
                     (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
-                    (CASE WHEN (city = '" . $city . "') THEN 0 ELSE 1 END) AS has_city,
+                    (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
                     (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
                 FROM time_zones
                 WHERE country_id=" . $country_id . "
@@ -1266,6 +1266,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.86  2004/08/16 16:06:11  neildogg
+ * - Quotes city properly
+ *
  * Revision 1.85  2004/08/14 00:43:23  gpowers
  * - added code for mapquest plugin support
  * - registered address vards as GLOBALS (needed for plugins)
