@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.47 2005/01/06 17:24:32 introspectshun Exp $
+ * $Id: edit-2.php,v 1.48 2005/01/09 13:58:51 braverock Exp $
  */
 
 //include required files
@@ -91,7 +91,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : 'NULL';
 
 //check to see if we need to associate with an opportunity or case
-if ($associate_activities = true ) {
+if ($associate_activities == true ) {
     if (($on_what_table=='contacts') or ($on_what_table=='')) {
         $opp_arr = array();
         $case_arr = array();
@@ -300,7 +300,7 @@ $old_status = '';
 
 /* this saves case/opportunity status changes to the database when they are changed in one.php */
 $table_name = strtolower($table_name);
-if ($table_name != "attached to") {
+if ($table_name !== "attached to") {
     $sql = "select * from $on_what_table where ".$table_name."_id=$on_what_id";
     $rst = $con->execute($sql);
 
@@ -331,12 +331,12 @@ if ($table_name != "attached to") {
             $no_update = false;
         } else {
             $sort_order++;
-            
+
             //look for activity_templates defined for the next status in the workflow
             $sql = "select * from activity_templates where on_what_table=" . $con->qstr($table_name.'_statuses') . " AND on_what_id=$sort_order";
             $rst=$con->execute($sql);
             if (!$rst) { db_error_handler($con,$sql); }
-            
+
             //if there are templates defined for the next status, find it
             if ($rst->numRows()>0) {
                 $no_update = false;
@@ -440,6 +440,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.48  2005/01/09 13:58:51  braverock
+ * - use of single = instead of == in comparison for $associate_activities
+ *   Solves SF bug 1098200 submitted by Fu22Ba55
+ *
  * Revision 1.47  2005/01/06 17:24:32  introspectshun
  * - Combined conditional for status label
  *

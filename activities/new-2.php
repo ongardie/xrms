@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.31 2005/01/09 00:01:39 braverock Exp $
+ * $Id: new-2.php,v 1.32 2005/01/09 13:58:51 braverock Exp $
  */
 
 //where do we include from
@@ -82,7 +82,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 
 //check to see if we need to associate with an opportunity or case
-if ($associate_activities = true ) {
+if ($associate_activities == true ) {
     if (($on_what_table=='contacts') or ($on_what_table=='')) {
         $opp_arr = array();
         $case_arr = array();
@@ -222,6 +222,10 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.32  2005/01/09 13:58:51  braverock
+ *- use of single = instead of == in comparison for $associate_activities
+ *  Solves SF bug 1098200 submitted by Fu22Ba55
+ *
  *Revision 1.31  2005/01/09 00:01:39  braverock
  *- fixed Fast/Long processing
  *- re-enable opportunity status code accidentally commented out
