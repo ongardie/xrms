@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.10 2004/05/07 16:17:10 braverock Exp $
+ * $Id: edit-2.php,v 1.11 2004/05/10 13:04:15 maulani Exp $
  */
 
 //include required files
@@ -16,6 +16,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+
+$session_user_id = session_check();
 
 $return_url = $_POST['return_url'];
 $activity_id = $_POST['activity_id'];
@@ -73,7 +75,8 @@ $sql = "update activities set
 
 //$con->debug = 1;
 $con->execute($sql);
-add_audit_item($con, $session_user_id, 'updated', 'activity', $activity_id);
+
+add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
 
 $sql = "select username from users where user_id = $user_id limit 1";
 $rst = $con->execute($sql);
@@ -147,6 +150,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.11  2004/05/10 13:04:15  maulani
+ * - add session_check
+ * - add level to audit_trail
+ *
  * Revision 1.10  2004/05/07 16:17:10  braverock
  * - remove trailing whitespace added by Glenn's editor
  *
