@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.86 2005/01/22 15:07:24 braverock Exp $
+ * $Id: some.php,v 1.87 2005/01/25 22:11:59 daturaarutad Exp $
  */
 
 // handle includes
@@ -14,8 +14,9 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/XRMS_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 // create session
 $on_what_table='activities';
@@ -73,10 +74,6 @@ if($saved_id) {
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-                   'sort_column'         => array ( 'activities_sort_column', arr_vars_SESSION ) ,
-                   'current_sort_column' => array ( 'activities_current_sort_column', arr_vars_SESSION ) ,
-                   'sort_order'          => array ( 'activities_sort_order', arr_vars_SESSION ) ,
-                   'current_sort_order'  => array ( 'activities_current_sort_order', arr_vars_SESSION ) ,
                    'title'               => array ( 'activities_title', arr_vars_SESSION ) ,
                    'template_title'      => array ( 'activities_template_title', arr_vars_SESSION ) ,
                    'contact'             => array ( 'activities_contact', arr_vars_SESSION ) ,
@@ -159,13 +156,13 @@ $sql = "SELECT
   (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS "
   . $con->qstr(_("Overdue"),get_magic_quotes_gpc()) . ", "
   ." at.activity_type_pretty_name AS " . $con->qstr(_("Type"),get_magic_quotes_gpc()) . ","
-  . $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
+  . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
   . " AS " . $con->qstr(_("Contact"),get_magic_quotes_gpc()) . ","
-  . $con->Concat("'<a href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
+  . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
   . " AS " . $con->qstr(_("Title"),get_magic_quotes_gpc()) . ", "
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS " . $con->qstr(_("Scheduled"),get_magic_quotes_gpc()) . ", "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS " . $con->qstr(_("Due"),get_magic_quotes_gpc()) . ", "
-  . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+  . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
   . " AS " . $con->qstr(_("Company"),get_magic_quotes_gpc()) . ",
   u.username AS " . $con->qstr(_("Owner"),get_magic_quotes_gpc()) . ", ";
 if($sort_column == 9) {
@@ -301,32 +298,6 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     } else { $sql .= ' AND 1 = 2 '; }
 }
 
-if ($sort_column == 1) {
-    $order_by = $con->qstr(_("Overdue"),get_magic_quotes_gpc());
-} elseif ($sort_column == 2) {
-    $order_by = "activity_type_pretty_name";
-} elseif ($sort_column == 3) {
-    $order_by = "cont.last_name";
-} elseif ($sort_column == 4) {
-    $order_by = "activity_title";
-} elseif ($sort_column == 5) {
-    $order_by = $con->qstr(_("Scheduled"),get_magic_quotes_gpc());
-} elseif ($sort_column == 6) {
-    $order_by = "a.ends_at";
-} elseif ($sort_column == 7) {
-    $order_by = "c.company_name";
-} elseif ($sort_column == 8) {
-    $order_by = $con->qstr(_("Owner"),get_magic_quotes_gpc());
-} elseif ($sort_column == 9) {
-    $order_by = "o.probability";
-} else {
-    $order_by = $sort_column;
-}
-
-
-$order_by .= " $sort_order";
-
-$sql .= " order by $order_by"; // is_overdue desc, a.scheduled_at, a.entered_at desc";
 //activities Pager table is rendered below by ADOdb pager
 //echo htmlspecialchars($sql);
 if($advanced_search) {
@@ -490,7 +461,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="ContentFullWidth">
 
-    <form action=some.php method=post>
+    <form action=some.php method=post name="ActivitiesData">
         <input type=hidden name=advanced_search value="<?php echo $advanced_search; ?>">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=activities_next_page value="<?php  echo $activities_next_page; ?>">
@@ -676,17 +647,55 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
     </table>
-    </form>
 
 <?php
 $_SESSION["search_sql"]=$sql;
 
-$pager = new Activities_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
-$pager->render($rows_per_page=$system_rows_per_page);
+$columns = array();
+$columns[] = array('name' => _('Overdue'), 'index' => 'Overdue');
+$columns[] = array('name' => _('Type'), 'index' => 'Type');
+$columns[] = array('name' => _('Contact'), 'index' => 'Contact');
+$columns[] = array('name' => _('Title'), 'index' => 'Title');
+$columns[] = array('name' => _('Scheduled'), 'index' => 'Scheduled');
+$columns[] = array('name' => _('Due'), 'index' => 'Due');
+$columns[] = array('name' => _('Company'), 'index' => 'Company');
+$columns[] = array('name' => _('Owner'), 'index' => 'Owner');
+$columns[] = array('name' => _('%'), 'index' => '%');
+
+
+
+// selects the columns this user is interested in
+$default_columns =  array('Overdue', 'Type', 'Contact', 'Title', 'Scheduled', 'Due', 'Company', 'Owner', '%');
+
+$pager_columns = new Pager_Columns('ActivitiesPager', $columns, $default_columns, 'ActivitiesData');
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+
+echo $pager_columns_selects;
+
+
+
+$pager = new XRMS_Pager($con, $sql, _('Search Results'), 'ActivitiesData', 'ActivitiesPager', $columns);
+$pager->AddEndRows($endrows);
+$pager->Render($system_rows_per_page);
+
+
+//$pager = new Activities_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
+//$pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
 ?>
 
+    </form>
     </div>
 
         <!-- right column //-->
@@ -754,6 +763,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.87  2005/01/25 22:11:59  daturaarutad
+ * updated to use new XRMS_Pager and Pager_Columns to implement selectable columns
+ *
  * Revision 1.86  2005/01/22 15:07:24  braverock
  * - add sort order to activity_types menu
  *
