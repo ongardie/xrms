@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.9 2004/07/31 16:23:09 cpsource Exp $
+ * $Id: some-advanced.php,v 1.10 2004/08/14 21:26:13 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -359,6 +359,15 @@ start_page($page_title, true, $msg);
 
 <div id="Main">
     <div id="Content">
+		<form action=some-advanced.php method=post name="advsearch">
+		  <input type=hidden name=use_post_vars value=1>
+		  <input type=hidden name=companies_next_page value="<?php  //echo $companies_next_page; ?>">
+      <input type=hidden name=resort value="0">
+      <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
+      <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
+      <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
+      <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
+
 
 <?php
 
@@ -367,7 +376,7 @@ $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
 ?>
-
+		</form>
     </div>
 
         <!-- right column //-->
@@ -395,6 +404,7 @@ $con->close();
         </table>
 
     </div>
+		
 </div>
 
 <script language="JavaScript" type="text/javascript">
@@ -426,6 +436,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.10  2004/08/14 21:26:13  niclowe
+ * added adodb pager to advanced search
+ *
  * Revision 1.9  2004/07/31 16:23:09  cpsource
  * - Make default menu items blank
  *
