@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.23 2004/07/13 21:09:29 braverock Exp $
+ * $Id: some.php,v 1.24 2004/07/14 12:51:50 cpsource Exp $
  */
 
 //include the standard files
@@ -61,7 +61,6 @@ if ($clear) {
     $description = '';
     $company_name = '';
     $company_code = '';
-    $company_type_id = '';
     $category_id = '';
     $user_id = '';
 } elseif ($use_post_vars) {
@@ -75,10 +74,13 @@ if ($clear) {
     $description = $_POST['description'];
     $company_name = $_POST['company_name'];
     $company_code = $_POST['company_code'];
-    $company_type_id = $_POST['company_type_id'];
     $category_id = $_POST['category_id'];
     $user_id = $_POST['user_id'];
 } else {
+
+  // first time through ???
+  if ( isset($_SESSION['contacts_sort_column']) ) {
+    // no - get from session
     $sort_column = $_SESSION['contacts_sort_column'];
     $current_sort_column = $_SESSION['contacts_current_sort_column'];
     $sort_order = $_SESSION['contacts_sort_order'];
@@ -87,11 +89,24 @@ if ($clear) {
     $first_names = $_SESSION['contacts_first_names'];
     $title = $_SESSION['contacts_title'];
     $description = $_SESSION['contacts_description'];
-    $company_name = isset($_GET['company_name']) ? $_GET['company_name'] : $_SESSION['contacts_company_name'];
-    $company_code = isset($_GET['company_code']) ? $_GET['company_code'] : $_SESSION['contacts_company_code'];
-    $company_type_id = $_SESSION['contacts_company_type_id'];
     $category_id = $_SESSION['category_id'];
     $user_id = $_SESSION['contacts_user_id'];
+  } else {
+    // yes - just reset variables
+    $sort_column = '';
+    $current_sort_column = '';
+    $sort_order = '';
+    $current_sort_order = '';
+    $last_name = '';
+    $first_names = '';
+    $title = '';
+    $description = '';
+    $category_id = '';
+    $user_id = '';
+  }
+
+  $company_name = isset($_GET['company_name']) ? $_GET['company_name'] : isset($_SESSION['contacts_company_name']) ? $_SESSION['contacts_company_name'] : '' ;
+  $company_code = isset($_GET['company_code']) ? $_GET['company_code'] : isset($_SESSION['contacts_company_code']) ? $_SESSION['contacts_company_code'] : '' ;
 }
 
 if (!strlen($sort_column) > 0) {
@@ -268,6 +283,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
+
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=8>Search Criteria</td>
@@ -396,6 +412,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.24  2004/07/14 12:51:50  cpsource
+ * - Removed company_type_id handling as it was unused
+ *   Session variables are cleared the first time in, as they were unset.
+ *
  * Revision 1.23  2004/07/13 21:09:29  braverock
  * -removed obsolete Bulk Email code. this code was moved to the adodb pager file long ago
  *
