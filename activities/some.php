@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.8 2004/04/20 12:53:48 braverock Exp $
+ * $Id: some.php,v 1.9 2004/04/22 18:29:36 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,7 +16,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 
 $session_user_id = session_check();
-//$user_id = 1;
 
 $msg = $_GET['msg'];
 $offset = $_POST['offset'];
@@ -185,9 +184,6 @@ if ($sort_column == 1) {
 
 $order_by .= " $sort_order";
 
-echo $order_by;
-
-
 $sql .= " order by $order_by"; // is_overdue desc, a.scheduled_at, a.entered_at desc";
 
 $rst = $con->execute($sql);
@@ -299,6 +295,7 @@ start_page($page_title);
 
 $pager = new ADODB_Pager($con,$sql, 'activities', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
+add_audit_item($con, $session_user_id, 'searched', 'activities', '');
 $con->close();
 
 ?>
@@ -365,6 +362,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2004/04/22 18:29:36  gpowers
+ * removed echo order_by , ^M's, //user_id=1
+ *
  * Revision 1.8  2004/04/20 12:53:48  braverock
  * - add direct link to activity
  * - add owner in the list
