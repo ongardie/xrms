@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.40 2004/07/19 21:19:52 neildogg Exp $
+ * $Id: one.php,v 1.41 2004/07/20 11:25:26 braverock Exp $
  */
 
 //include required files
@@ -338,7 +338,6 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Ends"); ?></td>
                 <td class=widget_content_form_element>
-                    <?php jscalendar_includes(); ?>
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
@@ -406,6 +405,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.41  2004/07/20 11:25:26  braverock
+ * - removed second jscalendar_includes call
+ *   - it is unecessary, and causes a stack overflow on IE 6
+ *   - applies fix for SF bug 976476 suggested by cdeneve
+ *
  * Revision 1.40  2004/07/19 21:19:52  neildogg
  * - Allow contact to be shifted with opportunity as well as activity
  *
