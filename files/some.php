@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.19 2004/07/15 16:43:36 introspectshun Exp $
+ * $Id: some.php,v 1.20 2004/07/16 03:14:55 introspectshun Exp $
  */
 
 //include required files
@@ -63,45 +63,45 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "SELECT "
       . $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&amp;file_id='","file_id","'\">'","file_pretty_name", "'</a>'")
-      . " AS 'Name', file_description as 'Description',";
+      . " AS '" . _("Name") . "', file_description as '" . _("Description") . "',";
 
 switch ($file_on_what) {
     case "contacts" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&amp;contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS 'Contact',"
+              . " AS '" . _("Contact") . "',"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '" . _("Company") . "',";
         break;
     }
     case "contacts_of_companies" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&amp;contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS 'Contact',"
+              . " AS '" . _("Contact") . "',"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '" . _("Company") . "',";
         break;
     }
     case "companies" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '" . _("Company") . "',";
         break;
     }
     case "campaigns" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&amp;campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
-              . " AS 'Campaign',";
+              . " AS '" . _("Campaign") . "',";
         break;
     }
     case "opportunities" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&amp;opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
-              . " AS 'Opportunity',"
+              . " AS '" . _("Opportunity") . "',"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '" . _("Company") . "',";
         break;
     }
     case "cases" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&amp;case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
-              . " AS 'Case',"
+              . " AS '" . _("Case") . "',"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '" . _("Company") . "',";
         break;
     }
     default : {
@@ -109,8 +109,8 @@ switch ($file_on_what) {
         }
 }
 
-$sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS 'Date'," .
-        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&amp;file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS 'ID' ";
+$sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS '" . _("Date") . "'," .
+        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&amp;file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS '" . _("ID") . "' ";
 
 $from = "from ";
 switch ($file_on_what) {
@@ -400,6 +400,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.20  2004/07/16 03:14:55  introspectshun
+ * - Localized SQL aliias strings for i18n/translation support
+ *
  * Revision 1.19  2004/07/15 16:43:36  introspectshun
  * - Fixed errant CVS Commit. Updated s-t's code to reflect recent HTML tweaks.
  *
