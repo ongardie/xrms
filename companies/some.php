@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.57 2005/03/11 17:28:39 daturaarutad Exp $
+ * $Id: some.php,v 1.58 2005/03/11 20:22:08 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -28,6 +28,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'user_id'             => array('companies_user_id',arr_vars_SESSION),
                    'crm_status_id'       => array('companies_crm_status_id',arr_vars_GET_SESSION),
                    'industry_id'         => array('industry_id',arr_vars_SESSION),
+                   'company_source_id'   => array('company_source_id',arr_vars_GET_SESSION),
                    'city'                => array('city',arr_vars_SESSION),
                    'state'               => array('state',arr_vars_SESSION)
                    );
@@ -125,6 +126,10 @@ if (strlen($industry_id) > 0) {
     $where .= " and c.industry_id = $industry_id";
 }
 
+if (strlen($company_source_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.company_source_id = $company_source_id";
+}
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
@@ -397,6 +402,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.58  2005/03/11 20:22:08  daturaarutad
+ * added company_source_id as a search criteria for linking with reports/graphs
+ *
  * Revision 1.57  2005/03/11 17:28:39  daturaarutad
  * added GET to cases_case_status_id for linking to reports/graphs
  *
