@@ -3,7 +3,7 @@
 		<input type=hidden name=return_url value="/companies/one.php?company_id=<?php $company_id ?>">
 		<input type=hidden name=on_what_table value="companies">
 		<input type=hidden name=on_what_id value="<?php $company_id ?>">
-		<table class=widget cellspacing=1 width=100%>
+		<table class=widget cellspacing=1 width="100%">
 			<tr>
 				<td class=widget_header colspan=4><?php $strCompaniesOneNotesTitle ?></td>
 			</tr>
