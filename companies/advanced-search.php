@@ -4,7 +4,7 @@
  *
  * This is the advanced screen that allows many more search fields
  *
- * $Id: advanced-search.php,v 1.4 2004/07/31 11:10:02 cpsource Exp $
+ * $Id: advanced-search.php,v 1.5 2004/07/31 12:11:04 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -87,6 +87,8 @@ start_page($page_title, true, $msg);
     <div id="ContentFullWidth">
 
         <form action=some-advanced.php method=post>
+        <input type=hidden name=use_post_vars value=1>
+
 <table border=0 cellpadding=0 cellspacing=0 width="100%">
     <tr>
         <td class=lcol width="55%" valign=top>
@@ -258,6 +260,13 @@ end_page();
 
 /**
  * $Log: advanced-search.php,v $
+ * Revision 1.5  2004/07/31 12:11:04  cpsource
+ * - Fixed multiple undefines and subsequent hidden bugs
+ *   Used arr_vars for retrieving POST'ed variables
+ *   Code cleanup and simplification.
+ *   Removed setting session variables as they were unused
+ *   Set use_post_vars as needed.
+ *
  * Revision 1.4  2004/07/31 11:10:02  cpsource
  * - Fix lots and lots of errors that were masked by using undefined
  *     variables.

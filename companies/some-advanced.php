@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.7 2004/07/28 20:41:31 neildogg Exp $
+ * $Id: some-advanced.php,v 1.8 2004/07/31 12:11:04 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,45 +14,71 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+// a helper routine to retrieve one field from a table
+function check_and_get ( $con, $sql, $nam )
+{
+  $rst = $con->execute($sql);
+
+  if ( !$rst ) {
+    db_error_handler($con, $sql);
+  }
+  if ( !$rst->EOF ) {
+    $GLOBALS[$nam] = $rst->fields[$nam];
+  } else {
+    $GLOBALS[$nam] = '';
+  }
+
+  $tmp = $rst->getmenu2($nam, $GLOBALS[$nam], true);
+  $rst->close();
+
+  return $tmp;
+}
+
 $session_user_id = session_check();
 
-$use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-$resort = $_POST['resort'];
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+		   'sort_column'         => array ( 'sort_column'         , arr_vars_SESSION),
+		   'current_sort_column' => array ( 'current_sort_column' , arr_vars_SESSION),
+		   'sort_order'          => array ( 'sort_order'          , arr_vars_SESSION),
+		   'current_sort_order'  => array ( 'current_sort_order'  , arr_vars_SESSION),
 
+		   'company_name' => array ( 'company_name' , arr_vars_SESSION),
+		   'legal_name' => array ( 'legal_name' , arr_vars_SESSION),
+		   'company_code' => array ( 'company_code' , arr_vars_SESSION),
+		   'crm_status_id' => array ( 'crm_status_id' , arr_vars_SESSION),
+		   'company_source_id' => array ( 'company_source_id' , arr_vars_SESSION),
+		   'industry_id' => array ( 'industry_id' , arr_vars_SESSION),
+		   'user_id' => array ( 'user_id' , arr_vars_SESSION),
+		   'phone' => array ( 'phone' , arr_vars_SESSION),
+		   'phone2' => array ( 'phone2' , arr_vars_SESSION),
+		   'fax' => array ( 'fax' , arr_vars_SESSION),
+		   'url' => array ( 'url' , arr_vars_SESSION),
+		   'employees' => array ( 'employees' , arr_vars_SESSION),
+		   'revenue' => array ( 'revenue' , arr_vars_SESSION),
+		   'custom1' => array ( 'custom1' , arr_vars_SESSION),
+		   'custom2' => array ( 'custom2' , arr_vars_SESSION),
+		   'custom3' => array ( 'custom3' , arr_vars_SESSION),
+		   'custom4' => array ( 'custom4' , arr_vars_SESSION),
+		   'profile' => array ( 'profile' , arr_vars_SESSION),
+		   'address_name' => array ( 'address_name' , arr_vars_SESSION),
+		   'line1' => array ( 'line1' , arr_vars_SESSION),
+		   'line2' => array ( 'line2' , arr_vars_SESSION),
+		   'city' => array ( 'city' , arr_vars_SESSION),
+		   'province' => array ( 'province' , arr_vars_SESSION),
+		   'postal_code' => array ( 'postal_code' , arr_vars_SESSION),
+		   'country_id' => array ( 'country_id' , arr_vars_SESSION),
+		   'address_body' => array ( 'address_body' , arr_vars_SESSION),
+                   );
 
-$sort_column = $_POST['sort_column'];
-$current_sort_column = $_POST['current_sort_column'];
-$sort_order = $_POST['sort_order'];
-$current_sort_order = $_POST['current_sort_order'];
+// get all passed in variables
+arr_vars_get_all ( $arr_vars, true );
 
-$company_name = $_POST['company_name'];
-$legal_name = $_POST['legal_name'];
-$company_code = $_POST['company_code'];
-$crm_status_id = $_POST['crm_status_id'];
-$company_source_id = $_POST['company_source_id'];
-$industry_id = $_POST['industry_id'];
-$user_id = $_POST['user_id'];
-$phone = $_POST ['phone'];
-$phone2 = $_POST ['phone2'];
-$fax = $_POST ['fax'];
-$url = $_POST ['url'];
-$employees = $_POST ['employees'];
-$revenue = $_POST ['revenue'];
-$custom1 = $_POST ['custom1'];
-$custom2 = $_POST ['custom2'];
-$custom3 = $_POST ['custom3'];
-$custom4 = $_POST ['custom4'];
-$profile = $_POST ['profile'];
-$address_name = $_POST ['address_name'];
-$line1 = $_POST ['line1'];
-$line2 = $_POST ['line2'];
-$city = $_POST ['city'];
-$province = $_POST ['province'];
-$postal_code = $_POST ['postal_code'];
-$country_id = $_POST['country_id'];
-$address_body = $_POST['address_body'];
+// generated from thin air as far as I can tell
+// probably a BUG - TBD - Please Fix Me!
+$company_category_id = '';
 
-if (!strlen($sort_column) > 0) {
+if ( !$sort_column ) {
     $sort_column = 1;
     $current_sort_column = $sort_column;
     $sort_order = "asc";
@@ -63,22 +89,25 @@ if (!($sort_column == $current_sort_column)) {
 }
 
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
+$sort_order = ( $resort && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 
-$ascending_order_image = ' <img border=0 height=10 width=10 alt="" src=../img/asc.gif>';
-$descending_order_image = ' <img border=0 height=10 width=10 alt="" src=../img/desc.gif>';
+$ascending_order_image  = '<img border=0 height=10 width=10 alt="" src=../img/asc.gif>' ;
+$descending_order_image = '<img border=0 height=10 width=10 alt="" src=../img/desc.gif>';
 
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-$_SESSION['companies_sort_column'] = $sort_column;
-$_SESSION['companies_current_sort_column'] = $sort_column;
-$_SESSION['companies_sort_order'] = $sort_order;
-$_SESSION['companies_current_sort_order'] = $sort_order;
-$_SESSION['companies_company_name'] = $company_name;
-$_SESSION['companies_company_category_id'] = $company_category_id;
-$_SESSION['companies_company_code'] = $company_code;
-$_SESSION['companies_user_id'] = $user_id;
-$_SESSION['companies_crm_status_id'] = $crm_status_id;
+//if ( 0 ) {
+// seems to be unused
+//  $_SESSION['companies_sort_column'] = $sort_column;
+//  $_SESSION['companies_current_sort_column'] = $sort_column;
+//  $_SESSION['companies_sort_order'] = $sort_order;
+//  $_SESSION['companies_current_sort_order'] = $sort_order;
+//  $_SESSION['companies_company_name'] = $company_name;
+//  $_SESSION['companies_company_category_id'] = $company_category_id;
+//  $_SESSION['companies_company_code'] = $company_code;
+//  $_SESSION['companies_user_id'] = $user_id;
+//  $_SESSION['companies_crm_status_id'] = $crm_status_id;
+//}
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -269,6 +298,8 @@ order by r.recent_item_timestamp desc";
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
+$recently_viewed_table_rows = '';
+
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
@@ -284,9 +315,7 @@ if (strlen($recently_viewed_table_rows) == 0) {
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+$user_menu = check_and_get($con,$sql2,'user_id');
 
 $sql2 = "select category_pretty_name, c.category_id
 from categories c, category_scopes cs, category_category_scope_map ccsm
@@ -295,24 +324,16 @@ and cs.on_what_table =  'companies'
 and ccsm.category_scope_id = cs.category_scope_id
 and category_record_status =  'a'
 order by category_pretty_name";
-$rst = $con->execute($sql2);
-$company_category_menu = $rst->getmenu2('company_category_id', $company_category_id, true);
-$rst->close();
+$company_category_menu = check_and_get($con,$sql2,'category_id');
 
 $sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
-$rst = $con->execute($sql2);
-$company_type_menu = $rst->getmenu2('company_type_id', $company_type_id, true);
-$rst->close();
+$company_type_menu = check_and_get($con,$sql2,'company_type_id');
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
-$rst = $con->execute($sql2);
-$crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, true);
-$rst->close();
+$crm_status_menu = check_and_get($con,$sql2,'crm_status_id');
 
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
-$rst = $con->execute($sql2);
-$industry_menu = $rst->getmenu2('industry_id', $industry_id, true);
-$rst->close();
+$industry_menu = check_and_get($con,$sql2,'industry_id');
 
 if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
@@ -392,6 +413,13 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.8  2004/07/31 12:11:04  cpsource
+ * - Fixed multiple undefines and subsequent hidden bugs
+ *   Used arr_vars for retrieving POST'ed variables
+ *   Code cleanup and simplification.
+ *   Removed setting session variables as they were unused
+ *   Set use_post_vars as needed.
+ *
  * Revision 1.7  2004/07/28 20:41:31  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
