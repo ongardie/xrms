@@ -2,7 +2,7 @@
 /**
  * Display login screen
  *
- * $Id: login.php,v 1.8 2004/06/28 18:45:36 gpowers Exp $
+ * $Id: login.php,v 1.9 2004/07/10 12:49:21 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -10,8 +10,6 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-
-session_start();
 
 $msg = $_GET['msg'];
 $target = urldecode($_GET['target']);
@@ -41,20 +39,20 @@ start_page($page_title, false, $msg);
 <form action="login-2.php" method=post>
 <input type=hidden name=target value="<?php echo $target; ?>" >
 <table class=widget cellspacing=1>
-	<tr>
-		<td class=widget_header colspan=2>Login</td>
-	</tr>
-	<tr>
-		<td class=widget_label_right>Username</td>
-		<td class=widget_content_form_element><input type=text name=username></td>
-	</tr>
-	<tr>
-		<td class=widget_label_right>Password</td>
-		<td class=widget_content_form_element><input type=password name=password></td>
-	</tr>
-	<tr>
-		<td class=widget_content_form_element_center colspan=2><input class=button type=submit value="Login"></td>
-	</tr>
+        <tr>
+                <td class=widget_header colspan=2>Login</td>
+        </tr>
+        <tr>
+                <td class=widget_label_right>Username</td>
+                <td class=widget_content_form_element><input type=text name=username></td>
+        </tr>
+        <tr>
+                <td class=widget_label_right>Password</td>
+                <td class=widget_content_form_element><input type=password name=password></td>
+        </tr>
+        <tr>
+                <td class=widget_content_form_element_center colspan=2><input class=button type=submit value="Login"></td>
+        </tr>
 </table>
 </form>
 </div>
@@ -77,6 +75,10 @@ end_page();
 
 /**
  * $Log: login.php,v $
+ * Revision 1.9  2004/07/10 12:49:21  braverock
+ * - removed session_start for security reasons
+ *   - applies patch suggested by cpsource in SF bug 977376
+ *
  * Revision 1.8  2004/06/28 18:45:36  gpowers
  * - commented out file checking code. it did not work
  *   - login should now redirect to requested page
