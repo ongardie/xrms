@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.26 2004/07/25 13:09:38 braverock Exp $
+ * $Id: utils-interface.php,v 1.27 2004/07/26 03:49:57 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -53,9 +53,9 @@ function status_msg($msg) {
             return _("Case Deleted.");
 
         case 'added':
-            return _("Added.");
+            return _("Added");
         case 'deleted':
-            return _("Deleted.");
+            return _("Deleted");
         case 'password_no_match':
             return _("Password Does Not Match.");
         case 'noauth':
@@ -69,7 +69,7 @@ function status_msg($msg) {
         default:
             if ( $msg ) {
                     // at least TRY to return a message
-                    return _("$msg.");
+                    return _("$msg");
             }
             break;
     }
@@ -95,7 +95,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     "http://www.w3.org/TR/html4/loose.dtd" >
     <html>
     <head>
-    <title>$page_title</title>
+    <title>$app_title : $page_title</title>
     <link rel=stylesheet href="$stylesheet">
     <link rel=stylesheet  type="text/css" href="$http_site_root/js/jscalendar/calendar-blue.css">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -209,6 +209,10 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.27  2004/07/26 03:49:57  braverock
+ * - added $app_title to browser page title
+ *   - implements SF Feature Request # 966189
+ *
  * Revision 1.26  2004/07/25 13:09:38  braverock
  * - remove trailing whitespace
  *
