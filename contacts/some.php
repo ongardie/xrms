@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.8 2004/04/07 22:53:15 maulani Exp $
+ * $Id: some.php,v 1.9 2004/04/08 15:41:01 maulani Exp $
  */
 
 //include the standard files
@@ -108,8 +108,7 @@ $sql = "select concat('<a href=one.php?contact_id=', cont.contact_id, '>', cont.
                company_code as 'Code',
                title as 'Title',
                description as 'Description',
-               work_phone as 'Phone',
-               concat('<a href=mailto:',cont.email,'>',cont.email, '</a>') as 'E-Mail', u.username as 'Owner' ";
+               u.username as 'Owner' ";
 
 $from = "from contacts cont, companies c, users u ";
 
@@ -338,6 +337,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2004/04/08 15:41:01  maulani
+ * - Fix width problem
+ *
  * Revision 1.8  2004/04/07 22:53:15  maulani
  * - Update layout to use CSS2
  * - Make HTML validate
