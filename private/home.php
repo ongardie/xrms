@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.38 2004/07/30 11:12:58 cpsource Exp $
+ * $Id: home.php,v 1.39 2004/08/05 15:45:38 braverock Exp $
  */
 
 // include the common files
@@ -27,6 +27,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 //connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+//$con->debug=1;
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -157,29 +158,30 @@ $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_pag
 $classname = 'non_uploaded_file';
 
 $files_rows = '';
+if ($rst) {
+    if ($rst->rowcount()>0) {
+        while (!$rst->EOF) {
 
-if ($rst->rowcount()>0) {
-    while (!$rst->EOF) {
+            $file_id = $rst->fields['file_id'];
+            $file_name = $rst->fields['file_pretty_name'];
+            $file_description = $rst->fields['file_description'];
+            $file_on_what_table = $rst->fields['on_what_table'];
+            $file_on_what_name = $rst->fields['last_name']." ".$rst->fields['first_names'];
+            $file_on_what_name_id = $rst->fields['contact_id'];
+            $file_date = $rst->fields['entered_at'];
 
-        $file_id = $rst->fields['file_id'];
-        $file_name = $rst->fields['file_pretty_name'];
-        $file_description = $rst->fields['file_description'];
-        $file_on_what_table = $rst->fields['on_what_table'];
-        $file_on_what_name = $rst->fields['last_name']." ".$rst->fields['first_names'];
-        $file_on_what_name_id = $rst->fields['contact_id'];
-        $file_date = $rst->fields['entered_at'];
-
-        $files_rows .= '<tr>';
-        $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
-        $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/contacts/one.php?contact_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
-        $files_rows .= '</tr>';
-        $rst->movenext();
+            $files_rows .= '<tr>';
+            $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+            $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+            $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+            $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
+            $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/contacts/one.php?contact_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
+            $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+            $files_rows .= '</tr>';
+            $rst->movenext();
+        }
+        $rst->close();
     }
-    $rst->close();
 }
 
 ////////////////////////////////////
@@ -189,32 +191,32 @@ $sql_files = "select * from files f, companies c where file_size = 0 and f.enter
 $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
 
 $classname = 'non_uploaded_file';
+if ($rst) {
+    if ($rst->rowcount()>0) {
 
-if ($rst->rowcount()>0) {
+        while (!$rst->EOF) {
 
-    while (!$rst->EOF) {
+            $file_id = $rst->fields['file_id'];
+            $file_name = $rst->fields['file_pretty_name'];
+            $file_description = $rst->fields['file_description'];
+            $file_on_what_table = $rst->fields['on_what_table'];
+            $file_on_what_name = $rst->fields['company_name'];
+            $file_on_what_name_id = $rst->fields['company_id'];
+            $file_date = $rst->fields['entered_at'];
 
-        $file_id = $rst->fields['file_id'];
-        $file_name = $rst->fields['file_pretty_name'];
-        $file_description = $rst->fields['file_description'];
-        $file_on_what_table = $rst->fields['on_what_table'];
-        $file_on_what_name = $rst->fields['company_name'];
-        $file_on_what_name_id = $rst->fields['company_id'];
-        $file_date = $rst->fields['entered_at'];
-
-        $files_rows .= '<tr>';
-        $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
-        $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/companies/one.php?company_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
-        $files_rows .= '</tr>';
-        $rst->movenext();
+            $files_rows .= '<tr>';
+            $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+            $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+            $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+            $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
+            $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/companies/one.php?company_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
+            $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+            $files_rows .= '</tr>';
+            $rst->movenext();
+        }
+        $rst->close();
     }
-    $rst->close();
 }
-
 ////////////////////////////////////
 // Show campaigns non-uploaded files
 $sql_files = "select * from files f where file_size = 0 and f.entered_by = ". $session_user_id . " order by file_id asc";
@@ -222,7 +224,6 @@ $sql_files = "select * from files f where file_size = 0 and f.entered_by = ". $s
 $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
 
 $classname = 'non_uploaded_file';
-
 if ($rst->rowcount()>0) {
     $nu_file_rows = "
         <table class=widget cellspacing=1 width='100%'>
@@ -493,6 +494,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.39  2004/08/05 15:45:38  braverock
+ * - add a commented out debug line and a few more checks to make sure we have a result set
+ *
  * Revision 1.38  2004/07/30 11:12:58  cpsource
  * - Got msg in standard format.
  *
