@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.38 2004/07/21 22:39:04 neildogg Exp $
+ * $Id: some.php,v 1.39 2004/07/22 13:58:27 neildogg Exp $
  */
 
 // handle includes
@@ -38,9 +38,14 @@ if($saved_id) {
     $sql = "SELECT saved_data, saved_status
             FROM saved_actions
             WHERE saved_id=" . $saved_id . "
-            AND (user_id=" . $session_user_id . "
-            OR group_item=1)
-            AND saved_status='a'";
+            AND (user_id=" . $session_user_id;
+    if($_SESSION['role_short_name'] === 'Admin') {
+        $sql .= " OR group_item=1)";
+    }
+    else {
+        $sql .= " AND group_item=0)";
+    }
+    $sql .= "AND saved_status='a'";
     $rst = $con->execute($sql);
     if(!$rst) {
         db_error_handler($con, $sql);
@@ -405,7 +410,9 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan="2">
                     <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?> 
                 </td>
-                <td class=widget_content_form_element colspan="2"> <input type=text name="saved_title" size=24> Add to Everyone <input type=checkbox name="group_item" value=1>
+                <td class=widget_content_form_element colspan="2"> 
+                    <input type=text name="saved_title" size=24> 
+                    <?php if($_SESSION['role_short_name'] === 'Admin') { ?>Add to Everyone <input type=checkbox name="group_item" value=1><? } ?>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
@@ -489,6 +496,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.39  2004/07/22 13:58:27  neildogg
+ * - Limit group saved-search functionality to admin
+ *
  * Revision 1.38  2004/07/21 22:39:04  neildogg
  * - Allow saved search deletion
  *

@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.44 2004/07/21 13:00:54 neildogg Exp $
+ * $Id: one.php,v 1.45 2004/07/22 13:58:27 neildogg Exp $
  */
 
 //include required files
@@ -20,6 +20,7 @@ require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 $msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
 $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
 $return_url  = isset($_GET['return_url']) ? $_GET['return_url'] : '';
+$save_and_next = isset($_GET['save_and_next']) ? $_GET['save_and_next'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -140,6 +141,12 @@ if ($contact_id) {
     $overall_id = $contact_id;
     require("../relationships/sidebar.php");
 }
+if($on_what_table == "opportunities") {
+    $relationship_name = "opportunity link";
+    $working_direction = "both";
+    $overall_id = $on_what_id;
+    require("../relationships/sidebar.php");
+}
 
 /* add opportunities/case/campaign combo box */
 //get singular form of table name (from on_what_table field)
@@ -208,8 +215,6 @@ if($on_what_table == 'opportunities') {
     $rst->close();
 }
 
-$con->close();
-
 $page_title = $activity_title;
 start_page($page_title, true, $msg);
 
@@ -253,7 +258,7 @@ function logTime() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?></td>
+                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? $_SESSION['pos'] . "/" . count($_SESSION['next_to_check']) : ""; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -312,7 +317,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Activity Notes"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=90 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=7 cols=90 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <?php
             if($on_what_table == 'opportunities') {
@@ -320,7 +325,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Opportunity Notes"); ?></td>
                 <td class=widget_content_form_element>
-                    <textarea rows=10 cols=90 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
+                    <textarea rows=7 cols=90 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
                     <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="document.forms[0].opportunity_description.value =
                         logTime() + ' by ' + document.forms[0].user_id.options[form.user_id.selectedIndex].text + ': \n\n' + document.forms[0].opportunity_description.value">
                 </td>
@@ -354,10 +359,14 @@ function logTime() {
                     <input class=button type=submit name="save" value="<?php echo _("Save Changes"); ?>">
                     <input class=button type=submit name="saveandnext" value="<?php echo _("Save and Next"); ?>">
                     <input class=button type=submit name="followup" value="<?php echo _("Schedule Followup"); ?>">
+                    <input class=button type=button value="Print" onclick="document.forms[1].submit()">
                     <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='<?php echo _("Delete Activity"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Activity?"); ?>');">
                 </td>
             </tr>
         </table>
+        </form>
+        <form method=post action=letter.php target="_blank">
+        <input type=hidden name=activity_id value=<?php echo $activity_id; ?>>
         </form>
 
     </div>
@@ -371,7 +380,7 @@ function logTime() {
         <!-- sidebar plugins //-->
         <?php echo $relationship_link_rows; ?>
     </div>
-    
+
 </div>
 
 <script type="text/javascript">
@@ -404,6 +413,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.45  2004/07/22 13:58:27  neildogg
+ * - Limit group saved-search functionality to admin
+ *
  * Revision 1.44  2004/07/21 13:00:54  neildogg
  * - Rolling back previous erroneous commit to reactivate sidebars
  *  - Sidebar variables are declared in the sidebar requires
