@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.115 2005/01/13 17:51:18 vanmer Exp $
+ * $Id: utils-misc.php,v 1.116 2005/01/29 17:20:14 braverock Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -763,6 +763,7 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
         $GLOBALS["iso_code2"] = $iso_code2 = $rst->fields['iso_code2'];
 
         if (!$single_line) {
+            //multiline address processing
             if ($use_pretty_address == 't') {
                 $address_to_display = nl2br($address_body);
             } else {
@@ -774,19 +775,23 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
                 // Remove blank lines (double <br>s)
                 $address_to_display = preg_replace("/<br>(\s+)<br>/", "<br>", $address_to_display);
             }
+            //end multiline address processing
         } else {
-            if ($line1) 
-                $address_array[]=$line1;
-            if ($city)
-                $address_array[]=$city;
-            if ($province)
-                $address_array[]=$province;
-            /* uncomment to add country name to single line address output            
-            if ($country_name)
-                $address_array[]=$country;
-           */
-           $address_to_display=implode(", ",$address_array);
-           
+            //create our single line address
+            if ($line1) { $address_array[]=$line1; } 
+                
+            if ($city) { $address_array[]=$city; }
+
+            if ($province) { $address_array[]=$province; }
+
+            if ($country_name) { $address_array[]=$country; }
+
+           if ($address_array) {
+                $address_to_display=implode(", ",$address_array);
+           } else {
+                $address_to_display = '';
+           }
+           //end single line address processing
         }
     } else {
         // database error, return some useful information.
@@ -801,12 +806,12 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
 
         // added for mapquest plugin
         global $use_mapquest_link;
-                // added for whereis plugin
-                global $use_whereis_link;
+        // added for whereis plugin
+        global $use_whereis_link;
         if ($use_mapquest_link == "y") {
             // this is defined in plugins/mapquest/setup.php:
             return mapquest($line1, $city, $province, $iso_code2, $address_to_display);
-                }elseif ($use_whereis_link == "y"){
+        } elseif ($use_whereis_link == "y"){
             // this is defined in plugins/whereis/setup.php:
             return whereis($line1, $city, $province, $iso_code2, $address_to_display);
         } else {
@@ -1467,6 +1472,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.116  2005/01/29 17:20:14  braverock
+ * - fixed problem with single line address formatting in get_formatted_address fn
+ *
  * Revision 1.115  2005/01/13 17:51:18  vanmer
  * - added ACL requirement to utils-misc.php (MAY BREAK existing installs unless update is run)
  * - added ACL restriction into session_check
