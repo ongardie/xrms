@@ -168,29 +168,29 @@
    if ($row['last_name']) {
       $company_profile        .= "Last Name: " . $row['last_name'] . "\n";
    }
-   if ($row['phone_ext.']) {
-      $company_profile        .= "Phone Ext: " . $row['phone_ext.'] . "\n";
+   if ($row['phone_ext']) {
+      $company_profile        .= "Phone Ext: " . $row['phone_ext'] . "\n";
    }
-   if ($row['fax_ext.']) {
-      $company_profile        .= "FAX Ext: " . $row['fax_ext.'] . "\n";
+   if ($row['fax_ext']) {
+      $company_profile        .= "FAX Ext: " . $row['fax_ext'] . "\n";
    }
-   if ($row['alt_phone_ext.']) {
-      $company_profile        .= "Alt Phone Ext: " . $row['alt_phone_ext.'] . "\n";
+   if ($row['alt_phone_ext']) {
+      $company_profile        .= "Alt Phone Ext: " . $row['alt_phone_ext'] . "\n";
    }
-   if ($row['2nd_phone_ext.']) {
-      $company_profile        .= "2nd Phone Ext: " . $row['2nd_phone_ext.'] . "\n";
+   if ($row['2nd_phone_ext']) {
+      $company_profile        .= "2nd Phone Ext: " . $row['2nd_phone_ext'] . "\n";
    }
-   if ($row['3rd_phone_ext.']) {
-      $company_profile        .= "3rd Phone Ext: " . $row['3rd_phone_ext.'] . "\n";
+   if ($row['3rd_phone_ext']) {
+      $company_profile        .= "3rd Phone Ext: " . $row['3rd_phone_ext'] . "\n";
    }
-   if ($row['asst._title']) {
-      $company_profile        .= "Asst. Title: " . $row['asst._title'] . "\n";
+   if ($row['asst_title']) {
+      $company_profile        .= "Asst. Title: " . $row['asst_title'] . "\n";
    }
-   if ($row['asst._phone']) {
-      $company_profile        .= "Asst. Phone: " . $row['asst._phone'] . "\n";
+   if ($row['asst_phone']) {
+      $company_profile        .= "Asst. Phone: " . $row['asst_phone'] . "\n";
    }
-   if ($row['asst._phone_ext.']) {
-      $company_profile        .= "Asst. Phone Ext: " . $row['asst._phone_ext.'] . "\n";
+   if ($row['asst_phone_ext']) {
+      $company_profile        .= "Asst. Phone Ext: " . $row['asst_phone_ext'] . "\n";
    }
     $division_name       = $row['department'];
    if ($row['spouse']) {
@@ -221,13 +221,17 @@
    if ($row['merge_date']) {
       $company_profile        .= "Merge Date: " . $row['merge_date'] . "\n";
    }
-   $contact_email    = $row['e-mail_login'];
-   if ($row['e-mail_system']) {
-      $company_profile        .= "E-Mail System: " . $row['e-mail_system'] . "\n";
+   $contact_email    = $row['email_login'];
+   if ($row['email_system']) {
+      $company_profile        .= "E-Mail System: " . $row['email_system'] . "\n";
    }
 
 /**
  * $Log: import-template-act2000.php,v $
+ * Revision 1.3  2004/09/22 22:08:19  introspectshun
+ * - Updated array keys to eliminate periods (.) and dashes (-)
+ *   - Now works in conjunction with CSVtoArray fn in utils-misc.php
+ *
  * Revision 1.2  2004/05/06 20:04:47  braverock
  * - update templates to capture more fields
  *   - makes use of material from SF patch 938836 by Glenn Powers
