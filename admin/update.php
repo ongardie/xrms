@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.35 2004/09/02 14:51:13 neildogg Exp $
+ * $Id: update.php,v 1.36 2004/09/02 15:09:53 neildogg Exp $
  */
 
 // where do we include from
@@ -2204,6 +2204,10 @@ if($recCount == 0) {
     $con->execute($sql);
 }
 
+// Add indexes so inserting daylight savings time takes a reasonable about of time
+$sql = "create index province on time_zones (province)";
+$rst = $con->execute($sql);
+
 //Update address table
 $sql = "alter table addresses add offset float";
 $con->execute($sql);
@@ -2262,6 +2266,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.36  2004/09/02 15:09:53  neildogg
+ * - Index added on update
+ *
  * Revision 1.35  2004/09/02 14:51:13  neildogg
  * - Removed additional indexes
  *  - as some were unused and some were duplicates
