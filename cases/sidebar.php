@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.11 2005/01/11 22:30:28 braverock Exp $
+ * $Id: sidebar.php,v 1.12 2005/01/11 22:32:05 braverock Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -50,7 +50,7 @@ if (strlen($rst->fields['username'])>0) {
         $case_rows .= '<tr>';
         $case_rows .= "<td class=widget_content><a href='$http_site_root/cases/one.php?case_id=" . $rst->fields['case_id'] . "'>" . $rst->fields['case_title'] . '</a></td>';
         $case_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $case_rows .= '<td class=widget_content>' . $rst->fields['case_priority_pretty_name'] . '</td>';
+        $case_rows .= '<td class=widget_content>' . _($rst->fields['case_priority_pretty_name']) . '</td>';
         $case_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['due_at']) . '</td>';
         $case_rows .= '</tr>';
         $rst->movenext();
@@ -95,6 +95,9 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.12  2005/01/11 22:32:05  braverock
+ * - localize case type pretty name in sidebar
+ *
  * Revision 1.11  2005/01/11 22:30:28  braverock
  * - update to use case_type_pretty_name instead of case_type_short_name in new dropdown
  *
