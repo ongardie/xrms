@@ -127,7 +127,7 @@ if (strlen($user_id) > 0) {
     $where .= " and c.user_id = $user_id";
 }
 
-if (!$criteria_count > 0) {
+if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 

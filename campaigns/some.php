@@ -121,7 +121,7 @@ if (strlen($campaign_type_id) > 0) {
     $where .= " and cam.campaign_type_id = $campaign_type_id";
 }
 
-if (!$criteria_count > 0) {
+if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 

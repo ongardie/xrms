@@ -124,7 +124,7 @@ if (strlen($case_status_id) > 0) {
     $where .= " and ca.case_status_id = $case_status_id";
 }
 
-if (!$criteria_count > 0) {
+if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 

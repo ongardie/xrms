@@ -153,7 +153,7 @@ if (strlen($crm_status_id) > 0) {
     $where .= " and c.crm_status_id = $crm_status_id";
 }
 
-if (!$criteria_count > 0) {
+if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 

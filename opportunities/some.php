@@ -118,7 +118,7 @@ if (strlen($opportunity_status_id) > 0) {
     $where .= " and opp.opportunity_status_id = $opportunity_status_id";
 }
 
-if (!$criteria_count > 0) {
+if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 
