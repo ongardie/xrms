@@ -1,21 +1,34 @@
 <?php
 
-require_once('vars.php');
-require_once('utils-interface.php');
-require_once('utils-misc.php');
-require_once('adodb/adodb.inc.php');
+require_once('../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
 $array_of_contacts = $_POST['array_of_contacts'];
-
-$_SESSION['array_of_contacts'] = serialize($array_of_contacts);
+$email_template_body = unserialize($_SESSION['email_template_body']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
-$con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
+
+// loop through the contacts and send each one a copy of the message
+
+$sql = "select email from contacts where contact_id in (" . implode(",", $array_of_contacts) . ")";
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $message .= "<li>" . $rst->fields['email'] . " - " . $email_template_body;
+        $rst->movenext();
+    }
+    $rst->close();
+}
 
 $con->close();
 
@@ -28,18 +41,14 @@ start_page($page_title, true, $msg);
 	<tr>
 		<td class=lcol width=35% valign=top>
 
-        <form action=email-5.php method=post>
 		<table class=widget cellspacing=1 width=100%>
             <tr>
                 <td class=widget_header>Messages Not Sent</td>
             </tr>
             <tr>
-                <td class=widget_content_wrappable>
-				<p>The messages have been composed and placed in the message queue, but they have not been sent, because bulk e-mail has not been enabled on this system.</p>
-                </td>
+                <td class=widget_content>These messages have not been sent, because bulk e-mail has not been enabled on this system.</td>
             </tr>
 		</table>
-        </form>
 		
 		</td>
 		<!-- gutter //-->

@@ -1,9 +1,11 @@
 <?php
 
-require_once('vars.php');
-require_once('utils-interface.php');
-require_once('utils-misc.php');
-require_once('adodb/adodb.inc.php');
+require_once('../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -11,18 +13,19 @@ $msg = $_GET['msg'];
 $email_template_title = $_POST['email_template_title'];
 $email_template_body = $_POST['email_template_body'];
 
-$array_of_companies = unserialize($_SESSION['array_of_companies']);
+$_SESSION['email_template_body'] = serialize($email_template_body);
+
+$array_of_contacts = unserialize($_SESSION['array_of_contacts']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
-$con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 $sql = "select cont.contact_id, cont.email, cont.first_names, cont.last_name, c.company_name, u.username 
 from contacts cont, companies c, users u 
 where c.company_id = cont.company_id 
 and c.user_id = u.user_id 
-and c.company_id in (" . implode($array_of_companies, ',') . ") and length(cont.email) > 0 and contact_record_status = 'act'";
+and c.company_id in (" . implode($array_of_contacts, ',') . ") and length(cont.email) > 0 and contact_record_status = 'a'";
 
 $rst = $con->execute($sql);
 if ($rst) {
@@ -42,7 +45,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = 'Select Contacts';
+$page_title = "Confirm Recipients";
 start_page($page_title, true, $msg);
 
 ?>
@@ -54,7 +57,7 @@ start_page($page_title, true, $msg);
         <form action=email-4.php method=post>
 		<table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=5>Select Contacts</td>
+                <td class=widget_header colspan=5>Confirm Recipients</td>
             </tr>
             <tr>
                 <td class=widget_label>&nbsp;</td>

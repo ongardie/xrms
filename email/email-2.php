@@ -1,9 +1,11 @@
 <?php
 
-require_once('vars.php');
-require_once('utils-interface.php');
-require_once('utils-misc.php');
-require_once('adodb/adodb.inc.php');
+require_once('../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
