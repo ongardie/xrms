@@ -3,14 +3,14 @@
  * Browse Activity Types Sidebar
  * /activities/browse-sidebar.php
  *
- * Include this sidebar anywhere that you would like to show a list of activity types. 
+ * Include this sidebar anywhere that you would like to show a list of activity types.
  * It will allow a user to work on a single type of activity, clicking save and next to stay within that type.
  * Once the type has been fully traversed, it drops to the activity type of next lowest priority.
  * If there are no more activities left, it returns to this screen.
  *
  * @author Neil Roberts
  *
- * $Id: browse-sidebar.php,v 1.8 2004/07/22 17:34:47 introspectshun Exp $
+ * $Id: browse-sidebar.php,v 1.9 2004/07/23 11:34:41 braverock Exp $
  */
 
 //add contact information block on sidebar
@@ -57,7 +57,7 @@ $browse_block .= '<form method=post action=browse-next.php>
     </tr>
     <tr>
         <td class=widget_content>';
-    
+
 //get saved searches
 $sql_saved = "SELECT saved_title, saved_id
         FROM saved_actions
@@ -67,11 +67,15 @@ $sql_saved = "SELECT saved_title, saved_id
         AND saved_action='search'
         AND saved_status='a'";
 $rst = $con->execute($sql_saved);
-if($rst->rowcount()) {
-    $browse_block .= $rst->getmenu2('saved_id', 0, false) . " <input type=submit class=button value=" . _("Browse") .">";
-}
-else {
-    $browse_block .= _("No Saved Searches");
+if ($rst) {
+    if($rst->rowcount()) {
+        $browse_block .= $rst->getmenu2('saved_id', 0, false) . " <input type=submit class=button value=" . _("Browse") .">";
+    }
+    else {
+        $browse_block .= _("No Saved Searches");
+    }
+} else {
+    db_error_handler ($con, $sql_saved);
 }
 
 $browse_block .= '</td>
@@ -82,6 +86,9 @@ $browse_block .= '</td>
 
 /**
  * $Log: browse-sidebar.php,v $
+ * Revision 1.9  2004/07/23 11:34:41  braverock
+ * - add check for valid result set around saved search sql
+ *
  * Revision 1.8  2004/07/22 17:34:47  introspectshun
  * - Localized button values for i18n support
  *
