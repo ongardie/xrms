@@ -2,7 +2,7 @@
 /**
  * Manage Industries
  *
- * $Id: some.php,v 1.6 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: some.php,v 1.7 2004/12/24 15:54:51 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,7 +24,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?industry_id=' . $rst->fields['industry_id'] . '>' . $rst->fields['industry_pretty_name'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href=one.php?industry_id=' . $rst->fields['industry_id'] . '>' . _($rst->fields['industry_pretty_name']) . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -90,6 +90,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/12/24 15:54:51  braverock
+ * - localize industry_pretty_name
+ *
  * Revision 1.6  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *
