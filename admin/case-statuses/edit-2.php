@@ -2,7 +2,7 @@
 /**
  * Insert the updated information into the database
  *
- * $Id: edit-2.php,v 1.6 2005/01/10 21:38:56 vanmer Exp $
+ * $Id: edit-2.php,v 1.7 2005/01/10 23:34:05 vanmer Exp $
  */
 
 // include required files
@@ -22,6 +22,7 @@ $case_status_pretty_plural = $_POST['case_status_pretty_plural'];
 $case_status_display_html = $_POST['case_status_display_html'];
 $case_status_long_desc = $_POST['case_status_long_desc'];
 $case_type_id = $_POST['case_type_id'];
+$status_open_indicator = $_POST['status_open_indicator'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -35,6 +36,7 @@ $rec['case_status_pretty_name'] = $case_status_pretty_name;
 $rec['case_status_pretty_plural'] = $case_status_pretty_plural;
 $rec['case_status_display_html'] = $case_status_display_html;
 $rec['case_status_long_desc'] = $case_status_long_desc;
+$rec['status_open_indicator'] = $status_open_indicator;
 
 // $con->debug=1;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
@@ -46,6 +48,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.7  2005/01/10 23:34:05  vanmer
+ * - added open_indicator to status save
+ *
  * Revision 1.6  2005/01/10 21:38:56  vanmer
  * - added case_type, needed for distinguishing between statuses
  *
