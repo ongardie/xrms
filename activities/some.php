@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.98 2005/03/04 17:57:13 daturaarutad Exp $
+ * $Id: some.php,v 1.99 2005/03/07 16:26:59 daturaarutad Exp $
  */
 
 // handle includes
@@ -114,27 +114,12 @@ else {
 
 $offset = $con->OffsetDate($day_diff);
 
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-    $current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
 if (!strlen($completed) > 0) {
     $completed ='o';
 }
 
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
 //If advanced search template title is on, it should override normal title
 $title = ($template_title) ? $template_title : $title;
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 // set all session variables
 arr_vars_session_set ( $arr_vars );
@@ -153,41 +138,46 @@ if(strlen($time_zone_between) and strlen($time_zone_between2)) {
 }
 
 $sql = "SELECT
-  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS "
-  . $con->qstr("overdue",get_magic_quotes_gpc()) . ", "
-  ." at.activity_type_pretty_name AS " . $con->qstr("type",get_magic_quotes_gpc()) . ","
-  . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
-  . " AS " . $con->qstr("contact",get_magic_quotes_gpc()) . ","
-  . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
-  . " AS " . $con->qstr("title",get_magic_quotes_gpc()) . ", "
-  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS " . $con->qstr("scheduled",get_magic_quotes_gpc()) . ", "
-  . $con->SQLDate('Y-m-d','a.ends_at') . " AS " . $con->qstr("due",get_magic_quotes_gpc()) . ", "
-  . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-  . " AS " . $con->qstr("company",get_magic_quotes_gpc()) . ",
-  u.username AS " . $con->qstr("owner",get_magic_quotes_gpc()) . ", ";
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS overdue, "
+  ." at.activity_type_pretty_name AS type, "
+  . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
+  . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS title, "
+  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
+  . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
+  . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
+  . "u.username AS owner, "
+  // these are to speed up the pager sorting
+  . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name ";
+
+/* disabled for now...
 if($sort_column == 9) {
     $sql .= " o.probability AS " . $con->qstr("%",get_magic_quotes_gpc());
 }
 else {
     $sql .= " 'n/a' AS " . $con->qstr("%",get_magic_quotes_gpc()) . " ";
-}
+} 
+*/ 
 $sql .= "FROM companies c, activity_types at, addresses addr, activities a ";
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     $sql .= ", time_daylight_savings tds";
 }
+/*
 if($opportunity_status_id || $sort_column == 9 || $campaign_id) {
     $sql .= ", opportunities o";
 }
+*/
 $sql .= "
 LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
 LEFT OUTER JOIN users u ON a.user_id = u.user_id";
   
 $sql .= " WHERE a.company_id = c.company_id";
 
+/*
 if($sort_column == 9 || $campaign_id) {
     $sql .= " AND a.on_what_table='opportunities'
   AND a.on_what_id=o.opportunity_id ";
 }
+*/
 $sql .= " AND a.activity_record_status = 'a'
   AND at.activity_type_id = a.activity_type_id
   AND c.default_primary_address=addr.address_id";
@@ -641,18 +631,16 @@ $_SESSION["search_sql"]=$sql;
 $columns = array();
 $columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
-$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact');
-$columns[] = array('name' => _('Title'), 'index_sql' => 'title');
-$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled');
-$columns[] = array('name' => _('Due'), 'index_sql' => 'due', 'default_sort' => 'desc');
-$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
+$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => '8,9');
+$columns[] = array('name' => _('Title'), 'index_sql' => 'title', 'sql_sort_column' => '11');
+$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled', 'sql_sort_column' => '12');
+$columns[] = array('name' => _('Due'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => '13');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => '14');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-$columns[] = array('name' => _('%'), 'index_sql' => '%', 'css_classname' => 'right');
-
 
 
 // selects the columns this user is interested in
-$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner', '%');
+$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner');
 
 $pager_columns = new Pager_Columns('SomeActivitiesPager', $columns, $default_columns, 'ActivitiesData');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -745,6 +733,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.99  2005/03/07 16:26:59  daturaarutad
+ * removed some vestigal sort column stuff (that moved to pager)
+ * added sql_sort_columns to speed up column sorting for concat'ed columns
+ * disabled the opportunity.probability for now
+ *
  * Revision 1.98  2005/03/04 17:57:13  daturaarutad
  * set Due to the default_sort
  *
