@@ -147,7 +147,7 @@ if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
         $recently_viewed_table_rows .= "<td class=widget_content><a href='$http_site_root/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "'>" . $rst->fields['opportunity_title'] . '</a></td>';
-        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
+        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_code'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_pretty_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['close_at']) . '</td>';
         $recently_viewed_table_rows .= '</tr>';
@@ -195,6 +195,7 @@ start_page($page_title, true, $msg);
         <td class=lcol width=65% valign=top>
 
         <form action=some.php method=post>
+        <input type=hidden name=scope value="opportunities">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=opportunities_next_page value="<?php  echo $opportunities_next_page; ?>">
         <input type=hidden name=resort value="0">
@@ -270,8 +271,15 @@ function initialize() {
 initialize();
 
 function bulkEmail() {
-    document.forms[0].action = "../email/index.php";
+    document.forms[0].action = "../email/email.php";
     document.forms[0].submit();
+}
+
+function exportIt() {
+    document.forms[0].action = "export.php";
+    document.forms[0].submit();
+    // reset the form so that post-export searches work
+    document.forms[0].action = "some.php";
 }
 
 function clearSearchCriteria() {
