@@ -2,7 +2,7 @@
 /**
  * Manage industries
  *
- * $Id: one.php,v 1.6 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: one.php,v 1.7 2004/07/25 18:20:59 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -34,7 +34,7 @@ if ($rst) {
     $rst->close();
 }
 
-$page_title = $industry_pretty_name;
+$page_title = _("Industry Details").': '.$industry_pretty_name;
 start_page($page_title);
 
 ?>
@@ -70,7 +70,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action=delete.php method=post>
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Industry?"); ?>');">
         <input type=hidden name=industry_id value="<?php  echo $industry_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -78,9 +78,9 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_content>
-                <?php echo _("Click the button below to remove this Industry from the system."); ?>
-                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
-                <p><input class=button type=submit value="<?php echo _("Delete Industry"); ?>">
+                <?php echo _("Click the button below to remove this company source from the system."); ?>
+                <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                 </td>
             </tr>
         </table>
@@ -102,6 +102,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/25 18:20:59  johnfawcett
+ * - standardized page title
+ * - standardized delete text and button
+ * - added delete confirm (call to javascript)
+ *
  * Revision 1.6  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *
