@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.38 2005/02/10 03:58:49 daturaarutad Exp $
+ * $Id: some.php,v 1.39 2005/02/11 21:31:49 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -44,18 +44,18 @@ $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
 $sql = "SELECT "
 . $con->Concat("'<a id=\"'", "opp.opportunity_title",  "'\" href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
-. " AS " . $con->qstr( _("opportunity"),get_magic_quotes_gpc()) . ",
-  c.company_name AS 'company', u.username AS " . $con->qstr(_("owner"),get_magic_quotes_gpc()) . ",
+. " AS opportunity" . ",
+  c.company_name AS 'company', u.username AS owner " . ",
   CASE
     WHEN (opp.size > 0) THEN opp.size
     ELSE 0
-  END AS " . $con->qstr( _("opportunity_size"),get_magic_quotes_gpc()) . ",
+  END AS opportunity_size" . ",
   CASE
     WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100)
     ELSE 0
-  END AS " . $con->qstr(_("weighted_size"),get_magic_quotes_gpc()) . ",
-  os.opportunity_status_pretty_name AS " . $con->qstr( _("status"), get_magic_quotes_gpc()) . ","
-  . " $close_at AS " . $con->qstr( _("close_date"),get_magic_quotes_gpc()) . ' ';
+  END AS weighted_size" . ",
+  os.opportunity_status_pretty_name AS status " . ","
+  . " $close_at AS close_date"  . ' ';
 
 
 if ($opportunity_category_id > 0) {
@@ -342,6 +342,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.39  2005/02/11 21:31:49  daturaarutad
+ * removed (hopefully) the last of the localization in the sql queries
+ *
  * Revision 1.38  2005/02/10 03:58:49  daturaarutad
  * Updated to use the new Grand Unified Pager, which allows grouping and has a tidier UI
  *
