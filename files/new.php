@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.8 2004/06/12 07:20:40 introspectshun Exp $
+ * $Id: new.php,v 1.9 2004/06/15 14:24:44 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -111,9 +111,6 @@ function initialize() {
 
 initialize();
 
-
-</script>
-
 Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
         ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
@@ -124,12 +121,17 @@ Calendar.setup({
         align          :    "Bl"           // alignment (defaults to "Bl")
     });
 
+</script>
+
 <?php
 
 end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.9  2004/06/15 14:24:44  gpowers
+ * - placed calendar setup code inside <script> tag
+ *
  * Revision 1.8  2004/06/12 07:20:40  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *
