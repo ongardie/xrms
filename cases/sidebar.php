@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.12 2005/01/11 22:32:05 braverock Exp $
+ * $Id: sidebar.php,v 1.13 2005/02/24 12:46:42 braverock Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -10,11 +10,14 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
-/*
-Commented until ACL system is fully implemented
-$caseList=get_list($session_user_id, 'Read', false, 'cases');
-if (!$caseList) { $case_rows=''; return false; }
-else { $caseList=implode(",",$caseList); $case_limit_sql.=" AND cases.case_id IN ($caseList) "; }
+/*  // Commented until ACL system is fully implemented    
+    $caseList=get_list($session_user_id, 'Read', false, 'cases');
+    if (!$caseList) {
+        $case_rows=''; return false;
+    } else {
+        $caseList=implode(",",$caseList);
+        $case_limit_sql.=" AND cases.case_id IN ($caseList) ";
+    }
 */
 
 $case_rows = "<div id='case_sidebar'>
@@ -30,14 +33,15 @@ $case_rows = "<div id='case_sidebar'>
             </tr>\n";
 
 //build the cases sql query
-$cases_sql = "select * from cases, case_priorities, users, case_statuses
-                where cases.case_priority_id = case_priorities.case_priority_id
+$cases_sql = "SELECT *
+              FROM cases, case_priorities, users, case_statuses
+              WHERE cases.case_priority_id = case_priorities.case_priority_id
                 and cases.user_id = users.user_id
                 and case_record_status = 'a'
                 and cases.case_status_id = case_statuses.case_status_id
                 and case_statuses.status_open_indicator = 'o'
                 $case_limit_sql
-                order by due_at";
+              ORDER BY due_at";
 
 //uncomment the debug line to see what's going on with the query
 //$con->debug=1;
@@ -64,7 +68,10 @@ if (strlen($rst->fields['username'])>0) {
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0))) {
     $new_case_button=render_create_button("New",'submit');
     if ($new_case_button) {
-        $case_type_sql = "select case_type_pretty_name, case_type_id FROM case_types";
+        $case_type_sql = "SELECT case_type_pretty_name,case_type_id
+                          FROM case_types
+                          WHERE case_type_record_status = 'a'
+                          ORDER BY case_type_pretty_name";
         $type_rst=$con->execute($case_type_sql);
         $new_case_types=$type_rst->getmenu2('case_type_id', '', false);
         $new_case_button=$new_case_types.$new_case_button; 
@@ -95,6 +102,11 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.13  2005/02/24 12:46:42  braverock
+ * - improve SQL formatting
+ * - only show case types that have an 'a'ctive status
+ *   - modified from patch submitted by Keith Edmunds
+ *
  * Revision 1.12  2005/01/11 22:32:05  braverock
  * - localize case type pretty name in sidebar
  *
