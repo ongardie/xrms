@@ -6,7 +6,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: index.php,v 1.1 2004/04/20 22:31:42 braverock Exp $
+ * $Id: index.php,v 1.2 2004/06/14 22:12:05 introspectshun Exp $
  */
 
 //include required files
@@ -16,6 +16,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $this = $_SERVER['REQUEST_URI'];
@@ -66,6 +67,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.2  2004/06/14 22:12:05  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.1  2004/04/20 22:31:42  braverock
  * - add country address formats
  *   - modified from SF patch 938811 to fix SF bug 925470
