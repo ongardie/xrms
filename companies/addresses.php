@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.18 2004/08/03 13:41:15 maulani Exp $
+ * $Id: addresses.php,v 1.19 2005/04/01 23:06:19 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,78 +12,98 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once ($include_directory . 'classes/Pager/Pager_Columns.php');
+require_once ($include_directory . 'classes/Pager/GUP_Pager.php');
+
 
 $session_user_id = session_check();
 
-$msg        = isset($_GET['msg'])     ? $_GET['msg']     : '';
-$company_id = isset($_GET['company_id']) ? $_GET['company_id'] : '';
+getGlobalVar($msg, 'msg');
+getGlobalVar($company_id, 'company_id');
 
+global $con;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
 $company_name = fetch_company_name($con, $company_id);
 
-$sql = "select * from companies c, addresses a
+$sql = "select a.address_name, a.address_id, c.default_primary_address, c.default_billing_address, c.default_shipping_address, c.default_payment_address from companies c, addresses a
 where a.address_record_status = 'a'
 and c.company_id = a.company_id
 and c.company_id = $company_id";
-$rst = $con->execute($sql);
 
-$addresses = '';
-if ($rst) {
-    while (!$rst->EOF) {
-        $addresses .= '<tr>';
-        $addresses .= "<td class=widget_label_right_91px><a href=edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a></td>';
-        $address_to_display = get_formatted_address($con, $rst->fields['address_id']);
 
-        $sql2 = "select contact_id, address_id, last_name, first_names  from contacts
-        where contact_record_status='a' and address_id = " . $rst->fields['address_id'];
-	$rst2 = $con->execute($sql2);
-        $addresses .= "<td class=widget_content>";
-	while(!$rst2->EOF) {
-		$addresses .= "<a href='../contacts/one.php?contact_id="
-                    . $rst2->fields['contact_id'] . "'>"
-                    . $rst2->fields['first_names'] . " "
-                    . $rst2->fields['last_name'] . "</a><br>";
-		    $rst2->MoveNext();
+$columns=array();
+$columns[] = array('name' => _('Address Name'), 'index_sql' => 'address_name', 'sql_sort_column' => 'a.address_name');
+$columns[] = array('name' => _('Used By Contacts'), 'index_calc' => 'used_by_contacts');
+$columns[] = array('name' => _('Formatted Address'), 'index_calc' => 'formatted_address');
+$columns[] = array('name' => _('Primary Default'), 'index_calc' => 'primary_default', 'not_sortable' => 'true', 'css_classname' => 'center');
+$columns[] = array('name' => _('Billing Default'), 'index_calc' => 'billing_default', 'not_sortable' => 'true', 'css_classname' => 'center');
+$columns[] = array('name' => _('Shipping Default'), 'index_calc' => 'shipping_default', 'not_sortable' => 'true', 'css_classname' => 'center');
+$columns[] = array('name' => _('Payment Default'), 'index_calc' => 'payment_default', 'not_sortable' => 'true', 'css_classname' => 'center');
+
+
+function GetAddressesPagerData($row) {
+	global $con;
+
+	// formatted_address
+	$row['formatted_address'] = get_formatted_address($con, $row['address_id']);
+
+	// used_by_contacts
+    $sql2 = "select contact_id, address_id, last_name, first_names  from contacts where contact_record_status='a' and address_id = {$row['address_id']}";
+    $rst2 = $con->execute($sql2);
+
+    $row['used_by_contacts'] = '';
+	if($rst2) {
+    	while(!$rst2->EOF) {
+        	$row['used_by_contacts'] .= "<a href='../contacts/one.php?contact_id="
+                    	. $rst2->fields['contact_id'] . "'>"
+                    	. $rst2->fields['first_names'] . " "
+                    	. $rst2->fields['last_name'] . "</a><br>";
+        	$rst2->MoveNext();
+    	}
 	}
-	$addresses .= "</td>";
 
-        $addresses .= "<td class=widget_content>$address_to_display</td>";
-        $addresses .= "<td class=widget_content><input type=radio name=default_primary_address value=" . $rst->fields['address_id'];
+	// form elements
+	$row['primary_default'] = "<input type=radio name=default_primary_address value=" . $row['address_id'];
+	if($row['default_primary_address'] == $row['address_id']) {
+		$row['primary_default'] .= ' checked';
+	}
+	$row['primary_default'] .= '>';
 
-        if ($rst->fields['default_primary_address'] == $rst->fields['address_id']) {
-            $addresses .= ' checked';
-        }
+	$row['billing_default'] = "<input type=radio name=default_billing_address value=" . $row['address_id'];
+	if($row['default_billing_address'] == $row['address_id']) {
+		$row['billing_default'] .= ' checked';
+	}
+	$row['billing_default'] .= '>';
 
-        $addresses .= '></td>';
-        $addresses .= "<td class=widget_content><input type=radio name=default_billing_address value=" . $rst->fields['address_id'];
+	$row['shipping_default'] = "<input type=radio name=default_shipping_address value=" . $row['address_id'];
+	if($row['default_shipping_address'] == $row['address_id']) {
+		$row['shipping_default'] .= ' checked';
+	}
+	$row['shipping_default'] .= '>';
 
-        if ($rst->fields['default_billing_address'] == $rst->fields['address_id']) {
-            $addresses .= ' checked';
-        }
+	$row['payment_default'] = "<input type=radio name=default_payment_address value=" . $row['address_id'];
+	if($row['default_payment_address'] == $row['address_id']) {
+		$row['payment_default'] .= ' checked';
+	}
+	$row['payment_default'] .= '>';
 
-        $addresses .= '></td>';
-        $addresses .= "<td class=widget_content><input type=radio name=default_shipping_address value=" . $rst->fields['address_id'];
-
-        if ($rst->fields['default_shipping_address'] == $rst->fields['address_id']) {
-            $addresses .= ' checked';
-        }
-
-        $addresses .= '></td>';
-        $addresses .= "<td class=widget_content><input type=radio name=default_payment_address value=" . $rst->fields['address_id'];
-
-        if ($rst->fields['default_payment_address'] == $rst->fields['address_id']) {
-            $addresses .= ' checked';
-        }
-
-        $addresses .= '></td>';
-        $addresses .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
+	return $row;
 }
+
+$pager = new GUP_Pager($con, $sql, 'GetAddressesPagerData', _('Addresses'), 'AddressPagerForm', 'AddressesPager', $columns, false, true);
+
+// Save Defaults button posts to set-address-defaults.php
+$endrows = "<tr><td class=widget_content_form_element colspan=10><input class=button type=button onclick=\"document.AddressPagerForm.action='set-address-defaults.php'; document.AddressPagerForm.submit();\" value=\"" . _("Save Defaults") . "\"></td></tr>";
+$pager->AddEndRows($endrows);
+
+global $system_rows_per_page;
+
+$address_pager = $pager->Render($system_rows_per_page);
+
+
 
 $sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
 $rst = $con->execute($sql);
@@ -101,28 +121,10 @@ start_page($page_title, true, $msg);
     <div id="ContentFullWidth">
 
         <!-- existing addresses //-->
-        <form action=set-address-defaults.php method=post>
+        <form action=addresses.php method=post name="AddressPagerForm">
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=7><?php echo _("Addresses"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Address Name"); ?></td>
-                <td class=widget_label><?php echo _("Used by Contacts"); ?></td>
-                <td class=widget_label><?php echo _("Formatted Address"); ?></td>
-                <td class=widget_label><?php echo _("Primary Default"); ?></td>
-                <td class=widget_label><?php echo _("Billing Default"); ?></td>
-                <td class=widget_label><?php echo _("Shipping Default"); ?></td>
-                <td class=widget_label><?php echo _("Payment Default"); ?></td>
-            </tr>
-            <?php  echo $addresses; ?>
-            </tr>
-            </tr>
-                <td class=widget_content_form_element colspan=7><input class=button type=submit value="<?php echo _("Save Defaults"); ?>"></td>
-            </tr>
-        </table>
-        </form>
+		<?php echo $address_pager; ?>
+         </form>
 
         <!-- new address //-->
         <form action=add-address.php method=post>
@@ -182,6 +184,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.19  2005/04/01 23:06:19  daturaarutad
+ * moved address listing into a GUP_Pager
+ *
  * Revision 1.18  2004/08/03 13:41:15  maulani
  * - Use full width since sidebar not needed
  *
