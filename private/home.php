@@ -13,12 +13,13 @@ $msg = $_GET['msg'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+// $con->debug = 1;
 
 $sql_activities = "select activity_id, 
 activity_title, 
 scheduled_at, 
-on_what_table, 
-on_what_id, 
+a.on_what_table, 
+a.on_what_id, 
 a.entered_at, 
 activity_status, 
 at.activity_type_pretty_name, 
@@ -41,9 +42,6 @@ $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_compan
 if ($rst) {
     while (!$rst->EOF) {
 		
-		$attached_to_link = '';
-		$attached_to_name = '';
-		
 		$company_id = $rst->fields['company_id'];
 		$company_name = $rst->fields['company_name'];
         $activity_title = $rst->fields['activity_title'];
@@ -53,13 +51,19 @@ if ($rst) {
         $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
         $activity_status = $rst->fields['activity_status'];
 		
+		$attached_to_link = '';
+		$attached_to_name = '';
+        
         if ($on_what_table == 'opportunities') {
             $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
             $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
         } elseif ($on_what_table == 'cases') {
             $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
             $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-		}
+		} else {
+            $attached_to_link = "";
+            $sql = "select * from users where 1 = 2";
+        }
 		
         $rst2 = $con->execute($sql);
         
