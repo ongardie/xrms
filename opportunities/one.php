@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.7 2004/02/06 22:47:37 maulani Exp $
+ * $Id: one.php,v 1.8 2004/02/10 17:26:28 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -226,6 +226,16 @@ $page_title = "One Opportunity : $opportunity_title";
 start_page($page_title, true, $msg);
 
 ?>
+
+<script language=javascript>
+<!--
+function markComplete() {
+    document.forms[0].activity_status.value = "c";
+    document.forms[0].submit();
+}
+
+//-->
+</script>
 
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
