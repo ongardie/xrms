@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.42 2004/06/10 13:23:22 braverock Exp $
+ * $Id: one.php,v 1.43 2004/06/10 18:54:14 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -294,7 +294,7 @@ require_once("../files/sidebar.php");
 require_once("../notes/sidebar.php");
 
 //call the sidebar hook
-$sidebar_rows = do_hook_function['company_sidebar_bottom'];
+$sidebar_rows = do_hook_function('company_sidebar_bottom', $sidebar_rows);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -642,6 +642,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.43  2004/06/10 18:54:14  braverock
+ * - fixed typo in hook call and added parameter to pass in the string
+ *
  * Revision 1.42  2004/06/10 13:23:22  braverock
  * - added company_sidebar_bottom hook
  *
