@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.25 2005/01/13 18:13:36 vanmer Exp $
+ * $Id: some.php,v 1.26 2005/02/10 02:28:16 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -111,7 +111,7 @@ if (strlen($case_status_id) > 0) {
     $where .= " and ca.case_status_id = $case_status_id";
 }
 
-if (strlen($case_id) > 0) {
+if (strlen($case_id) > 0 and is_numeric($case_id)) {
     $criteria_count++;
     $where .= " and ca.case_id = $case_id ";
 }
@@ -355,6 +355,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.26  2005/02/10 02:28:16  braverock
+ * - add is_numeric check for case_id search
+ *   - this should be an advanced search field
+ *
  * Revision 1.25  2005/01/13 18:13:36  vanmer
  * - Basic ACL changes to allow display functionality to be restricted
  *
@@ -431,7 +435,5 @@ end_page();
  * Revision 1.5  2004/04/08 16:59:15  maulani
  * - Update javascript declaration
  * - Add phpdoc
- *
- *
  */
 ?>
