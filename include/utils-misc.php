@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.55 2004/07/21 06:29:45 maulani Exp $
+ * $Id: utils-misc.php,v 1.56 2004/07/21 09:13:22 cpsource Exp $
  */
 
 /**
@@ -863,6 +863,24 @@ function arr_vars_post_get ( $ary, $allow_none = false )
     }
   }
 }
+// show program variables
+function arr_vars_show_pgm_vars ( $ary )
+{
+  echo 'arr_vars_show_pgm_vars<br>';
+
+  foreach ($ary as $key => $value) {
+    echo '$' . $key . ' = ' . $GLOBALS[$key] . '<br>';
+  }
+}
+// show session variables
+function arr_vars_show_ses_vars ( $ary )
+{
+  echo 'arr_vars_show_ses_vars<br>';
+
+  foreach ($ary as $key => $value) {
+    echo '$' . $value[0] . ' = ' . $_SESSION["$value[0]"] . '<br>';
+  }
+}
 
 /**
  * Include the i18n files, as every file with output will need them
@@ -878,6 +896,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.56  2004/07/21 09:13:22  cpsource
+ * - Add display functions to arr_vars
+ *
  * Revision 1.55  2004/07/21 06:29:45  maulani
  * - Fix bug 994830 with patch from johnfawcett.  Check that sql is valid
  *   in set_system_parameter.
