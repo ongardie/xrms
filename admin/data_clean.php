@@ -8,7 +8,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: data_clean.php,v 1.4 2004/04/21 05:16:22 braverock Exp $
+ * $Id: data_clean.php,v 1.5 2004/04/21 16:25:15 maulani Exp $
  */
 
 // where do we include from
@@ -96,13 +96,13 @@ if ($companies_to_fix > 0) {
 }
 
 // There needs to be at least one address for each company
-$sql = "SELECT companies.company_id, companies.default_primary_address, companies.company_record_status ";
+$sql = "SELECT companies.company_id, companies.company_record_status ";
 $sql .= "FROM companies ";
 $sql .= "LEFT JOIN addresses ON companies.company_id = addresses.company_id ";
-$sql .= "WHERE companies.default_primary_address = 0";
+$sql .= "WHERE addresses.company_id IS NULL";
 $rst = $con->execute($sql);
-$rst->RecordCount();
-if ($rst) {
+$companies_to_fix = $rst->RecordCount();
+if ($companies_to_fix > 0) {
     $msg .= "Need to create addresses for $companies_to_fix companies<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
@@ -112,27 +112,13 @@ if ($rst) {
                 country_id = $default_country_id,
                 address_name = 'Main',
                 address_record_status = '$company_record_status'";
+        $con->execute($sql);
 
-        $rst3 = $con->execute($sql);
-        $address_id = $con->insert_id();
-
-        if (($company_id) && ($address_id)) {
-            $sql = "update companies set
-                default_primary_address=$address_id,
-                default_billing_address=$address_id,
-                default_shipping_address=$address_id,
-                default_payment_address=$address_id
-                where company_id=$company_id";
-            $rst2 = $con->execute($sql);
-            if ($rst2) {
-                $rst2->close();
-            }
-        }
         $rst->movenext();
-   }
+    }
 }
 
-// There needs to be at least one active contact for each active company
+// There needs to be at least one active address for each active company
 $sql = "SELECT companies.company_id ";
 $sql .= "FROM companies ";
 $sql .= "LEFT JOIN addresses ON companies.company_id = addresses.company_id ";
@@ -176,6 +162,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.5  2004/04/21 16:25:15  maulani
+ * - Remove code that could alter valid data
+ *
  * Revision 1.4  2004/04/21 05:16:22  braverock
  * - set default address id for companies without address
  *   - fixes loop logic error in original code
