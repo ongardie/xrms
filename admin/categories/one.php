@@ -142,8 +142,8 @@ start_page($page_title);
 				<td class=widget_label>Not Associated With</td>
 			</tr>
 			<tr>
-				<td class=widget_content_wrappable><?php  echo $associated_with; ?></td>
-				<td class=widget_content_wrappable><?php  echo $not_associated_with; ?></td>
+				<td class=widget_content><?php  echo $associated_with; ?></td>
+				<td class=widget_content><?php  echo $not_associated_with; ?></td>
 			</tr>
 		</table>
 
