@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.66 2004/08/05 22:53:16 introspectshun Exp $
+ * $Id: one.php,v 1.67 2004/09/15 15:45:01 neildogg Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -623,6 +623,7 @@ function openNewsWindow() {
                 <input class=button type=button value="<?php echo _("Relationships"); ?>" onclick="javascript: location.href='relationships.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Addresses"); ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Divisions"); ?>" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
+                <?php do_hook('company_buttons'); ?>
                 </td>
             </tr>
         </table>
@@ -758,6 +759,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.67  2004/09/15 15:45:01  neildogg
+ * - Added hook for more company buttons
+ *
  * Revision 1.66  2004/08/05 22:53:16  introspectshun
  * - Localized 'Former Name'
  * - Contacts table now shows singular label ("Contact") when 1 record returned
