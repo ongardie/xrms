@@ -21,19 +21,16 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
-$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, addresses.*, iso_code3, address_format_string 
-        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses, countries, address_format_strings afs 
-        where c.account_status_id = as1.account_status_id 
-        and c.industry_id = i.industry_id 
-        and c.rating_id = r.rating_id 
-        and c.company_source_id = cs2.company_source_id 
-        and c.crm_status_id = cs.crm_status_id 
-        and c.user_id = u1.user_id 
-		and c.entered_by = u2.user_id 
-		and c.last_modified_by = u3.user_id 
-		and c.default_primary_address = addresses.address_id 
-		and addresses.country_id = countries.country_id 
-		and countries.address_format_string_id = afs.address_format_string_id 
+$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, addresses.*, iso_code3, address_format_string
+        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses, countries, address_format_strings afs
+        where c.account_status_id = as1.account_status_id
+        and c.industry_id = i.industry_id
+        and c.rating_id = r.rating_id
+        and c.company_source_id = cs2.company_source_id
+        and c.crm_status_id = cs.crm_status_id
+        and c.user_id = u1.user_id
+        and c.entered_by = u2.user_id
+        and c.last_modified_by = u3.user_id
         and c.company_id = $company_id";
 
 $rst = $con->execute($sql);
@@ -46,15 +43,6 @@ if ($rst) {
     $industry_pretty_name = $rst->fields['industry_pretty_name'];
     $user_id = $rst->fields['user_id'];
     $owner_username = $rst->fields['owner_username'];
-    $line1 = $rst->fields['line1'];
-    $line2 = $rst->fields['line2'];
-    $city = $rst->fields['city'];
-    $province = $rst->fields['province'];
-    $postal_code = $rst->fields['postal_code'];
-    $address_body = $rst->fields['address_body'];
-	$use_pretty_address = $rst->fields['use_pretty_address'];
-	$country = $rst->fields['iso_code3'];
-	$address_format_string = $rst->fields['address_format_string'];
     $phone = $rst->fields['phone'];
     $phone2 = $rst->fields['phone2'];
     $fax = $rst->fields['fax'];
@@ -76,6 +64,29 @@ if ($rst) {
     $custom4 = $rst->fields['custom4'];
     $extref1 = $rst->fields['extref1'];
     $extref2 = $rst->fields['extref2'];
+    //$rst->close();
+}
+
+$sql = "select c.*, addresses.*, iso_code3, address_format_string
+        from companies c, addresses, countries, address_format_strings afs
+        where
+            c.default_primary_address = addresses.address_id
+        and addresses.country_id = countries.country_id
+        and countries.address_format_string_id = afs.address_format_string_id
+        and c.company_id = $company_id";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    $line1 = $rst->fields['line1'];
+    $line2 = $rst->fields['line2'];
+    $city = $rst->fields['city'];
+    $province = $rst->fields['province'];
+    $postal_code = $rst->fields['postal_code'];
+    $address_body = $rst->fields['address_body'];
+    $use_pretty_address = $rst->fields['use_pretty_address'];
+    $country = $rst->fields['iso_code3'];
+    $address_format_string = $rst->fields['address_format_string'];
     $rst->close();
 }
 
@@ -83,11 +94,11 @@ $credit_limit = number_format($credit_limit, 2);
 $current_credit_limit = fetch_current_customer_credit_limit($extref1);
 
 if ($use_pretty_address == 't') {
-	$address_to_display = $address_body;
+    $address_to_display = $address_body;
 } else {
-	$lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
-	eval("\$address_to_display = \"$address_format_string\";");
-	// eval ("\$str = \"$str\";");
+    $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
+    eval("\$address_to_display = \"$address_format_string\";");
+    // eval ("\$str = \"$str\";");
 }
 
 if (strlen($url) > 0) {
@@ -98,23 +109,23 @@ if (strlen($url) > 0) {
 //  list of most recent activities
 //
 
-$sql_activities = "select activity_id, 
-activity_title, 
-scheduled_at, 
-on_what_table, 
-on_what_id, 
-a.entered_at, 
-activity_status, 
-at.activity_type_pretty_name, 
-cont.first_names as contact_first_names, 
-cont.last_name as contact_last_name, 
-u.username, 
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue 
-from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id 
-where a.company_id = $company_id 
-and a.user_id = u.user_id 
-and a.activity_type_id = at.activity_type_id 
-and a.activity_record_status = 'a' 
+$sql_activities = "select activity_id,
+activity_title,
+scheduled_at,
+on_what_table,
+on_what_id,
+a.entered_at,
+activity_status,
+at.activity_type_pretty_name,
+cont.first_names as contact_first_names,
+cont.last_name as contact_last_name,
+u.username,
+if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
+where a.company_id = $company_id
+and a.user_id = u.user_id
+and a.activity_type_id = at.activity_type_id
+and a.activity_record_status = 'a'
 order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
@@ -135,26 +146,26 @@ if ($rst) {
         } else {
             $classname = 'closed_activity';
         }
-		
-		if ($on_what_table == 'opportunities') {
-			$attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
-		    $sql2 = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
-		} elseif ($on_what_table == 'cases') {
-		    $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
-		    $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-		} else {
-		    $attached_to_link = "N/A";
-			$sql2 = "select * from companies where 1 = 2";
-		}
-		
-		$rst2 = $con->execute($sql2);
-		
-		if ($rst) {
-		    $attached_to_name = $rst2->fields['attached_to_name'];
-			$attached_to_link .= $attached_to_name . "</a>";
-		    $rst2->close();
-		}
-		
+
+        if ($on_what_table == 'opportunities') {
+            $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
+            $sql2 = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
+        } elseif ($on_what_table == 'cases') {
+            $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
+            $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
+        } else {
+            $attached_to_link = "N/A";
+            $sql2 = "select * from companies where 1 = 2";
+        }
+
+        $rst2 = $con->execute($sql2);
+
+        if ($rst) {
+            $attached_to_name = $rst2->fields['attached_to_name'];
+            $attached_to_link .= $attached_to_name . "</a>";
+            $rst2->close();
+        }
+
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php?company_id=$company_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
@@ -189,7 +200,7 @@ if ($rst) {
 
 // associated with
 
-$categories_sql = "select category_pretty_name 
+$categories_sql = "select category_pretty_name
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
 where ecm.on_what_table = 'companies'
 and ecm.on_what_id = $company_id
@@ -505,13 +516,13 @@ function openNewsWindow() {
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-				<input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
-				<input class=button type=button value="Admin" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';"> 
+                <input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="Admin" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="Clone" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
-				<input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
-				<input class=button type=button value="News" onclick="javascript: openNewsWindow();">
-				<input class=button type=button value="Addresses" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
-				</td>
+                <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="News" onclick="javascript: openNewsWindow();">
+                <input class=button type=button value="Addresses" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
+                </td>
             </tr>
         </table>
 
