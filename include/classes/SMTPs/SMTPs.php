@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.3 2005/03/21 05:24:27 jswalter Exp $
+// $Id: SMTPs.php,v 1.4 2005/03/21 05:38:56 jswalter Exp $
 
   /**
    * Class SMTPs
@@ -38,7 +38,7 @@
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    * @contributors name <email address> description
    *
-   * @version $Revision: 1.3 $
+   * @version $Revision: 1.4 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -1243,12 +1243,17 @@ class SMTPs
     function getHeader()
     {
         $_header = 'From: '       . $this->getFrom( 'org' ) . "\r\n"
-                 . 'To: '         . $this->getTO()          . "\r\n"
-                 . 'Cc: '         . $this->getCC()          . "\r\n"
-                 . 'Bcc: '        . $this->getBCC()         . "\r\n"
-                 . 'Subject: '    . $this->getSubject()     . "\r\n"
-                 . 'Date: '       . date("r")               . "\r\n"
-                 . 'Message-ID: ' . MD5( time() ) . '@torres.ws' . "\r\n";
+                 . 'To: '         . $this->getTO()          . "\r\n";
+
+        if ( $this->getCC() )
+            $_header .= 'Cc: ' . $this->getCC()  . "\r\n";
+
+        if ( $this->getBCC() )
+            $_header .= 'Bcc: ' . $this->getBCC()  . "\r\n";
+
+        $_header .= 'Subject: '    . $this->getSubject()     . "\r\n"
+                 .  'Date: '       . date("r")               . "\r\n"
+                 .  'Message-ID: <' . MD5( time() ) . '.SMPTs@torres.ws>' . "\r\n";
 //                 . 'Read-Receipt-To: '   . $this->getFrom( 'org' ) . "\r\n"
 //                 . 'Return-Receipt-To: ' . $this->getFrom( 'org' ) . "\r\n";
 
@@ -1260,8 +1265,6 @@ class SMTPs
 
         $_header .= 'X-Mailer: SMTPs/PHP Mailer'                   . "\r\n"
                  .  'Mime-Version: 1.0'                            . "\r\n";
-
-do_print_r ( $_header );
 
         return $_header;
     }
@@ -1636,6 +1639,11 @@ function server_parse($socket, $response)
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.4  2005/03/21 05:38:56  jswalter
+  *  - made 'CC' a conditional insert
+  *  - made 'BCC' a conditional insert
+  *  - fixed 'Message-ID'
+  *
   * Revision 1.3  2005/03/21 05:24:27  jswalter
   *  - corrected 'getSensitivity()'
   *
