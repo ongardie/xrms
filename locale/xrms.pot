@@ -1,0 +1,157 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-25 09:32-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: include/utils-interface.php:24
+msgid "Activity added."
+msgstr ""
+
+#: notes/new.php:42
+msgid "Attach Note"
+msgstr ""
+
+#: notes/sidebar.php:17
+msgid "Attached To"
+msgstr ""
+
+#: files/some.php:345
+msgid "Bulk E-Mail"
+msgstr ""
+
+#: include/utils-interface.php:21
+msgid "Changes saved."
+msgstr ""
+
+#: files/some.php:344
+msgid "Clear Search"
+msgstr ""
+
+#: include/utils-interface.php:30
+msgid "Company added."
+msgstr ""
+
+#: include/utils-interface.php:27
+msgid "Contact added."
+msgstr ""
+
+#: notes/sidebar.php:20 files/some.php:319 files/some.php:372
+msgid "Date"
+msgstr ""
+
+#: notes/edit.php:42
+msgid "Delete"
+msgstr ""
+
+#: notes/edit.php:43
+msgid "Edit Note"
+msgstr ""
+
+#: files/some.php:316
+msgid "File Description"
+msgstr ""
+
+#: files/some.php:314 files/some.php:373
+msgid "File ID"
+msgstr ""
+
+#: files/some.php:315
+msgid "File Name"
+msgstr ""
+
+#: files/some.php:293
+msgid "Files"
+msgstr ""
+
+#: include/utils-misc.php:561
+msgid "I tried to execute:"
+msgstr ""
+
+#: files/some.php:370
+msgid "Name"
+msgstr ""
+
+#: notes/sidebar.php:150
+msgid "New"
+msgstr ""
+
+#: notes/sidebar.php:137
+msgid "No attached notes"
+msgstr ""
+
+#: notes/edit.php:44 notes/new.php:45
+msgid "Note Body"
+msgstr ""
+
+#: notes/sidebar.php:12
+msgid "Notes"
+msgstr ""
+
+#: files/some.php:317
+msgid "On What"
+msgstr ""
+
+#: files/some.php:318
+msgid "On what Name"
+msgstr ""
+
+#: notes/sidebar.php:23 files/some.php:320
+msgid "Owner"
+msgstr ""
+
+#: include/utils-misc.php:557
+msgid "Please correct this error."
+msgstr ""
+
+#: include/utils-interface.php:18
+msgid "Please try again."
+msgstr ""
+
+#: files/some.php:367
+msgid "Recently Viewed"
+msgstr ""
+
+#: notes/edit.php:41 notes/new.php:51
+msgid "Save Changes"
+msgstr ""
+
+#: files/some.php:311
+msgid "Search Criteria"
+msgstr ""
+
+#: files/some.php:371
+msgid "Size"
+msgstr ""
+
+#: include/utils-interface.php:33
+msgid "Status not changed."
+msgstr ""
+
+#: include/utils-interface.php:33
+msgid "This activity is still open."
+msgstr ""
+
+#: include/utils-misc.php:556
+msgid "Unable to execute your query."
+msgstr ""
+
+#: notes/sidebar.php:120
+msgid "View/Edit"
+msgstr ""
+
+#: include/utils-interface.php:18
+msgid "We could not authenticate you."
+msgstr ""
