@@ -18,13 +18,14 @@
  * in another file.  It will improve the performance of the entire
  * system.
  *
- * $Id: setup.php,v 1.3 2004/03/20 22:49:42 braverock Exp $
+ * $Id: setup.php,v 1.4 2004/03/29 21:14:40 maulani Exp $
  */
 
 
 function xrms_plugin_init_demo() {
     global $xrms_plugin_hooks;
     $xrms_plugin_hooks['menuline']['demo'] = 'demo';
+    //$xrms_plugin_hooks['opportunity_detail']['demo'] = 'need_function';
 }
 
 
@@ -38,6 +39,9 @@ function demo() {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.4  2004/03/29 21:14:40  maulani
+ * - Add opportunity_detail hook as a commented-out example
+ *
  * Revision 1.3  2004/03/20 22:49:42  braverock
  * - need global $http_site_root in some cases
  *
