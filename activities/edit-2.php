@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.15 2004/06/11 21:18:39 introspectshun Exp $
+ * $Id: edit-2.php,v 1.16 2004/06/12 15:43:51 braverock Exp $
  */
 
 //include required files
@@ -66,7 +66,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 // if it's closed but wasn't before, update the closed_at timestamp
-$completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? $con->DBTimeStamp(date('Y-m-d H:i:s')) : 'NULL';
+$completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : 'NULL';
 
 $sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
 $rst = $con->execute($sql);
@@ -79,8 +79,8 @@ $rec['contact_id'] = $contact_id;
 $rec['activity_title'] = $activity_title;
 $rec['activity_description'] = $activity_description;
 $rec['user_id'] = $user_id;
-$rec['scheduled_at'] = $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($scheduled_at)));
-$rec['ends_at'] = $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($ends_at)));
+$rec['scheduled_at'] = strtotime($scheduled_at);
+$rec['ends_at'] = strtotime($ends_at);
 $rec['completed_at'] = $completed_at;
 $rec['activity_status'] = $activity_status;
 
@@ -253,6 +253,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.16  2004/06/12 15:43:51  braverock
+ * - changed all timestamps to work properly with ADODB getinsertsql/getupdatesql
+ *
  * Revision 1.15  2004/06/11 21:18:39  introspectshun
  * - Now use ADODB GetInsertSQL and GetUpdateSQL functions.
  *
