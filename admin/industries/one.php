@@ -2,7 +2,7 @@
 /**
  * Manage industries
  *
- * $Id: one.php,v 1.7 2004/07/25 18:20:59 johnfawcett Exp $
+ * $Id: one.php,v 1.8 2004/07/25 18:36:38 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -78,7 +78,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_content>
-                <?php echo _("Click the button below to remove this company source from the system."); ?>
+                <?php echo _("Click the button below to permanently remove this item."); ?>
                 <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
                 <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                 </td>
@@ -102,6 +102,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 18:36:38  johnfawcett
+ * - corrected string erroneously pasted
+ *
  * Revision 1.7  2004/07/25 18:20:59  johnfawcett
  * - standardized page title
  * - standardized delete text and button
