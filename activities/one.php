@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.66 2004/10/31 14:14:30 braverock Exp $
+ * $Id: one.php,v 1.67 2004/12/01 18:12:42 vanmer Exp $
  */
 
 //include required files
@@ -222,9 +222,9 @@ if ($company_id) {
 
 //include the contacts-companies sidebar
 if ($contact_id) {
-    $relationship_name = "company link";
-    $working_direction = "from";
-    $overall_id = $contact_id;
+    $relationship_name = "activity link";
+    $working_direction = "to";
+    $overall_id = $activity_id;
     require("../relationships/sidebar.php");
 }
 
@@ -461,6 +461,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.67  2004/12/01 18:12:42  vanmer
+ * - altered relationship setup section to reference relationships that relate to activities
+ *
  * Revision 1.66  2004/10/31 14:14:30  braverock
  * - fixed bug that overwrote table_name, breaking link w/ opportunities/cases
  * - moved sidebar code lower in page, resolved issues with overwriting values
