@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.15 2004/07/12 18:49:47 neildogg Exp $
+ * $Id: index.php,v 1.16 2004/07/14 16:24:22 maulani Exp $
  */
 
 //include required stuff
@@ -199,6 +199,11 @@ start_page($page_title, true, $msg);
                     <a href="activity-templates/some.php">Activity Templates</a>
                 </td>
             </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="system-parameters/some.php">System Parameters</a>
+                </td>
+            </tr>
 
 
         </table>
@@ -213,6 +218,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.16  2004/07/14 16:24:22  maulani
+ * - Add system parameters modification to administrative functions
+ *
  * Revision 1.15  2004/07/12 18:49:47  neildogg
  * - Added link for relationship types management
  *
