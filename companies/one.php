@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.83 2005/01/13 18:20:54 vanmer Exp $
+ * $Id: one.php,v 1.84 2005/01/21 14:48:53 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -158,7 +158,9 @@ if (strlen($url) > 0) {
 
 //if division_id is specified, look up the name
 if ($division_id) {
-    $sql = "SELECT division_name, address_id FROM company_division WHERE division_id=$division_id";
+    $sql = "SELECT division_name, address_id
+            FROM company_division
+            WHERE division_id=$division_id";
     $rst=$con->execute($sql);
     if (!$rst) {
         db_error_handler($con, $sql);
@@ -173,7 +175,10 @@ $address_to_display = get_formatted_address($con, $address_id);
 
 
 //list and create division select box
-$sql = "SELECT division_name, division_id FROM company_division WHERE company_id=$company_id";
+$sql = "SELECT division_name, division_id
+        FROM company_division
+        WHERE company_id=$company_id
+        AND division_record_status='a'";
 $division_rst=$con->execute($sql);
 if (!$division_rst) { db_error_handler($con, $sql); }
 elseif ($division_rst->numRows()>0) {
@@ -813,6 +818,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.84  2005/01/21 14:48:53  braverock
+ * - only add 'active' divisions to the select list
+ *
  * Revision 1.83  2005/01/13 18:20:54  vanmer
  * - ACL restriction on activity list
  *
