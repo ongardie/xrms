@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.12 2004/05/09 04:05:23 braverock Exp $
+ * $Id: utils-interface.php,v 1.13 2004/06/03 16:32:13 braverock Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -29,6 +29,9 @@ function status_msg($msg) {
         case 'company_added':
             return "Company added.";
             break;
+	case 'no_change':
+	    return "Status not changed.  This activity is still open.";
+	    break;
     }
 } //end status_msg fn
 
@@ -155,6 +158,10 @@ function build_salutation_menu($salutation) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.13  2004/06/03 16:32:13  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.12  2004/05/09 04:05:23  braverock
  * - change reports link to reports/index.php to help webservers that don't treat
  *   index.php as an auto-loaded index.
