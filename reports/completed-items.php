@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.12 2005/01/03 06:37:19 ebullient Exp $
+ * $Id: completed-items.php,v 1.13 2005/01/30 12:52:02 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -369,10 +369,11 @@ foreach ($userArray as $key => $user_id) {
     } // End Cases Type
 } // End Foreach User
 } // End If UserArray
-
+$from_email_address = get_system_parameter($con, "Sender Email Address");
 $con->close();
 if ($send_email) {
     $headers  = "MIME-Version: 1.0\r\n";
+    $headers .= "From: " . $from_email_address . "\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
     mail($send_email_to, "$app_title: $page_title", $output, $headers);
     if (($display) || ($friendly)) {
@@ -389,6 +390,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.13  2005/01/30 12:52:02  maulani
+ * - Add from email address to emailed reports
+ *
  * Revision 1.12  2005/01/03 06:37:19  ebullient
  * update reports - graphs centered on page, reports surrounded by divs
  *

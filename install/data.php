@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.16 2005/01/24 00:17:19 maulani Exp $
+ * $Id: data.php,v 1.17 2005/01/30 12:52:01 maulani Exp $
  */
 
 /**
@@ -31,6 +31,8 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters (param_id, string_val, description) values ('RSS Feeds Enabled', 'n', 'Provide RSS Feeds.  y or n.')";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters (param_id, int_val, description) values ('Maximum RSS Feed Entries', 15, 'Maximum number of entries to include in any RSS feed.')";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('Sender Email Address', 'xrms@example.com', 'Email address to use as the sender address when sending reports via email.')";
         $rst = $con->execute($sql);
     }
 
@@ -2433,6 +2435,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.17  2005/01/30 12:52:01  maulani
+ * - Add from email address to emailed reports
+ *
  * Revision 1.16  2005/01/24 00:17:19  maulani
  * - Add description to system parameters
  *

@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: overdue-items.php,v 1.4 2004/11/03 12:09:24 maulani Exp $
+ * $Id: overdue-items.php,v 1.5 2005/01/30 12:52:02 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -26,7 +26,7 @@ $starting = $_GET['starting'];
 $ending = $_GET['ending'];
 
 $use_hr = 1; // comment this out to remove <hr>'s from between lines
-$say_no_when_none = 0; // display "NO (CASES|ACTIVITIES|CAMPAIGNS|OPPORTUNITES} for First_Names Last_Name"
+$say_no_when_none = 1; // display "NO (CASES|ACTIVITIES|CAMPAIGNS|OPPORTUNITES} for First_Names Last_Name"
 
 $userArray = array();
 
@@ -374,7 +374,7 @@ foreach ($userArray as $key => $user_id) {
     } // End Cases Type
 } // End Foreach User
 } // End If UserArray
-
+$from_email_address = get_system_parameter($con, "Sender Email Address");
 $con->close();
 if ($send_email) {
   if ($overdue) {
@@ -382,6 +382,7 @@ if ($send_email) {
         $email = $send_email_to;
     }
     $headers  = "MIME-Version: 1.0\r\n";
+    $headers .= "From: " . $from_email_address . "\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
     mail($email, _("XRMS: Overdue Items"), $output, $headers);
     if (($display) || ($friendly)) {
@@ -399,6 +400,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: overdue-items.php,v $
+ * Revision 1.5  2005/01/30 12:52:02  maulani
+ * - Add from email address to emailed reports
+ *
  * Revision 1.4  2004/11/03 12:09:24  maulani
  * - Replace relative links with absolute links that work in emails
  *

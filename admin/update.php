@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.55 2005/01/29 19:40:05 vanmer Exp $
+ * $Id: update.php,v 1.56 2005/01/30 12:52:01 maulani Exp $
  */
 
 // where do we include from
@@ -73,7 +73,7 @@ if ($recCount == 0) {
         $rec['password'] = '24c9e15e52afc47c225b757e7bee1f9d';
         $rec['last_name'] = 'One';
         $rec['first_names'] = 'User';
-        $rec['email'] = 'user1@somecompany.com';
+        $rec['email'] = 'user1@example.com';
         $rec['language'] = 'english';
 
         $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
@@ -289,7 +289,25 @@ $sql .= 'sort_order     int';
 $sql .= ')';
 $rst = $con->execute($sql);
 
-// Make sure that there is an default GST offset in system_parameters
+// Make sure that there is a Sender Email Address in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='Sender Email Address'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= 'Added a Sender Email Address.<BR><BR>';
+    $sql = "SELECT * FROM system_parameters WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['param_id'] = 'Sender Email Address';
+    $rec['string_val'] = 'xrms@example.com';
+    $rec['description'] = 'Email address to use as the sender address when sending reports via email.';
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is a default GST offset in system_parameters
 $sql = "select count(*) as recCount from system_parameters where param_id='Default GST Offset'";
 $rst = $con->execute($sql);
 $recCount = $rst->fields['recCount'];
@@ -4108,6 +4126,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.56  2005/01/30 12:52:01  maulani
+ * - Add from email address to emailed reports
+ *
  * Revision 1.55  2005/01/29 19:40:05  vanmer
  * - added errorneously missing user_id field to user preferences table
  *
