@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.2 2004/04/20 14:00:58 braverock Exp $
+ * $Id: activitytimes.php,v 1.3 2004/06/12 05:35:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,6 +13,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -160,6 +161,10 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.3  2004/06/12 05:35:58  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.2  2004/04/20 14:00:58  braverock
  * - changed form definition
  *

@@ -2,7 +2,7 @@
 /**
  * Create a graph of activity for the requested user.
  *
- * $Id: user-activity.php,v 1.4 2004/04/17 15:57:03 maulani Exp $
+ * $Id: user-activity.php,v 1.5 2004/06/12 05:35:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -11,6 +11,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-graph.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -116,6 +117,10 @@ end_page();
 
 /**
  * $Log: user-activity.php,v $
+ * Revision 1.5  2004/06/12 05:35:58  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.4  2004/04/17 15:57:03  maulani
  * - Add CSS2 positioning
  * - Add phpdoc

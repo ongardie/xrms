@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.11 2004/06/07 16:39:53 gpowers Exp $
+ * $Id: index.php,v 1.12 2004/06/12 05:35:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -146,6 +147,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.12  2004/06/12 05:35:58  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.11  2004/06/07 16:39:53  gpowers
  * - Separated "Graphs" and "Reports"
  * - Correctly labelled graphs as "Graphs"

@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.5 2004/05/10 13:07:22 maulani Exp $
+ * $Id: audit-items.php,v 1.6 2004/06/12 05:35:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,6 +13,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -176,6 +177,10 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.6  2004/06/12 05:35:58  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.5  2004/05/10 13:07:22  maulani
  * - Add level to audit trail
  * - Clean up audit trail text

@@ -2,7 +2,7 @@
 /**
  * Search and view summary information on multiple companies and thier contacts for printing.
  *
- * $Id: company-contacts-printout.php,v 1.2 2004/06/05 16:03:16 braverock Exp $
+ * $Id: company-contacts-printout.php,v 1.3 2004/06/12 05:35:58 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 //set the language
 $_SESSION['language'] = 'english';
@@ -337,6 +338,10 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.3  2004/06/12 05:35:58  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.2  2004/06/05 16:03:16  braverock
  * - added print friendly formatting check
  *

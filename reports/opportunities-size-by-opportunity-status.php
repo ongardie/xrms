@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.3 2004/04/17 15:57:03 maulani Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.4 2004/06/12 05:35:58 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,6 +13,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-graph.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -91,7 +92,7 @@ start_page($page_title, true, $msg);
                 <?php echo $graph_rows; ?>
                 g.scale = <?php echo round(array_sum($array_of_total_values) / sizeof($array_of_total_values)) ?>;
                 g.stacked = true;
-                g.setXScaleValues(<?php  echo implode($graph_legend_array, ','); ?>);
+                g.setXScaleValues(<?php  echo implode(',', $graph_legend_array); ?>);
 				g.setLegend('Remainder', 'Weighted');
                 g.build();
                 </SCRIPT>
@@ -118,6 +119,10 @@ end_page();
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.4  2004/06/12 05:35:58  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.3  2004/04/17 15:57:03  maulani
  * - Add CSS2 positioning
  * - Add phpdoc
