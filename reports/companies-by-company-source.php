@@ -3,7 +3,7 @@
  *
  * Companies by company source report.
  *
- * $Id: companies-by-company-source.php,v 1.10 2005/03/21 13:40:58 maulani Exp $
+ * $Id: companies-by-company-source.php,v 1.11 2005/04/01 23:43:01 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -181,7 +181,7 @@ function GetCompaniesByCompanySourceGraph($con, $user_id, $all_users) {
 	
 	$graph_info = array();
 	$graph_info['size_class']   = 'main';
-	$graph_info['bar_type']     = 'single';
+	$graph_info['graph_type']   = 'single_bar';
 	$graph_info['data']         = $array_of_company_count_values;
 	$graph_info['x_labels']     = $graph_legend_array;
 	$graph_info['xaxis_label_angle'] = 30;
@@ -203,6 +203,9 @@ function GetCompaniesByCompanySourceGraph($con, $user_id, $all_users) {
 
 /**
  * $Log: companies-by-company-source.php,v $
+ * Revision 1.11  2005/04/01 23:43:01  daturaarutad
+ * updated for change of bar_type->graph_type
+ *
  * Revision 1.10  2005/03/21 13:40:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *

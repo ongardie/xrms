@@ -3,7 +3,7 @@
  *
  * Opportunities size by industry report.
  *
- * $Id: opportunities-size-by-industry.php,v 1.8 2005/03/11 21:51:50 daturaarutad Exp $
+ * $Id: opportunities-size-by-industry.php,v 1.9 2005/04/01 23:43:01 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -105,7 +105,7 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 	
 	$graph_info = array();
 	$graph_info['size_class']   = 'main';
-	$graph_info['bar_type']     = 'grouped';
+	$graph_info['graph_type']   = 'grouped_bar';
 	$graph_info['data']         = array($array_of_total_values, $array_of_total_weighted_values);
 	$graph_info['legend']       = array('Total', 'Weighted');
 	$graph_info['x_labels']     = $graph_legend_array;
@@ -126,6 +126,9 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 
 /**
  * $Log: opportunities-size-by-industry.php,v $
+ * Revision 1.9  2005/04/01 23:43:01  daturaarutad
+ * updated for change of bar_type->graph_type
+ *
  * Revision 1.8  2005/03/11 21:51:50  daturaarutad
  * updated to support client side image maps
  *

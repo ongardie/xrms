@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.11 2005/03/21 13:40:58 maulani Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.12 2005/04/01 23:43:01 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -199,7 +199,7 @@ function GetOpportunitiesSizeByOpportunityStatusGraph($con, $user_id, $all_users
 	
 	$graph_info = array();
 	$graph_info['size_class']   = 'main';
-	$graph_info['bar_type']     = 'grouped';
+	$graph_info['graph_type']   = 'grouped_bar';
 	$graph_info['data']         = array($array_of_total_weighted_values, $array_of_total_values);
 	$graph_info['legend']       = array('Total', 'Weighted');
 	$graph_info['x_labels']     = $graph_legend_array;
@@ -221,6 +221,9 @@ function GetOpportunitiesSizeByOpportunityStatusGraph($con, $user_id, $all_users
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.12  2005/04/01 23:43:01  daturaarutad
+ * updated for change of bar_type->graph_type
+ *
  * Revision 1.11  2005/03/21 13:40:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *

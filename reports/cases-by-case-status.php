@@ -3,7 +3,7 @@
  *
  * Cases by case status report.
  *
- * $Id: cases-by-case-status.php,v 1.8 2005/03/11 17:21:16 daturaarutad Exp $
+ * $Id: cases-by-case-status.php,v 1.9 2005/04/01 23:43:01 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -98,7 +98,7 @@ function GetCasesByCaseStatusGraph($con) {
 	
 	$graph_info = array();
 	$graph_info['size_class']   = 'main';
-	$graph_info['bar_type']     = 'single';
+	$graph_info['graph_type']   = 'single_bar';
 	$graph_info['data']         = $array_of_case_count_values;
 	$graph_info['x_labels']     = $graph_legend_array;
 	$graph_info['graph_title']  = $title;
@@ -116,6 +116,9 @@ function GetCasesByCaseStatusGraph($con) {
 
 /**
  * $Log: cases-by-case-status.php,v $
+ * Revision 1.9  2005/04/01 23:43:01  daturaarutad
+ * updated for change of bar_type->graph_type
+ *
  * Revision 1.8  2005/03/11 17:21:16  daturaarutad
  * updated to support client side image maps
  *

@@ -3,7 +3,7 @@
  *
  * Opportunities by quanity by industry report.
  *
- * $Id: opportunities-quantity-by-industry.php,v 1.8 2005/03/11 21:44:21 daturaarutad Exp $
+ * $Id: opportunities-quantity-by-industry.php,v 1.9 2005/04/01 23:43:01 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -96,7 +96,7 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 
 	$graph_info = array();
 	$graph_info['size_class']   = 'main';
-	$graph_info['bar_type']     = 'single';
+	$graph_info['graph_type']   = 'single_bar';
 	$graph_info['data']         = $array_of_opportunity_count_values;
 	$graph_info['x_labels']     = $graph_legend_array;
 	$graph_info['xaxis_label_angle'] = 30;
@@ -115,6 +115,9 @@ function GetOpportunitiesQuantityByOpportunityStatusGraph($con) {
 
 /**
  * $Log: opportunities-quantity-by-industry.php,v $
+ * Revision 1.9  2005/04/01 23:43:01  daturaarutad
+ * updated for change of bar_type->graph_type
+ *
  * Revision 1.8  2005/03/11 21:44:21  daturaarutad
  * updated to support client side image maps
  *
