@@ -4,7 +4,7 @@
  *
  * An include file to override ADODB_Pager to implement companies specific functions
  *
- * $Id: pager.php,v 1.1 2004/08/19 13:14:05 maulani Exp $
+ * $Id: pager.php,v 1.2 2004/08/26 22:35:07 niclowe Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -46,8 +46,8 @@ class Companies_Pager extends ADODB_Pager{
 
         if ($this->how_many_rows > 0)           
         {
-            echo "<tr><td class=widget_content_form_element colspan=10><input type=button class=button onclick=\"javascript: exportIt();\" value='Export - Not Coded Yet'> ";
-            echo "<input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge - Disabled'></td></tr>";
+            echo "<tr><td class=widget_content_form_element colspan=10><input type=button class=button onclick=\"javascript: exportIt();\" value=\"". _('Export')."-Not Coded Yet\"> ";
+            echo "<input type=button class=button onclick=\"javascript: bulkEmail();\" value=". _('Mail Merge')." ></td></tr>";
         }
 
         echo "</table>";
@@ -57,6 +57,9 @@ class Companies_Pager extends ADODB_Pager{
 
 /**
  * $Log: pager.php,v $
+ * Revision 1.2  2004/08/26 22:35:07  niclowe
+ * localised the mail merge & export buttons, and enabled mail merge functionality for companies
+ *
  * Revision 1.1  2004/08/19 13:14:05  maulani
  * - Add specific type pager to ease overriding of layout function
  *
