@@ -24,7 +24,7 @@
  * @todo modify CSVtoArray fn to do a trim, strtolower, and replace spaces with underscores in array element names
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-3.php,v 1.8 2004/02/10 16:38:13 braverock Exp $
+ * $Id: import-companies-3.php,v 1.9 2004/02/10 16:57:24 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -376,7 +376,7 @@ foreach ($filearray as $row) {
                                    company_id    = $company_id,
                                    address_name  = ". $con->qstr($address_name, get_magic_quotes_gpc()) .',
                                    line1         = '. $con->qstr($address_line1, get_magic_quotes_gpc()) .',
-                                   line2         = '. $con->qstr($address_line1, get_magic_quotes_gpc()) .',
+                                   line2         = '. $con->qstr($address_line2, get_magic_quotes_gpc()) .',
                                    city          = '. $con->qstr($address_city, get_magic_quotes_gpc()) . ',
                                    province      = '. $con->qstr($address_state, get_magic_quotes_gpc()) . ',
                                    postal_code   = '. $con->qstr($address_postal_code, get_magic_quotes_gpc());
@@ -537,6 +537,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.9  2004/02/10 16:57:24  braverock
+ * - fixed address line 2 insert
+ *
  * Revision 1.8  2004/02/10 16:38:13  braverock
  * - fixed error in $sql_insert_company syntax
  *
