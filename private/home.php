@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.37 2004/07/25 14:13:54 johnfawcett Exp $
+ * $Id: home.php,v 1.38 2004/07/30 11:12:58 cpsource Exp $
  */
 
 // include the common files
@@ -22,11 +22,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 
 // get call arguments
-if ( isset($_GET['msg']) ) {
-    $msg = $_GET['msg'];
-} else {
-    $msg = '';
-}
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 //connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
@@ -497,6 +493,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.38  2004/07/30 11:12:58  cpsource
+ * - Got msg in standard format.
+ *
  * Revision 1.37  2004/07/25 14:13:54  johnfawcett
  * - removed PDF from translated text
  *
