@@ -9,7 +9,7 @@ body {
   border: 1px solid Gainsboro;
   margin: 1px;
   padding-left: 5px;
-  background-color: #eeeeff;
+  background-color: rgb(20%,40%,60%);
   color: #ffffee;
   font-family: tahoma;
   font-size: 21pt;
@@ -83,21 +83,12 @@ table.widget {
 
 td.widget_header {
   padding: 5px;
-  background-color: #bb6666;
+  background-color: rgb(20%,40%,60%);
   color: #ffffee;
   font-family: verdana;
   font-size: 9pt;
   font-weight: bold;
   background-image: url("img/widget_header_background.gif");
-}
-td.widget_header_stock {
-  padding: 5px;
-  background-color: #bb6666;
-  color: #ffffee;
-  font-family: verdana;
-  font-size: 9pt;
-  font-weight: bold;
-  background-image: url("img/widget_header_stock_background.gif");
 }
 
 td.widget_label {
@@ -187,15 +178,6 @@ td.widget_label_right_166px {
   background-position: top right;
 }
 
-td.widget_header_stock {
-  padding: 5px;
-  background-color: #bb6666;
-  color: #ffffee;
-  font-family: verdana;
-  font-size: 9pt;
-  font-weight: bold;
-  background-image: url("img/widget_header_stock_background.gif");
-}
 td.widget_label_stock {
   padding: 5px;
   background-color: #eeeeee;
