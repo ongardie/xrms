@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.6 2004/01/26 19:18:29 braverock Exp $
+ * $Id: edit-2.php,v 1.7 2004/02/10 17:53:44 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -40,6 +40,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug=1;
 
 $sql = "update companies set
+        last_modified_by = $session_user_id,
+        last_modified_at = now(), 
         crm_status_id = $crm_status_id,
         company_source_id = $company_source_id,
         industry_id = $industry_id,
@@ -67,6 +69,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.7  2004/02/10 17:53:44  maulani
+ * Set last modified user and date
+ *
  * Revision 1.6  2004/01/26 19:18:29  braverock
  * - cleaned up sql format
  * - added phpdoc
