@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.49 2005/03/21 13:05:57 maulani Exp $
+ * $Id: utils-interface.php,v 1.50 2005/03/29 19:10:44 gpowers Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -142,6 +142,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     global $http_site_root;
     global $app_title;
     global $css_theme;
+    global $body_tags;
     
     if (!$xcon) {
         global $xrms_db_dbtype;
@@ -216,7 +217,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     }
 ?>
 </head>
-<body>
+<body $body_tags>
   <div id="page_header"><?php echo $page_title; ?></div>
 <?php
   // Show navbar..
@@ -289,7 +290,7 @@ function render_nav_line() {
     //place the menu_line hook before Reports and Adminstration link
     do_hook ('menuline');
 ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false,  'Read', 'reports')) echo http_root_href('/reports/index.php',      _("Reports")) . ' &bull; '; ?> 
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], 'Reports',  'Read')) echo http_root_href('/reports/index.php',      _("Reports")) . ' &bull; '; ?> 
       <?php if (check_object_permission_bool($_SESSION['session_user_id'], 'Administration', 'Read' )) echo http_root_href('/admin/routing.php',      _("Administration")). ' &bull; '; ?>
       <?php echo http_root_href('/admin/users/self.php', _("Preferences")); ?>
   </div><!-- end of navline -->
@@ -572,6 +573,10 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.50  2005/03/29 19:10:44  gpowers
+ * - based Reports ACL on object name, not table name (bug?)
+ * - changed 'reports' to 'Reports' for consistancy
+ *
  * Revision 1.49  2005/03/21 13:05:57  maulani
  * - Remove redundant code by centralizing common user menu call
  *
