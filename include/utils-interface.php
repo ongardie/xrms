@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.43 2005/01/25 06:01:27 vanmer Exp $
+ * $Id: utils-interface.php,v 1.44 2005/01/28 22:59:22 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -82,6 +82,8 @@ function status_msg($msg) {
       return _("Changes saved.");
     case 'no_change':
       return _("Status not changed.") . ' ' . _("This activity is still open.");
+    case 'division_added':
+      return _("Division Added.");
 
     // handle unknown messages
     default:
@@ -426,6 +428,9 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.44  2005/01/28 22:59:22  braverock
+ * - add msg for adding new division
+ *
  * Revision 1.43  2005/01/25 06:01:27  vanmer
  * - added check for user preference of css theme if set
  * - altered ACL button functions to call centralized function
