@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.12 2004/06/14 18:13:51 introspectshun Exp $
+ * $Id: update.php,v 1.13 2004/06/26 13:11:29 braverock Exp $
  */
 
 /**
@@ -50,7 +50,7 @@ if ($recCount == 0) {
     $rec['role_pretty_name'] = 'Admin';
     $rec['role_pretty_plural'] = 'Admin';
     $rec['role_display_html'] = 'Admin';
-    
+
     $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
 }
@@ -89,10 +89,10 @@ if ($recCount == 0) {
         $msg .= "Give Admin access to $user_id.<BR><BR>";
         $sql = "SELECT * FROM users WHERE user_id = $user_id";
         $rst = $con->execute($sql);
-        
+
         $rec = array();
         $rec['role_id'] = $role_id;
-        
+
         $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
         $con->execute($upd);
     }
@@ -126,9 +126,10 @@ $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 // end
 
-//add sort order to activity statuses
+//add sort order to activity types
 //should put a test here, but alter table is non-destructive
-$sql = "ALTER TABLE `activity_types` ADD `sort_order` TINYINT NOT NULL DEFAULT='1' AFTER `activity_type_record_status`";
+$sql = "ALTER TABLE activity_types ADD sort_order TINYINT NOT NULL DEFAULT '1' AFTER activity_type_record_status";
+$rst = $con->execute($sql);
 
 //make sure that there is connection detail columns in the audit_items table
 //these are done separately in case one column already exists
@@ -205,7 +206,7 @@ if ($recCount == 0) {
     $msg .= 'Added a default GST offset.<BR><BR>';
     $sql = "SELECT * FROM system_parameters WHERE 1 = 2"; //select empty record as placeholder
     $rst = $con->execute($sql);
-    
+
     $rec = array();
     $rec['param_id'] = 'Default GST Offset';
     $rec['int_val'] = -5;
@@ -255,6 +256,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.13  2004/06/26 13:11:29  braverock
+ * - execute sql for sort order on activity types
+ *   - applies SF patch #979564 by Marc Spoorendonk (grmbl)
+ *
  * Revision 1.12  2004/06/14 18:13:51  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
