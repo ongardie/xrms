@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.4 2004/03/22 03:16:55 braverock Exp $
+ * $Id: new-2.php,v 1.5 2004/03/26 23:52:47 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -49,7 +49,7 @@ $file_id = $con->insert_id();
 
 if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
     move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $filename);
-} elseif ($_FILES['file1']['tmp_name']) and (strlen($file_pretty_name))){
+} elseif ($_FILES['file1']['tmp_name'] and (strlen($file_pretty_name))){
         $error = $_FILES['file1']['tmp_name'];
         $msg .= '<p>'
              . 'A PHP error has occurred, your file was not uploaded.'
@@ -95,6 +95,10 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.5  2004/03/26 23:52:47  maulani
+ * - bug fix 923755 === unbalanced parenthesis
+ *   fix submitted by anonymous
+ *
  * Revision 1.4  2004/03/22 03:16:55  braverock
  * - added check for error codes on file upload
  *   - fixes SF bug 839574
