@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.14 2005/03/15 22:28:50 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.15 2005/03/17 19:43:12 daturaarutad Exp $
  */
 
 
@@ -141,6 +141,8 @@ class GUP_Pager {
 		if($refresh) { $this->use_cached	= false; }
 		// don't use the cache if we are in sql-only mode (no data or callbacks)
 		if(!isset($data)) { $this->use_cached	= false; }
+		// don't use the cache if there is no sql and the data is not
+		if(isset($data) && !function_exists($data)) { $this->use_cached	= false; }
 
 		if(!is_numeric($this->group_mode)) { unset($this->group_mode); }
 		if(isset($this->group_mode)) { $this->maximize = true; }
@@ -541,6 +543,7 @@ END;
     {
         ob_start();
 
+
         $color_counter = 0;
 		$col_classnames = array();
 
@@ -593,9 +596,10 @@ END;
 			$skip_value = null;
 		}
 
-
         // main data loop
         for($i=$this->start_data_row; $i<$this->end_data_row; $i++) {
+
+		
 
 			// in group mode, skip this value if it's not one we're interested in.
 			if($skip_value && $skip_value != $this->data[$i][$this->column_info[$this->group_mode]['index']]) {
@@ -982,6 +986,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.15  2005/03/17 19:43:12  daturaarutad
+ * don't use the cache if there is no sql and the data is not a function
+ *
  * Revision 1.14  2005/03/15 22:28:50  daturaarutad
  * default sql_sort_column to index_sql value if its not set already
  *
