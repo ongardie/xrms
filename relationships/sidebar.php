@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.25 2005/01/12 20:23:13 vanmer Exp $
+ * $Id: sidebar.php,v 1.26 2005/01/12 22:06:09 vanmer Exp $
  */
 
 if(empty($relationships)) {
@@ -153,6 +153,8 @@ for($j = 0; $j <= $expand; $j++) {
                             <!-- Content Start -->';
                         }
                     
+/*
+                        COMMENTED, SHOWS WRONG INFORMATION IF RELATIONSHIPS ALL HAVE SEPERATE NAMES                        
                         if($rst->fields['multiple'] == 1) {
                             $relationship_link_rows .= "
                         <tr>
@@ -160,17 +162,17 @@ for($j = 0; $j <= $expand; $j++) {
                         </tr>
                         <tr>";
                         }
-                        
+*/                        
                         if($j == 0) {
                             $relationship_link_rows .= "
                             <td class=widget_label>" . _($opposite_name) . "</td>";
                             if(in_array($_GET['other'], $relationship_type_ids)) {
                                 $relationship_link_rows .= "
-                                <td align=right class=widget_label>" . _("Other ". $display_name) . "</td>";
+                                <td align=right class=widget_label>" . _("Linked Relationships") . "</td>";
                             }
                             else {
                                 $relationship_link_rows .= "
-                                <td align=right class=widget_label><a href=\"$http_site_root" . current_page("other={$rst->fields['relationship_type_id']}") . "\">" . _("Other ". $display_name) . "</a></td>";
+                                <td align=right class=widget_label><a href=\"$http_site_root" . current_page("other={$rst->fields['relationship_type_id']}") . "\">" . _("Linked Relationships") . "</a></td>";
                             }
                         }
                         else {
@@ -411,6 +413,10 @@ $relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.26  2005/01/12 22:06:09  vanmer
+ * - changed Other links to read Linked Relationships, as Other Companies is misleading
+ * - Commented out relationship name display, as it does not show the name for each relationship, and is misleading because of this
+ *
  * Revision 1.25  2005/01/12 20:23:13  vanmer
  * - removed unneeded Group By out of relationship query
  * - removed unneeded NOT IN query, overly restrictive from deprecated method
