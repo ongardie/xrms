@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.44 2005/03/15 21:49:48 daturaarutad Exp $
+ * $Id: some.php,v 1.45 2005/03/15 22:29:34 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -56,7 +56,7 @@ $sql = "SELECT "
     ELSE 0
   END AS weighted_size" . ",
   os.opportunity_status_pretty_name AS status " . ","
-  . " $close_at AS close_date"  . ' ';
+  . " $close_at AS close_date, opp.opportunity_title"  . ' ';
 
 
 if ($opportunity_category_id > 0) {
@@ -248,7 +248,7 @@ $status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name
 $status_query_select = $sql . 'AND os.opportunity_status_id = XXX-value-XXX';
 
 $columns = array();
-$columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity');
+$columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
@@ -259,7 +259,9 @@ $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date');
 
 
 // selects the columns this user is interested in
-$default_columns =  array('opportunity', 'company', 'owner', 'opportunity_size', 'weighted_size', 'status', 'close_date');
+// no reason to set this if you don't want all by default
+$default_columns = null;
+//$default_columns =  array('opportunity', 'company', 'owner', 'opportunity_size', 'weighted_size', 'status', 'close_date');
 
 $pager_columns = new Pager_Columns('OpportunityPager', $columns, $default_columns, 'OpportunityData');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -343,6 +345,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.45  2005/03/15 22:29:34  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.44  2005/03/15 21:49:48  daturaarutad
  * fixed Mail Merge
  *
