@@ -4,7 +4,7 @@
  *
  * Edit campaign-statuses
  *
- * $Id: one.php,v 1.7 2004/07/25 15:32:02 johnfawcett Exp $
+ * $Id: one.php,v 1.8 2004/07/25 15:33:09 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -92,7 +92,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_content>
-                <?php echo _("Click the button below to remove this account status from the system."); ?>
+                <?php echo _("Click the button below to remove this campaign status from the system."); ?>
                 <p><?php echo _("Note: This action CANNOT be undone!"); ?>
                 <p><input class=button type=submit value="<?php echo _("Delete Campaign Status"); ?>">
                 </td>
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 15:33:09  johnfawcett
+ * - modified reference "account status" to "campaign status"
+ *
  * Revision 1.7  2004/07/25 15:32:02  johnfawcett
  * - unified page title
  * - removed punctuation from gettext strings
