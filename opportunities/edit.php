@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.15 2004/07/29 09:39:48 cpsource Exp $
+ * $Id: edit.php,v 1.16 2004/07/30 09:45:29 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -148,11 +148,11 @@ $rst->close();
 
 $con->close();
 
-// include confgoto.js
-confGoTo_includes();
-
 $page_title = _("Opportunity") . " : " . $opportunity_title;
 start_page($page_title, true, $msg);
+
+// include confgoto.js
+confGoTo_includes();
 
 ?>
 
@@ -300,6 +300,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.16  2004/07/30 09:45:29  cpsource
+ * - Place confGoTo setup later in startup sequence.
+ *
  * Revision 1.15  2004/07/29 09:39:48  cpsource
  * - Seperate .js from .php for confGoTo for PHP V4 problems.
  *

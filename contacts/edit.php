@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.21 2004/07/29 11:23:04 cpsource Exp $
+ * $Id: edit.php,v 1.22 2004/07/30 09:45:24 cpsource Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -107,11 +107,11 @@ $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
 $con->close();
 
-// include confGoTo javascrip module
-confGoTo_includes();
-
 $page_title = $first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
+
+// include confGoTo javascrip module
+confGoTo_includes();
 
 ?>
 
@@ -266,6 +266,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.22  2004/07/30 09:45:24  cpsource
+ * - Place confGoTo setup later in startup sequence.
+ *
  * Revision 1.21  2004/07/29 11:23:04  cpsource
  * - Added confGoTo sub-system for Delete confirm.
  *
