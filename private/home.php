@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.10 2004/03/07 17:47:10 braverock Exp $
+ * $Id: home.php,v 1.11 2004/03/15 16:41:21 braverock Exp $
  */
 
 // include the common files
@@ -34,7 +34,8 @@ $case_limit_sql = "and cases.user_id = $session_user_id";
 require_once("../cases/sidebar.php");
 
 //include the opportunities sidebar
-$opportunity_limit_sql = "and opportunities.user_id = $session_user_id";
+$opportunity_limit_sql = "and opportunities.user_id = $session_user_id \nand status_open_indicator = 'o'";
+
 require_once("../opportunities/sidebar.php");
 
 //include the files sidebar
@@ -202,6 +203,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.11  2004/03/15 16:41:21  braverock
+ * - show only open opportunities on the home page
+ *
  * Revision 1.10  2004/03/07 17:47:10  braverock
  * -changed to use $display_how_many_activities_on_home_page
  *
