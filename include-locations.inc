@@ -18,7 +18,7 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.9 2004/03/24 18:17:27 maulani Exp $
+ * $Id: include-locations.inc,v 1.10 2004/07/13 13:11:54 cpsource Exp $
  */
 
 // include trailing slash in path
@@ -34,6 +34,9 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.10  2004/07/13 13:11:54  cpsource
+ * - Add new-line to end-of-file so emacs emerges work
+ *
  * Revision 1.9  2004/03/24 18:17:27  maulani
  * - Restore from wayward commit
  *
