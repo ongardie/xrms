@@ -8,12 +8,12 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.79 2004/08/05 14:56:00 braverock Exp $
+ * $Id: utils-misc.php,v 1.80 2004/08/05 19:54:39 introspectshun Exp $
  */
 
 if ( !defined('IN_XRMS') )
 {
-  die('Hacking attempt');
+  die(_('Hacking attempt'));
   exit;
 }
 
@@ -237,8 +237,8 @@ function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure=
     }
     $handle = fopen($file, 'r');
     if (!$handle) {
-        echo "Unable to open file: $file \n";
-        echo "Please correct this error.";
+        echo _("Unable to open file") . ": $file \n";
+        echo _("Please correct this error.");
         exit;
     }
 
@@ -777,13 +777,13 @@ function time_zone_offet($con, $address_id) {
         $postal_code = $rst->fields['postal_code'];
 
         $sql = "SELECT daylight_savings_id, offset, confirmed,
-                    if(province='" . $province . "', 0, 1) as has_province,
-                    if(city='" . $city . "', 0, 1) as has_city,
-                    if(postal_code='" . $postal_code . "', 0, 1) as has_postal_code
+                    (CASE WHEN (province = '" . $province . "') THEN 0 ELSE 1 END) AS has_province,
+                    (CASE WHEN (city = '" . $city . "') THEN 0 ELSE 1 END) AS has_city,
+                    (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
                 FROM time_zones
                 WHERE country_id=" . $country_id . "
-                ORDER BY has_province, has_city, has_postal_code limit 1";
-        $rst = $con->execute($sql);
+                ORDER BY has_province, has_city, has_postal_code";
+        $rst = $con->SelectLimit($sql, 1);
         if(!$rst) {
             db_error_handler($con, $sql);
         }
@@ -854,7 +854,7 @@ function time_zone_offet($con, $address_id) {
 function update_daylight_savings($con) {
     $sql = "SELECT *
             FROM time_daylight_savings
-            WHERE last_update < curdate()";
+            WHERE last_update < " . $con->DBTimeStamp(time());
     $rst = $con->execute($sql);
     if(!$rst) {
         db_error_handler($con, $sql);
@@ -901,10 +901,20 @@ function update_daylight_savings($con) {
                 }
             }
 
-            $con->execute("UPDATE time_daylight_savings
-                           SET current_hour_shift=" . $current_hour_shift . ",
-                               last_update=" . $con->DBTimeStamp(time()) . "
-                           WHERE daylight_savings_id=" . $daylight_savings_id);
+            $dst_sql = "SELECT * FROM time_daylight_savings WHERE daylight_savings_id = " . $daylight_savings_id;
+            $dst_rst = $con->execute($dst_sql);
+            
+            $rec = array();
+            $rec['current_hour_shift'] = $current_hour_shift;
+            $rec['last_update'] = $con->DBTimeStamp(time());
+            
+            $upd = $con->GetUpdateSQL($dst_rst, $rec, false, get_magic_quotes_gpc());
+            if (strlen($upd) > 0) {
+                $upd_rst = $con->execute($upd);
+                if (!$upd_rst) {
+                    db_error_handler($con, $upd);
+                }
+            }
 
             $rst->movenext();
         }
@@ -1231,6 +1241,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.80  2004/08/05 19:54:39  introspectshun
+ * - Localized error msgs
+ * - time_zone_offset and update_daylight_savings funcs updated for db compatibility
+ *
  * Revision 1.79  2004/08/05 14:56:00  braverock
  * - add arr_vars functions for special cases
  *
