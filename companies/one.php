@@ -235,7 +235,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $note_rows .= "<tr>";
-        $note_rows .= "<td class=widget_content>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/companies/one.php?company_id=" . $company_id . "'>Edit</a><br>" . $rst->fields['note_description'] . "</td>";
+        $note_rows .= "<td class=widget_content><font class=note_label>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/companies/one.php?company_id=" . $company_id . "'>Edit</a></font><br>" . $rst->fields['note_description'] . "</td>";
         $note_rows .= "</tr>";
         $rst->movenext();
     }

@@ -46,6 +46,9 @@ if ($rst) {
     $account_owner = $rst->fields['account_owner'];
     $last_name = $rst->fields['last_name'];
     $first_names = $rst->fields['first_names'];
+    $salutation = $rst->fields['salutation'];
+    $date_of_birth = $con->userdate($rst->fields['date_of_birth']);
+    $gender = $rst->fields['gender'];
     $summary = $rst->fields['summary'];
     $title = $rst->fields['title'];
     $description = $rst->fields['description'];
@@ -78,6 +81,8 @@ if ($rst) {
     $last_modified_by = $rst->fields['last_modified_by_username'];
     $rst->close();
 }
+
+$gender = ($gender == 'f') ? 'Female' : 'Male';
 
 if ($use_pretty_address == 't') {
 	$address_to_display = $address_body;
@@ -197,7 +202,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $note_rows .= "<tr>";
-        $note_rows .= "<td class=widget_content>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/contacts/one.php?contact_id=" . $contact_id . "'>Edit</a><br>" . $rst->fields['note_description'] . "</td>";
+        $note_rows .= "<td class=widget_content><font class=note_label>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/contacts/one.php?contact_id=" . $contact_id . "'>Edit</a></font><br>" . $rst->fields['note_description'] . "</td>";
         $note_rows .= "</tr>";
         $rst->movenext();
     }
@@ -355,7 +360,11 @@ function markComplete() {
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
                                     <td width=1% class=sublabel>Name</td>
-                                    <td class=clear><?php  echo $last_name . ', ' . $first_names; ?></td>
+                                    <td class=clear><?php  echo $last_name . ', ' . $salutation . ' ' . $first_names; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Gender</td>
+                                    <td class=clear><?php  echo $gender; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Summary</td>
@@ -370,20 +379,24 @@ function markComplete() {
                                     <td class=clear><?php  echo $description; ?></td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel>Date of Birth</td>
+                                    <td class=clear><?php  echo $date_of_birth; ?></td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel>E-Mail</td>
                                     <td class=clear><a href='mailto:<?php echo $email . "'>" . htmlspecialchars($email); ?></a></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Work Phone</td>
-                                    <td class=clear><?php  echo $work_phone;; ?></td>
+                                    <td class=clear><?php  echo $work_phone; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Home Phone</td>
-                                    <td class=clear><?php  echo $home_phone;; ?></td>
+                                    <td class=clear><?php  echo $home_phone; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Cell Phone</td>
-                                    <td class=clear><?php  echo $cell_phone;; ?></td>
+                                    <td class=clear><?php  echo $cell_phone; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Fax</td>
@@ -391,15 +404,7 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Interests</td>
-                                    <td class=clear><?php  echo $interests;; ?></td>
-                                </tr>
-                                <tr>
-                                    <td class=sublabel>&nbsp;</td>
-                                    <td class=clear>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td class=sublabel>Address</td>
-                                    <td class=clear><?php echo $address_to_display ?></td>
+                                    <td class=clear><?php  echo $interests; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
@@ -444,6 +449,14 @@ function markComplete() {
                                 <tr>
                                     <td class=sublabel>Account Status</td>
                                     <td class=clear><?php  echo $account_status_display_html; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Address</td>
+                                    <td class=clear><?php echo $address_to_display ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
