@@ -48,7 +48,7 @@ xgettext ${XGETTEXT_OPTIONS} -j doc/users/*.php
 xgettext ${XGETTEXT_OPTIONS} -j email/*.php
 xgettext ${XGETTEXT_OPTIONS} -j files/*.php
 xgettext ${XGETTEXT_OPTIONS} -j files/storage/*.php
-xgettext ${XGETTEXT_OPTIONS} -j img/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j img/*.php
 xgettext ${XGETTEXT_OPTIONS} -j include/*.php
 xgettext ${XGETTEXT_OPTIONS} -j include/adodb/*.php
 
@@ -71,13 +71,13 @@ xgettext ${XGETTEXT_OPTIONS} -j include/adodb/*.php
 xgettext ${XGETTEXT_OPTIONS} -j install/*.php
 xgettext ${XGETTEXT_OPTIONS} -j js/*.php
 xgettext ${XGETTEXT_OPTIONS} -j js/jscalendar/*.php
-xgettext ${XGETTEXT_OPTIONS} -j js/jscalendar/lang/*.php
-xgettext ${XGETTEXT_OPTIONS} -j locale/*.php
-xgettext ${XGETTEXT_OPTIONS} -j locale/de_DE/*.php
-xgettext ${XGETTEXT_OPTIONS} -j locale/en_US/*.php
-xgettext ${XGETTEXT_OPTIONS} -j locale/es_ES/*.php
-xgettext ${XGETTEXT_OPTIONS} -j locale/es_ES/LC_MESSAGES/*.php
-xgettext ${XGETTEXT_OPTIONS} -j locale/fr_FR/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j js/jscalendar/lang/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j locale/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j locale/de_DE/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j locale/en_US/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j locale/es_ES/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j locale/es_ES/LC_MESSAGES/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j locale/fr_FR/*.php
 xgettext ${XGETTEXT_OPTIONS} -j notes/*.php
 xgettext ${XGETTEXT_OPTIONS} -j opportunities/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/*.php
