@@ -1,21 +1,23 @@
+# translation of xrms.po to 
+# translation of xrms.po to
 # translation of xrms.po to Russian
 # translation of xrms.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004.
-# Eugene N Shylaev <buzz@zamki.biz>, 2004.
+# Eugene N Shylaev <buzz@zamki.biz>, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: xrms\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: <buzz@zamki.biz>\n"
 "POT-Creation-Date: 2004-12-24 09:15-0600\n"
-"PO-Revision-Date: 2004-12-03 11:48+0500\n"
-"Last-Translator: Eugene N Shylaev <buzz@zamki.biz>\n"
-"Language-Team: Russian <en@li.org>\n"
+"PO-Revision-Date: 2005-03-03 18:05+0500\n"
+"Last-Translator: \n"
+"Language-Team:  <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3\n"
+"X-Generator: KBabel 1.9.1\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -259,7 +261,6 @@ msgstr "Добавить отношения"
 
 #: relationships/new-relationship-2.php:101
 #: relationships/new-relationship.php:78
-#, fuzzy
 msgid "Add Relationship for "
 msgstr "Добавить отношения"
 
@@ -313,7 +314,6 @@ msgid "Addresses"
 msgstr "Адреса"
 
 #: companies/admin.php:58 companies/one.php:589
-#, fuzzy
 msgid "Admin"
 msgstr "Админ"
 
@@ -734,9 +734,8 @@ msgid "Closed/Won"
 msgstr "Закрыто/Успешно"
 
 #: opportunities/one.php:313
-#, fuzzy
 msgid "Closes"
-msgstr "Ближе(?)"
+msgstr "Завершение"
 
 #: companies/one.php:457 contacts/some.php:74 contacts/some.php:276
 #: reports/companies-list.php:164
@@ -875,7 +874,6 @@ msgid "Company Types"
 msgstr "Типы фирм"
 
 #: reports/company-contacts-printout.php:214
-#, fuzzy
 msgid "Company User"
 msgstr "Пользователь фирмы"
 
@@ -1011,7 +1009,7 @@ msgstr "Страна"
 msgid "Country Localization Formats"
 msgstr "Национальный формат"
 
-# ,fuzzy
+#
 #: contacts/some.php:312
 msgid "Create Contact for 'Self'"
 msgstr "Создать контакт для себя"
@@ -1034,7 +1032,6 @@ msgid "Credit Limit"
 msgstr "Лимит кредита"
 
 #: locale/datastrings.php:31
-#, fuzzy
 msgid "Critical"
 msgstr "Критично"
 
@@ -1378,7 +1375,6 @@ msgid "Due"
 msgstr "Дата окончания"
 
 #: cases/edit.php:211
-#, fuzzy
 msgid "Due At"
 msgstr "Точно в"
 
@@ -1535,7 +1531,6 @@ msgid "Education"
 msgstr "Образование"
 
 #: contacts/some.php:71 contacts/some.php:275
-#, fuzzy
 msgid "Email"
 msgstr "E-Mail"
 
@@ -1565,7 +1560,6 @@ msgid "Ends On"
 msgstr "Окончание"
 
 #: activities/some.php:513
-#, fuzzy
 msgid "Ends/Due"
 msgstr "Контрольная дата"
 
@@ -1649,12 +1643,10 @@ msgid "Fax"
 msgstr "Факс"
 
 #: locale/datastrings.php:44
-#, fuzzy
 msgid "Feature Request"
 msgstr "Будущий запрос"
 
 #: locale/datastrings.php:45
-#, fuzzy
 msgid "Feature Requests"
 msgstr "Будущие запросы"
 
@@ -1814,9 +1806,8 @@ msgstr "График"
 #: contacts/sidebar.php:71 files/sidebar.php:10
 #: include/categories-sidebar.php:5 include/utils-misc.php:16
 #: notes/sidebar.php:5 relationships/sidebar.php:5
-#, fuzzy
 msgid "Hacking attempt"
-msgstr "Попытка подделки(?)"
+msgstr "Попытка подделки"
 
 #: locale/datastrings.php:50
 msgid "Healthcare"
@@ -1827,16 +1818,14 @@ msgid "Help Item"
 msgstr "Пердмет помощи"
 
 #: locale/datastrings.php:52
-#, fuzzy
 msgid "Help Items"
-msgstr "Предметы помощи"
+msgstr "Помощь"
 
 #: locale/datastrings.php:53
 msgid "High"
 msgstr "Высокий"
 
 #: locale/datastrings.php:54
-#, fuzzy
 msgid "Hold"
 msgstr "Держать"
 
@@ -1872,8 +1861,7 @@ msgid "How many opportunities are tied to companies in each industry?"
 msgstr "Распределение возможностей связанных с фирмами в каждой отрасли"
 
 #: reports/index.php:67
-msgid ""
-"How much potential revenue is in each stage of the sales closing process?"
+msgid "How much potential revenue is in each stage of the sales closing process?"
 msgstr "Распределение возможных доходов по статусу возможностей"
 
 #: reports/index.php:75
@@ -1968,21 +1956,18 @@ msgid "Legal Name"
 msgstr "Юридическое название"
 
 #: reports/audit-items.php:92
-#, fuzzy
 msgid "Line"
 msgstr "Линия"
 
 #: companies/addresses.php:143 companies/advanced-search.php:241
 #: companies/edit-address.php:77 companies/new.php:205
 #: contacts/edit-address.php:194
-#, fuzzy
 msgid "Line 1"
 msgstr "Линия'1"
 
 #: companies/addresses.php:147 companies/advanced-search.php:245
 #: companies/edit-address.php:81 companies/new.php:209
 #: contacts/edit-address.php:198
-#, fuzzy
 msgid "Line 2"
 msgstr "Линия'2"
 
@@ -2197,12 +2182,10 @@ msgid "Mrs."
 msgstr "Г-жа."
 
 #: include/utils-interface.php:268
-#, fuzzy
 msgid "Ms."
 msgstr "Ms."
 
 #: plugins/mrtg/mrtg.php:19
-#, fuzzy
 msgid "Multi Router Traffic Grapher"
 msgstr "Multi Router Traffic Grapher"
 
@@ -2351,7 +2334,6 @@ msgid "No Saved Searches"
 msgstr "нет сохраненых результатов поиска"
 
 #: opportunities/one.php:252
-#, fuzzy
 msgid "No activities"
 msgstr "Нет дел"
 
@@ -2447,7 +2429,7 @@ msgstr "Не связано с"
 
 #: cases/pager.php:49 companies/pager.php:49
 msgid "Not Coded Yet"
-msgstr ""
+msgstr "В разработке"
 
 #: notes/edit.php:43 notes/new.php:44
 msgid "Note Body"
@@ -2515,7 +2497,6 @@ msgid "On what Name"
 msgstr "На чье имя"
 
 #: admin/users/self.php:44
-#, fuzzy
 msgid "One User"
 msgstr "Один пользователь:"
 
@@ -2666,9 +2647,8 @@ msgid "Override Address"
 msgstr "Аннулированый адрес"
 
 #: files/some.php:338
-#, fuzzy
 msgid "Owl File Management"
-msgstr "Owl File Management"
+msgstr "Owl - Управление файлами"
 
 #: activities/some.php:171 activities/some.php:502 campaigns/edit.php:93
 #: campaigns/new.php:81 campaigns/some.php:66 campaigns/some.php:216
@@ -2816,9 +2796,8 @@ msgid "Prospects"
 msgstr "Перспективы"
 
 #: locale/datastrings.php:78
-#, fuzzy
 msgid "Qualified"
-msgstr "Квалифицирован"
+msgstr "Пригоден"
 
 #: reports/index.php:70
 msgid "Quantity by Industry"
@@ -2833,7 +2812,6 @@ msgid "Radio"
 msgstr "Радио"
 
 #: plugins/radtest/radtest.php:38 plugins/radtest/setup.php:26
-#, fuzzy
 msgid "Radius Test"
 msgstr "Radius Test"
 
@@ -2912,9 +2890,8 @@ msgid "Retail"
 msgstr "Розница"
 
 #: include/utils-interface.php:268
-#, fuzzy
 msgid "Rev."
-msgstr "Rev."
+msgstr "Вер."
 
 #: companies/advanced-search.php:198 companies/edit.php:149
 #: companies/new.php:159 companies/one.php:548
@@ -2934,7 +2911,6 @@ msgid "Roles"
 msgstr "Роли"
 
 #: reports/index.php:127
-#, fuzzy
 msgid "Sales Force Automation"
 msgstr "Sales Force Automation"
 
@@ -3011,9 +2987,8 @@ msgid "Search"
 msgstr "Поиск"
 
 #: activities/some.php:503
-#, fuzzy
 msgid "Search By Date"
-msgstr "Название результатов поиска"
+msgstr "Поиск по дате"
 
 #: companies/some-advanced.php:363 companies/some.php:243
 msgid "Search Companies"
@@ -3030,9 +3005,8 @@ msgid "Search Engine"
 msgstr "Поиск в интернет"
 
 #: locale/datastrings.php:84
-#, fuzzy
 msgid "Search Engines"
-msgstr "Search Engines"
+msgstr "Поисковые машины"
 
 #: activities/pager.php:35 cases/pager.php:35 companies/pager.php:35
 #: include/adodb/adodb-pager.inc.php:287 opportunities/pager.php:35
@@ -3065,12 +3039,10 @@ msgid "Send Email To"
 msgstr "Послать эл. писмо"
 
 #: plugins/autostatus/autostatus.php:54 plugins/autostatus/setup.php:37
-#, fuzzy
 msgid "Server Status"
-msgstr "Server Status"
+msgstr "Статус сервера"
 
 #: reports/audit-items.php:104
-#, fuzzy
 msgid "Session Id"
 msgstr "Session Id"
 
@@ -3189,9 +3161,8 @@ msgid "System Administration"
 msgstr "Системное администриование"
 
 #: reports/activitytimes.php:121
-#, fuzzy
 msgid "TOTAL"
-msgstr "TOTAL"
+msgstr "ИТОГО"
 
 #: reports/audit-items.php:96
 msgid "Table"
@@ -3210,12 +3181,10 @@ msgid "Tel"
 msgstr "Телефон"
 
 #: locale/datastrings.php:88
-#, fuzzy
 msgid "Telemarketing"
 msgstr "Telemarketing"
 
 #: locale/datastrings.php:89
-#, fuzzy
 msgid "Telemarketings"
 msgstr "Telemarketings"
 
@@ -3355,14 +3324,11 @@ msgstr "Невозмлжно открыть файл для записи."
 msgid ""
 "Unable to associate Activities because there are multiple Cases or "
 "Opportunities"
-msgstr ""
-"Не могу обеденить дела по причине множественности событий или возможностей"
+msgstr "Не могу обеденить дела по причине множественности событий или возможностей"
 
 #: activities/associate-activities.php:162
-msgid ""
-"Unable to associate Activities because there is no open Case or Opportunity"
-msgstr ""
-"Не могу объединить дела по причине отсутсвия открытых дел или возможностей"
+msgid "Unable to associate Activities because there is no open Case or Opportunity"
+msgstr "Не могу объединить дела по причине отсутсвия открытых дел или возможностей"
 
 #: include/utils-misc.php:628
 msgid "Unable to execute your query."
@@ -3542,8 +3508,7 @@ msgstr "Вы должны ввести название фамилии."
 
 #: email/email-2.php:137 email/one-template.php:136
 msgid "You must enter a name to let the recipient know who the email is from."
-msgstr ""
-"Вы должны ввести имя, что бы получатель знал от кого письмо и кому отвечать."
+msgstr "Вы должны ввести имя, что бы получатель знал от кого письмо и кому отвечать."
 
 #: admin/users/some.php:146
 msgid "You must enter a password."
@@ -3558,10 +3523,8 @@ msgid "You must enter an opportunity title."
 msgstr "Вы должны ввести название возможности."
 
 #: email/email-2.php:142 email/one-template.php:141
-msgid ""
-"You must enter an reply address so the recipient can reply to the message."
-msgstr ""
-"Вы должны ввести адрес для ответа, что бы получатель смог вам ответить."
+msgid "You must enter an reply address so the recipient can reply to the message."
+msgstr "Вы должны ввести адрес для ответа, что бы получатель смог вам ответить."
 
 #: admin/relationship-types/one.php:100
 msgid ""
@@ -3710,30 +3673,3 @@ msgstr "Табуляция"
 msgid "up"
 msgstr "вверх"
 
-#~ msgid "Add "
-#~ msgstr "Добавить'"
-
-#~ msgid "Choose a relationship"
-#~ msgstr "Выбрать отношения"
-
-#~ msgid "New Personal Note"
-#~ msgstr "Новая персональная заметка"
-
-#~ msgid "Next"
-#~ msgstr "Дальше"
-
-#~ msgid "No associated categories"
-#~ msgstr "Нет объедененных категорий"
-
-#~ msgid "No files"
-#~ msgstr "Нет файлов"
-
-#~ msgid "No notes"
-#~ msgstr "Нет заметок"
-
-#~ msgid "Search for "
-#~ msgstr "Поиск для"
-
-#, fuzzy
-#~ msgid "Specify a search condition"
-#~ msgstr "Specify a search condition"
