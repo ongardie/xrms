@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.13 2004/08/26 22:55:26 niclowe Exp $
+ * $Id: some-advanced.php,v 1.14 2004/08/30 12:52:38 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -84,7 +84,7 @@ $arr_vars = array ( // local var name       // session variable name
                    );
 
 // get all passed in variables
-arr_vars_get_all ( $arr_vars, true );
+arr_vars_get_all ( $arr_vars );
 
 // generated from thin air as far as I can tell
 // probably a BUG - TBD - Please Fix Me!
@@ -107,6 +107,9 @@ $ascending_order_image  = '<img border=0 height=10 width=10 alt="" src=../img/as
 $descending_order_image = '<img border=0 height=10 width=10 alt="" src=../img/desc.gif>';
 
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
+
+// set all session variables
+arr_vars_session_set ( $arr_vars );
 
 //if ( 0 ) {
 // seems to be unused
@@ -134,19 +137,21 @@ u.username AS '"._("User")."',
 industry_pretty_name as '"._("Industry")."',
 crm_status_pretty_name AS '"._("CRM Status")."',
 as1.account_status_display_html AS '"._("Account Status")."',
-r.rating_display_html AS '"._("Rating")."'
+r.rating_display_html AS '"._("Rating")."',
+count(con.contact_id) AS '"._("Contacts")."'
 ";
 
 $criteria_count = 0;
 
 if ($company_category_id > 0) {
     $criteria_count++;
-    $from = "from companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
+    $from = "from contacts con, companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
 } else {
-    $from = "from companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u ";
+    $from = "from contacts con, companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u ";
 }
 
 $where = "where c.industry_id = i.industry_id ";
+$where .= "and c.company_id = con.company_id  ";
 $where .= "and c.crm_status_id = crm.crm_status_id ";
 $where .= "and c.company_id = addr.company_id ";
 $where .= "and r.rating_id = c.rating_id ";
@@ -290,13 +295,16 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 
 if ($sort_column == 1) {
     $order_by = "company_name";
+}
+elseif($sort_column == 8) {
+    $order_by = _("Contacts");
 } else {
     $order_by = $sort_column;
 }
 
 $order_by .= " $sort_order";
 
-$sql .= $from . $where . " order by $order_by";
+$sql .= $from . $where . " group by c.company_id order by $order_by";
 
 //echo "sql = $sql<br>";
 
@@ -360,7 +368,6 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 		<form action=some-advanced.php method=post>
-		  <input type=hidden name=use_post_vars value=1>
 		  <input type=hidden name=companies_next_page value="<?php  echo $companies_next_page; ?>">
       <input type=hidden name=resort value="0">
       <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
@@ -440,6 +447,11 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.14  2004/08/30 12:52:38  neildogg
+ * - Got rid of use_post_vars which overrode
+ *  - saved session vars
+ *  - Added sort by # Contacts
+ *
  * Revision 1.13  2004/08/26 22:55:26  niclowe
  * Enabled mail merge functionality for companies/some.php
  * Sorted pre-sending email checkbox page by company then contact lastname
