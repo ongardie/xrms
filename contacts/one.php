@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.67 2005/03/07 16:48:53 daturaarutad Exp $
+ * $Id: one.php,v 1.68 2005/03/14 18:45:58 daturaarutad Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -162,7 +162,7 @@ WHERE a.contact_id = $contact_id
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
-    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => '4');
+    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => '4', 'default_sort' => 'desc');
 
     $default_columns = array('activity_status', 'activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
@@ -585,6 +585,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.68  2005/03/14 18:45:58  daturaarutad
+ * added default_sort to On column of activities pager
+ *
  * Revision 1.67  2005/03/07 16:48:53  daturaarutad
  * updated to speed up sql sorts in the pager using sql_sort_column
  *

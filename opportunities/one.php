@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.40 2005/03/07 16:57:03 daturaarutad Exp $
+ * $Id: one.php,v 1.41 2005/03/14 18:44:34 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -172,7 +172,7 @@ WHERE a.on_what_table = 'opportunities'
     $columns[] = array('name' => _('User'), 'index_sql' => 'username', 'sql_sort_column' => '12');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name', 'sql_sort_column' => '7');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => '11,10');
-    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => '2');
+    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => '2', 'default_sort' => 'desc');
     
     $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
 
@@ -475,6 +475,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.41  2005/03/14 18:44:34  daturaarutad
+ * added default_sort to On column of activities pager
+ *
  * Revision 1.40  2005/03/07 16:57:03  daturaarutad
  * updated to speed up sql sorts in the pager using sql_sort_column
  *
