@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.30 2004/08/04 20:46:06 introspectshun Exp $
+ * $Id: update.php,v 1.31 2004/08/16 16:08:45 neildogg Exp $
  */
 
 // where do we include from
@@ -2203,6 +2203,33 @@ if($recCount == 0) {
     $con->execute($sql);
 }
 
+//Go through each address to insert daylight savings
+$sql = 'SELECT *
+        FROM addresses
+        WHERE offset=0 and daylight_savings_id=0';
+$rst = $con->execute($sql);
+if(!$rst) {
+    db_error_handler($con, $sql);
+}
+else {
+    while(!$rst->EOF) {
+        if($time_zone_offset = time_zone_offset($con, $rst->fields['address_id'])) {
+            $sql = 'SELECT * FROM addresses where address_id=' . $rst->fields['address_id'];
+            $rst2 = $con->execute($sql);
+
+            $rec = array();
+            $rec['offset'] = $time_zone_offset['offset'];
+            $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
+            
+            $upd = $con->GetUpdateSQL($rst2, $rec, false, get_magic_quotes_gpc());
+            if(!$con->execute($upd)) {
+                db_error_handler($con, $sql);
+            }
+        }
+        $rst->movenext();
+    }
+}
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -2224,6 +2251,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.31  2004/08/16 16:08:45  neildogg
+ * - Updates addresses to daylight savings
+ *  - (will work for future time_zone database additions)
+ *
  * Revision 1.30  2004/08/04 20:46:06  introspectshun
  * - Pass table name to GetInsertSQL
  *
