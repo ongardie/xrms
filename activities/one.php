@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.67 2004/12/01 18:12:42 vanmer Exp $
+ * $Id: one.php,v 1.68 2004/12/20 13:50:39 neildogg Exp $
  */
 
 //include required files
@@ -101,7 +101,8 @@ if ($rst) {
 //get user menu
 $sql = "select username, user_id from users where user_record_status = 'a'";
 $rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $user_id, false);
+//There is a blank user here ON PURPOSE.
+$user_menu = $rst->getmenu2('user_id', $user_id, true);
 $rst->close();
 
 //get activity type menu
@@ -461,6 +462,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.68  2004/12/20 13:50:39  neildogg
+ * Added ability to select an empty user (allows an activity pool)
+ *
  * Revision 1.67  2004/12/01 18:12:42  vanmer
  * - altered relationship setup section to reference relationships that relate to activities
  *
