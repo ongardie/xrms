@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.53 2004/07/15 13:05:08 cpsource Exp $
+ * $Id: one.php,v 1.54 2004/07/15 17:29:08 cpsource Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -182,10 +182,11 @@ if ($rst) {
         if ( !isset($contact_rows) ) {
             $contact_rows = '';
         }
+	$contact_id = $rst->fields['contact_id'];
 
         $contact_rows .= "\n<tr>";
         $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
-                        . $rst->fields['contact_id'] . "'>"
+                        . $contact_id . "'>"
                         . $rst->fields['last_name'] . ', ' . $rst->fields['first_names']
                         . '</a></td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['summary'] . '</td>';
@@ -197,7 +198,7 @@ if ($rst) {
                         . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&contact_id=$contact_id&activity_title=email to "
                         . $rst->fields['first_names']. " " .$rst->fields['last_name']
                         . "&company_id=$company_id&contact_id="
-                        . $rst->fields['contact_id']
+                        . $contact_id
                         ."&email=true&return_url=$http_site_root/companies/one.php?company_id=$company_id'\" >"
                         . htmlspecialchars($rst->fields['email'])
                         . '</a></td>';
@@ -677,6 +678,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.54  2004/07/15 17:29:08  cpsource
+ * - Fix $contact_id undefines
+ *
  * Revision 1.53  2004/07/15 13:05:08  cpsource
  * - Add arr_vars sub-system for passing variables between code streams.
  *
