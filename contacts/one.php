@@ -19,22 +19,23 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
 $sql = "select cont.*,
-c.company_id, c.company_name, c.company_code,
-u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner,
-as1.account_status_display_html, crm.crm_status_display_html
-from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm
-where cont.company_id = c.company_id
-and cont.entered_by = u1.user_id
-and cont.last_modified_by = u2.user_id
-and c.user_id = u3.user_id
-and c.account_status_id = as1.account_status_id
-and c.crm_status_id = crm.crm_status_id
+c.company_id, company_name, company_code, line1, line2, city, province, postal_code, address_body, use_pretty_address, country_name, 
+u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner, 
+account_status_display_html, crm_status_display_html 
+from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm, addresses, countries 
+where cont.company_id = c.company_id 
+and cont.entered_by = u1.user_id 
+and cont.last_modified_by = u2.user_id 
+and c.user_id = u3.user_id 
+and c.account_status_id = as1.account_status_id 
+and c.crm_status_id = crm.crm_status_id 
 and contact_id = $contact_id";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     $company_id = $rst->fields['company_id'];
+	$address_id = $rst->fields['address_id'];
     $company_name = $rst->fields['company_name'];
     $company_code = $rst->fields['company_code'];
     $crm_status_display_html = $rst->fields['crm_status_display_html'];
@@ -58,6 +59,12 @@ if ($rst) {
     $custom2 = $rst->fields['custom2'];
     $custom3 = $rst->fields['custom3'];
     $custom4 = $rst->fields['custom4'];
+	$line1 = $rst->fields['line1'];
+	$line2 = $rst->fields['line2'];
+	$city = $rst->fields['city'];
+	$province = $rst->fields['province'];
+	$postal_code = $rst->fields['postal_code'];
+	$address_body = $rst->fields['address_body'];
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
     $entered_by = $rst->fields['entered_by_username'];
@@ -456,8 +463,8 @@ $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?con
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/contacts/one.php?contact_id=<?php  echo $contact_id; ?>">
-        <input type=hidden name=on_what_table value="contacts">
-        <input type=hidden name=on_what_id value="<?php  echo $contact_id; ?>">
+        <input type=hidden name=company_id value="<?php echo $company_id; ?>">
+        <input type=hidden name=contact_id value="<?php echo $contact_id; ?>">
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1 width=100%>
             <tr>
