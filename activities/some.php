@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.84 2005/01/13 17:54:45 vanmer Exp $
+ * $Id: some.php,v 1.85 2005/01/13 22:35:34 vanmer Exp $
  */
 
 // handle includes
@@ -273,10 +273,13 @@ if (strlen($search_date) > 0 && $start_end != 'all') {
 
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     update_daylight_savings($con);
+    $now = time();
+    $now_array=localtime($now, true);
+    $hour=$now_array['tm_hour'];
     $sql .= " and addr.daylight_savings_id = tds.daylight_savings_id";
 
-    $sql .= " and (hour(" . $con->DBTimeStamp(time()) . ") + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") >= " . $time_zone_between;
-    $sql .= " and (hour(" . $con->DBTimeStamp(time()) . ") + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") <= " . $time_zone_between2;
+    $sql .= " and ($hour + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") >= " . $time_zone_between;
+    $sql .= " and ($hour + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") <= " . $time_zone_between2;
 }
 
 if($opportunity_status_id) {
@@ -750,6 +753,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.85  2005/01/13 22:35:34  vanmer
+ * - removed HOUR sql code to allow compliance with other database servers
+ *
  * Revision 1.84  2005/01/13 17:54:45  vanmer
  * - ACL restriction on activity list when searching
  *
