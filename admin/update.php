@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.52 2005/01/24 00:17:18 maulani Exp $
+ * $Id: update.php,v 1.53 2005/01/24 14:10:15 maulani Exp $
  */
 
 // where do we include from
@@ -280,7 +280,7 @@ $rst = $con->execute($sql);
 
 // Add the system_parameters_options table
 $sql = 'create table system_parameters_options (';
-$sql .= 'param_id       varchar(40) not null unique,';
+$sql .= 'param_id       varchar(40) not null,';
 $sql .= 'string_val     varchar(100),';
 $sql .= 'int_val        int,';
 $sql .= 'float_val      float,';
@@ -392,7 +392,7 @@ if ($recCount == 0) {
     $rec['param_id'] = 'Audit Level';
     $rec['int_val'] = 0;
     $rec['sort_order'] = 1;
-    $tbl = 'system_parameters';
+    $tbl = 'system_parameters_options';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
     
@@ -428,7 +428,7 @@ if ($recCount == 0) {
     $rec['param_id'] = 'Activities Default Behavior';
     $rec['string_val'] = 'Fast';
     $rec['sort_order'] = 1;
-    $tbl = 'system_parameters';
+    $tbl = 'system_parameters_options';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
     
@@ -449,7 +449,7 @@ if ($recCount == 0) {
     $rec['param_id'] = 'LDAP Version';
     $rec['int_val'] = 2;
     $rec['sort_order'] = 1;
-    $tbl = 'system_parameters';
+    $tbl = 'system_parameters_options';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
     
@@ -470,7 +470,7 @@ if ($recCount == 0) {
     $rec['param_id'] = 'RSS Feeds Enabled';
     $rec['string_val'] = 'n';
     $rec['sort_order'] = 1;
-    $tbl = 'system_parameters';
+    $tbl = 'system_parameters_options';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
     
@@ -4060,6 +4060,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.53  2005/01/24 14:10:15  maulani
+ * - Fix system_parameters_options update
+ *
  * Revision 1.52  2005/01/24 00:17:18  maulani
  * - Add description to system parameters
  *
