@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.68 2005/03/14 18:45:58 daturaarutad Exp $
+ * $Id: one.php,v 1.69 2005/03/15 21:58:37 daturaarutad Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -156,6 +156,11 @@ WHERE a.contact_id = $contact_id
         }
     } else { $sql_activities .= ' AND 1 = 2 '; }
 
+    // Save this for email/email.php is activities Mail Merge
+    $_SESSION["search_sql"]=$sql;
+
+
+
     // begin Activities Pager
     $columns = array();
     $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '9');
@@ -177,7 +182,7 @@ WHERE a.contact_id = $contact_id
     $endrows = "<tr><td class=widget_content_form_element colspan=10>
                 $pager_columns_button
                 <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
 
 	// this is the callback function that the pager uses to fill in the calculated data.
     $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'Contact_ActivitiesPager', $columns, false, true);
@@ -566,6 +571,11 @@ function markComplete() {
 </div>
 
 <script language="JavaScript" type="text/javascript">
+function bulkEmail() {
+    document.forms[0].action = "../email/email.php";
+    document.forms[0].submit();
+}
+
 
 Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
@@ -585,6 +595,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.69  2005/03/15 21:58:37  daturaarutad
+ * fixed Mail Merge for activities pager
+ *
  * Revision 1.68  2005/03/14 18:45:58  daturaarutad
  * added default_sort to On column of activities pager
  *
