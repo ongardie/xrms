@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.10 2004/07/21 15:27:20 introspectshun Exp $
+ * $Id: add-address.php,v 1.11 2004/08/09 19:28:07 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -59,12 +59,37 @@ $con->execute($ins);
 $address_id = $con->insert_id();
 add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
 
+if($time_zone_offset = time_zone_offset($con, $address_id)) {
+    $sql = 'SELECT *
+            FROM addresses
+            WHERE address_id=' . $address_id;
+    $rst = $con->execute($sql);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif(!$rst->EOF) {
+        $rec = array();
+        $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
+        $rec['offset'] = $time_zone_offset['offset'];
+
+        $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
+        $rst = $con->execute($upd);
+        if(!$rst) {
+            db_error_handler($con, $sql);
+        }
+    }
+} 
+
 $con->close();
 
 header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.11  2004/08/09 19:28:07  neildogg
+ * - Now adds daylight savings information to new
+ * company addresses
+ *
  * Revision 1.10  2004/07/21 15:27:20  introspectshun
  * - Removed $con->execute($sql). Was replaced with $con->execute($ins) earlier.
  *
