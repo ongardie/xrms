@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.46 2004/10/28 22:17:02 gpowers Exp $
+ * $Id: some.php,v 1.47 2004/12/31 21:14:30 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -221,17 +221,17 @@ $rst = $con->execute($sql2);
 $company_category_menu = $rst->getmenu2('company_category_id', $company_category_id, true);
 $rst->close();
 
-$sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
+$sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_pretty_name";
 $rst = $con->execute($sql2);
 $company_type_menu = translate_menu($rst->getmenu2('company_type_id', $company_type_id, true));
 $rst->close();
 
-$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
+$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_pretty_name";
 $rst = $con->execute($sql2);
 $crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', $crm_status_id, true));
 $rst->close();
 
-$sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
+$sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_pretty_name";
 $rst = $con->execute($sql2);
 $industry_menu = translate_menu($rst->getmenu2('industry_id', $industry_id, true));
 $rst->close();
@@ -410,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.47  2004/12/31 21:14:30  braverock
+ * - sort select lists in search
+ *
  * Revision 1.46  2004/10/28 22:17:02  gpowers
  * - removed company_code from Recently Viewed Sidebar
  *   - If anyone wants to keep it, let me know and I'll revert this patch and create a new patch with a $show_company_code_in_sidebars var.
