@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.82 2004/08/09 19:22:02 neildogg Exp $
+ * $Id: utils-misc.php,v 1.83 2004/08/12 11:01:48 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1234,16 +1234,17 @@ function arr_vars_show_ses_vars ( $ary )
  *       the XRMS code base.
  */
 require_once($include_directory . 'i18n.php');
-// check to see if we need the php gettext functions
-if ($use_php_recode) {
-    require_once($include_directory . 'gettext.php');
-}
+
+
 /** Include the database utilities file */
 require_once($include_directory . 'utils-database.php');
 
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.83  2004/08/12 11:01:48  braverock
+ * - remove the gettext.php include, because i18n.php will include it if it needs to.
+ *
  * Revision 1.82  2004/08/09 19:22:02  neildogg
  * - Fixed spelling error in function name
  *
