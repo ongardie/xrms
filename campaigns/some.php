@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.18 2004/07/19 17:19:33 cpsource Exp $
+ * $Id: some.php,v 1.19 2004/07/23 03:59:00 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,17 +20,17 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'sort_column'          => array ( 'campaigns_sort_column', arr_vars_SESSION), 
-		   'current_sort_column'  => array ( 'campaigns_current_sort_column', arr_vars_SESSION), 
-		   'sort_order'           => array ( 'campaigns_sort_order', arr_vars_SESSION), 
-		   'current_sort_order'   => array ( 'campaigns_current_sort_order', arr_vars_SESSION), 
-		   'campaign_title'       => array ( 'campaigns_campaign_title', arr_vars_SESSION), 
-		   'user_id'              => array ( 'campaigns_user_id', arr_vars_SESSION), 
-		   'campaign_type_id'     => array ( 'campaigns_campaign_type_id', arr_vars_SESSION), 
-		   'campaign_status_id'   => array ( 'campaigns_campaign_status_id', arr_vars_SESSION), 
-		   'campaign_category_id' => array ( 'campaigns_campaign_category_id', arr_vars_SESSION), 
-		   'media'                => array ( 'campaigns_media', arr_vars_SESSION), 
-		   );
+                   'sort_column'          => array ( 'campaigns_sort_column', arr_vars_SESSION),
+                   'current_sort_column'  => array ( 'campaigns_current_sort_column', arr_vars_SESSION),
+                   'sort_order'           => array ( 'campaigns_sort_order', arr_vars_SESSION),
+                   'current_sort_order'   => array ( 'campaigns_current_sort_order', arr_vars_SESSION),
+                   'campaign_title'       => array ( 'campaigns_campaign_title', arr_vars_SESSION),
+                   'user_id'              => array ( 'campaigns_user_id', arr_vars_SESSION),
+                   'campaign_type_id'     => array ( 'campaigns_campaign_type_id', arr_vars_SESSION),
+                   'campaign_status_id'   => array ( 'campaigns_campaign_status_id', arr_vars_SESSION),
+                   'campaign_category_id' => array ( 'campaigns_campaign_category_id', arr_vars_SESSION),
+                   'media'                => array ( 'campaigns_media', arr_vars_SESSION),
+                   );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
@@ -240,7 +240,7 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td class=widget_content_form_element colspan=3><input name="submit" type=submit class=button value="<?php echo _("Search"); ?>">
+            <td class=widget_content_form_element colspan=3><input name="submit_form" type=submit class=button value="<?php echo _("Search"); ?>">
                 <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                 <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";} ?>
             </td>
@@ -326,6 +326,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.19  2004/07/23 03:59:00  braverock
+ * - resolve JS error when button is named 'submit'
+ *
  * Revision 1.18  2004/07/19 17:19:33  cpsource
  * - 'media' is used undefined. It's now zeroed out, but
  *    should be either implemented or removed.
