@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.12 2004/06/15 20:41:58 gpowers Exp $
+ * $Id: new.php,v 1.13 2004/07/13 18:05:59 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,47 +15,89 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$msg = $_GET['msg'];
-$company_id = $_GET['company_id'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "select company_name, phone, fax from companies where company_id = $company_id";
-
-//$con->debug=1;
-
-$rst = $con->execute($sql);
-
-if ($rst) {
-    $company_name = $rst->fields['company_name'];
-    $phone = $rst->fields['phone'];
-    $fax = $rst->fields['fax'];
+//
+// if $company_id is not passed in, get one for company 'Self' if the feature is set
+// else, don't set $company_id
+//
+if ( isset($_GET['company_id']) ) {
+  // was passed in
+  $company_id = $_GET['company_id'];
+} elseif ( $use_self_contacts ) {
+  // get from database
+  $sql = "select company_id from companies where company_name = 'Self'";
+  //$con->debug=1;
+  $rst = $con->execute($sql);
+  if ($rst) {
+    $company_id = $rst->fields['company_id'];
     $rst->close();
+  }
 }
 
-//build division menu
-$sql = "select division_name, division_id
+// get $company_name, $phone, $fax
+if ( isset($company_id) ) {
+  $sql = "select company_name, phone, fax from companies where company_id = $company_id";
+  //$con->debug=1;
+  $rst = $con->execute($sql);
+  if ($rst) {
+    $company_name = $rst->fields['company_name'];
+    $phone        = $rst->fields['phone'];
+    $fax          = $rst->fields['fax'];
+    $rst->close();
+  }
+}
+if ( !isset($company_name) ) {
+  $company_name = '';
+  $phone        = '';
+  $fax          = '';
+}
+
+// build division menu
+if ( isset($company_id) ) {
+  $sql = "select division_name, division_id
         from company_division
         where
         company_division.company_id = $company_id and
         division_record_status = 'a'";
-$rst = $con->execute($sql);
-if ($rst) {
+  $rst = $con->execute($sql);
+  if ($rst) {
     $division_menu = $rst->getmenu2('division_id', $division_id, true);
     $rst->close();
+  }
+}
+if ( !isset($division_menu) ) {
+  $division_menu = '';
 }
 
+// build salutation menu
+if ( !isset($salutation) ) {
+  $salutation = '';
+}
 $salutation_menu = build_salutation_menu($salutation);
 
-$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
-$rst = $con->execute($sql);
-if ($rst) {
+// build address menu
+if ( isset($company_id) ) {
+  $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+  $rst = $con->execute($sql);
+  if ($rst) {
     $address_menu = $rst->getmenu2('address_id', $address_id, false);
     $rst->close();
+  }
+}
+if ( !isset($address_menu) ) {
+  $address_menu = '';
 }
 
 $con->close();
+
+// TBD - BUG - $gender should be set from database
+if ( !isset($gender) ) {
+  $gender = '';
+}
 
 $page_title = "New Contact for $company_name";
 start_page($page_title, true, $msg);
@@ -206,6 +248,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.13  2004/07/13 18:05:59  cpsource
+ * - Add feature use_self_contacts
+ *   fix misc unitialized variables
+ *
  * Revision 1.12  2004/06/15 20:41:58  gpowers
  * - moved Profile textbox below Custom Fields to match contacts/edit.php
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.21 2004/07/13 14:18:58 neildogg Exp $
+ * $Id: some.php,v 1.22 2004/07/13 18:05:59 cpsource Exp $
  */
 
 //include the standard files
@@ -87,8 +87,8 @@ if ($clear) {
     $first_names = $_SESSION['contacts_first_names'];
     $title = $_SESSION['contacts_title'];
     $description = $_SESSION['contacts_description'];
-    $company_name = (strlen($_GET['company_name']) > 0) ? $_GET['company_name'] : $_SESSION['contacts_company_name'];
-    $company_code = (strlen($_GET['company_code']) > 0) ? $_GET['company_code'] : $_SESSION['contacts_company_code'];
+    $company_name = isset($_GET['company_name']) ? $_GET['company_name'] : $_SESSION['contacts_company_name'];
+    $company_code = isset($_GET['company_code']) ? $_GET['company_code'] : $_SESSION['contacts_company_code'];
     $company_type_id = $_SESSION['contacts_company_type_id'];
     $category_id = $_SESSION['category_id'];
     $user_id = $_SESSION['contacts_user_id'];
@@ -139,7 +139,7 @@ $sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact
 
 $from = "from contacts cont, companies c, users u ";
 
-$where .= "where c.company_id = cont.company_id ";
+$where  = "where c.company_id = cont.company_id ";
 $where .= "and c.user_id = u.user_id ";
 $where .= "and contact_record_status = 'a'";
 
@@ -191,7 +191,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 
-$group_by .= " group by contact_id";
+$group_by = " group by contact_id";
 
 if ($sort_column == 1) {
     $order_by = "cont.last_name";
@@ -215,6 +215,7 @@ order by r.recent_item_timestamp desc";
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
+$recently_viewed_table_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
@@ -227,7 +228,7 @@ if ($rst) {
     $rst->close();
 }
 
-if (strlen($recently_viewed_table_rows) == 0) {
+if ( !$recently_viewed_table_rows ) {
     $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed contacts</td></tr>';
 }
 
@@ -302,10 +303,18 @@ start_page($page_title, true, $msg);
             <?php  echo $user_menu; ?>
           </td>
         </tr>
+
         <tr>
-          <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="Search">
-            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
-            <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
+          <td class=widget_content_form_element colspan=4>
+           <input name="submitted" type=submit class=button value="Search">
+           <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
+<?php
+	  if ( $use_self_contacts ) {
+	    echo '<input class=button type=button onclick="javascript: createContact();" value="Create Contact for \'Self\'">';
+	  }
+          // TBD - BUG - $company_count is never defined
+?>
+            <?php if (isset($company_count) && $company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
           </td>
         </tr>
         </table>
@@ -357,6 +366,10 @@ function clearSearchCriteria() {
     location.href = "some.php?clear=1";
 }
 
+function createContact() {
+    location.href = "new.php";
+}
+
 function exportIt() {
     document.forms[0].action = "export.php";
     document.forms[0].submit();
@@ -385,6 +398,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.22  2004/07/13 18:05:59  cpsource
+ * - Add feature use_self_contacts
+ *   fix misc unitialized variables
+ *
  * Revision 1.21  2004/07/13 14:18:58  neildogg
  * - Changed submit button name to another name
  *   - resolves SF bug 9888931 reported by braverock
