@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.10 2004/03/09 14:59:05 braverock Exp $
+ * $Id: one.php,v 1.11 2004/03/29 21:12:58 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -341,6 +341,11 @@ function markComplete() {
             </tr>
         </table>
 
+<?php
+    //place the plug-in hook before the Activities
+    do_hook ('opportunity_detail');
+?>
+
         <!-- activities //-->
         <form action="../activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/opportunities/one.php?opportunity_id=<?php  echo $opportunity_id; ?>">
@@ -407,6 +412,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2004/03/29 21:12:58  maulani
+ * - Add plugin hook for quotes attached to an opportunity
+ *   (Or other functionality to be displayed on the opportunity detail screen)
+ *
  * Revision 1.10  2004/03/09 14:59:05  braverock
  * - removed obsolete code after sidebar conversion
  *
