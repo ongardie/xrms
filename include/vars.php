@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.16 2004/04/20 15:34:39 braverock Exp $
+ * $Id: vars.php,v 1.17 2004/04/29 00:42:16 braverock Exp $
  */
 
 /**
@@ -38,19 +38,20 @@ $xrms_file_root = "/full/path/to/xrms";
 // directory where uploaded files should go
 // make sure these directories are writable by the apache user
 $max_file_size = 200000;
-$tmp_upload_directory = "/full/path/to/xrms/tmp/";
-$file_storage_directory = "/full/path/to/xrms/files/storage/";
+$tmp_upload_directory = $xrms_file_root."/tmp/";
+$file_storage_directory = $xrms_file_root."/storage/";
 
 //uncomment this if you are having trouble with file uploads
 //ini_set ('upload_tmp_dir', $tmp_upload_directory);
 
 // directory for exports
 // directory must be writable by apache,
-// and should not be world readable (0700)
-// this needs to be relative to the xrms web root
-// (browser needs to be able to see it)
-// (no trailing slash)
-$tmp_export_directory = "/full/path/to/xrms/export/";
+// this needs to be relative to the xrms web/file root
+// (browser needs to be able to see the directory [+x bit])
+// (with trailing slash)
+$tmp_export_directory = $xrms_file_root."/export/";
+// if you change the export directory,
+// you will need to use a <Location> tag in your web server config
 
 // accounting software integration is in the works, but for now
 $accounting_system = ''; // no integration
@@ -148,5 +149,99 @@ $xrms_use_ldap = false; //set to true if you want ldap authenthication
     $xrms_ldap["default_role_id"] = "1";
     //time zone for new users added via LDAP
     $xrms_ldap["default_gmt_offset"] = "-6";
+
+/*** Language settings ***/
+/**
+ * Multiple language/i18n/localization/translation support
+ * gratefully ported from Squirrelmail.
+ *
+ * With 4 million+ users worldwide, we'll assume that the i18n
+ * team there knows what they are doing.
+ *
+ * Ported by Brian Peterson (braverock)
+ */
+
+/**
+ * Default language
+ *
+ *   This is the default language. It is used as a last resort
+ *   if XRMS can't figure out which language to display.
+ *   Language names usually consist of language code, underscore
+ *   symbol and country code
+ * @global string $xrms_default_language
+ */
+$xrms_default_language = 'en_US';
+
+/**
+ * Default Charset
+ *
+ * This option controls what character set is used when sending mail
+ * and when sending HTML to the browser. Do not set this to US-ASCII,
+ * use ISO-8859-1 instead.
+ *
+ * You can set this option, only if $xrms_default_language setting
+ * contains 'en_US' string. In any other case system does not allow
+ * making mistakes with incorrect language and charset combinations.
+ * @global string $default_charset
+ */
+$default_charset = 'iso-8859-1';
+
+/**
+ * Available Languages
+ *
+ * This option controls number of languages available to end user in
+ * language selection preferences. You can use space separated list
+ * of translations installed in locale/ directory or special keys
+ * 'all' (all languages are available) and 'none' (language selection
+ * is disabled, interface is set to $xrms_default_language
+ * @global string $available_languages
+ */
+$available_languages   = 'all';
+
+/**
+ * Alternative Language Names Control
+ *
+ * This options allows displaying native language names in language
+ * selection box.
+ * @global bool $show_alternative_names
+ */
+$show_alternative_names   = false;
+
+/**
+ * Agresive Decoding Control
+ *
+ * This option enables reading of Eastern multibyte encodings.
+ * Functions that provide this support are very cpu and memory intensive.
+ * Don't enable this option unless you really need it.
+ * @global bool $agresive_decoding
+ */
+$agresive_decoding = false;
+
+/**
+ * PHP recode functions control
+ *
+ * Use experimental code with php recode functions when reading messages with
+ * different encoding. This code is faster than interpreted PHP functions,
+ * but it require php with recode support.
+ *
+ * Don't enable this option if you are not sure about availability of
+ * recode support.
+ * @global bool $use_php_recode
+ */
+$use_php_recode = false;
+/**
+ * PHP iconv functions control
+ *
+ * Use experimental code with php iconv functions when reading messages with
+ * different encoding. This code is faster than interpreted PHP functions,
+ * but it require php with iconv support and works only with some translations.
+ *
+ * Don't enable this option if you are not sure about availability of
+ * iconv support.
+ * @global bool $use_php_iconv
+ */
+$use_php_iconv = false;
+
+/*** End Language settings ***/
 
 ?>
