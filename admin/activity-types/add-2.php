@@ -2,7 +2,7 @@
 /**
  * Commit the new Activity Type to the database
  *
- * $Id: add-2.php,v 1.5 2004/07/16 15:04:45 braverock Exp $
+ * $Id: add-2.php,v 1.6 2004/07/16 23:51:34 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $activity_type_short_name = $_POST['activity_type_short_name'];
 $activity_type_pretty_name = $_POST['activity_type_pretty_name'];
@@ -59,6 +59,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.6  2004/07/16 23:51:34  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.5  2004/07/16 15:04:45  braverock
  * - add phpdoc
  *

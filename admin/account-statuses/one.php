@@ -4,7 +4,7 @@
  *
  * Edit account-status
  *
- * $Id: one.php,v 1.5 2004/07/14 16:28:09 braverock Exp $
+ * $Id: one.php,v 1.6 2004/07/16 23:51:33 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $account_status_id = $_GET['account_status_id'];
 
@@ -118,6 +118,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.6  2004/07/16 23:51:33  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.5  2004/07/14 16:28:09  braverock
  * - applied modified version of i18n conversion submitted by Sebastian Becker (hyperpac)
  *

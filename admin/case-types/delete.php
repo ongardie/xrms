@@ -2,7 +2,7 @@
 /**
  * delete (set status to 'd') the information for a single case
  *
- * $Id: delete.php,v 1.3 2004/06/14 21:48:24 introspectshun Exp $
+ * $Id: delete.php,v 1.4 2004/07/16 23:51:35 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,7 +12,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $case_type_id = $_POST['case_type_id'];
 
@@ -34,6 +34,9 @@ header("Location: some.php");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.4  2004/07/16 23:51:35  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.3  2004/06/14 21:48:24  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

@@ -16,7 +16,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $direction = $_GET['direction'];
 $sort_order = $_GET['sort_order'];
@@ -101,6 +101,9 @@ header ('Location: ' . $http_site_root . $return_url);
 
 /**
  * $Log: sort.php,v $
+ * Revision 1.4  2004/07/16 23:51:34  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.3  2004/07/15 21:11:58  introspectshun
  * - Minor tweaks for consistency
  *

@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.4 2004/07/15 20:36:36 introspectshun Exp $
+ * $Id: new.php,v 1.5 2004/07/16 23:51:34 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $activity_title = $_POST['title'];
 $duration = $_POST['duration'];
@@ -67,6 +67,9 @@ header("Location: ".$http_site_root.'/admin/'.$on_what_table.'/one.php?'.$table_
 
 /**
  * $Log: new.php,v $
+ * Revision 1.5  2004/07/16 23:51:34  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.4  2004/07/15 20:36:36  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *

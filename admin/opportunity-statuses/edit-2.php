@@ -2,7 +2,7 @@
 /**
  * save an updated an opportunity status  to database after editing it.
  *
- * $Id: edit-2.php,v 1.5 2004/06/14 22:36:43 introspectshun Exp $
+ * $Id: edit-2.php,v 1.6 2004/07/16 23:51:37 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,7 +12,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $opportunity_status_id = $_POST['opportunity_status_id'];
 $opportunity_status_short_name = $_POST['opportunity_status_short_name'];
@@ -48,6 +48,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.6  2004/07/16 23:51:37  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.5  2004/06/14 22:36:43  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

@@ -2,7 +2,7 @@
 /**
  * commit a new user to the Database
  *
- * $Id: add-2.php,v 1.6 2004/07/15 22:23:53 introspectshun Exp $
+ * $Id: add-2.php,v 1.7 2004/07/16 23:51:38 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,7 +12,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $role_id = $_POST['role_id'];
 $new_username = $_POST['new_username'];
@@ -49,6 +49,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.7  2004/07/16 23:51:38  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.6  2004/07/15 22:23:53  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *

@@ -17,7 +17,7 @@
  * @author Brian Peterson
  *
  *
- * $Id: import-companies-2.php,v 1.7 2004/07/08 22:15:15 introspectshun Exp $
+ * $Id: import-companies-2.php,v 1.8 2004/07/16 23:51:37 cpsource Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -27,7 +27,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $delimiter = $_POST['delimiter'];
 $user_id = $_POST['user_id'];
@@ -298,6 +298,9 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.8  2004/07/16 23:51:37  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.7  2004/07/08 22:15:15  introspectshun
  * - Include adodb-params.php
  *

@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: edit-2.php,v 1.4 2004/07/07 20:46:26 neildogg Exp $
+ * $Id: edit-2.php,v 1.5 2004/07/16 23:51:36 cpsource Exp $
  */
 //include required files
 require_once('../../include-locations.inc');
@@ -16,7 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
@@ -55,6 +55,9 @@ header("Location: {$http_site_root}/{$return_url}");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.5  2004/07/16 23:51:36  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.4  2004/07/07 20:46:26  neildogg
  * - Added support for phone format editing
  *

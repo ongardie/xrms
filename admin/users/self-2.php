@@ -4,7 +4,7 @@
  *
  * Save the changes from a user-level self-change
  *
- * $Id: self-2.php,v 1.5 2004/06/14 22:50:14 introspectshun Exp $
+ * $Id: self-2.php,v 1.6 2004/07/16 23:51:38 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $edit_user_id = $_POST['edit_user_id'];
 $last_name = $_POST['last_name'];
@@ -47,6 +47,9 @@ header("Location: " . $http_site_root . "/private/home.php");
 
 /**
  *$Log: self-2.php,v $
+ *Revision 1.6  2004/07/16 23:51:38  cpsource
+ *- require session_check ( 'Admin' )
+ *
  *Revision 1.5  2004/06/14 22:50:14  introspectshun
  *- Add adodb-params.php include for multi-db compatibility.
  *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.

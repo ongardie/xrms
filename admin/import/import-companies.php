@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.7 2004/07/16 13:51:58 braverock Exp $
+ * $Id: import-companies.php,v 1.8 2004/07/16 23:51:37 cpsource Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -22,7 +22,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $page_title = _("Import");
 start_page($page_title, true, $msg);
@@ -160,6 +160,9 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.8  2004/07/16 23:51:37  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.7  2004/07/16 13:51:58  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

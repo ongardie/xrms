@@ -2,7 +2,7 @@
 /**
  * Show details of a single rating
  *
- * $Id: one.php,v 1.5 2004/07/16 13:51:59 braverock Exp $
+ * $Id: one.php,v 1.6 2004/07/16 23:51:37 cpsource Exp $
  */
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -11,7 +11,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $rating_id = $_GET['rating_id'];
 
@@ -102,6 +102,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.6  2004/07/16 23:51:37  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.5  2004/07/16 13:51:59  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: some.php,v 1.6 2004/07/16 13:51:55 braverock Exp $
+ * $Id: some.php,v 1.7 2004/07/16 23:51:35 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,7 +12,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -115,6 +115,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/07/16 23:51:35  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.6  2004/07/16 13:51:55  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

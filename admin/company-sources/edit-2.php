@@ -8,7 +8,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $company_source_id = $_POST['company_source_id'];
 $company_source_short_name = $_POST['company_source_short_name'];

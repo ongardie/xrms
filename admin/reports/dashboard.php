@@ -4,7 +4,7 @@
  *
  * Displays Audit entries and new activity counts.  Needs work.
  *
- * $Id: dashboard.php,v 1.9 2004/07/15 17:44:34 introspectshun Exp $
+ * $Id: dashboard.php,v 1.10 2004/07/16 23:51:38 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $msg = $_GET['msg'];
 
@@ -250,6 +250,9 @@ end_page();
 
 /**
  * $Log: dashboard.php,v $
+ * Revision 1.10  2004/07/16 23:51:38  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.9  2004/07/15 17:44:34  introspectshun
  * - Fixed errant CVS Commit.
  *

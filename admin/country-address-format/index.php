@@ -6,7 +6,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: index.php,v 1.5 2004/07/16 13:51:57 braverock Exp $
+ * $Id: index.php,v 1.6 2004/07/16 23:51:36 cpsource Exp $
  */
 
 //include required files
@@ -19,7 +19,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
@@ -74,6 +74,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.6  2004/07/16 23:51:36  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.5  2004/07/16 13:51:57  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

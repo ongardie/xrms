@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.6 2004/07/16 13:55:07 braverock Exp $
+ * $Id: change-password.php,v 1.7 2004/07/16 23:51:38 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $edit_user_id = $_GET['edit_user_id'];
 
@@ -63,6 +63,9 @@ end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.7  2004/07/16 23:51:38  cpsource
+ *- require session_check ( 'Admin' )
+ *
  *Revision 1.6  2004/07/16 13:55:07  braverock
  *- localize strings for i18n translation support
  *  - applies modified patches from Sebastian Becker (hyperpac)

@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.9 2004/07/16 13:51:59 braverock Exp $
+ * $Id: one.php,v 1.10 2004/07/16 23:51:37 cpsource Exp $
  */
 
 //uinclude required common files
@@ -16,7 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 //check to see if we are logged in
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $opportunity_status_id = $_GET['opportunity_status_id'];
 
@@ -232,6 +232,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2004/07/16 23:51:37  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.9  2004/07/16 13:51:59  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

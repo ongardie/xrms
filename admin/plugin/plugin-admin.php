@@ -15,7 +15,7 @@
  * @author Philippe Mingo
  * @author Brian Peterson
  *
- * $Id: plugin-admin.php,v 1.3 2004/07/16 13:51:59 braverock Exp $
+ * $Id: plugin-admin.php,v 1.4 2004/07/16 23:51:37 cpsource Exp $
  * @package xrms
  * @subpackage plugins
  */
@@ -28,7 +28,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'plugin.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $plugin_submit = $_POST['plugin_submit'];
 if ($plugin_submit=='true') {
@@ -293,6 +293,9 @@ echo '</table></form></p>';
 
 /**
  * $Log: plugin-admin.php,v $
+ * Revision 1.4  2004/07/16 23:51:37  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.3  2004/07/16 13:51:59  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

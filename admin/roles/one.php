@@ -4,7 +4,7 @@
  *
  * Edit roles
  *
- * $Id: one.php,v 1.4 2004/07/16 13:52:00 braverock Exp $
+ * $Id: one.php,v 1.5 2004/07/16 23:51:38 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $role_id = $_GET['role_id'];
 
@@ -105,6 +105,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.5  2004/07/16 23:51:38  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.4  2004/07/16 13:52:00  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

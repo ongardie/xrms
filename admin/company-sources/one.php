@@ -4,7 +4,7 @@
  *
  * Description
  *
- * $Id: one.php,v 1.6 2004/07/16 13:51:56 braverock Exp $
+ * $Id: one.php,v 1.7 2004/07/16 23:51:36 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,7 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $thispage = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check($thispage);
+$session_user_id = session_check( 'Admin' );
 
 $company_source_id = $_GET['company_source_id'];
 
@@ -112,6 +112,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/16 23:51:36  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.6  2004/07/16 13:51:56  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

@@ -2,7 +2,7 @@
 /**
  * Insert the updated information into the database
  *
- * $Id: edit-2.php,v 1.3 2004/06/14 22:14:42 introspectshun Exp $
+ * $Id: edit-2.php,v 1.4 2004/07/16 23:51:36 cpsource Exp $
  */
 
 // include required files
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $crm_status_id = $_POST['crm_status_id'];
 $crm_status_short_name = $_POST['crm_status_short_name'];
@@ -42,6 +42,9 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.4  2004/07/16 23:51:36  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.3  2004/06/14 22:14:42  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

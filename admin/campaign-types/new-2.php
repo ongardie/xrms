@@ -7,7 +7,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $campaign_type_short_name = $_POST['campaign_type_short_name'];
 $campaign_type_pretty_name = $_POST['campaign_type_pretty_name'];

@@ -2,7 +2,7 @@
 /**
  * save an updated an activity template to database after editing it.
  *
- * $Id: edit-2.php,v 1.2 2004/06/14 20:50:11 introspectshun Exp $
+ * $Id: edit-2.php,v 1.3 2004/07/16 23:51:34 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,7 +12,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $activity_template_id = $_POST['activity_template_id'];
 $activity_type_id = $_POST['activity_type_id'];

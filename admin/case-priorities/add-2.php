@@ -2,7 +2,7 @@
 /**
  * Insert a new Case Priority into the database
  *
- * $Id: add-2.php,v 1.4 2004/07/15 21:21:36 introspectshun Exp $
+ * $Id: add-2.php,v 1.5 2004/07/16 23:51:35 cpsource Exp $
  */
 
 //include required files
@@ -15,7 +15,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $case_priority_short_name = $_POST['case_priority_short_name'];
 $case_priority_pretty_name = $_POST['case_priority_pretty_name'];
@@ -46,6 +46,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.5  2004/07/16 23:51:35  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.4  2004/07/15 21:21:36  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *

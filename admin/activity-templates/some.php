@@ -2,7 +2,7 @@
 /**
  * Manage Activity Templates
  *
- * $Id: some.php,v 1.3 2004/07/15 20:36:18 introspectshun Exp $
+ * $Id: some.php,v 1.4 2004/07/16 23:51:34 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,7 +12,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -82,6 +82,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.4  2004/07/16 23:51:34  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.3  2004/07/15 20:36:18  introspectshun
  * - Localized strings for i18n/translation support
  *

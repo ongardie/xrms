@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.8 2004/07/13 18:16:16 neildogg Exp $
+ * $Id: edit-2.php,v 1.9 2004/07/16 23:51:38 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $edit_user_id = $_POST['edit_user_id'];
 $user_contact_id = $_POST['user_contact_id'];
@@ -53,6 +53,9 @@ header("Location: some.php");
 
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.9  2004/07/16 23:51:38  cpsource
+ *- require session_check ( 'Admin' )
+ *
  *Revision 1.8  2004/07/13 18:16:16  neildogg
  *- Add admin support to allow a contact to be tied to the user
  *

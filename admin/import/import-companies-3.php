@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.24 2004/07/08 22:16:28 introspectshun Exp $
+ * $Id: import-companies-3.php,v 1.25 2004/07/16 23:51:37 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -77,7 +77,7 @@ function importMessage($str, $success=true) {
     echo "<div style=\"background-color: $color\">$str</div>\n";
 }
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $delimiter = $_POST['delimiter'];
 $user_id = $_POST['user_id'];
@@ -728,6 +728,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.25  2004/07/16 23:51:37  cpsource
+ * - require session_check ( 'Admin' )
+ *
  * Revision 1.24  2004/07/08 22:16:28  introspectshun
  * - Now uses GetInsertSQL and GetUpdateSQL
  *
