@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.52 2004/07/28 19:24:21 cpsource Exp $
+ * $Id: one.php,v 1.53 2004/07/28 20:55:32 neildogg Exp $
  */
 
 //include required files
@@ -255,7 +255,7 @@ function logTime() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? $_SESSION['pos'] . "/" . count($_SESSION['next_to_check']) : ""; ?></td>
+                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? "(" . $_SESSION['pos'] . "/" . count($_SESSION['next_to_check']) . ")": "" ; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -413,6 +413,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.53  2004/07/28 20:55:32  neildogg
+ * - Added parenthesis around save and next numbers
+ *
  * Revision 1.52  2004/07/28 19:24:21  cpsource
  * - Move confGoTo sub-system out into a seperate file for
  *   a more structured, and general implementation.
