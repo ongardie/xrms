@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.29 2005/02/11 20:25:45 vanmer Exp $
+ * $Id: sidebar.php,v 1.30 2005/02/11 21:17:02 vanmer Exp $
  */
 
 require_once('relationship_functions.php');
@@ -161,8 +161,8 @@ $relationship_link_rows = '';
                 $relationship_link_rows .= $relationship_type_data['post_formatting'] . "\n"
                     . "                &bull;"
                     . " <a href='$http_site_root/relationships/edit.php?working_direction=$opposite_direction"
-                    . "&on_what_table=" . $what[$opposite_direction]['table']
-                    . "&relationship_id=" . $rst2->fields['relationship_id']
+                    . "&on_what_table=" . $relationship_type_data[$opposite_direction.'_what_table']
+                    . "&relationship_id=" . $relationship_id
                     . "&return_url=" . urlencode(current_page())
                     . "'>" . _("Edit") . "</a>";
             
@@ -316,6 +316,9 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.30  2005/02/11 21:17:02  vanmer
+ * - fixed edit links to properly allow edit of relationship
+ *
  * Revision 1.29  2005/02/11 20:25:45  vanmer
  * - added check to ensure that relationship types actually get returned before using them
  *
