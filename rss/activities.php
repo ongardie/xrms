@@ -11,7 +11,7 @@
  * status = open or scheduled or overdue or closed or current (open or closed).  Default all.
  * type = limit activity type.  Default all.
  *
- * $Id: activities.php,v 1.1 2005/02/05 23:11:30 maulani Exp $
+ * $Id: activities.php,v 1.2 2005/02/10 14:15:25 maulani Exp $
  */
 
 //include required files
@@ -186,11 +186,10 @@ if ($type != 'all') {
 	$sql .= "AND a.activity_type_id = $activity_type_id ";
 }
 
-$sql .= 'ORDER BY a.scheduled_at DESC ';
-$sql .= "LIMIT $max";
+$sql .= 'ORDER BY a.scheduled_at DESC';
 
 $items_text = '';
-$rst = $con->execute($sql);
+$rst = $con->selectlimit($sql, $max);
 if ($rst) {
 	$num_activities = $rst->rowcount();
 	while (!$rst->EOF) {
@@ -245,6 +244,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: activities.php,v $
+ * Revision 1.2  2005/02/10 14:15:25  maulani
+ * - Change SQL to use SelectLimit
+ *
  * Revision 1.1  2005/02/05 23:11:30  maulani
  * - Provide RSS Feed for activities
  *
