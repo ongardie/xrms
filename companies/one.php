@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.90 2005/02/01 00:26:07 braverock Exp $
+ * $Id: one.php,v 1.91 2005/02/10 21:16:45 maulani Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -435,6 +435,8 @@ if ($rst) {
     db_error_handler ($con, $sql);
 }
 
+add_audit_item($con, $session_user_id, 'viewed', 'companies', $company_id, 3);
+
 //close the database connection, we don't need it anymore
 $con->close();
 
@@ -822,6 +824,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.91  2005/02/10 21:16:45  maulani
+ * - Add audit trail entries
+ *
  * Revision 1.90  2005/02/01 00:26:07  braverock
  * - remove 'News' button, as this functionaltiy has been moved to the weblinks plugin
  *

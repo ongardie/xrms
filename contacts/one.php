@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.61 2005/02/10 19:41:28 braverock Exp $
+ * $Id: one.php,v 1.62 2005/02/10 21:16:50 maulani Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -279,6 +279,8 @@ if ($rst) {
     $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
     $rst->close();
 }
+
+add_audit_item($con, $session_user_id, 'viewed', 'contacts', $contact_id, 3);
 
 $con->close();
 
@@ -588,6 +590,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.62  2005/02/10 21:16:50  maulani
+ * - Add audit trail entries
+ *
  * Revision 1.61  2005/02/10 19:41:28  braverock
  * - add missing comma
  *

@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.12 2005/01/13 18:42:30 vanmer Exp $
+ * $Id: edit-2.php,v 1.13 2005/02/10 21:16:49 maulani Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -91,10 +91,15 @@ if ($salutation != '0') {
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+add_audit_item($con, $session_user_id, 'updated', 'contacts', $contact_id, 1);
+
 header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.13  2005/02/10 21:16:49  maulani
+ * - Add audit trail entries
+ *
  * Revision 1.12  2005/01/13 18:42:30  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

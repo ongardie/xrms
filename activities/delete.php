@@ -2,7 +2,7 @@
 /**
  * 'Delete' an activity
  *
- * $Id: delete.php,v 1.4 2005/01/29 13:12:38 braverock Exp $
+ * $Id: delete.php,v 1.5 2005/02/10 21:16:41 maulani Exp $
  */
   
 require_once('../include-locations.inc');
@@ -35,6 +35,8 @@ $rec['activity_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+add_audit_item($con, $session_user_id, 'deleted', 'activities', $activity_id, 1);
+
 $con->close();
 
 if($save_and_next) {
@@ -45,6 +47,9 @@ if($save_and_next) {
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.5  2005/02/10 21:16:41  maulani
+ * - Add audit trail entries
+ *
  * Revision 1.4  2005/01/29 13:12:38  braverock
  * - add 'Save and Next' browse support to delete
  *   resolves SF bug 1103958 reported by proto23

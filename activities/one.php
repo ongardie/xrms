@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.76 2005/01/22 15:07:14 braverock Exp $
+ * $Id: one.php,v 1.77 2005/02/10 21:16:43 maulani Exp $
  */
 
 //include required files
@@ -152,9 +152,7 @@ if ($company_id) {
     }
 }
 
-
-// add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
-
+add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
 
 /* add opportunities/case/campaign combo box */
 //get singular form of table name (from on_what_table field)
@@ -225,8 +223,6 @@ if ($is_linked) {
     }
 
 }
-
-// add_audit_item($con, $session_user_id, 'viewed', $table_name, $table_status_id, 3);
 
 $table_name=ucwords($table_name);
 
@@ -502,6 +498,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.77  2005/02/10 21:16:43  maulani
+ * - Add audit trail entries
+ *
  * Revision 1.76  2005/01/22 15:07:14  braverock
  * - add sort order to activity_types menu
  *
