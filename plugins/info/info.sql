@@ -73,3 +73,16 @@ REATE TABLE `info_types` (
   PRIMARY KEY  (`info_type_id`)
 ) TYPE=MyISAM AUTO_INCREMENT=1 ;
 
+# --------------------------------------------------------
+
+#
+# Table structure for table `info_display_map`
+#
+
+CREATE TABLE `info_display_map` (
+  `info_type_id` int(11) NOT NULL default '0',
+  `display_on` varchar(100) NOT NULL default '',
+  `record_status` char(1) NOT NULL default 'a',
+  KEY `info_type_id` (`info_type_id`,`display_on`)
+) TYPE=MyISAM;
+

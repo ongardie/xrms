@@ -2,14 +2,25 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.1 2004/07/14 16:50:16 gpowers Exp $
+ * $Id: sidebar.php,v 1.2 2004/07/14 19:03:27 gpowers Exp $
  */
 
 //$con->debug = 1;
 
-$sql = "SELECT info_type_id, info_type_name FROM info_types ";
-$sql .= "WHERE info_type_status = 'a'";
-$sql .= "ORDER BY info_type_order ";
+global $display_on;
+
+# set a reasonable default
+if (!$display_on) {
+    $display_on = "company_sidebar";
+}
+
+$sql = "SELECT info_types.info_type_id, info_types.info_type_name FROM info_types, info_display_map ";
+$sql .= "WHERE info_types.info_type_status = 'a' ";
+if ($display_on != "all") {
+    $sql .= "AND info_display_map.display_on = '" . $display_on . "' ";
+}
+$sql .= "AND info_types.info_type_id = info_display_map.info_type_id ";
+$sql .= "ORDER BY info_types.info_type_order ";
 
 $toprst = $con->execute($sql);
 if (!$toprst) {
@@ -45,9 +56,13 @@ if ($toprst) {
         #//build the info sql query
         $sql = "SELECT info.value, info.info_id FROM info, info_map ";
         $sql .= "WHERE info.info_id=info_map.info_id ";
+if ($company_id) {
         $sql .= "AND info_map.company_id=$company_id ";
+}
         $sql .= "AND info_map.info_type_id=$info_type_id  ";
+if ($name_element_id) {
         $sql .= "AND info.element_id=$name_element_id ";
+}
         $sql .= "AND info.info_record_status='a'";
         $rst = $con->execute($sql);
         if (!$rst) {
