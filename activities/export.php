@@ -97,31 +97,36 @@ $sql .= " ORDER BY is_overdue DESC, a.scheduled_at, a.entered_at DESC";
 
 $rst = $con->execute($sql);
 
-$filename =  'activities_' . $session_user_id . '.csv';
+$filename =  'activities_' . date('Y-m-d_H-i') . '.csv';
 
-$fp = fopen($tmp_export_directory . $filename, 'w');
-
-if (($fp) && ($rst)) {
-    rs2csvfile($rst, $fp);
+if ($rst) {
+    $csvdata= rs2csv($rst);
+    if ($csvdata) {
+      $filesize = strlen($csvdata);
+    }  
     $rst->close();
-    fclose($fp);
 } else {
-    echo "<p>There was a problem with your export:\n";
-    if (!$fp) {
-        echo "<br>Unable to open file: $tmp_export_directory . $filename \n";
+    echo "<p>" . _("There was a problem with your export") . ":\n";
+    if (!$csvdata) {
+        echo "<br>" . _("Unable to create file") . ": $xrms_file_root.$tmp_export_directory/$filename \n";
     }
     if (!$rst) {
-        echo "<br> No results returned from database by query: \n";
-        echo "<br> $sql \n";
+        db_error_handler($con,$sql);
     }
 }
 
 $con->close();
 
-header("Location: {$http_site_root}/export/{$filename}");
+SendDownloadHeaders('text', 'csv', $filename, true, $filesize);
+echo $csvdata;
 
 /**
  * $Log: export.php,v $
+ * Revision 1.5  2005/01/09 03:38:34  braverock
+ * - modified to use SendDownLoadHeaders
+ * - modified to send data directly,rather than writing a file
+ * - use timestamp in the filename
+ *
  * Revision 1.4  2004/08/03 11:39:52  cpsource
  * - Get rid of ^m's
  *   Add newline at end
