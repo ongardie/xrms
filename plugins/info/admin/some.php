@@ -1,8 +1,8 @@
 <?php
 /**
- * Manage Activity Types
+ * Manage Info Item Types
  *
- * $Id: some.php,v 1.2 2004/11/12 06:36:37 gpowers Exp $
+ * $Id: some.php,v 1.3 2005/02/11 00:54:55 braverock Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -108,42 +108,14 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.3  2005/02/11 00:54:55  braverock
+ * - add phpdoc where neccessary
+ * - fix code formatting and comments
+ *
  * Revision 1.2  2004/11/12 06:36:37  gpowers
  * - added support for single display_on add/edit/delete/show
  *
  * Revision 1.1  2004/11/10 07:27:49  gpowers
  * - added admin screens for info types
- *
- * Revision 1.10  2004/07/19 21:31:09  introspectshun
- * - Added i18n string for $page_title
- *
- * Revision 1.9  2004/07/16 23:51:34  cpsource
- * - require session_check ( 'Admin' )
- *
- * Revision 1.8  2004/07/16 13:51:53  braverock
- * - localize strings for i18n translation support
- *   - applies modified patches from Sebastian Becker (hyperpac)
- *
- * Revision 1.7  2004/07/15 21:11:58  introspectshun
- * - Minor tweaks for consistency
- *
- * Revision 1.6  2004/06/24 20:09:25  braverock
- * - use sort order when displaying activity types
- *   - patch provided by Neil Roberts
- *
- * Revision 1.5  2004/06/14 21:06:33  introspectshun
- * - Add adodb-params.php include for multi-db compatibility.
- * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
- *
- * Revision 1.4  2004/06/13 09:13:57  braverock
- * - add sort_order to activity_types
- *
- * Revision 1.3  2004/04/16 22:18:23  maulani
- * - Add CSS2 Positioning
- *
- * Revision 1.2  2004/04/08 16:56:46  maulani
- * - Update javascript declaration
- * - Add phpdoc
- *
  */
 ?>

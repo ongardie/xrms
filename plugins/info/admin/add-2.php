@@ -1,8 +1,8 @@
 <?php
 /**
- * Commit the new Activity Type to the database
+ * Commit the new Info Type to the database
  *
- * $Id: add-2.php,v 1.2 2004/11/12 06:36:37 gpowers Exp $
+ * $Id: add-2.php,v 1.3 2005/02/11 00:54:55 braverock Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -52,12 +52,31 @@ if (!$rst) {
     db_error_handler ($con, $ins);
 }
 
+//insert NAME element
+$rec = array();
+$rec['element_label'] = _("Name");
+$rec['element_type'] = "'name'";
+$rec['element_enabled'] = 1;
+$rec['info_type_id'] = $info_type_id;
+
+//commit it
+$tbl = "info_element_definitions";
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+$rst = $con->execute($ins);
+if (!$rst) {
+    db_error_handler ($con, $ins);
+}
+
 $con->close();
 
 header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.3  2005/02/11 00:54:55  braverock
+ * - add phpdoc where neccessary
+ * - fix code formatting and comments
+ *
  * Revision 1.2  2004/11/12 06:36:37  gpowers
  * - added support for single display_on add/edit/delete/show
  *

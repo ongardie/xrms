@@ -1,10 +1,8 @@
 <?php
 /**
- * /admin/account-types/one.php
+ * Edit info item types
  *
- * Edit account-types
- *
- * $Id: one.php,v 1.2 2004/11/12 06:36:37 gpowers Exp $
+ * $Id: one.php,v 1.3 2005/02/11 00:54:55 braverock Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -113,6 +111,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.3  2005/02/11 00:54:55  braverock
+ * - add phpdoc where neccessary
+ * - fix code formatting and comments
+ *
  * Revision 1.2  2004/11/12 06:36:37  gpowers
  * - added support for single display_on add/edit/delete/show
  *

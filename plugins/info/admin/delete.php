@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Delete an info element definition
+ *
+ * $Id: delete.php,v 1.3 2005/02/11 00:54:55 braverock Exp $
+ */
+ 
 require_once('../../../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -37,4 +42,11 @@ $con->close();
 
 header("Location: some.php");
 
+/**
+ * $Log: delete.php,v $
+ * Revision 1.3  2005/02/11 00:54:55  braverock
+ * - add phpdoc where neccessary
+ * - fix code formatting and comments
+ *
+ */
 ?>
