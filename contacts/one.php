@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.41 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: one.php,v 1.42 2004/07/25 13:37:56 johnfawcett Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -404,7 +404,7 @@ function markComplete() {
                                     <td class=clear><?php  echo $division_row; ?></td>
                                 </tr>
                                  <tr>
-                                    <td class=sublabel><?php echo _("Acct. Owner"); ?></td>
+                                    <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner; ?></td>
                                 </tr>
                                 <tr>
@@ -564,6 +564,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.42  2004/07/25 13:37:56  johnfawcett
+ * - modified string Acct. to Account to unify across application
+ *
  * Revision 1.41  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'

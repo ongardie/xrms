@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.17 2004/07/25 13:23:05 johnfawcett Exp $
+ * $Id: one.php,v 1.18 2004/07/25 13:35:29 johnfawcett Exp $
  */
 
 //include required files
@@ -284,7 +284,7 @@ start_page($page_title, true, $msg);
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a> (<?php  echo $company_code; ?>)</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php echo _("Acct. Owner"); ?></td>
+                                    <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner_username; ?></td>
                                 </tr>
                                 <tr>
@@ -372,6 +372,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.18  2004/07/25 13:35:29  johnfawcett
+ * - modified string Acct. to Account to unify across application
+ *
  * Revision 1.17  2004/07/25 13:23:05  johnfawcett
  * - removed punctuation form gettext call
  *
