@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.10 2004/07/25 13:50:29 johnfawcett Exp $
+ * $Id: import-companies.php,v 1.11 2004/09/22 22:05:07 introspectshun Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -21,6 +21,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
@@ -160,6 +161,9 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.11  2004/09/22 22:05:07  introspectshun
+ * - Added ADODB params include for multi-db compatibility
+ *
  * Revision 1.10  2004/07/25 13:50:29  johnfawcett
  * - correct my spelling mistake of previous change
  *
