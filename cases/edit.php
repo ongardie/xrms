@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.12 2004/07/30 11:02:14 cpsource Exp $
+ * $Id: edit.php,v 1.13 2004/08/02 12:04:46 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'confgoto.php');
 
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -155,6 +156,9 @@ $con->close();
 $page_title = _("Edit Case #") . $case_id . ": " . $case_title;
 start_page($page_title, true, $msg);
 
+// enable confirm
+confGoTo_includes();
+
 ?>
 
 <?php jscalendar_includes(); ?>
@@ -215,7 +219,14 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=case_description><?php  echo $case_description; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?case_id=<?php echo $case_id ?>';" value='<?php echo _("Delete"); ?>'></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+<?php
+		$quest  = _('Delete Case?');
+                $button = _('Delete');
+                $to_url = "delete.php?case_id=$case_id";
+                confGoTo( $quest, $button, $to_url );
+?>
+                </td>
             </tr>
         </table>
         </form>
@@ -276,6 +287,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.13  2004/08/02 12:04:46  cpsource
+ * - Per bug 997663, add confirm for delete of cases.
+ *
  * Revision 1.12  2004/07/30 11:02:14  cpsource
  * - Optionally define msg
  *   set default no_update flag to false in edit-2.php

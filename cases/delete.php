@@ -11,6 +11,10 @@ require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
 
+if ( !isset($_GET['case_id']) ) {
+  header("Location: some.php?msg=no_case");
+}
+
 $case_id = $_GET['case_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);

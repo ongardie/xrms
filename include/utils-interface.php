@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.29 2004/07/29 23:49:01 maulani Exp $
+ * $Id: utils-interface.php,v 1.30 2004/08/02 12:04:46 cpsource Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -22,6 +22,9 @@ function status_msg($msg) {
     switch ($msg) {
 
       // handle know messages
+    case 'no_case':
+      return _("No Case To Delete.");
+
         case 'company_added':
             return _("Company Added.");
         case 'company_deleted':
@@ -210,6 +213,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.30  2004/08/02 12:04:46  cpsource
+ * - Per bug 997663, add confirm for delete of cases.
+ *
  * Revision 1.29  2004/07/29 23:49:01  maulani
  * - update html to improve formatting
  *
