@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.25 2004/07/09 18:42:13 introspectshun Exp $
+ * $Id: some.php,v 1.26 2004/07/10 12:56:06 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -57,10 +57,10 @@ if ($clear) {
     $crm_status_id = $_POST['crm_status_id'];
     $industry_id = $_POST['industry_id'];
 } else {
-    $sort_column = $_SESSION['campaigns_sort_column'];
-    $current_sort_column = $_SESSION['campaigns_current_sort_column'];
-    $sort_order = $_SESSION['campaigns_sort_order'];
-    $current_sort_order = $_SESSION['campaigns_current_sort_order'];
+    $sort_column = $_SESSION['companies_sort_column'];
+    $current_sort_column = $_SESSION['companies_current_sort_column'];
+    $sort_order = $_SESSION['companies_sort_order'];
+    $current_sort_order = $_SESSION['companies_current_sort_order'];
     $company_name = $_SESSION['companies_company_name'];
     $company_type_id = $_SESSION['companies_company_type_id'];
     $company_category_id = $_SESSION['companies_company_category_id'];
@@ -200,16 +200,16 @@ $order_by .= " $sort_order";
 
 $sql .= $from . $where . " order by $order_by";
 
-$sql_recently_viewed = "select 
-r.recent_item_id,  
-r.on_what_table, 
-r.on_what_id, 
+$sql_recently_viewed = "select
+r.recent_item_id,
+r.on_what_table,
+r.on_what_id,
 r.recent_item_timestamp,
-c.*, 
-crm.crm_status_short_name, 
-crm.crm_status_pretty_name, 
-crm.crm_status_pretty_plural, 
-crm.crm_status_display_html, 
+c.*,
+crm.crm_status_short_name,
+crm.crm_status_pretty_name,
+crm.crm_status_pretty_plural,
+crm.crm_status_display_html,
 crm.crm_status_record_status
 from recent_items r, companies c, crm_statuses crm
 where r.user_id = $session_user_id
@@ -423,6 +423,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.26  2004/07/10 12:56:06  braverock
+ * - fix $SESSION sort order variables
+ *   - applies patch suggest by cpsource in SF bug 976223
+ *
  * Revision 1.25  2004/07/09 18:42:13  introspectshun
  * - Removed CAST(x AS CHAR) for wider database compatibility
  * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
