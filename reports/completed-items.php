@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.4 2004/04/23 15:24:10 gpowers Exp $
+ * $Id: completed-items.php,v 1.5 2004/04/23 15:43:17 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -140,7 +140,7 @@ if ($user_id) {
                 campaign_statuses.campaign_status_id = campaigns.campaign_status_id
                 and campaign_statuses.status_open_indicator = 'o'
                 and campaign_record_status = 'a'
-                and user_id = $user_id and entered_at between "
+                and user_id = $user_id and ends_at between "
                 . $con->qstr($starting, get_magic_quotes_gpc()) . "
                 and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
                 order by entered_at ";
@@ -174,11 +174,11 @@ if ($user_id) {
     } // End Campaigns Type
     if (($type == "opportunities") || ($type == "all")) {
         $sql = "SELECT * from opportunities, opportunity_statuses where
-                status_open_indicator = 'c'
+                opportunity_statuses.status_open_indicator != 'o'
                 and opportunity_record_status = 'a'
                 and opportunity_statuses.opportunity_status_id = opportunities.opportunity_status_id
                 and user_id = $user_id
-                and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc())
+                and close_at between " . $con->qstr($starting, get_magic_quotes_gpc())
               . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
                 order by entered_at";
         $rst = $con->execute($sql);
@@ -278,6 +278,9 @@ end_page();
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.5  2004/04/23 15:43:17  gpowers
+ * fixed select on campaigns and opportunities
+ *
  * Revision 1.4  2004/04/23 15:24:10  gpowers
  * Fixes Bug #938620, requires campaign_statuses.status_open_indicator
  *
