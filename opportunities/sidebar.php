@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.6 2004/06/14 17:41:36 introspectshun Exp $
+ * $Id: sidebar.php,v 1.7 2004/07/14 12:21:41 cpsource Exp $
  */
 
 $opportunity_rows = "<div id='opportunity_sidebar'>
@@ -48,7 +48,7 @@ if (strlen($rst->fields['username'])>0) {
 }
 
 //put in the new and search buttons
-if ((strlen($company_id) > 0)  or (strlen($contact_id) > 0)) {
+if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0)) ) {
     $opportunity_rows .= "
             <tr>
                 <form action='".$http_site_root."/opportunities/new.php' method='post'>
@@ -74,6 +74,9 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.7  2004/07/14 12:21:41  cpsource
+ * - Resolve uninitialized variable usage
+ *
  * Revision 1.6  2004/06/14 17:41:36  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
