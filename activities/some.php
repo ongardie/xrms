@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.5 2004/04/09 20:01:20 braverock Exp $
+ * $Id: some.php,v 1.6 2004/04/09 21:11:42 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -110,6 +110,7 @@ $sql = "select
  date_format(ends_at, '%Y-%m-%d') as 'Due'
 from companies c, users u, activity_types at, activities a left outer join contacts cont on cont.contact_id = a.contact_id
 where a.company_id = c.company_id
+and a.activity_record_status = 'a'
 and at.activity_type_id = a.activity_type_id
 and a.user_id = u.user_id";
 
@@ -335,6 +336,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2004/04/09 21:11:42  braverock
+ * - add check for activity_record_status = 'a'
+ *   - fixes SF bug 932545 reported by Beth (maulani)
+ *
  * Revision 1.5  2004/04/09 20:01:20  braverock
  * - display search results using adodb pager for consistency
  * - allow export of search results as CSV file
