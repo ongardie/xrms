@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.5 2004/04/15 22:04:39 maulani Exp $
+ * $Id: index.php,v 1.6 2004/04/20 13:34:42 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -80,7 +80,26 @@ start_page($page_title, true, $msg);
                 <td colspan=2 class=widget_label_center>User Reports</td>
             </tr>
             <tr>
-                <td class=widget_content colspan="2"><form action="user-activity.php" method=post>Activity Report for <?php echo $user_menu; ?> <input class=button type=submit value="Go"></form></td>
+                <td class=widget_content><a href="activitytimes.php">Activity Time Sheets</a></td>
+                <td class=widget_content>
+                    List Activiites by Start, End, and User (also shows Duration, Company and Contact)
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content><a href="open-items.php">Open Items</a></td>
+                <td class=widget_content>List Open Items by User and Type</td>
+            </tr>
+            <tr>
+                <td class=widget_content><a href="completed-items.php">Completed Items</a></td>
+                <td class=widget_content>List Completed Items by Date Range, User and Type</td>
+            </tr>
+            <tr>
+                <td class=widget_content colspan="2">
+                    <form action="user-activity.php" method=post>
+                        Activity Report for <?php echo $user_menu; ?>
+                        <input class=button type=submit value="Go">
+                    </form>
+                </td>
             </tr>
         </table>
 
@@ -100,6 +119,12 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.6  2004/04/20 13:34:42  braverock
+ * - add activity times report
+ * - add open items report
+ * - add completed items report
+ *   - apply SF patches 928336, 937994, 938094 submitted by Glenn Powers
+ *
  * Revision 1.5  2004/04/15 22:04:39  maulani
  * - Change to CSS2 positioning
  * - Clean HTML to achieve validation
