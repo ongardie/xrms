@@ -6,9 +6,15 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * @todo Move variable substitutions for actvity templates into a user-definable table.
+ * $Id: workflow-activities.php,v 1.9 2004/12/24 15:59:03 braverock Exp $
  *
- * $Id: workflow-activities.php,v 1.8 2004/09/17 20:02:15 neildogg Exp $
+ * @todo To extend and internationalize activity template substitution,
+ *       we would need to add a table to the database that would hold
+ *       the substitution string and the sql to execute to return
+ *       a single field to substitute.
+ *       Then, this page would retrieve the result set for string/sql pairs, and
+ *       run through the result set and do a test/select/substitute for each member
+ *       the substitution result set.
  */
 
 $sql = "select * from activity_templates
@@ -44,13 +50,7 @@ if ($rst) {
         /**
          * Do variable substitution on the Activity Title in an Activity Template
          *
-         * @todo To extend and internationalize activity template substitution,
-         *       we would need to add a table to the database that would hold
-         *       the substitution string and the sql to execute to return
-         *       a single field to substitute.
-         *       Then, this page would retrieve the result set for string/sql pairs, and
-         *       run through the result set and do a test/select/substitute for each member
-         *       the substitution result set.
+         * @todo Move variable substitutions for actvity templates into a user-definable table.
          */
         if (strpos($activity_title, 'company_name')) {
             //get the company name for substitutions
@@ -100,7 +100,7 @@ if ($rst) {
         $tbl = 'activities';
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
-        
+
         do_hook_function('workflow_addition', $activity_template_id);
 
         $rst->movenext();
@@ -110,6 +110,9 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.9  2004/12/24 15:59:03  braverock
+ * - clean up todo item about internationalization of activity template substitution
+ *
  * Revision 1.8  2004/09/17 20:02:15  neildogg
  * - Remove uninitialized values
  *  - Added hook
@@ -127,6 +130,5 @@ if ($rst) {
  * Revision 1.4  2004/06/21 14:26:48  braverock
  * - add variable substitution
  * - add phpdoc
- *
  */
 ?>
