@@ -1,8 +1,15 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * Sidebar box for serverinfo
  *
- * $Id: sidebar.php,v 1.1 2004/07/06 19:57:02 gpowers Exp $
+ * $Id: sidebar.php,v 1.2 2004/07/14 14:49:27 cpsource Exp $
  */
 
 //$con->debug = 1;

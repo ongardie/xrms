@@ -1,8 +1,15 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.8 2004/06/28 16:23:25 gpowers Exp $
+ * $Id: sidebar.php,v 1.9 2004/07/14 14:49:27 cpsource Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -158,6 +165,9 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.9  2004/07/14 14:49:27  cpsource
+ * - All sidebar.php's now support IN_XRMS security feature.
+ *
  * Revision 1.8  2004/06/28 16:23:25  gpowers
  * - removed $http_site_root from return_url
  *   - $http_site_root is added to the Location: header in notes/delete.php

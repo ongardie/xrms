@@ -1,8 +1,15 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.7 2004/07/14 12:21:41 cpsource Exp $
+ * $Id: sidebar.php,v 1.8 2004/07/14 14:49:27 cpsource Exp $
  */
 
 $opportunity_rows = "<div id='opportunity_sidebar'>
@@ -74,6 +81,9 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.8  2004/07/14 14:49:27  cpsource
+ * - All sidebar.php's now support IN_XRMS security feature.
+ *
  * Revision 1.7  2004/07/14 12:21:41  cpsource
  * - Resolve uninitialized variable usage
  *

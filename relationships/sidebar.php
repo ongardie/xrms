@@ -1,4 +1,11 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * Associated Companies Sidebar
  *
@@ -11,7 +18,7 @@
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.3 2004/07/14 14:08:53 neildogg Exp $
+ * $Id: sidebar.php,v 1.4 2004/07/14 14:49:28 cpsource Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -228,6 +235,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.4  2004/07/14 14:49:28  cpsource
+ * - All sidebar.php's now support IN_XRMS security feature.
+ *
  * Revision 1.3  2004/07/14 14:08:53  neildogg
  * - Add new relationship now in /relationships directory
  *

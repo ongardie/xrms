@@ -1,4 +1,11 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * Company Information Sidebar
  *
@@ -9,7 +16,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.5 2004/06/28 13:48:11 gpowers Exp $
+ * $Id: sidebar.php,v 1.6 2004/07/14 14:49:26 cpsource Exp $
  */
 
 // add company information block on sidebar
@@ -66,6 +73,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.6  2004/07/14 14:49:26  cpsource
+ * - All sidebar.php's now support IN_XRMS security feature.
+ *
  * Revision 1.5  2004/06/28 13:48:11  gpowers
  * - made company name a link to company page
  *

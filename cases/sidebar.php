@@ -1,8 +1,15 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.6 2004/07/14 12:08:19 cpsource Exp $
+ * $Id: sidebar.php,v 1.7 2004/07/14 14:49:26 cpsource Exp $
  */
 
 $case_rows = "<div id='case_sidebar'>
@@ -75,6 +82,9 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.7  2004/07/14 14:49:26  cpsource
+ * - All sidebar.php's now support IN_XRMS security feature.
+ *
  * Revision 1.6  2004/07/14 12:08:19  cpsource
  * - Fix uninitialized variable usage
  *

@@ -1,4 +1,11 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * Contact Information Sidebar
  *
@@ -9,7 +16,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.7 2004/07/04 11:34:58 metamedia Exp $
+ * $Id: sidebar.php,v 1.8 2004/07/14 14:49:27 cpsource Exp $
  */
 
 //add contact information block on sidebar
@@ -62,6 +69,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.8  2004/07/14 14:49:27  cpsource
+ * - All sidebar.php's now support IN_XRMS security feature.
+ *
  * Revision 1.7  2004/07/04 11:34:58  metamedia
  * Now also displays cell phone number for contact.
  *

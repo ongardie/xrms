@@ -1,9 +1,22 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.5 2004/06/12 07:20:40 introspectshun Exp $
+ * $Id: sidebar.php,v 1.6 2004/07/14 14:49:27 cpsource Exp $
  */
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
 
 $file_rows = "<div id='file_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
@@ -85,6 +98,9 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.6  2004/07/14 14:49:27  cpsource
+ * - All sidebar.php's now support IN_XRMS security feature.
+ *
  * Revision 1.5  2004/06/12 07:20:40  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *
