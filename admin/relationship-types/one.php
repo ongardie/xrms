@@ -4,7 +4,7 @@
  *
  * Edit roles
  *
- * $Id: one.php,v 1.2 2004/07/18 16:03:59 braverock Exp $
+ * $Id: one.php,v 1.3 2004/07/25 18:52:36 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -40,7 +40,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("Relationship Type").': '.$relationship_name;
+$page_title = _("Relationship Type Details").': '.$relationship_name;
 start_page($page_title);
 
 ?>
@@ -88,18 +88,18 @@ start_page($page_title);
 		</table>
 		</form>
 
-		<form action=delete.php method=post>
-		<input type=hidden name=relationship_type_id value="<?php  echo $relationship_type_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Relationship Type?"); ?>');">
+		<form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Relationship Type?"); ?>');">
+		<input type=hidden name=relationship_type_id value="<?php  echo $relationship_type_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=4><?php echo _("Delete Role"); ?></td>
 			</tr>
 			<tr>
 				<td class=widget_content>
-				<?php echo _("Click the button below to remove this role from the system."); ?>
+				<?php echo _("Click the button below to permanently remove this item."); ?>
                                 <p><?php echo _("You should NOT delete the last element of a relationship type, or a used relationship type."); ?></p>
 				<p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
-				<p><input class=button type=submit value="<?php echo _("Delete Role">; ?>"</p>
+				<p><input class=button type=submit value="<?php echo _("Delete"); ?>"</p>
 				</td>
 			</tr>
 		</table>
@@ -121,6 +121,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.3  2004/07/25 18:52:36  johnfawcett
+ * - standardized page title
+ * - standardized delete text and button
+ * - corrected parse error
+ * - corrected bug: confirm delete not working
+ *
  * Revision 1.2  2004/07/18 16:03:59  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)
