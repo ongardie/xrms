@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.27 2004/08/25 14:18:45 neildogg Exp $
+ * $Id: import-companies-3.php,v 1.28 2005/03/22 15:49:14 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -415,7 +415,6 @@ foreach ($filearray as $row) {
         //insert new address
         if ($address_city) {
             //city is required, can't think of a simpler requirement
-
             //if we don't have an address name, assign the city as the name
             if (!$address_name) {$address_name = $address_city;}
 
@@ -429,6 +428,8 @@ foreach ($filearray as $row) {
             if ($rst) {
                 $address_id = $rst->fields['address_id'];
                 //should probably echo here to indicate that we didn't import this address
+		// The following line was added by cgg
+		importMessage("Duplicate address.  Using address id $address_id\n");
             }
             if (!$address_id and $company_id) {
                 //figure out a country, because country is required as well
@@ -464,25 +465,40 @@ foreach ($filearray as $row) {
                     $address_country = $default_country_id;
                     importFailedMessage("Country not specified. Using default country");
                 }
+		// added by cgg
+		if (!isset($address_line2)) {
+			$address_line2 = "";
+		}
+
+		if (!isset($address_body)) {
+			$address_body = " ";
+		}
+
+		if (!isset($address_use_pretty_address)) {
+			$address_use_pretty_address = "f";
+		}
 
                 //insert the new address
                 $rec = array();
                 $rec['company_id'] = $company_id;
                 $rec['address_name'] = $address_name;
-                $rec['line1'] = $address_line1;
-                $rec['line2'] = $address_line2;
-                $rec['city'] = $address_city;
+                $rec['line1'] = trim($address_line1);
+                $rec['line2'] = trim($address_line2);
+                $rec['city'] = trim($address_city);
                 $rec['province'] = $address_state;
                 $rec['address_body'] = $address_body;
                 $rec['use_pretty_address'] = $address_use_pretty_address;
                 $rec['postal_code'] = $address_postal_code;
                 $rec['country_id'] = $address_country;
 
-                $tbl = 'addresses';
+		$tbl = 'addresses';
+//		Changed by cgg
                 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+//		$ins = $con->GetInsertSQL($tbl, $rec);
+
                 debugSql($ins);
-                $con->execute($ins);
-                
+                $con->Execute($ins);
+
                 $address_id = $con->insert_id();
                 if($time_zone_offset = time_zone_offset($con, $address_id)) {
                     $sql = 'SELECT *
@@ -756,6 +772,10 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.28  2005/03/22 15:49:14  gpowers
+ * - patched address import bug
+ *   - patch provided by cgg
+ *
  * Revision 1.27  2004/08/25 14:18:45  neildogg
  * - Daylight savings now applied to all new addresses
  *
