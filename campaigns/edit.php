@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.5 2004/04/17 16:02:40 maulani Exp $
+ * $Id: edit.php,v 1.6 2004/06/04 17:44:05 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,7 +61,7 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+<?php jscalendar_includes(); ?>
 
 <div id="Main">
     <div id="Content">
@@ -89,13 +89,19 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Starts At</td>
-                <td class=widget_content_form_element><input type=text size=12 name=starts_at value="<?php  echo $starts_at; ?>">&nbsp;<a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a></td>
+                <td class=widget_label_right>Starts On</td>
+                <td class=widget_content_form_element>
+                    <input type=text ID="f_date_c" name=starts_at value="<?php  echo $starts_at; ?>">
+                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Ends At</td>
-                <td class=widget_content_form_element><input type=text size=12 name=ends_at value="<?php  echo $ends_at; ?>">&nbsp;<a href="javascript:cal2.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a></td>
-            </tr>
+                <td class=widget_label_right>Ends On</td>
+                <td class=widget_content_form_element>
+                    <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>">
+                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                </td>
+           </tr>
             <tr>
                 <td class=widget_label_right>Cost</td>
                 <td class=widget_content_form_element><input type=text size=10 name=cost value="<?php  echo $cost; ?>"></td>
@@ -147,22 +153,28 @@ function validate() {
 
 initialize();
 
-<!--
+    Calendar.setup({
+        inputField     :    "f_date_c",      // id of the input field
+        ifFormat       :    "%Y-%m-%d",       // format of the input field
+        showsTime      :    false,            // will display a time selector
+        button         :    "f_trigger_c",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
 
-// create calendar object(s) just after form tag closed
-// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
-// note: you can have as many calendar objects as you need for your application
+    Calendar.setup({
+        inputField     :    "f_date_d",      // id of the input field
+        ifFormat       :    "%Y-%m-%d",       // format of the input field
+        showsTime      :    false,            // will display a time selector
+        button         :    "f_trigger_d",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
 
-    var cal1 = new calendar1(document.forms[0].elements['starts_at']);
-    cal1.year_scroll = false;
-    cal1.time_comp = false;
-
-    var cal2 = new calendar1(document.forms[0].elements['ends_at']);
-    cal2.year_scroll = false;
-    cal2.time_comp = false;
-
-//-->
 </script>
+
 
 <?php
 
@@ -170,6 +182,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.6  2004/06/04 17:44:05  gpowers
+ * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
+ * w/minor changes: changed includes to function, used complete php tags
+ *
  * Revision 1.5  2004/04/17 16:02:40  maulani
  * - Add CSS2 positioning
  *

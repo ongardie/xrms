@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.8 2004/06/03 16:16:18 braverock Exp $
+ * $Id: edit.php,v 1.9 2004/06/04 17:39:44 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -145,14 +145,14 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+<?php jscalendar_includes(); ?>
 
 <div id="Main">
     <div id="Content">
 
         <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=opportunity_id value=<?php  echo $opportunity_id; ?>>
-        <input type=hidden name=company_id value=<?php echo $company_id; ?>>	
+        <input type=hidden name=company_id value=<?php echo $company_id; ?>>
 	<input type=hidden name=on_what_table value=<?php echo "opportunities"; ?>>
 
 	<table class=widget cellspacing=1>
@@ -208,7 +208,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Close&nbsp;Date</td>
-                <td class=widget_content_form_element><input type=text size=12 name=close_at value="<?php  echo $close_at; ?>"><a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a></td>
+
+                <td class=widget_content_form_element>
+                    <input type=text ID="f_date_c" name=close_at value="<?php  echo $close_at; ?>">
+                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Description</td>
@@ -257,17 +261,17 @@ function validate() {
 }
 
 initialize();
-<!--
 
-// create calendar object(s) just after form tag closed
-// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
-// note: you can have as many calendar objects as you need for your application
+Calendar.setup({
+        inputField     :    "f_date_c",      // id of the input field
+        ifFormat       :    "%Y-%m-%d",       // format of the input field
+        showsTime      :    false,            // will display a time selector
+        button         :    "f_trigger_c",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
 
-    var cal1 = new calendar1(document.forms[0].elements['close_at']);
-    cal1.year_scroll = false;
-    cal1.time_comp = false;
-
-//-->
 </script>
 
 <?php
@@ -276,6 +280,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.9  2004/06/04 17:39:44  gpowers
+ * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
+ * w/minor changes: changed includes to function, used complete php tags
+ *
  * Revision 1.8  2004/06/03 16:16:18  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
