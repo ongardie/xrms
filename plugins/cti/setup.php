@@ -10,13 +10,21 @@
 
 function xrms_plugin_init_cti() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['one_contact_buttons']['cti'] = 'asteriskdial';
+//    $xrms_plugin_hooks['one_contact_buttons']['cti'] = 'asteriskdial';
+    $GLOBALS["use_dial_link"]="y";
 //    $xrms_plugin_hooks['menuline']['cti'] = 'voicemail';
+
+    function phone_link_to_display($phone, $phone_to_display) {
+        global $http_site_root;
+        global $company_id;
+        global $contact_id;
+        $url_phone = urlencode($phone);
+        return "<a href=\"" . $http_site_root . "/plugins/cti/asteriskdial.php?company_id=" . $company_id . "&contact_id=" . $contact_id . "&phone=" . $url_phone . "\">" . $phone_to_display . "</a>";
+    }
 }
 
 function asteriskdial() {
     global $http_site_root;
-    global $work_phone;
     global $contact_id;
     global $company_id;
     echo "<input class=button type=button value=\"" . _("Dial") . "\" onclick=\"javascript: location.href='" . $http_site_root . "/plugins/cti/asteriskdial.php?company_id=" . $company_id . "&contact_id=" . $contact_id . "&phone=" . $work_phone . "';\">";
