@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.12 2004/05/28 13:55:02 gpowers Exp $
+ * $Id: edit.php,v 1.13 2004/06/10 15:26:59 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -219,7 +219,12 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save"> <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';"><?php if ($contact_count > 1) {echo(" <input type=button class=button onclick=\"javascript: location.href='delete.php?company_id=$company_id&contact_id=$contact_id';\" value='Delete' onclick=\"javascript: return confirm('Delete Contact?')\"");} ?></td>
+                <td class=widget_content_form_element colspan=2>
+                    <input class=button type=submit value="Save">
+                    <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';"><?php if ($contact_count > 1) {echo(" <input type=button class=button onclick=\"javascript: location.href='delete.php?company_id=$company_id&contact_id=$contact_id';\" value='Delete' onclick=\"javascript: return confirm('Delete Contact?')\"");} ?>
+                    <input class=button type=button value="Transfer" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=button value="Edit Address" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+                </td>
             </tr>
         </table>
         </form>
@@ -240,6 +245,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.13  2004/06/10 15:26:59  gpowers
+ * - added "Transfer" and "Edit Address" buttons. (moved from one.php)
+ *
  * Revision 1.12  2004/05/28 13:55:02  gpowers
  * removed "viewed" audit log entry. this is redundant, as this data is
  * already stored in httpd access logs.
