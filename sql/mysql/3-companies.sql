@@ -7,12 +7,13 @@
 -- 
 
 create table company_sources (
-	company_source_id           								int not null primary key auto_increment,
-	company_source_short_name									varchar(10) not null default '',
-	company_source_pretty_name									varchar(100) not null default '',
-	company_source_pretty_plural								varchar(100) not null default '',
-	company_source_display_html									varchar(100) not null default '',
-	company_source_record_status								char(1) default 'a'
+	company_source_id           	int not null primary key auto_increment,
+	company_source_short_name	varchar(10) not null default '',
+	company_source_pretty_name	varchar(100) not null default '',
+	company_source_pretty_plural	varchar(100) not null default '',
+	company_source_display_html	varchar(100) not null default '',
+	company_source_record_status	char(1) default 'a',
+	company_source_score_adjustment int not null
 );
 
 insert into company_sources (company_source_short_name, company_source_pretty_name, company_source_pretty_plural, company_source_display_html) values ('OTH', 'Other', 'Other', 'Other');
@@ -34,12 +35,12 @@ insert into company_sources (company_source_short_name, company_source_pretty_na
 -- 
 
 create table industries (
-	industry_id           										int not null primary key auto_increment,
-	industry_short_name											varchar(10) not null default '',
-	industry_pretty_name										varchar(100) not null default '',
-	industry_pretty_plural										varchar(100) not null default '',
-	industry_display_html										varchar(100) not null default '',
-	industry_record_status										char(1) default 'a'
+	industry_id           		int not null primary key auto_increment,
+	industry_short_name		varchar(10) not null default '',
+	industry_pretty_name		varchar(100) not null default '',
+	industry_pretty_plural		varchar(100) not null default '',
+	industry_display_html		varchar(100) not null default '',
+	industry_record_status		char(1) default 'a'
 );
 
 
@@ -72,12 +73,12 @@ insert into industries (industry_short_name, industry_pretty_name, industry_pret
 -- 
 
 create table ratings (
-	rating_id													int not null primary key auto_increment,
-	rating_short_name											varchar(10) not null default '',
-	rating_pretty_name											varchar(100) not null default '',
-	rating_pretty_plural										varchar(100) not null default '',
-	rating_display_html											varchar(100) not null default '',
-	rating_record_status										char(1) default 'a'
+	rating_id			int not null primary key auto_increment,
+	rating_short_name		varchar(10) not null default '',
+	rating_pretty_name		varchar(100) not null default '',
+	rating_pretty_plural		varchar (100) not null default '',
+	rating_display_html		varchar(100) not null default '',
+	rating_record_status		char(1) default 'a'
 );
 
 insert into ratings (rating_short_name, rating_pretty_name, rating_pretty_plural, rating_display_html) values ('N/A', 'N/A', 'N/A', '<font color=#999999><b>N/A</b></font>');
@@ -92,12 +93,12 @@ insert into ratings (rating_short_name, rating_pretty_name, rating_pretty_plural
 -- 
 
 create table account_statuses (
-	account_status_id											int not null primary key auto_increment,
-	account_status_short_name									varchar(10) not null default '',
-	account_status_pretty_name									varchar(100) not null default '',
-	account_status_pretty_plural								varchar(100) not null default '',
-	account_status_display_html									varchar(100) not null default '',
-	account_status_record_status								char(1) default 'a'
+	account_status_id			int not null primary key auto_increment,
+	account_status_short_name		varchar(10) not null default '',
+	account_status_pretty_name		varchar(100) not null default '',
+	account_status_pretty_plural		varchar(100) not null default '',
+	account_status_display_html		varchar(100) not null default '',
+	account_status_record_status		char(1) default 'a'
 );
 
 insert into account_statuses (account_status_short_name, account_status_pretty_name, account_status_pretty_plural, account_status_display_html) values ('N/A', 'N/A', 'N/A', '<font color=#999999><b>N/A</b></font>');
@@ -113,12 +114,12 @@ insert into account_statuses (account_status_short_name, account_status_pretty_n
 -- 
 
 create table company_types (
-	company_type_id												int not null primary key auto_increment,
-	company_type_short_name										varchar(10) not null default '',
-	company_type_pretty_name									varchar(100) not null default '',
-	company_type_pretty_plural									varchar(100) not null default '',
-	company_type_display_html									varchar(100) not null default '',
-	company_type_record_status									char(1) default 'a'
+	company_type_id				int not null primary key auto_increment,
+	company_type_short_name			varchar(10) not null default '',
+	company_type_pretty_name		varchar(100) not null default '',
+	company_type_pretty_plural		varchar(100) not null default '',
+	company_type_display_html		varchar(100) not null default '',
+	company_type_record_status		char(1) default 'a'
 );
 
 insert into company_types (company_type_short_name, company_type_pretty_name, company_type_pretty_plural, company_type_display_html) values ('CUST', 'Customer', 'Customers', 'Customer');
@@ -133,8 +134,8 @@ insert into company_types (company_type_short_name, company_type_pretty_name, co
 -- 
 
 create table company_company_type_map (
-	company_id													int not null default 0,
-	company_type_id												int not null default 0
+	company_id				int not null default 0,
+	company_type_id				int not null default 0
 );
 
 -- 
@@ -144,12 +145,12 @@ create table company_company_type_map (
 -- 
 
 create table crm_statuses (
-	crm_status_id												int not null primary key auto_increment,
-	crm_status_short_name										varchar(10) not null default '',
-	crm_status_pretty_name										varchar(100) not null default '',
-	crm_status_pretty_plural									varchar(100) not null default '',
-	crm_status_display_html										varchar(100) not null default '',
-	crm_status_record_status									char(1) default 'a'
+	crm_status_id				int not null primary key auto_increment,
+	crm_status_short_name			varchar(10) not null default '',
+	crm_status_pretty_name			varchar(100) not null default '',
+	crm_status_pretty_plural		varchar(100) not null default '',
+	crm_status_display_html			varchar(100) not null default '',
+	crm_status_record_status		char(1) default 'a'
 );
 
 insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_status_pretty_plural, crm_status_display_html) values ('Lead', 'Lead', 'Leads', 'Lead');
@@ -165,39 +166,39 @@ insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_sta
 -- 
 
 create table companies (
-	company_id					int not null primary key auto_increment,
-	user_id						int not null default 0,
-	company_source_id			int not null default 0,
-	industry_id					int not null default 0,
-	crm_status_id				int not null default 0,
-	rating_id					int not null default 0,
-	account_status_id			int not null default 0,
-	company_name				varchar(100) not null default '',
-	company_code				varchar(10) not null default '',
-	profile						text not null default '',
-	phone						varchar(50) not null default '',
-	phone2						varchar(50) not null default '',
-	fax							varchar(50) not null default '',
-	url							varchar(50) not null default '',
-	employees					varchar(50) not null default '',
-	revenue						varchar(50) not null default '',
-	credit_limit				int not null default 0,
-	terms						int not null default 0,
-	entered_at					datetime,
-	entered_by					int not null default 0,
-	last_modified_at			datetime,
-	last_modified_by			int not null default 0,
+	company_id			int not null primary key auto_increment,
+	user_id				int not null default 0,
+	company_source_id		int not null default 0,
+	industry_id			int not null default 0,
+	crm_status_id			int not null default 0,
+	rating_id			int not null default 0,
+	account_status_id		int not null default 0,
+	company_name			varchar(100) not null default '',
+	company_code			varchar(10) not null default '',
+	profile				text not null default '',
+	phone				varchar(50) not null default '',
+	phone2				varchar(50) not null default '',
+	fax				varchar(50) not null default '',
+	url				varchar(50) not null default '',
+	employees			varchar(50) not null default '',
+	revenue				varchar(50) not null default '',
+	credit_limit			int not null default 0,
+	terms				int not null default 0,
+	entered_at			datetime,
+	entered_by			int not null default 0,
+	last_modified_at		datetime,
+	last_modified_by		int not null default 0,
 	default_primary_address		int not null default 0,
 	default_billing_address		int not null default 0,
 	default_shipping_address	int not null default 0,
 	default_payment_address		int not null default 0,
-	custom1						varchar(100) not null default '',
-	custom2						varchar(100) not null default '',
-	custom3						varchar(100) not null default '',
-	custom4						varchar(100) not null default '',
-	extref1						varchar(50) not null default '',
-	extref2						varchar(50) not null default '',
-	extref3						varchar(50) not null default '',
+	custom1				varchar(100) not null default '',
+	custom2				varchar(100) not null default '',
+	custom3				varchar(100) not null default '',
+	custom4				varchar(100) not null default '',
+	extref1				varchar(50) not null default '',
+	extref2				varchar(50) not null default '',
+	extref3				varchar(50) not null default '',
 	company_record_status		char(1) default 'a'
 );
 
@@ -207,18 +208,18 @@ create table companies (
 -- "facilities" table, with contacts belonging to one facility, but for now this should be good enough.
 
 create table addresses (
-	address_id													int not null primary key auto_increment,
-	company_id													int not null default 0,
-	country_id													int not null default 1,
-	address_name												varchar(100) not null default '',
-	address_body												varchar(255) not null default '',
-	line1														varchar(255) not null default '',
-	line2														varchar(255) not null default '',
-	city														varchar(255) not null default '',
-	province													varchar(255) not null default '',
-	postal_code													varchar(255) not null default '',
-	use_pretty_address											char(1) not null default 'f',
-	address_record_status										char(1) not null default 'a'
+	address_id			int not null primary key auto_increment,
+	company_id			int not null default 0,
+	country_id			int not null default 1,
+	address_name			varchar(100) not null default '',
+	address_body			varchar(255) not null default '',
+	line1				varchar(255) not null default '',
+	line2				varchar(255) not null default '',
+	city				varchar(255) not null default '',
+	province			varchar(255) not null default '',
+	postal_code			varchar(255) not null default '',
+	use_pretty_address		char(1) not null default 'f',
+	address_record_status		char(1) not null default 'a'
 );
 
 -- 
@@ -229,46 +230,45 @@ create table addresses (
 -- 
 
 create table contacts (
-	contact_id													int not null primary key auto_increment,
-	company_id													int not null default 0,
-	address_id													int not null default 0,
-	last_name													varchar(100) not null default '',
-	first_names													varchar(100) not null default '',
-	summary 													varchar(100) not null default '',
-	title														varchar(100) not null default '',
-	description													varchar(100) not null default '',
-	email														varchar(100) not null default '',
-    email_status                                                char(1) default 'a',
-	work_phone													varchar(50) not null default '',
-	cell_phone													varchar(50) not null default '',
-	home_phone													varchar(50) not null default '',
-	fax															varchar(50) not null default '',
-	aol_name													varchar(50) not null default '',
-	yahoo_name													varchar(50) not null default '',
-	msn_name													varchar(50) not null default '',
-	interests													varchar(50) not null default '',
-	profile														text not null default '',
-	custom1														varchar(50) not null default '',
-	custom2														varchar(50) not null default '',
-	custom3														varchar(50) not null default '',
-	custom4														varchar(50) not null default '',
-	entered_at													datetime,
-	entered_by													int not null default 0,
-	last_modified_at											datetime,
-	last_modified_by											int not null default 0,
-	contact_record_status										char(1) not null default 'a'
+	contact_id			int not null primary key auto_increment,
+	company_id			int not null default 0,
+	address_id			int not null default 0,
+	last_name			varchar(100) not null default '',
+	first_names			varchar(100) not null default '',
+	summary 			varchar(100) not null default '',
+	title				varchar(100) not null default '',
+	description			varchar(100) not null default '',
+	email				varchar(100) not null default '',
+	email_status                    char(1) default 'a',
+	work_phone			varchar(50) not null default '',
+	cell_phone			varchar(50) not null default '',
+	home_phone			varchar(50) not null default '',
+	fax				varchar(50) not null default '',
+	aol_name			varchar(50) not null default '',
+	yahoo_name			varchar(50) not null default '',
+	msn_name			varchar(50) not null default '',
+	interests			varchar(50) not null default '',
+	profile				text not null default '',
+	custom1				varchar(50) not null default '',
+	custom2				varchar(50) not null default '',
+	custom3				varchar(50) not null default '',
+	custom4				varchar(50) not null default '',
+	entered_at			datetime,
+	entered_by			int not null default 0,
+	last_modified_at		datetime,
+	last_modified_by		int not null default 0,
+	contact_record_status		char(1) not null default 'a'
 );
-
 -- 
 -- for the bulk e-mail stuff, where you can store things like "Dear ##CONTACT_FIRST_NAMES## - " and the system will 
 -- replace the ##CONTACT_FIRST_NAMES## token with the contact's actual first names
 -- 
 
 create table email_templates (
-    email_template_id                                           int not null primary key auto_increment,
-    email_template_title                                        varchar(100) not null default '',
-    email_template_body                                         text not null default '',
-    email_template_record_status                                char(1) not null default 'a'
+    email_template_id                   int not null primary key auto_increment,
+    email_template_title                varchar(100) not null default '',
+    email_template_body                 text not null default '',
+    email_template_record_status        char(1) not null default 'a'
 );
 
 insert into email_templates (email_template_title, email_template_body) values ('Blank Template', '');
