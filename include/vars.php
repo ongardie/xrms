@@ -2,16 +2,26 @@
 /**
  * XRMS system configuration file
  *
- * You will need to review the variables in this file and make changes as necessary for your environment.
+ * You will need to review the variables in this file and
+ * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.11 2004/03/07 17:27:57 braverock Exp $
+ * $Id: vars.php,v 1.12 2004/03/22 15:37:06 braverock Exp $
  */
 
 /**
- *  database connection info for XRMS system
- *  eventually there will be a nice, pretty web-based way to install XRMS, but for now you've got to create the db
- *  yourself and run the xrms-initialization scripts (*.sql) found in the [xrms_root]/sql/mysql directory to create the
- *  appropriate tables and insert some sample/default data
+ *  Database Connection info for XRMS system
+ *
+ *  Beth Macknik (maulani) has created a nice, pretty web-based way
+ *  to install XRMS.
+ *
+ *  You need to create a database, add a user, and grant permissions.
+ *  @example:  from a mysql prompt
+ *  create database xrms;
+ *  grant all privileges on xrms.* to xrms@localhost identified by 'yourpasswordhere';
+ *
+ *  After you've created the database and database user,
+ *  follow the instructions in the install/INSTALL file
+ *  and on the screen in the install scripts.
  */
 $xrms_db_dbtype = 'mysql';
 $xrms_db_server = 'localhost';
@@ -26,24 +36,29 @@ $http_site_root = "http://www.yoursitename.com/xrms";
 $xrms_file_root = "/full/path/to/xrms";
 
 // directory where uploaded files should go
-//make sure these directories are writable by the apache user
+// make sure these directories are writable by the apache user
 $max_file_size = 200000;
 $tmp_upload_directory = "/full/path/to/xrms/tmp/";
 $file_storage_directory = "/full/path/to/xrms/files/storage/";
+
 //uncomment this if you are having trouble with file uploads
 //ini_set ('upload_tmp_dir', $tmp_upload_directory);
 
 // directory for exports
-// directory must be writable by apache, and should not be world readable (0700)
-// this needs to be relative to the xrms web root (browser needs to be able to see it)
+// directory must be writable by apache,
+// and should not be world readable (0700)
+// this needs to be relative to the xrms web root
+// (browser needs to be able to see it)
 // (no trailing slash)
 $tmp_export_directory = "/full/path/to/xrms/export/";
 
 // accounting software integration is in the works, but for now
 $accounting_system = ''; // no integration
 
-// if you have more than one XRMS installation, these need to be unique so that users logged in to one
-// application can't just start using the other one.  This variable sets "scope" to the user's login.
+// if you have more than one XRMS installation,
+// these need to be unique so that users logged in to one
+// application can't just start using the other one.
+// This variable sets "scope" to the user's login.
 $xrms_system_id = "XRMS";
 
 // what should this application be called?
@@ -98,7 +113,6 @@ $company_custom4_label = "(Custom 4)";
 //  Options are "Fast" or "Long"
 
 $activities_default_behavior = "Fast";
-
 
 /** Optional LDAP configuration parameters **/
 /**

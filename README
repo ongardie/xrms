@@ -1,6 +1,6 @@
 XRMS - README
 
-/** $Id: README,v 1.3 2004/03/08 14:09:17 braverock Exp $ **/
+/** $Id: README,v 1.4 2004/03/22 15:36:35 braverock Exp $ **/
 ---
 
 SUMMARY
@@ -59,35 +59,7 @@ I like Red Hat machines, but XRMS should work just fine on Apple and Microsoft s
 
 INSTALLATION
 
-1. Create a MySQL database to hold the XRMS tables, and pick a valid MySQL 
-   account for XRMS to use.
-
-2. Find the appropriate scripts in [xrms_root]/sql/mysql, and run them against 
-   this database, in numeric order.
-
-   Alternately, you may just 'source xrms-init-all.sql' which will source all the 
-   other files.
-
-   If you are upgrading from a previous version, you will need to examine the 
-   various upgrade scripts to determine which one or more of them you may need 
-   to apply.
-
-3. Modify the file [xrms_root]/include/vars.php as appropriate for your company.  
-   This is the primary XRMS configuration file. Make sure that your web server 
-   has the appropriate permissions for the specified file storage directories.
-
-4. Make a decision about where the XRMS "include" directory should go.  
-   By default, it's at [xrms_root]/include, but this isn't very secure.  
-   You should probably put it outside the document root of the web server, 
-   but some of you won't have this option.  Either way, you'll need to modify 
-   the [xrms_root]/include-locations.inc file as appropriate.
-
-5. After building the database, putting the file directory where it should go, 
-   and modifying the vars.php and include-locations.inc files, point your web 
-   browser to the appropriate [xrms_root] directory.  If all has been 
-   successful, you'll be able to log in using 'user1' and 'user1' for the 
-   username and password.  Now would be a good time to change the 
-   username/password for that account (go to Administration -> Users).
+See the file INSTALL in the install/ directory.
 
 ---
 
@@ -95,9 +67,9 @@ NOTES
 
 1. For now, it's all in English, but translation capabilities are in progress.  
    If you can translate English business terms (like "customer" and "opportunity") 
-   into other languages, please let me know.
+   into other languages, please let us know.
 
-2. There's almost no validation (client- or server-side) being performed yet, 
+2. We are still adding validation on form submits, and have a long way to go here,
    so don't try anything funny.
 
 3. Dates are expected to be in 'YYYY-MM-DD' format... the date-picker widget 
@@ -107,12 +79,12 @@ NOTES
    available for preliminary testing and bug-fixing.
 
 5. I'm still trying to figure out how best to include a flexible security layer 
-   (roles, permissions, etc.) into XRMS, so for now, there's no ability to limit 
-   what a logged-in user may do.  I've got some ideas for this, but it really is 
-   difficult to make this both flexible and convenient.
+   (roles, permissions, etc.) into XRMS, so for now, there's only limited ability 
+   to limit what a logged-in user may do.  We've got some ideas for this, but it 
+   really is difficult to make this both flexible and convenient.  
 
 6. To import companies, export a .csv file of companies (e.g., from Outlook) and 
-   put the columns in this order:
+   label the columns with the names of the database columns:
 
    company_name - the name of each company
    company_phone - the primary telephone number for each company
@@ -125,10 +97,13 @@ NOTES
    contact_phone - the phone number of the primary contact for each company
    contact_email - the e-mail address of the primary contact for each company
 
-Then visit Administration -> Import Companies/Contacts, select the appopriate 
-default values, and upload the file.
+   Then visit Administration -> Import Companies/Contacts, select the appopriate 
+   default values, and upload the file.  You will be able to preview the upload before 
+   you actualy commit to loading everything into the database.  
+   We've tried to make the import 
 
-7. There's no documentation... until further notice, just use the forums at SourceForge 
+7. There's very little documentation.  We aer happily accepting contributions of user 
+   documentation. Until further notice, just use the forums at SourceForge 
    for support.  We'll be around to answer questions.
 
 8. If you've got suggestions, please pass them along!
@@ -154,3 +129,11 @@ error_reporting = E_ALL & ~E_NOTICE
 If you get errors like "Warning: Cannot modify header 
 information -.. " the set following option in your php.ini:
 output_buffering = On
+
+/**
+ * Changelog for README file
+ * $Log: README,v $
+ * Revision 1.4  2004/03/22 15:36:35  braverock
+ * Update to reference the install scripts and documentation
+ *
+ */
