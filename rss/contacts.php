@@ -7,7 +7,7 @@
  * max = maximum number of entries.  Overridden by system parameter if necessary
  * status = new or modified.  Default new.
  *
- * $Id: contacts.php,v 1.1 2005/03/07 11:52:48 maulani Exp $
+ * $Id: contacts.php,v 1.2 2005/03/20 14:46:46 maulani Exp $
  */
 
 //include required files
@@ -42,15 +42,19 @@ if ( $max > $system_max_entries ) $max = $system_max_entries;
 switch ($status) {
 case "":
 	$status = 'new';
+	$feed_name = 'XRMS New Contacts';
 	break;
 case "new":
 	$status = 'new';
+	$feed_name = 'XRMS New Contacts';
 	break;
 case "modified":
 	$status = 'modified';
+	$feed_name = 'XRMS Modified Contacts';
 	break;
 default:
 	$status = 'new';
+	$feed_name = 'XRMS New Contacts';
 	break;
 }
 
@@ -103,7 +107,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 ?>
 <rss version="2.0">
    <channel>
-      <title>XRMS Contacts</title>
+      <title><?php echo $feed_name; ?></title>
       <link><?php echo $feed_location; ?></link>
       <description>A list of contacts from XRMS</description>
       <language>en-us</language>
@@ -120,6 +124,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: contacts.php,v $
+ * Revision 1.2  2005/03/20 14:46:46  maulani
+ * - Have RSS feed title relect options selected by user
+ *
  * Revision 1.1  2005/03/07 11:52:48  maulani
  * - Add basic RSS feed for companies and contacts
  *
