@@ -18,6 +18,18 @@
 // bookmark, prefilling the fields if we're passed $form_* values.
 //
 //####################################################################
+
+//include required files
+require_once('../../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+//require_once($include_directory . 'utils-interface.php');
+//require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
+//require_once($include_directory . 'utils-accounting.php');
+
+
 $action =  $_GET['action'];
 $form_id = $_POST['form_id'];
 $form_group_id = $_POST['form_group_id'];
@@ -36,7 +48,7 @@ apb_head();
 if ($APB_SETTINGS['auth_user_id']) {
 
     // Print Header
-    print "<h2>" . (($id) ? 'Edit' : 'Add') . " Bookmark</h2>\n";
+    print "<h2>" . (($id) ? 'Edit' : 'Add') . " " . _("Bookmark") . "</h2>\n";
 
     // If we're going to insert, we need to have a URL. [LBS 20020211]
     if ($action == 'insert_bookmark' && $form_url) {
@@ -97,22 +109,16 @@ if ($APB_SETTINGS['auth_user_id']) {
                     $b = apb_bookmark($form_id);
                     $g = apb_group($b->group_id());
 
-                    ?>
-
-                    <p>Bookmark saved!
-
-                    <p><?php echo $g->print_group_path() ?>
-
-                    <p><?php echo $b->link() ?>
-
-                    <p><a href='<?php echo $back_url ?>'>Go Back to Editing</a>
-
-                    <?
+                    echo "<p>" . _("Bookmark saved!") . "</p>"
+                        . "<p>" . $g->print_group_path() . "</p>"
+                        . "<p>" . $b->link() . "</p>"
+                        . "<p><a href='" . $back_url . "'>"
+                        . _("Go Back to Editing") . "</a>";
                 } else {
-                    error("Bookmark edit failed!!");
+                    error( _("Bookmark edit failed!!") );
                 }
             } else {
-                error("You don't have permission to edit this bookmark.");
+                error( _("You don't have permission to edit this bookmark.") );
             }
 
         // INSERT bookmark
@@ -134,26 +140,18 @@ if ($APB_SETTINGS['auth_user_id']) {
                 $b = apb_bookmark(mysql_insert_id());
                 $g = apb_group($b->group_id());
 
-                ?>
-
-                <p>Bookmark saved!
-
-                <p><?php echo $g->print_group_path() ?>
-
-                <p><?php echo $b->link() ?>
-
-                <?
+                echo "<p>" . _("Bookmark saved!") . "</p>"
+                    . "<p>" . $g->print_group_path() . "</p>"
+                    . "<p>" . $b->link() . "</p>";
 
             } else {
-                error("Bookmark add failed!!");
+                error( _("Bookmark add failed!!") );
             }
         }
 
     } elseif ($action == 'delete_bookmark') {
         $b = apb_bookmark($bookmark_id);
-        debug("I want to delete " . $b->link(), 1);
         if ($b->user_id() == $APB_SETTINGS['auth_user_id']) {
-            debug("I have permission", 1);
             $query = "
                 UPDATE apb_bookmarks
                    SET bookmark_deleted = '1'
@@ -162,17 +160,16 @@ if ($APB_SETTINGS['auth_user_id']) {
             ";
             debug($query, 3);
             $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-            print "Bookmark Deleted<br>\n";
+            print _("Bookmark Deleted") . "<br>\n";
 
             ?>
 
-            <p><a href='<?php echo $back_url ?>'>Go Back to Editing</a>
+            <p><a href='<?php echo $back_url; ?>'>Go Back to Editing</a>
 
             <?
 
         } else {
-            debug("I don't have permission", 1);
-            print "Can't delete, you don't have permission<br>\n";
+            print _("Can't delete, you don't have permission.") . "<br>\n";
         }
 
     } else {
@@ -195,8 +192,8 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             ?>
 
-            <form action="<?php echo $SCRIPT_NAME ?>?action=insert_bookmark" method="post">
-            <input type='hidden' name='back_url' value='<?php echo $HTTP_REFERER ?>'>
+            <form action="<?php echo $SCRIPT_NAME; ?>?action=insert_bookmark" method="post">
+            <input type='hidden' name='back_url' value='<?php echo $HTTP_REFERER; ?>'>
             <?php if ($id) { print "<input type='hidden' name='form_id' value='$id'>\n"; } ?>
             <table>
             <tr>
@@ -215,8 +212,8 @@ if ($APB_SETTINGS['auth_user_id']) {
                         <table cellpadding="5" cellspacing="0" border="0" width="100%">
                         <tr>
                             <td><input type="radio" name="form_group_type" value="existing" checked></td>
-                            <td>Existing Group:</td>
-                            <td><?php groups_dropdown('form_group_id', $form_group_id) ?></td>
+                            <td><?php echo _("Existing Group"); ?>:</td>
+                            <td><?php groups_dropdown('form_group_id', $form_group_id); ?></td>
                         </tr>
                         <tr>
                             <td colspan='3'><hr></td>
@@ -224,19 +221,19 @@ if ($APB_SETTINGS['auth_user_id']) {
                         <tr>
                             <td><input type="radio" name="form_group_type" value="new"></td>
                             <td>New Group:</td>
-                            <td><input name="form_group_title" size="20" value="<?php echo $form_group_title ?>"></td>
+                            <td><input name="form_group_title" size="20" value="<?php echo $form_group_title; ?>"></td>
                         </tr>
                         <tr>
                             <td>&nbsp;</td>
-                            <td>Parent Group:</td>
-                            <td><?php groups_dropdown('form_group_parent_id', '0', '[top level]') ?></td>
+                            <td><?php echo _("Parent Group"); ?>:</td>
+                            <td><?php groups_dropdown('form_group_parent_id', '0', '[top level]'); ?></td>
                         </tr>
                         </table>
                       </td>
                     </tr>
                     </table>
 
-                    <?
+                    <?php
                 }
                 // If there are not any groups yet, show the simple group editor. [LBS 20020211]
                 else
@@ -251,14 +248,14 @@ if ($APB_SETTINGS['auth_user_id']) {
                       <td>
                         <table width="100%" cellpadding="5" cellspacing="0">
                         <tr>
-                            <td align="center">New Group: <input name="form_group_title" size="20" value="<?php echo $form_group_title ?>"></td>
+                            <td align="center">New Group: <input name="form_group_title" size="20" value="<?php echo $form_group_title; ?>"></td>
                         </tr>
                         </table>
                       </td>
                     </tr>
                     </table>
 
-                    <?
+                    <?php
                 }
 
                 ?>
@@ -268,23 +265,23 @@ if ($APB_SETTINGS['auth_user_id']) {
                 <table width='100%'>
                     <tr>
                         <td>Title:</td>
-                        <td><input size="40" name="form_title" value="<?php echo stripslashes($form_title) ?>"></td>
+                        <td><input size="40" name="form_title" value="<?php echo stripslashes($form_title); ?>"></td>
                     </tr>
                     <tr>
-                        <td>URL:</td>
-                        <td><input size="40" name="form_url" value="<?php echo $form_url ?>"></td>
+                        <td><?php echo _("URL"); ?>:</td>
+                        <td><input size="40" name="form_url" value="<?php echo $form_url; ?>"></td>
                     </tr>
                     <tr>
-                        <td>Description:</td>
-                        <td><input size="40" name="form_description" value="<?php echo stripslashes($form_description) ?>"></td>
+                        <td><?php echo _("Description"); ?>:</td>
+                        <td><input size="40" name="form_description" value="<?php echo stripslashes($form_description); ?>"></td>
                     </tr>
                     <tr>
-                        <td>Private:</td>
+                        <td><?php echo _("Private"); ?>:</td>
                         <td>
-                            No <input type='radio' name='form_private' value='0' <?=
-                                (($form_private == '1') ? '' : ' CHECKED' ) ?> >
-                            Yes <input type='radio' name='form_private' value='1' <?=
-                                (($form_private == '1') ? ' CHECKED' : '' ) ?> >
+                            <?php echo _("No"); ?> <input type='radio' name='form_private' value='0' <?php
+                                (($form_private == '1') ? '' : ' CHECKED' ); ?> >
+                            <?php echo _("Yes"); ?> <input type='radio' name='form_private' value='1' <?php
+                                (($form_private == '1') ? ' CHECKED' : '' ); ?> >
                         </td>
                     </tr>
                 </table>
@@ -292,7 +289,7 @@ if ($APB_SETTINGS['auth_user_id']) {
             </tr>
             </table>
 
-            <p><center><input type="submit" value="<?php echo (($id) ? 'Edit' : 'Add') ?> Bookmark"></center>
+            <p><center><input type="submit" value="<?php echo (($id) ? 'Edit' : 'Add'); ?> Bookmark"></center>
 
             </form>
 
@@ -304,17 +301,17 @@ if ($APB_SETTINGS['auth_user_id']) {
 
          <?php } ?>
 
-            <?
+            <?php
         } else {
-            error("You don't have permission to edit this bookmark");
+            error( _("You don't have permission to edit this bookmark") );
         }
 
     }
 
 } else {
 
-    print "<p><b>You must be logged in to do whatever it is you wanted to do.</b>\n";
-    echo  "<p>When you log in, you should select the 'Remember Me' option to avoid this in the future.\n\n";
+    echo "<p><b>" . _("You must be logged in to do whatever it is you wanted to do.") . "</b></p>\n";
+    echo  "<p>" . _("When you log in, you should select the 'Remember Me' option to avoid this in the future.") . "</p>\n\n";
 
 }
 
