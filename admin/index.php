@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.9 2004/04/20 22:29:26 braverock Exp $
+ * $Id: index.php,v 1.10 2004/05/27 17:10:55 gpowers Exp $
  */
 
 //include required stuff
@@ -192,17 +192,6 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 
-        <!-- synchronization options //-->
-        <table class=widget cellspacing=1 width="100%">
-            <tr>
-                <td class=widget_header>PDA Synchronization</td>
-            </tr>
-            <tr>
-                <td class=widget_content>PDA synchronization has not been enabled on this system.</td>
-            </tr>
-        </table>
-
-
     </div>
 
 </div>
@@ -213,6 +202,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.10  2004/05/27 17:10:55  gpowers
+ * removed PDA Synchronization sidebar. this feature doesn't exist in XRMS.
+ *
  * Revision 1.9  2004/04/20 22:29:26  braverock
  * - add country address formats
  *   - modified from SF patch 938811 to fix SF bug 925470
