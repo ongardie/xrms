@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: ControlledObject_list.php,v 1.1 2005/01/13 17:16:14 vanmer Exp $
+ * $Id: ControlledObject_list.php,v 1.2 2005/02/14 23:42:17 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat('"<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_ControlledObject.php?form_action=edit&return_url=ControlledObject_list.php&ControlledObject_id="', 'ControlledObject_id', '"\'\">"') . "AS LINK, ControlledObject_name as 'Object Name', on_what_table as 'Source Table', on_what_field as 'Identifying Field', data_source.data_source_name as 'Data Source' FROM ControlledObject  JOIN data_source ON data_source.data_source_id=ControlledObject.data_source_id order by $order_by";
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_ControlledObject.php?form_action=edit&return_url=ControlledObject_list.php&ControlledObject_id="), 'ControlledObject_id', $con->qstr("'\">")) . "AS LINK, ControlledObject_name as 'Object Name', on_what_table as 'Source Table', on_what_field as 'Identifying Field', data_source.data_source_name as 'Data Source' FROM ControlledObject  JOIN data_source ON data_source.data_source_id=ControlledObject.data_source_id order by $order_by";
 
 $css_theme='basic-left';
 start_page($page_title);
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: ControlledObject_list.php,v $
+ * Revision 1.2  2005/02/14 23:42:17  vanmer
+ * -requoted strings
+ *
  * Revision 1.1  2005/01/13 17:16:14  vanmer
  * - Initial Commit for ACL Administration interface
  *
