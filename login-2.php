@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Check if login is valid
+ *
+ * $Id: login-2.php,v 1.4 2004/03/26 21:44:08 maulani Exp $
+ */
 require_once('include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -85,9 +89,18 @@ if ($rst && !$rst->EOF && $ldapok) {
     $_SESSION['username'] = $username;
     $_SESSION['language'] = $language;
     $_SESSION['gmt_offset'] = $gmt_offset;
+    add_audit_item($con, $session_user_id, 'login', '', 0);
     header("Location: $target");
 } else {
     header("Location: $http_site_root/login.php?msg=noauth");
 }
 
+/**
+ * $Log: login-2.php,v $
+ * Revision 1.4  2004/03/26 21:44:08  maulani
+ * - Add login to audit trail
+ * - Add phpdoc
+ *
+ *
+ */
 ?>
