@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.43 2004/07/25 16:18:20 johnfawcett Exp $
+ * $Id: one.php,v 1.44 2004/08/02 15:56:49 gpowers Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -468,7 +468,6 @@ function markComplete() {
             <tr>
                 <td class=widget_content_form_element>
                     <input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';">
-                    <input class=button type=button value="<?php echo _("Vcard"); ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';">
                     <?php do_hook('one_contact_buttons'); ?>
                 </td>
             </tr>
@@ -564,6 +563,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.44  2004/08/02 15:56:49  gpowers
+ * - removed "Vcard" button
+ *   - moved to "Vcard" plugin
+ *
  * Revision 1.43  2004/07/25 16:18:20  johnfawcett
  * - unified page title
  *
