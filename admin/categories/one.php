@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.11 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: one.php,v 1.12 2004/07/25 15:48:36 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -76,7 +76,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Category :").$category_pretty_name;
+$page_title = _("Category Details").': '.$category_pretty_name;
 start_page($page_title);
 
 ?>
@@ -158,6 +158,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2004/07/25 15:48:36  johnfawcett
+ * - unified page title
+ *
  * Revision 1.11  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *
