@@ -2,7 +2,7 @@
 /**
  * Edit a note
  *
- * $Id: edit.php,v 1.8 2004/07/16 14:59:57 braverock Exp $
+ * $Id: edit.php,v 1.9 2004/07/25 13:00:13 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $note_id = $_GET['note_id'];
 $return_url = $_GET['return_url'];
@@ -86,6 +85,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.9  2004/07/25 13:00:13  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.8  2004/07/16 14:59:57  braverock
  * - localize $page_title
  *
@@ -104,7 +106,5 @@ end_page();
  * Revision 1.3  2004/04/08 16:59:46  maulani
  * - Update javascript declaration
  * - Add phpdoc
- *
- *
  */
 ?>

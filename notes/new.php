@@ -2,7 +2,7 @@
 /**
  * Create a note
  *
- * $Id: new.php,v 1.6 2004/06/21 14:25:00 braverock Exp $
+ * $Id: new.php,v 1.7 2004/07/25 13:00:13 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $on_what_table = $_POST['on_what_table'];
 $on_what_id = $_POST['on_what_id'];
@@ -69,6 +68,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.7  2004/07/25 13:00:13  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.6  2004/06/21 14:25:00  braverock
  * - localized strings for i18n/internationalization/translation support
  *
@@ -84,7 +86,5 @@ end_page();
  * Revision 1.2  2004/04/08 16:59:47  maulani
  * - Update javascript declaration
  * - Add phpdoc
- *
- *
  */
 ?>
