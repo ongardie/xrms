@@ -2,7 +2,7 @@
 /**
  * Edit company relationships
  *
- * $Id: relationships.php,v 1.3 2004/04/16 22:19:38 maulani Exp $
+ * $Id: relationships.php,v 1.4 2004/05/06 13:33:04 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,22 +23,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $company_name = fetch_company_name($con, $company_id);
 
-// former names
-
-$sql = "select * from company_former_names where company_id = $company_id order by namechange_at desc";
-
-$rst = $con->execute($sql);
-
-if ($rst) {
-    while (!$rst->EOF) {
-        $former_name_rows .= $rst->fields['former_name'] . '<br>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-
-$sql = "select r.relationship_type, r.established_at, r.company_to_id, c.company_name 
+$sql = "select r.relationship_type, r.established_at, r.company_to_id, c.company_name, r.company_from_id
 from company_relationship r, companies c 
 where r.company_from_id = $company_id 
 and r.company_to_id=c.company_id 
@@ -53,6 +38,11 @@ if ($rst) {
         $relationship_rows .= '<td class=widget_content_form_element>' . $rst->fields['relationship_type'] . '</td>';
         $relationship_rows .= '<td class=widget_content_form_element>' . $rst->fields['company_name'] . '</td>';
         $relationship_rows .= '<td class=widget_content_form_element>' . $established_at . '</td>';
+        $relationship_rows .= '<td class=widget_content_form_element>' 
+            . '<a href="delete-relationship.php?company_to_id=' . $rst->fields['company_to_id']
+            . '&company_from_id=' . $rst->fields['company_from_id']
+            . '&relationship_type=' . $rst->fields['relationship_type'] . '">(Delete)</a>'
+            . '</td>';
         $relationship_rows .= '</tr>';
         $rst->movenext();
     }
@@ -82,49 +72,24 @@ for ($i = 0; $i < sizeof($relation_array); $i++) {
 $relation_menu .= "\n</select>";
 
 
-$page_title = $company_name . " - Names and Relationships";
+$page_title = $company_name . " - Relationships";
 start_page($page_title, true, $msg);
 
 ?>
 
 <div id="Main">
     <div id="Content">
-
-        <!-- former name //-->
-        <form action=add-former-name.php method=post>
-        <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=2>Former Names</td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>Company</td>
-                <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>Former Names</td>
-                <td class=widget_content_form_element><?php  echo $former_name_rows; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>Former Name</td>
-                <td class=widget_content_form_element><input type=text name=former_name size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add Former Name"></td>
-            </tr>
-        </table>
-        </form>
-
         <form action=add-relationship.php method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=3>Relationships</td>
+                <td class=widget_header colspan=4>Relationships</td>
             </tr>
 			<tr>
 				<td class=widget_label>Relationship</td>
 				<td class=widget_label>Company</td>
 				<td class=widget_label>Date</td>
+				<td class=widget_label></td>
 			</tr>
             <?php  echo $relationship_rows; ?>
             <tr>
@@ -132,7 +97,7 @@ start_page($page_title, true, $msg);
             	<td><?php echo $company_menu ?></td>
 			</tr>
             <tr>
-                <td class=widget_content_form_element colspan=3><input class=button type=submit value="Add Relationship"></td>
+                <td class=widget_content_form_element colspan=4><input class=button type=submit value="Add Relationship"></td>
             </tr>
         </table>
         </form>
@@ -153,6 +118,9 @@ end_page();
 
 /**
  * $Log: relationships.php,v $
+ * Revision 1.4  2004/05/06 13:33:04  gpowers
+ * removed "Former Names". This is now a separate screen.
+ *
  * Revision 1.3  2004/04/16 22:19:38  maulani
  * - Add CSS2 positioning
  *
