@@ -20,7 +20,13 @@
  *	-user clicks around and at some point is happy with their columns list and clicks 'update column view for this session' button which triggers a javascript function
  *	-javascript packs the column list into a variable along with the pager name, submits form
  *
- * $Id: Pager_Columns.php,v 1.3 2005/02/07 19:12:34 daturaarutad Exp $
+ * Click the link below to run the example code (you may need to modify the URL of this link)
+ *
+ * @link http://localhost/xrms/include/classes/Pager/examples/  http://localhost/xrms/include/classes/Pager/examples/  
+ *
+ * @example Pager_Columns.doc.1.php check out 
+ *
+ * $Id: Pager_Columns.php,v 1.4 2005/02/25 03:45:59 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -37,8 +43,17 @@ class Pager_Columns {
 
 		$columns = array();
 		// internally we always refer to the thing by the value
+
+		$sql_query_column = 0;
+
 		foreach($pager_columns as $pager_column) { 
+
 			if($pager_column['index_sql']) {
+				$sql_query_column++;
+				if(!isset($pager_column['sql_sort_column'])) {
+					//echo "settin query col to $sql_query_column for {$pager_column['index_sql']}<br/>";
+					$pager_column['sql_sort_column'] = $sql_query_column;
+				}
 				$columns[$pager_column['index_sql']] = $pager_column; 
 			} elseif($pager_column['index_calc']) {
 				$columns[$pager_column['index_calc']] = $pager_column; 
@@ -233,6 +248,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.4  2005/02/25 03:45:59  daturaarutad
+ * code to set up sql_sort_column if it was not set by the user
+ *
  * Revision 1.3  2005/02/07 19:12:34  daturaarutad
  * updated to work with the GU_Pager
  *
