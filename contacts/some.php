@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.6 2004/03/12 11:43:27 braverock Exp $
+ * $Id: some.php,v 1.7 2004/03/18 12:48:42 braverock Exp $
  */
 
 //include the standard files
@@ -111,10 +111,9 @@ $sql = "select concat('<a href=one.php?contact_id=', cont.contact_id, '>', cont.
                work_phone as 'Phone',
                concat('<a href=mailto:',cont.email,'>',cont.email, '</a>') as 'E-Mail', u.username as 'Owner' ";
 
-$from = "from contacts cont, companies c, users u, entity_category_map ecm ";
+$from = "from contacts cont, companies c, users u ";
 
 $where .= "where c.company_id = cont.company_id ";
-$where .= "and cont.contact_id = ecm.on_what_id ";
 $where .= "and c.user_id = u.user_id ";
 $where .= "and contact_record_status = 'a'";
 
@@ -152,8 +151,8 @@ if (strlen($company_code) > 0) {
 
 if (strlen($category_id) > 0) {
     $criteria_count++;
-//    $where .= " and ecm.category_id like " . $con->qstr($category_id, get_magic_quotes_gpc());
-    $where .= " and ecm.on_what_table = 'contacts' and ecm.on_what_id = cont.contact_id and ecm.category_id = $category_id ";
+    $from .= ", entity_category_map ecm ";
+    $where .= " and ecm.on_what_table = 'contacts' and cont.contact_id = ecm.on_what_id and ecm.category_id = $category_id ";
 
 }
 
@@ -166,6 +165,8 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 
+$group_by .= " group by contact_id";
+
 if ($sort_column == 1) {
     $order_by = "cont.last_name";
 } elseif ($sort_column == 2) {
@@ -176,7 +177,7 @@ if ($sort_column == 1) {
 
 $order_by .= " $sort_order";
 
-$sql .= $from . $where . " order by $order_by";
+$sql .= $from . $where . $group_by . " order by $order_by";
 
 $sql_recently_viewed = "select * from recent_items r, contacts cont, companies c
 where r.user_id = $session_user_id
@@ -343,6 +344,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/03/18 12:48:42  braverock
+ * - patch for Category search provided by Fontaine Consulting (France)
+ *
  * Revision 1.6  2004/03/12 11:43:27  braverock
  * - added search for category_id
  *   - patch provided by Thibaut Midon (SF: tjm-fc)
