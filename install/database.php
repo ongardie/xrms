@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.26 2005/01/06 21:51:25 vanmer Exp $
+ * $Id: database.php,v 1.27 2005/01/09 18:27:59 braverock Exp $
  */
 
 /**
@@ -758,6 +758,7 @@ function opportunity_db_tables($con, $table_list) {
         }
     }
 
+    if (!in_array('time_daylight_savings',$table_list)) {
     // create the time_daylight_savings table if we need it
         $sql ="CREATE TABLE time_daylight_savings (
                daylight_savings_id              int(11) NOT NULL auto_increment,
@@ -777,7 +778,9 @@ function opportunity_db_tables($con, $table_list) {
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
-
+    }
+    
+    if (!in_array('time_zones',$table_list)) {
     // create the time_zones table if we need it
         $sql ="CREATE TABLE time_zones (
                time_zone_id int(11) NOT NULL auto_increment,
@@ -797,7 +800,7 @@ function opportunity_db_tables($con, $table_list) {
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
-
+   }
 } // end opportunity_db_tables fn
 
 
@@ -1047,6 +1050,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.27  2005/01/09 18:27:59  braverock
+ * - add test on time_zones and time_daylight_savings table creation
+ *   resolves SF bug 1023849
+ *
  * Revision 1.26  2005/01/06 21:51:25  vanmer
  * - added address_id to company_division table, for use in specifying addresses for divisions
  *
