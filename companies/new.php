@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.10 2004/07/22 15:39:05 cpsource Exp $
+ * $Id: new.php,v 1.11 2004/07/25 14:39:52 johnfawcett Exp $
  */
 
 /* Include required files */
@@ -234,7 +234,7 @@ start_page($page_title, true, $msg);
         <!-- Default Contact Entry //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=2><?php echo _("Contact Information<"); ?>/td>
+                <td class=widget_header colspan=2><?php echo _("Contact Information"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("First Names"); ?></td>
@@ -291,6 +291,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.11  2004/07/25 14:39:52  johnfawcett
+ * - corrected gettext call
+ *
  * Revision 1.10  2004/07/22 15:39:05  cpsource
  * - Fix multiple undefines
  *   Check for records retrieved from db

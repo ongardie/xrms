@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.9 2004/07/16 07:11:17 introspectshun Exp $
+ * $Id: new.php,v 1.10 2004/07/25 14:35:47 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -77,7 +77,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text size=40 name=case_title> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Contac"); ?>t</td>
+                <td class=widget_label_right><?php echo _("Contact"); ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu ?></td>
             </tr>
             <tr>
@@ -169,6 +169,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.10  2004/07/25 14:35:47  johnfawcett
+ * - corrected gettext call
+ *
  * Revision 1.9  2004/07/16 07:11:17  introspectshun
  * - Localized strings for i18n/translation support
  *
