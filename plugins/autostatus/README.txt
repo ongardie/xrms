@@ -7,3 +7,8 @@ Licensed Under the Open Software License v. 2.0
 This is a simple plugin for including an Autostatus page in XRMS.
 This plugin can be easily modified to include any other PHP page.
 
+*****
+This plugin is depreciated and will be removed soon.
+-- glenn@net127.com
+*****
+
