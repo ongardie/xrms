@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.32 2005/01/11 23:13:35 braverock Exp $
+ * $Id: one.php,v 1.33 2005/01/13 18:55:08 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -383,7 +383,9 @@ function markComplete() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?opportunity_id=<?php  echo $opportunity_id; ?>';"></td>
+                <td class=widget_content_form_element>
+                    <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?opportunity_id=$opportunity_id';"); ?>
+                </td>
             </tr>
         </table>
 
@@ -415,7 +417,10 @@ function markComplete() {
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="<?php echo _("Add"); ?>"> <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>"></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>">
+                    <?php echo render_create_button("Add"); ?>
+                    <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
+                </td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -447,6 +452,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.33  2005/01/13 18:55:08  vanmer
+ * - Basic ACL changes to allow display functionality to be restricted
+ *
  * Revision 1.32  2005/01/11 23:13:35  braverock
  * - removed bad javascript window.open hack, now set empty anchor on current page
  *
