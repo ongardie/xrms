@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: inline-edit.php,v 1.2 2005/03/24 17:42:08 gpowers Exp $
+ * $Id: inline-edit.php,v 1.3 2005/04/01 20:10:00 ycreddy Exp $
  */
 
 # Always retrieve, and pass on, company_id, contact_id, division_id, and info_idd
@@ -24,9 +24,8 @@ $new_info = $_GET['new_info'];
     $sql = "SELECT info_type_id
             FROM info_display_map
             WHERE display_on = '" . $display_on . "' 
-    	    AND record_status = 'a'
-            LIMIT 1";
-    $rst = $con->execute($sql);
+    	    AND record_status = 'a'";
+    $rst = $con->SelectLimit($sql, 1);
 
     if ($rst) {
         if (!$rst->EOF) {
@@ -197,6 +196,9 @@ return $sidebar_string;
 
 /**
  * $Log: inline-edit.php,v $
+ * Revision 1.3  2005/04/01 20:10:00  ycreddy
+ * Replaced LIMIT with the portable SelectLimit
+ *
  * Revision 1.2  2005/03/24 17:42:08  gpowers
  * - moved admin button to admin screen
  * - fixed bug when removing and adding info types
