@@ -2,7 +2,7 @@
 /**
  * Display login screen
  *
- * $Id: login.php,v 1.7 2004/04/07 22:53:18 maulani Exp $
+ * $Id: login.php,v 1.8 2004/06/28 18:45:36 gpowers Exp $
  */
 require_once('include-locations.inc');
 
@@ -14,8 +14,9 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 session_start();
 
 $msg = $_GET['msg'];
-$target = $_GET['target'];
+$target = urldecode($_GET['target']);
 
+/* This code does not work and should not be nessacary
     // add check here to make sure that the $target is inside our file tree
     if ($target !='' ) {
         if ((target != $http_site_root) and (!file_exists('.'.$target))){
@@ -29,6 +30,7 @@ $target = $_GET['target'];
     } else {
         $target=$http_site_root.$target;
     }
+*/
 
 $page_title = $app_title;
 start_page($page_title, false, $msg);
@@ -69,12 +71,16 @@ initialize();
 </script>
 
 
-<?php 
+<?php
 
-end_page(); 
+end_page();
 
 /**
  * $Log: login.php,v $
+ * Revision 1.8  2004/06/28 18:45:36  gpowers
+ * - commented out file checking code. it did not work
+ *   - login should now redirect to requested page
+ *
  * Revision 1.7  2004/04/07 22:53:18  maulani
  * - Update layout to use CSS2
  * - Make HTML validate
