@@ -1,10 +1,17 @@
 <?php
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
+
 /**
  * /activities/pager.php
  *
  * An include file to override ADODB_Pager to implement activities specific functions
  *
- * $Id: pager.php,v 1.1 2004/08/16 14:39:23 maulani Exp $
+ * $Id: pager.php,v 1.2 2004/08/18 08:09:46 cpsource Exp $
  */
 
 // include adodb pager class
@@ -47,6 +54,10 @@ class Activities_Pager extends ADODB_Pager{
 
 /**
  * $Log: pager.php,v $
+ * Revision 1.2  2004/08/18 08:09:46  cpsource
+ * - Added hacking attempt code
+ *   Added <nl> at eof
+ *
  * Revision 1.1  2004/08/16 14:39:23  maulani
  * - Override ADODB_Pager class for activities to allow customization
  * - Customization still todo
