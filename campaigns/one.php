@@ -43,47 +43,6 @@ if ($rst) {
     $rst->close();
 }
 
-$sql_activities = "select activity_id, activity_title, scheduled_at, a.entered_at, activity_status,
-at.activity_type_pretty_name, u.username, if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
-from activity_types at, users u, activities a
-where a.on_what_table = 'campaigns' and on_what_id = $campaign_id
-and a.user_id = u.user_id
-and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'
-order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
-
-$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
-
-if ($rst) {
-    while (!$rst->EOF) {
-
-        $open_p = $rst->fields['activity_status'];
-        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
-        $is_overdue = $rst->fields['is_overdue'];
-
-        if ($open_p == 'o') {
-            if ($is_overdue) {
-                $classname = 'overdue_activity';
-            } else {
-                $classname = 'open_activity';
-            }
-        } else {
-            $classname = 'closed_activity';
-        }
-
-        $contact_name = $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'];
-
-        $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/cases/one.php?case_id=$case_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
-        $activity_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
 $categories_sql = "select category_pretty_name
 from categories
 where category_record_status = 'a'
@@ -136,16 +95,6 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-$rst->close();
-
-$sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
-$rst = $con->execute($sql);
-$activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
-$rst->close();
-
 $con->close();
 
 if (strlen($note_rows) == 0) {
@@ -182,19 +131,19 @@ start_page($page_title, true, $msg);
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
                                     <td width=1% class=sublabel>Title</td>
-                                    <td class=clear><?php  echo $campaign_title; ?></td>
+                                    <td class=clear><?php echo $campaign_title; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Type</td>
-                                    <td class=clear><?php  echo $campaign_type_display_html; ?></td>
+                                    <td class=clear><?php echo $campaign_type_display_html; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Status</td>
-                                    <td class=clear><?php  echo $campaign_status_display_html; ?></td>
+                                    <td class=clear><?php echo $campaign_status_display_html; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Cost</td>
-                                    <td class=clear><?php  echo number_format($cost, 2); ?></td>
+                                    <td class=clear><?php echo number_format($cost, 2); ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
@@ -202,11 +151,11 @@ start_page($page_title, true, $msg);
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Created</td>
-                                    <td class=clear><?php  echo $entered_at; ?> (<?php  echo $entered_by; ?>)</td>
+                                    <td class=clear><?php echo $entered_at; ?> (<?php  echo $entered_by; ?>)</td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Last Modified</td>
-                                    <td class=clear><?php  echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
+                                    <td class=clear><?php echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
                                 </tr>
                                 </table>
                             </td>
@@ -214,15 +163,7 @@ start_page($page_title, true, $msg);
                             <td width=50% class=clear align=left valign=top>
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
-                                <tr>
-                                    <td width=1% class=sublabel>Contact</td>
-                                    <td class=clear><a href="<?php  echo $http_site_root; ?>/contacts/one.php?contact_id=<?php  echo $contact_id; ?>"><?php  echo $first_names; ?> <?php  echo $last_name; ?></a></td>
-                                </tr>
-                                <tr>
-                                    <td class=sublabel>Work Phone</td>
-                                    <td class=clear><?php  echo $work_phone; ?></td>
-                                </tr>
-                            </table>
+	                            </table>
 
                             </td>
                         </tr>
@@ -236,32 +177,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?campaign_id=<?php  echo $campaign_id; ?>';"></td>
             </tr>
         </table>
-
-        <!-- activities //-->
-        <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
-        <input type=hidden name=return_url value="/campaigns/one.php?campaign_id=<?php  echo $campaign_id; ?>">
-        <input type=hidden name=on_what_table value="campaigns">
-        <input type=hidden name=on_what_id value="<?php  echo $campaign_id; ?>">
-        <input type=hidden name=activity_status value="o">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header colspan=5>Activities</td>
-            </tr>
-            <tr>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>User</td>
-                <td class=widget_label>Type</td>
-                <td colspan=2 class=widget_label>On</td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
-            </tr>
-            <?php  echo $activity_rows; ?>
-        </table>
-        </form>
 
         </td>
         <!-- gutter //-->

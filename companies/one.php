@@ -22,15 +22,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
-$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u.username
-        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u
+$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, a.*, country_name
+        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses a, countries
         where c.account_status_id = as1.account_status_id
         and c.industry_id = i.industry_id
         and c.rating_id = r.rating_id
         and c.company_source_id = cs2.company_source_id
         and c.crm_status_id = cs.crm_status_id
-        and c.user_id = u.user_id
-        and company_id = $company_id";
+        and c.user_id = u1.user_id
+		and c.entered_by = u2.user_id
+		and c.last_modified_by = u3.user_id
+		and c.default_primary_address = a.address_id
+		and a.country_id = countries.country_id
+        and c.company_id = $company_id";
 
 $rst = $con->execute($sql);
 
@@ -41,12 +45,13 @@ if ($rst) {
     $company_source = $rst->fields['company_source_display_html'];
     $industry_pretty_name = $rst->fields['industry_pretty_name'];
     $user_id = $rst->fields['user_id'];
-    $username = $rst->fields['username'];
-    $address = $rst->fields['address'];
+    $owner_username = $rst->fields['owner_username'];
+    $line1 = $rst->fields['line1'];
+    $line2 = $rst->fields['line2'];
     $city = $rst->fields['city'];
-    $state = $rst->fields['state'];
+    $province = $rst->fields['province'];
     $postal_code = $rst->fields['postal_code'];
-    $country = $rst->fields['country'];
+    $country_name = $rst->fields['country_name'];
     $phone = $rst->fields['phone'];
     $phone2 = $rst->fields['phone2'];
     $fax = $rst->fields['fax'];
@@ -58,13 +63,20 @@ if ($rst) {
     $rating = $rst->fields['rating_display_html'];
     $terms = $rst->fields['terms'];
     $profile = $rst->fields['profile'];
+    $entered_by = $rst->fields['entered_by'];
+    $entered_at = $con->userdate($rst->fields['entered_at']);
+    $last_modified_by = $rst->fields['last_modified_by'];
+    $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
+    $custom1 = $rst->fields['custom1'];
+    $custom2 = $rst->fields['custom2'];
+    $custom3 = $rst->fields['custom3'];
+    $custom4 = $rst->fields['custom4'];
     $extref1 = $rst->fields['extref1'];
     $extref2 = $rst->fields['extref2'];
     $rst->close();
 }
 
-$has_access_p = ($has_access_p == 't') ? $strYes : $strNo;
-$last_extranet_visit = (strlen($last_extranet_visit) > 0) ? $con->userdate($last_extranet_visit) : "Never";
+$line2 = (strlen($line2) > 0) ? "<br>$line2" : "";
 $credit_limit = number_format($credit_limit, 2);
 $current_credit_limit = fetch_current_customer_credit_limit($extref1);
 
@@ -76,19 +88,25 @@ if (strlen($url) > 0) {
 //  list of most recent activities
 //
 
-$sql_activities = "select activity_id, activity_title, scheduled_at, on_what_table, on_what_id, a.entered_at, activity_status, at.activity_type_pretty_name, cont.first_names
-as contact_first_names, cont.last_name as contact_last_name, u.username,
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
-from activity_types at, users u, activities a left join contacts cont on a.on_what_id = cont.contact_id
-where ((a.on_what_table = 'companies' and a.on_what_id = $company_id) or
-(a.on_what_table = 'contacts' and on_what_id in (select contact_id from contacts where company_id = $company_id)))
-and a.user_id = u.user_id
-and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'
+$sql_activities = "select activity_id, 
+activity_title, 
+scheduled_at, 
+on_what_table, 
+on_what_id, 
+a.entered_at, 
+activity_status, 
+at.activity_type_pretty_name, 
+cont.first_names as contact_first_names, 
+cont.last_name as contact_last_name, 
+u.username, 
+if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue 
+from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id 
+where a.company_id = $company_id 
+and a.user_id = u.user_id 
+and a.activity_type_id = at.activity_type_id 
+and a.activity_record_status = 'a' 
 order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
-
-//$con->debug = 1;
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
 
 if ($rst) {
@@ -108,17 +126,11 @@ if ($rst) {
             $classname = 'closed_activity';
         }
 
-        if ($rst->fields['on_what_table'] == 'contacts') {
-            $contact_name = $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'];
-        } else {
-            $contact_name = '';
-        }
-
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php?company_id=$company_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $contact_name . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
         $activity_rows .= '</tr>';
         $rst->movenext();
@@ -345,43 +357,43 @@ function openNewsWindow() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php  echo $strCompaniesOneCompanyUserLabel; ?></td>
-                                    <td class=clear><?php  echo $username; ?></td>
+                                    <td class=clear><?php  echo $owner_username; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyPhoneLabel; ?></td>
+                                    <td class=sublabel>Phone</td>
                                     <td class=clear><?php  echo $phone; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyPhone2Label; ?></td>
+                                    <td class=sublabel>Alt. Phone</td>
                                     <td class=clear><?php  echo $phone2; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyFaxLabel; ?></td>
+                                    <td class=sublabel>Fax</td>
                                     <td class=clear><?php  echo $fax; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyURLLabel; ?></td>
+                                    <td class=sublabel>URL</td>
                                     <td class=clear><?php  echo $url; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo 'Primary Address' ?></td>
-                                    <td class=clear><?php  echo $address; ?></td>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCityLabel; ?></td>
-                                    <td class=clear><?php  echo $city; ?></td>
+                                    <td class=sublabel>Address</td>
+                                    <td class=clear><?php  echo "$line1$line2<br>$city, $province $postal_code<br>$country_name"; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyStateLabel; ?></td>
-                                    <td class=clear><?php  echo $state; ?></td>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo 'Postal Code' ?></td>
-                                    <td class=clear><?php  echo $postal_code; ?></td>
+                                    <td class=sublabel>Created</td>
+                                    <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCountryLabel; ?></td>
-                                    <td class=clear><?php  echo $country; ?></td>
+                                    <td class=sublabel>Last Modified</td>
+                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
                                 </tr>
                                 </table>
 
@@ -431,12 +443,20 @@ function openNewsWindow() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyHasExtranetAccessLabel; ?></td>
-                                    <td class=clear><?php  echo $has_extranet_access; ?></td>
+                                    <td width=1% class=sublabel><?php  echo $company_custom1_label; ?></td>
+                                    <td class=clear><?php  echo $custom1; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyLastExtranetVisitLabel; ?></td>
-                                    <td class=clear><?php  echo $last_extranet_visit; ?></td>
+                                    <td class=sublabel><?php  echo $company_custom2_label; ?></td>
+                                    <td class=clear><?php  echo $custom2; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $company_custom3_label; ?></td>
+                                    <td class=clear><?php  echo $custom3; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $company_custom4_label; ?></td>
+                                    <td class=clear><?php  echo $custom4; ?></td>
                                 </tr>
                             </table>
 
@@ -449,17 +469,13 @@ function openNewsWindow() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="<?php  echo
-$strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
-<input
-class=button type=button value="<?php echo $strCompaniesOneAdminButton; ?>" onclick="javascript:
-location.href='admin.php?company_id=<?php echo $company_id; ?>';"> <input class=button type=button value="<?php echo
-$strCompaniesOneCloneButton; ?>" onclick="javascript: location.href='new.php?clone_id=<?php $company_id ?>';"> <input
-class=button type=button value="<?php echo $strCompaniesOneMailMergeButton; ?>" onclick="javascript:
-location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';"> <input class=button type=button
-value="<?php echo $strCompaniesOneNewsButton; ?>" onclick="javascript: openNewsWindow();"> <input class=button type=button
-value="<?php echo $strCompaniesOneAddressesButton; ?>" onclick="javascript: location.href='addresses.php?company_id=<?php
-echo $company_id; ?>';"></td>
+                <td class=widget_content_form_element>
+				<input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
+				<input class=button type=button value="<?php echo $strCompaniesOneAdminButton; ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';"> <input class=button type=button value="<?php echo $strCompaniesOneCloneButton; ?>" onclick="javascript: location.href='new.php?clone_id=<?php $company_id ?>';">
+				<input class=button type=button value="<?php echo $strCompaniesOneMailMergeButton; ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
+				<input class=button type=button value="<?php echo $strCompaniesOneNewsButton; ?>" onclick="javascript: openNewsWindow();">
+				<input class=button type=button value="<?php echo $strCompaniesOneAddressesButton; ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
+				</td>
             </tr>
         </table>
 
@@ -478,16 +494,14 @@ echo $company_id; ?>';"></td>
             </tr>
             <?php  echo $contact_rows; ?>
             <tr>
-                <td class=widget_content_form_element colspan=6><input type=button class=button
-onclick="location.href='<?php echo $http_site_root; ?>/contacts/new.php?company_id=<?php echo $company_id; ?>';" value="<?php echo $strCompaniesOneNewContactButton; ?>"></td>
+                <td class=widget_content_form_element colspan=6><input type=button class=button onclick="location.href='<?php echo $http_site_root; ?>/contacts/new.php?company_id=<?php echo $company_id; ?>';" value="<?php echo $strCompaniesOneNewContactButton; ?>"></td>
             </tr>
         </table>
 
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
-        <input type=hidden name=on_what_table value="companies">
-        <input type=hidden name=on_what_id value="<?php  echo $company_id; ?>">
+        <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1 width=100%>
             <tr>
@@ -505,9 +519,7 @@ onclick="location.href='<?php echo $http_site_root; ?>/contacts/new.php?company_
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at
-value="<?php echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button
-onclick="javascript: markComplete();" value="Done"></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at value="<?php echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>

@@ -69,10 +69,24 @@ if ($rst) {
     $rst->close();
 }
 
-$sql_activities = "select activity_id, activity_title, scheduled_at, a.entered_at, activity_status,
-at.activity_type_pretty_name, u.username, if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
-from activity_types at, users u, activities a
-where a.on_what_table = 'cases' and on_what_id = $case_id
+// most recent activities
+
+$sql_activities = "select activity_id, 
+activity_title, 
+scheduled_at, 
+a.entered_at, 
+a.on_what_table,
+a.on_what_id,
+activity_status, 
+at.activity_type_pretty_name, 
+cont.contact_id, 
+cont.first_names as contact_first_names, 
+cont.last_name as contact_last_name, 
+u.username, 
+if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
+where a.on_what_table = 'cases'
+and a.on_what_id = $case_id
 and a.user_id = u.user_id
 and a.activity_type_id = at.activity_type_id
 and a.activity_record_status = 'a'
@@ -86,7 +100,9 @@ if ($rst) {
         $open_p = $rst->fields['activity_status'];
         $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
         $is_overdue = $rst->fields['is_overdue'];
-
+        $on_what_table = $rst->fields['on_what_table'];
+        $on_what_id = $rst->fields['on_what_id'];
+		
         if ($open_p == 'o') {
             if ($is_overdue) {
                 $classname = 'overdue_activity';
@@ -96,14 +112,13 @@ if ($rst) {
         } else {
             $classname = 'closed_activity';
         }
-
-        $contact_name = $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'];
-
+		
         $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/cases/one.php?case_id=$case_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . "</td>";
+        $activity_rows .= '<td colspan=2 class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
         $activity_rows .= '</tr>';
         $rst->movenext();
     }
@@ -170,6 +185,11 @@ $rst->close();
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
 $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+$rst->close();
+
+$sql = "select concat(first_names, ' ', last_name), contact_id from contacts where company_id = $company_id and contact_record_status = 'a' order by last_name";
+$rst = $con->execute($sql);
+$contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
 $rst->close();
 
 $con->close();
@@ -292,25 +312,28 @@ start_page($page_title, true, $msg);
         </table>
 
         <!-- activities //-->
-        <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
+        <form action="../activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/cases/one.php?case_id=<?php  echo $case_id; ?>">
+        <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=on_what_table value="cases">
         <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=5>Activities</td>
+                <td class=widget_header colspan=6>Activities</td>
             </tr>
             <tr>
                 <td class=widget_label>Title</td>
                 <td class=widget_label>User</td>
                 <td class=widget_label>Type</td>
+                <td class=widget_label>Contact</td>
                 <td colspan=2 class=widget_label>On</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
                 <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
             </tr>
             <?php  echo $activity_rows; ?>
@@ -381,32 +404,4 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<script language=javascript>
-
-function initialize() {
-    document.forms[0].case_title.focus();
-}
-
-function validate() {
-
-    var numberOfErrors = 0;
-    var msgToDisplay = '';
-
-    if (document.forms[0].case_title.value == '') {
-        numberOfErrors ++;
-        msgToDisplay += '\nYou must enter a case title.';
-    }
-
-    if (numberOfErrors > 0) {
-        alert(msgToDisplay);
-        return false;
-    } else {
-        return true;
-    }
-
-}
-
-initialize();
-
-</script>
 <?php end_page(); ?>

@@ -42,8 +42,8 @@ td.widget_content_form_element_center {padding: 4px; vertical-align: middle; bac
 
 td.widget_label_pager_navbar {padding: 5px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #666666; text-align: center;}
 
-td.sublabel {padding-left: 0px; padding-top: 1px; background-color: #ffffff; font-family: arial; font-size: 9pt; color: #666666; font-weight: bold; text-align: right; white-space: nowrap;}
-td.clear {padding-left: 6px; padding-top: 1px; background-color: #ffffff; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333;}
+td.sublabel {vertical-align: top; padding-left: 0px; padding-top: 1px; background-color: #ffffff; font-family: arial; font-size: 9pt; color: #666666; font-weight: bold; text-align: right; white-space: nowrap;}
+td.clear {vertical-align: top; padding-left: 6px; padding-top: 1px; background-color: #ffffff; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333;}
 
 td.offer {padding: 5px; background-color: #ffffff; font-family: tahoma; font-size: 8pt;}
 td.requirement {padding: 5px; background-color: #eeeeee; font-family: tahoma; font-size: 8pt;}

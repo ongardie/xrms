@@ -18,7 +18,10 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "activities", $activity_id);
 
-$sql = "select * from activities where activity_id = $activity_id";
+$sql = "select a.*, c.company_id, c.company_name, cont.first_names, cont.last_name 
+from companies c, activities a left join contacts cont on a.contact_id = cont.contact_id 
+where a.company_id = c.company_id 
+and activity_id = $activity_id";
 
 $rst = $con->execute($sql);
 
@@ -27,6 +30,9 @@ if ($rst) {
     $activity_title = $rst->fields['activity_title'];
     $activity_description = $rst->fields['activity_description'];
     $user_id = $rst->fields['user_id'];
+	$company_id = $rst->fields['company_id'];
+	$company_name = $rst->fields['company_name'];
+	$contact_id = $rst->fields['contact_id'];
     $on_what_table = $rst->fields['on_what_table'];
     $on_what_id = $rst->fields['on_what_id'];
     $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
@@ -38,30 +44,24 @@ if ($rst) {
 // since the activity can be attached to many things -- a company, contact, opportunity, or case -- we need to figure
 // out a way to display the link... this is probably less than perfect, but it works ok
 
-if ($on_what_table == 'companies') {
-    $attached_to_link = "<a href='$http_site_root/companies/one.php?company_id=$on_what_id'>";
-    $sql = "select company_name as attached_to_name from companies where company_id = $on_what_id";
-} elseif ($on_what_table == 'contacts') {
-    $attached_to_link = "<a href='$http_site_root/contacts/one.php?contact_id=$on_what_id'>";
-    $sql = "select concat(first_names, ' ', last_name) as attached_to_name from contacts where contact_id = $on_what_id";
-} elseif ($on_what_table == 'opportunities') {
+if ($on_what_table == 'opportunities') {
     $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
     $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
 } elseif ($on_what_table == 'cases') {
     $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
     $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-} elseif ($on_what_table == 'campaigns') {
-    $attached_to_link = "<a href='$http_site_root/campaigns/one.php?campaign_id=$on_what_id'>";
-    $sql = "select campaign_title as attached_to_name from campaigns where campaign_id = $on_what_id";
+} else {
+    $attached_to_link = "N/A";
+	$sql = "select * from companies where 1 = 2";
 }
 
 $rst = $con->execute($sql);
+
 if ($rst) {
     $attached_to_name = $rst->fields['attached_to_name'];
+	$attached_to_link .= $attached_to_name . "</a>";
     $rst->close();
 }
-
-$attached_to_link .= $attached_to_name . "</a>";
 
 $sql = "select username, user_id from users where user_record_status = 'a'";
 $rst = $con->execute($sql);
@@ -71,6 +71,11 @@ $rst->close();
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
 $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
+$rst->close();
+
+$sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
+$rst = $con->execute($sql);
+$contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
 $rst->close();
 
 $con->close();
@@ -93,6 +98,14 @@ start_page($page_title, true, $msg);
         <table class=widget cellspacing=1 width=100%>
             <tr>
                 <td class=widget_header colspan=2>About This Activity</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Company</td>
+                <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Contact</td>
+                <td class=widget_content><?php echo $contact_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Attached&nbsp;To</td>

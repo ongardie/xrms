@@ -28,6 +28,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_id = $rst->fields['company_id'];
+	$address_id = $rst->fields['address_id'];
     $company_name = $rst->fields['company_name'];
     $last_name = $rst->fields['last_name'];
     $first_names = $rst->fields['first_names'];
@@ -49,53 +50,6 @@ if ($rst) {
     $rst->close();
 }
 
-//
-//  list of most recent activities
-//
-
-$sql_activities = "select activity_id, activity_title, scheduled_at, a.entered_at, activity_status, at.activity_type_pretty_name, cont.first_names as contact_first_names, cont.last_name as contact_last_name, u.username, if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
-from activity_types at, users u, activities a, contacts cont
-where a.on_what_table = 'contacts' and on_what_id = $contact_id
-and a.on_what_id = cont.contact_id
-and a.user_id = u.user_id
-and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'
-order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
-
-$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
-
-if ($rst) {
-    while (!$rst->EOF) {
-
-        $open_p = $rst->fields['activity_status'];
-        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
-        $is_overdue = $rst->fields['is_overdue'];
-
-        if ($open_p == 'o') {
-            if ($is_overdue) {
-                $classname = 'overdue_activity';
-            } else {
-                $classname = 'open_activity';
-            }
-        } else {
-            $classname = 'closed_activity';
-        }
-
-        $contact_name = $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'];
-
-        $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
-        $activity_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-// we should allow users to delete this contact if there are others
-
 $sql = "select count(contact_id) as contact_count from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
 $contact_count = $rst->fields['contact_count'];
@@ -111,13 +65,14 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
+$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+$rst = $con->execute($sql);
+$address_menu = $rst->getmenu2('address_id', $address_id, false);
+$rst->close();
+
 add_audit_item($con, $session_user_id, 'view contact', 'contacts', $contact_id);
 
 $con->close();
-
-if (strlen($activity_rows) == 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=5>No activities</td></tr>";
-}
 
 $page_title = $first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
@@ -136,8 +91,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Company</td>
-                <td class=widget_content_form_element><a href="<?php  echo $http_site_root;
-?>/companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a></td>
+                <td class=widget_content_form_element><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Address</td>
+                <td class=widget_content_form_element><?php echo $address_menu ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>First&nbsp;Names</td>

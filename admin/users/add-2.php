@@ -22,7 +22,7 @@ $password = md5($password);
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "insert into users (role_id, last_name, first_names, username, password, email, gmt_offset, language) values ($role_id, " . $con->qstr($last_name) . ", " . $con->qstr($first_names) . ", " . $con->qstr($username) . ", " . $con->qstr($password) . ", " . $con->qstr($email) . ", $gmt_offset, 'english')";
+$sql = "insert into users (role_id, last_name, first_names, username, password, email, gmt_offset, language) values ($role_id, " . $con->qstr($last_name, get_magic_quotes_gpc()) . ", " . $con->qstr($first_names, get_magic_quotes_gpc()) . ", " . $con->qstr($username, get_magic_quotes_gpc()) . ", " . $con->qstr($password, get_magic_quotes_gpc()) . ", " . $con->qstr($email, get_magic_quotes_gpc()) . ", $gmt_offset, 'english')";
 $con->execute($sql);
 
 $con->close();

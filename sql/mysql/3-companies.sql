@@ -139,7 +139,7 @@ create table company_company_type_map (
 
 -- 
 -- Did you just find out about this company, or is this an old, well-developed account?  I like traditional options here 
--- such as "Lead," "Prospect," "Developed," etc.  Eventually we'll probably add a crm_status_transitions table to keep 
+-- such as Lead, Prospect, Developed, etc.  Eventually we'll probably add a crm_status_transitions table to keep 
 -- tabs on how well companies are moving along through the CRM process.
 -- 
 
@@ -165,38 +165,43 @@ insert into crm_statuses (crm_status_short_name, crm_status_pretty_name, crm_sta
 -- 
 
 create table companies (
-	company_id			int not null primary key auto_increment,
-	user_id				int not null default 0,
-	company_source_id		int not null default 0,
-	industry_id			int not null default 0,
-	crm_status_id			int not null default 0,
-	rating_id			int not null default 0,
-	account_status_id		int not null default 0,
-	company_name			varchar(100) not null default '',
-	company_code			varchar(10) not null default '',
-	profile				text not null default '',
-	city				varchar(50) not null default '',
-	state				varchar(50) not null default '',
-	postal_code			varchar(15) not null default '',
-	country				varchar(50) not null default '',
-	phone				varchar(50) not null default '',
-	phone2				varchar(50) not null default '',
-	fax				varchar(50) not null default '',
-	url				varchar(50) not null default '',
-	employees			varchar(50) not null default '',
-	revenue				varchar(50) not null default '',
-	credit_limit			int not null default 0,
-	terms				int not null default 0,
-	entered_at			datetime,
-	entered_by			int not null default 0,
-	last_modified_at		datetime,
-	last_modified_by		int not null default 0,
+	company_id					int not null primary key auto_increment,
+	user_id						int not null default 0,
+	company_source_id			int not null default 0,
+	industry_id					int not null default 0,
+	crm_status_id				int not null default 0,
+	rating_id					int not null default 0,
+	account_status_id			int not null default 0,
+	company_name				varchar(100) not null default '',
+	company_code				varchar(10) not null default '',
+	profile						text not null default '',
+	city						varchar(50) not null default '',
+	state						varchar(50) not null default '',
+	postal_code					varchar(15) not null default '',
+	country						varchar(50) not null default '',
+	phone						varchar(50) not null default '',
+	phone2						varchar(50) not null default '',
+	fax							varchar(50) not null default '',
+	url							varchar(50) not null default '',
+	employees					varchar(50) not null default '',
+	revenue						varchar(50) not null default '',
+	credit_limit				int not null default 0,
+	terms						int not null default 0,
+	entered_at					datetime,
+	entered_by					int not null default 0,
+	last_modified_at			datetime,
+	last_modified_by			int not null default 0,
+	default_primary_address		int not null default 0,
 	default_billing_address		int not null default 0,
 	default_shipping_address	int not null default 0,
 	default_payment_address		int not null default 0,
-	extref1				varchar(50) not null default '',
-	extref2				varchar(50) not null default '',
-	extref3				varchar(50) not null default '',
+	custom1						varchar(100) not null default '',
+	custom2						varchar(100) not null default '',
+	custom3						varchar(100) not null default '',
+	custom4						varchar(100) not null default '',
+	extref1						varchar(50) not null default '',
+	extref2						varchar(50) not null default '',
+	extref3						varchar(50) not null default '',
 	company_record_status		char(1) default 'a'
 );
 
@@ -208,20 +213,29 @@ create table companies (
 create table addresses (
 	address_id													int not null primary key auto_increment,
 	company_id													int not null default 0,
+	country_id													int not null default 1,
 	address_name												varchar(100) not null default '',
 	address_body												varchar(255) not null default '',
+	line1														varchar(255) not null default '',
+	line2														varchar(255) not null default '',
+	city														varchar(255) not null default '',
+	province													varchar(255) not null default '',
+	postal_code													varchar(255) not null default '',
+	use_pretty_address											char(1) not null default 'f',
 	address_record_status										char(1) not null default 'a'
 );
 
 -- 
 -- I could have made separate tables for titles ("President", "Marketing Director", etc.) and summaries 
 -- ("Decision Maker", "Influencer", etc.) but constraining these often seems to just get in the way.  If you'd 
--- like to use specific values here, just have your employees use them consistently.
+-- like to use specific values here, just come to some kind of agreement as to what they should be and have 
+-- your employees use them consistently.
 -- 
 
 create table contacts (
 	contact_id													int not null primary key auto_increment,
 	company_id													int not null default 0,
+	address_id													int not null default 0,
 	last_name													varchar(100) not null default '',
 	first_names													varchar(100) not null default '',
 	summary 													varchar(100) not null default '',
@@ -274,23 +288,23 @@ insert into email_templates (email_template_title, email_template_body) values (
 -- ---------------------------------------------------------------------------------------------------------------
 
 -- insert some companies
-insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, city, state, country, phone, phone2, fax, url, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2) values (1, 1, 2, 1, 4, 4, 'Bushwood Components', 'BUSH01', '(Bushwood Components is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', 'Davie', 'FL', 'USA', '(800) 555-2000', '(800) 555-2001', '(800) 555-2002', 'http://www.bushwood.com', 1, 1, 1, 100000, 10, '10090', '10091');
-insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, city, state, country, phone, phone2, fax, url, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2) values (1, 2, 3, 2, 4, 4, 'Polymer Electronics', 'POLY01', '(Polymer Electronics is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', 'Los Angeles', 'CA', 'USA', '(800) 555-3000', '(800) 555-3001', '(800) 555-3002', 'http://www.polymer.com', 2, 2, 2, 200000, 20, '10092', '10093');
-insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, city, state, country, phone, phone2, fax, url, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2) values (1, 3, 4, 3, 4, 4, 'Callahan Manufacturing', 'CALL01', '(Callahan Manufacturing is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', 'Sandusky', 'OH', 'USA', '(800) 555-4000', '(800) 555-4001', '(800) 555-4002', 'http://www.callahan.com', 3, 3, 3, 300000, 30, '10094', '10095');
+insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 1, 2, 1, 4, 4, 'Bushwood Components', 'BUSH01', '(Bushwood Components is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-2000', '(800) 555-2001', '(800) 555-2002', 'http://www.bushwood.com', 1, 1, 1, 1, 100000, 10, '10090', '10091', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);
+insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 2, 3, 2, 4, 4, 'Polymer Electronics', 'POLY01', '(Polymer Electronics is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-3000', '(800) 555-3001', '(800) 555-3002', 'http://www.polymer.com', 2, 2, 2, 2, 200000, 20, '10092', '10093', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);
+insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 3, 4, 3, 4, 4, 'Callahan Manufacturing', 'CALL01', '(Callahan Manufacturing is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-4000', '(800) 555-4001', '(800) 555-4002', 'http://www.callahan.com', 3, 3, 3, 3, 300000, 30, '10094', '10095', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);
 
 -- insert the corresponding addresses
-insert into addresses (company_id, address_name, address_body) values (1, 'Address 1', '3201 West Rolling Hills Circle\nFt. Lauderdale, FL 33328\nUSA');
-insert into addresses (company_id, address_name, address_body) values (2, 'Address 2', '11 Platinum Drive\nLos Angeles, CA 90001\nUSA');
-insert into addresses (company_id, address_name, address_body) values (3, 'Address 3', '123 Main Street\nSuite 100\nSandusky, OH 44870\nUSA');
+insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (1, 1, 'Address 1', '3201 West Rolling Hills Circle', '', 'Ft. Lauderdale', 'FL', '33328', '3201 West Rolling Hills Circle\nFt. Lauderdale, FL 33328\nUSA');
+insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (2, 1, 'Address 2', '11 Platinum Drive', '', 'Los Angeles', 'CA', '90001', '11 Platinum Drive\nLos Angeles, CA 90001\nUSA');
+insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (3, 1, 'Address 3', '123 Main Street', 'Suite 100', 'Sandusky', 'OH', '44870', '123 Main Street\nSuite 100\nSandusky, OH 44870\nUSA');
 
 -- insert contacts for the first company
-insert into contacts (company_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name) values (1, 'Webb', 'Ty', '1/2 owner', 'Account Manager', 'dad never liked us', 'twebb@bushwoodcc.com', '(555) 555-2100', 'twebb', 'twebb', 'twebb');
-insert into contacts (company_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name) values (1, 'Spackler', 'Carl', 'do not call', 'Assistant Greenskeeper', 'to the bejeezus belt!', 'cspackler@bushwoodcc.com', '(555) 555-2200', 'cspackler', 'cspackler', 'cspackler');
+insert into contacts (company_id, address_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 1, 'Webb', 'Ty', '1/2 owner', 'Account Manager', 'dad never liked us', 'twebb@bushwoodcc.com', '(555) 555-2100', 'twebb', 'twebb', 'twebb', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);
+insert into contacts (company_id, address_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 1, 'Spackler', 'Carl', 'do not call', 'Assistant Greenskeeper', 'to the bejeezus belt!', 'cspackler@bushwoodcc.com', '(555) 555-2200', 'cspackler', 'cspackler', 'cspackler', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);
 
 -- insert contacts for the second company
-insert into contacts (company_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name) values (2, 'Fufkin', 'Artie', '', 'Director', '', 'artie@polymer.com', '(555) 555-3100', 'tcallahan', 'tcallahan', 'tcallahan');
-insert into contacts (company_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name) values (2, 'Smalls', 'Derek', '', 'Bass', '', 'derek@polymer.com', '(555) 555-3200', 'tcallahan', 'tcallahan', 'tcallahan');
+insert into contacts (company_id, address_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name, entered_at, entered_by, last_modified_at, last_modified_by) values (2, 2, 'Fufkin', 'Artie', '', 'Director', '', 'artie@polymer.com', '(555) 555-3100', 'artie', 'artie', 'artie', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);
+insert into contacts (company_id, address_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name, entered_at, entered_by, last_modified_at, last_modified_by) values (2, 2, 'Smalls', 'Derek', '', 'Bass', '', 'derek@polymer.com', '(555) 555-3200', 'derek', 'derek', 'derek', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);
 
 -- insert contacts for the third company
-insert into contacts (company_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name) values (3, 'Callahan', 'Tommy', 'works nights', 'President/CEO', '', 'tommy@callahan.com', '(555) 555-4100', 'tcallahan', 'tcallahan', 'tcallahan');
-insert into contacts (company_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name) values (3, 'Hayden', 'Richard', 'good contact', 'Buyer', 'All Lines', 'richard@callahan.com', '(555) 555-4200', 'rhayden', 'rhayden', 'rhayden');
+insert into contacts (company_id, address_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name, entered_at, entered_by, last_modified_at, last_modified_by) values (3, 3, 'Callahan', 'Tommy', 'works nights', 'President/CEO', '', 'tommy@callahan.com', '(555) 555-4100', 'tcallahan', 'tcallahan', 'tcallahan', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);
+insert into contacts (company_id, address_id, last_name, first_names, summary, title, description, email, work_phone, aol_name, yahoo_name, msn_name, entered_at, entered_by, last_modified_at, last_modified_by) values (3, 3, 'Hayden', 'Richard', 'good contact', 'Buyer', 'All Lines', 'richard@callahan.com', '(555) 555-4200', 'rhayden', 'rhayden', 'rhayden', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1);

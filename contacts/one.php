@@ -65,14 +65,23 @@ if ($rst) {
     $rst->close();
 }
 
-//
-//  list of most recent activities
-//
+// most recent activities
 
-$sql_activities = "select activity_id, activity_title, scheduled_at, a.entered_at, activity_status, at.activity_type_pretty_name, cont.first_names as contact_first_names, cont.last_name as contact_last_name, u.username, if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+$sql_activities = "select activity_id, 
+activity_title, 
+scheduled_at, 
+a.entered_at, 
+a.on_what_table,
+a.on_what_id,
+activity_status, 
+at.activity_type_pretty_name, 
+cont.first_names as contact_first_names, 
+cont.last_name as contact_last_name, 
+u.username, 
+if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
 from activity_types at, users u, activities a, contacts cont
-where a.on_what_table = 'contacts' and on_what_id = $contact_id
-and a.on_what_id = cont.contact_id
+where a.contact_id = $contact_id
+and a.contact_id = cont.contact_id
 and a.user_id = u.user_id
 and a.activity_type_id = at.activity_type_id
 and a.activity_record_status = 'a'
@@ -86,7 +95,9 @@ if ($rst) {
         $open_p = $rst->fields['activity_status'];
         $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
         $is_overdue = $rst->fields['is_overdue'];
-
+        $on_what_table = $rst->fields['on_what_table'];
+        $on_what_id = $rst->fields['on_what_id'];
+		
         if ($open_p == 'o') {
             if ($is_overdue) {
                 $classname = 'overdue_activity';
@@ -96,14 +107,32 @@ if ($rst) {
         } else {
             $classname = 'closed_activity';
         }
-
-        $contact_name = $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'];
-
+		
+		if ($on_what_table == 'opportunities') {
+			$attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
+		    $sql2 = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
+		} elseif ($on_what_table == 'cases') {
+		    $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
+		    $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
+		} else {
+		    $attached_to_link = "N/A";
+			$sql2 = "select * from companies where 1 = 2";
+		}
+		
+		$rst2 = $con->execute($sql2);
+		
+		if ($rst) {
+		    $attached_to_name = $rst2->fields['attached_to_name'];
+			$attached_to_link .= $attached_to_name . "</a>";
+		    $rst2->close();
+		}
+		
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
+        $activity_rows .= '<td class=' . $classname . ">$attached_to_link</td>";
+        $activity_rows .= '<td colspan=2 class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
         $activity_rows .= '</tr>';
         $rst->movenext();
     }
@@ -236,27 +265,27 @@ add_audit_item($con, $session_user_id, 'view contact', 'contacts', $contact_id);
 $con->close();
 
 if (strlen($activity_rows) == 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=5>No activities</td></tr>";
+    $activity_rows = "<tr><td class=widget_content colspan=6>No activities</td></tr>";
+}
+
+if (strlen($opportunity_rows) == 0) {
+    $opportunity_rows = "<tr><td class=widget_content colspan=4>No opportunities</td></tr>";
+}
+
+if (strlen($case_rows) == 0) {
+    $case_rows = "<tr><td class=widget_content colspan=4>No cases</td></tr>";
 }
 
 if (strlen($categories) == 0) {
     $categories = "No categories";
 }
 
-if (strlen($opportunity_rows) == 0) {
-    $opportunity_rows = "<tr><td class=widget_content colspan=4>$strCompaniesOneNoOpportunitiesMessage</td></tr>";
-}
-
 if (strlen($note_rows) == 0) {
-    $note_rows = "<tr><td class=widget_content colspan=4>$strCompaniesOneNoNotesMessage</td></tr>";
-}
-
-if (strlen($case_rows) == 0) {
-    $case_rows = "<tr><td class=widget_content colspan=4>$strCompaniesOneNoCasesMessage</td></tr>";
+    $note_rows = "<tr><td class=widget_content colspan=4>No notes</td></tr>";
 }
 
 if (strlen($file_rows) == 0) {
-    $file_rows = "<tr><td class=widget_content colspan=4>$strCompaniesOneNoFilesMessage</td></tr>";
+    $file_rows = "<tr><td class=widget_content colspan=4>No files</td></tr>";
 }
 
 $page_title = $first_names . ' ' . $last_name;
@@ -333,6 +362,10 @@ function markComplete() {
                                     <td class=clear><?php  echo $interests;; ?></td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel>Yahoo! IM</td>
                                     <td class=clear>
                                     <?php if (strlen($yahoo_name) > 0) {echo("<a href='ymsgr:sendim?$yahoo_name'><img border=0 src='http://opi.yahoo.com/online?u=$yahoo_name&m=g&t=3'></a>");}; ?>
@@ -402,8 +435,7 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Last Modified</td>
-                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by;
-?></td>
+                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
                                 </tr>
                             </table>
 
@@ -429,18 +461,20 @@ $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?con
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=5>Activities</td>
+                <td class=widget_header colspan=6>Activities</td>
             </tr>
             <tr>
                 <td class=widget_label>Title</td>
                 <td class=widget_label>User</td>
                 <td class=widget_label>Type</td>
+                <td class=widget_label>About</td>
                 <td colspan=2 class=widget_label>On</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
+                <td class=widget_content_form_element>&nbsp;</td>
                 <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
             </tr>
             <?php  echo $activity_rows; ?>

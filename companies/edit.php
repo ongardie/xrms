@@ -39,6 +39,10 @@ if ($rst) {
     $country = $rst->fields['country'];
     $employees = $rst->fields['employees'];
     $revenue = $rst->fields['revenue'];
+    $custom1 = $rst->fields['custom1'];
+    $custom2 = $rst->fields['custom2'];
+    $custom3 = $rst->fields['custom3'];
+    $custom4 = $rst->fields['custom4'];
     $rst->close();
 }
 
@@ -120,32 +124,28 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=url size=40 value="<?php  echo $url; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Address</td>
-                <td class=widget_content_form_element><input type=text name=address value="<?php  echo $address; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>City</td>
-                <td class=widget_content_form_element><input type=text name=city value="<?php  echo $city; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>State</td>
-                <td class=widget_content_form_element><input type=text name=state value="<?php  echo $state; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>Postal Code</td>
-                <td class=widget_content_form_element><input type=text name=postal_code size=15 value="<?php  echo $postal_code; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>Country</td>
-                <td class=widget_content_form_element><input type=text name=country size=30 value="<?php  echo $country; ?>"></td>
-            </tr>
-            <tr>
                 <td class=widget_label_right>Employees</td>
                 <td class=widget_content_form_element><input type=text name=employees size=10 value="<?php  echo $employees; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Revenue</td>
                 <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php  echo $revenue; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo $company_custom1_label ?></td>
+                <td class=widget_content_form_element><input type=text name=custom1 size=30 value="<?php  echo $custom1; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo $company_custom2_label ?></td>
+                <td class=widget_content_form_element><input type=text name=custom2 size=30 value="<?php  echo $custom2; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo $company_custom3_label ?></td>
+                <td class=widget_content_form_element><input type=text name=custom3 size=30 value="<?php  echo $custom3; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo $company_custom4_label ?></td>
+                <td class=widget_content_form_element><input type=text name=custom4 size=30 value="<?php  echo $custom4; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Profile</td>

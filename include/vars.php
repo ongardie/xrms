@@ -1,4 +1,4 @@
-<?php
+<?
 
 //
 // system configuration file
@@ -6,35 +6,36 @@
 
 
 // database connection info for XRMS system
-// eventually there will be a nice, pretty web-based way to install XRMS, but for now you've got to create the db
-// yourself and run the xrms-initialization scripts (*.sql) found in the [xrms_root]/sql/mysql directory to create the
-// appropriate tables and insert some sample/default data
+// eventually there will be a nice, pretty web-based way to install XRMS, but for now you've got to create the db 
+// yourself and run the xrms-initialization scripts (*.sql) found in the [xrms_root]/sql/mysql directory to create the 
+// appropriate tables and insert some sample/default data 
 
 $xrms_db_dbtype = 'mysql';
 $xrms_db_server = 'localhost';
-$xrms_db_username = 'username';
-$xrms_db_password = 'password';
-$xrms_db_dbname = 'name_of_database';
+$xrms_db_username = 'xrms_dev';
+$xrms_db_password = 'xrmsdev73';
+$xrms_db_dbname = 'xrms_dev';
 
 // where is this application, web-wise? (no trailing slash)
-$http_site_root = "http://www.yoursitename.com/xrms";
+$http_site_root = "http://www.cdwtech.com:8083";
 
 // directory where uploaded files should go
-$tmp_upload_directory = "/path/to/xrms/tmp/";
-$file_storage_directory = "/path/to/xrms/files/storage/";
+$max_file_size = 200000;
+$tmp_upload_directory = "/web/xrms/tmp/";
+$file_storage_directory = "/web/xrms/files/storage/";
 
 // accounting software integration is in the works, but for now
 $accounting_system = ''; // no integration
 
-// if you have more than one XRMS installation, these need to be unique so that users logged in to one
+// if you have more than one XRMS installation, these need to be unique so that users logged in to one 
 // application can't just start using the other one.  This variable sets "scope" to the user's login.
-$xrms_system_id = "XRMS01";
+$xrms_system_id = "XRMS DEV";
 
 // what should this application be called?
-$app_title = 'XRMS';
+$app_title = 'XRMS Dev';
 
-// replace this with your organization's name
-$system_company_name = 'My Company';
+// replace this with your organization's name 
+$system_company_name = 'Acme Distribution';
 
 // so that order numbers can be continuous with whatever you're using now
 $order_number_seed = 1000;
@@ -51,7 +52,7 @@ $how_many_rows_to_import_per_page = 10;
 /* STYLE OPTIONS */
 
 // replace this with HTML or another image
-$required_indicator = "<img height=12 width=12 alt=required src=$http_site_root/img/required.gif>";
+$required_indicator = "<img height=12 width=12 alt=required src=/img/required.gif>";
 
 // if vertical space is tight, shrink this down and change the font size in the stylesheet
 // these shouldn't even be here, though... all style info should be set in the stylesheet
@@ -70,7 +71,6 @@ $contact_custom3_label = "(Custom 3)";
 $contact_custom4_label = "(Custom 4)";
 
 // label up to four custom fields for company information
-// these aren't used yet
 
 $company_custom1_label = "(Custom 1)";
 $company_custom2_label = "(Custom 2)";
