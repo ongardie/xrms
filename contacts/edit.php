@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.11 2004/05/10 13:07:22 maulani Exp $
+ * $Id: edit.php,v 1.12 2004/05/28 13:55:02 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -96,9 +96,6 @@ $sql = "select address_name, address_id from addresses where company_id = $compa
 $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, false);
 $rst->close();
-
-add_audit_item($con, $session_user_id, 'viewed', 'contacts', $contact_id, 3);
-
 $con->close();
 
 $page_title = $first_names . ' ' . $last_name;
@@ -243,6 +240,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.12  2004/05/28 13:55:02  gpowers
+ * removed "viewed" audit log entry. this is redundant, as this data is
+ * already stored in httpd access logs.
+ *
  * Revision 1.11  2004/05/10 13:07:22  maulani
  * - Add level to audit trail
  * - Clean up audit trail text

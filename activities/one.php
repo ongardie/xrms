@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.15 2004/05/27 20:36:12 gpowers Exp $
+ * $Id: one.php,v 1.16 2004/05/28 13:58:33 gpowers Exp $
  */
 
 //include required files
@@ -85,7 +85,6 @@ if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
     $rst->close();
 }
-add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
 
 $con->close();
 
@@ -206,6 +205,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.16  2004/05/28 13:58:33  gpowers
+ * removed "viewed" audit log entry. this is redundant, as this data is
+ * already stored in httpd access logs.
+ *
  * Revision 1.15  2004/05/27 20:36:12  gpowers
  * Added Support for Patch [ 951138 ] Export Activities vCALENDAR
  * Export one activity into the vCalendar format.

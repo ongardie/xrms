@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.24 2004/05/27 20:23:15 gpowers Exp $
+ * $Id: one.php,v 1.25 2004/05/28 13:57:31 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -262,8 +262,6 @@ if ($rst) {
     $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
     $rst->close();
 }
-
-add_audit_item($con, $session_user_id, 'viewed', 'contacts', $contact_id, 3);
 
 $con->close();
 
@@ -542,6 +540,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.25  2004/05/28 13:57:31  gpowers
+ * removed "viewed" audit log entry. this is redundant, as this data is
+ * already stored in httpd access logs.
+ *
  * Revision 1.24  2004/05/27 20:23:15  gpowers
  * Added "Vcard": Export one contact to a Vcard
  * Patch [ 951084 ] Export VCARD
