@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.1 2005/01/13 17:16:14 vanmer Exp $
+ * $Id: GroupUser_list.php,v 1.2 2005/02/14 23:30:20 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat('"<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_GroupUser.php?form_action=edit&return_url=GroupUser_list.php&GroupUser_id="', 'GroupUser_id', '"\'\">"') . "AS LINK, Groups.Group_name as 'Group', User_id as User, Role_name as Role, ChildGroup.Group_name as 'Child Group' FROM GroupUser JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Role on Role.Role_id=GroupUser.Role_id LEFT OUTER JOIN Groups as ChildGroup ON ChildGroup.Group_id=GroupUser.ChildGroup_id order by $order_by";
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_GroupUser.php?form_action=edit&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("\'\">")) . "AS LINK, Groups.Group_name as 'Group', User_id as User, Role_name as Role, ChildGroup.Group_name as 'Child Group' FROM GroupUser JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Role on Role.Role_id=GroupUser.Role_id LEFT OUTER JOIN Groups as ChildGroup ON ChildGroup.Group_id=GroupUser.ChildGroup_id order by $order_by";
 
 $css_theme='basic-left';
 start_page($page_title);
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.2  2005/02/14 23:30:20  vanmer
+ * - changed quotes
+ *
  * Revision 1.1  2005/01/13 17:16:14  vanmer
  * - Initial Commit for ACL Administration interface
  *
