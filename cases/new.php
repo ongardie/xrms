@@ -25,7 +25,7 @@ $rst->close();
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', '', false);
+$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
 $rst->close();
 
 $sql2 = "select case_priority_pretty_name, case_priority_id from case_priorities where case_priority_record_status = 'a' order by case_priority_id";
