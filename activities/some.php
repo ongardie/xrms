@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.52 2004/08/05 18:42:56 neildogg Exp $
+ * $Id: some.php,v 1.53 2004/08/16 14:39:23 maulani Exp $
  */
 
 // handle includes
@@ -14,7 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
 // create session
@@ -427,7 +427,7 @@ start_page($page_title, true, $msg);
 
 <?php
 
-$pager = new ADODB_Pager($con, $sql, 'activities', false, $sort_column-1, $pretty_sort_order);
+$pager = new Activities_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
@@ -495,6 +495,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.53  2004/08/16 14:39:23  maulani
+ * - Override ADODB_Pager class for activities to allow customization
+ * - Customization still todo
+ *
  * Revision 1.52  2004/08/05 18:42:56  neildogg
  * - Date offset now compatible thanks to
  *  - advice from David Rogers
