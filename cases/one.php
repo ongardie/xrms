@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.33 2005/02/25 03:41:47 daturaarutad Exp $
+ * $Id: one.php,v 1.34 2005/03/07 16:38:12 daturaarutad Exp $
  */
 
 //include required files
@@ -95,7 +95,7 @@ if ($rst) {
 
 $sql_activities = "SELECT " . 
 $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/cases/one.php%3Fcase_id=$case_id\">'", "activity_title", "'</a>'") .
-" AS  activity_title,
+" AS  activity_title_link,
 u.username,
 at.activity_type_pretty_name," . 
 $con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' .   
@@ -107,7 +107,7 @@ activity_status,
 cont.contact_id,
 cont.first_names as contact_first_names,
 cont.last_name as contact_last_name,
-(CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->SQLDate('Y-m-d') . ") THEN 1 ELSE 0 END) AS is_overdue
+(CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->SQLDate('Y-m-d') . ") THEN 1 ELSE 0 END) AS is_overdue, activity_title
 from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
 where a.on_what_table = 'cases'
 and a.on_what_id = $case_id
@@ -127,13 +127,13 @@ and a.activity_record_status = 'a'";
     // begin Activities Pager
 
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title');
+    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '14');
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name');
+    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => '12,11');
     $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at');
 
-    $default_columns = array('activity_title', 'username','activity_type_pretty_name','contact_name','scheduled_at');
+    $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
 
 
     // selects the columns this user is interested in
@@ -434,6 +434,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.34  2005/03/07 16:38:12  daturaarutad
+ * added sql_sort_column to speed up pager sorting
+ *
  * Revision 1.33  2005/02/25 03:41:47  daturaarutad
  * updated to use GUP_Pager for activities listing
  *
