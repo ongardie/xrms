@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.23 2004/07/20 14:07:47 cpsource Exp $
+ * $Id: new-2.php,v 1.24 2004/07/22 17:14:35 braverock Exp $
  */
 
 //where do we include from
@@ -29,25 +29,25 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'return_url'       => array ( 'return_url' , arr_vars_SESSION ),
-		   'activity_type_id' => array ( 'activity_type_id' , arr_vars_SESSION ),
-		   'on_what_table'    => array ( 'on_what_table' , arr_vars_SESSION ),
-		   'on_what_id'       => array ( 'on_what_id' , arr_vars_SESSION ),
-		   'on_what_status'   => array ( 'on_what_status' , arr_vars_SESSION ),
-		   'activity_title'   => array ( 'activity_title' , arr_vars_SESSION ),
-		   'activity_description' => array ( 'activity_description' , arr_vars_SESSION ),
-		   'activity_status'  => array ( 'activity_status' , arr_vars_SESSION ),
-		   'scheduled_at'     => array ( 'scheduled_at' , arr_vars_SESSION ),
-		   'ends_at'          => array ( 'ends_at' , arr_vars_SESSION ),
-		   'company_id'       => array ( 'company_id' , arr_vars_SESSION ),
-		   'contact_id'       => array ( 'contact_id' , arr_vars_SESSION ),
-		   'user_id'          => array ( 'user_id' , arr_vars_SESSION ),
-		   'email'            => array ( 'email' , arr_vars_SESSION ),
-		   'followup'         => array ( 'followup' , arr_vars_SESSION ),
-		   );
+                   'return_url'       => array ( 'return_url' , arr_vars_REQUEST_SESSION ),
+                   'activity_type_id' => array ( 'activity_type_id' , arr_vars_REQUEST_SESSION ),
+                   'on_what_table'    => array ( 'on_what_table' , arr_vars_REQUEST_SESSION ),
+                   'on_what_id'       => array ( 'on_what_id' , arr_vars_REQUEST_SESSION ),
+                   'on_what_status'   => array ( 'on_what_status' , arr_vars_REQUEST_SESSION ),
+                   'activity_title'   => array ( 'activity_title' , arr_vars_REQUEST_SESSION ),
+                   'activity_description' => array ( 'activity_description' , arr_vars_REQUEST_SESSION ),
+                   'activity_status'  => array ( 'activity_status' , arr_vars_REQUEST_SESSION ),
+                   'scheduled_at'     => array ( 'scheduled_at' , arr_vars_REQUEST_SESSION ),
+                   'ends_at'          => array ( 'ends_at' , arr_vars_REQUEST_SESSION ),
+                   'company_id'       => array ( 'company_id' , arr_vars_REQUEST_SESSION ),
+                   'contact_id'       => array ( 'contact_id' , arr_vars_REQUEST_SESSION ),
+                   'user_id'          => array ( 'user_id' , arr_vars_REQUEST_SESSION ),
+                   'email'            => array ( 'email' , arr_vars_REQUEST_SESSION ),
+                   'followup'         => array ( 'followup' , arr_vars_REQUEST_SESSION ),
+                   );
 
 // get all passed in variables
-arr_vars_get_all ( $arr_vars );
+arr_vars_get_all ( $arr_vars, true );
 
 // beagle bites squirrel - getGlobalVar calls removed
 
@@ -149,8 +149,6 @@ if ($associate_activities = true ) {
 } // end associate code
 
 //save to database
-$rec = array();
-
 $rec['user_id']          = (strlen($user_id) > 0) ? $user_id : $session_user_id;
 $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
 $rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
@@ -189,6 +187,9 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.24  2004/07/22 17:14:35  braverock
+ *- fixed problem with arr_vars subsystem
+ *
  *Revision 1.23  2004/07/20 14:07:47  cpsource
  *- Remove unused calls to getGlobalVar's
  *

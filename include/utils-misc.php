@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.64 2004/07/22 14:34:07 cpsource Exp $
+ * $Id: utils-misc.php,v 1.65 2004/07/22 17:15:10 braverock Exp $
  */
 
 /**
@@ -68,11 +68,11 @@ function session_check($c_role='') {
     if ( $c_role ) {
       $s_role = isset($_SESSION['role_short_name']) ? $_SESSION['role_short_name'] : '';
       if ( 0 == strcmp($s_role, $c_role) ) {
-	// yes
-	$role_ok = true;
+        // yes
+        $role_ok = true;
       } else {
-	// no
-	$role_ok = false;
+        // no
+        $role_ok = false;
       }
     }
 
@@ -80,9 +80,9 @@ function session_check($c_role='') {
     if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
       // we are logged in
       if ( !$role_ok ) {
-	// we are logged in, go straight to logout.php
-	header("Location: $http_site_root" . "/logout.php?msg=noauth");
-	//exit;
+        // we are logged in, go straight to logout.php
+        header("Location: $http_site_root" . "/logout.php?msg=noauth");
+        //exit;
       }
       // just return our current session id
       return $_SESSION['session_user_id'];
@@ -503,7 +503,7 @@ function get_system_parameter(&$con, $param) {
 
       // is the requested record in the database ???
       if ( $sysst->RecordCount() > 0 ) {
-	// yes - it was found
+        // yes - it was found
 
         $string_val   = $sysst->fields['string_val'];
         $int_val      = $sysst->fields['int_val'];
@@ -521,9 +521,9 @@ function get_system_parameter(&$con, $param) {
         }
 
       } else {
-	// no - it was not found
+        // no - it was not found
 
-	$my_val = '';
+        $my_val = '';
 
       } // if ( $sysst->RecordCount() > 0 ) ...
 
@@ -575,10 +575,10 @@ function set_system_parameter(&$con, $param, $new_val) {
     }
     $sql ="SELECT * FROM system_parameters WHERE param_id='$param'";
     $rst = $con->execute($sql);
-    
+
     $rec = array();
     $rec[$my_field] = $set_val;
-    
+
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     if ($upd !='') {
         $sysst = $con->execute($upd);
@@ -764,7 +764,7 @@ function get_formatted_address (&$con,$address_id) {
  *    ...
  *  }
  *
- * The trouble with this construction is that it's error prone - 
+ * The trouble with this construction is that it's error prone -
  * you have to make sure all variables are listed multiple times.
  *
  * THE SOLUTION
@@ -791,6 +791,8 @@ define ( "arr_vars_SESSION"           , 0 );  // just try a SESSION
 define ( "arr_vars_GET"               , 1 );  // just try a GET
 define ( "arr_vars_GET_SESSION"       , 2 );  // try a GET first, and then if it fails, do a SESSION
 define ( "arr_vars_GET_STRLEN_SESSION", 3 );  // try a GET first with length > 0, and then if it fails, do a SESSION
+define ( "arr_vars_REQUEST"           , 4 );  // just try a POST/GET
+define ( "arr_vars_REQUEST_SESSION"   , 5 );  // just try a POST/GET
 
 //
 // get all variables
@@ -884,31 +886,40 @@ function arr_vars_session_get ( $ary )
     switch ( $flag )
       {
       case arr_vars_SESSION:      // just try a SESSION
-	$GLOBALS[$key] = isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
-	break;
+        $GLOBALS[$key] = isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+        break;
 
       case arr_vars_GET:         // just try a GET
-	$GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : '';
-	break;
+        $GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : '';
+        break;
+
 
       case arr_vars_GET_SESSION:  // try a GET first, and then if it fails, do a SESSION
-	$GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
-	break;
+        $GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+        break;
+
+      case arr_vars_REQUEST:         // just try a REQUEST
+        $GLOBALS[$key] = isset($_REQUEST["$value[0]"]) ? $_REQUEST["$value[0]"] : '';
+        break;
+
+      case arr_vars_REQUEST_SESSION:  // try a GET first, and then if it fails, do a SESSION
+        $GLOBALS[$key] = isset($_REQUEST["$value[0]"]) ? $_REQUEST["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+        break;
 
       case arr_vars_GET_STRLEN_SESSION:  // try a GET first with length > 0, and then if it fails, do a SESSION
-	if ( isset($_GET["$value[0]"]) ) {
-	  $tmp = isset($_GET["$value[0]"]);
-	  if ( strlen($tmp) > 0 ) {
-	    $GLOBALS[$key] = $tmp;
-	    break;
-	  }
-	}
-	$GLOBALS[$key] = isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
-	break;
+        if ( isset($_GET["$value[0]"]) ) {
+          $tmp = isset($_GET["$value[0]"]);
+          if ( strlen($tmp) > 0 ) {
+            $GLOBALS[$key] = $tmp;
+            break;
+          }
+        }
+        $GLOBALS[$key] = isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+        break;
 
       default:
-	echo "utils-misc.php::arr_vars_session_get: unknown flag = $flag<br>";
-	exit;
+        echo "utils-misc.php::arr_vars_session_get: unknown flag = $flag<br>";
+        exit;
       }
   }
 }
@@ -924,12 +935,13 @@ function arr_vars_post_get ( $ary, $allow_none = false )
 {
   foreach ($ary as $key => $value) {
     if ( $allow_none ) {
-      $GLOBALS[$key] = isset($_POST["$key"]) ? $_POST["$key"] : '';
+      $GLOBALS[$key] = isset($_REQUEST["$key"]) ? $_REQUEST["$key"] : '';
     } else {
       $GLOBALS[$key] = $_POST["$key"];
     }
   }
 }
+
 // show program variables
 function arr_vars_show_pgm_vars ( $ary )
 {
@@ -963,6 +975,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.65  2004/07/22 17:15:10  braverock
+ * - fixed problem with arr_vars subsystem
+ *
  * Revision 1.64  2004/07/22 14:34:07  cpsource
  * - Fixed bug with get_formatted_phone whereby $extra
  *   was sometimes used uninitialized.
