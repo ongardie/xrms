@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.15 2005/01/07 01:59:31 braverock Exp $
+ * $Id: edit.php,v 1.16 2005/01/10 21:51:08 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,10 +14,13 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
-$session_user_id = session_check();
+$case_id = $_GET['case_id'];
+$case_type_id=$_GET['case_type_id'];
+$on_what_id=$case_id;
+
+$session_user_id = session_check('','Update');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$case_id = $_GET['case_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -35,7 +38,9 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $case_status_id = $rst->fields['case_status_id'];
     $case_priority_id = $rst->fields['case_priority_id'];
-    $case_type_id = $rst->fields['case_type_id'];
+    
+    if (!$case_type_id)  $case_type_id = $rst->fields['case_type_id'];
+    
     $user_id = $rst->fields['user_id'];
     $case_title = $rst->fields['case_title'];
     $case_description = $rst->fields['case_description'];
@@ -148,12 +153,13 @@ $rst->close();
 //case type list
 $sql2 = "select case_type_pretty_name, case_type_id from case_types where case_type_record_status = 'a' order by case_type_id";
 $rst = $con->execute($sql2);
-$case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false);
+$case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false, false, 1, "id=case_type_id onchange=javascript:restrictByCaseType();");
 $rst->close();
 
 //case status list
-$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by sort_order";
+$sql2 = "select case_status_pretty_name, case_status_id from case_statuses WHERE case_type_id=$case_type_id AND case_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
+if (!$rst) db_error_handler($con, $sql2);
 $case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, false);
 $rst->close();
 
@@ -168,6 +174,15 @@ confGoTo_includes();
 ?>
 
 <?php jscalendar_includes(); ?>
+    
+    <script language=JavaScript>
+    <!--
+        function restrictByCaseType() {
+            select=document.getElementById('case_type_id');
+            location.href = 'edit.php?case_id=<?php echo $case_id; ?>&case_type_id=' + select.value;
+        }
+     //-->
+    </script>
 
 <div id="Main">
     <div id="Content">
@@ -300,6 +315,11 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.16  2005/01/10 21:51:08  vanmer
+ * - moved case_id to above session_check for ACL
+ * - added parameter to session_check for ACL
+ * - added reload by case type, to restrict statuses
+ *
  * Revision 1.15  2005/01/07 01:59:31  braverock
  * - add link to case status pop-up
  *
