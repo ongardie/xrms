@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.64 2004/09/13 21:59:03 introspectshun Exp $
+ * $Id: one.php,v 1.65 2004/10/08 19:30:43 gpowers Exp $
  */
 
 //include required files
@@ -149,6 +149,12 @@ if ($contact_id) {
     $overall_id = $contact_id;
     require("../relationships/sidebar.php");
 }
+
+//include the files sidebar
+$on_what_table = 'activities';
+$on_what_id = $activity_id;
+$on_what_string = 'activity';
+require_once( '../files/sidebar.php');
 
 //Add optional tables
 $sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom');
@@ -402,6 +408,8 @@ function logTime() {
         <?php echo $company_block; ?>
         <!-- contact information block //-->
         <?php if ( $contact_block) echo $contact_block; ?>
+        <!-- file block //-->
+        <?php echo $file_rows; ?>
         <!-- sidebar plugins //-->
         <?php if ( isset($relationship_link_rows) && $relationship_link_rows ) echo $relationship_link_rows; ?>
         <?php if ( isset($sidebar_plugin_rows) && $sidebar_plugin_rows ) echo $sidebar_plugin_rows; ?>
@@ -439,6 +447,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.65  2004/10/08 19:30:43  gpowers
+ * - added file attachment sidebar to activities
+ *
  * Revision 1.64  2004/09/13 21:59:03  introspectshun
  * - Changed order of tables in main query.
  *   - MSSQL chokes on the JOIN otherwise.
