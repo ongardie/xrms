@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.7 2005/01/06 21:54:26 vanmer Exp $
+ * $Id: divisions.php,v 1.8 2005/01/08 06:23:41 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -77,7 +77,7 @@ start_page($page_title, true, $msg);
 		</tr>
             <tr>
                 <td class=widget_label><?php echo _("Address"); ?></td>
-                <td class=widget_content_form_element><?php echo $address_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $address_menu; ?><?php echo '<a href="http://localhost/xrms/companies/addresses.php?company_id=' . $company_id .'">' . _("Add/Edit Addresses") . '</a>'; ?></td>
             </tr>
 		<tr>
 			<td class=widget_label><?php echo _("Division Description"); ?></td>
@@ -108,6 +108,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.8  2005/01/08 06:23:41  gpowers
+ * - added "Add/Edit Addresses" Link
+ *
  * Revision 1.7  2005/01/06 21:54:26  vanmer
  * - added address_id load/display to division UI, to specify an address for a division
  *
