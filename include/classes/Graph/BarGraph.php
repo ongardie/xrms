@@ -6,7 +6,7 @@
 *	creating bar charts.
 *
 *	@author daturaarutad
-*	$Id: BarGraph.php,v 1.2 2005/03/09 21:09:53 daturaarutad Exp $
+*	$Id: BarGraph.php,v 1.3 2005/03/11 17:17:36 daturaarutad Exp $
 */
 
 if(PHPVERSION() >= 5.0) {
@@ -105,6 +105,14 @@ function CreateGraph() {
 	}
 
 	switch($this->graph_info['size_class']) {
+        case 'sidebar': 
+            $width = 250;
+            $height = 150; // + 30 + 15; 
+			$this->graph_info['xaxis_label_angle'] = 90;
+			$this->graph_info['legend'] = null;
+            //$height = $rows * 35; // + 30 + 15; 
+            break;
+
 		case 'main':
 			$width = 750;
 			$height = 400; // + 30 + 15; 
@@ -121,31 +129,23 @@ function CreateGraph() {
 		case 'single':
 
 			$plot = new BarPlot($this->graph_info['data']);
+
+			if(is_array($this->graph_info['legend'])) {
+				$plot->SetLegend($this->graph_info['legend']);
+			}
+
+			// Set up CSIM stuff
+			if($this->graph_info['csim_targets'] || $this->graph_info['csim_alts']) {
+				$plot->SetCSIMTargets($this->graph_info['csim_targets'], $this->graph_info['csim_alts']);
+			}
+
+
 			$plot->SetFillColor($this->graph_info['bar_colors'][0]);
 
 			$this->graph->Add($plot);
 			break;
 
 		case 'grouped':
-			// Create the bar plots
-			$plots = array();
-			if(is_array($this->graph_info['data'])) {
-				$plots = array();
-				$i=0;
-				foreach($this->graph_info['data'] as $plot_data) {
-					$plot = new BarPlot($plot_data);
-					$plot->SetFillColor($this->graph_info['bar_colors'][$i]);
-					if(is_array($this->graph_info['legend'])) {
-						$plot->SetLegend($this->graph_info['legend'][$i]);
-					}
-
-					$plots[] = $plot;
-					$i++;
-				}
-				$this->graph->Add(new GroupBarPlot($plots));
-			}
-			break;
-
 		case 'accumulated':
 			// Create the bar plots
 			$plots = array();
@@ -155,14 +155,27 @@ function CreateGraph() {
 				foreach($this->graph_info['data'] as $plot_data) {
 					$plot = new BarPlot($plot_data);
 					$plot->SetFillColor($this->graph_info['bar_colors'][$i]);
+
 					if(is_array($this->graph_info['legend'])) {
 						$plot->SetLegend($this->graph_info['legend'][$i]);
 					}
 
+					// Set up CSIM stuff
+					if($this->graph_info['csim_targets'] || $this->graph_info['csim_alts']) {
+						$plot->SetCSIMTargets($this->graph_info['csim_targets'][$i], $this->graph_info['csim_alts'][$i]);
+
+						if(is_array($this->graph_info['legend'])) {
+						}
+					} else {
+					}
 					$plots[] = $plot;
 					$i++;
 				}
-				$this->graph->Add(new AccBarPlot($plots));
+				if('grouped' == $this->graph_info['bar_type']) {
+					$this->graph->Add(new GroupBarPlot($plots));
+				} else {
+					$this->graph->Add(new AccBarPlot($plots));
+				}
 			}
 			break;
 	}
@@ -216,6 +229,7 @@ function CreateGraph() {
 	// Set up the Img margins
 	$this->graph->img->SetMargin($this->graph_info['margins'][0], $this->graph_info['margins'][1], $this->graph_info['margins'][2], $this->graph_info['margins'][3]);
 
+
 }
 
 // seems like a good cantidate for inheritance
@@ -224,10 +238,22 @@ function Display() {
 	$this->graph->Stroke();
 }
 
+function DisplayCSIM($url, $filename, $map_name, $border = 0) {
+	$this->CreateGraph();
+	$this->graph->Stroke($filename);
+
+	$ret =  $this->graph->GetHTMLImageMap($map_name);
+	$ret .= "<img src=\"$url\" usemap=\"$map_name\" border=0>";
+	return $ret;
+}
+
 }
 
 /**
 * $Log: BarGraph.php,v $
+* Revision 1.3  2005/03/11 17:17:36  daturaarutad
+* Added Client Side Image Map support
+*
 * Revision 1.2  2005/03/09 21:09:53  daturaarutad
 * updated jpgraph 2.x path
 *
