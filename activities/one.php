@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.49 2004/07/25 20:06:57 johnfawcett Exp $
+ * $Id: one.php,v 1.50 2004/07/26 12:10:26 cpsource Exp $
  */
 
 //include required files
@@ -209,12 +209,27 @@ if($on_what_table == 'opportunities') {
 
 $con->close();
 
+// generate html code to ask a quest(ion) with a button about
+// going to a to_url. If the answer is TRUE, goto the URL, else
+// don't do anything.
+function confGoTo( $quest, $button, $to_url )
+{
+  $tmp    = ' onclick="javascript: confGoTo(\''.$quest.'\',\''.$to_url.'\')"';
+  echo '<input type=button class=button value="'.$button.'"'. $tmp.'>';
+}
+
 $page_title = _("Activity Details").': '.$activity_title;
 start_page($page_title, true, $msg);
 
 ?>
 
 <script language="JavaScript" type="text/javascript">
+function confGoTo(quest,dest) {
+  if ( confirm(quest) ) {
+    window.location = dest;
+  }
+}
+
 function logTime() {
     var date = new Date();
     var d = date.getDate();
@@ -353,7 +368,12 @@ function logTime() {
                     <input class=button type=submit name="save" value="<?php echo _("Save Changes"); ?>">
                     <input class=button type=submit name="saveandnext" value="<?php echo _("Save and Next"); ?>">
                     <input class=button type=submit name="followup" value="<?php echo _("Schedule Followup"); ?>">
-                    <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='<?php echo _("Delete"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Activity?"); ?>');">
+
+<?php
+		confGoTo ( _('Delete Activity?'),
+			   _('Delete'),
+			   'delete.php?activity_id='.$activity_id.'&return_url='.urlencode($return_url));
+?>
                 </td>
             </tr>
         </table>
@@ -403,6 +423,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.50  2004/07/26 12:10:26  cpsource
+ * - Fix bug whereby javascript is used to confirm the
+ *   delete of an activity.
+ *
  * Revision 1.49  2004/07/25 20:06:57  johnfawcett
  * - standardized delete button
  *
