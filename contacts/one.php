@@ -168,7 +168,7 @@ if ($rst) {
 
 // associated with
 
-$categories_sql = "select category_pretty_name 
+$categories_sql = "select category_display_html 
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
 where ecm.on_what_table = 'contacts'
 and ecm.on_what_id = $contact_id
@@ -177,14 +177,14 @@ and cs.category_scope_id = ccsm.category_scope_id
 and c.category_id = ccsm.category_id
 and cs.on_what_table = 'contacts'
 and category_record_status = 'a'
-order by category_pretty_name";
+order by category_display_html";
 
 $rst = $con->execute($categories_sql);
 $categories = array();
 
 if ($rst) {
     while (!$rst->EOF) {
-        array_push($categories, $rst->fields['category_pretty_name']);
+        array_push($categories, $rst->fields['category_display_html']);
         $rst->movenext();
     }
     $rst->close();

@@ -21,16 +21,16 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 /*
 
-$sql = "select category_id, category_pretty_name
+$sql = "select category_id, category_display_html
 from categories
 where category_record_status = 'a'
 and category_id in (select ccsm.category_id from category_category_scope_map ccsm, category_scopes cs where ccsm.category_scope_id = cs.category_scope_id and cs.on_what_table = 'companies')
 and category_id in (select category_id from entity_category_map where on_what_table = 'companies' and on_what_id = $company_id)
-order by category_pretty_name";
+order by category_display_html";
 
 */
 
-$sql = "select c.category_id, category_pretty_name
+$sql = "select c.category_id, category_display_html
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
 where ecm.on_what_table = 'contacts'
 and ecm.on_what_id = $contact_id
@@ -39,7 +39,7 @@ and cs.category_scope_id = ccsm.category_scope_id
 and c.category_id = ccsm.category_id
 and cs.on_what_table = 'contacts'
 and category_record_status = 'a'
-order by category_pretty_name";
+order by category_display_html";
 
 $rst = $con->execute($sql);
 $array_of_categories = array();
@@ -47,7 +47,7 @@ array_push($array_of_categories, 0);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $associated_with .= "<a href='remove-category.php?contact_id=$contact_id&category_id=" . $rst->fields['category_id'] . "'>" . $rst->fields['category_pretty_name'] . "</a><br>";
+        $associated_with .= "<a href='remove-category.php?contact_id=$contact_id&category_id=" . $rst->fields['category_id'] . "'>" . $rst->fields['category_display_html'] . "</a><br>";
         array_push($array_of_categories, $rst->fields['category_id']);
         $rst->movenext();
     }
@@ -56,20 +56,20 @@ if ($rst) {
 
 // not associated with
 
-$sql = "select c.category_id, category_pretty_name
+$sql = "select c.category_id, category_display_html
 from categories c, category_scopes cs, category_category_scope_map ccsm
 where cs.category_scope_id = ccsm.category_scope_id
 and c.category_id = ccsm.category_id
 and cs.on_what_table = 'contacts'
 and c.category_id not in (" . implode($array_of_categories, ',') . ")
 and category_record_status = 'a'
-order by category_pretty_name";
+order by category_display_html";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $not_associated_with .= "<a href='add-category.php?contact_id=$contact_id&category_id=" . $rst->fields['category_id'] . "'>" . $rst->fields['category_pretty_name'] . "</a><br>";
+        $not_associated_with .= "<a href='add-category.php?contact_id=$contact_id&category_id=" . $rst->fields['category_id'] . "'>" . $rst->fields['category_display_html'] . "</a><br>";
         $rst->movenext();
     }
     $rst->close();
