@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.10 2005/03/01 15:47:53 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.11 2005/03/01 21:58:36 daturaarutad Exp $
  */
 
 
@@ -554,10 +554,10 @@ END;
             }
 
         	if($group_html || $i == ($this->sort_column-1)) {
-            	$hdr .= "<td class=widget_label><table cellpadding=0 cellspacing=0><tr><td class=widget_label ><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a></td>";
+            	$hdr .= "<td class=widget_label_center><table cellpadding=0 cellspacing=0><tr><td class=widget_label><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a></td>";
             	$hdr .= "<td class=widget_label>$selected_column_header_html</td><td class=widget_label> $group_html</td></tr></table></td>";
         	} else {
-            	$hdr .= "<td class=widget_label ><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
+            	$hdr .= "<td class=widget_label_center><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
         	}
 
 			// set the column css
@@ -607,13 +607,13 @@ END;
 
                 if($this->column_info[$j]['type']) {
                     if('currency' == $this->column_info[$j]['type']) {
-                        echo "<td class='$row_classnames {$col_classname[$j]}'>$" . number_format($this->data[$i][$this->column_info[$j]['index']], 2, '.', ',') . "</td>\n";
+                        echo "<td class='$row_classnames {$col_classnames[$j]}'>$" . number_format($this->data[$i][$this->column_info[$j]['index']], 2, '.', ',') . "</td>\n";
                     } elseif('date' == $this->column_info[$j]['type']) {
-                        echo "<td class='$row_classnames {$col_classname[$j]}'>" . format_date($this->data[$i][$this->column_info[$j]['index']]) . "</td>\n";
+                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" . format_date($this->data[$i][$this->column_info[$j]['index']]) . "</td>\n";
                     } elseif('int' == $this->column_info[$j]['type']) {
-                        echo "<td class='$row_classnames {$col_classname[$j]}'>" . number_format($this->data[$i][$this->column_info[$j]['index']], 0, '.',',') . "</td>\n";
+                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" . number_format($this->data[$i][$this->column_info[$j]['index']], 0, '.',',') . "</td>\n";
                     } else {
-                        echo "<td class='$row_classnames {$col_classname[$j]}'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
+                        echo "<td class='$row_classnames {$col_classnames[$j]}'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
                     }
                 } else {
                     echo "<td class='$row_classnames {$col_classnames[$j]}'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
@@ -640,8 +640,8 @@ END;
             	}
         	}
         	// only do the first one if we're not on the first page
-        	$this->RenderTotals(_('Subtotals this page:'), $this->SubtotalColumns);
-        	$this->RenderTotals(_('Totals:'), $this->TotalColumns);
+        	$this->RenderTotals(_('Subtotals this page:'), $this->SubtotalColumns, $row_classnames, $col_classnames);
+        	$this->RenderTotals(_('Totals:'), $this->TotalColumns, $row_classnames, $col_classnames);
 		} else {
 			echo '<tr><td colspan="' . $column_count . '" class="widget_content">' . _('No matches') . '</td></tr>';
 		}
@@ -811,7 +811,8 @@ END;
 			}
 		}
 
-       	echo "<table class=widget cellspacing=1 width=\"100%\">
+       	echo "<!-- Begin Pager -->\n
+				<table class=widget cellspacing=1 width=\"100%\">
 				<tr><td colspan=$colspan class=widget_header align=left>
 					<table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
 						<tr><td class=widget_header align=left>{$this->caption}</td>
@@ -832,7 +833,7 @@ END;
 
 		if($this->EndRows) { echo $this->EndRows; }
 
-        echo "</table>";
+        echo "</table>\n<!-- End Pager -->";
     }
 
 
@@ -869,20 +870,20 @@ END;
 	/**
 	* private method to render the totals and subtotals columns
 	*/
-    function RenderTotals($caption, $values) {
+    function RenderTotals($caption, $values, $row_classnames, $col_classnames) {
         if(0 != count($values)) {
 
             echo "<tr>";
-            echo  "<td align=right class=\"widget_label\"><b>$caption</b></td>";
+            echo  "<td class=\"widget_label\"><b>$caption</b></td>";
 
             // starting with 1 because column 1 is used for the header, so sorry!
             for ($i=1; $i < count($this->column_info); $i++) {
 
                 if(isset($values[$this->column_info[$i]['index']])) {
                     if('currency' == $this->column_info[$i]['type']) {
-                        echo "<td align=right class=\"widget_content_alt\"><b>$" . number_format($values[$this->column_info[$i]['index']], 2, '.', ',') . "</b></td>\n";
+                        echo "<td class=\"$row_classnames {$col_classnames[$i]}\"><b>$" . number_format($values[$this->column_info[$i]['index']], 2, '.', ',') . "</b></td>\n";
                     } else {
-                        echo "<td align=right class=\"widget_content_alt\"><b>" . $values[$this->column_info[$i]['index']] . "</b></td>";
+                        echo "<td class=\"$row_classnames {$col_classnames[$i]}\"><b>" . $values[$this->column_info[$i]['index']] . "</b></td>";
                     }
                 } else {
                     echo "<td class=\"widget_content_alt\">&nbsp;</td>";
@@ -975,6 +976,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.11  2005/03/01 21:58:36  daturaarutad
+ * added functionality to specify CSS classes for rows/columns in pager
+ *
  * Revision 1.10  2005/03/01 15:47:53  daturaarutad
  * expanded the ability to specify CSS styles for rows and columns
  *
