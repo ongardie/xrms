@@ -1,30 +1,29 @@
 XRMS - README
 
-/** $Id: README,v 1.4 2004/03/22 15:36:35 braverock Exp $ **/
+/** $Id: README,v 1.5 2004/04/20 14:26:27 braverock Exp $ **/
 ---
 
 SUMMARY
 
-XRMS is a web-based application for managing business entities such as 
+XRMS is a web-based application for managing business entities such as
 employees, customers, contacts, activities with those contacts, etc.
 
 ---
 
 VERSION
 
-0.9 -- December 2003
+20 April 2004
 
-This version has had many many bug fixes and enhancements, but much of the code 
-is still sloppy, some of it still doesn't work, and you probably still shouldn't 
-trust it with anything important, as the data model may change substantially, 
-and in some cases we may not feel like making future versions compatible with 
-this one.
+This version has had many many bug fixes and enhancements.  We have also
+added an automated installation, update, and data integrity process. See
+the file install/INSTALL for details.
 
 ---
 
 COPYRIGHTS
 
 Copyright (c) 2000-2003 Chris Woofter <chris_at_brokerstream_dot_com>
+Copyright (c) 2003-2004 XRMS Development Team
 
 ---
 
@@ -52,8 +51,11 @@ http://www.softcomplex.com/
 REQUIREMENTS
 
 Currently, you'll need MySQL v 3.23 (v4.0 recommended) and PHP v4.2 (or higher) for XRMS.
+XRMS should work without modification on SAPDB/MaxDB if you need a really huge installation
 
-I like Red Hat machines, but XRMS should work just fine on Apple and Microsoft systems, too.  
+XRMS is reported to work well under several Linux/Unix flavors, Mac OSX, and Windows Servers.
+
+XRMS is regularly tested with most modern browsers, please report any problems.
 
 ---
 
@@ -62,78 +64,142 @@ INSTALLATION
 See the file INSTALL in the install/ directory.
 
 ---
+IMPORTING YOUR DATA
+To import companies, export a .csv file of companies and contacts.
+We've included templates for many common CRM/SFA applications, such as
+Microsoft Outlook, Act!, SalesForce.com, and Goldmine, as well as a 'default'
+import template.
 
+Then visit Administration -> Import Companies/Contacts, select the appopriate
+default values, and upload the file.  You will be able to preview the upload before
+you actualy commit to loading everything into the database.
+
+We've tried to make the import 'safe'.
+The import scripts run multiple checks on each record and attempt to not overwrite
+existing data, or create duplicate records.  We make broad allowances for missing
+data fields: as long as you have a Company Name, things should work.
+
+The default template includes the following fields:
+    //company info
+    company_name
+    legal_name
+    division_name
+    website
+    tax_id
+    extref1
+    extref2
+    extref3
+    company_custom1
+    company_custom2
+    company_custom3
+    company_custom4
+    employees
+    revenue
+    credit_limit
+    terms
+    company_profile
+    company_code
+    phone
+    phone2
+    fax
+
+    //contact info
+    first_name
+    last_name
+    email
+    work_phone
+    home_phone
+    fax
+    division
+    salutation
+    date_of_birth
+    summary
+    title
+    description
+    cell_phone
+    aol
+    yahoo
+    msn
+    interests
+    contact_custom1
+    contact_custom2
+    contact_custom3
+    contact_custom4
+    contact_profile
+
+    //address info
+    address_name
+    line1
+    line2
+    city
+    state
+    postal_code
+    country
+    address_body
+    use_pretty_address
+
+If you wish to use the default template, name the columns in your .csv
+file as the columns are named above.
+
+You may also create your own templates, and submit them for inclusion with XRMS.
+
+---
 NOTES
 
-1. For now, it's all in English, but translation capabilities are in progress.  
-   If you can translate English business terms (like "customer" and "opportunity") 
+1. For now, it's all in English, but translation capabilities are in progress.
+   If you can translate English business terms (like "customer" and "opportunity")
    into other languages, please let us know.
 
 2. We are still adding validation on form submits, and have a long way to go here,
    so don't try anything funny.
 
-3. Dates are expected to be in 'YYYY-MM-DD' format... the date-picker widget 
+3. Dates are expected to be in 'YYYY-MM-DD' format... the date-picker widget
    should handle this automatically.
 
-4. I never finished some mail-merge stuff, but the mail-merge functionality is now 
+4. I never finished some mail-merge stuff, but the mail-merge functionality is now
    available for preliminary testing and bug-fixing.
 
-5. I'm still trying to figure out how best to include a flexible security layer 
-   (roles, permissions, etc.) into XRMS, so for now, there's only limited ability 
-   to limit what a logged-in user may do.  We've got some ideas for this, but it 
-   really is difficult to make this both flexible and convenient.  
+5. I'm still trying to figure out how best to include a flexible security layer
+   (roles, permissions, etc.) into XRMS, so for now, there's only limited ability
+   to limit what a logged-in user may do.  We've got some ideas for this, but it
+   really is difficult to make this both flexible and convenient.
 
-6. To import companies, export a .csv file of companies (e.g., from Outlook) and 
-   label the columns with the names of the database columns:
-
-   company_name - the name of each company
-   company_phone - the primary telephone number for each company
-   company_address - the primary address for each company
-   company_city - the primary city address for each company
-   company_state - the primary state/province address for each company
-   company_postal_code - the primary postal_code for each company
-   contact_first_names - the first name of the primary contact for each company
-   contact_last_name - the last name of the primary contact for each company
-   contact_phone - the phone number of the primary contact for each company
-   contact_email - the e-mail address of the primary contact for each company
-
-   Then visit Administration -> Import Companies/Contacts, select the appopriate 
-   default values, and upload the file.  You will be able to preview the upload before 
-   you actualy commit to loading everything into the database.  
-   We've tried to make the import 
-
-7. There's very little documentation.  We aer happily accepting contributions of user 
-   documentation. Until further notice, just use the forums at SourceForge 
+6. There's very little documentation.  We are happily accepting contributions of user
+   documentation. Until further notice, just use the forums at SourceForge
    for support.  We'll be around to answer questions.
 
-8. If you've got suggestions, please pass them along!
+7. If you've got suggestions, please pass them along!
 
 ---
 HINTS, installation on Windows
 ========================
 
-While editing the above mentioned php files you will have 
+While editing the above mentioned php files you will have
 to change the path name to XRMS.
-Please enter the path name with slashes "/" (NOT 
+Please enter the path name with slashes "/" (NOT
 backslashes "\", as commonly used in windows),
-e.g. "C:/Program Files/Apache 
+e.g. "C:/Program Files/Apache
 Group/Apache/htdocs/xrms"
 
-HINTS, preventing some common errors 
+HINTS, preventing some common errors
 ==============================
-To prevent to get too many php warning messages you 
+To prevent to get too many php warning messages you
 might want to modify your php.ini as follows:
 ; - Show all errors, except for notices
 error_reporting = E_ALL & ~E_NOTICE
 
-If you get errors like "Warning: Cannot modify header 
-information -.. " the set following option in your php.ini:
+If you get errors like "Warning: Cannot modify header
+information -.. " the set the following option in your php.ini:
 output_buffering = On
 
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.5  2004/04/20 14:26:27  braverock
+ * - update to include more complete information about importing CSV files
+ * - change version information
+ * - update requirements
+ *
  * Revision 1.4  2004/03/22 15:36:35  braverock
  * Update to reference the install scripts and documentation
- *
  */
