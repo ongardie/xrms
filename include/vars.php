@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.15 2004/03/24 18:17:27 maulani Exp $
+ * $Id: vars.php,v 1.16 2004/04/20 15:34:39 braverock Exp $
  */
 
 /**
@@ -128,10 +128,25 @@ $activities_default_behavior = "Fast";
  */
 $xrms_use_ldap = false; //set to true if you want ldap authenthication
     //all other ldap params are useless if $xrms_use_ldap is false
-    $xrms_ldap["server"] = "localhost";                             //ldap server address
-    $xrms_ldap["search_user"] = "cn=search,ou=services,o=barcet";   //user name to do the search as (leave blank for anonymous login)
-    $xrms_ldap["search_pw"] = "search";                             //password for the user to do the search as (leave blank for anonymous login)
-    $xrms_ldap["search_context"] = "o=novell";                      //context where to start the search in the tree
-    $xrms_ldap["search_attribute"] = "cn";                          //usually, search is done on cn, uid or mail
+
+    //ldap server address
+    $xrms_ldap["server"] = "ldap";
+
+    //user name to do the search as (leave blank for anonymous login)
+    $xrms_ldap["search_user"] = "";
+
+    //password for the user to do the search as (leave blank for anonymous login)
+    $xrms_ldap["search_pw"] = "";
+
+    //context where to start the search in the tree
+    $xrms_ldap["search_context"] = "dc=People,dc=mycompany,dc=com";
+    //usually, search is done on cn, uid or mail
+    $xrms_ldap["search_attribute"] = "uid";
+
+    // default values for users added from LDAP
+    //role ID for new users added via LDAP
+    $xrms_ldap["default_role_id"] = "1";
+    //time zone for new users added via LDAP
+    $xrms_ldap["default_gmt_offset"] = "-6";
 
 ?>
