@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.5 2004/01/30 21:09:45 cdwtech Exp $
+ * $Id: utils-misc.php,v 1.6 2004/02/01 00:36:08 braverock Exp $
  */
 
 /**
@@ -49,9 +49,19 @@ function session_check($target='') {
  * @return void
  */
 function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
-    $sql1 = "delete from recent_items where user_id = $user_id and on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc())  . " and on_what_id = $on_what_id";
-    $sql2 = "insert into recent_items (user_id, on_what_table, on_what_id, recent_item_timestamp) values ($user_id, " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ", $on_what_id, " . $con->dbtimestamp(time()) . ")";
-    // print $sql;
+
+    $sql1 = "delete from recent_items where
+             user_id = $user_id
+             and on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc())  ."
+             and on_what_id = $on_what_id";
+
+    $sql2 = "insert into recent_items set
+             user_id       =  $user_id,
+             on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
+             on_what_id    = $on_what_id,
+             recent_item_timestamp = " . $con->dbtimestamp(time());
+
+    // $con->debug=1;
     $con->execute($sql1);
     $con->execute($sql2);
 }
@@ -196,8 +206,8 @@ function getGlobalVar( &$value, $name ) {
 
 /**
  * $Log: utils-misc.php,v $
- * Revision 1.5  2004/01/30 21:09:45  cdwtech
- * update_recent_items was broken
+ * Revision 1.6  2004/02/01 00:36:08  braverock
+ * improved sql formatting of update_recent_items fn sql
  *
  * Revision 1.4  2004/01/26 19:24:51  braverock
  * - added getGlobalVar fn
