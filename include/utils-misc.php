@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.34 2004/06/24 23:08:39 braverock Exp $
+ * $Id: utils-misc.php,v 1.35 2004/06/28 11:59:43 braverock Exp $
  */
 
 /**
@@ -58,7 +58,8 @@ function session_check($target='') {
         if($justfile=="login.php"){//do nothing
         } else {
             header("Location: $http_site_root" . "/login.php?target=$target");
-            exit;
+            //don't know why, but the exit causes problems in some installations...
+            //exit;
         }
     }
 
@@ -622,6 +623,10 @@ require_once($include_directory . 'i18n.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.35  2004/06/28 11:59:43  braverock
+ * - comment out exit in session_check function because it causes problems in some installations
+ *   - credit to Nic Lowe for spotting the workaround to problem reported on SF
+ *
  * Revision 1.34  2004/06/24 23:08:39  braverock
  * - add patch to prevent recursive call to session_check
  *
