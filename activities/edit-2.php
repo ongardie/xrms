@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.43 2004/12/20 15:30:41 neildogg Exp $
+ * $Id: edit-2.php,v 1.44 2004/12/20 20:10:05 neildogg Exp $
  */
 
 //include required files
@@ -179,7 +179,7 @@ $rec['activity_type_id']     = $activity_type_id;
 $rec['contact_id']           = $contact_id;
 $rec['activity_title']       = $activity_title;
 $rec['activity_description'] = $activity_description;
-if(empty($user_id) && strstr($return_url, 'one.php')) {
+if(empty($user_id) && strstr($return_url, 'activities/one.php')) {
     //If the user ID was empty and we're returning to the same activity page
     // then we're going to assume that the user has taken over the activity.
     $rec['user_id']          = $session_user_id;
@@ -442,6 +442,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.44  2004/12/20 20:10:05  neildogg
+ * Made sure the user change only applies to the activities reload
+ *
  * Revision 1.43  2004/12/20 15:30:41  neildogg
  * - If the user was empty and the Insert Log button was used, move it to the session user
  *
