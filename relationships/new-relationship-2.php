@@ -48,10 +48,23 @@ $rst->close();
 $display_name = ucfirst($what_table);
 $display_name_singular = ucfirst($what_table_singular);
 
-$sql = "select " . $working_direction . "_what_text, relationship_type_id 
-        from relationship_types 
-        where relationship_name='$relationship_name' 
-        and relationship_status='a'";
+if($working_direction == "both") {
+    $sql = "SELECT from_what_text, relationship_type_id 
+            FROM relationship_types 
+            WHERE relationship_name='" . $relationship_name . "' 
+            AND relationship_status='a'
+            UNION
+            SELECT to_what_text, relationship_type_id
+            FROM relationship_types
+            WHERE relationship_name='" . $relationship_name . "'
+            AND relationship_status='a'";
+}
+else {
+    $sql = "SELECT " . $working_direction . "_what_text, relationship_type_id 
+            FROM relationship_types 
+            WHERE relationship_name='" . $relationship_name . "' 
+            AND relationship_status='a'";
+}
 $rst = $con->execute($sql);
 $relationship_menu = $rst->getmenu2('relationship_type_id', '', false);
 $rst->close();
@@ -67,7 +80,7 @@ start_page($page_title, true, $msg);
         <form action="<?php echo $http_site_root . "/" . $what_table . "/one.php"; ?>" method=get target="_blank">
         <input type="hidden" name="<?php echo $what_table_singular; ?>_id">
         </form>
-        <form action=new-relationship-3.php method=post>
+        <form action=new-relationship-3.php method=post onsubmit="document.forms[1].working_direction.value = (document.forms[1].relationship_type_id.selectedIndex < (document.forms[1].relationship_type_id.length / 2)) ? 'from' : 'to'; return true;">
         <input type="hidden" name="relationship_name" value="<?php echo $relationship_name; ?>">
         <input type="hidden" name="working_direction" value="<?php echo $working_direction; ?>">
         <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">

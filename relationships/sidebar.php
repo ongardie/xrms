@@ -18,11 +18,12 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.7 2004/07/14 22:15:42 neildogg Exp $
+ * $Id: sidebar.php,v 1.8 2004/07/15 13:47:34 neildogg Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
 $found = 0;
+$orig_working_direction = $working_direction;
 
 $sql = "SELECT from_what_table, to_what_table
         FROM relationship_types
@@ -295,7 +296,7 @@ $relationship_link_rows .= "
                 <td class=widget_content_form_element colspan=2>
                     <input type=hidden name=relationship_name value='" . $relationship_name . "'>
                     <input type=hidden name=on_what_id value='$overall_id'>
-                    <input type=hidden name=working_direction value='$working_direction'>
+                    <input type=hidden name=working_direction value='$orig_working_direction'>
                     <input type=hidden name=return_url value='/$what_table[$working_direction]/one.php?$what_table_singular[$working_direction]_id=$overall_id'>
                     <input type=submit class=button value='New'>
                 </td>
@@ -390,6 +391,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.8  2004/07/15 13:47:34  neildogg
+ * - If using "both" user can choose either option from relationship type
+ *
  * Revision 1.7  2004/07/14 22:15:42  neildogg
  * - Now uses $overall_id
  *  - Can use $working_direction = "both" for
