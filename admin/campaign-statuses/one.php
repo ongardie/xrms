@@ -4,7 +4,7 @@
  *
  * Edit campaign-statuses
  *
- * $Id: one.php,v 1.8 2004/07/25 15:33:09 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2004/07/25 17:34:45 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -84,17 +84,17 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action=delete.php method=post>
-        <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Campaign Status").'?'; ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Campaign Status?"); ?>');">
+        <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Campaign Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
-                <?php echo _("Click the button below to remove this campaign status from the system."); ?>
-                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
-                <p><input class=button type=submit value="<?php echo _("Delete Campaign Status"); ?>">
+                <?php echo _("Click the button below to permanently remove this item."); ?>
+                <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                 </td>
             </tr>
         </table>
@@ -116,6 +116,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/07/25 17:34:45  johnfawcett
+ * - reinserted ? in gettext string - needed by some languages
+ * - standardized delete text and button
+ * - corrected bug: did not ask for confirmation before deleting
+ *
  * Revision 1.8  2004/07/25 15:33:09  johnfawcett
  * - modified reference "account status" to "campaign status"
  *
