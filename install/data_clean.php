@@ -1,13 +1,11 @@
 <?php
 /**
- * install/data_clean.php - Cleanup the database
+ * install/data_clean.php - Moved to XRMS administration
  *
- * When coding this file, it is important that everything only happen after
- * a test.  This file must be non-destructive and only make the changes that
- * must be made.
+ * Do not add anything to this file
  *
  * @author Beth Macknik
- * $Id: data_clean.php,v 1.4 2004/04/12 16:21:58 maulani Exp $
+ * $Id: data_clean.php,v 1.5 2004/04/13 12:29:20 maulani Exp $
  */
 
 // where do we include from
@@ -21,59 +19,13 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 // vars.php sets all of the installation-specific variables
 require_once($include_directory . 'vars.php');
 
-$session_user_id = session_check();
-
-// make a database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-$msg = '';
-
-// Make sure that there is a last name for every contact
-$sql = "update contacts set last_name='[last name]' where last_name=''";
-$rst = $con->execute($sql);
-
-// Make sure that there is a first name for every contact
-$sql = "update contacts set first_names='[first names]' where first_names=''";
-$rst = $con->execute($sql);
-
-// There needs to be at least one contact for each company
-$sql = "SELECT companies.company_id ";
-$sql .= "FROM companies ";
-$sql .= "LEFT JOIN contacts ON companies.company_id = contacts.company_id ";
-$sql .= "WHERE contacts.company_id IS NULL";
-$rst = $con->execute($sql);
-if ($rst) {
-    $msg .= 'Need to create contacts for x companies<BR><BR>';
-    while (!$rst->EOF) {
-        $company_id = $rst->fields['company_id'];
-		$sql = "insert into contacts set
-				company_id = $company_id,
-				last_name = 'Contact',
-				first_names = 'Default',
-				entered_by = $session_user_id,
-				entered_at = " . $con->dbtimestamp(mktime()) . ",
-				last_modified_at = " . $con->dbtimestamp(mktime()) . ",
-				last_modified_by = $session_user_id"
-				;
-        $con->execute($sql);
-
-        $rst->movenext();
-    }
-}
-
-//close the database connection, because we don't need it anymore
-$con->close();
-
 $page_title = "Database Cleanup Complete";
 start_page($page_title, false, $msg);
 
 ?>
 
 <BR>
-Your database has been cleaned.
-<BR><BR>
-You may now <a href="../login.php">login</a>.
+This function has been moved to the administration section of XRMS.  Please log in to run it.
 
 
 <?php
@@ -82,6 +34,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.5  2004/04/13 12:29:20  maulani
+ * - Move the data clean and update files into the admin section of XRMS
+ *
  * Revision 1.4  2004/04/12 16:21:58  maulani
  * - Add check to insure that all companies have at least one contact
  *

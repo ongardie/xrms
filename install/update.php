@@ -1,13 +1,11 @@
 <?php
 /**
- * install/update.php - Update the database from a previous version of xrms
+ * install/update.php - Moved to XRMS administration
  *
- * When coding this file, it is important that everything only happen after
- * a test.  This file must be non-destructive and only make the changes that
- * must be made.
+ * Do not add anything to this file
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.6 2004/04/12 14:34:02 maulani Exp $
+ * $Id: update.php,v 1.7 2004/04/13 12:29:20 maulani Exp $
  */
 
 /**
@@ -32,6 +30,9 @@ require_once('install-utils.inc');
 // make a database connection
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+// Leave the admin checks so folks can always get into the admin section.
+// even though this file has been moved
 
 
 // Make sure that there is an admin record in roles
@@ -66,32 +67,6 @@ if ($recCount == 0) {
     }
 }
 
-// make sure that there is a case_priority_score_adjustment column
-//should put a test here, but alter table is non-destructive
-$sql = "alter table case_priorities add case_priority_score_adjustment int not null after case_priority_display_html";
-$rst = $con->execute($sql);
-// end case_priority_display_html
-
-// Fix problem introduced by buggy Mar 19, 2004 install code
-// This will modify the initial data appropriately
-$sql = "update address_format_strings set address_format_string='";
-$sql .= '$lines<br>$city, $province $postal_code<br>$country';
-$sql .= "' where address_format_string!='";
-$sql .= '$lines<br>$city, $province $postal_code<br>$country';
-$sql .= "' and address_format_string_id=1";
-$rst = $con->execute($sql);
-
-// Add indexes on the company_id field so data integrity checks take a reasonable about of time
-$sql = "create index company_id on addresses (company_id)";
-$rst = $con->execute($sql);
-$sql = "create index company_id on contacts (company_id)";
-$rst = $con->execute($sql);
-
-// Make sure that the database has the correct legal_name column
-$sql = "alter table companies change company_legal_name legal_name varchar( 100 ) not null";
-$rst = $con->execute($sql);
-
-
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -101,10 +76,9 @@ start_page($page_title, false, $msg);
 ?>
 
 <BR>
-Your database has been updated.
+This function has been moved into the Administration section of XRMS.
 <BR><BR>
-You may now <a href="../login.php">login</a> to get started.
-
+Please <a href="../login.php">login</a> to run it.
 
 <?php
 
@@ -112,6 +86,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.7  2004/04/13 12:29:20  maulani
+ * - Move the data clean and update files into the admin section of XRMS
+ *
  * Revision 1.6  2004/04/12 14:34:02  maulani
  * - Add indexes for foreign key company_id
  *
