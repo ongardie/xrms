@@ -114,8 +114,8 @@ $rst->close();
             <td><input type=text name=city value="<?php echo $city; ?>"></td>
             <td><input type=text name=state value="<?php echo $state; ?>"></td>
             <td><input type=text name=country value="<?php echo $country; ?>"></td>
-            <td><input class=button type=submit name="go" value="<?php echo ("Go"); ?>"></td>
-            <td><input class=button type=submit name="pdf" value="<?php echo ("PDF"); ?>"></td>
+            <td><input class=button type=submit name="go" value="<?php echo _("Go"); ?>"></td>
+            <td><input class=button type=submit name="pdf" value="<?php echo _("PDF"); ?>"></td>
         </form>
     </tr>
 </table>
@@ -308,6 +308,9 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.5  2004/12/30 21:43:13  braverock
+ * - localize strings
+ *
  * Revision 1.4  2004/12/21 19:36:13  braverock
  * - improved display of screen table
  * - fixed code formatting

@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: company-contacts-printout.php,v 1.8 2004/12/21 19:36:14 braverock Exp $
+ * $Id: company-contacts-printout.php,v 1.9 2004/12/30 21:43:46 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -229,7 +229,7 @@ start_page($page_title, $show_navbar, $msg);
                     <input class=button type=submit value="<?php echo _("Search"); ?>">
                 </td>
                 <td class=widget_content_form_element>
-                    <input type="checkbox" name="printer_friendly" value="true" checked><?php echo ("Format for Printer"); ?>
+                    <input type="checkbox" name="printer_friendly" value="true" checked><?php echo _("Format for Printer"); ?>
                 </td>
             </tr>
 
@@ -341,6 +341,9 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.9  2004/12/30 21:43:46  braverock
+ * - localize strings
+ *
  * Revision 1.8  2004/12/21 19:36:14  braverock
  * - improved display of screen table
  * - fixed code formatting
