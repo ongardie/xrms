@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.30 2004/06/11 20:26:30 introspectshun Exp $
+ * $Id: utils-misc.php,v 1.31 2004/06/15 14:03:18 gpowers Exp $
  */
 
 /**
@@ -80,7 +80,7 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
     $rec['user_id'] = $user_id;
     $rec['on_what_table'] = $on_what_table;
     $rec['on_what_id'] = $on_what_id;
-    $rec['recent_item_timestamp'] = $con->dbtimestamp(date("Y-m-d H:i:s"));
+    $rec['recent_item_timestamp'] = time());
 
     $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
@@ -117,7 +117,7 @@ function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_wh
     if ($level <= $log_level) {
         $sql = "SELECT * FROM audit_items WHERE 1 = 2"; //select empty record as placeholder
         $rst = $con->execute($sql);
-        
+
         $rec = array();
         $rec['user_id'] = $user_id;
         $rec['audit_item_type'] = $audit_item_type;
@@ -126,7 +126,7 @@ function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_wh
         $rec['remote_addr'] = $_SERVER['REMOTE_ADDR'];
         $rec['remote_port'] = $_SERVER['REMOTE_PORT'];
         $rec['session_id'] = $_COOKIE['PHPSESSID'];
-        $rec['audit_item_timestamp'] = $con->dbtimestamp(date("Y-m-d H:i:s"));
+        $rec['audit_item_timestamp'] = time();
 
         $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
@@ -598,6 +598,10 @@ function get_formatted_address (&$con,$address_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.31  2004/06/15 14:03:18  gpowers
+ * - chagned dbtimestamp() to time()
+ *   - b/c the quoted time didn't work with mysql
+ *
  * Revision 1.30  2004/06/11 20:26:30  introspectshun
  * - Now use ADODB GetInsertSQL and GetUpdateSQL functions.
  *
