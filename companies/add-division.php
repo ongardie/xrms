@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.9 2005/01/25 23:29:20 vanmer Exp $
+ * $Id: add-division.php,v 1.10 2005/01/28 22:58:22 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -50,10 +50,13 @@ add_audit_item($con, $session_user_id, 'created', 'company_division', $division_
 
 $con->close();
 
-header("Location: divisions.php?msg=address_added&company_id=$company_id");
+header("Location: one.php?msg=division_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.10  2005/01/28 22:58:22  braverock
+ * - change return_url to companies/one.php with the correct message
+ *
  * Revision 1.9  2005/01/25 23:29:20  vanmer
  * - added hook for plugin processing after new division creation
  *
