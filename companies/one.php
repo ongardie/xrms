@@ -5,9 +5,8 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.67 2004/09/15 15:45:01 neildogg Exp $
+ * $Id: one.php,v 1.68 2004/10/22 21:06:15 introspectshun Exp $
  *
- * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
 
@@ -317,34 +316,6 @@ if ($rst) {
     db_error_handler ($con, $sql);
 }
 
-// associated with
-
-$categories_sql = "select category_display_html
-from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
-where ecm.on_what_table = 'companies'
-and ecm.on_what_id = $company_id
-and ecm.category_id = c.category_id
-and cs.category_scope_id = ccsm.category_scope_id
-and c.category_id = ccsm.category_id
-and cs.on_what_table = 'companies'
-and category_record_status = 'a'
-order by category_display_html";
-
-$rst = $con->execute($categories_sql);
-$categories = array();
-
-if ($rst) {
-    while (!$rst->EOF) {
-        array_push($categories, $rst->fields['category_display_html']);
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-    db_error_handler ($con, $categories_sql);
-}
-
-$categories = implode(', ', $categories);
-
 /*********************************/
 /*** Include the sidebar boxes ***/
 
@@ -352,6 +323,9 @@ $categories = implode(', ', $categories);
 $on_what_table = 'companies';
 $on_what_id = $company_id;
 $on_what_string = 'company';
+
+//include the categories sidebar
+require_once($include_directory . 'categories-sidebar.php');
 
 //include the Cases sidebar
 $case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
@@ -432,10 +406,6 @@ if (!$former_name_rows) {
 
 if (!$relationship_rows) {
     $relationship_rows = "";
-}
-
-if (!$categories) {
-    $categories = _("No associated categories");
 }
 
 $page_title = _("Company Details") . ' : ' . $company_name;
@@ -647,8 +617,9 @@ function openNewsWindow() {
             </tr>
         </table>
 
-        <?php jscalendar_includes(); ?>
 <?php
+    jscalendar_includes();
+
     //place the plug-in hook before the Activities
     do_hook ('company_detail');
 ?>
@@ -705,19 +676,7 @@ function openNewsWindow() {
     <div id="Sidebar">
 
         <!-- categories //-->
-        <div id='category_sidebar'>
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header><?php echo _("Categories"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><?php  echo $categories; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?company_id=<?php  echo $company_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
-            </tr>
-        </table>
-        </div>
+        <?php echo $category_rows; ?>
 
         <!-- opportunities //-->
         <?php echo $opportunity_rows; ?>
@@ -759,6 +718,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.68  2004/10/22 21:06:15  introspectshun
+ * - Centralized category handling as sidebar
+ *
  * Revision 1.67  2004/09/15 15:45:01  neildogg
  * - Added hook for more company buttons
  *
