@@ -6,7 +6,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: install-utils.inc,v 1.7 2004/08/02 01:31:19 maulani Exp $
+ * $Id: install-utils.inc,v 1.8 2004/08/21 01:30:56 d2uhlman Exp $
  */
 
 /**
@@ -39,11 +39,10 @@ EOQ;
 // headers before it should.
 function check_extra_whitespace($path, $filename) {
     $filepath = $path . $filename;
-    $fp = fopen($filepath, "r");
-    $contents = fread($fp, filesize($filepath));
-    fclose($fp);
-    $endchars = substr($contents, -2);
-    if($endchars != "?>") {
+    $contents = file($filepath);
+    $endchars = $contents[count($contents) -1];
+    //char 10 is a linefeed, this is acceptable at the end of a file
+    if(!($endchars == "?>" xor $endchars == ("?>" . chr(10)))) {
         $failuremsg = "The file  ";
         $failuremsg .= $filename;
         $failuremsg .= " does not end with the characters ?>. ";
@@ -56,6 +55,9 @@ function check_extra_whitespace($path, $filename) {
 
 /**
  * $Log: install-utils.inc,v $
+ * Revision 1.8  2004/08/21 01:30:56  d2uhlman
+ * better whitespace check, linefeeds 0A,char(10) are acceptable and common at the end of a php file
+ *
  * Revision 1.7  2004/08/02 01:31:19  maulani
  * - Add ending whitespace check to include-locations.inc and vars.php.
  * - Fix bugs involving dependency on general system includes
