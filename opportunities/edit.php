@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.13 2004/07/25 20:28:05 johnfawcett Exp $
+ * $Id: edit.php,v 1.14 2004/07/28 19:39:57 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,11 +12,12 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'confgoto.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
 
-$opportunity_id = $_GET['opportunity_id'];
+$msg            = isset($_GET['msg'])            ? $_GET['msg'] : '';
+$opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -45,7 +46,6 @@ if ($rst) {
     $close_at = $con->userdate($rst->fields['close_at']);
     $rst->close();
 }
-
 
 // associated with
 /*
@@ -106,6 +106,8 @@ and category_record_status = 'a'
 order by category_pretty_name";
 
 $rst = $con->execute($sql);
+
+$not_associated_with = '';
 
 if ($rst) {
     while (!$rst->EOF) {
@@ -225,7 +227,16 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value='<?php echo _("Delete"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Opportunity?"); ?>');"></td>
+                <td class=widget_content_form_element colspan=2>
+                <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+<?php
+		confGoTo (
+			  _('Delete Opportunity?'),                      // question to ask operator
+			  _('Delete'),                                   // display this on button
+			  'delete.php?opportunity_id='.$opportunity_id   // do this if operator approves
+			  );
+?>
+                </td>
             </tr>
         </table>
         </form>
@@ -286,6 +297,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.14  2004/07/28 19:39:57  cpsource
+ * - Add confGoTo for Delete confirm question
+ *   Fix some undefined variable usages
+ *
  * Revision 1.13  2004/07/25 20:28:05  johnfawcett
  * - standardized delete button
  *
