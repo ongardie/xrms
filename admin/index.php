@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.3 2004/01/26 21:19:27 braverock Exp $
+ * $Id: index.php,v 1.4 2004/03/21 18:15:36 braverock Exp $
  */
 
 //include required stuff
@@ -106,6 +106,9 @@ start_page($page_title, true, $msg);
                 <td class=widget_content><a href=roles/some.php>Roles</a></td>
             </tr>
             <tr>
+                <td class=widget_content><a href=plugin/plugin-admin.php>Plugin Administration</td>
+            </tr>
+            <tr>
                 <td class=widget_content><a href=categories/some.php>Categories</td>
             </tr>
             <tr>
@@ -169,6 +172,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.4  2004/03/21 18:15:36  braverock
+ * - add plugin admin link to administration menu
+ *
  * Revision 1.3  2004/01/26 21:19:27  braverock
  * - added page target
  * - added phpdoc
