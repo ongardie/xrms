@@ -2,7 +2,7 @@
 /**
  * Edit a campaign
  *
- * $Id: one.php,v 1.10 2004/07/16 05:28:14 introspectshun Exp $
+ * $Id: one.php,v 1.11 2004/07/19 17:19:52 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -80,6 +80,7 @@ and note_record_status = 'a' order by entered_at desc";
 
 $rst = $con->execute($sql);
 
+$note_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
         $note_rows .= "<tr>";
@@ -94,6 +95,7 @@ $sql = "select * from files, users where files.entered_by = users.user_id and on
 
 $rst = $con->execute($sql);
 
+$file_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
         $file_rows .= '<tr>';
@@ -255,6 +257,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2004/07/19 17:19:52  cpsource
+ * - Resolved undefs
+ *
  * Revision 1.10  2004/07/16 05:28:14  introspectshun
  * - Localized strings for i18n/translation support
  *
