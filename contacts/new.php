@@ -127,6 +127,26 @@ start_page($page_title, true, $msg);
 				<td class=widget_label_right>Interests</td>
 				<td class=widget_content_form_element><input type=text name=interests size=35></td>
 			</tr>
+            <tr>
+                <td class=widget_label_right_166px>Profile</td>
+                <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php  echo $contact_custom1_label; ?></td>
+                <td class=widget_content_form_element><input type=text name=custom1 size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php  echo $contact_custom2_label; ?></td>
+                <td class=widget_content_form_element><input type=text name=custom2 size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php  echo $contact_custom3_label; ?></td>
+                <td class=widget_content_form_element><input type=text name=custom3 size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php  echo $contact_custom4_label; ?></td>
+                <td class=widget_content_form_element><input type=text name=custom4 size=35></td>
+            </tr>
 			<tr>
 				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Add Contact"></td>
 			</tr>
