@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: data_clean.php,v 1.2 2004/04/13 15:06:41 maulani Exp $
+ * $Id: data_clean.php,v 1.3 2004/04/13 15:47:12 maulani Exp $
  */
 
 // where do we include from
@@ -93,6 +93,54 @@ if ($companies_to_fix > 0) {
     }
 }
 
+// There needs to be at least one address for each company
+$sql = "SELECT companies.company_id, companies.company_record_status ";
+$sql .= "FROM companies ";
+$sql .= "LEFT JOIN addresses ON companies.company_id = addresses.company_id ";
+$sql .= "WHERE addresses.company_id IS NULL";
+$rst = $con->execute($sql);
+$companies_to_fix = $rst->RecordCount();
+if ($companies_to_fix > 0) {
+    $msg .= "Need to create addresses for $companies_to_fix companies<BR><BR>";
+    while (!$rst->EOF) {
+        $company_id = $rst->fields['company_id'];
+        $company_record_status = $rst->fields['company_record_status'];
+		$sql = "insert into addresses set
+				company_id = $company_id,
+				country_id = $default_country_id,
+				address_name = 'Main',
+				address_record_status = '$company_record_status'"
+				;
+        $con->execute($sql);
+
+        $rst->movenext();
+    }
+}
+
+// There needs to be at least one active contact for each active company
+$sql = "SELECT companies.company_id ";
+$sql .= "FROM companies ";
+$sql .= "LEFT JOIN addresses ON companies.company_id = addresses.company_id ";
+$sql .= "AND addresses.address_record_status = 'a' ";
+$sql .= "WHERE addresses.company_id IS NULL ";
+$sql .= "AND companies.company_record_status = 'a' ";
+$rst = $con->execute($sql);
+$companies_to_fix = $rst->RecordCount();
+if ($companies_to_fix > 0) {
+    $msg .= "Need to create active addresses for $companies_to_fix active companies<BR><BR>";
+    while (!$rst->EOF) {
+        $company_id = $rst->fields['company_id'];
+		$sql = "insert into addresses set
+				company_id = $company_id,
+				country_id = $default_country_id,
+				address_name = 'Main'"
+				;
+        $con->execute($sql);
+
+        $rst->movenext();
+    }
+}
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -113,6 +161,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.3  2004/04/13 15:47:12  maulani
+ * - add data integrity check so all companies have addresses
+ *
  * Revision 1.2  2004/04/13 15:06:41  maulani
  * - Add active contact data integrity check to database cleanup
  *

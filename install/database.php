@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.4 2004/04/13 15:06:42 maulani Exp $
+ * $Id: database.php,v 1.5 2004/04/13 15:47:12 maulani Exp $
  */
 
 /**
@@ -389,7 +389,8 @@ function company_db_tables($con, $table_list) {
                postal_code         varchar(255) not null default '',
                use_pretty_address      char(1) not null default 'f',
                address_record_status       char(1) not null default 'a',
-               INDEX company_id (company_id)
+               INDEX company_id (company_id),
+               INDEX address_record_status (address_record_status)
                )";
         //execute
         $rst = $con->execute($sql);
@@ -778,6 +779,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.5  2004/04/13 15:47:12  maulani
+ * - add data integrity check so all companies have addresses
+ *
  * Revision 1.4  2004/04/13 15:06:42  maulani
  * - Add active contact data integrity check to database cleanup
  *

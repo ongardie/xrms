@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.2 2004/04/13 15:06:41 maulani Exp $
+ * $Id: update.php,v 1.3 2004/04/13 15:47:12 maulani Exp $
  */
 
 /**
@@ -94,6 +94,8 @@ $sql = "create index company_record_status on companies (company_record_status)"
 $rst = $con->execute($sql);
 $sql = "create index contact_record_status on contacts (contact_record_status)";
 $rst = $con->execute($sql);
+$sql = "create index address_record_status on addresses (address_record_status)";
+$rst = $con->execute($sql);
 
 // Make sure that the database has the correct legal_name column
 $sql = "alter table companies change company_legal_name legal_name varchar( 100 ) not null";
@@ -121,6 +123,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.3  2004/04/13 15:47:12  maulani
+ * - add data integrity check so all companies have addresses
+ *
  * Revision 1.2  2004/04/13 15:06:41  maulani
  * - Add active contact data integrity check to database cleanup
  *
