@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.7 2004/02/10 17:53:44 maulani Exp $
+ * $Id: edit-2.php,v 1.8 2004/02/14 15:27:19 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -21,6 +21,7 @@ $company_code = $_POST['company_code'];
 $crm_status_id = $_POST['crm_status_id'];
 $company_source_id = $_POST['company_source_id'];
 $industry_id = $_POST['industry_id'];
+$rating_id = $_POST['rating_id'];
 $user_id = $_POST['user_id'];
 $phone = $_POST['phone'];
 $phone2 = $_POST['phone2'];
@@ -34,6 +35,8 @@ $custom2 = $_POST['custom2'];
 $custom3 = $_POST['custom3'];
 $custom4 = $_POST['custom4'];
 
+if (!$rating_id) { $rating_id = 0; }
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
@@ -41,10 +44,11 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "update companies set
         last_modified_by = $session_user_id,
-        last_modified_at = now(), 
+        last_modified_at = now(),
         crm_status_id = $crm_status_id,
         company_source_id = $company_source_id,
         industry_id = $industry_id,
+        rating_id = $rating_id,
         user_id = $user_id,
         last_modified_by = $session_user_id,
         company_name = " . $con->qstr($company_name, get_magic_quotes_gpc()) . ",
@@ -69,6 +73,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.8  2004/02/14 15:27:19  braverock
+ * - add ratings to the editing of companies
+ *
  * Revision 1.7  2004/02/10 17:53:44  maulani
  * Set last modified user and date
  *

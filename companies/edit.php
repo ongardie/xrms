@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.5 2004/01/26 19:18:29 braverock Exp $
+ * $Id: edit.php,v 1.6 2004/02/14 15:27:19 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,6 +20,8 @@ $company_id = $_GET['company_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+//$con->debug=1;
 
 $sql = "select * from companies where company_id = $company_id";
 
@@ -70,6 +72,11 @@ $rst->close();
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_pretty_name";
 $rst = $con->execute($sql2);
 $industry_menu = $rst->getmenu2('industry_id', $industry_id, false);
+$rst->close();
+
+$sql2 = "select rating_pretty_name, rating_id from ratings where rating_record_status = 'a' order by rating_pretty_name";
+$rst = $con->execute($sql2);
+$rating_menu = $rst->getmenu2('rating_id', $rating_id, true);
 $rst->close();
 
 $con->close();
@@ -142,6 +149,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php echo $revenue; ?>"></td>
             </tr>
             <tr>
+                <td class=widget_label_right>Rating</td>
+                <td class=widget_content_form_element><?php echo $rating_menu; ?></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo $company_custom1_label ?></td>
                 <td class=widget_content_form_element><input type=text name=custom1 size=30 value="<?php echo $custom1; ?>"></td>
             </tr>
@@ -211,6 +222,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.6  2004/02/14 15:27:19  braverock
+ * - add ratings to the editing of companies
+ *
  * Revision 1.5  2004/01/26 19:18:29  braverock
  * - cleaned up sql format
  * - added phpdoc
