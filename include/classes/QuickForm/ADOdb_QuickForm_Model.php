@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.5 2005/03/05 00:08:47 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.6 2005/03/05 00:31:58 daturaarutad Exp $
 */
 
 
@@ -466,7 +466,7 @@ class ADOdb_QuickForm_Model {
 	
 		$dbh = $this->DBStructure['dbh']; 
 	
-		$columns = $this->GetColumns();
+		$columns = $this->GetColumns($primarykeyname);
 	
     	$sql="select $columns from $tablename where $primarykeyname = $id";
 	
@@ -509,7 +509,7 @@ class ADOdb_QuickForm_Model {
 	/**
 	* Used internally to skip over blob fields when performing a Read
 	*/
-	function GetColumns() {
+	function GetColumns($omit_column = '') {
 		$dbh = $this->DBStructure['dbh']; 
 
 		$columns = '';
@@ -517,7 +517,8 @@ class ADOdb_QuickForm_Model {
 
 			if(isset($this->DBStructure['fields'][$i]) && 
 				'blob' != $this->DBStructure['fields'][$i]['type'] && 
-				'longblob' != $this->DBStructure['fields'][$i]['type']) 
+				'longblob' != $this->DBStructure['fields'][$i]['type'] &&
+				$omit_column != $this->DBStructure['fields'][$i]['name']) 
 				{
 					$columns .= $this->DBStructure['fields'][$i]['name'] . ',';
 				}
