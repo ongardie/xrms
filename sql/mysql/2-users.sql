@@ -34,4 +34,4 @@ create table users (
 
 ALTER TABLE `users` ADD UNIQUE (`username` );
 
-insert into users (role_id, username, password, last_name, first_names, email, language) values (1, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english');
+insert into users (role_id, username, password, last_name, first_names, email, language) values (2, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english');
