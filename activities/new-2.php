@@ -20,6 +20,7 @@ $activity_status = $_POST['activity_status'];
 $scheduled_at = $_POST['scheduled_at'];
 $company_id = $_POST['company_id'];
 $contact_id = $_POST['contact_id'];
+$user_id    = $_POST['user_id'];
 
 $activity_title = (strlen($activity_title) > 0) ? $activity_title : "[none]";
 $on_what_table = (strlen($on_what_table) > 0) ? $on_what_table : '';
@@ -31,7 +32,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "insert into activities (activity_type_id, user_id, company_id, contact_id, on_what_table, on_what_id, activity_title, activity_description, entered_at, entered_by, scheduled_at, activity_status) values ($activity_type_id, $session_user_id, $company_id, $contact_id, " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ", $on_what_id, " . $con->qstr($activity_title, get_magic_quotes_gpc()) . ", " . $con->qstr($activity_note, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp($scheduled_at . ' 23:59:59') . ", " . $con->qstr($activity_status, get_magic_quotes_gpc()) . ")"; 
+$sql = "insert into activities (activity_type_id, user_id, company_id, contact_id, on_what_table, on_what_id, activity_title, activity_description, entered_at, entered_by, scheduled_at, activity_status) values ($activity_type_id, $user_id, $company_id, $contact_id, " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ", $on_what_id, " . $con->qstr($activity_title, get_magic_quotes_gpc()) . ", " . $con->qstr($activity_note, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp($scheduled_at . ' 23:59:59') . ", " . $con->qstr($activity_status, get_magic_quotes_gpc()) . ")";
 $con->execute($sql);
 
 $con->close();
