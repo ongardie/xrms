@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.14 2005/01/07 02:00:01 braverock Exp $
+ * $Id: new.php,v 1.15 2005/01/10 21:53:19 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,12 +13,14 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('','Create');
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-$company_id = $_POST['company_id'];
-$division_id = $_POST['division_id'];
-$contact_id = $_POST['contact_id'];
+$company_id = (array_key_exists('company_id',$_GET) ? $_GET['company_id'] : $_POST['company_id']);
+$division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : $_POST['division_id']);
+$contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $_POST['contact_id']);
+$case_type_id = (array_key_exists('case_type_id',$_GET) ? $_GET['case_type_id'] : $_POST['case_type_id']);
+$case_title = (array_key_exists('case_title',$_GET) ? $_GET['case_title'] : $_POST['case_title']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -28,7 +30,7 @@ $company_name = fetch_company_name($con, $company_id);
 //get menu for contacts
 $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a'";
 $rst = $con->execute($sql);
-$contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
+$contact_menu = $rst->getmenu2('contact_id', $contact_id, false, false, 1, 'id=contact_id');
 $rst->close();
 
 //get username menu
@@ -40,7 +42,7 @@ $rst->close();
 //division menu
 $sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
 $rst = $con->execute($sql2);
-$division_menu = $rst->getmenu2('division_id', $division_id, true);
+$division_menu = $rst->getmenu2('division_id', $division_id, true, false, 1, 'id=division_id');
 $rst->close();
 
 //get case priority menu
@@ -64,17 +66,19 @@ $rst = $con->execute($sql2);
 
 // defining case_type_id before the call to getmenu2 means that this
 // option will be selected when the menu is generated.
-if ( $rst && !$rst->EOF ) {
-  $case_type_id = $rst->fields['case_type_id'];
-} else {
-  $case_type_id = 0;
+if (!$case_type_id) {
+    if ( $rst && !$rst->EOF ) {
+    $case_type_id = $rst->fields['case_type_id'];
+    } else {
+    $case_type_id = 0;
+    }
 }
 
-$case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false);
+$case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false, false, 1, "id=case_type_id onchange=javascript:restrictByCaseType();");
 $rst->close();
 
 //get case status menu
-$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by case_status_id";
+$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_type_id=$case_type_id AND case_status_record_status = 'a' order by sort_order, case_status_id";
 $rst = $con->execute($sql2);
 
 // defining case_status_id before the call to getmenu2 means that this
@@ -96,6 +100,19 @@ start_page($page_title, true, $msg);
 ?>
 
 <?php jscalendar_includes(); ?>
+    
+    <script language=JavaScript>
+    <!--
+        function restrictByCaseType() {
+            case_title=document.getElementById('case_title');
+            division=document.getElementById('division_id');
+            contact=document.getElementById('contact_id');
+            select=document.getElementById('case_type_id');
+            location.href = 'new.php?company_id=<?php echo $company_id; ?>&case_title='+ case_title.value +'&division_id='+division.value + '&contact_id=' + contact.value + '&case_type_id=' + select.value;
+        }
+     //-->
+    </script>
+
 
 <div id="Main">
     <div id="Content">
@@ -108,7 +125,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Case Title"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=case_title> <?php  echo $required_indicator ?></td>
+                <td class=widget_content_form_element><input type=text size=40 name=case_title id=case_title value="<?php echo $case_title ?>"> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
@@ -210,6 +227,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.15  2005/01/10 21:53:19  vanmer
+ * - added redirect on case_type change, will re-fill fields above the type
+ * - added javascript id to getmenu2 calls, to allow for above feature to operate properly
+ *
  * Revision 1.14  2005/01/07 02:00:01  braverock
  * - add link to case status pop-up
  *
