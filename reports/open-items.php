@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.11 2004/07/25 13:13:15 johnfawcett Exp $
+ * $Id: open-items.php,v 1.12 2004/09/02 17:05:47 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -290,7 +290,7 @@ foreach ($userArray as $key => $user_id) {
                 $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
                 $rst6 = $con->execute($sql6);
                 $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"" . $http_site_root . "opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=4><hr></td></tr>\n";
                 }
@@ -375,6 +375,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.12  2004/09/02 17:05:47  maulani
+ * - Fix bug 1021252 bad opportunities link.  Patch submitted by Steve Weiss, sweiss_1966
+ *
  * Revision 1.11  2004/07/25 13:13:15  johnfawcett
  * - tidied up gettext calls and removed parse error
  *
