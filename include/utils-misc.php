@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.20 2004/05/10 13:07:21 maulani Exp $
+ * $Id: utils-misc.php,v 1.21 2004/05/13 16:40:06 braverock Exp $
  */
 
 /**
@@ -75,8 +75,8 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
  *   2 - and login/logout
  *   3 - and views
  *   4 - and searches
- * 
- * @return the audit level 
+ *
+ * @return the audit level
  */
 function current_audit_level() {
     return 4;  // 0 is the most restrictive level, 4 logs everything
@@ -95,18 +95,18 @@ function current_audit_level() {
 function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_what_id, $level=4) {
     $log_level = current_audit_level();
     if ( $level <= $log_level ) {
-		$sql = "insert into audit_items set
-				user_id = $user_id,
-				audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
-				on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
-				on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
-				remote_addr = '" . $_SERVER['REMOTE_ADDR'] . "',
-				remote_port = '" . $_SERVER['REMOTE_PORT'] . "',
-				session_id = '" . $_COOKIE['PHPSESSID'] . "',
-				audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
-	
-		//$con->debug=1
-		$con->execute($sql);
+                $sql = "insert into audit_items set
+                                user_id = $user_id,
+                                audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
+                                on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
+                                on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
+                                remote_addr = '" . $_SERVER['REMOTE_ADDR'] . "',
+                                remote_port = '" . $_SERVER['REMOTE_PORT'] . "',
+                                session_id = '" . $_COOKIE['PHPSESSID'] . "',
+                                audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
+
+                //$con->debug=1
+                $con->execute($sql);
     }
 }
 
@@ -363,64 +363,107 @@ exit;
 /**
  * Retrieve a value from the system_parameters.
  *
+ * @param handle &$con handle to the database connection
+ * @param string $param System Parameter to be retrieved
  */
-function get_system_parameter($con, $param) {
+function get_system_parameter(&$con, $param) {
 
     $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
     $sysst = $con->execute($sql);
-    $string_val = $sysst->fields['string_val'];
-    $int_val = $sysst->fields['int_val'];
-    $float_val = $sysst->fields['float_val'];
-    $datetime_val = $sysst->fields['datetime_val'];
-    if (!is_null($string_val)) {
-        $my_val=$string_val;
-    } elseif (!is_null($int_val)) {
-        $my_val=$int_val;
-    } elseif (!is_null($float_val)) {
-        $my_val=$float_val;
-    } elseif (!is_null($datetime_val)) {
-        $my_val=$datetime_val;
+    if ($sysst){
+        $string_val = $sysst->fields['string_val'];
+        $int_val = $sysst->fields['int_val'];
+        $float_val = $sysst->fields['float_val'];
+        $datetime_val = $sysst->fields['datetime_val'];
+        if (!is_null($string_val)) {
+            $my_val=$string_val;
+        } elseif (!is_null($int_val)) {
+            $my_val=$int_val;
+        } elseif (!is_null($float_val)) {
+            $my_val=$float_val;
+        } elseif (!is_null($datetime_val)) {
+            $my_val=$datetime_val;
+        }
+        $sysst->close();
+    } else {
+        //there was a problem, notify the user
+        db_error_handler ($con, $sql);
     }
-    $sysst->close();
 
     return $my_val;
-} //get_system_parameter
+} //end fn get_system_parameter
 
 /**
  * Set a value in the system_parameters.
  *
+ * @param handle &$con    handle to the database connection
+ * @param string $param   System Parameter to be changed
+ * @param mixed  $new_val value to change the parameter to
  */
-function set_system_parameter($con, $param, $new_val) {
+function set_system_parameter(&$con, $param, $new_val) {
 
     // First, determine which field is appropriate for the set.
     $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
     $sysst = $con->execute($sql);
-    $string_val = $sysst->fields['string_val'];
-    $int_val = $sysst->fields['int_val'];
-    $float_val = $sysst->fields['float_val'];
-    $datetime_val = $sysst->fields['datetime_val'];
-    if (!is_null($string_val)) {
-        $my_field='string_val';
-        $set_val = "'" . $new_val . "'";
-    } elseif (!is_null($int_val)) {
-        $my_field='int_val';
-        $set_val = $new_val;
-    } elseif (!is_null($float_val)) {
-        $my_field='float_val';
-        $set_val = $new_val;
-    } elseif (!is_null($datetime_val)) {
-        $my_field='datetime_val';
-        $set_val = $new_val;
+    if ($sysst){
+        $string_val = $sysst->fields['string_val'];
+        $int_val = $sysst->fields['int_val'];
+        $float_val = $sysst->fields['float_val'];
+        $datetime_val = $sysst->fields['datetime_val'];
+        if (!is_null($string_val)) {
+            $my_field='string_val';
+            $set_val = "'" . $new_val . "'";
+        } elseif (!is_null($int_val)) {
+            $my_field='int_val';
+            $set_val = $new_val;
+        } elseif (!is_null($float_val)) {
+            $my_field='float_val';
+            $set_val = $new_val;
+        } elseif (!is_null($datetime_val)) {
+            $my_field='datetime_val';
+            $set_val = $new_val;
+        }
+        $sysst->close();
+    } else {
+        //there was a problem, notify the user
+        db_error_handler ($con, $sql);
     }
-    $sysst->close();
-
     $sql ="update system_parameters set $myfield=$set_val where param_id='$param'";
-    $con->execute($sql);
-} //set_system_parameter
+    $sysst = $con->execute($sql);
+    if (!$sysst){
+        //there was a problem, notify the user
+        db_error_handler ($con, $sql);
+    }
+} //end fn set_system_parameter
 
+/**
+ * function db_error_handler : display the error to the user
+ *
+ * @author Brian Peterson
+ *
+ * @param handle &$con handle to the database connection
+ * @param string $sql SQL that was attempted
+ */
+function db_error_handler (&$con,$sql) {
+        $error = $con->ErrorMsg();
+        // figure out where to print this out.
+        if ($error) {
+            echo "\n<tr>\n\t<td class=widget_error>"
+                 ."\t<br> Unable to execute your query.  Please correct this error.<br>"
+                 . htmlspecialchars($error)
+                 ."\t<br> I tried to execute: <br>"
+                 . htmlspecialchars ($sql)
+                 ."\t</td>\n</tr>\n";
+        }
+} //end fn db_error_handler
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.21  2004/05/13 16:40:06  braverock
+ * - modified system prefs functions to pass database conection by reference
+ * - modified system prefs functions to use db_error_handler_fn
+ * - added generic database error handler fn ( db_error_handler() )
+ *
  * Revision 1.20  2004/05/10 13:07:21  maulani
  * - Add level to audit trail
  * - Clean up audit trail text
