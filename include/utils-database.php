@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.8 2005/01/12 20:11:45 braverock Exp $
+ * $Id: utils-database.php,v 1.9 2005/01/25 05:59:59 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -30,9 +30,8 @@ function list_db_tables(&$con) {
     $number_of_rows = $rst->RecordCount();
     if ($number_of_rows > 0) {
         $my_array = $rst->GetRows($number_of_rows);
-
         $table_list = array();
-        for ($i=0;$i<$number_of_rows;$i++) $table_list[$i] = $my_array[$i][0];
+        for ($i=0;$i<$number_of_rows;$i++) $table_list[$i] = current($my_array[$i]);
         return ($table_list);
     } else {
         $table_list = array();
@@ -106,8 +105,40 @@ function table_name($table) {
     }
 } 
 
+function execute_batch_sql_file($con, $file_path) {
+    if (file_exists($file_path)) {
+        $fh = fopen($file_path, 'r');
+        $last_buff='';
+        while (!feof($fh)) {
+            $buffer = fgets($fh, 4096);
+            $info_file.=$buffer;
+        }
+        fclose($fh);
+        $info_sql_array=explode(";",$info_file);
+        foreach ($info_sql_array as $sql_line) {
+            $sql_line_array=explode("\n",$sql_line);
+            $sql_array=array();
+            foreach ($sql_line_array as $newlined) {
+                if (strpos($newlined,'--')!==0) {
+                    $sql_array[]=$newlined;
+                }
+            }
+            $sql=trim(implode("\n",$sql_array));
+            if (!empty($sql)) {
+                $rst=$con->execute($sql);
+                if (!$rst) db_error_handler($con, $sql);
+            }
+        } return true;
+    } else return false;
+}
+
+
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.9  2005/01/25 05:59:59  vanmer
+ * - altered to use current function instead of hardcoded element 0
+ * - added function for executing a batch sql file
+ *
  * Revision 1.8  2005/01/12 20:11:45  braverock
  * - add company_division to table_name fn
  *
