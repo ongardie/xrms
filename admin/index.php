@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.17 2004/07/16 12:10:03 cpsource Exp $
+ * $Id: index.php,v 1.18 2004/07/16 12:22:20 cpsource Exp $
  */
 
 //include required stuff
@@ -20,8 +20,8 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 // get and check role (Admin, Developer) OK, else we should fail
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
-if ( !(strcmp($role,'Admin') || strcmp($role,'Developer')) ) {
-   // not OK - bring them to logout
+if ( !(0 == strcmp($role,'Admin') || 0 == strcmp($role,'Developer')) ) {
+   // not OK - bring them to logout, they've tried to hack the system
    header("Location: " . $http_site_root . "/logout.php");
 }
 
@@ -232,6 +232,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.18  2004/07/16 12:22:20  cpsource
+ * - Logic fix for checking roles
+ *
  * Revision 1.17  2004/07/16 12:10:03  cpsource
  * - Add $role from routing to SESSION so that index.php
  *   can check we are Admin or Developer before we
