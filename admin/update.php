@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.38 2004/09/02 22:27:08 maulani Exp $
+ * $Id: update.php,v 1.39 2004/09/06 12:23:00 braverock Exp $
  */
 
 // where do we include from
@@ -177,6 +177,12 @@ $rec['status_open_indicator'] = 'c';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 // end
+
+//add sort order to case_statuses
+//should put a test here, but alter table is non-destructive
+$sql = "ALTER TABLE case_statuses ADD sort_order TINYINT NOT
+NULL DEFAULT '1' AFTER case_status_id";
+$rst = $con->execute($sql);
 
 //add phone format to countries
 $sql = "ALTER TABLE countries ADD phone_format VARCHAR(25) NOT NULL DEFAULT '' AFTER country_record_status";
@@ -765,7 +771,7 @@ $sql ="CREATE TABLE time_daylight_savings (
 )";
         //execute
         $rst = $con->execute($sql);
-        
+
 // Add values if none exist (future values will be added, hence the structure)
 $sql = "select count(*) as recCount from time_daylight_savings";
 $rst = $con->execute($sql);
@@ -797,7 +803,7 @@ $sql ="CREATE TABLE time_zones (
 )";
         //execute
         $rst = $con->execute($sql);
-        
+
 // Add values if none exist (future values will be added, hence the structure)
 $sql = "select count(*) as recCount from time_zones";
 $rst = $con->execute($sql);
@@ -2273,7 +2279,7 @@ else {
             $rec = array();
             $rec['offset'] = $time_zone_offset['offset'];
             $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
-            
+
             $upd = $con->GetUpdateSQL($rst2, $rec, false, get_magic_quotes_gpc());
             if(!$con->execute($upd)) {
                 db_error_handler($con, $sql);
@@ -2308,6 +2314,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.39  2004/09/06 12:23:00  braverock
+ * - add sort_order to case statuses
+ *
  * Revision 1.38  2004/09/02 22:27:08  maulani
  * - Add status_open_indicator to opportunity_statuses and case_statuses tables
  * - Correct spelling
