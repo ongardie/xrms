@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.11 2004/04/15 22:04:39 maulani Exp $
+ * $Id: some.php,v 1.12 2004/05/10 13:08:36 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -198,7 +198,7 @@ $opportunity_category_menu = $rst->getmenu2('opportunity_category_id', $opportun
 $rst->close();
 
 if ($criteria_count > 0) {
-    add_audit_item($con, $session_user_id, 'opportunities', '', '');
+    add_audit_item($con, $session_user_id, 'searched', 'opportunities', '', 4);
 }
 
 $page_title = 'Opportunities';
@@ -319,6 +319,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2004/05/10 13:08:36  maulani
+ * - Add level to audit trail
+ * - Correct audit trail entry text
+ *
  * Revision 1.11  2004/04/15 22:04:39  maulani
  * - Change to CSS2 positioning
  * - Clean HTML to achieve validation

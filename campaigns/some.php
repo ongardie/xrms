@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.9 2004/04/16 14:46:27 maulani Exp $
+ * $Id: some.php,v 1.10 2004/05/10 13:08:36 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -195,7 +195,7 @@ $campaign_category_menu = $rst->getmenu2('campaign_category_id', $campaign_categ
 $rst->close();
 
 if ($criteria_count > 0) {
-    add_audit_item($con, $session_user_id, 'campaigns', '', '');
+    add_audit_item($con, $session_user_id, 'searched', 'campaigns', '', 4);
 }
 
 $page_title = 'Campaigns';
@@ -318,6 +318,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/05/10 13:08:36  maulani
+ * - Add level to audit trail
+ * - Correct audit trail entry text
+ *
  * Revision 1.9  2004/04/16 14:46:27  maulani
  * - Clean HTML so page will validate
  *

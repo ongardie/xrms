@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.9 2004/04/20 14:42:14 braverock Exp $
+ * $Id: some.php,v 1.10 2004/05/10 13:08:36 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -217,7 +217,7 @@ $case_category_menu = $rst->getmenu2('case_category_id', $case_category_id, true
 $rst->close();
 
 if ($criteria_count > 0) {
-    add_audit_item($con, $session_user_id, 'cases', '', '');
+    add_audit_item($con, $session_user_id, 'searched', 'cases', '', 4);
 }
 
 $page_title = 'Cases';
@@ -337,6 +337,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/05/10 13:08:36  maulani
+ * - Add level to audit trail
+ * - Correct audit trail entry text
+ *
  * Revision 1.9  2004/04/20 14:42:14  braverock
  * - add search for case type
  *   - fixes SF bug 930935
