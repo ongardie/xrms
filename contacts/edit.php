@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.13 2004/06/10 15:26:59 gpowers Exp $
+ * $Id: edit.php,v 1.14 2004/06/15 14:31:33 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,7 +23,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
+$con->execute("update users set last_hit = " . time() . " where user_id = $session_user_id");
 
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
@@ -245,6 +245,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.14  2004/06/15 14:31:33  gpowers
+ * - corrected time formats
+ *
  * Revision 1.13  2004/06/10 15:26:59  gpowers
  * - added "Transfer" and "Edit Address" buttons. (moved from one.php)
  *
