@@ -22,6 +22,12 @@ $possible_id = $_POST['possible_id'];
 $on_what_id = $_POST['on_what_id'];
 $return_url = $_POST['return_url'];
 $search_on = ($_POST['possible_id']) ? $_POST['possible_id'] : $_POST['search_on'];
+$relationship_entity = $_POST['relationship_entity'];
+if ($relationship_entity) {    
+    $relationship_entity_array=explode(",",$relationship_entity);
+    $on_what_table=array_shift($relationship_entity_array);
+    $on_what_id = array_shift($relationship_entity_array);
+}
 
 getGlobalVar($relationship_type_direction, 'relationship_type_direction');
 $typedirection = explode(",", $relationship_type_direction);
@@ -206,6 +212,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.24  2005/01/12 18:18:11  vanmer
+ * - added parsing of relationship_entity to provide ablity for multiple entities on original screen
+ *
  * Revision 1.23  2005/01/11 21:07:16  neildogg
  * - Null search shows all
  *
