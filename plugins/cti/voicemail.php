@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: voicemail.php,v 1.1 2004/08/02 14:43:48 gpowers Exp $
+ * $Id: voicemail.php,v 1.2 2004/11/15 23:55:22 gpowers Exp $
  */
 
 // include the common files
@@ -68,6 +68,7 @@ start_page($page_title);
 $user = $_SESSION['username'];
 $context = "default";
 $mailbox = "INBOX";
+$vm_file_exten = "WAV";
 
 $vmurlprefix="/voicemail";
 $vmconfig = "/etc/asterisk/voicemail.conf";
@@ -110,7 +111,7 @@ if ($handle = opendir($vmdir)) {
 // Msg Num
          //preg_match("/^(msg)?(\.txt)/i", $filename, $msgnum);
          preg_match("/^(msg)(\d+)(\.txt)$/", $filename, $msgnum);
-         echo "<a href=$vmurlprefix/" . $context . "/" . $exten . "/" . $mailbox . "/msg" . $msgnum[2] . ".wav>" . $msgnum[2] . "</a>";
+         echo "<a href=$vmurlprefix/" . $context . "/" . $exten . "/" . $mailbox . "/msg" . $msgnum[2] . "." . $vm_file_exten . ">" . $msgnum[2] . "</a>";
          echo "</td><td>";
 // Date
          preg_match("/(origdate=)([^\n]+)/i",$contents,$date);
