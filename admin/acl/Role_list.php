@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: Role_list.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: Role_list.php,v 1.2 2005/02/14 23:04:54 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat('"<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_Role.php?form_action=edit&return_url=Role_list.php&Role_id="', 'Role_id', '"\'\">"') . "AS LINK, Role.* FROM Role order by $order_by";
+$sql="SELECT " . $con->Concat("'<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_Role.php?form_action=edit&return_url=Role_list.php&Role_id='", 'Role_id', "\'\">'") . "AS LINK, Role.* FROM Role order by $order_by";
 
 $css_theme='basic-left';
 start_page($page_title);
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: Role_list.php,v $
+ * Revision 1.2  2005/02/14 23:04:54  vanmer
+ * altered quote order to work on SQL server
+ *
  * Revision 1.1  2005/01/13 17:16:15  vanmer
  * - Initial Commit for ACL Administration interface
  *
