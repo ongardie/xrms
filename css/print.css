@@ -69,3 +69,8 @@ table.widget td.widget_header {
     border-bottom: 1px solid blue;
     padding: 4px 2px;
 }
+/* Set rational size for pre-formatted text */
+pre {
+    font-size: 10pt;
+}
+

@@ -57,6 +57,9 @@ select.monospace,
 textarea.monospace {
     font-family: courier, monospace;
 }
+pre {
+    font-size: medium;
+}
 /**
  * font weights
  */
