@@ -10,21 +10,25 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-sidebar.php,v 1.5 2004/07/16 04:53:51 introspectshun Exp $
+ * $Id: browse-sidebar.php,v 1.6 2004/07/21 22:21:41 neildogg Exp $
  */
 
 //add contact information block on sidebar
-$browse_block = '<table class=widget cellspacing=1 width="100%">
+$browse_block = '<form method=post action=browse-next.php>
+<table class=widget cellspacing=1 width="100%">
     <tr>
         <td class=widget_header colspan=5>' . _("Browse") . '</td>
     </tr>
     <tr>
         <td class=widget_label>' . _("Activity Types") . '</td>
-    </tr>';
+    </tr>
+    <tr>
+        <td class=widget_content>';
 
-$sql = "select activity_type_id, activity_type_display_html
-        from activity_types
-        order by sort_order asc";
+$sql = "SELECT activity_type_pretty_name, activity_type_id
+        FROM activity_types
+        WHERE activity_type_record_status='a'
+        ORDER BY sort_order asc";
 
 $rst = $con->execute($sql);
 
@@ -32,23 +36,56 @@ if(!$rst) {
      db_error_handler($con, $sql);
 }
 elseif($rst->rowcount() > 0) {
-    while(!$rst->EOF) {
-        $browse_block .= "\n<tr><td class=widget_content>"
-            . "<a href='browse-next.php?activity_type_id=" . $rst->fields['activity_type_id'] . "'>"
-            . $rst->fields['activity_type_display_html'] . "</a></td></tr>";
-        $rst->movenext();
-    }
+    $browse_block .= $rst->getmenu2('activity_type_id', 0, false) . " <input type=submit value=Browse>";
 } else {
-    $browse_block .= "<tr><td class=widget_content>"
-        . _("No Activities Types")
-        . "</td>\n\t</tr>";
+    $browse_block .= _("No Activities Types");
 }
 
-$browse_block .= "\n</table>";
+$browse_block .= '</td>
+    </tr>
+</table>
+</form>';
 $rst->close();
+
+$browse_block .= '<form method=post action=browse-next.php>
+<table class=widget cellspacing=1 width="100%">
+    <tr>
+        <td class=widget_header colspan=5>' . _("Saved Search Browse") . '</td>
+    </tr>
+    <tr>
+        <td class=widget_label>' . _("Search Name") . '</td>
+    </tr>
+    <tr>
+        <td class=widget_content>';
+    
+//get saved searches
+$sql_saved = "SELECT saved_title, saved_id
+        FROM saved_actions
+        WHERE (user_id=$session_user_id
+        OR group_item=1)
+        AND on_what_table='activities'
+        AND saved_action='search'
+        AND saved_status='a'";
+$rst = $con->execute($sql_saved);
+if($rst->rowcount()) {
+    $browse_block .= $rst->getmenu2('saved_id', 0, false) . " <input type=submit value=Browse>";
+}
+else {
+    $browse_block .= _("No Saved Searches");
+}
+
+$browse_block .= '</td>
+    </tr>
+</table>
+</form>';
+
 
 /**
  * $Log: browse-sidebar.php,v $
+ * Revision 1.6  2004/07/21 22:21:41  neildogg
+ * - Rearranged sidebar
+ *  - Now can browse saved searches
+ *
  * Revision 1.5  2004/07/16 04:53:51  introspectshun
  * - Localized strings for i18n/translation support
  *

@@ -14,7 +14,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.7 2004/07/07 21:43:33 neildogg Exp $
+ * $Id: browse-next.php,v 1.8 2004/07/21 22:21:41 neildogg Exp $
  */
 
 //include required files
@@ -38,16 +38,52 @@ $activity_type_ids = $_SESSION['activity_type_ids'];
 // The current activity ID that was being viewed through activities/one.php. Will not be set if using "Browse" on activities/some.php
 $activity_id = $_GET['activity_id'];
 // The activity type used if using "Browse"
-$activity_type_id = $_GET['activity_type_id'];
+$activity_type_id = $_POST['activity_type_id'];
+// The saved ID used if using "Saved Search Browse"
+$saved_id = $_POST['saved_id'];
 // The last position in the activity IDs
 $pos = $_SESSION['pos'];
 
+if($saved_id) {
+    $next_to_check = array();
+    $sql = "SELECT saved_data
+            FROM saved_actions
+            WHERE saved_id=" . $saved_id . "
+            AND (user_id=" . $session_user_id . "
+            OR group_item=1)
+            AND saved_status='a'";
+    $rst = $con->execute($sql);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif($rst->rowcount()) {
+        $sql = unserialize($rst->fields['saved_data']);
+        $sql = $sql['sql'];
+        $sql = preg_replace("|^select|i", "select activity_id,", $sql);
+    }
+    $rst = $con->execute($sql);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif($rst->rowcount()) {
+        while(!$rst->EOF) {
+            $next_to_check[] = $rst->fields['activity_id'];
+            $rst->movenext();
+        }
+        header("Location: one.php?save_and_next=true&activity_id=" . $next_to_check[0]);
+        $pos = 1;
+    }
+}
+//If we've created the next_to_check array from outside (ie the saved query)
+elseif(($activity_type_id == 0) and ($pos >= count($next_to_check))) {
+    header("Location: some.php");
+}
 // If the activity is part of the array, ie if they have already obtained an array, use the array.   
-if($next_to_check[$pos] and is_array($next_to_check) and in_array($activity_id, $next_to_check) and ($pos > 0) and ($pos < count($next_to_check))) {
+elseif($next_to_check[$pos] and is_array($next_to_check) and in_array($activity_id, $next_to_check) and ($pos > 0) and ($pos < count($next_to_check))) {
     // If they try to traverse it out of order, simply move the array to around
     $input = array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
     array_splice($next_to_check, $pos-1, 0, $input[0]);
-    header("Location: one.php?activity_id=" . $next_to_check[$pos]);
+    header("Location: one.php?save_and_next=true&activity_id=" . $next_to_check[$pos]);
     $pos++;
 }
 else {
@@ -185,7 +221,7 @@ else {
                     array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
                 }    
                 if($next_to_check[0]) {
-                    header("Location: one.php?activity_id=" . $next_to_check[0]);
+                    header("Location: one.php?save_and_next=true&activity_id=" . $next_to_check[0]);
                 }
                 else {
                     $more_to_check = true;
@@ -209,6 +245,10 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.8  2004/07/21 22:21:41  neildogg
+ * - Rearranged sidebar
+ *  - Now can browse saved searches
+ *
  * Revision 1.7  2004/07/07 21:43:33  neildogg
  * - Fixed inexplicable empty [0] error
  *
