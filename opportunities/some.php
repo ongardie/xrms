@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.42 2005/03/01 21:56:55 daturaarutad Exp $
+ * $Id: some.php,v 1.43 2005/03/11 21:49:18 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -26,8 +26,9 @@ $arr_vars = array ( // local var name       // session variable name
            'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
            'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
            'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
-           'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_SESSION ),
+           'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_GET_SESSION ),
            'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
+           'industry_id' 			 => array ( 'industry_id', arr_vars_GET_SESSION ),
            );
 
 // get all passed in variables
@@ -101,6 +102,10 @@ if (strlen($opportunity_status_id) > 0) {
     $where .= " and opp.opportunity_status_id = $opportunity_status_id";
 }
 
+if (strlen($industry_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.industry_id = $industry_id";
+}
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 } else {
@@ -338,6 +343,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.43  2005/03/11 21:49:18  daturaarutad
+ * added industry_id as a search criteria for linking with reports/graphs
+ *
  * Revision 1.42  2005/03/01 21:56:55  daturaarutad
  * set the css_classname for right-align on numerics in pager
  *
