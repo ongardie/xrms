@@ -20,7 +20,7 @@ $session_user_id = session_check();
 
 
 $possible_id = $_POST['possible_id'];
-$relationship_name = $_POST['relationship_name'];
+$relationship_type_id = $_POST['relationship_type_id'];
 $working_direction = $_POST['working_direction'];
 $on_what_id = $_POST['on_what_id'];
 $return_url = $_POST['return_url'];
@@ -35,13 +35,6 @@ if (getGlobalVar($relationship_type_direction,'relationship_type_direction')) {
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-if ($relationship_type) { $where = "relationship_type_id=$relationship_type"; }
-else { $where = "relationship_name='$relationship_name'"; }
-$sql = "SELECT *
-        FROM relationship_types
-        WHERE $where";
-$rst = $con->execute($sql);
-
 if($working_direction == "from") {
     $opposite_direction = "to";
 }
@@ -49,10 +42,22 @@ else {
     $opposite_direction = "from";
 }
 
-$what_table = $rst->fields[$opposite_direction . '_what_table'];
-$what_table_singular = make_singular($what_table);
+$sql = "SELECT rt2.from_what_table, rt2.to_what_table, rt2.relationship_name
+        FROM relationship_types AS rt, relationship_types AS rt2
+        WHERE rt.relationship_type_id = $relationship_type_id
+        AND rt.relationship_name = rt2.relationship_name
+        AND rt2.relationship_status = 'a'";
+$rst = $con->execute($sql);
+if(!$rst) {
+    db_error_handler($con, $sql);
+}
+elseif(!$rst->EOF) {
+    $relationship_name = $rst->fields['relationship_name'];
+    $what_table = $rst->fields[$opposite_direction . '_what_table'];
+    $what_table_singular = make_singular($what_table);
 
-$rst->close();
+    $rst->close();
+}
 
 $display_name = ucfirst($what_table);
 $display_name_singular = ucfirst($what_table_singular);
@@ -109,7 +114,7 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="<?php echo $what_table_singular; ?>_id">
         </form>
         <form action=new-relationship-3.php method=post <?php if($working_direction == "both") { ?>onsubmit="document.forms[1].working_direction.value = (document.forms[1].relationship_type_id.selectedIndex < (document.forms[1].relationship_type_id.length / 2)) ? 'from' : 'to'; return true;"<?php } ?>>
-        <input type="hidden" name="relationship_name" value="<?php echo $relationship_name; ?>">
+        <input type="hidden" name="relationship_type_id" value="<?php echo $relationship_type_id; ?>">
         <input type="hidden" name="working_direction" value="<?php echo $working_direction; ?>">
         <input type="hidden" name="real_working_direction" value="<?php echo $working_direction; ?>">
         <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
@@ -232,6 +237,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.20  2005/01/10 20:40:02  neildogg
+ * - Supports parameter passing after the sidebar update
+ *
  * Revision 1.19  2005/01/08 19:18:59  braverock
  * - add more portable handling of single field order by, group by
  *

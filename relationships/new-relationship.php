@@ -18,18 +18,49 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-GetGlobalVar($on_what_id,'on_what_id');
-
-//GetGlobalVar($working_direction = $_POST['working_direction'];
 GetGlobalVar($return_url,'return_url');
-GetGlobalVar($on_what_table,'on_what_table');
+GetGlobalVar($relationships,'relationships');
+parse_str($relationships);
 GetGlobalVar($msg, 'msg');
 
-//$relationship_name = $_POST['relationship_name'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$singular_table=make_singular($on_what_table);
+$sql = "SELECT rt2.from_what_table, rt2.to_what_table
+        FROM relationship_types AS rt, relationship_types AS rt2
+        WHERE rt.relationship_type_id = $relationship_type_id
+        AND rt.relationship_name = rt2.relationship_name
+        AND rt2.relationship_status = 'a'";
+$rst = $con->execute($sql);
+
+if($working_direction == "from") {
+    $opposite_direction = "to";
+}
+else {
+    $opposite_direction = "from";
+}
+
+if($working_direction == "both") {
+    $working_table = $rst->fields['from_what_table'];
+    $what_table = false;
+}
+else {
+    $working_table = $rst->fields[$working_direction . '_what_table'];
+    $what_table = $rst->fields[$opposite_direction . '_what_table'];
+}
+$display_name = ucfirst(make_singular($working_table));
+
+if($working_table == "companies" and $what_table == "contacts") {
+    $sql = "(SELECT 'Enter other contact' AS name,
+            0 AS contact_id)
+            UNION
+            (SELECT " .
+            $con->Concat("first_names", "' '", "last_name") . " AS name,
+            contact_id
+            FROM contacts
+            WHERE company_id=" . $on_what_id . "
+            AND contact_record_status='a'
+            ORDER BY last_name)";
 
         //Create query to get the name of the entity, either contact first/last name or _name
         $name_order = implode(', ', array_reverse(table_name($on_what_table)));
@@ -84,6 +115,7 @@ start_page($page_title, true, $msg);
     <div id="Content">
 
         <form action=new-relationship-2.php method=post>
+        <input type="hidden" name="relationship_type_id" value="<?php echo $relationship_type_id; ?>">
         <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
         <input type="hidden" name="on_what_table" value="<?php echo $on_what_table; ?>">
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
@@ -97,6 +129,9 @@ start_page($page_title, true, $msg);
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.11  2005/01/10 20:40:02  neildogg
+ * - Supports parameter passing after the sidebar update
+ *
  * Revision 1.10  2004/12/30 20:29:20  vanmer
  * - added restriction to only show active relationship types
  *

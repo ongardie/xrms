@@ -18,7 +18,6 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 
 $return = ($_POST['return']) ? true : false;
-$relationship_name = $_POST['relationship_name'];
 $on_what_id = $_POST['on_what_id'];
 $on_what_id2 = $_POST['on_what_id2'];
 $working_direction = $_POST['working_direction'];
