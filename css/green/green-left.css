@@ -4,6 +4,7 @@
  * to move sidebar to the left side
  *  (URIs are always relative to the stylesheet)
  */
+@import url(../../js/jscalendar/calendar-green.css);
 @import url(green.css);
 /**
  * Change margin/width for sidebar on the left
