@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.21 2004/08/21 01:41:09 d2uhlman Exp $
+ * $Id: database.php,v 1.22 2004/09/02 15:06:57 maulani Exp $
  */
 
 /**
@@ -471,6 +471,8 @@ function company_db_tables($con, $table_list) {
                daylight_savings_id     int unsigned,
                address_record_status       char(1) not null default 'a',
                INDEX company_id (company_id),
+               INDEX city (city),
+               INDEX province (province),
                INDEX address_record_status (address_record_status)
                )";
         //execute
@@ -1039,6 +1041,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.22  2004/09/02 15:06:57  maulani
+ * - Add indexes to addresses city and province to speed company search
+ *
  * Revision 1.21  2004/08/21 01:41:09  d2uhlman
  * bad cut and paste job, missing comma on install sql
  *
