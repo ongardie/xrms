@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.13 2004/07/30 11:23:38 cpsource Exp $
+ * $Id: edit.php,v 1.14 2005/01/13 18:20:28 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,10 +14,13 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$session_user_id = session_check();
+$company_id = $_GET['company_id'];
+$on_what_id=$company_id;
+
+$session_user_id = session_check('','Update');
+
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$company_id = $_GET['company_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -222,6 +225,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.14  2005/01/13 18:20:28  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.13  2004/07/30 11:23:38  cpsource
  * - Do standard msg processing
  *   Default use_pretty_address in new-2.php set to null

@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.20 2005/01/09 14:49:56 braverock Exp $
+ * $Id: new-2.php,v 1.21 2005/01/13 18:20:28 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -17,7 +17,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('','Create');
 
 $company_name = $_POST['company_name'];
 $legal_name = $_POST['legal_name'];
@@ -219,6 +219,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.21  2005/01/13 18:20:28  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.20  2005/01/09 14:49:56  braverock
  * - set company_name to [none] if no company name is provided.
  *

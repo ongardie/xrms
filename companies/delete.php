@@ -2,7 +2,7 @@
 /**
  * Delete company
  *
- * $Id: delete.php,v 1.4 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: delete.php,v 1.5 2005/01/13 18:20:28 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,9 +13,11 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$session_user_id = session_check();
-
 $company_id = $_POST['company_id'];
+$on_what_id=$company_id;
+
+$session_user_id = session_check('','Delete');
+
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -97,6 +99,9 @@ header("Location: some.php?msg=company_deleted");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.5  2005/01/13 18:20:28  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.4  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

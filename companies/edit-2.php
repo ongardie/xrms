@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.13 2004/06/15 13:50:46 gpowers Exp $
+ * $Id: edit-2.php,v 1.14 2005/01/13 18:20:28 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,9 +13,11 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$session_user_id = session_check();
-
 $company_id = $_POST['company_id'];
+$on_what_id=$company_id;
+
+$session_user_id = session_check('','Update');
+
 $company_name = $_POST['company_name'];
 $legal_name = $_POST['legal_name'];
 $company_code = $_POST['company_code'];
@@ -80,6 +82,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.14  2005/01/13 18:20:28  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.13  2004/06/15 13:50:46  gpowers
  * - forgot to disable debug in previous commit
  *
