@@ -1,4 +1,9 @@
 <?php
+/**
+ * Set categories for an opportunity
+ *
+ * $Id: categories.php,v 1.2 2004/04/08 17:13:06 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -115,4 +120,16 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: categories.php,v $
+ * Revision 1.2  2004/04/08 17:13:06  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>

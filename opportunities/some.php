@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.9 2004/03/15 16:53:02 braverock Exp $
+ * $Id: some.php,v 1.10 2004/04/08 17:13:06 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -206,9 +206,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=some.php method=post>
         <input type=hidden name=scope value="opportunities">
@@ -251,13 +250,10 @@ $con->close();
 
 ?>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=34% valign=top>
+    <div id="Sidebar">
 
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width=100%>
@@ -273,11 +269,10 @@ $con->close();
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function initialize() {
@@ -324,6 +319,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/04/08 17:13:06  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
  * Revision 1.9  2004/03/15 16:53:02  braverock
  * - cleaned up sql formatting
  *

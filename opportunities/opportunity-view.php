@@ -1,4 +1,9 @@
 <?php
+/**
+ * View an opportunity
+ *
+ * $Id: opportunity-view.php,v 1.2 2004/04/08 17:13:06 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -58,4 +63,16 @@ start_page($page_title);
     </tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: opportunity-view.php,v $
+ * Revision 1.2  2004/04/08 17:13:06  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>

@@ -1,4 +1,9 @@
 <?php
+/**
+ * This file allows the creation of opportunities
+ *
+ * $Id: new.php,v 1.2 2004/04/08 17:13:06 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -126,7 +131,7 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 
 function initialize() {
     document.forms[0].opportunity_title.focus();
@@ -167,4 +172,16 @@ initialize();
 
 </script>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: new.php,v $
+ * Revision 1.2  2004/04/08 17:13:06  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ *
+ */
+?>

@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.7 2004/02/11 15:05:01 braverock Exp $
+ * $Id: new.php,v 1.8 2004/04/08 17:13:44 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -193,7 +193,7 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 
 function initialize() {
     document.forms[0].first_names.focus();
@@ -209,6 +209,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.8  2004/04/08 17:13:44  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
  * Revision 1.7  2004/02/11 15:05:01  braverock
  * - place $rst -> close() commands inside the if blocks
  * - fixes SF bug 893683 reported by Roberto Durrer (durrer)

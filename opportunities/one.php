@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.11 2004/03/29 21:12:58 maulani Exp $
+ * $Id: one.php,v 1.12 2004/04/08 17:13:06 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -213,7 +213,7 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language=javascript>
+<script language="JavaScript" type="text/javascript">
 <!--
 function markComplete() {
     document.forms[0].activity_status.value = "c";
@@ -412,6 +412,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2004/04/08 17:13:06  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
  * Revision 1.11  2004/03/29 21:12:58  maulani
  * - Add plugin hook for quotes attached to an opportunity
  *   (Or other functionality to be displayed on the opportunity detail screen)
