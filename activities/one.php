@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.56 2004/07/30 10:03:10 cpsource Exp $
+ * $Id: one.php,v 1.57 2004/08/04 15:31:12 neildogg Exp $
  */
 
 //include required files
@@ -143,6 +143,9 @@ if ($contact_id) {
     $overall_id = $contact_id;
     require("../relationships/sidebar.php");
 }
+
+//Add optional tables
+$sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom');
 
 /* add opportunities/case/campaign combo box */
 //get singular form of table name (from on_what_table field)
@@ -328,8 +331,9 @@ function logTime() {
                 <td class=widget_label_right_166px><?php echo _("Opportunity Notes"); ?></td>
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=90 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
-                    <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="document.forms[0].opportunity_description.value =
-                        logTime() + ' by <?php echo $_SESSION['username']; ?>: \n' + document.forms[0].opportunity_description.value">
+                    <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('Enter note', ''); document.forms[0].opportunity_description.value =
+                        logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value">
+                    <?php do_hook('opportunity_notes_buttons'); ?>
                 </td>
             </tr>
             <?php } ?>
@@ -384,6 +388,7 @@ function logTime() {
         <?php if ( $contact_block) echo $contact_block; ?>
         <!-- sidebar plugins //-->
         <?php if ( isset($relationship_link_rows) && $relationship_link_rows ) echo $relationship_link_rows; ?>
+        <?php if ( isset($sidebar_plugin_rows) && $sidebar_plugin_rows ) echo $sidebar_plugin_rows; ?>
     </div>
 
 </div>
@@ -418,6 +423,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.57  2004/08/04 15:31:12  neildogg
+ * - Added more plugin support
+ *
  * Revision 1.56  2004/07/30 10:03:10  cpsource
  * - Remove undefines
  *     contact_block
