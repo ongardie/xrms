@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.11 2004/04/15 22:04:39 maulani Exp $
+ * $Id: some.php,v 1.12 2004/04/18 14:29:46 braverock Exp $
  */
 
 //include the standard files
@@ -103,7 +103,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "select concat('<a href=\"one.php?contact_id=', cont.contact_id, '\">', cont.first_names, ' ', cont.last_name, '</a>') as 'Name',
+$sql = "select concat('<a href=\"one.php?contact_id=', cont.contact_id, '\">', cont.last_name, ', ', cont.first_names, '</a>') as 'Name',
                concat('<a href=\"../companies/one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',
                company_code as 'Code',
                title as 'Title',
@@ -337,6 +337,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2004/04/18 14:29:46  braverock
+ * - change display to show last name before first name
+ *   - in response to SF patch 926962 submitted by Glenn Powers
+ *
  * Revision 1.11  2004/04/15 22:04:39  maulani
  * - Change to CSS2 positioning
  * - Clean HTML to achieve validation
