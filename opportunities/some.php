@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.13 2004/06/14 17:41:36 introspectshun Exp $
+ * $Id: some.php,v 1.14 2004/06/14 20:56:04 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -91,7 +91,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
 $sql = "SELECT " .
-  $con->Concat("'<a href=\"one.php?opportunity_id='", "CAST(opp.opportunity_id AS VARCHAR(10))", "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
+  $con->Concat("'<a href=\"one.php?opportunity_id='", opportunity_id, "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
   c.company_name AS 'Company', u.username AS 'Owner',
   CASE
     WHEN (opp.size > 0) THEN opp.size
@@ -326,6 +326,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.14  2004/06/14 20:56:04  gpowers
+ * - removed CAST from SELECT statement
+ *   - it is not compatible across databases
+ *
  * Revision 1.13  2004/06/14 17:41:36  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
