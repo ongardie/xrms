@@ -17,6 +17,10 @@ $account_status_display_html = $_POST['account_status_display_html'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
+if (!$account_status_pretty_name) { $account_status_pretty_name = $account_status_short_name; }
+if (!$account_status_pretty_plural) { $account_status_pretty_plural = $account_status_short_name; }
+if (!$account_status_diplay_html) { $account_status_display_html = $account_status_short_name; }
+
 //save to database
 $rec = array();
 $rec['account_status_short_name'] = $account_status_short_name;
