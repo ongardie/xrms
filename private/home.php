@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.12 2004/03/24 15:02:11 braverock Exp $
+ * $Id: home.php,v 1.13 2004/04/07 13:50:54 maulani Exp $
  */
 
 // include the common files
@@ -406,9 +406,8 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width="100%">
-    <tr>
-        <td class=lcol width="75%" valign=top>
+<div id="Main">
+    <div id="Content">
 
         <!-- Activity Rows //-->
         <table class=widget cellspacing=1 width="100%">
@@ -429,15 +428,10 @@ start_page($page_title);
         <!-- Non-Uploaded Files //-->
             <?php  echo $nu_file_rows; ?>
 
-        </td>
-
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
 
         <!-- right column //-->
-        <td class=rcol width="24%" valign=top>
+    <div id="Sidebar">
 
             <!-- opportunities //-->
             <?php  echo $opportunity_rows; ?>
@@ -451,9 +445,8 @@ start_page($page_title);
             <!-- notes //-->
             <?php  echo $note_rows; ?>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -461,6 +454,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.13  2004/04/07 13:50:54  maulani
+ * - Set CSS2 positioning for the home page
+ *
  * Revision 1.12  2004/03/24 15:02:11  braverock
  * - add non-uploaded files dsplay on home page
  * - only display if the user has 'non-uploaded' files

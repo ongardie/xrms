@@ -55,6 +55,22 @@ body {
   background-image: url("img/msg_background.gif");
 }
 
+#Content {
+  margin-left: 1px;
+  margin-top: 1px;
+  text-align: left;
+  float: left;
+  width: 74%;
+}
+
+#Sidebar {
+  margin-right: 1px;
+  margin-top: 1px;
+  text-align: right;
+  width: 25%;
+  float: right;
+}
+
 
 table.widget {
   border-bottom: 2px solid Gainsboro;
@@ -67,7 +83,7 @@ table.widget {
 
 td.widget_header {
   padding: 5px;
-  background-color: #6666bb;
+  background-color: #bb6666;
   color: #ffffee;
   font-family: verdana;
   font-size: 9pt;

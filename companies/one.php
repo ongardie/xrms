@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.21 2004/03/22 02:45:15 braverock Exp $
+ * $Id: one.php,v 1.22 2004/04/07 13:50:54 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centalized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -596,6 +596,7 @@ function openNewsWindow() {
         <td class=rcol width=29% valign=top>
 
         <!-- categories //-->
+        <div id='category_sidebar'>
         <table class=widget cellspacing=1 width=100%>
             <tr>
                 <td class=widget_header><?php  echo $strCompaniesOneCategoriesTitle; ?></td>
@@ -607,6 +608,7 @@ function openNewsWindow() {
                 <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?company_id=<?php  echo $company_id; ?>';" value="Manage"></td>
             </tr>
         </table>
+        </div>
 
         <!-- opportunities //-->
         <?php echo $opportunity_rows; ?>
@@ -630,6 +632,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.22  2004/04/07 13:50:54  maulani
+ * - Set CSS2 positioning for the home page
+ *
  * Revision 1.21  2004/03/22 02:45:15  braverock
  * - added result set check around contact list lines 311-314 (formerly line 308)
  *   addresses multiple SF bugs when no contacts exist for a company

@@ -2,10 +2,10 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.2 2004/03/15 16:51:28 braverock Exp $
+ * $Id: sidebar.php,v 1.3 2004/04/07 13:50:54 maulani Exp $
  */
 
-$opportunity_rows = "
+$opportunity_rows = "<div id='opportunity_sidebar'>
         <table class=widget cellspacing=1 width=100%>
             <tr>
                 <td class=widget_header colspan=4>Opportunities</td>
@@ -70,10 +70,13 @@ if ((strlen($company_id) > 0)  or (strlen($contact_id) > 0)) {
 }
 
 //now close the table, we're done
-$opportunity_rows .= "        </table>\n";
+$opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.3  2004/04/07 13:50:54  maulani
+ * - Set CSS2 positioning for the home page
+ *
  * Revision 1.2  2004/03/15 16:51:28  braverock
  * - add sort_order to opportunity sidebar
  *

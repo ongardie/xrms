@@ -2,10 +2,10 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.2 2004/03/12 13:48:12 braverock Exp $
+ * $Id: sidebar.php,v 1.3 2004/04/07 13:50:53 maulani Exp $
  */
 
-$file_rows = "
+$file_rows = "<div id='file_sidebar'>
         <table class=widget cellspacing=1 width=100%>
             <tr>
                 <td class=widget_header colspan=5>Files</td>
@@ -85,10 +85,13 @@ if (strlen($on_what_table)>0){
 }
 
 //now close the table, we're done
-$file_rows .= "        </table>\n";
+$file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.3  2004/04/07 13:50:53  maulani
+ * - Set CSS2 positioning for the home page
+ *
  * Revision 1.2  2004/03/12 13:48:12  braverock
  * - added code to change display for zero-size files
  * - patch provided by Olivier Colonna of Fontaine Consulting

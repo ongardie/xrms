@@ -2,10 +2,10 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.1 2004/03/07 14:06:19 braverock Exp $
+ * $Id: sidebar.php,v 1.2 2004/04/07 13:50:52 maulani Exp $
  */
 
-$case_rows = "
+$case_rows = "<div id='case_sidebar'>
         <table class=widget cellspacing=1 width=100%>
             <tr>
                 <td class=widget_header colspan=5>Cases</td>
@@ -70,10 +70,13 @@ if ((strlen($company_id) > 0)  or (strlen($contact_id) > 0)) {
 }
 
 //now close the table, we're done
-$case_rows .= "        </table>\n";
+$case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.2  2004/04/07 13:50:52  maulani
+ * - Set CSS2 positioning for the home page
+ *
  * Revision 1.1  2004/03/07 14:06:19  braverock
  * Initital Checkin of side-bar centralization
  *
