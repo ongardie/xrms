@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.93 2004/09/02 14:49:29 neildogg Exp $
+ * $Id: utils-misc.php,v 1.94 2004/09/02 14:58:05 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -817,7 +817,6 @@ function time_zone_offset($con, $address_id) {
                     FROM time_zones
                     WHERE country_id=" . $country_id . "
                     ORDER BY has_province, has_city, has_postal_code";
-            }
         }
         $rst = $con->SelectLimit($sql, 1);
         if(!$rst) {
@@ -1287,6 +1286,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.94  2004/09/02 14:58:05  neildogg
+ * - Errant bracket close
+ *
  * Revision 1.93  2004/09/02 14:49:29  neildogg
  * - Significantly speed up calls for US time zones
  *
