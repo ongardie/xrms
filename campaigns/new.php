@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.9 2004/07/30 10:30:44 cpsource Exp $
+ * $Id: new.php,v 1.10 2004/07/30 10:52:47 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,26 +13,35 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+// a common function
+function local_get ( $con, $sql, $nam )
+{
+  $rst = $con->execute($sql);
+  if(!$rst) {
+    db_error_handler($con, $sql);
+  }
+  $tmp = $rst->getmenu2($nam, '', false);
+  $rst->close();
+  
+  return $tmp;
+}
+
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', '', false);
-$rst->close();
+$user_menu             = local_get ( $con,
+				     "select username, user_id from users where user_record_status = 'a' order by username", 'user_id' );
 
-$sql2 = "select campaign_type_pretty_name, campaign_type_id from campaign_types where campaign_type_record_status = 'a' order by campaign_type_pretty_name";
-$rst = $con->execute($sql2);
-$campaign_type_menu = $rst->getmenu2('campaign_type_id', '', false);
-$rst->close();
+$campaign_type_menu    = local_get ( $con,
+				     "select campaign_type_pretty_name, campaign_type_id from campaign_types where campaign_type_record_status = 'a' order by campaign_type_pretty_name",
+				  'campaign_type_id' );
 
-$sql2 = "select campaign_status_pretty_name, campaign_status_id from campaign_statuses where campaign_status_record_status = 'a' order by campaign_status_id";
-$rst = $con->execute($sql2);
-$campaign_status_menu = $rst->getmenu2('campaign_status_id', '', false);
-$rst->close();
+$campaign_status_menu = local_get ( $con,
+				    "select campaign_status_pretty_name, campaign_status_id from campaign_statuses where campaign_status_record_status = 'a' order by campaign_status_id",
+				    'campaign_status_id');
 
 $con->close();
 
@@ -47,7 +56,11 @@ start_page($page_title, true, $msg);
     <div id="Content">
 
         <form action=new-2.php onsubmit="javascript: return validate();" method=post>
-        <input type=hidden name=company_id value=<?php  echo $company_id ?>>
+<?php
+// company_id is not generated in this script, nor passed in, nor
+// is it used by new-2.php, so, it's hereby deleted.
+//echo '<input type=hidden name=company_id value="'.$company_id.'">';
+?>
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Campaign Details"); ?></td>
@@ -163,6 +176,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.10  2004/07/30 10:52:47  cpsource
+ * - Remove unused company_id from processing.
+ *   Cleanup repetative operations by adding a subroutine.
+ *
  * Revision 1.9  2004/07/30 10:30:44  cpsource
  * - Make sure msg can be optionally used.
  *
