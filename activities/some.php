@@ -4,9 +4,10 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.28 2004/07/09 18:35:07 introspectshun Exp $
+ * $Id: some.php,v 1.29 2004/07/10 12:14:53 braverock Exp $
  */
 
+// handle includes
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -16,14 +17,37 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+// create session
 $session_user_id = session_check();
 
-$msg = $_GET['msg'];
-$offset = $_POST['offset'];
-$clear = ($_GET['clear'] == 1) ? 1 : 0;
-$use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-$resort = $_POST['resort'];
+// get call arguments
+if ( isset($_GET['msg']) ) {
+  $msg = $_GET['msg'];
+} else {
+  $msg = '';
+}
+if ( isset($_POST['offset']) ) {
+  $offset = $_POST['offset'];
+} else {
+  $offset = '';
+}
+if ( isset($_GET['clear']) ) {
+  $clear = ($_GET['clear'] == 1) ? 1 : 0;
+} else {
+  $clear = 0;
+}
+if ( isset($_POST['use_post_vars']) ) {
+  $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
+} else {
+  $use_post_vars = 0;
+}
+if ( isset($_POST['resort']) ) {
+  $resort = $_POST['resort'];
+} else {
+  $resort = '';
+}
 
+// get passed variables
 if ($clear) {
     $sort_column = '';
     $current_sort_column = '';
@@ -52,21 +76,23 @@ if ($clear) {
     $activity_type_id = $_POST['activity_type_id'];
     $completed = $_POST['completed'];
     $user_id = $_POST['user_id'];
+    $date = isset($_POST['date']) ? $_POST['date'] : '';
 } else {
-    $sort_column = $_SESSION['activities_sort_column'];
-    $current_sort_column = $_SESSION['activities_current_sort_column'];
-    $sort_order = $_SESSION['activities_sort_order'];
-    $current_sort_order = $_SESSION['activities_current_sort_order'];
-    $title = $_SESSION['activities_title'];
-    $contact = $_SESSION['activities_contact'];
-    $company = $_SESSION['activities_company'];
-    $owner = $_SESSION['activities_owner'];
+    $sort_column = isset($_SESSION['activities_sort_column']) ? $_SESSION['activities_sort_column'] : '';
+    $current_sort_column = isset($_SESSION['activities_current_sort_column']) ? $_SESSION['activities_current_sort_column'] : '';
+    $sort_order = isset($_SESSION['activities_sort_order']) ? $_SESSION['activities_sort_order'] : '';
+    $current_sort_order = isset($_SESSION['activities_current_sort_order']) ? $_SESSION['activities_current_sort_order'] : '';
+    $title = isset($_SESSION['activities_title']) ? $_SESSION['activities_title'] : '';
+    $contact = isset($_SESSION['activities_contact']) ? $_SESSION['activities_contact'] : '';
+    $company = isset($_SESSION['activities_company']) ? $_SESSION['activities_company'] : '';
+    $owner = isset($_SESSION['activities_owner']) ? $_SESSION['activities_owner'] : '';
     $search_date = date('Y-m-d', time());
     //$search_date = $_SESSION['activities_date'];
-    $before_after = $_SESSION['activities_before_after'];
-    $activity_type_id = $_SESSION['activity_type_id'];
-    $completed = $_SESSION['activities_completed'];
-    $user_id = $_SESSION['activities_user_id'];
+    $before_after = isset($_SESSION['activities_before_after']) ? $_SESSION['activities_before_after'] : '';
+    $activity_type_id = isset($_SESSION['activity_type_id']) ? $_SESSION['activity_type_id'] : '';
+    $completed = isset($_SESSION['activities_completed']) ? $_SESSION['activities_completed'] : '';
+    $user_id = isset($_SESSION['activities_user_id']) ? $_SESSION['activities_user_id'] : '';
+    $date = isset($_SESSION['date']) ? $_SESSION['date'] : '';
 }
 
 if (!strlen($sort_column) > 0) {
@@ -88,6 +114,7 @@ $ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif"
 $descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
+// set session info
 $_SESSION['activities_sort_column'] = $sort_column;
 $_SESSION['activities_current_sort_column'] = $sort_column;
 $_SESSION['activities_sort_order'] = $sort_order;
@@ -403,6 +430,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.29  2004/07/10 12:14:53  braverock
+ * - applied patch for undefined variables
+ *   - modified from SF patch 979124 supplied by cpsource
+ *
  * Revision 1.28  2004/07/09 18:35:07  introspectshun
  * - Removed CAST(x AS CHAR) for wider database compatibility
  * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
