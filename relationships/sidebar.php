@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.21 2005/01/10 23:02:33 neildogg Exp $
+ * $Id: sidebar.php,v 1.22 2005/01/11 17:19:00 neildogg Exp $
  */
 
 if(empty($relationships)) {
@@ -30,6 +30,7 @@ if(isset($_GET['expand'])) {
     $expand = 1;
 }
 $current_ids = array(-1);
+$relationship_ids = array(-1);
 $relationship_link_rows = '';
 
 for($j = 0; $j <= $expand; $j++) {
@@ -112,6 +113,7 @@ for($j = 0; $j <= $expand; $j++) {
                             AND r." . $opposite_direction . "_what_id=" . $what[$opposite_direction]['singular'] . "_id
                             AND r.relationship_type_id = rt.relationship_type_id
                             AND r.{$opposite_direction}_what_id NOT IN (" . implode(', ', $current_ids) . ")
+                            AND r.relationship_id NOT IN (" . implode(', ', $relationship_ids) . ")
                             GROUP BY c." . $what[$opposite_direction]['singular'] . "_id";
 
                     $rst2 = $con->execute($sql);
@@ -180,6 +182,7 @@ for($j = 0; $j <= $expand; $j++) {
                         while(!$rst2->EOF) {
                             $current_id = $rst2->fields[$what[$opposite_direction]['singular'] . '_id'];
                             $current_ids[] = $current_id;
+                            $relationship_ids[] = $rst2->fields['relationship_id'];
         
                             $agent_count = 0;
                             if($what[$opposite_direction]['table'] == "companies" && !empty($relationships['companies'])) {
@@ -478,6 +481,9 @@ $relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.22  2005/01/11 17:19:00  neildogg
+ * - Avoid duplicating relationships
+ *
  * Revision 1.21  2005/01/10 23:02:33  neildogg
  * - Fixed error on empty values
  *
