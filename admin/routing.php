@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.7 2004/07/20 11:40:05 cpsource Exp $
+ * $Id: routing.php,v 1.8 2004/07/20 12:45:21 cpsource Exp $
  */
 
 //where do we include from
@@ -22,7 +22,9 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 //check to make sure we are logged on
-$session_user_id = session_check( 'Admin' );
+$session_user_id = session_check();
+
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 //make our database connection
 $con = &adonewconnection($xrms_db_dbtype);
@@ -35,17 +37,25 @@ $con->close();
 
 $role = $_SESSION['role_short_name'];
 
+if ( $msg ) {
+  $msg = "?msg=$msg";
+}
+
 //if this is a mailto link, try to open the user's default mail application
 if ($role == 'Admin') {
-  header("Location: " . $http_site_root . "/admin/index.php");
+  header("Location: " . $http_site_root . "/admin/index.php"      . $msg);
 } elseif ($role == 'Developer') {
-  header("Location: " . $http_site_root . "/admin/index.php");
+  header("Location: " . $http_site_root . "/admin/index.php"      . $msg);
 } else {
-  header("Location: " . $http_site_root . "/admin/users/self.php");
+  header("Location: " . $http_site_root . "/admin/users/self.php" . $msg);
 }
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.8  2004/07/20 12:45:21  cpsource
+ *- Allow non-Admin users to change their passwords, but do so
+ *  in a secure manner.
+ *
  *Revision 1.7  2004/07/20 11:40:05  cpsource
  *- Fixed multiple errors
  *   misc undefined variables being used, g....

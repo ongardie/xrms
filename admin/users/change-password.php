@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.7 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: change-password.php,v 1.8 2004/07/20 12:45:22 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,9 +15,17 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check( 'Admin' );
+$session_user_id = session_check();
 
-$edit_user_id = $_GET['edit_user_id'];
+//
+// become Admin aware - Don't accept the user to edit from the URL
+// for non-Admin types.
+//
+if ( 'Admin' != $_SESSION['role_short_name'] ) {
+  $edit_user_id = $session_user_id;
+} else {
+  $edit_user_id = $_GET['edit_user_id'];
+}
 
 $page_title = _("Change Password");
 start_page($page_title);
@@ -63,6 +71,10 @@ end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.8  2004/07/20 12:45:22  cpsource
+ *- Allow non-Admin users to change their passwords, but do so
+ *  in a secure manner.
+ *
  *Revision 1.7  2004/07/16 23:51:38  cpsource
  *- require session_check ( 'Admin' )
  *

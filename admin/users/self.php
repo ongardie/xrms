@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.9 2004/07/20 11:40:06 cpsource Exp $
+ * $Id: self.php,v 1.10 2004/07/20 12:45:22 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -88,7 +88,8 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input class=button type=button onclick="javascript: location.href='change-password.php?edit_user_id=<?php echo $session_user_id ?>';" value="<?php echo _("Change Password"); ?>">
+                  <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+                  <input class=button type=button onclick="javascript: location.href='change-password.php';" value="<?php echo _("Change Password"); ?>">
                 </td>
             </tr>
         </table>
@@ -109,6 +110,10 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.10  2004/07/20 12:45:22  cpsource
+ *- Allow non-Admin users to change their passwords, but do so
+ *  in a secure manner.
+ *
  *Revision 1.9  2004/07/20 11:40:06  cpsource
  *- Fixed multiple errors
  *   misc undefined variables being used, g....

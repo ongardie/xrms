@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.8 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: change-password-2.php,v 1.9 2004/07/20 12:45:21 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,9 +15,18 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check( 'Admin' );
+$session_user_id = session_check();
 
-$edit_user_id = $_POST['edit_user_id'];
+//
+// become Admin aware - Don't accept the user to edit from the URL
+// or from POST for non-Admin types.
+//
+if ( 'Admin' != $_SESSION['role_short_name'] ) {
+  $edit_user_id = $session_user_id;
+} else {
+  $edit_user_id = $_POST['edit_user_id'];
+}
+
 $password = $_POST['password'];
 $confirm_password = $_POST['confirm_password'];
 
@@ -40,13 +49,17 @@ if ($password == $confirm_password) {
 
     $con->close();
 
-    header("Location: " . $http_site_root . "/admin/routing.php");
+    header("Location: " . $http_site_root . "/admin/routing.php?msg=saved");
 } else {
     header("Location: change-password.php?msg=password_no_match");
 }
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.9  2004/07/20 12:45:21  cpsource
+ *- Allow non-Admin users to change their passwords, but do so
+ *  in a secure manner.
+ *
  *Revision 1.8  2004/07/16 23:51:38  cpsource
  *- require session_check ( 'Admin' )
  *
