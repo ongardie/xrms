@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.35 2005/01/22 15:07:26 braverock Exp $
+ * $Id: one.php,v 1.36 2005/02/09 15:25:18 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -300,7 +300,7 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Size"); ?></td>
-                                    <td class=clear>$<?php  echo number_format($size, 2); ?></td>
+                                    <td class=clear><?php  echo _("$").' '.number_format($size, 2); ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Probability"); ?></td>
@@ -463,6 +463,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.36  2005/02/09 15:25:18  braverock
+ * - localized the $ sign as a temporary workaround for internationalization of currencies
+ *
  * Revision 1.35  2005/01/22 15:07:26  braverock
  * - add sort order to activity_types menu
  *
