@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.31 2004/07/16 11:31:42 cpsource Exp $
+ * $Id: some.php,v 1.32 2004/07/19 02:21:56 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -21,20 +21,20 @@ require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'sort_column'         => array('companies_sort_column',arr_vars_SESSION),
-		   'current_sort_column' => array('companies_current_sort_column',arr_vars_SESSION),
-		   'sort_order'          => array('companies_sort_order',arr_vars_SESSION),
-		   'current_sort_order'  => array('companies_current_sort_order',arr_vars_SESSION),
-		   'company_name'        => array('companies_company_name',arr_vars_SESSION),
-		   'company_type_id'     => array('companies_company_type_id',arr_vars_SESSION),
-		   'company_category_id' => array('companies_company_category_id',arr_vars_SESSION),
-		   'company_code'        => array('companies_company_code',arr_vars_SESSION),
-		   'user_id'             => array('companies_user_id',arr_vars_SESSION),
-		   'crm_status_id'       => array('companies_crm_status_id',arr_vars_SESSION),
-		   'industry_id'         => array('industry_id',arr_vars_SESSION),
-		   'city'                => array('city',arr_vars_SESSION),
-		   'state'               => array('state',arr_vars_SESSION)
-		   );
+                   'sort_column'         => array('companies_sort_column',arr_vars_SESSION),
+                   'current_sort_column' => array('companies_current_sort_column',arr_vars_SESSION),
+                   'sort_order'          => array('companies_sort_order',arr_vars_SESSION),
+                   'current_sort_order'  => array('companies_current_sort_order',arr_vars_SESSION),
+                   'company_name'        => array('companies_company_name',arr_vars_SESSION),
+                   'company_type_id'     => array('companies_company_type_id',arr_vars_SESSION),
+                   'company_category_id' => array('companies_company_category_id',arr_vars_SESSION),
+                   'company_code'        => array('companies_company_code',arr_vars_SESSION),
+                   'user_id'             => array('companies_user_id',arr_vars_SESSION),
+                   'crm_status_id'       => array('companies_crm_status_id',arr_vars_SESSION),
+                   'industry_id'         => array('industry_id',arr_vars_SESSION),
+                   'city'                => array('city',arr_vars_SESSION),
+                   'state'               => array('state',arr_vars_SESSION)
+                   );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
@@ -67,14 +67,13 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 
 $sql = "
-SELECT " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
-c.company_code AS '$strCompaniesSomeCompanyCodeLabel',
-u.username AS '$strCompaniesSomeCompanyUserLabel',
-industry_pretty_name as '$strCompaniesSomeCompanyIndustrylabel',
-crm_status_pretty_name AS '$strCompaniesSomeCompanyCRMStatusLabel',
-as1.account_status_display_html AS '$strCompaniesSomeCompanyAccountStatusLabel',
-r.rating_display_html AS '$strCompaniesSomeCompanyRatingLabel'
-";
+SELECT " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '"._("Company Name")."',
+c.company_code AS '"._("Company Code")."',
+u.username AS '"._("User")."',
+industry_pretty_name as '"._("Industry")."',
+crm_status_pretty_name AS '"._("CRM Status")."',
+as1.account_status_display_html AS '"._("Account Status")."',
+r.rating_display_html AS '"._("Rating")."'";
 
 $criteria_count = 0;
 
@@ -121,9 +120,9 @@ if (strlen($company_code) > 0) {
 
 if (strlen($city) > 0) {
     $criteria_count++;
-    $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
+    $sql   .= ", addr.city as '"._("City")."' \n";
     if (!strlen($state) > 0) {
-        $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
+        $sql   .= ", addr.province as '"._("State")."' \n";
     }
     $where .= " and addr.city LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc()) ;
 }
@@ -131,9 +130,9 @@ if (strlen($city) > 0) {
 if (strlen($state) > 0) {
     $criteria_count++;
     if (!strlen($city) > 0) {
-        $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
+        $sql   .= ", addr.city as '"._("City")."' \n";
     }
-    $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
+    $sql   .= ", addr.province as '"._("State")."' \n";
     $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
 }
 
@@ -209,7 +208,7 @@ if ($rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = "<tr><td class=widget_content colspan=3>$strCompaniesSomeNoRecentlyViewedMessage</td></tr>";
+    $recently_viewed_table_rows = "<tr><td class=widget_content colspan=3>"._("No recently viewed companies")."</td></tr>";
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -247,7 +246,7 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
 }
 
-$page_title = $strCompaniesSomePageTitle;
+$page_title = _("Search Companies");
 start_page($page_title, true, $msg);
 
 ?>
@@ -270,27 +269,27 @@ start_page($page_title, true, $msg);
         <table class=widget cellspacing=1 width="100%">
             <tr>
           <td class=widget_header colspan=6>
-            <?php  echo $strCompaniesSomeSearchCriteriaTitle; ?>
+            <?php  echo _("Search Criteria"); ?>
           </td>
         </tr>
         <tr>
           <td class=widget_label>
-            <?php  echo $strCompaniesSomeCompanyNameLabel; ?>
+            <?php  echo _("Company Name"); ?>
           </td>
           <td class=widget_label>
-            <?php  echo $strCompaniesSomeCompanyUserLabel; ?>
+            <?php  echo _("Owner"); ?>
           </td>
           <td class=widget_label>
-            <?php  echo $strCompaniesSomeCompanyCategoryLabel; ?>
+            <?php  echo _("Category"); ?>
           </td>
           <td class=widget_label>
-            <?php  echo $strCompaniesSomeCompanyIndustrylabel; ?>
+            <?php  echo _("Industry"); ?>
           </td>
           <td class=widget_label>
-            <?php  echo $strCompaniesSomeCompanyCityLabel; ?>
+            <?php  echo _("City"); ?>
           </td>
           <td class=widget_label>
-            <?php  echo $strCompaniesSomeCompanyStateLabel; ?>
+            <?php  echo _("State"); ?>
           </td>
         </tr>
         <tr>
@@ -315,14 +314,15 @@ start_page($page_title, true, $msg);
         </tr>
         <tr>
             <td class=widget_content_form_element colspan=6>
-                <input name="submit_form" type=submit class=button value="Search">
-                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
+                <input name="submit_form" type=submit class=button value="<?php echo _("Search"); ?>">
+                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                 <?php
                     if ($company_count > 0) {
-                        print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";
+                        print "<input class=button type=button onclick='javascript: bulkEmail()' value='". _("Bulk E-Mail")."'>";
                     };
-//stub for now, as advanced search has problems
-//print '&nbsp;<input type=button class=button onclick="javascript: location.href=\'advanced-search.php\';" value="Advanced Search">';
+                //mark Advanced Search as experimental for now.
+                print "\n\t\t"
+                     .'&nbsp;<input type=button class=button onclick="javascript: location.href=\'advanced-search.php\';" value="'. _("Advanced Search").'- Experimental">';
                 ?>
             </td>
         </tr>
@@ -345,20 +345,20 @@ $con->close();
         <!-- new company //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=2>Company Options</td>
+                <td class=widget_header colspan=2><?php echo _("Company Options"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="new.php">New Company</a></td>
+                <td class=widget_content><a href="new.php"><?php echo _("New Company"); ?></a></td>
             </tr>
         </table>
 
         <!-- recently viewed companies //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header>Recently Viewed</td>
+                <td class=widget_header><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyNameLabel; ?></td>
+                <td class=widget_label><?php  echo _("Company Name"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
@@ -405,6 +405,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.32  2004/07/19 02:21:56  braverock
+ * - localize all strings for i18n
+ *
  * Revision 1.31  2004/07/16 11:31:42  cpsource
  * - Removed hard-coded english language construct
  *   Removed advanced-search.php button as advanced-search had problems
