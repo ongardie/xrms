@@ -1,4 +1,4 @@
-<?
+<?php
 
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
@@ -12,6 +12,9 @@
 //####################################################################
 
 include_once('apb.php');
+
+$keywords = $_GET['keywords'];
+
 apb_head();
 
 $APB_SETTINGS['allow_edit_mode'] = 1;
@@ -97,12 +100,13 @@ foreach ($words as $search_string) {
 $keyword = htmlspecialchars(stripslashes($keyword));
 $number_of_results = count($results) + count($group_results);
 
-print "<h2>Search Results</h2>";
-if ($number_of_results == 1) { $s = ""; }
-else { $s = "s"; }
+print "<h2>" . _("Search Results") . "</h2>";
+if ($number_of_results == 1) { $s = _("result"); }
+else { $s = _("results"); }
 
 // Added all the entities stripslashes stuff to the search results. [LBS 20020211]
-print "<p><b>$number_of_results</b> result".$s." for \"<b>".htmlentities(stripslashes($keywords))."</b>\"";
+print "<p><b>$number_of_results</b> " . $s . " " . _("for")
+    . " \"<b>" . htmlentities(stripslashes($keywords)) . "</b>\"";
 
 ?>
    <!-- Search Box -->
@@ -113,13 +117,13 @@ print "<p><b>$number_of_results</b> result".$s." for \"<b>".htmlentities(stripsl
    <input name='keywords' value="<?php echo htmlentities(stripslashes($keywords)) ?>">
    <input type='submit' name='Submit' value='Search'>
    </form>
-<?
+<?php
 
 print "<p><table align='center' cellpadding='0' cellspacing='0' border='0'><tr><td>\n";
 
 if ($group_results) {
 
-    print "<p><b>Group Matches</b></p>\n\n";
+    print "<p><b>" . _("Group Matches") . "</b></p>\n\n";
 
     echo "<ul>";
 	while(list($id, $score) = each ($group_results)) {
@@ -142,7 +146,7 @@ if ($results) {
 	arsort($results);
 	reset($results);
 
-    print "<p><b>Site Matches</b></p>\n\n";
+    print "<p><b>" . _("Site Matches") . "</b></p>\n\n";
 
     echo "<ul>";
 	while(list($id, $score) = each ($results)) {
