@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.9 2004/06/12 07:20:40 introspectshun Exp $
+ * $Id: one.php,v 1.10 2004/07/10 13:30:16 braverock Exp $
  */
 
 //include required files
@@ -15,9 +15,19 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+// get call arguments
+if ( isset($_GET['msg']) ) {
+    $msg = $_GET['msg'];
+} else {
+    $msg = '';
+}
 
-$return_url = $_GET['return_url'];
+if ( isset($_GET['return_url']) ) {
+    $return_url = $_GET['return_url'];
+} else {
+    $return_url = '';
+}
+
 $file_id = $_GET['file_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -146,6 +156,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.10  2004/07/10 13:30:16  braverock
+ *- fixed unitialized variables errors
+ *
  *Revision 1.9  2004/06/12 07:20:40  introspectshun
  *- Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *
