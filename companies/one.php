@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.51 2004/07/14 22:12:43 neildogg Exp $
+ * $Id: one.php,v 1.52 2004/07/14 23:19:47 neildogg Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -311,7 +311,7 @@ require_once("../opportunities/sidebar.php");
 //include the contacts-companies sidebar
 $relationship_name = "company link";
 $working_direction = "to";
-$overll_id = $company_id;
+$overall_id = $company_id;
 require_once("../relationships/sidebar.php");
 
 
@@ -678,6 +678,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.52  2004/07/14 23:19:47  neildogg
+ * - Mistyped
+ *
  * Revision 1.51  2004/07/14 22:12:43  neildogg
  * - Now uses $overall_id
  *
