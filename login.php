@@ -10,6 +10,21 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 session_start();
 
 $msg = $_GET['msg'];
+$target = $_GET['target'];
+
+    // add check here to make sure that the $target is inside our file tree
+    if ($target !='' ) {
+        if ((target != $http_site_root) and (!file_exists('.'.$target))){
+            $target = '';
+        }
+    }
+
+    // now set it correctly
+    if ($target== '' or $target==$http_site_root) {
+        $target=$http_site_root.'/private/home.php';
+    } else {
+        $target=$http_site_root.$target;
+    }
 
 $page_title = $app_title;
 start_page($page_title, false, $msg);
@@ -28,6 +43,7 @@ start_page($page_title, false, $msg);
         <td align=center valign=middle>
 
         <form action=login-2.php method=post>
+        <input type=hidden name=target value="<?php echo $target; ?>" >
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Login</td>
