@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.36 2004/07/31 12:23:19 cpsource Exp $
+ * $Id: some.php,v 1.37 2004/08/03 14:36:54 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -174,24 +174,20 @@ if ( $rst ) {
 }
 
 $sql_recently_viewed = "select
-r.recent_item_id,
-r.on_what_table,
-r.on_what_id,
-r.recent_item_timestamp,
-c.*,
-crm.crm_status_short_name,
-crm.crm_status_pretty_name,
-crm.crm_status_pretty_plural,
-crm.crm_status_display_html,
-crm.crm_status_record_status
-from recent_items r, companies c, crm_statuses crm
+c.company_id,
+c.company_name,
+c.company_code,
+max(r.recent_item_timestamp) as lasttime
+from recent_items r, companies c
 where r.user_id = $session_user_id
 and r.on_what_table = 'companies'
 and r.recent_action = ''
-and c.crm_status_id = crm.crm_status_id
 and r.on_what_id = c.company_id
-and company_record_status = 'a'
-order by r.recent_item_timestamp desc";
+and c.company_record_status = 'a'
+group by company_id, 
+c.company_name,
+c.company_code
+order by lasttime desc";
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
@@ -315,20 +311,13 @@ start_page($page_title, true, $msg);
         <tr>
             <td class=widget_content_form_element colspan=6>
                 <input name="submit_form" type=submit class=button value="<?php echo _("Search"); ?>">
-                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
+                <input name="clear_search" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                 <?php
                     if ($company_count > 0) {
                         print "<input class=button type=button onclick='javascript: bulkEmail()' value='". _("Bulk E-Mail")."'>";
                     };
-if ( 1 ) {
-  //
-  // doesn't seem to work
-  //
-                //mark Advanced Search as experimental for now.
-                print "\n\t\t"
-                     .'&nbsp;<input type=button class=button onclick="javascript: location.href=\'advanced-search.php\';" value="'. _("Advanced Search").'- Experimental">';
-}
                 ?>
+                <input name="advanced_search" type=submit class=button value="<?php echo _("Advanced Search"); ?>">
             </td>
         </tr>
       </table>
@@ -410,6 +399,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.37  2004/08/03 14:36:54  maulani
+ * - Fix recent items sql to only list each company once and to optimize the sql
+ * - Fix advanced search button to remove erroneous comment
+ *
  * Revision 1.36  2004/07/31 12:23:19  cpsource
  * - Reactivate advanced search feature
  *
