@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.2 2004/06/10 17:49:19 gpowers Exp $
+ * $Id: edit-address.php,v 1.3 2004/06/10 18:05:51 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -53,6 +53,26 @@ $country_menu = $rst->getmenu2('country_id', $country_id, false);
 $rst->close();
 
 $company_name = fetch_company_name($con, $company_id);
+
+
+$sql = "select * from addresses a
+where address_record_status = 'a'
+and company_id = $company_id";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $alt_addresses .= "<tr><td class=widget_label_right>"
+                        . "<input type=radio name=alt_address value=\"" . $rst->fields['address_id'] . "\">"
+                        . "<a href=../companies/edit-address.php?company_id=$company_id&address_id="
+                        . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a><td class=widget_content>'
+                        . get_formatted_address($con, $rst->fields['address_id']) . "</td></tr>";
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
 
 $sql = "select * from companies c
 where c.company_record_status = 'a'
@@ -138,6 +158,10 @@ start_page($page_title, true, $msg);
             </tr>
             <?php echo $addresses; ?>
             <tr>
+                <td class=widget_header colspan=2>Use Alternate Address</td>
+            </tr>
+            <?php echo $alt_addresses; ?>
+            <tr>
                 <td class=widget_header colspan=2>Create New Address?</td>
             </tr>
             <tr>
@@ -209,6 +233,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.3  2004/06/10 18:05:51  gpowers
+ * - added "Use Alternate Address" section
+ *
  * Revision 1.2  2004/06/10 17:49:19  gpowers
  * - added "This Address Is Also Used By" and "Create New Address?"
  *   to avert unintended editing.
