@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.74 2005/01/05 23:08:38 braverock Exp $
+ * $Id: one.php,v 1.75 2005/01/06 15:47:22 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -339,7 +339,7 @@ $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contac
 
 $rst = $con->execute($sql);
 if ($rst) {
-    $contact_menu = $rst->getmenu2('contact_id', '', true, false, 0, 'style="font-size: x-small"');
+    $contact_menu = $rst->getmenu2('contact_id', '', true, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
     $rst->close();
 } else {
     db_error_handler ($con, $sql);
@@ -348,7 +348,7 @@ if ($rst) {
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 if ($rst) {
-    $user_menu = $rst->getmenu2('user_id', $session_user_id, false, false, 0, 'style="font-size: x-small"');
+    $user_menu = $rst->getmenu2('user_id', $session_user_id, false, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
     $rst->close();
 } else {
     db_error_handler ($con, $sql);
@@ -357,7 +357,7 @@ if ($rst) {
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
 $rst = $con->execute($sql);
 if ($rst) {
-    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false, false, 0, 'style="font-size: x-small"');
+    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
     $rst->close();
 } else {
     db_error_handler ($con, $sql);
@@ -561,7 +561,7 @@ function openNewsWindow() {
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                <input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
+                <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?company_id=$company_id';"); ?>
                 <input class=button type=button value="<?php echo _("Admin"); ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
                 <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
@@ -637,8 +637,8 @@ function openNewsWindow() {
                 <td class=widget_content_form_element>
                     <input type=text size=10 ID="f_date_d" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
-                    <input class=button type=submit value="<?php echo _("Add"); ?>">
-                    <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
+                    <?php echo render_create_button("Add"); ?>
+                    <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
                 </td>
             </tr>
             <?php  echo $activity_rows; ?>
@@ -696,6 +696,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.75  2005/01/06 15:47:22  vanmer
+ * - added style entries to activity top row in one company view, to shrink activities so that they do not overlap the sidebars
+ * - replaced edit buttons with new render button functions (allows for ACL control of the display of buttons)
+ *
  * Revision 1.74  2005/01/05 23:08:38  braverock
  * - changed incorrect second occurance of sidebar_rows to bottom_rows
  *   this was causing plugins to not display in the sidebar
