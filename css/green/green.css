@@ -112,6 +112,8 @@ table.widget .widget_content_alt {
 .calendar .combo .hilite,
 table.widget .widget_label {
     background-color: rgb(183,210,168); /* light */
+	text-align: center; 
+	padding: 0em 0.5em 0em 0.5em;
 }
 .calendar,
 .calendar thead .active,
