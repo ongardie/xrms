@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.70 2004/07/31 12:08:06 cpsource Exp $
+ * $Id: utils-misc.php,v 1.71 2004/08/02 08:34:16 maulani Exp $
  */
 
 /**
@@ -501,7 +501,7 @@ function get_system_parameter(&$con, $param) {
     if ($sysst) {
 
       // is the requested record in the database ???
-      if ( $sysst->RecordCount() > 0 ) {
+      if ( $sysst->RecordCount() != 1 ) {
         // yes - it was found
 
         $string_val   = $sysst->fields['string_val'];
@@ -522,7 +522,7 @@ function get_system_parameter(&$con, $param) {
       } else {
         // no - it was not found
 
-        $my_val = '';
+        db_error_handler ($con, $sql);
 
       } // if ( $sysst->RecordCount() > 0 ) ...
 
@@ -1024,6 +1024,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.71  2004/08/02 08:34:16  maulani
+ * - Force get_system_parameter to throw an error if value not found
+ *
  * Revision 1.70  2004/07/31 12:08:06  cpsource
  * - Remove errant REQUEST from arr_vars
  *
