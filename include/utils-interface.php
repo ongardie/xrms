@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.16 2004/07/02 15:01:22 maulani Exp $
+ * $Id: utils-interface.php,v 1.17 2004/07/10 12:52:47 braverock Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -137,6 +137,8 @@ function end_page() {
  */
 function build_salutation_menu($salutation) {
 
+    global $include_directory;
+
     require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
     // global $salutation_array;
@@ -178,6 +180,10 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.17  2004/07/10 12:52:47  braverock
+ * - added global $include_directory
+ *   - applies SF patch 976707 submitted by cpsource
+ *
  * Revision 1.16  2004/07/02 15:01:22  maulani
  * - Move calendar stylesheet link into the head section of the webpage instead
  *   of the body.  Link statements in the body section are not valid.
