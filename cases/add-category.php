@@ -9,7 +9,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $case_id = $_GET['case_id'];
 $category_id = $_GET['category_id'];

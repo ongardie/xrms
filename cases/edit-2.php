@@ -26,6 +26,8 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
+$no_update = false;
+
 //check to see if the status was changed (for workflow)
 $sql = "select case_status_id from cases where case_id=$case_id";
 $rst = $con->execute($sql);
@@ -65,7 +67,7 @@ if ($old_status != $case_status_id) {
 
 }
 
-if (!$no_update) {
+if ( ! $no_update ) {
     //update the information from edit.php
     $sql = "SELECT * FROM cases WHERE case_id = $case_id";
     $rst = $con->execute($sql);

@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.19 2004/07/30 10:20:01 cpsource Exp $
+ * $Id: one.php,v 1.20 2004/07/30 11:02:14 cpsource Exp $
  */
 
 //include required files
@@ -15,7 +15,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $case_id = $_GET['case_id'];
 
@@ -374,6 +374,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.20  2004/07/30 11:02:14  cpsource
+ * - Optionally define msg
+ *   set default no_update flag to false in edit-2.php
+ *
  * Revision 1.19  2004/07/30 10:20:01  cpsource
  * - Fixed undefines
  *     activity_rows

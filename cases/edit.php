@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.11 2004/07/25 19:25:45 johnfawcett Exp $
+ * $Id: edit.php,v 1.12 2004/07/30 11:02:14 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $case_id = $_GET['case_id'];
 
@@ -104,6 +104,8 @@ and category_record_status = 'a'
 order by category_pretty_name";
 
 $rst = $con->execute($sql);
+
+$not_associated_with = '';
 
 if ($rst) {
     while (!$rst->EOF) {
@@ -274,6 +276,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.12  2004/07/30 11:02:14  cpsource
+ * - Optionally define msg
+ *   set default no_update flag to false in edit-2.php
+ *
  * Revision 1.11  2004/07/25 19:25:45  johnfawcett
  * - standardized delete button
  *

@@ -2,7 +2,7 @@
 /**
  * Set categories for a case
  *
- * $Id: categories.php,v 1.5 2004/07/16 07:11:17 introspectshun Exp $
+ * $Id: categories.php,v 1.6 2004/07/30 11:02:14 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,7 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $case_id = $_GET['case_id'];
 
@@ -124,6 +124,10 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.6  2004/07/30 11:02:14  cpsource
+ * - Optionally define msg
+ *   set default no_update flag to false in edit-2.php
+ *
  * Revision 1.5  2004/07/16 07:11:17  introspectshun
  * - Localized strings for i18n/translation support
  *
