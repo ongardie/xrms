@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.33 2004/08/23 13:49:57 neildogg Exp $
+ * $Id: update.php,v 1.34 2004/09/02 14:21:31 maulani Exp $
  */
 
 // where do we include from
@@ -2209,8 +2209,23 @@ $con->execute($sql);
 $sql = "alter table addresses add daylight_savings_id int unsigned";
 $con->execute($sql);
 
+
+// Add indexes so inserting daylight savings time takes a reasonable about of time
+$sql = "create index address_id on addresses (address_id)";
+$rst = $con->execute($sql);
+$sql = "create index country_id on addresses (country_id)";
+$rst = $con->execute($sql);
+$sql = "create index province on addresses (province)";
+$rst = $con->execute($sql);
+$sql = "create index city on addresses (city)";
+$rst = $con->execute($sql);
+$sql = "create index country_id on time_zones country_id";
+$rst = $con->execute($sql);
+$sql = "create index province on time_zones province";
+$rst = $con->execute($sql);
+
 //Go through each address to insert daylight savings
-$sql = 'SELECT *
+$sql = 'SELECT address_id
         FROM addresses
         WHERE (offset=0 or offset is null)
         AND (daylight_savings_id=0 or daylight_savings_id is null)';
@@ -2262,6 +2277,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.34  2004/09/02 14:21:31  maulani
+ * - Add indexes to speed up time zone assignment
+ * - Reduce scope of selection to speed up time zone assignment
+ *
  * Revision 1.33  2004/08/23 13:49:57  neildogg
  * - Properly updates daylight savings
  *  - in addresses
