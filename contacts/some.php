@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.12 2004/04/18 14:29:46 braverock Exp $
+ * $Id: some.php,v 1.13 2004/04/20 12:32:43 braverock Exp $
  */
 
 //include the standard files
@@ -316,6 +316,13 @@ function clearSearchCriteria() {
     location.href = "some.php?clear=1";
 }
 
+function exportIt() {
+    document.forms[0].action = "export.php";
+    document.forms[0].submit();
+    // reset the form so that post-export searches work
+    document.forms[0].action = "some.php";
+}
+
 function submitForm(adodbNextPage) {
     document.forms[0].contacts_next_page.value = adodbNextPage;
     document.forms[0].submit();
@@ -337,6 +344,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.13  2004/04/20 12:32:43  braverock
+ * - add export function for contacts
+ *   - apply SF patch 938388 submitted by frenchman
+ *
  * Revision 1.12  2004/04/18 14:29:46  braverock
  * - change display to show last name before first name
  *   - in response to SF patch 926962 submitted by Glenn Powers
