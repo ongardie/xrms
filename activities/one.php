@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.39 2004/07/16 04:53:51 introspectshun Exp $
+ * $Id: one.php,v 1.40 2004/07/19 21:19:52 neildogg Exp $
  */
 
 //include required files
@@ -264,7 +264,9 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
-                <td class=widget_content><?php echo $contact_menu; ?></td>
+                <td class=widget_content><?php echo $contact_menu; if($on_what_table == "opportunities") { ?>
+                    &nbsp; Switch Opportunity <input type=checkbox name=switch_opportunity value=on>
+                    <?php } ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Attached") . "&nbsp;" . _("To"); ?></td>
@@ -404,6 +406,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.40  2004/07/19 21:19:52  neildogg
+ * - Allow contact to be shifted with opportunity as well as activity
+ *
  * Revision 1.39  2004/07/16 04:53:51  introspectshun
  * - Localized strings for i18n/translation support
  *

@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.30 2004/07/16 04:53:51 introspectshun Exp $
+ * $Id: edit-2.php,v 1.31 2004/07/19 21:19:52 neildogg Exp $
  */
 
 //include required files
@@ -44,6 +44,7 @@ $table_status_id         = $_POST['table_status_id'];
 $probability             = isset($_POST['probability']) ? $_POST['probability'] : '';
 $followup                = isset($_POST['followup'])    ? $_POST['followup']    : '';
 $saveandnext             = isset($_POST['saveandnext']) ? $_POST['saveandnext'] : '';
+$switch_opportunity      = isset($_POST['switch_opportunity']) ? $_POST['switch_opportunity'] : '';
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -165,6 +166,22 @@ if (strlen($upd)>0) {
     $rst = $con->execute($upd);
     if (!$rst) {
         db_error_handler ($con, $upd);
+    }
+}
+
+if($switch_opportunity == "on") {
+    $sql = "SELECT * FROM opportunities WHERE opportunity_id = " . $on_what_id;
+    $rst = $con->execute($sql);
+    
+    $rec = array();
+    $rec['contact_id'] = $contact_id;
+    
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    if(strlen($upd)) {
+        $rst = $con->execute($upd);
+        if(!$rst) {
+            db_error_handler($con, $upd);
+        }
     }
 }
 
@@ -391,6 +408,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.31  2004/07/19 21:19:52  neildogg
+ * - Allow contact to be shifted with opportunity as well as activity
+ *
  * Revision 1.30  2004/07/16 04:53:51  introspectshun
  * - Localized strings for i18n/translation support
  *
