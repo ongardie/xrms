@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.9 2004/06/04 17:39:44 gpowers Exp $
+ * $Id: edit.php,v 1.10 2004/06/05 16:24:13 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -153,9 +153,9 @@ start_page($page_title, true, $msg);
         <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=opportunity_id value=<?php  echo $opportunity_id; ?>>
         <input type=hidden name=company_id value=<?php echo $company_id; ?>>
-	<input type=hidden name=on_what_table value=<?php echo "opportunities"; ?>>
+        <input type=hidden name=on_what_table value=<?php echo "opportunities"; ?>>
 
-	<table class=widget cellspacing=1>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Opportunity Details</td>
             </tr>
@@ -192,17 +192,17 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right>Probability&nbsp;(%)</td>
                 <td class=widget_content_form_element>
                 <select name=probability>
-                    <option value="100"<?php if ($probability == '100') {echo ' selected';}; ?>>100%
-                    <option value="90"<?php if ($probability == '90') {echo ' selected';}; ?>>90%
-                    <option value="80"<?php if ($probability == '80') {echo ' selected';}; ?>>80%
-                    <option value="70"<?php if ($probability == '70') {echo ' selected';}; ?>>70%
-                    <option value="60"<?php if ($probability == '60') {echo ' selected';}; ?>>60%
-                    <option value="50"<?php if ($probability == '50') {echo ' selected';}; ?>>50%
-                    <option value="40"<?php if ($probability == '40') {echo ' selected';}; ?>>40%
-                    <option value="30"<?php if ($probability == '30') {echo ' selected';}; ?>>30%
-                    <option value="20"<?php if ($probability == '20') {echo ' selected';}; ?>>20%
-                    <option value="10"<?php if ($probability == '10') {echo ' selected';}; ?>>10%
                     <option value="0"<?php if ($probability == '0') {echo ' selected';}; ?>>0%
+                    <option value="10"<?php if ($probability == '10') {echo ' selected';}; ?>>10%
+                    <option value="20"<?php if ($probability == '20') {echo ' selected';}; ?>>20%
+                    <option value="30"<?php if ($probability == '30') {echo ' selected';}; ?>>30%
+                    <option value="40"<?php if ($probability == '40') {echo ' selected';}; ?>>40%
+                    <option value="50"<?php if ($probability == '50') {echo ' selected';}; ?>>50%
+                    <option value="60"<?php if ($probability == '60') {echo ' selected';}; ?>>60%
+                    <option value="70"<?php if ($probability == '70') {echo ' selected';}; ?>>70%
+                    <option value="80"<?php if ($probability == '80') {echo ' selected';}; ?>>80%
+                    <option value="90"<?php if ($probability == '90') {echo ' selected';}; ?>>90%
+                    <option value="100"<?php if ($probability == '100') {echo ' selected';}; ?>>100%
                 </select>
                 </td>
             </tr>
@@ -280,6 +280,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.10  2004/06/05 16:24:13  braverock
+ * - reverse probability sort order to 0->100
+ *
  * Revision 1.9  2004/06/04 17:39:44  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags

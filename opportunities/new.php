@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.6 2004/06/04 17:41:36 gpowers Exp $
+ * $Id: new.php,v 1.7 2004/06/05 16:24:13 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -95,17 +95,17 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right>Probability</td>
                 <td class=widget_content_form_element>
                 <select name=probability>
-                    <option value="100">100%
-                    <option value="90">90%
-                    <option value="80">80%
-                    <option value="70">70%
-                    <option value="60">60%
-                    <option value="50">50%
-                    <option value="40">40%
-                    <option value="30">30%
-                    <option value="20">20%
-                    <option value="10">10%
                     <option value="0">0%
+                    <option value="10">10%
+                    <option value="20">20%
+                    <option value="30">30%
+                    <option value="40">40%
+                    <option value="50">50%
+                    <option value="60">60%
+                    <option value="70">70%
+                    <option value="80">80%
+                    <option value="90">90%
+                    <option value="100">100%
                 </select>
                 </td>
             </tr>
@@ -182,6 +182,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.7  2004/06/05 16:24:13  braverock
+ * - reverse probability sort order to 0->100
+ *
  * Revision 1.6  2004/06/04 17:41:36  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags
