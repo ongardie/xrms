@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.24 2004/06/13 09:15:07 braverock Exp $
+ * $Id: one.php,v 1.25 2004/06/24 19:58:47 braverock Exp $
  */
 
 //include required files
@@ -20,7 +20,6 @@ require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 $msg = $_GET['msg'];
 $activity_id = $_GET['activity_id'];
 $return_url = $_GET['return_url'];
-$pos = $_GET['pos'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -204,9 +203,6 @@ start_page($page_title, true, $msg);
         <input type=hidden name=on_what_table value="<?php  echo $on_what_table; ?>">
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
         <input type=hidden name=table_name value="<?php echo $table_name ?>">
-        <input type=hidden name=current_activity_type_id value="<?php echo $activity_type_id; ?>">
-        <input type=hidden name=pos value="<?php echo $pos; ?>">
-        <input type=hidden name=current_on_what_table value="<?php echo $on_what_table; ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -353,6 +349,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.25  2004/06/24 19:58:47  braverock
+ * - committing enhancements to Save&Next functionality
+ *   - patches submitted by Neil Roberts
+ *
  * Revision 1.24  2004/06/13 09:15:07  braverock
  * - add Save & Next functionality
  *   - code contributed by Neil Roberts

@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.19 2004/06/21 16:10:07 braverock Exp $
+ * $Id: edit-2.php,v 1.20 2004/06/24 19:58:47 braverock Exp $
  */
 
 //include required files
@@ -40,9 +40,6 @@ $email_to = $_POST['email_to'];
 $table_name = $_POST['table_name'];
 $table_status_id = $_POST['table_status_id'];
 $probability = $_POST['probability'];
-$current_activity_type_id = $_POST['current_activity_type_id'];
-$pos = $_POST['pos'];
-$current_on_what_table = $_POST['current_on_what_table'];
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -269,15 +266,17 @@ if ($email_to) {
 if ($followup) {
     header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( 'Follow-up ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&return_url=$return_url&followup=true" );
 } elseif($saveandnext) {
-    $pos++;
-    header("Location: browse-next.php?current_on_what_table=" . $current_on_what_table
-        . "&current_activity_type_id=" . $current_activity_type_id . "&pos=" . $pos);
+    header("Location: browse-next.php");
 } else {
     header("Location: " . $http_site_root . $return_url);
 }
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.20  2004/06/24 19:58:47  braverock
+ * - committing enhancements to Save&Next functionality
+ *   - patches submitted by Neil Roberts
+ *
  * Revision 1.19  2004/06/21 16:10:07  braverock
  * - improved error handling around changes to Probability
  *

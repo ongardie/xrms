@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.22 2004/06/22 11:04:16 braverock Exp $
+ * $Id: some.php,v 1.23 2004/06/24 19:58:47 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -103,6 +103,15 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 //uncomment this to see what's gonig on with the database
 //$con->debug=1;
+
+/*********************************
+//*** Include the sidebar boxes ***/
+//include the browse sidebar
+
+require_once("browse-sidebar.php");
+
+/** End of the sidebar includes **
+//*********************************/
 
 $sql = "SELECT
   (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS is_overdue,"
@@ -317,6 +326,9 @@ $con->close();
         <!-- right column //-->
     <div id="Sidebar">
 
+        <!-- browse //-->
+        <?php echo $browse_block; ?>
+
     </div>
 </div>
 
@@ -375,6 +387,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.23  2004/06/24 19:58:47  braverock
+ * - committing enhancements to Save&Next functionality
+ *   - patches submitted by Neil Roberts
+ *
  * Revision 1.22  2004/06/22 11:04:16  braverock
  * - fixed timestamp to be in proper database compliant mode
  *
