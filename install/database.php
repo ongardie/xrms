@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.13 2004/07/13 18:15:59 neildogg Exp $
+ * $Id: database.php,v 1.14 2004/07/15 15:12:52 maulani Exp $
  */
 
 /**
@@ -795,7 +795,7 @@ function activity_db_tables($con, $table_list) {
                activity_type_pretty_plural        varchar(100) not null default '',
                activity_type_display_html         varchar(100) not null default '',
                activity_type_score_adjustment     int not null default 0,
-               activity_type_record_status        char(1) not null default 'a'
+               activity_type_record_status        char(1) not null default 'a',
                sort_order                         tinyint not null default '1'
                )";
         //execute
@@ -852,6 +852,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.14  2004/07/15 15:12:52  maulani
+ * - Fix activity_types creation error reported by jalperin with patch submitted
+ *     by kerkness
+ *
  * Revision 1.13  2004/07/13 18:15:59  neildogg
  * - Add database entries to allow a contact to be tied to the user
  *
