@@ -1,14 +1,15 @@
 <?php
-
-/*
- * Author: Brad Marshall
- * Description: generates activities that are linked to the status
- *   when the status is changed.
- * Date: 2004/05/24
+/**
+ * workflow-activities.php -  generates activities that are linked to
+ *                            the workflow status when the status is changed.
  *
+ * @author Brad Marshall
+ * @author Brian Peterson
+ *
+ * @todo Move variable substitutions for actvity templates into a user-definable table.
+ *
+ * $Id: workflow-activities.php,v 1.4 2004/06/21 14:26:48 braverock Exp $
  */
-
-
 
 $sql = "select * from activity_templates
     where on_what_table='$on_what_table_template'
@@ -23,13 +24,6 @@ $cnt = 0;
 if ($rst) {
     while (!$rst->EOF) {
 
-        //puts a comma before the set of values (skips the first set)
-        if ($cnt == 0) {
-            $cnt++;
-        } else {
-            $sql_insert .= ", ";
-        }
-
         //get the field values from the next record in the query
         $activity_type_id = $rst->fields['activity_type_id'];
         $activity_title = $rst->fields['activity_title'];
@@ -41,8 +35,45 @@ if ($rst) {
         if ( is_numeric("$duration") ) {
             $duration = $duration.' days';
         }
-
         $ends_at = date('Y-m-d',strtotime($duration));
+
+        /**
+         * Do variable substitution on the Activity Title in an Activity Template
+         *
+         * @todo To extend and internationalize activity template substitution,
+         *       we would need to add a table to the database that would hold
+         *       the substitution string and the sql to execute to return
+         *       a single field to substitute.
+         *       Then, this page would retrieve the result set for string/sql pairs, and
+         *       run through the result set and do a test/select/substitute for each member
+         *       the substitution result set.
+         */
+        if (strpos($activity_title, 'company_name')) {
+            //get the company name for substitutions
+            $company_sql = "select company_name from companies where company_id=$company_id and company_record_status='a'";
+            $company_name = $con->GetOne($company_sql);
+            if ($company_name) {
+                $activity_title = str_replace('company_name',$company_name,$activity_title);
+            } else {
+                db_error_handler ($con, $company_sql);
+            }
+        }
+        if (strpos($activity_title, 'contact_name')) {
+            // get the contact name for variable substitution
+            $contact_sql = "
+            SELECT " . $con->Concat("first_names","' '","last_name") . " AS contact_name
+            FROM contacts
+            WHERE company_id = $company_id
+            AND contact_id = $contact_id
+            AND contact_record_status = 'a'
+            ";
+            $contact_name = $con->GetOne($contact_sql);
+            if ($contact_name) {
+                $activity_title = str_replace('contact_name',$contact_name,$activity_title);
+            } else {
+                db_error_handler ($con, $contact_sql);
+            }
+        }
 
         $sql2 = "SELECT * FROM activities WHERE 1 = 2"; //select empty record as placeholder
         $rst2 = $con->execute($sql2);
@@ -72,4 +103,11 @@ if ($rst) {
     $rst->close();
 }
 
+/**
+ * $Log: workflow-activities.php,v $
+ * Revision 1.4  2004/06/21 14:26:48  braverock
+ * - add variable substitution
+ * - add phpdoc
+ *
+ */
 ?>
