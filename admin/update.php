@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.37 2004/09/02 18:29:02 maulani Exp $
+ * $Id: update.php,v 1.38 2004/09/02 22:27:08 maulani Exp $
  */
 
 // where do we include from
@@ -103,7 +103,7 @@ $sql = "alter table recent_items add recent_action varchar(100) not null after o
 $rst = $con->execute($sql);
 // end recent_action
 
-//make sure that there is a status_open_indicator column in campagins
+//make sure that there is a status_open_indicator column in campaigns
 //should put a test here, but alter table is non-destructive
 //This is used for reports/open-items.php and reports/completed-items.php reports
 //Similiar to opportunity_statuses, 'o' means open, anything else means "completed" for the completed-item report
@@ -111,10 +111,10 @@ $sql = "alter table campaign_statuses add status_open_indicator char(1) not null
 $rst = $con->execute($sql);
 // end
 
-//set "CLOSED" campagin status_open_indicator to "c"
+//set "CLOSED" campaign status_open_indicator to "c"
 //should put a test here, but alter table is non-destructive
 //This is used for reports/open-items.php and reports/completed-items.php reports
-//This sets the default "Closed" campagin status with a status_open_indicator of "c" for "Closed"
+//This sets the default "Closed" campaign status with a status_open_indicator of "c" for "Closed"
 $sql = "SELECT * FROM campaign_statuses WHERE campaign_status_short_name = 'CLO'";
 $rst = $con->execute($sql);
 
@@ -144,6 +144,40 @@ $sql = "alter table opportunity_statuses add status_open_indicator char(1) not n
 $rst = $con->execute($sql);
 // end
 
+//set "CLOSED" opportunity status_open_indicator to "c"
+//This is used for reports/open-items.php and reports/completed-items.php reports
+//This sets the default "Closed" campaign status with a status_open_indicator of "c" for "Closed"
+$sql = "SELECT * FROM opportunity_statuses WHERE opportunity_status_short_name like 'CL%'";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['status_open_indicator'] = 'c';
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+// end
+
+//make sure that there is a status_open_indicator column in case statuses
+//should put a test here, but alter table is non-destructive
+//This is used for reports/open-items.php and reports/completed-items.php reports
+//'o' means open, anything else means "completed" for the completed-item report
+$sql = "alter table case_statuses add status_open_indicator char(1) not null default 'o' after case_status_id";
+$rst = $con->execute($sql);
+// end
+
+//set "CLOSED" case status_open_indicator to "c"
+//This is used for reports/open-items.php and reports/completed-items.php reports
+//This sets the default "Closed" campaign status with a status_open_indicator of "c" for "Closed"
+$sql = "SELECT * FROM case_statuses WHERE case_status_short_name='CLO'";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['status_open_indicator'] = 'c';
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+// end
+
 //add phone format to countries
 $sql = "ALTER TABLE countries ADD phone_format VARCHAR(25) NOT NULL DEFAULT '' AFTER country_record_status";
 $rst = $con->execute($sql);
@@ -169,7 +203,7 @@ $sql = "alter table audit_items add session_id varchar(50) after remote_port";
 $rst = $con->execute($sql);
 // end
 
-//make sure that there is a status_open_indicator column in campagins
+//make sure that there is a status_open_indicator column in campaigns
 //should put a test here, but alter table is non-destructive
 $sql = "alter table campaign_statuses add status_open_indicator char(1) not null default 'o' after campaign_status_id";
 $rst = $con->execute($sql);
@@ -2274,6 +2308,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.38  2004/09/02 22:27:08  maulani
+ * - Add status_open_indicator to opportunity_statuses and case_statuses tables
+ * - Correct spelling
+ *
  * Revision 1.37  2004/09/02 18:29:02  maulani
  * - Add status_open_indicator to opportunity_statuses table.  Field was
  *   in install but never added to update.
