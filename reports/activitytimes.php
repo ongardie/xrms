@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.1 2004/04/20 13:34:42 braverock Exp $
+ * $Id: activitytimes.php,v 1.2 2004/04/20 14:00:58 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -41,7 +41,7 @@ $rst->close();
         <th></th>
     </tr>
         <tr>
-            <form action="timesheets.php" method=post>
+            <form action="activitytimes.php" method=post>
                 <td><input type=text name=starting value="<?php  echo date("Y-m-d"); ?>"></td>
                 <td><input type=text name=ending value="<?php  echo date("Y-m-d"); ?>"></td>
                 <td><?php echo $user_menu; ?></td>
@@ -160,6 +160,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.2  2004/04/20 14:00:58  braverock
+ * - changed form definition
+ *
  * Revision 1.1  2004/04/20 13:34:42  braverock
  * - add activity times report
  * - add open items report
