@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Add Category
+ *
+ * $Id: add-category.php,v 1.2 2004/05/10 13:03:04 maulani Exp $
+ */
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -26,10 +30,18 @@ $con->execute($sql);
 $sql = "insert into entity_category_map (category_id, on_what_table, on_what_id) values ($category_id, 'companies', $company_id)";
 $con->execute($sql);
 
+add_audit_item($con, $session_user_id, 'created', 'entity_category_map', $category_id, 1);
+
 $con->close();
 
 header("Location: categories.php?company_id=$company_id");
 
+/**
+ * $Log: add-category.php,v $
+ * Revision 1.2  2004/05/10 13:03:04  maulani
+ * - add phpdoc
+ * - add audit trail entry
+ *
+ *
+ */
 ?>
-
-<?php  echo $sql; ?>
