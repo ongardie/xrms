@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.60 2004/09/21 18:21:28 introspectshun Exp $
+ * $Id: some.php,v 1.61 2004/10/29 15:34:11 introspectshun Exp $
  */
 
 // handle includes
@@ -237,8 +237,10 @@ if (strlen($search_date) > 0) {
     $criteria_count++;
     if (!$before_after) {
         $sql .= " and a.ends_at < " . $offset;
-    } else {
+    } elseif ($before_after === 'after') {
         $sql .= " and a.ends_at > " . $offset;
+    } elseif ($before_after === 'on') {
+        $sql .= " and a.ends_at = " . $offset;
     }
 }
 
@@ -469,6 +471,7 @@ start_page($page_title, true, $msg);
                     <select name="before_after">
                         <option value=""<?php if (!$before_after) { print " selected"; } ?>><?php echo _("Before"); ?></option>
                         <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>><?php echo _("After"); ?></option>
+                        <option value="on"<?php if ($before_after == "on") { print " selected"; } ?>><?php echo _("On"); ?></option>
                     </select>
                     <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif" alt="">
@@ -616,6 +619,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.61  2004/10/29 15:34:11  introspectshun
+ * - Added option to search activities 'on' a specific date
+ *
  * Revision 1.60  2004/09/21 18:21:28  introspectshun
  * - Changed table order in main query FROM clause
  *   - Join fails on MSSQL otherwise
