@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.16 2004/06/21 20:56:29 introspectshun Exp $
+ * $Id: some.php,v 1.17 2004/06/23 21:50:53 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -120,12 +120,14 @@ if ($company_category_id > 0) {
     $criteria_count++;
     $from = "from companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
 } else {
-    $from = "from companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u ";
+    $from = "from companies c, industries i, crm_statuses crm, ratings r, account_statuses as1, users u ";
 }
 
+$from  .= "LEFT JOIN addresses as addr on addr.address_id = c.default_primary_address ";
 $where .= "where c.industry_id = i.industry_id ";
 $where .= "and c.crm_status_id = crm.crm_status_id ";
-$where .= "and c.default_primary_address = addr.address_id ";
+//remove next line because it makes companies without default addr not display
+//$where .= "and c.default_primary_address = addr.address_id ";
 $where .= "and r.rating_id = c.rating_id ";
 $where .= "and as1.account_status_id = c.account_status_id ";
 $where .= "and c.user_id = u.user_id ";
@@ -380,6 +382,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2004/06/23 21:50:53  braverock
+ * - use join to find address so that even companies without addr will display
+ *   - patch submitted by David Uhlman
+ *
  * Revision 1.16  2004/06/21 20:56:29  introspectshun
  * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
  *
