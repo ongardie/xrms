@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.14 2004/09/09 12:26:09 braverock Exp $ **/
+/** $Id: README,v 1.15 2004/09/10 20:05:35 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -376,6 +376,7 @@ Neil Williams     metamedia      Developer
 
 Brunno Barrera                   Translator - Spanish
 Sebastian Becker                 Translator - German
+Roberto Durrer                   Translator - Brazilian Portugese
 John Fawcett                     Translator - Italian
 Piotr Kabath                     Translator - Polish
 Bert-Jan van Rein                Translator - Dutch
@@ -389,6 +390,9 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.15  2004/09/10 20:05:35  braverock
+ * - added Roberto Durrer as Brazilan Portugese translator
+ *
  * Revision 1.14  2004/09/09 12:26:09  braverock
  * - updates in advance of new release
  *
