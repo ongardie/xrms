@@ -6,7 +6,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: install-utils.inc,v 1.2 2004/07/01 12:43:26 braverock Exp $
+ * $Id: install-utils.inc,v 1.3 2004/07/22 11:12:56 maulani Exp $
  */
 
 /**
@@ -20,7 +20,7 @@ function install_fatal_error($error_msg = '') {
     <html>
     <head>
     <title>Test Results</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
 $error_msg<BR>
@@ -33,6 +33,9 @@ exit;
 
 /**
  * $Log: install-utils.inc,v $
+ * Revision 1.3  2004/07/22 11:12:56  maulani
+ * - Change default characterset to UTF-8
+ *
  * Revision 1.2  2004/07/01 12:43:26  braverock
  * - add utils-database.php file
  * - move list_db_tables and confirm_no_records fns to utils-database.php file

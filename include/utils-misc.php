@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.58 2004/07/21 13:35:04 cpsource Exp $
+ * $Id: utils-misc.php,v 1.59 2004/07/22 11:12:55 maulani Exp $
  */
 
 /**
@@ -474,7 +474,7 @@ function show_test_values($param1 = '', $param2 = '', $param3 = '', $param4 = ''
     <html>
     <head>
     <title>Test Results</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
     Username = $session_username<BR>
@@ -952,6 +952,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.59  2004/07/22 11:12:55  maulani
+ * - Change default characterset to UTF-8
+ *
  * Revision 1.58  2004/07/21 13:35:04  cpsource
  * - Document function arr_vars_get_all
  *

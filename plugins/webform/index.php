@@ -12,7 +12,7 @@
 <html>
 <head>
 <title>Contact Us</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 
 <body bgcolor="#FFFFFF" text="#000000">
@@ -23,6 +23,9 @@
 <?php
 /**
  * $Log: index.php,v $
+ * Revision 1.2  2004/07/22 11:12:56  maulani
+ * - Change default characterset to UTF-8
+ *
  * Revision 1.1  2004/06/26 14:39:30  braverock
  * - Initial Revision of WebForm Plugin by Nic Lowe
  *   - added phpdoc

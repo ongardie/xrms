@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.16 2004/07/20 10:43:16 cpsource Exp $
+ * $Id: login-2.php,v 1.17 2004/07/22 11:12:55 maulani Exp $
  */
 require_once('include-locations.inc');
 
@@ -37,7 +37,7 @@ if (!$connectiontest) {
         <html>
         <head>
         <title>Test Results</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         </head>
         <body>
         $problem<BR>
@@ -164,6 +164,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.17  2004/07/22 11:12:55  maulani
+ * - Change default characterset to UTF-8
+ *
  * Revision 1.16  2004/07/20 10:43:16  cpsource
  * - Moved SESSION['role'] to SESSION['role_short_name']
  *   role is now set in login-2.php instead of admin/routing.php
