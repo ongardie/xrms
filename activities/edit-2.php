@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.38 2004/08/13 10:22:12 cpsource Exp $
+ * $Id: edit-2.php,v 1.39 2004/08/16 15:18:15 neildogg Exp $
  */
 
 //include required files
@@ -295,7 +295,6 @@ if ($table_name != "attached to") {
     $sql = "select * from $on_what_table where ".$table_name."_id=$on_what_id";
     $rst = $con->execute($sql);
 
-    $old_sort_order = $rst->fields['sort_order'];
     $old_status = $rst->fields[$table_name . '_status_id'];
 
     //check if there are open activities left
@@ -425,6 +424,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.39  2004/08/16 15:18:15  neildogg
+ * - Removed $old_sort_order as it is used nowhere else
+ *  - and eg was being used on opportunities table
+ *  - (which has no sort order)
+ *
  * Revision 1.38  2004/08/13 10:22:12  cpsource
  * - Define a default value for old_status
  *
