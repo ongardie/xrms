@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.25 2004/06/24 19:58:47 braverock Exp $
+ * $Id: one.php,v 1.26 2004/06/25 03:12:41 braverock Exp $
  */
 
 //include required files
@@ -30,7 +30,8 @@ update_recent_items($con, $session_user_id, "activities", $activity_id);
 $sql = "select a.*, c.company_id, c.company_name, cont.first_names, cont.last_name
 from companies c, activities a left join contacts cont on a.contact_id = cont.contact_id
 where a.company_id = c.company_id
-and activity_id = $activity_id";
+and activity_id = $activity_id
+and activity_record_status='a'";
 
 $rst = $con->execute($sql);
 
@@ -101,27 +102,35 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
 $rst->close();
 
-//get contact name menu
-$sql = "
-SELECT " . $con->Concat("first_names","' '","last_name") . " AS contact_name, contact_id
-FROM contacts
-WHERE company_id = $company_id
-  AND contact_record_status = 'a'
-";
-$rst = $con->execute($sql);
-if ($rst) {
-    $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
-    $rst->close();
+if ($company_id) {
+    //get contact name menu
+    $sql = "
+    SELECT " . $con->Concat("first_names","' '","last_name") . " AS contact_name, contact_id
+    FROM contacts
+    WHERE company_id = $company_id
+    AND contact_record_status = 'a'
+    ";
+    $rst = $con->execute($sql);
+    if ($rst) {
+        $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
+        $rst->close();
+    } else {
+        db_error_handler ($con, $sql);
+    }
 }
+
 
 // add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
 
-// include the contact sidebar code
-require_once ('../contacts/sidebar.php');
+if ($contact_id) {
+    // include the contact sidebar code
+    require_once ('../contacts/sidebar.php');
+}
 
-// include the company sidebar code
-require_once ('../companies/sidebar.php');
-
+if ($company_id) {
+    // include the company sidebar code
+    require_once ('../companies/sidebar.php');
+}
 
 /* add opportunities/case/campaign combo box */
 //get singular form of table name (from on_what_table field)
@@ -349,6 +358,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.26  2004/06/25 03:12:41  braverock
+ * - add error handling for missing variables
+ *
  * Revision 1.25  2004/06/24 19:58:47  braverock
  * - committing enhancements to Save&Next functionality
  *   - patches submitted by Neil Roberts
