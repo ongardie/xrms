@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.9 2004/04/06 21:59:16 maulani Exp $
+ * $Id: utils-interface.php,v 1.10 2004/04/09 19:54:42 braverock Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -51,8 +51,8 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
 
     echo <<<EOQ
-    <!DOCTYPE HTML PUBLIC 
-    "-//W3C//DTD HTML 4.01 Transitional//EN" 
+    <!DOCTYPE HTML PUBLIC
+    "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd" >
     <html>
     <head>
@@ -68,22 +68,23 @@ EOQ;
         echo <<<EOQ
     <div id="navline">
         <span id="navbar">
-		<a href="$http_site_root/private/home.php">Home</a> &bull;
-		<a href="$http_site_root/companies/some.php">Companies</a> &bull;
-		<a href="$http_site_root/contacts/some.php">Contacts</a> &bull;
-		<a href="$http_site_root/campaigns/some.php">Campaigns</a> &bull;
-		<a href="$http_site_root/opportunities/some.php">Opportunities</a> &bull;
-		<a href="$http_site_root/cases/some.php">Cases</a> &bull;
-		<a href="$http_site_root/files/some.php">Files</a> &bull;
+        <a href="$http_site_root/private/home.php">Home</a> &bull;
+        <a href="$http_site_root/activities/some.php">Activities</a> &bull;
+        <a href="$http_site_root/companies/some.php">Companies</a> &bull;
+        <a href="$http_site_root/contacts/some.php">Contacts</a> &bull;
+        <a href="$http_site_root/campaigns/some.php">Campaigns</a> &bull;
+        <a href="$http_site_root/opportunities/some.php">Opportunities</a> &bull;
+        <a href="$http_site_root/cases/some.php">Cases</a> &bull;
+        <a href="$http_site_root/files/some.php">Files</a> &bull;
 EOQ;
 
-	//place the menu_line hook before Reports and Adminstration link
-	do_hook ('menuline');
+    //place the menu_line hook before Reports and Adminstration link
+    do_hook ('menuline');
 
-	echo <<<EOQ
+    echo <<<EOQ
 
-		<a href="$http_site_root/reports/">Reports</a> &bull;
-		<a href="$http_site_root/admin/routing.php">Administration</a>
+        <a href="$http_site_root/reports/">Reports</a> &bull;
+        <a href="$http_site_root/admin/routing.php">Administration</a>
         </span>
         <div id="loginbar">Logged in as: $session_username &bull; <a href="$http_site_root/logout.php">Logout</a></div>
     </div>
@@ -91,9 +92,9 @@ EOQ;
     }
 
     if (strlen($msg) > 0) echo <<<EOQ
-		<div id="msg">
-			{$msg}
-		</div>
+        <div id="msg">
+            {$msg}
+        </div>
 EOQ;
 } // end start_page fn
 
@@ -154,6 +155,9 @@ function build_salutation_menu($salutation) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.10  2004/04/09 19:54:42  braverock
+ * - add Activities to top menu
+ *
  * Revision 1.9  2004/04/06 21:59:16  maulani
  * - Begin conversion of positioning tables to CSS
  *   - Remove tables from all page headers
