@@ -1,4 +1,9 @@
 <?php
+/**
+ * save the updated information for a single case
+ *
+ * $Id: edit-2.php,v 1.2 2004/03/21 23:55:51 braverock Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -22,6 +27,13 @@ $con->execute($sql);
 
 $con->close();
 
-header("Location: one.php?case_type_id=$case_type_id");
+header("Location: some.php");
 
+/**
+ * $Log: edit-2.php,v $
+ * Revision 1.2  2004/03/21 23:55:51  braverock
+ * - fix SF bug 906413
+ * - add phpdoc
+ *
+ */
 ?>

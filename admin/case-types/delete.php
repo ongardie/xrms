@@ -1,4 +1,9 @@
 <?php
+/**
+ * delete (set status to 'd') the information for a single case
+ *
+ * $Id: delete.php,v 1.2 2004/03/21 23:55:51 braverock Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -20,4 +25,11 @@ $con->close();
 
 header("Location: some.php");
 
+/**
+ * $Log: delete.php,v $
+ * Revision 1.2  2004/03/21 23:55:51  braverock
+ * - fix SF bug 906413
+ * - add phpdoc
+ *
+ */
 ?>
