@@ -79,6 +79,7 @@ table.widget {
   border-top: 1px solid Gainsboro;
   background-color: #eeeeee;
   margin-bottom: 15px;
+  width: 100%;
 }
 
 td.widget_header {
