@@ -26,7 +26,7 @@
  *      #login-box - centered login form
  *      #ContentFullWidth large container, no sidebar
  *
- * $Id: layout.css,v 1.3 2005/01/03 01:24:41 ebullient Exp $
+ * $Id: layout.css,v 1.4 2005/01/03 04:24:42 ebullient Exp $
  */
 body {
     margin: 0px;
@@ -83,11 +83,15 @@ div.calendar {
 }
 /** ----------
  * Alternate page/content body: ContentFullWidth (no inner Content/Sidebar)
+ * If this is included inside Main, don't set a margin
  */
 #ContentFullWidth {
     clear: both;
     position: relative;
     margin: 2px;
+}
+#Main #ContentFullWidth {
+    margin: 0px;
 }
 /** ----------
  * Alternate page/content body: login-box for login page
