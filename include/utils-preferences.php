@@ -7,7 +7,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.1 2005/01/24 18:26:50 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.2 2005/01/25 06:01:59 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -153,6 +153,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
         $preference_type_data=get_user_preference_type($con, $preference_type);
     }
     $preference_type=$preference_type_data['user_preference_type_id'];
+    if (!$preference_type) { return false; }
     if ($preference_type_data['allow_multiple_flag']==1) {
         $allow_multiple=true;
     } else $allow_multiple=false;
@@ -247,7 +248,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     } else {
         $sql = "DELETE FROM user_preferences WHERE $wherestr";
     }
-    echo "<br>$sql<br>";
+//    echo "<br>$sql<br>";
     $pref_rst=$con->execute($sql);
     if (!$pref_rst) { db_error_handler( $con, $sql); return false; }
     return true;
