@@ -24,7 +24,7 @@
  * @todo modify CSVtoArray fn to do a trim, strtolower, and replace spaces with underscores in array element names
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-3.php,v 1.6 2004/02/10 13:31:44 braverock Exp $
+ * $Id: import-companies-3.php,v 1.7 2004/02/10 13:43:17 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -346,7 +346,7 @@ foreach ($filearray as $row) {
         }
 
         //check to see if we need to insert a division
-        if (strlen($company_name) > 0) {
+        if (strlen($division_name) > 0) {
             $sql_insert_division = 'insert into company_division set
                                     division_name = '. $con->qstr($division_name, get_magic_quotes_gpc());
             $con->execute($sql_insert_division);
@@ -537,6 +537,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.7  2004/02/10 13:43:17  braverock
+ * - fixed error in division import
+ *
  * Revision 1.6  2004/02/10 13:31:44  braverock
  * - change url to 'website'
  * - fixed syntax errror on insert
