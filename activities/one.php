@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.35 2004/07/14 15:22:17 cpsource Exp $
+ * $Id: one.php,v 1.36 2004/07/14 18:30:37 neildogg Exp $
  */
 
 //include required files
@@ -213,7 +213,6 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 <script language="JavaScript" type="text/javascript">
 function logTime() {
     var date = new Date();
@@ -249,7 +248,6 @@ function logTime() {
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
         <input type=hidden name=table_name value="<?php echo $table_name ?>">
         <input type=hidden name=table_status_id value="<?php echo $table_status_id ?>">
-        <input type=hidden name=opportunity_description value="<?php echo $opportunity_description ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -319,8 +317,8 @@ function logTime() {
                 <td class=widget_label_right_166px>Opportunity Notes</td>
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=90 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
-                    <input class=button value="Insert Log" type=button onclick="var now = new Date(); form.opportunity_description.value =
-                        logTime() + ' by ' + form.user_id.options[form.user_id.selectedIndex].text + ': \n\n' + form.opportunity_description.value">
+                    <input class=button value="Insert Log" type=button onclick="document.forms[0].opportunity_description.value =
+                        logTime() + ' by ' + document.forms[0].user_id.options[form.user_id.selectedIndex].text + ': \n\n' + document.forms[0].opportunity_description.value">
                 </td>
             </tr>
             <?php } ?>
@@ -403,6 +401,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.36  2004/07/14 18:30:37  neildogg
+ * - I don't have a calender1.js file, correct if wrong
+ *  - For some reason someone added a second opportunity_description, removed
+ *  - Proper form naming, since form name=form was removed
+ *
  * Revision 1.35  2004/07/14 15:22:17  cpsource
  * - Fixed various undefines, including:
  *     $opportunity_description
