@@ -7,7 +7,8 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-$session_user_id = session_check();
+$thispage = $_SERVER['REQUEST_URI'];
+$session_user_id = session_check($thispage);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -60,7 +61,7 @@ start_page($page_title);
         <form action="add-2.php" method=post>
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=2>Add New Priority Type</td>
+                <td class=widget_header colspan=2>Add New Company Source</td>
             </tr>
             <tr>
                 <td class=widget_label_right>Short Name</td>

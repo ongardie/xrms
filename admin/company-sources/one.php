@@ -7,7 +7,8 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-$session_user_id = session_check();
+$thispage = $_SERVER['REQUEST_URI'];
+$session_user_id = session_check($thispage);
 
 $company_source_id = $_GET['company_source_id'];
 
