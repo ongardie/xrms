@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.35 2004/07/16 04:53:51 introspectshun Exp $
+ * $Id: some.php,v 1.36 2004/07/16 11:11:48 cpsource Exp $
  */
 
 // handle includes
@@ -184,11 +184,46 @@ $rst = $con->execute($sql_type);
 $type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, true);
 $rst->close();
 
+// Stub out $open_activities is never used. The ENTIRE code base
+// was searched and $open_activities NEVER appears outside what
+// was stubbed.
+//
+// Note (1):
+//
+//      If you're going to see if a string contains
+//      data, you're better off doing:
+//
+//        if ( !$open_activities ) {
+//           ... string is 0 length ...
+//
+//      as you don't waste the time calculating the
+//      length of the string.
+//
+// Note (2):
+//
+//      Remember that doing something like:
+//
+//         !strlen($open_activities) > 0
+//
+//     first calculates the length of the string
+//     then NOT's it
+//     then compares to see if the NOT'ed result is > 0
+//
+//     The author probably intended to do
+//
+//        !(strlen($open_activities) > 0)
+//
+//     which is just as bad from an efficiency point of view.
+//
 //check to see if $open_activities record set is empty
-if (!strlen($open_activities) > 0) {
-    $open_activities = "<tr><td class=widget_content colspan=5>No open activities</td></tr>";
-}
+//if (!strlen($open_activities) > 0) {
+//    $open_activities = "<tr><td class=widget_content colspan=5>No open activities</td></tr>";
+//}
+
 add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
+
+//debug
+//echo $sql.'<br>';
 
 // get company_count
 $rst = $con->execute($sql);
@@ -201,6 +236,9 @@ if ( $rst ) {
   }
   $rst->close();
 }
+
+//debug
+//echo 'company_count = ' . $company_count;
 
 $page_title = _("Open Activities");
 start_page($page_title, true, $msg);
@@ -348,6 +386,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.36  2004/07/16 11:11:48  cpsource
+ * - Remove unused $open_activities variable.
+ *   Add a programming note on how to efficiently tell if string length is 0
+ *
  * Revision 1.35  2004/07/16 04:53:51  introspectshun
  * - Localized strings for i18n/translation support
  *
