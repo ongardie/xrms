@@ -2,7 +2,7 @@
 
 //  general
 
-$salutation_array = array("Mr.", "Mrs.", "Miss", "Dr.");
+$salutation_array = array("Mr.", "Ms.", "Mrs.", "Miss", "Dr.", "Rev.");
 
 $strYes = "Yes";
 $strNo = "No";
