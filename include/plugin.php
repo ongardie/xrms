@@ -1,11 +1,4 @@
 <?php
-
-if ( !defined('IN_XRMS') )
-{
-  die('Hacking attempt');
-  exit;
-}
-
 /**
  * plugin.php
  *
@@ -19,9 +12,15 @@ if ( !defined('IN_XRMS') )
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.5 2004/07/14 11:50:50 cpsource Exp $
+ * $Id: plugin.php,v 1.6 2004/08/12 13:54:31 braverock Exp $
  * @package xrms
  */
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
 
 /** Everything needs vars.php */
 require_once($include_directory .'vars.php');
@@ -194,28 +193,6 @@ function boolean_hook_function($name,$parm=NULL,$priority=0,$tie=false) {
     return NULL;
 }
 
-/***********************************************************************/
-/**
- * This function checks whether the user's USER_AGENT is known to
- * be broken. If so, returns true and the plugin is invisible to the
- * offending browser.
- * This function needs to have its name changed!
- *
- * @return bool whether this browser properly supports JavaScript
- */
-function soupNazi(){
-
-    $soup_menu = array('Mozilla/3','Mozilla/2','Mozilla/1', 'Opera 4',
-                       'Opera/4', 'OmniWeb', 'Lynx');
-    GetGlobalVar('HTTP_USER_AGENT', $user_agent);
-    foreach($soup_menu as $browser) {
-        if(stristr($user_agent, $browser)) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
 /*************************************/
 /*** MAIN PLUGIN LOADING CODE HERE ***/
 /*************************************/
@@ -239,6 +216,9 @@ if (isset($plugins) && is_array($plugins)) {
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.6  2004/08/12 13:54:31  braverock
+ * - remove SoupNazi fn, as it isn't used in XRMS
+ *
  * Revision 1.5  2004/07/14 11:50:50  cpsource
  * - Added security feature IN_XRMS
  *
