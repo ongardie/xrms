@@ -1,6 +1,9 @@
 <?php
-// $con->debug = 1;
-
+/**
+ * Export contacts from the search rwsults from contacts/some.php
+ *
+ * $Id: export.php,v 1.4 2004/07/13 21:17:19 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -17,7 +20,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $session_user_id = session_check();
 
 $last_name = $_POST['last_name'];
-$first_names = $_POST['first_name'];
+$first_names = $_POST['first_names'];
 $title = $_POST['title'];
 $description = $_POST['description'];
 $company_name = $_POST['company_name'];
@@ -29,7 +32,7 @@ $user_id = $_POST['user_id'];
 
 
 
-$sql = "select 
+$sql = "select
    cont.salutation as 'Salutation',
    cont.first_names as 'First Name',
    cont.last_name as 'Last Name',
@@ -131,6 +134,10 @@ header("Location: {$http_site_root}/export/{$filename}");
 
 /**
  * $Log: export.php,v $
+ * Revision 1.4  2004/07/13 21:17:19  braverock
+ * - fixed a couple of limitng bugs
+ * - add phpdoc to start of file
+ *
  * Revision 1.3  2004/06/21 19:50:24  introspectshun
  * - Fixed merge problem caused by incompatible line breaks.
  *
@@ -138,10 +145,7 @@ header("Location: {$http_site_root}/export/{$filename}");
  * - add export function for contacts
  *   - apply SF patch 938388 submitted by frenchman
  *
- *
  * Revision 1.0 2004/04/16 frenchman
- * 
+ *
  */
 ?>
-
-
