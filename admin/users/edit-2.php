@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.7 2004/06/14 22:50:14 introspectshun Exp $
+ * $Id: edit-2.php,v 1.8 2004/07/13 18:16:16 neildogg Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,6 +17,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 
 $edit_user_id = $_POST['edit_user_id'];
+$user_contact_id = $_POST['user_contact_id'];
 $role_id = $_POST['role_id'];
 $new_username = $_POST['new_username'];
 $last_name = $_POST['last_name'];
@@ -34,6 +35,7 @@ $rst = $con->execute($sql);
 
 $rec = array();
 $rec['role_id'] = $role_id;
+$rec['user_contact_id'] = $user_contact_id;
 $rec['last_name'] = $last_name;
 $rec['first_names'] = $first_names;
 $rec['username'] = $new_username;
@@ -51,6 +53,9 @@ header("Location: some.php");
 
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.8  2004/07/13 18:16:16  neildogg
+ *- Add admin support to allow a contact to be tied to the user
+ *
  *Revision 1.7  2004/06/14 22:50:14  introspectshun
  *- Add adodb-params.php include for multi-db compatibility.
  *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.

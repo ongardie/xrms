@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.8 2004/07/13 13:24:05 braverock Exp $
+ * $Id: one.php,v 1.9 2004/07/13 18:16:16 neildogg Exp $
  */
 
 //include required files
@@ -26,6 +26,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
 
+    $user_contact_id = $rst->fields['user_contact_id'];
     $new_username = $rst->fields['username'];
     $first_names = $rst->fields['first_names'];
     $last_name = $rst->fields['last_name'];
@@ -41,6 +42,17 @@ $sql2 = "select role_pretty_name, role_id from roles where role_record_status = 
 $rst = $con->execute($sql2);
 $role_menu = $rst->getmenu2('role_id', $role_id, false);
 $rst->close();
+
+if($my_company_id) {
+    $sql = "select " . $con->Concat("last_name", "', '", "first_names") . " AS contact_name,
+            contact_id
+            FROM contacts
+            WHERE company_id = $my_company_id
+            AND contact_record_status = 'a'
+            ORDER BY contact_name";
+    $rst = $con->execute($sql);
+    $contact_menu = $rst->getmenu2('user_contact_id', $user_contact_id, true);
+}
 
 $con->close();
 
@@ -62,6 +74,16 @@ start_page($page_title);
                 <td class=widget_label_right>Role</td>
                 <td class=widget_content_form_element><?php  echo $role_menu; ?></td>
             </tr>
+<?php
+    if($my_company_id) {
+?>
+            <tr>
+                <td class=widget_label_right>Contact</td>
+                <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
+            </tr>
+<?php 
+    }
+ ?>
             <tr>
                 <td class=widget_label_right>Last Name</td>
                 <td class=widget_content_form_element><input type=text size=30 name=last_name value="<?php  echo $last_name; ?>"></td>
@@ -126,6 +148,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/07/13 18:16:16  neildogg
+ * - Add admin support to allow a contact to be tied to the user
+ *
  * Revision 1.8  2004/07/13 13:24:05  braverock
  * - change user_type_id to role_id
  *
