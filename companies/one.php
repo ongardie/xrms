@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.55 2004/07/15 17:39:13 cpsource Exp $
+ * $Id: one.php,v 1.56 2004/07/17 13:15:03 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -86,6 +86,8 @@ if ($rst) {
     $extref1 = $rst->fields['extref1'];
     $extref2 = $rst->fields['extref2'];
     //$rst->close();
+} else {
+    db_error_handler ($con, $sql);
 }
 
 $credit_limit = number_format($credit_limit, 2);
@@ -166,6 +168,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler ($con, $sql_activities);
 }
 
 // contacts
@@ -176,12 +180,11 @@ $sql = "select * from contacts where company_id = $company_id
 
 $rst = $con->execute($sql);
 
-$contacts = $rst->rowcount();
-
 $contact_rows = '';
 if ($rst) {
+    $num_contacts = $rst->rowcount();
     while (!$rst->EOF) {
-	$contact_id = $rst->fields['contact_id'];
+        $contact_id = $rst->fields['contact_id'];
         $contact_rows .= "\n<tr>";
         $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
                         . $contact_id . "'>"
@@ -197,13 +200,15 @@ if ($rst) {
                         . $rst->fields['first_names']. " " .$rst->fields['last_name']
                         . "&company_id=$company_id&contact_id="
                         . $contact_id
-                        ."&email=true&return_url=$http_site_root/companies/one.php?company_id=$company_id'\" >"
+                        ."&email=true&return_url=/companies/one.php?company_id=$company_id'\" >"
                         . htmlspecialchars($rst->fields['email'])
                         . '</a></td>';
         $contact_rows .= "\n</tr>";
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler ($con, $sql);
 }
 
 // former names
@@ -221,6 +226,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler ($con, $sql);
 }
 
 // related companies
@@ -288,6 +295,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler ($con, $categories_sql);
 }
 
 $categories = implode(', ', $categories);
@@ -314,7 +323,6 @@ $working_direction = "to";
 $overall_id = $company_id;
 require_once("../relationships/sidebar.php");
 
-
 // include the files sidebar
 require_once("../files/sidebar.php");
 
@@ -336,41 +344,52 @@ $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', '', true);
     $rst->close();
+} else {
+    db_error_handler ($con, $sql);
 }
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-$rst->close();
+if ($rst) {
+    $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
+    $rst->close();
+} else {
+    db_error_handler ($con, $sql);
+}
 
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
 $rst = $con->execute($sql);
-$activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
-$rst->close();
+if ($rst) {
+    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+    $rst->close();
+} else {
+    db_error_handler ($con, $sql);
+}
 
+//close the database connection, we don't need it anymore
 $con->close();
 
-if (strlen($activity_rows) == 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=7>No activities</td></tr>";
+if (!$activity_rows) {
+    $activity_rows = '<tr><td class=widget_content colspan=7>'._("No Activities").'</td></tr>';
 }
 
-if (strlen($contact_rows) == 0) {
-    $contact_rows = "<tr><td class=widget_content colspan=6>$strCompaniesOneNoContactsMessage</td></tr>";
+if (!$contact_rows) {
+    $contact_rows = '<tr><td class=widget_content colspan=6>'._("No Contacts").'</td></tr>';
 }
 
-if (strlen($former_name_rows) == 0) {
+if (!$former_name_rows) {
     $former_name_rows = "";
 }
 
-if (strlen($relationship_rows) == 0) {
+if (!$relationship_rows) {
     $relationship_rows = "";
 }
 
-if (strlen($categories) == 0) {
-    $categories = $strCompaniesOneNoCategoriesMessage;
+if (!$categories) {
+    $categories = _("No associated categories");
 }
 
-$page_title = (strlen($strCompaniesOnePageTitle) > 0) ? $strCompaniesOnePageTitle . ' : ' . $company_name : $company_name;
+$page_title = _("Company Details") . ' : ' . $company_name;
 start_page($page_title, true, $msg);
 
 ?>
@@ -397,7 +416,7 @@ function openNewsWindow() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header><?php  echo $strCompaniesOneCompanyDetailsTitle; ?></td>
+                <td class=widget_header><?php echo _("Company Details"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -407,52 +426,52 @@ function openNewsWindow() {
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel>Company Name</td>
+                                    <td width=1% class=sublabel><?php echo _("Company Name"); ?></td>
                                     <td class=clear><?php  echo $company_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td width=1% class=sublabel>Legal Name</td>
+                                    <td width=1% class=sublabel><?php echo _("Legal Name"); ?></td>
                                     <td class=clear><?php  echo $legal_name; ?></td>
                                 </tr>
                                 <?php  echo $former_name_rows; ?>
                                 <tr>
-                                    <td class=sublabel>Code</td>
+                                    <td class=sublabel><?php echo _("Code"); ?></td>
                                     <td class=clear><?php  echo $company_code; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Industry</td>
+                                    <td class=sublabel><?php echo _("Industry"); ?></td>
                                     <td class=clear><?php  echo $industry_pretty_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>CRM Status</td>
+                                    <td class=sublabel><?php echo _("CRM Status"); ?></td>
                                     <td class=clear><?php  echo $crm_status_pretty_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Acct. Owner</td>
+                                    <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $owner_username; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Phone</td>
+                                    <td class=sublabel><?php echo _("Phone"); ?></td>
                                     <td class=clear><?php  echo $phone; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Alt. Phone</td>
+                                    <td class=sublabel><?php echo _("Alt. Phone"); ?></td>
                                     <td class=clear><?php  echo $phone2; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Fax</td>
+                                    <td class=sublabel><?php echo _("Fax"); ?></td>
                                     <td class=clear><?php  echo $fax; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>URL</td>
-                                    <td class=clear><?php  echo $url; ?></td>
+                                    <td class=sublabel><?php echo _("URL"); ?></td>
+                                    <td class=clear><?php echo $url; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Address</td>
+                                    <td class=sublabel><?php echo _("Address"); ?></td>
                                     <td class=clear><?php echo $address_to_display ?></td>
                                 </tr>
                                 <tr>
@@ -460,11 +479,11 @@ function openNewsWindow() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Created</td>
+                                    <td class=sublabel><?php echo _("Created"); ?></td>
                                     <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Last Modified</td>
+                                    <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
                                 </tr>
                                 </table>
@@ -475,63 +494,63 @@ function openNewsWindow() {
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td class=sublabel>Account&nbsp;Status</td>
+                                    <td class=sublabel><?php echo _("Account Status"); ?></td>
                                     <td class=clear><?php echo $account_status; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Tax ID</td>
+                                    <td class=sublabel><?php echo _("Tax ID"); ?></td>
                                     <td class=clear><?php echo $tax_id; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Credit&nbsp;Limit</td>
+                                    <td class=sublabel><?php echo _("Credit Limit"); ?></td>
                                     <td class=clear>$<?php echo $credit_limit; ?> <?php echo $current_credit_limit; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Rating</td>
+                                    <td class=sublabel><?php echo _("Rating"); ?></td>
                                     <td class=clear><?php echo $rating; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Terms</td>
-                                    <td class=clear><?php echo $terms; ?> days</td>
+                                    <td class=sublabel><?php echo _("Terms"); ?></td>
+                                    <td class=clear><?php echo $terms; ?> <?php echo _("days"); ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td width=1% class=sublabel><?php  echo $strCompaniesOneCompanySourceLabel; ?></td>
-                                    <td class=clear><?php  echo $company_source; ?></td>
+                                    <td width=1% class=sublabel><?php echo _("Company Source"); ?></td>
+                                    <td class=clear><?php echo $company_source; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyIndustryLabel; ?></td>
-                                    <td class=clear><?php  echo $industry_pretty_name; ?></td>
+                                    <td class=sublabel><?php echo _("Industry"); ?></td>
+                                    <td class=clear><?php echo $industry_pretty_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyEmployeesLabel; ?></td>
+                                    <td class=sublabel><?php echo _("Employees"); ?></td>
                                     <td class=clear><?php  echo $employees; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyRevenueLabel; ?></td>
-                                    <td class=clear><?php  echo $revenue; ?></td>
+                                    <td class=sublabel><?php echo _("Revenue"); ?></td>
+                                    <td class=clear><?php echo $revenue; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td width=1% class=sublabel><?php  echo $company_custom1_label; ?></td>
+                                    <td width=1% class=sublabel><?php echo _($company_custom1_label); ?></td>
                                     <td class=clear><?php  echo $custom1; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $company_custom2_label; ?></td>
+                                    <td class=sublabel><?php echo _($company_custom2_label); ?></td>
                                     <td class=clear><?php  echo $custom2; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $company_custom3_label; ?></td>
+                                    <td class=sublabel><?php echo _($company_custom3_label); ?></td>
                                     <td class=clear><?php  echo $custom3; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $company_custom4_label; ?></td>
+                                    <td class=sublabel><?php echo _($company_custom4_label); ?></td>
                                     <td class=clear><?php  echo $custom4; ?></td>
                                 </tr>
                                 <tr>
@@ -545,20 +564,20 @@ function openNewsWindow() {
                         </tr>
                     </table>
 
-                    <p><?php  echo $profile; ?>
+                    <p><?php echo htmlspecialchars($profile); ?>
 
                 </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                <input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
-                <input class=button type=button value="Admin" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';">
-                <input class=button type=button value="Clone" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
-                <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
-                <input class=button type=button value="News" onclick="javascript: openNewsWindow();">
-                <input class=button type=button value="Relationships" onclick="javascript: location.href='relationships.php?company_id=<?php echo $company_id; ?>';">
-                <input class=button type=button value="Addresses" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
-                <input class=button type=button value="Divisions" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo _("Admin"); ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
+                <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo _("News"); ?>" onclick="javascript: openNewsWindow();">
+                <input class=button type=button value="<?php echo _("Relationships"); ?>" onclick="javascript: location.href='relationships.php?company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo _("Addresses"); ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
+                <input class=button type=button value="<?php echo _("Divisions"); ?>" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
                 </td>
             </tr>
         </table>
@@ -566,19 +585,19 @@ function openNewsWindow() {
         <!-- contacts //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6><?php echo $contacts; ?> <?php  echo $strCompaniesOneContactsTitle; ?></td>
+                <td class=widget_header colspan=6><?php echo $num_contacts; ?> <?php echo _("Contacts"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Summary</td>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>Description</td>
-                <td class=widget_label>Phone</td>
-                <td class=widget_label>E-Mail</td>
+                <td class=widget_label><?php echo _("Name<"); ?>/td>
+                <td class=widget_label><?php echo _("Summary"); ?></td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Description"); ?></td>
+                <td class=widget_label><?php echo _("Phone"); ?></td>
+                <td class=widget_label><?php echo _("E-Mail"); ?></td>
             </tr>
             <?php  echo $contact_rows; ?>
             <tr>
-                <td class=widget_content_form_element colspan=6><input type=button class=button onclick="location.href='../contacts/new.php?company_id=<?php echo $company_id; ?>';" value="New"></td>
+                <td class=widget_content_form_element colspan=6><input type=button class=button onclick="location.href='../contacts/new.php?company_id=<?php echo $company_id; ?>';" value="<?php echo _("New"); ?>"></td>
             </tr>
         </table>
 
@@ -595,27 +614,27 @@ function openNewsWindow() {
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=7><?php  echo $strCompaniesOneActivitiesTitle; ?></td>
+                <td class=widget_header colspan=7><?php echo _("Activities"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>User</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Contact</td>
-                <td class=widget_label>About</td>
-                <td colspan=2 class=widget_label>Starts</td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("User"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Contact"); ?></td>
+                <td class=widget_label><?php echo _("About"); ?></td>
+                <td colspan=2 class=widget_label><?php echo _("Starts"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $user_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
+                <td class=widget_content_form_element><?php echo $contact_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
                 <td colspan=2 class=widget_content_form_element>
                     <input type=text ID="f_date_d" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
-                    <input class=button type=submit value="Add">
-                    <input class=button type=button onclick="javascript: markComplete();" value="Done">
+                    <input class=button type=submit value="<?php echo _("Add"); ?>">
+                    <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
                 </td>
             </tr>
             <?php  echo $activity_rows; ?>
@@ -631,13 +650,13 @@ function openNewsWindow() {
         <div id='category_sidebar'>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header><?php  echo $strCompaniesOneCategoriesTitle; ?></td>
+                <td class=widget_header><?php echo _("Categories"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content><?php  echo $categories; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?company_id=<?php  echo $company_id; ?>';" value="Manage"></td>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?company_id=<?php  echo $company_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
             </tr>
         </table>
         </div>
@@ -682,6 +701,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.56  2004/07/17 13:15:03  braverock
+ * - localize all strings for i18n/translation
+ * - add db_error_handler on all queries
+ * - fixed email URL link bug reported by twistymcgee
+ *
  * Revision 1.55  2004/07/15 17:39:13  cpsource
  * - Fix undefines: former_name_rows, relationship_rows, activity_rows,
  *   sidebar_rows
