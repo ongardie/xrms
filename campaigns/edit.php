@@ -98,7 +98,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Description</td>
-                <td class=widget_content_form_element><textarea rows=10 cols=100 name=campaign_description><?php  echo $case_description; ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=100 name=campaign_description><?php  echo $campaign_description; ?></textarea></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input type=button class=button onclick="javascript: location.href='delete.php?campaign_id=<?php  echo $campaign_id; ?>';" value='Delete Campaign' onclick="javascript: return confirm('Delete Campaign?');"></td>
