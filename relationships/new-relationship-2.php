@@ -79,9 +79,10 @@ start_page($page_title, true, $msg);
         <form action="<?php echo $http_site_root . "/" . $what_table . "/one.php"; ?>" method=get target="_blank">
         <input type="hidden" name="<?php echo $what_table_singular; ?>_id">
         </form>
-        <form action=new-relationship-3.php method=post onsubmit="document.forms[1].working_direction.value = (document.forms[1].relationship_type_id.selectedIndex < (document.forms[1].relationship_type_id.length / 2)) ? 'from' : 'to'; return true;">
+        <form action=new-relationship-3.php method=post <?php if($working_direction == "both") { ?>onsubmit="document.forms[1].working_direction.value = (document.forms[1].relationship_type_id.selectedIndex < (document.forms[1].relationship_type_id.length / 2)) ? 'from' : 'to'; return true;"<?php } ?>>
         <input type="hidden" name="relationship_name" value="<?php echo $relationship_name; ?>">
         <input type="hidden" name="working_direction" value="<?php echo $working_direction; ?>">
+        <input type="hidden" name="real_working_direction" value="<?php echo $working_direction; ?>">
         <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
         <table class=widget cellspacing=1>
@@ -137,7 +138,10 @@ else
                </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo $page_title; ?>"></td>
+                <td class=widget_content_form_element colspan=2>
+                    <input class=button type=submit value="<?php echo $page_title; ?>">
+                    <input class=button name=return type=submit value="<?php echo $page_title; ?> and Return">
+                </td>
             </tr>
         </table>
         </form>

@@ -17,10 +17,12 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
+$return = ($_POST['return']) ? true : false;
 $relationship_name = $_POST['relationship_name'];
 $on_what_id = $_POST['on_what_id'];
 $on_what_id2 = $_POST['on_what_id2'];
 $working_direction = $_POST['working_direction'];
+$real_working_direction = $_POST['real_working_direction'];
 $return_url = $_POST['return_url'];
 $relationship_type_id = $_POST['relationship_type_id'];
 
@@ -63,7 +65,13 @@ if ($rst) {
 
 $con->close();
 
-header("Location: .." . $return_url);
+if($return) {
+    $_POST['working_direction'] = $real_working_direction;
+    require("new-relationship.php");
+}
+else {
+    header("Location: .." . $return_url);
+}
 
 /**
  * Revision 1.3  2004/07/07 21:53:13  introspectshun
