@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.77 2004/08/03 20:21:02 neildogg Exp $
+ * $Id: utils-misc.php,v 1.78 2004/08/05 14:47:56 neildogg Exp $
  */
 
 /**
@@ -922,6 +922,7 @@ function update_daylight_savings($con) {
  
 function current_page() {
     global $http_site_root;
+    $page = '';
     $site_directories = explode('/', $http_site_root);
 
     $request_uri = getenv("REQUEST_URI");
@@ -1209,6 +1210,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.78  2004/08/05 14:47:56  neildogg
+ * - Fixed my undefined variable
+ *
  * Revision 1.77  2004/08/03 20:21:02  neildogg
  * - No need for starting slashes
  *
