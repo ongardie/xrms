@@ -34,7 +34,7 @@ CREATE TABLE `info_element_definitions` (
 # Table structure for table `info_element_definitions`
 #
 
-INSERT INTO `info_element_definitions` VALUES (1, 'Name', 'text', '1', 0, '', '', 1);
+INSERT INTO `info_element_definitions` VALUES (1, 'Name', 'text', '1', 0, '', '', 1, 0);
 
 # --------------------------------------------------------
 

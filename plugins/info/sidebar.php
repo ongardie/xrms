@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.3 2004/07/22 18:18:19 gpowers Exp $
+ * $Id: sidebar.php,v 1.4 2004/09/09 12:29:37 braverock Exp $
  */
 
 //$con->debug = 1;
@@ -92,22 +92,22 @@ if ($name_element_id) {
             }
         }
 
-        # Add New button
-        $info_rows .= "
-             <tr>
-                <td class=widget_content_form_element colspan=5>
-                  <input class=button type=button value=\"New\"
-                    onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&info_type_id=$info_type_id';\">
-                  </td>
-              </tr>\n;
-        ";
-
         //now close the table, we're done
         $info_rows .= "</table>\n</div>";
 
-        echo $info_rows;
         $toprst->movenext();
     }
 }
+# Add New button
+$info_rows .= "
+     <tr>
+        <td class=widget_content_form_element colspan=5>
+          <input class=button type=button value=\"New\"
+            onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&info_type_id=$info_type_id';\">
+        </td>
+     </tr>\n;
+";
+echo $info_rows;
+
 # End Info Type Loop
 ?>
