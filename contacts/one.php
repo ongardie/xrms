@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.64 2005/02/14 21:44:11 vanmer Exp $
+ * $Id: one.php,v 1.65 2005/02/18 14:12:32 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -16,6 +16,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+
 $contact_id = $_GET['contact_id'];
 global $on_what_id;
 $on_what_id=$contact_id;
@@ -24,8 +25,6 @@ $session_user_id = session_check();
 
 // make sure $msg is never undefined
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-
-$contact_id = $_GET['contact_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -603,6 +602,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.65  2005/02/18 14:12:32  braverock
+ * - remove double assignment of $contact_id
+ *   - patch supplied by Keith Edmunds
+ *
  * Revision 1.64  2005/02/14 21:44:11  vanmer
  * - updated to reflect speed changes in ACL operation
  *
