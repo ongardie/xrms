@@ -1,11 +1,11 @@
 <?php
 /**
- * Edit a campaign
+ * View Campaign Details
  *
- * $Id: one.php,v 1.14 2004/07/30 10:30:44 cpsource Exp $
+ * $Id: one.php,v 1.15 2004/10/22 20:48:43 introspectshun Exp $
  */
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -24,14 +24,18 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "campaigns", $campaign_id);
 
-$sql = "select cam.*, camt.campaign_type_display_html, cams.campaign_status_display_html, u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as campaign_owner_username
+$sql = "select cam.campaign_id,
+cam.campaign_type_id, cam.campaign_status_id, cam.user_id, cam.campaign_title,
+cam.campaign_description, cam.starts_at, cam.ends_at,
+cam.cost, cam.entered_at, cam.entered_by, cam.last_modified_at, cam.last_modified_by, cam.campaign_record_status,
+camt.campaign_type_display_html, cams.campaign_status_display_html, u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as campaign_owner_username
 from campaigns cam, campaign_types camt, campaign_statuses cams, users u1, users u2, users u3
 where cam.campaign_type_id = camt.campaign_type_id
 and cam.campaign_status_id = cams.campaign_status_id
 and cam.entered_by = u1.user_id
 and cam.last_modified_by = u2.user_id
 and cam.user_id = u3.user_id
-and cam.campaign_id = $campaign_id";
+and cam.campaign_id = '$campaign_id'";
 
 $rst = $con->execute($sql);
 
@@ -40,6 +44,8 @@ if ($rst) {
     $campaign_description = $rst->fields['campaign_description'];
     $campaign_type_display_html = $rst->fields['campaign_type_display_html'];
     $campaign_status_display_html = $rst->fields['campaign_status_display_html'];
+    $starts_at = $con->userdate($rst->fields['starts_at']);
+    $ends_at = $con->userdate($rst->fields['ends_at']);
     $cost = $rst->fields['cost'];
     $campaign_owner_username = $rst->fields['campaign_owner_username'];
     $entered_at = $con->userdate($rst->fields['entered_at']);
@@ -49,79 +55,24 @@ if ($rst) {
     $rst->close();
 }
 
-$categories_sql = "select category_pretty_name
-from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
-where ecm.on_what_table = 'campaigns'
-and ecm.on_what_id = $campaign_id
-and ecm.category_id = c.category_id
-and cs.category_scope_id = ccsm.category_scope_id
-and c.category_id = ccsm.category_id
-and cs.on_what_table = 'campaigns'
-and category_record_status = 'a'
-order by category_pretty_name";
+/*********************************/
+/*** Include the sidebar boxes ***/
 
-$rst = $con->execute($categories_sql);
-$categories = array();
+//set up our substitution variables for use in the siddebars
+$on_what_table = 'campaigns';
+$on_what_id = $campaign_id;
+$on_what_string = 'campaign';
 
-if ($rst) {
-    while (!$rst->EOF) {
-        array_push($categories, $rst->fields['category_pretty_name']);
-        $rst->movenext();
-    }
-    $rst->close();
-}
+// include the categories sidebar
+require_once($include_directory . 'categories-sidebar.php');
 
-$categories = implode(', ', $categories);
+// include the notes sidebar
+require_once($include_locations_location . 'notes/sidebar.php');
 
-$sql = "select note_id, note_description, entered_by, entered_at, username from notes, users
-where notes.entered_by = users.user_id
-and on_what_table = 'campaigns' and on_what_id = $campaign_id
-and note_record_status = 'a' order by entered_at desc";
-
-$rst = $con->execute($sql);
-
-$note_rows = '';
-if ($rst) {
-    while (!$rst->EOF) {
-        $note_rows .= "<tr>";
-        $note_rows .= "<td class=widget_content><font class=note_label>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/campaigns/one.php?campaign_id=" . $campaign_id . "'>Edit</a></font><br>" . $rst->fields['note_description'] . "</td>";
-        $note_rows .= "</tr>";
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-$sql = "select * from files, users where files.entered_by = users.user_id and on_what_table = 'campaigns' and on_what_id = $campaign_id and file_record_status = 'a'";
-
-$rst = $con->execute($sql);
-
-$file_rows = '';
-if ($rst) {
-    while (!$rst->EOF) {
-        $file_rows .= '<tr>';
-        $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/campaigns/one.php?campaign_id=$campaign_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
-        $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
-        $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
-        $file_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
+//include the files sidebar
+require_once($include_locations_location . 'files/sidebar.php');
 
 $con->close();
-
-if (strlen($note_rows) == 0) {
-    $note_rows = "<tr><td class=widget_content colspan=4>" . _("No notes") . "</td></tr>";
-}
-
-if (strlen($categories) == 0) {
-    $categories = _("No categories");
-}
-
-if (strlen($file_rows) == 0) {
-    $file_rows = "<tr><td class=widget_content colspan=4>" . _("No files") . "</td></tr>";
-}
 
 $page_title = _("Campaign Details") .': '. $campaign_title;
 start_page($page_title, true, $msg);
@@ -159,16 +110,24 @@ start_page($page_title, true, $msg);
                                     <td class=clear><?php echo number_format($cost, 2); ?></td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel><?php echo _("Starts"); ?></td>
+                                    <td class=clear><?php echo $starts_at; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php echo _("Ends"); ?></td>
+                                    <td class=clear><?php echo $ends_at; ?></td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Created"); ?></td>
-                                    <td class=clear><?php echo $entered_at; ?> (<?php  echo $entered_by; ?>)</td>
+                                    <td class=clear><?php echo $entered_at; ?> by <?php  echo $entered_by; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
-                                    <td class=clear><?php echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
+                                    <td class=clear><?php echo $last_modified_at; ?> by <?php  echo $last_modified_by; ?></td>
                                 </tr>
                                 </table>
                             </td>
@@ -197,56 +156,16 @@ start_page($page_title, true, $msg);
     <div id="Sidebar">
 
         <!-- categories //-->
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header><?php echo _("Categories"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><?php echo $categories; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?campaign_id=<?php echo $campaign_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
-            </tr>
-        </table>
+        <?php echo $category_rows; ?>
 
         <!-- notes //-->
-        <form action="../notes/new.php" method="post">
-        <input type="hidden" name="on_what_table" value="campaigns">
-        <input type="hidden" name="on_what_id" value="<?php echo $campaign_id; ?>">
-        <input type="hidden" name="return_url" value="/campaigns/one.php?campaign_id=<?php echo $campaign_id; ?>">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header><?php echo _("Notes"); ?></td>
-            </tr>
             <?php echo $note_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=4><input type=submit class=button value="<?php echo _("New"); ?>"></td>
-            </tr>
-        </table>
-        </form>
 
         <!-- files //-->
-        <form action="<?php  echo $http_site_root; ?>/files/new.php" method="post">
-        <input type=hidden name=on_what_table value="campaigns">
-        <input type=hidden name=on_what_id value="<?php echo $campaign_id; ?>">
-        <input type=hidden name=return_url value="/campaigns/one.php?campaign_id=<?php echo $campaign_id; ?>">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=5><?php echo _("Files"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
-                <td class=widget_label><?php echo _("Size"); ?></td>
-                <td class=widget_label><?php echo _("Owner"); ?></td>
-                <td class=widget_label><?php echo _("Date"); ?></td>
+        <?php echo $file_rows; ?>
 
-            </tr>
-            <?php  echo $file_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=5><input type=submit class=button value="<?php echo _("New"); ?>"></td>
-            </tr>
-        </table>
-        </form>
+        <!-- sidebar plugins //-->
+        <?php echo $sidebar_rows; ?>
 
     </div>
 </div>
@@ -257,6 +176,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2004/10/22 20:48:43  introspectshun
+ * - Added include-locations-location
+ * - Now uses sidebars, including new category sidebar
+ *
  * Revision 1.14  2004/07/30 10:30:44  cpsource
  * - Make sure msg can be optionally used.
  *
