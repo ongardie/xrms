@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.17 2004/12/21 19:36:14 braverock Exp $ **/
+/** $Id: README,v 1.18 2005/01/12 22:54:13 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -15,23 +15,20 @@ of Business Intelligence (BI).  Basically, if your company needs to manage
 relationships with your customers and business partners, XRMS should be able
 to fulfill your needs.
 
+We believe that XRMS is the most advanced open source CRM application
+written in PHP.  We hope that you will find it useful.
+
 ========================
 VERSION
 
-2004-09-14
+2005-01-12
 
 This version has had many many bug fixes and enhancements.  We have also
 added an automated installation, update, and data integrity process. See
 the file install/INSTALL for details.
 
-This version of XRMS marks a major milestone: We are officially multi-language.
-There are currently translations for Spanish, German, Brazilian Portugese,
-Italian, Polish, Dutch, and Chinese, Simplified. Please join us in thanking
-the translators for all their hard work.  If your native language is not
-English, please help the community by providing a translation, or providing
-feedback and enhancements to translations already completed.  Contact the
-development team or the translator for more information on how to contribute.
-
+This release fixes over 50 bugs, and adds many many enhancements.
+The Relationships and Workflow areas have received particular attention.
 
 We recommend that if more than a few days has passed since the date on a release
 tarball that you consider downloading and installing a development snapshot
@@ -45,11 +42,10 @@ this functionality in older MySQL installations, so you can try things without
 upgrading MySQL first, but be aware that you may need to upgrade to a newer
 MySQL version to get everything running.
 
-========================
 COPYRIGHTS
 
 Copyright (c) 2000-2003 Chris Woofter <chris_at_brokerstream_dot_com>
-Copyright (c) 2003-2004 XRMS Development Team http://xrms.sourceforge.net/
+Copyright (c) 2003-2005 XRMS Development Team http://xrms.sourceforge.net/
 
 ========================
 REQUIREMENTS
@@ -401,6 +397,9 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.18  2005/01/12 22:54:13  braverock
+ * - updates for 2005-01-12 release
+ *
  * Revision 1.17  2004/12/21 19:36:14  braverock
  * - improved display of screen table
  * - fixed code formatting
