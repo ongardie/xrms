@@ -4,7 +4,7 @@
  *
  * An include file to override ADODB_Pager to implement opportunities specific functions
  *
- * $Id: pager.php,v 1.1 2004/08/19 13:14:05 maulani Exp $
+ * $Id: pager.php,v 1.2 2004/08/20 03:12:13 maulani Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -27,11 +27,39 @@ class Opportunities_Pager extends ADODB_Pager{
          $this->ADODB_Pager($db, $sql, 'opportunities', false, $selected_column, $selected_column_html);
     }
 
+    //------------------------------------------------------
+    // overridden to add export and mail merge
+    function RenderLayout($header,$grid,$footer,$attributes='class=widget cellspacing=1 cellpadding=0 border=0 width="100%"')
+    {
+        echo "<table " . $attributes . ">",
+        "<tr><td colspan=13 class=widget_header>Search Results</td></tr>\n";
+
+        if ($header != '&nbsp;') {
+            echo "<tr><td colspan=13>",
+            "<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">",
+            "<tr><td class=widget_label>" . $footer . "</td>" . "<td align=right class=widget_label>" . $header . "</td></tr>",
+            "</table>",
+            "</td></tr>\n";
+        }
+
+        echo $grid;
+
+        if ($this->how_many_rows > 0)           
+        {
+            echo "<tr><td class=widget_content_form_element colspan=10><input type=button class=button onclick=\"javascript: exportIt();\" value='Export'> ";
+            echo "<input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+        }
+
+        echo "</table>";
+    }
 }
 
 
 /**
  * $Log: pager.php,v $
+ * Revision 1.2  2004/08/20 03:12:13  maulani
+ * - Restore mail merge functionality reported in bug 941839
+ *
  * Revision 1.1  2004/08/19 13:14:05  maulani
  * - Add specific type pager to ease overriding of layout function
  *
