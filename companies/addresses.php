@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.16 2004/07/21 19:17:56 introspectshun Exp $
+ * $Id: addresses.php,v 1.17 2004/08/02 22:09:55 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -38,7 +38,7 @@ if ($rst) {
         $address_to_display = get_formatted_address($con, $rst->fields['address_id']);
 
         $sql2 = "select contact_id, address_id, last_name, first_names  from contacts
-        where address_id = " . $rst->fields['address_id'];
+        where contact_record_status='a' and address_id = " . $rst->fields['address_id'];
 	$rst2 = $con->execute($sql2);
         $addresses .= "<td class=widget_content>";
 	while(!$rst2->EOF) {
@@ -189,6 +189,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.17  2004/08/02 22:09:55  maulani
+ * - Company addresses screen will no longer show deleted contacts
+ *
  * Revision 1.16  2004/07/21 19:17:56  introspectshun
  * - Localized strings for i18n/l10n support
  *
