@@ -5,7 +5,7 @@
  * Design copyright 2004 Explorer Fund Advisors
  * All Rights Reserved
  *
- * $Id: xrms_acl_config.php,v 1.2 2005/01/25 06:07:16 vanmer Exp $
+ * $Id: xrms_acl_config.php,v 1.3 2005/01/25 06:25:25 vanmer Exp $
  */
 
 /**
@@ -40,11 +40,8 @@
  $options['default']['db_dbname'] = $xrms_acl_db_dbname;
 
 
- $plugin_options=do_hook_function('xrms_acl_database_access',$options);
-
- if ($plugin_options) {
- 	$options=array_merge($plugin_options, $options);
- }
+ $plugin_options=do_hook_function('xrms_acl_database_access',&$options);
+ 
  $options['ACL_Test']=$options['default'];
  $options['ACL_Test']['db_dbname'] = $xrms_acl_test_db_dbname;
 
@@ -52,9 +49,11 @@
      $options['XRMS'] = $options['default'];
      $options['XRMS']['db_dbname'] = $xrms_db_dbname;
  }
-
 /**
  * $Log: xrms_acl_config.php,v $
+ * Revision 1.3  2005/01/25 06:25:25  vanmer
+ * - changed to use pointer to array to allow plugins to modify directly
+ *
  * Revision 1.2  2005/01/25 06:07:16  vanmer
  * - removed extraneous ACL configuration
  * - added hook for plugins to define ACL authentication information
