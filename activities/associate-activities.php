@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: associate-activities.php,v 1.2 2004/07/13 19:58:56 braverock Exp $
+ * $Id: associate-activities.php,v 1.3 2004/07/16 04:44:24 introspectshun Exp $
  */
 
 
@@ -26,11 +26,11 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $color_counter = 0;
 
-$page_title = "Associate Activities";
+$page_title = _("Associate Activities");
 
 start_page($page_title, true, $msg);
 echo '<table>';
-echo "\n".'<tr><td class=widget_header>Company</td><td class=widget_header>Action</td>';
+echo "\n".'<tr><td class=widget_header>' . _("Company") . '</td><td class=widget_header>' . _("Action") . '</td>';
 //get list of active companies
 $company_sql="select company_id, company_name from companies where company_record_status = 'a' order by company_name";
 
@@ -48,12 +48,12 @@ if ($company_rst) {
         $company_name = $company_rst->fields['company_name'];
 
         //get active opportunity ids for each company
-        $opp_sql = "select opportunity_id from opportunities
-                    left join opportunity_statuses using (opportunity_status_id)
-                    where
-                    company_id = $company_id
-                    and status_open_indicator = 'o'
-                    and opportunity_record_status='a'";
+        $opp_sql = "SELECT o.opportunity_id
+                    FROM opportunities o
+                    LEFT JOIN opportunity_statuses os ON (o.opportunity_status_id = os.opportunity_status_id)
+                    WHERE o.company_id = $company_id
+                      AND os.status_open_indicator = 'o'
+                      AND o.opportunity_record_status='a'";
         $opp_rst = $con->execute($opp_sql);
         if ($opp_rst) {
             if ($opp_rst->RecordCount()>=1){
@@ -70,12 +70,12 @@ if ($company_rst) {
         }
 
         //get active case ids for each company
-        $case_sql = "select case_id from cases
-                     left join case_statuses using (case_status_id)
-                     where
-                     company_id = $company_id
-                     and status_open_indicator = 'o'
-                     and case_record_status='a'";
+        $case_sql = "SELECT c.case_id
+                     FROM cases c
+                     LEFT JOIN case_statuses cs ON (c.case_status_id = cs.case_status_id)
+                     WHERE c.company_id = $company_id
+                       AND cs.status_open_indicator = 'o'
+                       AND c.case_record_status='a'";
         $case_rst = $con->execute($case_sql);
         if ($case_rst) {
             if ($case_rst->RecordCount()>=1){
@@ -145,21 +145,21 @@ if ($company_rst) {
             $color_counter++;
             $classname = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
             echo "\n<tr><td class=$classname>$company_name</td>";
-            echo "<td class=$classname>Associated $activity_count activities.</td>";
+            echo "<td class=$classname>" . _("Associated") . " $activity_count " . _("activities") . ".</td>";
             echo '</tr>';
         } elseif ($arr_count>1) {
             //print some useful information and move along
             $color_counter++;
             $classname = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
             echo "\n<tr><td class=$classname>$company_name</td>";
-            echo "<td class=$classname>Unable to associate Activities because there are multiple Cases or Opportunities</td>";
+            echo "<td class=$classname>" . _("Unable to associate Activities because there are multiple Cases or Opportunities") . "</td>";
             echo '</tr>';
         } else {
             //display notice if no active opportunity or case for a company
             $color_counter++;
             $classname = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
             echo "\n<tr><td class=$classname>$company_name</td>";
-            echo "<td class=$classname>Unable to associate Activities because there are is no open Case or Opportunity</td>";
+            echo "<td class=$classname>" . _("Unable to associate Activities because there is no open Case or Opportunity") . "</td>";
             echo '</tr>';
         }
 
@@ -177,6 +177,10 @@ end_page();
 
 /**
  * $Log: associate-activities.php,v $
+ * Revision 1.3  2004/07/16 04:44:24  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Altered LEFT JOINs to use standard ON syntax rather than USING
+ *
  * Revision 1.2  2004/07/13 19:58:56  braverock
  * - fixed cut and paste error in case checking
  *
