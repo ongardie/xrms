@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.77 2005/01/06 20:41:45 vanmer Exp $
+ * $Id: one.php,v 1.78 2005/01/06 21:55:30 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -149,7 +149,6 @@ if ($rst) {
 $credit_limit = number_format($credit_limit, 2);
 $current_credit_limit = fetch_current_customer_credit_limit($extref1);
 
-$address_to_display = get_formatted_address($con, $address_id);
 
 if (strlen($url) > 0) {
     $url = "<a target='_new' href='" . $url . "'>$url</a>";
@@ -157,14 +156,20 @@ if (strlen($url) > 0) {
 
 //if division_id is specified, look up the name
 if ($division_id) {
-    $sql = "SELECT division_name FROM company_division WHERE division_id=$division_id";
+    $sql = "SELECT division_name, address_id FROM company_division WHERE division_id=$division_id";
     $rst=$con->execute($sql);
     if (!$rst) {
         db_error_handler($con, $sql);
     } else {
         $division_name=$rst->fields['division_name'];
+        if ($rst->fields['address_id']) $address_id=$rst->fields['address_id'];
     }
 }
+
+//show address (of division if specified, main if not specified)
+$address_to_display = get_formatted_address($con, $address_id);
+
+
 //list and create division select box
 $sql = "SELECT division_name, division_id FROM company_division WHERE company_id=$company_id";
 $division_rst=$con->execute($sql);
@@ -801,6 +806,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.78  2005/01/06 21:55:30  vanmer
+ * - moved address lookup to below division lookup to allow division address to be displayed instead of main address
+ * - added logic to optionally set address to address of division, if set
+ *
  * Revision 1.77  2005/01/06 20:41:45  vanmer
  * - added division scoping of activities to include cases/opportunities which match the division specified
  * - removed on_what_string hack, changed to use standard make_singular function
