@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.8 2005/02/08 17:13:58 vanmer Exp $
+ * $Id: edit-division-2.php,v 1.9 2005/02/08 17:16:10 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -36,6 +36,7 @@ $rst = $con->execute($sql);
 
 $rec = array();
 $rec['division_id'] = $division_id;
+$rec['company_id'] = $company_id;
 $rec['address_id'] = $address_id;
 $rec['division_name'] = $division_name;
 $rec['description'] = $description;
@@ -52,6 +53,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.9  2005/02/08 17:16:10  vanmer
+ * - added company id to edit division collection
+ *
  * Revision 1.8  2005/02/08 17:13:58  vanmer
  * - switched to pass correct collection to hook function
  *
