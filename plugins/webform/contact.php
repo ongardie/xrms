@@ -42,7 +42,7 @@ function MM_validateForm() { //v4.0
 //-->
 </script>
 
-<form enctype='multipart/form-data' action='<? echo $http_site_root; ?>/plugins/webform/new-form.php' method='post'>
+<form enctype='multipart/form-data' action='<?php echo $http_site_root; ?>/plugins/webform/new-form.php' method='post'>
 <input type="hidden" name="user_id" value="1">
 <input type="hidden" name="crm_status_id" value="1">
 <input type="hidden" name="industry_id" value="1">
