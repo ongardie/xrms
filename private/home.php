@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.31 2004/07/14 20:19:51 cpsource Exp $
+ * $Id: home.php,v 1.32 2004/07/15 17:44:05 cpsource Exp $
  */
 
 // include the common files
@@ -51,6 +51,9 @@ require_once("../files/sidebar.php");
 require_once("../notes/sidebar.php");
 
 //call the sidebar hook
+if ( !isset($sidebar_rows) ) {
+  $sidebar_rows = '';
+}
 $sidebar_rows = do_hook_function('private_sidebar_bottom', $sidebar_rows);
 
 /** End of the sidebar includes **/
@@ -493,6 +496,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.32  2004/07/15 17:44:05  cpsource
+ * - Resolve undef sidebar_rows
+ *
  * Revision 1.31  2004/07/14 20:19:51  cpsource
  * - Resolved $company_count not being set properly
  *   opportunities/some.php tried to set $this which can't be done in PHP V5
