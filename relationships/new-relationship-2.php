@@ -114,14 +114,18 @@ else
                 having " . $name_concat . " like " . $search_on . "
                 order by " . $name_order;
         $rst = $con->execute($sql);
-        if($rst->rowcount()) {
-            echo $rst->getmenu2('on_what_id2', '', false);
-            echo " &nbsp; <input type=button class=button value='"._("More Info")."' "
-                . "onclick='document.forms[0]." . $what_table_singular
-                . "_id.value=document.forms[1].on_what_id2.options[document.forms[1].on_what_id2.selectedIndex].value; document.forms[0].submit();'>";
-        }
-        else {
-            echo _("There is no ". $what_table_singular . " by that name");
+        if ($rst) {
+            if($rst->rowcount()) {
+                echo $rst->getmenu2('on_what_id2', '', false);
+                echo " &nbsp; <input type=button class=button value='"._("More Info")."' "
+                    . "onclick='document.forms[0]." . $what_table_singular
+                    . "_id.value=document.forms[1].on_what_id2.options[document.forms[1].on_what_id2.selectedIndex].value; document.forms[0].submit();'>";
+            }
+            else {
+                echo _("There is no ". $what_table_singular . " by that name");
+            }
+        } else {
+            db_error_handler ($con, $sql);
         }
     }
     else {
@@ -131,11 +135,15 @@ else
             where " . $what_table_singular . "_id = " . $search_on . "
             and " .$what_table_singular . "_record_status='a'";
         $rst = $con->execute($sql);
-        if($rst->rowcount()) {
-          echo "<input type=hidden name=on_what_id2 value=$search_on>" . $rst->fields['name'] . "\n";
-        }
-        else {
-            echo _("There is no ". $what_table_singular . " by that ID");
+        if ($rst) {
+            if($rst->rowcount()) {
+            echo "<input type=hidden name=on_what_id2 value=$search_on>" . $rst->fields['name'] . "\n";
+            }
+            else {
+                echo _("There is no ". $what_table_singular . " by that ID");
+            }
+        } else {
+            db_error_handler ($con, $sql);
         }
     }
 }
@@ -166,6 +174,33 @@ else
 end_page();
 
 /**
+ * $Log: new-relationship-2.php,v $
+ * Revision 1.12  2004/09/29 14:27:06  braverock
+ * - add additional db_error_handler clauses to aid debugging
+ *
+ * revision 1.11 2004-09-29 08:37 braverock
+ * - add db_error_handler to help debug non-object error
+ *
+ * revision 1.10 2004-09-13 06:47 introspectshun
+ * - Fixed db incompatibility with HAVING clause (now uses expression rather than alias)
+ * - Added GROUP BY clause, as HAVING doesn't work without it on MSSQL
+ *
+ * revision 1.9 2004-07-28 01:28 neildogg
+ * - Can now add multiple relationships with new button
+ *
+ * revision 1.8 2004-07-28 12:59 neildogg
+ * - Added drop down box if added a contact to a company
+ *
+ * revision 1.7 2004-07-25 05:50 johnfawcett
+ * - Removed lang/ - I clobbered an earlier change by Brian
+ *
+ * revision 1.6 2004-07-25 05:11 johnfawcett
+ * - updated gettext to include strings formed by static and database lookups
+ * - corrected sql error when * given as search criteria
+ *
+ * revision 1.5 2004-07-25 08:13 braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.4  2004/07/08 19:38:38  neildogg
  * No need to add quotes or %% to ID search
  *
@@ -178,6 +213,5 @@ end_page();
  * Revision 1.1  2004/07/01 19:48:10  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts
- *
  */
 ?>
