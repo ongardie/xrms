@@ -4,7 +4,7 @@
  *
  * Displays Audit entries and new activity counts.  Needs work.
  *
- * $Id: dashboard.php,v 1.6 2004/04/20 20:03:07 braverock Exp $
+ * $Id: dashboard.php,v 1.7 2004/05/27 12:03:03 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -308,6 +308,9 @@ end_page();
 
 /**
  * $Log: dashboard.php,v $
+ * Revision 1.7  2004/05/27 12:03:03  braverock
+ * - added additional database error handling
+ *
  * Revision 1.6  2004/04/20 20:03:07  braverock
  * - add additional activity reporting to the admin interface
  *   - modified from SF patch 927132 submitted by s-t
