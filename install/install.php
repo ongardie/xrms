@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.8 2004/08/02 01:31:19 maulani Exp $
+ * $Id: install.php,v 1.9 2004/08/02 08:49:55 maulani Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -230,7 +230,6 @@ create_db_data($con);
 //close the connection
 $con->close();
 
-
 // get message
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
@@ -256,6 +255,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.9  2004/08/02 08:49:55  maulani
+ *- Add test to check register_globals
+ *
  *Revision 1.8  2004/08/02 01:31:19  maulani
  *- Add ending whitespace check to include-locations.inc and vars.php.
  *- Fix bugs involving dependency on general system includes
