@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.9 2004/04/22 18:29:36 gpowers Exp $
+ * $Id: some.php,v 1.10 2004/04/27 13:43:24 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -295,7 +295,6 @@ start_page($page_title);
 
 $pager = new ADODB_Pager($con,$sql, 'activities', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
-add_audit_item($con, $session_user_id, 'searched', 'activities', '');
 $con->close();
 
 ?>
@@ -362,6 +361,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/04/27 13:43:24  gpowers
+ * removed audit_items entry for searching. it is a duplicate of information
+ * available in the httpd access log.
+ *
  * Revision 1.9  2004/04/22 18:29:36  gpowers
  * removed echo order_by , ^M's, //user_id=1
  *
