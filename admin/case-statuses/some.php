@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: some.php,v 1.4 2004/06/03 16:12:51 braverock Exp $
+ * $Id: some.php,v 1.5 2004/06/14 21:37:55 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -114,6 +115,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2004/06/14 21:37:55  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.4  2004/06/03 16:12:51  braverock
  * - add functionality to support workflow and activity templates
  * - add functionality to support changing sort order

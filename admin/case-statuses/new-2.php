@@ -5,6 +5,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -23,15 +24,18 @@ $rst = $con->execute($sql);
 $sort_order = $rst->fields['sort_order'] + 1;
 
 //put in new record
-$sql = "insert into case_statuses (case_status_short_name, 
-	case_status_pretty_name, case_status_pretty_plural, 
-	case_status_display_html, sort_order) 
-	values (" . $con->qstr($case_status_short_name, get_magic_quotes_gpc()) . ", " 
-	. $con->qstr($case_status_pretty_name, get_magic_quotes_gpc()) . ", " 
-	. $con->qstr($case_status_pretty_plural, get_magic_quotes_gpc()) . ", " 
-	. $con->qstr($case_status_display_html, get_magic_quotes_gpc()) . ", "
-	. $sort_order . ")";
-$con->execute($sql);
+$sql = "SELECT * FROM case_statuses WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['case_status_short_name'] = $case_status_short_name;
+$rec['case_status_pretty_name'] = $case_status_pretty_name;
+$rec['case_status_pretty_plural'] = $case_status_pretty_plural;
+$rec['case_status_display_html'] = $case_status_display_html;
+$rec['sort_order'] = $sort_order;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $con->close();
 
