@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.56 2005/01/30 12:52:01 maulani Exp $
+ * $Id: update.php,v 1.57 2005/01/30 18:28:21 maulani Exp $
  */
 
 // where do we include from
@@ -319,6 +319,7 @@ if ($recCount == 0) {
     $rec = array();
     $rec['param_id'] = 'Default GST Offset';
     $rec['int_val'] = -5;
+    $rec['description'] = 'Default timezone offset';
 
     $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
@@ -336,6 +337,7 @@ if ($recCount == 0) {
     $rec = array();
     $rec['param_id'] = 'Audit Level';
     $rec['int_val'] = 4;
+    $rec['description'] = 'What level of audit logging should be performed.  0 - no logging, 1 - inserts & updates, 2 - and login/logout, 3 - and views, 4 - and searches';
 
     $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
@@ -351,6 +353,7 @@ if ($recCount == 0) {
     $rec = array();
     $rec['param_id'] = 'Activities Default Behavior';
     $rec['string_val'] = $activities_default_behavior;
+    $rec['description'] = 'How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.';
 
     $tbl = 'system_parameters';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -367,6 +370,7 @@ if ($recCount == 0) {
     $rec = array();
     $rec['param_id'] = 'LDAP Version';
     $rec['int_val'] = 3;
+    $rec['description'] = 'Version of the LDAP server.  Will usually be 2 or 3.';
 
     $tbl = 'system_parameters';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -4126,6 +4130,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.57  2005/01/30 18:28:21  maulani
+ * - Add system parameters descriptions
+ *
  * Revision 1.56  2005/01/30 12:52:01  maulani
  * - Add from email address to emailed reports
  *
