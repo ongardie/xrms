@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.26 2004/07/14 16:53:01 neildogg Exp $
+ * $Id: edit-2.php,v 1.27 2004/07/14 18:33:28 neildogg Exp $
  */
 
 //include required files
@@ -80,7 +80,7 @@ $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ?
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities = true ) {
-    if ($on_what_table='contacts' or $on_what_table='') {
+    if ($on_what_table=='contacts' or $on_what_table=='') {
         $opp_arr = array();
         $case_arr = array();
         $arr_count = 0;
@@ -129,7 +129,7 @@ if ($associate_activities = true ) {
         }
 
         //we can only guess at the association if there is only one item to associate to
-        if ($arr_count>=1) {
+        if ($arr_count==1) {
             if (count($case_arr)){
                 //echo '<pre>'.print_r($case_arr).'</pre>';
                 $on_what_table = 'cases';
@@ -379,6 +379,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.27  2004/07/14 18:33:28  neildogg
+ * - Found the correct logic error, thanks to Brian
+ *
  * Revision 1.26  2004/07/14 16:53:01  neildogg
  * - Removed duplicate code
  *  - Fixed logic problem
