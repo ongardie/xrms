@@ -121,7 +121,7 @@ td.widget_label_right {
   color: #333333;
   text-align: right;
   background-image: url("img/widget_label_right_background.gif");
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   background-position: top right;
 }
 td.widget_label_center {
