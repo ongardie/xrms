@@ -1,4 +1,11 @@
 <?php
+/**
+ * /activities/some.php
+ *
+ * View a list of activities
+ *
+ * $Id: some.php,v 1.3 2004/03/24 17:18:37 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -94,4 +101,15 @@ start_page($page_title);
 	</tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.3  2004/03/24 17:18:37  maulani
+ * - add phpdoc
+ *
+ *
+ */
+?>
