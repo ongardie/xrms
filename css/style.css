@@ -33,6 +33,9 @@ table.widget {
     margin: 0px auto 4px auto;
     width: 100%;
 }
+table.widget .widget_content_graph table {
+    margin: 0px auto 4px auto; 
+}
 table.widget .sublabel {
     padding-right: 4px;
 }
