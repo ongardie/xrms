@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.12 2004/06/15 13:49:21 gpowers Exp $
+ * $Id: edit-2.php,v 1.13 2004/06/15 13:50:46 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -41,7 +41,7 @@ if (!$rating_id) { $rating_id = 0; }
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$con->debug=1;
+// $con->debug=1;
 
 $sql = "SELECT * FROM companies WHERE company_id = $company_id";
 $rst = $con->execute($sql);
@@ -80,6 +80,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.13  2004/06/15 13:50:46  gpowers
+ * - forgot to disable debug in previous commit
+ *
  * Revision 1.12  2004/06/15 13:49:21  gpowers
  * - removed dbtimestamp() function, b/c it didn't work with MySQL.
  *
