@@ -1,5 +1,11 @@
 <?php
+/**
+ * View a single Service Case
+ *
+ * $Id: one.php,v 1.7 2004/03/07 14:07:14 braverock Exp $
+ */
 
+//include required files
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -71,18 +77,18 @@ if ($rst) {
 
 // most recent activities
 
-$sql_activities = "select activity_id, 
-activity_title, 
-scheduled_at, 
-a.entered_at, 
+$sql_activities = "select activity_id,
+activity_title,
+scheduled_at,
+a.entered_at,
 a.on_what_table,
 a.on_what_id,
-activity_status, 
-at.activity_type_pretty_name, 
-cont.contact_id, 
-cont.first_names as contact_first_names, 
-cont.last_name as contact_last_name, 
-u.username, 
+activity_status,
+at.activity_type_pretty_name,
+cont.contact_id,
+cont.first_names as contact_first_names,
+cont.last_name as contact_last_name,
+u.username,
 if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
 from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
 where a.on_what_table = 'cases'
@@ -102,7 +108,7 @@ if ($rst) {
         $is_overdue = $rst->fields['is_overdue'];
         $on_what_table = $rst->fields['on_what_table'];
         $on_what_id = $rst->fields['on_what_id'];
-		
+
         if ($open_p == 'o') {
             if ($is_overdue) {
                 $classname = 'overdue_activity';
@@ -112,7 +118,7 @@ if ($rst) {
         } else {
             $classname = 'closed_activity';
         }
-		
+
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
@@ -125,7 +131,7 @@ if ($rst) {
     $rst->close();
 }
 
-$categories_sql = "select category_pretty_name 
+$categories_sql = "select category_pretty_name
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
 where ecm.on_what_table = 'cases'
 and ecm.on_what_id = $case_id
@@ -149,39 +155,30 @@ if ($rst) {
 
 $categories = implode($categories, ", ");
 
-$sql = "select note_id, note_description, entered_by, entered_at, username from notes, users
-where notes.entered_by = users.user_id
-and on_what_table = 'cases' and on_what_id = $case_id
-and note_record_status = 'a' order by entered_at desc";
+/*********************************/
+/*** Include the sidebar boxes ***/
 
-$rst = $con->execute($sql);
+//set up our substitution variables for use in the siddebars
+$on_what_table = 'cases';
+$on_what_id = $case_id;
+$on_what_string = 'case';
 
-if ($rst) {
-    while (!$rst->EOF) {
-        $note_rows .= "<tr>";
-        $note_rows .= "<td class=widget_content><font class=note_label>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/cases/one.php?case_id=" . $case_id . "'>Edit</a></font><br>" . $rst->fields['note_description'] . "</td>";
-        $note_rows .= "</tr>";
-        $rst->movenext();
-    }
-    $rst->close();
-}
+//include the Cases sidebar
+//$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
+//require_once("../cases/sidebar.php");
 
-$sql = "select * from files, users where files.entered_by = users.user_id and on_what_table = 'cases' and on_what_id = $case_id and file_record_status = 'a'";
+//include the opportunities sidebar
+//$opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
+//require_once("../opportunities/sidebar.php");
 
-$rst = $con->execute($sql);
+//include the files sidebar
+require_once("../files/sidebar.php");
 
-if ($rst) {
-    while (!$rst->EOF) {
-        $file_rows .= '<tr>';
-        $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/cases/one.php?case_id=$case_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
-        $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
-        $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
-        $file_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
+//include the notes sidebar
+require_once("../notes/sidebar.php");
+
+/** End of the sidebar includes **/
+/*********************************/
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
@@ -200,16 +197,8 @@ $rst->close();
 
 $con->close();
 
-if (strlen($note_rows) == 0) {
-    $note_rows = "<tr><td class=widget_content colspan=4>No notes</td></tr>";
-}
-
 if (strlen($categories) == 0) {
     $categories = "No categories";
-}
-
-if (strlen($file_rows) == 0) {
-    $file_rows = "<tr><td class=widget_content colspan=4>No files</td></tr>";
 }
 
 $page_title = "One Case : $case_title";
@@ -280,7 +269,7 @@ start_page($page_title, true, $msg);
                                 </tr>
                                 <tr>
                                     <td class=sublabel>E-Mail</td>
-                                    <td class=clear><a href="mailto:<?php  echo $email; ?>"><?php  echo $email; ?></a></td>
+                                    <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$case_id&contact_id=$contact_id&on_what_table=cases&activity_title=email RE: $case_title&company_id=$company_id&email=$email&return_url=/cases/one.php?case_id=$case_id'\" >" . htmlspecialchars($email); ?></a></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
@@ -368,46 +357,23 @@ start_page($page_title, true, $msg);
         </table>
 
         <!-- notes //-->
-        <form action="../notes/new.php" method="post">
-        <input type="hidden" name="on_what_table" value="cases">
-        <input type="hidden" name="on_what_id" value="<?php echo $case_id ?>">
-        <input type="hidden" name="return_url" value="/cases/one.php?case_id=<?php echo $case_id ?>">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header>Notes</td>
-            </tr>
-            <?php echo $note_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=4><input type=submit class=button value="New"></td>
-            </tr>
-        </table>
-        </form>
+        <?php echo $note_rows; ?>
 
         <!-- files //-->
-        <form action="<?php  echo $http_site_root; ?>/files/new.php" method="post">
-        <input type=hidden name=on_what_table value="cases">
-        <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
-        <input type=hidden name=return_url value="/cases/one.php?case_id=<?php  echo $case_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header colspan=5>Files</td>
-            </tr>
-            <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Size</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Date</td>
-
-            </tr>
-            <?php  echo $file_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=5><input type=submit class=button value="New"></td>
-            </tr>
-        </table>
-        </form>
+        <?php echo $file_rows; ?>
 
         </td>
     </tr>
 </table>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: one.php,v $
+ * Revision 1.7  2004/03/07 14:07:14  braverock
+ * - use centralized side-bar code in advance of i18n conversion
+ *
+ */
+?>

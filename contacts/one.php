@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.13 2004/02/06 22:47:37 maulani Exp $
+ * $Id: one.php,v 1.14 2004/03/07 14:07:57 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -223,83 +223,30 @@ if ($rst) {
 
 $categories = implode($categories, ", ");
 
-$sql = "select note_id, note_description, entered_by, entered_at, username from notes, users
-where notes.entered_by = users.user_id
-and on_what_table = 'contacts' and on_what_id = $contact_id
-and note_record_status = 'a' order by entered_at desc";
+/*********************************/
+/*** Include the sidebar boxes ***/
 
-$rst = $con->execute($sql);
+//set up our substitution variables for use in the siddebars
+$on_what_table = 'contacts';
+$on_what_id = $contact_id;
+$on_what_string = 'contact';
 
-if ($rst) {
-    while (!$rst->EOF) {
-        $note_rows .= "<tr>";
-        $note_rows .= "<td class=widget_content><font class=note_label>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/contacts/one.php?contact_id=" . $contact_id . "'>Edit</a></font><br>" . $rst->fields['note_description'] . "</td>";
-        $note_rows .= "</tr>";
-        $rst->movenext();
-    }
-    $rst->close();
-}
+//include the Cases sidebar
+$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
+require_once("../cases/sidebar.php");
 
-$sql = "select * from opportunities opp, opportunity_statuses os, users u
-where opp.opportunity_status_id = os.opportunity_status_id
-and opp.contact_id = $contact_id
-and opp.user_id = u.user_id
-and opportunity_record_status = 'a'
-order by close_at desc";
+//include the opportunities sidebar
+$opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
+require_once("../opportunities/sidebar.php");
 
-$rst = $con->execute($sql);
+//include the files sidebar
+require_once("../files/sidebar.php");
 
-if ($rst) {
-    while (!$rst->EOF) {
-        $opportunity_rows .= '<tr>';
-        $opportunity_rows .= "<td class=widget_content><a href='$http_site_root/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "'>" . $rst->fields['opportunity_title'] . '</a></td>';
-        $opportunity_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $opportunity_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_pretty_name'] . '</td>';
-        $opportunity_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['close_at']) . '</td>';
-        $opportunity_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
+//include the notes sidebar
+require_once("../notes/sidebar.php");
 
-$sql = "select * from cases, case_priorities, users
-where cases.case_priority_id = case_priorities.case_priority_id
-and contact_id = $contact_id
-and cases.user_id = users.user_id
-and case_record_status = 'a'
-order by due_at desc";
-
-$rst = $con->execute($sql);
-
-if ($rst) {
-    while (!$rst->EOF) {
-        $case_rows .= '<tr>';
-        $case_rows .= "<td class=widget_content><a href='$http_site_root/cases/one.php?case_id=" . $rst->fields['case_id'] . "'>" . $rst->fields['case_title'] . '</a></td>';
-        $case_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $case_rows .= '<td class=widget_content>' . $rst->fields['case_priority_pretty_name'] . '</td>';
-        $case_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['due_at']) . '</td>';
-        $case_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-$sql = "select * from files, users where files.entered_by = users.user_id and on_what_table = 'contacts' and on_what_id = $contact_id and file_record_status = 'a'";
-
-$rst = $con->execute($sql);
-
-if ($rst) {
-    while (!$rst->EOF) {
-        $file_rows .= '<tr>';
-        $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
-        $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
-        $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
-        $file_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
+/** End of the sidebar includes **/
+/*********************************/
 
 // we should allow users to delete this contact if there are others
 /*
@@ -329,28 +276,8 @@ add_audit_item($con, $session_user_id, 'view contact', 'contacts', $contact_id);
 
 $con->close();
 
-if (strlen($activity_rows) == 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=6>No activities</td></tr>";
-}
-
-if (strlen($opportunity_rows) == 0) {
-    $opportunity_rows = "<tr><td class=widget_content colspan=4>No opportunities</td></tr>";
-}
-
-if (strlen($case_rows) == 0) {
-    $case_rows = "<tr><td class=widget_content colspan=4>No cases</td></tr>";
-}
-
 if (strlen($categories) == 0) {
     $categories = "No categories";
-}
-
-if (strlen($note_rows) == 0) {
-    $note_rows = "<tr><td class=widget_content colspan=4>No notes</td></tr>";
-}
-
-if (strlen($file_rows) == 0) {
-    $file_rows = "<tr><td class=widget_content colspan=4>No files</td></tr>";
 }
 
 $page_title = $first_names . ' ' . $last_name;
@@ -590,86 +517,17 @@ function markComplete() {
             </tr>
         </table>
 
-        <!-- notes //-->
-        <form action="../notes/new.php" method="post">
-        <input type="hidden" name="on_what_table" value="contacts">
-        <input type="hidden" name="on_what_id" value="<?php echo $contact_id ?>">
-        <input type="hidden" name="return_url" value="/contacts/one.php?contact_id=<?php echo $contact_id ?>">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header>Notes</td>
-            </tr>
-            <?php echo $note_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=4><input type=submit class=button value="New"></td>
-            </tr>
-        </table>
-        </form>
-
         <!-- opportunities //-->
-        <form action="<?php  echo $http_site_root; ?>/opportunities/new.php" method="post">
-        <input type="hidden" name="company_id" value="<?php  echo $company_id; ?>">
-        <input type="hidden" name="contact_id" value="<?php  echo $contact_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header colspan=4><?php  echo $strCompaniesOneOpportunitiesTitle; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Status</td>
-                <td class=widget_label>Due</td>
-            </tr>
-            <?php  echo $opportunity_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=4><input type=submit class=button value="New"> <input type=button class=button onclick="javascript: location.href='<?php  echo $http_site_root ?>/opportunities/some.php?company_code=<?php echo $company_code;; ?>';" value="More"></td>
-            </tr>
-        </table>
-        </form>
+        <?php echo $opportunity_rows; ?>
 
         <!-- cases //-->
-        <form action="<?php  echo $http_site_root; ?>/cases/new.php" method="post">
-        <input type="hidden" name="company_id" value="<?php  echo $company_id; ?>">
-        <input type="hidden" name="contact_id" value="<?php  echo $contact_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header colspan=5><?php  echo $strCompaniesOneCasesTitle; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Priority</td>
-                <td class=widget_label>Due</td>
-            </tr>
-            <?php  echo $case_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=5><input type=submit class=button value="New"> <input type=button class=button onclick="javascript: location.href='<?php  echo $http_site_root ?>/cases/some.php?company_code=<?php echo $company_code;; ?>';" value="More"></td>
-            </tr>
-        </table>
-        </form>
+        <?php echo $case_rows; ?>
+
+        <!-- notes //-->
+        <?php echo $note_rows; ?>
 
         <!-- files //-->
-        <form action="<?php  echo $http_site_root; ?>/files/new.php" method="post">
-        <input type=hidden name=on_what_table value="contacts">
-        <input type=hidden name=on_what_id value="<?php  echo $contact_id; ?>">
-        <input type=hidden name=return_url value="/contacts/one.php?contact_id=<?php  echo $contact_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header colspan=5><?php  echo $strCompaniesOneFilesTitle; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Size</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Date</td>
-
-            </tr>
-            <?php  echo $file_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=5><input type=submit class=button value="New"></td>
-            </tr>
-        </table>
-        </form>
+        <?php echo $file_rows; ?>
 
         </td>
     </tr>
@@ -681,6 +539,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.14  2004/03/07 14:07:57  braverock
+ * - use centralized side-bar code in advance of i18n conversion
+ *
  * Revision 1.13  2004/02/06 22:47:37  maulani
  * Use ends_at to determine if activity is overdue
  *

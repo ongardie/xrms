@@ -1,5 +1,15 @@
 <?php
+/**
+ * The user's personal home page.
+ *
+ * @todo make the user's home page configurable,
+ *       to create a 'personal dashboard'
+ *
+ *
+ * $Id: home.php,v 1.9 2004/03/07 14:09:14 braverock Exp $
+ */
 
+// include the common files
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -7,28 +17,52 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-$session_user_id = session_check();
+//set target and see if we are logged in
+$this = $_SERVER['REQUEST_URI'];
+$session_user_id = session_check( $this );
 
 $msg = $_GET['msg'];
 
+//connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+/*********************************/
+/*** Include the sidebar boxes ***/
+//include the Cases sidebar
+$case_limit_sql = "and cases.user_id = $session_user_id";
+require_once("../cases/sidebar.php");
+
+//include the opportunities sidebar
+$opportunity_limit_sql = "and opportunities.user_id = $session_user_id";
+require_once("../opportunities/sidebar.php");
+
+//include the files sidebar
+require_once("../files/sidebar.php");
+
+//include the notes sidebar
+require_once("../notes/sidebar.php");
+
+/** End of the sidebar includes **/
+/*********************************/
+
+//uncomment the debug line to see what's going on with the query
 // $con->debug = 1;
 
-$sql_activities = "select activity_id, 
-activity_title, 
-scheduled_at, 
+$sql_activities = "select activity_id,
+activity_title,
+scheduled_at,
 ends_at,
-a.on_what_table, 
-a.on_what_id, 
-a.entered_at, 
-activity_status, 
-at.activity_type_pretty_name, 
-c.company_id, 
-c.company_name, 
-cont.contact_id, 
-cont.first_names as contact_first_names, 
-cont.last_name as contact_last_name, 
+a.on_what_table,
+a.on_what_id,
+a.entered_at,
+activity_status,
+at.activity_type_pretty_name,
+c.company_id,
+c.company_name,
+cont.contact_id,
+cont.first_names as contact_first_names,
+cont.last_name as contact_last_name,
 if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
 from activity_types at, companies c, activities a left join contacts cont on a.contact_id = cont.contact_id
 where a.user_id = $session_user_id
@@ -42,9 +76,9 @@ $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_compan
 
 if ($rst) {
     while (!$rst->EOF) {
-		
-		$company_id = $rst->fields['company_id'];
-		$company_name = $rst->fields['company_name'];
+
+        $company_id = $rst->fields['company_id'];
+        $company_name = $rst->fields['company_name'];
         $activity_title = $rst->fields['activity_title'];
         $activity_description = $rst->fields['activity_description'];
         $on_what_table = $rst->fields['on_what_table'];
@@ -52,30 +86,30 @@ if ($rst) {
         $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
         $ends_at = $con->userdate($rst->fields['ends_at']);
         $activity_status = $rst->fields['activity_status'];
-		
-		$attached_to_link = '';
-		$attached_to_name = '';
-        
+
+        $attached_to_link = '';
+        $attached_to_name = '';
+
         if ($on_what_table == 'opportunities') {
             $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
             $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
         } elseif ($on_what_table == 'cases') {
             $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
             $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-		} else {
+        } else {
             $attached_to_link = "";
             $sql = "select * from users where 1 = 2";
         }
-		
+
         $rst2 = $con->execute($sql);
-        
-		if ($rst2) {
+
+        if ($rst2) {
             $attached_to_name = $rst2->fields['attached_to_name'];
             $rst2->close();
         }
-		
+
         $attached_to_link .= $attached_to_name . "</a>";
-		
+
         $open_p = $rst->fields['activity_status'];
         $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
         $is_overdue = $rst->fields['is_overdue'];
@@ -104,6 +138,7 @@ if ($rst) {
     $rst->close();
 }
 
+//close the database connection, as we are done with it.
 $con->close();
 
 if (!strlen($activity_rows) > 0) {
@@ -136,15 +171,39 @@ start_page($page_title);
         </table>
 
         </td>
+
         <!-- gutter //-->
         <td class=gutter width=1%>
         &nbsp;
         </td>
+
         <!-- right column //-->
         <td class=rcol width="24%" valign=top>
+
+            <!-- opportunities //-->
+            <?php  echo $opportunity_rows; ?>
+
+            <!-- cases //-->
+            <?php  echo $case_rows; ?>
+
+            <!-- files //-->
+            <?php  echo $file_rows; ?>
+
+            <!-- notes //-->
+            <?php  echo $note_rows; ?>
 
         </td>
     </tr>
 </table>
 
-<?php end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: home.php,v $
+ * Revision 1.9  2004/03/07 14:09:14  braverock
+ * - use centralized side-bar code in advance of i18n conversion
+ *
+ */
+?>

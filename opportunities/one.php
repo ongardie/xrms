@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.8 2004/02/10 17:26:28 maulani Exp $
+ * $Id: one.php,v 1.9 2004/03/07 14:08:22 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -149,6 +149,31 @@ if ($rst) {
     }
     $rst->close();
 }
+
+/*********************************/
+/*** Include the sidebar boxes ***/
+
+//set up our substitution variables for use in the siddebars
+$on_what_table = 'opportunities';
+$on_what_id = $opportunity_id;
+$on_what_string = 'opportunity';
+
+//include the Cases sidebar
+//$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
+//require_once("../cases/sidebar.php");
+
+//include the opportunities sidebar
+//$opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
+//require_once("../opportunities/sidebar.php");
+
+//include the files sidebar
+require_once("../files/sidebar.php");
+
+//include the notes sidebar
+require_once("../notes/sidebar.php");
+
+/** End of the sidebar includes **/
+/*********************************/
 
 $categories = implode($categories, ", ");
 
@@ -406,43 +431,10 @@ function markComplete() {
         </table>
 
         <!-- notes //-->
-        <form action="../notes/new.php" method="post">
-        <input type="hidden" name="on_what_table" value="opportunities">
-        <input type="hidden" name="on_what_id" value="<?php echo $opportunity_id ?>">
-        <input type="hidden" name="return_url" value="/opportunities/one.php?opportunity_id=<?php echo $opportunity_id ?>">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header>Notes</td>
-            </tr>
-            <?php echo $note_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=4><input type=submit class=button value="New"></td>
-            </tr>
-        </table>
-        </form>
+        <?php echo $note_rows; ?>
 
         <!-- files //-->
-        <form action="<?php  echo $http_site_root; ?>/files/new.php" method="post">
-        <input type=hidden name=on_what_table value="opportunities">
-        <input type=hidden name=on_what_id value="<?php  echo $opportunity_id; ?>">
-        <input type=hidden name=return_url value="/opportunities/one.php?opportunity_id=<?php  echo $opportunity_id; ?>">
-        <table class=widget cellspacing=1 width=100%>
-            <tr>
-                <td class=widget_header colspan=5>Files</td>
-            </tr>
-            <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Size</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Date</td>
-
-            </tr>
-            <?php  echo $file_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=5><input type=submit class=button value="New"></td>
-            </tr>
-        </table>
-        </form>
+        <?php echo $file_rows; ?>
 
         </td>
     </tr>
@@ -453,6 +445,9 @@ function markComplete() {
 end_page();
 
 /**
- * $Log:
+ * $Log: one.php,v $
+ * Revision 1.9  2004/03/07 14:08:22  braverock
+ * - use centralized side-bar code in advance of i18n conversion
+ *
  */
 ?>
