@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.1 2004/07/14 16:50:16 gpowers Exp $
+ * $Id: one.php,v 1.2 2004/07/22 17:37:10 gpowers Exp $
  *
  */
 
@@ -25,7 +25,7 @@ $info_id = $_GET['info_id'];
 $info_type_id = $_GET['info_type_id'];
 $company_id = $_GET['company_id'];
 
-$return_url = urlencode("$http_site_root/plugins/info/one.php?info_id=" . $info_id . "&info_type_id=" . $info_type_id . "&company_id=" . $company_id);
+$return_url = urlencode("/plugins/info/one.php?info_id=" . $info_id . "&info_type_id=" . $info_type_id . "&company_id=" . $company_id);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -174,8 +174,9 @@ if ($all_elements) {
             $rst->close();
         }
 
+        $return_url = urlencode("/plugins/info/one.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id");
         $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php?company_id=$company_id&activity_id=" . $all_elements->fields['activity_id'] . "'>" . $all_elements->fields['activity_title'] . '</a></td>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?company_id=$company_id&activity_id=" . $all_elements->fields['activity_id'] . "&return_url=$return_url'>" . $all_elements->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $all_elements->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $all_elements->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $all_elements->fields['contact_first_names'] . ' ' . $all_elements->fields['contact_last_name'] . '</td>';
