@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.12 2005/03/04 17:55:47 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.13 2005/03/07 16:31:02 daturaarutad Exp $
  */
 
 
@@ -358,6 +358,7 @@ class GUP_Pager {
 				} else {
 					$rs = &$this->db->Execute($this->sql);
 				}
+
       			$this->rs = &$rs;
        			if (!$rs) {
        				print "<h3>";
@@ -958,8 +959,18 @@ END;
 	*/
 	function SetUpSQLOrderByClause() {
 	
-		// set up an order by clause if the sort column is coming from SQL
-		if(!isset($this->column_info[$this->sort_column-1]['sql_sort_column'])) {
+		if(isset($this->column_info[$this->sort_column-1]['sql_sort_column'])) {
+
+			$columns = array();
+
+			// set up the order by 8 desc, 9 desc, etc.
+			foreach(explode(',', $this->column_info[$this->sort_column-1]['sql_sort_column']) as $column) {
+				$columns[] = $column . " " . $this->sort_order;
+			}
+			
+			$order_by = " order by " . implode(', ', $columns);
+
+		} else {
 			
 			$sql_query_column = 0;
 
@@ -973,10 +984,9 @@ END;
                 	}
             	}
 			}
+			$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'] . " " . $this->sort_order;
 		} 
-		$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'];
 
-		$order_by .= " " . $this->sort_order;
 		$this->sql .= " $order_by";
 		$this->get_only_visible = true;
 	}
@@ -984,6 +994,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.13  2005/03/07 16:31:02  daturaarutad
+ * fixed code for comma delimited sql_sort_column parameter
+ *
  * Revision 1.12  2005/03/04 17:55:47  daturaarutad
  * added code to handle default_sort in column_info
  *
