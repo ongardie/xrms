@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.16 2005/01/13 18:42:30 vanmer Exp $
+ * $Id: new-2.php,v 1.17 2005/03/29 18:23:54 maulani Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -97,6 +97,8 @@ $con->execute($ins);
 
 $contact_id = $con->Insert_ID();
 
+add_audit_item($con, $session_user_id, 'created', 'contacts', $contact_id, 1);
+
 $con->close();
 
 if ($edit_address == "on") {
@@ -107,6 +109,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.17  2005/03/29 18:23:54  maulani
+ * - Add audit log entry for contact creation
+ *
  * Revision 1.16  2005/01/13 18:42:30  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *
