@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.33 2004/08/06 15:58:25 neildogg Exp $
+ * $Id: some.php,v 1.34 2004/08/14 00:41:46 gpowers Exp $
  */
 
 //include the standard files
@@ -150,6 +150,7 @@ $sql_recently_viewed = "select
 cont.contact_id,
 cont.first_names,
 cont.last_name,
+c.company_id,
 c.company_name,
 cont.address_id,
 cont.work_phone,
@@ -177,7 +178,7 @@ if ($rst) {
         $recently_viewed_table_rows .= '<tr>';
         $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">';
         $recently_viewed_table_rows .= $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
-        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="../companies/one.php?company_id=' . $rst->fields['company_id'] . '">' . $rst->fields['company_name'] . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) . '</td>';
         $recently_viewed_table_rows .= '</tr>';
         $rst->movenext();
@@ -359,6 +360,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.34  2004/08/14 00:41:46  gpowers
+ * - made Company Name a link, under "Recently Viewed"
+ *
  * Revision 1.33  2004/08/06 15:58:25  neildogg
  * - Now adds exact match sort AFTER chosen sort
  *
