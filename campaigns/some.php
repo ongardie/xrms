@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.26 2005/02/14 21:42:11 vanmer Exp $
+ * $Id: some.php,v 1.27 2005/03/02 19:36:52 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,8 +13,10 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+
 
 $on_what_table='campaigns';
 $session_user_id = session_check();
@@ -36,23 +38,6 @@ $arr_vars = array ( // local var name       // session variable name
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
 
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-    $current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
@@ -63,10 +48,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $starts_at = $con->SQLDate('Y-m-d', 'cam.starts_at');
 $ends_at = $con->SQLDate('Y-m-d', 'cam.ends_at');
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "cam.campaign_id", "'\">'" , "cam.campaign_title", "'</a>'") . " AS '" . _("Campaign") . "',
-  camt.campaign_type_pretty_name AS '" . _("Type") . "', cams.campaign_status_pretty_name AS '" . _("Status") . "', u.username AS '" . _("Owner") . "',
-  $starts_at AS '" . _("Starts") . "', $ends_at AS '" . _("Ends") . "'
-";
+$sql = "SELECT " . 
+$con->Concat($con->qstr('<a id="'), 'cam.campaign_title', $con->qstr('" href="one.php?campaign_id='), "cam.campaign_id",  $con->qstr('">'), "cam.campaign_title", $con->qstr('</a>')) . " AS campaign, " . 
+"camt.campaign_type_pretty_name AS type, cams.campaign_status_pretty_name AS status, u.username AS owner, $starts_at AS starts, $ends_at AS ends ";
 
 if ($campaign_category_id > 0) {
     $from = "from campaigns cam, campaign_types camt, campaign_statuses cams, users u, entity_category_map ecm ";
@@ -119,14 +103,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     } else { $where .= ' AND 1 = 2 '; }
 }
 
-if ($sort_column == 1) {
-    $order_by = "campaign_title";
-} else {
-    $order_by = $sort_column;
-}
-
-$order_by .= " $sort_order";
-$sql .= $from . $where . " order by $order_by";
+$sql .= $from . $where;
 
 $sql_recently_viewed = "select * from recent_items r, campaigns cam, campaign_types camt, campaign_statuses cams
 where r.user_id = $session_user_id
@@ -188,18 +165,6 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'campaigns', '', 4);
 }
 
-// get company_count
-$rst = $con->execute($sql);
-$company_count = 0;
-if ( $rst ) {
-  while (!$rst->EOF) {
-    $company_count += 1;
-    break;                // we only care if we have more than 0, so stop here
-    $rst->movenext();
-  }
-  $rst->close();
-}
-
 $page_title = _("Campaigns");
 start_page($page_title, true, $msg);
 
@@ -208,7 +173,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-    <form action=some.php method=post>
+    <form action=some.php method=post name="CampaignForm">
     <input type=hidden name=use_post_vars value=1>
     <input type=hidden name=campaigns_next_page value="<?php  echo $campaigns_next_page ?>">
     <input type=hidden name=resort value="0">
@@ -253,20 +218,48 @@ start_page($page_title, true, $msg);
         <tr>
             <td class=widget_content_form_element colspan=3><input name="submit_form" type=submit class=button value="<?php echo _("Search"); ?>">
                 <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
-                <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";} ?>
             </td>
         </tr>
     </table>
-    </form>
 
 <?php
 
-$pager = new Campaigns_Pager($con,$sql, $sort_column-1, $pretty_sort_order);
-$pager->render($rows_per_page=$system_rows_per_page);
-$con->close();
+//Campaign 	Type	Status	Owner	Starts	Ends
+
+$columns = array();
+$columns[] = array('name' => _('Campaign'), 'index_sql' => 'campaign');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'type');
+$columns[] = array('name' => _('Status'), 'index_sql' => 'status');
+$columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
+$columns[] = array('name' => _('Starts'), 'index_sql' => 'starts');
+$columns[] = array('name' => _('Ends'), 'index_sql' => 'ends');
+
+
+// selects the columns this user is interested in
+$default_columns =  array('campaign','type','status','owner','starts','ends');
+
+$pager_columns = new Pager_Columns('CampaignPager', $columns, $default_columns, 'CampaignForm');
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+
+echo $pager_columns_selects;
+
+
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CampaignForm', 'CampaignPager', $columns, false);
+$pager->AddEndRows($endrows);
+$pager->Render($system_rows_per_page);
 
 ?>
 
+    </form>
     </div>
 
         <!-- right column //-->
@@ -337,6 +330,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.27  2005/03/02 19:36:52  daturaarutad
+ * updated to use the GUP_Pager class
+ *
  * Revision 1.26  2005/02/14 21:42:11  vanmer
  * - updated to reflect speed changes in ACL operation
  *
