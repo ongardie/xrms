@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.9 2004/03/07 14:08:22 braverock Exp $
+ * $Id: one.php,v 1.10 2004/03/09 14:59:05 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,7 +19,7 @@ $opportunity_id = $_GET['opportunity_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 
 update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 
@@ -150,6 +150,8 @@ if ($rst) {
     $rst->close();
 }
 
+$categories = implode($categories, ", ");
+
 /*********************************/
 /*** Include the sidebar boxes ***/
 
@@ -175,52 +177,19 @@ require_once("../notes/sidebar.php");
 /** End of the sidebar includes **/
 /*********************************/
 
-$categories = implode($categories, ", ");
-
-$sql = "select note_id, note_description, entered_by, entered_at, username from notes, users
-where notes.entered_by = users.user_id
-and on_what_table = 'opportunities' and on_what_id = $opportunity_id
-and note_record_status = 'a' order by entered_at desc";
-
-$rst = $con->execute($sql);
-
-if ($rst) {
-    while (!$rst->EOF) {
-        $note_rows .= "<tr>";
-        $note_rows .= "<td class=widget_content><font class=note_label>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/opportunities/one.php?opportunity_id=" . $opportunity_id . "'>Edit</a></font><br>" . $rst->fields['note_description'] . "</td>";
-        $note_rows .= "</tr>";
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-$sql = "select * from files, users where files.entered_by = users.user_id and on_what_table = 'opportunities' and on_what_id = $opportunity_id and file_record_status = 'a'";
-
-$rst = $con->execute($sql);
-
-if ($rst) {
-    while (!$rst->EOF) {
-        $file_rows .= '<tr>';
-        $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/opportunities/one.php?opportunity_id=$opportunity_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
-        $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
-        $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
-        $file_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
+// get user name menu
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
 $rst->close();
 
+//get activity type menu
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
 $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
+// get contact names
 $sql = "select concat(first_names, ' ', last_name), contact_id from contacts where company_id = $company_id and contact_record_status = 'a' order by last_name";
 $rst = $con->execute($sql);
 if ($rst) {
@@ -237,14 +206,6 @@ if (strlen($categories) == 0) {
 
 if (strlen($activity_rows) == 0) {
     $activity_rows = "<tr><td class=widget_content colspan=6>No activities</td></tr>";
-}
-
-if (strlen($note_rows) == 0) {
-    $note_rows = "<tr><td class=widget_content colspan=4>No notes</td></tr>";
-}
-
-if (strlen($file_rows) == 0) {
-    $file_rows = "<tr><td class=widget_content colspan=4>No files</td></tr>";
 }
 
 $page_title = "One Opportunity : $opportunity_title";
@@ -446,6 +407,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2004/03/09 14:59:05  braverock
+ * - removed obsolete code after sidebar conversion
+ *
  * Revision 1.9  2004/03/07 14:08:22  braverock
  * - use centralized side-bar code in advance of i18n conversion
  *
