@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.26 2004/07/10 12:56:06 braverock Exp $
+ * $Id: some.php,v 1.27 2004/07/14 16:06:55 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,12 +23,19 @@ $session_user_id = session_check();
 
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
-$msg = $_GET['msg'];
-$offset = $_POST['offset'];
-$clear = ($_GET['clear'] == 1) ? 1 : 0;
-$use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-$resort = $_POST['resort'];
-
+$msg    = isset($_GET['msg'])     ? $_GET['msg']     : '';
+$offset = isset($_POST['offset']) ? $_POST['offset'] : '';
+$resort = isset($_POST['resort']) ? $_POST['resort'] : '';
+if ( isset($_GET['clear']) ) {
+  $clear = ($_GET['clear'] == 1) ? 1 : 0;
+} else {
+  $clear = 0;
+}
+if ( isset($_POST['use_post_vars']) ) {
+  $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
+} else {
+  $use_post_vars = 0;
+}
 
 if ($clear) {
     $sort_column = '';
@@ -42,6 +49,8 @@ if ($clear) {
     $user_id = '';
     $crm_status_id = '';
     $industry_id = '';
+    $city = '';
+    $state = '';
 } elseif ($use_post_vars) {
     $sort_column = $_POST['sort_column'];
     $current_sort_column = $_POST['current_sort_column'];
@@ -57,6 +66,10 @@ if ($clear) {
     $crm_status_id = $_POST['crm_status_id'];
     $industry_id = $_POST['industry_id'];
 } else {
+
+  // first time in ???
+  if ( isset($_SESSION['companies_sort_column']) ) {
+    // no - get from session
     $sort_column = $_SESSION['companies_sort_column'];
     $current_sort_column = $_SESSION['companies_current_sort_column'];
     $sort_order = $_SESSION['companies_sort_order'];
@@ -68,6 +81,25 @@ if ($clear) {
     $user_id = $_SESSION['companies_user_id'];
     $crm_status_id = $_SESSION['companies_crm_status_id'];
     $industry_id = $_SESSION['industry_id'];
+    $city = $_SESSION['city'];
+    $state = $_SESSION['state'];
+  } else {
+    // yes - clear
+    $sort_column = '';
+    $current_sort_column = '';
+    $sort_order = '';
+    $current_sort_order = '';
+    $company_name = '';
+    $company_type_id = '';
+    $company_category_id = '';
+    $company_code = '';
+    $user_id = '';
+    $crm_status_id = '';
+    $industry_id = '';
+    $city = '';
+    $state = '';
+  }
+
 }
 
 if (!strlen($sort_column) > 0) {
@@ -88,6 +120,7 @@ $descending_order_image = ' <img border=0 height=10 width=10 alt="" src=../img/d
 
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
+$_SESSION['companies_company_type_id'] = $company_type_id;
 $_SESSION['companies_sort_column'] = $sort_column;
 $_SESSION['companies_current_sort_column'] = $sort_column;
 $_SESSION['companies_sort_order'] = $sort_order;
@@ -97,6 +130,9 @@ $_SESSION['companies_company_category_id'] = $company_category_id;
 $_SESSION['companies_company_code'] = $company_code;
 $_SESSION['companies_user_id'] = $user_id;
 $_SESSION['companies_crm_status_id'] = $crm_status_id;
+$_SESSION['industry_id'] = $industry_id;
+$_SESSION['city'] = $city;
+$_SESSION['state'] = $state;
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -200,6 +236,18 @@ $order_by .= " $sort_order";
 
 $sql .= $from . $where . " order by $order_by";
 
+// note: $sql is the list of companies we will be selecting
+// we need to determine the $company_count from it.
+$rst = $con->execute($sql);
+$company_count = 0;
+if ( $rst ) {
+  while (!$rst->EOF) {
+    $company_count += 1;
+    $rst->movenext();
+  }
+  $rst->close();
+}
+
 $sql_recently_viewed = "select
 r.recent_item_id,
 r.on_what_table,
@@ -220,6 +268,8 @@ and company_record_status = 'a'
 order by r.recent_item_timestamp desc";
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
+
+$recently_viewed_table_rows = '';
 
 if ($rst) {
     while (!$rst->EOF) {
@@ -285,6 +335,10 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
+        <input type=hidden name=company_type_id value="<?php  echo $company_type_id; ?>">
+        <input type=hidden name=company_code value="<?php  echo $company_code; ?>">
+        <input type=hidden name=crm_status_id value="<?php  echo $crm_status_id; ?>">
+
         <input type=hidden name=companies_next_page>
         <table class=widget cellspacing=1 width="100%">
             <tr>
@@ -423,6 +477,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.27  2004/07/14 16:06:55  cpsource
+ * - Fix numerous undefined variable usages, including a database
+ *   loop to determine $company_count.
+ *
  * Revision 1.26  2004/07/10 12:56:06  braverock
  * - fix $SESSION sort order variables
  *   - applies patch suggest by cpsource in SF bug 976223
