@@ -9,13 +9,14 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$session_user_id = session_check();
-
 if ( !isset($_GET['case_id']) ) {
   header("Location: some.php?msg=no_case");
 }
 
 $case_id = $_GET['case_id'];
+$on_what_id=$case_id;
+
+$session_user_id = session_check('','Delete');
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);

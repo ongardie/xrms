@@ -8,9 +8,10 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
-
 $case_id = $_POST['case_id'];
+$on_what_id=$case_id;
+$session_user_id = session_check('','Update');
+
 $case_type_id = $_POST['case_type_id'];
 $case_status_id = $_POST['case_status_id'];
 $case_priority_id = $_POST['case_priority_id'];
@@ -22,6 +23,7 @@ $due_at = $_POST['due_at'];
 $company_id = $_POST['company_id'];
 $division_id = $_POST['division_id'];
 $on_what_table = $_POST['on_what_table'];
+$return_url = (array_key_exists('return_url',$_GET) ? $_GET['return_url'] : $_POST['return_url']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -89,7 +91,9 @@ if ( ! $no_update ) {
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
 
-    header("Location: one.php?msg=saved&case_id=$case_id");
+    if (!$return_url) $return_url="one.php?msg=saved&case_id=$case_id";
+    
+    header("Location: $return_url");
 }
 
 $con->close();
