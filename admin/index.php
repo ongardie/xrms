@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.18 2004/07/16 12:22:20 cpsource Exp $
+ * $Id: index.php,v 1.19 2004/07/16 12:35:10 cpsource Exp $
  */
 
 //include required stuff
@@ -19,10 +19,20 @@ $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 // get and check role (Admin, Developer) OK, else we should fail
-$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
-if ( !(0 == strcmp($role,'Admin') || 0 == strcmp($role,'Developer')) ) {
-   // not OK - bring them to logout, they've tried to hack the system
-   header("Location: " . $http_site_root . "/logout.php");
+$role    = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+$role_ok = false;
+
+echo "role = $role<br>";
+
+if ( $role == 'Admin' || $role == 'Developer' ) {
+  $role_ok = true;
+}
+
+if ( 0 ) {
+if ( !$role_ok ) {
+  // not OK - bring them to logout, they've tried to hack the system
+  header("Location: " . $http_site_root . "/logout.php");
+}
 }
 
 // open a connection to the database
@@ -232,6 +242,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.19  2004/07/16 12:35:10  cpsource
+ * - Stub login feature for more debug.
+ *
  * Revision 1.18  2004/07/16 12:22:20  cpsource
  * - Logic fix for checking roles
  *
