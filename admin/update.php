@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.29 2004/08/03 15:47:06 neildogg Exp $
+ * $Id: update.php,v 1.30 2004/08/04 20:46:06 introspectshun Exp $
  */
 
 // where do we include from
@@ -251,14 +251,13 @@ $rst = $con->execute($sql);
 $recCount = $rst->fields['recCount'];
 if ($recCount == 0) {
     $msg .= _("Added an Activities Default Behavior system parameter.").'<BR><BR>';
-    $sql = "SELECT * FROM system_parameters WHERE 1 = 2"; //select empty record as placeholder
-    $rst = $con->execute($sql);
 
     $rec = array();
     $rec['param_id'] = 'Activities Default Behavior';
     $rec['string_val'] = $activities_default_behavior;
 
-    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
 }
 
@@ -2225,6 +2224,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.30  2004/08/04 20:46:06  introspectshun
+ * - Pass table name to GetInsertSQL
+ *
  * Revision 1.29  2004/08/03 15:47:06  neildogg
  * - Now changes are actually being executed
  *
