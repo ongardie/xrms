@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.26 2004/06/25 03:12:41 braverock Exp $
+ * $Id: one.php,v 1.27 2004/07/02 18:09:19 neildogg Exp $
  */
 
 //include required files
@@ -131,6 +131,9 @@ if ($company_id) {
     // include the company sidebar code
     require_once ('../companies/sidebar.php');
 }
+
+//include the contacts-companies sidebar
+require_once("../companies/company-sidebar.php");
 
 /* add opportunities/case/campaign combo box */
 //get singular form of table name (from on_what_table field)
@@ -323,6 +326,8 @@ start_page($page_title, true, $msg);
         <?php echo $company_block; ?>
         <!-- contact information block //-->
         <?php echo $contact_block; ?>
+        <!-- sidebar plugins //-->
+        <?php echo $company_link_rows; ?>
     </div>
 
 </div>
@@ -358,6 +363,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.27  2004/07/02 18:09:19  neildogg
+ * - Added contact-company sidebar to activities page as per new support in companies/company-sidebar.php.
+ *
  * Revision 1.26  2004/06/25 03:12:41  braverock
  * - add error handling for missing variables
  *
