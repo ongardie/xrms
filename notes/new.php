@@ -2,7 +2,7 @@
 /**
  * Create a note
  *
- * $Id: new.php,v 1.3 2004/04/16 22:22:26 maulani Exp $
+ * $Id: new.php,v 1.4 2004/04/17 16:04:30 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,9 +29,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=45% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=new-2.php method=post>
         <input type="hidden" name="on_what_table" value="<?php echo $on_what_table; ?>">
@@ -53,13 +52,10 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=53% valign=top>
+    <div id="Sidebar">
 
         &nbsp;
 
@@ -72,6 +68,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.4  2004/04/17 16:04:30  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.3  2004/04/16 22:22:26  maulani
  * - Add CSS2 positioning
  *

@@ -1,4 +1,10 @@
 <?php
+/**
+ *
+ * Email.
+ *
+ * $Id: index.php,v 1.3 2004/04/17 16:00:36 maulani Exp $
+ */
 
 require_once('vars.php');
 require_once('utils-interface.php');
@@ -41,9 +47,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=email-2.php method=post>
 		<table class=widget cellspacing=1>
@@ -60,17 +65,27 @@ start_page($page_title, true, $msg);
 			</tr>
 		</table>
         </form>
-		
-		</td>
-		<!-- gutter //-->
-		<td class=gutter width=2%>
-		&nbsp;
-		</td>
-		<!-- right column //-->
-		<td class=rcol width=33% valign=top>
-		
-    	</td>
-	</tr>
-</table>
 
-<?php end_page(); ?>
+    </div>
+
+        <!-- right column //-->
+    <div id="Sidebar">
+
+		&nbsp;
+
+    </div>
+
+</div>
+
+<?php
+
+end_page();
+
+/**
+ * $Log: index.php,v $
+ * Revision 1.3  2004/04/17 16:00:36  maulani
+ * - Add CSS2 positioning
+ *
+ *
+ */
+?>

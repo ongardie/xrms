@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of campaigns
  *
- * $Id: new.php,v 1.4 2004/04/16 22:20:55 maulani Exp $
+ * $Id: new.php,v 1.5 2004/04/17 16:02:40 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -42,9 +42,8 @@ start_page($page_title, true, $msg);
 
 <script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=55% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=new-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id ?>>
@@ -90,17 +89,16 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
-        <!-- right column //-->
-        <td class=rcol width=43% valign=top>
+    </div>
 
-        </td>
-    </tr>
-</table>
+        <!-- right column //-->
+    <div id="Sidebar">
+
+        &nbsp;
+
+    </div>
+
+</div>
 
 <script language="JavaScript" type="text/javascript">
 
@@ -152,6 +150,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.5  2004/04/17 16:02:40  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.4  2004/04/16 22:20:55  maulani
  * - Add CSS2 positioning
  *

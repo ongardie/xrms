@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.7 2004/04/16 22:21:19 maulani Exp $
+ * $Id: one.php,v 1.8 2004/04/17 16:02:40 maulani Exp $
  */
 
 //include required files
@@ -155,13 +155,10 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=53% valign=top>
+    <div id="Sidebar">
 
         &nbsp;
 
@@ -193,6 +190,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/04/17 16:02:40  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.7  2004/04/16 22:21:19  maulani
  * - Add CSS2 positioning
  *

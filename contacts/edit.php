@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.8 2004/04/16 22:20:55 maulani Exp $
+ * $Id: edit.php,v 1.9 2004/04/17 16:03:45 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -106,9 +106,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=50% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=edit-2.php method=post>
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
@@ -228,13 +227,12 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=68% valign=top>
+    <div id="Sidebar">
+
+        &nbsp;
 
     </div>
 </div>
@@ -245,6 +243,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.9  2004/04/17 16:03:45  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.8  2004/04/16 22:20:55  maulani
  * - Add CSS2 positioning
  *

@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.10 2004/04/16 22:21:59 maulani Exp $
+ * $Id: one.php,v 1.11 2004/04/17 16:02:41 maulani Exp $
  */
 
 //include required files
@@ -208,9 +208,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=70% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -337,13 +336,10 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=29% valign=top>
+    <div id="Sidebar">
 
         <!-- categories //-->
         <table class=widget cellspacing=1>
@@ -373,6 +369,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2004/04/17 16:02:41  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.10  2004/04/16 22:21:59  maulani
  * - Add CSS2 positioning
  *

@@ -1,4 +1,10 @@
 <?php
+/**
+ *
+ * Confirm email recipients.
+ *
+ * $Id: email-3.php,v 1.4 2004/04/17 16:00:36 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -50,9 +56,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=55% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=email-4.php method=post>
 		<table class=widget cellspacing=1>
@@ -72,17 +77,27 @@ start_page($page_title, true, $msg);
             </tr>
 		</table>
         </form>
-		
-		</td>
-		<!-- gutter //-->
-		<td class=gutter width=2%>
-		&nbsp;
-		</td>
-		<!-- right column //-->
-		<td class=rcol width=43% valign=top>
-		
-    	</td>
-	</tr>
-</table>
 
-<?php end_page(); ?>
+    </div>
+
+        <!-- right column //-->
+    <div id="Sidebar">
+
+		&nbsp;
+
+    </div>
+
+</div>
+
+<?php
+
+end_page();
+
+/**
+ * $Log: email-3.php,v $
+ * Revision 1.4  2004/04/17 16:00:36  maulani
+ * - Add CSS2 positioning
+ *
+ *
+ */
+?>

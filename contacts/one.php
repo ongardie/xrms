@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.17 2004/04/16 22:20:55 maulani Exp $
+ * $Id: one.php,v 1.18 2004/04/17 16:03:45 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -309,9 +309,8 @@ function markComplete() {
 //-->
 </script>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=70% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -504,13 +503,10 @@ function markComplete() {
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=29% valign=top>
+    <div id="Sidebar">
 
         <!-- categories //-->
         <table class=widget cellspacing=1>
@@ -537,9 +533,9 @@ function markComplete() {
         <!-- files //-->
         <?php echo $file_rows; ?>
 
-        </td>
-    </tr>
-</table>
+    </div>
+
+</div>
 
 <script>
 <!--
@@ -560,6 +556,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.18  2004/04/17 16:03:45  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.17  2004/04/16 22:20:55  maulani
  * - Add CSS2 positioning
  *

@@ -1,4 +1,10 @@
 <?php
+/**
+ *
+ * Show email messages not sent.
+ *
+ * $Id: email-4.php,v 1.4 2004/04/17 16:00:36 maulani Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -37,9 +43,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=35% valign=top>
+<div id="Main">
+    <div id="Content">
 
 		<table class=widget cellspacing=1>
             <tr>
@@ -49,17 +54,27 @@ start_page($page_title, true, $msg);
                 <td class=widget_content>These messages have not been sent, because bulk e-mail has not been enabled on this system.</td>
             </tr>
 		</table>
-		
-		</td>
-		<!-- gutter //-->
-		<td class=gutter width=2%>
-		&nbsp;
-		</td>
-		<!-- right column //-->
-		<td class=rcol width=63% valign=top>
-		
-    	</td>
-	</tr>
-</table>
 
-<?php end_page(); ?>
+    </div>
+
+        <!-- right column //-->
+    <div id="Sidebar">
+
+		&nbsp;
+
+    </div>
+
+</div>
+
+<?php
+
+end_page();
+
+/**
+ * $Log: email-4.php,v $
+ * Revision 1.4  2004/04/17 16:00:36  maulani
+ * - Add CSS2 positioning
+ *
+ *
+ */
+?>

@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.4 2004/04/16 22:20:55 maulani Exp $
+ * $Id: edit.php,v 1.5 2004/04/17 16:02:40 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -63,9 +63,8 @@ start_page($page_title, true, $msg);
 
 <script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=55% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=campaign_id value=<?php  echo $campaign_id; ?>>
@@ -171,6 +170,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.5  2004/04/17 16:02:40  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.4  2004/04/16 22:20:55  maulani
  * - Add CSS2 positioning
  *

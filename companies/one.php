@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.25 2004/04/16 22:19:38 maulani Exp $
+ * $Id: one.php,v 1.26 2004/04/17 16:02:41 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -369,9 +369,8 @@ function openNewsWindow() {
 //-->
 </script>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=70% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -588,15 +587,10 @@ function openNewsWindow() {
         </table>
         </form>
 
-        </td>
-
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
 
         <!-- right column //-->
-        <td class=rcol width=29% valign=top>
+    <div id="Sidebar">
 
         <!-- categories //-->
         <div id='category_sidebar'>
@@ -625,9 +619,10 @@ function openNewsWindow() {
         <!-- files //-->
         <?php echo $file_rows; ?>
 
-        </td>
-    </tr>
-</table>
+    </div>
+
+</div>
+
 <script>
 <!--
 
@@ -648,6 +643,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.26  2004/04/17 16:02:41  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.25  2004/04/16 22:19:38  maulani
  * - Add CSS2 positioning
  *

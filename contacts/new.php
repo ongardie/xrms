@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.9 2004/04/16 22:20:55 maulani Exp $
+ * $Id: new.php,v 1.10 2004/04/17 16:03:45 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,9 +61,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=45% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=new-2.php method=post>
         <input type=hidden name=company_id value="<?php echo $company_id; ?>">
@@ -179,19 +178,16 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=53% valign=top>
+    <div id="Sidebar">
 
         &nbsp;
 
-        </td>
-    </tr>
-</table>
+    </div>
+
+</div>
 
 <script language="JavaScript" type="text/javascript">
 
@@ -209,6 +205,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.10  2004/04/17 16:03:45  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.9  2004/04/16 22:20:55  maulani
  * - Add CSS2 positioning
  *

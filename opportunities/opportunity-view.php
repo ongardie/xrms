@@ -2,7 +2,7 @@
 /**
  * View an opportunity
  *
- * $Id: opportunity-view.php,v 1.3 2004/04/16 22:22:41 maulani Exp $
+ * $Id: opportunity-view.php,v 1.4 2004/04/17 15:59:59 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -36,9 +36,8 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=100% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -51,17 +50,16 @@ start_page($page_title);
             <?php  echo $table_rows; ?>
         </table>
 
-        </td>
-
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
+    </div>
 
         <!-- right column //-->
+    <div id="Sidebar">
 
-    </tr>
-</table>
+        &nbsp;
+
+    </div>
+
+</div>
 
 <?php
 
@@ -69,6 +67,9 @@ end_page();
 
 /**
  * $Log: opportunity-view.php,v $
+ * Revision 1.4  2004/04/17 15:59:59  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.3  2004/04/16 22:22:41  maulani
  * - Add CSS2 positioning
  *

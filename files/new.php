@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.5 2004/04/16 22:22:06 maulani Exp $
+ * $Id: new.php,v 1.6 2004/04/17 16:04:30 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -49,9 +49,9 @@ start_page($page_title, true, $msg);
 ?>
 
 <script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=55% valign=top>
+
+<div id="Main">
+    <div id="Content">
 
         <form enctype="multipart/form-data" action=new-2.php method=post>
         <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_file_size; ?>">
@@ -88,17 +88,16 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
-        <!-- right column //-->
-        <td class=rcol width=43% valign=top>
+    </div>
 
-        </td>
-    </tr>
-</table>
+        <!-- right column //-->
+    <div id="Sidebar">
+
+        &nbsp;
+
+    </div>
+
+</div>
 
 <script language="JavaScript" type="text/javascript">
 
@@ -127,6 +126,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.6  2004/04/17 16:04:30  maulani
+ * - Add CSS2 positioning
+ *
  * Revision 1.5  2004/04/16 22:22:06  maulani
  * - Add CSS2 positioning
  *

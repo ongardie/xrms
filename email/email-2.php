@@ -46,9 +46,8 @@ function saveAsNewTemplate() {
 
 </script>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=55% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=email-3.php method=post>
 		<table class=widget cellspacing=1>
@@ -67,18 +66,17 @@ function saveAsNewTemplate() {
 			</tr>
 		</table>
         </form>
-		
-		</td>
-		<!-- gutter //-->
-		<td class=gutter width=1%>
-		&nbsp;
-		</td>
-		<!-- right column //-->
-		<td class=rcol width=44% valign=top>
+
+    </div>
+
+        <!-- right column //-->
+    <div id="Sidebar">
+
         &nbsp;
-        </td>
-	</tr>
-</table>
+
+    </div>
+
+</div>
 
 <form action=update-template.php method=post>
 <input type=hidden name=email_template_id value="<?php  echo $email_template_id ?>">
