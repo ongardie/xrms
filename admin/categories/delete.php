@@ -11,13 +11,13 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 
 $category_id = $_POST['category_id'];
+$category_record_status = "NULL";
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 $sql = "SELECT * FROM categories WHERE category_id = $category_id";
 $rst = $con->execute($sql);
-
 $rec = array();
 $rec['category_record_status'] = $category_record_status;
 
