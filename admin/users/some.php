@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.10 2004/12/09 22:29:12 braverock Exp $
+ * $Id: some.php,v 1.11 2005/01/08 01:31:34 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,7 +26,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $table_rows .= '<tr>';
+        $table_rows = '<tr>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['role_pretty_name'] . '</td>';
@@ -163,6 +163,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2005/01/08 01:31:34  introspectshun
+ * - Fixed $table_rows undefined error
+ *
  * Revision 1.10  2004/12/09 22:29:12  braverock
  * - rearrange output to order by name and place the userid link in the last column of the table
  *
