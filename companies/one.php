@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.40 2004/06/04 14:30:13 braverock Exp $
+ * $Id: one.php,v 1.41 2004/06/04 16:54:38 gpowers Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -547,7 +547,7 @@ function openNewsWindow() {
             </tr>
         </table>
 
-        <script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+        <?php jscalendar_includes(); ?>
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
@@ -571,9 +571,12 @@ function openNewsWindow() {
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at value="<?php echo date('Y-m-d H:i:s'); ?>">
-              <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a>
-<input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
+                <td colspan=2 class=widget_content_form_element>
+                    <input type=text ID="f_date_d" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <input class=button type=submit value="Add">
+                    <input class=button type=button onclick="javascript: markComplete();" value="Done">
+                </td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -616,17 +619,15 @@ function openNewsWindow() {
 </div>
 
 <script>
-<!--
-
-// create calendar object(s) just after form tag closed
-// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
-// note: you can have as many calendar objects as you need for your application
-
-    var cal1 = new calendar1(document.forms[0].elements['scheduled_at']);
-    cal1.year_scroll = false;
-    cal1.time_comp = false;
-
-//-->
+Calendar.setup({
+        inputField     :    "f_date_d",      // id of the input field
+        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
+        showsTime      :    true,            // will display a time selector
+        button         :    "f_trigger_d",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
 </script>
 
 <?php
@@ -635,6 +636,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.41  2004/06/04 16:54:38  gpowers
+ * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
+ * w/minor changes: changed includes to function, used complete php tags
+ *
  * Revision 1.40  2004/06/04 14:30:13  braverock
  * - add contact_id field to mailto link
  *
