@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.15 2005/01/10 21:53:19 vanmer Exp $
+ * $Id: new.php,v 1.16 2005/01/11 23:10:32 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -143,7 +143,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element>
                     <?php  echo $case_status_menu ?>
-                    <a href="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                    <a href="#" onclick="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -227,6 +227,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.16  2005/01/11 23:10:32  braverock
+ * - removed bad javascript window.open hack, now set empty anchor on current page
+ *
  * Revision 1.15  2005/01/10 21:53:19  vanmer
  * - added redirect on case_type change, will re-fill fields above the type
  * - added javascript id to getmenu2 calls, to allow for above feature to operate properly

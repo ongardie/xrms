@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.31 2005/01/11 13:57:24 braverock Exp $
+ * $Id: one.php,v 1.32 2005/01/11 23:13:35 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -411,7 +411,7 @@ function markComplete() {
                 <td colspan=2 class=widget_label><?php echo _("On"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
+                <td class=widget_content_form_element><input type=text name=activity_title></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
@@ -447,6 +447,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.32  2005/01/11 23:13:35  braverock
+ * - removed bad javascript window.open hack, now set empty anchor on current page
+ *
  * Revision 1.31  2005/01/11 13:57:24  braverock
  * - removed bad javascript window.open hack - now set empty anchor on current page
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.16 2005/01/10 21:51:08 vanmer Exp $
+ * $Id: edit.php,v 1.17 2005/01/11 23:10:33 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -221,7 +221,7 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element>
                     <?php  echo $case_status_menu; ?>
-                    <a href="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                    <a href="#" onclick="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -315,6 +315,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.17  2005/01/11 23:10:33  braverock
+ * - removed bad javascript window.open hack, now set empty anchor on current page
+ *
  * Revision 1.16  2005/01/10 21:51:08  vanmer
  * - moved case_id to above session_check for ACL
  * - added parameter to session_check for ACL
