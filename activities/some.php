@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.99 2005/03/07 16:26:59 daturaarutad Exp $
+ * $Id: some.php,v 1.100 2005/03/15 22:34:45 daturaarutad Exp $
  */
 
 // handle includes
@@ -631,16 +631,18 @@ $_SESSION["search_sql"]=$sql;
 $columns = array();
 $columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
-$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => '8,9');
-$columns[] = array('name' => _('Title'), 'index_sql' => 'title', 'sql_sort_column' => '11');
-$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled', 'sql_sort_column' => '12');
-$columns[] = array('name' => _('Due'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => '13');
-$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => '14');
+$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names');
+$columns[] = array('name' => _('Title'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title');
+$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
+$columns[] = array('name' => _('Due'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
 
 
 // selects the columns this user is interested in
-$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner');
+// no reason to set this if you don't want all by default
+$default_columns = null;
+//$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner');
 
 $pager_columns = new Pager_Columns('SomeActivitiesPager', $columns, $default_columns, 'ActivitiesData');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -733,6 +735,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.100  2005/03/15 22:34:45  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.99  2005/03/07 16:26:59  daturaarutad
  * removed some vestigal sort column stuff (that moved to pager)
  * added sql_sort_columns to speed up column sorting for concat'ed columns

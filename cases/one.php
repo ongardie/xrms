@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.37 2005/03/15 21:37:07 daturaarutad Exp $
+ * $Id: one.php,v 1.38 2005/03/15 22:41:03 daturaarutad Exp $
  */
 
 //include required files
@@ -104,6 +104,7 @@ a.entered_at,
 a.on_what_table,
 a.on_what_id,
 activity_status,
+activity_title,
 cont.contact_id,
 cont.first_names as contact_first_names,
 cont.last_name as contact_last_name,
@@ -131,14 +132,15 @@ and a.activity_record_status = 'a'";
 
 
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '14');
+    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title');
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => '12,11');
+    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names');
     $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
 
-    $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
-
+	// no reason to set this if you don't want all by default
+	$default_columns = null;
+	//$default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
 
     // selects the columns this user is interested in
     $pager_columns = new Pager_Columns('CasesActivitiesPager', $columns, $default_columns, $form_name);
@@ -446,6 +448,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.38  2005/03/15 22:41:03  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.37  2005/03/15 21:37:07  daturaarutad
  * fixed Mail Merge for activities pager
  *

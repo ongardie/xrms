@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.28 2005/03/02 20:48:59 daturaarutad Exp $
+ * $Id: some.php,v 1.29 2005/03/15 22:36:46 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -232,7 +232,9 @@ $columns[] = array('name' => _('Ends'), 'index_sql' => 'ends');
 
 
 // selects the columns this user is interested in
-$default_columns =  array('campaign','type','status','owner','starts','ends');
+// no reason to set this if you don't want all by default
+$default_columns = null;
+// $default_columns =  array('campaign','type','status','owner','starts','ends');
 
 $pager_columns = new Pager_Columns('CampaignPager', $columns, $default_columns, 'CampaignForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -326,6 +328,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.29  2005/03/15 22:36:46  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.28  2005/03/02 20:48:59  daturaarutad
  * forgot to remove sorting variables from arr_list
  *
