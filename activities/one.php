@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.59 2004/08/04 18:18:11 neildogg Exp $
+ * $Id: one.php,v 1.60 2004/08/19 20:43:51 neildogg Exp $
  */
 
 //include required files
@@ -265,7 +265,7 @@ function logTime() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? "(" . $_SESSION['pos'] . "/" . count($_SESSION['next_to_check']) . ")": "" ; ?></td>
+                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? "(<input onclick=\"var input = prompt('Jump to', ''); if(input != null && input != '') document.location.href='browse-next.php?activity_id=" . $activity_id . "&pos=' + (input);\" type=button class=button value=" . $_SESSION['pos'] . ">/" . count($_SESSION['next_to_check']) . ")": "" ; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -334,7 +334,7 @@ function logTime() {
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=80 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
                     <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('Enter note', ''); document.forms[0].opportunity_description.value =
-                        logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value">
+                        logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page(); ?>'; document.forms[0].submit();">
                     <?php do_hook('opportunity_notes_buttons'); ?>
                 </td>
             </tr>
@@ -425,6 +425,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.60  2004/08/19 20:43:51  neildogg
+ * - Added jump to position in save and next
+ *
  * Revision 1.59  2004/08/04 18:18:11  neildogg
  * - If you're going to change one textarea
  *  - for goodness sake, change the one below it
