@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: RolePermission_list.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: RolePermission_list.php,v 1.2 2005/02/14 23:35:36 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat('"<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_RolePermission.php?form_action=edit&return_url=RolePermission_list.php&RolePermission_id="', 'RolePermission_id', '"\'\">"') . "AS LINK,
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_RolePermission.php?form_action=edit&return_url=RolePermission_list.php&RolePermission_id="), 'RolePermission_id', $con->qstr("'\">")) . "AS LINK,
 Role_name as 'Role', Child.ControlledObject_name as 'Child Object', Parent.ControlledObject_name as 'Parent Object', Scope, Permission_name as 'Permission'
 FROM RolePermission JOIN Permission ON Permission.Permission_id=RolePermission.Permission_id 
 JOIN Role on Role.Role_id=RolePermission.Role_id
@@ -123,6 +123,9 @@ end_page();
 
 /**
  * $Log: RolePermission_list.php,v $
+ * Revision 1.2  2005/02/14 23:35:36  vanmer
+ * - added qstr and removed single quote slashes
+ *
  * Revision 1.1  2005/01/13 17:16:15  vanmer
  * - Initial Commit for ACL Administration interface
  *
