@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.32 2004/08/19 21:49:53 neildogg Exp $
+ * $Id: update.php,v 1.33 2004/08/23 13:49:57 neildogg Exp $
  */
 
 // where do we include from
@@ -2212,7 +2212,8 @@ $con->execute($sql);
 //Go through each address to insert daylight savings
 $sql = 'SELECT *
         FROM addresses
-        WHERE offset=0 and daylight_savings_id=0';
+        WHERE (offset=0 or offset is null)
+        AND (daylight_savings_id=0 or daylight_savings_id is null)';
 $rst = $con->execute($sql);
 if(!$rst) {
     db_error_handler($con, $sql);
@@ -2261,6 +2262,11 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.33  2004/08/23 13:49:57  neildogg
+ * - Properly updates daylight savings
+ *  - in addresses
+ *  - May take a long time on large systems
+ *
  * Revision 1.32  2004/08/19 21:49:53  neildogg
  * - Adds field to activity templates for default text
  *
