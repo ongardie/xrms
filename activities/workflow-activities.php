@@ -6,7 +6,7 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * $Id: workflow-activities.php,v 1.9 2004/12/24 15:59:03 braverock Exp $
+ * $Id: workflow-activities.php,v 1.10 2005/01/10 21:47:10 vanmer Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -78,7 +78,6 @@ if ($rst) {
                 db_error_handler ($con, $contact_sql);
             }
         }
-
         //save to database
         $rec = array();
         $rec['activity_type_id'] = $activity_type_id;
@@ -99,8 +98,10 @@ if ($rst) {
 
         $tbl = 'activities';
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-        $con->execute($ins);
-
+        $ins_rst=$con->execute($ins);
+        if (!$ins_rst) { db_error_handler($con, $sql); }
+//        echo "INSERTED ". $con->Insert_ID();
+        
         do_hook_function('workflow_addition', $activity_template_id);
 
         $rst->movenext();
@@ -110,6 +111,9 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.10  2005/01/10 21:47:10  vanmer
+ * - added db_error_handler to the Insert SQL used for creating new activities
+ *
  * Revision 1.9  2004/12/24 15:59:03  braverock
  * - clean up todo item about internationalization of activity template substitution
  *
