@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.26 2004/08/05 14:57:14 braverock Exp $
+ * $Id: new-2.php,v 1.27 2004/08/05 15:12:22 braverock Exp $
  */
 
 //where do we include from
@@ -48,8 +48,6 @@ $arr_vars = array ( // local var name       // session variable name
 
 // get all passed in variables
 arr_vars_get_request ( $arr_vars, true );
-
-// beagle bites squirrel - getGlobalVar calls removed
 
 //mark completed if it is an email
 if ($email) { $activity_status = 'c'; };
@@ -189,6 +187,9 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.27  2004/08/05 15:12:22  braverock
+ *- remove obsolete comment
+ *
  *Revision 1.26  2004/08/05 14:57:14  braverock
  *- update to use new arr_vars_get_request fn
  *  - resolves several bugs reported on SF
