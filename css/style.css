@@ -1,11 +1,11 @@
 /**
- * XRMS 
+ * XRMS
  *
  * Stylesheet for basic/default style attributes.
  * Override/extend these in themed stylesheets
  */
-/** 
- * default font settings for entire document 
+/**
+ * default font settings for entire document
  */
 body {
     font-family: arial, sans-serif;
@@ -14,7 +14,7 @@ body {
     background-color: white;
 }
 /** --------------------
- * PADDING / MARGINS 
+ * PADDING / MARGINS
  * for evenness, padding is in multiples of 2 with the exception
  * of a few tiny cell elements that need a boost of 1
  */
@@ -43,16 +43,16 @@ table.widget .sublabel {
     padding-top: 4px;
 }
 /** -------
- * FONT/TEXT SETTINGS 
+ * FONT/TEXT SETTINGS
  */
 td.monospace,
-input.monospace, 
-select.monospace, 
+input.monospace,
+select.monospace,
 textarea.monospace {
     font-family: courier, monospace;
 }
-/** 
- * font weights 
+/**
+ * font weights
  */
 table.widget .widget_header,
 #page_header,
@@ -60,7 +60,7 @@ table.widget .widget_header,
     font-weight: bold;
 }
 /**
- * text alignment 
+ * text alignment
  */
 #msg,
 table.widget .center,
@@ -80,10 +80,10 @@ table.widget .widget_label_right_166px {
     text-align: right;
 }
 /** ----------
- * OTHER - WIDGETS/TABLES/FORMS 
+ * OTHER - WIDGETS/TABLES/FORMS
  */
-form { 
-	display: inline;
+form {
+    display: inline;
 }
 table.widget .sublabel,
 table.widget .nowrap {
@@ -92,6 +92,7 @@ table.widget .nowrap {
 table.widget th,
 table.widget td {
     vertical-align: top;
+    padding: 2px;
 }
 table.widget .widget_label,
 table.widget .widget_label_right {
