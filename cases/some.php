@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.20 2004/07/28 20:41:04 neildogg Exp $
+ * $Id: some.php,v 1.21 2004/07/30 11:43:10 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -175,7 +175,12 @@ $rst->close();
 
 $sql2 = "select case_priority_pretty_name, case_priority_id from case_priorities where case_priority_record_status = 'a' order by case_priority_pretty_name";
 $rst = $con->execute($sql2);
-$case_priority_id = $rst->fields['case_priority_id'];
+$case_priority_id = '';
+if ( !$rst ) {
+  db_error_handler($con, $sql2);
+} elseif ( !$rst->EOF ) {
+  $case_priority_id = $rst->fields['case_priority_id'];
+}
 $case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, true);
 $rst->close();
 
@@ -323,6 +328,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.21  2004/07/30 11:43:10  cpsource
+ * - Check for db errors and record found before setting
+ *     case_prority_id
+ *
  * Revision 1.20  2004/07/28 20:41:04  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
