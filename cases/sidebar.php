@@ -2,29 +2,31 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.3 2004/04/07 19:38:25 maulani Exp $
+ * $Id: sidebar.php,v 1.4 2004/04/10 15:20:52 braverock Exp $
  */
 
 $case_rows = "<div id='case_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
-                <td class=widget_header colspan=5>Cases</td>
+                <td class=widget_header colspan=5>Open Cases</td>
             </tr>
             <tr>
                 <td class=widget_label>Name</td>
                 <td class=widget_label>Owner</td>
                 <td class=widget_label>Priority</td>
                 <td class=widget_label>Due</td>
-            </tr>";
+            </tr>\n";
 
 //build the cases sql query
-$cases_sql = "select * from cases, case_priorities, users
-where cases.case_priority_id = case_priorities.case_priority_id
-and cases.user_id = users.user_id
-and case_record_status = 'a'
-$case_limit_sql
-order by due_at
-limit 5";
+$cases_sql = "select * from cases, case_priorities, users, case_statuses
+                where cases.case_priority_id = case_priorities.case_priority_id
+                and cases.user_id = users.user_id
+                and case_record_status = 'a'
+                and cases.case_status_id = case_statuses.case_status_id
+                and case_statuses.status_open_indicator = 'o'
+                $case_limit_sql
+                order by due_at
+                limit 5";
 
 //uncomment the debug line to see what's going on with the query
 //$con->debug=1;
@@ -74,6 +76,10 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.4  2004/04/10 15:20:52  braverock
+ * - display only open Cases on Cases sidebar
+ *   - apply SF patch 931251 submitted by Glenn Powers
+ *
  * Revision 1.3  2004/04/07 19:38:25  maulani
  * - Add CSS2 positioning
  * - Repair HTML to meet validation
