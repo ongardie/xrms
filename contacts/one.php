@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.57 2005/01/22 15:07:25 braverock Exp $
+ * $Id: one.php,v 1.58 2005/01/22 15:21:47 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -340,7 +340,7 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("E-Mail"); ?></td>
 
                                     <td class=clear>
-                                    <a href='mailto:<?php echo $email."' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&return_url=$http_site_root/contacts/one.php?contact_id=$contact_id";?>'">
+                                    <a href='mailto:<?php echo $email."' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&return_url=/contacts/one.php?contact_id=$contact_id";?>'">
                                     <?php echo htmlspecialchars($email); ?></a>
                                     </td>
                                 </tr>
@@ -564,6 +564,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.58  2005/01/22 15:21:47  braverock
+ * - fixed double handlnig of $http_site_root on mailto link
+ *   Resolves SF Bug #1106989 using patch reported by fu22ba55
+ *
  * Revision 1.57  2005/01/22 15:07:25  braverock
  * - add sort order to activity_types menu
  *
