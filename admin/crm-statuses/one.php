@@ -2,7 +2,7 @@
 /**
  * Manage crm statuses
  *
- * $Id: one.php,v 1.8 2004/07/25 15:18:21 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2004/07/25 18:16:20 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -71,7 +71,7 @@ start_page($page_title);
 		</table>
 		</form>
 
-		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete CRM Status").'?'; ?>');">
+		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete CRM Status?"); ?>');">
 		<input type=hidden name="crm_status_id" value="<?php  echo $crm_status_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
@@ -79,9 +79,9 @@ start_page($page_title);
 			</tr>
 			<tr>
 				<td class=widget_content>
-				<?php echo _("Click the button below to remove this status from the system."); ?>
-				<p><?php echo _("Note: This action CANNOT be undone!"); ?>
-				<p><input class=button type=submit value="<?php echo _("Delete Status"); ?>">
+				<?php echo _("Click the button below to remove this company source from the system."); ?>
+				<p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+				<p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
 				</td>
 			</tr>
 		</table>
@@ -103,6 +103,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/07/25 18:16:20  johnfawcett
+ * - reinserted ? in gettext string - needed by some languages
+ * - standardized delete text and button
+ *
  * Revision 1.8  2004/07/25 15:18:21  johnfawcett
  * - added punctuation which I removed instead of moving
  *
