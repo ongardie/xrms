@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.11 2004/04/10 11:51:14 braverock Exp $
+ * $Id: utils-interface.php,v 1.12 2004/05/09 04:05:23 braverock Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -83,7 +83,7 @@ EOQ;
 
     echo <<<EOQ
 
-        <a href="$http_site_root/reports/">Reports</a> &bull;
+        <a href="$http_site_root/reports/index.php">Reports</a> &bull;
         <a href="$http_site_root/admin/routing.php">Administration</a>
         </span>
         <div id="loginbar">Logged in as: $session_username &bull; <a href="$http_site_root/logout.php">Logout</a></div>
@@ -155,6 +155,10 @@ function build_salutation_menu($salutation) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.12  2004/05/09 04:05:23  braverock
+ * - change reports link to reports/index.php to help webservers that don't treat
+ *   index.php as an auto-loaded index.
+ *
  * Revision 1.11  2004/04/10 11:51:14  braverock
  * - remove trailing whitespace
  *
