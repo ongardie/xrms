@@ -2,7 +2,7 @@
 /**
  * Display login screen
  *
- * $Id: login.php,v 1.9 2004/07/10 12:49:21 braverock Exp $
+ * $Id: login.php,v 1.10 2004/07/14 12:12:50 cpsource Exp $
  */
 require_once('include-locations.inc');
 
@@ -11,8 +11,12 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-$msg = $_GET['msg'];
-$target = urldecode($_GET['target']);
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+if ( isset($_GET['target']) ) {
+  $target = urldecode($_GET['target']);
+} else {
+  $target = '';
+}
 
 /* This code does not work and should not be nessacary
     // add check here to make sure that the $target is inside our file tree
@@ -75,6 +79,9 @@ end_page();
 
 /**
  * $Log: login.php,v $
+ * Revision 1.10  2004/07/14 12:12:50  cpsource
+ * - Fix uninitialized variables $msg and $target
+ *
  * Revision 1.9  2004/07/10 12:49:21  braverock
  * - removed session_start for security reasons
  *   - applies patch suggested by cpsource in SF bug 977376
