@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.89 2004/08/30 14:01:07 neildogg Exp $
+ * $Id: utils-misc.php,v 1.90 2004/08/30 14:09:23 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1128,15 +1128,16 @@ function arr_vars_session_get ( $ary )
     switch ( $flag )
       {
       case arr_vars_SESSION:      // just try a SESSION
-        $GLOBALS[$key] = (isset($_SESSION["$value[0]"]) && $_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+        $GLOBALS[$key] = isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
         break;
 
       case arr_vars_GET:         // just try a GET
         $GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : '';
         break;
 
-      case arr_vars_POST_SESSION;// try a POST first, and then if it fails, do a SESSION
-        $GLOBALS[$key] = isset($_POST["$value[0]"]) ? $_POST["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+
+      case arr_vars_GET_SESSION:  // try a GET first, and then if it fails, do a SESSION
+        $GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
         break;
 
       case arr_vars_REQUEST:         // just try a REQUEST
@@ -1269,6 +1270,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.90  2004/08/30 14:09:23  neildogg
+ * - Rollback errant commit
+ *
  * Revision 1.89  2004/08/30 14:01:07  neildogg
  * - Grab sorting values
  *
