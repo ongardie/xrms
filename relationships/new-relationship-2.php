@@ -134,10 +134,10 @@ if(empty($search_on) OR !eregi("[0-9]", $search_on)) {
             FROM $what_table
             WHERE {$what_table_singular}_record_status='a'";
 
-    if (!empty($search_on) && $what_table == 'contacts' ) { 
+    if(!empty($search_on) && $what_table == 'contacts' ) { 
         $sql.= " AND ((first_names LIKE $search_on) OR ( last_name LIKE $search_on)) ";
     }
-    else {
+    elseif(!empty($search_on)) {
         $sql .= " AND $name_order LIKE $search_on ";
     }
 
@@ -206,6 +206,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.23  2005/01/11 21:07:16  neildogg
+ * - Null search shows all
+ *
  * Revision 1.22  2005/01/11 17:19:33  neildogg
  * - Fairly large update to make it work as it should
  *
