@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.5 2004/03/26 23:52:47 maulani Exp $
+ * $Id: new-2.php,v 1.6 2004/06/03 16:23:48 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -57,7 +57,7 @@ if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
              . 'You attempted to upload file: '
              . htmlspecialchars($file_pretty_name)
              . '<br>'
-             . 'If you feel that you have received this message in error, Please back up and try again.'
+             . 'If you feel that you have received this message in error, Please try to upload again.'
              . '<br>'
              . 'If this error recurs, please contact your system administrator for assistance.'
              . "\n";
@@ -95,6 +95,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.6  2004/06/03 16:23:48  braverock
+ * - fixed typo
+ *
  * Revision 1.5  2004/03/26 23:52:47  maulani
  * - bug fix 923755 === unbalanced parenthesis
  *   fix submitted by anonymous
