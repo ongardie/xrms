@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.3 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: activitytimes.php,v 1.4 2004/07/04 09:56:07 metamedia Exp $
  */
 require_once('../include-locations.inc');
 
@@ -20,6 +20,18 @@ $msg = $_GET['msg'];
 $starting = $_POST['starting'];
 $ending = $_POST['ending'];
 $user_id = $_POST['user_id'];
+$only_show_completed = $_POST['only_show_completed'];
+
+echo ">>$only_show_completed";
+
+if (strlen($only_show_completed) > 0) {
+	$checked_only_show_completed = "checked";
+	$only_show_completed = true;
+}
+else $only_show_completed = false;
+
+if (!strlen($starting) > 0) $starting = date("Y-m-d");
+if (!strlen($ending) > 0) $ending = date("Y-m-d");
 
 $page_title = "Timesheets";
 start_page($page_title, true, $msg);
@@ -30,7 +42,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', '', false);
+$user_menu = $rst->getmenu2('user_id', $user_id, false);
 $rst->close();
 ?>
 
@@ -43,9 +55,10 @@ $rst->close();
     </tr>
         <tr>
             <form action="activitytimes.php" method=post>
-                <td><input type=text name=starting value="<?php  echo date("Y-m-d"); ?>"></td>
-                <td><input type=text name=ending value="<?php  echo date("Y-m-d"); ?>"></td>
+                <td><input type=text name=starting value="<?php  echo $starting; ?>"></td>
+                <td><input type=text name=ending value="<?php  echo $ending; ?>"></td>
                 <td><?php echo $user_menu; ?></td>
+		<td><input type=checkbox name=only_show_completed value="true" <?php  echo $checked_only_show_completed; ?>>Only show completed activities</input></td>
                 <td><input class=button type=submit value="Go"></td>
             </form>
         </tr>
@@ -73,7 +86,13 @@ if ($user_id) {
     $start_date = "$starting 00:00:00";
     $end_date =  "$ending 23:23:59";
 
-    $sql2 = "SELECT * from activities where activity_record_status = 'a' and user_id = $user_id and entered_at between " . $con->qstr($start_date, get_magic_quotes_gpc()) . " and " . $con->qstr($end_date, get_magic_quotes_gpc()) . " order by entered_at ";
+    $sql2 = "SELECT * from activities
+    		where activity_record_status = 'a'
+    		and user_id = $user_id 
+    		and scheduled_at between " . $con->qstr($start_date, get_magic_quotes_gpc()) . "
+    		and " . $con->qstr($end_date, get_magic_quotes_gpc());
+    if ($only_show_completed) $sql2 .= " and activity_status <> 'o' ";
+    $sql2 .= " order by scheduled_at ";
     $rst = $con->execute($sql2);
 
     if ($rst) {
@@ -99,7 +118,7 @@ if ($user_id) {
     }
     $con->close();
 
-    echo "<tr><td></td><td align=right><strong>TOTAL</srtong><td><strong>" . formatSeconds($total_time) . "</strong></td><td></td><td></td><td></td></tr>\n";
+    echo "<tr><td></td><td align=right><strong>TOTAL</srtong><td><strong>" . formatSeconds($total_time) . "</strong> ($total_time sec)</td><td></td><td></td><td></td></tr>\n";
     echo "</table>";
 }
 
@@ -161,6 +180,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.4  2004/07/04 09:56:07  metamedia
+ * Added option to include only completed activities in the report. Also modified form so that the form elements are rendered with values that match the last query.
+ *
  * Revision 1.3  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
