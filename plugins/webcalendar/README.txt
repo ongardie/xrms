@@ -1,0 +1,18 @@
+WebCalendar XRMS Plugin v0.2
+http://sourceforge.net/projects/webcalendar/
+
+copyright 2004 Glenn Powers <glenn@net127.com>
+Licensed Under the Open Software License v. 2.0
+
+This plugin integrates WebCalendar into XRMS.
+It will use the same database as XRMS, but different tables.
+
+Run install.sh to get v0.9.43 and copy the patched files.
+
+Read the WebCalendar docs in src/docs/WebCalendar-UserManual.html
+and src/docs/WebCalendar-SysAdmin.html
+
+If you have any problems, please email me.
+
+Enjoy.
+
