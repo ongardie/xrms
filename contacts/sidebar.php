@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.2 2004/06/03 16:57:23 gpowers Exp $
+ * $Id: sidebar.php,v 1.3 2004/06/03 17:17:01 gpowers Exp $
  */
 
 //add contact information block on sidebar
@@ -19,7 +19,7 @@ $contact_block = '<table class=widget cellspacing=1 width="100%">
     </tr>'."\n";
 
 $sql = "select
-        first_names, last_name, work_phone, address_id
+        first_names, last_name, work_phone, address_id, email
         from contacts
         where
         contact_id=$contact_id";
@@ -32,9 +32,19 @@ if (!$rst->EOF) {
                     . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</td>\n\t</tr>"
                     . "\n\t<tr>\n\t\t<td class=widget_content>"
                     . get_formatted_address ($con, $rst->fields['address_id'])
-                    . "</td>\n\t</tr>"
-                    . "<tr><td class=widget_content>"
-                    . $rst->fields['work_phone'] . "&nbsp; </td>\n\t</tr>";
+                    . "</td>\n\t</tr>";
+
+    if ($rst->fields['work_phone']) {
+        $contact_block .= "<tr><td class=widget_content>"
+                        . $rst->fields['work_phone'] . "&nbsp; </td>\n\t</tr>";
+    }
+
+    if ($rst->fields['email']) {
+        $contact_block .= "<tr>\n\t\t<td class=widget_content>"
+                        . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
+                        . $rst->fields['email'] . "</a></td>\n\t</tr>";
+    }
+
     $rst->close();
 
 } else {
@@ -46,6 +56,10 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.3  2004/06/03 17:17:01  gpowers
+ * - added email display, with link
+ * - only show email or work_phone if they exist
+ *
  * Revision 1.2  2004/06/03 16:57:23  gpowers
  * If no contact is associated with the activity,
  * return "No Contact Selected." instead of long error message.
