@@ -11,7 +11,6 @@ require_once($include_directory . 'utils-accounting.php');
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
-
 $msg = $_GET['msg'];
 
 $company_id = $_GET['company_id'];
@@ -20,20 +19,19 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-update_recent_items($con, $session_user_id, "companies", $company_id);
-
-$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, a.*, country_name
-        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses a, countries
-        where c.account_status_id = as1.account_status_id
-        and c.industry_id = i.industry_id
-        and c.rating_id = r.rating_id
-        and c.company_source_id = cs2.company_source_id
-        and c.crm_status_id = cs.crm_status_id
-        and c.user_id = u1.user_id
-		and c.entered_by = u2.user_id
-		and c.last_modified_by = u3.user_id
-		and c.default_primary_address = a.address_id
-		and a.country_id = countries.country_id
+$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, addresses.*, iso_code3, address_format_string 
+        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses, countries, address_format_strings afs 
+        where c.account_status_id = as1.account_status_id 
+        and c.industry_id = i.industry_id 
+        and c.rating_id = r.rating_id 
+        and c.company_source_id = cs2.company_source_id 
+        and c.crm_status_id = cs.crm_status_id 
+        and c.user_id = u1.user_id 
+		and c.entered_by = u2.user_id 
+		and c.last_modified_by = u3.user_id 
+		and c.default_primary_address = addresses.address_id 
+		and addresses.country_id = countries.country_id 
+		and countries.address_format_string_id = afs.address_format_string_id 
         and c.company_id = $company_id";
 
 $rst = $con->execute($sql);
@@ -51,7 +49,10 @@ if ($rst) {
     $city = $rst->fields['city'];
     $province = $rst->fields['province'];
     $postal_code = $rst->fields['postal_code'];
-    $country_name = $rst->fields['country_name'];
+    $address_body = $rst->fields['address_body'];
+	$use_pretty_address = $rst->fields['use_pretty_address'];
+	$country = $rst->fields['iso_code3'];
+	$address_format_string = $rst->fields['address_format_string'];
     $phone = $rst->fields['phone'];
     $phone2 = $rst->fields['phone2'];
     $fax = $rst->fields['fax'];
@@ -76,9 +77,16 @@ if ($rst) {
     $rst->close();
 }
 
-$line2 = (strlen($line2) > 0) ? "<br>$line2" : "";
 $credit_limit = number_format($credit_limit, 2);
 $current_credit_limit = fetch_current_customer_credit_limit($extref1);
+
+if ($use_pretty_address == 't') {
+	$address_to_display = $address_body;
+} else {
+	$lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
+	eval("\$address_to_display = \"$address_format_string\";");
+	// eval ("\$str = \"$str\";");
+}
 
 if (strlen($url) > 0) {
     $url = "<a target='_new' href='" . $url . "'>$url</a>";
@@ -381,7 +389,7 @@ function openNewsWindow() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Address</td>
-                                    <td class=clear><?php  echo "$line1$line2<br>$city, $province $postal_code<br>$country_name"; ?></td>
+                                    <td class=clear><?php echo $address_to_display ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>

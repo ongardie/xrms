@@ -42,16 +42,16 @@ if (strlen($company_code) == 0) {
     $con->execute("update companies set company_code = " . $con->qstr($company_code, get_magic_quotes_gpc()) . " where company_id = $company_id");
 }
 
-// insert a contact
-$sql_insert_contact = "insert into contacts (company_id, first_names, last_name, entered_at, entered_by, last_modified_at, last_modified_by) values ($company_id, 'Default', 'Contact', " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
-$con->execute($sql_insert_contact);
-
 // insert an address
 $con->execute("insert into addresses (company_id, address_name, address_body) values ($company_id, 'address', " . $con->qstr($city . ' ' . $country, get_magic_quotes_gpc()) . ")");
 
 // make that address the default, and set the customer and vendor references
 $address_id = $con->insert_id();
 $con->execute("update companies set default_primary_address = $address_id, default_billing_address = $address_id, default_shipping_address = $address_id, default_payment_address = $address_id where company_id = $company_id");
+
+// insert a contact
+$sql_insert_contact = "insert into contacts (company_id, address_id, first_names, last_name, entered_at, entered_by, last_modified_at, last_modified_by) values ($company_id, $address_id, 'Default', 'Contact', " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
+$con->execute($sql_insert_contact);
 
 if (strlen($accounting_system) > 0) {
     add_accounting_customer($con, $company_id, $company_name, $company_code, $customer_credit_limit, $customer_terms);

@@ -92,8 +92,8 @@ $sql = "select concat('<a href=one.php?company_id=', c.company_id, '>', c.compan
 c.company_code as '$strCompaniesSomeCompanyCodeLabel',
 u.username as '$strCompaniesSomeCompanyUserLabel',
 crm_status_pretty_name as '$strCompaniesSomeCompanyCRMStatusLabel',
-city as '$strCompaniesSomeCompanyCityLabel',
-state as '$strCompaniesSomeCompanyStateLabel',
+addr.city as '$strCompaniesSomeCompanyCityLabel',
+addr.province as '$strCompaniesSomeCompanyStateLabel',
 as1.account_status_display_html as '$strCompaniesSomeCompanyAccountStatusLabel',
 r.rating_display_html as '$strCompaniesSomeCompanyRatingLabel' ";
 
@@ -101,12 +101,13 @@ $criteria_count = 0;
 
 if ($company_category_id > 0) {
     $criteria_count++;
-    $from = "from companies c, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
+    $from = "from companies c, addresses addr, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
 } else {
-    $from = "from companies c, crm_statuses crm, ratings r, account_statuses as1, users u ";
+    $from = "from companies c, addresses addr, crm_statuses crm, ratings r, account_statuses as1, users u ";
 }
 
 $where .= "where c.crm_status_id = crm.crm_status_id ";
+$where .= "and c.default_primary_address = addr.address_id ";
 $where .= "and r.rating_id = c.rating_id ";
 $where .= "and as1.account_status_id = c.account_status_id ";
 $where .= "and c.user_id = u.user_id ";
@@ -138,16 +139,12 @@ if (strlen($company_code) > 0) {
 
 if (strlen($city) > 0) {
     $criteria_count++;
-    $where .= " and c.city LIKE " . $con->qstr($city, get_magic_quotes_gpc());
-}
-if (strlen($state) > 0) {
-    $criteria_count++;
-    $where .= " and c.state LIKE " . $con->qstr($state, get_magic_quotes_gpc());
+    $where .= " and addr.city LIKE " . $con->qstr($city, get_magic_quotes_gpc());
 }
 
-if (strlen($country) > 0) {
+if (strlen($state) > 0) {
     $criteria_count++;
-    $where .= " and c.country LIKE " . $con->qstr($country, get_magic_quotes_gpc());
+    $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
 }
 
 if (strlen($crm_status_id) > 0) {
