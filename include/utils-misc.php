@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.75 2004/08/02 20:20:48 neildogg Exp $
+ * $Id: utils-misc.php,v 1.76 2004/08/03 19:39:35 neildogg Exp $
  */
 
 /**
@@ -913,6 +913,34 @@ function update_daylight_savings($con) {
 }
 
 /**
+ * Get the current page
+ *
+ * Gets the current page with extras
+ *
+ * @author Neil Roberts
+ */
+ 
+function current_page() {
+    global $http_site_root;
+    $site_directories = explode('/', $http_site_root);
+
+    $request_uri = getenv("REQUEST_URI");
+    $parts = explode('?', $request_uri, 2);
+    $directories = explode('/', $parts[0]);
+    foreach($directories as $directory) {
+        if(!in_array($directory, $site_directories) and $directory) {
+            $page .= '/' . $directory;
+        }
+    }
+    if(count($parts)) {
+        return '/' . $page . '?' . $parts[1];
+    }
+    else {
+        return '/' . $page;
+    }
+}
+
+/**
  * The arr_vars sub-system
  *
  * This is an attempt to simplify processing of passing variables in and
@@ -1181,6 +1209,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.76  2004/08/03 19:39:35  neildogg
+ * - Returns the return_url appropriate current page string
+ *
  * Revision 1.75  2004/08/02 20:20:48  neildogg
  * - 3 functions added to manage daylight savings
  *
