@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.7 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: one.php,v 1.8 2004/07/25 17:52:37 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -41,13 +41,13 @@ $table_name = "case_statuses";
 $sql_activity_templates="select activity_title,
         duration,
         activity_template_id,
-        activity_type_pretty_name, sort_order
+        activity_type_pretty_name, activity_templates.sort_order
         from activity_templates, activity_types
         where on_what_id=$case_status_id
         and on_what_table='$table_name'
         and activity_templates.activity_type_id=activity_types.activity_type_id
         and activity_template_record_status='a'
-        order by sort_order";
+        order by activity_templates.sort_order";
 
 $rst = $con->execute($sql_activity_templates);
 
@@ -103,7 +103,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = _("Case Status : ").$case_status_pretty_name;
+$page_title = _("Case Status Details").': '.$case_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -182,17 +182,17 @@ start_page($page_title);
     <!-- right column //-->
     <div id="Sidebar">
 
-        <form action=delete.php method=post>
-        <input type=hidden name=case_status_id value="<?php  echo $case_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Case Status?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Case Status?"); ?>');">
+        <input type=hidden name=case_status_id value="<?php  echo $case_status_id; ?>">
         <table class=widget cellspacing=1>
              <tr>
                    <td class=widget_header colspan=4><?php echo _("Delete Case Status"); ?></td>
              </tr>
              <tr>
                    <td class=widget_content>
-                       <?php echo _("Click the button below to remove this"); ?><br><?php echo _("case status from the system."); ?>
-                       <p><?php echo _("Note: This action CANNOT be undone!"); ?>
-                       <p><input class=button type=submit value="<?php echo _("Delete Case Status"); ?>">
+                       <?php echo _("Click the button below to permanently remove this item."); ?>
+                       <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                       <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                    </td>
              </tr>
         </table>
@@ -208,6 +208,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 17:52:37  johnfawcett
+ * - corrected bug: ambigous column name (sort order) in select $sql_activity_templates
+ * - corrected bug: no confirmation asked for on delete
+ * - standardized page title
+ * - standardized delete text and syntax
+ *
  * Revision 1.7  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *
