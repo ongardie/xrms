@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.6 2004/07/30 11:23:38 cpsource Exp $
+ * $Id: divisions.php,v 1.7 2005/01/06 21:54:26 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -46,6 +46,11 @@ if ($rst) {
     $rst->close();
 }
 
+$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+$rst = $con->execute($sql);
+$address_menu = $rst->getmenu2('address_id', $address_id, true);
+$rst->close();
+
 $con->close();
 
 $page_title = $company_name . " - " . _("Divisions");
@@ -70,6 +75,10 @@ start_page($page_title, true, $msg);
 			<td class=widget_label><?php echo _("Division Name"); ?></td>
 			<td class=widget_content_form_element><input type=text name=division_name size=30></td>
 		</tr>
+            <tr>
+                <td class=widget_label><?php echo _("Address"); ?></td>
+                <td class=widget_content_form_element><?php echo $address_menu; ?></td>
+            </tr>
 		<tr>
 			<td class=widget_label><?php echo _("Division Description"); ?></td>
 			<td class=widget_content_form_element><textarea rows=8 cols=80 name=description></textarea></td>
@@ -99,6 +108,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.7  2005/01/06 21:54:26  vanmer
+ * - added address_id load/display to division UI, to specify an address for a division
+ *
  * Revision 1.6  2004/07/30 11:23:38  cpsource
  * - Do standard msg processing
  *   Default use_pretty_address in new-2.php set to null

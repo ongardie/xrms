@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.5 2004/07/30 11:23:38 cpsource Exp $
+ * $Id: edit-division.php,v 1.6 2005/01/06 21:54:26 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,6 +16,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_GET['company_id'];
+$address_id = $_GET['address_id'];
 $division_id = $_GET['division_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -27,11 +28,18 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $division_id = $rst->fields['division_id'];
+    $address_id = $rst->fields['address_id'];
     $company_name = $rst->fields['company_name'];
     $division_name = $rst->fields['division_name'];
     $description = $rst->fields['description'];
     $rst->close();
 }
+
+$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+$rst = $con->execute($sql);
+$address_menu = $rst->getmenu2('address_id', $address_id, true);
+$rst->close();
+
 
 $con->close();
 
@@ -59,6 +67,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text size=30 name=division_name value="<?php echo $division_name; ?>"></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Address"); ?></td>
+                <td class=widget_content_form_element><?php echo $address_menu; ?></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=description><?php echo $description; ?></textarea></td>
             </tr>
@@ -84,6 +96,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.6  2005/01/06 21:54:26  vanmer
+ * - added address_id load/display to division UI, to specify an address for a division
+ *
  * Revision 1.5  2004/07/30 11:23:38  cpsource
  * - Do standard msg processing
  *   Default use_pretty_address in new-2.php set to null
