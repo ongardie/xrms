@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.56 2004/07/21 09:13:22 cpsource Exp $
+ * $Id: utils-misc.php,v 1.57 2004/07/21 10:11:58 cpsource Exp $
  */
 
 /**
@@ -499,11 +499,17 @@ function get_system_parameter(&$con, $param) {
 
     $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
     $sysst = $con->execute($sql);
-    if ($sysst){
-        $string_val = $sysst->fields['string_val'];
-        $int_val = $sysst->fields['int_val'];
-        $float_val = $sysst->fields['float_val'];
+    if ($sysst) {
+
+      // is the requested record in the database ???
+      if ( $sysst->RecordCount() > 0 ) {
+	// yes - it was found
+
+        $string_val   = $sysst->fields['string_val'];
+        $int_val      = $sysst->fields['int_val'];
+        $float_val    = $sysst->fields['float_val'];
         $datetime_val = $sysst->fields['datetime_val'];
+
         if (!is_null($string_val)) {
             $my_val=$string_val;
         } elseif (!is_null($int_val)) {
@@ -513,7 +519,17 @@ function get_system_parameter(&$con, $param) {
         } elseif (!is_null($datetime_val)) {
             $my_val=$datetime_val;
         }
-        $sysst->close();
+
+      } else {
+	// no - it was not found
+
+	$my_val = '';
+
+      } // if ( $sysst->RecordCount() > 0 ) ...
+
+      // close the recordset
+      $sysst->close();
+
     } else {
         //there was a problem, notify the user
         db_error_handler ($con, $sql);
@@ -896,6 +912,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.57  2004/07/21 10:11:58  cpsource
+ * - Fixed problems with get_system_parameter whereby it ASS-UMED
+ *   the record existed in the table.
+ *
  * Revision 1.56  2004/07/21 09:13:22  cpsource
  * - Add display functions to arr_vars
  *
