@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.46 2005/01/06 21:48:19 vanmer Exp $
+ * $Id: update.php,v 1.47 2005/01/10 21:47:12 braverock Exp $
  */
 
 // where do we include from
@@ -325,6 +325,10 @@ if ($recCount == 0) {
 //add statuses to activities
 $sql = "alter table activities add on_what_status int not null default 0 after on_what_id";
 $rst = $con->execute($sql);
+
+//make activity_description a nullable field
+$sql="ALTER TABLE `activities` CHANGE `activity_description` `activity_description` TEXT";
+$con->execute($sql);
 
 //create the activity_templates table if we need it
 $sql = "create table activity_templates (
@@ -3869,6 +3873,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.47  2005/01/10 21:47:12  braverock
+ * - make activity_description a nullable field
+ *
  * Revision 1.46  2005/01/06 21:48:19  vanmer
  * - added address_id to company_division table, for use in specifying addresses for divisions
  *
