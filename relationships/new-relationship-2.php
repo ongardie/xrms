@@ -136,12 +136,29 @@ else
         $name_order = implode(', ', array_reverse(table_name($what_table)));
         $name_concat = $con->Concat(implode(', \' \', ', table_name($what_table)));
 
-        $sql = "select " . $name_concat . " as name, " . $what_table_singular . "_id
-                from " . $what_table . "
-                where " . $what_table_singular . "_record_status='a'
-                group by name, " . $what_table_singular . "_id, " . $name_order;
-        if ($search_on!='') { $sql.= " having name like " . $search_on; }
+        /**
+        * SQL Compatibility Changes 
+        * 1. Removed name from group by clause as the group by clause
+        *       has contact name already
+        * 2. When the relationship involves a contact
+        *       Modified the
+        *       having firstnames, lastname like $search_on 
+        *       SQL clause to
+        *       having (firstnames like $search_on) OR (lastname like $search_on)
+        **/
+        $sql = "SELECT " . $name_concat . " as name, " . $what_table_singular . "_id
+                FROM " . $what_table . "
+                WHERE " . $what_table_singular . "_record_status='a'
+                GROUP BY " . $what_table_singular . "_id, " . $name_order;
+
+        if ($search_on!='' AND $what_table=='contacts' ) { 
+            $sql.= " HAVING (first_names LIKE " . $search_on . ") OR ( last_name LIKE " . $search_on . ")";
+        } else {
+            $sql.= " HAVING " . $name_order . " LIKE " . $search_on;
+        }
+
         $sql.="        order by " . $name_order;
+
         $rst = $con->execute($sql);
         if ($rst) {
             if($rst->rowcount()) {
@@ -204,6 +221,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.18  2005/01/07 21:14:24  braverock
+ * - sql portability change for HAVING clause on name search
+ *
  * Revision 1.17  2004/12/01 18:24:59  vanmer
  * - changed to allow new-relationship-2 to be called using a type_id and direction (from new new-relationship.php)
  * - changed to display relationship creation as a sentence
