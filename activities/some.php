@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.33 2004/07/14 20:19:49 cpsource Exp $
+ * $Id: some.php,v 1.34 2004/07/15 14:07:38 cpsource Exp $
  */
 
 // handle includes
@@ -20,80 +20,29 @@ require_once($include_directory . 'adodb-params.php');
 // create session
 $session_user_id = session_check();
 
-// get call arguments
-if ( isset($_GET['msg']) ) {
-  $msg = $_GET['msg'];
-} else {
-  $msg = '';
-}
-if ( isset($_POST['offset']) ) {
-  $offset = $_POST['offset'];
-} else {
-  $offset = '';
-}
-if ( isset($_GET['clear']) ) {
-  $clear = ($_GET['clear'] == 1) ? 1 : 0;
-} else {
-  $clear = 0;
-}
-if ( isset($_POST['use_post_vars']) ) {
-  $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-} else {
-  $use_post_vars = 0;
-}
-if ( isset($_POST['resort']) ) {
-  $resort = $_POST['resort'];
-} else {
-  $resort = '';
-}
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+		   'sort_column'         => array ( 'activities_sort_column', arr_vars_SESSION ) ,
+		   'current_sort_column' => array ( 'activities_current_sort_column', arr_vars_SESSION ) ,
+		   'sort_order'          => array ( 'activities_sort_order', arr_vars_SESSION ) ,
+		   'current_sort_order'  => array ( 'activities_current_sort_order', arr_vars_SESSION ) ,
+		   'title'               => array ( 'activities_title', arr_vars_SESSION ) ,
+		   'contact'             => array ( 'activities_contact', arr_vars_SESSION ) ,
+		   'company'             => array ( 'activities_company', arr_vars_SESSION ) ,
+		   'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
+		   'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
+		   'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
+		   'completed'           => array ( 'activities_completed', arr_vars_SESSION ) ,
+		   'user_id'             => array ( 'activities_user_id', arr_vars_SESSION ) ,
+		   'date'                => array ( 'date', arr_vars_SESSION ) ,
+		   'search_date'         => array ( 'activities_date', arr_vars_SESSION ) ,
+		   );
 
-// get passed variables
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $title = '';
-    $contact = '';
-    $company = '';
-    $owner = '';
-    $date = '';
-    $before_after = '';
-    $activity_type_id = '';
-    $completed = '';
-    $user_id = '';
-} elseif ($use_post_vars) {
-    $sort_column = $_POST['sort_column'];
-    $current_sort_column = $_POST['current_sort_column'];
-    $sort_order = $_POST['sort_order'];
-    $current_sort_order = $_POST['current_sort_order'];
-    $title = $_POST['title'];
-    $contact = $_POST['contact'];
-    $company = $_POST['company'];
-    $owner = $_POST['owner'];
-    $search_date = $_POST['search_date'];
-    $before_after = $_POST['before_after'];
-    $activity_type_id = $_POST['activity_type_id'];
-    $completed = $_POST['completed'];
-    $user_id = $_POST['user_id'];
-    $date = isset($_POST['date']) ? $_POST['date'] : '';
-} else {
-    $sort_column = isset($_SESSION['activities_sort_column']) ? $_SESSION['activities_sort_column'] : '';
-    $current_sort_column = isset($_SESSION['activities_current_sort_column']) ? $_SESSION['activities_current_sort_column'] : '';
-    $sort_order = isset($_SESSION['activities_sort_order']) ? $_SESSION['activities_sort_order'] : '';
-    $current_sort_order = isset($_SESSION['activities_current_sort_order']) ? $_SESSION['activities_current_sort_order'] : '';
-    $title = isset($_SESSION['activities_title']) ? $_SESSION['activities_title'] : '';
-    $contact = isset($_SESSION['activities_contact']) ? $_SESSION['activities_contact'] : '';
-    $company = isset($_SESSION['activities_company']) ? $_SESSION['activities_company'] : '';
-    $owner = isset($_SESSION['activities_owner']) ? $_SESSION['activities_owner'] : '';
-    $search_date = date('Y-m-d', time());
-    //$search_date = $_SESSION['activities_date'];
-    $before_after = isset($_SESSION['activities_before_after']) ? $_SESSION['activities_before_after'] : '';
-    $activity_type_id = isset($_SESSION['activity_type_id']) ? $_SESSION['activity_type_id'] : '';
-    $completed = isset($_SESSION['activities_completed']) ? $_SESSION['activities_completed'] : '';
-    $user_id = isset($_SESSION['activities_user_id']) ? $_SESSION['activities_user_id'] : '';
-    $date = isset($_SESSION['date']) ? $_SESSION['date'] : '';
-}
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
+
+// TBD - BUG - search date hack !!!
+$search_date = date('Y-m-d', time());
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -114,19 +63,8 @@ $ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif"
 $descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-// set session info
-$_SESSION['activities_sort_column'] = $sort_column;
-$_SESSION['activities_current_sort_column'] = $sort_column;
-$_SESSION['activities_sort_order'] = $sort_order;
-$_SESSION['activities_current_sort_order'] = $sort_order;
-$_SESSION['activities_title'] = $title;
-$_SESSION['activities_contact'] = $company;
-$_SESSION['activities_owner'] = $owner;
-$_SESSION['activities_date'] = $date;
-$_SESSION['activities_before_after'] = $before_after;
-$_SESSION['activities_type'] = $type;
-$_SESSION['activities_completed'] = $completed;
-$_SESSION['activities_user_id'] = $user_id;
+// set all session variables
+arr_vars_session_set ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -410,6 +348,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.34  2004/07/15 14:07:38  cpsource
+ * - Ported arr_vars sub-system.
+ *
  * Revision 1.33  2004/07/14 20:19:49  cpsource
  * - Resolved $company_count not being set properly
  *   opportunities/some.php tried to set $this which can't be done in PHP V5
