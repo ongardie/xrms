@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.28 2005/01/11 13:30:40 braverock Exp $
+ * $Id: one.php,v 1.29 2005/01/13 18:19:46 vanmer Exp $
  */
 
 //include required files
@@ -104,15 +104,14 @@ and a.on_what_id = $case_id
 and a.user_id = u.user_id
 and a.activity_type_id = at.activity_type_id
 and a.activity_record_status = 'a'";
-/*
-    COMMENTED until ACL is fully integrated    
+    
     $list=get_list($session_user_id, 'Read', false, 'activities');
     //print_r($list);
     if ($list) {
         $list=implode(",",$list);
         $sql_activities .= " and a.activity_id IN ($list) ";
     } else { $sql_activities .= ' AND 1 = 2 '; }
-*/
+
 $sql_activities.=" 
 order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
@@ -380,6 +379,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.29  2005/01/13 18:19:46  vanmer
+ * - ACL restriction on activity list
+ *
  * Revision 1.28  2005/01/11 13:30:40  braverock
  * - removed on_what_string hack, changed to use standard make_singular function
  *

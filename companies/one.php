@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.82 2005/01/13 16:49:36 vanmer Exp $
+ * $Id: one.php,v 1.83 2005/01/13 18:20:54 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -207,15 +207,13 @@ WHERE a.company_id = $company_id
   AND a.user_id = u.user_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'";
-/*    
-    COMMENTED until ACL is integrated
+    
     $list=get_list($session_user_id, 'Read', false, 'activities');
     
     if ($list) {
         $list=implode(",",$list);
         $sql_activities .= " and a.activity_id IN ($list) ";
     } else { $sql_activities .= ' AND 1 = 2 '; }
-*/
 
 if ($division_id) {
     $sql_activities.=" AND (a.on_what_table='company_division' AND a.on_what_id=$division_id";
@@ -815,6 +813,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.83  2005/01/13 18:20:54  vanmer
+ * - ACL restriction on activity list
+ *
  * Revision 1.82  2005/01/13 16:49:36  vanmer
  * - updated to use $division_id instead of isset $divison_id, because isset will not check if the field is blank
  *
