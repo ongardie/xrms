@@ -9,8 +9,45 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.14 2004/07/29 11:09:02 cpsource Exp $
+ * $Id: sidebar.php,v 1.15 2004/08/03 21:42:26 neildogg Exp $
  */
+
+$new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
+
+if($new_cell_phone) {
+    $contact_id         = isset($_GET['contact_id']) ? $_GET['contact_id'] : false;
+    if($contact_id) {
+        // handle includes
+        require_once('../include-locations.inc');
+
+        require_once($include_directory . 'vars.php');
+        require_once($include_directory . 'utils-interface.php');
+        require_once($include_directory . 'utils-misc.php');
+        require_once($include_directory . 'adodb/adodb.inc.php');
+        require_once($include_directory . 'adodb/adodb-pager.inc.php');
+        require_once($include_directory . 'adodb-params.php');
+
+        $session_user_id = session_check();
+
+        $con = &adonewconnection($xrms_db_dbtype);
+        $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+        //$con->debug = 1;
+
+        $sql = "SELECT *
+                FROM contacts
+                WHERE contact_id=" . $contact_id;
+        $rst = $con->execute($sql);
+        
+        $rec = array();
+        $rec['cell_phone'] = $new_cell_phone;
+        
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
+        $con->close();
+
+        die();
+    }
+}
 
 if ( !defined('IN_XRMS') )
 {
@@ -18,14 +55,37 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
+$contact_block = '<script language=text/javascript>
+    var temp = new Image();
+    var newsrc;
+
+    function updateVariable(text, variable, extra) {
+        var new_variable = prompt(text, "");
+        if(new_variable != null && new_variable != "") {
+            newsrc = "' . $http_site_root . '/contacts/sidebar.php?" + variable + "=" + new_variable + "&" + extra;
+            temp.src = newsrc;
+            isChanged();
+            document.forms[0].return_url.value = "' . current_page() . '";
+            setTimeout("document.forms[0].submit()", 500);
+        }
+    }
+    
+    function isChanged() {
+        if(!(temp.complete && (temp.src == newsrc))) {
+            setTimeout("isChanged()", 500);
+        }
+    }
+            
+</script>';
+
 //add contact information block on sidebar
-$contact_block = '<table class=widget cellspacing=1 width="100%">
+$contact_block .= '<table class=widget cellspacing=1 width="100%">
     <tr>
         <td class=widget_header colspan=5>' . _("Contact Information") . '</td>
     </tr>'."\n";
 
 if ( $contact_id ) {
-    $sql = "SELECT ct.first_names, ct.last_name, ct.work_phone, ct.address_id, ct.email, ct.cell_phone, ct.company_id
+    $sql = "SELECT ct.first_names, ct.last_name, ct.work_phone, ct.address_id, ct.email, ct.cell_phone, ct.home_phone, ct.company_id
             FROM contacts ct
             WHERE ct.contact_id=$contact_id";
 
@@ -69,26 +129,33 @@ if ( $contact_id ) {
 	  . "</td>\n\t</tr>";
       }
 
-      if ($rst->fields['cell_phone'] or $rst->fields['work_phone']) {
+    $contact_block .= "<tr><td class=widget_content>";
 
-        $contact_block .= "<tr><td class=widget_content>";
-
-	if ($rst->fields['cell_phone']) {
-	  $contact_block .= _("Cell Phone") . ": <strong>"
-	    . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']) 
-	    . "</strong><br>";
-	}
-	
-	if ($rst->fields['work_phone']) {
-	  $contact_block .= _("Work Phone") . ": <strong>"
-	    . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
-	    . "</strong><br>";
-	}
-
-        $contact_block .= "</td>\n\t</tr>";
-      }
+    if ($rst->fields['cell_phone']) {
+        $contact_block .= _("Cell Phone") . ": <strong>"
+                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']) 
+                        . "</strong><br>";
+    }
+    else {
+        $contact_block .= "<a href=\"javascript: updateVariable('Enter Cell Phone', 'cell_phone', 'contact_id=" . $contact_id . "');\">"
+                       . "Enter Cell</a><br>";
+    }
     
-      if ($rst->fields['email']) {
+    if ($rst->fields['work_phone']) {
+        $contact_block .= _("Work Phone") . ": <strong>"
+                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
+                        . "</strong><br>";
+    }
+    
+    if ($rst->fields['home_phone']) {
+        $contact_block .= _("Home Phone") . ": <strong>"
+                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone']) 
+                        . "</strong><br>";
+    }
+
+    $contact_block .= "</td>\n\t</tr>";
+
+    if ($rst->fields['email']) {
         $contact_block .= "<tr>\n\t\t<td class=widget_content>"
 	  . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
 	  . $rst->fields['email'] . "</a></td>\n\t</tr>";
@@ -108,6 +175,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.15  2004/08/03 21:42:26  neildogg
+ * - Sidebar variable changing
+ *
  * Revision 1.14  2004/07/29 11:09:02  cpsource
  * - Fixed multiple errors that showed up because no one
  *   checked for uninitialized variables.
