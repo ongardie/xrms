@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.36 2004/09/02 15:09:53 neildogg Exp $
+ * $Id: update.php,v 1.37 2004/09/02 18:29:02 maulani Exp $
  */
 
 // where do we include from
@@ -135,6 +135,14 @@ $rst = $con->execute($sql);
 // adding a test here would allow us to use UPDATE to set rational default values
 $sql = "ALTER TABLE opportunity_statuses ADD sort_order TINYINT NOT NULL DEFAULT '1' AFTER opportunity_status_id";
 $rst = $con->execute($sql);
+
+//make sure that there is a status_open_indicator column in opportunity statuses
+//should put a test here, but alter table is non-destructive
+//This is used for reports/open-items.php and reports/completed-items.php reports
+//'o' means open, anything else means "completed" for the completed-item report
+$sql = "alter table opportunity_statuses add status_open_indicator char(1) not null default 'o' after sort_order";
+$rst = $con->execute($sql);
+// end
 
 //add phone format to countries
 $sql = "ALTER TABLE countries ADD phone_format VARCHAR(25) NOT NULL DEFAULT '' AFTER country_record_status";
@@ -2266,6 +2274,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.37  2004/09/02 18:29:02  maulani
+ * - Add status_open_indicator to opportunity_statuses table.  Field was
+ *   in install but never added to update.
+ *
  * Revision 1.36  2004/09/02 15:09:53  neildogg
  * - Index added on update
  *
