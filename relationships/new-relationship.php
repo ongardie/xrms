@@ -41,7 +41,7 @@ $what_table_singular = make_singular($what_table);
 $display_name = ucfirst($what_table_singular);
 
 $con->close();
-$page_title = _("Add")." " . $display_name;
+$page_title = _("Add " . $display_name);
 
 start_page($page_title, true, $msg);
 
@@ -57,7 +57,7 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header><?php echo _("Search for")." ".$display_name; ?></td>
+                <td class=widget_header><?php echo _("Search for ".$display_name); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Name or ID"); ?></td>
@@ -87,8 +87,8 @@ end_page();
 
 /**
  * $Log: new-relationship.php,v $
- * Revision 1.3  2004/07/25 13:13:04  braverock
- * - remove lang file require_once, as it is no longer used
+ * Revision 1.4  2004/07/25 22:48:30  johnfawcett
+ * - updated gettext strings
  *
  * Revision 1.2  2004/07/18 18:10:22  braverock
  * - convert all strings for i18n/translation
@@ -109,3 +109,4 @@ end_page();
  *
  */
 ?>
+
