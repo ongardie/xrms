@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.41 2004/11/15 16:16:16 neildogg Exp $
+ * $Id: edit-2.php,v 1.42 2004/12/20 13:58:37 neildogg Exp $
  */
 
 //include required files
@@ -264,10 +264,12 @@ if ($rst) {
 }
 
 //get current username
-$sql = "select username from users where user_id = $user_id";
-$rst = $con->SelectLimit($sql, 1, 0);
-if ($rst) { $username = $rst->fields['username']; }
-$rst->close();
+if($user_id) {
+    $sql = "select username from users where user_id = $user_id";
+    $rst = $con->SelectLimit($sql, 1, 0);
+    if ($rst) { $username = $rst->fields['username']; }
+    $rst->close();
+}
 
 //get current company name and phone
 $sql = "select company_name, phone from companies where company_id = $company_id";
@@ -433,6 +435,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.42  2004/12/20 13:58:37  neildogg
+ * This isn't even used anywhere, but it's fixed anyway
+ *
  * Revision 1.41  2004/11/15 16:16:16  neildogg
  * Improperly ordered function call
  *
