@@ -1,4 +1,4 @@
-<?
+<?php
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
 //
@@ -9,11 +9,23 @@
 //
 //####################################################################
 
+//include required files
+require_once('../../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+//require_once($include_directory . 'utils-interface.php');
+//require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
+//require_once($include_directory . 'utils-accounting.php');
+
 include_once('apb.php');
 $APB_SETTINGS['allow_edit_mode'] = 1;
 $APB_SETTINGS['allow_search_box'] = 1;
-apb_head();
 
+$date = $_GET['date'];
+
+apb_head();
 
 ?>
 
@@ -23,7 +35,7 @@ apb_head();
 <tr>
   <td valign='top'>
 
-<?
+<?php
 
 if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']) {
 
@@ -47,12 +59,12 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
 
 	<table align='center' width='100%'>
 	<tr>
-	<td align='left' valign='bottom'>&lt;-- <a href='?date=<?php echo $yesterday ?><?php if ($edit_mode) print "&edit_mode=$edit_mode" ?>'><?php echo $yesterday ?></a></td>
+	<td align='left' valign='bottom'>&lt;-- <a href='?date=<?php echo $yesterday; ?><?php if ($edit_mode) print "&edit_mode=$edit_mode"; ?>'><?php echo $yesterday; ?></a></td>
 	<td align='center' valign='center'><center><?php echo $now_full ?></center></td>
 	<td align='right' valign='bottom'>
 
 
-	<?
+	<?php
 		if (strtotime($tomorrow) <= strtotime($today)) {
 			print "<a href='?date=$today";
             if ($edit_mode) {
@@ -80,7 +92,7 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
   <tr>
   <td valign='top'>
 
-	<?
+	<?php
 
     if ($APB_SETTINGS['auth_user_id']) {
         $private_sql = "";
@@ -112,14 +124,14 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
             print $row[creation_date] . " - " . $b->link() . " <font size='1'>(" . $g->link() . ")</font><br>\n";
         }
     } else {
-        print "No sites bookmarked";
+        print _("No sites bookmarked");
     }
 
 
 	/* Display The Days Browsing */
 
 	print "<p>\n";
-	print "<b>Bookmarks Used by " . return_username($APB_SETTINGS['user_id']) . "</b><p>\n";
+	print "<b>" . _("Bookmarks Used by")  . return_username($APB_SETTINGS['user_id']) . "</b><p>\n";
 
 	$query = "
 		SELECT b.*, g.*, DATE_FORMAT(h.hit_date, '%H:%i:%s') as hit_date
@@ -142,14 +154,14 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
             print $row[hit_date] . " - " . $b->link() . " <font size='1'>(" . $g->link() . ")</font><br>\n";
         }
     } else {
-        print "No bookmarks used";
+        print _("No bookmarks used");
     }
 
 
 	/* Display The Days Browsing by Visitors*/
 
 	print "<p>\n";
-	print "<b>Bookmarks Used by Visitors</b><p>\n";
+	print "<b>" . _("Bookmarks Used by Visitors") . "</b><p>\n";
 
 	$query = "
 		SELECT b.*, g.*, DATE_FORMAT(h.hit_date, '%H:%i:%s') as hit_date, h.hit_ip
@@ -173,7 +185,7 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
             print $row[hit_date] . " - " . $b->link() . " <font size='1'>(" . $g->link() . ")</font> - <font color='#999999'>" . $row[hit_ip] . "</font><br>\n";
         }
     } else {
-        print "No bookmarks used";
+        print _("No bookmarks used");
     }
 
     echo "<br>";
@@ -182,9 +194,9 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
 
 ?>
 
-<center><p>Daily bookmark browsing is not enabled for non-authenticated users.</center>
+<center><p><?php echo _("Daily bookmark browsing is not enabled for non-authenticated users."); ?></center>
 
-<?
+<?php
 }
 ?>
 
@@ -192,6 +204,6 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
 </tr>
 </table>
 
-<?
+<?php
 apb_foot();
 ?>
