@@ -2,7 +2,7 @@
 /**
  * Search and view summary information on multiple companies and thier contacts for printing.
  *
- * $Id: company-contacts-printout.php,v 1.5 2004/07/20 18:38:04 introspectshun Exp $
+ * $Id: company-contacts-printout.php,v 1.6 2004/07/24 15:47:14 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -88,7 +88,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
 
-$sql = "select " . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS Company, c.company_id, c.default_primary_address \n" ;
+$sql = "select " . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS "
+        ._("Company").", c.company_id, c.default_primary_address \n" ;
 
 $criteria_count = 0;
 
@@ -120,9 +121,9 @@ if (strlen($user_id) > 0) {
 
 if (strlen($city) > 0) {
     $criteria_count++;
-    $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
+    $sql   .= ", addr.city as '"._("City")."' \n";
     if (!strlen($state) > 0) {
-        $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
+        $sql   .= ", addr.province as '"._("State")."' \n";
     }
     $where .= " and addr.city LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc()) ;
 }
@@ -130,9 +131,9 @@ if (strlen($city) > 0) {
 if (strlen($state) > 0) {
     $criteria_count++;
     if (!strlen($city) > 0) {
-        $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
+        $sql   .= ", addr.city as '"._("City")."' \n";
     }
-    $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
+    $sql   .= ", addr.province as '"._("State")."' \n";
     $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
 }
 
@@ -204,14 +205,14 @@ start_page($page_title, $show_navbar, $msg);
         <input type=hidden name=companies_next_page>
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=8><?php  echo $strCompaniesSomeSearchCriteriaTitle; ?></td>
+                <td class=widget_header colspan=8><?php  echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyNameLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyUserLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCategoryLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCityLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyStateLabel; ?></td>
+                <td class=widget_label><?php  echo _("Company Name"); ?></td>
+                <td class=widget_label><?php  echo _("Company User"); ?></td>
+                <td class=widget_label><?php  echo _("Company Category"); ?></td>
+                <td class=widget_label><?php  echo _("Company City"); ?></td>
+                <td class=widget_label><?php  echo _("Company State"); ?></td>
 
             </tr>
             <tr>
@@ -283,7 +284,7 @@ if ($use_post_vars) {
             }
 
             $company_row = "\n<tr>\n\t<td class=widget_content>"
-                            . $rst->fields['Company']
+                            . $rst->fields[_("Company")]
                             . "\n\t</td>"
                             . "<td>".$contact_rows."</td>"
                             . "\n\t<td class=widget_content>"
@@ -338,6 +339,10 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.6  2004/07/24 15:47:14  braverock
+ * - remove lang/english.php variables
+ * - fixed other localized strings for i18n
+ *
  * Revision 1.5  2004/07/20 18:38:04  introspectshun
  * - Localized strings for i18n/translation support
  * - Now use ADODB Concat function
