@@ -13,8 +13,14 @@
 
     //company info
     $company_name        = $row['company_name'];
+    if(!strlen($company_name)) {
+        $company_name    = $row['company'];
+    }
     $legal_name          = $row['legal_name'];
     $division_name       = $row['division_name'];
+    if (!strlen($division_name)) {
+        $division_name   = $row['division'];
+    }
     $company_website     = $row['website'];
     $company_taxid       = $row['tax_id'];
     $extref1             = $row['extref1'];
@@ -57,13 +63,20 @@
     $contact_custom3       = $row['contact_custom3'];
     $contact_custom4       = $row['contact_custom4'];
     $contact_profile       = $row['contact_profile'];
+    $gender                = $row['gender'];
 
     //address info
     $address_name               = $row['address_name'];
     $address_line1              = $row['line1'];
+    if (!strlen($address_line1)) {
+        $address_line1          = $row['street'];
+    }
     $address_line2              = $row['line2'];
     $address_city               = $row['city'];
     $address_state              = $row['state'];
+    if(!strlen($address_state)) {
+        $address_state          = $row['province'];
+    }
     $address_postal_code        = $row['postal_code'];
     $address_country            = $row['country'];
     $address_body               = $row['address_body'];
@@ -71,6 +84,9 @@
 
 /**
  * $Log: import-template-default.php,v $
+ * Revision 1.2  2004/07/07 22:18:33  braverock
+ * - minor improvements to import process
+ *
  * Revision 1.1  2004/04/19 14:21:54  braverock
  * - add additional look-ups and tests on import
  * - improve error reporting

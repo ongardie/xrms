@@ -42,10 +42,11 @@
     if ($row['suffix']) {
         $contact_profile            .= "Suffix: " . $row['suffix'] . "\n";
     }
+    $gender              = $row['gender'];
     $company_name        = $row['company'];
     $legal_name          = $company_name;
-    $contact_division        = $row['department'];
-    $contact_title        = $row['job_title'];
+    $contact_division    = $row['department'];
+    $contact_title       = $row['job_title'];
     $address_line1       = $row['business_street'];
     $address_line2       = $row['business_street_2'];
     if ($row['business_street_3']) {
@@ -54,7 +55,7 @@
     $address_city        = $row['business_city'];
     $address_state       = $row['business_state'];
     $address_postal_code = $row['business_postal_code'];
-    $address_country        = $row['business_country'];
+    $address_country     = $row['business_country'];
     if ($row['home_street']) {
         $contact_profile            .= "Home Street: " . $row['home_street'] . "\n";
     }
@@ -255,6 +256,9 @@
 
 /**
  * $Log: import-template-outlook.php,v $
+ * Revision 1.3  2004/07/07 22:18:33  braverock
+ * - minor improvements to import process
+ *
  * Revision 1.2  2004/05/06 20:04:48  braverock
  * - update templates to capture more fields
  *   - makes use of material from SF patch 938836 by Glenn Powers

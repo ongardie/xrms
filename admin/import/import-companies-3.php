@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.22 2004/05/21 12:24:27 braverock Exp $
+ * $Id: import-companies-3.php,v 1.23 2004/07/07 22:18:32 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -613,6 +613,10 @@ foreach ($filearray as $row) {
                 $sql_insert_contact .= ',
                                        profile       = '. $con->qstr($contact_profile);
             }
+            if ($gender){
+                $sql_insert_contact .= ',
+                                       gender       = '. $con->qstr($gender);
+            }
             debugSql($sql_insert_contact);
             $con->execute($sql_insert_contact);
             importMessage("Updated contact '$contact_first_names $contact_last_name'");
@@ -740,6 +744,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.23  2004/07/07 22:18:32  braverock
+ * - minor improvements to import process
+ *
  * Revision 1.22  2004/05/21 12:24:27  braverock
  * - assign contact address_id to the company default address if no address is imported with the contact
  *
