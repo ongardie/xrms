@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit-definitions.php,v 1.1 2004/07/14 16:50:16 gpowers Exp $
+ * $Id: edit-definitions.php,v 1.2 2004/07/22 18:29:58 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -154,7 +154,7 @@ $return_url = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
 
 if (!$return_url) {
-    $return_url = urlencode("$http_site_root/plugins/info/edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id");
+    $return_url = urlencode("/plugins/info/edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id");
 } else {
     $return_url = urlencode($return_url);
 }

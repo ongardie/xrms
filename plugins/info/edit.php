@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.2 2004/07/22 18:18:19 gpowers Exp $
+ * $Id: edit.php,v 1.3 2004/07/22 18:29:58 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -87,7 +87,7 @@ $company_id = $_GET['company_id'];
 $return_url = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
 
-$delete_return_url = urlencode("$http_site_root/companies/one.php?company_id=$company_id");
+$delete_return_url = urlencode("/companies/one.php?company_id=$company_id");
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);

@@ -2,7 +2,7 @@
 /**
  * The main page for the info plugin
  *
- * $Id: info.php,v 1.2 2004/07/22 18:18:19 gpowers Exp $
+ * $Id: info.php,v 1.3 2004/07/22 18:29:58 gpowers Exp $
  */
 
 // include the common files
@@ -19,6 +19,8 @@ require_once('info.inc');
 $session_user_id = session_check();
 
 $msg = $_GET['msg'];
+
+$return_url = "/plugins/info/info.php";
 
 //connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
@@ -65,7 +67,7 @@ start_page($server_info_heading);
               $company_id = $rst->fields['company_id'];
               $info_id = $rst->fields['info_id'];
 
-              $link = "one.php?info_id=$info_id&company_id=$company_id&return_url=$this";
+              $link = "one.php?info_id=$info_id&company_id=$company_id&return_url=$return_url";
               $server_link = "<a href='$link'>$server_name</a>";
 
               echo "<tr><td class=widget_content>";

@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: delete-item-2.php,v 1.1 2004/07/14 16:50:15 gpowers Exp $
+ * $Id: delete-item-2.php,v 1.2 2004/07/22 18:29:58 gpowers Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -34,6 +34,6 @@ $con->execute($sql);
 
 $con->close();
 
-header("Location: $return_url");
+header("Location: " . $http_site_root . $return_url");
 
 ?>

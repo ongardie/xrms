@@ -2,7 +2,7 @@
 /**
  * Edit info element definitions
  *
- * $Id: edit-definitions-2.php,v 1.1 2004/07/14 16:50:15 gpowers Exp $
+ * $Id: edit-definitions-2.php,v 1.2 2004/07/22 18:29:58 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-accounting.php');
 
 require_once('info.inc');
-$this = $_SERVER['REQUEST_URI'];
+
 $session_user_id = session_check();
 
 $msg = $_POST['msg'];
@@ -168,6 +168,6 @@ if ($new_element) {
 $con->close();
 $con_write->close();
 
-header("Location: $return_url");
+header("Location: " . $http_site_root . $return_url");
 
 ?>
