@@ -2,7 +2,7 @@
 /**
  * Commit the new Activity Type to the database
  *
- * $Id: add-2.php,v 1.4 2004/07/16 15:04:05 braverock Exp $
+ * $Id: add-2.php,v 1.5 2004/07/16 15:04:45 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -58,6 +58,9 @@ $con->close();
 header("Location: some.php");
 
 /**
- * $Id: add-2.php,v 1.4 2004/07/16 15:04:05 braverock Exp $
+ * $Log: add-2.php,v $
+ * Revision 1.5  2004/07/16 15:04:45  braverock
+ * - add phpdoc
+ *
  */
 ?>
