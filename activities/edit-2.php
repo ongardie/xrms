@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.49 2005/01/09 17:26:29 vanmer Exp $
+ * $Id: edit-2.php,v 1.50 2005/01/10 21:45:07 vanmer Exp $
  */
 
 //include required files
@@ -50,8 +50,18 @@ $arr_vars = array (
 
 // get posted data
 arr_vars_post_with_cmd ( $arr_vars );
+
+$activity_on_what_id=$on_what_id;
+$activity_on_what_table=$on_what_table;
+
 $on_what_id=$activity_id;
+$on_what_table='activities';
+
 $session_user_id = session_check('','Update');
+
+$on_what_id=$activity_on_what_id;
+$on_what_table=$activity_on_what_table;
+
 if (!$return_url) {
     $return_url='/activities/some.php';
 }
@@ -265,11 +275,19 @@ if($activity_status == 'c' && $current_activity_status != 'c') {
 }
 
 //get sort_order field
-$sql = "select sort_order from " . strtolower($table_name) . "_statuses where " . strtolower($table_name) ."_status_id=$table_status_id";
+$sql = "select * from " . strtolower($table_name) . "_statuses where " . strtolower($table_name) ."_status_id=$table_status_id";
 $rst = $con->SelectLimit($sql, 1, 0);
 $rst = $con->execute($sql);
 if ($rst) {
     $sort_order = $rst->fields['sort_order'];
+    switch (strtolower($table_name)) {
+        case 'case':
+            $type_id = $rst->fields[strtolower($table_name).'_type_id'];
+        break;
+        default:
+            $type_id=false;
+        break;
+    }
     $rst->close();
 }
 
@@ -334,20 +352,27 @@ if ($table_name !== "attached to") {
             $no_update = false;
         } else {
             $sort_order++;
-
-            //look for activity_templates defined for the next status in the workflow
-            $sql = "select * from activity_templates where on_what_table=" . $con->qstr($table_name.'_statuses') . " AND on_what_id=$sort_order";
-            $rst=$con->execute($sql);
-            if (!$rst) { db_error_handler($con,$sql); }
-
-            //if there are templates defined for the next status, find it
-            if ($rst->numRows()>0) {
-                $no_update = false;
-                $sql = "select * from " . $table_name . "_statuses
-                    where sort_order=$sort_order
-                    and " . $table_name . "_status_record_status='a'";
-                $rst = $con->execute($sql);
-                $table_status_id = $rst->fields[$table_name . '_status_id'];
+            //$con->debug=1;            
+            $sql = "select * from {$table_name}_statuses
+                where sort_order=$sort_order";
+            if ($type_id) {
+                $sql.=" and {$table_name}_type_id=$type_id ";
+            }
+            $sql.=" and {$table_name}_status_record_status='a'";
+            $status_rst = $con->execute($sql);
+            if (!$status_rst) db_error_handler($con, $sql);
+            if ($status_rst AND ($status_rst->numRows()>0)) {
+                $table_status_id = $status_rst->fields[$table_name . '_status_id'];
+                
+                //look for activity_templates defined for the next status in the workflow
+                $sql = "select * from activity_templates where on_what_table=" . $con->qstr($table_name.'_statuses') . " AND on_what_id=$table_status_id";
+                $rst=$con->execute($sql);
+                if (!$rst) { db_error_handler($con,$sql); }
+    
+                //if there are templates defined for the next status, find it
+                if ($rst->numRows()>0) {
+                    $no_update = false;
+                }
             }
         }
     }
@@ -443,6 +468,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.50  2005/01/10 21:45:07  vanmer
+ * - updates to allow workflow hooks to properly find the next possible status, and activities to populate
+ *
  * Revision 1.49  2005/01/09 17:26:29  vanmer
  * - moved session_check after get/post variable are processed (for ACL)
  * - added default return_url if none specified from calling pages
