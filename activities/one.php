@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.31 2004/07/08 12:27:05 braverock Exp $
+ * $Id: one.php,v 1.32 2004/07/09 15:50:56 neildogg Exp $
  */
 
 //include required files
@@ -134,7 +134,10 @@ if ($company_id) {
 }
 
 //include the contacts-companies sidebar
-require_once("../companies/company-sidebar.php");
+$relationship_name = "company link";
+$working_direction = "from";
+$from_what_id = $contact_id;
+require_once("../relationships/sidebar.php");
 
 /* add opportunities/case/campaign combo box */
 //get singular form of table name (from on_what_table field)
@@ -360,7 +363,7 @@ function logTime() {
         <!-- contact information block //-->
         <?php echo $contact_block; ?>
         <!-- sidebar plugins //-->
-        <?php echo $company_link_rows; ?>
+        <?php echo $relationship_link_rows; ?>
     </div>
 
 </div>
@@ -395,6 +398,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.32  2004/07/09 15:50:56  neildogg
+ * - Uses the new, generic relationship sidebar
+ *
  * Revision 1.31  2004/07/08 12:27:05  braverock
  * - clean up formatting of probability syntax for less parser switching and easier readability
  *
