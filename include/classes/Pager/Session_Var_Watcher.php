@@ -24,7 +24,7 @@
 * 	1		34		34			true
 *
 * @author Justin Cooper
-* $Id: Session_Var_Watcher.php,v 1.1 2005/03/21 21:19:10 daturaarutad Exp $
+* $Id: Session_Var_Watcher.php,v 1.2 2005/03/21 21:20:07 daturaarutad Exp $
 */
 
 class SessionVarWatcher {
@@ -59,7 +59,7 @@ class SessionVarWatcher {
 		// check CGI vars
         foreach($this->cgi_vars as $var) {
             $v = null;
-			echo "$var";
+			//echo "$var";
             getGlobalVar($v, $var);
 
             if(array_key_exists($this->id . $var, $_SESSION) && $_SESSION[$this->id . $var] != $v) {
@@ -92,6 +92,9 @@ class SessionVarWatcher {
 
 /**
 * $Log: Session_Var_Watcher.php,v $
+* Revision 1.2  2005/03/21 21:20:07  daturaarutad
+* removed echo
+*
 * Revision 1.1  2005/03/21 21:19:10  daturaarutad
 * new class for handling caching issues
 *
