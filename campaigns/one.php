@@ -2,7 +2,7 @@
 /**
  * Edit a campaign
  *
- * $Id: one.php,v 1.11 2004/07/19 17:19:52 cpsource Exp $
+ * $Id: one.php,v 1.12 2004/07/25 15:26:31 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -123,7 +123,7 @@ if (strlen($file_rows) == 0) {
     $file_rows = "<tr><td class=widget_content colspan=4>" . _("No files") . "</td></tr>";
 }
 
-$page_title = _("One Campaign : ") . $campaign_title;
+$page_title = _("Campaign Details") .': '. $campaign_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -257,6 +257,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2004/07/25 15:26:31  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext string
+ *
  * Revision 1.11  2004/07/19 17:19:52  cpsource
  * - Resolved undefs
  *
