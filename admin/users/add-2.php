@@ -2,13 +2,14 @@
 /**
  * commit a new user to the Database
  *
- * $Id: add-2.php,v 1.9 2005/01/13 17:56:13 vanmer Exp $
+ * $Id: add-2.php,v 1.10 2005/02/10 23:45:05 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-users.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -21,36 +22,13 @@ $last_name = $_POST['last_name'];
 $first_names = $_POST['first_names'];
 $email = $_POST['email'];
 $gmt_offset = $_POST['gmt_offset'];
-
-$gmt_offset = ($gmt_offset < 0) || ($gmt_offset > 0) ? $gmt_offset : 0;
-$password = md5($password);
+if (array_key_exists('allowed_p', $_POST)) $enabled=true;
+else $enabled=false;
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-//save to database
-$rec = array();
-$rec['role_id'] = $role_id;
-$rec['last_name'] = $last_name;
-$rec['first_names'] = $first_names;
-$rec['username'] = $new_username;
-$rec['password'] = $password;
-$rec['email'] = $email;
-$rec['gmt_offset'] = $gmt_offset;
-$rec['language'] = 'english';
-
-$tbl = 'users';
-$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$rst = $con->execute($ins);
-
-if(!$rst) {
-    db_error_handler($con, $ins);
-}
-$user_id=$con->Insert_ID();
-if (!$group) {
-    $group="Users";
-}
-add_user_group(false, $group, $user_id, $role_id);
+$user_id=add_xrms_user($con, $new_username, $password, $role_id, $first_names, $last_name, $email, $gmt_offset, $enabled);
 
 $con->close();
 
@@ -58,6 +36,10 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.10  2005/02/10 23:45:05  vanmer
+ * -altered to use new add_xrms_user function
+ * -altered to use enabled flag to set user account status
+ *
  * Revision 1.9  2005/01/13 17:56:13  vanmer
  * - added new ACL code to user management section
  *
