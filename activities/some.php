@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.87 2005/01/25 22:11:59 daturaarutad Exp $
+ * $Id: some.php,v 1.88 2005/01/26 22:37:15 vanmer Exp $
  */
 
 // handle includes
@@ -171,13 +171,14 @@ if($sort_column == 9) {
 else {
     $sql .= " 'n/a' AS " . $con->qstr(_("%"),get_magic_quotes_gpc()) . " ";
 }
-$sql .= "FROM companies c, activity_types at, addresses addr, activities a";
+$sql .= "FROM companies c, activity_types at, addresses addr";
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     $sql .= ", time_daylight_savings tds";
 }
 if($opportunity_status_id || $sort_column == 9 || $campaign_id) {
     $sql .= ", opportunities o";
 }
+$sql .= ", activities a ";
 $sql .= " LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
   LEFT OUTER JOIN users u ON a.user_id = u.user_id
   WHERE a.company_id = c.company_id";
@@ -694,10 +695,8 @@ $pager->Render($system_rows_per_page);
 $con->close();
 
 ?>
-
     </form>
     </div>
-
         <!-- right column //-->
     <?php
     /*
@@ -763,6 +762,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.88  2005/01/26 22:37:15  vanmer
+ * - altered query to allow activities table to always directly preceed LEFT OUTER JOINS, to fix sql server error
+ *
  * Revision 1.87  2005/01/25 22:11:59  daturaarutad
  * updated to use new XRMS_Pager and Pager_Columns to implement selectable columns
  *
