@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.1 2004/10/21 05:53:46 gpowers Exp $
+ * $Id: setup.php,v 1.2 2004/11/09 03:12:54 gpowers Exp $
  */
 
 
@@ -32,7 +32,9 @@ function sidebar () {
                 <td>
                     <img src="../files/storage/' . $file_filesystem_name . '" height=160 width=120 alt="' . _("ID Photo") . '">
                 </td>
-</tr>'."\n";
+</tr>
+</table>
+';
         }
             $rst->close();
     }
