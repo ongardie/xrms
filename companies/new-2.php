@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.14 2004/06/12 17:10:24 gpowers Exp $
+ * $Id: new-2.php,v 1.15 2004/07/07 21:53:13 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -64,9 +64,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "SELECT * FROM companies WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['crm_status_id'] = $crm_status_id;
 $rec['company_source_id'] = $company_source_id;
@@ -93,7 +91,8 @@ $rec['entered_by'] = $session_user_id;
 $rec['last_modified_by'] = $session_user_id;
 $rec['last_modified_at'] = time();
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'companies';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $company_id = $con->insert_id();
@@ -112,9 +111,6 @@ if (strlen($company_code) == 0) {
 }
 
 // insert an address
-$sql = "SELECT * FROM addresses WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['country_id'] = $country_id;
@@ -127,7 +123,8 @@ $rec['postal_code'] = $postal_code;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'addresses';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 
@@ -148,9 +145,6 @@ $con->execute($upd);
 
 
 // insert a contact
-$sql = "SELECT * FROM contacts WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['address_id'] = $address_id;
@@ -164,7 +158,8 @@ $rec['entered_by'] = $session_user_id;
 $rec['last_modified_by'] = $session_user_id;
 $rec['last_modified_at'] = time();
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'contacts';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 if (strlen($accounting_system) > 0) {
@@ -181,6 +176,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.15  2004/07/07 21:53:13  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.14  2004/06/12 17:10:24  gpowers
  * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
  *   GetUpdateSQL()

@@ -51,16 +51,15 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     if($rst->rowcount() == 0) {
-        $sql = "SELECT * FROM relationships WHERE 1 = 2"; //select empty record as placeholder
-        $rst = $con->execute($sql);
-
+        //save to database
         $rec = array();
         $rec["$working_direction" . "_what_id"] = $overall_id;
         $rec["$opposite_direction" . "_what_id"] = $on_what_id;
         $rec['relationship_type_id'] = $relationship_type_id;
         $rec['established_at'] = time();
 
-        $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+        $tbl = 'relationships';
+        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
         // $con->debug=1;
 
@@ -75,6 +74,9 @@ header("Location: .." . $return_url);
 
 /**
  * $Log: new-company-3.php,v $
+ * Revision 1.3  2004/07/07 21:53:13  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.2  2004/07/05 22:13:54  introspectshun
  * - Now uses GetInsertSQL
  * - Include adodb-params.php

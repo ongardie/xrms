@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id:
+ * $Id: divisions.php,v 1.4 2004/07/07 21:53:13 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -99,6 +99,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.4  2004/07/07 21:53:13  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.3  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

@@ -2,7 +2,7 @@
 /**
  * Add Category
  *
- * $Id: add-category.php,v 1.3 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: add-category.php,v 1.4 2004/07/07 21:53:13 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -28,15 +28,14 @@ and on_what_table = 'companies'
 and on_what_id = $company_id";
 $con->execute($sql);
 
-$sql = "SELECT * FROM entity_category_map WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['category_id'] = $category_id;
 $rec['on_what_table'] = 'companies';
 $rec['on_what_id'] = $company_id;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'entity_category_map';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 add_audit_item($con, $session_user_id, 'created', 'entity_category_map', $category_id, 1);
@@ -47,6 +46,9 @@ header("Location: categories.php?company_id=$company_id");
 
 /**
  * $Log: add-category.php,v $
+ * Revision 1.4  2004/07/07 21:53:13  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.3  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

@@ -2,7 +2,7 @@
 /**
  * Add Relationship
  *
- * $Id: add-relationship.php,v 1.8 2004/07/05 21:17:01 introspectshun Exp $
+ * $Id: add-relationship.php,v 1.9 2004/07/07 21:53:13 introspectshun Exp $
  *
  * @todo put back in established at date parsing
  */
@@ -34,16 +34,15 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "SELECT * FROM relationships WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['from_what_id'] = $from_what_id;
 $rec['to_what_id'] = $to_what_id;
 $rec['relationship_type_id'] = $relationship_type_id;
 $rec['established_at'] = time();
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'relationships';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 add_audit_item($con, $session_user_id, 'created', 'relationships', $company_id, 1);
@@ -54,6 +53,9 @@ header("Location: relationships.php?company_id=$company_id");
 
 /**
  * $Log: add-relationship.php,v $
+ * Revision 1.9  2004/07/07 21:53:13  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.8  2004/07/05 21:17:01  introspectshun
  * - Now uses GetInsertSQL
  * - Updated add_audit_item to reflect new relationship table

@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.5 2004/06/12 17:10:24 gpowers Exp $
+ * $Id: add-division.php,v 1.6 2004/07/07 21:53:13 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,9 +24,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 //$con->debug = 1;
 
-$sql = "SELECT * FROM company_division WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['division_name'] = $division_name;
@@ -36,7 +34,8 @@ $rec['entered_by'] = $session_user_id;
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'company_division';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $division_id = $con->insert_id();
@@ -49,6 +48,9 @@ header("Location: divisions.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.6  2004/07/07 21:53:13  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.5  2004/06/12 17:10:24  gpowers
  * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
  *   GetUpdateSQL()

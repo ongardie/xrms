@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.7 2004/06/16 19:22:36 gpowers Exp $
+ * $Id: add-address.php,v 1.8 2004/07/07 21:53:13 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -33,9 +33,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "SELECT * FROM addresses WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['country_id'] = $country_id;
@@ -48,7 +46,8 @@ $rec['postal_code'] = $postal_code;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'addresses';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $address_id = $con->insert_id();
@@ -62,6 +61,9 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.8  2004/07/07 21:53:13  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.7  2004/06/16 19:22:36  gpowers
  * - removed double quoting from t/f
  *   - did not work with MySQL
