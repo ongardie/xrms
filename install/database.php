@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.17 2004/07/28 20:41:52 neildogg Exp $
+ * $Id: database.php,v 1.18 2004/08/03 15:51:00 neildogg Exp $
  */
 
 /**
@@ -751,6 +751,67 @@ function opportunity_db_tables($con, $table_list) {
         }
     }
 
+    // time_daylight_savings
+    if (!in_array('opportunity_statuses',$table_list)) {
+        $sql ="create table opportunity_statuses (
+               opportunity_status_id            int not null primary key auto_increment,
+               sort_order                       tinyint default '1' not null,
+               status_open_indicator            char( 1 ) default 'o' not null,
+               opportunity_status_short_name    varchar(10) not null default '',
+               opportunity_status_pretty_name   varchar(100) not null default '',
+               opportunity_status_pretty_plural varchar(100) not null default '',
+               opportunity_status_display_html  varchar(100) not null default '',
+               opportunity_status_record_status char(1) not null default 'a',
+               opportunity_status_long_desc     varchar(255) not null default ''
+               )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
+    // create the time_daylight_savings table if we need it
+        $sql ="CREATE TABLE time_daylight_savings (
+               daylight_savings_id              int(11) NOT NULL auto_increment,
+               start_position                   varchar(5) NOT NULL default '',
+               start_day                        varchar(10) NOT NULL default '',
+               start_month                      int(2) NOT NULL default '0',
+               end_position                     varchar(5) NOT NULL default '',
+               end_day                          varchar(10) NOT NULL default '',
+               end_month                        int(2) NOT NULL default '0',
+               hour_shift                       float NOT NULL default '0',
+               last_update                      date NOT NULL default '0000-00-00',
+               current_hour_shift               float NOT NULL default '0'
+               PRIMARY KEY (daylight_savings_id)
+               )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+    
+    // create the time_zones table if we need it
+        $sql ="CREATE TABLE time_zones (
+               time_zone_id int(11) NOT NULL auto_increment,
+               country_id int(11) NOT NULL default '0',
+               province varchar(255) default NULL,
+               city varchar(255) default NULL,
+               postal_code varchar(24) default NULL,
+               daylight_savings_id int(11) NOT NULL default '0',
+               offset float NOT NULL default '0',
+               confirmed char(1) NOT NULL default '',
+               PRIMARY KEY  (time_zone_id),
+               KEY country_id (country_id)
+               )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
 } // end opportunity_db_tables fn
 
 
@@ -997,6 +1058,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.18  2004/08/03 15:51:00  neildogg
+ * - Added daylight savings and time zones tables and data for US
+ *
  * Revision 1.17  2004/07/28 20:41:52  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
