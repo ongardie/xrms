@@ -1,4 +1,10 @@
 <?php
+/**
+ * Export Search Results from opportunities/some.php
+ *
+ * $Id: export.php,v 1.8 2004/08/25 18:28:43 braverock Exp $
+ */
+
 
 require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -12,7 +18,7 @@ $session_user_id = session_check();
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 
 $opportunity_title = $_POST['opportunity_title'];
 $company_name = $_POST['company_name'];
@@ -71,9 +77,13 @@ if (strlen($opportunity_status_id) > 0) {
 
 $rst = $con->execute($sql.$where);
 
+if (!$rst) {
+    db_error_handler ($con, $sql.$where);
+}
+
 $filename =  'opportunities_' . time() . '.csv';
 
-$fp = fopen($tmp_export_directory . $filename, 'w');
+$fp = fopen($xrms_file_root.$tmp_export_directory.'/'.$filename, 'w');
 
 if (($fp) && ($rst)) {
     rs2csvfile($rst, $fp);
@@ -82,7 +92,7 @@ if (($fp) && ($rst)) {
 } else {
     echo "<p>" . _("There was a problem with your export") . ":\n";
     if (!$fp) {
-        echo "<br>" . _("Unable to open file") . ": $tmp_export_directory . $filename \n";
+        echo "<br>" . _("Unable to open file") . ": $xrms_file_root.$tmp_export_directory/$filename \n";
     }
     if (!$rst) {
         echo "<br>" . _("No results returned from database by query") . ": \n";
@@ -92,6 +102,13 @@ if (($fp) && ($rst)) {
 
 $con->close();
 
-header("Location: {$http_site_root}/export/{$filename}");
+header("Location: {$http_site_root}{$tmp_export_directory}/{$filename}");
 
+/**
+ *$Log: export.php,v $
+ *Revision 1.8  2004/08/25 18:28:43  braverock
+ *- make paths relative to vars.php variables
+ *- add phpdoc
+ *
+ */
 ?>
