@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.24 2004/07/20 19:38:31 introspectshun Exp $
+ * $Id: some.php,v 1.25 2004/07/20 19:43:02 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -63,17 +63,17 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
 $sql = "SELECT " .
-  $con->Concat("'<a href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
-  c.company_name AS 'Company', u.username AS 'Owner',
+  $con->Concat("'<a href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'") . " AS '" . _("Opportunity") . "',
+  c.company_name AS 'Company', u.username AS '" . _("Owner") . "',
   CASE
     WHEN (opp.size > 0) THEN opp.size
     ELSE 0
-  END AS 'Opportunity Size',
+  END AS '" . _("Opportunity Size") . "',
   CASE
     WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100)
     ELSE 0
-  END AS 'Weighted Size',
-  os.opportunity_status_pretty_name AS 'Status', $close_at AS 'Close Date'
+  END AS '" . _("Weighted Size") . "',
+  os.opportunity_status_pretty_name AS '" . _("Status") . "', $close_at AS '" . _("Close Date") . "'
 ";
 
 if ($opportunity_category_id > 0) {
@@ -314,6 +314,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.25  2004/07/20 19:43:02  introspectshun
+ * - Localized SQL aliias strings for i18n/translation support
+ *
  * Revision 1.24  2004/07/20 19:38:31  introspectshun
  * - Localized strings for i18n/translation support
  *
