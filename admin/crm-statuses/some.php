@@ -2,7 +2,7 @@
 /**
  * Show and edit the details for all crm statuses
  *
- * $Id: some.php,v 1.7 2004/07/16 23:51:36 cpsource Exp $
+ * $Id: some.php,v 1.8 2004/11/26 17:18:51 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,9 +23,9 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         if (strlen($rst->fields['crm_status_display_html']) > 0) {
-            $crm_status_display = $rst->fields['crm_status_display_html'];
+            $crm_status_display = _($rst->fields['crm_status_display_html']);
         } else {
-            $crm_status_display = $rst->fields['crm_status_pretty_name'];
+            $crm_status_display = _($rst->fields['crm_status_pretty_name']);
         }
         $table_rows .= '<tr>';
         $table_rows .= '<td class=widget_content><a href=one.php?crm_status_id=' . $rst->fields['crm_status_id'] . '>' . $crm_status_display . '</a></td>';
@@ -96,6 +96,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/11/26 17:18:51  braverock
+ * - localized strings for i18n
+ *
  * Revision 1.7  2004/07/16 23:51:36  cpsource
  * - require session_check ( 'Admin' )
  *

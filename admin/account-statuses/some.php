@@ -4,7 +4,7 @@
  *
  * List account-status
  *
- * $Id: some.php,v 1.7 2004/07/16 23:51:33 cpsource Exp $
+ * $Id: some.php,v 1.8 2004/11/26 17:18:28 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,7 +25,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?account_status_id=' . $rst->fields['account_status_id'] . '>' . $rst->fields['account_status_pretty_name'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href=one.php?account_status_id=' . $rst->fields['account_status_id'] . '>' . _($rst->fields['account_status_pretty_name']) . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -93,6 +93,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/11/26 17:18:28  braverock
+ * - localized strings for i18n
+ *
  * Revision 1.7  2004/07/16 23:51:33  cpsource
  * - require session_check ( 'Admin' )
  *
