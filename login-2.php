@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.17 2004/07/22 11:12:55 maulani Exp $
+ * $Id: login-2.php,v 1.18 2004/07/22 17:22:04 introspectshun Exp $
  */
 require_once('include-locations.inc');
 
@@ -31,12 +31,13 @@ if (!$connectiontest) {
              . _("Have the administrator check the database parameters in vars.php to make sure they are correct.")
              . _("Also make sure the database is running and can accept a connection from this server.")
              . '<BR><BR>';
+    $title = _("Test Results");
 
         echo <<<EOQ
         <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
         <html>
         <head>
-        <title>Test Results</title>
+        <title>$title</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         </head>
         <body>
@@ -55,7 +56,7 @@ if ($xrms_use_ldap) {
      ini_set ('error_reporting', 0);
      $ds=ldap_connect($xrms_ldap["server"]);  // connect to the LDAP server!
      if ($ds) {
-          $r=ldap_bind($ds, $xrms_ldap["search_user"], $xrms_ldap["search_password"]);  //authenticate as the search user specified
+          $r=ldap_bind($ds, $xrms_ldap["search_user"], $xrms_ldap["search_pw"]);  //authenticate as the search user specified
           //specify which attributes to fetch from ldap
           $justthese = array ("dn","uid","givenName","sn","mail");
         // Search for the user name
@@ -164,6 +165,11 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.18  2004/07/22 17:22:04  introspectshun
+ * - Made connectiontest doc title a GetText string
+ * - Corrected LDAP authentication to use $xrms_ldap['search_pw'] instead of
+ *   $xrms_ldap['search_password']
+ *
  * Revision 1.17  2004/07/22 11:12:55  maulani
  * - Change default characterset to UTF-8
  *
