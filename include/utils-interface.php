@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.15 2004/06/21 15:50:57 braverock Exp $
+ * $Id: utils-interface.php,v 1.16 2004/07/02 15:01:22 maulani Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -48,7 +48,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
     $msg = status_msg($msg);
 
-    $stylesheet = "'$http_site_root/stylesheet.css'";
+    $stylesheet = "$http_site_root/stylesheet.css";
 
 
 
@@ -60,7 +60,8 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     <html>
     <head>
     <title>$page_title</title>
-    <link rel=stylesheet href=$stylesheet>
+    <link rel=stylesheet href="$stylesheet">
+    <link rel=stylesheet  type="text/css" href="$http_site_root/js/jscalendar/calendar-blue.css">
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     </head>
     <body>
@@ -165,17 +166,22 @@ function jscalendar_includes() {
 
     global $http_site_root;
 
-    echo "<!-- JSCALENDAR SCRIPT INCLUDES -->"
-       . "<script type=\"text/javascript\" src=\"$http_site_root/js/jscalendar/calendar.js\"></script>"
-       . "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"$http_site_root/js/jscalendar/calendar-blue.css\">"
-       . "<script type=\"text/javascript\" src=\"$http_site_root/js/jscalendar/lang/calendar-en.js\"></script>"
-       . "<script type=\"text/javascript\" src=\"$http_site_root/js/jscalendar/calendar-setup.js\"></script>"
-       . "<!-- JSEND CALENDAR SCRIPT INCLUDES -->";
+    echo <<<EOQ
+    <!-- JSCALENDAR SCRIPT INCLUDES -->
+    <script type="text/javascript" src="$http_site_root/js/jscalendar/calendar.js"></script>
+    <script type="text/javascript" src="$http_site_root/js/jscalendar/lang/calendar-en.js"></script>
+    <script type="text/javascript" src="$http_site_root/js/jscalendar/calendar-setup.js"></script>
+    <!-- JSEND CALENDAR SCRIPT INCLUDES -->
+EOQ;
 
 } //end jscalendar_includes fn
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.16  2004/07/02 15:01:22  maulani
+ * - Move calendar stylesheet link into the head section of the webpage instead
+ *   of the body.  Link statements in the body section are not valid.
+ *
  * Revision 1.15  2004/06/21 15:50:57  braverock
  * - localized strings for i18n/internationalization/translation support
  *
