@@ -20,9 +20,9 @@ function get_group_users($acl_group, $acl_role = false) {
         }
     } else { $role_id=false; }
     
-    $ret = $acl->get_group_user($group_id, false, $role_id, NULL);
+    $aryGroupList = $acl->get_group_user($group_id, false, $role_id, NULL);
     // Make sure we get something
-    if ( $ret )
+    if ( $aryGroupList )
     {
         $aryUserList=array();
         // pull out just the user_ids for this list
