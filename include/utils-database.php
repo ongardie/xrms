@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.5 2004/07/14 20:54:33 neildogg Exp $
+ * $Id: utils-database.php,v 1.6 2004/07/14 21:09:16 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -87,8 +87,8 @@ function table_name($table) {
     if($table == "contacts") {
         return array("first_names", "last_name");
     }
-    elseif($table == "opportunities") {
-        return array("opportunity_title");
+    elseif($table == "opportunities" or $table == "activities") {
+        return array(make_singular($table) . "_title");
     }
     else {
         return array(make_singular($table) . "_name");
@@ -97,6 +97,9 @@ function table_name($table) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.6  2004/07/14 21:09:16  neildogg
+ * - Added activities to table_name
+ *
  * Revision 1.5  2004/07/14 20:54:33  neildogg
  * - Added name for opportunities table
  *
