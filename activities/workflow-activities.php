@@ -8,7 +8,7 @@
  *
  * @todo Move variable substitutions for actvity templates into a user-definable table.
  *
- * $Id: workflow-activities.php,v 1.5 2004/07/07 21:27:37 introspectshun Exp $
+ * $Id: workflow-activities.php,v 1.6 2004/07/07 21:51:11 braverock Exp $
  */
 
 $sql = "select * from activity_templates
@@ -93,7 +93,7 @@ if ($rst) {
         $rec['activity_status'] = 'o';
         $rec['activity_record_status'] = 'a';
 
-        $tbl = 'activities'
+        $tbl = 'activities';
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
 
@@ -104,6 +104,9 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.6  2004/07/07 21:51:11  braverock
+ * - fix parse error after $tbl change on line 97
+ *
  * Revision 1.5  2004/07/07 21:27:37  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
