@@ -8,7 +8,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     
     global $page_title_height;
     global $http_site_root;
-    $username = $_SESSION['username'];
+    $session_username = $_SESSION['username'];
     $msg = translate_msg($msg);
 	$stylesheet = "'$http_site_root/stylesheet.css'";
     
@@ -43,7 +43,7 @@ if ($show_navbar) echo <<<EOQ
 		</td>
 		<td class=navbar align=center>&nbsp;</td>
 		<td class=navbar align=right>
-			Logged in as: $username &bull; <a href="$http_site_root/logout.php">Logout</a>
+			Logged in as: $session_username &bull; <a href="$http_site_root/logout.php">Logout</a>
 		</td>
         </table>
         </td>
