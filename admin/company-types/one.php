@@ -2,7 +2,7 @@
 /**
  * Manage company types
  *
- * $Id: one.php,v 1.9 2004/07/25 18:12:17 johnfawcett Exp $
+ * $Id: one.php,v 1.10 2004/08/04 18:54:17 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -34,7 +34,7 @@ if ($rst) {
     $rst->close();
 }
 
-$page_title = _("Comapny Type Details").': '.$company_type_pretty_name;
+$page_title = _("Company Type Details").': '.$company_type_pretty_name;
 start_page($page_title);
 
 ?>
@@ -102,6 +102,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2004/08/04 18:54:17  introspectshun
+ * - Corrected spelling of Company
+ *
  * Revision 1.9  2004/07/25 18:12:17  johnfawcett
  * - standardized page title
  * - standardized delete text and button
