@@ -1,5 +1,4 @@
 <?php
-
 /**
  * functions/i18n.php
  *
@@ -7,22 +6,19 @@
  * Licensed under the GNU GPL. For full terms see the file COPYING.
  * Ported for use in XRMS by Brian Peterson
  *
- * This file contains variuos functions that are needed to do
+ * This file contains various functions that are needed to do
  * internationalization of XRMS.
  *
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.1 2004/05/14 11:07:30 braverock Exp $
+ * @version $Id: i18n.php,v 1.2 2004/06/21 15:40:31 braverock Exp $
  * @package xrms
  * @subpackage i18n
  */
 
-/** Everything uses global.php... */
-//require_once(SM_PATH . 'functions/global.php');
-
 /**
- * Converts string from given charset to charset, that can be displayed by user translation.
+ * Converts string from given charset to charset that can be displayed by user translation.
  *
  * Function by default returns html encoded strings, if translation uses different encoding.
  * If Japanese translation is used - function returns string converted to euc-jp
@@ -38,7 +34,7 @@
  */
 function charset_decode ($charset, $string) {
     global $languages, $xrms_language, $default_charset;
-    global $use_php_recode, $use_php_iconv, $agresive_decoding;
+    global $use_php_recode, $use_php_iconv, $aggressive_decoding;
 
     if (isset($languages[$xrms_language]['XTRA_CODE']) &&
         function_exists($languages[$xrms_language]['XTRA_CODE'])) {
@@ -51,17 +47,18 @@ function charset_decode ($charset, $string) {
 
     // Variables that allow to use functions without function_exist() calls
     if (! isset($use_php_recode) || $use_php_recode=="" ) {
-         $use_php_recode=false; }
+         $use_php_recode=false;
+    }
     if (! isset($use_php_iconv) || $use_php_iconv=="" ) {
-         $use_php_iconv=false; }
+         $use_php_iconv=false;
+    }
 
     // Don't do conversion if charset is the same.
     if ( $charset == strtolower($default_charset) )
           return htmlspecialchars($string);
 
     // catch iso-8859-8-i thing
-    if ( $charset == "iso-8859-8-i" )
-              $charset = "iso-8859-8";
+    if ( $charset == "iso-8859-8-i" ) { $charset = "iso-8859-8"; }
 
     /*
      * Recode converts html special characters automatically if you use
@@ -69,23 +66,23 @@ function charset_decode ($charset, $string) {
      * into php recode function call.
      */
     if ( $use_php_recode ) {
-      if ( $default_charset == "utf-8" ) {
-    // other charsets can be converted to utf-8 without loss.
-    // and output string is smaller
-    $string = recode_string($charset . "..utf-8",$string);
-    return htmlspecialchars($string);
-      } else {
-    $string = recode_string($charset . "..html",$string);
-    // recode does not convert single quote, htmlspecialchars does.
-    $string = str_replace("'", '&#039;', $string);
-    return $string;
-      }
+        if ( $default_charset == "utf-8" ) {
+            // other charsets can be converted to utf-8 without loss.
+            // and output string is smaller
+            $string = recode_string($charset . "..utf-8",$string);
+            return htmlspecialchars($string);
+        } else {
+            $string = recode_string($charset . "..html",$string);
+            // recode does not convert single quote, htmlspecialchars does.
+            $string = str_replace("'", '&#039;', $string);
+            return $string;
+        }
     }
 
     // iconv functions does not have html target and can be used only with utf-8
     if ( $use_php_iconv && $default_charset=='utf-8') {
-      $string = iconv($charset,$default_charset,$string);
-      return htmlspecialchars($string);
+        $string = iconv($charset,$default_charset,$string);
+        return htmlspecialchars($string);
     }
 
     // If we don't use recode and iconv, we'll do it old way.
@@ -95,16 +92,17 @@ function charset_decode ($charset, $string) {
     $string = htmlspecialchars ($string);
 
     /* controls cpu and memory intensive decoding cycles */
-    if (! isset($agresive_decoding) || $agresive_decoding=="" ) {
-         $agresive_decoding=false; }
+    if (! isset($aggressive_decoding) || $aggressive_decoding=="" ) {
+         $aggressive_decoding=false;
+    }
 
     $decode=fixcharset($charset);
-    $decodefile=SM_PATH . 'functions/decode/' . $decode . '.php';
+    $decodefile=$xrms_file_root . 'include/decode/' . $decode . '.php';
     if (file_exists($decodefile)) {
-    include_once($decodefile);
-    $ret = call_user_func('charset_decode_'.$decode, $string);
+        include_once($decodefile);
+        $ret = call_user_func('charset_decode_'.$decode, $string);
     } else {
-    $ret = $string;
+        $ret = $string;
     }
     return( $ret );
 }
@@ -145,17 +143,17 @@ function fixcharset($charset) {
  *  1 = mbstring support is not present,
  *  2 = mbstring support is not present, user's translation reverted to en_US.
  *
- * @param string $sm_language translation used by user's interface
+ * @param string $xrms_language translation used by user's interface
  * @param bool $do_search use browser's preferred language detection functions. Defaults to false.
- * @param bool $default set $sm_language to $xrms_default_language if language detection fails or language is not set. Defaults to false.
+ * @param bool $default set $xrms_language to $xrms_default_language if language detection fails or language is not set. Defaults to false.
  * @return int function execution error codes.
  */
-function set_up_language($sm_language, $do_search = false, $default = false) {
+function set_up_language($xrms_language, $do_search = false, $default = false) {
 
     static $SetupAlready = 0;
     global $use_gettext, $languages,
            $xrms_language, $xrms_default_language,
-           $sm_notAlias, $username, $data_dir;
+           $xrms_notAlias, $userid, $data_dir;
 
     if ($SetupAlready) {
         return;
@@ -164,90 +162,93 @@ function set_up_language($sm_language, $do_search = false, $default = false) {
     $SetupAlready = TRUE;
     sqgetGlobalVar('HTTP_ACCEPT_LANGUAGE',  $accept_lang, SQ_SERVER);
 
-    if ($do_search && ! $sm_language && isset($accept_lang)) {
-        $sm_language = substr($accept_lang, 0, 2);
+    if ($do_search && ! $xrms_language && isset($accept_lang)) {
+        $xrms_language = substr($accept_lang, 0, 2);
     }
 
-    if ((!$sm_language||$default) && isset($xrms_default_language)) {
+    if ((!$xrms_language||$default) && isset($xrms_default_language)) {
         $xrms_language = $xrms_default_language;
-        $sm_language = $xrms_default_language;
+        $xrms_language = $xrms_default_language;
     }
-    $sm_notAlias = $sm_language;
+    $xrms_notAlias = $xrms_language;
 
     // Catching removed translation
     // System reverts to English translation if user prefs contain translation
     // that is not available in $languages array
-    if (!isset($languages[$sm_notAlias])) {
-      $sm_notAlias="en_US";
+    if (!isset($languages[$xrms_notAlias])) {
+      $xrms_notAlias="en_US";
     }
 
-    while (isset($languages[$sm_notAlias]['ALIAS'])) {
-        $sm_notAlias = $languages[$sm_notAlias]['ALIAS'];
+    while (isset($languages[$xrms_notAlias]['ALIAS'])) {
+        $xrms_notAlias = $languages[$xrms_notAlias]['ALIAS'];
     }
 
-    if ( isset($sm_language) &&
+    // now do all the additional checks and set the appropriate variables for language display
+
+    if ( isset($xrms_language) &&
          $use_gettext &&
-         $sm_language != '' &&
-         isset($languages[$sm_notAlias]['CHARSET']) ) {
-        bindtextdomain( 'xrms', SM_PATH . 'locale/' );
+         $xrms_language != '' &&
+         isset($languages[$xrms_notAlias]['CHARSET']) )
+    {
+        bindtextdomain( 'xrms', $xrms_file_root.'locale/' );
         textdomain( 'xrms' );
-    if (function_exists('bind_textdomain_codeset')) {
-            if ($sm_notAlias == 'ja_JP') {
-            bind_textdomain_codeset ("xrms", 'EUC-JP');
+        if (function_exists('bind_textdomain_codeset')) {
+            if ($xrms_notAlias == 'ja_JP') {
+                bind_textdomain_codeset ("xrms", 'EUC-JP');
             } else {
-            bind_textdomain_codeset ("xrms", $languages[$sm_notAlias]['CHARSET'] );
+                bind_textdomain_codeset ("xrms", $languages[$xrms_notAlias]['CHARSET'] );
+            }
         }
-    }
-    if (isset($languages[$sm_notAlias]['LOCALE'])){
-      $longlocale=$languages[$sm_notAlias]['LOCALE'];
-    } else {
-      $longlocale=$sm_notAlias;
-    }
+        if (isset($languages[$xrms_notAlias]['LOCALE'])){
+            $longlocale=$languages[$xrms_notAlias]['LOCALE'];
+        } else {
+            $longlocale=$xrms_notAlias;
+        }
         if ( !ini_get('safe_mode') &&
-             getenv( 'LC_ALL' ) != $longlocale ) {
+            getenv( 'LC_ALL' ) != $longlocale ) {
             putenv( "LC_ALL=$longlocale" );
             putenv( "LANG=$longlocale" );
             putenv( "LANGUAGE=$longlocale" );
         }
-    setlocale(LC_ALL, $longlocale);
+        setlocale(LC_ALL, $longlocale);
 
-    // Set text direction/alignment variables
-    if (isset($languages[$sm_notAlias]['DIR']) &&
-        $languages[$sm_notAlias]['DIR'] == 'rtl') {
-      /**
-       * Text direction
-       * @global string $text_direction
-       */
-        $text_direction='rtl';
-      /**
-       * Left alignment
-       * @global string $left_align
-       */
-        $left_align='right';
-      /**
-       * Right alignment
-       * @global string $right_align
-       */
-        $right_align='left';
-    } else {
-        $text_direction='ltr';
-        $left_align='left';
-        $right_align='right';
-    }
+        // Set text direction/alignment variables
+        if (isset($languages[$xrms_notAlias]['DIR']) &&
+            $languages[$xrms_notAlias]['DIR'] == 'rtl') {
+            /**
+            * Text direction
+            * @global string $text_direction
+            */
+            $text_direction='rtl';
+            /**
+            * Left alignment
+            * @global string $left_align
+            */
+            $left_align='right';
+            /**
+            * Right alignment
+            * @global string $right_align
+            */
+            $right_align='left';
+        } else {
+            $text_direction='ltr';
+            $left_align='left';
+            $right_align='right';
+        }
 
-    $xrms_language = $sm_notAlias;
+        $xrms_language = $xrms_notAlias;
         if ($xrms_language == 'ja_JP') {
             header ('Content-Type: text/html; charset=EUC-JP');
             if (!function_exists('mb_internal_encoding')) {
-        // Error messages can't be displayed here
-        $error = 1;
-        // Revert to English if possible.
-        if (function_exists('setPref')  && $username!='' && $data_dir!="") {
-            setPref($data_dir, $username, 'language', "en_US");
-                $error = 2;
-        }
-        // stop further execution in order not to get php errors on mb_internal_encoding().
-        return $error;
+                // Error messages can't be displayed here
+                $error = 1;
+                // Revert to English if possible.
+                if (function_exists('setPref')  && $userid!='' && $data_dir!="") {
+                    setPref($data_dir, $userid, 'language', "en_US");
+                    $error = 2;
+                }
+                // stop further execution in order not to get php errors on mb_internal_encoding().
+                return $error;
             }
             if (function_exists('mb_language')) {
                 mb_language('Japanese');
@@ -255,9 +256,9 @@ function set_up_language($sm_language, $do_search = false, $default = false) {
             mb_internal_encoding('EUC-JP');
             mb_http_output('pass');
         } else {
-        header( 'Content-Type: text/html; charset=' . $languages[$sm_notAlias]['CHARSET'] );
-    }
-}
+            header( 'Content-Type: text/html; charset=' . $languages[$xrms_notAlias]['CHARSET'] );
+        }
+    } //end big if check
     return 0;
 }
 
@@ -277,15 +278,16 @@ function set_up_language($sm_language, $do_search = false, $default = false) {
  * message blindly with the system-wide $default_charset.
  */
 function set_my_charset(){
-    global $data_dir, $username, $default_charset, $languages, $xrms_default_language;
+    global $data_dir, $userid, $default_charset, $languages, $xrms_default_language;
 
-    $my_language = getPref($data_dir, $username, 'language');
+    $my_language = getPref($data_dir, $userid, 'language');
+    //$my_language = 'es_ES';
     if (!$my_language) {
         $my_language = $xrms_default_language ;
     }
     // Catch removed translation
     if (!isset($languages[$my_language])) {
-      $my_language="en_US";
+        $my_language="en_US";
     }
     while (isset($languages[$my_language]['ALIAS'])) {
         $my_language = $languages[$my_language]['ALIAS'];
@@ -601,7 +603,7 @@ if ($gettext_flags == 7) {
 /* If we can fake gettext, try that */
 elseif ($gettext_flags == 0) {
     $use_gettext = true;
-    include_once(SM_PATH . 'functions/gettext.php');
+    include_once($include_directory . 'gettext.php');
 } else {
     /* Uh-ho.  A weird install */
     if (! $gettext_flags & 1) {
@@ -806,7 +808,7 @@ function korean_charset_xtra() {
 /**
  * Replaces non-braking spaces inserted by some browsers with regular space
  *
- * This function can be used to replace non-braking space symbols
+ * This function can be used to replace non-breaking space symbols
  * that are inserted in forms by some browsers instead of normal
  * space symbol.
  *
@@ -816,40 +818,40 @@ function korean_charset_xtra() {
  */
 function cleanup_nbsp($string,$charset) {
 
-  // reduce number of case statements
-  if (stristr('iso-8859-',substr($charset,0,9))){
-    $output_charset="iso-8859-x";
-  }
-  if (stristr('windows-125',substr($charset,0,11))){
-    $output_charset="cp125x";
-  }
-  if (stristr('koi8',substr($charset,0,4))){
-    $output_charset="koi8-x";
-  }
-  if (! isset($output_charset)){
-    $output_charset=strtolower($charset);
-  }
+    // reduce number of case statements
+    if (stristr('iso-8859-',substr($charset,0,9))){
+        $output_charset="iso-8859-x";
+    }
+    if (stristr('windows-125',substr($charset,0,11))){
+        $output_charset="cp125x";
+    }
+    if (stristr('koi8',substr($charset,0,4))){
+        $output_charset="koi8-x";
+    }
+    if (! isset($output_charset)){
+        $output_charset=strtolower($charset);
+    }
 
-// where is non-braking space symbol
-switch($output_charset):
- case "iso-8859-x":
- case "cp125x":
- case "iso-2022-jp":
-  $nbsp="\xA0";
-  break;
- case "koi8-x":
-   $nbsp="\x9A";
-   break;
- case "utf-8":
-   $nbsp="\xC2\xA0";
-   break;
- default:
-   // don't change string if charset is unmatched
-   return $string;
-endswitch;
+    // where is non-breaking space symbol
+    switch($output_charset):
+        case "iso-8859-x":
+        case "cp125x":
+        case "iso-2022-jp":
+            $nbsp="\xA0";
+            break;
+        case "koi8-x":
+            $nbsp="\x9A";
+            break;
+        case "utf-8":
+            $nbsp="\xC2\xA0";
+            break;
+        default:
+            // don't change string if charset is unmatched
+            return $string;
+    endswitch;
 
-// return space instead of non-braking space.
- return str_replace($nbsp,' ',$string);
+    // return space instead of non-breaking space.
+    return str_replace($nbsp,' ',$string);
 }
 
 /**
@@ -862,80 +864,83 @@ endswitch;
  * @return bool is it possible to convert to user's charset
  */
 function is_conversion_safe($input_charset) {
-  global $languages, $sm_notAlias, $default_charset;
+   global $languages, $xrms_notAlias, $default_charset;
 
- // convert to lower case
- $input_charset = strtolower($input_charset);
+   // convert to lower case
+   $input_charset = strtolower($input_charset);
 
- // Is user's locale Unicode based ?
- if ( $default_charset == "utf-8" ) {
-   return true;
- }
+   // Is user's locale Unicode based ?
+   if ( $default_charset == "utf-8" ) {
+       return true;
+   }
 
- // Charsets that are similar
-switch ($default_charset):
-case "windows-1251":
-      if ( $input_charset == "iso-8859-5" ||
-       $input_charset == "koi8-r" ||
-       $input_charset == "koi8-u" ) {
-        return true;
-     } else {
-        return false;
-     }
-case "windows-1257":
-  if ( $input_charset == "iso-8859-13" ||
-     $input_charset == "iso-8859-4" ) {
-    return true;
-  } else {
-    return false;
-  }
-case "iso-8859-4":
-  if ( $input_charset == "iso-8859-13" ||
-     $input_charset == "windows-1257" ) {
-     return true;
-  } else {
-     return false;
-  }
-case "iso-8859-5":
-  if ( $input_charset == "windows-1251" ||
-     $input_charset == "koi8-r" ||
-     $input_charset == "koi8-u" ) {
-     return true;
-  } else {
-     return false;
-  }
-case "iso-8859-13":
-  if ( $input_charset == "iso-8859-4" ||
-       $input_charset == "windows-1257" ) {
-     return true;
-  } else {
-     return false;
-  }
-case "koi8-r":
-  if ( $input_charset == "windows-1251" ||
-     $input_charset == "iso-8859-5" ||
-     $input_charset == "koi8-u" ) {
-     return true;
-  } else {
-     return false;
-  }
-case "koi8-u":
-  if ( $input_charset == "windows-1251" ||
-    $input_charset == "iso-8859-5" ||
-    $input_charset == "koi8-r" ) {
-     return true;
-  } else {
-     return false;
-  }
-default:
-   return false;
-endswitch;
-}
+   // Charsets that are similar
+   switch ($default_charset):
+        case "windows-1251":
+            if ( $input_charset == "iso-8859-5" ||
+                $input_charset == "koi8-r" ||
+                $input_charset == "koi8-u" ) {
+                return true;
+            } else {
+                return false;
+            }
+        case "windows-1257":
+            if ( $input_charset == "iso-8859-13" ||
+                $input_charset == "iso-8859-4" ) {
+                return true;
+            } else {
+                return false;
+            }
+        case "iso-8859-4":
+            if ( $input_charset == "iso-8859-13" ||
+                $input_charset == "windows-1257" ) {
+                return true;
+            } else {
+                return false;
+            }
+        case "iso-8859-5":
+            if ( $input_charset == "windows-1251" ||
+                $input_charset == "koi8-r" ||
+                $input_charset == "koi8-u" ) {
+                return true;
+            } else {
+                return false;
+            }
+        case "iso-8859-13":
+            if ( $input_charset == "iso-8859-4" ||
+                $input_charset == "windows-1257" ) {
+                return true;
+            } else {
+                return false;
+            }
+        case "koi8-r":
+            if ( $input_charset == "windows-1251" ||
+                $input_charset == "iso-8859-5" ||
+                $input_charset == "koi8-u" ) {
+                return true;
+            } else {
+                return false;
+            }
+        case "koi8-u":
+            if ( $input_charset == "windows-1251" ||
+                $input_charset == "iso-8859-5" ||
+                $input_charset == "koi8-r" ) {
+                return true;
+            } else {
+                return false;
+            }
+        default:
+            return false;
+    endswitch;
+} //end fn is_conversion_safe
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.2  2004/06/21 15:40:31  braverock
+ * - modified i18n files to better integrate with XRMS
+ *
  * Revision 1.1  2004/05/14 11:07:30  braverock
- * - initial checking of i18n files -- not yet working, doesn't break anything
+ * - initial checkin of i18n files -- not yet working, doesn't break anything
  *
  */
 ?>

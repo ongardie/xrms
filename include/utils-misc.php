@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.32 2004/06/15 14:04:54 gpowers Exp $
+ * $Id: utils-misc.php,v 1.33 2004/06/21 15:43:01 braverock Exp $
  */
 
 /**
@@ -541,9 +541,14 @@ function db_error_handler (&$con,$sql,$colspan=20) {
         // figure out where to print this out.
         if ($error) {
             echo "\n<tr>\n\t<td class=widget_error colspan=$colspan>"
-                 ."\t<br> Unable to execute your query.  Please correct this error.<br>"
+                 ."\t<br>"
+                 ._("Unable to execute your query.").' '
+                 ._("Please correct this error.")
+                 ."<br>"
                  . htmlspecialchars($error)
-                 ."\t<br> I tried to execute: <br>"
+                 ."\t<br>"
+                 ._("I tried to execute:")
+                 ."<br>"
                  . htmlspecialchars ($sql)
                  ."\t</td>\n</tr>\n";
         }
@@ -597,7 +602,18 @@ function get_formatted_address (&$con,$address_id) {
 } //end fn get_formatted_address
 
 /**
+ * Include the i18n files, as every file with output will need them
+ *
+ * @todo sort out a better include strategy to simplify it across
+ *       the XRMS code base.
+ */
+require_once($include_directory . 'i18n.php');
+
+/**
  * $Log: utils-misc.php,v $
+ * Revision 1.33  2004/06/21 15:43:01  braverock
+ * - modified i18n files to better integrate with XRMS
+ *
  * Revision 1.32  2004/06/15 14:04:54  gpowers
  * - removed extra )
  *   - second time is a charm? Arg.

@@ -2,7 +2,7 @@
 /**
  * XRMS internal gettext functions
  *
- * Copyright (c) 1999-2004 The Squirrelamil Project Team
+ * Copyright (c) 1999-2004 The Squirrelmail Project Team
  * Licensed under the GNU GPL. For full terms see the file COPYING.
  * Ported for use in XRMS by Brian Peterson
  *
@@ -12,13 +12,11 @@
  * Possible use in other PHP scripts?
  *
  * @link http://www.php.net/gettext Original php gettext manual
- * @version $Id: gettext.php,v 1.1 2004/05/14 11:07:30 braverock Exp $
+ * @version $Id: gettext.php,v 1.2 2004/06/21 15:40:31 braverock Exp $
  * @package xrms
  * @subpackage i18n
  */
 
-/** Almost everything requires global.php... */
-//require_once(SM_PATH . 'functions/global.php');
 
 global $gettext_php_domain, $gettext_php_dir, $gettext_php_loaded,
  $gettext_php_translateStrings, $gettext_php_loaded_language,
@@ -26,27 +24,27 @@ global $gettext_php_domain, $gettext_php_dir, $gettext_php_loaded,
 
 if (! isset($gettext_php_loaded)) {
     $gettext_php_loaded = false;
-    sqsession_register($gettext_php_loaded, 'gettext_php_loaded');
+    xrms_session_register($gettext_php_loaded, 'gettext_php_loaded');
 }
 if (! isset($gettext_php_domain)) {
     $gettext_php_domain = '';
-    sqsession_register($gettext_php_domain, 'gettext_php_domain');
+    xrms_session_register($gettext_php_domain, 'gettext_php_domain');
 }
 if (! isset($gettext_php_dir)) {
     $gettext_php_dir = '';
-    sqsession_register($gettext_php_dir, 'gettext_php_dir');
+    xrms_session_register($gettext_php_dir, 'gettext_php_dir');
 }
 if (! isset($gettext_php_translateStrings)) {
     $gettext_php_translateStrings = array();
-    sqsession_register($gettext_php_translateStrings, 'gettext_php_translateStrings');
+    xrms_session_register($gettext_php_translateStrings, 'gettext_php_translateStrings');
 }
 if (! isset($gettext_php_loaded_language)) {
     $gettext_php_loaded_language = '';
-    sqsession_register($gettext_php_loaded_language, 'gettext_php_loaded_language');
+    xrms_session_register($gettext_php_loaded_language, 'gettext_php_loaded_language');
 }
 if (! isset($gettext_php_short_circuit)) {
     $gettext_php_short_circuit = false;
-    sqsession_register($gettext_php_short_circuit, 'gettext_php_short_circuit');
+    xrms_session_register($gettext_php_short_circuit, 'gettext_php_short_circuit');
 }
 
 /**
@@ -251,6 +249,9 @@ function textdomain($name = false) {
 
 /**
  * $Log: gettext.php,v $
+ * Revision 1.2  2004/06/21 15:40:31  braverock
+ * - modified i18n files to better integrate with XRMS
+ *
  * Revision 1.1  2004/05/14 11:07:30  braverock
  * - initial checking of i18n files -- not yet working, doesn't break anything
  *
