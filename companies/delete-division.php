@@ -2,7 +2,7 @@
 /**
  * Delete a division by setting its status
  *
- * $Id: delete-division.php,v 1.1 2004/01/26 19:18:02 braverock Exp $
+ * $Id: delete-division.php,v 1.2 2004/06/12 05:03:16 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -21,13 +21,16 @@ $division_id = $_GET['division_id'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update company_division set
-        division_record_status = 'd',
-        last_modified_at = " . $con->dbtimestamp(mktime()) . ",
-        last_modified_by = $session_user_id
-        where division_id = $division_id";
+$sql = "SELECT * FROM company_division WHERE division_id = $division_id";
+$rst = $con->execute($sql);
 
-$con->execute($sql);
+$rec = array();
+$rec['division_record_status'] = 'd';
+$rec['last_modified_at'] = $con->DBTimestamp(mktime());
+$rec['last_modified_by'] = $session_user_id;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 $con->close();
 
@@ -35,6 +38,10 @@ header("Location: divisions.php?msg=address_deleted&company_id=$company_id");
 
 /**
  * $Log: delete-division.php,v $
+ * Revision 1.2  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.1  2004/01/26 19:18:02  braverock
  * - added company division pages and fields
  * - added phpdoc

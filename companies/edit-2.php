@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.10 2004/05/10 13:09:14 maulani Exp $
+ * $Id: edit-2.php,v 1.11 2004/06/12 05:03:16 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
@@ -42,39 +43,47 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 //$con->debug=1;
 
-$sql = "update companies set
-        last_modified_by = $session_user_id,
-        last_modified_at = now(),
-        crm_status_id = $crm_status_id,
-        company_source_id = $company_source_id,
-        industry_id = $industry_id,
-        rating_id = $rating_id,
-        user_id = $user_id,
-        last_modified_by = $session_user_id,
-        company_name = " . $con->qstr($company_name, get_magic_quotes_gpc()) . ",
-        legal_name = " . $con->qstr($legal_name, get_magic_quotes_gpc()) . ",
-        company_code = " . $con->qstr($company_code, get_magic_quotes_gpc()) . ",
-        phone = " . $con->qstr($phone, get_magic_quotes_gpc()) . ",
-        phone2 = " . $con->qstr($phone2, get_magic_quotes_gpc()) . ",
-        fax = " . $con->qstr($fax, get_magic_quotes_gpc()) . ",
-        url = " . $con->qstr($url, get_magic_quotes_gpc()) . ",
-        employees = " . $con->qstr($employees, get_magic_quotes_gpc()) . ",
-        revenue = " . $con->qstr($revenue, get_magic_quotes_gpc()) . ",
-        custom1 = " . $con->qstr($custom1, get_magic_quotes_gpc()) . ",
-        custom2 = " . $con->qstr($custom2, get_magic_quotes_gpc()) . ",
-        custom3 = " . $con->qstr($custom3, get_magic_quotes_gpc()) . ",
-        custom4 = " . $con->qstr($custom4, get_magic_quotes_gpc()) . ",
-        profile = " . $con->qstr($profile, get_magic_quotes_gpc()) . "
-        WHERE company_id = $company_id";
+$sql = "SELECT * FROM companies WHERE company_id = $company_id";
+$rst = $con->execute($sql);
 
-$con->execute($sql);
+$rec = array();
+$rec['last_modified_by'] = $session_user_id;
+$rec['last_modified_at'] = $con->dbtimestamp(mktime());
+$rec['crm_status_id'] = $crm_status_id;
+$rec['company_source_id'] = $company_source_id;
+$rec['industry_id'] = $industry_id;
+$rec['rating_id'] = $rating_id;
+$rec['user_id'] = $user_id;
+$rec['company_name'] = $company_name;
+$rec['legal_name'] = $legal_name;
+$rec['company_code'] = $company_code;
+$rec['phone'] = $phone;
+$rec['phone2'] = $phone2;
+$rec['fax'] = $fax;
+$rec['url'] = $url;
+$rec['employees'] = $employees;
+$rec['revenue'] = $revenue;
+$rec['custom1'] = $custom1;
+$rec['custom2'] = $custom2;
+$rec['custom3'] = $custom3;
+$rec['custom4'] = $custom4;
+$rec['profile'] = $profile;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 add_audit_item($con, $session_user_id, 'updated', 'companies', $company_id, 1);
+
+$con->close();
 
 header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.11  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.10  2004/05/10 13:09:14  maulani
  * - add level to audit trail
  *

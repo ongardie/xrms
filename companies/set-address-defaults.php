@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -27,9 +28,17 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 // $con->debug=1;
 
-$sql = "update companies set default_primary_address = $default_primary_address, default_billing_address = $default_billing_address, default_shipping_address = $default_shipping_address, default_payment_address = $default_payment_address where company_id = $company_id";
+$sql = "SELECT * FROM companies WHERE company_id = $company_id";
+$rst = $con->execute($sql);
 
-$con->execute($sql);
+$rec = array();
+$rec['default_primary_address'] = $default_primary_address;
+$rec['default_billing_address'] = $default_billing_address;
+$rec['default_shipping_address'] = $default_shipping_address;
+$rec['default_payment_address'] = $default_payment_address;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 header("Location: addresses.php?msg=saved&company_id=$company_id");
 

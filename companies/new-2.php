@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.12 2004/05/10 13:09:14 maulani Exp $
+ * $Id: new-2.php,v 1.13 2004/06/12 05:03:16 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -14,6 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
@@ -63,81 +64,108 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "insert into companies set
-                    crm_status_id = $crm_status_id, 
-                    company_source_id = $company_source_id,
-                    industry_id = $industry_id,
-                    user_id = $user_id,
-                    account_status_id = $account_status_id,
-                    rating_id = $rating_id,
-                    company_name = ". $con->qstr($company_name, get_magic_quotes_gpc()). ',
-                    legal_name = ' . $con->qstr($legal_name, get_magic_quotes_gpc()) . ',
-                    company_code = '. $con->qstr($company_code, get_magic_quotes_gpc()) . ',
-                    phone = '. $con->qstr($phone, get_magic_quotes_gpc()) . ',
-                    phone2 = '. $con->qstr($phone2, get_magic_quotes_gpc()) .',
-                    fax = '. $con->qstr($fax, get_magic_quotes_gpc()) .',
-                    url = '. $con->qstr($url, get_magic_quotes_gpc()) .',
-                    employees = '. $con->qstr($employees, get_magic_quotes_gpc()) .',
-                    revenue = '. $con->qstr($revenue, get_magic_quotes_gpc()) .',
-                    custom1 = '. $con->qstr($custom1, get_magic_quotes_gpc()) .',
-                    custom2 = '. $con->qstr($custom2, get_magic_quotes_gpc()) .',
-                    custom3 = '. $con->qstr($custom3, get_magic_quotes_gpc()) .',
-                    custom4 = '. $con->qstr($custom4, get_magic_quotes_gpc()) .',
-                    profile = '. $con->qstr($profile, get_magic_quotes_gpc()) .',
-                    entered_at = '. $con->dbtimestamp(mktime()) .",
-                    entered_by = $session_user_id,
-                    last_modified_by = $session_user_id,
-                    last_modified_at = " . $con->dbtimestamp(mktime());
+$sql = "SELECT * FROM companies WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
 
-$con->execute($sql);
+$rec = array();
+$rec['crm_status_id'] = $crm_status_id;
+$rec['company_source_id'] = $company_source_id;
+$rec['industry_id'] = $industry_id;
+$rec['user_id'] = $user_id;
+$rec['account_status_id'] = $account_status_id;
+$rec['rating_id'] = $rating_id;
+$rec['company_name'] = $company_name;
+$rec['legal_name'] = $legal_name;
+$rec['company_code'] = $company_code;
+$rec['phone'] = $phone;
+$rec['phone2'] = $phone2;
+$rec['fax'] = $fax;
+$rec['url'] = $url;
+$rec['employees'] = $employees;
+$rec['revenue'] = $revenue;
+$rec['custom1'] = $custom1;
+$rec['custom2'] = $custom2;
+$rec['custom3'] = $custom3;
+$rec['custom4'] = $custom4;
+$rec['profile'] = $profile;
+$rec['entered_at'] = $con->DBTimestamp(mktime());
+$rec['entered_by'] = $session_user_id;
+$rec['last_modified_by'] = $session_user_id;
+$rec['last_modified_at'] = $$con->DBTimestamp(mktime());
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
+
 $company_id = $con->insert_id();
 
 // if no code was provided, set a default company code
 if (strlen($company_code) == 0) {
     $company_code = 'C' . $company_id;
-    $con->execute("update companies set
-                          company_code = " . $con->qstr($company_code, get_magic_quotes_gpc()) . "
-                          where company_id = $company_id");
+    $sql = "SELECT * FROM companies WHERE company_id = $company_id";
+    $rst = $con->execute($sql);
+    
+    $rec = array();
+    $rec['company_code'] = $company_code;
+    
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
 }
 
 // insert an address
-$sql = "insert into addresses set
-               company_id = $company_id,
-               country_id = $country_id,
-               address_name = " . $con->qstr($address_name, get_magic_quotes_gpc()) . ',
-               line1 = '. $con->qstr($line1, get_magic_quotes_gpc()) . ',
-               line2 = '. $con->qstr($line2, get_magic_quotes_gpc()) . ',
-               city = '. $con->qstr($city, get_magic_quotes_gpc()) . ',
-               province = '. $con->qstr($province, get_magic_quotes_gpc()) .',
-               postal_code = '. $con->qstr($postal_code, get_magic_quotes_gpc()) . ',
-               address_body = '. $con->qstr($address_body, get_magic_quotes_gpc()) .",
-               use_pretty_address  = $use_pretty_address";
+$sql = "SELECT * FROM addresses WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
 
-$con->execute($sql);
+$rec = array();
+$rec['company_id'] = $company_id;
+$rec['country_id'] = $country_id;
+$rec['address_name'] = $address_name;
+$rec['line1'] = $line1;
+$rec['line2'] = $line2;
+$rec['city'] = $city;
+$rec['province'] = $province;
+$rec['postal_code'] = $postal_code;
+$rec['address_body'] = $address_body;
+$rec['use_pretty_address'] = $use_pretty_address;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
+
 
 // make that address the default, and set the customer and vendor references
 $address_id = $con->insert_id();
-$con->execute("update companies set default_primary_address = $address_id,
-                                    default_billing_address = $address_id,
-                                    default_shipping_address = $address_id,
-                                    default_payment_address = $address_id
-                                    where company_id = $company_id");
+
+$sql = "SELECT * FROM companies WHERE company_id = $company_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['default_primary_address'] = $address_id;
+$rec['default_billing_address'] = $address_id;
+$rec['default_shipping_address'] = $address_id;
+$rec['default_payment_address'] = $address_id;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+
 
 // insert a contact
-$sql_insert_contact = "insert into contacts set
-                              company_id = $company_id,
-                              address_id = $address_id,
-                              first_names = ". $con->qstr($first_names, get_magic_quotes_gpc()) .',
-                              last_name = '. $con->qstr($last_name, get_magic_quotes_gpc()) .',
-                              email = '. $con->qstr($email, get_magic_quotes_gpc()) .',
-                              work_phone = '. $con->qstr($phone, get_magic_quotes_gpc()) .',
-                              fax = '. $con->qstr($fax, get_magic_quotes_gpc()) .',
-                              entered_at = '. $con->dbtimestamp(mktime()) .",
-                              entered_by = $session_user_id,
-                              last_modified_by = $session_user_id,
-                              last_modified_at = " . $con->dbtimestamp(mktime());
+$sql = "SELECT * FROM contacts WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
 
-$con->execute($sql_insert_contact);
+$rec = array();
+$rec['company_id'] = $company_id;
+$rec['address_id'] = $address_id;
+$rec['first_names'] = $first_names;
+$rec['last_name'] = $last_name;
+$rec['email'] = $email;
+$rec['work_phone'] = $phone;
+$rec['fax'] = $fax;
+$rec['entered_at'] = $con->DBTimestamp(mktime());
+$rec['entered_by'] = $session_user_id;
+$rec['last_modified_by'] = $session_user_id;
+$rec['last_modified_at'] = $$con->DBTimestamp(mktime());
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 if (strlen($accounting_system) > 0) {
     add_accounting_customer($con, $company_id, $company_name, $company_code, $customer_credit_limit, $customer_terms);
@@ -153,6 +181,10 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.13  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.12  2004/05/10 13:09:14  maulani
  * - add level to audit trail
  *

@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.4 2004/06/09 17:39:51 gpowers Exp $
+ * $Id: edit-address-2.php,v 1.5 2004/06/12 05:03:16 introspectshun Exp $
  */
 
 
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -32,13 +33,33 @@ $use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update addresses set country_id = $country_id, line1 = " . $con->qstr($line1, get_magic_quotes_gpc()) . ", line2 = " . $con->qstr($line2, get_magic_quotes_gpc()) . ", city = " . $con->qstr($city, get_magic_quotes_gpc()) . ", province = " . $con->qstr($province, get_magic_quotes_gpc()) . ", postal_code = " . $con->qstr($postal_code, get_magic_quotes_gpc()) . ", address_name = " . $con->qstr($address_name, get_magic_quotes_gpc()) . ", address_body = " . $con->qstr($address_body, get_magic_quotes_gpc()) . ", use_pretty_address = $use_pretty_address where address_id = $address_id";
-$con->execute($sql);
+$sql = "SELECT * FROM addresses WHERE address_id = $address_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['country_id'] = $country_id;
+$rec['line1'] = $line1;
+$rec['line2'] = $line2;
+$rec['city'] = $city;
+$rec['province'] = $province;
+$rec['postal_code'] = $postal_code;
+$rec['address_name'] = $address_name;
+$rec['address_body'] = $address_body;
+$rec['use_pretty_address'] = $use_pretty_address;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
+
+$con->close();
 
 header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.5  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.4  2004/06/09 17:39:51  gpowers
  * - added $Id and $Log tags
  *

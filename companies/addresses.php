@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.12 2004/06/09 18:07:52 gpowers Exp $
+ * $Id: addresses.php,v 1.13 2004/06/12 05:03:16 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -184,6 +185,10 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.13  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.12  2004/06/09 18:07:52  gpowers
  * - fixed reversal of "Used by Contacts" and "Formatted Address" columns
  *

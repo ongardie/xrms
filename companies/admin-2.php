@@ -2,7 +2,7 @@
 /**
  * Insert company admin items into the database
  *
- * $Id: admin-2.php,v 1.4 2004/05/10 13:09:14 maulani Exp $
+ * $Id: admin-2.php,v 1.5 2004/06/12 05:03:16 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
@@ -29,8 +30,20 @@ $terms = ($terms > 0) ? $terms : 0;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update companies set account_status_id = $account_status_id, tax_id = " . $con->qstr($tax_id, get_magic_quotes_gpc()) . ", credit_limit = " . $con->qstr($credit_limit, get_magic_quotes_gpc()) . ", rating_id = $rating_id, terms = $terms, extref1 = " . $con->qstr($extref1, get_magic_quotes_gpc()) . ", extref2 = " . $con->qstr($extref2, get_magic_quotes_gpc()) . " where company_id = $company_id";
-$con->execute($sql);
+$sql = "SELECT * FROM companies WHERE company_id = $company_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['account_status_id'] = $account_status_id;
+$rec['tax_id'] = $tax_id;
+$rec['credit_limit'] = $credit_limit;
+$rec['rating_id'] = $rating_id;
+$rec['terms'] = $terms;
+$rec['extref1'] = $extref1;
+$rec['extref2'] = $extref2;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 $sql = "select extref1, extref2 from companies where company_id = $company_id";
 $rst = $con->execute($sql);
@@ -49,6 +62,10 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: admin-2.php,v $
+ * Revision 1.5  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.4  2004/05/10 13:09:14  maulani
  * - add level to audit trail
  *

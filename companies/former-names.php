@@ -2,7 +2,7 @@
 /**
  * Edit company relationships
  *
- * $Id: former-names.php,v 1.1 2004/05/06 13:34:30 gpowers Exp $
+ * $Id: former-names.php,v 1.2 2004/06/12 05:03:16 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -39,7 +40,7 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select concat(company_code, ' ', company_name), company_id as company2_id from companies where company_record_status = 'a' order by company_code";
+$sql = "SELECT " . $con->Concat("company_code", "' '", "company_name") . ", company_id AS company2_id FROM companies WHERE company_record_status = 'a' ORDER BY company_code";
 $rst = $con->execute($sql);
 $company_menu = $rst->getmenu2('company2_id', '', false);
 $rst->close();
@@ -110,6 +111,10 @@ end_page();
 
 /**
  * $Log: former-names.php,v $
+ * Revision 1.2  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.1  2004/05/06 13:34:30  gpowers
  * This implements a separate screen for editing Former Names.
  *

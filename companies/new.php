@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.7 2004/02/15 02:18:12 maulani Exp $
+ * $Id: new.php,v 1.8 2004/06/12 05:03:16 introspectshun Exp $
  */
 
 /* Include required files */
@@ -17,6 +17,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -266,6 +267,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.8  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.7  2004/02/15 02:18:12  maulani
  * force popup menus to have valid values
  *

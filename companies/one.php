@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.43 2004/06/10 18:54:14 braverock Exp $
+ * $Id: one.php,v 1.44 2004/06/12 05:03:16 introspectshun Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -18,6 +18,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $this = $_SERVER['REQUEST_URI'];
@@ -100,25 +101,19 @@ if (strlen($url) > 0) {
 //
 //  list of most recent activities
 //
-
-$sql_activities = "select activity_id,
-activity_title,
-scheduled_at,
-on_what_table,
-on_what_id,
-a.entered_at,
-activity_status,
-at.activity_type_pretty_name,
-cont.first_names as contact_first_names,
-cont.last_name as contact_last_name,
-u.username,
-if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
-from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
-where a.company_id = $company_id
-and a.user_id = u.user_id
-and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'
-order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
+$sql_activities = "
+SELECT a.activity_id, a.activity_title, a.scheduled_at, a.on_what_table, a.on_what_id,
+  a.entered_at, a.activity_status, at.activity_type_pretty_name,
+  cont.first_names AS contact_first_names, cont.last_name AS contact_last_name, u.username,
+  (CASE WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1 ELSE 0 END) AS is_overdue
+FROM activity_types at, users u, activities a
+LEFT JOIN contacts cont ON cont.contact_id = a.contact_id
+WHERE a.company_id = $company_id
+  AND a.user_id = u.user_id
+  AND a.activity_type_id = at.activity_type_id
+  AND a.activity_record_status = 'a'
+ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
+";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
 
@@ -269,12 +264,12 @@ if ($rst) {
     $rst->close();
 }
 
-$categories = implode($categories, ", ");
+$categories = implode(', ', $categories);
 
 /*********************************/
 /*** Include the sidebar boxes ***/
 
-//set up our substitution variables for use in the siddebars
+//set up our substitution variables for use in the sidebars
 $on_what_table = 'companies';
 $on_what_id = $company_id;
 $on_what_string = 'company';
@@ -299,7 +294,7 @@ $sidebar_rows = do_hook_function('company_sidebar_bottom', $sidebar_rows);
 /** End of the sidebar includes **/
 /*********************************/
 
-$sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
+$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a'";
 $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', '', true);
@@ -642,6 +637,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.44  2004/06/12 05:03:16  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.43  2004/06/10 18:54:14  braverock
  * - fixed typo in hook call and added parameter to pass in the string
  *
