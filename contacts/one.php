@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.62 2005/02/10 21:16:50 maulani Exp $
+ * $Id: one.php,v 1.63 2005/02/11 12:26:16 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -259,6 +259,14 @@ if ( !isset($sidebar_rows_top) ) {
 
 //call the sidebar top hook
 $sidebar_rows_top = do_hook_function('contact_sidebar_top', $sidebar_rows_top);
+
+// make sure $sidebar_rows_bottom is defined
+if ( !isset($sidebar_rows_bottom) ) {
+  $sidebar_rows_bottom = '';
+}
+
+//call the sidebar bottom hook
+$sidebar_rows_bottom = do_hook_function('contact_sidebar_bottom', $sidebar_rows_bottom);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -565,6 +573,9 @@ function markComplete() {
 
         <!-- files //-->
         <?php echo $file_rows; ?>
+        
+        <!-- bottom sidebar plugins //-->
+        <?php echo $sidebar_rows_bottom; ?>
 
     </div>
 
@@ -590,6 +601,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.63  2005/02/11 12:26:16  braverock
+ * - define contact_sidebar_bottom hook
+ *
  * Revision 1.62  2005/02/10 21:16:50  maulani
  * - Add audit trail entries
  *
