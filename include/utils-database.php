@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.6 2004/07/14 21:09:16 neildogg Exp $
+ * $Id: utils-database.php,v 1.7 2005/01/10 23:56:53 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -84,19 +84,31 @@ function make_singular($word) {
  * @todo Add naming conventions as needed
  */
 function table_name($table) {
-    if($table == "contacts") {
-        return array("first_names", "last_name");
-    }
-    elseif($table == "opportunities" or $table == "activities") {
-        return array(make_singular($table) . "_title");
-    }
-    else {
-        return array(make_singular($table) . "_name");
+    switch ($table) {
+        case "contacts":
+            return array("first_names", "last_name");
+        break;
+        case "activities":
+        case "cases":
+        case "campaigns":
+        case "opportunities":
+            return array(make_singular($table) . "_title");
+        break;
+        case "files":
+            return array(make_singular($table)."_pretty_name");
+        break;
+        default:
+            return array(make_singular($table) . "_name");
+        break;
     }
 } 
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.7  2005/01/10 23:56:53  vanmer
+ * - changed multiple ifs into a switch/case statement
+ * - added files, cases, campaigns handling for determining which field in the database provides the name of the entity
+ *
  * Revision 1.6  2004/07/14 21:09:16  neildogg
  * - Added activities to table_name
  *
