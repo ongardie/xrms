@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.37 2004/08/03 14:36:54 maulani Exp $
+ * $Id: some.php,v 1.38 2004/08/13 12:29:57 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -317,7 +317,7 @@ start_page($page_title, true, $msg);
                         print "<input class=button type=button onclick='javascript: bulkEmail()' value='". _("Bulk E-Mail")."'>";
                     };
                 ?>
-                <input name="advanced_search" type=submit class=button value="<?php echo _("Advanced Search"); ?>">
+                <input name="advanced_search" type=button class=button onclick="javascript: location.href='advanced-search.php';" value="<?php echo _("Advanced Search"); ?>">
             </td>
         </tr>
       </table>
@@ -399,6 +399,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.38  2004/08/13 12:29:57  maulani
+ * - Fix errant copy and paste
+ *
  * Revision 1.37  2004/08/03 14:36:54  maulani
  * - Fix recent items sql to only list each company once and to optimize the sql
  * - Fix advanced search button to remove erroneous comment
