@@ -24,7 +24,7 @@
 * 	1		34		34			true
 *
 * @author Justin Cooper
-* $Id: Session_Var_Watcher.php,v 1.3 2005/03/29 23:05:36 daturaarutad Exp $
+* $Id: Session_Var_Watcher.php,v 1.4 2005/04/06 18:30:34 daturaarutad Exp $
 */
 
 class SessionVarWatcher {
@@ -53,7 +53,7 @@ class SessionVarWatcher {
 	/**
 	* @return boolean Indicates whether or not variables have changed since the last invocation
 	*/
-	function VarsChanged() {
+	function VarsChanged($debug = false) {
 		$return = false;
 
 		// check CGI vars
@@ -63,10 +63,10 @@ class SessionVarWatcher {
             getGlobalVar($v, $var);
 
             if(array_key_exists($this->id . $var, $_SESSION) && $_SESSION[$this->id . $var] != $v) {
-                //echo "$var has changed from {$_SESSION[$this->id . $var]} to $v, flushing the cache<br/>";
+                if($debug) echo "$var has changed from {$_SESSION[$this->id . $var]} to $v, flushing the cache<br/>";
 				$return = true;
             } else {
-                //echo "$var is the same: {$_SESSION[$this->id . $var]} to $v<br/>";
+                if($debug) echo "$var is the same: {$_SESSION[$this->id . $var]} to $v<br/>";
 			}
             $_SESSION[$this->id . $var] = $v;
         }
@@ -75,14 +75,14 @@ class SessionVarWatcher {
         foreach($this->local_vars as $varname => $value) {
 			// Check for local vars too!
         	if(!array_key_exists($this->id . $varname, $_SESSION) && $_SESSION[$this->id . $varname]) {
-            	//echo "no entry in cache for $varname, but var has value $value<br>";
+            	if($debug) echo "no entry in cache for $varname, but var has value $value<br>";
 				$return = true;
         	}
         	elseif(array_key_exists($this->id . $varname, $_SESSION) && $_SESSION[$this->id . $varname] != $value) {
-            	//echo "$varname has changed from {$_SESSION[$this->id . $varname]} to $value, flushing the cache<br/>";
+            	if($debug) echo "$varname has changed from {$_SESSION[$this->id . $varname]} to $value, flushing the cache<br/>";
 				$return = true;
         	} else {
-            	//echo "$varname has not changed<br>";
+            	if($debug) echo "$varname has not changed<br>";
 			}
         	$_SESSION[$this->id . $varname] = $value;
 		}
@@ -92,6 +92,9 @@ class SessionVarWatcher {
 
 /**
 * $Log: Session_Var_Watcher.php,v $
+* Revision 1.4  2005/04/06 18:30:34  daturaarutad
+* added debug flag to output what the object sees for values of variables
+*
 * Revision 1.3  2005/03/29 23:05:36  daturaarutad
 * removed debug output
 *
