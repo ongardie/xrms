@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.7 2005/02/08 16:59:43 vanmer Exp $
+ * $Id: edit-division-2.php,v 1.8 2005/02/08 17:13:58 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -45,13 +45,16 @@ $rec['last_modified_by'] = $session_user_id;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
-do_hook_function('edit_division_process', $upd);
+do_hook_function('edit_division_process', $rec);
 
 
 header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.8  2005/02/08 17:13:58  vanmer
+ * - switched to pass correct collection to hook function
+ *
  * Revision 1.7  2005/02/08 16:59:43  vanmer
  * - added hook for processing division edit
  *
