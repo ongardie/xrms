@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupMember_list.php,v 1.1 2005/01/13 17:16:14 vanmer Exp $
+ * $Id: GroupMember_list.php,v 1.2 2005/02/15 00:33:36 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat('"<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_GroupMember.php?form_action=edit&return_url=GroupMember_list.php&GroupMember_id="', 'GroupMember_id', '"\'\">"') . "AS LINK, Groups.Group_name as 'Group', ControlledObject.ControlledObject_name as 'Controlled Object', on_what_id as 'Object ID' FROM GroupMember JOIN Groups ON Groups.Group_id=GroupMember.Group_id JOIN ControlledObject ON ControlledObject.ControlledObject_id=GroupMember.ControlledObject_id order by $order_by";
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_GroupMember.php?form_action=edit&return_url=GroupMember_list.php&GroupMember_id="), 'GroupMember_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'Group', ControlledObject.ControlledObject_name as 'Controlled Object', on_what_id as 'Object ID' FROM GroupMember JOIN Groups ON Groups.Group_id=GroupMember.Group_id JOIN ControlledObject ON ControlledObject.ControlledObject_id=GroupMember.ControlledObject_id order by $order_by";
 
 $css_theme='basic-left';
 start_page($page_title);
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: GroupMember_list.php,v $
+ * Revision 1.2  2005/02/15 00:33:36  vanmer
+ * requoted for general use
+ *
  * Revision 1.1  2005/01/13 17:16:14  vanmer
  * - Initial Commit for ACL Administration interface
  *
