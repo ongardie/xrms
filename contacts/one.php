@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.58 2005/01/22 15:21:47 braverock Exp $
+ * $Id: one.php,v 1.59 2005/01/26 22:43:03 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -130,7 +130,7 @@ CASE
   WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
   ELSE 0
 END AS is_overdue
-FROM activity_types at, activities a, contacts cont
+FROM activity_types at, contacts cont, activities a
 LEFT OUTER JOIN users u ON (a.user_id = u.user_id)
 WHERE a.contact_id = $contact_id
   AND a.contact_id = cont.contact_id
@@ -564,6 +564,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.59  2005/01/26 22:43:03  vanmer
+ * - altered SQL query to allow activities table to appear directly before LEFT OUTER JOIN
+ *
  * Revision 1.58  2005/01/22 15:21:47  braverock
  * - fixed double handlnig of $http_site_root on mailto link
  *   Resolves SF Bug #1106989 using patch reported by fu22ba55
