@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.21 2004/10/26 16:36:26 introspectshun Exp $
+ * $Id: one.php,v 1.22 2004/12/24 16:41:23 braverock Exp $
  */
 
 //include required files
@@ -306,7 +306,7 @@ start_page($page_title, true, $msg);
                 <td colspan=2 class=widget_label><?php echo _("On"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
+                <td class=widget_content_form_element><input type=text name=activity_title ></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
@@ -339,6 +339,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.22  2004/12/24 16:41:23  braverock
+ * - adjusted width of activity title to better manage layout of activity table
+ *
  * Revision 1.21  2004/10/26 16:36:26  introspectshun
  * - Centralized category handling as sidebar
  *
