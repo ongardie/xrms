@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.31 2004/07/19 21:19:52 neildogg Exp $
+ * $Id: edit-2.php,v 1.32 2004/07/27 09:26:06 cpsource Exp $
  */
 
 //include required files
@@ -27,7 +27,6 @@ $activity_type_id        = $_POST['activity_type_id'];
 $contact_id              = $_POST['contact_id'];
 $activity_title          = $_POST['activity_title'];
 $activity_description    = $_POST['activity_description'];
-$opportunity_description = $_POST['opportunity_description'];
 $scheduled_at            = $_POST['scheduled_at'];
 $ends_at                 = $_POST['ends_at'];
 $activity_status         = $_POST['activity_status'];
@@ -41,6 +40,7 @@ $table_name              = $_POST['table_name'];
 $table_status_id         = $_POST['table_status_id'];
 
 // optionally posted data
+$opportunity_description = isset($_POST['opportunity_description']) ? $_POST['opportunity_description'] : '';
 $probability             = isset($_POST['probability']) ? $_POST['probability'] : '';
 $followup                = isset($_POST['followup'])    ? $_POST['followup']    : '';
 $saveandnext             = isset($_POST['saveandnext']) ? $_POST['saveandnext'] : '';
@@ -408,6 +408,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.32  2004/07/27 09:26:06  cpsource
+ * - Move opportunity_description to the optionally passed area.
+ *
  * Revision 1.31  2004/07/19 21:19:52  neildogg
  * - Allow contact to be shifted with opportunity as well as activity
  *
