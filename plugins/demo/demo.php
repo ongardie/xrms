@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: demo.php,v 1.2 2004/03/29 13:26:57 maulani Exp $
+ * $Id: demo.php,v 1.3 2004/05/04 23:55:30 maulani Exp $
  */
 
 // include the common files
@@ -59,19 +59,13 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width="100%">
-    <tr>
-        <td class=lcol width="75%" valign=top>
+<div id="Main">
+    <div id="Content">
                 Demo Plugin.  You would place your main page content here.
-        </td>
-
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
 
         <!-- right column //-->
-        <td class=rcol width="24%" valign=top>
+    <div id="Sidebar">
 
             <!-- opportunities //-->
             <?php  echo $opportunity_rows; ?>
@@ -85,9 +79,8 @@ start_page($page_title);
             <!-- notes //-->
             <?php  echo $note_rows; ?>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <?php
 
@@ -95,6 +88,9 @@ end_page();
 
 /**
  * $Log: demo.php,v $
+ * Revision 1.3  2004/05/04 23:55:30  maulani
+ * - Add CSS2 positioning to plugin demo.
+ *
  * Revision 1.2  2004/03/29 13:26:57  maulani
  * - patch #922717 submitted by Glenn Powers (gpowers)
  * - fix table formatting
