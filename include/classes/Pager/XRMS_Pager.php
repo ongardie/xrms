@@ -46,6 +46,8 @@ class XRMS_Pager {
 
     var $pager_id;
     var $EndRows;
+    var $maximize;
+
 
 
 
@@ -79,7 +81,7 @@ class XRMS_Pager {
         getGlobalVar($this->current_sort_order, $pager_id . '_current_sort_order');
         getGlobalVar($this->next_page, $pager_id . '_next_page');
         getGlobalVar($this->resort, $pager_id . '_resort');
-
+        getGlobalVar($this->maximize, $pager_id . '_maximize');
 
         if (!strlen($this->sort_column) > 0) {
             $this->sort_column = 1;
@@ -271,75 +273,6 @@ class XRMS_Pager {
 	  	// adodb_pager code end 
 
 		$rs = $this->rs;
-		
-
-/*
-		if(is_array($this->SubtotalColumns)) {
-
-			// reset the record set pointer
-			$rs->Move(0);
-
-			$s .= "<tr>";
-
-			while(!$rs->EOF) {
-
-				foreach($this->SubtotalColumns as $fieldname => $v) {
-					$this->SubtotalColumns[$fieldname] += $rs->Fields($fieldname);
-				}
-				$rs->MoveNext();
-			}
-
-			for ($i=0; $i < $rs->FieldCount(); $i++) {
-
-				$field = $rs->FetchField($i);
-
-				if(0 == $i) {
-					$s .= "<td class=\"widget_content\"><b>SubTotal this page:</b></td>";
-
-				} else {
-					if($this->SubtotalColumns[$field->name]) {
-						$s .= "<td class=\"widget_content\">" . $this->SubtotalColumns[$field->name] . "</td>";
-					} else {
-						$s .= "<td class=\"widget_content\">&nbsp;</td>";
-					}
-				}
-			}
-			$s .= "</tr>\n";
-		}
-
-		if(is_array($this->TotalColumns)) {
-
-			$s .= "<tr>";
-
-			foreach($this->TotalColumns as $fieldname => $tablename) {
-				$sql = "SELECT SUM($fieldname) FROM $tablename";
-				$rs2 = $this->db->execute($sql);
-
-				if ($rs2) {
-					$this->TotalColumns[$fieldname] = $rs2->Fields(0);
-    				$rs2->close();
-				} else {
-    				db_error_handler($this->db, $sql);
-				}
-			}
-			// use the first query rs for field names!
-			for ($i=0; $i < $rs->FieldCount(); $i++) {
-
-				$field = $rs->FetchField($i);
-
-				if(0 == $i) {
-					$s .= "<td class=\"widget_content\"><b>Total:</b></td>";
-				} else {
-					if($this->TotalColumns[$field->name]) {
-						$s .= "<td class=\"widget_content\">" . $this->TotalColumns[$field->name] . "</td>";
-					} else {
-						$s .= "<td class=\"widget_content\">&nbsp;</td>";
-					}
-				}
-			}
-			$s .= "</tr>\n";
-		}
-*/
 		return $s;
 	}
 
@@ -386,7 +319,7 @@ class XRMS_Pager {
       } // check for empty rs.
       if ($this->curr_page > $lastPage) $this->curr_page = 1;
         // *** got rid of the font size changes!
-        return "$this->page ".$this->curr_page."/".$lastPage;
+        return "$this->page ".$this->curr_page."/" . $lastPage;
     }
 
 
@@ -397,8 +330,11 @@ class XRMS_Pager {
     // overridden to add export and mail merge
     function RenderLayout($header,$grid,$footer,$attributes='class=widget cellspacing=1 cellpadding=0 border=0 width="100%"')
     {
-        echo "<table {$attributes} ><tr><td colspan=0 class=widget_header>" . $this->caption . "</td></tr>\n";
-
+		if($this->maximize) {
+        	echo "<table {$attributes} ><tr><td colspan=0 class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_unmaximize();>(show paged)</a></td></tr>\n";
+		} else {
+        	echo "<table {$attributes} ><tr><td colspan=0 class=widget_header>" . $this->caption . "<a href=javascript:{$this->pager_id}_maximize();>(show all)</a></td></tr>\n";
+		}
         if ($header != '&nbsp;') {
             echo "<tr><td colspan=0>".
             "<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
@@ -441,6 +377,17 @@ class XRMS_Pager {
                 document.{$this->form_id}.{$this->pager_id}_resort.value = 1;
                 document.{$this->form_id}.submit();
             }
+            function {$this->pager_id}_maximize() {
+                document.{$this->form_id}.{$this->pager_id}_maximize.value = 'true';
+                document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
+                document.{$this->form_id}.submit();
+			}
+	        function {$this->pager_id}_unmaximize() {
+                document.{$this->form_id}.{$this->pager_id}_maximize.value = null;
+                document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
+                document.{$this->form_id}.submit();
+			}
+		
 
             //-->
             </script>
@@ -452,20 +399,25 @@ class XRMS_Pager {
             <input type=hidden name={$this->pager_id}_sort_column value="{$this->sort_column}">
             <input type=hidden name={$this->pager_id}_current_sort_order value="{$this->sort_order}">
             <input type=hidden name={$this->pager_id}_sort_order value="{$this->sort_order}">
+            <input type=hidden name={$this->pager_id}_maximize value="{$this->maximize}">
 END;
 
 
 		// adodb_pager code begin
         global $ADODB_COUNTRECS;
 
-        $this->rows = $rows;
+        if($this->maximize) {
+            $this->rows = 10000; // sanity
+        } else {
+            $this->rows = $rows;
+        }
 
         $savec = $ADODB_COUNTRECS;
         if ($this->db->pageExecuteCountRows) $ADODB_COUNTRECS = true;
         if ($this->cache)
-        $rs = &$this->db->CachePageExecute($this->cache,$this->sql,$rows,$this->curr_page);
+        $rs = &$this->db->CachePageExecute($this->cache,$this->sql,$this->rows,$this->curr_page);
         else
-        $rs = &$this->db->PageExecute($this->sql,$rows,$this->curr_page);
+        $rs = &$this->db->PageExecute($this->sql,$this->rows,$this->curr_page);
         $ADODB_COUNTRECS = $savec;
 
         $this->rs = &$rs;
