@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.29 2004/09/21 18:19:30 introspectshun Exp $
+ * $Id: new-2.php,v 1.30 2005/01/07 03:40:54 braverock Exp $
  */
 
 //where do we include from
@@ -186,10 +186,10 @@ else {
     $tbl = 'opportunities';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
-    
+
     $opportunity_id = $con->insert_id();
     add_audit_item($con, $session_user_id, 'created', 'opportunities', $opportunity_id, 1);
-    
+
     $on_what_table_template = "opportunity_statuses";
     $on_what_id_template = $opportunity_status_id;
     $on_what_table = "opportunities";
@@ -208,16 +208,21 @@ $activities_default_behavior = get_system_parameter($con, 'Activities Default Be
 $con->close();
 
 //now send them back where they came from
-if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
+if ($activity_status == 'c') {
     header("Location: " . $http_site_root . $return_url);
-} elseif(!empty($opportunity_status_id)) {
-    header("Location: " . $http_site_root . "/opportunities/one.php?return_url=" . $return_url . "&opportunity_id=" . $opportunity_id);
+} elseif ($activities_default_behavior == "Fast") {
+    header("Location: " . $http_site_root . $return_url);
+//} elseif(!empty($opportunity_status_id)) {
+//    header("Location: " . $http_site_root . "/opportunities/one.php?return_url=" . $return_url . "&opportunity_id=" . $opportunity_id);
 } else {  //If Long activities are the default, send them to edit the activity
     header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
 }
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.30  2005/01/07 03:40:54  braverock
+ *- add status pop-up link
+ *
  *Revision 1.29  2004/09/21 18:19:30  introspectshun
  *- Corrected mispelling of opportunities directory
  *
