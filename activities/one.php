@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.78 2005/03/21 13:40:51 maulani Exp $
+ * $Id: one.php,v 1.79 2005/03/21 14:38:31 maulani Exp $
  */
 
 //include required files
@@ -105,7 +105,8 @@ if ($rst) {
     $rst->close();
 }
 
-$user_menu = get_user_menu($con, $user_id, true);
+$show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ?Êtrue : false);
+$user_menu = get_user_menu($con, $user_id, $show_blank);
 
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
 
@@ -512,6 +513,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.79  2005/03/21 14:38:31  maulani
+ * - Having unassigned activities is now an option that can be set in
+ *   system parameters.  Installations that do not need activity pools
+ *   can require activities to have an assigned user.
+ *
  * Revision 1.78  2005/03/21 13:40:51  maulani
  * - Remove redundant code by centralizing common user menu call
  *
