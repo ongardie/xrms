@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.14 2005/02/15 15:05:03 ycreddy Exp $
+ * $Id: sidebar.php,v 1.15 2005/02/15 19:36:09 ycreddy Exp $
  */
 
 //$con->debug = 1;
@@ -153,9 +153,10 @@ while (!$toprst->EOF) {
               $rst2 = $con->execute($sql2);
 
               if ($rst2) {
-                if (!$rst2->EOF) {
+                while (!$rst2->EOF) {
                   $info_rows .= "<tr><td class=sublabel>" . $field . "</td><td class=widget_content>"
                       . $rst2->fields['value'] . "</td></tr>";
+		  $rst2->movenext();
                 }
               }
           }
