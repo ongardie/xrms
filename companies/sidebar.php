@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.11 2004/07/27 20:40:04 neildogg Exp $
+ * $Id: sidebar.php,v 1.12 2004/08/04 20:27:28 introspectshun Exp $
  */
 
 // add company information block on sidebar
@@ -67,7 +67,7 @@ if ($rst) {
 
     if ($rst->fields['url']) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-	                   . "<a href=\"" . $url . "\" target=\"_new\">Web Site</a></td>\n\t</tr>";
+	                   . "<a href=\"" . $url . "\" target=\"_new\">" . _("Web Site") . "</a></td>\n\t</tr>";
     }
 
   } // if ( !$rst->EOF ) ...
@@ -88,6 +88,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.12  2004/08/04 20:27:28  introspectshun
+ * - Converted "Web Site" str to GetText equivalent
+ *
  * Revision 1.11  2004/07/27 20:40:04  neildogg
  * - Removed unnecessary tr's
  *
