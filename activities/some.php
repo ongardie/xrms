@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.30 2004/07/10 12:24:59 braverock Exp $
+ * $Id: some.php,v 1.31 2004/07/11 12:32:48 braverock Exp $
  */
 
 // handle includes
@@ -145,15 +145,14 @@ require_once("browse-sidebar.php");
 
 $sql = "SELECT
   (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS is_overdue,"
+  ." at.activity_type_pretty_name AS 'Type',"
+  . $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact',"
   . $con->Concat("'<a href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
-  . " AS 'Title',
-  at.activity_type_pretty_name AS 'Type'," .
-  $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
-  $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
-  u.username AS 'Owner'," .
-  $con->SQLDate('Y-m-d','a.scheduled_at') . " AS 'Scheduled'," .
-  $con->SQLDate('Y-m-d','a.ends_at') . " AS 'Due',
-  a.activity_id
+  . " AS 'Title', "
+  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS 'Scheduled', "
+  . $con->SQLDate('Y-m-d','a.ends_at') . " AS 'Due', "
+  . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
+  u.username AS 'Owner'
   FROM companies c, users u, activity_types at, activities a
   LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
   WHERE a.company_id = c.company_id
@@ -210,20 +209,19 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 if ($sort_column == 1) {
     $order_by = "is_overdue";
 } elseif ($sort_column == 2) {
-    $order_by = "activity_title";
-} elseif ($sort_column == 3) {
     $order_by = "activity_type_pretty_name";
-} elseif ($sort_column == 4) {
+} elseif ($sort_column == 3) {
     $order_by = "cont.last_name";
+} elseif ($sort_column == 4) {
+    $order_by = "activity_title";
 } elseif ($sort_column == 5) {
-    $order_by = "c.company_name";
-} elseif ($sort_column == 6) {
-    $order_by = "owner";
-} elseif ($sort_column == 7) {
     $order_by = "Scheduled";
-} elseif ($sort_column == 8) {
+} elseif ($sort_column == 6) {
     $order_by = "Due";
-
+} elseif ($sort_column == 7) {
+    $order_by = "c.company_name";
+} elseif ($sort_column == 8) {
+    $order_by = "owner";
 } else {
     $order_by = $sort_column;
 }
@@ -232,38 +230,7 @@ if ($sort_column == 1) {
 $order_by .= " $sort_order";
 
 $sql .= " order by $order_by"; // is_overdue desc, a.scheduled_at, a.entered_at desc";
-
-$rst = $con->execute($sql);
-
-if ($rst) {
-    while (!$rst->EOF) {
-
-        $open_p = $rst->fields['activity_status'];
-        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
-        $is_overdue = $rst->fields['is_overdue'];
-
-        if ($open_p == 'o') {
-            if ($is_overdue) {
-                $classname = 'overdue_activity';
-            } else {
-                $classname = 'open_activity';
-            }
-        } else {
-            $classname = 'closed_activity';
-        }
-
-        $open_activities .= '<tr>';
-        $open_activities .= '<td class=' . $classname . '><a href=one.php?activity_id=' . $rst->fields['activity_id'] . '>' . $rst->fields['Title'] . '</a></td>';
-        $open_activities .= '<td class=' . $classname . '>' . $rst->fields['Type'] . '</td>';
-        $open_activities .= '<td class=' . $classname . '>' . $rst->fields['Company'] . '</td>';
-        $open_activities .= '<td class=' . $classname . '>' . $rst->fields['Contact'] . '</td>';
-        $open_activities .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['Scheduled']) . '</td>';
-        $open_activities .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['Due']) . '</td>';
-        $open_activities .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
+//activities Pager table is rendered below by ADOdb pager
 
 //get menu for users
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -431,6 +398,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.31  2004/07/11 12:32:48  braverock
+ * - eliminate manual table generation in favor of pager object
+ * - rearrange column order based on input from Walt Pennington
+ *
  * Revision 1.30  2004/07/10 12:24:59  braverock
  * - fixed undefined activity_id
  * - fixed misdefined activity_type_pretty_name
