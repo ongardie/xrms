@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.14 2004/05/10 13:07:20 maulani Exp $
+ * $Id: one.php,v 1.15 2004/05/27 20:36:12 gpowers Exp $
  */
 
 //include required files
@@ -164,6 +164,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan=2>
                     <input class=button type=submit name="save" value="Save Changes">
                     <input class=button type=submit name="followup" value="Schedule Followup">
+                    <input type=button class=button onclick="javascript: location.href='vcal.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='Export as vCal' onclick="javascript: return confirm('Delete Activity?');">
                     <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='Delete Activity' onclick="javascript: return confirm('Delete Activity?');">
                 </td>
             </tr>
@@ -205,6 +206,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2004/05/27 20:36:12  gpowers
+ * Added Support for Patch [ 951138 ] Export Activities vCALENDAR
+ * Export one activity into the vCalendar format.
+ *
  * Revision 1.14  2004/05/10 13:07:20  maulani
  * - Add level to audit trail
  * - Clean up audit trail text
