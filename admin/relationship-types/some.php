@@ -36,7 +36,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Manage Relationship Types";
+$page_title = _("Manage Relationship Types");
 start_page($page_title);
 
 ?>
@@ -46,13 +46,13 @@ start_page($page_title);
 
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=4>Relationship Types</td>
+				<td class=widget_header colspan=4><?php echo _("Relationship Types"); ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label>Name</td>
-                                <td class=widget_label>Tables</td>
-                                <td class=widget_label>Relationship</td>
-                                <td class=widget_label>Formatting</td>
+				<td class=widget_label><?php echo _("Name"); ?></td>
+                                <td class=widget_label><?php echo _("Tables"); ?></td>
+                                <td class=widget_label><?php echo _("Relationship"); ?></td>
+                                <td class=widget_label><?php echo _("Formatting"); ?></td>
 			</tr>
 			<?php  echo $table_rows; ?>
 		</table>
@@ -65,38 +65,38 @@ start_page($page_title);
 		<form action=new-2.php method=post>
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=2>Add New Role</td>
+				<td class=widget_header colspan=2><?php echo _("Add New Role"); ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Relationship Name</td>
+				<td class=widget_label_right><?php echo _("Relationship Name"); ?></td>
 				<td class=widget_content_form_element><input type=text name=relationship_name size=20></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>From What Table</td>
+				<td class=widget_label_right><?php echo _("From What Table"); ?></td>
 				<td class=widget_content_form_element><input type=text name=from_what_table size=20></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>To What Table</td>
+				<td class=widget_label_right><?php echo _("To What Table"); ?></td>
 				<td class=widget_content_form_element><input type=text name=to_what_table size=20></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>From Text</td>
+				<td class=widget_label_right><?php echo _("From Text"); ?></td>
 				<td class=widget_content_form_element><input type=text name=from_what_text size=30></td>
 			</tr>
                         <tr>
-                                <td class=widget_label_right>To Text</td>
+                                <td class=widget_label_right><?php echo _("To Text"); ?></td>
                                 <td class=widget_content_form_element><input type=text name=to_what_text size=30></td>
                         </tr>
                         <tr>
-                                <td class=widget_label_right>Pre-Text Formatting</td>
+                                <td class=widget_label_right><?php echo _("Pre-Text Formatting"); ?></td>
                                 <td class=widget_content_form_element><input type=text name=pre_formatting size=30></td>
                         </tr>
                         <tr>
-                                <td class=widget_label_right>Post-Text Formatting</td>
+                                <td class=widget_label_right><?php echo _("Post-Text Formatting"); ?></td>
                                 <td class=widget_content_form_element><input type=text name=post_formatting size=30></td>
                         </tr>
 			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+				<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
 			</tr>
 		</table>
 		</form>
@@ -110,6 +110,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.2  2004/07/18 16:03:59  braverock
+ * - localize strings for i18n translation support
+ *   - applies modified patches from Sebastian Becker (hyperpac)
+ *
  * Revision 1.1  2004/07/12 18:47:59  neildogg
  * - Added Relationship Type management
  *
