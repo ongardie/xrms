@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.7 2004/05/07 21:30:39 maulani Exp $
+ * $Id: login-2.php,v 1.8 2004/06/11 20:46:04 introspectshun Exp $
  */
 require_once('include-locations.inc');
 
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -55,7 +56,7 @@ if ($xrms_use_ldap) {
           $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc());
           $rst = $con->execute($sql);
 
-          //we check tje user_record_status separatly in order to allow ldap provisioning which
+          //we check the user_record_status separately in order to allow ldap provisioning which
           //should not occur if the user exists but is not marked active...
           if ($rst && !$rst->EOF) {
                if ($rst->fields['user_record_status'] != "a") {
@@ -64,14 +65,26 @@ if ($xrms_use_ldap) {
                }
           } else {
                // if the user does not exist in the database but we were able to authenticate him, we create it automatically in the database
-               $sql = "insert into users(role_id, last_name, first_names, username, password, email, gmt_offset, language) values(" . $xrms_ldap["default_role_id"] . ", " . $con->qstr($info[0]["sn"][0], get_magic_quotes_gpc()) . ", " . $con->qstr($info[0]["givenName"][0], get_magic_quotes_gpc()) . ", " . $con->qstr($info[0]["uid"][0], get_magic_quotes_gpc()) . ", 'NOPASSWORD', " . $con->qstr($info[0]["mail"][0], get_magic_quotes_gpc()) . ", " . $xrms_ldap["default_gmt_offset"] . ", 'english')";
-               $con->execute($sql);
+               $sql = "SELECT * FROM users WHERE 1 = 2"; //select empty record as placeholder
+               $rst = $con->execute($sql);
+               
+               $rec = array();
+               $rec['role_id'] = $xrms_ldap['default_role_id'];
+               $rec['last_name'] = $info[0]['sn'][0];
+               $rec['first_names'] = $info[0]['givenName'][0];
+               $rec['username'] = $info[0]['uid'][0];
+               $rec['password'] = 'NOPASSWORD';
+               $rec['email'] = $info[0]['mail'][0];
+               $rec['gmt_offset'] = $xrms_ldap['default_gmt_offset'];
+               $rec['language'] = 'english';
+               
+               $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+               $con->execute($ins);
 
                // and now pull the data we just inserted
                $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc());
                $rst = $con->execute($sql);
           }
-
      }
 
 } else {
@@ -105,6 +118,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.8  2004/06/11 20:46:04  introspectshun
+ * - Now use ADODB GetInsertSQL function.
+ *
  * Revision 1.7  2004/05/07 21:30:39  maulani
  * - Add audit-level to allow different levels of audit-logging
  *
