@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.53 2005/01/10 23:03:58 neildogg Exp $
+ * $Id: one.php,v 1.54 2005/01/11 13:36:35 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -60,7 +60,7 @@ if ($rst) {
     $date_of_birth = $con->userdate($rst->fields['date_of_birth']);
     $gender = $rst->fields['gender'];
     $summary = $rst->fields['summary'];
-    $title = $rst->fields['title'];
+    $e = $rst->fields['title'];
     $description = $rst->fields['description'];
     $profile = $rst->fields['profile'];
     $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
@@ -214,17 +214,16 @@ if ($division_id != '') {
 //set up our substitution variables for use in the sidebars
 $on_what_table = 'contacts';
 $on_what_id = $contact_id;
-$on_what_string = 'contact';
 
 //include the categories sidebar
 require_once($include_directory . 'categories-sidebar.php');
 
 //include the Cases sidebar
-$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
+$case_limit_sql = "and cases.".make_singular($on_what_table)."_id = $on_what_id";
 require_once( $include_locations_location . 'cases/sidebar.php');
 
 //include the opportunities sidebar
-$opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
+$opportunity_limit_sql = "and opportunities.".make_singular($on_what_table)."_id = $on_what_id";
 require_once( $include_locations_location . 'opportunities/sidebar.php');
 
 //include the contacts-companies sidebar
@@ -247,16 +246,6 @@ $sidebar_rows_top = do_hook_function('contact_sidebar_top', $sidebar_rows_top);
 
 /** End of the sidebar includes **/
 /*********************************/
-
-// we should allow users to delete this contact if there are others
-/*
-$sql = "select count(contact_id) as contact_count from contacts where company_id = $company_id and contact_record_status = 'a'";
-$rst = $con->execute($sql);
-if ($rst) {
-    $contact_count = $rst->fields['contact_count'];
-    $rst->close();
-}
-*/
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
@@ -562,6 +551,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.54  2005/01/11 13:36:35  braverock
+ * - removed on_what_string hack, changed to use make_singular function
+ *
  * Revision 1.53  2005/01/10 23:03:58  neildogg
  * - Because contacts have companies too
  *
