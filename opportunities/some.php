@@ -1,11 +1,11 @@
 <?php
-/** 
- * opportunities/some.php - This file provides the opportunities search page 
- * 
- *  
- * 
- * $Id: some.php,v 1.8 2004/03/04 00:16:24 maulani Exp $ 
- */ 
+/**
+ * opportunities/some.php - This file provides the opportunities search page
+ *
+ *
+ *
+ * $Id: some.php,v 1.9 2004/03/15 16:53:02 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -15,7 +15,10 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 
-$session_user_id = session_check();
+//set target and see if we are logged in
+$this = $_SERVER['REQUEST_URI'];
+$session_user_id = session_check( $this );
+
 $msg = $_GET['msg'];
 $offset = $_POST['offset'];
 $clear = ($_GET['clear'] == 1) ? 1 : 0;
@@ -86,7 +89,13 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
-$sql = "select concat('<a href=one.php?opportunity_id=', opp.opportunity_id, '>', opp.opportunity_title, '</a>') as 'Opportunity', c.company_name as 'Company', u.username as 'Owner', if (size > 0, size, 0) as 'Opportunity Size', if (size > 0, size*probability/100, 0) as 'Weighted Size', os.opportunity_status_pretty_name as 'Status', $close_at as 'Close Date' ";
+$sql = "select concat('<a href=one.php?opportunity_id=', opp.opportunity_id, '>', opp.opportunity_title, '</a>') as 'Opportunity',
+               c.company_name as 'Company',
+               u.username as 'Owner',
+               if (size > 0, size, 0) as 'Opportunity Size',
+               if (size > 0, size*probability/100, 0) as 'Weighted Size',
+               os.opportunity_status_pretty_name as 'Status',
+               $close_at as 'Close Date' ";
 
 if ($opportunity_category_id > 0) {
     $from = "from companies c, opportunities opp, opportunity_statuses os, users u, entity_category_map ecm ";
@@ -309,17 +318,20 @@ function resort(sortColumn) {
 </script>
 
 
-<?php 
+<?php
 
-end_page(); 
+end_page();
 
-/** 
+/**
  * $Log: some.php,v $
+ * Revision 1.9  2004/03/15 16:53:02  braverock
+ * - cleaned up sql formatting
+ *
  * Revision 1.8  2004/03/04 00:16:24  maulani
  *  - correct phpdoc entries
  *
  * Revision 1.7  2004/03/01 16:38:32  maulani
  * added phpdoc
- * 
- */ 
-?> 
+ *
+ */
+?>
