@@ -10,6 +10,16 @@
 *
 */
 
+$radtest = "/usr/local/bin/radtest";
+$radius_server = "auth.example.com";
+$radius_port = "1645";
+# nas_port is the port number that will appear in the RADIUS logs
+# it has no effect on the plugin, but should not be null
+$nas_port = "99";
+# you will need to configure your radius server to accept connections
+# from the server running XRMS. shared secrets must match and should
+# be different than other NASes.
+$shared_secret = "testing123";
 
 // include the common files
 require_once('../../include-locations.inc');
@@ -25,7 +35,7 @@ $username = urldecode($_GET['username']);
 $password = urldecode($_GET['password']);
 $contact_id = $_GET['contact_id'];
 
-$page_title = "Radius Test";
+$page_title = _("Radius Test");
 start_page($page_title);
 
 ?>
@@ -33,7 +43,7 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
         <pre>
-<?php system("/usr/local/bin/radtest $username $password earth.isosat.net:1645 99 testing123");  // Edit this if needed ?>
+<?php system("$radtest $username $password $radius_server:$radius_port $nas_port $shared_secret"); ?>
         </pre>
         <a href="../../contacts/one.php?contact_id=<?php echo $contact_id; ?>">Back</a>
     </div>
@@ -43,4 +53,13 @@ start_page($page_title);
 
 end_page();
 
+/**
+ * $Log: radtest.php,v $
+ * Revision 1.2  2004/07/22 13:32:41  gpowers
+ * - put server vars and comment at head of file
+ * - i18n'ed page title
+ * - added phpdoc log
+ *
+ *
+ */
 ?>
