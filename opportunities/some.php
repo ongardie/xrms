@@ -105,7 +105,7 @@ if (strlen($opportunity_title) > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name LIKE " . $con->qstr($company_name, get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr('%' . $company_name . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($user_id) > 0) {
