@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.5 2004/07/14 19:38:00 neildogg Exp $
+ * $Id: sidebar.php,v 1.6 2004/07/14 21:04:37 neildogg Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -36,6 +36,7 @@ $what_table_singular['to']   = make_singular($what_table['to']);
 $rst->close();
 
 // TBD - BUG - $to_what_id and/or $from_what_id NEED to be defined here
+// I'll have it pass $on_what_id and rename $overall_id to that
 
 if($working_direction == "from") {
     $opposite_direction = "to";
@@ -48,6 +49,10 @@ else {
 $display_name          = ucfirst($what_table[$working_direction]);
 $display_name_singular = ucfirst($what_table_singular[$working_direction]);
 $opposite_name         = ucfirst($what_table[$opposite_direction]);
+
+if(!$relationship_link_rows) {
+    $relationship_link_rows = "";
+}
 
 $relationship_type_ids = array();
 
@@ -73,7 +78,7 @@ elseif($rst->rowcount()) {
 $rst->close();
 
 //build the table heading
-$relationship_link_rows = "<div id='company_link_sidebar'>
+$relationship_link_rows .= "<div id='company_link_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
                 <td colspan=2 class=widget_header colspan=4>Associated $opposite_name</td>
@@ -81,7 +86,7 @@ $relationship_link_rows = "<div id='company_link_sidebar'>
             <tr>
                 <td class=widget_label>$opposite_name</td><td align=right class=widget_label>Other $display_name</td>
             </tr>\n";
-//build the companies sql query
+//build the relationships sql query
 
 $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($what_table[$opposite_direction])));
 
@@ -261,7 +266,7 @@ elseif($rst->rowcount()) {
     $rst->close();
 }
 else {
-    $relationship_link_rows .= "            <tr> <td class=widget_content colspan=4> No attached companies </td> </tr>\n";
+    $relationship_link_rows .= "            <tr> <td class=widget_content colspan=4> No attached " . $what_table[$working_direction] . " </td> </tr>\n";
 }
 
 //put in the new button
@@ -269,7 +274,7 @@ $relationship_link_rows .= "
             <tr>
             <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
                 <td class=widget_content_form_element colspan=2>
-                    <input type=hidden name=relationship_name value='company link'>
+                    <input type=hidden name=relationship_name value='" . $relationship_name . "'>
                     <input type=hidden name=on_what_id value='$overall_id'>
                     <input type=hidden name=working_direction value='$working_direction'>
                     <input type=hidden name=return_url value='/$what_table[$working_direction]/one.php?$what_table_singular[$working_direction]_id=$overall_id'>
@@ -366,6 +371,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.6  2004/07/14 21:04:37  neildogg
+ * - Fixed genericity bugs, allowed for multiple includes
+ *
  * Revision 1.5  2004/07/14 19:38:00  neildogg
  * - Added address/agent count/is opportunity depending on table
  *  - Should give example for people that want to extend functionality
