@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.9 2004/07/19 14:25:09 cpsource Exp $
+ * $Id: add-address.php,v 1.10 2004/07/21 15:27:20 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -59,16 +59,15 @@ $con->execute($ins);
 $address_id = $con->insert_id();
 add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
 
-// TBD - BUG - $sql is undefined ??? - stub it out for now
-// but hopefully, someone will come along and fix it.
-//$con->execute($sql);
-
 $con->close();
 
 header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.10  2004/07/21 15:27:20  introspectshun
+ * - Removed $con->execute($sql). Was replaced with $con->execute($ins) earlier.
+ *
  * Revision 1.9  2004/07/19 14:25:09  cpsource
  * - General cleanup
  *   Also noted bug with $sql not defined.
