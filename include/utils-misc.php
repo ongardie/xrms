@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.87 2004/08/16 19:51:06 neildogg Exp $
+ * $Id: utils-misc.php,v 1.88 2004/08/26 14:40:18 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -857,8 +857,11 @@ function time_zone_offset($con, $address_id) {
     if(!$rst) {
         db_error_handler($con, $sql);
     }
-    elseif(!$rst->EOF) {
+    elseif(!$rst->EOF and $daylight_savings_id) {
         return time() + ($offset*3600) + ($rst->fields['current_hour_shift']*3600);
+    }
+    else {
+        return false;
     }
  }
 
@@ -1267,6 +1270,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.88  2004/08/26 14:40:18  neildogg
+ * - Return false if no values for address
+ *
  * Revision 1.87  2004/08/16 19:51:06  neildogg
  * - Missing end_position definition
  *
