@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.73 2004/12/20 22:16:06 neildogg Exp $
+ * $Id: some.php,v 1.74 2004/12/23 16:16:24 neildogg Exp $
  */
 
 // handle includes
@@ -33,7 +33,7 @@ $arr_vars = array ( // local var name       // session variable name
            'browse'             => arr_vars_POST_UNDEF,
            );
 
-$advanced_search = (isset($_REQUEST['advanced_search'])) ? true : false;
+$advanced_search = (!empty($_REQUEST['advanced_search'])) ? true : false;
 
 // get all passed in variables
 arr_vars_post_with_cmd ( $arr_vars );
@@ -665,6 +665,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.74  2004/12/23 16:16:24  neildogg
+ * - Adjusted since advanced search is always submitted as a variable
+ *
  * Revision 1.73  2004/12/20 22:16:06  neildogg
  * - Saves advanced search status
  *
