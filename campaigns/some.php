@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.7 2004/04/08 16:58:23 maulani Exp $
+ * $Id: some.php,v 1.8 2004/04/15 22:04:38 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -67,8 +67,8 @@ if (!($sort_column == $current_sort_column)) {
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 
-$ascending_order_image = " <img border=0 height=10 width=10 src=../img/asc.gif>";
-$descending_order_image = " <img border=0 height=10 width=10 src=../img/desc.gif>";
+$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
+$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 $_SESSION['campaigns_sort_column'] = $sort_column;
@@ -88,7 +88,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $starts_at = $con->SQLDate('Y-M-D', 'starts_at');
 $ends_at = $con->SQLDate('Y-M-D', 'ends_at');
 
-$sql = "select concat('<a href=one.php?campaign_id=', cam.campaign_id, '>', cam.campaign_title, '</a>') as 'Campaign', camt.campaign_type_pretty_name as 'Type', cams.campaign_status_pretty_name as 'Status', u.username as 'Owner', $starts_at as 'Starts', $ends_at as 'Ends' ";
+$sql = "select concat('<a href=\"one.php?campaign_id=', cam.campaign_id, '\">', cam.campaign_title, '</a>') as 'Campaign', camt.campaign_type_pretty_name as 'Type', cams.campaign_status_pretty_name as 'Status', u.username as 'Owner', $starts_at as 'Starts', $ends_at as 'Ends' ";
 
 if ($campaign_category_id > 0) {
     $from = "from campaigns cam, campaign_types camt, campaign_statuses cams, users u, entity_category_map ecm ";
@@ -214,7 +214,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=6>Search Criteria</td>
             </tr>
@@ -254,7 +254,7 @@ $con->close();
     <div id="Sidebar">
 
         <!-- new campaign //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2>Options</td>
             </tr>
@@ -264,7 +264,7 @@ $con->close();
         </table>
 
         <!-- recently viewed support items //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=5>Recently Viewed</td>
             </tr>
@@ -318,6 +318,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/04/15 22:04:38  maulani
+ * - Change to CSS2 positioning
+ * - Clean HTML to achieve validation
+ *
  * Revision 1.7  2004/04/08 16:58:23  maulani
  * - Update javascript declaration
  * - Add phpdoc

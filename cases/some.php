@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.6 2004/04/10 14:53:57 braverock Exp $
+ * $Id: some.php,v 1.7 2004/04/15 22:04:38 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -71,8 +71,8 @@ if (!($sort_column == $current_sort_column)) {
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 
-$ascending_order_image = " <img border=0 height=10 width=10 src=../img/asc.gif>";
-$descending_order_image = " <img border=0 height=10 width=10 src=../img/desc.gif>";
+$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
+$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 $_SESSION['cases_sort_column'] = $sort_column;
@@ -91,7 +91,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "select concat('<a href=one.php?case_id=', ca.case_id, '>', ca.case_title, '</a>') as 'Case', c.company_code as 'Company', u.username as 'Owner', cat.case_type_pretty_name as 'Type', cap.case_priority_pretty_name as 'Priority', cas.case_status_pretty_name as 'Status', date_format(ca.due_at, '%Y-%m-%d') as 'Due At' ";
+$sql = "select concat('<a href=\"one.php?case_id=', ca.case_id, '\">', ca.case_title, '</a>') as 'Case', c.company_code as 'Company', u.username as 'Owner', cat.case_type_pretty_name as 'Type', cap.case_priority_pretty_name as 'Priority', cas.case_status_pretty_name as 'Status', date_format(ca.due_at, '%Y-%m-%d') as 'Due At' ";
 
 if ($case_category_id > 0) {
     $from = "from companies c, cases ca, case_types cat, case_priorities cap, case_statuses cas, users u, entity_category_map ecm ";
@@ -218,9 +218,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
@@ -230,7 +229,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=4>Search Criteria</td>
             </tr>
@@ -270,16 +269,13 @@ $con->close();
 
 ?>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=34% valign=top>
+    <div id="Sidebar">
 
         <!-- recently viewed support items //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=5>Recently Viewed</td>
             </tr>
@@ -292,9 +288,8 @@ $con->close();
             <?php  echo $recently_viewed_table_rows ?>
         </table>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -335,6 +330,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/04/15 22:04:38  maulani
+ * - Change to CSS2 positioning
+ * - Clean HTML to achieve validation
+ *
  * Revision 1.6  2004/04/10 14:53:57  braverock
  * - add search by Case ID
  * - applied SF patch 925621 submitted by Glenn Powers

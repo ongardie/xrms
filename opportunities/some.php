@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.10 2004/04/08 17:13:06 maulani Exp $
+ * $Id: some.php,v 1.11 2004/04/15 22:04:39 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -70,8 +70,8 @@ if (!($sort_column == $current_sort_column)) {
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 
-$ascending_order_image = " <img border=0 height=10 width=10 src=../img/asc.gif>";
-$descending_order_image = " <img border=0 height=10 width=10 src=../img/desc.gif>";
+$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
+$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 $_SESSION['opportunities_sort_column'] = $sort_column;
@@ -89,7 +89,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
-$sql = "select concat('<a href=one.php?opportunity_id=', opp.opportunity_id, '>', opp.opportunity_title, '</a>') as 'Opportunity',
+$sql = "select concat('<a href=\"one.php?opportunity_id=', opp.opportunity_id, '\">', opp.opportunity_title, '</a>') as 'Opportunity',
                c.company_name as 'Company',
                u.username as 'Owner',
                if (size > 0, size, 0) as 'Opportunity Size',
@@ -218,7 +218,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=6>Search Criteria</td>
             </tr>
@@ -256,7 +256,7 @@ $con->close();
     <div id="Sidebar">
 
         <!-- recently viewed support items //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=5>Recently Viewed</td>
             </tr>
@@ -319,6 +319,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2004/04/15 22:04:39  maulani
+ * - Change to CSS2 positioning
+ * - Clean HTML to achieve validation
+ *
  * Revision 1.10  2004/04/08 17:13:06  maulani
  * - Update javascript declaration
  * - Add phpdoc

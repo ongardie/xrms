@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.4 2004/01/26 15:52:42 braverock Exp $
+ * $Id: index.php,v 1.5 2004/04/15 22:04:39 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -28,11 +28,10 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td colspan=2 class=widget_header>Reports</td>
             </tr>
@@ -85,17 +84,15 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 
-        </td>
-
-        <!-- gutter //-->
-        <td class=gutter width=2%>&nbsp;</td>
+    </div>
 
         <!-- right column //-->
-        <td class=rcol width=33% valign=top>
+    <div id="Sidebar">
 
-        </td>
-    </tr>
-</table>
+
+    </div>
+
+</div>
 
 <?php
 
@@ -103,6 +100,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.5  2004/04/15 22:04:39  maulani
+ * - Change to CSS2 positioning
+ * - Clean HTML to achieve validation
+ *
  * Revision 1.4  2004/01/26 15:52:42  braverock
  * - fixed short tags
  * - added phpdoc

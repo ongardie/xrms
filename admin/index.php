@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.7 2004/04/13 15:06:41 maulani Exp $
+ * $Id: index.php,v 1.8 2004/04/15 22:04:37 maulani Exp $
  */
 
 //include required stuff
@@ -33,11 +33,10 @@ $page_title = 'Administration';
 start_page($page_title, true, $msg);
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>
+<div id="Main">
+    <div id="Content">
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header>System Administration</td>
             </tr>
@@ -73,87 +72,85 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 
-        </td>
 
-        <!-- gutter //-->
-        <td class=gutter width=2%>&nbsp;</td>
+    </div>
 
         <!-- right column //-->
-        <td class=rcol width=33% valign=top>
+    <div id="Sidebar">
 
         <!-- import/export //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header>Import/Export</td>
             </tr>
             <tr>
-                <td class=widget_content><a href=import/import-companies.php>Import Companies/Contacts</a></td>
+                <td class=widget_content><a href="import/import-companies.php">Import Companies/Contacts</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=export/export-companies.php>Export Companies/Contacts</a></td>
+                <td class=widget_content><a href="export/export-companies.php">Export Companies/Contacts</a></td>
             </tr>
         </table>
 
         <!-- management //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header>Manage</td>
             </tr>
             <tr>
-                <td class=widget_content><a href=users/some.php>Users</a></td>
+                <td class=widget_content><a href="users/some.php">Users</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=roles/some.php>Roles</a></td>
+                <td class=widget_content><a href="roles/some.php">Roles</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=plugin/plugin-admin.php>Plugin Administration</td>
+                <td class=widget_content><a href="plugin/plugin-admin.php">Plugin Administration</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=categories/some.php>Categories</td>
+                <td class=widget_content><a href="categories/some.php">Categories</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=activity-types/some.php>Activity Types</td>
+                <td class=widget_content><a href="activity-types/some.php">Activity Types</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=industries/some.php>Industries</a></td>
+                <td class=widget_content><a href="industries/some.php">Industries</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=company-types/some.php>Company Types</a></td>
+                <td class=widget_content><a href="company-types/some.php">Company Types</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=company-sources/some.php>Company Sources</a></td>
+                <td class=widget_content><a href="company-sources/some.php">Company Sources</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=crm-statuses/some.php>CRM Statuses</a></td>
+                <td class=widget_content><a href="crm-statuses/some.php">CRM Statuses</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=account-statuses/some.php>Account Statuses</a></td>
+                <td class=widget_content><a href="account-statuses/some.php">Account Statuses</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=ratings/some.php>Ratings</a></td>
+                <td class=widget_content><a href="ratings/some.php">Ratings</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=opportunity-statuses/some.php>Opportunity Statuses</a></td>
+                <td class=widget_content><a href="opportunity-statuses/some.php">Opportunity Statuses</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=case-types/some.php>Case Types</a></td>
+                <td class=widget_content><a href="case-types/some.php">Case Types</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=case-statuses/some.php>Case Statuses</a></td>
+                <td class=widget_content><a href="case-statuses/some.php">Case Statuses</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=case-priorities/some.php>Case Priorities</a></td>
+                <td class=widget_content><a href="case-priorities/some.php">Case Priorities</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=campaign-types/some.php>Campaign Types</a></td>
+                <td class=widget_content><a href="campaign-types/some.php">Campaign Types</a></td>
             </tr>
             <tr>
-                <td class=widget_content><a href=campaign-statuses/some.php>Campaign Statuses</a></td>
+                <td class=widget_content><a href="campaign-statuses/some.php">Campaign Statuses</a></td>
             </tr>
         </table>
 
         <!-- synchronization options //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header>PDA Synchronization</td>
             </tr>
@@ -162,9 +159,10 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 
-        </td>
-    </tr>
-</table>
+
+    </div>
+
+</div>
 
 <?php
 
@@ -172,6 +170,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.8  2004/04/15 22:04:37  maulani
+ * - Change to CSS2 positioning
+ * - Clean HTML to achieve validation
+ *
  * Revision 1.7  2004/04/13 15:06:41  maulani
  * - Add active contact data integrity check to database cleanup
  *

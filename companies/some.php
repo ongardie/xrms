@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.9 2004/04/07 19:38:25 maulani Exp $
+ * $Id: some.php,v 1.10 2004/04/15 22:04:39 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -100,7 +100,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
 
-$sql = "select concat('<a href=one.php?company_id=', c.company_id, '>', c.company_name, '</a>') as '$strCompaniesSomeCompanyNameLabel',
+$sql = "select concat('<a href=\"one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as '$strCompaniesSomeCompanyNameLabel',
 c.company_code as '$strCompaniesSomeCompanyCodeLabel',
 u.username as '$strCompaniesSomeCompanyUserLabel',
 crm_status_pretty_name as '$strCompaniesSomeCompanyCRMStatusLabel',
@@ -359,6 +359,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/04/15 22:04:39  maulani
+ * - Change to CSS2 positioning
+ * - Clean HTML to achieve validation
+ *
  * Revision 1.9  2004/04/07 19:38:25  maulani
  * - Add CSS2 positioning
  * - Repair HTML to meet validation

@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.4 2004/04/08 17:00:11 maulani Exp $
+ * $Id: some.php,v 1.5 2004/04/15 22:04:39 maulani Exp $
  */
 
 //include required files
@@ -72,8 +72,8 @@ if (!($sort_column == $current_sort_column)) {
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 
-$ascending_order_image = " <img border=0 height=10 width=10 src=../img/asc.gif>";
-$descending_order_image = " <img border=0 height=10 width=10 src=../img/desc.gif>";
+$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
+$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 $_SESSION['files_sort_column'] = $sort_column;
@@ -95,42 +95,42 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
         $sql = "select
-        concat('<a href=$http_site_root/files/one.php?return_url=/private/home.php&file_id=', file_id, '>',file_pretty_name, '</a>') as 'Name',
+        concat('<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id=', file_id, '\">',file_pretty_name, '</a>') as 'Name',
         file_description as 'Description',";
 
 switch ($file_on_what) {
     case "contacts" : {
         $sql .= "
-        concat('<a href=$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '>', cont.last_name, ' ', cont.first_names, '</a>') as 'Contact',
-        concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+        concat('<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '\">', cont.last_name, ' ', cont.first_names, '</a>') as 'Contact',
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     case "contacts_of_companies" : {
         $sql .= "
-        concat('<a href=$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '>', cont.last_name, ' ', cont.first_names, '</a>') as 'Contact',
-        concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+        concat('<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '\">', cont.last_name, ' ', cont.first_names, '</a>') as 'Contact',
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     case "companies" : {
         $sql .= "
-        concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     case "campaigns" : {
         $sql .= "
-        concat('<a href=$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id=', camp.campaign_id, '>', camp.campaign_title, '</a>') as 'Campaign',";
+        concat('<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id=', camp.campaign_id, '\">', camp.campaign_title, '</a>') as 'Campaign',";
         break;
     }
     case "opportunities" : {
         $sql .= "
-        concat('<a href=$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id=', opportunity_id, '>', opp.opportunity_title, '</a>') as 'Opportunity',
-        concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+        concat('<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id=', opportunity_id, '\">', opp.opportunity_title, '</a>') as 'Opportunity',
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     case "cases" : {
         $sql .= "
-        concat('<a href=$http_site_root/cases/one.php?return_url=/private/home.php&case_id=', case_id, '>', cases.case_title, '</a>') as 'Case',
-        concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+        concat('<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id=', case_id, '\">', cases.case_title, '</a>') as 'Case',
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     default : {
@@ -139,7 +139,7 @@ switch ($file_on_what) {
 }
 
 $sql .= "date_format(f.entered_at, '%Y-%m-%d') as 'Date',
-         concat('<a href=$http_site_root/files/one.php?return_url=/private/home.php&file_id=', file_id, '>', file_id, '</a>') as 'ID'";
+         concat('<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id=', file_id, '\">', file_id, '</a>') as 'ID'";
 
 $from = "from ";
 switch ($file_on_what) {
@@ -290,9 +290,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=75% valign=top>
+<div id="Main">
+    <div id="Content">
 
         <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
@@ -302,7 +301,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=7>Search Criteria</td>
             </tr>
@@ -348,16 +347,13 @@ $con->close();
 
 ?>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=1%>
-        &nbsp;
-        </td>
+    </div>
+
         <!-- right column //-->
-        <td class=rcol width=24% valign=top>
+    <div id="Sidebar">
 
         <!-- recently viewed support items //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=4>Recently Viewed</td>
             </tr>
@@ -370,9 +366,8 @@ $con->close();
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
 
-        </td>
-    </tr>
-</table>
+    </div>
+</div>
 
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -413,6 +408,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2004/04/15 22:04:39  maulani
+ * - Change to CSS2 positioning
+ * - Clean HTML to achieve validation
+ *
  * Revision 1.4  2004/04/08 17:00:11  maulani
  * - Update javascript declaration
  * - Add phpdoc

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.10 2004/04/12 16:24:41 maulani Exp $
+ * $Id: some.php,v 1.11 2004/04/15 22:04:39 maulani Exp $
  */
 
 //include the standard files
@@ -80,8 +80,8 @@ if (!($sort_column == $current_sort_column)) {
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 
-$ascending_order_image = " <img border=0 height=10 width=10 src=../img/asc.gif>";
-$descending_order_image = " <img border=0 height=10 width=10 src=../img/desc.gif>";
+$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
+$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 $_SESSION['contacts_sort_column'] = $sort_column;
@@ -103,8 +103,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "select concat('<a href=one.php?contact_id=', cont.contact_id, '>', cont.first_names, ' ', cont.last_name, '</a>') as 'Name',
-               concat('<a href=../companies/one.php?company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',
+$sql = "select concat('<a href=\"one.php?contact_id=', cont.contact_id, '\">', cont.first_names, ' ', cont.last_name, '</a>') as 'Name',
+               concat('<a href=\"../companies/one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',
                company_code as 'Code',
                title as 'Title',
                description as 'Description',
@@ -191,7 +191,7 @@ $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href=one.php?contact_id=' . $rst->fields['contact_id'] . '>' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['work_phone'] . '</td>';
         $recently_viewed_table_rows .= '</tr>';
@@ -240,7 +240,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=8>Search Criteria</td>
             </tr>
@@ -283,7 +283,7 @@ $con->close();
         <!-- right column //-->
     <div id="Sidebar">
         <!-- recently viewed support items //-->
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=5>Recently Viewed</td>
             </tr>
@@ -337,6 +337,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2004/04/15 22:04:39  maulani
+ * - Change to CSS2 positioning
+ * - Clean HTML to achieve validation
+ *
  * Revision 1.10  2004/04/12 16:24:41  maulani
  * - Adjust sizing to fit screen in IE6
  *
