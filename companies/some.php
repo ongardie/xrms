@@ -11,7 +11,8 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 //set the language
 $_SESSION['language'] = 'english';
 
-$session_user_id = session_check();
+$thispage = $_SERVER['REQUEST_URI'];
+$session_user_id = session_check($thispage);
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
@@ -92,8 +93,6 @@ $sql = "select concat('<a href=one.php?company_id=', c.company_id, '>', c.compan
 c.company_code as '$strCompaniesSomeCompanyCodeLabel',
 u.username as '$strCompaniesSomeCompanyUserLabel',
 crm_status_pretty_name as '$strCompaniesSomeCompanyCRMStatusLabel',
-addr.city as '$strCompaniesSomeCompanyCityLabel',
-addr.province as '$strCompaniesSomeCompanyStateLabel',
 as1.account_status_display_html as '$strCompaniesSomeCompanyAccountStatusLabel',
 r.rating_display_html as '$strCompaniesSomeCompanyRatingLabel' ";
 
@@ -139,11 +138,13 @@ if (strlen($company_code) > 0) {
 
 if (strlen($city) > 0) {
     $criteria_count++;
+    $sql   .= "addr.city as '$strCompaniesSomeCompanyCityLabel', \n";
     $where .= " and addr.city LIKE " . $con->qstr($city, get_magic_quotes_gpc());
 }
 
 if (strlen($state) > 0) {
     $criteria_count++;
+    $sql   .= " addr.province as '$strCompaniesSomeCompanyStateLabel', \n";
     $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
 }
 
