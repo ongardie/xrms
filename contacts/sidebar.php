@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.17 2004/08/05 15:10:52 neildogg Exp $
+ * $Id: sidebar.php,v 1.18 2004/08/25 15:26:50 neildogg Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -49,7 +49,7 @@ if($new_cell_phone or $new_home_phone or $new_work_phone or $new_email) {
             $rec['home_phone'] = $new_home_phone;        
         }
         elseif($new_work_phone) {
-            $rec['cell_phone'] = $new_cell_phone;
+            $rec['work_phone'] = $new_work_phone;
         }
         elseif($new_email) {
             $rec['email'] = $new_email;
@@ -58,6 +58,9 @@ if($new_cell_phone or $new_home_phone or $new_work_phone or $new_email) {
         $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
         $con->execute($upd);
         $con->close();
+
+        header("Content-type: image/gif");
+        @readfile("../img/pixel.gif");
 
         die();
     }
@@ -159,7 +162,7 @@ if ( $contact_id ) {
                         . "</strong><br>";
     }
     else {
-        $contact_block .= "<a href=\"javascript: updateVariable('Enter Work Phone', 'work', 'contact_id=" . $contact_id . "');\">"
+        $contact_block .= "<a href=\"javascript: updateVariable('Enter Work Phone', 'work_phone', 'contact_id=" . $contact_id . "');\">"
                        . _("Enter Work Phone") . "</a><br>";
     }
     
@@ -200,6 +203,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.18  2004/08/25 15:26:50  neildogg
+ * - Fixed misnamed variables
+ *
  * Revision 1.17  2004/08/05 15:10:52  neildogg
  * - Localized strings, removed company
  *  - Added update from sidebar to all phones and email
