@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.31 2004/08/06 14:47:07 braverock Exp $
+ * $Id: utils-interface.php,v 1.32 2004/08/06 16:54:20 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -10,6 +10,14 @@ if ( !defined('IN_XRMS') )
   die('Hacking attempt');
   exit;
 }
+
+/**
+ * Include the i18n files, as every file with output will need them
+ *
+ * @todo sort out a better include strategy to simplify it across
+ *       the XRMS code base.
+ */
+require_once($include_directory . 'i18n.php');
 
 require_once ($include_directory.'plugin.php');
 
@@ -92,6 +100,11 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     global $page_title_height;
     global $http_site_root;
     global $app_title;
+
+    //i18n globals
+    global $use_gettext, $languages,
+           $xrms_language, $xrms_default_language,
+           $xrms_notAlias, $userid, $data_dir;
 
     $msg = status_msg($msg);
 
@@ -219,6 +232,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.32  2004/08/06 16:54:20  braverock
+ * - pull i18n vars definitions in a 'global' in start_page fn
+ *
  * Revision 1.31  2004/08/06 14:47:07  braverock
  * - push in changes to turn on i18n gettext
  *
