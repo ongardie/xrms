@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.109 2005/01/10 16:55:14 neildogg Exp $
+ * $Id: utils-misc.php,v 1.110 2005/01/10 17:52:31 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -987,7 +987,7 @@ function update_daylight_savings($con) {
  *
  * @author Neil Roberts
  */
-function current_page($vars = false) {
+function current_page($vars = false, $anchor = false) {
     global $http_site_root;
     $page = $http_site_root;
     $site_directories = explode('/', $http_site_root);
@@ -1005,6 +1005,10 @@ function current_page($vars = false) {
     }
     if(count($parts)) {
         parse_str($vars, $vars);
+        if(!$anchor) {
+            list($parts[1], $anchor) = split('#', $parts[1], 2);
+        }
+
         parse_str($parts[1], $parts);
         foreach($vars as $key => $value) {
             if(in_array($key, array_keys($parts))) {
@@ -1017,17 +1021,16 @@ function current_page($vars = false) {
         foreach ($parts as $key => $value) {
             $page .= '&' . $key . '=' . $value;
         }
-        
-        return $page;
     }
     else {
         if($vars) {
-            return $page . '?' . $vars;
-        }
-        else {
-            return $page;
+            $page .= '?' . $vars;
         }
     }
+    if($anchor) {
+        $page .= '#' . $anchor;
+    }
+    return $page;
 }
 
 /**
@@ -1431,6 +1434,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.110  2005/01/10 17:52:31  neildogg
+ * - Allows an anchor name to be used
+ *
  * Revision 1.109  2005/01/10 16:55:14  neildogg
  * - Properly replaces variables if duplicated
  *
