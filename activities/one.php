@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.30 2004/07/08 02:22:11 gpowers Exp $
+ * $Id: one.php,v 1.31 2004/07/08 12:27:05 braverock Exp $
  */
 
 //include required files
@@ -64,7 +64,7 @@ if($on_what_table == 'opportunities') {
     $rst = $con->execute($sql);
 
     if($rst) {
-        $probability = array();  
+        $probability = array();
         $probability[$rst->fields['probability']] = ' selected';
     }
 }
@@ -273,20 +273,22 @@ function logTime() {
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
             </tr>
            <?php
-           if($on_what_table == 'opportunities') {
+                if($on_what_table == 'opportunities') {
            ?>
            <tr>
                 <td class=widget_label_right>Probability&nbsp;(%)</td>
                 <td class=widget_content_form_element>
                 <select name=probability>
-                    <?php for($i = 0; $i <= 100; $i += 10) { ?>
-                    <option value="<?php echo $i; ?>"<?php echo $probability[$i]; ?>><?php echo $i; ?>%
-                    <?php } ?>
+                    <?php
+                        for($i = 0; $i <= 100; $i += 10) {
+                            echo "\n\t\t<option value=\"$i\" ".$probability[$i]."> $i %";
+                        };
+                    ?>
                 </select>
                 </td>
             </tr>
             <?php
-            }
+                } //end if on_what_table=opportunities check
             ?>
             <tr>
                 <td class=widget_label_right>Title</td>
@@ -302,14 +304,14 @@ function logTime() {
                 <td class=widget_label_right_166px>Description</td>
                 <td class=widget_content_form_element><textarea rows=10 cols=90 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
-            <?php 
+            <?php
             if($on_what_table == 'opportunities') {
-            ?> 
+            ?>
             <tr>
                 <td class=widget_label_right_166px>Opportunity Notes</td>
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea>
-                    <input class=button value="Insert Log" type=button onclick="var now = new Date(); form.opportunity_description.value = 
+                    <input class=button value="Insert Log" type=button onclick="var now = new Date(); form.opportunity_description.value =
                         logTime() + ' by ' + form.user_id.options[form.user_id.selectedIndex].text + ': \n\n' + form.opportunity_description.value">
                 </td>
             </tr>
@@ -393,6 +395,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.31  2004/07/08 12:27:05  braverock
+ * - clean up formatting of probability syntax for less parser switching and easier readability
+ *
  * Revision 1.30  2004/07/08 02:22:11  gpowers
  * - changed description textarea width to 90 (was 100)
  *   - this screen will now fit on a 1024x768 Windows XP display
