@@ -2,7 +2,7 @@
 /**
  * Edit a note
  *
- * $Id: edit.php,v 1.6 2004/06/12 06:23:27 introspectshun Exp $
+ * $Id: edit.php,v 1.7 2004/06/21 14:25:00 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -37,6 +37,12 @@ $con->close();
 $page_title = "Edit Note";
 start_page($page_title, true, $msg);
 
+//pull out some strings so gettext will see them
+$save = _("Save Changes");
+$delete = _("Delete");
+$edit = _("Edit Note");
+$body = _("Note Body");
+
 ?>
 
 <div id="Main">
@@ -47,18 +53,18 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="return_url" value="<?php echo $return_url; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Edit Note</td>
+                <td class=widget_header><?php echo $edit; ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Note Body</td>
+                <td class=widget_label><?php echo $body; ?></td>
             </tr>
             <tr>
                 <td class=widget_content><textarea rows=5 cols=80 name=note_description><?php echo $note_description ?></textarea></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                    <input class=button type=submit value="Save Changes">
-                    <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo $return_url; ?>&note_id=<?php echo $note_id; ?>';" value="Delete">
+                    <input class=button type=submit value="<?php echo $save; ?>">
+                    <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo $return_url; ?>&note_id=<?php echo $note_id; ?>';" value="<?php echo $delete; ?>">
                 </td>
             </tr>
         </table>
@@ -80,6 +86,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.7  2004/06/21 14:25:00  braverock
+ * - localized strings for i18n/internationalization/translation support
+ *
  * Revision 1.6  2004/06/12 06:23:27  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *
@@ -96,4 +105,3 @@ end_page();
  *
  */
 ?>
-

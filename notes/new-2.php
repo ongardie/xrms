@@ -1,4 +1,9 @@
 <?php
+/**
+ * Insert a new Note into the Database
+ *
+ * $Id: new-2.php,v 1.4 2004/06/21 14:25:00 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -36,4 +41,10 @@ $con->close();
 
 header("Location: " . $http_site_root . $return_url);
 
+/**
+ * $Log: new-2.php,v $
+ * Revision 1.4  2004/06/21 14:25:00  braverock
+ * - localized strings for i18n/internationalization/translation support
+ *
+ */
 ?>

@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.10 2004/06/12 18:23:51 braverock Exp $
+ * $Id: some.php,v 1.11 2004/06/21 14:25:32 braverock Exp $
  */
 
 //include required files
@@ -97,45 +97,45 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "SELECT "
       . $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='","file_id","'\">'","file_pretty_name", "'</a>'")
-      . " AS 'Name', file_description as 'Description',";
+      . " AS '"._("Name")."', file_description as '"._("Description")."',";
 
 switch ($file_on_what) {
     case "contacts" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS 'Contact',"
+              . " AS '"._("Contact")."',"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '"._("Company")."',";
         break;
     }
     case "contacts_of_companies" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS 'Contact',"
+              . " AS '"._("Contact")."',"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '"._("Company")."',";
         break;
     }
     case "companies" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '"._("Company")."',";
         break;
     }
     case "campaigns" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
-              . " AS 'Campaign',";
+              . " AS '"._("Campaign")."',";
         break;
     }
     case "opportunities" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
-              . " AS 'Opportunity',"
+              . " AS '"._("Opportunity")."',"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '"._("Company")."',";
         break;
     }
     case "cases" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
-              . " AS 'Case',"
+              . " AS '"._("Case")."',"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+              . " AS '"._("Company")."',";
         break;
     }
     default : {
@@ -144,7 +144,7 @@ switch ($file_on_what) {
 }
 
 $sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS 'Date'," .
-        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS 'ID' ";
+        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS '"._("ID")."' ";
 
 $from = "from ";
 switch ($file_on_what) {
@@ -290,7 +290,7 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'files', '', 4);
 }
 
-$page_title = 'Files';
+$page_title = _("Files");
 start_page($page_title, true, $msg);
 
 ?>
@@ -308,16 +308,16 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=7>Search Criteria</td>
+                <td class=widget_header colspan=7><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>File ID</td>
-                <td class=widget_label>File Name</td>
-                <td class=widget_label>File Description</td>
-                <td class=widget_label>On What</td>
-                <td class=widget_label>On what Name</td>
-                <td class=widget_label>Date</td>
-                <td class=widget_label>Owner</td>
+                <td class=widget_label><?php echo _("File ID"); ?></td>
+                <td class=widget_label><?php echo _("File Name"); ?></td>
+                <td class=widget_label><?php echo _("File Description"); ?></td>
+                <td class=widget_label><?php echo _("On What"); ?></td>
+                <td class=widget_label><?php echo _("On what Name"); ?></td>
+                <td class=widget_label><?php echo _("Date"); ?></td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name="file_id" size=5 value="<?php  echo $file_id ?>"></td>
@@ -325,21 +325,22 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name="file_description" size=12 value="<?php  echo $file_description ?>"></td>
                 <td class=widget_content_form_element>
                     <select name="file_on_what">
-                        <option value="default"<?php if ($file_on_what == "") { print " selected"; } ?>></option>
-                        <option value="contacts"<?php if ($file_on_what == "contacts" ) { print " selected"; } ?>>Contacts</option>
-                        <option value="contacts_of_companies"<?php if ($file_on_what == "contacts_of_companies") { print " selected"; } ?>>Contacts of Companies</option>
-                        <option value="companies"<?php if ($file_on_what == "companies") { print " selected"; } ?>>Companies</option>
-                        <option value="campaigns"<?php if ($file_on_what == "campaigns") { print " selected"; } ?>>Campaigns</option>
-                        <option value="opportunities"<?php if ($file_on_what == "opportunities") { print " selected"; } ?>>Opportunities</option>
-                        <option value="cases"<?php if ($file_on_what == "cases") { print " selected"; } ?>>Cases</option>
+                        <option value="default"<?php if ($file_on_what == "") { echo " selected"; } ?>></option>
+                        <option value="contacts"<?php if ($file_on_what == "contacts" ) { echo " selected"; } ?>>Contacts</option>
+                        <option value="contacts_of_companies"<?php if ($file_on_what == "contacts_of_companies") { echo " selected"; } ?>>Contacts of Companies</option>
+                        <option value="companies"<?php if ($file_on_what == "companies") { echo " selected"; } ?>>Companies</option>
+                        <option value="campaigns"<?php if ($file_on_what == "campaigns") { echo " selected"; } ?>>Campaigns</option>
+                        <option value="opportunities"<?php if ($file_on_what == "opportunities") { echo " selected"; } ?>>Opportunities</option>
+                        <option value="cases"<?php if ($file_on_what == "cases") { echo " selected"; } ?>>Cases</option>
                     </select>
                 </td>
-                <td class=widget_content_form_element><input type=text name="file_on_what_name" size=12 value="<?php  echo $file_on_what_name ?>"></td>
-                <td class=widget_content_form_element><input type=text name="file_date" size=8 value="<?php  echo $file_date ?>"></td>
-                <td class=widget_content_form_element><?php  echo $user_menu ?></td>
+                <td class=widget_content_form_element><input type=text name="file_on_what_name" size=12 value="<?php echo $file_on_what_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="file_date" size=8 value="<?php echo $file_date; ?>"></td>
+                <td class=widget_content_form_element><?php echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=7><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
+                <td class=widget_content_form_element colspan=7>
+                    < input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"><?php if ($company_count > 0) {echo "<input class=button type=button onclick='javascript: bulkEmail()' value='"._("Bulk E-Mail")."'>";}; ?> </td>
             </tr>
         </table>
         </form>
@@ -360,13 +361,13 @@ $con->close();
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Recently Viewed</td>
+                <td class=widget_header colspan=4><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Size</td>
-                <td class=widget_label>Date</td>
-                <td class=widget_label>File ID</td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Size"); ?></td>
+                <td class=widget_label><?php echo _("Date"); ?></td>
+                <td class=widget_label><?php echo _("File ID"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
@@ -413,6 +414,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2004/06/21 14:25:32  braverock
+ * - localized strings for i18n/internationalization/translation support
+ *
  * Revision 1.10  2004/06/12 18:23:51  braverock
  * - remove CAST, as it is not standard across databases
  *   - database should explicitly convert number to string for CONCAT

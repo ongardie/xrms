@@ -2,7 +2,7 @@
 /**
  * Create a note
  *
- * $Id: new.php,v 1.5 2004/06/12 06:23:27 introspectshun Exp $
+ * $Id: new.php,v 1.6 2004/06/21 14:25:00 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -39,16 +39,16 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Attach Note</td>
+                <td class=widget_header><?php echo _("Attach Note"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Note Body</td>
+                <td class=widget_label><?php echo _("Note Body"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content><textarea rows=5 cols=80 name=note_description></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -69,6 +69,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.6  2004/06/21 14:25:00  braverock
+ * - localized strings for i18n/internationalization/translation support
+ *
  * Revision 1.5  2004/06/12 06:23:27  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *
@@ -85,4 +88,3 @@ end_page();
  *
  */
 ?>
-

@@ -2,20 +2,28 @@
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.6 2004/06/12 06:26:27 introspectshun Exp $
+ * $Id: sidebar.php,v 1.7 2004/06/21 14:25:00 braverock Exp $
  */
 
-$note_rows = "<div id='note_sidebar'>
-        <table class=widget cellspacing=1 width=\"100%\">
+$note_rows = '<div id="note_sidebar">
+        <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4>Notes</td>
+                <td class=widget_header colspan=4>'
+                ._("Notes")
+                .'</td>
             </tr>
             <tr>
-                <td class=widget_label>Attached To</td>
-                <td class=widget_label>Date</td>
-                <td class=widget_label>Owner</td>
+                <td class=widget_label>'
+                ._("Attached To")
+                .'</td>
+                <td class=widget_label>'
+                ._("Date")
+                .'</td>
+                <td class=widget_label>'
+                ._("Owner")
+                .'</td>
                 <td class=widget_label>&nbsp;</td>
-            </tr>\n";
+            </tr>'."\n";
 
 //build the notes sql query
 if (strlen($on_what_table)>0){
@@ -108,7 +116,9 @@ if (strlen($rst->fields['username']) > 0) {
                . $rst->fields['username']
                . "</td>\n\t<td class=widget_content>
                  <font class=note_label>
-                 <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . $return_url . "'>View/Edit</a>
+                 <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . $return_url . "'>"
+               . _("View/Edit")
+               . "</a>
                  </font>
                  </td>
              </tr>";
@@ -123,7 +133,9 @@ if (strlen($rst->fields['username']) > 0) {
     }
     $rst->close();
 } else {
-    $note_rows .= "            <tr> <td class=widget_content colspan=4> No attached notes </td> </tr>\n";
+    $note_rows .= "\n            <tr> <td class=widget_content colspan=4> "
+                 . _("No attached notes")
+                 . " </td> </tr>\n";
 }
 
 //put in the new button
@@ -135,7 +147,7 @@ if (strlen($on_what_table)>0){
                         <input type=hidden name=on_what_table value='$on_what_table'>
                         <input type=hidden name=on_what_id value='$on_what_id'>
                         <input type=hidden name=return_url value='/".$on_what_table."/one.php?".$on_what_string."_id=".$on_what_id."'>
-                        <input type=submit class=button value='New'>
+                        <input type=submit class=button value='"._("New")."'>
                 </td>
             </form>
             </tr>";
@@ -146,6 +158,9 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.7  2004/06/21 14:25:00  braverock
+ * - localized strings for i18n/internationalization/translation support
+ *
  * Revision 1.6  2004/06/12 06:26:27  introspectshun
  * - Now use ADODB Concat & SelectLimit functions.
  * - Updated 'on_what_table' switch with $on_what_name values for opportunites, cases, campaigns and users.

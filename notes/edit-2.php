@@ -1,4 +1,9 @@
 <?php
+/**
+ * Commit and edited note to the database
+ *
+ * $Id: edit-2.php,v 1.3 2004/06/21 14:24:59 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -30,4 +35,10 @@ $con->close();
 
 header("Location: " . $http_site_root . $return_url);
 
+/**
+ * $Log: edit-2.php,v $
+ * Revision 1.3  2004/06/21 14:24:59  braverock
+ * - localized strings for i18n/internationalization/translation support
+ *
+ */
 ?>
