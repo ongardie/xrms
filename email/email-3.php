@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.9 2004/08/18 00:06:17 niclowe Exp $
+ * $Id: email-3.php,v 1.10 2004/08/26 22:55:26 niclowe Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -47,7 +47,7 @@ where c.company_id = cont.company_id
 and c.user_id = u.user_id
 and cont.contact_id in ($imploded_contacts)
 and length(cont.email) > 0
-and contact_record_status = 'a'";
+and contact_record_status = 'a' order by c.company_name,cont.last_name asc";
 
 $rst = $con->execute($sql);
 if ($rst) {
@@ -111,6 +111,11 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.10  2004/08/26 22:55:26  niclowe
+ * Enabled mail merge functionality for companies/some.php
+ * Sorted pre-sending email checkbox page by company then contact lastname
+ * Enabled mail merge for advanced-search companies
+ *
  * Revision 1.9  2004/08/18 00:06:17  niclowe
  * Fixed bug 941839 - Mail Merge not working
  *

@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.8 2004/08/18 00:06:17 niclowe Exp $
+  * $Id: email.php,v 1.9 2004/08/26 22:55:26 niclowe Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -29,13 +29,9 @@
   //activities
   $activity_id = $_POST['activity_id'];
 
-
-
-
-
   $con = &adonewconnection($xrms_db_dbtype);
   $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-//  $con->debug = 1;
+//$con->debug = 1;
 
   switch ($scope) {
     case "company":
@@ -44,6 +40,17 @@
       where c.company_id = $company_id
       and c.company_id = cont.company_id
       and cont.contact_record_status = 'a'";
+			break;
+		case "companies":
+		  //Nic: DO SOMETHING DIFFERENT FOR COMPANIES BECAUSE YOU HAVE TO GET THE CONTACT IDS FROM WITHIN THE COMPANY
+			//I only pass companies the end of the sql, ie the from and the where.
+			//I should have really done this in the first place for all of them.
+      $from=$_SESSION["search_sql"]["from"];
+			//var_dump($_SESSION["search_sql"]);
+			$where=$_SESSION["search_sql"]["where"];
+			$order_by=$_SESSION["search_sql"]["order"];
+			$from.=" LEFT JOIN contacts cont on cont.company_id=c.company_id ";
+			$sql="SELECT cont.contact_id ".$from.$where.$order_by;
 			break;
    default:
       $search_sql=$_SESSION["search_sql"];
@@ -56,6 +63,7 @@
       $sql.=" AND cont.contact_id IS NOT NULL ";
       //look out for group bys...
       if($groupby)$sql.="GROUP BY ".$groupby;
+			$sql.=" ORDER BY ".$orderby;
 			break;
     }
 
@@ -136,6 +144,11 @@
 
     /**
     * $Log: email.php,v $
+    * Revision 1.9  2004/08/26 22:55:26  niclowe
+    * Enabled mail merge functionality for companies/some.php
+    * Sorted pre-sending email checkbox page by company then contact lastname
+    * Enabled mail merge for advanced-search companies
+    *
     * Revision 1.8  2004/08/18 00:06:17  niclowe
     * Fixed bug 941839 - Mail Merge not working
     *

@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.12 2004/08/19 13:14:05 maulani Exp $
+ * $Id: some-advanced.php,v 1.13 2004/08/26 22:55:26 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -125,7 +125,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 //uncomment this line if you suspect a problem with the SQL query
-// $con->debug = 1;
+//$con->debug = 1;
 
 $sql = "
 SELECT distinct " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '"._("Company Name")."',
@@ -370,6 +370,10 @@ start_page($page_title, true, $msg);
 
 
 <?php
+//Nic - I did this different than the other some.phps because it is a more complex sql you have to write to retrieve company email records
+$_SESSION["search_sql"]["from"]=$from;
+$_SESSION["search_sql"]["where"]=$where;
+$_SESSION["search_sql"]["order"]=" order by $order_by";
 
 $pager = new Companies_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
@@ -416,7 +420,7 @@ function submitForm(companiesNextPage) {
 }
 
 function bulkEmail() {
-    document.forms[0].action = "../email/email.php";
+    document.forms[0].action = "../email/email.php?scope=companies";
     document.forms[0].submit();
 }
 
@@ -436,6 +440,11 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.13  2004/08/26 22:55:26  niclowe
+ * Enabled mail merge functionality for companies/some.php
+ * Sorted pre-sending email checkbox page by company then contact lastname
+ * Enabled mail merge for advanced-search companies
+ *
  * Revision 1.12  2004/08/19 13:14:05  maulani
  * - Add specific type pager to ease overriding of layout function
  *
