@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.6 2004/07/01 15:23:06 braverock Exp $
+ * $Id: data.php,v 1.7 2004/07/05 21:03:04 introspectshun Exp $
  */
 
 /**
@@ -749,7 +749,7 @@ function company_db_data($con) {
                 ('company relationships','companies','companies','Acquired','Acquired by','a',NULL,NULL)";
         $rst = $con->execute($sql);
         $sql = "INSERT INTO relationship_types
-                (relationship_type_id,relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
+                (relationship_name,from_what_table,to_what_table,from_what_text,to_what_text,relationship_status,pre_formatting,post_formatting)
                 VALUES
                 ('company relationships','companies','companies','Retains Consultant','Consultant for','a',NULL,NULL)";
         $rst = $con->execute($sql);
@@ -941,6 +941,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.7  2004/07/05 21:03:04  introspectshun
+ * - Removed relationship_type_id field for data-to-column consistency
+ *
  * Revision 1.6  2004/07/01 15:23:06  braverock
  * - update default data for relationship_types table
  * - use NAMES -> VALUES SQL construction to be safe
