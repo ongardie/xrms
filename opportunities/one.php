@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.22 2004/07/25 14:03:48 johnfawcett Exp $
+ * $Id: one.php,v 1.23 2004/07/29 10:04:20 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,9 +14,9 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
 
-$opportunity_id = $_GET['opportunity_id'];
+$msg            = isset($_GET['msg']) ? $_GET['msg'] : '';
+$opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -47,9 +47,15 @@ and c.crm_status_id = crm.crm_status_id
 and o.opportunity_status_id = os.opportunity_status_id
 and opportunity_id = $opportunity_id";
 
+// execute
 $rst = $con->execute($sql);
 
+// was there a database error ???
 if ($rst) {
+  // no
+  // was there a row ???
+  if ( !$rst->EOF ) {
+    // yes - there is a row
     $company_id = $rst->fields['company_id'];
     $company_name = $rst->fields['company_name'];
     $company_code = $rst->fields['company_code'];
@@ -76,9 +82,41 @@ if ($rst) {
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
     $entered_by = $rst->fields['entered_by_username'];
     $last_modified_by = $rst->fields['last_modified_by_username'];
-    $rst->close();
+  } else {
+    // no - there is no row
+    $company_id = '';
+    $company_name = '';
+    $company_code = '';
+    $contact_id = '';
+    $first_names = '';
+    $last_name = '';
+    $work_phone = '';
+    $email = '';
+    $crm_status_display_html = '';
+    $account_status_display_html = '';
+    $rating_display_html = '';
+    $contact_id = '';
+    $campaign_id = '';
+    $campaign_title = '';
+    $opportunity_status_display_html = '';
+    $opportunity_owner_username = '';
+    $account_owner_username = '';
+    $opportunity_title = '';
+    $opportunity_description = '';
+    $size = '';
+    $probability = '';
+    $close_at = '';
+    $entered_at = '';
+    $last_modified_at = '';
+    $entered_by = '';
+    $last_modified_by = '';
+  }
+
+  $rst->close();
+
 } else {
-    db_error_handler ($con, $sql);
+  // yes
+  db_error_handler ($con, $sql);
 }
 
 // most recent activities
@@ -107,7 +145,6 @@ $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contac
 
 if ($rst) {
     while (!$rst->EOF) {
-
         $open_p = $rst->fields['activity_status'];
         $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
         $is_overdue = $rst->fields['is_overdue'];
@@ -434,6 +471,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.23  2004/07/29 10:04:20  cpsource
+ * - Rid some undefines.
+ *
  * Revision 1.22  2004/07/25 14:03:48  johnfawcett
  * - modified string Acct. to Account to unify across application
  * - standardized page title

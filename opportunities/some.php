@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.26 2004/07/28 20:42:27 neildogg Exp $
+ * $Id: some.php,v 1.27 2004/07/29 10:04:20 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,9 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-//set target and see if we are logged in
-//$tmp = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( '' );
+$session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -315,6 +313,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.27  2004/07/29 10:04:20  cpsource
+ * - Rid some undefines.
+ *
  * Revision 1.26  2004/07/28 20:42:27  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
