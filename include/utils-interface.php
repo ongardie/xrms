@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.44 2005/01/28 22:59:22 braverock Exp $
+ * $Id: utils-interface.php,v 1.45 2005/02/08 17:54:38 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -157,7 +157,8 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     
     $msg = status_msg($msg);
     if ($user_id) {
-        $css_theme = get_user_preference($xcon, $user_id, 'css_theme');
+        $user_css_theme = get_user_preference($xcon, $user_id, 'css_theme');
+	if ($user_css_theme) $css_theme=$user_css_theme;
     }
 //    echo "    $css_theme = get_user_preference($con, $user_id, 'css_theme');";
     $curtheme = empty($css_theme) ? 'basic' : $css_theme;
@@ -348,6 +349,107 @@ function build_salutation_menu($salutation) {
     return $salutation_menu;
 } //end build_salutation_menu fn
 
+/*****************************************************************************/
+/**
+ * Function public string buildDataTable( array, [[array,] string] )
+ *
+ * Accepting an array for the data body and an optional
+ * array for a header row, this function will create a grided
+ * HTML table.
+ *
+ * @name buildDataTable
+ * @author Walter Torres <walter@torres.ws>
+ *
+ * @category displayWidgets
+ * @uses none
+ * @requires none
+ * @static
+ * @final
+ * @access public
+ * @version
+ *
+ * @param array  $aryRecordSet Two dimensional array of data
+ *        array  $aryHeader    flat array of with header text
+ *        string $tableTitle   String to use as a Title for the Table
+ * @return string $table       HTML string of TAble with data
+ *
+ **/
+function buildDataTable ( $aryRecordSet = null,
+                          $aryHeader = null,
+                          $tableTitle = null
+                        )
+{
+  /** Variable local string $table
+   * @varstring $table holds generated HTML
+   * @name var_name
+   *
+   * @abstract container to hold gnerated HTML as array is processed
+   *
+   * @access private
+   * @static
+   * @since 1.0
+   *
+   **/
+    $table = '';
+
+    // If an array is not sent, we don't do a thing
+    if ( isset ( $aryRecordSet ) )
+    {
+        // Open Table TAG
+        $table .= '<table class="widget" border="0">';
+
+        // Table header, only if Title is defined
+        if ( isset ( $tableTitle ) )
+        {
+            $table .= '<tr>';
+            $table .=   '<td class="widget_header" colspan="' . count ( $aryHeader ) . '">';
+            $table .=     $tableTitle;
+            $table .=   '</td>';
+            $table .= '</tr>'."\n";
+        }
+
+        // Column Header Row, only if defined
+        if ( isset ( $aryHeader ) )
+        {
+            $table .= '<tr>';
+            foreach ( $aryHeader as $strLabel )
+            {
+                $table .= '<td valign="top" class="widget_header">';
+                $table .= $strLabel;
+                $table .= '</td>';
+            }
+            $table .= '</tr>';
+        }
+
+        // We need to count the rows for alternating row display
+        $rowCount = 0;
+
+        // Loop through data array
+        foreach ( $aryRecordSet as $aryRecSet )
+        {
+            // We need to track ROW count to display alternate ROW backgrounds
+            $rowCount++;
+            $style = ( $rowCount % 2 ) ? 'widget_content' : 'widget_content_alt';
+
+            // each sub-array will be a single ROW of the table
+            $table .= '<tr class="' . $style . '">';
+            // Loop across the the sub-array
+            foreach ( $aryRecSet as $strLabel )
+            {
+                $table .= '<td valign="top" class="'. $style . '">';
+                $table .=    $strLabel;
+                $table .= '</td>';
+            }
+            $table .= '</tr>';
+        }
+
+        // We're done, close the table
+        $table .= '</table>';
+    }
+
+       return $table;
+};
+
 /*
  * JScalendar calendar widget settings
  * Patch by Miguel Gonçalves ( Mig77 at users.sourceforge.net)
@@ -428,6 +530,10 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.45  2005/02/08 17:54:38  vanmer
+ * - changed user css_theme load to not override of previously set css_theme variable
+ * - added builddatatable function (by Walter Torres)
+ *
  * Revision 1.44  2005/01/28 22:59:22  braverock
  * - add msg for adding new division
  *
