@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.7 2004/02/01 00:45:41 braverock Exp $
+ * $Id: utils-misc.php,v 1.8 2004/02/01 22:05:48 braverock Exp $
  */
 
 /**
@@ -128,34 +128,39 @@ function pretty_filesize($file_size) {
 /**
  * Get the contents of the CSV file as an array
  *
- * modified from a function on php.net
+ * modified from a function on php.net ref:fgetcsv
  *
- * @param  handle  $file           handle to the uploaded file
- * @param  boolean $hasFieldNames  should we get the filed list off the first line
+ * @param  string  $file           path to the uploaded file
+ * @param  boolean $hasFieldNames  should we get the description list off the first line
  * @param  char    $delimiter      delimiter for the CSV file
  * @param  char    $enclosure      are the fields enclosed in anything (like quotes)
  *
  * @return array   $result         array in the form of rows with keys and values
  */
 function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure='') {
-   $result = Array();
+    $result_arr = Array();
 
-   //@todo There must be a better way of finding out the size of the longest row... until then
-   $size = filesize($file) +1;
-   $file = fopen($file, 'r');
+    $size = filesize($file) +1;
+    $handle = fopen($file, 'r');
 
-   if ($hasFieldNames) $keys = fgetcsv($file, $size, $delimiter, $enclosure);
-   while ($row = fgetcsv($file, $size, $delimiter, $enclosure)) {
-       $n = count($row); $res=array();
-       for($i = 0; $i < $n; $i++) {
-           $idx = ($hasFieldNames) ? $keys[$i] : $i;
-           $res[$idx] = $row[i];
-       }
-       $result[] = $res;
-   }
-   fclose($file);
-   return $result;
-}
+    if ($hasFieldNames) $keys = fgetcsv($handle, 4096, $delimiter);
+
+    while ($row = fgetcsv($handle, 4096, $delimiter))
+    {
+        for($i = 0; $i < count($row); $i++)
+        {
+            if(array_key_exists($i, $keys))
+            {
+                $row[$keys[$i]] = $row[$i];
+            }
+        }
+        $result_arr[] = $row;
+    }
+
+    fclose($handle);
+
+    return $result_arr;
+} //end CSVtoArray fn
 
 /**
  * Search for the var $name in $_SESSION, $_POST, $_GET,
@@ -214,8 +219,11 @@ function getGlobalVar( &$value, $name ) {
  */
 function fetch_company_id($con, $company_name) {
 
-    $sql_fetch_company_id = "select company_id from companies where company_name = " . $con->qstr($company_name, get_magic_quotes_gpc());
+    $sql_fetch_company_id = 'select company_id from companies where
+                             company_name = ' . $con->qstr($company_name, get_magic_quotes_gpc());
+
     $rst_company_id = $con->execute($sql_fetch_company_id);
+
     if ($rst_company_id) {
         $company_id = $rst_company_id->fields['company_id'];
         $rst_company_id->close();
@@ -249,7 +257,40 @@ function fetch_default_address($con, $company_id) {
 }
 
 /**
+ * Find division id from division name and company id
+ * to see if the division exists before adding it
+ * or appending the division id to a new contact
+ *
+ * @param  handle  $con database connection
+ * @param  string  $division_name to search for
+ * @param  integer $company_id to search for
+ * @return integer $division_id found ID or 0 (ZERO) if no match
+ */
+function fetch_division_id($con, $division_name, $company_id) {
+
+    $sql_fetch_division_id = 'select division_id from company_division where
+                             division_name = ' . $con->qstr($company_name, get_magic_quotes_gpc()) . ",
+                             and company_id = $company_id";
+
+    $rst_division_id = $con->execute($sql_fetch_division_id);
+
+    if ($rst_division_id) {
+        $division_id = $rst_division_id->fields['division_id'];
+        $rst_division_id->close();
+    } else {
+        $division_id = 0;
+    }
+
+    return $division_id;
+}
+
+
+/**
  * $Log: utils-misc.php,v $
+ * Revision 1.8  2004/02/01 22:05:48  braverock
+ * - clean up CSVtoArray fn
+ * - add get_division_id fn
+ *
  * Revision 1.7  2004/02/01 00:45:41  braverock
  * added Chris's fetch_company_id and fetch_default_address fns
  *
@@ -262,6 +303,5 @@ function fetch_default_address($con, $company_id) {
  * Revision 1.4  2004/01/26 19:24:51  braverock
  * - added getGlobalVar fn
  * - added phpdoc
- *
  */
 ?>
