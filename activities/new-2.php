@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.14 2004/06/12 17:10:23 gpowers Exp $
+ * $Id: new-2.php,v 1.15 2004/06/29 14:28:31 gpowers Exp $
  */
 
 //where do we include from
@@ -81,7 +81,7 @@ $rec['user_id'] = (strlen($user_id) > 0) ? $user_id : $session_user_id;
 $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
 $rec['activity_status'] = (strlen($activity_status) > 0) ? $activity_status : "o";
 $rec['activity_title'] = (strlen($activity_title) > 0) ? $activity_title : "[none]";
-$rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "[none]";
+$rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
 $rec['on_what_table'] = (strlen($on_what_table) > 0) ? $on_what_table : '';
 $rec['on_what_id'] = ($on_what_id > 0) ? $on_what_id : 0;
 $rec['company_id'] = ($company_id > 0) ? $company_id : 0;
@@ -113,6 +113,10 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.15  2004/06/29 14:28:31  gpowers
+ *- changed activity_description default to null
+ *  - to save activity enter time
+ *
  *Revision 1.14  2004/06/12 17:10:23  gpowers
  *- removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
  *  GetUpdateSQL()
