@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.48 2005/03/04 13:31:39 braverock Exp $
+ * $Id: utils-interface.php,v 1.49 2005/03/21 13:05:57 maulani Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -545,7 +545,36 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 }
 
 /**
+ * Retrieve menu of XRMS users 
+ *
+ * @param  handle  $con database connection
+ * @param  integer $user_id to set the menu to
+ * @param  boolean $blank_user include a blank area
+ * @return string  $user_menu the html menu to display
+ */
+function get_user_menu(&$con, $user_id='', $blank_user=false) {
+
+    $sql = '
+    SELECT ' . $con->Concat("first_names","' '","last_name") . " AS name, user_id
+    FROM users
+    WHERE user_record_status = 'a'
+    ORDER BY last_name, first_names
+    ";
+	$rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+	$user_menu = $rst->getmenu2('user_id', $user_id, $blank_user);
+	$rst->close();
+	
+	return $user_menu;
+}
+
+/**
  * $Log: utils-interface.php,v $
+ * Revision 1.49  2005/03/21 13:05:57  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.48  2005/03/04 13:31:39  braverock
  * - add 'simple' CSS styles to the array
  *   @todo make CSS theme selectable from system parameters and user prefs

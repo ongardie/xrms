@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.27 2005/02/10 02:00:54 braverock Exp $
+ * $Id: index.php,v 1.28 2005/03/21 13:05:58 maulani Exp $
  */
 
 //include required stuff
@@ -18,21 +18,18 @@ $session_user_id = session_check( 'Admin' );
 // get display message
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-// open a connection to the database
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
 // stub out
 if ( 0 ) {
-  // get the user info
-  $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-  $rst = $con->execute($sql2);
-  $user_menu = $rst->getmenu2('user_id', '', false);
-  $rst->close();
-}
+  // open a connection to the database
+  $con = &adonewconnection($xrms_db_dbtype);
+  $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-// close the connection to the database
-$con->close();
+  // get the user info
+  $user_menu = get_user_menu($con);
+
+  // close the connection to the database
+  $con->close();
+}
 
 $page_title = _("Administration");
 
@@ -248,6 +245,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.28  2005/03/21 13:05:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.27  2005/02/10 02:00:54  braverock
  * - disable digital dashboard link until we can fix the problems with this page
  *

@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.13 2004/11/26 15:55:45 braverock Exp $
+ * $Id: import-companies.php,v 1.14 2005/03/21 13:05:58 maulani Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -32,10 +32,7 @@ start_page($page_title, true, $msg);
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-$rst->close();
+$user_menu = get_user_menu($con, $session_user_id);
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where
          crm_status_record_status = 'a' order by crm_status_id";
@@ -163,6 +160,9 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.14  2005/03/21 13:05:58  maulani
+ * - Remove redundant code by centralizing common user menu call
+ *
  * Revision 1.13  2004/11/26 15:55:45  braverock
  * - add translate_menu call to all drop-down menus for i18n
  * - fix unitialized variable Notices
