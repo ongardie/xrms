@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.24 2004/07/05 21:30:54 introspectshun Exp $
+ * $Id: some.php,v 1.25 2004/07/09 18:42:13 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -102,10 +102,10 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 //uncomment this line if you suspect a problem with the SQL query
-// $con->debug = 1;
+//$con->debug = 1;
 
 $sql = "
-SELECT " . $con->Concat("'<a href=\"one.php?company_id='","CAST(c.company_id AS CHAR)","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
+SELECT " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
 c.company_code AS '$strCompaniesSomeCompanyCodeLabel',
 u.username AS '$strCompaniesSomeCompanyUserLabel',
 industry_pretty_name as '$strCompaniesSomeCompanyIndustrylabel',
@@ -123,7 +123,7 @@ if ($company_category_id > 0) {
     $from = "from industries i, crm_statuses crm, ratings r, account_statuses as1, users u, companies c ";
 }
 
-$from  .= "LEFT JOIN addresses as addr on addr.address_id = c.default_primary_address ";
+$from  .= "LEFT JOIN addresses addr on addr.address_id = c.default_primary_address ";
 $where = "where c.industry_id = i.industry_id ";
 $where .= "and c.crm_status_id = crm.crm_status_id ";
 //remove next line because it makes companies without default addr not display
@@ -200,7 +200,18 @@ $order_by .= " $sort_order";
 
 $sql .= $from . $where . " order by $order_by";
 
-$sql_recently_viewed = "select * from recent_items r, companies c, crm_statuses crm
+$sql_recently_viewed = "select 
+r.recent_item_id,  
+r.on_what_table, 
+r.on_what_id, 
+r.recent_item_timestamp,
+c.*, 
+crm.crm_status_short_name, 
+crm.crm_status_pretty_name, 
+crm.crm_status_pretty_plural, 
+crm.crm_status_display_html, 
+crm.crm_status_record_status
+from recent_items r, companies c, crm_statuses crm
 where r.user_id = $session_user_id
 and r.on_what_table = 'companies'
 and c.crm_status_id = crm.crm_status_id
@@ -412,6 +423,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.25  2004/07/09 18:42:13  introspectshun
+ * - Removed CAST(x AS CHAR) for wider database compatibility
+ * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
+ * - Removed 'as' in JOIN as it fails on Oracle and isn't needed with other db engines
+ *
  * Revision 1.24  2004/07/05 21:30:54  introspectshun
  * - Moved 'companies c' to the end of 'from' clause.
  * - Query fails on MSSQL otherwise (column 'c' not recognized during 'LEFT JOIN' operation)
