@@ -1,12 +1,15 @@
 <?php
 
-// the following sort class came from http://us2.php.net/manual/en/function.uksort.php
-
-// Justin modified this function to assume arrays always! (used by Pager)
 /**
 * Handles multidimentional array sorting by a key (not recursive)
 *
+* The following sort class came from http://us2.php.net/manual/en/function.uksort.php
+*
+* Justin modified this function to assume arrays always! (used by Pager)
+*
+* $Id: Array_Sorter.php,v 1.4 2005/03/03 21:39:25 daturaarutad Exp $
 * @author Oliwier Ptak <aleczapka at gmx dot net>
+* @author Justin cooper <justin at braverock dot com>
 */
 class array_sorter
 {
@@ -106,7 +109,10 @@ class array_sorter
 }//end of class
 
 /**
-* $ Log: $
+* $Log: Array_Sorter.php,v $
+* Revision 1.4  2005/03/03 21:39:25  daturaarutad
+* another stab at tidy comments...
+*
 */
 
 
