@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.10 2004/07/10 13:30:16 braverock Exp $
+ * $Id: one.php,v 1.11 2004/07/25 16:34:00 johnfawcett Exp $
  */
 
 //include required files
@@ -50,7 +50,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "One File : $file_pretty_name";
+$page_title = _("File Details").': '. $file_pretty_name;
 start_page($page_title, true, $msg);
 
 ?>
@@ -65,37 +65,37 @@ start_page($page_title, true, $msg);
         <input type=hidden name=file_id value="<?php  echo $file_id ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>File Information</td>
+                <td class=widget_header colspan=2><?php echo _("File Information");?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>File&nbsp;Name</td>
+                <td class=widget_label_right><?php echo _("File Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name value="<?php  echo $file_pretty_name ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Uploaded</td>
+                <td class=widget_label_right><?php echo _("Uploaded"); ?></td>
                 <td class=widget_content_form_element><?php  echo $entered_at ?> by <?php echo $username; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Size</td>
+                <td class=widget_label_right><?php echo _("Size"); ?></td>
                 <td class=widget_content_form_element><?php  echo $file_size ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Description</td>
+                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description><?php  echo $file_description ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Change Date</td>
+                <td class=widget_label_right><?php echo _("Change Date"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=file_entered_at value="<?php  echo $entered_at; ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Change File</td>
+                <td class=widget_label_right><?php echo _("Change File"); ?></td>
                 <td class=widget_content_form_element><input type=file name=file1></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input type=submit class=button value="Save Changes"> <input type=button class=button onclick="javascript: location.href='download.php?file_id=<?php  echo $file_id ?>';" value="Download"> <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo $return_url; ?>&file_id=<?php echo $file_id; ?>';" value="Delete"></td>
+                <td class=widget_content_form_element colspan=2><input type=submit class=button value="<?php echo _("Save Changes");?>"> <input type=button class=button onclick="javascript: location.href='download.php?file_id=<?php  echo $file_id ?>';" value="<?php echo _("Download"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo $return_url; ?>&file_id=<?php echo $file_id; ?>';" value="<?php echo _("Delete"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -156,6 +156,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.11  2004/07/25 16:34:00  johnfawcett
+ *- added gettext
+ *
  *Revision 1.10  2004/07/10 13:30:16  braverock
  *- fixed unitialized variables errors
  *
