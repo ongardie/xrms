@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.97 2005/03/02 15:15:44 daturaarutad Exp $
+ * $Id: some.php,v 1.98 2005/03/04 17:57:13 daturaarutad Exp $
  */
 
 // handle includes
@@ -644,7 +644,7 @@ $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
 $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact');
 $columns[] = array('name' => _('Title'), 'index_sql' => 'title');
 $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled');
-$columns[] = array('name' => _('Due'), 'index_sql' => 'due');
+$columns[] = array('name' => _('Due'), 'index_sql' => 'due', 'default_sort' => 'desc');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
 $columns[] = array('name' => _('%'), 'index_sql' => '%', 'css_classname' => 'right');
@@ -745,6 +745,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.98  2005/03/04 17:57:13  daturaarutad
+ * set Due to the default_sort
+ *
  * Revision 1.97  2005/03/02 15:15:44  daturaarutad
  * removed redundant mail merge button and corresponding query
  *
