@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.18 2004/07/25 13:35:29 johnfawcett Exp $
+ * $Id: one.php,v 1.19 2004/07/30 10:20:01 cpsource Exp $
  */
 
 //include required files
@@ -100,6 +100,8 @@ and a.activity_record_status = 'a'
 order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
+
+$activity_rows = '';
 
 if ($rst) {
     while (!$rst->EOF) {
@@ -372,6 +374,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.19  2004/07/30 10:20:01  cpsource
+ * - Fixed undefines
+ *     activity_rows
+ *
  * Revision 1.18  2004/07/25 13:35:29  johnfawcett
  * - modified string Acct. to Account to unify across application
  *
