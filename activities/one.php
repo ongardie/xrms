@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.47 2004/07/25 12:27:42 braverock Exp $
+ * $Id: one.php,v 1.48 2004/07/25 16:15:25 johnfawcett Exp $
  */
 
 //include required files
@@ -209,7 +209,7 @@ if($on_what_table == 'opportunities') {
 
 $con->close();
 
-$page_title = $activity_title;
+$page_title = _("Activity Details").': '.$activity_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -403,6 +403,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.48  2004/07/25 16:15:25  johnfawcett
+ * - unified page title
+ *
  * Revision 1.47  2004/07/25 12:27:42  braverock
  * - remove lang file require_once, as it is no longer used
  *

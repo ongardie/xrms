@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.42 2004/07/25 13:37:56 johnfawcett Exp $
+ * $Id: one.php,v 1.43 2004/07/25 16:18:20 johnfawcett Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -283,7 +283,7 @@ if (strlen($categories) == 0) {
     $categories = _("No categories");
 }
 
-$page_title = $first_names . ' ' . $last_name;
+$page_title = _("Contact Details").': '.$first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
 
 ?>
@@ -564,6 +564,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.43  2004/07/25 16:18:20  johnfawcett
+ * - unified page title
+ *
  * Revision 1.42  2004/07/25 13:37:56  johnfawcett
  * - modified string Acct. to Account to unify across application
  *
