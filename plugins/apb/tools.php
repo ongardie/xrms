@@ -1,41 +1,30 @@
-<?
+<?php
+
 include_once('apb.php');
 apb_head();
-?>
 
-<h2>Tools</h2>
+echo "<h2>" . _("Tools") . "</h2>";
 
-<?php if ($APB_SETTINGS['auth_user_id']) { ?>
-
-<p><table cellpadding="0" cellspacing="0" width="70%">
+echo "<table cellpadding=\"0\" cellspacing=\"0\" width=\"70%\">
 <tr>
   <td>
 
-  <h3>APB Setup</h3>
+  <h3>" . _("Bookmark Setup") . "</h3>
 
   <ul>
-    <li><a href="quickadd.php">Setup QuickAdd</a> - Create a button in your browser that
-    will automatically add bookmarks to APB.
+    <li><a href=\"quickadd.php\">" . _("Setup QuickAdd") . "</a> - " . _("Create a button in your browser that will automatically add bookmarks.") . "
   </ul>
 
-  <h3>Additional APB Features</h3>
+  <h3>" . _("Additional Features") . "</h3>
 
   <ul>
-    <li><a href="daily_browser.php">Daily Browser</a> - See what kind of activity your APB is
-    getting.
+    <li><a href=\"daily_browser.php\">" . _("Daily Browser") . "</a> - " . _("See what kind of activity your Bookarks are getting.") . "
   </ul>
 
   </td>
 </tr>
 </table>
-
-<?php } else { ?>
-
-<p>You must be logged into access this feature of APB.
-
-<?
-
-}
+";
 
 apb_foot();
 
