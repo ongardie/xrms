@@ -511,9 +511,6 @@ function add_purchase_order_to_accounting_system($order_id) {
 			}
 			
 			// we've got a part, now add the item to the order in SQL-Ledger
-            $sql_select_empty = "SELECT * FROM orderitems WHERE 1 = 2"; //select empty record as placeholder
-            $rst_select_empty = $sl_con->execute($sql_select_empty);
-            
             $rec = array();
             $rec['trans_id'] = $trans_id;
             $rec['parts_id'] = $part_id;
@@ -521,7 +518,8 @@ function add_purchase_order_to_accounting_system($order_id) {
             $rec['qty'] = $rst_items_in_order->fields['qty'];
             $rec['sellprice'] = $rst_items_in_order->fields['price'];
 
-            $sql_add_item_to_order = $sl_con->GetInsertSQL($rst_select_empty, $rec, get_magic_quotes_gpc());
+            $tbl = 'orderitems';
+            $sql_add_item_to_order = $sl_con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 			$sl_con->execute($sql_add_item_to_order);
             
 			$rst_items_in_order->movenext();

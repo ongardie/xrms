@@ -2,7 +2,7 @@
 /**
  * Insert a new Note into the Database
  *
- * $Id: new-2.php,v 1.4 2004/06/21 14:25:00 braverock Exp $
+ * $Id: new-2.php,v 1.5 2004/07/07 22:37:40 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,9 +24,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "SELECT * FROM notes WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['on_what_table'] = $on_what_table;
 $rec['on_what_id'] = $on_what_id;
@@ -34,7 +32,8 @@ $rec['note_description'] = $note_description;
 $rec['entered_at'] = time();
 $rec['entered_by'] = $session_user_id;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'notes';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
@@ -43,6 +42,9 @@ header("Location: " . $http_site_root . $return_url);
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.5  2004/07/07 22:37:40  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.4  2004/06/21 14:25:00  braverock
  * - localized strings for i18n/internationalization/translation support
  *

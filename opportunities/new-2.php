@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.6 2004/06/21 03:54:22 braverock Exp $
+ * $Id: new-2.php,v 1.7 2004/07/07 22:39:46 introspectshun Exp $
  */
 
 //include common files
@@ -34,9 +34,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "SELECT * FROM opportunities WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['opportunity_status_id'] = $opportunity_status_id;
 $rec['user_id'] = $user_id;
@@ -54,7 +52,8 @@ $rec['entered_by'] = $session_user_id;
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'opportunities';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $opportunity_id = $con->insert_id();
@@ -73,6 +72,9 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.7  2004/07/07 22:39:46  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.6  2004/06/21 03:54:22  braverock
  * - fixed timestamp for new opportunity
  *
