@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.92 2005/02/14 21:43:45 vanmer Exp $
+ * $Id: one.php,v 1.93 2005/02/17 08:00:28 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -19,6 +19,9 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
+
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 
 $company_id = $_GET['company_id'];
 if (isset($_GET['division_id'])) {
@@ -36,6 +39,8 @@ $company_id = $_GET['company_id'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
+
+$form_name = 'One_Company';
 
 
 // make sure $accounting_rows is defined
@@ -201,11 +206,11 @@ TILLEND;
 //
 //  list of most recent activities
 //
-$sql_activities = "
-SELECT a.activity_id, a.activity_title, a.scheduled_at, a.on_what_table, a.on_what_id,
-  a.entered_at, a.activity_status, at.activity_type_pretty_name,
-  cont.first_names AS contact_first_names, cont.last_name AS contact_last_name, u.username,
-  (CASE WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1 ELSE 0 END) AS is_overdue
+$sql_activities = "SELECT " . 
+$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/companies/one.php%3Fcompany_id=$company_id\">'", "activity_title", "'</a>'") .
+" AS  activity_title, u.username, at.activity_type_pretty_name, " . $con->Concat('cont.first_names', "' '", 'cont.last_name') . " AS contact_name, 
+a.scheduled_at, a.on_what_table, a.on_what_id, a.entered_at, a.activity_status,     
+(CASE WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1 ELSE 0 END) AS is_overdue
 FROM activity_types at, users u, activities a
 LEFT JOIN contacts cont ON cont.contact_id = a.contact_id
 LEFT JOIN opportunities o ON o.opportunity_id=a.on_what_id
@@ -230,67 +235,31 @@ if ($division_id) {
     $sql_activities.=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
     
 }
-$sql_activities.="
-    ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
-";
 
-$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
+	// begin Activities Pager
 
-$activity_rows = '';
-if ($rst) {
-    while (!$rst->EOF) {
+    $columns = array();
+    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title');
+    $columns[] = array('name' => _('User'), 'index_sql' => 'username');
+    $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
+    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name');
+    $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at');
 
-        $open_p = $rst->fields['activity_status'];
-        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
-        $is_overdue = $rst->fields['is_overdue'];
-        $on_what_table = $rst->fields['on_what_table'];
-        $on_what_id = $rst->fields['on_what_id'];
+	$default_columns = array('activity_title', 'username','activity_type_pretty_name','contact_name','scheduled_at');
 
-        if ($open_p == 'o') {
-            if ($is_overdue) {
-                $classname = 'overdue_activity';
-            } else {
-                $classname = 'open_activity';
-            }
-        } else {
-            $classname = 'closed_activity';
-        }
 
-        if ($on_what_table == 'opportunities') {
-            $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
-            $sql2 = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
-        } elseif ($on_what_table == 'cases') {
-            $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
-            $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-        } else {
-            $attached_to_link = "N/A";
-            $sql2 = "select * from companies where 1 = 2";
-        }
+    // selects the columns this user is interested in
+    $pager_columns = new Pager_Columns('ActivitiesPager', $columns, $default_columns, $form_name);
+    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
-        $rst2 = $con->execute($sql2);
+    $columns = $pager_columns->GetUserColumns('default');
 
-        if ($rst) {
-            $attached_to_name = $rst2->fields['attached_to_name'];
-            $attached_to_link .= $attached_to_name . "</a>";
-            $rst2->close();
-        }
 
-        $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php%3Fcompany_id=$company_id";
-        ($division_id) ? $activity_rows .= "%26division_id=" . $division_id : '';
-        $activity_rows .= "&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . ">$attached_to_link</td>";
-        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
-        $activity_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql_activities);
-}
+    $pager = new GUP_Pager($con, $sql_activities, null, _('Activities'), $form_name, 'ActivitiesPager', $columns, false, true);
+    $activity_rows = $pager->Render($system_rows_per_page);
+	// end Activities Pager
+
 
 // contacts
 
@@ -728,6 +697,7 @@ function markComplete() {
 
     //place the plug-in hook before the Activities
     do_hook ('company_detail');
+
 ?>
 
         <!-- activities //-->
@@ -748,7 +718,7 @@ function markComplete() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("New Activities"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
@@ -771,9 +741,16 @@ function markComplete() {
                     <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
                 </td>
             </tr>
-            <?php  echo $activity_rows; ?>
         </table>
         </form>
+
+        <form name="<?php echo $form_name; ?>" method=post>
+            <?php 
+				// activity pager
+				echo $pager_columns_selects; 
+				echo $activity_rows; 
+			?>
+		</form>
 
         <!-- company content bottom plugins //-->
         <?php echo $bottom_rows; ?>
@@ -826,6 +803,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.93  2005/02/17 08:00:28  daturaarutad
+ * updated to use GUP Pager class for activities
+ *
  * Revision 1.92  2005/02/14 21:43:45  vanmer
  * - updated to reflect speed changes in ACL operation
  *
