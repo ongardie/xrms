@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.12 2005/04/01 23:43:01 daturaarutad Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.13 2005/04/05 18:50:16 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -210,8 +210,8 @@ function GetOpportunitiesSizeByOpportunityStatusGraph($con, $user_id, $all_users
 	$graph = new BarGraph($graph_info);
 	
 	$basename = 'opportunities-size-by-opportunity-status';
-	$filename = $basename .'-'. $session_user_id;
-	
+    $filename = "$basename-$session_user_id.jpg";
+
 	return $graph->DisplayCSIM($http_site_root . '/export/' . $filename, $tmp_export_directory . $filename , $basename);
 
 }
@@ -221,6 +221,9 @@ function GetOpportunitiesSizeByOpportunityStatusGraph($con, $user_id, $all_users
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.13  2005/04/05 18:50:16  daturaarutad
+ * added .jpg extension to graph images
+ *
  * Revision 1.12  2005/04/01 23:43:01  daturaarutad
  * updated for change of bar_type->graph_type
  *

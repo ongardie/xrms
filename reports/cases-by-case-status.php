@@ -3,7 +3,7 @@
  *
  * Cases by case status report.
  *
- * $Id: cases-by-case-status.php,v 1.9 2005/04/01 23:43:01 daturaarutad Exp $
+ * $Id: cases-by-case-status.php,v 1.10 2005/04/05 18:50:16 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -107,7 +107,7 @@ function GetCasesByCaseStatusGraph($con) {
 	$graph = new BarGraph($graph_info);
 	
 	$basename = 'cases-by-case-status';
-	$filename = $basename .'-'. $session_user_id;
+	$filename = "$basename-$session_user_id.jpg";
 	
 	return $graph->DisplayCSIM($http_site_root . '/export/' . $filename, $tmp_export_directory . $filename , $basename);
 	
@@ -116,6 +116,9 @@ function GetCasesByCaseStatusGraph($con) {
 
 /**
  * $Log: cases-by-case-status.php,v $
+ * Revision 1.10  2005/04/05 18:50:16  daturaarutad
+ * added .jpg extension to graph images
+ *
  * Revision 1.9  2005/04/01 23:43:01  daturaarutad
  * updated for change of bar_type->graph_type
  *
