@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.11 2005/02/11 00:49:12 braverock Exp $
+ * $Id: setup.php,v 1.12 2005/02/11 13:56:00 braverock Exp $
  */
 
 
@@ -68,7 +68,7 @@ function info_install($con) {
 }
 
 function company_content_bottom ($_sidebar) {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $info_list, $display_on;
     $return_url="/companies/one.php?company_id=$company_id&division_id=$division_id";
     include("info.inc");
     ob_start();
@@ -80,7 +80,7 @@ function company_content_bottom ($_sidebar) {
 }
 
 function company_accounting () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $info_list, $display_on;
     $return_url="/companies/one.php?company_id=$company_id&division_id=$division_id";
     include("info.inc");
     ob_start();
@@ -92,7 +92,7 @@ function company_accounting () {
 }
 
 function company_sidebar_bottom () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $info_list, $display_on;
     $return_url="/companies/one.php?company_id=$company_id&division_id=$division_id";
     include("info.inc");
     ob_start();
@@ -104,7 +104,7 @@ function company_sidebar_bottom () {
 }
 
 function contact_sidebar_top () {
-    global $xrms_file_root, $http_site_root, $con, $contact_id, $company_id, $division_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $contact_id, $company_id, $division_id, $info_list, $display_on;
     $return_url="/contacts/one.php?contact_id=$contact_id";
     include("info.inc");
     ob_start();
@@ -116,7 +116,7 @@ function contact_sidebar_top () {
 }
 
 function contact_sidebar_bottom () {
-    global $xrms_file_root, $http_site_root, $con, $contact_id, $company_id, $division_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $contact_id, $company_id, $division_id, $info_list, $display_on;
     $return_url="/contacts/one.php?contact_id=$contact_id";
     include("info.inc");
     ob_start();
@@ -128,7 +128,7 @@ function contact_sidebar_bottom () {
 }
 
 function private_sidebar_bottom () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $info_list, $display_on;
     $return_url="/private/home.php";
     include("info.inc");
     ob_start();
@@ -140,7 +140,7 @@ function private_sidebar_bottom () {
 }
 
 function info_sidebar_bottom () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $info_list, $display_on;
     include("info.inc");
     ob_start();
     $display_on = "all";

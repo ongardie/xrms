@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.12 2005/02/11 00:49:12 braverock Exp $
+ * $Id: sidebar.php,v 1.13 2005/02/11 13:56:29 braverock Exp $
  */
 
 //$con->debug = 1;
@@ -121,12 +121,18 @@ while (!$toprst->EOF) {
     # Loop through each instance type and get info to display
     while (!$rst->EOF) {
       $not_empty = 1;
-      $server_link = "<tr><td colspan=2 class=widget_content><a href='$http_site_root/plugins/info/one.php";
-      $server_link .= "?info_id=" . $rst->fields['info_id'];
-      $server_link .= "&company_id=$company_id'>";
-      $server_link .= $rst->fields['value'] . "</a></td></tr>";
+      $info_link = "<tr><td colspan=2 class=widget_content><a href='$http_site_root/plugins/info/one.php";
+      $info_link .= "?info_id=" . $rst->fields['info_id'];
+      $info_link .= "&company_id=$company_id";
+      if ($contact_id) {
+            $info_link .="&contact_id=$contact_id";
+      }
+      if ($return_url) {
+            $info_link .="&return_url=$return_url";
+      }
+      $info_link .= "'>".$rst->fields['value'] . "</a></td></tr>";
 
-      $info_rows .= $server_link;
+      $info_rows .= $info_link;
 
       # If we should show fields under link, generate them now
       #echo "count=".count($el

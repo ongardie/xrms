@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.11 2005/02/11 00:49:11 braverock Exp $
+ * $Id: one.php,v 1.12 2005/02/11 13:55:14 braverock Exp $
  *
  */
 
@@ -25,8 +25,10 @@ $info_id      = $_GET['info_id'];
 $info_type_id = $_GET['info_type_id'];
 $company_id   = $_GET['company_id'];
 $contact_id   = $_GET['contact_id'];
+$return_url   = $_GET['return_url'];
 
-global $http_site_root,$return_url;
+global $http_site_root;
+
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -68,10 +70,10 @@ if (!$rst) {
 }
 
 # Build an array of this server's elements indexed by element_id
-$this_server = array();
+$this_info = array();
 if(!$rst->EOF) {
     while (!$rst->EOF) {
-        $this_server[$rst->fields['element_id']] = $rst->fields['value'];
+        $this_info[$rst->fields['element_id']] = $rst->fields['value'];
         $rst->movenext();
     }
 }
@@ -85,8 +87,8 @@ while (!$all_elements->EOF) {
   $column = $all_elements->fields['element_column'];
 
   # If this server doesn't have this element defined, use default value
-  $value = (array_key_exists($element_id, $this_server)) ?
-    $this_server[$element_id] : $all_elements->fields['element_default_value'];
+  $value = (array_key_exists($element_id, $this_info)) ?
+    $this_info[$element_id] : $all_elements->fields['element_default_value'];
 
   # Use words for checkbox status
   if ($all_elements->fields['element_type'] == "checkbox") {
@@ -119,9 +121,9 @@ if (!$company_info) {
 if ($company_info) {
     $info_name = $company_info->fields['company_name'];
 }
-if($sontact_id) {
+if($contact_id) {
     $sql="SELECT first_names, last_name from contacts where contact_id=$contact_id";
-    $rst=$con-Execute($sql);
+    $rst=$con->execute($sql);
     if ($rst) {
         $last_name = $rst->fields['last_name'];
         $first_names = $rst->fields['first_names'];
@@ -189,6 +191,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2005/02/11 13:55:14  braverock
+ * - fix handling of return_url
+ * - remove references to server_info and replace with just info
+ *
  * Revision 1.11  2005/02/11 00:49:11  braverock
  * - modified to correctly pass contact_id and return_url
  *
