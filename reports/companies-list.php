@@ -229,7 +229,7 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
     {
         while (!$rst->EOF)
         {
-            $output .= "<tr><td$w1$l>" . nbsp($rst->fields['company_code']) . "</td>";
+            $output .= "<tr><td$w1$l><a href=../companies/one.php?company_id=".$rst->fields['company_id'].">" . nbsp($rst->fields['company_code']) . "</a></td>";
             $output .= "<td$w2$l>" . nbsp($rst->fields['company_name']) . "</td>";
             $output .= "<td$w3$l>" . nbsp($rst->fields['line1'].' '.$rst->fields['line2']) . "</td>";
             $output .= "<td$w4$l>" . nbsp($rst->fields['postal_code']) . "</td>";
@@ -330,6 +330,9 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.8  2005/03/16 15:34:23  niclowe
+ * added html link to company one.php so you can use this report to go to the company details.
+ *
  * Revision 1.7  2005/01/03 06:37:19  ebullient
  * update reports - graphs centered on page, reports surrounded by divs
  *
