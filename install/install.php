@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.10 2004/08/02 08:51:24 maulani Exp $
+ * $Id: install.php,v 1.11 2005/01/12 12:43:32 braverock Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -218,7 +218,7 @@ if (!$connectiontest) {
 
 // if you can make a database connection make sure that you are running at least version 4 of MYSQL
 // otherwise alert the user to potential problems
-if($xrms_db_dbtype="mysql"){
+if($xrms_db_dbtype=="mysql"){
         // dont use adodb bcos i need the link identifier for mysql_get_server_info
         $link = mysql_connect($xrms_db_server, $xrms_db_username, $xrms_db_password);
         $ver  = mysql_get_server_info($link);
@@ -269,6 +269,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.11  2005/01/12 12:43:32  braverock
+ *- replace erroneous assignment operator in xrms_db_dbtype check
+ *
  *Revision 1.10  2004/08/02 08:51:24  maulani
  *- Add test to check register_globals
  *
