@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.4 2005/03/03 17:35:03 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.5 2005/03/05 00:08:47 daturaarutad Exp $
 */
 
 
@@ -340,7 +340,14 @@ class ADOdb_QuickForm_Model {
 	function SetTableName($tablename) { $this->DBStructure['tablename'] = $tablename; }
 
 	function GetPrimaryKeyName() { return $this->DBStructure['primarykey']; }
-	function SetPrimaryKeyName($primarykeyname) { $this->DBStructure['primarykey'] = $primarykeyname; }
+	function SetPrimaryKeyName($primarykeyname) { 
+ 		if(false !== ($i = $this->GetFieldIndex($primarykeyname))) {
+			$this->DBStructure['primarykey'] = $primarykeyname; 
+            $this->DBStructure['fields'][$i]['type'] = 'primarykey';
+            return true;
+        }
+		return false;
+	}
 
 	function GetPrimaryKeyValue() { return $this->Values[$this->GetPrimaryKeyName()]; }
 
@@ -435,11 +442,12 @@ class ADOdb_QuickForm_Model {
 			$dbh = $this->DBStructure['dbh']; 
    			$rst = $dbh->execute($sql);
 	
-   			if (!$rst) { db_error_handler($dbh,$sql); exit; }
+   			if (!$rst) { db_error_handler($dbh,$sql); return false; }
 	
    			// override GET/POST vars
    			$this->Values = $rst->fields;
 		}
+		return true;
 	}
 
 	/**
@@ -464,14 +472,15 @@ class ADOdb_QuickForm_Model {
 	
     	$rst=$dbh->execute($sql);
 	
-    	if (!$rst) { db_error_handler($dbh,$sql); exit; }
+    	if (!$rst) { db_error_handler($dbh,$sql); return false; }
 	
     	$sql = $dbh->GetUpdateSQL($rst, $this->Values, true, false, ADODB_FORCE_NULL);
 	
     	if($sql) {
-      	$rst=$dbh->execute($sql);
-      	if (!$rst) { db_error_handler($dbh,$sql); exit; }
+      		$rst=$dbh->execute($sql);
+      		if (!$rst) { db_error_handler($dbh,$sql); return false; }
     	}
+		return true;
 	}
 
 	/**
@@ -491,7 +500,7 @@ class ADOdb_QuickForm_Model {
 
     	if($sql) {
       		$rst=$dbh->execute($sql);
-      		if (!$rst) { db_error_handler($dbh,$sql); exit; }
+      		if (!$rst) { db_error_handler($dbh,$sql); return false; }
 			return $dbh->Insert_Id();
     	}
 		return false;
