@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.70 2004/12/18 21:34:27 neildogg Exp $
+ * $Id: some.php,v 1.71 2004/12/20 14:45:55 neildogg Exp $
  */
 
 // handle includes
@@ -175,7 +175,7 @@ if($sort_column == 9) {
 else {
     $sql .= " 'n/a' AS '" . _("%") . "' ";
 }
-$sql .= "FROM companies c, users u, activity_types at, addresses addr, activities a";
+$sql .= "FROM companies c, activity_types at, addresses addr, activities a";
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     $sql .= ", time_daylight_savings tds";
 }
@@ -183,6 +183,7 @@ if($opportunity_status_id || $sort_column == 9 || $campaign_id) {
     $sql .= ", opportunities o";
 }
 $sql .= " LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
+  LEFT OUTER JOIN users u ON a.user_id = u.user_id
   WHERE a.company_id = c.company_id";
 if($sort_column == 9 || $campaign_id) {
     $sql .= " AND a.on_what_table='opportunities'
@@ -190,7 +191,6 @@ if($sort_column == 9 || $campaign_id) {
 }
 $sql .= " AND a.activity_record_status = 'a'
   AND at.activity_type_id = a.activity_type_id
-  AND a.user_id = u.user_id
   AND c.default_primary_address=addr.address_id";
 
 $criteria_count = 0;
@@ -664,6 +664,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.71  2004/12/20 14:45:55  neildogg
+ * - Changed user table to a left join to allow an empty user search
+ *
  * Revision 1.70  2004/12/18 21:34:27  neildogg
  * Added empty user and current user search (great for saved searches)
  *
