@@ -49,7 +49,8 @@ foreach ($directions as $direction) {
     //search for this table in relationships in this direction
     $sql="SELECT *
     FROM relationship_types
-    WHERE $direction"."_what_table = " . $con->qstr($on_what_table);
+    WHERE $direction"."_what_table = " . $con->qstr($on_what_table)
+    ." AND relationship_status='a'";
     
     $rst = $con->execute($sql);
     if ($direction=='from') { $opposite='to'; } else { $opposite='from'; }
@@ -96,6 +97,9 @@ start_page($page_title, true, $msg);
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.10  2004/12/30 20:29:20  vanmer
+ * - added restriction to only show active relationship types
+ *
  * Revision 1.9  2004/12/09 17:42:18  vanmer
  * - fixed unclosed tag to allow options to display properly in internet explorer.
  *
