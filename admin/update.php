@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.50 2005/01/13 21:55:48 vanmer Exp $
+ * $Id: update.php,v 1.51 2005/01/23 18:48:57 maulani Exp $
  */
 
 // where do we include from
@@ -332,6 +332,30 @@ if ($recCount == 0) {
     $rec = array();
     $rec['param_id'] = 'LDAP Version';
     $rec['int_val'] = 3;
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is RSS Feeds Enabled and Maximum RSS Feed Entries in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='RSS Feeds Enabled'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added RSS Feeds Enabled and Maximum RSS Feed Entries system parameters.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'RSS Feeds Enabled';
+    $rec['int_val'] = 'No';
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $rec = array();
+    $rec['param_id'] = 'Maximum RSS Feed Entries';
+    $rec['int_val'] = 50;
 
     $tbl = 'system_parameters';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -3889,6 +3913,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.51  2005/01/23 18:48:57  maulani
+ * - Add system parameters required for RSS feeds
+ *
  * Revision 1.50  2005/01/13 21:55:48  vanmer
  * - altered currency SQL with IS NULL to simply check for the first record, and update only if it is blank
  *

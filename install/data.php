@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.14 2005/01/11 17:08:40 maulani Exp $
+ * $Id: data.php,v 1.15 2005/01/23 18:49:03 maulani Exp $
  */
 
 /**
@@ -27,6 +27,10 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters (param_id, string_val) values ('Activities Default Behavior', 'Fast')";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters (param_id, int_val) values ('LDAP Version', 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, int_val) values ('RSS Feeds Enabled', 'No')";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, int_val) values ('Maximum RSS Feed Entries', 50)";
         $rst = $con->execute($sql);
     }
 
@@ -2403,6 +2407,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.15  2005/01/23 18:49:03  maulani
+ * - Add system parameters required for RSS feeds
+ *
  * Revision 1.14  2005/01/11 17:08:40  maulani
  * - Added parameter for LDAP Version.  Some LDAP Version 3 installations
  *   require this option to be set.  Initial parameter setting is version 2
