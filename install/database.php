@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.15 2004/07/17 11:54:01 braverock Exp $
+ * $Id: database.php,v 1.16 2004/07/21 20:30:30 neildogg Exp $
  */
 
 /**
@@ -648,6 +648,27 @@ function company_db_tables($con, $table_list) {
             db_error_handler ($con, $sql);
         }
     }
+    
+    if (!in_array('saved_actions',$table_list)) {
+        $sql = "CREATE TABLE saved_actions (
+                 saved_id int(10) unsigned NOT NULL auto_increment,
+                 saved_title varchar(100) NOT NULL default '',
+                 user_id int(10) unsigned NOT NULL default '0',
+                 on_what_table varchar(100) NOT NULL default '',
+                 saved_action varchar(100) NOT NULL default '',
+                 group_item int(1) NOT NULL default '0',
+                 saved_data text NOT NULL,
+                 saved_status char(1) NOT NULL default 'a',
+                 PRIMARY KEY  (saved_id),
+                 KEY user_id (user_id),
+                 KEY group_item (group_item)
+                 )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
 
     if (!in_array('relationships',$table_list)) {
         // create the relationships table if we need it
@@ -975,6 +996,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.16  2004/07/21 20:30:30  neildogg
+ * - Added saved_actions table
+ *
  * Revision 1.15  2004/07/17 11:54:01  braverock
  * - add db_error_handler to each table creation for error reporting
  *

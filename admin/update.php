@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.23 2004/07/16 18:52:43 cpsource Exp $
+ * $Id: update.php,v 1.24 2004/07/21 20:30:18 neildogg Exp $
  */
 
 // where do we include from
@@ -266,6 +266,23 @@ $sql ="CREATE TABLE relationship_types (
                 pre_formatting varchar(25) default NULL,
                 post_formatting varchar(25) default NULL,
                 PRIMARY KEY  (relationship_type_id)
+                )";
+        //execute
+        $rst = $con->execute($sql);
+        
+// create the saved_actions table if we need it
+$sql = "CREATE TABLE saved_actions (
+                saved_id int(10) unsigned NOT NULL auto_increment,
+                saved_title varchar(100) NOT NULL default '',
+                user_id int(10) unsigned NOT NULL default '0',
+                on_what_table varchar(100) NOT NULL default '',
+                saved_action varchar(100) NOT NULL default '',
+                group_item int(1) NOT NULL default '0',
+                saved_data text NOT NULL,
+                saved_status char(1) NOT NULL default 'a',
+                PRIMARY KEY  (saved_id),
+                KEY user_id (user_id),
+                KEY group_item (group_item)
                 )";
         //execute
         $rst = $con->execute($sql);
@@ -684,6 +701,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.24  2004/07/21 20:30:18  neildogg
+ * - Added saved_actions table
+ *
  * Revision 1.23  2004/07/16 18:52:43  cpsource
  * - Add role check inside of session_check
  *
