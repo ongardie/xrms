@@ -43,6 +43,7 @@ if ($rst) {
     $work_phone = $rst->fields['work_phone'];
     $cell_phone = $rst->fields['cell_phone'];
     $home_phone = $rst->fields['home_phone'];
+    $profile = $rst->fields['profile'];
     $fax = $rst->fields['fax'];
     $aol_name = $rst->fields['aol_name'];
     $yahoo_name = $rst->fields['yahoo_name'];
