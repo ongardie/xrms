@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.46 2004/09/17 20:04:46 neildogg Exp $
+ * $Id: one.php,v 1.47 2004/10/21 05:58:18 gpowers Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -259,6 +259,14 @@ require_once( $include_locations_location . 'files/sidebar.php');
 
 //include the notes sidebar
 require_once( $include_locations_location . 'notes/sidebar.php');
+
+// make sure $sidebar_rows_top is defined
+if ( !isset($sidebar_rows_top) ) {
+  $sidebar_rows_top = '';
+}
+
+//call the sidebar top hook
+$sidebar_rows_top = do_hook_function('contact_sidebar_top', $sidebar_rows_top);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -532,8 +540,11 @@ function markComplete() {
 
     </div>
 
-        <!-- right column //-->
+    <!-- right column //-->
     <div id="Sidebar">
+
+        <!-- top sidebar plugins //-->
+        <?php echo $sidebar_rows_top; ?>
 
         <!-- categories //-->
         <table class=widget cellspacing=1>
@@ -587,6 +598,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.47  2004/10/21 05:58:18  gpowers
+ * - added contact_sidebar_top plugin hook
+ *
  * Revision 1.46  2004/09/17 20:04:46  neildogg
  * - Added optional auto creation of opportunity
  *  - from contact screen along with auto
