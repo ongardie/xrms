@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.72 2004/12/31 13:46:51 braverock Exp $
+ * $Id: one.php,v 1.73 2005/01/09 18:08:57 vanmer Exp $
  */
 
 //include required files
@@ -16,12 +16,15 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
-
+$activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
+$on_what_id=$activity_id;
 $session_user_id = session_check();
 
 $msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
 $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
 $return_url  = isset($_GET['return_url']) ? $_GET['return_url'] : '';
+if (!$return_url) $return_url='/activities/some.php';
+
 $save_and_next = isset($_GET['save_and_next']) ? true : false;
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -424,17 +427,13 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <input class=button type=submit name="save" value="<?php echo _("Save Changes"); ?>">
+                    <?php echo render_edit_button("Save Changes",'submit',false,'save'); ?>
                     <?php if($save_and_next) { ?>
                     <input class=button type=submit name="saveandnext" value="<?php echo _("Save and Next"); ?>">
                     <?php } ?>
-                    <input class=button type=submit name="followup" value="<?php echo _("Schedule Followup"); ?>">
+                    <?php echo render_create_button("Schedule Followup",'submit',false,'followup'); ?>
 
-<?php
-        confGoTo ( _("Delete Activity?"),
-                   _("Delete"),
-                   'delete.php?activity_id='.$activity_id.'&return_url='.urlencode($return_url));
-?>
+<?php echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id); ?>
                 </td>
             </tr>
         </table>
@@ -487,6 +486,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.73  2005/01/09 18:08:57  vanmer
+ * - moved definition activity_id to above session_check (for ACL)
+ * - added default return_url if none is defined
+ * - changed to use render_button functions for buttons instead of direct HTML
+ *
  * Revision 1.72  2004/12/31 13:46:51  braverock
  * - localize 'Entered by'
  * - sort contact list by last_name, first_names
