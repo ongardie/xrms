@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.38 2005/02/14 21:48:17 vanmer Exp $
+ * $Id: one.php,v 1.39 2005/02/25 03:37:02 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,6 +12,11 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once('../activities/activities-pager-functions.php');
+
+
 
 $opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
 $on_what_id=$opportunity_id;
@@ -22,6 +27,8 @@ $msg            = isset($_GET['msg']) ? $_GET['msg'] : '';
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
+
+$form_name = 'One_Opportunity';
 
 update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 
@@ -129,11 +136,13 @@ if ($rst) {
 
 // most recent activities
 
-$sql_activities = "
-SELECT
-  a.activity_id, a.activity_title, a.scheduled_at, a.on_what_table, a.on_what_id,
-  a.entered_at, a.activity_status, at.activity_type_pretty_name,
-  cont.contact_id, cont.first_names AS contact_first_names,
+$sql_activities = "SELECT " . 
+$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/opportunities/one.php%3Fopportunity_id=$opportunity_id\">'", "activity_title", "'</a>'") .
+"
+  AS activity_title, a.scheduled_at, a.on_what_table, a.on_what_id,
+  a.entered_at, a.activity_status, at.activity_type_pretty_name, " . 
+$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' .
+" cont.contact_id, cont.first_names AS contact_first_names,
   cont.last_name AS contact_last_name, u.username,
 CASE
   WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
@@ -157,43 +166,36 @@ WHERE a.on_what_table = 'opportunities'
     } else { $sql_activities .= ' AND 1 = 2 '; }
 
 
-$sql.="ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC";
+    // begin Activities Pager
+    $columns = array();
+    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title');
+    $columns[] = array('name' => _('User'), 'index_sql' => 'username');
+    $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
+    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name');
+    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at');
+    
+    $default_columns = array('activity_title', 'username','activity_type_pretty_name','contact_name','scheduled_at');
 
-$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
 
-$activity_rows = '';
+    // selects the columns this user is interested in
+    $pager_columns = new Pager_Columns('OpportunityActivitiesPager', $columns, $default_columns, $form_name);
+    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
-if ($rst) {
-    while (!$rst->EOF) {
-        $open_p = $rst->fields['activity_status'];
-        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
-        $is_overdue = $rst->fields['is_overdue'];
-        $on_what_table = $rst->fields['on_what_table'];
-        $on_what_id = $rst->fields['on_what_id'];
+    $columns = $pager_columns->GetUserColumns('default');
 
-        if ($open_p == 'o') {
-            if ($is_overdue) {
-                $classname = 'overdue_activity';
-            } else {
-                $classname = 'open_activity';
-            }
-        } else {
-            $classname = 'closed_activity';
-        }
+    $endrows = "<tr><td class=widget_content_form_element colspan=10>
+                $pager_columns_button
+                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
+                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
 
-        $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . "</td>";
-        $activity_rows .= '<td colspan=2 class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
-        $activity_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql_activities);
-}
+
+    $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'OpportunityActivitiesPager', $columns, false, true);
+    $pager->AddEndRows($endrows);
+
+    $activity_rows = $pager->Render($system_rows_per_page);
+    // end Activities Pager
+
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -436,9 +438,16 @@ function markComplete() {
                     <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
                 </td>
             </tr>
-            <?php  echo $activity_rows; ?>
         </table>
         </form>
+        <form name="<?php echo $form_name; ?>" method=post>
+            <?php
+                // activity pager
+                echo $pager_columns_selects;
+                echo $activity_rows;
+            ?>
+        </form>
+
 
     </div>
 
@@ -466,6 +475,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.39  2005/02/25 03:37:02  daturaarutad
+ * now using GUP_Pager for Activities listing
+ *
  * Revision 1.38  2005/02/14 21:48:17  vanmer
  * - updated to reflect speed changes in ACL operation
  *
