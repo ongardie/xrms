@@ -2,7 +2,7 @@
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.4 2004/04/20 15:20:58 braverock Exp $
+ * $Id: sidebar.php,v 1.5 2004/06/05 15:29:53 braverock Exp $
  */
 
 $note_rows = "<div id='note_sidebar'>
@@ -11,10 +11,10 @@ $note_rows = "<div id='note_sidebar'>
                 <td class=widget_header colspan=4>Notes</td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Size</td>
-                <td class=widget_label>Owner</td>
+                <td class=widget_label>Attached To</td>
                 <td class=widget_label>Date</td>
+                <td class=widget_label>Owner</td>
+                <td class=widget_label>&nbsp;</td>
             </tr>\n";
 
 //build the notes sql query
@@ -26,7 +26,7 @@ if (strlen($on_what_table)>0){
             and note_record_status = 'a'
             order by entered_at desc";
 } else {
-    $note_sql = "select note_id, note_description, entered_by, entered_at, username from notes, users
+    $note_sql = "select note_id, note_description, entered_by, entered_at, on_what_table, on_what_id, username from notes, users
             where notes.entered_by = '$session_user_id'
             and notes.entered_by = users.user_id
             and note_record_status = 'a'
@@ -41,32 +41,74 @@ $rst = $con->execute($note_sql);
 
 if (strlen($rst->fields['username']) > 0) {
     while (!$rst->EOF) {
-    if ($contact_id) {
-        $return_url = "&return_url=/contacts/one.php?contact_id=" . $contact_id;
-    }
-    elseif ($company_id) {
-        $return_url = "&return_url=/companies/one.php?company_id=" . $company_id;
-    }
-    else {
-        $return_url = "&return_url=/private/home.php";
-    }
+        $attached_to_link ='';
+        $on_what_name     ='';
+        $on_what_table    ='';
+
+        if ($contact_id) {
+            $return_url = "&return_url=$http_site_root/contacts/one.php?contact_id=" . $contact_id;
+        } elseif ($company_id) {
+            $return_url = "&return_url=$http_site_root/companies/one.php?company_id=" . $company_id;
+        } else {
+            $return_url = "&return_url=$http_site_root/private/home.php";
+        }
+        if (strlen($rst->fields['on_what_table']) > 0) {
+            switch ($rst->fields['on_what_table']) {
+                case 'companies': $on_what_table = 'company'; break;
+                case 'contacts':
+                    $on_what_table = 'contact';
+                    $on_what_name = " concat(last_name,', ',first_names) as on_what_name ";
+                    break;
+                case 'opporunities': $on_what_table = 'opportunity'; break;
+                case 'cases': $on_what_table = 'ccase'; break;
+                case 'campaigns': $on_what_table = 'ccampaign'; break;
+            }
+            if (!$on_what_name) { $on_what_name = $on_what_table.'_name as on_what_name '; }
+            $attached_sql = 'select '
+                           . $on_what_name.', '
+                           . $on_what_table.'_id '
+                           . ' from '.$rst->fields['on_what_table']
+                           . ' where '
+                           . $on_what_table.'_id = '. $rst->fields['on_what_id']
+                           . ' limit 1';
+            $attached_rst = $con->execute($attached_sql);
+            if ($attached_rst) {
+                $attached_to_link = "<a href=\"$http_site_root/". $rst->fields['on_what_table']
+                                        .'/one.php?'. $on_what_table.'_id='
+                                        .$rst->fields['on_what_id']
+                                        .'">'.$attached_rst->fields['on_what_name'].'</a>';
+            }
+        }
+        $note_rows .= "
+             <tr>
+                 <td class=widget_content>
+                 <font class=note_label>
+                 $attached_to_link
+                 </td>
+                 <td class=widget_content>
+                 <font class=note_label>"
+               . $con->userdate($rst->fields['entered_at'])
+               . "</td>\n\t<td class=widget_content>
+                 <font class=note_label>"
+               . $rst->fields['username']
+               . "</td>\n\t<td class=widget_content>
+                 <font class=note_label>
+                 <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . $return_url . "'>View/Edit</a>
+                 </font>
+                 </td>
+             </tr>";
         $note_rows .= "
              <tr>
                  <td class=widget_content colspan=4>
                  <font class=note_label>"
-               . $con->userdate($rst->fields['entered_at']) . " &bull; "
-               . $rst->fields['username'] . " &bull;
-                 <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . $return_url . "'>Edit</a>
-                 </font>
-                 <br>"
-               . $rst->fields['note_description'] .'
+               . nl2br(substr($rst->fields['note_description'],0,255)) .'
                  </td>
              </tr>';
         $rst->movenext();
     }
     $rst->close();
 } else {
-    $note_rows .= "            <tr> <td class=widget_content colspan=5> No attached notes </td> </tr>\n";
+    $note_rows .= "            <tr> <td class=widget_content colspan=4> No attached notes </td> </tr>\n";
 }
 
 //put in the new button
@@ -89,6 +131,11 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.5  2004/06/05 15:29:53  braverock
+ * - cleaned up table headers
+ * - fixed sql error handling
+ * - added link to attached record
+ *
  * Revision 1.4  2004/04/20 15:20:58  braverock
  * - apply patch to fix return URL on delete
  *   - fixes SF bugs 938049 & 938007
