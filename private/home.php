@@ -41,6 +41,9 @@ $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_compan
 if ($rst) {
     while (!$rst->EOF) {
 		
+		$attached_to_link = '';
+		$attached_to_name = '';
+		
 		$company_id = $rst->fields['company_id'];
 		$company_name = $rst->fields['company_name'];
         $activity_title = $rst->fields['activity_title'];
