@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.29 2005/01/10 20:48:03 neildogg Exp $
+ * $Id: one.php,v 1.30 2005/01/11 13:39:59 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -190,18 +190,9 @@ if ($rst) {
 //set up our substitution variables for use in the siddebars
 $on_what_table = 'opportunities';
 $on_what_id = $opportunity_id;
-$on_what_string = 'opportunity';
 
 //include the categories sidebar
 require_once($include_directory . 'categories-sidebar.php');
-
-//include the Cases sidebar
-//$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
-//require_once("../cases/sidebar.php");
-
-//include the opportunities sidebar
-//$opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
-//require_once("../opportunities/sidebar.php");
 
 // include the contact sidebar code
 require_once ('../contacts/sidebar.php');
@@ -456,6 +447,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.30  2005/01/11 13:39:59  braverock
+ * - removed on_what_string hack, changed to use standard make_singular function
+ *
  * Revision 1.29  2005/01/10 20:48:03  neildogg
  * - Changed to support new relationship sidebar variable requirement
  *
