@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.93 2005/02/17 08:00:28 daturaarutad Exp $
+ * $Id: one.php,v 1.94 2005/02/25 03:34:08 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -19,10 +19,12 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
-
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once('../activities/activities-pager-functions.php');
 
+
+global $company_id;
 $company_id = $_GET['company_id'];
 if (isset($_GET['division_id'])) {
     $division_id = $_GET['division_id'];
@@ -30,6 +32,7 @@ if (isset($_GET['division_id'])) {
 
 global $on_what_id;
 $on_what_id=$company_id;
+global $session_user_id;
 $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -40,7 +43,8 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$form_name = 'One_Company';
+$activities_form_name = 'Company_Activities';
+$contacts_form_name = 'Company_Contacts';
 
 
 // make sure $accounting_rows is defined
@@ -203,13 +207,15 @@ TILLEND;
         $division_select.="&nbsp; <input class=button type=button value=\"". _("Administer Division")."\" onclick=\"javascript:location.href='".$http_site_root."/companies/edit-division.php?company_id=$company_id&division_id=$division_id';\">";
     }
 } else { $division_select=false; }
+
 //
-//  list of most recent activities
+//  list of most recent activities (note that the order of sql fields is important for the GUP_Pager)
 //
 $sql_activities = "SELECT " . 
-$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/companies/one.php%3Fcompany_id=$company_id\">'", "activity_title", "'</a>'") .
-" AS  activity_title, u.username, at.activity_type_pretty_name, " . $con->Concat('cont.first_names', "' '", 'cont.last_name') . " AS contact_name, 
-a.scheduled_at, a.on_what_table, a.on_what_id, a.entered_at, a.activity_status,     
+$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/companies/one.php%3Fcompany_id=$company_id\">'", "activity_title", "'</a>'") .  " AS  activity_title," . 
+"u.username, at.activity_type_pretty_name, " . 
+$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' . 
+"a.scheduled_at, a.on_what_table, a.on_what_id, a.entered_at, a.activity_status,     
 (CASE WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1 ELSE 0 END) AS is_overdue
 FROM activity_types at, users u, activities a
 LEFT JOIN contacts cont ON cont.contact_id = a.contact_id
@@ -236,74 +242,99 @@ if ($division_id) {
     
 }
 
-	// begin Activities Pager
+// begin Activities Pager
+$columns = array();
+$columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title');
+$columns[] = array('name' => _('User'), 'index_sql' => 'username');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
+$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name');
+$columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
+$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at');
 
-    $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title');
-    $columns[] = array('name' => _('User'), 'index_sql' => 'username');
-    $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name');
-    $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at');
-
-	$default_columns = array('activity_title', 'username','activity_type_pretty_name','contact_name','scheduled_at');
-
-
-    // selects the columns this user is interested in
-    $pager_columns = new Pager_Columns('ActivitiesPager', $columns, $default_columns, $form_name);
-    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-
-    $columns = $pager_columns->GetUserColumns('default');
+$default_columns = array('activity_title', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
 
-    $pager = new GUP_Pager($con, $sql_activities, null, _('Activities'), $form_name, 'ActivitiesPager', $columns, false, true);
-    $activity_rows = $pager->Render($system_rows_per_page);
-	// end Activities Pager
+// selects the columns this user is interested in
+$pager_columns = new Pager_Columns('CompanyActivitiesPager', $columns, $default_columns, $activities_form_name);
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$activities_pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+
+$pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $activities_form_name, 'CompanyActivitiesPager', $columns, false, true);
+$pager->AddEndRows($endrows);
+
+$activity_rows = $pager->Render($system_rows_per_page);
+// end Activities Pager
 
 
-// contacts
+// contacts query
+$sql = "select " . 
+		$con->Concat($con->qstr('<a id="'), 'last_name', $con->qstr(' '), 'first_names', $con->qstr('" href="' . $http_site_root . '/contacts/one.php?contact_id='), "contact_id", $con->qstr('&amp;return_url=/companies/one.php%3Fcompany_id=' . $company_id . '">'), "last_name", $con->qstr(', '), "first_names", $con->qstr('</a>')) . " AS name, summary, title, description, email, contact_id, first_names, last_name, address_id, work_phone
+from contacts where company_id = $company_id and contact_record_status = 'a'";
 
-$sql = "select * from contacts where company_id = $company_id
-        and contact_record_status = 'a'
-";
+
 if ($division_id) {
     $sql .=" AND division_id=$division_id";
 }
-$sql .="
-        order by last_name";
 
-$rst = $con->execute($sql);
+//echo htmlentities($sql);
 
-$contact_rows = '';
-if ($rst) {
-    $num_contacts = $rst->rowcount();
-    while (!$rst->EOF) {
-        $contact_id = $rst->fields['contact_id'];
-        $contact_rows .= "\n<tr>";
-        $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
-                        . $contact_id . "'>"
-                        . $rst->fields['last_name'] . ', ' . $rst->fields['first_names']
-                        . '</a></td>';
-        $contact_rows .= '<td class=widget_content>' . $rst->fields['summary'] . '</td>';
-        $contact_rows .= '<td class=widget_content>' . $rst->fields['title'] . '</td>';
-        $contact_rows .= '<td class=widget_content>' . $rst->fields['description'] . '</td>';
-        $contact_rows .= '<td class=widget_content>' . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) . '</td>';
-        $contact_rows .= "\n\t<td class=widget_content><a href='mailto:"
-                        . $rst->fields['email']
-                        . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&contact_id=$contact_id&activity_title=email to "
-                        . $rst->fields['first_names']. " " .$rst->fields['last_name']
-                        . "&company_id=$company_id&contact_id="
-                        . $contact_id
-                        ."&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id'\" >"
-                        . htmlspecialchars($rst->fields['email'])
-                        . '</a></td>';
-        $contact_rows .= "\n</tr>";
-        $rst->movenext();
+// begin Contacts Pager
+$columns = array();
+$columns[] = array('name' => _('Name'), 'index_sql' => 'name');
+$columns[] = array('name' => _('Summary'), 'index_sql' => 'summary');
+$columns[] = array('name' => _('Title'), 'index_sql' => 'title');
+$columns[] = array('name' => _('Description'), 'index_sql' => 'description');
+$columns[] = array('name' => _('Phone'), 'index_calc' => 'phone');
+$columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email');
+
+$default_columns = array('name','summary','title','description','phone','email');
+
+
+// selects the columns this user is interested in
+$pager_columns = new Pager_Columns('ContactsPager', $columns, $default_columns, $contacts_form_name);
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$contacts_pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+$new_contact_location="../contacts/new.php?company_id=$company_id";
+if ($division_id) $new_contact_location.= "&division_id=$division_id"; 
+	
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . ">" .
+			render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
+
+    // this is the callback function that the pager uses to fill in the calculated data.
+    function getContactDetails($row) {
+        global $con;
+		global $session_user_id;
+		global $company_id;
+
+		// this is for the CTI dialing bit
+		global $contact_id;
+		$contact_id = $row['contact_id'];
+
+        $row['phone'] = get_formatted_phone($con, $row['address_id'], $row['work_phone']);
+        $row['email'] = "<a href='mailto:{$row['email']}' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}'\" >" . htmlspecialchars($row['email']) . '</a>';
+
+        return $row;
     }
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
-}
+
+
+$pager = new GUP_Pager($con, $sql, 'getContactDetails', _('Contacts'), $contacts_form_name, 'ContactsPager', $columns, false, true);
+$pager->AddEndRows($endrows);
+
+$contact_rows = $pager->Render($system_rows_per_page);
+// end Contacts Pager
+
 
 // former names
 
@@ -410,14 +441,6 @@ add_audit_item($con, $session_user_id, 'viewed', 'companies', $company_id, 3);
 
 //close the database connection, we don't need it anymore
 $con->close();
-
-if (!$activity_rows) {
-    $activity_rows = '<tr><td class=widget_content colspan=7>'._("No Activities").'</td></tr>';
-}
-
-if (!$contact_rows) {
-    $contact_rows = '<tr><td class=widget_content colspan=6>'._("No Contacts").'</td></tr>';
-}
 
 if (!$former_name_rows) {
     $former_name_rows = "";
@@ -670,27 +693,14 @@ function markComplete() {
         </table>
 
         <!-- contacts //-->
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=6><?php echo $num_contacts; ?> <?php if ($num_contacts === 1) { echo _("Contact"); } else { echo _("Contacts"); } ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
-                <td class=widget_label><?php echo _("Summary"); ?></td>
-                <td class=widget_label><?php echo _("Title"); ?></td>
-                <td class=widget_label><?php echo _("Description"); ?></td>
-                <td class=widget_label><?php echo _("Phone"); ?></td>
-                <td class=widget_label><?php echo _("E-Mail"); ?></td>
-            </tr>
-            <?php  echo $contact_rows; ?>
-            <tr>
-                <td class=widget_content_form_element colspan=6>
-                    <?php $new_contact_location="../contacts/new.php?company_id=$company_id";
-                            if ($division_id) $new_contact_location.= "&division_id=$division_id"; ?>
-                    <?php echo render_create_button("New",'button',"location.href='$new_contact_location';"); ?>
-            </td>
-            </tr>
-        </table>
+        <form name="<?php echo $contacts_form_name; ?>" method=post>
+            <?php 
+				// contacts pager
+				echo $contacts_pager_columns_selects; 
+				echo $contact_rows; 
+			?>
+		</form>
+
 
 <?php
     jscalendar_includes();
@@ -700,7 +710,7 @@ function markComplete() {
 
 ?>
 
-        <!-- activities //-->
+        <!-- new activity //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
 
         <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?><?php echo ($division_id) ? "%26division_id=" . $division_id : ''; ?>">
@@ -718,7 +728,7 @@ function markComplete() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6><?php echo _("New Activities"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("Add New Activity"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
@@ -744,13 +754,15 @@ function markComplete() {
         </table>
         </form>
 
-        <form name="<?php echo $form_name; ?>" method=post>
+        <!-- activities list //-->
+        <form name="<?php echo $activities_form_name; ?>" method=post>
             <?php 
-				// activity pager
-				echo $pager_columns_selects; 
+				// activities pager
+				echo $activities_pager_columns_selects; 
 				echo $activity_rows; 
 			?>
 		</form>
+
 
         <!-- company content bottom plugins //-->
         <?php echo $bottom_rows; ?>
@@ -795,6 +807,13 @@ Calendar.setup({
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
         align          :    "Bl"           // alignment (defaults to "Bl")
     });
+
+
+function bulkEmail() {
+    document.forms[0].action = "../email/email.php";
+    document.forms[0].submit();
+}
+
 </script>
 
 <?php
@@ -803,6 +822,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.94  2005/02/25 03:34:08  daturaarutad
+ * contacts and activities now using GUP_Pager class
+ *
  * Revision 1.93  2005/02/17 08:00:28  daturaarutad
  * updated to use GUP Pager class for activities
  *
