@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.24 2004/07/21 20:30:18 neildogg Exp $
+ * $Id: update.php,v 1.25 2004/07/28 11:50:19 braverock Exp $
  */
 
 // where do we include from
@@ -120,9 +120,15 @@ $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 // end
 
-//add sort order to activity types
-//should put a test here, but alter table is non-destructive
+// add sort order to activity types
+// should put a test here, but alter table is non-destructive
+// adding a test here would allow us to use UPDATE to set rational default values
 $sql = "ALTER TABLE activity_types ADD sort_order TINYINT NOT NULL DEFAULT '1' AFTER activity_type_record_status";
+$rst = $con->execute($sql);
+
+// add sort order to opportunity statuses
+// adding a test here would allow us to use UPDATE to set rational default values
+$sql = "ALTER TABLE opportunity_statuses ADD sort_order TINYINT NOT NULL DEFAULT '1' AFTER opportunity_status_id";
 $rst = $con->execute($sql);
 
 //add phone format to countries
@@ -269,7 +275,7 @@ $sql ="CREATE TABLE relationship_types (
                 )";
         //execute
         $rst = $con->execute($sql);
-        
+
 // create the saved_actions table if we need it
 $sql = "CREATE TABLE saved_actions (
                 saved_id int(10) unsigned NOT NULL auto_increment,
@@ -701,6 +707,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.25  2004/07/28 11:50:19  braverock
+ * - add sort order to opportunity statuses
+ *
  * Revision 1.24  2004/07/21 20:30:18  neildogg
  * - Added saved_actions table
  *
