@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.13 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: addresses.php,v 1.14 2004/06/30 11:39:25 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -28,7 +28,6 @@ $sql = "select * from companies c, addresses a
 where a.address_record_status = 'a'
 and c.company_id = a.company_id
 and c.company_id = $company_id";
-
 $rst = $con->execute($sql);
 
 if ($rst) {
@@ -39,12 +38,16 @@ if ($rst) {
 
         $sql2 = "select contact_id, address_id, last_name, first_names  from contacts
         where address_id = " . $rst->fields['address_id'];
-        $rst2 = $con->execute($sql2);
-
-        $addresses .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
+	$rst2 = $con->execute($sql2);
+        $addresses .= "<td class=widget_content>";
+	while(!$rst2->EOF) {
+		$addresses .= "<a href='../contacts/one.php?contact_id="
                     . $rst2->fields['contact_id'] . "'>"
                     . $rst2->fields['first_names'] . " "
-                    . $rst2->fields['last_name'] . "</a></td>";
+                    . $rst2->fields['last_name'] . "</a><br>";
+		    $rst2->MoveNext();
+	}
+	$addresses .= "</td>";
 
         $addresses .= "<td class=widget_content>$address_to_display</td>";
         $addresses .= "<td class=widget_content><input type=radio name=default_primary_address value=" . $rst->fields['address_id'];
@@ -185,6 +188,10 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.14  2004/06/30 11:39:25  braverock
+ * - fixes a bug in showing contacts using address
+ *   - patch supplied by David Uhlman
+ *
  * Revision 1.13  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.
