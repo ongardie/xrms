@@ -3,20 +3,30 @@
  *
  * This style sheet overlays the default XRMS sheets:
  *    xrmsstyle.css, xrmsstyle-ie.css (if IE), and xrmsstyle-screen.css
- *
+ * Pull in relevant Calendar style sheet
  */
+@import url(../../js/jscalendar/calendar-green.css);
 /**
  * Page colors
  * foregrounds and backgrounds (except page background)
  * should stick with this subset of colors + black, white
  */
-.darkest   { color: rgb(67,104,47); }
-.dark      { color: rgb(113,149,92); }
+.darkest   { color: rgb(47,74,0); }
+.dark      { color: rgb(92,119,77); }
 .middle    { color: rgb(137,164,122); }
 .light     { color: rgb(183,210,168); }
+.lightest  { color: rgb(228,255,213); }
 
-.lightpink { color: #fee; }
+.lightpink   { color: rgb(255,213,213); }
+.mediumpink  { color: rgb(240,183,183); }
+.darkpink    { color: rgb(149.92,92);   }
+.darkestpink { color: rgb(104,47,47);   }
+
 .paleyellow { color: #ffe; } 
+
+.mediumnavy { color: #009; }
+
+.disabled   { color: #ccc; }
 
 /** ----------
  * FOREGROUND COLORS - black by default (body - inherited) 
@@ -26,56 +36,136 @@ a:hover {
 }
 #loginbar,
 #page_header,
+.calendar .button,
 table.widget .widget_header {
     color: white;
 }
+.calendar td.time span.hilite {
+    color: black;
+}
+.calendar tbody .disabled {
+    color: #ccc;             /* disabled */
+}
+.calendar tbody .day.othermonth {
+  color: rgb(92,119,77);     /* dark */
+}
+.calendar thead .name,
+.calendar thead .daynames,
+.calendar table .wn,
+.calendar tbody .day,
+.calendar td.time,
+.calendar tbody td.selected {
+    color: rgb(47,74,0);     /* darkest */
+}
+.calendar td.time span.active,
+.calendar thead .weekend,
+.calendar tbody td.weekend {
+    color: rgb(149,92,92);   /* darkpink */
+}
+.calendar tbody td.today,
 a {
-    color: #009;
+    color: #009;             /* mediumnavy - for link visibility */
 }
 #loginbar a,
 #page_header a,
+.calendar thead .title,
+.calendar tfoot .ttip,
 table.widget .widget_header a {
     color: #ffe;            /* pale yellow, to stand out against dark green */
 }
-/**
+/**-----------------------------------------------------------
  * BACKGROUND COLORS
  */
+.calendar tbody .rowhilite td.hilite,
+.calendar .combo .active,
 body {
     background-color: #ffe; /* pale yellow - accents green for page background */
 }
-table.widget {
-    background-color: rgb(137,164,122); /* middle */
-}
+.calendar table,
+.calendar tbody,
+.calendar td.time .hour,
+.calendar td.time .minute,
+.calendar td.time .ampm,
 table.widget td {
     background-color: white;
 }
+.calendar .combo,
+.calendar tbody .rowhilite td,
+.calendar tbody .rowhilite td.wn,
+.calendar td.time span.active,
+.calendar td.time span.hilite,
+.calendar tfoot .hilite,
+.calendar thead .hilite {
+    background-color: rgb(228,255,213); /* lightest */
+}
 #navline,
+.calendar table .wn,
+.calendar td.time,
+.calendar thead .daynames,
+.calendar tbody td.active,
+.calendar tfoot .active,
+.calendar .combo .hilite,
 table.widget .widget_label {
     background-color: rgb(183,210,168); /* light */
 }
+.calendar,
+.calendar thead .active,
+table.widget {
+    background-color: rgb(137,164,122); /* middle */
+}
+.calendar tfoot .ttip,
+.calendar .button,
+.calendar .nav {
+    background-color: rgb(92,119,77);  /* dark */
+}
 #page_header,
+.calendar thead .title,
+.calendar tfoot .footrow,
 table.widget .widget_header {
-    background-color: rgb(67,104,47);   /* darkest */
+    background-color: rgb(47,74,0);   /* darkest */
 }
 #msg,
 table.widget .non_uploaded_file,
 table.widget .overdue_activity {
-    background-color: #fee;             /* lightpink */
+    background-color: rgb(255,213,213); /* lightpink */
 }
 /** 
  * BORDERS
  */
+#msg {
+    background-image: url(../../img/msg_background.gif);
+    border: 1px solid #ccc;                           /* disabled */
+}
 #page_header {
     border:        1px solid rgb(137,164,122);        /* middle */
     border-top:    3px solid rgb(137,164,122);        /* middle */
     border-bottom: 2px solid rgb(137,164,122);        /* middle */
 }
+.calendar td.time {
+    border-top:    1px solid rgb(137,164,122);        /* middle */
+}
+.calendar td.time {
+    border-right:  1px solid rgb(137,164,122);        /* middle */
+}
+.calendar thead .name {
+    border-right:  1px solid rgb(137,164,122);        /* middle */
+}
+.calendar, 
+.calendar table
+.calendar .combo,
+.calendar .combo .active,
+.calendar td.time .hour,
+.calendar td.time .minute,
+.calendar td.time .ampm,
 #navline {
     border:        1px solid rgb(137,164,122);        /* middle */
 }
-#msg {
-    background-image: url(../../img/msg_background.gif);
-    border: 1px solid #ccc;
+.calendar tfoot .hilite,
+.calendar thead .hilite,
+.calendar tbody td.hilite,
+.calendar td.time span.hilite,
+.calendar td.time span.active {
+    border-color: rgb(47,74,0);                       /* darkest */
 }
 /**
  * PADDING/MARGINS 
