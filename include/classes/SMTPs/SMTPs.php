@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.2 2005/03/21 05:10:45 jswalter Exp $
+// $Id: SMTPs.php,v 1.3 2005/03/21 05:24:27 jswalter Exp $
 
   /**
    * Class SMTPs
@@ -38,7 +38,7 @@
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    * @contributors name <email address> description
    *
-   * @version $Revision: 1.2 $
+   * @version $Revision: 1.3 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -1261,6 +1261,8 @@ class SMTPs
         $_header .= 'X-Mailer: SMTPs/PHP Mailer'                   . "\r\n"
                  .  'Mime-Version: 1.0'                            . "\r\n";
 
+do_print_r ( $_header );
+
         return $_header;
     }
 
@@ -1438,7 +1440,7 @@ class SMTPs
     */
     function getSensitivity()
     {
-        return $this->_arySensitivity[$this->$_msgSensitivity];
+        return $this->_arySensitivity[$this->_msgSensitivity];
     }
 
    /**
@@ -1467,7 +1469,7 @@ class SMTPs
     */
     function setPriority ( $_value = 0 )
     {
-        $this->$_msgPriority = $_value;
+        $this->_msgPriority = $_value;
     }
 
    /**
@@ -1499,7 +1501,7 @@ class SMTPs
     {
         return 'Importance: ' . $this->_aryPriority[$this->_msgPriority] . "\r\n"
              . 'Priority: '   . $this->_aryPriority[$this->_msgPriority] . "\r\n"
-             . 'X-Priority: ' . $this->_msgPriority . '(' . $this->_aryPriority[$this->_msgPriority] . ')' . "\r\n";
+             . 'X-Priority: ' . $this->_msgPriority . ' (' . $this->_aryPriority[$this->_msgPriority] . ')' . "\r\n";
     }
 
 
@@ -1634,6 +1636,9 @@ function server_parse($socket, $response)
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.3  2005/03/21 05:24:27  jswalter
+  *  - corrected 'getSensitivity()'
+  *
   * Revision 1.2  2005/03/21 05:10:45  jswalter
   *  - modified '$_aryPriority[]' to proper values
   *
