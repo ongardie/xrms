@@ -3,7 +3,7 @@
  *
  * Companies by crm status report.
  *
- * $Id: companies-by-crm-status.php,v 1.7 2005/01/03 06:37:19 ebullient Exp $
+ * $Id: companies-by-crm-status.php,v 1.8 2005/03/09 21:06:11 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,77 +17,82 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
+$user_id = $_GET['user_id'];
+$all_users = $_GET['all_users'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
-
-$sql1 = "select crm_status_id, crm_status_pretty_plural from crm_statuses where crm_status_record_status = 'a'";
-$rst1 = $con->execute($sql1);
-$graph_legend_array = array();
-$array_of_company_count_values = array();
-$total_company_count = 0;
-
-while (!$rst1->EOF) {
-
-    $sql2 = "SELECT count(*) AS company_count 
-	from companies 
-	where crm_status_id = " . $rst1->fields['crm_status_id'];
-    $rst2 = $con->execute($sql2);
-
-    if ($rst2) {
-        $company_count = $rst2->fields['company_count'];
-        $rst2->close();
-    }
-
-    if (!$company_count) {
-        $company_count = 0;
-    }
-    $total_company_count += $company_count;
-    array_push($array_of_company_count_values, $company_count);
-    array_push($graph_legend_array, "'" . $rst1->fields['crm_status_pretty_plural'] . "'");
-    $rst1->movenext();
-
+if (!$user_id)
+{
+   $all_users = true;
 }
-
-$graph_rows .= "g.addRow(" . implode(',', $array_of_company_count_values) . ");\n";
-
-$rst1->close();
-$con->close();
 
 $page_title = _("Companies by CRM Status");
 start_page($page_title, true, $msg);
 
-?>
+// jnh
+$userArray = array();
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+// $con->debug = 1;
 
-<SCRIPT LANGUAGE="JavaScript1.2" SRC="<?php  echo $http_site_root; ?>/js/graph.js"></SCRIPT>
+// JNH add for change user
+$sqljnh = "select username, user_id from users where user_record_status = 'a' order by username";
+$rstjnh = $con->execute($sqljnh);
+$user_menu = $rstjnh->getmenu2('user_id',$user_id, false);
+$rstjnh->close();
+
+?>
 
 <div id="Main">
     <div id="ContentFullWidth">
-
         <table class=widget cellspacing=1>
-            <tr>
-                <th class=widget_header><?php echo _("Companies by CRM Status"); ?></th>
-            </tr>
-            <tr>
-
-                <td class=widget_content_graph>
-                    <SCRIPT LANGUAGE="JavaScript">
-                        var g = new Graph(<?php  echo $report_graph_width . ' , ' . $report_graph_height;  ?>  );
-                                <?php  echo $graph_rows; ?>
-                        g.scale = <?php  echo round($total_company_count / 10); ?>;
-                        g.stacked = false;
-                        g.setXScaleValues(<?php echo implode(',', $graph_legend_array); ?>);
-                        g.build();
-                    </SCRIPT>
-                </td>
-
-            </tr>
-
+        <tr>
+              <th class=widget_header><?php echo _("Companies by CRM Status"); ?></th>
+        </tr>
+        <tr>
+            <td class=widget_content_graph>
+                  <img src="jpgraph-companies-by-crm-status.php<?php
+                  if ( $all_users )
+                  {
+                    echo "?all_users=on"; 
+                  }
+                  else
+                  {
+                     echo "?user_id=" . $user_id;
+                  }  
+           ?>"
+            border=0 align=center>
+            </td>
+        </tr>
         </table>
+    <table>
+    <form method=get>
+    <tr>
+        <th><?php echo _("User"); ?></th>
+        <th></th>
+    </tr>
+    <tr>
+            <td><?php echo $user_menu; ?></td>
+            <td>
+                <input class=button type=submit value="<?php echo _("Change Graph"); ?>">
+            </td>
+    </tr>
+    <tr>
+       <td>
+                <input name=all_users type=checkbox 
+<?php
+    if ($all_users) {
+        echo "checked";
+    }
 
+    echo ">" . _("All Users");
+?>
+       </td>
+            <td>
+            </td>
+    </tr>
+    </form>
+        </table>
     </div>
-
 </div>
 
 <?php
@@ -96,6 +101,10 @@ end_page();
 
 /**
  * $Log: companies-by-crm-status.php,v $
+ * Revision 1.8  2005/03/09 21:06:11  daturaarutad
+ * updated to use Jean-Noel HAYART changes: user filtering
+ * updated to use JPGraph bar chart class
+ *
  * Revision 1.7  2005/01/03 06:37:19  ebullient
  * update reports - graphs centered on page, reports surrounded by divs
  *
@@ -112,5 +121,6 @@ end_page();
  *
  *
  */
+ 
 ?>
 

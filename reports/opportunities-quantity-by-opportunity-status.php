@@ -3,7 +3,7 @@
  *
  * Opportunities quanity by opportunity status report.
  *
- * $Id: opportunities-quantity-by-opportunity-status.php,v 1.7 2005/01/03 06:37:19 ebullient Exp $
+ * $Id: opportunities-quantity-by-opportunity-status.php,v 1.8 2005/03/09 21:06:12 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,8 +17,15 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
-
+$user_id = $_GET['user_id'];
+$all_users = $_GET['all_users'];
 $hide_closed_opps = $_GET['hide_closed_opps'];
+
+if(!$user_id)
+{
+	$all_users = true;
+}
+
 if (strlen($hide_closed_opps) > 0) {
 	$checked_hide_closed_opps = "checked";
 	$hide_closed_opps = true;
@@ -28,87 +35,76 @@ else $hide_closed_opps = false;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql1 = "select opportunity_status_id, opportunity_status_pretty_plural
-from opportunity_statuses
-where opportunity_status_record_status = 'a'";
-
-if ($hide_closed_opps) $sql1 .= " and status_open_indicator = 'o'";
-
-$rst1 = $con->execute($sql1);
-$opportunity_status_count = $rst1->recordcount();
-$graph_legend_array = array();
-$array_of_opportunity_count_values = array();
-$total_opportunity_count = 0;
-
-while (!$rst1->EOF) {
-
-    $sql2 = "SELECT count(*) AS opportunity_count
-	from opportunities
-	where opportunity_status_id = " . $rst1->fields['opportunity_status_id'] . "
-	and opportunity_record_status = 'a'";
-    $rst2 = $con->execute($sql2);
-
-    if ($rst2) {
-        $opportunity_count = $rst2->fields['opportunity_count'];
-        $rst2->close();
-    }
-
-    if (!$opportunity_count) {
-        $opportunity_count = 0;
-    }
-    $total_opportunity_count += $opportunity_count;
-    array_push($array_of_opportunity_count_values, $opportunity_count);
-    array_push($graph_legend_array, "'" . $rst1->fields['opportunity_status_pretty_plural'] . "'");
-    $rst1->movenext();
-
-}
-
-$graph_rows .= "g.addRow(" . implode(',', $array_of_opportunity_count_values) . ");\n";
-
-$rst1->close();
-$con->close();
+// JNH add for change user
+$sqljnh = "select username, user_id from users where user_record_status = 'a' order by username";
+$rstjnh = $con->execute($sqljnh);
+$user_menu = $rstjnh->getmenu2('user_id',$user_id, false);
+$rstjnh->close();
 
 $page_title = _("Opportunities by Status");
 start_page($page_title, true, $msg);
 
 ?>
 
-<SCRIPT LANGUAGE="JavaScript1.2" SRC="<?php  echo $http_site_root; ?>/js/graph.js"></SCRIPT>
-
 <div id="Main">
     <div id="ContentFullWidth">
-
         <table class=widget cellspacing=1>
-            <tr>
-                <th class=widget_header><?php echo _("Opportunities by Status"); ?></th>
-            </tr>
-            <tr>
+        <tr>
+              <th class=widget_header><?php echo _("Opportunities by Status"); ?></th>
+        </tr>
+        <tr>
+            <td class=widget_content_graph>
+                  <img src="jpgraph-opportunities-quantity-by-opportunity-status.php<?php
+                  if ( $all_users )
+                  {
+                    echo "?all_users=on"; 
+                  }
+                  else
+                  {
+                     echo "?user_id=" . $user_id;
+                  }  
+                  if ($hide_closed_opps)
+                  {
+                     echo "&hide_closed_opps=on";
+                  }  
+                  
+           ?>"
+            border=0 align=center>
+            </td>
+        </tr>
+        </table>
+    <table>
+    <form method=get>
+    <tr>
+        <th><?php echo _("User"); ?></th>
+        <th></th>
+    </tr>
+    <tr>
+            <td><?php echo $user_menu; ?></td>
+            <td>
+                <input class=button type=submit value="<?php echo _("Change Graph"); ?>">
+            </td>
+    </tr>
+    <tr>
+       <td>
+                <input name=all_users type=checkbox 
+<?php
+    if ($all_users) {
+        echo "checked";
+    }
 
-                <td class=widget_content_graph>
-                <SCRIPT LANGUAGE="JavaScript1.2">
-                var g = new Graph(<?php  echo ($opportunity_status_count * 80); ?>,<?php  echo $report_graph_height; ?>);
-                <?php  echo $graph_rows; ?>
-                g.scale = <?php  echo round($total_opportunity_count / 10); ?>;
-                g.stacked = false;
-                g.setXScaleValues(<?php  echo implode(',', $graph_legend_array); ?>);
-                g.build();
-                </SCRIPT>
-                </td>
-
-            </tr>
-		<tr>
-                <td class=widget_content_form_element>
-		<form method=get>
+    echo ">" . _("All Users");
+?>
+       </td>
+            <td>
 		<input type=checkbox name=hide_closed_opps value="true" <?php echo $checked_hide_closed_opps; ?>>
 		<?php echo _("Exclude Closed Opportunities"); ?>
-		<input type=submit class=button value="<?php echo _("Change Graph"); ?>">
-		</form>
-		</td>
-            </tr>
+            
+            </td>
+    </tr>
+    </form>
         </table>
-
     </div>
-
 </div>
 
 <?php
@@ -117,6 +113,10 @@ end_page();
 
 /**
  * $Log: opportunities-quantity-by-opportunity-status.php,v $
+ * Revision 1.8  2005/03/09 21:06:12  daturaarutad
+ * updated to use Jean-Noel HAYART changes: user filtering
+ * updated to use JPGraph bar chart class
+ *
  * Revision 1.7  2005/01/03 06:37:19  ebullient
  * update reports - graphs centered on page, reports surrounded by divs
  *
