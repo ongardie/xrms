@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.5 2004/12/31 22:54:18 gpowers Exp $
+ * $Id: edit.php,v 1.6 2005/01/08 06:25:14 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -84,13 +84,15 @@ function show_element ($element_id, $element_value, $element_possvals) {
 # Always retrieve, and pass on, server and company ID
 $info_id = $_GET['info_id'];
 $company_id = $_GET['company_id'];
+$division_id = $_GET['division_id'];
+$contact_id = $_GET['contact_id'];
 $return_url = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
 
-$delete_return_url = urlencode("../../companies/one.php?company_id=$company_id");
+$delete_return_url = urlencode("../../companies/one.php?company_id=$company_id&division_id=$division_id");
 
 if (!$return_url) {
-    $return_url = "../../companies/one.php?company_id=$company_id";
+    $return_url = "../../companies/one.php?company_id=$company_id&division_id=$division_id";
 };
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -183,6 +185,8 @@ $con->close();
     <form action=edit-2.php method=post>
       <input type=hidden name=info_id value=<?php  echo $info_id; ?>>
       <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
+      <input type=hidden name=division_id value=<?php  echo $division_id; ?>>
+      <input type=hidden name=contact_id value=<?php  echo $contact_id; ?>>
       <input type=hidden name=info_type_id value=<?php  echo $info_type_id; ?>>
       <input type=hidden name=return_url value=<?php  echo $return_url; ?>>
       <table class=widget cellspacing=1>
@@ -210,11 +214,11 @@ if ((($element_label[$element_id] != "Name")
             <input class=button type=button
               value="Edit element definitions" onclick="javascript:
               location.href='<?php echo
-              "edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&return_url=$return_url"; ?>';">&nbsp;
+              "edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&division_id=$division_id&return_url=$return_url"; ?>';">&nbsp;
             <input class=button type=button
               value="Delete" onclick="javascript:
               location.href='<?php echo
-              "delete-item-2.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&return_url=$delete_return_url"; ?>';">&nbsp;
+              "delete-item-2.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&division_id=$division_id&return_url=$delete_return_url"; ?>';">&nbsp;
           </td>
         </tr>
       </table>

@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.6 2005/01/03 16:42:19 gpowers Exp $
+ * $Id: setup.php,v 1.7 2005/01/08 06:25:14 gpowers Exp $
  */
 
 
@@ -55,7 +55,7 @@ function info_setup() {
 }
 
 function company_content_bottom () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
     include("info.inc");
     ob_start();
     $display_on = "company_content_bottom";
@@ -66,7 +66,7 @@ function company_content_bottom () {
 }
 
 function company_accounting () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
     include("info.inc");
     ob_start();
     $display_on = "company_accounting";
@@ -77,7 +77,7 @@ function company_accounting () {
 }
 
 function company_sidebar_bottom () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
     include("info.inc");
     ob_start();
     $display_on = "company_sidebar_bottom";
@@ -88,7 +88,7 @@ function company_sidebar_bottom () {
 }
 
 function contact_sidebar_top () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
     include("info.inc");
     ob_start();
     $display_on = "contact_sidebar_top";
@@ -99,7 +99,7 @@ function contact_sidebar_top () {
 }
 
 function contact_sidebar_bottom () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
     include("info.inc");
     ob_start();
     $display_on = "contact_sidebar_bottom";

@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: edit-2.php,v 1.5 2004/11/10 07:29:32 gpowers Exp $
+ * $Id: edit-2.php,v 1.6 2005/01/08 06:25:14 gpowers Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -21,6 +21,8 @@ $msg = $_POST['msg'];
 # Always retrieve, and pass on, server and company ID
 $info_id = $_POST['info_id'];
 $company_id = $_POST['company_id'];
+$division_id = $_POST['division_id'];
+$contact_id = $_POST['contact_id'];
 $info_type_id = $_POST['info_type_id'];
 $return_url = $_POST['return_url'];
 
@@ -30,7 +32,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 # If this is a new server then $info_id will be zero, so create server
 if (0 == $info_id) {
-  $sql = "INSERT INTO info_map (company_id,info_type_id) VALUES ('$company_id','$info_type_id')";
+  $sql = "INSERT INTO info_map (company_id,division_id,contact_id,info_type_id) VALUES ('$company_id','$division_id','$contact_id','$info_type_id')";
   $status = $con->execute($sql);
   if (!$status) {
     db_error_handler ($con, $sql);

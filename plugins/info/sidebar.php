@@ -2,23 +2,26 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.7 2005/01/03 16:52:38 gpowers Exp $
+ * $Id: sidebar.php,v 1.8 2005/01/08 06:25:14 gpowers Exp $
  */
 
 // $con->debug = 1;
 
 global $display_on;
 
-# set a reasonable default
+// exit if no $display_on
 if (!$display_on) {
-    $display_on = "company_sidebar_bottom";
+    return;
 }
+
+// Set imbedded
+if ($display_on != "company_accounting") {
+    $company_accounting = 1;
+};
 
 $sql = "SELECT info_types.info_type_id, info_types.info_type_name FROM info_types, info_display_map ";
 $sql .= "WHERE info_types.info_type_record_status = 'a' ";
-if ($display_on != "all") {
-    $sql .= "AND info_display_map.display_on = '" . $display_on . "' ";
-}
+$sql .= "AND info_display_map.display_on = '" . $display_on . "' ";
 $sql .= "AND info_types.info_type_id = info_display_map.info_type_id ";
 $sql .= "ORDER BY info_types.info_type_order ";
 
@@ -35,13 +38,12 @@ if ($toprst) {
         $info_type_id = $toprst->fields['info_type_id'];
         $info_type_name = $toprst->fields['info_type_name'];
 
-        if ($display_on != "company_accounting") {
-        $info_rows .= "<div id='note_sidebar'>
-            <table class=widget cellspacing=1 width=\"100%\">
-            <tr>
-            <td class=widget_header colspan=2>$info_type_name</td>
-            </tr>\n
-        ";
+        if ($company_accounting) {
+            $info_rows .= "<div id='note_sidebar'>
+                <table class=widget cellspacing=1 width=\"100%\">
+                    <tr>
+                        <td class=widget_header colspan=2>$info_type_name</td>
+                    </tr>\n";
         };
 
         #//Find which element_id contains the "Name"
@@ -79,6 +81,12 @@ if ($toprst) {
             $sql .= "AND info_map.company_id=$company_id ";
         } else {
             $company_id = 0;
+        }
+        if ($division_id) {
+            $sql .= "AND info_map.division_id = '" . $division_id . "' ";
+        }
+        if ((!$company_accounting) && (!$division_id)) {
+            $sql .= "AND info_map.division_id = '' ";
         }
         $sql .= "AND info_map.info_type_id=$info_type_id  ";
         if ($name_element_id) {
@@ -119,7 +127,7 @@ if ($toprst) {
                   }
                 }
              }
-        if ($display_on != "company_accounting") {
+        if ($company_accounting) {
                 $info_rows .= "
                   <tr>
                     <td class=widget_content>";
@@ -128,7 +136,7 @@ if ($toprst) {
                       <font class=note_label>
                         $server_link
                       </font>";
-        if ($display_on != "company_accounting") {
+        if ($company_accounting) {
                 $info_rows .= "
                     </td>
                   </tr>";
@@ -139,22 +147,22 @@ if ($toprst) {
 
        # Add New button
 
-        if ($display_on != "company_accounting") {
+        if ($company_accounting) {
            $info_rows .= "<tr>
                <td class=widget_content_form_element colspan=5>";
         };
         if (!$server_link) {
-            if ($display_on == "company_accounting") {
+            if (!$company_accounting) {
                  $info_rows .= "<tr><td colspan=2>";
             };
         $info_rows .= "<br />
           <input class=button type=button value=\"" . _("New") . " " . $info_type_name . " Info\"
-            onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&info_type_id=$info_type_id';\">";
+            onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&contact_id=$contact_id&division_id=$division_id&info_type_id=$info_type_id';\">";
         };
-        if ($display_on == "company_accounting") {
+        if (!$company_accounting) {
              $info_rows .= "<tr><td colspan=2>";
         };
-        if ($display_on != "company_accounting") {
+        if ($company_accounting) {
            $info_rows .= "</td>
              </tr>\n";
 
