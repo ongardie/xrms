@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.24 2004/08/19 13:14:05 maulani Exp $
+ * $Id: some.php,v 1.25 2004/11/26 17:31:38 braverock Exp $
  */
 
 //include required files
@@ -19,18 +19,18 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'sort_column'        => array ( 'files_sort_column', arr_vars_SESSION ),
-		   'current_sort_column'=> array ( 'files_current_sort_column', arr_vars_SESSION ),
-		   'sort_order'         => array ( 'files_sort_order', arr_vars_SESSION ),
-		   'current_sort_order' => array ( 'files_current_sort_order', arr_vars_SESSION ),
-		   'file_id'            => array ( 'file_id', arr_vars_SESSION ),
-		   'file_name'          => array ( 'file_name', arr_vars_SESSION ),
-		   'file_description'   => array ( 'file_description', arr_vars_SESSION ),
-		   'file_on_what'       => array ( 'file_on_what', arr_vars_SESSION ),
-		   'file_on_what_name'  => array ( 'file_on_what_name', arr_vars_SESSION ),
-		   'file_date'          => array ( 'file_date', arr_vars_SESSION ),
-		   'user_id'            => array ( 'file_user_id', arr_vars_SESSION ),
-		   );
+           'sort_column'        => array ( 'files_sort_column', arr_vars_SESSION ),
+           'current_sort_column'=> array ( 'files_current_sort_column', arr_vars_SESSION ),
+           'sort_order'         => array ( 'files_sort_order', arr_vars_SESSION ),
+           'current_sort_order' => array ( 'files_current_sort_order', arr_vars_SESSION ),
+           'file_id'            => array ( 'file_id', arr_vars_SESSION ),
+           'file_name'          => array ( 'file_name', arr_vars_SESSION ),
+           'file_description'   => array ( 'file_description', arr_vars_SESSION ),
+           'file_on_what'       => array ( 'file_on_what', arr_vars_SESSION ),
+           'file_on_what_name'  => array ( 'file_on_what_name', arr_vars_SESSION ),
+           'file_date'          => array ( 'file_date', arr_vars_SESSION ),
+           'user_id'            => array ( 'file_user_id', arr_vars_SESSION ),
+           );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
@@ -208,7 +208,7 @@ if ($sort_column == 6) {
 } elseif ($sort_column == 1) {
     $order_by = "f.file_pretty_name";
 } elseif ($sort_column == 2) {
-    $order_by = "f.description";
+    $order_by = "f.file_description";
 } elseif ($sort_column == 5) {
     $order_by = "f.entered_at";
 } else {
@@ -287,16 +287,16 @@ start_page($page_title, true, $msg);
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1>
-        <tr> 
+        <tr>
                 <td class=widget_header colspan=7><?php echo _("Search Criteria"); ?></td>
         </tr>
-        <tr> 
+        <tr>
                 <td class=widget_label><?php echo _("File ID"); ?></td>
                 <td class=widget_label><?php echo _("File Name"); ?></td>
                 <td class=widget_label><?php echo _("File Description"); ?></td>
                 <td class=widget_label><?php echo _("On What"); ?></td>
         </tr>
-        <tr> 
+        <tr>
                 <td class=widget_content_form_element><input type=text name="file_id" size=5 value="<?php  echo $file_id ?>"></td>
                 <td class=widget_content_form_element><input type=text name="file_name" size=12 value="<?php  echo $file_name ?>"></td>
                 <td class=widget_content_form_element><input type=text name="file_description" size=12 value="<?php  echo $file_description ?>"></td>
@@ -312,19 +312,19 @@ start_page($page_title, true, $msg);
                     </select>
                 </td>
         </tr>
-        <tr> 
+        <tr>
                 <td colspan=2 class=widget_label><?php echo _("On what Name"); ?></td>
                 <td class=widget_label><?php echo _("Date"); ?></td>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
         </tr>
-        <tr> 
+        <tr>
                 <td colspan=2 class=widget_content_form_element><input type=text name="file_on_what_name" size=12 value="<?php echo $file_on_what_name; ?>"></td>
                 <td class=widget_content_form_element><input type=text name="file_date" size=8 value="<?php echo $file_date; ?>"></td>
                 <td class=widget_content_form_element><?php echo $user_menu; ?></td>
         </tr>
-        <tr> 
+        <tr>
                 <td colspan=4 class=widget_content_form_element>
-                    <input class=button type=submit value="<?php echo _("Search"); ?>"> 
+                    <input class=button type=submit value="<?php echo _("Search"); ?>">
                     <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php if ($company_count > 0) {echo "<input class=button type=button onclick='javascript: bulkEmail()' value='"._("Bulk E-Mail")."'>";}; ?>
           </td>
@@ -410,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.25  2004/11/26 17:31:38  braverock
+ * - fix syntax error where f.description should have been f.file_description
+ *
  * Revision 1.24  2004/08/19 13:14:05  maulani
  * - Add specific type pager to ease overriding of layout function
  *
