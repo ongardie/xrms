@@ -19,6 +19,10 @@ $session_user_id = session_check();
 
 $working_direction = $_GET['working_direction'];
 $on_what_table = $_GET['on_what_table'];
+
+if (!$on_what_table) { echo "ERROR viewing relationship: table not specified."; return false; }
+
+
 $on_what_table_singular = make_singular($on_what_table);
 $relationship_id = $_GET['relationship_id'];
 $return_url = $_GET['return_url'];
@@ -30,12 +34,15 @@ $page_title = _("Edit Association");
 start_page($page_title, true, $msg);
 
 $rst = $con->execute("select * from relationships where relationship_id='$relationship_id'");
+if (!$rst) db_error_handler($con, $sql);
 
 $name_to_get = $con->Concat(implode(", ' ' , ", table_name($on_what_table)));
 $sql = "SELECT " . $name_to_get . " as name
         FROM " . $on_what_table . "
         WHERE " . $on_what_table_singular . "_id=" . $rst->fields[$working_direction . '_what_id'];
 $rst2 = $con->execute($sql);
+if (!$rst2) db_error_handler($con, $sql);
+
 $name = $rst2->fields['name'];
 $rst2->close();
 $rst->close();
@@ -79,6 +86,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.5  2005/02/11 21:18:27  vanmer
+ * - added error handling on failed queries
+ * - added error handling if table not specified properly
+ *
  * Revision 1.4  2004/07/25 13:18:48  braverock
  * - remove lang file require_once, as it is no longer used
  *
