@@ -6,12 +6,12 @@
 *	creating bar charts.
 *
 *	@author daturaarutad
-*	$Id: BarGraph.php,v 1.1 2005/03/09 18:28:08 daturaarutad Exp $
+*	$Id: BarGraph.php,v 1.2 2005/03/09 21:09:53 daturaarutad Exp $
 */
 
 if(PHPVERSION() >= 5.0) {
-	require_once($include_directory . 'jpgraph-2.x/src/jpgraph.php');
-	require_once($include_directory . 'jpgraph-2.x/src/jpgraph_bar.php');
+	require_once($include_directory . 'jpgraph-2.x/jpgraph.php');
+	require_once($include_directory . 'jpgraph-2.x/jpgraph_bar.php');
 } else {
 	require_once($include_directory . 'jpgraph-1.x/src/jpgraph.php');
 	require_once($include_directory . 'jpgraph-1.x/src/jpgraph_bar.php');
@@ -228,6 +228,9 @@ function Display() {
 
 /**
 * $Log: BarGraph.php,v $
+* Revision 1.2  2005/03/09 21:09:53  daturaarutad
+* updated jpgraph 2.x path
+*
 * Revision 1.1  2005/03/09 18:28:08  daturaarutad
 * new file for creating Bar graphs
 *
