@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.16 2004/06/21 14:02:06 gpowers Exp $
+ * $Id: edit.php,v 1.17 2004/06/21 17:26:07 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -102,7 +102,7 @@ $rst->close();
 
 $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
 $rst = $con->execute($sql);
-$address_menu = $rst->getmenu2('address_id', $address_id, false);
+$address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
 $con->close();
 
@@ -254,6 +254,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.17  2004/06/21 17:26:07  braverock
+ * - address can be blank, revised argument to getmenu2
+ *
  * Revision 1.16  2004/06/21 14:02:06  gpowers
  * - added space between "Transfer" and "Delete" buttons
  *
