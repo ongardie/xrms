@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.94 2005/02/25 03:34:08 daturaarutad Exp $
+ * $Id: one.php,v 1.95 2005/03/05 00:58:02 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -249,7 +249,7 @@ $columns[] = array('name' => _('User'), 'index_sql' => 'username');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
 $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name');
 $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
-$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at');
+$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
 
 $default_columns = array('activity_title', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
@@ -822,6 +822,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.95  2005/03/05 00:58:02  daturaarutad
+ * set default sort column to scheduled for activities pager
+ *
  * Revision 1.94  2005/02/25 03:34:08  daturaarutad
  * contacts and activities now using GUP_Pager class
  *
