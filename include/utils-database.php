@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.7 2005/01/10 23:56:53 vanmer Exp $
+ * $Id: utils-database.php,v 1.8 2005/01/12 20:11:45 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -97,6 +97,9 @@ function table_name($table) {
         case "files":
             return array(make_singular($table)."_pretty_name");
         break;
+        case "company_division":
+            return array("division_id");
+        break;    
         default:
             return array(make_singular($table) . "_name");
         break;
@@ -105,6 +108,9 @@ function table_name($table) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.8  2005/01/12 20:11:45  braverock
+ * - add company_division to table_name fn
+ *
  * Revision 1.7  2005/01/10 23:56:53  vanmer
  * - changed multiple ifs into a switch/case statement
  * - added files, cases, campaigns handling for determining which field in the database provides the name of the entity
