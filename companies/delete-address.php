@@ -16,7 +16,7 @@ $address_id = $_GET['address_id'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update addresses set address_record_status = 'd'";
+$sql = "update addresses set address_record_status = 'd' where address_id = $address_id";
 $con->execute($sql);
 
 $con->close();
