@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.7 2004/04/17 15:59:58 maulani Exp $
+ * $Id: edit.php,v 1.8 2004/06/03 16:16:18 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -47,7 +47,6 @@ if ($rst) {
 
 
 // associated with
-
 /*
 
 $sql = "select category_id, category_pretty_name
@@ -83,8 +82,8 @@ if ($rst) {
     $rst->close();
 }
 
-// not associated with
 
+// not associated with
 /*
 
 $sql = "select category_id, category_pretty_name
@@ -115,29 +114,33 @@ if ($rst) {
     $rst->close();
 }
 
+//contact menu
 $sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
 
+//users menu
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', $user_id, false);
 $rst->close();
 
+//campaign menu
 $sql2 = "select campaign_title, campaign_id from campaigns where campaign_record_status = 'a' order by campaign_title";
 $rst = $con->execute($sql2);
 $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
 $rst->close();
 
-$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by opportunity_status_id";
+//opportunity status menu
+$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
 $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
 $rst->close();
 
 $con->close();
 
-$page_title = "One Opportunity : $opportunity_title";
+$page_title = "Opportunity : $opportunity_title";
 start_page($page_title, true, $msg);
 
 ?>
@@ -149,7 +152,10 @@ start_page($page_title, true, $msg);
 
         <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=opportunity_id value=<?php  echo $opportunity_id; ?>>
-        <table class=widget cellspacing=1>
+        <input type=hidden name=company_id value=<?php echo $company_id; ?>>	
+	<input type=hidden name=on_what_table value=<?php echo "opportunities"; ?>>
+
+	<table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Opportunity Details</td>
             </tr>
@@ -270,6 +276,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.8  2004/06/03 16:16:18  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.7  2004/04/17 15:59:58  maulani
  * - Add CSS2 positioning
  *

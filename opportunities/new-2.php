@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.3 2004/04/13 15:08:37 maulani Exp $
+ * $Id: new-2.php,v 1.4 2004/06/03 16:16:18 braverock Exp $
  */
 
 //include common files
@@ -54,12 +54,24 @@ $con->execute($sql);
 
 $opportunity_id = $con->insert_id();
 
+$on_what_table = "opportunities";
+$on_what_id = $opportunity_id;
+//generate activities for the new opportunity
+$on_what_table_template = "opportunity_statuses";
+$on_what_id_template = $opportunity_status_id;
+require_once("../activities/workflow-activities.php");
+
+
 $con->close();
 
 header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.4  2004/06/03 16:16:18  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.3  2004/04/13 15:08:37  maulani
  * - cleanup sql
  *

@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.12 2004/05/10 13:07:20 maulani Exp $
+ * $Id: some.php,v 1.13 2004/06/03 16:11:01 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -218,11 +218,13 @@ if ($rst) {
     $rst->close();
 }
 
+//get menu for users
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql2);
 $user_menu = $rst->getmenu2('user_id', $user_id, true);
 $rst->close();
 
+//get activity type menu
 $sql_type = "select activity_type_pretty_name, activity_type_id
 from activity_types at
 order by activity_type_pretty_name";
@@ -230,15 +232,17 @@ $rst = $con->execute($sql_type);
 $type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, true);
 $rst->close();
 
+//check to see if $open_activities record set is empty
 if (!strlen($open_activities) > 0) {
     $open_activities = "<tr><td class=widget_content colspan=5>No open activities</td></tr>";
 }
 add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 
 $page_title = "Open Activities";
-start_page($page_title);
+start_page($page_title, true, $msg);
 
 ?>
+
 <script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 
 <div id="Main">
@@ -362,6 +366,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.13  2004/06/03 16:11:01  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.12  2004/05/10 13:07:20  maulani
  * - Add level to audit trail
  * - Clean up audit trail text

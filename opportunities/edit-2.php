@@ -19,6 +19,8 @@ $opportunity_description = $_POST['opportunity_description'];
 $size = $_POST['size'];
 $probability = $_POST['probability'];
 $close_at = $_POST['close_at'];
+$company_id = $_POST['company_id'];
+$on_what_table = $_POST['on_what_table'];
 
 $campaign_id = ($campaign_id > 0) ? $campaign_id : 0;
 
@@ -26,11 +28,67 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "update opportunities set opportunity_status_id = $opportunity_status_id, contact_id = $contact_id, campaign_id = $campaign_id, user_id = $user_id, size = $size, probability = $probability, opportunity_title = " . $con->qstr($opportunity_title, get_magic_quotes_gpc()) . ", opportunity_description = " . $con->qstr($opportunity_description, get_magic_quotes_gpc()) . ", close_at = " . $con->dbdate($close_at . ' 23:59:59') . ", last_modified_at = " . $con->dbtimestamp(mktime()) . ", last_modified_by = $session_user_id where opportunity_id = $opportunity_id";
+$no_update = false;
 
-$con->execute($sql);
+//check to see if the status was changed (for workflow)
+$sql = "select opportunity_status_id from opportunities where opportunity_id=$opportunity_id";
+$rst = $con->execute($sql);
+
+                                                                                                                         
+$old_status = $rst->fields['opportunity_status_id'];
+if ($old_status != $opportunity_status_id) {
+
+    $on_what_id = $opportunity_id;
+    $on_what_id_template = $opportunity_status_id;
+    $on_what_table_template = "opportunity_statuses";
+
+    //check to see if there are open activities 
+    //  from the previous status
+    $sql = "select * from activities 
+	where on_what_status=$old_status 
+	and on_what_table='$on_what_table' 
+	and on_what_id=$on_what_id
+	and contact_id=$contact_id
+	and company_id=$company_id
+	and activity_status='o'
+	and activity_record_status='a'";
+
+    $rst = $con->execute($sql);
+    $activity_id = $rst->fields['activity_id'];
+
+    //if there is only one field, the result set is empty (no old activities)
+    //  otherwise prompt the user
+    if (count($rst->fields) > 1) {
+	header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id");
+	$no_update = true;
+    }
+    $rst->close();
+
+    if (!$no_update) {
+	require_once("../activities/workflow-activities.php");
+    }
+}
+
+if (!$no_update) {
+    //update the information from edit.php
+    $sql = "update opportunities set opportunity_status_id = $opportunity_status_id, 
+	contact_id = $contact_id, 
+	campaign_id = $campaign_id, 
+	user_id = $user_id, 
+	size = $size, 
+	probability = $probability, 
+	opportunity_title = " . $con->qstr($opportunity_title, get_magic_quotes_gpc()) . ", 
+	opportunity_description = " . $con->qstr($opportunity_description, get_magic_quotes_gpc()) . ", 
+	close_at = " . $con->dbdate($close_at . ' 23:59:59') . ", 
+	last_modified_at = " . $con->dbtimestamp(mktime()) . ", 
+	last_modified_by = $session_user_id 
+	where opportunity_id = $opportunity_id";
+
+    $con->execute($sql);
+
+    header("Location: one.php?msg=saved&opportunity_id=$opportunity_id");
+}
+
 $con->close();
-
-header("Location: one.php?msg=saved&opportunity_id=$opportunity_id");
 
 ?>

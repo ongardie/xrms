@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.16 2004/05/28 13:58:33 gpowers Exp $
+ * $Id: one.php,v 1.17 2004/06/03 16:11:00 braverock Exp $
  */
 
 //include required files
@@ -16,11 +16,13 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
+$msg = $_GET['msg'];
 $activity_id = $_GET['activity_id'];
 $return_url = $_GET['return_url'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+//$con->debug = 1;
 
 update_recent_items($con, $session_user_id, "activities", $activity_id);
 
@@ -69,22 +71,91 @@ if ($rst) {
     $rst->close();
 }
 
+//get user menu
 $sql = "select username, user_id from users where user_record_status = 'a'";
 $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', $user_id, false);
 $rst->close();
 
+//get activity type menu
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
 $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
 $rst->close();
 
+//get contact name menu
 $sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
     $rst->close();
 }
+
+// add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
+
+// include the contact sidebar code
+require_once ('../contacts/sidebar.php');
+
+// include the company sidebar code
+require_once ('../companies/sidebar.php');
+
+
+/* add opportunities/case/campaign combo box */
+//get singular form of table name (from on_what_table field)
+$is_linked = true;
+if ($on_what_table == "opportunities") {
+    $table_name = "opportunity";
+}
+elseif ($on_what_table == "campaigns") {
+    $table_name = "campaign";
+}
+elseif ($on_what_table == "cases") {
+    $table_name = "case";
+}
+else {
+    $table_name = "attached to";
+    $is_linked = false;
+}
+
+
+//Check if activity is linked to something, then generate a SQL statement
+if ($is_linked) {
+    $sql = "select ".$table_name."_id,
+            ".$table_name."_statuses.".$table_name."_status_pretty_name,
+            ".$on_what_table.".".$table_name."_id,
+            ".$on_what_table.".".$table_name."_status_id,
+            ".$table_name."_statuses.".$table_name."_status_id
+            from ".$table_name."_statuses, ".$on_what_table."
+            where ".$on_what_table.".".$table_name."_id=$on_what_id
+            and ".$on_what_table.".".$table_name."_status_id=".$table_name."_statuses.".$table_name."_status_id";
+
+    $rst = $con->execute($sql);
+    //If not empty, get pretty name and id
+    if ($rst) {
+        $table_status = $rst->fields[$table_name.'_status_pretty_name'];
+        $table_status_id = $rst->fields[$table_name.'_status_id'];
+        $rst->close();
+    }
+
+    //generate SQL for status combo box
+    $sql = "select ".$table_name."_status_pretty_name,
+            ".$table_name."_status_id
+            from ".$table_name."_statuses
+            where ".$table_name."_status_record_status='a'
+            order by sort_order";
+    $rst = $con->execute($sql);
+
+    //create combo box using ADODB getmenu2 function
+    if ($rst) {
+        $table_menu = $rst->getmenu2('table_status_id', $table_status_id, false);
+        $rst->close();
+    }
+
+}
+
+// add_audit_item($con, $session_user_id, 'viewed', $table_name, $table_status_id, 3);
+
+$table_name=ucwords($table_name);
 
 $con->close();
 
@@ -95,9 +166,10 @@ start_page($page_title, true, $msg);
 
 <script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 
-<table border=0 cellpadding=0 cellspacing=0>
-    <tr>
-        <td class=lcol width="45%" valign=top>
+<div id="Main">
+
+    <div id="Content">
+
 
         <form action=edit-2.php method=post>
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
@@ -106,6 +178,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value="<?php  echo $company_id; ?>">
         <input type=hidden name=on_what_table value="<?php  echo $on_what_table; ?>">
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
+        <input type=hidden name=table_name value="<?php echo $table_name ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -123,7 +196,14 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Attached&nbsp;To</td>
-                <td class=widget_content><?php  echo $attached_to_link; ?></td>
+                <td class=widget_content>
+                    <?php  echo $attached_to_link;
+                        if ($table_name != "Attached To") {
+                            echo " &nbsp; Status &nbsp; ";
+                            echo $table_menu;
+                        }
+                    ?>
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right>Activity&nbsp;Type</td>
@@ -163,7 +243,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan=2>
                     <input class=button type=submit name="save" value="Save Changes">
                     <input class=button type=submit name="followup" value="Schedule Followup">
-                    <input type=button class=button onclick="javascript: location.href='vcal.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='Export as vCal' onclick="javascript: return confirm('Delete Activity?');">
                     <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='Delete Activity' onclick="javascript: return confirm('Delete Activity?');">
                 </td>
             </tr>
@@ -172,14 +251,16 @@ start_page($page_title, true, $msg);
 
     </div>
 
-        <!-- right column //-->
+    <!-- right column //-->
     <div id="Sidebar">
+        <!-- contact information block //-->
+        <?php echo $contact_block; ?>
 
-        &nbsp;
+        <!-- company information block //-->
+        <?php echo $company_block; ?>
+    </div>
 
-        </td>
-    </tr>
-</table>
+</div>
 
 <script language="JavaScript" type="text/javascript">
 <!--
@@ -205,6 +286,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.17  2004/06/03 16:11:00  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.16  2004/05/28 13:58:33  gpowers
  * removed "viewed" audit log entry. this is redundant, as this data is
  * already stored in httpd access logs.

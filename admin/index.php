@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.10 2004/05/27 17:10:55 gpowers Exp $
+ * $Id: index.php,v 1.11 2004/06/03 16:14:40 braverock Exp $
  */
 
 //include required stuff
@@ -190,6 +190,12 @@ start_page($page_title, true, $msg);
                     <a href="country-address-format/index.php">Country Address Formats</a>
                 </td>
             </tr>
+	    <tr>
+                <td class=widget_content>
+                    <a href="activity-templates/some.php">Activity Templates</a>
+                </td>
+            </tr>
+
         </table>
 
     </div>
@@ -202,6 +208,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.11  2004/06/03 16:14:40  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.10  2004/05/27 17:10:55  gpowers
  * removed PDA Synchronization sidebar. this feature doesn't exist in XRMS.
  *

@@ -29,6 +29,15 @@ $con->execute($sql);
 
 $case_id = $con->insert_id();
 
+
+//generate activities for the new case
+$on_what_table = "cases";
+$on_what_id = $case_id;
+$on_what_table_template = "case_statuses";
+$on_what_id_template = $case_status_id;
+require_once("../activities/workflow-activities.php");
+
+
 $con->close();
 
 header("Location: one.php?msg=case_added&case_id=$case_id");

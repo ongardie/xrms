@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.5 2004/04/17 16:02:41 maulani Exp $
+ * $Id: new.php,v 1.6 2004/06/03 16:15:33 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,27 +23,32 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $company_name = fetch_company_name($con, $company_id);
 
+//get menu for contacts
 $sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
 
+//get username menu
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
 $rst->close();
 
+//get case priority menu
 $sql2 = "select case_priority_pretty_name, case_priority_id from case_priorities where case_priority_record_status = 'a' order by case_priority_id";
 $rst = $con->execute($sql2);
 $case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, false);
 $rst->close();
 
+//get case name menu
 $sql2 = "select case_type_pretty_name, case_type_id from case_types where case_type_record_status = 'a' order by case_type_id";
 $rst = $con->execute($sql2);
 $case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false);
 $rst->close();
 
-$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by case_status_id";
+//get case status menu
+$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
 $case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, false);
 $rst->close();
@@ -161,6 +166,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.6  2004/06/03 16:15:33  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.5  2004/04/17 16:02:41  maulani
  * - Add CSS2 positioning
  *

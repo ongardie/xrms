@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.8 2004/05/04 23:48:02 maulani Exp $
+ * $Id: update.php,v 1.9 2004/06/03 16:14:56 braverock Exp $
  */
 
 /**
@@ -166,6 +166,26 @@ if ($recCount == 0) {
     $rst = $con->execute($sql);
 }
 
+//add statuses to activities
+$sql = "alter table activities add on_what_status int not null default 0 after on_what_id";
+$rst = $con->execute($sql);
+
+//create the activity_templates table if we need it
+$sql = "create table if not exists activity_templates (
+                activity_template_id    int not null primary key auto_increment,
+                role_id                 int not null default 0,
+                activity_type_id        int not null default 0,
+                on_what_table           varchar(100) not null default '',
+                on_what_id              int not null default 0,
+                activity_title          varchar(100) not null default '',
+                activity_description    text not null default '',
+                duration                smallint not null default 0,
+                sort_order              tinyint not null default 1,
+                activity_template_record_status         char not null default 'a'
+                )";
+        //execute
+        $rst = $con->execute($sql);
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -187,6 +207,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.9  2004/06/03 16:14:56  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.8  2004/05/04 23:48:02  maulani
  * - Added a system parameters table to the database.  This table can be used
  *   for items that would otherwise be dumped into the vars.php file. These
@@ -221,6 +245,28 @@ end_page();
  *
  * Revision 1.1  2004/04/12 18:59:01  maulani
  * - Make database structure and data cleanup available withing Admin interface
+ *
+ * Revision 1.7  2004/04/13 12:29:20  maulani
+ * - Move the data clean and update files into the admin section of XRMS
+ *
+ * Revision 1.6  2004/04/12 14:34:02  maulani
+ * - Add indexes for foreign key company_id
+ *
+ * Revision 1.5  2004/03/26 16:17:00  maulani
+ * - Cleanup formatting
+ *
+ * Revision 1.3  2004/03/23 14:34:05  braverock
+ * - add check for result set before closing rst
+ *
+ * Revision 1.2  2004/03/22 02:05:08  braverock
+ * - add case_priority_score_adjustment to fix SF bug 906413
+ *
+ * Revision 1.1  2004/03/18 01:07:18  maulani
+ * - Create installation tests to check whether the include location and
+ *   vars.php have been configured.
+ * - Create PHP-based database installation to replace old SQL scripts
+ * - Create PHP-update routine to update users to latest schema/data as
+ *   XRMS evolves.
  *
  */
 ?>

@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.15 2004/04/25 22:45:19 braverock Exp $
+ * $Id: one.php,v 1.16 2004/06/03 16:16:18 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,7 +23,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 
-$sql = "select o.*, c.company_id, c.company_name, c.company_code, cont.first_names, cont.last_name, cont.work_phone, cont.email,
+$sql = "select o.*, c.company_id, c.company_name, c.company_code,
+cont.first_names, cont.last_name, cont.work_phone, cont.email,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
 u3.username as opportunity_owner_username, u4.username as account_owner_username,
 as1.account_status_display_html, r.rating_display_html, crm_status_display_html, os.opportunity_status_display_html, cam.campaign_title
@@ -167,6 +168,9 @@ $on_what_string = 'opportunity';
 //include the opportunities sidebar
 //$opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
 //require_once("../opportunities/sidebar.php");
+
+// include the contact sidebar code
+require_once ('../contacts/sidebar.php');
 
 //include the files sidebar
 require_once("../files/sidebar.php");
@@ -378,7 +382,7 @@ function markComplete() {
 
     </div>
 
-        <!-- right column //-->
+    <!-- right column //-->
     <div id="Sidebar">
 
         <!-- categories //-->
@@ -409,6 +413,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.16  2004/06/03 16:16:18  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.15  2004/04/25 22:45:19  braverock
  * clean up formatting of email link
  *

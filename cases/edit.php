@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.5 2004/04/17 16:02:41 maulani Exp $
+ * $Id: edit.php,v 1.6 2004/06/03 16:15:33 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -112,27 +112,32 @@ if ($rst) {
     $rst->close();
 }
 
+//contact list
 $sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
 
+//user list
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', $user_id, false);
 $rst->close();
 
+//case priority list
 $sql2 = "select case_priority_pretty_name, case_priority_id from case_priorities where case_priority_record_status = 'a' order by case_priority_id";
 $rst = $con->execute($sql2);
 $case_priority_menu = $rst->getmenu2('case_priority_id', $case_priority_id, false);
 $rst->close();
 
+//case type list
 $sql2 = "select case_type_pretty_name, case_type_id from case_types where case_type_record_status = 'a' order by case_type_id";
 $rst = $con->execute($sql2);
 $case_type_menu = $rst->getmenu2('case_type_id', $case_type_id, false);
 $rst->close();
 
-$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by case_status_id";
+//case status list
+$sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
 $case_status_menu = $rst->getmenu2('case_status_id', $case_status_id, false);
 $rst->close();
@@ -151,6 +156,10 @@ start_page($page_title, true, $msg);
 
         <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=case_id value=<?php  echo $case_id; ?>>
+	<input type=hidden name=company_id value=<?php echo $company_id; ?>>
+	<input type=hidden name=on_what_table value=<?php echo "cases"; ?>>
+
+
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2>Case Details</td>
@@ -253,6 +262,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.6  2004/06/03 16:15:33  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.5  2004/04/17 16:02:41  maulani
  * - Add CSS2 positioning
  *

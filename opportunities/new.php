@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.4 2004/04/17 15:59:59 maulani Exp $
+ * $Id: new.php,v 1.5 2004/06/03 16:16:18 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,22 +23,27 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $company_name = fetch_company_name($con, $company_id);
 
+
+//generate a contact menu
 $sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
 
+//get a campaign menu
 $sql2 = "select campaign_title, campaign_id from campaigns where campaign_record_status = 'a' order by campaign_title";
 $rst = $con->execute($sql2);
 $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
 $rst->close();
 
+//get a username menu
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
 $rst->close();
 
-$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by opportunity_status_id";
+//get the opportunity status menu
+$sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
 $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
 $rst->close();
@@ -176,6 +181,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.5  2004/06/03 16:16:18  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.4  2004/04/17 15:59:59  maulani
  * - Add CSS2 positioning
  *

@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.11 2004/05/10 13:04:15 maulani Exp $
+ * $Id: edit-2.php,v 1.12 2004/06/03 16:11:00 braverock Exp $
  */
 
 //include required files
@@ -35,6 +35,8 @@ $on_what_table = $_POST['on_what_table'];
 $on_what_id = $_POST['on_what_id'];
 $company_id = $_POST['company_id'];
 $email_to = $_POST['email_to'];
+$table_name = $_POST['table_name'];
+$table_status_id = $_POST['table_status_id'];
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -60,6 +62,7 @@ $contact_id = ($contact_id > 0) ? $contact_id : 'NULL';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+//$con->debug = 1;
 
 $sql = "update activities set
         activity_type_id = $activity_type_id,
@@ -73,16 +76,26 @@ $sql = "update activities set
         activity_status = " . $con->qstr($activity_status, get_magic_quotes_gpc()) . "
         where activity_id = $activity_id";
 
-//$con->debug = 1;
 $con->execute($sql);
 
 add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
 
+
+//get sort_order field
+$sql = "select sort_order from " . strtolower($table_name) . "_statuses where " . strtolower($table_name) ."_status_id=$table_status_id limit 1";
+$rst = $con->execute($sql);
+if ($rst) {
+    $sort_order = $rst->fields['sort_order'];
+    $rst -> close();
+}
+
+//get current username
 $sql = "select username from users where user_id = $user_id limit 1";
 $rst = $con->execute($sql);
 if ($rst) { $username = $rst->fields['username']; }
 $rst -> close();
 
+//get current company name and phone
 $sql = "select company_name, phone from companies where company_id = $company_id limit 1";
 $rst = $con->execute($sql);
 if ($rst) {
@@ -98,6 +111,74 @@ if ($rst) {
     $rst->close();
 }
 
+
+/* this saves case/opportunity status changes to the database when they are changed in one.php */
+$table_name = strtolower($table_name);
+if ($table_name != "attached to") {
+    $sql = "select * from $on_what_table where ".$table_name."_id=$on_what_id";
+    $rst = $con->execute($sql);
+
+    $old_sort_order = $rst->fields['sort_order'];
+    $old_status = $rst->fields[$table_name . '_status_id'];
+
+    //check if there are open activities left
+    $sql = "select * from activities
+             where on_what_status=$old_status
+             and on_what_table='$on_what_table'
+             and on_what_id=$on_what_id
+             and contact_id=$contact_id
+             and company_id=$company_id
+             and activity_status='o'
+             and activity_record_status='a'";
+
+    $rst = $con->execute($sql);
+    $activity_return_id = $rst->fields['activity_id'];
+
+
+    //check if there are open activities from this status
+    // if no more activities are open, advance status
+    $no_update = true;
+    if ($rst->rowcount() == 0) {
+        if ($old_status != $table_status_id) {
+            $no_update = false;
+        } else {
+            $no_update = false;
+            $sort_order++;
+            $sql = "select * from " . $table_name . "_statuses
+                where sort_order=$sort_order
+                and " . $table_name . "_status_record_status='a'";
+            $rst = $con->execute($sql);
+            $table_status_id = $rst->fields[$table_name . '_status_id'];
+        }
+    }
+
+    // check for status change
+    if ($old_status != $table_status_id){
+        //if there is only one field, the result set is empty (no old activities)
+        //  otherwise prompt the user
+        if ($no_update) {
+            $return_url = "/activities/one.php?msg=no_change&activity_id=$activity_return_id";
+        }
+
+        //update if there are no open activities
+        if (!$no_update) {
+            $sql = "update " . $on_what_table . "
+                set " . $table_name . "_status_id=$table_status_id
+                where " . $table_name . "_id=$on_what_id";
+
+            $con->execute($sql);
+            $on_what_table_template = $table_name .  "_statuses";
+            $on_what_id_template = $table_status_id;
+
+            //include the workflow-activities.php page to actually make the update
+            require_once("workflow-activities.php");
+        }
+    } //end if to check for status change
+
+}
+
+
+//get data for generated email
 $sql = "select concat(first_names, ' ', last_name) as contact_name, work_phone from contacts where contact_id = $contact_id limit 1";
 $rst = $con->execute($sql);
 if ($rst) {
@@ -150,6 +231,13 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.12  2004/06/03 16:11:00  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
+ * Revision 1.12  2004/05/21 15:27:02  bmarshall
+ * - added functionality to save opportunity/case status changes
+ *
  * Revision 1.11  2004/05/10 13:04:15  maulani
  * - add session_check
  * - add level to audit_trail
