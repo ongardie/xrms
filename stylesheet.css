@@ -64,6 +64,22 @@ body {
   width: 69%;
 }
 
+#MContent {
+  margin-left: 1px;
+  margin-top: 3px;
+  text-align: left;
+  float: left;
+  width: 49%;
+}
+
+#LeftSidebar {
+  margin-right: 0px;
+  margin-top: 3px;
+  text-align: left;
+  width: 20%;
+  float: left;
+}
+
 #Sidebar {
   margin-right: 1px;
   margin-top: 3px;
