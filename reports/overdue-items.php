@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: overdue-items.php,v 1.3 2004/09/07 03:57:26 maulani Exp $
+ * $Id: overdue-items.php,v 1.4 2004/11/03 12:09:24 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -218,7 +218,7 @@ foreach ($userArray as $key => $user_id) {
                 $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
                 $rst6 = $con->execute($sql6);
                 $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"../activities/one.php?activity_id=" . $rst->fields['activity_id'] . "\">" . $rst->fields['activity_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "/activities/one.php?activity_id=" . $rst->fields['activity_id'] . "\">" . $rst->fields['activity_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=7><hr></td></tr>\n";
                 }
@@ -260,7 +260,7 @@ foreach ($userArray as $key => $user_id) {
                 $sql4 = "SELECT campaign_type_pretty_name from campaign_types where campaign_type_id = " . $rst->fields['campaign_type_id'];
                 $rst4 = $con->execute($sql4);
                 $output .= "<td>" . $rst4->fields['campaign_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"../campaigns/one.php?campaign_id=" . $rst->fields['campaign_id'] . "\">" . $rst->fields['campaign_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "/campaigns/one.php?campaign_id=" . $rst->fields['campaign_id'] . "\">" . $rst->fields['campaign_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=4><hr></td></tr>\n";
                 }
@@ -357,7 +357,7 @@ foreach ($userArray as $key => $user_id) {
                 $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
                 $rst6 = $con->execute($sql6);
                 $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"../cases/one.php?case_id=" . $rst->fields['case_id'] . "\">" . $rst->fields['case_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "/cases/one.php?case_id=" . $rst->fields['case_id'] . "\">" . $rst->fields['case_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=5><hr></td></tr>\n";
                 }
@@ -399,6 +399,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: overdue-items.php,v $
+ * Revision 1.4  2004/11/03 12:09:24  maulani
+ * - Replace relative links with absolute links that work in emails
+ *
  * Revision 1.3  2004/09/07 03:57:26  maulani
  * - Cleaned up SQL
  * - Fixed copy & paste bugs
