@@ -11,7 +11,7 @@
  * status = open or scheduled or overdue or closed or current (open or closed).  Default all.
  * type = limit activity type.  Default all.
  *
- * $Id: activities.php,v 1.3 2005/03/07 11:51:15 maulani Exp $
+ * $Id: activities.php,v 1.4 2005/03/20 15:22:23 maulani Exp $
  */
 
 //include required files
@@ -107,24 +107,31 @@ if ($assigned != '') {
 switch ($status) {
 case "":
 	$status = 'all';
+	$feed_name = 'XRMS Activities';
 	break;
 case "open":
 	$status = 'open';
+	$feed_name = 'XRMS Open Activities';
 	break;
 case "scheduled":
 	$status = 'scheduled';
+	$feed_name = 'XRMS Scheduled Activities';
 	break;
 case "overdue":
 	$status = 'overdue';
+	$feed_name = 'XRMS Overdue Activities';
 	break;
 case "closed":
 	$status = 'closed';
+	$feed_name = 'XRMS Closed Activities';
 	break;
 case "current":
 	$status = 'current';
+	$feed_name = 'XRMS Current Activities';
 	break;
 default:
 	$status = 'all';
+	$feed_name = 'XRMS Activities';
 	break;
 }
 
@@ -153,18 +160,22 @@ FROM activities a, companies c
 WHERE a.company_id=c.company_id AND a.activity_record_status = 'a' ";
 
 if ($user != '') {
+	$feed_name .= " User is $user";
 	$sql .= "AND (a.user_id = $user_id OR a.entered_by = $user_id) ";
 }
 
 if ($created != '') {
+	$feed_name .= " Created by $created";
 	$sql .= "AND a.entered_by = $created_user_id ";
 }
 
 if ($assigned != '') {
+	$feed_name .= " Assigned to $assigned";
 	$sql .= "AND a.user_id = $assigned_user_id ";
 }
 
 if ($type != 'all') {
+	$feed_name .= " Type is $type";
 	$sql .= "AND a.activity_type_id = $activity_type_id ";
 }
 
@@ -229,7 +240,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 ?>
 <rss version="2.0">
    <channel>
-      <title>XRMS Activities</title>
+      <title><?php echo $feed_name; ?></title>
       <link><?php echo $feed_location; ?></link>
       <description>A list of activities from XRMS</description>
       <language>en-us</language>
@@ -246,6 +257,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: activities.php,v $
+ * Revision 1.4  2005/03/20 15:22:23  maulani
+ * - Have RSS feed title relect options selected by user
+ *
  * Revision 1.3  2005/03/07 11:51:15  maulani
  * - Improve sort based on activity status
  *
