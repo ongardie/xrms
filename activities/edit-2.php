@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.52 2005/01/13 18:40:09 vanmer Exp $
+ * $Id: edit-2.php,v 1.53 2005/02/10 14:29:29 maulani Exp $
  */
 
 //include required files
@@ -200,6 +200,8 @@ if(empty($user_id) && strstr($return_url, 'fill_user')) {
 else {
     $rec['user_id']          = $user_id;
 }
+$rec['last_modified_by']     = $session_user_id;
+$rec['last_modified_at']     = time();
 $rec['scheduled_at']         = $scheduled_at;
 $rec['ends_at']              = $ends_at;
 $rec['completed_at']         = $completed_at;
@@ -476,6 +478,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.53  2005/02/10 14:29:29  maulani
+ * - Add last modified timestamp and user fields to activities
+ *
  * Revision 1.52  2005/01/13 18:40:09  vanmer
  * - ensure that if parameters are already set for return_url that msg is simply appended
  *

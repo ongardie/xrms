@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.59 2005/02/07 17:36:35 maulani Exp $
+ * $Id: update.php,v 1.60 2005/02/10 14:29:29 maulani Exp $
  */
 
 // where do we include from
@@ -4179,6 +4179,17 @@ install_upgrade_acl($con);
 $sql = "ALTER TABLE user_preferences ADD user_id INT( 11 ) UNSIGNED NOT NULL";
 $con->execute($sql);
 
+//add modified info to activities
+$sql = "ALTER TABLE `activities` ADD `last_modified_at` datetime AFTER `entered_by`";
+$rst = $con->execute($sql);
+$sql = "ALTER TABLE `activities` ADD `last_modified_by` int not null default 0 AFTER `last_modified_at`";
+$rst = $con->execute($sql);
+
+$sql="UPDATE activities set last_modified_at=entered_at WHERE last_modified_at is NULL";
+$con->execute($sql);
+$sql="UPDATE activities set last_modified_by=entered_by WHERE last_modified_by=0";
+$con->execute($sql);
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -4202,6 +4213,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.60  2005/02/10 14:29:29  maulani
+ * - Add last modified timestamp and user fields to activities
+ *
  * Revision 1.59  2005/02/07 17:36:35  maulani
  * - Test if variable exists before using it.  Will allow removal from vars.php
  *   without breaking update.

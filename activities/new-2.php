@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.34 2005/01/13 17:53:19 vanmer Exp $
+ * $Id: new-2.php,v 1.35 2005/02/10 14:29:30 maulani Exp $
  */
 
 //where do we include from
@@ -155,6 +155,8 @@ $rec['contact_id']       = ($contact_id > 0) ? $contact_id : 0;
 $rec['entered_at']       = time();
 $rec['entered_by']       = $session_user_id;
 $rec['ends_at']          = strtotime($ends_at);
+$rec['last_modified_at'] = time();
+$rec['last_modified_by'] = $session_user_id;
 $rec['opportunity_status_id'] = $opportunity_status_id;
 
 if(empty($opportunity_status_id)) {
@@ -170,8 +172,6 @@ if(empty($opportunity_status_id)) {
 else {
     $rec['opportunity_status']  = "o";
     $rec['opportunity_title'] = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
-    $rec['last_modified_at'] = time();
-    $rec['last_modified_by'] = $session_user_id;
 }
 
 if(empty($opportunity_status_id)) {
@@ -222,6 +222,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.35  2005/02/10 14:29:30  maulani
+ *- Add last modified timestamp and user fields to activities
+ *
  *Revision 1.34  2005/01/13 17:53:19  vanmer
  *- Basic ACL changes to allow create/delete functionality to be restricted
  *

@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.29 2005/01/25 06:03:56 vanmer Exp $
+ * $Id: database.php,v 1.30 2005/02/10 14:29:29 maulani Exp $
  */
 
 /**
@@ -1072,6 +1072,8 @@ function activity_db_tables($con, $table_list) {
                activity_description            text not null default '',
                entered_at                      datetime,
                entered_by                      int not null default 0,
+               last_modified_at                datetime,
+               last_modified_by                int not null default 0,
                scheduled_at                    datetime,
                ends_at                         datetime,
                completed_at                    datetime,
@@ -1107,6 +1109,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.30  2005/02/10 14:29:29  maulani
+ * - Add last modified timestamp and user fields to activities
+ *
  * Revision 1.29  2005/01/25 06:03:56  vanmer
  * - added tables for user preferences to install
  *
