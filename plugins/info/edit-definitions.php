@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit-definitions.php,v 1.2 2004/07/22 18:29:58 gpowers Exp $
+ * $Id: edit-definitions.php,v 1.3 2004/07/22 20:07:54 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -150,14 +150,14 @@ $msg = $_GET['msg'];
 # Always retrieve, and pass on, server and company ID
 $info_id = $_GET['info_id'];
 $company_id = $_GET['company_id'];
-$return_url = $_GET['return_url'];
+//$return_url = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
 
-if (!$return_url) {
+//if (!$return_url) {
     $return_url = urlencode("/plugins/info/edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id");
-} else {
-    $return_url = urlencode($return_url);
-}
+//} else {
+//    $return_url = urlencode($return_url);
+//}
 
 $back_url = "$http_site_root/plugins/info/one.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id";
 
