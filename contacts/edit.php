@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.23 2005/01/13 18:42:54 vanmer Exp $
+ * $Id: edit.php,v 1.24 2005/03/18 20:53:32 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -107,6 +107,9 @@ $sql = "select address_name, address_id from addresses where company_id = $compa
 $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
+
+$accounting_rows = do_hook_function('contact_accounting_inline_edit', $accounting_rows);
+
 $con->close();
 
 $page_title = $first_names . ' ' . $last_name;
@@ -208,6 +211,8 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("MSN Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=msn_name value='<?php echo $msn_name; ?>' size=25></td>
             </tr>
+            <!-- accounting plugin -->
+            <?php echo $accounting_rows; ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Interests"); ?></td>
                 <td class=widget_content_form_element><input type=text name=interests size=35 value='<?php echo $interests; ?>'></td>
@@ -268,6 +273,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.24  2005/03/18 20:53:32  gpowers
+ * - added hooks for inline info plugin
+ *
  * Revision 1.23  2005/01/13 18:42:54  vanmer
  * - Basic ACL changes to allow edit functionality to be restricted
  *

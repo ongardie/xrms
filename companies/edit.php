@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.14 2005/01/13 18:20:28 vanmer Exp $
+ * $Id: edit.php,v 1.15 2005/03/18 20:53:29 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -25,7 +25,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-//$con->debug=1;
+// $con->debug=1;
 
 $sql = "select * from companies where company_id = $company_id";
 
@@ -83,6 +83,8 @@ $sql2 = "select rating_pretty_name, rating_id from ratings where rating_record_s
 $rst = $con->execute($sql2);
 $rating_menu = $rst->getmenu2('rating_id', $rating_id, false);
 $rst->close();
+
+$accounting_rows = do_hook_function('company_accounting_inline_edit', $accounting_rows);
 
 $con->close();
 
@@ -148,6 +150,8 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Employees"); ?></td>
                 <td class=widget_content_form_element><input type=text name=employees size=10 value="<?php echo $employees; ?>"></td>
             </tr>
+            <!-- accounting plugin -->
+            <?php echo $accounting_rows; ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Revenue"); ?></td>
                 <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php echo $revenue; ?>"></td>
@@ -225,6 +229,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.15  2005/03/18 20:53:29  gpowers
+ * - added hooks for inline info plugin
+ *
  * Revision 1.14  2005/01/13 18:20:28  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.14 2005/01/13 18:20:28 vanmer Exp $
+ * $Id: edit-2.php,v 1.15 2005/03/18 20:53:29 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -74,6 +74,8 @@ $rec['profile'] = $profile;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+$accounting_rows = do_hook_function('company_accounting_inline_edit_2', $accounting_rows);
+
 add_audit_item($con, $session_user_id, 'updated', 'companies', $company_id, 1);
 
 $con->close();
@@ -82,6 +84,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.15  2005/03/18 20:53:29  gpowers
+ * - added hooks for inline info plugin
+ *
  * Revision 1.14  2005/01/13 18:20:28  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

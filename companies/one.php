@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.99 2005/03/15 22:46:26 daturaarutad Exp $
+ * $Id: one.php,v 1.100 2005/03/18 20:53:29 gpowers Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -52,7 +52,7 @@ if ( !isset($accounting_rows) ) {
   $accounting_rows = '';
 }
 //call the accounting hook
-$accounting_rows = do_hook_function('company_accounting', $accounting_rows);
+$accounting_rows = do_hook_function('company_accounting_inline_display', $accounting_rows);
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
@@ -826,6 +826,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.100  2005/03/18 20:53:29  gpowers
+ * - added hooks for inline info plugin
+ *
  * Revision 1.99  2005/03/15 22:46:26  daturaarutad
  * pager tuning sql_sort_column
  *

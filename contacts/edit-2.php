@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.13 2005/02/10 21:16:49 maulani Exp $
+ * $Id: edit-2.php,v 1.14 2005/03/18 20:53:32 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -91,12 +91,18 @@ if ($salutation != '0') {
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+do_hook_function('contact_accounting_inline_edit_2', $accounting_rows);
+//include("../plugins/info/inline-edit-2.php");
+
 add_audit_item($con, $session_user_id, 'updated', 'contacts', $contact_id, 1);
 
 header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.14  2005/03/18 20:53:32  gpowers
+ * - added hooks for inline info plugin
+ *
  * Revision 1.13  2005/02/10 21:16:49  maulani
  * - Add audit trail entries
  *

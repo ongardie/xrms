@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.70 2005/03/15 22:50:06 daturaarutad Exp $
+ * $Id: one.php,v 1.71 2005/03/18 20:53:32 gpowers Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -36,6 +36,13 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 $form_name = 'One_Contact';
+
+// make sure $accounting_rows is defined
+if ( !isset($accounting_rows) ) {
+  $accounting_rows = '';
+}
+//call the accounting hook
+$accounting_rows = do_hook_function('contact_accounting_inline_display', $accounting_rows);
 
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
@@ -410,6 +417,8 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner; ?></td>
                                 </tr>
+                                <!-- accounting plugin -->
+                                <?php echo $accounting_rows; ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("CRM Status"); ?></td>
                                     <td class=clear><?php  echo $crm_status_display_html; ?></td>
@@ -597,6 +606,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.71  2005/03/18 20:53:32  gpowers
+ * - added hooks for inline info plugin
+ *
  * Revision 1.70  2005/03/15 22:50:06  daturaarutad
  * pager tuning sql_sort_column
  *
@@ -637,7 +649,7 @@ end_page();
  *
  * Revision 1.58  2005/01/22 15:21:47  braverock
  * - fixed double handlnig of $http_site_root on mailto link
- *   Resolves SF Bug #1106989 using patch reported by fu22ba55
+ * ï¿½ Resolves SF Bug #1106989 using patch reported by fu22ba55
  *
  * Revision 1.57  2005/01/22 15:07:25  braverock
  * - add sort order to activity_types menu
