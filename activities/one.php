@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.29 2004/07/07 22:23:18 neildogg Exp $
+ * $Id: one.php,v 1.30 2004/07/08 02:22:11 gpowers Exp $
  */
 
 //include required files
@@ -300,7 +300,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Description</td>
-                <td class=widget_content_form_element><textarea rows=10 cols=100 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=90 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <?php 
             if($on_what_table == 'opportunities') {
@@ -393,6 +393,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.30  2004/07/08 02:22:11  gpowers
+ * - changed description textarea width to 90 (was 100)
+ *   - this screen will now fit on a 1024x768 Windows XP display
+ *     with MSIE v6.0 (Maximized)
+ *
  * Revision 1.29  2004/07/07 22:23:18  neildogg
  * - Fixed lack of <?php in probability printing\n- Added logging formatting in opportunity notes
  *
