@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.37 2004/07/14 22:10:49 neildogg Exp $
+ * $Id: one.php,v 1.38 2004/07/15 22:57:20 cpsource Exp $
  */
 
 //include required files
@@ -250,6 +250,7 @@ function logTime() {
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
         <input type=hidden name=table_name value="<?php echo $table_name ?>">
         <input type=hidden name=table_status_id value="<?php echo $table_status_id ?>">
+        <input type=hidden name=opportunity_description value="<?php echo $opportunity_description ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -403,6 +404,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.38  2004/07/15 22:57:20  cpsource
+ * - Post $opportunity_description
+ *
  * Revision 1.37  2004/07/14 22:10:49  neildogg
  * - Now uses $overall_id
  *
