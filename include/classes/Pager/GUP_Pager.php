@@ -1,36 +1,22 @@
 <?php
-
 /**
-
- The Grand Unified Pager
-
- Pager for GUP
- based on ADOdb's pager
- (still uses ADOdb's tohtml.php include file)
-
- see opportunities/some.php for an example of usage
-
-
-	grouping..................
-
-
-	pass in 2 queries.
-	one is for the distinct list of names and values like (1 => 'Hey Guy', 2 => 'you need to relax');
-	two is a select that takes $select_id and will be used as the query.
-
-	create a second page function that will generate the page links for this select mode...
-
-
-
-
-*/
-
-// specific code for tohtml
-GLOBAL $gSQLMaxRows,$gSQLBlockRows;
-
-$gSQLMaxRows   = 1000; // max no of rows to download
-$gSQLBlockRows = 20; // max no of rows per table block
-
+ *
+ * The Grand Unified Pager
+ *
+ * see @example for usage
+ * 
+ * This pager can be passed an SQL query with the option to have a callback called for each row, 
+ * or an array of data may be passed in.
+ *
+ * The pager by default handles the caching of data and users may flush the cache or ask the pager
+ * to watch variables to see if they have changed, triggering a cache flush.
+ *
+ * Information about the columns to display in the pager is passed in as a structured array, which
+ * is described in the constructor docs below.
+ *
+ *  
+ * $Id: GUP_Pager.php,v 1.3 2005/02/11 01:49:03 daturaarutad Exp $
+ */
 
 
 class GUP_Pager {
@@ -38,8 +24,6 @@ class GUP_Pager {
 	var $SubtotalColumns;
 	var $TotalColumns;
 
-	// adodb_pager code begin
-    var $id;    // unique id for pager (defaults to 'adodb')
     var $db;    // ADODB connection object
     var $sql;   // sql used
     var $rs;    // recordset generated
@@ -60,7 +44,7 @@ class GUP_Pager {
     var $htmlSpecialChars = false;
     var $selected_column = 1;
     var $selected_column_html = '*';
-    var $page = 'Page';
+    var $page;
     var $cache = 0;  #secs to cache with CachePageExecute()
 	// adodb_pager code end
 
@@ -69,14 +53,17 @@ class GUP_Pager {
     var $maximize;
 
 
-	var $get_only_visible = false;
+	var $get_only_visible = false; // used internally; whether or not to get the whole sql dataset
 	var $use_cached = true; 	// whether or not to use the cache
 	var $using_cached = false;	// whether or not we are currently using cached data
+	var $group_mode = false;
 
 
     /**
-    * constructor
+    * see @example for details
     *
+    * @param object an ADOdb connection object
+    * @param string SQL query
     * @param array Numeric or Assoc. Array containing the data
     * @param string Caption to display in pager header
     * @param string ID of the form that contains this pager (for javascript document.form_id.element)
@@ -89,9 +76,9 @@ class GUP_Pager {
     *   type = currency will use number_format to display dollar values
     *   subtotal = true will subtotal the columns on the visible page
     *   total = true will total all columns 
+	*
     */
-
-    function GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='adodb_pager', $column_info, $use_cached = true)
+    function GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true)
     {
         global $http_site_root;
 
@@ -103,8 +90,8 @@ class GUP_Pager {
         $this->pager_id		= $pager_id;
         $this->column_info 	= $column_info;
 		$this->use_cached	= $use_cached;
-
-        // begin sorted columns stuff
+ 		$this->page			= _('Page');
+        // get CGI vars
         getGlobalVar($this->sort_column, $pager_id . '_sort_column');
         getGlobalVar($this->current_sort_column, $pager_id . '_current_sort_column');
         getGlobalVar($this->sort_order, $pager_id . '_sort_order');
@@ -115,13 +102,10 @@ class GUP_Pager {
 		getGlobalVar($this->group_mode, $this->pager_id . '_group_mode');
 		getGlobalVar($this->group_id, $this->pager_id . '_group_id');
 		getGlobalVar($refresh, $this->pager_id . '_refresh');
-		if($refresh) {
-			$this->use_cached	= false;
-		}
 
-		if($this->group_mode) {
-			$this->maximize = true;
-		}
+		if($refresh) { $this->use_cached	= false; }
+
+		if(!empty($this->group_mode)) { $this->maximize = true; }
 
 		// begin sort stuff
         if (!strlen($this->sort_column) > 0) {
@@ -141,8 +125,10 @@ class GUP_Pager {
         $descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
         $this->pretty_sort_order = ($this->sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-		// let the user specify an arbitrary sql column to sort on for this pager column
+		// here we add the ORDER BY clause to the SQL query.
+		// this is done seperately for grouping later because we don't know enough yet to contruct it for grouping
 		if($this->column_info[$this->sort_column-1]['sql_sort_column']) {
+			// let the user specify a numericly indexed column from the sql query to sort on for this displayed pager column
         	$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'];
         	$order_by .= " " . $this->sort_order;
 			$this->sql .= " $order_by";
@@ -155,10 +141,8 @@ class GUP_Pager {
 			$this->get_only_visible = true;
 		} 
 		// end sort stuff
-			
 
-		// this is so that we can refer to all columns by ['index'] later when it doesn't concern us
-		// if they are sql/calc/data
+		// this is so that we can refer to all columns by ['index'] later when it doesn't concern us if they are sql/calc/data
 		foreach($this->column_info as $k => $column) {
 			if($column['index_sql']) $this->column_info[$k]['index'] = $column['index_sql'];
 			if($column['index_calc']) $this->column_info[$k]['index'] = $column['index_calc'];
@@ -176,7 +160,7 @@ class GUP_Pager {
         // end sorted columns stuff
 
 
-        // Set up the Subtotal and Total column arrays
+        // Init the Subtotal and Total column arrays
         foreach($this->column_info as $k => $column_header) {
             if($column_header['subtotal']) {
                 $this->SubtotalColumns[$column_header['index']] = 0;
@@ -185,13 +169,18 @@ class GUP_Pager {
                 $this->TotalColumns[$column_header['index']] = 0;
             }
         }
-
+		
       	$this->selected_column = $this->sort_column-1;
       	$this->selected_column_html = $this->pretty_sort_order;
 
+	} // end constructor
 
-	} // end GUP_Pager
 
+    /**
+	* public method called by user to render the pager
+	*
+	* @param integer number of rows to display in this pager
+	*/
 	function Render($rows=10) {
 
 		echo "<a name=\"{$this->pager_id}\"></a>\n";
@@ -211,7 +200,8 @@ class GUP_Pager {
 
 		$this->GetData();
 		// if group mode or there is data and we're not at the first and last page simultaneously (only one page!)
-        if ($this->group_mode) {
+        if (!empty($this->group_mode)) {
+			// makes Group: <select> [ungroup button]
         	$page_nav = $this->column_info[$this->group_mode]['name'] . ':' ;
         	$page_nav .= $this->group_select_widget;
         	$page_nav .= "<input type=button class=button onclick=\"javascript:{$this->pager_id}_ungroup({$this->group_mode});\" value=\"" . _('Ungroup') . '">';
@@ -227,11 +217,18 @@ class GUP_Pager {
         $grid = $this->RenderGrid();
 
         $this->RenderLayout($page_nav,$grid,$page_count);
+
+		global $xrms_plugin_hooks;
+
+		// add the hook to include the JS for the tooltips
+		$xrms_plugin_hooks['end_page']['pager'] = 'javascript_tooltips_include';
 	}
 
 
-
-	// GetData returns the appropriate data slice we are viewing.
+	/**
+	* private function GetData returns the appropriate data slice we are viewing.
+	*
+	*/
 	function GetData() {
 		/* Get the data...
 			
@@ -244,12 +241,12 @@ class GUP_Pager {
 			-where could be set to group (also the sort columns should still work within that page)
 	
 		Caching...if you do sql query, you only get + calc part of the view
-		Once you have a cached dataset, you always work from that, even if the sort column is sql.
+		Once you have a cached dataset, you always work from that, even if the sort column is of type sql.
 	
 		*/
 		$cache_name = $this->pager_id . '_data';
 
-		if($this->group_mode) {
+		if(!empty($this->group_mode)) {
 			/* 
 				In group mode, we replace the normal sql query with the one passed in group_query_select
 				
@@ -275,24 +272,24 @@ class GUP_Pager {
 					}
 					$this->group_select_widget =  $group_values->GetMenu2($this->pager_id . '_group_id', $this->group_id, false, false, 0, "onchange='javascript:{$this->pager_id}_group(" . $this->group_mode . ");'");
 				}
-			}
 
-			// change the sql query to the group select
-			$this->sql = str_replace('XXX-value-XXX', $this->group_id, $this->column_info[$this->group_mode]['group_query_select']);
-
-			// set up an order by clause if the sort column is coming from SQL
-			if($this->column_info[$this->sort_column-1]['sql_sort_column']) {
-        		$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'];
-        		$order_by .= " " . $this->sort_order;
-				$this->sql .= " $order_by";
-				$this->get_only_visible = true;
+				// change the sql query to the group select
+				$this->sql = str_replace('XXX-value-XXX', $this->group_id, $this->column_info[$this->group_mode]['group_query_select']);
 	
-			} elseif($this->column_info[$this->sort_column-1]['index_sql']) {
-        		$order_by = " order by " . $this->sort_column;
-        		$order_by .= " " . $this->sort_order;
-				$this->sql .= " $order_by";
-				$this->get_only_visible = true;
-			} 
+				// set up an order by clause if the sort column is coming from SQL
+				if($this->column_info[$this->sort_column-1]['sql_sort_column']) {
+        			$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'];
+        			$order_by .= " " . $this->sort_order;
+					$this->sql .= " $order_by";
+					$this->get_only_visible = true;
+		
+				} elseif($this->column_info[$this->sort_column-1]['index_sql']) {
+        			$order_by = " order by " . $this->sort_column;
+        			$order_by .= " " . $this->sort_order;
+					$this->sql .= " $order_by";
+					$this->get_only_visible = true;
+				} 
+			}
 		}
 
 		if($_SESSION[$cache_name] && $this->use_cached) {
@@ -368,13 +365,12 @@ class GUP_Pager {
 			$this->AtLastPage 	= ($this->LastPageNo <= 1);
 
 			//echo "clause A<br>";
-
             $this->start_data_row = ($this->curr_page -1) * $this->rows;
             $this->end_data_row = min($this->start_data_row + $this->rows, count($this->data));
 
 		} else {
 			if($this->rs) { 
-			//echo "clause B<br>";
+				//echo "clause B<br>";
 				$this->AbsolutePage = $rs->AbsolutePage();
 				$this->LastPageNo = $rs->LastPageNo();
 				$this->AtFirstPage = $rs->AtFirstPage();
@@ -384,7 +380,6 @@ class GUP_Pager {
             	$this->end_data_row = count($this->data);
 			} else {
 				//echo "clause C<br>";
-
 				$this->AbsolutePage = $this->curr_page;
 				$this->LastPageNo 	= (int)((count($this->data) + $this->rows - 1) / $this->rows);
 				$this->AtFirstPage 	= (1 == $this->curr_page);
@@ -395,6 +390,33 @@ class GUP_Pager {
 			}
 		}
 		//echo "rows from {$this->start_data_row} to {$this->end_data_row}<br/>";
+
+
+		if(!empty($this->group_mode) && $this->column_info[$this->group_mode]['group_calc']) {
+			// build the select from the real data
+
+			$unique_ids = array();
+			$index = $this->column_info[$this->group_mode]['index'];
+
+	 		for($i=$this->start_data_row; $i<$this->end_data_row; $i++) {
+				$unique_ids[$this->data[$i][$index]] = true;
+			}
+			$this->group_select_widget = '<select name="' . $this->pager_id . "_group_id\" onchange='javascript:{$this->pager_id}_group(" . $this->group_mode . ");'"; 
+			foreach($unique_ids as $id => $v) {
+				$this->group_select_widget .= "<option value=$id";
+				if($this->group_id == $id) { 
+					$this->group_select_widget .= " selected"; 
+				}
+				$this->group_select_widget .= ">$id</option>";
+			}
+			$this->group_select_widget .= '</select>';
+
+			//$this->group_select_widget =  $group_values->GetMenu2($this->pager_id . '_group_id', $this->group_id, false, false, 0, "onchange='javascript:{$this->pager_id}_group(" . $this->group_mode . ");'");
+
+		}
+
+
+
 	}
 
 	function Render_JS() {
@@ -462,45 +484,6 @@ class GUP_Pager {
 END;
 	}
 
-    function Render_PageLinks()
-    {
-
-   		// original code by "Pablo Costa" <pablo@cbsp.com.br>
-   		$pages        = $this->LastPageNo;
-  		$linksperpage = $this->linksPerPage ? $this->linksPerPage : $pages;
-   		for($i=1; $i <= $pages; $i+=$linksperpage)
-   		{
-      		if($this->AbsolutePage >= $i)
-      		{
-        		$start = $i;
-       		}
-   		}
-   		$numbers = '';
-   		$end = $start+$linksperpage-1;
-   		$link = $this->pager_id . '_' . "_next_page";
-   		if($end > $pages) $end = $pages;
-		
-		
-   		if ($this->startLinks && $start > 1) {
-     		$pos = $start - 1;
-       		$numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $pos . ");'>" . $this->startLinks . "</a> ";
-   		}
-		
-   		for($i=$start; $i <= $end; $i++) {
-       		if ($this->AbsolutePage == $i)
-       		$numbers .= "<b>$i</b>  ";
-       		else
-       		$numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $i . ");'>" . $i . "</a> ";
-       		// $numbers .= "<a href=$PHP_SELF?$link=$i>$i</a>  ";
-	
-   		}
-   		if ($this->moreLinks && $end < $pages){
-       		$numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $i . ");'>" . $this->moreLinks . "</a>  ";
-   		}
-   		print $numbers . ' &nbsp; ';
-	}
-
-
     function RenderGrid()
     {
         ob_start();
@@ -514,7 +497,9 @@ END;
         for($i=0; $i<$column_count; $i++) {
 
         	$group_html = '';
-        	if($this->column_info[$i]['group_query_list']) {
+
+
+        	if($this->column_info[$i]['group_query_list'] || $this->column_info[$i]['group_calc']) {
             	$group_html = "<a href='javascript: " . $this->pager_id . "_group($i);'><b>(" . _('G') . ")</b></a>";
         	}
 
@@ -538,9 +523,31 @@ END;
 
         echo "<tr>$hdr</tr>";
 
-		//echo "rows from {$this->start_data_row} to {$this->end_data_row}<br/>";
+
+		/*  Grouping:
+			Get the index of the column that is being grouped
+			Get the value of the thing
+			during the loop, check to see if the column matches
+			also, this loop could be sped up if you cache $this->column_info[$j]['index'] as $data_index[$j]
+
+		*/
+		if($this->column_info[$this->group_mode]['group_calc']) {
+			$skip_value = $this->group_id;
+		} else {
+			$skip_value = null;
+		}
+
+
+
 
         for($i=$this->start_data_row; $i<$this->end_data_row; $i++) {
+
+			// in group mode, skip this value if it's not one we're interested in.
+			if($skip_value && $skip_value != $this->data[$i][$this->column_info[$this->group_mode]['index']]) {
+				continue;
+			}
+
+
             $classname = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
             $color_counter++;
 
@@ -614,6 +621,44 @@ END;
 
       return $s;
     }
+    function Render_PageLinks()
+    {
+
+   		// original code by "Pablo Costa" <pablo@cbsp.com.br>
+   		$pages        = $this->LastPageNo;
+  		$linksperpage = $this->linksPerPage ? $this->linksPerPage : $pages;
+   		for($i=1; $i <= $pages; $i+=$linksperpage)
+   		{
+      		if($this->AbsolutePage >= $i)
+      		{
+        		$start = $i;
+       		}
+   		}
+   		$numbers = '';
+   		$end = $start+$linksperpage-1;
+   		$link = $this->pager_id . '_' . "_next_page";
+   		if($end > $pages) $end = $pages;
+		
+		
+   		if ($this->startLinks && $start > 1) {
+     		$pos = $start - 1;
+       		$numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $pos . ");'>" . $this->startLinks . "</a> ";
+   		}
+		
+   		for($i=$start; $i <= $end; $i++) {
+       		if ($this->AbsolutePage == $i)
+       		$numbers .= "<b>$i</b>  ";
+       		else
+       		$numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $i . ");'>" . $i . "</a> ";
+   		}
+   		if ($this->moreLinks && $end < $pages){
+       		$numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $i . ");'>" . $this->moreLinks . "</a>  ";
+   		}
+   		print $numbers . ' &nbsp; ';
+	}
+
+
+
     // Display link to first page
     function Render_First()
     {
@@ -676,6 +721,9 @@ END;
 	
 
     //------------------------------------------------------
+	/**
+	* this function assembles the html elements for final composition of the pager
+	*/
     function RenderLayout($page_nav,$grid,$page_count,$attributes='class=widget cellspacing=1 cellpadding=0 border=0 width="100%"')
     {
 		global $http_site_root;
@@ -684,18 +732,20 @@ END;
 
 		if($this->using_cache) {
 			$cache_indicator = '<input type="button" class="button" value="(cached)" onclick=javascript:' . $this->pager_id . '_refresh();>';
-			$cache_indicator = "<a href=javascript:{$this->pager_id}_refresh();><img alt=\"" . _('Refresh Pager') . "\" border=0 src=\"$http_site_root/img/refresh.gif\"></a> ";
+			$cache_indicator = "<a onmouseover=\"this.T_OFFSETX=-360; this.T_OFFSETY=10; return escape('" . _('Refresh Data') . "')\" href=javascript:{$this->pager_id}_refresh();><img alt=\"" . _('Refresh Pager') . "\" border=0 src=\"$http_site_root/img/refresh.gif\"></a> ";
 		} else {
 			$cache_indicator = "";
 		}
 
-		if($this->group_mode) {
+		if(!empty($this->group_mode)) {
 			$size_buttons = '';
 		} else {
 			if($this->maximize) {
-				$size_buttons =  "<a href=javascript:{$this->pager_id}_unmaximize();><img alt=\"" . _('Restore Pager') . "\" border=0 src=\"$http_site_root/img/restore.gif\"></a>";
+				$size_buttons =  "<a onmouseover=\"this.T_OFFSETX=-360; this.T_OFFSETY=10; return escape('" . _('Show paged data') . "')\" href=javascript:{$this->pager_id}_unmaximize();><img  alt=\"" . _('Restore Pager') . "\" border=0 src=\"$http_site_root/img/restore.gif\"></a>";
 			} else {
-				$size_buttons =  "<a href=javascript:{$this->pager_id}_maximize();><img alt=\"" . _('Maximize Pager') . "\" border=0 src=\"$http_site_root/img/maximize.gif\"></a>";
+				if(!($this->AtFirstPage && $this->AtLastPage)) {
+					$size_buttons =  "<a onmouseover=\"this.T_OFFSETX=-360; this.T_OFFSETY=10; return escape('" . _('Show all data in a single page.') . "')\" href=javascript:{$this->pager_id}_maximize();><img alt=\"" . _('Maximize Pager') . "\" border=0 src=\"$http_site_root/img/maximize.gif\"></a>";
+				}
 			}
 		}
 
@@ -783,7 +833,6 @@ END;
 		foreach($vars as $var) {
 			$v = null;
 			getGlobalVar($v, $var);
-			//echo "$var is $v<br>\n";
 
 			if(array_key_exists($prepend . $var, $_SESSION) && $_SESSION[$prepend . $var] != $v) {
 				//echo "$var has changed from {$_SESSION[$prepend . $var]} to $v, flushing the cache<br/>";
@@ -807,4 +856,10 @@ END;
 	}
 }
 
+/**
+ * $Log: GUP_Pager.php,v $
+ * Revision 1.3  2005/02/11 01:49:03  daturaarutad
+ * updated to allow for grouping of calculated (non-sql) columns
+ *
+ */
 ?>
