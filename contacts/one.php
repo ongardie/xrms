@@ -398,6 +398,14 @@ function markComplete() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel>Address</td>
+                                    <td class=clear><?php echo $address_to_display ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel>Yahoo! IM</td>
                                     <td class=clear>
                                     <?php if (strlen($yahoo_name) > 0) {echo("<a href='ymsgr:sendim?$yahoo_name'><img border=0 src='http://opi.yahoo.com/online?u=$yahoo_name&m=g&t=3'></a>");}; ?>
