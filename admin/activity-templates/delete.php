@@ -29,7 +29,7 @@ $rec = array();
 $rec['activity_template_record_status'] = 'd';
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
-$rst = $con->execute($upd);
+$con->execute($upd);
 
 //update the sort_order field - re-initialize the values
 $sql = "select activity_template_id, sort_order 
