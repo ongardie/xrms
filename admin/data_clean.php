@@ -7,8 +7,9 @@
  * must be made.
  *
  * @author Beth Macknik
+ * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.5 2004/04/21 16:25:15 maulani Exp $
+ * $Id: data_clean.php,v 1.6 2004/04/21 21:54:35 maulani Exp $
  */
 
 // where do we include from
@@ -142,6 +143,130 @@ if ($companies_to_fix > 0) {
     }
 }
 
+// Each company must have a valid default_primary_address
+$sql = "SELECT companies.company_id, companies.company_record_status ";
+$sql .= "FROM companies ";
+$sql .= "LEFT JOIN addresses ON companies.default_primary_address = addresses.address_id ";
+$sql .= "AND companies.company_id = addresses.company_id ";
+$sql .= "WHERE addresses.address_id IS NULL ";
+$rst = $con->execute($sql);
+$companies_to_fix = $rst->RecordCount();
+if ($companies_to_fix > 0) {
+    $msg .= "Need to assign default_primary_address for $companies_to_fix companies<BR><BR>";
+    while (!$rst->EOF) {
+        $company_id = $rst->fields['company_id'];
+        $company_record_status = $rst->fields['company_record_status'];
+        $sql = "select min(address_id) as the_address
+                FROM addresses
+                WHERE addresses.company_id = $company_id";
+        if($company_record_status = 'a') {
+            $sql .= " AND addresses.address_record_status = 'a'";
+        }
+        $ast = $con->execute($sql);
+        $address_id = $ast->fields['the_address'];
+
+        $sql = "update companies set
+                default_primary_address = $address_id
+                where company_id=$company_id";
+        $con->execute($sql);
+
+        $rst->movenext();
+    }
+}
+
+// Each company must have a valid default_billing_address
+$sql = "SELECT companies.company_id, companies.company_record_status ";
+$sql .= "FROM companies ";
+$sql .= "LEFT JOIN addresses ON companies.default_billing_address = addresses.address_id ";
+$sql .= "AND companies.company_id = addresses.company_id ";
+$sql .= "WHERE addresses.address_id IS NULL ";
+$rst = $con->execute($sql);
+$companies_to_fix = $rst->RecordCount();
+if ($companies_to_fix > 0) {
+    $msg .= "Need to assign default_billing_address for $companies_to_fix companies<BR><BR>";
+    while (!$rst->EOF) {
+        $company_id = $rst->fields['company_id'];
+        $company_record_status = $rst->fields['company_record_status'];
+        $sql = "select min(address_id) as the_address
+                FROM addresses
+                WHERE addresses.company_id = $company_id";
+        if($company_record_status = 'a') {
+            $sql .= " AND addresses.address_record_status = 'a'";
+        }
+        $ast = $con->execute($sql);
+        $address_id = $ast->fields['the_address'];
+
+        $sql = "update companies set
+                default_billing_address = $address_id
+                where company_id=$company_id";
+        $con->execute($sql);
+
+        $rst->movenext();
+    }
+}
+
+// Each company must have a valid default_shipping_address
+$sql = "SELECT companies.company_id, companies.company_record_status ";
+$sql .= "FROM companies ";
+$sql .= "LEFT JOIN addresses ON companies.default_shipping_address = addresses.address_id ";
+$sql .= "AND companies.company_id = addresses.company_id ";
+$sql .= "WHERE addresses.address_id IS NULL ";
+$rst = $con->execute($sql);
+$companies_to_fix = $rst->RecordCount();
+if ($companies_to_fix > 0) {
+    $msg .= "Need to assign default_shipping_address for $companies_to_fix companies<BR><BR>";
+    while (!$rst->EOF) {
+        $company_id = $rst->fields['company_id'];
+        $company_record_status = $rst->fields['company_record_status'];
+        $sql = "select min(address_id) as the_address
+                FROM addresses
+                WHERE addresses.company_id = $company_id";
+        if($company_record_status = 'a') {
+            $sql .= " AND addresses.address_record_status = 'a'";
+        }
+        $ast = $con->execute($sql);
+        $address_id = $ast->fields['the_address'];
+
+        $sql = "update companies set
+                default_shipping_address = $address_id
+                where company_id=$company_id";
+        $con->execute($sql);
+
+        $rst->movenext();
+    }
+}
+
+// Each company must have a valid default_payment_address
+$sql = "SELECT companies.company_id, companies.company_record_status ";
+$sql .= "FROM companies ";
+$sql .= "LEFT JOIN addresses ON companies.default_payment_address = addresses.address_id ";
+$sql .= "AND companies.company_id = addresses.company_id ";
+$sql .= "WHERE addresses.address_id IS NULL ";
+$rst = $con->execute($sql);
+$companies_to_fix = $rst->RecordCount();
+if ($companies_to_fix > 0) {
+    $msg .= "Need to assign default_payment_address for $companies_to_fix companies<BR><BR>";
+    while (!$rst->EOF) {
+        $company_id = $rst->fields['company_id'];
+        $company_record_status = $rst->fields['company_record_status'];
+        $sql = "select min(address_id) as the_address
+                FROM addresses
+                WHERE addresses.company_id = $company_id";
+        if($company_record_status = 'a') {
+            $sql .= " AND addresses.address_record_status = 'a'";
+        }
+        $ast = $con->execute($sql);
+        $address_id = $ast->fields['the_address'];
+
+        $sql = "update companies set
+                default_payment_address = $address_id
+                where company_id=$company_id";
+        $con->execute($sql);
+
+        $rst->movenext();
+    }
+}
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -162,6 +287,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.6  2004/04/21 21:54:35  maulani
+ * - Add additional company <--> address relationship verifications
+ *
  * Revision 1.5  2004/04/21 16:25:15  maulani
  * - Remove code that could alter valid data
  *
