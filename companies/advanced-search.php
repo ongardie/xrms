@@ -4,7 +4,7 @@
  *
  * This is the advanced screen that allows many more search fields
  *
- * $Id: advanced-search.php,v 1.1 2004/06/28 23:08:39 maulani Exp $
+ * $Id: advanced-search.php,v 1.2 2004/06/29 13:19:59 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -161,9 +161,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right_166px>Profile</td>
                 <td class=widget_content_form_element><textarea rows=10 cols=70 name=profile></textarea></td>
             </tr>
-             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Search"></td>
-            </tr>
         </table>
 
         </td>
@@ -211,6 +208,9 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right_91px>Override&nbsp;Address</td>
                 <td class=widget_content_form_element><textarea rows=5 cols=40 name=address_body></textarea></td>
             </tr>
+             <tr>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Search"></td>
+            </tr>
         </table>
 
         </td>
@@ -252,6 +252,9 @@ end_page();
 
 /**
  * $Log: advanced-search.php,v $
+ * Revision 1.2  2004/06/29 13:19:59  maulani
+ * - Additional fields for advanced search
+ *
  * Revision 1.1  2004/06/28 23:08:39  maulani
  * - Advanced search allows searching with a lot more fields
  *

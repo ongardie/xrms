@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.1 2004/06/28 23:08:40 maulani Exp $
+ * $Id: some-advanced.php,v 1.2 2004/06/29 13:19:59 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -21,52 +21,41 @@ $session_user_id = session_check();
 
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
-$msg = $_GET['msg'];
-$offset = $_POST['offset'];
-$clear = ($_GET['clear'] == 1) ? 1 : 0;
 $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
 $resort = $_POST['resort'];
 
 
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $company_name = '';
-    $company_type_id = '';
-    $company_category_id = '';
-    $company_code = '';
-    $user_id = '';
-    $crm_status_id = '';
-    $industry_id = '';
-} elseif ($use_post_vars) {
-    $sort_column = $_POST['sort_column'];
-    $current_sort_column = $_POST['current_sort_column'];
-    $sort_order = $_POST['sort_order'];
-    $current_sort_order = $_POST['current_sort_order'];
-    $company_name = $_POST['company_name'];
-    $company_type_id = $_POST['company_type_id'];
-    $company_category_id = $_POST['company_category_id'];
-    $company_code = $_POST['company_code'];
-    $city = $_POST ['city'];
-    $state = $_POST ['state'];
-    $user_id = $_POST['user_id'];
-    $crm_status_id = $_POST['crm_status_id'];
-    $industry_id = $_POST['industry_id'];
-} else {
-    $sort_column = $_SESSION['campaigns_sort_column'];
-    $current_sort_column = $_SESSION['campaigns_current_sort_column'];
-    $sort_order = $_SESSION['campaigns_sort_order'];
-    $current_sort_order = $_SESSION['campaigns_current_sort_order'];
-    $company_name = $_SESSION['companies_company_name'];
-    $company_type_id = $_SESSION['companies_company_type_id'];
-    $company_category_id = $_SESSION['companies_company_category_id'];
-    $company_code = $_SESSION['companies_company_code'];
-    $user_id = $_SESSION['companies_user_id'];
-    $crm_status_id = $_SESSION['companies_crm_status_id'];
-    $industry_id = $_SESSION['industry_id'];
-}
+$sort_column = $_POST['sort_column'];
+$current_sort_column = $_POST['current_sort_column'];
+$sort_order = $_POST['sort_order'];
+$current_sort_order = $_POST['current_sort_order'];
+
+$company_name = $_POST['company_name'];
+$legal_name = $_POST['legal_name'];
+$company_code = $_POST['company_code'];
+$crm_status_id = $_POST['crm_status_id'];
+$company_source_id = $_POST['company_source_id'];
+$industry_id = $_POST['industry_id'];
+$user_id = $_POST['user_id'];
+$phone = $_POST ['phone'];
+$phone2 = $_POST ['phone2'];
+$fax = $_POST ['fax'];
+$url = $_POST ['url'];
+$employees = $_POST ['employees'];
+$revenue = $_POST ['revenue'];
+$custom1 = $_POST ['custom1'];
+$custom2 = $_POST ['custom2'];
+$custom3 = $_POST ['custom3'];
+$custom4 = $_POST ['custom4'];
+$profile = $_POST ['profile'];
+$address_name = $_POST ['address_name'];
+$line1 = $_POST ['line1'];
+$line2 = $_POST ['line2'];
+$city = $_POST ['city'];
+$province = $_POST ['province'];
+$postal_code = $_POST ['postal_code'];
+$country_id = $_POST['country_id'];
+$address_body = $_POST['address_body'];
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -123,11 +112,12 @@ if ($company_category_id > 0) {
 
 $where .= "where c.industry_id = i.industry_id ";
 $where .= "and c.crm_status_id = crm.crm_status_id ";
-$where .= "and c.default_primary_address = addr.address_id ";
+$where .= "and c.company_id = addr.company_id ";
 $where .= "and r.rating_id = c.rating_id ";
 $where .= "and as1.account_status_id = c.account_status_id ";
 $where .= "and c.user_id = u.user_id ";
-$where .= "and company_record_status = 'a'";
+$where .= "and company_record_status = 'a' ";
+$where .= "and address_record_status = 'a'";
 
 if ($company_category_id > 0) {
     $where .= " and ecm.on_what_table = 'companies' and ecm.on_what_id = c.company_id and ecm.category_id = $company_category_id ";
@@ -135,12 +125,32 @@ if ($company_category_id > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr('%'. $company_name . '%', get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr($company_name, get_magic_quotes_gpc());
 }
 
-if (strlen($company_type_id) > 0) {
+if (strlen($legal_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_id in (select company_id from company_company_type_map where company_type_id = $company_type_id)";
+    $where .= " and c.legal_name like " . $con->qstr($legal_name, get_magic_quotes_gpc());
+}
+
+if (strlen($company_code) > 0) {
+    $criteria_count++;
+    $where .= " and c.company_code = " . $con->qstr($company_code, get_magic_quotes_gpc());
+}
+
+if (strlen($crm_status_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.crm_status_id = $crm_status_id";
+}
+
+if (strlen($company_source_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.company_source_id = $company_source_id";
+}
+
+if (strlen($industry_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.industry_id = $industry_id";
 }
 
 if (strlen($user_id) > 0) {
@@ -148,9 +158,14 @@ if (strlen($user_id) > 0) {
     $where .= " and c.user_id = $user_id";
 }
 
-if (strlen($company_code) > 0) {
+if (strlen($phone) > 0) {
     $criteria_count++;
-    $where .= " and c.company_code = " . $con->qstr($company_code, get_magic_quotes_gpc());
+    $where .= " and c.phone like " . $con->qstr($phone, get_magic_quotes_gpc());
+}
+
+if (strlen($company_type_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.company_id in (select company_id from company_company_type_map where company_type_id = $company_type_id)";
 }
 
 if (strlen($city) > 0) {
@@ -169,16 +184,6 @@ if (strlen($state) > 0) {
     }
     $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
     $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
-}
-
-if (strlen($crm_status_id) > 0) {
-    $criteria_count++;
-    $where .= " and c.crm_status_id = $crm_status_id";
-}
-
-if (strlen($industry_id) > 0) {
-    $criteria_count++;
-    $where .= " and c.industry_id = $industry_id";
 }
 
 
@@ -263,45 +268,6 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post>
-        <input type=hidden name=use_post_vars value=1>
-        <input type=hidden name=resort value="0">
-        <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-        <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-        <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-        <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-        <input type=hidden name=companies_next_page>
-        <table class=widget cellspacing=1 width="100%">
-            <tr>
-                <td class=widget_header colspan=8><?php  echo $strCompaniesSomeSearchCriteriaTitle; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyNameLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCodeLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyUserLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCategoryLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyIndustrylabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCRMStatusLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyCityLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyStateLabel; ?></td>
-
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_code" size=4 value="<?php  echo $company_code; ?>"></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $company_category_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $industry_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
-                <td class=widget_content_form_element><input type=text name="city" size=10 value="<?php  echo $city; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="state" size=5 value="<?php echo $state; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=8><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
-            </tr>
-        </table>
-        </form>
-
 <?php
 
 $pager = new ADODB_Pager($con, $sql, 'companies', false, $sort_column-1, $pretty_sort_order);
@@ -342,12 +308,6 @@ $con->close();
 <script language="JavaScript" type="text/javascript">
 <!--
 
-function initialize() {
-    document.forms[0].company_name.focus();
-}
-
-initialize();
-
 function submitForm(companiesNextPage) {
     document.forms[0].companies_next_page.value = companiesNextPage;
     document.forms[0].submit();
@@ -356,10 +316,6 @@ function submitForm(companiesNextPage) {
 function bulkEmail() {
     document.forms[0].action = "../email/email.php";
     document.forms[0].submit();
-}
-
-function clearSearchCriteria() {
-    location.href = "some.php?clear=1";
 }
 
 function resort(sortColumn) {
@@ -378,6 +334,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.2  2004/06/29 13:19:59  maulani
+ * - Additional fields for advanced search
+ *
  * Revision 1.1  2004/06/28 23:08:40  maulani
  * - Advanced search allows searching with a lot more fields
  *
