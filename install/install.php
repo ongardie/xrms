@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.2 2004/03/19 23:48:43 maulani Exp $
+ * $Id: install.php,v 1.3 2004/07/02 18:58:49 maulani Exp $
  */
 
 // include the installation utility routines
@@ -188,7 +188,25 @@ if (!$con) {
     
     install_fatal_error($problem);
 }
-
+//if you can make a database connection make sure that you are running at least version 4 of MYSQL
+// otherwise alert the user to potential problems
+if($xrms_db_dbtype="mysql"){
+	//dont use adodb bcos i need the link identifier for mysql_get_server_info
+	$link = mysql_connect($xrms_db_server, $xrms_db_username, $xrms_db_password);
+	$ver=mysql_get_server_info($link);
+	mysql_close($link);//close the link when you are done with it.
+  if (version_compare($ver,"4.0.2")<0){
+		 //Ooops you are not running a compliant version of mysql
+    // Now instruct the user in how to fix this problem
+    $problem = 'XRMS requires Mysql version 4.0.2 or above to work. <BR>';
+		$problem .='You are currently running MySql Server version '.$ver.'<BR>';
+    $problem .= 'At the moment, previous versions are not supported.';
+		
+    $problem .= 'Please install version 4.0.2 or greater of MySql, available here <a href="http://dev.mysql.com/downloads/">Mysql Downloads</a><BR>';
+    install_fatal_error($problem);
+		
+  };
+}
 // create the database tables
 create_db_tables($con);
 
@@ -220,6 +238,10 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.3  2004/07/02 18:58:49  maulani
+ *- add mySQL version check patch #980507 submitted by Nic Lowe
+ *  Modified to check for version 4.0.2
+ *
  *Revision 1.2  2004/03/19 23:48:43  maulani
  *- Add additional tests to insure that include-locations
  *  and vars.php are setup correctly
