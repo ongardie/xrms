@@ -26,7 +26,7 @@
  *
  * @example Pager_Columns.doc.1.php check out 
  *
- * $Id: Pager_Columns.php,v 1.4 2005/02/25 03:45:59 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.5 2005/03/10 20:38:09 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -63,6 +63,7 @@ class Pager_Columns {
 				$columns[$pager_column['index']]= $pager_column; 
 			}
 		}
+
 		$pager_columns = $columns;
 
 		if($new_columns_view) {
@@ -75,6 +76,13 @@ class Pager_Columns {
 
 			// set it in the session
 			$_SESSION[$pager_name . '_columns_view'] = $user_columns;
+		}
+
+
+		if(!$default_columns) {
+			foreach($pager_columns as $index => $pager_column) { 
+				$default_columns[] = $index;
+			}
 		}
 
 		$this->pager_name = $pager_name;
@@ -248,6 +256,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.5  2005/03/10 20:38:09  daturaarutad
+ * no longer require default_columns
+ *
  * Revision 1.4  2005/02/25 03:45:59  daturaarutad
  * code to set up sql_sort_column if it was not set by the user
  *
