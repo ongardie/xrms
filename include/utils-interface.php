@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.13 2004/06/03 16:32:13 braverock Exp $
+ * $Id: utils-interface.php,v 1.14 2004/06/04 15:54:26 gpowers Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -156,8 +156,30 @@ function build_salutation_menu($salutation) {
     return $salutation_menu;
 } //end build_salutation_menu fn
 
+/*
+ * JScalendar calendar widget settings
+ * Patch by Miguel Gonçalves ( Mig77 at users.sourceforge.net)
+ */
+
+function jscalendar_includes() {
+
+    global $http_site_root;
+
+    echo "<!-- JSCALENDAR SCRIPT INCLUDES -->"
+       . "<script type=\"text/javascript\" src=\"$http_site_root/js/jscalendar/calendar.js\"></script>"
+       . "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"$http_site_root/js/jscalendar/calendar-blue.css\">"
+       . "<script type=\"text/javascript\" src=\"$http_site_root/js/jscalendar/lang/calendar-en.js\"></script>"
+       . "<script type=\"text/javascript\" src=\"$http_site_root/js/jscalendar/calendar-setup.js\"></script>"
+       . "<!-- JSEND CALENDAR SCRIPT INCLUDES -->";
+
+} //end jscalendar_includes fn
+
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.14  2004/06/04 15:54:26  gpowers
+ * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
+ * (This code was orginially placed in vars.php)
+ *
  * Revision 1.13  2004/06/03 16:32:13  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
