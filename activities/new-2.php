@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.33 2005/01/09 14:54:02 braverock Exp $
+ * $Id: new-2.php,v 1.34 2005/01/13 17:53:19 vanmer Exp $
  */
 
 //where do we include from
@@ -25,7 +25,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 //check to make sure we are logged on
-$session_user_id = session_check();
+$session_user_id = session_check('','Create');
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -222,6 +222,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.34  2005/01/13 17:53:19  vanmer
+ *- Basic ACL changes to allow create/delete functionality to be restricted
+ *
  *Revision 1.33  2005/01/09 14:54:02  braverock
  *- localize [none]
  *
