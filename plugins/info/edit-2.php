@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: edit-2.php,v 1.7 2005/02/10 13:42:18 braverock Exp $
+ * $Id: edit-2.php,v 1.8 2005/02/11 00:49:11 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -18,7 +18,7 @@ $session_user_id = session_check();
 
 $msg = $_POST['msg'];
 
-# Always retrieve, and pass on, server and company ID
+# Always retrieve, and pass on, info, contact, and company ID
 $info_id = $_POST['info_id'];
 $company_id = $_POST['company_id'];
 $division_id = $_POST['division_id'];
@@ -26,11 +26,13 @@ $contact_id = $_POST['contact_id'];
 $info_type_id = $_POST['info_type_id'];
 $return_url = $_POST['return_url'];
 
+global $http_site_root;
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-# If this is a new server then $info_id will be zero, so create server
+# If this is a new info item then $info_id will be zero, so create info item
 # Note that we cannot simply add a null array as AutoExecute seems to
 # optimise it out
 if (0 == $info_id) {
@@ -81,7 +83,7 @@ foreach ($_POST as $key=>$value) {
 
 # Check all existing values against those passed. Any which were not
 # passed must be now-cleared checkboxes, so add them to the passed_values array
-foreach ($existing_values as $element_id=>$exising_value) {
+foreach ($existing_values as $element_id=>$existing_value) {
     if (!array_key_exists($element_id, $passed_values)) {
         $passed_values[$element_id] = 0;
     } 
@@ -113,6 +115,12 @@ foreach ($passed_values as $element_id=>$value) {
 
 $con->close();
 
-header("Location: " . $return_url);
+header("Location: " .$http_site_root.$return_url);
 
+/**
+ * $Log: edit-2.php,v $
+ * Revision 1.8  2005/02/11 00:49:11  braverock
+ * - modified to correctly pass contact_id and return_url
+ *
+ */
 ?>

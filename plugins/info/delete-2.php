@@ -2,7 +2,7 @@
 /**
  * Mark a note as deleted
  *
- * $Id: delete-2.php,v 1.3 2005/02/10 13:42:18 braverock Exp $
+ * $Id: delete-2.php,v 1.4 2005/02/11 00:49:11 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,10 +33,13 @@ if (!$con->AutoExecute($tbl, $rec, 'UPDATE', "info_id = $info_id")) {
 
 $con->close();
 
-header("Location: {$http_site_root}/companies/{$return_url}");
+header("Location: ".$http_site_root.$return_url);
 
 /**
  * $Log: delete-2.php,v $
+ * Revision 1.4  2005/02/11 00:49:11  braverock
+ * - modified to correctly pass contact_id and return_url
+ *
  * Revision 1.3  2005/02/10 13:42:18  braverock
  * - update to newest info plugin provided by Keith Edmunds
  *   - now uses ADOdb for database access

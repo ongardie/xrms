@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.6 2005/01/08 06:25:14 gpowers Exp $
+ * $Id: edit.php,v 1.7 2005/02/11 00:49:11 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -81,15 +81,13 @@ function show_element ($element_id, $element_value, $element_possvals) {
   return $html;
 }
 
-# Always retrieve, and pass on, server and company ID
-$info_id = $_GET['info_id'];
-$company_id = $_GET['company_id'];
-$division_id = $_GET['division_id'];
-$contact_id = $_GET['contact_id'];
-$return_url = $_GET['return_url'];
+# Always retrieve, and pass on, company_id, contact_id, division_id, and info_idd
+$info_id      = $_GET['info_id'];
+$company_id   = $_GET['company_id'];
+$division_id  = $_GET['division_id'];
+$contact_id   = $_GET['contact_id'];
+$return_url   = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
-
-$delete_return_url = urlencode("../../companies/one.php?company_id=$company_id&division_id=$division_id");
 
 if (!$return_url) {
     $return_url = "../../companies/one.php?company_id=$company_id&division_id=$division_id";
@@ -214,11 +212,11 @@ if ((($element_label[$element_id] != "Name")
             <input class=button type=button
               value="Edit element definitions" onclick="javascript:
               location.href='<?php echo
-              "edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&division_id=$division_id&return_url=$return_url"; ?>';">&nbsp;
+              "edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&division_id=$division_id&return_url=$return_url"; ?>';">&nbsp;
             <input class=button type=button
               value="Delete" onclick="javascript:
               location.href='<?php echo
-              "delete-item-2.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&division_id=$division_id&return_url=$delete_return_url"; ?>';">&nbsp;
+              "delete-item-2.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&division_id=$division_id&return_url=$delete_return_url"; ?>';">&nbsp;
           </td>
         </tr>
       </table>
@@ -238,4 +236,10 @@ if ((($element_label[$element_id] != "Name")
 
 end_page();
 
+/**
+ * $Log: edit.php,v $
+ * Revision 1.7  2005/02/11 00:49:11  braverock
+ * - modified to correctly pass contact_id and return_url
+ *
+ */
 ?>

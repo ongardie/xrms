@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.10 2005/01/25 05:57:53 vanmer Exp $
+ * $Id: setup.php,v 1.11 2005/02/11 00:49:12 braverock Exp $
  */
 
 
@@ -16,6 +16,8 @@ function xrms_plugin_init_info () {
       = 'company_sidebar_bottom';
     $xrms_plugin_hooks['contact_sidebar_top']['info']
       = 'contact_sidebar_top';
+    $xrms_plugin_hooks['contact_sidebar_bottom']['info']
+      = 'contact_sidebar_bottom';
     $xrms_plugin_hooks['private_sidebar_bottom']['info']
       = 'private_sidebar_bottom';
     $xrms_plugin_hooks['info_sidebar_bottom']['info']
@@ -24,6 +26,7 @@ function xrms_plugin_init_info () {
       = 'company_content_bottom';
     $xrms_plugin_hooks['plugin_admin']['info'] = 'info_setup';
     $xrms_plugin_hooks['xrms_install']['info'] = 'info_install';
+    $xrms_plugin_hooks['xrms_update']['info'] = 'info_install';
 }
 
 function display_on_menu () {
@@ -35,6 +38,9 @@ function display_on_menu () {
     $menu .= "<option ";
     if ($display_on == 'contact_sidebar_top') $menu .= "SELECTED ";
     $menu .= "value=\"contact_sidebar_top\">Contact Sidebar Top</option>";
+    $menu .= "<option ";
+    if ($display_on == 'contact_sidebar_bottom') $menu .= "SELECTED ";
+    $menu .= "value=\"contact_sidebar_bottom\">Contact Sidebar Bottom</option>";
     $menu .= "<option ";
     if ($display_on == "private_sidebar_bottom") $menu .= "SELECTED ";
     $menu .= "value=\"private_sidebar_bottom\">Private Sidebar Bottom</option>";
@@ -63,6 +69,7 @@ function info_install($con) {
 
 function company_content_bottom ($_sidebar) {
     global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
+    $return_url="/companies/one.php?company_id=$company_id&division_id=$division_id";
     include("info.inc");
     ob_start();
     $display_on = "company_content_bottom";
@@ -74,6 +81,7 @@ function company_content_bottom ($_sidebar) {
 
 function company_accounting () {
     global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
+    $return_url="/companies/one.php?company_id=$company_id&division_id=$division_id";
     include("info.inc");
     ob_start();
     $display_on = "company_accounting";
@@ -85,6 +93,7 @@ function company_accounting () {
 
 function company_sidebar_bottom () {
     global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
+    $return_url="/companies/one.php?company_id=$company_id&division_id=$division_id";
     include("info.inc");
     ob_start();
     $display_on = "company_sidebar_bottom";
@@ -95,7 +104,8 @@ function company_sidebar_bottom () {
 }
 
 function contact_sidebar_top () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $contact_id, $company_id, $division_id, $server_list, $display_on;
+    $return_url="/contacts/one.php?contact_id=$contact_id";
     include("info.inc");
     ob_start();
     $display_on = "contact_sidebar_top";
@@ -106,7 +116,8 @@ function contact_sidebar_top () {
 }
 
 function contact_sidebar_bottom () {
-    global $xrms_file_root, $http_site_root, $con, $company_id, $division_id, $server_list, $display_on;
+    global $xrms_file_root, $http_site_root, $con, $contact_id, $company_id, $division_id, $server_list, $display_on;
+    $return_url="/contacts/one.php?contact_id=$contact_id";
     include("info.inc");
     ob_start();
     $display_on = "contact_sidebar_bottom";
@@ -118,6 +129,7 @@ function contact_sidebar_bottom () {
 
 function private_sidebar_bottom () {
     global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    $return_url="/private/home.php";
     include("info.inc");
     ob_start();
     $display_on = "private_sidebar_bottom";

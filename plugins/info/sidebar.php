@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.11 2005/02/10 13:42:18 braverock Exp $
+ * $Id: sidebar.php,v 1.12 2005/02/11 00:49:12 braverock Exp $
  */
 
 //$con->debug = 1;
@@ -41,7 +41,7 @@ while (!$toprst->EOF) {
     $info_type_name = $toprst->fields['info_type_name'];
 
     if (!$company_accounting) {
-        $info_rows .= "<div id='note_sidebar'>
+        $info_rows .= "<div id='info_item'>
             <table class=widget cellspacing=1 width=\"100%\">
                 <tr>
                     <td class=widget_header colspan=2>$info_type_name</td>
@@ -100,6 +100,12 @@ while (!$toprst->EOF) {
         $sql .= "AND info_map.division_id = '" . $division_id . "' ";
     }
 
+    if ($contact_id) {
+        $sql .= "AND info_map.contact_id = $contact_id ";
+    } else {
+        $contact_id = 0;
+    }
+    
     if (($company_accounting) && (!$division_id)) {
         $sql .= "AND info_map.division_id = '' ";
     }
@@ -168,7 +174,7 @@ while (!$toprst->EOF) {
             $info_rows .= " " . $info_type_name . " Info";
         }
 
-         $info_rows .= "\" onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&contact_id=$contact_id&division_id=$division_id&info_type_id=$info_type_id';\">";
+         $info_rows .= "\" onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&contact_id=$contact_id&division_id=$division_id&info_type_id=$info_type_id&return_url=$return_url';\">";
     };
 
     if (!$company_accounting) {

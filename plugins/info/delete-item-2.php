@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: delete-item-2.php,v 1.4 2005/02/10 13:42:18 braverock Exp $
+ * $Id: delete-item-2.php,v 1.5 2005/02/11 00:49:11 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -22,6 +22,8 @@ $msg = $_GET['msg'];
 # Always retrieve, and pass on, server and company ID
 $info_id = $_GET['info_id'];
 $company_id = $_GET['company_id'];
+$contact_id = $_GET['contact_id'];
+$division_id = $_GET['division_id'];
 $info_type_id = $_GET['info_type_id'];
 $return_url = $_GET['return_url'];
 
@@ -39,6 +41,12 @@ if (!$con->AutoExecute($tbl, $rec, 'UPDATE', "info_id = $info_id")) {
 
 $con->close();
 
-header("Location: " . $http_site_root . $return_url");
+header("Location: " . $http_site_root . $return_url);
 
+/**
+ * $Log: delete-item-2.php,v $
+ * Revision 1.5  2005/02/11 00:49:11  braverock
+ * - modified to correctly pass contact_id and return_url
+ *
+ */
 ?>
