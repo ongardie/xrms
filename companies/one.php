@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.20 2004/03/22 02:42:54 braverock Exp $
+ * $Id: one.php,v 1.21 2004/03/22 02:45:15 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centalized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -308,8 +308,10 @@ require_once("../notes/sidebar.php");
 
 $sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
-$contact_menu = $rst->getmenu2('contact_id', '', true);
-$rst->close();
+if ($rst) {
+    $contact_menu = $rst->getmenu2('contact_id', '', true);
+    $rst->close();
+}
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
@@ -628,6 +630,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.21  2004/03/22 02:45:15  braverock
+ * - added result set check around contact list lines 311-314 (formerly line 308)
+ *   addresses multiple SF bugs when no contacts exist for a company
+ *
  * Revision 1.20  2004/03/22 02:42:54  braverock
  * - add http:// in front of url's that don't have them
  *   - fixes SF bug 906413
