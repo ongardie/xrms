@@ -18,14 +18,16 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.11 2004/07/14 11:47:06 cpsource Exp $
+ * $Id: include-locations.inc,v 1.12 2004/07/19 21:05:01 maulani Exp $
  */
 
 //
 // A security feature that helps prevent malicious users
 // from attempting to execute scripts out of order
 //
-define('IN_XRMS', true);
+if (!defined('IN_XRMS')) { 
+    define('IN_XRMS', true); 
+}
 
 // include trailing slash in path
 $include_directory = "/full/path/to/xrms/include/";
@@ -40,6 +42,9 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.12  2004/07/19 21:05:01  maulani
+ * - Add check to make sure that IN_XRMS is defined only once
+ *
  * Revision 1.11  2004/07/14 11:47:06  cpsource
  * - Add security feature IN_XRMS
  *
