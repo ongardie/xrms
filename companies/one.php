@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.95 2005/03/05 00:58:02 daturaarutad Exp $
+ * $Id: one.php,v 1.96 2005/03/07 12:14:44 maulani Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -440,7 +440,7 @@ if ($rst) {
 add_audit_item($con, $session_user_id, 'viewed', 'companies', $company_id, 3);
 
 //close the database connection, we don't need it anymore
-$con->close();
+//$con->close();
 
 if (!$former_name_rows) {
     $former_name_rows = "";
@@ -706,7 +706,7 @@ function markComplete() {
     jscalendar_includes();
 
     //place the plug-in hook before the Activities
-    do_hook ('company_detail');
+    do_hook_function ('company_detail', $con);
 
 ?>
 
@@ -822,6 +822,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.96  2005/03/07 12:14:44  maulani
+ * - pass the db connection to the plugin
+ *
  * Revision 1.95  2005/03/05 00:58:02  daturaarutad
  * set default sort column to scheduled for activities pager
  *
