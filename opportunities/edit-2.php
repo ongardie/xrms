@@ -59,7 +59,10 @@ if ($old_status != $opportunity_status_id) {
 
     //if there is only one field, the result set is empty (no old activities)
     //  otherwise prompt the user
-    if (count($rst->fields) > 1) {
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif ($rst->rowcount()) {
         header("Location: ../activities/one.php?msg=no_change&activity_id=$activity_id");
         $no_update = true;
     }
