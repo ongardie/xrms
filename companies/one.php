@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.78 2005/01/06 21:55:30 vanmer Exp $
+ * $Id: one.php,v 1.79 2005/01/09 00:27:17 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -379,7 +379,7 @@ if ( !isset($bottom_rows) ) {
   $bottom_rows = '';
 }
 //call the sidebar hook
-$bottom_rows = do_hook_function('company_content_bottom', $sidebar_rows);
+$bottom_rows = do_hook_function('company_content_bottom', $bottom_rows);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -806,6 +806,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.79  2005/01/09 00:27:17  braverock
+ * - change company_content_bottom hook to us $bottom rows instead of the incorrect $sidebar_rows
+ *
  * Revision 1.78  2005/01/06 21:55:30  vanmer
  * - moved address lookup to below division lookup to allow division address to be displayed instead of main address
  * - added logic to optionally set address to address of division, if set
