@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer.php,v 1.2 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: transfer.php,v 1.3 2004/07/06 17:25:22 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,7 +29,7 @@ $rst = $con->execute($sql);
 $contact_name = $rst->fields['first_names'] . ' ' . $rst->fields['last_name'];
 $company_id =  $rst->fields['company_id'];
 
-$sql = "select company_name, company_id from companies where company_record_status = 'a'";
+$sql = "select company_name, company_id from companies where company_record_status = 'a' order by company_name";
 $rst = $con->execute($sql);
 
 $company_menu = $rst->getmenu2('company_id', $company_id, false);
@@ -80,6 +80,10 @@ end_page();
 
 /**
  * $Log: transfer.php,v $
+ * Revision 1.3  2004/07/06 17:25:22  braverock
+ * - fixed sort order on transfer
+ *   - resolves SF bug 978438 reported by Walt Pennington
+ *
  * Revision 1.2  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
