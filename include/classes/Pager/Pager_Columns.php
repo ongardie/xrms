@@ -26,7 +26,7 @@
  *
  * @example Pager_Columns.doc.1.php check out 
  *
- * $Id: Pager_Columns.php,v 1.6 2005/03/15 22:28:05 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.7 2005/03/25 20:05:26 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -121,6 +121,12 @@ class Pager_Columns {
 		$display_columns_options = '';
 		$reset_columns_rows = '';
 
+		$text_update_columns = _("Update View");
+		$text_reset_columns = _("Reset View");
+		$text_cancel_columns = _("Cancel Changes");
+		
+		$widget_name = $this->pager_name . '_widget';
+
 		// add currently displayed columns
 		foreach($user_columns as $user_column) {
 			if(isset($user_column)) {
@@ -173,6 +179,8 @@ class Pager_Columns {
 
 				$reset_columns_rows;
 
+				document.{$this->form_id}.submit();
+
 			}
 		</script>
 		
@@ -182,7 +190,7 @@ class Pager_Columns {
 		<a name="{$this->pager_name}_select_columns"/> 
         <table class=widget cellspacing=1>
     		<tr>
-				<td class="widget_header" colspan=0>
+				<td class="widget_header" colspan=5>
 					Select Columns
 				</td>
 			</tr>
@@ -230,10 +238,11 @@ class Pager_Columns {
 <input type="button" class="button" onClick="moveListItemAll( '{$this->pager_name}_availColumns', '{$this->pager_name}_displayColumns' )" value="<- move all">
         </td>
 
-		<td class="widget_content">
+		<td class="widget_content_center">
 
-			<input type="button" class="button" name="button" onclick="{$this->pager_name}_columns_change(this)" value="Update Columns List">
-			<input type="button" class="button" name="button" onclick="{$this->pager_name}_reset_default(this)" value="Reset Default Columns List">
+			<input type="button" class="button" name="button" onclick="{$this->pager_name}_columns_change(this)" value="$text_update_columns"><br/>
+			<input type="button" class="button" name="button" onclick="{$this->pager_name}_reset_default(this)" value="$text_reset_columns"><br/>
+			<input type="button" class="button" name="button" onclick="document.getElementById('{$widget_name}').style.display = 'none'" value="$text_cancel_columns"><br/>
 		</td>
     </tr>
 	</table>
@@ -241,7 +250,7 @@ class Pager_Columns {
 
 
 <script language="JavaScript" type="text/javascript">
-	document.getElementById('{$this->pager_name}_widget').style.display = 'none';
+	document.getElementById('{$widget_name}').style.display = 'none';
 </script>
 END;
 		return $s;
@@ -249,6 +258,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.7  2005/03/25 20:05:26  daturaarutad
+ * enhancement to the Update/Reset/Cancel columns buttons and their behavior
+ *
  * Revision 1.6  2005/03/15 22:28:05  daturaarutad
  * removed setting of sql_sort_column, its now it GUP_Pager::SetUpSQLOrderByClause
  *
