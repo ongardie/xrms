@@ -14,8 +14,15 @@ function xrms_plugin_init_cti() {
     $xrms_plugin_hooks['admin_user_edit_sidebar']['cti'] = 'do_admin_user_edit_sidebar';
     $GLOBALS["use_dial_link"]="y";
 //    $xrms_plugin_hooks['menuline']['cti'] = 'voicemail';
+    $xrms_plugin_hooks['plugin_admin']['cti'] = 'admin_setup';
 
-    function phone_link_to_display($phone, $phone_to_display) {
+function admin_setup() {
+    global $http_site_root;
+    echo "<tr><td class=widget_content>\n<a href='$http_site_root/plugins/cti/provision/new-asterisk-voicemail-conf.php'>" . _("Create New") . " voicemail.conf</a>\n</td>\n</tr>\n";
+    echo "<tr><td class=widget_content>\n<a href='$http_site_root/plugins/cti/provision/new-asterisk-sip-conf.php'>" . _("Create New") . " sip.conf</a>\n</td>\n</tr>\n";
+    echo "<tr><td class=widget_content>\n<a href='$http_site_root/plugins/cti/provision/new-asterisk-extensions-conf.php'>" . _("Create New") . " extensions.conf</a>\n</td>\n</tr>\n";
+}
+function phone_link_to_display($phone, $phone_to_display) {
         global $http_site_root;
         global $company_id;
         global $contact_id;
@@ -37,10 +44,12 @@ function voicemail() {
 }
 
 function do_admin_user_edit_sidebar() {
-    global $new_username, $user_contact_id, $email, $edit_user_id, $http_site_root;
+    global $new_username, $user_contact_id, $email, $edit_user_id, $http_site_root, $first_names, $last_name;
     return "<form action=\"" . $http_site_root . "/plugins/cti/provision/new-cisco-7960.php\" method=post>
     <input type=hidden name=user_id value=\"" . $edit_user_id . "\">
     <input type=hidden name=email value=\"" . $email . "\">
+    <input type=hidden name=first_names value=\"" . $first_names . "\">
+    <input type=hidden name=last_name value=\"" . $last_name . "\">
     <input type=hidden name=username value=\"" . $new_username . "\">
     <table class=widget cellspacing=1>
     <tr>
