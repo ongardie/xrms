@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.72 2004/08/02 10:01:39 cpsource Exp $
+ * $Id: utils-misc.php,v 1.73 2004/08/02 11:33:48 maulani Exp $
  */
 
 /**
@@ -496,14 +496,12 @@ exit;
  */
 function get_system_parameter(&$con, $param) {
 
-  $my_val = '';
-
     $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
     $sysst = $con->execute($sql);
     if ($sysst) {
 
       // is the requested record in the database ???
-      if ( $sysst->RecordCount() != 1 ) {
+      if ( $sysst->RecordCount() == 1 ) {
         // yes - it was found
 
         $string_val   = $sysst->fields['string_val'];
@@ -519,12 +517,16 @@ function get_system_parameter(&$con, $param) {
             $my_val=$float_val;
         } elseif (!is_null($datetime_val)) {
             $my_val=$datetime_val;
+        } else {
+            echo _('Failure to get system parameter ') . $param . _('.  The data entry appears to be corrupted.');
+            exit;
         }
 
       } else {
         // no - it was not found
 
-        db_error_handler ($con, $sql);
+        echo _('Failure to get system parameter ') . $param . _('.  Make sure you have run the administration update.');
+        exit;
 
       } // if ( $sysst->RecordCount() > 0 ) ...
 
@@ -1026,6 +1028,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.73  2004/08/02 11:33:48  maulani
+ * - Fix logical check bug and expand error messages
+ *
  * Revision 1.72  2004/08/02 10:01:39  cpsource
  * - Define default value of my_val as '' for the impared developer
  *
