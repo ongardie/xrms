@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.39 2004/08/05 15:45:38 braverock Exp $
+ * $Id: home.php,v 1.40 2004/08/23 01:47:50 d2uhlman Exp $
  */
 
 // include the common files
@@ -23,6 +23,13 @@ $session_user_id = session_check();
 
 // get call arguments
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+
+
+//if phone browser detected redirect to phone plugin
+if (stristr($_SERVER['HTTP_USER_AGENT'], "MMP")) {
+    header("Location: ../plugins/phone");
+    exit;
+}
 
 //connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
@@ -494,6 +501,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.40  2004/08/23 01:47:50  d2uhlman
+ * check for MMP in user header and if so redirect to phone plugin
+ *
  * Revision 1.39  2004/08/05 15:45:38  braverock
  * - add a commented out debug line and a few more checks to make sure we have a result set
  *
