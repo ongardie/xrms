@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.4 2004/05/21 14:34:07 maulani Exp $
+ * $Id: data.php,v 1.5 2004/07/01 12:56:33 braverock Exp $
  */
 
 /**
@@ -575,7 +575,7 @@ function misc_db_data($con) {
         $sql ="insert into address_format_strings (address_format_string_id, address_format_string) values (15, '" . '$lines<br>$city, $province $postal_code<br>$country' . "')";
         $rst = $con->execute($sql);
     }
-    
+
 } // end misc_db_data fn
 
 
@@ -592,13 +592,13 @@ function user_db_data($con) {
         $sql ="insert into roles (role_short_name, role_pretty_name, role_pretty_plural, role_display_html) values ('Admin', 'Admin', 'Admin', 'Admin')";
         $rst = $con->execute($sql);
     }
-    
+
     // users
     if (confirm_no_records($con, 'users')) {
         $sql ="insert into users (role_id, username, password, last_name, first_names, email, language) values (2, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english')";
         $rst = $con->execute($sql);
     }
-    
+
 } // end user_db_data fn
 
 
@@ -739,6 +739,30 @@ function company_db_data($con) {
         $sql ="insert into email_templates (email_template_title, email_template_body) values ('Thanks for Your Business', '')";
         $rst = $con->execute($sql);
         $sql ="insert into email_templates (email_template_title, email_template_body) values ('Customer Service Inquiry', '')";
+        $rst = $con->execute($sql);
+    }
+
+    if (confirm_no_records($con, 'relationship_types')) {
+        $sql = "INSERT INTO relationship_types VALUES
+                (1,'company relationships','companies','companies','Acquired','Acquired by','a',NULL,NULL)";
+        $rst = $con->execute($sql);
+        $sql = "INSERT INTO relationship_types VALUES
+                (2,'company relationships','companies','companies','Retains Consultant','Consultant for','a',NULL,NULL)";
+        $rst = $con->execute($sql);
+        $sql = "INSERT INTO relationship_types VALUES
+                (3,'company relationships','companies','companies','Manufactures for','Uses Manufacturer','a',NULL,NULL)";
+        $rst = $con->execute($sql);
+        $sql = "INSERT INTO relationship_types VALUES
+                (4,'company relationships','companies','companies','Parent Company of','Subsidiary of','a',NULL,NULL)";
+        $rst = $con->execute($sql);
+        $sql = "INSERT INTO relationship_types VALUES
+                (5,'company relationships','companies','companies','Uses Supplier','Supplier for','a',NULL,NULL)";
+        $rst = $con->execute($sql);
+        $sql = "INSERT INTO relationship_types VALUES
+                (6,'company link','contacts','companies','Owns','Owned By','a','<b>','</b>')";
+        $rst = $con->execute($sql);
+        $sql = "INSERT INTO relationship_types VALUES
+                (7,'company link','contacts','companies','Manages','Managed By','a',NULL,NULL)";
         $rst = $con->execute($sql);
     }
 
@@ -898,6 +922,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.5  2004/07/01 12:56:33  braverock
+ * - add relationships and relationship_types tables and data to install and update
+ *
  * Revision 1.4  2004/05/21 14:34:07  maulani
  * - Add additional address formats in addition to the U.S.
  *

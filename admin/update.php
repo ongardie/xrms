@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.14 2004/06/28 14:30:01 maulani Exp $
+ * $Id: update.php,v 1.15 2004/07/01 12:56:33 braverock Exp $
  */
 
 // where do we include from
@@ -183,7 +183,7 @@ $sql = "alter table companies change company_legal_name legal_name varchar( 100 
 $rst = $con->execute($sql);
 
 // Add the system_parameters table
-$sql = 'create table if not exists system_parameters (';
+$sql = 'create table system_parameters (';
 $sql .= 'param_id       varchar(40) not null unique,';
 $sql .= 'string_val     varchar(100),';
 $sql .= 'int_val        int,';
@@ -214,7 +214,7 @@ $sql = "alter table activities add on_what_status int not null default 0 after o
 $rst = $con->execute($sql);
 
 //create the activity_templates table if we need it
-$sql = "create table if not exists activity_templates (
+$sql = "create table activity_templates (
                 activity_template_id    int not null primary key auto_increment,
                 role_id                 int not null default 0,
                 activity_type_id        int not null default 0,
@@ -229,7 +229,61 @@ $sql = "create table if not exists activity_templates (
         //execute
         $rst = $con->execute($sql);
 
+// create the relationship_types table if we need it
+$sql ="CREATE TABLE relationship_types (
+                relationship_type_id int(10) unsigned NOT NULL auto_increment,
+                relationship_name varchar(48) NOT NULL default '',
+                from_what_table varchar(24) NOT NULL default '',
+                to_what_table varchar(24) NOT NULL default '',
+                from_what_text varchar(32) NOT NULL default '',
+                to_what_text varchar(32) NOT NULL default '',
+                relationship_status char(1) NOT NULL default 'a',
+                pre_formatting varchar(25) default NULL,
+                post_formatting varchar(25) default NULL,
+                PRIMARY KEY  (relationship_type_id)
+                )";
+        //execute
+        $rst = $con->execute($sql);
 
+if (confirm_no_records($con, 'relationship_types')) {
+    $sql = "INSERT INTO relationship_types VALUES
+            (1,'company relationships','companies','companies','Acquired','Acquired by','a',NULL,NULL)";
+    $rst = $con->execute($sql);
+    $sql = "INSERT INTO relationship_types VALUES
+            (2,'company relationships','companies','companies','Retains Consultant','Consultant for','a',NULL,NULL)";
+    $rst = $con->execute($sql);
+    $sql = "INSERT INTO relationship_types VALUES
+            (3,'company relationships','companies','companies','Manufactures for','Uses Manufacturer','a',NULL,NULL)";
+    $rst = $con->execute($sql);
+    $sql = "INSERT INTO relationship_types VALUES
+            (4,'company relationships','companies','companies','Parent Company of','Subsidiary of','a',NULL,NULL)";
+    $rst = $con->execute($sql);
+    $sql = "INSERT INTO relationship_types VALUES
+            (5,'company relationships','companies','companies','Uses Supplier','Supplier for','a',NULL,NULL)";
+    $rst = $con->execute($sql);
+    $sql = "INSERT INTO relationship_types VALUES
+            (6,'company link','contacts','companies','Owns','Owned By','a','<b>','</b>')";
+    $rst = $con->execute($sql);
+    $sql = "INSERT INTO relationship_types VALUES
+            (7,'company link','contacts','companies','Manages','Managed By','a',NULL,NULL)";
+    $rst = $con->execute($sql);
+}
+
+// create the relationships table if we need it
+$sql ="CREATE TABLE relationships (
+        relationship_id int(10) unsigned NOT NULL auto_increment,
+        from_what_id int(10) unsigned NOT NULL default '0',
+        to_what_id int(10) unsigned NOT NULL default '0',
+        relationship_type_id int(10) unsigned NOT NULL default '0',
+        established_at datetime default NULL,
+        ended_on datetime default NULL,
+        relationship_status char(1) NOT NULL default 'a',
+        PRIMARY KEY  (relationship_id),
+        KEY from_what_id (from_what_id),
+        KEY to_what_id (to_what_id)
+        )";
+        //execute
+        $rst = $con->execute($sql);
 
 // Make sure that the additional address format strings are added
 $sql = "select count(*) as recCount from address_format_strings";
@@ -237,7 +291,7 @@ $rst = $con->execute($sql);
 $recCount = $rst->fields['recCount'];
 if ($recCount <16) {
     $msg .= 'Added additional address format strings.<BR><BR>';
-    
+
     define('ADODB_FORCE_NULLS', 0);
     $sql = "SELECT * FROM address_format_strings WHERE 1 = 2"; //select empty record as placeholder
     $rst = $con->execute($sql);
@@ -386,132 +440,132 @@ if ($recCount <16) {
 
     $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Argentina', 'Kuwait', 'Oman', 'Poland')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 2;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Brazil', 'China', 'Italy', 'Mexico', 'Portugal', 'Spain')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 3;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Australia', 'Canada', 'Hong Kong Special Administrative Region of China', 'Ireland', 'Taiwan')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 4;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Denmark')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 5;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
 
-	$sql = "SELECT * FROM countries WHERE country_name in ('Austria', 'Bahrain', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Czech Republic', 'Egypt', 'Finland', 'France', 'France, metropolitan', 'Germany', 'Greece', 'Greenland', 'Iceland', 'Israel', 'Jordan', 'Lebanon', 'Luxembourg', 'Netherlands', 'Norway', 'Qatar', 'Romania', 'Saudi Arabia', 'Singapore', 'Slovakia', 'Slovenia', 'Sweden', 'Switzerland', 'Syrian Arab Republic', 'Turkey', 'Yemen')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 6;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Hungary')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 7;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('India', 'New Zealand')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 8;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Indonesia')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 9;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Japan')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 10;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Republic of Korea', 'Ukraine')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 11;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('Russian Federation')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 12;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('South Africa', 'United Kingdom')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 13;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('The former Yugoslav Republic of Macedonia')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 14;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
-    
-	$sql = "SELECT * FROM countries WHERE country_name in ('United States', 'United States Virgin Islands')";
-	$rst = $con->execute($sql);
-	
-	$rec = array();
-	$rec['address_format_string_id'] = 15;
-	
-	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-	$con->execute($upd);
+    $sql = "SELECT * FROM countries WHERE country_name in ('Argentina', 'Kuwait', 'Oman', 'Poland')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 2;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Brazil', 'China', 'Italy', 'Mexico', 'Portugal', 'Spain')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 3;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Australia', 'Canada', 'Hong Kong Special Administrative Region of China', 'Ireland', 'Taiwan')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 4;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Denmark')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 5;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Austria', 'Bahrain', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Czech Republic', 'Egypt', 'Finland', 'France', 'France, metropolitan', 'Germany', 'Greece', 'Greenland', 'Iceland', 'Israel', 'Jordan', 'Lebanon', 'Luxembourg', 'Netherlands', 'Norway', 'Qatar', 'Romania', 'Saudi Arabia', 'Singapore', 'Slovakia', 'Slovenia', 'Sweden', 'Switzerland', 'Syrian Arab Republic', 'Turkey', 'Yemen')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 6;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Hungary')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 7;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('India', 'New Zealand')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 8;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Indonesia')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 9;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Japan')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 10;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Republic of Korea', 'Ukraine')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 11;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('Russian Federation')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 12;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('South Africa', 'United Kingdom')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 13;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('The former Yugoslav Republic of Macedonia')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 14;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "SELECT * FROM countries WHERE country_name in ('United States', 'United States Virgin Islands')";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_format_string_id'] = 15;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
 }
 
 //close the database connection, because we don't need it anymore
@@ -535,6 +589,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.15  2004/07/01 12:56:33  braverock
+ * - add relationships and relationship_types tables and data to install and update
+ *
  * Revision 1.14  2004/06/28 14:30:01  maulani
  * - add address format strings for many countries
  *

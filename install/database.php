@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.9 2004/06/04 14:54:08 braverock Exp $
+ * $Id: database.php,v 1.10 2004/07/01 12:56:34 braverock Exp $
  */
 
 /**
@@ -543,6 +543,41 @@ function company_db_tables($con, $table_list) {
         $rst = $con->execute($sql);
     }
 
+    if (!in_array('relationship_types',$table_list)) {
+        $sql ="CREATE TABLE relationship_types (
+                relationship_type_id int(10) unsigned NOT NULL auto_increment,
+                relationship_name varchar(48) NOT NULL default '',
+                from_what_table varchar(24) NOT NULL default '',
+                to_what_table varchar(24) NOT NULL default '',
+                from_what_text varchar(32) NOT NULL default '',
+                to_what_text varchar(32) NOT NULL default '',
+                relationship_status char(1) NOT NULL default 'a',
+                pre_formatting varchar(25) default NULL,
+                post_formatting varchar(25) default NULL,
+                PRIMARY KEY  (relationship_type_id)
+                )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
+    if (!in_array('relationships',$table_list)) {
+        // create the relationships table if we need it
+        $sql ="CREATE TABLE relationships (
+                relationship_id int(10) unsigned NOT NULL auto_increment,
+                from_what_id int(10) unsigned NOT NULL default '0',
+                to_what_id int(10) unsigned NOT NULL default '0',
+                relationship_type_id int(10) unsigned NOT NULL default '0',
+                established_at datetime default NULL,
+                ended_on datetime default NULL,
+                relationship_status char(1) NOT NULL default 'a',
+                PRIMARY KEY  (relationship_id),
+                KEY from_what_id (from_what_id),
+                KEY to_what_id (to_what_id)
+                )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
 } // end company_db_tables fn
 
 /**
@@ -814,6 +849,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.10  2004/07/01 12:56:34  braverock
+ * - add relationships and relationship_types tables and data to install and update
+ *
  * Revision 1.9  2004/06/04 14:54:08  braverock
  * - change activity_templates duration to varchar for advanced date functionality
  *
