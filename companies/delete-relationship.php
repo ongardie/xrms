@@ -2,7 +2,7 @@
 /**
  * Add Former Name
  *
- * $Id: delete-relationship.php,v 1.2 2004/05/10 13:09:14 maulani Exp $
+ * $Id: delete-relationship.php,v 1.3 2004/07/01 19:49:13 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,28 +13,31 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 
-$company_to_id = $_GET['company_to_id'];
-$company_from_id = $_GET['company_from_id'];
-$relationship_type = $_GET['relationship_type'];
+$to_what_id = $_GET['to_what_id'];
+$from_what_id = $_GET['from_what_id'];
+$relationship_type_id = $_GET['relationship_type_id'];
+$company_id = $_GET['company_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "delete from company_relationship where company_from_id = " .  $con->qstr($company_from_id, get_magic_quotes_gpc())
-     . " AND company_to_id = " . $con->qstr($company_to_id, get_magic_quotes_gpc())
-     . " AND relationship_type = " . $con->qstr($relationship_type, get_magic_quotes_gpc());
+$sql = "delete from relationships where from_what_id = " .  $con->qstr($from_what_id, get_magic_quotes_gpc())
+     . " AND to_what_id = " . $con->qstr($to_what_id, get_magic_quotes_gpc())
+     . " AND relationship_type_id = " . $con->qstr($relationship_type_id, get_magic_quotes_gpc());
 
 $con->execute($sql);
 
-add_audit_item($con, $session_user_id, 'deleted', 'company_relationship', $company_id, 1);
-
 $con->close();
 
-header("Location: relationships.php?company_id=$company_from_id");
+header("Location: relationships.php?company_id=$company_id");
 
 /**
  * $Log: delete-relationship.php,v $
+ * Revision 1.3  2004/07/01 19:49:13  braverock
+ * - add new configurable relationships code
+ *   - adapted from patches submitted by Neil Roberts
+ *
  * Revision 1.2  2004/05/10 13:09:14  maulani
  * - add level to audit trail
  *

@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.34 2004/06/24 20:50:29 gpowers Exp $
+ * $Id: one.php,v 1.35 2004/07/01 19:48:10 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -229,6 +229,9 @@ require_once("../cases/sidebar.php");
 //include the opportunities sidebar
 $opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
 require_once("../opportunities/sidebar.php");
+
+//include the contacts-companies sidebar
+require_once("../companies/company-sidebar.php");
 
 //include the files sidebar
 require_once("../files/sidebar.php");
@@ -517,6 +520,9 @@ function markComplete() {
         <!-- cases //-->
         <?php echo $case_rows; ?>
 
+        <!-- company links //-->
+        <?php echo $company_link_rows; ?>
+
         <!-- notes //-->
         <?php echo $note_rows; ?>
 
@@ -547,6 +553,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.35  2004/07/01 19:48:10  braverock
+ * - add new configurable relationships code
+ *   - adapted from patches submitted by Neil Roberts
+ *
  * Revision 1.34  2004/06/24 20:50:29  gpowers
  * - added one_contact_buttons hook for radtest plugin
  *

@@ -2,7 +2,9 @@
 /**
  * Edit company relationships
  *
- * $Id: relationships.php,v 1.7 2004/06/12 05:03:16 introspectshun Exp $
+ * @todo put back in established at date picker in form
+ *
+ * $Id: relationships.php,v 1.8 2004/07/01 19:48:10 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,26 +26,41 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $company_name = fetch_company_name($con, $company_id);
 
-$sql = "select r.relationship_type, r.established_at, r.company_to_id, c.company_name, r.company_from_id
-from company_relationship r, companies c
-where r.company_from_id = $company_id
-and r.company_to_id=c.company_id
-order by r.established_at desc";
+$sql = "select rt.from_what_text, rt.to_what_text, r.established_at, r.to_what_id,
+    c1.company_name as to_company_name, c2.company_name as from_company_name,
+    c1.company_id as to_company_id, c2.company_id as from_company_id,
+    r.from_what_id, rt.relationship_type_id
+    from relationships r, companies c1, companies c2, relationship_types rt
+    where (r.from_what_id = $company_id or r.to_what_id = $company_id)
+    and rt.from_what_table = 'companies'
+    and rt.to_what_table = 'companies'
+    and r.relationship_type_id=rt.relationship_type_id
+    and r.from_what_id=c1.company_id
+    and r.to_what_id=c2.company_id
+    and r.relationship_status = 'a'
+    order by r.established_at desc";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
+        if($rst->fields['from_what_id'] == $company_id) {
+            $from_or_to = "from";
+        }
+        else {
+            $from_or_to = "to";
+        }
         $established_at = $con->userdate($rst->fields['established_at']);
         $relationship_rows .= '<tr>';
-        $relationship_rows .= '<td class=widget_content_form_element>' . $rst->fields['relationship_type'] . '</td>';
+        $relationship_rows .= '<td class=widget_content_form_element>' . $rst->fields[$from_or_to . '_what_text'] . '</td>';
         $relationship_rows .= '<td class=widget_content_form_element><a href="one.php?company_id='
-            . $rst->fields['company_to_id'] . '">' . $rst->fields['company_name'] . '</a></td>';
+            . $rst->fields[$from_or_to . '_company_id'] . '">' . $rst->fields[$from_or_to . '_company_name'] . '</a></td>';
         $relationship_rows .= '<td class=widget_content_form_element>' . $established_at . '</td>';
         $relationship_rows .= '<td class=widget_content_form_element>'
-            . '<a href="delete-relationship.php?company_to_id=' . $rst->fields['company_to_id']
-            . '&company_from_id=' . $rst->fields['company_from_id']
-            . '&relationship_type=' . $rst->fields['relationship_type'] . '">(Delete)</a>'
+            . '<a href="delete-relationship.php?to_what_id=' . $rst->fields['to_what_id']
+            . '&from_what_id=' . $rst->fields['from_what_id']
+            . '&relationship_type_id=' . $rst->fields['relationship_type_id']
+            . '&return_url=/companies/relationships.php?company_id=' . $company_id . '">(Delete)</a>'
             . '</td>';
         $relationship_rows .= '</tr>';
         $rst->movenext();
@@ -51,28 +68,34 @@ if ($rst) {
     $rst->close();
 }
 
-
-$sql = "SELECT " . $con->Concat("company_code", "' '", "company_name") . ", company_id AS company2_id FROM companies WHERE company_record_status = 'a' ORDER BY company_code";
+$sql = "SELECT " . $con->Concat("company_name", "' '", "company_code") . ", company_id AS company2_id FROM companies WHERE company_record_status = 'a' ORDER BY company_name";
 $rst = $con->execute($sql);
-$company_menu = $rst->getmenu2('company2_id', '', false);
+$company_menu = $rst->getmenu2('to_what_id', '', false);
 $rst->close();
 
-$con->close();
+$relation_menu = "<select name=relationship_type_id>";
 
-$relation_array = array("Acquired", "Acquired by", "Consultant for", "Retains consultant", "Manufactures for", "Uses manufacturer", "Subsidiary of", "Parent company of", "Alternate address for", "Parent address for");
+$sql = "select relationship_type_id, from_what_text, to_what_text
+    from relationship_types
+    where from_what_table = 'companies'
+    and to_what_table = 'companies'
+    and relationship_status='a'";
 
-$relation_menu = "<select name=relation>";
+$rst = $con->execute($sql);
 
-for ($i = 0; $i < sizeof($relation_array); $i++) {
-	$relation_menu .= "\n<option value='" . $i . "'";
-	if ($relation == $relation_array[$i]) {
-		$relation_menu .= " selected";
-	}
-	$relation_menu .= ">" . $relation_array[$i];
+if($rst) {
+    while(!$rst->EOF) {
+        $relation_menu .= "\n<option value='from_" . $rst->fields['relationship_type_id'] . "'>"
+            . $rst->fields['from_what_text']
+            . "\n<option value='to_" . $rst->fields['relationship_type_id'] . "'>"
+            . $rst->fields['to_what_text'];
+        $rst->movenext();
+    }
 }
 
 $relation_menu .= "\n</select>";
 
+$con->close();
 
 $page_title = $company_name . " - Relationships";
 start_page($page_title, true, $msg);
@@ -87,17 +110,17 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_header colspan=4>Relationships</td>
             </tr>
-			<tr>
-				<td class=widget_label>Relationship</td>
-				<td class=widget_label>Company</td>
-				<td class=widget_label>Date</td>
-				<td class=widget_label></td>
-			</tr>
+                        <tr>
+                                <td class=widget_label>Relationship</td>
+                                <td class=widget_label>Company</td>
+                                <td class=widget_label>Date</td>
+                                <td class=widget_label></td>
+                        </tr>
             <?php  echo $relationship_rows; ?>
             <tr>
-            	<td><?php echo $relation_menu ?></td>
-            	<td><?php echo $company_menu ?></td>
-			</tr>
+                <td><?php echo $relation_menu ?></td>
+                <td><?php echo $company_menu ?></td>
+                        </tr>
             <tr>
                 <td class=widget_content_form_element colspan=4>
                     <input class=button type=submit value="Add Relationship">
@@ -123,6 +146,10 @@ end_page();
 
 /**
  * $Log: relationships.php,v $
+ * Revision 1.8  2004/07/01 19:48:10  braverock
+ * - add new configurable relationships code
+ *   - adapted from patches submitted by Neil Roberts
+ *
  * Revision 1.7  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

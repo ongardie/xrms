@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.46 2004/06/28 20:04:21 maulani Exp $
+ * $Id: one.php,v 1.47 2004/07/01 19:48:10 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -220,7 +220,19 @@ if ($rst) {
 
 // related companies
 
-$sql = "select r.relationship_type, r.established_at, r.company_to_id, c.company_name from company_relationship r, companies c where r.company_from_id = $company_id and r.company_to_id=c.company_id order by r.established_at desc";
+$sql = "select rt.from_what_text, rt.to_what_text, r.established_at,
+    r.to_what_id, r.from_what_id,
+    c1.company_name as to_company_name, c1.company_id as to_company_id,
+    c2.company_name as from_company_name, c2.company_id as from_company_id
+    from relationships as r, companies as c1, companies as c2, relationship_types as rt
+    where (r.from_what_id = $company_id or r.to_what_id = $company_id)
+    and rt.from_what_table = 'companies'
+    and rt.to_what_table = 'companies'
+    and r.relationship_type_id=rt.relationship_type_id
+    and r.to_what_id=c2.company_id
+    and r.from_what_id=c1.company_id
+    and r.relationship_status = 'a'
+    order by r.established_at desc";
 
 $rst = $con->execute($sql);
 
@@ -228,16 +240,24 @@ $linecounter = 0;
 if ($rst) {
     while (!$rst->EOF) {
         $linecounter +=1;
+        if($rst->fields['from_what_id'] == $company_id) {
+            $from_or_to = "from";
+        }
+        else {
+            $from_or_to = "to";
+        }
         $established_at = $con->userdate($rst->fields['established_at']);
         $relationship_rows .= ($linecounter == '1') ? '<tr><td class=sublabel>Relationship</td>' : '<tr><td class=sublabel>&nbsp;</td>';
-        $relationship_rows .= '<td class=clear>' . $rst->fields['relationship_type'] . ' '
-            . '<a href="one.php?company_id=' . $rst->fields['company_to_id']
-            . '">' . $rst->fields['company_name'] . '</a> '
+        $relationship_rows .= '<td class=clear>' . $rst->fields[$from_or_to . '_what_text'] . ' '
+            . '<a href="one.php?company_id=' . $rst->fields[$from_or_to . '_company_id']
+            . '">' . $rst->fields[$from_or_to . '_company_name'] . '</a> '
             . $established_at . '</td>';
         $relationship_rows .= '</tr>';
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler ($con, $sql);
 }
 
 // associated with
@@ -281,6 +301,10 @@ require_once("../cases/sidebar.php");
 //include the opportunities sidebar
 $opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
 require_once("../opportunities/sidebar.php");
+
+//include the contacts-companies sidebar
+require_once("../companies/company-sidebar.php");
+
 
 //include the files sidebar
 require_once("../files/sidebar.php");
@@ -611,6 +635,9 @@ function openNewsWindow() {
         <!-- cases //-->
         <?php echo $case_rows; ?>
 
+        <!-- contact/company //-->
+        <?php echo $company_link_rows; ?>
+
         <!-- notes //-->
         <?php echo $note_rows; ?>
 
@@ -642,6 +669,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.47  2004/07/01 19:48:10  braverock
+ * - add new configurable relationships code
+ *   - adapted from patches submitted by Neil Roberts
+ *
  * Revision 1.46  2004/06/28 20:04:21  maulani
  * - Add plug-in hook similar to hook on opportunities page
  *

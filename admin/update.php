@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.16 2004/07/01 15:23:06 braverock Exp $
+ * $Id: update.php,v 1.17 2004/07/01 19:48:09 braverock Exp $
  */
 
 // where do we include from
@@ -303,6 +303,55 @@ $sql ="CREATE TABLE relationships (
         )";
         //execute
         $rst = $con->execute($sql);
+
+// now convert existing relationships
+if (confirm_no_records($con, 'relationships')) {
+    $sql = "select company_from_id, relationship_type, company_to_id, established_at
+            from company_relationship
+            order by established_at desc";
+    $rst = $con->execute($sql);
+    if ($rst) {
+        while (!$rst->EOF) {
+            $direction = '';
+
+            $to_what_id     = $rst->fields['company_to_id'];
+            $from_what_id   = $rst->fields['company_from_id'];
+            $established_at =  $con->qstr($rst->fields['established_at'], get_magic_quotes_gpc());
+
+            $relationship_type_id = 0;
+
+            $old_type = $con->qstr($rst->fields['relationship_type'], get_magic_quotes_gpc());
+            $match_sql = "select relationship_type_id from relationship_types
+                              where from_what_table = 'companies' and to_what_table = 'companies'
+                              and to_what_text LIKE $old_type ";
+
+            $relationship_type_id = (int) $con->GetOne($match_sql);
+            if ((int) $relationship_type_id == (int) 0) {
+                $match_sql = "select relationship_type_id from relationship_types
+                              where from_what_table = 'companies' and to_what_table = 'companies'
+                              and from_what_text LIKE $old_type ";
+
+                $relationship_type_id = (int) $con->GetOne($match_sql);
+                $direction = 'from';
+            }
+            if ($relationship_type_id) {
+                //now insert the row in the new table
+                if ($direction=='from'){
+                    $new_from_id = $to_what_id;
+                    $new_to_id   = $from_what_id;
+                } else {
+                    $new_to_id = $to_what_id;
+                    $new_from_id = $from_what_id;
+                }
+                $sql = "insert into relationships
+                (from_what_id, to_what_id, relationship_type_id, established_at)
+                values (" . $new_from_id . ", " . $new_to_id . ", " . $relationship_type_id . ", $established_at)";
+                $ins_rst=$con->execute($sql);
+            }
+            $rst->movenext();
+        }
+    }
+} //end convert old relationships
 
 // Make sure that the additional address format strings are added
 $sql = "select count(*) as recCount from address_format_strings";
@@ -608,6 +657,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.17  2004/07/01 19:48:09  braverock
+ * - add new configurable relationships code
+ *   - adapted from patches submitted by Neil Roberts
+ *
  * Revision 1.16  2004/07/01 15:23:06  braverock
  * - update default data for relationship_types table
  * - use NAMES -> VALUES SQL construction to be safe
