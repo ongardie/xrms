@@ -10,7 +10,7 @@
  * and allows the user to select the file to be imported,
  * and the delimiter to be used.
  *
- * The second page, import-copanies-2.php, allows the user to preview the data,
+ * The second page, import-companies-2.php, allows the user to preview the data,
  * and performs the first round of validation on the data.
  *
  * The third page, import-companies-3.php, actually imports the data and stuffs it
@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.23 2004/07/07 22:18:32 braverock Exp $
+ * $Id: import-companies-3.php,v 1.24 2004/07/08 22:16:28 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -32,6 +32,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 /**
  * function importFailedMessage - debug function for import
@@ -261,118 +262,106 @@ foreach ($filearray as $row) {
     if (strlen($company_name) > 0) {
         // start putting together our query
         if (!$company_id) {
-            $sql_insert_company = "
-            insert into companies set
-                user_id = $user_id,
-                crm_status_id = $crm_status_id,
-                company_source_id= $company_source_id,
-                industry_id = " . $con->qstr($industry_id) . ",
-                account_status_id = $account_status_id,
-                rating_id = $rating_id,
-                entered_at = " . $con->qstr($entered_at) . ',
-                entered_by = ' . $con->qstr($entered_by) . ',
-                company_name = '. $con->qstr($company_name) .',';
+            //Set defaults for INSERT
+            $rec = array();
+            $rec['user_id'] = $user_id;
+            $rec['crm_status_id'] = $crm_status_id;
+            $rec['company_source_id'] = $company_source_id;
+            $rec['industry_id'] = $industry_id;
+            $rec['account_status_id'] = $account_status_id;
+            $rec['rating_id'] = $rating_id;
+            $rec['entered_at'] = $entered_at;
+            $rec['entered_by'] = $entered_by;
+            $rec['company_name'] = $company_name;
 
             importMessage("Created company '$company_name'");
         } else {
-            $sql_insert_company = '
-            update companies set ';
+            //Empty array for UPDATE
+            $rec = array();
 
             importMessage("Updated company '$company_name'");
         }
 
-        $sql_insert_company .=
-            "
-            company_record_status = 'a' ,
-            last_modified_at = " . $con->qstr($last_modified_at) . ',
-            last_modified_by = ' . $con->qstr($last_modified_by);
+        $rec['company_record_status'] = 'a';
+        $rec['last_modified_at'] = $last_modified_at;
+        $rec['last_modified_by'] = $last_modified_by;
 
         if ($legal_name) {
-            $sql_insert_company .= ',
-            legal_name    = '. $con->qstr($legal_name);
+            $rec['legal_name'] = $legal_name;
         }
         if ($company_website) {
-            $sql_insert_company .= ',
-            url           = '. $con->qstr($company_website);
+            $rec['url'] = $company_website;
         }
         if ($company_taxid) {
-            $sql_insert_company .= ',
-            tax_id        = '. $con->qstr($company_taxid);
+            $rec['tax_id'] = $company_taxid;
         }
         if ($extref1) {
-            $sql_insert_company .= ',
-            extref1       = '. $con->qstr($extref1);
+            $rec['extref1'] = $extref1;
         }
         if ($extref2) {
-            $sql_insert_company .= ',
-            extref2       = '. $con->qstr($extref2);
+            $rec['extref2'] = $extref2;
         }
         if ($extref3) {
-            $sql_insert_company .= ',
-            extref3       = '. $con->qstr($extref3);
+            $rec['extref3'] = $extref3;
         }
         if ($company_custom1) {
-            $sql_insert_company .= ',
-            custom1       = '. $con->qstr($company_custom1);
+            $rec['custom1'] = $company_custom1;
         }
         if ($company_custom2) {
-            $sql_insert_company .= ',
-            custom2       = '. $con->qstr($company_custom2);
+            $rec['custom2'] = $company_custom2;
         }
         if ($company_custom3) {
-            $sql_insert_company .= ',
-            custom3       = '. $con->qstr($company_custom3);
+            $rec['custom3'] = $company_custom3;
         }
         if ($company_custom4) {
-            $sql_insert_company .= ',
-            custom4       = '. $con->qstr($company_custom4);
+            $rec['custom4'] = $company_custom4;
         }
         if ($employees) {
-            $sql_insert_company .= ',
-            employees     = '. $con->qstr($employees);
+            $rec['employees'] = $employees;
         }
         if ($revenue) {
-            $sql_insert_company .= ',
-            revenue       = '. $con->qstr($revenue);
+            $rec['revenue'] = $revenue;
         }
         if ($credit_limit) {
-            $sql_insert_company .= ',
-            credit_limit  = '. $con->qstr($credit_limit);
+            $rec['credit_limit'] = $credit_limit;
         }
         if ($terms) {
-            $sql_insert_company .= ',
-            terms         = '. $con->qstr($terms);
+            $rec['terms'] = $terms;
         }
         if ($company_profile) {
-            $sql_insert_company .= ',
-            profile       = '. $con->qstr($company_profile);
+            $rec['profile'] = $company_profile;
         }
         if ($company_code) {
-            $sql_insert_company .= ',
-            company_code  = '. $con->qstr($company_code);
+            $rec['company_code'] = $company_code;
         }
         //set phone numbers only if the company didn't already exist
         if (!$company_id) {
             if ($company_phone) {
-                $sql_insert_company .= ',
-                phone     = '. $con->qstr($company_phone);
+                $rec['phone'] = $company_phone;
             }
             if ($company_phone2) {
-                $sql_insert_company .= ',
-                phone2    = '. $con->qstr($company_phone2);
+                $rec['phone2'] = $company_phone2;
             }
             if ($company_fax) {
-                $sql_insert_company .= ',
-                fax       = '. $con->qstr($company_fax);
+                $rec['fax'] = $company_fax;
             }
         }
-        //now set the where clause if the company existed
         if ($company_id) {
-            $sql_insert_company .= " where company_id = $company_id";
+            //UPDATE
+            $sql = "SELECT * FROM companies WHERE company_id = $company_id";
+            $rst = $con->execute($sql);
+                    
+            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            debugSql($upd);
+            $con->execute($upd);
+        } else {
+            //INSERT
+            $tbl = 'companies';
+            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            debugSql($ins);
+            $con->execute($ins);
         }
 
-        debugSql($sql_insert_company);
-        $con->execute($sql_insert_company);
         $error='';
         $error = $con->ErrorMsg();
         // figure out where to print this out.
@@ -392,26 +381,30 @@ foreach ($filearray as $row) {
         if (!$company_id) {
             $company_id = $con->insert_id();
             if (!$company_code) {
-            $sql_update_company_code = "update companies set
-                                        company_code = " .
-                                        $con->qstr('C' . $company_id) .
-                                        " where company_id = $company_id";
+                $rec = array();
+                $rec['company_code'] = 'C' . $company_id;
             } else {
-                $sql_update_company_code = "update companies set
-                                            company_code = " .
-                                            $company_code .
-                                            " where company_id = $company_id";
+                $rec = array();
+                $rec['company_code'] = $company_code;
             }
-            debugSql($sql_update_company_code);
-            $con->execute($sql_update_company_code);
+
+            $sql = "SELECT * FROM companies WHERE company_id = $company_id";
+            $rst = $con->execute($sql);
+            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            debugSql($upd);
+            $con->execute($upd);
         }
 
         //check to see if we need to insert a division
         if (strlen($division_name) > 0) {
-            $sql_insert_division = 'insert into company_division set
-                                    division_name = '. $con->qstr($division_name);
-            debugSql($sql_insert_division);
-            $con->execute($sql_insert_division);
+            $rec = array();
+            $rec['division_name'] = $division_name;
+            
+            $tbl = 'company_division';
+            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            debugSql($ins);
+            $con->execute($ins);
+            
             $division_id = $con->insert_id();
         }
 
@@ -469,19 +462,23 @@ foreach ($filearray as $row) {
                 }
 
                 //insert the new address
-                $sql_insert_address = "insert into addresses set
-                                   company_id    = $company_id,
-                                   address_name  = ". $con->qstr($address_name) .',
-                                   line1         = '. $con->qstr($address_line1) .',
-                                   line2         = '. $con->qstr($address_line2) .',
-                                   city          = '. $con->qstr($address_city) . ',
-                                   province      = '. $con->qstr($address_state) . ',
-                                   address_body       = '. $con->qstr($address_body) . ',
-                                   use_pretty_address = '. $con->qstr($address_use_pretty_address) . ',
-                                   postal_code   = '. $con->qstr($address_postal_code) .',
-                                   country_id = '. $con->qstr($address_country);
-                debugSql($sql_insert_address);
-                $con->execute($sql_insert_address);
+                $rec = array();
+                $rec['company_id'] = $company_id;
+                $rec['address_name'] = $address_name;
+                $rec['line1'] = $address_line1;
+                $rec['line2'] = $address_line2;
+                $rec['city'] = $address_city;
+                $rec['province'] = $address_state;
+                $rec['address_body'] = $address_body;
+                $rec['use_pretty_address'] = $address_use_pretty_address;
+                $rec['postal_code'] = $address_postal_code;
+                $rec['country_id'] = $address_country;
+                
+                $tbl = 'addresses';
+                $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+                debugSql($ins);
+                $con->execute($ins);
+                
                 importMessage("Imported address '$address_line1'");
                 $address_id = $con->insert_id();
             }
@@ -491,15 +488,18 @@ foreach ($filearray as $row) {
             // if we don't have a default address, set them now
             // this is kind of naive first through the post choosing, but oh well
             if (!$default_address_id  && $address_id) {
-                $sql_update_company_set_address_defaults = "
-                    update companies set
-                        default_primary_address = $address_id,
-                        default_billing_address = $address_id,
-                        default_shipping_address = $address_id,
-                        default_payment_address = $address_id
-                        where company_id = $company_id";
-                debugSql($sql_update_company_set_address_defaults);
-                $con->execute($sql_update_company_set_address_defaults);
+                $sql = "SELECT * FROM companies WHERE company_id = $company_id";
+                $rst = $con->execute($sql);
+                
+                $rec = array();
+                $rec['default_primary_address'] = $address_id;
+                $rec['default_billing_address'] = $address_id;
+                $rec['default_shipping_address'] = $address_id;
+                $rec['default_payment_address'] = $address_id;
+                
+                $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+                debugSql($upd);
+                $con->execute($upd);
                 $default_address_id = $address_id;
             }
         } // end address insert
@@ -517,109 +517,91 @@ foreach ($filearray as $row) {
         }
         if (!$contact_id and $company_id) {
         // doesn't exist, create new one
-            $sql_insert_contact = "insert into contacts set
-                                       company_id  = $company_id,
-                                       first_names = ". $con->qstr($contact_first_names) .',
-                                       last_name   =' . $con->qstr($contact_last_name) .',
-                                       entered_at  =' . $con->qstr($entered_at) .',
-                                       entered_by  =' . $con->qstr($entered_by) .',
-                                       last_modified_at = ' . $con->qstr($last_modified_at) . ',
-                                       last_modified_by = ' . $con->qstr($last_modified_by);
+            $rec = array();
+            $rec['company_id'] = $company_id;
+            $rec['first_names'] = $contact_first_names;
+            $rec['last_name'] = $contact_last_name;
+            $rec['entered_at'] = $entered_at;
+            $rec['entered_by'] = $entered_by;
+            $rec['last_modified_at'] = $last_modified_at;
+            $rec['last_modified_by'] = $last_modified_by;
+            
             if ($address_id) {
-                $sql_insert_contact .= ',
-                                       address_id  = '. $con->qstr($address_id,  get_magic_quotes_gpc()) ;
+                $rec['address_id'] = $address_id;
             } else {
-                $sql_insert_contact .= ',
-                                       address_id  = '. $con->qstr($default_address_id,  get_magic_quotes_gpc()) ;
+                $rec['address_id'] = $default_address_id;
             }
-
             if ($division_id){
-                $sql_insert_contact .= ',
-                                       division_id = '. $con->qstr($division_id,  get_magic_quotes_gpc());
+                $rec['division_id'] = $division_id;
             }
             if ($contact_work_phone){
-                $sql_insert_contact .= ',
-                                       work_phone  = '. $con->qstr($contact_work_phone);
+                $rec['work_phone'] = $contact_work_phone;
             }
             if ($contact_home_phone){
-                $sql_insert_contact .= ',
-                                       home_phone  = '. $con->qstr($contact_home_phone);
+                $rec['home_phone'] = $contact_home_phone;
             }
             if ($contact_fax){
-                $sql_insert_contact .= ',
-                                       fax         = '. $con->qstr($contact_fax);
+                $rec['fax'] = $contact_fax;
             }
             if ($contact_email){
-                $sql_insert_contact .= ',
-                                       email       = '. $con->qstr($contact_email);
+                $rec['email'] = $contact_email;
             }
             if ($contact_salutation){
-                $sql_insert_contact .= ',
-                                       salutation       = '. $con->qstr($contact_salutation);
+                $rec['salutation'] = $contact_salutation;
             }
             if ($contact_date_of_birth){
-                $sql_insert_contact .= ',
-                                       date_of_birth       = '. $con->qstr($contact_date_of_birth);
+                $rec['date_of_birth'] = $contact_date_of_birth;
             }
             if ($contact_summary){
-                $sql_insert_contact .= ',
-                                       summary       = '. $con->qstr($contact_summary);
+                $rec['summary'] = $contact_summary;
             }
             if ($contact_title){
-                $sql_insert_contact .= ',
-                                       title       = '. $con->qstr($contact_title);
+                $rec['title'] = $contact_title;
             }
             if ($contact_description){
-                $sql_insert_contact .= ',
-                                       description       = '. $con->qstr($contact_description);
+                $rec['description'] = $contact_description;
             }
             if ($contact_cell_phone){
-                $sql_insert_contact .= ',
-                                       cell_phone       = '. $con->qstr($contact_cell_phone);
+                $rec['cell_phone'] = $contact_cell_phone;
             }
             if ($contact_aol){
-                $sql_insert_contact .= ',
-                                       aol_name       = '. $con->qstr($contact_aol);
+                $rec['aol_name'] = $contact_aol;
             }
             if ($contact_yahoo){
-                $sql_insert_contact .= ',
-                                       yahoo_name       = '. $con->qstr($contact_yahoo);
+                $rec['yahoo_name'] = $contact_yahoo;
             }
             if ($contact_msn){
-                $sql_insert_contact .= ',
-                                       msn_name       = '. $con->qstr($contact_msn);
+                $rec['msn_name'] = $contact_msn;
             }
             if ($contact_interests){
-                $sql_insert_contact .= ',
-                                       interests       = '. $con->qstr($contact_interests);
+                $rec['interests'] = $contact_interests;
             }
             if ($contact_custom1){
-                $sql_insert_contact .= ',
-                                       custom1       = '. $con->qstr($contact_custom1);
+                $rec['custom1'] = $contact_custom1;
             }
             if ($contact_custom2){
-                $sql_insert_contact .= ',
-                                       custom2       = '. $con->qstr($contact_custom2);
+                $rec['custom2'] = $contact_custom2;
             }
             if ($contact_custom3){
-                $sql_insert_contact .= ',
-                                       custom3       = '. $con->qstr($contact_custom3);
+                $rec['custom3'] = $contact_custom3;
             }
             if ($contact_custom4){
-                $sql_insert_contact .= ',
-                                       custom4       = '. $con->qstr($contact_custom4);
+                $rec['custom4'] = $contact_custom4;
             }
             if ($contact_profile){
-                $sql_insert_contact .= ',
-                                       profile       = '. $con->qstr($contact_profile);
+                $rec['profile'] = $contact_profile;
             }
             if ($gender){
-                $sql_insert_contact .= ',
-                                       gender       = '. $con->qstr($gender);
+                $rec['gender'] = $gender;
             }
-            debugSql($sql_insert_contact);
-            $con->execute($sql_insert_contact);
+        
+            $tbl = 'contacts';
+            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            debugSql($ins);
+            $con->execute($ins);
+            
             importMessage("Updated contact '$contact_first_names $contact_last_name'");
+            
         } //end insert contact
     else {
         importFailedMessage("Did not update contact '$contact_first_names $contact_last_name'");
@@ -628,13 +610,15 @@ foreach ($filearray as $row) {
         //set the category if we got one
         if ($category_id) {
             //should add an is_numeric check and other logic here
+            $rec = array();
+            $rec['category_id'] = $category_id;
+            $rec['on_what_table'] = 'companies';
+            $rec['on_what_id'] = $company_id;
 
-            $sql_insert_category_into_the_companies = "insert into entity_category_map set
-                                                        category_id = $category_id,
-                                                        on_what_table = 'companies',
-                                                        on_what_id = $company_id";
-            debugSql($sql_insert_category_into_the_companies);
-            $con->execute($sql_insert_category_into_the_companies);
+            $tbl = 'entity_category_map';
+            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+            debugSql($ins);
+            $con->execute($ins);
         }
 
     } // end company_name insert/update check
@@ -744,6 +728,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.24  2004/07/08 22:16:28  introspectshun
+ * - Now uses GetInsertSQL and GetUpdateSQL
+ *
  * Revision 1.23  2004/07/07 22:18:32  braverock
  * - minor improvements to import process
  *
