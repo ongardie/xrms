@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: RolePermission_list.php,v 1.2 2005/02/14 23:35:36 vanmer Exp $
+ * $Id: RolePermission_list.php,v 1.3 2005/02/15 19:49:35 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -66,7 +66,7 @@ $sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\
 Role_name as 'Role', Child.ControlledObject_name as 'Child Object', Parent.ControlledObject_name as 'Parent Object', Scope, Permission_name as 'Permission'
 FROM RolePermission JOIN Permission ON Permission.Permission_id=RolePermission.Permission_id 
 JOIN Role on Role.Role_id=RolePermission.Role_id
-JOIN ControlledObjectRelationship ON ControlledObjectRelationship.ControlledObjectRelationship_id=RolePermission.ControlledObjectRelationship_id
+JOIN ControlledObjectRelationship ON ControlledObjectRelationship.CORelationship_id=RolePermission.CORelationship_id
 JOIN ControlledObject as Child ON Child.ControlledObject_id=ControlledObjectRelationship.ChildControlledObject_id
 LEFT OUTER JOIN ControlledObject as Parent ON Parent.ControlledObject_id=ControlledObjectRelationship.ParentControlledObject_id
 order by $order_by";
@@ -123,6 +123,9 @@ end_page();
 
 /**
  * $Log: RolePermission_list.php,v $
+ * Revision 1.3  2005/02/15 19:49:35  vanmer
+ * - changes to reflect new fieldnames
+ *
  * Revision 1.2  2005/02/14 23:35:36  vanmer
  * - added qstr and removed single quote slashes
  *
