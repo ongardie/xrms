@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.9 2004/06/12 07:20:40 introspectshun Exp $
+ * $Id: some.php,v 1.10 2004/06/12 18:23:51 braverock Exp $
  */
 
 //include required files
@@ -96,45 +96,45 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 $sql = "SELECT "
-      . $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='","CAST(file_id AS VARCHAR(10))","'\">'","file_pretty_name", "'</a>'")
+      . $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='","file_id","'\">'","file_pretty_name", "'</a>'")
       . " AS 'Name', file_description as 'Description',";
 
 switch ($file_on_what) {
     case "contacts" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS VARCHAR(10))", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
               . " AS 'Contact',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS 'Company',";
         break;
     }
     case "contacts_of_companies" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS VARCHAR(10))", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
               . " AS 'Contact',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS 'Company',";
         break;
     }
     case "companies" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+        $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS 'Company',";
         break;
     }
     case "campaigns" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "CAST(camp.campaign_id AS VARCHAR(10))", "'\">'", "camp.campaign_title", "'</a>'")
+        $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
               . " AS 'Campaign',";
         break;
     }
     case "opportunities" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "CAST(opportunity_id AS VARCHAR(10))", "'\">'", "opp.opportunity_title", "'</a>'")
+        $sql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
               . " AS 'Opportunity',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS 'Company',";
         break;
     }
     case "cases" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "CAST(case_id AS VARCHAR(10))", "'\">'", "cases.case_title", "'</a>'")
+        $sql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
               . " AS 'Case',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS 'Company',";
         break;
     }
@@ -144,7 +144,7 @@ switch ($file_on_what) {
 }
 
 $sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS 'Date'," .
-        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='", "CAST(file_id AS VARCHAR(10))", "'\">'", "CAST(file_id AS VARCHAR(10))", "'</a>'") . " AS 'ID' ";
+        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS 'ID' ";
 
 $from = "from ";
 switch ($file_on_what) {
@@ -413,6 +413,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/06/12 18:23:51  braverock
+ * - remove CAST, as it is not standard across databases
+ *   - database should explicitly convert number to string for CONCAT
+ *
  * Revision 1.9  2004/06/12 07:20:40  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *

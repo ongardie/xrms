@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.11 2004/06/12 03:27:32 introspectshun Exp $
+ * $Id: some.php,v 1.12 2004/06/12 18:29:46 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -89,7 +89,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $starts_at = $con->SQLDate('Y-M-D', 'starts_at');
 $ends_at = $con->SQLDate('Y-M-D', 'ends_at');
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "CAST(cam.campaign_id AS varchar(10))", "'\">'" , "cam.campaign_title", "'</a>'") . " AS 'Campaign',
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "cam.campaign_id", "'\">'" , "cam.campaign_title", "'</a>'") . " AS 'Campaign',
   camt.campaign_type_pretty_name AS 'Type', cams.campaign_status_pretty_name AS 'Status', u.username AS 'Owner',
   $starts_at AS 'Starts', $ends_at AS 'Ends'
 ";
@@ -322,6 +322,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2004/06/12 18:29:46  braverock
+ * - remove CAST, as it is not standard across databases
+ *   - database should explicitly convert number to string for CONCAT
+ *
  * Revision 1.11  2004/06/12 03:27:32  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.
