@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.9 2005/01/06 20:55:10 vanmer Exp $
+ * $Id: sidebar.php,v 1.10 2005/01/10 21:53:50 vanmer Exp $
  */
 /*
 Commented until ACL system is fully implemented
@@ -64,6 +64,12 @@ if (strlen($rst->fields['username'])>0) {
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0))) {
     $new_case_button=render_create_button("New",'submit');
+    if ($new_case_button) {
+        $case_type_sql = "select case_type_short_name, case_type_id FROM case_types"; 
+        $type_rst=$con->execute($case_type_sql);
+        $new_case_types=$type_rst->getmenu2('case_type_id', '', false);
+        $new_case_button=$new_case_types.$new_case_button; 
+    }
     $case_rows .= "
             <tr>
                 <form action='".$http_site_root."/cases/new.php' method='post'>
@@ -90,6 +96,9 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.10  2005/01/10 21:53:50  vanmer
+ * - added short name for case type when adding a new case
+ *
  * Revision 1.9  2005/01/06 20:55:10  vanmer
  * - added division_id to new case sidebar button
  * - added commented ACL authentication to top of sidebar
