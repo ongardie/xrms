@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.43 2005/01/11 23:21:10 vanmer Exp $
+ * $Id: home.php,v 1.44 2005/01/17 13:39:50 braverock Exp $
  */
 
 // include the common files
@@ -164,6 +164,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+   db_error_handler ($con, $sql_activities);
 }
 
 $_SESSION['next_to_check']=$next_to_check;
@@ -201,6 +203,8 @@ if ($rst) {
         }
         $rst->close();
     }
+} else {
+   db_error_handler ($con, $sql_files);
 }
 
 ////////////////////////////////////
@@ -235,6 +239,8 @@ if ($rst) {
         }
         $rst->close();
     }
+} else {
+   db_error_handler ($con, $sql_files);
 }
 ////////////////////////////////////
 // Show campaigns non-uploaded files
@@ -243,124 +249,126 @@ $sql_files = "select * from files f where file_size = 0 and f.entered_by = ". $s
 $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
 
 $classname = 'non_uploaded_file';
-if ($rst->rowcount()>0) {
-    $nu_file_rows = "
-        <table class=widget cellspacing=1 width='100%'>
-            <tr>
-                <td class=widget_header colspan=6>" . _("Non Uploaded Files") . "</td>
-            </tr>
-            <tr>
-                <td class=widget_label>" . _("Name") . "</td>
-                <td class=widget_label>" . _("Description") . "</td>
-                <td class=widget_label>" . _("On What") . "</td>
-                <td class=widget_label>" . _("Company") . "</td>
-                <td class=widget_label>" . _("Date") . "</td>
-                <td class=widget_label>" . _("File ID") . "</td>
-            </tr>
-        </table>";
-
-
-
-    while (!$rst->EOF) {
-
-        $file_id = $rst->fields['file_id'];
-        $file_name = $rst->fields['file_pretty_name'];
-        $file_description = $rst->fields['file_description'];
-        $file_on_what = $rst->fields['on_what_table'];
-        $on_what_id = $rst->fields['on_what_id'];
-        $file_date = $rst->fields['entered_at'];
-
-
-        //add switches for 'on what' here
-        $fsql = "select ";
-        $fsql .= "from files f, users u ";
-        switch ($file_on_what) {
-            case "contacts" : { $fsql .= "contacts cont, companies c, "; break; }
-            case "contacts_of_companies" : { $fsql .= "contacts cont, companies c, "; break; }
-            case "companies" : { $fsql .= "companies c, "; break; }
-            case "campaigns" : { $fsql .= "campaigns camp, "; break; }
-            case "opportunities" : { $fsql .= "opportunities opp, companies c, "; break; }
-            case "cases" : { $fsql .= "cases cases, companies c, "; break; }
-        }
-        switch ($file_on_what) {
-            case "contacts" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
-                       . " AS '" . _("Name") . "',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS '" . _("Company") . "',";
-                break;
-            }
-            case "contacts_of_companies" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-                      . " AS '" . _("Name") . "',"
-                      . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                      . " AS '" . _("Company") . "',";
-                break;
-            }
-            case "companies" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS '" . _("Name") . "',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS '" . _("Company") . "',";
-                break;
-            }
-            case "campaigns" : {
-                $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
-                       . " AS '" . _("Campaign") . "',";
-                break;
-            }
-            case "opportunities" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
-                       . " AS '" . _("Name") . "',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS '" . _("Company") . "',";
-                break;
-            }
-            case "cases" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
-                       . " AS '" . _("Name") . "',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-                       . " AS '" . _("Company") . "',";
-                break;
-            }
-            default : {
-                $fsql .= "";
-                }
-        }
-        $where = "where f.entered_by = $session_user_id ";
-        switch ($file_on_what) {
-            case "contacts" : { $where .= "and f.on_what_table = 'contacts' and cont.contact_id = $on_what_id and cont.company_id = c.company_id "; break; }
-            case "contacts_of_companies" : { $where .= "and f.on_what_table = 'contacts' and cont.contact_id = $on_what_id and cont.company_id = c.company_id "; break; }
-            case "companies" : { $where .= "and f.on_what_table = 'companies' and c.company_id = $on_what_id "; break; }
-            case "campaigns" : { $where .= "and f.on_what_table = 'campaigns' and camp.campaign_id = $on_what_id  "; break; }
-            case "opportunities" : { $where .= "and f.on_what_table = 'opportunities' and opp.opportunity_id = $on_what_id and opp.company_id = c.company_id "; break; }
-            case "cases" : { $where .= "and f.on_what_table = 'cases' and cases.case_id = $on_what_id and cases.company_id = c.company_id "; break; }
-        }
-        $where .= "and file_record_status = 'a'";
-
-        $fsql .= $where;
-        $frst = $con->execute($fsql);
-
-        //now build the file row
-        $nu_file_rows .= '<tr>';
-        $nu_file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
-        $nu_file_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
-        $nu_file_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
-        if ($frst) {
-           $nu_file_rows .= '<td class=' . $classname . '>' . $frst->fields['Name'] . '</td>';
-           $nu_file_rows .= '<td class=' . $classname . '>' . $frst->fields['Company'] . '</td>';
-        } else {
-           $nu_file_rows .= "<td></td>\n<td></td>\n";
-        }
-        $nu_file_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
-        $nu_file_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
-        $nu_file_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
+if ($rst) {
+   if ($rst->rowcount()>0) {
+      $nu_file_rows = "
+         <table class=widget cellspacing=1 width='100%'>
+               <tr>
+                  <td class=widget_header colspan=6>" . _("Non Uploaded Files") . "</td>
+               </tr>
+               <tr>
+                  <td class=widget_label>" . _("Name") . "</td>
+                  <td class=widget_label>" . _("Description") . "</td>
+                  <td class=widget_label>" . _("On What") . "</td>
+                  <td class=widget_label>" . _("Company") . "</td>
+                  <td class=widget_label>" . _("Date") . "</td>
+                  <td class=widget_label>" . _("File ID") . "</td>
+               </tr>
+         </table>";
+   
+   
+   
+      while (!$rst->EOF) {
+   
+         $file_id = $rst->fields['file_id'];
+         $file_name = $rst->fields['file_pretty_name'];
+         $file_description = $rst->fields['file_description'];
+         $file_on_what = $rst->fields['on_what_table'];
+         $on_what_id = $rst->fields['on_what_id'];
+         $file_date = $rst->fields['entered_at'];
+   
+   
+         //add switches for 'on what' here
+         $fsql = "select ";
+         $fsql .= "from files f, users u ";
+         switch ($file_on_what) {
+               case "contacts" : { $fsql .= "contacts cont, companies c, "; break; }
+               case "contacts_of_companies" : { $fsql .= "contacts cont, companies c, "; break; }
+               case "companies" : { $fsql .= "companies c, "; break; }
+               case "campaigns" : { $fsql .= "campaigns camp, "; break; }
+               case "opportunities" : { $fsql .= "opportunities opp, companies c, "; break; }
+               case "cases" : { $fsql .= "cases cases, companies c, "; break; }
+         }
+         switch ($file_on_what) {
+               case "contacts" : {
+                  $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
+                        . " AS '" . _("Name") . "',"
+                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                        . " AS '" . _("Company") . "',";
+                  break;
+               }
+               case "contacts_of_companies" : {
+                  $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+                        . " AS '" . _("Name") . "',"
+                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                        . " AS '" . _("Company") . "',";
+                  break;
+               }
+               case "companies" : {
+                  $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                        . " AS '" . _("Name") . "',"
+                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                        . " AS '" . _("Company") . "',";
+                  break;
+               }
+               case "campaigns" : {
+                  $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
+                        . " AS '" . _("Campaign") . "',";
+                  break;
+               }
+               case "opportunities" : {
+                  $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
+                        . " AS '" . _("Name") . "',"
+                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                        . " AS '" . _("Company") . "',";
+                  break;
+               }
+               case "cases" : {
+                  $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
+                        . " AS '" . _("Name") . "',"
+                        . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                        . " AS '" . _("Company") . "',";
+                  break;
+               }
+               default : {
+                  $fsql .= "";
+                  }
+         }
+         $where = "where f.entered_by = $session_user_id ";
+         switch ($file_on_what) {
+               case "contacts" : { $where .= "and f.on_what_table = 'contacts' and cont.contact_id = $on_what_id and cont.company_id = c.company_id "; break; }
+               case "contacts_of_companies" : { $where .= "and f.on_what_table = 'contacts' and cont.contact_id = $on_what_id and cont.company_id = c.company_id "; break; }
+               case "companies" : { $where .= "and f.on_what_table = 'companies' and c.company_id = $on_what_id "; break; }
+               case "campaigns" : { $where .= "and f.on_what_table = 'campaigns' and camp.campaign_id = $on_what_id  "; break; }
+               case "opportunities" : { $where .= "and f.on_what_table = 'opportunities' and opp.opportunity_id = $on_what_id and opp.company_id = c.company_id "; break; }
+               case "cases" : { $where .= "and f.on_what_table = 'cases' and cases.case_id = $on_what_id and cases.company_id = c.company_id "; break; }
+         }
+         $where .= "and file_record_status = 'a'";
+   
+         $fsql .= $where;
+         $frst = $con->execute($fsql);
+   
+         //now build the file row
+         $nu_file_rows .= '<tr>';
+         $nu_file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?return_url=/contacts/one.php?contact_id=$contact_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
+         $nu_file_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+         $nu_file_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+         if ($frst) {
+            $nu_file_rows .= '<td class=' . $classname . '>' . $frst->fields['Name'] . '</td>';
+            $nu_file_rows .= '<td class=' . $classname . '>' . $frst->fields['Company'] . '</td>';
+         } else {
+            $nu_file_rows .= "<td></td>\n<td></td>\n";
+         }
+         $nu_file_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+         $nu_file_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+         $nu_file_rows .= '</tr>';
+         $rst->movenext();
+      }
+      $rst->close();
+   }
 } else {
-  // else code for "if ($rst->rowcount()>0) ..." above. Make sure $nu_file_rows is always defined.
-  $nu_file_rows = '';
+   //no result set - database error
+   db_error_handler ($con,$sql_files);
 }
 
 ////////////////////////////////////
@@ -371,28 +379,33 @@ $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_pag
 
 $classname = 'non_uploaded_file';
 
-if ($rst->rowcount()>0) {
-    while (!$rst->EOF) {
-
-        $file_id = $rst->fields['file_id'];
-        $file_name = $rst->fields['file_pretty_name'];
-        $file_description = $rst->fields['file_description'];
-        $file_on_what_table = $rst->fields['on_what_table'];
-        $file_on_what_name = $rst->fields['opportunity_title'];
-        $file_on_what_name_id = $rst->fields['opportunity_id'];
-        $file_date = $rst->fields['entered_at'];
-
-        $files_rows .= '<tr>';
-        $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
-        $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/opportunities/one.php?opportunity_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
-        $files_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
+if ($rst) {
+   if ($rst->rowcount()>0) {
+      while (!$rst->EOF) {
+   
+         $file_id = $rst->fields['file_id'];
+         $file_name = $rst->fields['file_pretty_name'];
+         $file_description = $rst->fields['file_description'];
+         $file_on_what_table = $rst->fields['on_what_table'];
+         $file_on_what_name = $rst->fields['opportunity_title'];
+         $file_on_what_name_id = $rst->fields['opportunity_id'];
+         $file_date = $rst->fields['entered_at'];
+   
+         $files_rows .= '<tr>';
+         $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+         $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+         $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+         $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
+         $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/opportunities/one.php?opportunity_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
+         $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+         $files_rows .= '</tr>';
+         $rst->movenext();
+      }
+      $rst->close();
+   }
+} else {
+   //no result set - database error
+   db_error_handler ($con,$sql_files);
 }
 
 ////////////////////////////////////
@@ -403,40 +416,49 @@ $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_pag
 
 $classname = 'non_uploaded_file';
 
-if ($rst->rowcount()>0) {
-    while (!$rst->EOF) {
-
-        $file_id = $rst->fields['file_id'];
-        $file_name = $rst->fields['file_pretty_name'];
-        $file_description = $rst->fields['file_description'];
-        $file_on_what_table = $rst->fields['on_what_table'];
-        $file_on_what_name = $rst->fields['case_title'];
-        $file_on_what_name_id = $rst->fields['case_id'];
-        $file_date = $rst->fields['entered_at'];
-
-        $files_rows .= '<tr>';
-        $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
-        $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/cases/one.php?case_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
-        $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
-        $files_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-$con->close();
-
-if (!strlen($files_rows) > 0) {
-    $files_rows = "<tr><td class=widget_content colspan=7>" . _("No open files") . "</td></tr>";
+if ($rst) {
+   if ($rst->rowcount()>0) {
+      while (!$rst->EOF) {
+   
+         $file_id = $rst->fields['file_id'];
+         $file_name = $rst->fields['file_pretty_name'];
+         $file_description = $rst->fields['file_description'];
+         $file_on_what_table = $rst->fields['on_what_table'];
+         $file_on_what_name = $rst->fields['case_title'];
+         $file_on_what_name_id = $rst->fields['case_id'];
+         $file_date = $rst->fields['entered_at'];
+   
+         $files_rows .= '<tr>';
+         $files_rows .= "<td class='$classname'><a href='$http_site_root/files/one.php?return_url=/private/home.php&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_id'] . '</a></td>';
+         $files_rows .= '<td class=' . $classname . '>' . $file_name . '</td>';
+         $files_rows .= '<td class=' . $classname . '>' . $file_description . '</td>';
+         $files_rows .= '<td class=' . $classname . '>' . $file_on_what_table . '</td>';
+         $files_rows .= '<td class=' . $classname . '><a href="'.$http_site_root.'/cases/one.php?case_id='.$file_on_what_name_id.'">' . $file_on_what_name . '</a></td>';
+         $files_rows .= '<td class=' . $classname . '>' . $file_date . '</td>';
+         $files_rows .= '</tr>';
+         $rst->movenext();
+      }
+      $rst->close();
+   }
+} else {
+   //no result set - database error
+   db_error_handler ($con,$sql_files);
 }
 
 //close the database connection, as we are done with it.
 $con->close();
 
+if (!strlen($files_rows) > 0) {
+    // Make sure $file_rows is always defined.
+    $files_rows = "<tr><td class=widget_content colspan=7>" . _("No open files") . "</td></tr>";
+}
+if (!strlen($nu_files_rows) > 0) {
+    // Make sure $nu_file_rows is always defined.
+    $nu_file_rows = '';
+}
+
 if (!strlen($activity_rows) > 0) {
+   // Make sure $activity_rows is always defined.
     $activity_rows = "<tr><td class=widget_content colspan=7>" . _("No open activities") . "</td></tr>";
 }
 
@@ -507,6 +529,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.44  2005/01/17 13:39:50  braverock
+ * - add db_error_handler to all queries
+ *
  * Revision 1.43  2005/01/11 23:21:10  vanmer
  * - changed home.php to automatically populate the browse activities, so that save and next will operate off the user's activities
  *
