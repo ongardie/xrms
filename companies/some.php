@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.38 2004/08/13 12:29:57 maulani Exp $
+ * $Id: some.php,v 1.39 2004/08/17 10:56:44 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -235,7 +235,7 @@ $rst->close();
 
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
 $rst = $con->execute($sql2);
-$industry_menu = $rst->getmenu2('industry_id', $industry_id, true);
+$industry_menu = translate_menu($rst->getmenu2('industry_id', $industry_id, true));
 $rst->close();
 
 if ($criteria_count > 0) {
@@ -399,6 +399,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.39  2004/08/17 10:56:44  johnfawcett
+ * - added translate_menu call to Industries select menu
+ *
  * Revision 1.38  2004/08/13 12:29:57  maulani
  * - Fix errant copy and paste
  *
