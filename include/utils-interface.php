@@ -3,7 +3,7 @@
  * Common user interface functions file.
  *
  *
- * $Id: utils-interface.php,v 1.5 2004/02/16 20:14:11 maulani Exp $
+ * $Id: utils-interface.php,v 1.6 2004/03/12 15:46:52 maulani Exp $
  */
 
 /**
@@ -75,7 +75,7 @@ EOQ;
                 <a href="$http_site_root/opportunities/some.php">Opportunities</a> &bull;
                 <a href="$http_site_root/cases/some.php">Cases</a> &bull;
                 <a href="$http_site_root/reports/">Reports</a> &bull;
-                <a href="$http_site_root/admin/">Administration</a>
+                <a href="$http_site_root/admin/routing.php">Administration</a>
             </td>
             <td class=navbar align=center>&nbsp;</td>
             <td class=navbar align=right>
@@ -145,6 +145,12 @@ function build_salutation_menu($salutation) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.6  2004/03/12 15:46:52  maulani
+ * Temporary change for use until full access control is implemented
+ * - Block non-admin users from the administration screen
+ * - Allow all users to modify their own user record and password
+ * - Add phpdoc
+ *
  * Revision 1.5  2004/02/16 20:14:11  maulani
  * Close table tag when nav bar not used
  *
