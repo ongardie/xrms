@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.65 2004/11/26 17:22:00 braverock Exp $
+ * $Id: some.php,v 1.66 2004/11/26 17:26:19 braverock Exp $
  */
 
 // handle includes
@@ -286,7 +286,7 @@ if ($sort_column == 1) {
 
 $order_by .= " $sort_order";
 
-$sql .= " order by "$con->qstr($order_by,get_magic_quotes_gpc()); // is_overdue desc, a.scheduled_at, a.entered_at desc";
+$sql .= " order by ". $con->qstr($order_by,get_magic_quotes_gpc()); // is_overdue desc, a.scheduled_at, a.entered_at desc";
 //activities Pager table is rendered below by ADOdb pager
 
 if($advanced_search) {
@@ -619,6 +619,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.66  2004/11/26 17:26:19  braverock
+ * - quote order by clause for i18n
+ *
  * Revision 1.65  2004/11/26 17:22:00  braverock
  * - quote order by clause for i18n
  *
