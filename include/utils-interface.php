@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.45 2005/02/08 17:54:38 vanmer Exp $
+ * $Id: utils-interface.php,v 1.46 2005/02/10 23:20:49 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -474,6 +474,20 @@ EOQ;
 
 } //end jscalendar_includes fn
 
+function javascript_tooltips_include() {
+    global $javascript_tooltips_included;
+
+	if(!isset($javascript_tooltips_included)) {
+    	global $http_site_root;
+        echo <<<EOQ
+    		<!-- TOOLTIP SCRIPT INCLUDES -->
+			<script type="text/javascript" src="$http_site_root/js/wz_tooltip.js"></script>
+    		<!-- TOOLTIP SCRIPT INCLUDES -->
+EOQ;
+    	$javascript_tooltips_included = true;
+	}
+}
+
 function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     return render_ACL_button('Update', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
@@ -530,6 +544,9 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.46  2005/02/10 23:20:49  daturaarutad
+ * added function for including javascript tooltip code
+ *
  * Revision 1.45  2005/02/08 17:54:38  vanmer
  * - changed user css_theme load to not override of previously set css_theme variable
  * - added builddatatable function (by Walter Torres)
