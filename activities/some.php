@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.26 2004/07/02 15:22:44 maulani Exp $
+ * $Id: some.php,v 1.27 2004/07/05 20:29:09 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -118,7 +118,7 @@ require_once("browse-sidebar.php");
 
 $sql = "SELECT
   (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS is_overdue,"
-  . $con->Concat("'<a href=\"one.php?activity_id='", "activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
+  . $con->Concat("'<a href=\"one.php?activity_id='", "CAST(a.activity_id AS CHAR)", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
   . " AS 'Title',
   at.activity_type_pretty_name AS 'Type'," .
   $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "CAST(cont.contact_id AS CHAR)", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
@@ -403,6 +403,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.27  2004/07/05 20:29:09  introspectshun
+ * - Updated Concat to use CAST AS CHAR for activity_id.
+ *
  * Revision 1.26  2004/07/02 15:22:44  maulani
  * - Fix formatting and HTML so page will validate
  *
