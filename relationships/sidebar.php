@@ -11,14 +11,12 @@ if ( !defined('IN_XRMS') )
  *
  * Include this file anywhere you want to show other relationships
  *
- * @param string $relationship_name Name of the relationship as named in relationship_types
- * @param string $working_direction from or to or both: Starting point as shown in relationships table
- * @param string $overall_id Where from/to is the same as working direction
+ * @param string $relationships Associative array of table names and IDs
  *
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.19 2005/01/10 20:31:21 neildogg Exp $
+ * $Id: sidebar.php,v 1.20 2005/01/10 22:15:43 neildogg Exp $
  */
 
 if(empty($relationships)) {
@@ -47,12 +45,12 @@ for($j = 0; $j <= $expand; $j++) {
         }
     }
     
-    $sql = "SELECT relationship_type_id, relationship_name, from_what_table, to_what_table
+    $sql = "SELECT COUNT(DISTINCT relationship_name) AS multiple, relationship_type_id, relationship_name, from_what_table, to_what_table
             FROM relationship_types
             WHERE (from_what_table IN ('" . implode("', '", array_keys($relationships)) . "')
                 OR to_what_table IN ('" . implode("', '", array_keys($relationships)) . "'))
             AND relationship_status = 'a'
-            GROUP BY relationship_name
+            GROUP BY from_what_table, to_what_table
             ORDER BY relationship_type_id";
     $rst = $con->execute($sql);
     
@@ -63,7 +61,8 @@ for($j = 0; $j <= $expand; $j++) {
         while(!$rst->EOF) {
             $sql = "SELECT *
                     FROM relationship_types
-                    WHERE relationship_name = '{$rst->fields['relationship_name']}'
+                    WHERE from_what_table = '{$rst->fields['from_what_table']}'
+                    AND to_what_table = '{$rst->fields['to_what_table']}'
                     AND relationship_status = 'a'";
             $rst2 = $con->execute($sql);
             if(!$rst2) {
@@ -151,11 +150,14 @@ for($j = 0; $j <= $expand; $j++) {
                             <!-- Content Start -->';
                         }
                     
-                        $relationship_link_rows .= "
+                        if($rst->fields['multiple'] == 1) {
+                            $relationship_link_rows .= "
                         <tr>
                             <td class=widget_label colspan=2 align=center>" . _($rst->fields['relationship_name']) . "</td>
                         </tr>
                         <tr>";
+                        }
+                        
                         if($j == 0) {
                             $relationship_link_rows .= "
                             <td class=widget_label>" . _($opposite_name) . "</td>";
@@ -417,12 +419,12 @@ $relationship_link_rows .= "
                 <input type=hidden name=return_url value=\"" . current_page() . "\">
                 <td class=widget_content_form_element colspan=2>";
 
-$sql = "SELECT relationship_name, relationship_type_id, from_what_table, to_what_table
+$sql = "SELECT COUNT(DISTINCT relationship_name) AS multiple, relationship_name, relationship_type_id, from_what_table, to_what_table
         FROM relationship_types
         WHERE (from_what_table IN ('" . implode("', '", array_keys($relationships)) . "')
             OR to_what_table IN ('" . implode("', '", array_keys($relationships)) . "'))
         AND relationship_status = 'a'
-        GROUP BY relationship_name
+        GROUP BY from_what_table, to_what_table
         ORDER BY relationship_type_id";
 $rst = $con->execute($sql);
 if(!$rst) {
@@ -433,17 +435,31 @@ else {
                 <select name=relationships>";
     while(!$rst->EOF) {
         if($rst->fields['from_what_table'] == $rst->fields['to_what_table']) {
+            if($rst->fields['multiple'] == 1) {
+                $relationship_name = $rst->fields['relationship_name'];
+            }
+            else {
+                $relationship_name = $rst->fields['from_what_table'] . ' -&gt; ' . $rst->fields['to_what_table'];
+            }
             $relationship_link_rows .= "
-                  <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=both&relationship_type_id={$rst->fields['relationship_type_id']}\">{$rst->fields['relationship_name']}</option>";            
+                  <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=both&relationship_type_id={$rst->fields['relationship_type_id']}\">$relationship_name</option>";            
         }
         else {
             if($relationships[$rst->fields['from_what_table']]) {
+                $relationship_name = "({$rst->fields['from_what_table']} -&gt; {$rst->fields['to_what_table']})";
+                if($rst->fields['multiple'] == 1) {
+                    $relationship_name = "{$rst->fields['relationship_name']} " . $relationship_name;
+                }
                 $relationship_link_rows .= "
-                  <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=from&relationship_type_id={$rst->fields['relationship_type_id']}\">{$rst->fields['relationship_name']} ({$rst->fields['from_what_table']} -&gt; {$rst->fields['to_what_table']})</option>";
+                  <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=from&relationship_type_id={$rst->fields['relationship_type_id']}\">$relationship_name</option>";
             }
             if($relationships[$rst->fields['to_what_table']]) {            
+                $relationship_name = "({$rst->fields['to_what_table']} -&gt; {$rst->fields['from_what_table']})";
+                if($rst->fields['multiple'] == 1) {
+                    $relationship_name = "{$rst->fields['relationship_name']} " . $relationship_name;
+                }
                 $relationship_link_rows .= "
-                  <option value=\"on_what_id={$relationships[$rst->fields['to_what_table']]}&working_direction=to&relationship_type_id={$rst->fields['relationship_type_id']}\">{$rst->fields['relationship_name']} ({$rst->fields['to_what_table']} -&gt; {$rst->fields['from_what_table']})</option>";
+                  <option value=\"on_what_id={$relationships[$rst->fields['to_what_table']]}&working_direction=to&relationship_type_id={$rst->fields['relationship_type_id']}\">$relationship_name</option>";
             }
         }
         $rst->movenext();
@@ -462,6 +478,9 @@ $relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.20  2005/01/10 22:15:43  neildogg
+ * - Complete independance from relationship names granted
+ *
  * Revision 1.19  2005/01/10 20:31:21  neildogg
  * - Relationships sidebar now takes array, requires no code change, supports any available tables, decreases space usage
  *
