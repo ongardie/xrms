@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.6 2004/01/26 19:13:34 braverock Exp $
+ * $Id: new.php,v 1.7 2004/02/11 15:05:01 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -42,16 +42,17 @@ $sql = "select division_name, division_id
 $rst = $con->execute($sql);
 if ($rst) {
     $division_menu = $rst->getmenu2('division_id', $division_id, true);
+    $rst->close();
 }
-$rst->close();
-
 
 $salutation_menu = build_salutation_menu($salutation);
 
 $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
 $rst = $con->execute($sql);
-$address_menu = $rst->getmenu2('address_id', $address_id, false);
-$rst->close();
+if ($rst) {
+    $address_menu = $rst->getmenu2('address_id', $address_id, false);
+    $rst->close();
+}
 
 $con->close();
 
@@ -208,6 +209,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.7  2004/02/11 15:05:01  braverock
+ * - place $rst -> close() commands inside the if blocks
+ * - fixes SF bug 893683 reported by Roberto Durrer (durrer)
+ *
  * Revision 1.6  2004/01/26 19:13:34  braverock
  * - added company division fields
  * - added phpdoc
