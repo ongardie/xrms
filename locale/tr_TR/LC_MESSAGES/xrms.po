@@ -1,0 +1,3724 @@
+# Özgür Çaycý <ozgur@cayci.org>, 2004.
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: xrms\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-12-27 08:16-0600\n"
+"PO-Revision-Date: 2005-01-02 11:15+0200\n"
+"Last-Translator: Ã–zgÃ¼r Ã‡aycÄ±Özgür Çayc <ozgur@cayci.org>\n"
+"Language-Team: Turkish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-9\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);"
+
+#: relationships/new-relationship-2.php:172
+msgid " by that ID"
+msgstr "o ID ile"
+
+#: relationships/new-relationship-2.php:154
+msgid " by that name"
+msgstr " o isim ile"
+
+#: activities/some.php:176 activities/some.php:179
+msgid "%"
+msgstr "%"
+
+#: email/email-4.php:77 email/email-4.php:87
+msgid "'Messages Sent"
+msgstr "'Mesaj Gönderildi"
+
+#: activities/one.php:326
+msgid "(%)"
+msgstr "(%)"
+
+#: admin/case-statuses/one.php:154 admin/opportunity-statuses/one.php:177
+msgid "(defaults to days)"
+msgstr "(gün olarak öntanýmlý)"
+
+#: include/utils-misc.php:531
+msgid ".  Make sure you have run the administration update."
+msgstr ".  Yönetim güncellemesini çalýþtýrdýðýnýza emin olunuz."
+
+#: include/utils-misc.php:524
+msgid ".  The data entry appears to be corrupted."
+msgstr ".  Veri giriþi bozuk olarak görünmektedir."
+
+#: relationships/sidebar.php:327
+msgid "/"
+msgstr "/"
+
+#: contacts/one.php:383
+msgid "AOL IM"
+msgstr "AOL IM"
+
+#: contacts/edit.php:198 contacts/new.php:193
+msgid "AOL Name"
+msgstr "AOL Adý"
+
+#: companies/one.php:653 contacts/one.php:487 plugins/info/one.php:368
+#: private/home.php:452
+msgid "About"
+msgstr "Hakkýnda"
+
+#: activities/one.php:293
+msgid "About This Activity"
+msgstr "Bu Aktivite Hakkýnda"
+
+#: admin/import/import-companies.php:118 cases/one.php:264
+#: companies/one.php:469 contacts/one.php:404 opportunities/one.php:357
+msgid "Account Owner"
+msgstr "Hesap Sahibi"
+
+#: admin/import/import-companies.php:138 cases/one.php:272
+#: companies/admin.php:74 companies/one.php:516
+#: companies/some-advanced.php:139 companies/some.php:74 contacts/one.php:412
+#: opportunities/one.php:365
+msgid "Account Status"
+msgstr "Hesap Statüsü"
+
+#: admin/account-statuses/one.php:40
+msgid "Account Status Details"
+msgstr "Hesap Statü Detaylarý"
+
+#: admin/account-statuses/some.php:47 admin/index.php:183
+msgid "Account Statuses"
+msgstr "Hesap Statüleri"
+
+#: activities/associate-activities.php:33
+msgid "Action"
+msgstr "Ýþlem"
+
+#: cases/one.php:299 companies/one.php:646 contacts/one.php:481
+#: include/utils-interface.php:207 opportunities/one.php:403
+#: plugins/info/one.php:361 reports/completed-items.php:96
+#: reports/open-items.php:78 reports/overdue-items.php:92
+msgid "Activities"
+msgstr "Aktiviteler"
+
+#: locale/datastrings.php:12
+msgid "Activities Default Behavior"
+msgstr "Aktiviteler Öntanýmlý Davranýþý"
+
+#: activities/one.php:319 private/home.php:448 reports/activitytimes.php:78
+#: reports/completed-items.php:203 reports/open-items.php:189
+#: reports/overdue-items.php:204
+msgid "Activity"
+msgstr "Aktivite"
+
+#: include/utils-interface.php:64
+msgid "Activity Added."
+msgstr "Aktivite Eklendi."
+
+#: include/utils-interface.php:66
+msgid "Activity Deleted."
+msgstr "Aktivite Silindi."
+
+#: activities/one.php:246
+msgid "Activity Details"
+msgstr "Aktivite Detaylarý"
+
+#: activities/one.php:351
+msgid "Activity Notes"
+msgstr "Aktivite Notlarý"
+
+#: reports/index.php:133
+msgid "Activity Report for"
+msgstr "Aktivite Raporu"
+
+#: reports/user-activity.php:68 reports/user-activity.php:80
+#: reports/user-activity.php:83
+msgid "Activity Summary"
+msgstr "Aktivite Özeti"
+
+#: admin/activity-templates/edit.php:47
+msgid "Activity Template Details"
+msgstr "Aktivite Þablonu Detaylarý"
+
+#: admin/activity-templates/some.php:59 admin/index.php:136
+msgid "Activity Templates"
+msgstr "Aktivite Þablonlarý"
+
+#: reports/index.php:105
+msgid "Activity Time Sheets"
+msgstr "Aktivite Zaman Çizelgeleri"
+
+#: admin/activity-types/one.php:42
+msgid "Activity Type Details"
+msgstr "Aktivite Tipi Detaylarý"
+
+#: admin/activity-types/some.php:54 admin/index.php:158
+msgid "Activity Types"
+msgstr "Aktivite Tipleri"
+
+#: admin/account-statuses/some.php:82 admin/activity-types/some.php:94
+#: admin/campaign-statuses/some.php:92 admin/campaign-types/some.php:80
+#: admin/case-priorities/some.php:86 admin/case-statuses/one.php:163
+#: admin/case-statuses/some.php:104 admin/case-types/some.php:80
+#: admin/categories/some.php:81 admin/company-sources/some.php:88
+#: admin/company-types/some.php:79 admin/crm-statuses/some.php:85
+#: admin/industries/some.php:79 admin/opportunity-statuses/one.php:186
+#: admin/opportunity-statuses/some.php:141 admin/ratings/some.php:83
+#: admin/relationship-types/some.php:99 admin/roles/some.php:82
+#: admin/users/some.php:118 cases/one.php:313 companies/addresses.php:171
+#: companies/divisions.php:78 companies/one.php:665 contacts/one.php:498
+#: opportunities/one.php:417
+msgid "Add"
+msgstr "Ekle"
+
+#: include/strings.php:17 include/strings.php:22
+msgid "Add Company"
+msgstr "Þirket Ekle"
+
+#: contacts/new.php:233 include/strings.php:16 include/strings.php:21
+msgid "Add Contact"
+msgstr "Yetkili Ekle"
+
+#: companies/former-names.php:93
+msgid "Add Former Name"
+msgstr "Ön Ad Ekle"
+
+#: admin/account-statuses/some.php:63
+msgid "Add New Account Status"
+msgstr "Yeni Hesap Statüsü Ekle"
+
+#: admin/activity-types/some.php:71
+msgid "Add New Activity Type"
+msgstr "Yeni Aktivite Tipi Ekle"
+
+#: admin/crm-statuses/some.php:66
+msgid "Add New CRM Status"
+msgstr "Yeni CRM Statüsü Ekle"
+
+#: campaigns/some.php:271
+msgid "Add New Campaign"
+msgstr "Yeni Kampanya Ekle"
+
+#: admin/campaign-statuses/some.php:63
+msgid "Add New Campaign Status"
+msgstr "Yeni Kampanya Statüsü Ekle"
+
+#: admin/campaign-types/some.php:61
+msgid "Add New Campaign Type"
+msgstr "Yeni Kampanya Tipi Ekle"
+
+#: admin/case-statuses/some.php:85
+msgid "Add New Case Status"
+msgstr "Yeni Vaka Statüsü Ekle"
+
+#: admin/case-types/some.php:61
+msgid "Add New Case Type"
+msgstr "Yeni Vaka Tipi Ekle"
+
+#: admin/categories/some.php:62
+msgid "Add New Category"
+msgstr "Yeni Kategori Ekle"
+
+#: admin/company-sources/some.php:65
+msgid "Add New Company Source"
+msgstr "Yeni Þirket Kaynaðý Ekle"
+
+#: admin/company-types/some.php:60
+msgid "Add New Company Type"
+msgstr "Yeni Þirket Tipi Ekle"
+
+#: admin/industries/some.php:60
+msgid "Add New Industry"
+msgstr "Yeni Sektör Ekle"
+
+#: admin/opportunity-statuses/some.php:108
+msgid "Add New Opportunity Status"
+msgstr "Yeni Fýrsat Statüsü Ekle"
+
+#: admin/case-priorities/some.php:63
+msgid "Add New Priority Type"
+msgstr "Yeni Öncelik Tipi Ekle"
+
+#: admin/ratings/some.php:64
+msgid "Add New Rating"
+msgstr "Yeni Derece Ekle"
+
+#: admin/relationship-types/some.php:68 admin/roles/some.php:63
+msgid "Add New Role"
+msgstr "Yeni Rol Ekle"
+
+#: admin/users/some.php:79
+msgid "Add New User"
+msgstr "Yeni Kullanýcý Ekle"
+
+#: companies/relationships.php:126 relationships/sidebar.php:334
+msgid "Add Relationship"
+msgstr "Ýliþki Ekle"
+
+#: relationships/new-relationship-2.php:101
+#: relationships/new-relationship.php:78
+msgid "Add Relationship for "
+msgstr "Ýliþki Ekle"
+
+#: activities/some.php:593
+msgid "Add to Everyone"
+msgstr "Herkese Ekle"
+
+#: include/utils-interface.php:73
+msgid "Added"
+msgstr "Eklendi"
+
+#: admin/update.php:305
+msgid "Added an Activities Default Behavior system parameter."
+msgstr "Aktivite Öntanýmlý Davranýþ sistem parametresi eklendi."
+
+#: admin/update.php:288
+msgid "Added an Audit Level."
+msgstr "Denetim Seviyesi Eklendi."
+
+#: companies/advanced-search.php:234 companies/new.php:198
+#: companies/one.php:493 contacts/edit.php:136 contacts/new.php:131
+#: contacts/one.php:420 reports/companies-list.php:166
+msgid "Address"
+msgstr "Adres"
+
+#: include/utils-interface.php:51
+msgid "Address Added."
+msgstr "Adres Eklendi."
+
+#: companies/edit-address.php:101 contacts/edit-address.php:218
+msgid "Address Body"
+msgstr "Adres Gövdesi"
+
+#: include/utils-interface.php:53
+msgid "Address Deleted."
+msgstr "Adres Silindi."
+
+#: admin/country-address-format/index.php:45
+msgid "Address Format"
+msgstr "Adres Formatý"
+
+#: companies/addresses.php:111 companies/addresses.php:139
+#: companies/advanced-search.php:237 companies/edit-address.php:73
+#: companies/new.php:201 contacts/edit-address.php:190
+msgid "Address Name"
+msgstr "Adres Adý"
+
+#: companies/addresses.php:95 companies/addresses.php:108
+#: companies/one.php:594
+msgid "Addresses"
+msgstr "Adresler"
+
+#: companies/admin.php:58 companies/one.php:589
+msgid "Admin"
+msgstr "Yönetici"
+
+#: admin/index.php:37 include/utils-interface.php:220
+msgid "Administration"
+msgstr "Yönetim"
+
+#: activities/some.php:608 companies/some.php:318
+msgid "Advanced Search"
+msgstr "Geliþmiþ Arama"
+
+#: locale/datastrings.php:13
+msgid "Advertisement"
+msgstr "Reklam"
+
+#: locale/datastrings.php:14
+msgid "Advertisements"
+msgstr "Reklamlar"
+
+#: locale/datastrings.php:15
+msgid "Advertising"
+msgstr "Reklamcýlýk"
+
+#: activities/some.php:538
+msgid "After"
+msgstr "Sonra"
+
+#: activities/some.php:549 reports/completed-items.php:89
+#: reports/open-items.php:71 reports/overdue-items.php:85
+msgid "All"
+msgstr "Tümü"
+
+#: activities/some.php:534 reports/audit-items.php:56
+msgid "All Dates"
+msgstr "Tüm Tarihler"
+
+#: reports/completed-items.php:144 reports/open-items.php:113
+#: reports/overdue-items.php:128
+msgid "All Users"
+msgstr "Tüm Kullanýcýlar"
+
+#: admin/users/some.php:114
+msgid "Allow Access"
+msgstr "Eriþim Ýzni"
+
+#: companies/advanced-search.php:182 companies/edit.php:133
+#: companies/new.php:143 companies/one.php:477
+msgid "Alt. Phone"
+msgstr "Diðer Telefon"
+
+#: locale/datastrings.php:16
+msgid "Approved"
+msgstr "Onaylanmýþ"
+
+#: locale/datastrings.php:17
+msgid "Architecture"
+msgstr "Mimarlýk"
+
+#: activities/associate-activities.php:29
+msgid "Associate Activities"
+msgstr "Aktiviteleri Ýliþkilendir"
+
+#: activities/associate-activities.php:148
+msgid "Associated"
+msgstr "Ýliþkili"
+
+#: include/strings.php:27
+msgid "Associated Companies"
+msgstr "Ýliþkili Þirketler"
+
+#: include/strings.php:26
+msgid "Associated Contacts"
+msgstr "Ýliþkili Yetkililer"
+
+#: admin/categories/one.php:142 campaigns/categories.php:99
+#: cases/categories.php:99 companies/categories.php:103
+#: contacts/categories.php:105 opportunities/categories.php:99
+msgid "Associated With"
+msgstr "Ýliþkili Olduðu"
+
+#: files/new.php:52
+msgid "Attach File"
+msgstr "Dosya Ekle"
+
+#: notes/new.php:41
+msgid "Attach Note"
+msgstr "Not Ekle"
+
+#: activities/one.php:308
+msgid "Attached"
+msgstr "Ekli"
+
+#: files/new.php:74 notes/sidebar.php:24
+msgid "Attached To"
+msgstr "Ekli Bulunduðu"
+
+#: reports/index.php:123
+msgid "Audit Items"
+msgstr "Ýþleri Denetle"
+
+#: locale/datastrings.php:18
+msgid "Audit Level"
+msgstr "Denetim Seviyesi"
+
+#: reports/audit-items.php:27
+msgid "Audit Log"
+msgstr "Denetim Kayýtlarý"
+
+#: plugins/radtest/radtest.php:48
+msgid "Back"
+msgstr "Geri"
+
+#: companies/relationships.php:127
+msgid "Back to"
+msgstr "Geriye dön"
+
+#: email/email-2.php:83 email/one-template.php:82
+msgid "Bcc"
+msgstr "Bcc"
+
+#: activities/some.php:537
+msgid "Before"
+msgstr "Önce"
+
+#: contacts/edit-address.php:95
+msgid "Billing Address"
+msgstr "Faturalama Adresi"
+
+#: companies/addresses.php:115
+msgid "Billing Default"
+msgstr "Faturalama Öntanýmý"
+
+#: activities/some.php:601
+msgid "Browse"
+msgstr "Gezin"
+
+#: locale/datastrings.php:19
+msgid "Bug"
+msgstr "Hata"
+
+#: locale/datastrings.php:20
+msgid "Bugs"
+msgstr "Hatalar"
+
+#: activities/some.php:605 campaigns/some.php:246 cases/some.php:263
+#: companies/some.php:315 email/email.php:106 email/index.php:56
+#: files/some.php:329 opportunities/some.php:243
+msgid "Bulk E-Mail"
+msgstr "Toplu E-Mail"
+
+#: reports/completed-items.php:194
+msgid "COMPLETED ACTIVITIES for"
+msgstr "TAMAMLANAN AKTÝVÝTELER"
+
+#: reports/completed-items.php:245
+msgid "COMPLETED CAMPAIGNS for"
+msgstr "TAMAMLANAN KAMPANYALAR"
+
+#: reports/completed-items.php:336
+msgid "COMPLETED CASES for"
+msgstr "TAMAMLANAN VAKALAR"
+
+#: reports/completed-items.php:287
+msgid "COMPLETED OPPORTUNITIES for"
+msgstr "TAMAMLANAN FIRSATLAR"
+
+#: admin/import/import-companies.php:122 cases/one.php:268
+#: companies/advanced-search.php:162 companies/edit.php:113
+#: companies/new.php:123 companies/one.php:465 companies/some-advanced.php:138
+#: companies/some.php:73 contacts/one.php:408 opportunities/one.php:361
+#: reports/companies-list.php:101
+msgid "CRM Status"
+msgstr "CRM Statüsü"
+
+#: admin/crm-statuses/one.php:38
+msgid "CRM Status Details"
+msgstr "CRM Statüsü Detaylarý"
+
+#: admin/index.php:178
+msgid "CRM Statuses"
+msgstr "CRM Statüleri"
+
+#: plugins/webcalendar/setup.php:22
+msgid "Calendar"
+msgstr "Takvim"
+
+#: campaigns/some.php:65 campaigns/some.php:281 files/some.php:90
+#: opportunities/edit.php:186 opportunities/new.php:88
+#: opportunities/one.php:293 private/home.php:300
+#: reports/completed-items.php:252 reports/open-items.php:236
+#: reports/overdue-items.php:253
+msgid "Campaign"
+msgstr "Kampanya"
+
+#: include/utils-interface.php:56
+msgid "Campaign Added."
+msgstr "Kampanya Eklendi."
+
+#: include/utils-interface.php:58
+msgid "Campaign Deleted."
+msgstr "Kampanya Silindi."
+
+#: campaigns/edit.php:78 campaigns/new.php:66 campaigns/one.php:77
+#: campaigns/one.php:87
+msgid "Campaign Details"
+msgstr "Kampanya Detaylarý"
+
+#: campaigns/some.php:214
+msgid "Campaign Name"
+msgstr "Kampanya Adý"
+
+#: admin/campaign-statuses/one.php:41
+msgid "Campaign Status Details"
+msgstr "Kampanya Statüsü Detaylarý"
+
+#: admin/campaign-statuses/some.php:47 admin/index.php:223
+msgid "Campaign Statuses"
+msgstr "Kampanya Statüleri"
+
+#: campaigns/edit.php:81 campaigns/new.php:69
+msgid "Campaign Title"
+msgstr "Kampanya Baþlýðý"
+
+#: admin/campaign-types/one.php:38
+msgid "Campaign Type Details"
+msgstr "Kampanya Tipi Detaylarý"
+
+#: admin/index.php:218
+msgid "Campaign Types"
+msgstr "Kampanya Tipleri"
+
+#: activities/some.php:514 campaigns/some.php:193 files/some.php:309
+#: include/utils-interface.php:210 reports/completed-items.php:103
+#: reports/open-items.php:85 reports/overdue-items.php:99
+msgid "Campaigns"
+msgstr "Kampanyalar"
+
+#: cases/some.php:63 cases/some.php:287 files/some.php:102
+#: reports/index.php:78 reports/open-items.php:330
+#: reports/overdue-items.php:347
+msgid "Case"
+msgstr "Vaka"
+
+#: cases/one.php:186
+msgid "Case #"
+msgstr "Vaka #"
+
+#: include/utils-interface.php:68
+msgid "Case Added."
+msgstr "Vaka Eklendi."
+
+#: include/utils-interface.php:70
+msgid "Case Deleted."
+msgstr "Vaka Silindi."
+
+#: cases/edit.php:177 cases/new.php:100 cases/one.php:196
+msgid "Case Details"
+msgstr "Vaka Detaylarý"
+
+#: cases/some.php:241
+msgid "Case Name"
+msgstr "Vaka Adý"
+
+#: cases/some.php:242
+msgid "Case Number"
+msgstr "Vaka Numarasý"
+
+#: admin/case-priorities/some.php:47 admin/index.php:213
+msgid "Case Priorities"
+msgstr "Vaka Öncelikleri"
+
+#: admin/case-priorities/one.php:41
+msgid "Case Priority Details"
+msgstr "Vaka Öncelik Detaylarý"
+
+#: admin/case-statuses/one.php:106
+msgid "Case Status Details"
+msgstr "Vaka Statüsü Detaylarý"
+
+#: admin/case-statuses/some.php:68 admin/index.php:208
+msgid "Case Statuses"
+msgstr "Vaka Statüleri"
+
+#: cases/edit.php:180 cases/new.php:103
+msgid "Case Title"
+msgstr "Vaka Baþlýðý"
+
+#: admin/case-types/one.php:40
+msgid "Case Type Details"
+msgstr "Vaka Tipi Detaylarý"
+
+#: admin/case-types/some.php:45 admin/index.php:203
+msgid "Case Types"
+msgstr "Vaka Tipleri"
+
+#: cases/some.php:220 files/some.php:311 include/utils-interface.php:212
+#: reports/completed-items.php:117 reports/open-items.php:99
+#: reports/overdue-items.php:113
+msgid "Cases"
+msgstr "Vakalar"
+
+#: reports/cases-by-case-status.php:59 reports/cases-by-case-status.php:71
+#: reports/cases-by-case-status.php:74 reports/index.php:81
+msgid "Cases by Status"
+msgstr "Statüye Göre Vakalar"
+
+#: admin/categories/some.php:46 admin/index.php:153
+#: include/categories-sidebar.php:18 plugins/info/one.php:396
+#: reports/companies-list.php:171
+msgid "Categories"
+msgstr "Kategoriler"
+
+#: admin/import/import-companies.php:130 campaigns/some.php:228
+#: cases/some.php:252 companies/some.php:277 contacts/some.php:278
+#: opportunities/some.php:234 reports/companies-list.php:100
+msgid "Category"
+msgstr "Kategori"
+
+#: admin/categories/one.php:79
+msgid "Category Details"
+msgstr "Kategori Detaylarý"
+
+#: admin/categories/one.php:139
+msgid "Category Scopes"
+msgstr "Kategori Sahalarý"
+
+#: contacts/edit.php:186 contacts/new.php:181 contacts/one.php:356
+#: contacts/sidebar.php:171
+msgid "Cell Phone"
+msgstr "Cep Telefonu"
+
+#: admin/country-address-format/edit.php:63
+msgid "Change"
+msgstr "Deðiþtir"
+
+#: files/one.php:83
+msgid "Change Date"
+msgstr "Tarih Deðiþtir"
+
+#: files/one.php:90
+msgid "Change File"
+msgstr "Dosya Deðiþtir"
+
+#: reports/opportunities-quantity-by-opportunity-status.php:107
+msgid "Change Graph"
+msgstr "Grafik Deðiþtir"
+
+#: admin/users/change-password.php:30 admin/users/change-password.php:42
+#: admin/users/one.php:117 admin/users/self.php:92
+msgid "Change Password"
+msgstr "Þifre Deðiþtir"
+
+#: include/utils-interface.php:81
+msgid "Changes saved."
+msgstr "Deðiþiklikler kaydedildi."
+
+#: locale/datastrings.php:21
+msgid "Chemicals"
+msgstr "Kimya"
+
+#: companies/addresses.php:151 companies/advanced-search.php:249
+#: companies/edit-address.php:85 companies/new.php:213 companies/some.php:122
+#: companies/some.php:132 companies/some.php:283 contacts/edit-address.php:202
+#: reports/companies-list.php:102 reports/companies-list.php:168
+#: reports/company-contacts-printout.php:126
+#: reports/company-contacts-printout.php:136
+msgid "City"
+msgstr "Þehir"
+
+#: activities/some.php:602 campaigns/some.php:245 cases/some.php:263
+#: companies/advanced-search.php:271 companies/some.php:312
+#: contacts/some.php:301 files/some.php:328 opportunities/some.php:243
+msgid "Clear Search"
+msgstr "Aramayý Temizle"
+
+#: admin/account-statuses/one.php:88 admin/activity-templates/edit.php:104
+#: admin/activity-types/one.php:90 admin/campaign-statuses/one.php:95
+#: admin/campaign-types/one.php:82 admin/case-priorities/one.php:89
+#: admin/case-statuses/one.php:193 admin/case-types/one.php:84
+#: admin/categories/one.php:123 admin/company-sources/one.php:91
+#: admin/company-types/one.php:81 admin/crm-statuses/one.php:82
+#: admin/industries/one.php:81 admin/opportunity-statuses/one.php:216
+#: admin/ratings/one.php:81 admin/relationship-types/one.php:99
+#: admin/roles/one.php:84 admin/users/one.php:131
+msgid "Click the button below to permanently remove this item."
+msgstr "Bu veriyi tamamen silmek için aþaðýdaki butona týklayýn."
+
+#: companies/admin.php:115
+msgid ""
+"Click the button below to remove this company (and all associated contacts, "
+"activities, opportunities, cases, etc.) from the system."
+msgstr ""
+"Bu þirketi sistemden tamamen silmek (ayný zamanda baðlantýlý tüm yetkilileri, "
+"aktiviteleri, fýrsatlarý, vakalarý vb. silmek için) için aþaðýdaki butona "
+"týklayýnýz."
+
+#: companies/one.php:590
+msgid "Clone"
+msgstr "Kopya"
+
+#: opportunities/edit.php:221 opportunities/new.php:123
+#: opportunities/some.php:76 opportunities/some.php:269
+msgid "Close Date"
+msgstr "Kapanýþ Tarihi"
+
+#: admin/campaign-statuses/one.php:76 admin/campaign-statuses/some.php:87
+#: locale/datastrings.php:22
+msgid "Closed"
+msgstr "Kapandý"
+
+#: admin/opportunity-statuses/one.php:154
+#: admin/opportunity-statuses/some.php:136 locale/datastrings.php:23
+msgid "Closed/Lost"
+msgstr "Kapandý/Kaybedildi"
+
+#: admin/opportunity-statuses/one.php:153
+#: admin/opportunity-statuses/some.php:135 locale/datastrings.php:24
+msgid "Closed/Won"
+msgstr "Kapandý/Kazanýldý"
+
+#: opportunities/one.php:313
+msgid "Closes"
+msgstr "Kapanýþ"
+
+#: companies/one.php:457 contacts/some.php:74 contacts/some.php:276
+#: reports/companies-list.php:164
+msgid "Code"
+msgstr "Kod"
+
+#: locale/datastrings.php:25
+msgid "Communications"
+msgstr "Ýletiþim"
+
+#: companies/advanced-search.php:130 files/some.php:308 include/strings.php:31
+#: include/utils-interface.php:208
+msgid "Companies"
+msgstr "Þirketler"
+
+#: reports/companies-list.php:65
+msgid "Companies List"
+msgstr "Þirketler Listesi"
+
+#: reports/companies-by-crm-status.php:58
+#: reports/companies-by-crm-status.php:70
+#: reports/companies-by-crm-status.php:73 reports/index.php:45
+msgid "Companies by CRM Status"
+msgstr "CRM Statüsüne göre Þirketler"
+
+#: reports/companies-by-industry.php:57 reports/companies-by-industry.php:69
+#: reports/companies-by-industry.php:72 reports/index.php:49
+msgid "Companies by Industry"
+msgstr "Sektöre göre Þirketler"
+
+#: reports/companies-by-company-source.php:59
+#: reports/companies-by-company-source.php:71
+#: reports/companies-by-company-source.php:74 reports/index.php:53
+msgid "Companies by Source"
+msgstr "Kaynaða göre Þirketler"
+
+#: activities/associate-activities.php:33 activities/one.php:296
+#: activities/some.php:173 activities/some.php:489 cases/edit.php:184
+#: cases/one.php:260 cases/some.php:64 cases/some.php:243 cases/some.php:288
+#: companies/addresses.php:135 companies/divisions.php:66
+#: companies/edit-address.php:69 companies/edit-division.php:54
+#: companies/former-names.php:81 companies/relationships.php:115
+#: contacts/edit.php:128 contacts/one.php:396 contacts/some.php:69
+#: contacts/some.php:258 contacts/some.php:335 email/email-3.php:85
+#: files/some.php:73 files/some.php:80 files/some.php:85 files/some.php:97
+#: files/some.php:104 opportunities/edit.php:178 opportunities/one.php:353
+#: opportunities/some.php:226 opportunities/some.php:267 private/home.php:247
+#: private/home.php:281 private/home.php:288 private/home.php:295
+#: private/home.php:307 private/home.php:314 private/home.php:450
+#: reports/activitytimes.php:76 reports/company-contacts-printout.php:94
+#: reports/company-contacts-printout.php:289 reports/completed-items.php:201
+#: reports/completed-items.php:293 reports/index.php:42
+#: reports/open-items.php:187 reports/open-items.php:328
+#: reports/overdue-items.php:202 reports/overdue-items.php:297
+#: reports/overdue-items.php:345
+msgid "Company"
+msgstr "Þirket"
+
+#: include/utils-interface.php:43
+msgid "Company Added."
+msgstr "Þirket Eklendi."
+
+#: reports/company-contacts-printout.php:215
+msgid "Company Category"
+msgstr "Þirket Kategorisi"
+
+#: reports/company-contacts-printout.php:216
+msgid "Company City"
+msgstr "Þirket Þehri"
+
+#: companies/advanced-search.php:158 companies/edit.php:109
+#: companies/new.php:119 companies/some-advanced.php:135 companies/some.php:70
+msgid "Company Code"
+msgstr "Þirket Kodu"
+
+#: include/utils-interface.php:45
+msgid "Company Deleted."
+msgstr "Þirket Silindi."
+
+#: companies/one.php:411 companies/one.php:438
+msgid "Company Details"
+msgstr "Þirket Detaylarý"
+
+#: activities/some.php:503
+msgid "Company ID"
+msgstr "Þirket ID"
+
+#: companies/advanced-search.php:147 companies/new.php:108
+msgid "Company Information"
+msgstr "Þirket Bilgileri"
+
+#: reports/index.php:94
+msgid "Company List"
+msgstr "Þirket Listesi"
+
+#: companies/advanced-search.php:150 companies/edit.php:101
+#: companies/new.php:111 companies/one.php:448 companies/some-advanced.php:134
+#: companies/some-advanced.php:412 companies/some.php:69
+#: companies/some.php:271 companies/some.php:357 reports/companies-list.php:98
+#: reports/companies-list.php:165 reports/company-contacts-printout.php:213
+#: reports/company-contacts-printout.php:246
+msgid "Company Name"
+msgstr "Þirket Adý"
+
+#: companies/some-advanced.php:399 companies/some.php:344
+msgid "Company Options"
+msgstr "Þirket Seçenekleri"
+
+#: reports/index.php:91
+msgid "Company Reports"
+msgstr "Þirket Raporlarý"
+
+#: admin/import/import-companies.php:126 companies/advanced-search.php:166
+#: companies/edit.php:121 companies/new.php:127 companies/one.php:540
+msgid "Company Source"
+msgstr "Þirket Kaynaðý"
+
+#: admin/company-sources/one.php:43
+msgid "Company Source Details"
+msgstr "Þirket Kaynak Detaylarý"
+
+#: admin/company-sources/some.php:49 admin/index.php:173
+msgid "Company Sources"
+msgstr "Þirket Kaynaklarý"
+
+#: reports/company-contacts-printout.php:217
+msgid "Company State"
+msgstr "Þirket Durumu"
+
+#: admin/company-types/one.php:37
+msgid "Company Type Details"
+msgstr "Þirket Tipi Detaylarý"
+
+#: admin/company-types/some.php:44 admin/index.php:168
+msgid "Company Types"
+msgstr "Þirket Tipleri"
+
+#: reports/company-contacts-printout.php:214
+msgid "Company User"
+msgstr "Þirket Kullanýcýsý"
+
+#: locale/datastrings.php:26
+msgid "Competitor"
+msgstr "Rakip"
+
+#: locale/datastrings.php:27
+msgid "Competitors"
+msgstr "Rakipler"
+
+#: activities/some.php:524 activities/some.php:551
+msgid "Completed"
+msgstr "Tamamlandý"
+
+#: reports/completed-items.php:48 reports/index.php:119
+msgid "Completed Items"
+msgstr "Tamamlanan Ýþler"
+
+#: activities/one.php:397
+msgid "Completed?"
+msgstr "Tamamlandý mý?"
+
+#: locale/datastrings.php:28
+msgid "Computers"
+msgstr "Bilgisayarlar"
+
+#: admin/plugin/plugin-admin.php:292
+msgid "Config file can't be opened. Please check vars.php."
+msgstr "Konfigürasyon dosyasý açýlamadý. vars.php dosyasýný kontrol ediniz."
+
+#: admin/plugin/plugin-admin.php:286
+msgid "Config written successfully."
+msgstr "Konfigürasyon baþarýyla kayýt edildi"
+
+#: admin/users/change-password.php:49
+msgid "Confirm New Password"
+msgstr "Yeni Þifreyi Onayla"
+
+#: email/email-3.php:70 email/email-3.php:81
+msgid "Confirm Recipients"
+msgstr "Alýcýlarý Onayla"
+
+#: reports/audit-items.php:58
+msgid "Connection Details"
+msgstr "Baðlantý Detaylarý"
+
+#: locale/datastrings.php:29
+msgid "Construction"
+msgstr "Yapý Endüstürisi"
+
+#: locale/datastrings.php:30
+msgid "Consulting"
+msgstr "Danýþmanlýk"
+
+#: activities/one.php:302 activities/some.php:167 activities/some.php:488
+#: admin/users/one.php:85 cases/edit.php:188 cases/new.php:107
+#: cases/one.php:244 cases/one.php:305 companies/one.php:604
+#: companies/one.php:652 contacts/edit-address.php:186 contacts/some.php:334
+#: email/email-3.php:87 files/some.php:71 files/some.php:78
+#: opportunities/edit.php:182 opportunities/new.php:84
+#: opportunities/one.php:335 opportunities/one.php:409
+#: plugins/info/one.php:367 private/home.php:451 reports/activitytimes.php:77
+#: reports/completed-items.php:202 reports/completed-items.php:294
+#: reports/open-items.php:188 reports/open-items.php:329
+#: reports/overdue-items.php:203 reports/overdue-items.php:298
+#: reports/overdue-items.php:346
+msgid "Contact"
+msgstr "Yetkili"
+
+#: include/utils-interface.php:47
+msgid "Contact Added."
+msgstr "Yetkili Eklendi."
+
+#: reports/company-contacts-printout.php:182
+msgid "Contact Call List"
+msgstr "Yetkili Ýletiþim Listesi"
+
+#: include/utils-interface.php:49
+msgid "Contact Deleted."
+msgstr "Yetkili Silindi."
+
+#: contacts/one.php:279 contacts/one.php:306
+msgid "Contact Details"
+msgstr "Yetkili Detaylarý"
+
+#: activities/some.php:502
+msgid "Contact ID"
+msgstr "Yetkili ID"
+
+#: companies/new.php:239 contacts/edit.php:125 contacts/new.php:124
+#: contacts/sidebar.php:101
+msgid "Contact Information"
+msgstr "Yetkili Bilgileri"
+
+#: companies/one.php:604 companies/some-advanced.php:141
+#: companies/some-advanced.php:300 contacts/some.php:230 files/some.php:306
+#: include/strings.php:30 include/utils-interface.php:209
+#: reports/company-contacts-printout.php:247
+msgid "Contacts"
+msgstr "Yetkililer"
+
+#: reports/index.php:98
+msgid "Contacts at Companies"
+msgstr "Þirketlerdeki Yetkililer"
+
+#: reports/company-contacts-printout.php:243
+msgid "Contacts for Companies"
+msgstr "Þirketler için Yetkililer"
+
+#: files/some.php:307
+msgid "Contacts of Companies"
+msgstr "Þirketlerin Yetkilileri"
+
+#: email/email-2.php:96 email/email-3.php:92 email/email.php:125
+#: email/index.php:75
+msgid "Continue"
+msgstr "Devam"
+
+#: campaigns/edit.php:111 campaigns/new.php:99 campaigns/one.php:109
+msgid "Cost"
+msgstr "Maliyet"
+
+#: admin/country-address-format/edit.php:43
+#: admin/country-address-format/index.php:43 companies/addresses.php:163
+#: companies/advanced-search.php:261 companies/edit-address.php:97
+#: companies/new.php:225 contacts/edit-address.php:214
+#: reports/companies-list.php:104 reports/companies-list.php:169
+msgid "Country"
+msgstr "Ülke"
+
+#: admin/country-address-format/index.php:32 admin/index.php:131
+msgid "Country Localization Formats"
+msgstr "Ülke Yerelleþtirme Formatlarý"
+
+#: contacts/some.php:312
+msgid "Create Contact for 'Self'"
+msgstr "'Kendin' için Yetkili Yarat"
+
+#: contacts/edit-address.php:170
+msgid "Create New Address?"
+msgstr "Yeni Adres Yaratýlsýn Mý?"
+
+#: contacts/edit-address.php:177
+msgid "Create a New Address?"
+msgstr "Yeni Adres Yaratýlsýn Mý?"
+
+#: campaigns/one.php:125 cases/one.php:230 companies/one.php:501
+#: contacts/one.php:448 opportunities/one.php:321
+msgid "Created"
+msgstr "Yaratýldý"
+
+#: companies/admin.php:82 companies/one.php:524
+msgid "Credit Limit"
+msgstr "Kredi Limiti"
+
+#: locale/datastrings.php:31
+msgid "Critical"
+msgstr "Kritik"
+
+#: activities/some.php:349
+msgid "Current User"
+msgstr "Mevcut Kullanýcý"
+
+#: reports/index.php:139
+msgid "Custom Reports"
+msgstr "Kiþisel Raporlar"
+
+#: locale/datastrings.php:32
+msgid "Customer"
+msgstr "Müþteri"
+
+#: companies/admin.php:94
+msgid "Customer Key"
+msgstr "Müþteri Anahtarý"
+
+#: locale/datastrings.php:33
+msgid "Customers"
+msgstr "Müþteriler"
+
+#: admin/index.php:56
+msgid "Data Cleanup"
+msgstr "Veri Temizliði"
+
+#: admin/data_clean.php:344
+msgid "Database Cleanup Complete"
+msgstr "Veritabaný Temizliði Tamamlandý"
+
+#: admin/index.php:53
+msgid "Database Structure Update"
+msgstr "Veritabaný Yapýsý Güncellemesi"
+
+#: companies/relationships.php:116 files/new.php:86 files/sidebar.php:24
+#: files/some.php:112 files/some.php:317 files/some.php:360
+#: notes/sidebar.php:27 private/home.php:248
+msgid "Date"
+msgstr "Tarih"
+
+#: contacts/edit.php:162 contacts/new.php:157 contacts/one.php:336
+msgid "Date of Birth"
+msgstr "Doðum Tarihi"
+
+#: locale/datastrings.php:34
+msgid "Default GST Offset"
+msgstr "Öntanýmlý GST Farký"
+
+#: admin/activity-templates/edit.php:79
+msgid "Default Text"
+msgstr "Öntanýmlý Metin"
+
+#: activities/one.php:410 activities/some.php:438
+#: admin/account-statuses/one.php:94 admin/activity-templates/edit.php:109
+#: admin/activity-types/one.php:94 admin/campaign-statuses/one.php:97
+#: admin/campaign-types/one.php:84 admin/case-priorities/one.php:91
+#: admin/case-statuses/one.php:195 admin/case-types/one.php:86
+#: admin/categories/one.php:125 admin/company-sources/one.php:93
+#: admin/company-types/one.php:83 admin/country-address-format/edit.php:58
+#: admin/crm-statuses/one.php:84 admin/industries/one.php:83
+#: admin/opportunity-statuses/one.php:218 admin/ratings/one.php:83
+#: admin/relationship-types/one.php:102 admin/roles/one.php:86
+#: admin/users/one.php:133 campaigns/edit.php:122 cases/edit.php:225
+#: contacts/edit.php:240 files/one.php:94 notes/edit.php:41
+#: opportunities/edit.php:238 plugins/info/one.php:344
+msgid "Delete"
+msgstr "Sil"
+
+#: admin/account-statuses/one.php:83
+msgid "Delete Account Status"
+msgstr "Hesap Statüsünü Sil"
+
+#: admin/account-statuses/one.php:80
+msgid "Delete Account Status?"
+msgstr "Hesap Statüsü Silinsin mi?"
+
+#: admin/activity-templates/edit.php:100
+msgid "Delete Activity Template"
+msgstr "Aktivite Þablonunu Sil"
+
+#: admin/activity-templates/edit.php:94
+msgid "Delete Activity Template?"
+msgstr "Aktivite Þablonu Silinsin mi?"
+
+#: admin/activity-types/one.php:86
+msgid "Delete Activity Type"
+msgstr "Aktivite Tipini Sil"
+
+#: admin/activity-types/one.php:82
+msgid "Delete Activity Type?"
+msgstr "Aktivite Tipi Silinsin mi?"
+
+#: activities/one.php:409
+msgid "Delete Activity?"
+msgstr "Aktivite Silinsin mi?"
+
+#: companies/edit-address.php:110 contacts/edit-address.php:226
+msgid "Delete Address"
+msgstr "Adres Sil"
+
+#: companies/edit-address.php:109 contacts/edit-address.php:225
+msgid "Delete Address?"
+msgstr "Adres Silinsin mi?"
+
+#: admin/crm-statuses/one.php:78
+msgid "Delete CRM Status"
+msgstr "CRM Statüsünü Sil"
+
+#: admin/crm-statuses/one.php:74
+msgid "Delete CRM Status?"
+msgstr "CRM Statüsü Silinsin mi?"
+
+#: admin/campaign-statuses/one.php:91
+msgid "Delete Campaign Status"
+msgstr "Kampanya Statüsü Sil"
+
+#: admin/campaign-statuses/one.php:87
+msgid "Delete Campaign Status?"
+msgstr "Kampanya Statüsü Silinsin mi?"
+
+#: admin/campaign-types/one.php:78
+msgid "Delete Campaign Type"
+msgstr "Kampanya Tipi Sil"
+
+#: admin/campaign-types/one.php:74
+msgid "Delete Campaign Type?"
+msgstr "Kampanya Tipi Silinsin mi?"
+
+#: campaigns/edit.php:121
+msgid "Delete Campaign?"
+msgstr "Kampanya Silinsin mi?"
+
+#: admin/case-statuses/one.php:189
+msgid "Delete Case Status"
+msgstr "Vaka Statüsünü Sil"
+
+#: admin/case-statuses/one.php:185
+msgid "Delete Case Status?"
+msgstr "Vaka Statüsü Silinsin mi?"
+
+#: admin/case-types/one.php:80
+msgid "Delete Case Type"
+msgstr "Vaka Tipini Sil"
+
+#: admin/case-types/one.php:76
+msgid "Delete Case Type?"
+msgstr "Vaka Tipi Silinsin mi?"
+
+#: cases/edit.php:224
+msgid "Delete Case?"
+msgstr "Vaka Silinsin mi?"
+
+#: admin/categories/one.php:119
+msgid "Delete Category"
+msgstr "Kategori Sil"
+
+#: admin/categories/one.php:115
+msgid "Delete Category?"
+msgstr "Kategori Silinsin mi?"
+
+#: companies/admin.php:111 companies/admin.php:116
+msgid "Delete Company"
+msgstr "Þirket Sil"
+
+#: admin/company-sources/one.php:87
+msgid "Delete Company Source"
+msgstr "Þirket Kaynaðýný Sil"
+
+#: admin/company-sources/one.php:83
+msgid "Delete Company Source?"
+msgstr "Þirket Kaynaðý Silinsin mi?"
+
+#: admin/company-types/one.php:77
+msgid "Delete Company Type"
+msgstr "Þirket Tipi Sil"
+
+#: admin/company-types/one.php:73
+msgid "Delete Company Type?"
+msgstr "Þirket Tipi Silinsin mi?"
+
+#: companies/admin.php:107
+msgid "Delete Company?"
+msgstr "Þirket Silinsin mi?"
+
+#: contacts/edit.php:239
+msgid "Delete Contact?"
+msgstr "Yetkili Silinsin mi?"
+
+#: companies/edit-division.php:66
+msgid "Delete Division"
+msgstr "Bölüm Sil"
+
+#: admin/industries/one.php:77
+msgid "Delete Industry"
+msgstr "Sektör Sil"
+
+#: admin/industries/one.php:73
+msgid "Delete Industry?"
+msgstr "Sektör Silinsin mi?"
+
+#: admin/opportunity-statuses/one.php:212
+msgid "Delete Opportunity Status"
+msgstr "Fýrsat Statüsünü Sil"
+
+#: admin/opportunity-statuses/one.php:208
+msgid "Delete Opportunity Status?"
+msgstr "Fýrsat Statüsü Silinsin mi?"
+
+#: opportunities/edit.php:237
+msgid "Delete Opportunity?"
+msgstr "Fýrsat Silinsin mi?"
+
+#: admin/case-priorities/one.php:85
+msgid "Delete Priority Type"
+msgstr "Öncelik Tipini Sil"
+
+#: admin/case-priorities/one.php:81
+msgid "Delete Priority Type?"
+msgstr "Öncelik Tipi Silinsin mi?"
+
+#: admin/ratings/one.php:77
+msgid "Delete Rating"
+msgstr "Derece Sil"
+
+#: admin/ratings/one.php:73
+msgid "Delete Rating?"
+msgstr "Derece Silinsin mi?"
+
+#: admin/relationship-types/one.php:91
+msgid "Delete Relationship Type?"
+msgstr "Ýliþki Tipi Silinsin mi?"
+
+#: admin/relationship-types/one.php:95 admin/roles/one.php:80
+msgid "Delete Role"
+msgstr "Rol Sil"
+
+#: admin/roles/one.php:76
+msgid "Delete Role?"
+msgstr "Rol Silinsin mi?"
+
+#: admin/users/one.php:127
+msgid "Delete User"
+msgstr "Kullanýcý Sil"
+
+#: admin/users/one.php:123
+msgid "Delete User?"
+msgstr "Kullanýcý Silinsin mi?"
+
+#: include/utils-interface.php:75
+msgid "Deleted"
+msgstr "Silindi"
+
+#: admin/activity-templates/edit.php:75 admin/opportunity-statuses/some.php:93
+#: admin/opportunity-statuses/some.php:127 campaigns/edit.php:115
+#: campaigns/new.php:103 cases/edit.php:218 cases/new.php:134
+#: companies/divisions.php:89 companies/edit-division.php:62
+#: companies/one.php:610 contacts/edit.php:174 contacts/new.php:169
+#: contacts/one.php:332 contacts/some.php:80 contacts/some.php:277
+#: files/new.php:82 files/one.php:79 files/some.php:66
+#: opportunities/edit.php:229 opportunities/new.php:130
+#: opportunities/opportunity-view.php:49 private/home.php:245
+msgid "Description"
+msgstr "Açýklama"
+
+#: plugins/info/one.php:320
+msgid "Details"
+msgstr "Detaylar"
+
+#: locale/datastrings.php:35
+msgid "Developed"
+msgstr "Geliþtirilmiþ"
+
+#: admin/index.php:50
+msgid "Digital Dashboard"
+msgstr "Dijital Tahta"
+
+#: locale/datastrings.php:36
+msgid "Direct Mail"
+msgstr "Doðrudan Posta"
+
+#: locale/datastrings.php:37
+msgid "Discussion"
+msgstr "Tartýþma"
+
+#: admin/account-statuses/one.php:70 admin/account-statuses/some.php:78
+#: admin/activity-types/one.php:69 admin/activity-types/some.php:86
+#: admin/campaign-statuses/one.php:68 admin/campaign-statuses/some.php:78
+#: admin/campaign-types/one.php:65 admin/campaign-types/some.php:76
+#: admin/case-priorities/one.php:68 admin/case-priorities/some.php:78
+#: admin/case-statuses/one.php:133 admin/case-statuses/some.php:100
+#: admin/case-types/one.php:67 admin/case-types/some.php:76
+#: admin/categories/one.php:106 admin/categories/some.php:77
+#: admin/company-sources/one.php:70 admin/company-sources/some.php:80
+#: admin/company-types/one.php:64 admin/company-types/some.php:75
+#: admin/crm-statuses/one.php:65 admin/crm-statuses/some.php:81
+#: admin/industries/one.php:64 admin/industries/some.php:75
+#: admin/opportunity-statuses/one.php:141
+#: admin/opportunity-statuses/some.php:123 admin/ratings/one.php:64
+#: admin/ratings/some.php:79 admin/roles/one.php:67 admin/roles/some.php:78
+msgid "Display HTML"
+msgstr "HTML Olarak Gösterimi"
+
+#: locale/datastrings.php:38
+msgid "Distribution"
+msgstr "Daðýtým"
+
+#: contacts/edit.php:132 contacts/new.php:127 contacts/one.php:400
+msgid "Division"
+msgstr "Bölüm"
+
+#: companies/divisions.php:74
+msgid "Division Description"
+msgstr "Bölüm Açýklamasý"
+
+#: companies/divisions.php:70 companies/edit-division.php:58
+msgid "Division Name"
+msgstr "Bölüm Adý"
+
+#: companies/divisions.php:51 companies/divisions.php:85 companies/one.php:595
+msgid "Divisions"
+msgstr "Bölümler"
+
+#: private/home.php:469
+msgid "Documentation"
+msgstr "Dökümantasyon"
+
+#: cases/one.php:313 companies/one.php:666 contacts/one.php:499
+#: opportunities/one.php:417
+msgid "Done"
+msgstr "Tamam"
+
+#: files/one.php:94
+msgid "Download"
+msgstr "Yükle"
+
+#: include/utils-interface.php:268
+msgid "Dr."
+msgstr "Dr."
+
+#: activities/some.php:171 cases/sidebar.php:24 cases/some.php:65
+#: cases/some.php:290 opportunities/sidebar.php:24 private/home.php:454
+#: reports/open-items.php:327 reports/overdue-items.php:344
+msgid "Due"
+msgstr "Bitiþ"
+
+#: cases/edit.php:211
+msgid "Due At"
+msgstr "Bitiþ Tarihi"
+
+#: cases/edit.php:208 cases/new.php:127
+msgid "Due By"
+msgstr "Bitiþ Tarihi"
+
+#: admin/activity-templates/edit.php:67 admin/case-statuses/one.php:154
+#: admin/opportunity-statuses/one.php:177 reports/activitytimes.php:74
+msgid "Duration"
+msgstr "Süre"
+
+#: admin/users/one.php:104 admin/users/self.php:76 admin/users/some.php:64
+#: admin/users/some.php:102 cases/one.php:252 companies/new.php:250
+#: companies/one.php:612 contacts/edit.php:178 contacts/new.php:173
+#: contacts/one.php:340 email/email-3.php:88 locale/datastrings.php:39
+#: opportunities/one.php:343
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: email/email.php:117 email/index.php:67 email/templates.php:53
+#: email/templates.php:63
+msgid "E-Mail Templates"
+msgstr "E-Mail Þablonlarý"
+
+#: admin/country-address-format/index.php:63 campaigns/one.php:149
+#: cases/one.php:286 companies/one.php:588 contacts/one.php:467
+#: opportunities/one.php:385 plugins/info/one.php:342
+#: relationships/sidebar.php:180
+msgid "Edit"
+msgstr "Düzenle"
+
+#: companies/admin.php:71
+msgid "Edit Account Information"
+msgstr "Hesap Bilgilerini Düzenle"
+
+#: admin/account-statuses/one.php:53
+msgid "Edit Account Status Information"
+msgstr "Hesap Statü Bilgilerini Düzenle"
+
+#: admin/activity-templates/edit.php:60
+msgid "Edit Activity Template Information"
+msgstr "Aktivite Þablon Bilgilerini Düzenle"
+
+#: admin/activity-types/one.php:54
+msgid "Edit Activity Type Information"
+msgstr "Aktivite Tipi Bilgilerini Düzenle"
+
+#: companies/edit-address.php:50 companies/edit-address.php:66
+#: contacts/edit-address.php:145 contacts/edit-address.php:183
+#: contacts/edit.php:246 contacts/new.php:229
+msgid "Edit Address"
+msgstr "Adres Düzenle"
+
+#: admin/country-address-format/edit.php:30
+msgid "Edit Address Country Format"
+msgstr "Adres Ülke Formatýný Düzenle"
+
+#: relationships/edit.php:29
+msgid "Edit Association"
+msgstr "Ýliþkilendirmeyi Düzenle"
+
+#: campaigns/edit.php:61
+msgid "Edit Campaign"
+msgstr "Kampanya Düzenle"
+
+#: admin/campaign-statuses/one.php:53
+msgid "Edit Campaign Status Information"
+msgstr "Kampanya Statü Bilgilerini Düzenle"
+
+#: admin/campaign-types/one.php:50
+msgid "Edit Campaign Type Information"
+msgstr "Kampanya Tipi Bilgilerini Düzenle"
+
+#: cases/edit.php:156
+msgid "Edit Case #"
+msgstr "Vaka Düzenle #"
+
+#: admin/case-statuses/one.php:118
+msgid "Edit Case Status Information"
+msgstr "Vaka Statüsü Bilgilerini Düzenle"
+
+#: admin/case-types/one.php:52
+msgid "Edit Case Type Information"
+msgstr "Vaka Tipi Bilgilerini Düzenle"
+
+#: admin/categories/one.php:91
+msgid "Edit Category Information"
+msgstr "Kategori Bilgilerini Düzenle"
+
+#: admin/company-sources/one.php:55
+msgid "Edit Company Source Information"
+msgstr "Þirket Kaynak Bilgilerini Düzenle"
+
+#: admin/company-types/one.php:49
+msgid "Edit Company Type Information"
+msgstr "Þirket Tipi Bilgilerini Düzenle"
+
+#: companies/edit-division.php:38 companies/edit-division.php:51
+msgid "Edit Division"
+msgstr "Bölüm Düzenle"
+
+#: companies/edit.php:178
+msgid "Edit Former Names"
+msgstr "Ön Adlarý Düzenle"
+
+#: admin/industries/one.php:49
+msgid "Edit Industry Information"
+msgstr "Sektör Bilgilerini Düzenle"
+
+#: email/email-2.php:45 email/email-2.php:72 email/one-template.php:44
+#: email/one-template.php:71
+msgid "Edit Message"
+msgstr "Mesaj Düzenle"
+
+#: notes/edit.php:36 notes/edit.php:42
+msgid "Edit Note"
+msgstr "Not Düzenle"
+
+#: admin/opportunity-statuses/one.php:126
+msgid "Edit Opportunity Status Information"
+msgstr "Fýrsat Statüsü Bilgilerini Düzenle"
+
+#: admin/case-priorities/one.php:53
+msgid "Edit Priority Type Information"
+msgstr "Öncelik Tipi Bilgilerini Düzenle"
+
+#: companies/edit.php:86 companies/edit.php:98
+msgid "Edit Profile"
+msgstr "Profil Düzenle"
+
+#: admin/crm-statuses/one.php:50 admin/ratings/one.php:49
+msgid "Edit Rating Information"
+msgstr "Derece Bilgilerini Düzenle"
+
+#: admin/relationship-types/one.php:55 admin/roles/one.php:52
+msgid "Edit Role Information"
+msgstr "Rol Bilgilerini Düzenle"
+
+#: admin/users/one.php:75 admin/users/self.php:61
+msgid "Edit User Information"
+msgstr "Kullanýcý Bilgileri Düzenle"
+
+#: contacts/edit-address.php:175
+msgid ""
+"Editing/Deleting this record will change the address for all companies and "
+"contacts listed above."
+msgstr ""
+"Bu kayýtý düzenlemek/silmek yukarýda listelenen tüm þirketlerin ve "
+"yetkililerin adreslerinin deðiþmesine neden olacaktýr."
+
+#: locale/datastrings.php:40
+msgid "Education"
+msgstr "Eðitim"
+
+#: contacts/some.php:71 contacts/some.php:275
+msgid "Email"
+msgstr "E-Mail"
+
+#: activities/one.php:393
+msgid "Email This To"
+msgstr "Bunu E-Mail Olarak Yolla"
+
+#: companies/advanced-search.php:194 companies/edit.php:145
+#: companies/new.php:155 companies/one.php:544
+msgid "Employees"
+msgstr "Çalýþanlar"
+
+#: reports/activitytimes.php:52 reports/activitytimes.php:73
+#: reports/audit-items.php:44 reports/completed-items.php:72
+#: reports/completed-items.php:199 reports/completed-items.php:250
+#: reports/open-items.php:185 reports/open-items.php:234
+#: reports/overdue-items.php:200 reports/overdue-items.php:251
+msgid "End"
+msgstr "Bitiþ"
+
+#: activities/one.php:386 campaigns/one.php:117 campaigns/some.php:67
+msgid "Ends"
+msgstr "Bitiþ"
+
+#: campaigns/edit.php:104 campaigns/new.php:92
+msgid "Ends On"
+msgstr "Bitiþ Tarihi"
+
+#: activities/some.php:532
+msgid "Ends/Due"
+msgstr "Bitiþ/Tamamlanýþ Tarihi"
+
+#: admin/users/self.php:83 admin/users/some.php:107
+msgid "English"
+msgstr "Ýngilizce"
+
+#: contacts/sidebar.php:177
+msgid "Enter Cell"
+msgstr "Cep Gir"
+
+#: contacts/sidebar.php:176
+msgid "Enter Cell Phone"
+msgstr "Cep Telefonu Gir"
+
+#: contacts/sidebar.php:155
+msgid "Enter Email Address"
+msgstr "E-mail Adresi Gir"
+
+#: contacts/sidebar.php:186 contacts/sidebar.php:187
+msgid "Enter Home Phone"
+msgstr "Ev Telefonu Gir"
+
+#: admin/country-address-format/edit.php:65
+msgid "Enter New format"
+msgstr "Yeni Formatý Gir"
+
+#: contacts/sidebar.php:166 contacts/sidebar.php:167
+msgid "Enter Work Phone"
+msgstr "Ýþ Telefonu Gir"
+
+#: reports/completed-items.php:291 reports/open-items.php:326
+#: reports/overdue-items.php:295 reports/overdue-items.php:343
+msgid "Entered"
+msgstr "Girilmiþ"
+
+#: admin/country-address-format/edit.php:73
+msgid "Error. No Data."
+msgstr "Hata. Veri Bulunmuyor."
+
+#: locale/datastrings.php:41
+msgid "Event"
+msgstr "Olay"
+
+#: reports/opportunities-quantity-by-opportunity-status.php:106
+msgid "Exclude Closed Opportunities"
+msgstr "Kapanmýþ Fýrsatlar Hariç"
+
+#: admin/crm-statuses/some.php:50
+msgid "Existing CRM Statuses"
+msgstr "Mevcut CRM Statüleri"
+
+#: activities/pager.php:49 cases/pager.php:49 companies/pager.php:49
+msgid "Export"
+msgstr "Dýþarý Aktarým"
+
+#: admin/index.php:109
+msgid "Export Companies with address and phone info"
+msgstr "Adres ve telefon bilgileri bulunan þirketlerin verilerini dýþarý aktar"
+
+#: admin/index.php:99
+msgid "Export Companies/Contacts"
+msgstr "Þirketler/Yetkililer Verilerini Dýþarý Aktar"
+
+#: admin/index.php:104
+msgid "Export Companies/Contacts as LDAP/LDIF"
+msgstr "Þirketler/Yetkililer Bilgilerini LDAP/LDIF Olarak Dýþarý Aktar"
+
+#: include/utils-misc.php:524 include/utils-misc.php:531
+msgid "Failure to get system parameter "
+msgstr "Sistem parametresini edinmekte baþarýlý olunamadý "
+
+#: locale/datastrings.php:42
+msgid "Fair"
+msgstr "Adil"
+
+#: locale/datastrings.php:43
+msgid "Fast"
+msgstr "Hýzlý"
+
+#: companies/advanced-search.php:186 companies/edit.php:137
+#: companies/new.php:147 companies/one.php:481 companies/sidebar.php:61
+#: contacts/edit.php:194 contacts/new.php:189 contacts/one.php:360
+msgid "Fax"
+msgstr "Faks"
+
+#: locale/datastrings.php:44
+msgid "Feature Request"
+msgstr "Özellik Ýsteði"
+
+#: locale/datastrings.php:45
+msgid "Feature Requests"
+msgstr "Özellik Ýstekleri"
+
+#: contacts/edit.php:157 contacts/new.php:152 contacts/one.php:90
+msgid "Female"
+msgstr "Kadýn"
+
+#: admin/import/import-companies.php:93
+msgid "Field Delimiter"
+msgstr "Alan Ayracý"
+
+#: admin/import/import-companies.php:89
+msgid "File"
+msgstr "Dosya"
+
+#: files/some.php:296
+msgid "File Description"
+msgstr "Dosya Açýklamasý"
+
+#: files/one.php:49
+msgid "File Details"
+msgstr "Dosya Detaylarý"
+
+#: admin/import/import-companies.php:101
+msgid "File Format"
+msgstr "Dosya Formatý"
+
+#: files/some.php:294 files/some.php:361 private/home.php:249
+msgid "File ID"
+msgstr "Dosya ID"
+
+#: files/new.php:71 files/one.php:64
+msgid "File Information"
+msgstr "Dosya Bilgisi"
+
+#: files/new.php:78 files/one.php:67 files/some.php:295
+msgid "File Name"
+msgstr "Dosya Adý"
+
+#: files/sidebar.php:18 files/some.php:273 include/utils-interface.php:213
+msgid "Files"
+msgstr "Dosyalar"
+
+#: locale/datastrings.php:46
+msgid "Finance"
+msgstr "Finans"
+
+#: campaigns/categories.php:107 cases/categories.php:107
+#: companies/categories.php:111 contacts/categories.php:113
+#: locale/datastrings.php:47 opportunities/categories.php:107
+msgid "Finished"
+msgstr "Tamamlandý"
+
+#: admin/users/one.php:96 admin/users/self.php:68 admin/users/some.php:90
+#: companies/new.php:242 contacts/edit.php:144 contacts/new.php:139
+#: contacts/some.php:256
+msgid "First Names"
+msgstr "Ýlk Adlarý"
+
+#: companies/addresses.php:113
+msgid "Formatted Address"
+msgstr "Düzenlenmiþ Adres"
+
+#: admin/relationship-types/some.php:55
+msgid "Formatting"
+msgstr "Düzenleme"
+
+#: companies/former-names.php:89 companies/one.php:266
+msgid "Former Name"
+msgstr "Ön Adý"
+
+#: companies/former-names.php:65 companies/former-names.php:78
+#: companies/former-names.php:85
+msgid "Former Names"
+msgstr "Ön Adlarý"
+
+#: email/email-2.php:75 email/one-template.php:74
+msgid "From"
+msgstr "Kimden"
+
+#: admin/relationship-types/one.php:70 admin/relationship-types/some.php:83
+msgid "From Text"
+msgstr "Kimden Metin"
+
+#: admin/relationship-types/one.php:62 admin/relationship-types/some.php:75
+msgid "From What Table"
+msgstr "Hangi Tablodan"
+
+#: admin/account-statuses/one.php:62 admin/account-statuses/some.php:70
+#: admin/activity-types/one.php:61 admin/activity-types/some.php:78
+#: admin/campaign-statuses/one.php:60 admin/campaign-statuses/some.php:70
+#: admin/campaign-types/one.php:57 admin/campaign-types/some.php:68
+#: admin/case-priorities/one.php:60 admin/case-priorities/some.php:70
+#: admin/case-statuses/one.php:125 admin/case-statuses/some.php:92
+#: admin/case-types/one.php:59 admin/case-types/some.php:68
+#: admin/categories/one.php:98 admin/categories/some.php:69
+#: admin/company-sources/one.php:62 admin/company-sources/some.php:72
+#: admin/company-types/one.php:56 admin/company-types/some.php:67
+#: admin/crm-statuses/one.php:57 admin/crm-statuses/some.php:73
+#: admin/industries/one.php:56 admin/industries/some.php:67
+#: admin/opportunity-statuses/one.php:133
+#: admin/opportunity-statuses/some.php:115 admin/ratings/one.php:56
+#: admin/ratings/some.php:71 admin/roles/one.php:59 admin/roles/some.php:70
+#: admin/users/some.php:63
+msgid "Full Name"
+msgstr "Tam Adý"
+
+#: admin/account-statuses/one.php:66 admin/activity-types/one.php:65
+#: admin/campaign-statuses/one.php:64 admin/campaign-types/one.php:61
+#: admin/case-priorities/one.php:64 admin/case-statuses/one.php:129
+#: admin/case-types/one.php:63 admin/categories/one.php:102
+#: admin/company-sources/one.php:66 admin/company-types/one.php:60
+#: admin/crm-statuses/one.php:61 admin/industries/one.php:60
+#: admin/opportunity-statuses/one.php:137 admin/ratings/one.php:60
+#: admin/roles/one.php:63
+msgid "Full Plural"
+msgstr "Tam Çoðul Adý"
+
+#: admin/account-statuses/some.php:74 admin/activity-types/some.php:82
+#: admin/campaign-statuses/some.php:74 admin/campaign-types/some.php:72
+#: admin/case-priorities/some.php:74 admin/case-statuses/some.php:96
+#: admin/case-types/some.php:72 admin/categories/some.php:73
+#: admin/company-sources/some.php:76 admin/company-types/some.php:71
+#: admin/crm-statuses/some.php:77 admin/industries/some.php:71
+#: admin/opportunity-statuses/some.php:119 admin/ratings/some.php:75
+#: admin/roles/some.php:74
+msgid "Full Plural Name"
+msgstr "Tam Çoðul Adý"
+
+#: admin/users/one.php:112 admin/users/self.php:86 admin/users/some.php:110
+msgid "GMT Offset"
+msgstr "GMT Farký"
+
+#: contacts/edit.php:152 contacts/new.php:147 contacts/one.php:320
+msgid "Gender"
+msgstr "Cinsiyet"
+
+#: reports/activitytimes.php:62 reports/audit-items.php:60
+#: reports/completed-items.php:120 reports/index.php:134
+#: reports/open-items.php:102 reports/overdue-items.php:117
+msgid "Go"
+msgstr "Git"
+
+#: locale/datastrings.php:48
+msgid "Good"
+msgstr "Ýyi"
+
+#: locale/datastrings.php:49
+msgid "Government"
+msgstr "Devlet"
+
+#: reports/index.php:39
+msgid "Graphs"
+msgstr "Grafikler"
+
+#: activities/pager.php:12 cases/pager.php:12 companies/pager.php:12
+#: contacts/sidebar.php:71 files/sidebar.php:10
+#: include/categories-sidebar.php:5 include/utils-misc.php:16
+#: notes/sidebar.php:5 relationships/sidebar.php:5
+msgid "Hacking attempt"
+msgstr "Sistem kýrma denemesi"
+
+#: locale/datastrings.php:50
+msgid "Healthcare"
+msgstr "Saðlýk Hizmetleri"
+
+#: locale/datastrings.php:51
+msgid "Help Item"
+msgstr "Yardým Kýsmý"
+
+#: locale/datastrings.php:52
+msgid "Help Items"
+msgstr "Yardým Kýsýmlarý"
+
+#: locale/datastrings.php:53
+msgid "High"
+msgstr "Yüksek"
+
+#: locale/datastrings.php:54
+msgid "Hold"
+msgstr "Beklemede"
+
+#: include/utils-interface.php:206 private/home.php:434
+msgid "Home"
+msgstr "Ana Sayfa"
+
+#: contacts/edit.php:190 contacts/new.php:185 contacts/one.php:352
+#: contacts/sidebar.php:181
+msgid "Home Phone"
+msgstr "Ev Telefonu"
+
+#: reports/index.php:82
+msgid "How many cases are in each stage of the case resolution process?"
+msgstr "Vaka çözümleme iþlemlerinin hangi süreçlerinde hangi sayýda vaka bulunuyor?"
+
+#: reports/index.php:50
+msgid "How many companies are in each industry?"
+msgstr "Her sektörde kaç þirket bulunuyor?"
+
+#: reports/index.php:54
+msgid "How many of your accounts come from each source?"
+msgstr "Hangi sayýda hesabýnýz hangi kaynaktan geliyor?"
+
+#: reports/index.php:63
+msgid "How many opportunities are in each stage of the sales closing process?"
+msgstr "Satýþ kapatma süreçlerinin hangi safhalarýnda hangi sayýda fýrsat bulunuyor?"
+
+#: reports/index.php:71
+msgid "How many opportunities are tied to companies in each industry?"
+msgstr "Hangi sayýda fýrsatlar hangi sektördeki þirketlere baðlý durumda?"
+
+#: reports/index.php:67
+msgid ""
+"How much potential revenue is in each stage of the sales closing process?"
+msgstr ""
+"Satýþ kapatma iþlemlerinin hangi safhalarýnda hangi miktarda potansiyel "
+"gelir söz konusu?"
+
+#: reports/index.php:75
+msgid "How much potential revenue is tied to companies in each industry?"
+msgstr "Hangi sektördeki firmalara hangi miktarda potansiyel gelir baðlý durumda?"
+
+#: include/utils-misc.php:633
+msgid "I tried to execute:"
+msgstr "Çalýþtýrmaya çalýþtýðým:"
+
+#: files/some.php:113
+msgid "ID"
+msgstr "ID"
+
+#: admin/import/import-companies.php:28 admin/import/import-companies.php:146
+msgid "Import"
+msgstr "Ýçeri Aktar"
+
+#: admin/import/import-companies.php:86
+msgid "Import Companies"
+msgstr "Þirket Verilerini Ýçeri Aktar"
+
+#: admin/index.php:94
+msgid "Import Companies/Contacts"
+msgstr "Þirketler/Yetkililer Verilerini Ýçeri Aktar"
+
+#: admin/index.php:90
+msgid "Import/Export"
+msgstr "Ýçeri/Dýþarý Aktarým"
+
+#: locale/datastrings.php:55
+msgid "In Progress"
+msgstr "Süreçte"
+
+#: admin/index.php:163 admin/industries/some.php:44
+msgid "Industries"
+msgstr "Sektörler"
+
+#: admin/import/import-companies.php:134 companies/advanced-search.php:170
+#: companies/edit.php:125 companies/new.php:131 companies/one.php:461
+#: companies/some-advanced.php:137 companies/some.php:72
+#: companies/some.php:280
+msgid "Industry"
+msgstr "Sektör"
+
+#: admin/industries/one.php:37
+msgid "Industry Details"
+msgstr "Sektör Detaylarý"
+
+#: activities/one.php:361
+msgid "Insert Log"
+msgstr "Giriþ Kayýtý"
+
+#: locale/datastrings.php:56
+msgid "Insurance"
+msgstr "Sigorta"
+
+#: contacts/edit.php:210 contacts/new.php:205 contacts/one.php:364
+msgid "Interests"
+msgstr "Ýlgi Alanlarý"
+
+#: admin/users/one.php:108 admin/users/self.php:82 admin/users/some.php:106
+msgid "Language"
+msgstr "Dil"
+
+#: campaigns/one.php:129 cases/one.php:234 companies/one.php:505
+#: contacts/one.php:452 opportunities/one.php:325
+msgid "Last Modified"
+msgstr "Son Düzenleme"
+
+#: admin/users/one.php:92 admin/users/self.php:64 admin/users/some.php:86
+#: companies/new.php:246 contacts/edit.php:148 contacts/new.php:143
+#: contacts/some.php:255
+msgid "Last Name"
+msgstr "Soyad"
+
+#: locale/datastrings.php:57
+msgid "Lead"
+msgstr "Yönlendirme"
+
+#: locale/datastrings.php:58
+msgid "Leads"
+msgstr "Yönlendirmeler"
+
+#: locale/datastrings.php:59
+msgid "Legal"
+msgstr "Yasal"
+
+#: companies/advanced-search.php:154 companies/edit.php:105
+#: companies/new.php:115 companies/one.php:452
+msgid "Legal Name"
+msgstr "Yasal Ad"
+
+#: reports/audit-items.php:92
+msgid "Line"
+msgstr "Satýr"
+
+#: companies/addresses.php:143 companies/advanced-search.php:241
+#: companies/edit-address.php:77 companies/new.php:205
+#: contacts/edit-address.php:194
+msgid "Line 1"
+msgstr "Satýr 1"
+
+#: companies/addresses.php:147 companies/advanced-search.php:245
+#: companies/edit-address.php:81 companies/new.php:209
+#: contacts/edit-address.php:198
+msgid "Line 2"
+msgstr "Satýr 2"
+
+#: admin/case-statuses/one.php:150
+msgid "Link Activity To Case Status"
+msgstr "Aktiviteyi Vaka Statüsüne Baðla"
+
+#: admin/opportunity-statuses/one.php:173
+msgid "Link Activity To Opportunity Status"
+msgstr "Aktiviteyi Fýrsat Statüsüne Baðla"
+
+#: admin/activity-templates/some.php:64
+msgid "Linked Table"
+msgstr "Baðlantýlý Tablo"
+
+#: reports/index.php:107
+msgid ""
+"List Activiites by Start, End, and User (also shows Duration, Company and "
+"Contact)"
+msgstr ""
+"Baþlangýç, Bitiþ ve Kullanýcýya göre Aktiviteleri Listele (Ayný zamanda "
+"süreyi, þirketi ve yetkilileri de gösterir)"
+
+#: reports/index.php:124
+msgid "List Audit Items by Date and User"
+msgstr "Tarihe ve Kullanýcýya göre Denetim Ýþlerini Listele"
+
+#: reports/index.php:120
+msgid "List Completed Items by Date Range, User and Type"
+msgstr "Zaman Aralýðý, Kullanýcý ve Tipe Göre Tamamlanan Ýþleri Listele"
+
+#: reports/index.php:116
+msgid "List Open Items by User and Type"
+msgstr "Kullanýcýya ve Tipine Göre Açýk Ýþleri Listele"
+
+#: reports/index.php:112
+msgid "List Overdue Items by User and Type"
+msgstr "Kullanýcýya ve Tipine Göre Gecikmiþ Ýþleri Listele"
+
+#: reports/index.php:95
+msgid "List of companies, addresses and phone numbers"
+msgstr "Þirketleri, adresleri ve telefon numaralarýný listele"
+
+#: activities/one.php:368
+msgid "Local Time"
+msgstr "Yerel Saat"
+
+#: activities/some.php:557
+msgid "Local Time Between"
+msgstr "Aradaki Yerel Saat"
+
+#: include/utils-interface.php:202
+msgid "Logged in as"
+msgstr "Giriþ yapýlan kullanýcý"
+
+#: include/utils-interface.php:203
+msgid "Logout"
+msgstr "Sistemden Çýk"
+
+#: admin/opportunity-statuses/one.php:145
+msgid "Long Description"
+msgstr "Uzun Açýklama"
+
+#: locale/datastrings.php:60
+msgid "Low"
+msgstr "Düþük"
+
+#: plugins/mrtg/setup.php:36
+msgid "MRTG"
+msgstr "MRTG"
+
+#: contacts/one.php:378
+msgid "MSN IM"
+msgstr "MSN IM"
+
+#: contacts/edit.php:206 contacts/new.php:201
+msgid "MSN Name"
+msgstr "MSN Adý"
+
+#: locale/datastrings.php:61
+msgid "Magazine"
+msgstr "Magazin"
+
+#: locale/datastrings.php:62
+msgid "Mail"
+msgstr "Posta"
+
+#: activities/pager.php:50 cases/pager.php:50 companies/one.php:591
+#: companies/pager.php:50 contacts/edit.php:236
+msgid "Mail Merge"
+msgstr "Posta Birleþtir"
+
+#: contacts/edit.php:156 contacts/new.php:151 contacts/one.php:93
+msgid "Male"
+msgstr "Erkek"
+
+#: admin/index.php:117 include/categories-sidebar.php:61
+msgid "Manage"
+msgstr "Yönet"
+
+#: admin/account-statuses/some.php:37
+msgid "Manage Account Statuses"
+msgstr "Hesap Statülerini Yönet"
+
+#: admin/activity-templates/some.php:49
+msgid "Manage Activity Templates"
+msgstr "Aktivite Þablonlarýný Yönet"
+
+#: admin/activity-types/some.php:44
+msgid "Manage Activity Types"
+msgstr "Aktivite Tiplerini Yönet"
+
+#: admin/crm-statuses/some.php:40
+msgid "Manage CRM Statuses"
+msgstr "CRM Statülerini Yönet"
+
+#: admin/campaign-statuses/some.php:37
+msgid "Manage Campaign Statuses"
+msgstr "Kampanya Statülerini Yönet"
+
+#: admin/campaign-types/some.php:35
+msgid "Manage Campaign Types"
+msgstr "Kampanya Tiplerini Yönet"
+
+#: admin/case-priorities/some.php:37
+msgid "Manage Case Priorities"
+msgstr "Vaka Önceliklerini Yönet"
+
+#: admin/case-statuses/some.php:58
+msgid "Manage Case Statuses"
+msgstr "Vaka Statülerini Yönet"
+
+#: admin/case-types/some.php:35
+msgid "Manage Case Types"
+msgstr "Vaka Tiplerini Yönet"
+
+#: admin/categories/some.php:36 campaigns/categories.php:86
+#: campaigns/categories.php:96 cases/categories.php:86 cases/categories.php:96
+#: companies/categories.php:90 companies/categories.php:100
+#: contacts/categories.php:92 contacts/categories.php:102
+#: opportunities/categories.php:86 opportunities/categories.php:96
+msgid "Manage Categories"
+msgstr "Kategorileri Yönet"
+
+#: admin/company-sources/some.php:39
+msgid "Manage Company Sources"
+msgstr "Þirket Kaynaklarýný Yönet"
+
+#: admin/company-types/some.php:34
+msgid "Manage Company Types"
+msgstr "Þirket Tiplerini Yönet"
+
+#: admin/industries/some.php:34
+msgid "Manage Industries"
+msgstr "Sektörleri Yönet"
+
+#: admin/opportunity-statuses/some.php:78
+msgid "Manage Opportunity Statuses"
+msgstr "Fýrsat Statülerini Yönet"
+
+#: admin/ratings/some.php:38
+msgid "Manage Ratings"
+msgstr "Dereceleri Yönet"
+
+#: admin/relationship-types/some.php:39
+msgid "Manage Relationship Types"
+msgstr "Ýliþki Tiplerini Yönet"
+
+#: admin/roles/some.php:37
+msgid "Manage Roles"
+msgstr "Rolleri Yönet"
+
+#: admin/users/some.php:50
+msgid "Manage Users"
+msgstr "Kullanýcýlarý Yönet"
+
+#: locale/datastrings.php:63
+msgid "Manufacturing"
+msgstr "Üretim/Ýmalat"
+
+#: reports/index.php:128
+msgid "Measure performance of users over a selectable timeframe"
+msgstr "Kullanýcýlarýn seçilebilir bir zaman zarfýndaki performanslarýný ölç"
+
+#: campaigns/some.php:229
+msgid "Media"
+msgstr "Medya"
+
+#: locale/datastrings.php:64
+msgid "Medium"
+msgstr "Orta"
+
+#: include/utils-interface.php:268
+msgid "Miss"
+msgstr "Bayan"
+
+#: relationships/new-relationship-2.php:149
+msgid "More Info"
+msgstr "Ayrýntýlý Bilgi"
+
+#: admin/activity-types/some.php:58 admin/case-statuses/some.php:72
+#: admin/opportunity-statuses/some.php:94
+msgid "Move"
+msgstr "Taþý"
+
+#: include/utils-interface.php:268
+msgid "Mr."
+msgstr "Bay"
+
+#: include/utils-interface.php:268
+msgid "Mrs."
+msgstr "Bayan"
+
+#: include/utils-interface.php:268
+msgid "Ms."
+msgstr "Bayan"
+
+#: plugins/mrtg/mrtg.php:19
+msgid "Multi Router Traffic Grapher"
+msgstr "Multi Router Traffic Grapher"
+
+#: contacts/one.php:170 locale/datastrings.php:65
+msgid "N/A"
+msgstr "G/D"
+
+#: reports/completed-items.php:230
+msgid "NO COMPLETED ACTIVITIES for"
+msgstr "TOPLAM TAMAMLANMIÞ AKTÝVÝTE -"
+
+#: reports/completed-items.php:272
+msgid "NO COMPLETED CAMPAIGNS for"
+msgstr "TOPLAM TAMAMLANMIÞ KAMPANYA -"
+
+#: reports/completed-items.php:367
+msgid "NO COMPLETED CASES for"
+msgstr "TOPLAM TAMAMLANMIÞ VAKA -"
+
+#: reports/completed-items.php:321
+msgid "NO COMPLETED OPPORTUNITIES for"
+msgstr "TOPLAM TAMAMLANMIÞ FIRSAT -"
+
+#: reports/open-items.php:216
+msgid "NO OPEN ACTIVITIES for"
+msgstr "TOPLAM AÇIK AKTÝVÝTE -"
+
+#: reports/open-items.php:258
+msgid "NO OPEN CAMPAIGNS for"
+msgstr "TOPLAM AÇIK KAMPANYA -"
+
+#: reports/open-items.php:355
+msgid "NO OPEN CASES for"
+msgstr "TOPLAM AÇIK VAKA -"
+
+#: reports/open-items.php:307
+msgid "NO OPEN OPPORTUNITIES for"
+msgstr "TOPLAM AÇIK FIRSAT -"
+
+#: reports/overdue-items.php:232
+msgid "NO OVERDUE ACTIVITIES for"
+msgstr "TOPLAM GECÝKEN AKTÝVÝTE -"
+
+#: reports/overdue-items.php:274
+msgid "NO OVERDUE CAMPAIGNS for"
+msgstr "TOPLAM GECÝKEN KAMPANYA -"
+
+#: reports/overdue-items.php:371
+msgid "NO OVERDUE CASES for"
+msgstr "TOPLAM GECÝKEN VAKA -"
+
+#: reports/overdue-items.php:323
+msgid "NO OVERDUE OPPORTUNITIES for"
+msgstr "TOPLAM GECÝKEN FIRSAT -"
+
+#: admin/account-statuses/some.php:50 admin/activity-templates/some.php:62
+#: admin/activity-types/some.php:57 admin/campaign-statuses/some.php:50
+#: admin/case-priorities/some.php:50 admin/case-statuses/some.php:71
+#: admin/case-types/some.php:48 admin/categories/some.php:49
+#: admin/company-sources/some.php:52 admin/company-types/some.php:47
+#: admin/crm-statuses/some.php:53 admin/industries/some.php:47
+#: admin/opportunity-statuses/some.php:92 admin/ratings/some.php:51
+#: admin/relationship-types/some.php:52 admin/roles/some.php:50
+#: cases/sidebar.php:21 companies/divisions.php:88 companies/one.php:607
+#: contacts/one.php:316 contacts/some.php:68 email/templates.php:66
+#: files/sidebar.php:21 files/some.php:66 files/some.php:358
+#: opportunities/opportunity-view.php:48 opportunities/sidebar.php:21
+#: private/home.php:244 private/home.php:279 private/home.php:286
+#: private/home.php:293 private/home.php:305 private/home.php:312
+#: relationships/edit.php:52 reports/audit-items.php:97
+msgid "Name"
+msgstr "Ad"
+
+#: contacts/transfer.php:49
+msgid "Name or ID"
+msgstr "Ad veya ID"
+
+#: locale/datastrings.php:66
+msgid "Negotiation"
+msgstr "Görüþme"
+
+#: admin/country-address-format/edit.php:69 cases/sidebar.php:66
+#: companies/one.php:616 files/sidebar.php:94 locale/datastrings.php:67
+#: notes/sidebar.php:229 opportunities/sidebar.php:65 plugins/info/one.php:346
+msgid "New"
+msgstr "Yeni"
+
+#: companies/addresses.php:132
+msgid "New Address"
+msgstr "Yeni Adres"
+
+#: campaigns/new.php:48
+msgid "New Campaign"
+msgstr "Yeni Kampanya"
+
+#: cases/new.php:86
+msgid "New Case"
+msgstr "Yeni Vaka"
+
+#: companies/new.php:95 companies/some-advanced.php:402 companies/some.php:347
+msgid "New Company"
+msgstr "Yeni Þirket"
+
+#: contacts/new.php:112
+msgid "New Contact for"
+msgstr "Yeni Yetkili"
+
+#: companies/divisions.php:63
+msgid "New Division"
+msgstr "Yeni Bölüm"
+
+#: opportunities/new.php:63
+msgid "New Opportunity"
+msgstr "Yeni Fýrsat"
+
+#: admin/users/change-password.php:45
+msgid "New Password"
+msgstr "Yeni Þifre"
+
+#: companies/one.php:592
+msgid "News"
+msgstr "Haberler"
+
+#: companies/one.php:396
+msgid "No Activities"
+msgstr "Aktiviteler Bulunmuyor"
+
+#: reports/audit-items.php:170
+msgid "No Activity."
+msgstr "Aktivite Bulunmuyor"
+
+#: include/utils-interface.php:40
+msgid "No Case To Delete."
+msgstr "Silinecek Vaka Bulunmuyor."
+
+#: contacts/sidebar.php:198
+msgid "No Contact Selected."
+msgstr "Yetkili Seçilmemiþtir."
+
+#: companies/one.php:400
+msgid "No Contacts"
+msgstr "Yetkili Bulunmuyor"
+
+#: activities/some.php:587
+msgid "No Saved Searches"
+msgstr "Kayýt Edilmiþ Arama Bulunmuyor"
+
+#: opportunities/one.php:252
+msgid "No activities"
+msgstr "Aktiviteler Bulunmuyor"
+
+#: include/strings.php:33
+msgid "No attached companies"
+msgstr "Ekli þirketler bulunmuyor"
+
+#: include/strings.php:32
+msgid "No attached contacts"
+msgstr "Ekli yetkili bulunmuyor"
+
+#: files/sidebar.php:82
+msgid "No attached files"
+msgstr "Ekli dosya bulunmuyor"
+
+#: notes/sidebar.php:174
+msgid "No attached notes"
+msgstr "Ekli not bulunmuyor"
+
+#: include/categories-sidebar.php:53
+msgid "No categories"
+msgstr "Kategori bulunmuyor"
+
+#: contacts/transfer-2.php:66
+msgid "No companies found"
+msgstr "Þirket bulunamadý"
+
+#: email/email.php:101 email/index.php:53 email/templates.php:50
+msgid "No e-mail templates"
+msgstr "E-mail þablonu bulunmuyor"
+
+#: admin/case-statuses/one.php:171 admin/opportunity-statuses/one.php:194
+msgid "No linked activities"
+msgstr "Baðlantýlý aktivite bulunmuyor"
+
+#: include/adodb/tohtml.inc.php:150
+msgid "No matches"
+msgstr "Sonuç bulunamadý"
+
+#: private/home.php:431
+msgid "No open activities"
+msgstr "Açýk aktivite bulunmuyor"
+
+#: cases/sidebar.php:55
+msgid "No open cases"
+msgstr "Açýk vaka bulunmuyor"
+
+#: private/home.php:424
+msgid "No open files"
+msgstr "Açýk dosya bulunmuyor"
+
+#: opportunities/sidebar.php:54
+msgid "No open opportunities"
+msgstr "Açýk fýrsat bulunmuyor"
+
+#: campaigns/some.php:148
+msgid "No recently viewed campaigns"
+msgstr "Son görüntülenen kampanya bulunmuyor"
+
+#: cases/some.php:164
+msgid "No recently viewed cases"
+msgstr "Son görüntülenen vaka bulunmuyor"
+
+#: companies/some-advanced.php:335 companies/some.php:205
+msgid "No recently viewed companies"
+msgstr "Son görüntülenen þirket bulunmuyor"
+
+#: contacts/some.php:207
+msgid "No recently viewed contacts"
+msgstr "Son görüntülenen yetkili bulunmuyor"
+
+#: files/some.php:249
+msgid "No recently viewed file"
+msgstr "Son görüntülenen dosya bulunmuyor"
+
+#: opportunities/export.php:98
+msgid "No results returned from database by query"
+msgstr "Sorgu sonucunda veritabanýnda bir sonuç bulunamadý"
+
+#: private/home.php:241
+msgid "Non Uploaded Files"
+msgstr "Yüklenmiþ Dosya Bulunmuyor"
+
+#: activities/some.php:550
+msgid "Non-Completed"
+msgstr "Tamamlanmadý"
+
+#: locale/datastrings.php:68
+msgid "Non-Profit"
+msgstr "Kar Amacý Gütmeyen"
+
+#: admin/categories/one.php:143 campaigns/categories.php:100
+#: cases/categories.php:100 companies/categories.php:104
+#: contacts/categories.php:106 opportunities/categories.php:100
+msgid "Not Associated With"
+msgstr "Ýliþkili Deðil"
+
+#: cases/pager.php:49 companies/pager.php:49
+msgid "Not Coded Yet"
+msgstr "Henüz Kodlanmamýþtýr"
+
+#: activities/some.php:351
+msgid "Not Set"
+msgstr "Ayarlanmadý"
+
+#: notes/edit.php:43 notes/new.php:44
+msgid "Note Body"
+msgstr "Not Gövdesi"
+
+#: admin/account-statuses/one.php:90 admin/activity-templates/edit.php:106
+#: admin/activity-types/one.php:92 admin/campaign-statuses/one.php:96
+#: admin/campaign-types/one.php:83 admin/case-priorities/one.php:90
+#: admin/case-statuses/one.php:194 admin/case-types/one.php:85
+#: admin/categories/one.php:124 admin/company-sources/one.php:92
+#: admin/company-types/one.php:82 admin/crm-statuses/one.php:83
+#: admin/industries/one.php:82 admin/opportunity-statuses/one.php:217
+#: admin/ratings/one.php:82 admin/relationship-types/one.php:101
+#: admin/roles/one.php:85 admin/users/one.php:132
+msgid "Note: This action CANNOT be undone!"
+msgstr "Not: Bu iþlem GERÝ DÖNDÜRÜLEMEZ!"
+
+#: notes/sidebar.php:19 reports/companies-list.php:173
+msgid "Notes"
+msgstr "Notlar"
+
+#: reports/open-items.php:180
+msgid "OPEN ACTIVITIES"
+msgstr "AÇIK AKTÝVÝTELER"
+
+#: reports/open-items.php:229
+msgid "OPEN CAMPAIGNS for"
+msgstr "AÇIK KAMPANYALAR"
+
+#: reports/open-items.php:322
+msgid "OPEN CASES for"
+msgstr "AÇIK VAKALAR"
+
+#: admin/country-address-format/edit.php:65
+msgid "OR"
+msgstr "VEYA"
+
+#: reports/overdue-items.php:195
+msgid "OVERDUE ACTIVITIES for"
+msgstr "GECÝKEN AKTÝVÝTELER"
+
+#: reports/overdue-items.php:246
+msgid "OVERDUE CAMPAIGNS for"
+msgstr "GECÝKEN KAMPANYALAR"
+
+#: reports/overdue-items.php:339
+msgid "OVERDUE CASES for"
+msgstr "GECÝKEN VAKALAR"
+
+#: reports/overdue-items.php:291
+msgid "OVERDUE OPPORTUNITIES for"
+msgstr "GECÝKEN FIRSATLAR"
+
+#: activities/some.php:539 cases/one.php:306 contacts/one.php:488
+#: opportunities/one.php:410
+msgid "On"
+msgstr "Tarihinde"
+
+#: files/some.php:297 private/home.php:246
+msgid "On What"
+msgstr "Nerede"
+
+#: files/some.php:316
+msgid "On what Name"
+msgstr "Hangi Ýsimde"
+
+#: admin/users/self.php:44
+msgid "One User"
+msgstr "Tek Kullanýcý"
+
+#: reports/activitytimes.php:61
+msgid "Only show completed activities"
+msgstr "Yanlýzca tamamlanan aktiviteleri göster"
+
+#: admin/campaign-statuses/one.php:75 admin/campaign-statuses/some.php:86
+#: admin/opportunity-statuses/one.php:152
+#: admin/opportunity-statuses/some.php:134 locale/datastrings.php:69
+msgid "Open"
+msgstr "Açýk"
+
+#: activities/some.php:463 private/home.php:445
+msgid "Open Activities"
+msgstr "Açýk Aktiviteler"
+
+#: cases/sidebar.php:18
+msgid "Open Cases"
+msgstr "Açýk Vakalar"
+
+#: reports/index.php:115 reports/open-items.php:35
+msgid "Open Items"
+msgstr "Açýk Ýþler"
+
+#: admin/campaign-statuses/one.php:72 admin/campaign-statuses/some.php:83
+#: admin/opportunity-statuses/one.php:149
+#: admin/opportunity-statuses/some.php:131
+msgid "Open Status"
+msgstr "Açýklýk Statüsü"
+
+#: files/some.php:310 include/utils-interface.php:211
+#: opportunities/sidebar.php:18 opportunities/some.php:203
+#: reports/completed-items.php:110 reports/open-items.php:92
+#: reports/overdue-items.php:106
+msgid "Opportunities"
+msgstr "Fýrsatlar"
+
+#: reports/opportunities-size-by-industry.php:71
+#: reports/opportunities-size-by-industry.php:83
+#: reports/opportunities-size-by-industry.php:86
+msgid "Opportunities (Size) by Industry"
+msgstr "Sektöre göre Fýrsatlar (Boyut)"
+
+#: reports/opportunities-size-by-opportunity-status.php:82
+#: reports/opportunities-size-by-opportunity-status.php:94
+#: reports/opportunities-size-by-opportunity-status.php:97
+msgid "Opportunities (Size) by Status"
+msgstr "Statüye Göre Fýrsatlar (Boyut)"
+
+#: reports/opportunities-by-industry.php:60
+#: reports/opportunities-by-industry.php:72
+#: reports/opportunities-by-industry.php:75
+#: reports/opportunities-quantity-by-industry.php:60
+#: reports/opportunities-quantity-by-industry.php:72
+#: reports/opportunities-quantity-by-industry.php:75
+msgid "Opportunities by Industry"
+msgstr "Sektöre Göre Fýrsatlar"
+
+#: reports/opportunities-by-opportunity-status.php:59
+#: reports/opportunities-by-opportunity-status.php:71
+#: reports/opportunities-by-opportunity-status.php:74
+#: reports/opportunities-quantity-by-opportunity-status.php:71
+#: reports/opportunities-quantity-by-opportunity-status.php:83
+#: reports/opportunities-quantity-by-opportunity-status.php:86
+msgid "Opportunities by Status"
+msgstr "Statüye Göre Fýrsatlar"
+
+#: files/some.php:95 opportunities/edit.php:151 opportunities/some.php:65
+#: opportunities/some.php:266 reports/completed-items.php:295
+#: reports/index.php:57 reports/overdue-items.php:299
+msgid "Opportunity"
+msgstr "Fýrsat"
+
+#: include/utils-interface.php:60
+msgid "Opportunity Added."
+msgstr "Fýrsat Eklendi."
+
+#: include/utils-interface.php:62
+msgid "Opportunity Deleted."
+msgstr "Fýrsat Silindi."
+
+#: opportunities/edit.php:171 opportunities/new.php:77
+#: opportunities/one.php:255 opportunities/one.php:275
+msgid "Opportunity Details"
+msgstr "Fýrsat Detaylarý"
+
+#: opportunities/some.php:225
+msgid "Opportunity Name"
+msgstr "Fýrsat Adý"
+
+#: activities/one.php:358
+msgid "Opportunity Notes"
+msgstr "Fýrsat Notlarý"
+
+#: opportunities/some.php:70
+msgid "Opportunity Size"
+msgstr "Fýrsat Boyutu"
+
+#: activities/some.php:558
+msgid "Opportunity Status"
+msgstr "Fýrsat Statüsü"
+
+#: admin/opportunity-statuses/one.php:114
+msgid "Opportunity Status Details"
+msgstr "Fýrsat Statü Detaylarý"
+
+#: admin/index.php:193 admin/opportunity-statuses/some.php:89
+#: opportunities/opportunity-view.php:45
+msgid "Opportunity Statuses"
+msgstr "Fýrsat Statüleri"
+
+#: opportunities/edit.php:174 opportunities/new.php:80
+msgid "Opportunity Title"
+msgstr "Fýrsat Baþlýðý"
+
+#: campaigns/some.php:268
+msgid "Options"
+msgstr "Ayarlar"
+
+#: locale/datastrings.php:70
+msgid "Other"
+msgstr "Diðer"
+
+#: relationships/sidebar.php:117
+msgid "Other "
+msgstr "Diðer "
+
+#: include/strings.php:29
+msgid "Other Companies"
+msgstr "Diðer Þirketler"
+
+#: include/strings.php:28
+msgid "Other Contacts"
+msgstr "Diðer Yetkililer"
+
+#: activities/some.php:164 activities/some.php:290
+msgid "Overdue"
+msgstr "Gecikmiþ"
+
+#: reports/index.php:111 reports/overdue-items.php:52
+msgid "Overdue Items"
+msgstr "Gecikmiþ Ýþler"
+
+#: companies/addresses.php:167 companies/advanced-search.php:265
+#: companies/new.php:229
+msgid "Override Address"
+msgstr "Diðer Adres"
+
+#: files/some.php:338
+msgid "Owl File Management"
+msgstr "Owl Dosya Yönetimi"
+
+#: activities/some.php:174 activities/some.php:304 activities/some.php:521
+#: campaigns/edit.php:93 campaigns/new.php:81 campaigns/some.php:66
+#: campaigns/some.php:216 cases/edit.php:204 cases/new.php:123
+#: cases/one.php:214 cases/sidebar.php:22 cases/some.php:64 cases/some.php:251
+#: companies/advanced-search.php:174 companies/edit.php:117
+#: companies/new.php:135 companies/some.php:274 contacts/some.php:83
+#: contacts/some.php:279 email/email-3.php:86 files/sidebar.php:23
+#: files/some.php:318 notes/sidebar.php:30 opportunities/edit.php:195
+#: opportunities/new.php:97 opportunities/one.php:289
+#: opportunities/sidebar.php:22 opportunities/some.php:66
+#: opportunities/some.php:233 reports/companies-list.php:99
+msgid "Owner"
+msgstr "Sahibi"
+
+#: locale/datastrings.php:71
+msgid "Partner"
+msgstr "Ortak"
+
+#: locale/datastrings.php:72
+msgid "Partners"
+msgstr "Ortaklar"
+
+#: admin/users/some.php:98
+msgid "Password"
+msgstr "Þifre"
+
+#: include/utils-interface.php:77
+msgid "Password Does Not Match."
+msgstr "Password Does Not Match."
+
+#: contacts/edit-address.php:105
+msgid "Payment Address"
+msgstr "Ödeme Adresi"
+
+#: companies/addresses.php:117
+msgid "Payment Default"
+msgstr "Ödeme Öntanýmý"
+
+#: companies/advanced-search.php:178 companies/edit.php:129
+#: companies/new.php:139 companies/one.php:473 companies/one.php:611
+#: companies/sidebar.php:55 locale/datastrings.php:73
+msgid "Phone"
+msgstr "Telefon"
+
+#: admin/country-address-format/index.php:44
+msgid "Phone Format"
+msgstr "Telefon Formatý"
+
+#: include/utils-misc.php:245 include/utils-misc.php:629
+msgid "Please correct this error."
+msgstr "Lütfen bu hatayý düzeltiniz."
+
+#: include/utils-interface.php:79
+msgid "Please try again."
+msgstr "Lütfen tekrar deneyin."
+
+#: admin/index.php:235
+msgid "Plugin Activation"
+msgstr "Eklenti Özelliði Aktivasyonu"
+
+#: admin/plugin/plugin-admin.php:170
+msgid "Plugin Administration"
+msgstr "Eklenti Özellikleri Yönetimi"
+
+#: admin/plugin/plugin-admin.php:246
+msgid "Plugin directory could not be found: "
+msgstr "Eklenti özellik dizini bulunamadý:"
+
+#: admin/index.php:231 admin/plugin/plugin-admin.php:187
+msgid "Plugins"
+msgstr "Eklenti Özellikler"
+
+#: locale/datastrings.php:74
+msgid "Poor"
+msgstr "Vasat"
+
+#: admin/relationship-types/one.php:82
+msgid "Post Formatting"
+msgstr "Sonraki Formatlama"
+
+#: admin/relationship-types/some.php:95
+msgid "Post-Text Formatting"
+msgstr "Sonraki-Metin Formatlama"
+
+#: companies/addresses.php:159 companies/advanced-search.php:257
+#: companies/edit-address.php:93 companies/new.php:221
+#: contacts/edit-address.php:210 reports/companies-list.php:167
+msgid "Postal Code"
+msgstr "Posta Kodu"
+
+#: admin/relationship-types/one.php:78
+msgid "Pre Formatting"
+msgstr "Önceki Formatlama"
+
+#: admin/relationship-types/some.php:91
+msgid "Pre-Text Formatting"
+msgstr "Önceki-Metin Formatlama"
+
+#: locale/datastrings.php:75
+msgid "Preliminaries"
+msgstr "Baþlangýç Niteliðinde"
+
+#: contacts/edit-address.php:90 reports/company-contacts-printout.php:248
+msgid "Primary Address"
+msgstr "Ana Adres"
+
+#: companies/addresses.php:114
+msgid "Primary Default"
+msgstr "Ana Ön Tanýmý"
+
+#: reports/index.php:99
+msgid "Printable contact summary information for Companies in search Results."
+msgstr "Arama sonuçlarýndaki þirketler için yazdýrýlabilir yetkili özet bilgileri."
+
+#: reports/completed-items.php:153 reports/open-items.php:122
+#: reports/overdue-items.php:137
+msgid "Printer Friendly"
+msgstr "Yazýcý Dostu"
+
+#: cases/edit.php:200 cases/new.php:119 cases/one.php:222 cases/sidebar.php:23
+#: cases/some.php:64
+msgid "Priority"
+msgstr "Öncelik"
+
+#: activities/one.php:326 opportunities/new.php:105 opportunities/one.php:301
+msgid "Probability"
+msgstr "Olasýlýk"
+
+#: opportunities/edit.php:203
+msgid "Probability (%)"
+msgstr "Olasýlýk (%)"
+
+#: companies/advanced-search.php:218 companies/edit.php:173
+#: companies/new.php:179 contacts/edit.php:230 contacts/new.php:225
+msgid "Profile"
+msgstr "Profil"
+
+#: locale/datastrings.php:76
+msgid "Prospect"
+msgstr "Olasýlýk"
+
+#: locale/datastrings.php:77
+msgid "Prospects"
+msgstr "Olasýlýklar"
+
+#: locale/datastrings.php:78
+msgid "Qualified"
+msgstr "Yeterlilik Kazanan"
+
+#: reports/index.php:70
+msgid "Quantity by Industry"
+msgstr "Sektöre göre Miktar"
+
+#: reports/index.php:61
+msgid "Quantity by Status"
+msgstr "Statüye göre Miktar"
+
+#: locale/datastrings.php:79
+msgid "Radio"
+msgstr "Radyo"
+
+#: plugins/radtest/radtest.php:38 plugins/radtest/setup.php:26
+msgid "Radius Test"
+msgstr "Radius Testi"
+
+#: admin/import/import-companies.php:142 companies/admin.php:86
+#: companies/edit.php:153 companies/one.php:528
+#: companies/some-advanced.php:140 companies/some.php:75
+msgid "Rating"
+msgstr "Derece"
+
+#: admin/ratings/one.php:37
+msgid "Rating Details"
+msgstr "Derece Detaylarý"
+
+#: admin/index.php:188 admin/ratings/some.php:48
+msgid "Ratings"
+msgstr "Dereceler"
+
+#: locale/datastrings.php:80
+msgid "Real Estate"
+msgstr "Gayrimenkul"
+
+#: campaigns/some.php:278 cases/some.php:284 companies/some-advanced.php:409
+#: companies/some.php:354 contacts/some.php:331 files/some.php:355
+#: opportunities/some.php:263
+msgid "Recently Viewed"
+msgstr "Son Görüntülenen"
+
+#: admin/relationship-types/some.php:54 companies/relationships.php:114
+msgid "Relationship"
+msgstr "Ýliþki"
+
+#: admin/relationship-types/one.php:58 admin/relationship-types/some.php:71
+msgid "Relationship Name"
+msgstr "Ýliþki Adý"
+
+#: admin/relationship-types/one.php:43
+msgid "Relationship Type Details"
+msgstr "Ýliþki Tipi Detaylarý"
+
+#: admin/index.php:198 admin/relationship-types/some.php:49
+msgid "Relationship Types"
+msgstr "Ýliþki Tipleri"
+
+#: companies/one.php:593 companies/relationships.php:100
+#: companies/relationships.php:111 relationships/sidebar.php:72
+msgid "Relationships"
+msgstr "Ýliþkiler"
+
+#: reports/opportunities-size-by-industry.php:97
+#: reports/opportunities-size-by-opportunity-status.php:107
+msgid "Remainder"
+msgstr "Kalan"
+
+#: reports/audit-items.php:102
+msgid "Remote Addr"
+msgstr "Karþý Adres"
+
+#: reports/audit-items.php:103
+msgid "Remote Port"
+msgstr "Karþý Port"
+
+#: email/email-2.php:79 email/one-template.php:78
+msgid "Reply to"
+msgstr "Yanýt Verilecek"
+
+#: include/utils-interface.php:219 reports/index.php:29 reports/index.php:88
+msgid "Reports"
+msgstr "Raporlar"
+
+#: locale/datastrings.php:81
+msgid "Restaurant"
+msgstr "Restaurant"
+
+#: locale/datastrings.php:82
+msgid "Retail"
+msgstr "Perakende/Toptan"
+
+#: include/utils-interface.php:268
+msgid "Rev."
+msgstr "Revizyon"
+
+#: companies/advanced-search.php:198 companies/edit.php:149
+#: companies/new.php:159 companies/one.php:548
+msgid "Revenue"
+msgstr "Gelir"
+
+#: admin/users/one.php:78 admin/users/some.php:65 admin/users/some.php:82
+msgid "Role"
+msgstr "Rol"
+
+#: admin/roles/one.php:40
+msgid "Role Details"
+msgstr "Rol Detaylarý"
+
+#: admin/index.php:126 admin/roles/some.php:47
+msgid "Roles"
+msgstr "Roller"
+
+#: reports/index.php:127
+msgid "Sales Force Automation"
+msgstr "Satýþ Gücü Otomasyonu"
+
+#: contacts/edit.php:140 contacts/new.php:135
+msgid "Salutation"
+msgstr "Ünvan"
+
+#: contacts/edit.php:235 contacts/transfer-2.php:70
+msgid "Save"
+msgstr "Kaydet"
+
+#: activities/one.php:402 admin/account-statuses/one.php:74
+#: admin/activity-templates/edit.php:83 admin/activity-types/one.php:77
+#: admin/campaign-statuses/one.php:82 admin/campaign-types/one.php:69
+#: admin/case-priorities/one.php:76 admin/case-statuses/one.php:137
+#: admin/case-types/one.php:71 admin/categories/one.php:110
+#: admin/company-sources/one.php:78 admin/company-types/one.php:68
+#: admin/crm-statuses/one.php:69 admin/industries/one.php:68
+#: admin/opportunity-statuses/one.php:160 admin/ratings/one.php:68
+#: admin/relationship-types/one.php:86 admin/roles/one.php:71
+#: admin/users/change-password.php:53 admin/users/one.php:116
+#: admin/users/self.php:91 campaigns/edit.php:119 campaigns/new.php:107
+#: cases/edit.php:222 cases/new.php:138 companies/admin.php:102
+#: companies/edit-address.php:107 companies/edit-division.php:66
+#: companies/edit.php:177 companies/new.php:183 contacts/edit-address.php:223
+#: files/one.php:94 notes/edit.php:40 notes/new.php:50
+#: opportunities/edit.php:234 opportunities/new.php:134
+msgid "Save Changes"
+msgstr "Deðiþiklikleri Kaydet"
+
+#: companies/addresses.php:122
+msgid "Save Defaults"
+msgstr "Ön Tanýmlarý Kaydet"
+
+#: activities/one.php:404
+msgid "Save and Next"
+msgstr "Kaydet ve Sonraki"
+
+#: contacts/transfer-2.php:70
+msgid "Save and Update All Records"
+msgstr "Kaydet ve Tüm Kayýtlarý Güncelle"
+
+#: email/email-2.php:96 email/one-template.php:95
+msgid "Save as New Template"
+msgstr "Yeni Þablon Olarak Kaydet"
+
+#: activities/some.php:582
+msgid "Saved Searches"
+msgstr "Kayýtlý Aramalar"
+
+#: activities/one.php:406
+msgid "Schedule Followup"
+msgstr "Program Takibi"
+
+#: activities/some.php:170 activities/some.php:298 activities/some.php:533
+#: private/home.php:453
+msgid "Scheduled"
+msgstr "Planlanýþ"
+
+#: admin/activity-types/one.php:73 admin/activity-types/some.php:90
+#: admin/case-priorities/one.php:72 admin/case-priorities/some.php:82
+#: admin/company-sources/one.php:74 admin/company-sources/some.php:84
+msgid "Score Adjustment"
+msgstr "Skor Ayarlamasý"
+
+#: activities/some.php:600 campaigns/some.php:244 cases/sidebar.php:67
+#: cases/sidebar.php:75 cases/some.php:263 companies/advanced-search.php:270
+#: companies/some.php:311 contacts/some.php:300 contacts/transfer.php:56
+#: files/some.php:327 opportunities/sidebar.php:66
+#: opportunities/sidebar.php:74 opportunities/some.php:243
+#: relationships/new-relationship.php:93
+#: reports/company-contacts-printout.php:229
+msgid "Search"
+msgstr "Ara"
+
+#: activities/some.php:522
+msgid "Search By Date"
+msgstr "Tarihe Göre Ara"
+
+#: companies/some-advanced.php:363 companies/some.php:243
+msgid "Search Companies"
+msgstr "Þirketlerde Ara"
+
+#: activities/some.php:484 campaigns/some.php:211 cases/some.php:238
+#: companies/some.php:266 contacts/some.php:252 files/some.php:291
+#: opportunities/some.php:222 reports/company-contacts-printout.php:210
+msgid "Search Criteria"
+msgstr "Arama Kriteri"
+
+#: locale/datastrings.php:83
+msgid "Search Engine"
+msgstr "Arama Motoru"
+
+#: locale/datastrings.php:84
+msgid "Search Engines"
+msgstr "Arama Motorlarý"
+
+#: activities/pager.php:35 cases/pager.php:35 companies/pager.php:35
+#: include/adodb/adodb-pager.inc.php:287 opportunities/pager.php:35
+msgid "Search Results"
+msgstr "Arama Sonuçlarý"
+
+#: activities/some.php:583
+msgid "Search Title"
+msgstr "Baþlýklarda Ara"
+
+#: contacts/transfer.php:46 include/strings.php:19
+msgid "Search for Company"
+msgstr "Þirket için Ara"
+
+#: include/strings.php:18
+msgid "Search for Contact"
+msgstr "Yetkilli için Ara"
+
+#: locale/datastrings.php:85
+msgid "Seminar"
+msgstr "Seminer"
+
+#: locale/datastrings.php:86
+msgid "Seminars"
+msgstr "Seminerler"
+
+#: reports/completed-items.php:132 reports/open-items.php:136
+#: reports/overdue-items.php:151
+msgid "Send Email To"
+msgstr "Email Olarak Gönder"
+
+#: plugins/autostatus/autostatus.php:54 plugins/autostatus/setup.php:37
+msgid "Server Status"
+msgstr "Sunucu Statüsü"
+
+#: reports/audit-items.php:104
+msgid "Session Id"
+msgstr "Oturum Id"
+
+#: contacts/edit-address.php:100
+msgid "Shipping Address"
+msgstr "Teslimat Adresi"
+
+#: companies/addresses.php:116
+msgid "Shipping Default"
+msgstr "Teslimat Öntanýmý"
+
+#: admin/account-statuses/one.php:56 admin/account-statuses/some.php:66
+#: admin/activity-types/one.php:57 admin/activity-types/some.php:74
+#: admin/campaign-statuses/one.php:56 admin/campaign-statuses/some.php:66
+#: admin/campaign-types/one.php:53 admin/campaign-types/some.php:64
+#: admin/case-priorities/one.php:56 admin/case-priorities/some.php:66
+#: admin/case-statuses/one.php:121 admin/case-statuses/some.php:88
+#: admin/case-types/one.php:55 admin/case-types/some.php:64
+#: admin/categories/one.php:94 admin/categories/some.php:65
+#: admin/company-sources/one.php:58 admin/company-sources/some.php:68
+#: admin/company-types/one.php:52 admin/company-types/some.php:63
+#: admin/crm-statuses/one.php:53 admin/crm-statuses/some.php:69
+#: admin/industries/one.php:52 admin/industries/some.php:63
+#: admin/opportunity-statuses/one.php:129
+#: admin/opportunity-statuses/some.php:111 admin/ratings/one.php:52
+#: admin/ratings/some.php:67 admin/roles/one.php:55 admin/roles/some.php:66
+msgid "Short Name"
+msgstr "Kýsa Ad"
+
+#: files/one.php:75 files/sidebar.php:22 files/some.php:359
+#: opportunities/one.php:297
+msgid "Size"
+msgstr "Boyut"
+
+#: opportunities/edit.php:199 opportunities/new.php:101
+msgid "Size (in dollars)"
+msgstr "Boyut (YTL Olarak)"
+
+#: reports/index.php:74
+msgid "Size by Industry"
+msgstr "Sektöre göre Boyut"
+
+#: reports/index.php:66
+msgid "Size by Status"
+msgstr "Statüye göre Boyut"
+
+#: locale/datastrings.php:87
+msgid "Special"
+msgstr "Özel"
+
+#: reports/activitytimes.php:51 reports/activitytimes.php:72
+#: reports/audit-items.php:43 reports/completed-items.php:71
+#: reports/completed-items.php:198 reports/completed-items.php:249
+#: reports/open-items.php:184 reports/open-items.php:233
+#: reports/overdue-items.php:199 reports/overdue-items.php:250
+msgid "Start"
+msgstr "Baþlangýç"
+
+#: activities/one.php:378 campaigns/one.php:113 campaigns/some.php:67
+#: companies/one.php:654 plugins/info/one.php:369
+msgid "Starts"
+msgstr "Baþlangýç"
+
+#: campaigns/edit.php:97 campaigns/new.php:85
+msgid "Starts On"
+msgstr "Baþlangýç Tarihi"
+
+#: companies/some.php:124 companies/some.php:134 companies/some.php:286
+#: reports/companies-list.php:103 reports/company-contacts-printout.php:128
+#: reports/company-contacts-printout.php:138
+msgid "State"
+msgstr "Eyalet"
+
+#: companies/addresses.php:155 companies/advanced-search.php:253
+#: companies/edit-address.php:89 companies/new.php:217
+#: contacts/edit-address.php:206
+msgid "State/Province"
+msgstr "Eyalet/Ýl"
+
+#: activities/one.php:312 admin/activity-templates/some.php:63
+#: campaigns/edit.php:89 campaigns/new.php:77 campaigns/one.php:105
+#: campaigns/some.php:66 campaigns/some.php:230 campaigns/some.php:283
+#: cases/edit.php:196 cases/new.php:115 cases/one.php:218 cases/some.php:65
+#: cases/some.php:254 cases/some.php:289 opportunities/edit.php:190
+#: opportunities/new.php:92 opportunities/one.php:309
+#: opportunities/sidebar.php:23 opportunities/some.php:75
+#: opportunities/some.php:235 opportunities/some.php:268
+#: reports/overdue-items.php:296
+msgid "Status"
+msgstr "Statü"
+
+#: opportunities/new.php:94
+msgid "Status Definitions"
+msgstr "Statü Tanýmlarý"
+
+#: include/utils-interface.php:83
+msgid "Status not changed."
+msgstr "Statü deðiþtirilmedi."
+
+#: email/email-2.php:89 email/one-template.php:88
+msgid "Subject"
+msgstr "Konu"
+
+#: admin/plugin/plugin-admin.php:243
+msgid "Submit"
+msgstr "Gönder"
+
+#: companies/one.php:608 contacts/edit.php:166 contacts/new.php:161
+#: contacts/one.php:324
+msgid "Summary"
+msgstr "Özet"
+
+#: admin/index.php:47
+msgid "System Administration"
+msgstr "Sistem Yönetimi"
+
+#: reports/activitytimes.php:121
+msgid "TOTAL"
+msgstr "TOPLAM"
+
+#: reports/audit-items.php:96
+msgid "Table"
+msgstr "Tablo"
+
+#: admin/relationship-types/some.php:53
+msgid "Tables"
+msgstr "Tablolar"
+
+#: companies/admin.php:78 companies/one.php:520
+msgid "Tax ID"
+msgstr "Vergi Numarasý"
+
+#: reports/companies-list.php:170
+msgid "Tel"
+msgstr "Tel"
+
+#: locale/datastrings.php:88
+msgid "Telemarketing"
+msgstr "Telepazarlama"
+
+#: locale/datastrings.php:89
+msgid "Telemarketings"
+msgstr "Telepazarlamalar"
+
+#: locale/datastrings.php:90
+msgid "Television"
+msgstr "Televizyon"
+
+#: email/email.php:121 email/index.php:71
+msgid "Template"
+msgstr "Þablon"
+
+#: activities/some.php:501
+msgid "Template Titles"
+msgstr "Þablon Baþlýklarý"
+
+#: companies/admin.php:90 companies/one.php:532
+msgid "Terms"
+msgstr "Koþullar"
+
+#: email/email-4.php:90
+msgid "The bulk e-mail sub-system has sent"
+msgstr "Toplu e-mail alt sistemi göndermiþtir"
+
+#: relationships/new-relationship-2.php:154
+#: relationships/new-relationship-2.php:172
+msgid "There is no "
+msgstr "Bulunmamaktadýr"
+
+#: include/strings.php:24
+msgid "There is no company by that name"
+msgstr "Bu isimde bir þirket bulunmamaktadýr"
+
+#: include/strings.php:23
+msgid "There is no contact by that name"
+msgstr "Bu isimde bir yetkili bulunmamaktadýr."
+
+#: opportunities/export.php:93
+msgid "There was a problem with your export"
+msgstr "Veri aktarýmýnýzla ilgili bir problem meydana geldi"
+
+#: contacts/edit-address.php:162
+msgid "This Address Is Also Used By"
+msgstr "Bu adres ayný zamanda bir baþkasý tarafýndan kullanýlmaktadýr"
+
+#: include/utils-interface.php:83
+msgid "This activity is still open."
+msgstr "Bu aktivite halen açýktýr."
+
+#: reports/audit-items.php:93
+msgid "Time"
+msgstr "Zaman"
+
+#: reports/overdue-items.php:72
+msgid "Time Window"
+msgstr "Zaman Zarfý"
+
+#: reports/activitytimes.php:36
+msgid "Timesheets"
+msgstr "Zaman Çizelgeleri"
+
+#: activities/one.php:341 activities/some.php:169 activities/some.php:487
+#: admin/activity-templates/edit.php:63 admin/case-statuses/one.php:153
+#: admin/opportunity-statuses/one.php:176 campaigns/one.php:97
+#: cases/one.php:206 cases/one.php:302 companies/one.php:609
+#: companies/one.php:649 contacts/edit.php:170 contacts/new.php:165
+#: contacts/one.php:328 contacts/one.php:484 contacts/some.php:77
+#: contacts/some.php:257 opportunities/one.php:285 opportunities/one.php:406
+#: plugins/info/one.php:364
+msgid "Title"
+msgstr "Baþlýk"
+
+#: activities/one.php:308
+msgid "To"
+msgstr "Kime"
+
+#: admin/relationship-types/one.php:74 admin/relationship-types/some.php:87
+msgid "To Text"
+msgstr "Kime Metin"
+
+#: admin/relationship-types/one.php:66 admin/relationship-types/some.php:79
+msgid "To What Table"
+msgstr "Hangi Tabloya"
+
+#: reports/companies-list.php:263
+msgid "Total records"
+msgstr "Toplam kayýt"
+
+#: locale/datastrings.php:91
+msgid "Trade Show"
+msgstr "Ticaret Þovu"
+
+#: locale/datastrings.php:92
+msgid "Trade Shows"
+msgstr "Ticaret Þovlarý"
+
+#: contacts/edit.php:245
+msgid "Transfer"
+msgstr "Transfer"
+
+#: contacts/transfer-2.php:48 contacts/transfer-2.php:63
+#: contacts/transfer.php:33
+msgid "Transfer to Another Company"
+msgstr "Bir Baþka Þirkete Transfer Et"
+
+#: activities/one.php:319 activities/some.php:165 activities/some.php:523
+#: admin/activity-templates/edit.php:71 campaigns/edit.php:85
+#: campaigns/new.php:73 campaigns/one.php:101 campaigns/some.php:66
+#: campaigns/some.php:215 campaigns/some.php:282 cases/edit.php:192
+#: cases/new.php:111 cases/one.php:210 cases/one.php:304 cases/some.php:64
+#: cases/some.php:253 companies/one.php:651 contacts/one.php:486
+#: opportunities/one.php:408 plugins/info/one.php:366 private/home.php:449
+#: reports/audit-items.php:95 reports/completed-items.php:74
+#: reports/completed-items.php:200 reports/completed-items.php:251
+#: reports/completed-items.php:292 reports/open-items.php:58
+#: reports/open-items.php:186 reports/open-items.php:235
+#: reports/overdue-items.php:71 reports/overdue-items.php:201
+#: reports/overdue-items.php:252
+msgid "Type"
+msgstr "Tip"
+
+#: admin/index.php:149
+msgid "Types and Statuses"
+msgstr "Tipler ve Statüler"
+
+#: companies/advanced-search.php:190 companies/edit.php:141
+#: companies/new.php:151 companies/one.php:485
+msgid "URL"
+msgstr "URL"
+
+#: admin/export/export-companies-ldap.php:149
+#: admin/export/export-companies.php:99
+#: admin/export/export-company-address.php:52
+msgid "Unable to Open file for writing."
+msgstr "Dosya yazmak üzere açýlamadý."
+
+#: activities/associate-activities.php:155
+msgid ""
+"Unable to associate Activities because there are multiple Cases or "
+"Opportunities"
+msgstr ""
+"Birden fazla vaka veya fýrsat olduðundan dolayý aktiviteler "
+"iliþkilendirilemedi"
+
+#: activities/associate-activities.php:162
+msgid ""
+"Unable to associate Activities because there is no open Case or Opportunity"
+msgstr ""
+"Açýk bir vaka veya fýrsat bulunmadýðý için aktiviteler iliþkilendirilemedi"
+
+#: include/utils-misc.php:628
+msgid "Unable to execute your query."
+msgstr "Sorgunuz çalýþtýrýlamadý"
+
+#: admin/users/some.php:39
+msgid "Unable to get data from database"
+msgstr "Veritabanýndan veri alýnamadý"
+
+#: include/utils-misc.php:244 opportunities/export.php:95
+msgid "Unable to open file"
+msgstr "Dosya açýlamadý"
+
+#: relationships/edit.php:60
+msgid "Unassociate"
+msgstr "Ýliþkilendirmeyi Kaldýr"
+
+#: contacts/edit.php:155 contacts/new.php:150 contacts/one.php:96
+#: contacts/one.php:99
+msgid "Unknown"
+msgstr "Bilinmeyen"
+
+#: admin/country-address-format/index.php:60
+msgid "Update"
+msgstr "Güncelle"
+
+#: admin/update.php:3833
+msgid "Update Complete"
+msgstr "Güncelleme Tamamlandý"
+
+#: email/email-2.php:96 email/one-template.php:95
+msgid "Update Template"
+msgstr "Þablon Güncelle"
+
+#: files/new.php:93 files/new.php:97
+msgid "Upload"
+msgstr "Yükle"
+
+#: files/one.php:71
+msgid "Uploaded"
+msgstr "Yüklendi"
+
+#: companies/addresses.php:168 companies/edit-address.php:103
+#: companies/new.php:231 contacts/edit-address.php:219
+msgid "Use"
+msgstr "Kullan"
+
+#: contacts/edit-address.php:166
+msgid "Use Alternate Address"
+msgstr "Alternatif Adresi Kullan"
+
+#: companies/addresses.php:112
+msgid "Used by Contacts"
+msgstr "Yetkililer Tarafýndan Kullanýlan"
+
+#: activities/one.php:347 cases/one.php:303 companies/one.php:650
+#: companies/some-advanced.php:136 companies/some.php:71 contacts/one.php:485
+#: opportunities/one.php:407 plugins/info/one.php:365
+#: reports/activitytimes.php:53 reports/activitytimes.php:75
+#: reports/audit-items.php:45 reports/audit-items.php:94
+#: reports/companies-list.php:172 reports/completed-items.php:73
+#: reports/open-items.php:57 reports/overdue-items.php:70
+msgid "User"
+msgstr "Kullanýcý"
+
+#: admin/users/one.php:59
+msgid "User Details"
+msgstr "Kullanýcý Detaylarý"
+
+#: private/home.php:472
+msgid "User Manual"
+msgstr "Kullanýcý Kýlavuzu"
+
+#: reports/index.php:102
+msgid "User Reports"
+msgstr "Kullanýcý Raporlarý"
+
+#: admin/users/one.php:100 admin/users/self.php:72 admin/users/some.php:66
+#: admin/users/some.php:94
+msgid "Username"
+msgstr "Kullanýcý Adý"
+
+#: admin/index.php:121 admin/users/some.php:60
+msgid "Users"
+msgstr "Kullanýcýlar"
+
+#: locale/datastrings.php:93
+msgid "Vendor"
+msgstr "Satýcý"
+
+#: companies/admin.php:98
+msgid "Vendor Key"
+msgstr "Üretici Anahtarý"
+
+#: locale/datastrings.php:94
+msgid "Vendors"
+msgstr "Üreticiler"
+
+#: opportunities/opportunity-view.php:35
+msgid "View Opportunity Statuses"
+msgstr "Fýrsat Statülerini Göster"
+
+#: notes/sidebar.php:151
+msgid "View/Edit"
+msgstr "Göster/Düzenle"
+
+#: email/email-3.php:37
+msgid "WARNING: No array of contacts!"
+msgstr "UYARI! Yetkili dizini bulunmuyor!"
+
+#: include/utils-interface.php:79
+msgid "We could not authenticate you."
+msgstr "Kullanýcý doðrulanamadý."
+
+#: companies/sidebar.php:70 locale/datastrings.php:95
+msgid "Web Site"
+msgstr "Web Sitesi"
+
+#: locale/datastrings.php:96
+msgid "Web Sites"
+msgstr "Web Siteleri"
+
+#: plugins/webcalendar/setup.php:28
+msgid "WebCalendar SysAdmin Manual"
+msgstr "WebCalendar SysAdmin Manual"
+
+#: reports/opportunities-size-by-industry.php:97
+#: reports/opportunities-size-by-opportunity-status.php:107
+msgid "Weighted"
+msgstr "Aðýrlýklý"
+
+#: opportunities/one.php:305 opportunities/some.php:74
+msgid "Weighted Size"
+msgstr "Aðýrlýklý Boyutu"
+
+#: locale/datastrings.php:97
+msgid "Word of Mouth"
+msgstr "Arkadaþýmdan"
+
+#: cases/one.php:248 contacts/edit.php:182 contacts/new.php:177
+#: contacts/one.php:348 contacts/sidebar.php:161 contacts/some.php:336
+#: opportunities/one.php:339
+msgid "Work Phone"
+msgstr "Ýþ Telefonu"
+
+#: reports/open-items.php:369
+msgid "XRMS: Open Items"
+msgstr "XRMS: Açýk Ýþler"
+
+#: reports/overdue-items.php:386
+msgid "XRMS: Overdue Items"
+msgstr "XRMS: Geciken Ýþler"
+
+#: contacts/edit.php:202 contacts/new.php:197
+msgid "Yahoo Name"
+msgstr "Yahoo Adý"
+
+#: contacts/one.php:372
+msgid "Yahoo! IM"
+msgstr "Yahoo! IM"
+
+#: activities/some.php:163
+msgid "Yes"
+msgstr "Evet"
+
+#: campaigns/edit.php:153 campaigns/new.php:137
+msgid "You must enter a campaign title."
+msgstr "Bir kampanya baþlýðý girmelisiniz."
+
+#: cases/edit.php:258 cases/new.php:167
+msgid "You must enter a case title."
+msgstr "Bir vaka baþlýðý girmelisiniz."
+
+#: companies/edit.php:203 companies/new.php:274
+msgid "You must enter a company name."
+msgstr "Bir þirket adý girmelisiniz."
+
+#: admin/users/some.php:141
+msgid "You must enter a last name."
+msgstr "Bir soyad girmelisiniz."
+
+#: email/email-2.php:137 email/one-template.php:136
+msgid "You must enter a name to let the recipient know who the email is from."
+msgstr ""
+"Alýcýlarýn E-Mail'in kimden geldiðinden haberdar olabilmesi için bir isim "
+"girmelisiniz."
+
+#: admin/users/some.php:146
+msgid "You must enter a password."
+msgstr "Bir þifre girmelisiniz."
+
+#: admin/users/some.php:136
+msgid "You must enter a username."
+msgstr "Bir kullanýcý adý girmelisiniz."
+
+#: opportunities/edit.php:271 opportunities/new.php:163
+msgid "You must enter an opportunity title."
+msgstr "Bir fýrsat baþlýðý girmelisiniz."
+
+#: email/email-2.php:142 email/one-template.php:141
+msgid ""
+"You must enter an reply address so the recipient can reply to the message."
+msgstr ""
+"Alýcýlarýn bu mesaja yanýt verebilmeleri için bir yanýt verilecek adres "
+"girmelisiniz."
+
+#: admin/relationship-types/one.php:100
+msgid ""
+"You should NOT delete the last element of a relationship type, or a used "
+"relationship type."
+msgstr ""
+"Bir iliþki tipinin en son elemanýný veya kullanýlan bir iliþki tipini "
+"silmemelisiniz."
+
+#: admin/data_clean.php:351
+msgid "Your database has been cleaned."
+msgstr "Veritabanýnýz temizlenmiþtir."
+
+#: admin/update.php:3840
+msgid "Your database has been updated."
+msgstr "Veritabanýnýz güncellenmiþtir."
+
+#: reports/index.php:46
+msgid ""
+"Your sales funnel - how many of your accounts are in each stage of the "
+"customer development process?"
+msgstr ""
+"Satýþ kanalýnýz - hangi sayýda hesabýnýz müþteri geliþtirme süreçlerinin "
+"hangi safhasýnda?"
+
+#: admin/account-statuses/some.php:28
+msgid "account_status_pretty_name"
+msgstr "hesap_statüsü_kýsa_adý"
+
+#: activities/associate-activities.php:148
+msgid "activities"
+msgstr "aktiviteler"
+
+#: locale/datastrings.php:98
+msgid "call from"
+msgstr "gelen arama"
+
+#: locale/datastrings.php:99
+msgid "call to"
+msgstr "yapýlan arama"
+
+#: locale/datastrings.php:100
+msgid "calls from"
+msgstr "gelen aramalar"
+
+#: locale/datastrings.php:101
+msgid "calls to"
+msgstr "yapýlan aramalar"
+
+#: admin/import/import-companies.php:95
+msgid "comma"
+msgstr "virgül"
+
+#: include/strings.php:34
+msgid "companies/contacts"
+msgstr "þirketler/yetkililer"
+
+#: admin/company-sources/some.php:30
+msgid "company_source_pretty_name"
+msgstr "þirket_kaynaðý_kýsa_adý"
+
+#: admin/company-types/some.php:27
+msgid "company_type_pretty_name"
+msgstr "þirket_tipi_kýsa_adý"
+
+#: admin/crm-statuses/some.php:26
+msgid "crm_status_display_html"
+msgstr "crm_statü_html_görüntüsü"
+
+#: admin/crm-statuses/some.php:28
+msgid "crm_status_pretty_name"
+msgstr "crm_statü_kýsa_adý"
+
+#: companies/one.php:533
+msgid "days"
+msgstr "gün"
+
+#: admin/activity-types/some.php:35 admin/case-statuses/some.php:47
+msgid "down"
+msgstr "aþaðý"
+
+#: locale/datastrings.php:102
+msgid "e-mail from"
+msgstr "gelen e-mail"
+
+#: locale/datastrings.php:103
+msgid "e-mail to"
+msgstr "atýlan e-mail"
+
+#: locale/datastrings.php:104
+msgid "e-mails from"
+msgstr "gelen e-mailler"
+
+#: locale/datastrings.php:105
+msgid "e-mails to"
+msgstr "atýlan e-mailler"
+
+#: locale/datastrings.php:106
+msgid "fax from"
+msgstr "gelen faks"
+
+#: locale/datastrings.php:107
+msgid "fax to"
+msgstr "çekilen faks"
+
+#: locale/datastrings.php:108
+msgid "faxes from"
+msgstr "gelen fakslar"
+
+#: locale/datastrings.php:109
+msgid "faxes to"
+msgstr "çekilen fakslar"
+
+#: admin/industries/some.php:27
+msgid "industry_pretty_name"
+msgstr "sektör_kýsa_adý"
+
+#: locale/datastrings.php:110
+msgid "internal"
+msgstr "iç"
+
+#: locale/datastrings.php:111
+msgid "letter from"
+msgstr "gelen mektup"
+
+#: locale/datastrings.php:112
+msgid "letter to"
+msgstr "postalanan mektup"
+
+#: admin/import/import-companies.php:97
+msgid "pipe"
+msgstr "boru"
+
+#: locale/datastrings.php:113
+msgid "process"
+msgstr "iþlem"
+
+#: admin/import/import-companies.php:98
+msgid "semi-colon"
+msgstr "noktalý-virgül"
+
+#: admin/import/import-companies.php:96
+msgid "tab"
+msgstr "tab"
+
+#: admin/activity-types/some.php:31 admin/case-statuses/some.php:42
+msgid "up"
+msgstr "yukarý"
+
+#~ msgid "Add "
+#~ msgstr "Ekle "
+
+#~ msgid "Choose a relationship"
+#~ msgstr "Bir iliÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â…ÃƒÂƒÃ‚Â‚ÃƒÂ‚Ã‚ÂŸki seÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚ÂƒÃƒÂƒÃ‚Â‚ÃƒÂ‚Ã‚Â§iniz"
+
+#~ msgid "New Personal Note"
+#~ msgstr "Yeni KiÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â…ÃƒÂƒÃ‚Â‚ÃƒÂ‚Ã‚ÂŸisel Not"
+
+#~ msgid "Next"
+#~ msgstr "Sonraki"
+
+#~ msgid "No associated categories"
+#~ msgstr "ÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â„ÃƒÂƒÃ‚Â‚ÃƒÂ‚Ã‚Â°lgili kategori bulunmuyor"
+
+#~ msgid "No files"
+#~ msgstr "Dosya bulunmuyor"
+
+#~ msgid "No notes"
+#~ msgstr "Not bulunmuyor"
+
+#~ msgid "Search for "
+#~ msgstr "Aranacak"
+
+#~ msgid "Specify a search condition"
+#~ msgstr "Bir arama koÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â…ÃƒÂƒÃ‚Â‚ÃƒÂ‚Ã‚ÂŸulu belirleyin"
