@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.14 2004/06/14 20:56:04 gpowers Exp $
+ * $Id: some.php,v 1.15 2004/06/16 20:44:07 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,9 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-//set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $msg = $_GET['msg'];
 $offset = $_POST['offset'];
@@ -326,6 +324,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2004/06/16 20:44:07  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.14  2004/06/14 20:56:04  gpowers
  * - removed CAST from SELECT statement
  *   - it is not compatible across databases

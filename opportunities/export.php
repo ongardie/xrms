@@ -8,9 +8,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'adodb/toexport.inc.php');
 
-//set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);

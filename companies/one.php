@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.44 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: one.php,v 1.45 2004/06/16 20:41:07 gpowers Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -21,8 +21,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
+
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
@@ -637,6 +637,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.45  2004/06/16 20:41:07  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.44  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

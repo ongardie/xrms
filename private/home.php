@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.20 2004/06/15 14:18:04 gpowers Exp $
+ * $Id: home.php,v 1.21 2004/06/16 20:38:20 gpowers Exp $
  */
 
 // include the common files
@@ -18,9 +18,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-//set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+//see if we are logged in
+$session_user_id = session_check();
 
 $msg = $_GET['msg'];
 
@@ -475,6 +474,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.21  2004/06/16 20:38:20  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.20  2004/06/15 14:18:04  gpowers
  * - corrected time formats
  *

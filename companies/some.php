@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.14 2004/06/12 16:15:06 braverock Exp $
+ * $Id: some.php,v 1.15 2004/06/16 20:42:02 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,8 +19,8 @@ require_once($include_directory . 'adodb-params.php');
 //set the language
 $_SESSION['language'] = 'english';
 
-$thispage = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check($thispage);
+$session_user_id = session_check();
+
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
@@ -102,7 +102,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 //uncomment this line if you suspect a problem with the SQL query
-//$con->debug = 1;
+// $con->debug = 1;
 
 $sql = "
 SELECT " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
@@ -380,6 +380,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2004/06/16 20:42:02  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.14  2004/06/12 16:15:06  braverock
  * - remove CAST on CONCAT - databases should implicitly convert numeric to string and VARCHAR is not universally supported
  *

@@ -2,7 +2,7 @@
 /**
  * Search and view summary information on multiple companies and thier contacts for printing.
  *
- * $Id: company-contacts-printout.php,v 1.3 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: company-contacts-printout.php,v 1.4 2004/06/16 20:40:23 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,8 +17,8 @@ require_once($include_directory . 'adodb-params.php');
 //set the language
 $_SESSION['language'] = 'english';
 
-$thispage = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check($thispage);
+$session_user_id = session_check();
+
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
@@ -338,6 +338,10 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.4  2004/06/16 20:40:23  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.3  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
