@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.33 2004/06/21 13:56:44 gpowers Exp $
+ * $Id: one.php,v 1.34 2004/06/24 20:50:29 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -455,6 +455,7 @@ function markComplete() {
                 <td class=widget_content_form_element>
                     <input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';">
                     <input class=button type=button value="<?php  echo 'Vcard'; ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';">
+                    <?php do_hook('one_contact_buttons'); ?>
                 </td>
             </tr>
         </table>
@@ -546,6 +547,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.34  2004/06/24 20:50:29  gpowers
+ * - added one_contact_buttons hook for radtest plugin
+ *
  * Revision 1.33  2004/06/21 13:56:44  gpowers
  * - removed extra blank lines
  *
