@@ -18,7 +18,7 @@
  * in another file.  It will improve the performance of the entire
  * system.
  *
- * $Id: setup.php,v 1.1 2004/05/06 14:30:14 gpowers Exp $
+ * $Id: setup.php,v 1.2 2004/07/22 13:12:30 gpowers Exp $
  */
 
 
@@ -34,25 +34,17 @@ function autostatus() {
     global $http_site_root;
 
     //Add Demo link to upper menu
-    echo "&nbsp;<a href='$http_site_root/plugins/autostatus/autostatus.php'>Server Status</a>&nbsp;&bull;\n";
+    echo "&nbsp;<a href='$http_site_root/plugins/autostatus/autostatus.php'>" . _("Server Status") . "</a>&nbsp;&bull;\n";
 }
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.2  2004/07/22 13:12:30  gpowers
+ * - Added i18n support to menuline title
+ *   - Removed unrelated phpdoc notes
+ *
  * Revision 1.1  2004/05/06 14:30:14  gpowers
  * This is a simple plugin for including an Autostatus page in XRMS.
- *
- * Revision 1.4  2004/03/29 21:14:40  maulani
- * - Add opportunity_detail hook as a commented-out example
- *
- * Revision 1.3  2004/03/20 22:49:42  braverock
- * - need global $http_site_root in some cases
- *
- * Revision 1.2  2004/03/20 22:43:02  braverock
- * - changed to use $http_site_root
- *
- * Revision 1.1  2004/03/20 20:09:35  braverock
- * Initial Revision of Demo plugin to autostatusnstrate using hooks
  *
  */
 ?>
