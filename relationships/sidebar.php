@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.27 2005/02/10 02:34:30 vanmer Exp $
+ * $Id: sidebar.php,v 1.28 2005/02/10 13:13:28 braverock Exp $
  */
 
 require_once('relationship_functions.php');
@@ -44,7 +44,7 @@ $current_ids = array(-1);
 $relationship_ids = array(-1);
 $relationship_link_rows = '';
 
-
+// $con->debug=1;
 
 
     //check relationships to ensure value before loading relationships    
@@ -310,8 +310,13 @@ $relationship_link_rows = '';
             $relationship_link_rows .= "        <!-- Content End --></table>\n";
         }
 
+// $con->debug=0;
+
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.28  2005/02/10 13:13:28  braverock
+ * - add debug commands (commented) so that we can continue to optimize this
+ *
  * Revision 1.27  2005/02/10 02:34:30  vanmer
  * - altered execution of sidebar to use newly created relationship functions
  * - added optional parameters to show/hide certain relationship information, including address, agent count, linked relationships, and opportunities
