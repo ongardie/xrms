@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.22 2004/12/24 16:41:23 braverock Exp $
+ * $Id: one.php,v 1.23 2005/01/06 20:54:36 vanmer Exp $
  */
 
 //include required files
@@ -14,10 +14,10 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+$case_id = $_GET['case_id'];
+$on_what_id=$case_id;
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-
-$case_id = $_GET['case_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -26,6 +26,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 update_recent_items($con, $session_user_id, "cases", $case_id);
 
 $sql = "select ca.*, c.company_id, c.company_name, c.company_code,
+d.division_name,
 cont.first_names, cont.last_name, cont.work_phone, cont.email,
 cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_display_html,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
@@ -33,6 +34,7 @@ u3.username as case_owner_username, u4.username as account_owner_username,
 as1.account_status_display_html, r.rating_display_html, crm_status_display_html
 from cases ca, case_statuses cas, case_priorities cap, case_types cat, companies c, contacts cont,
 users u1, users u2, users u3, users u4, account_statuses as1, ratings r, crm_statuses crm
+left outer join company_division d on ca.division_id=d.division_id
 where ca.company_id = c.company_id
 and ca.case_status_id = cas.case_status_id
 and ca.case_priority_id = cap.case_priority_id
@@ -51,6 +53,8 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_id = $rst->fields['company_id'];
+    $division_id = $rst->fields['division_id'];
+    $division_name = $rst->fields['division_name'];
     $company_name = $rst->fields['company_name'];
     $company_code = $rst->fields['company_code'];
     $contact_id = $rst->fields['contact_id'];
@@ -261,6 +265,10 @@ start_page($page_title, true, $msg);
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a> (<?php  echo $company_code; ?>)</td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel><?php echo _("Division"); ?></td>
+                                    <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>&division_id=<?php echo $division_id; ?>"><?php  echo $division_name; ?></a></td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner_username; ?></td>
                                 </tr>
@@ -339,6 +347,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.23  2005/01/06 20:54:36  vanmer
+ * - moved setup of initial values to above session_check (for ACL)
+ * - added division to display of one case, if available
+ *
  * Revision 1.22  2004/12/24 16:41:23  braverock
  * - adjusted width of activity title to better manage layout of activity table
  *
