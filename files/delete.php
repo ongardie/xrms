@@ -26,6 +26,10 @@ $rec['file_record_status'] = 'd';
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+// uncomment the following line to remove files from the filesystem
+// when they are deleted by a user. Use with caution.
+// system("rm storage/" . $rst->fields['file_filesystem_name'] );
+
 $con->close();
 
 header("Location: {$http_site_root}/{$return_url}");
