@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.25 2004/10/26 16:39:00 introspectshun Exp $
+ * $Id: one.php,v 1.26 2004/12/20 21:21:18 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -131,11 +131,11 @@ CASE
   WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
   ELSE 0
 END AS is_overdue
-FROM activity_types at, users u, activities a
+FROM activity_types at, activities a
 LEFT JOIN contacts cont ON a.contact_id = cont.contact_id
+LEFT JOIN users u ON a.user_id = u.user_id
 WHERE a.on_what_table = 'opportunities'
   AND a.on_what_id = $opportunity_id
-  AND a.user_id = u.user_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'
 ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
@@ -204,6 +204,14 @@ require_once("../files/sidebar.php");
 
 //include the notes sidebar
 require_once("../notes/sidebar.php");
+
+//include the relationships sidebar
+$relationship_name = "opportunity link";
+$working_direction = "both";
+$overall_id = $opportunity_id;
+$saved_opportunity_id = $opportunity_id;
+require("../relationships/sidebar.php");
+$opportunity_id = $saved_opportunity_id;
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -425,6 +433,9 @@ function markComplete() {
 
         <!-- files //-->
         <?php echo $file_rows; ?>
+        
+        <!-- relationships //-->
+        <?php echo $relationship_link_rows; ?>
 
     </div>
 </div>
@@ -435,6 +446,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.26  2004/12/20 21:21:18  neildogg
+ * - User 0 support in opportunities
+ *
  * Revision 1.25  2004/10/26 16:39:00  introspectshun
  * - Centralized category handling as sidebar
  *
