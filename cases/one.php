@@ -83,7 +83,7 @@ cont.contact_id,
 cont.first_names as contact_first_names, 
 cont.last_name as contact_last_name, 
 u.username, 
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
 from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
 where a.on_what_table = 'cases'
 and a.on_what_id = $case_id

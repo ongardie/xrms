@@ -36,7 +36,8 @@ if ($rst) {
     $on_what_table = $rst->fields['on_what_table'];
     $on_what_id = $rst->fields['on_what_id'];
     $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
-    $ends_at = $con->userdate($rst->fields['ends_at']);
+    if ($rst->fields['ends_at']!="") {$ends_at = $con->userdate($rst->fields['ends_at']);} else {$ends_at = "";}
+    
     $activity_status = $rst->fields['activity_status'];
     $rst->close();
 }

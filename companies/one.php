@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.16 2004/01/26 19:18:02 braverock Exp $
+ * $Id: one.php,v 1.17 2004/02/06 22:47:37 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -130,7 +130,7 @@ at.activity_type_pretty_name,
 cont.first_names as contact_first_names,
 cont.last_name as contact_last_name,
 u.username,
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
 from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
 where a.company_id = $company_id
 and a.user_id = u.user_id
@@ -708,6 +708,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.17  2004/02/06 22:47:37  maulani
+ * Use ends_at to determine if activity is overdue
+ *
  * Revision 1.16  2004/01/26 19:18:02  braverock
  * - added company division pages and fields
  * - added phpdoc

@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.4 2004/01/26 19:26:32 braverock Exp $
+ * $Id: new-2.php,v 1.5 2004/02/06 22:47:36 maulani Exp $
  */
 
 //where do we include from
@@ -58,7 +58,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
     //munge the scheduled time into a time that we can use
     $scheduled_at = (strlen($scheduled_at) > 0) ? $con->dbtimestamp($scheduled_at . ' 23:59:59') : $con->dbtimestamp(mktime());
-
+    $ends_at = $scheduled_at;
 //$con->debug = 1;
 
 // define our query
@@ -75,6 +75,7 @@ $sql = "insert into activities
         activity_description = '. $con->qstr($activity_note, get_magic_quotes_gpc()) . ',
         entered_at = '. $con->dbtimestamp(mktime()) .',
         scheduled_at = '. $scheduled_at . ',
+        ends_at = '. $ends_at . ',
         activity_status = ' . $con->qstr($activity_status, get_magic_quotes_gpc());
 
 //insert it aready
@@ -93,6 +94,9 @@ header("Location: " . $http_site_root . $return_url);
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.5  2004/02/06 22:47:36  maulani
+ *Use ends_at to determine if activity is overdue
+ *
  *Revision 1.4  2004/01/26 19:26:32  braverock
  *- modified to use getGlobalVar fn
  *- modified to allow for mailto $email link

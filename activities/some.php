@@ -11,7 +11,7 @@ $user_id = 1;
 
 $msg = $_GET['msg'];
 
-$sql = "select *, if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue 
+$sql = "select *, if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue 
 from companies c, activity_types at, activities a left outer join contacts cont on cont.contact_id = a.contact_id 
 where a.company_id = c.company_id 
 and at.activity_type_id = a.activity_type_id 

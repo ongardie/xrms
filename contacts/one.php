@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.12 2004/01/26 19:13:34 braverock Exp $
+ * $Id: one.php,v 1.13 2004/02/06 22:47:37 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -126,7 +126,7 @@ at.activity_type_pretty_name,
 cont.first_names as contact_first_names,
 cont.last_name as contact_last_name,
 u.username,
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
 from activity_types at, users u, activities a, contacts cont
 where a.contact_id = $contact_id
 and a.contact_id = cont.contact_id
@@ -681,6 +681,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2004/02/06 22:47:37  maulani
+ * Use ends_at to determine if activity is overdue
+ *
  * Revision 1.12  2004/01/26 19:13:34  braverock
  * - added company division fields
  * - added phpdoc

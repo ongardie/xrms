@@ -18,6 +18,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql_activities = "select activity_id, 
 activity_title, 
 scheduled_at, 
+ends_at,
 a.on_what_table, 
 a.on_what_id, 
 a.entered_at, 
@@ -28,7 +29,7 @@ c.company_name,
 cont.contact_id, 
 cont.first_names as contact_first_names, 
 cont.last_name as contact_last_name, 
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
 from activity_types at, companies c, activities a left join contacts cont on a.contact_id = cont.contact_id
 where a.user_id = $session_user_id
 and a.activity_type_id = at.activity_type_id
@@ -49,6 +50,7 @@ if ($rst) {
         $on_what_table = $rst->fields['on_what_table'];
         $on_what_id = $rst->fields['on_what_id'];
         $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
+        $ends_at = $con->userdate($rst->fields['ends_at']);
         $activity_status = $rst->fields['activity_status'];
 		
 		$attached_to_link = '';
@@ -95,6 +97,7 @@ if ($rst) {
         $activity_rows .= '<td class=' . $classname . "><a href='../contacts/one.php?contact_id=" . $rst->fields['contact_id'] . "'>" . $rst->fields['contact_first_names'] . ' ' .  $rst->fields['contact_last_name'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $attached_to_link . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['ends_at']) . '</td>';
         $activity_rows .= '</tr>';
         $rst->movenext();
     }
@@ -118,7 +121,7 @@ start_page($page_title);
 
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=6>Open Activities</td>
+                <td class=widget_header colspan=7>Open Activities</td>
             </tr>
             <tr>
                 <td class=widget_label>Activity</td>
@@ -127,6 +130,7 @@ start_page($page_title);
                 <td class=widget_label>Contact</td>
                 <td class=widget_label>About</td>
                 <td class=widget_label>Scheduled</td>
+                <td class=widget_label>Due</td>
             </tr>
             <?php  echo $activity_rows ?>
         </table>

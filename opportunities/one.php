@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.6 2004/01/26 19:35:25 braverock Exp $
+ * $Id: one.php,v 1.7 2004/02/06 22:47:37 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -86,7 +86,7 @@ $sql_activities = "select activity_id,
     cont.first_names as contact_first_names,
     cont.last_name as contact_last_name,
     u.username,
-    if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+    if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
     from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
     where a.on_what_table = 'opportunities'
     and a.on_what_id = $opportunity_id
