@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.95 2004/09/02 15:19:13 neildogg Exp $
+ * $Id: utils-misc.php,v 1.96 2004/09/24 21:45:16 niclowe Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -760,9 +760,14 @@ function get_formatted_address (&$con,$address_id) {
 
         // added for mapquest plugin
         global $use_mapquest_link;
+				// added for whereis plugin
+				global $use_whereis_link;
         if ($use_mapquest_link == "y") {
             // this is defined in plugins/mapquest/setup.php:
             return mapquest($line1, $city, $province, $iso_code2, $address_to_display);
+				}elseif ($use_whereis_link == "y"){
+            // this is defined in plugins/whereis/setup.php:
+            return whereis($line1, $city, $province, $iso_code2, $address_to_display);				
         } else {
             return $address_to_display;
         }
@@ -1286,6 +1291,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.96  2004/09/24 21:45:16  niclowe
+ * added support for whereis plugin (very similiar to mapquest)
+ *
  * Revision 1.95  2004/09/02 15:19:13  neildogg
  * - Significantly faster time zone queries
  *
