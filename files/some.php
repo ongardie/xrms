@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.22 2004/08/04 13:05:18 cpsource Exp $
+ * $Id: some.php,v 1.23 2004/08/05 14:34:19 introspectshun Exp $
  */
 
 //include required files
@@ -246,7 +246,7 @@ if ($rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed file</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed file") . '</td></tr>';
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -303,12 +303,12 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element>
             <select name="file_on_what">
                         <option value="default"<?php if ($file_on_what == "") { echo " selected"; } ?>></option>
-                        <option value="contacts"<?php if ($file_on_what == "contacts" ) { echo " selected"; } ?>>Contacts</option>
-                        <option value="contacts_of_companies"<?php if ($file_on_what == "contacts_of_companies") { echo " selected"; } ?>>Contacts of Companies</option>
-                        <option value="companies"<?php if ($file_on_what == "companies") { echo " selected"; } ?>>Companies</option>
-                        <option value="campaigns"<?php if ($file_on_what == "campaigns") { echo " selected"; } ?>>Campaigns</option>
-                        <option value="opportunities"<?php if ($file_on_what == "opportunities") { echo " selected"; } ?>>Opportunities</option>
-                        <option value="cases"<?php if ($file_on_what == "cases") { echo " selected"; } ?>>Cases</option>
+                        <option value="contacts"<?php if ($file_on_what == "contacts" ) { echo " selected"; } ?>><?php echo _("Contacts"); ?></option>
+                        <option value="contacts_of_companies"<?php if ($file_on_what == "contacts_of_companies") { echo " selected"; } ?>><?php echo _("Contacts of Companies"); ?></option>
+                        <option value="companies"<?php if ($file_on_what == "companies") { echo " selected"; } ?>><?php echo _("Companies"); ?></option>
+                        <option value="campaigns"<?php if ($file_on_what == "campaigns") { echo " selected"; } ?>><?php echo _("Campaigns"); ?></option>
+                        <option value="opportunities"<?php if ($file_on_what == "opportunities") { echo " selected"; } ?>><?php echo _("Opportunities"); ?></option>
+                        <option value="cases"<?php if ($file_on_what == "cases") { echo " selected"; } ?>><?php echo _("Cases"); ?></option>
                     </select>
                 </td>
         </tr>
@@ -324,7 +324,7 @@ start_page($page_title, true, $msg);
         </tr>
         <tr> 
                 <td colspan=4 class=widget_content_form_element>
-                    <input class=button type=submit value="Search"> 
+                    <input class=button type=submit value="<?php echo _("Search"); ?>"> 
                     <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php if ($company_count > 0) {echo "<input class=button type=button onclick='javascript: bulkEmail()' value='"._("Bulk E-Mail")."'>";}; ?>
           </td>
@@ -410,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.23  2004/08/05 14:34:19  introspectshun
+ * - Localized remaining option/button strings for i18n/l10n support
+ *
  * Revision 1.22  2004/08/04 13:05:18  cpsource
  * - Add hook to OWL.
  *
