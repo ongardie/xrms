@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.65 2004/08/03 11:18:35 cpsource Exp $
+ * $Id: one.php,v 1.66 2004/08/05 22:53:16 introspectshun Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -264,7 +264,7 @@ $rst = $con->execute($sql);
 $former_name_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
-        $former_name_rows .= '<tr><td class=sublabel>Former Name</td>';
+        $former_name_rows .= '<tr><td class=sublabel>'._("Former Name").'</td>';
         $former_name_rows .= '<td class=clear>' . $rst->fields['former_name'] . '</td>';
         $former_name_rows .= '</tr>';
         $rst->movenext();
@@ -630,7 +630,7 @@ function openNewsWindow() {
         <!-- contacts //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6><?php echo $num_contacts; ?> <?php echo _("Contacts"); ?></td>
+                <td class=widget_header colspan=6><?php echo $num_contacts; ?> <?php if ($num_contacts === 1) { echo _("Contact"); } else { echo _("Contacts"); } ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Name"); ?></td>
@@ -758,6 +758,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.66  2004/08/05 22:53:16  introspectshun
+ * - Localized 'Former Name'
+ * - Contacts table now shows singular label ("Contact") when 1 record returned
+ *
  * Revision 1.65  2004/08/03 11:18:35  cpsource
  * - Bug 993235 - industry repeat deleted
  *
