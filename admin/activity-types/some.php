@@ -2,7 +2,7 @@
 /**
  * Manage Activity Types
  *
- * $Id: some.php,v 1.11 2004/11/26 15:58:42 braverock Exp $
+ * $Id: some.php,v 1.12 2004/11/28 17:30:45 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -32,7 +32,7 @@ if ($rst) {
         }
         if($rst->fields['sort_order'] != $rst->rowcount()) {
             $table_rows .= "<a href='../sort.php?direction=down&sort_order=" . $rst->fields['sort_order']
-                . "&table_name=activity_type&return_url=/admin/activity-types/some.php'>"_("down")."</a>\n";
+                . "&table_name=activity_type&return_url=/admin/activity-types/some.php'>"._("down")."</a>\n";
         }
                 $table_rows .= '</tr>';
                 $rst->movenext();
@@ -105,6 +105,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2004/11/28 17:30:45  braverock
+ * - localized strings for i18n
+ *
  * Revision 1.11  2004/11/26 15:58:42  braverock
  * - localized strings for i18n
  *
