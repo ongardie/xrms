@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer.php,v 1.5 2004/07/20 15:38:37 neildogg Exp $
+ * $Id: transfer.php,v 1.6 2004/07/21 15:20:04 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -30,7 +30,7 @@ $company_id =  $rst->fields['company_id'];
 
 $con->close();
 
-$page_title = $contact_name . " - Transfer to Another Company";
+$page_title = $contact_name . " - " . _("Transfer to Another Company");
 start_page($page_title, true, $msg);
 
 ?>
@@ -43,17 +43,17 @@ start_page($page_title, true, $msg);
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Search for Company</td>
+                <td class=widget_header colspan=2><?php echo _("Search for Company"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name or ID</td>
+                <td class=widget_label><?php echo _("Name or ID"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="company_name"> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <input class=button type=submit value="Search">
+                    <input class=button type=submit value="<?php echo _("Search"); ?>">
                 </td>
             </tr>
 
@@ -76,6 +76,10 @@ end_page();
 
 /**
  * $Log: transfer.php,v $
+ * Revision 1.6  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
  * Revision 1.5  2004/07/20 15:38:37  neildogg
  * - Fixed copy and paste problem with required indicator
  *

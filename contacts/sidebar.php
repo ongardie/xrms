@@ -9,19 +9,19 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.9 2004/07/14 22:04:48 braverock Exp $
+ * $Id: sidebar.php,v 1.10 2004/07/21 15:20:04 introspectshun Exp $
  */
 
 if ( !defined('IN_XRMS') )
 {
-  die('Hacking attempt');
+  die(_("Hacking attempt"));
   exit;
 }
 
 //add contact information block on sidebar
 $contact_block = '<table class=widget cellspacing=1 width="100%">
     <tr>
-        <td class=widget_header colspan=5>Contact Information</td>
+        <td class=widget_header colspan=5>' . _("Contact Information") . '</td>
     </tr>'."\n";
 
 if ($contact_id) {
@@ -44,12 +44,12 @@ if ($rst && $rst->RecordCount()>=1) {
                     . "</td>\n\t</tr>";
 
     if ($rst->fields['work_phone']) {
-        $contact_block .= "<tr><td class=widget_content>Work Phone: <strong>"
+        $contact_block .= "<tr><td class=widget_content>" . _("Work Phone") . ": <strong>"
                         . $rst->fields['work_phone'] . "</strong></td>\n\t</tr>";
     }
 
     if ($rst->fields['cell_phone']) {
-        $contact_block .= "<tr><td class=widget_content>Cell Phone: <strong>"
+        $contact_block .= "<tr><td class=widget_content>" . _("Cell Phone") . ": <strong>"
                         . $rst->fields['cell_phone'] . "</strong></td>\n\t</tr>";
     }
 
@@ -63,13 +63,17 @@ if ($rst && $rst->RecordCount()>=1) {
 
 } else {
     $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content colspan=5>"
-                    . "No Contact Selected."
+                    . _("No Contact Selected.")
                     . "&nbsp; </td>\n\t</tr>";
 }
 $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.10  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
  * Revision 1.9  2004/07/14 22:04:48  braverock
  * - added code to avoid object not defined error
  *

@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.4 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: edit-address.php,v 1.5 2004/07/21 15:20:04 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -86,22 +86,22 @@ if ($rst) {
         $show_company = false;
         $company_addresses = "";
         if ($rst->fields['default_primary_address'] == $address_id) {
-            $company_addresses .= 'Primary Address<br />';
+            $company_addresses .= _("Primary Address") . '<br />';
             $show_company = true;
         }
 
         if ($rst->fields['default_billing_address'] == $address_id) {
-            $company_addresses .= 'Billing Address<br />';
+            $company_addresses .= _("Billing Address") . '<br />';
             $show_company = true;
         }
 
         if ($rst->fields['default_shipping_address'] == $address_id) {
-            $company_addresses .= 'Shipping Address<br />';
+            $company_addresses .= _("Shipping Address") . '<br />';
             $show_company = true;
         }
 
         if ($rst->fields['default_payment_address'] == $address_id) {
-            $company_addresses .= 'Payment Address<br />';
+            $company_addresses .= _("Payment Address") . '<br />';
             $show_company = true;
         }
 
@@ -141,7 +141,7 @@ if ($rst) {
 $con->close();
 
 
-$page_title = $contact_name . " - Edit Address";
+$page_title = $contact_name . " - " . _("Edit Address");
 start_page($page_title, true, $msg);
 
 ?>
@@ -155,65 +155,67 @@ start_page($page_title, true, $msg);
         <input type=hidden name=address_id value=<?php echo $address_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>This Address Is Also Used By</td>
+                <td class=widget_header colspan=2><?php echo _("This Address Is Also Used By"); ?></td>
             </tr>
             <?php echo $addresses; ?>
             <tr>
-                <td class=widget_header colspan=2>Use Alternate Address</td>
+                <td class=widget_header colspan=2><?php echo _("Use Alternate Address"); ?></td>
             </tr>
             <?php echo $alt_addresses; ?>
             <tr>
-                <td class=widget_header colspan=2>Create New Address?</td>
+                <td class=widget_header colspan=2><?php echo _("Create New Address?"); ?></td>
             </tr>
             <tr>
                 <td></td>
                 <td class=widget_label colspan=2>
-                    Editing/Deleting this record will change the address for <em><b>ALL</b</em>
-                    companies and contacts listed abve.<br /><br />
-                    Create a New Address? <input type=checkbox name=new>
+                <?php echo _("Editing/Deleting this record will change the address for all companies and contacts listed above.")
+                    . "<br /><br />"
+                    . _("Create a New Address?")
+                    . " <input type=checkbox name=new>";
+                ?>
                 </td>
             </tr>
             <tr>
-                <td class=widget_header colspan=2>Edit Address</td>
+                <td class=widget_header colspan=2><?php echo _("Edit Address"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Contact</td>
+                <td class=widget_label_right><?php echo _("Contact"); ?></td>
                 <td class=widget_content><a href="one.php?contact_id=<?php echo $contact_id; ?>"><?php  echo $contact_name; ?></a></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Address Name</td>
+                <td class=widget_label_right><?php echo _("Address Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Line 1</td>
+                <td class=widget_label_right><?php echo _("Line 1"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=line1 value="<?php echo $line1; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Line 2</td>
+                <td class=widget_label_right><?php echo _("Line 2"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=line2 value="<?php echo $line2; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>City</td>
+                <td class=widget_label_right><?php echo _("City"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=city value="<?php echo $city; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>State/Province</td>
+                <td class=widget_label_right><?php echo _("State/Province"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=province value="<?php echo $province; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Postal Code</td>
+                <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
                 <td class=widget_content_form_element><input type=text size=10 name=postal_code value="<?php echo $postal_code; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Country</td>
+                <td class=widget_label_right><?php echo _("Country"); ?></td>
                 <td class=widget_content_form_element><?php echo $country_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_91px>Address Body</td>
-                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> Use</td>
+                <td class=widget_label_right_91px><?php echo _("Address Body"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> <?php echo _("Use"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input class=button type=button value="Delete Address" onclick="javascript: location.href='delete-address.php?contact_id=<?php echo $contact_id ?>&address_id=<?php echo $address_id ?>';"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input class=button type=button value="<?php echo _("Delete Address"); ?>" onclick="javascript: location.href='delete-address.php?contact_id=<?php echo $contact_id ?>&address_id=<?php echo $address_id ?>';"></td>
             </tr>
         </table>
         </form>
@@ -234,6 +236,10 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.5  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
  * Revision 1.4  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

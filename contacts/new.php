@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.13 2004/07/13 18:05:59 cpsource Exp $
+ * $Id: new.php,v 1.14 2004/07/21 15:20:04 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -99,7 +99,7 @@ if ( !isset($gender) ) {
   $gender = '';
 }
 
-$page_title = "New Contact for $company_name";
+$page_title = _("New Contact for") . ' ' . $company_name;
 start_page($page_title, true, $msg);
 
 ?>
@@ -111,88 +111,88 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value="<?php echo $company_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Contact Information</td>
+                <td class=widget_header colspan=2><?php echo _("Contact Information"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Division</td>
+                <td class=widget_label_right><?php echo _("Division"); ?></td>
                 <td class=widget_content_form_element><?php echo $division_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Address</td>
+                <td class=widget_label_right><?php echo _("Address"); ?></td>
                 <td class=widget_content_form_element><?php echo $address_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Salutation</td>
+                <td class=widget_label_right><?php echo _("Salutation"); ?></td>
                 <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>First Names</td>
+                <td class=widget_label_right><?php echo _("First Names"); ?></td>
                 <td class=widget_content_form_element><input type=text name=first_names size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Last Name</td>
+                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=last_name size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Gender</td>
+                <td class=widget_label_right><?php echo _("Gender"); ?></td>
                 <td class=widget_content_form_element>
                 <select name="gender">
-                    <option value="u" <?php if (($gender == "u") or ($gender == '')) {print " selected ";} ?>>Unknown
-                    <option value="m" <?php if ($gender == "m") {print " selected ";} ?>>Male
-                    <option value="f" <?php if ($gender == "f") {print " selected ";} ?>>Female
+                    <option value="u" <?php if (($gender == "u") or ($gender == '')) {print " selected ";} ?>><?php echo _("Unknown"); ?>
+                    <option value="m" <?php if ($gender == "m") {print " selected ";} ?>><?php echo _("Male"); ?>
+                    <option value="f" <?php if ($gender == "f") {print " selected ";} ?>><?php echo _("Female"); ?>
                 </select>
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Date of Birth</td>
+                <td class=widget_label_right><?php echo _("Date of Birth"); ?></td>
                 <td class=widget_content_form_element><input type=text name=date_of_birth size=12></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Summary</td>
+                <td class=widget_label_right><?php echo _("Summary"); ?></td>
                 <td class=widget_content_form_element><input type=text name=summary size=35></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Title</td>
+                <td class=widget_label_right><?php echo _("Title"); ?></td>
                 <td class=widget_content_form_element><input type=text name=title size=35></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Description</td>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><input type=text name=description size=35></td>
             </tr>
             <tr>
-                <td class=widget_label_right>E-Mail</td>
+                <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
                 <td class=widget_content_form_element><input type=text name=email size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Work Phone</td>
+                <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=work_phone size=30 value="<?php  echo $phone; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Cell Phone</td>
+                <td class=widget_label_right><?php echo _("Cell Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=cell_phone size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Home Phone</td>
+                <td class=widget_label_right><?php echo _("Home Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=home_phone size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Fax</td>
+                <td class=widget_label_right><?php echo _("Fax"); ?></td>
                 <td class=widget_content_form_element><input type=text name=fax size=30 value="<?php  echo $fax; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>AOL Name</td>
+                <td class=widget_label_right><?php echo _("AOL Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=aol_name size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Yahoo Name</td>
+                <td class=widget_label_right><?php echo _("Yahoo Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=yahoo_name size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>MSN Name</td>
+                <td class=widget_label_right><?php echo _("MSN Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=msn_name size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Interests</td>
+                <td class=widget_label_right><?php echo _("Interests"); ?></td>
                 <td class=widget_content_form_element><input type=text name=interests size=35></td>
             </tr>
             <tr>
@@ -212,11 +212,11 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=custom4 size=35></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Profile</td>
+                <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add Contact"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add Contact"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -248,6 +248,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.14  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
  * Revision 1.13  2004/07/13 18:05:59  cpsource
  * - Add feature use_self_contacts
  *   fix misc unitialized variables

@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.38 2004/07/14 22:12:00 neildogg Exp $
+ * $Id: one.php,v 1.39 2004/07/21 15:20:04 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -18,7 +18,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 // make sure $msg is never undefined
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -87,16 +86,16 @@ if ($rst) {
 
 switch ($gender) {
     case 'f':
-        $gender = 'Female';
+        $gender = _("Female");
         break;
     case 'm':
-        $gender = 'Male';
+        $gender = _("Male");
         break;
     case 'u':
-        $gender = 'Unknown';
+        $gender = _("Unknown");
         break;
     default:
-        $gender = 'Unknown';
+        $gender = _("Unknown");
         break;
 }
 
@@ -157,7 +156,7 @@ if ($rst) {
             $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
             $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
         } else {
-            $attached_to_link = "N/A";
+            $attached_to_link = _("N/A");
             $sql2 = "select * from companies where 1 = 2";
         }
 
@@ -281,7 +280,7 @@ if ($rst) {
 $con->close();
 
 if (strlen($categories) == 0) {
-    $categories = "No categories";
+    $categories = _("No categories");
 }
 
 $page_title = $first_names . ' ' . $last_name;
@@ -311,7 +310,7 @@ function markComplete() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Contact Details</td>
+                <td class=widget_header><?php echo _("Contact Details"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -321,51 +320,51 @@ function markComplete() {
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel>Name</td>
+                                    <td width=1% class=sublabel><?php echo _("Name"); ?></td>
                                     <td class=clear><?php  echo $last_name . ', ' . $salutation . ' ' . $first_names; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Gender</td>
+                                    <td class=sublabel><?php echo _("Gender"); ?></td>
                                     <td class=clear><?php  echo $gender; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Summary</td>
+                                    <td class=sublabel><?php echo _("Summary"); ?></td>
                                     <td class=clear><?php  echo $summary; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Title</td>
+                                    <td class=sublabel><?php echo _("Title"); ?></td>
                                     <td class=clear><?php  echo $title; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Description</td>
+                                    <td class=sublabel><?php echo _("Description"); ?></td>
                                     <td class=clear><?php  echo $description; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Date of Birth</td>
+                                    <td class=sublabel><?php echo _("Date of Birth"); ?></td>
                                     <td class=clear><?php  echo $date_of_birth; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>E-Mail</td>
+                                    <td class=sublabel><?php echo _("E-Mail"); ?></td>
                                     <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&return_url=$http_site_root/contacts/one.php?contact_id=$contact_id'\" >" . htmlspecialchars($email); ?></a></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Work Phone</td>
+                                    <td class=sublabel><?php echo _("Work Phone"); ?></td>
                                     <td class=clear><?php  echo $work_phone; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Home Phone</td>
+                                    <td class=sublabel><?php echo _("Home Phone"); ?></td>
                                     <td class=clear><?php  echo $home_phone; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Cell Phone</td>
+                                    <td class=sublabel><?php echo _("Cell Phone"); ?></td>
                                     <td class=clear><?php  echo $cell_phone; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Fax</td>
+                                    <td class=sublabel><?php echo _("Fax"); ?></td>
                                     <td class=clear><?php  echo $fax; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Interests</td>
+                                    <td class=sublabel><?php echo _("Interests"); ?></td>
                                     <td class=clear><?php  echo $interests; ?></td>
                                 </tr>
                                 <tr>
@@ -373,18 +372,18 @@ function markComplete() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Yahoo! IM</td>
+                                    <td class=sublabel><?php echo _("Yahoo! IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($yahoo_name) > 0) {echo("<a href='ymsgr:sendim?$yahoo_name'><img border=0 src='http://opi.yahoo.com/online?u=$yahoo_name&m=g&t=3'></a>");}; ?>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>MSN IM</td>
+                                    <td class=sublabel><?php echo _("MSN IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($msn_name) > 0) {echo("<a href=\"javascript: openMsnSession('$msn_name');\">$msn_name</a>");}; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>AOL IM</td>
+                                    <td class=sublabel><?php echo _("AOL IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($aol_name) > 0) {echo("<a href='aim:goim?screenname=$aol_name'>$aol_name</a>");}; ?>
                                     </td>
@@ -397,23 +396,23 @@ function markComplete() {
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td class=sublabel>Company</td>
+                                    <td class=sublabel><?php echo _("Company"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root?>/companies/one.php?company_id=<?php echo $company_id;; ?>"><?php echo $company_name; ?></a> (<?php echo $company_code;?>)</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Division</td>
+                                    <td class=sublabel><?php echo _("Division"); ?></td>
                                     <td class=clear><?php  echo $division_row; ?></td>
                                 </tr>
                                  <tr>
-                                    <td class=sublabel>Acct. Owner</td>
+                                    <td class=sublabel><?php echo _("Acct. Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>CRM Status</td>
+                                    <td class=sublabel><?php echo _("CRM Status"); ?></td>
                                     <td class=clear><?php  echo $crm_status_display_html; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Account Status</td>
+                                    <td class=sublabel><?php echo _("Account Status"); ?></td>
                                     <td class=clear><?php  echo $account_status_display_html; ?></td>
                                 </tr>
                                 <tr>
@@ -421,7 +420,7 @@ function markComplete() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Address</td>
+                                    <td class=sublabel><?php echo _("Address"); ?></td>
                                     <td class=clear><?php echo $address_to_display ?></td>
                                 </tr>
                                 <tr>
@@ -449,11 +448,11 @@ function markComplete() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Created</td>
+                                    <td class=sublabel><?php echo _("Created"); ?></td>
                                     <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Last Modified</td>
+                                    <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
                                 </tr>
                             </table>
@@ -468,8 +467,8 @@ function markComplete() {
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                    <input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';">
-                    <input class=button type=button value="<?php  echo 'Vcard'; ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=button value="<?php echo _("Vcard"); ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';">
                     <?php do_hook('one_contact_buttons'); ?>
                 </td>
             </tr>
@@ -483,14 +482,14 @@ function markComplete() {
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6>Activities</td>
+                <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>User</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>About</td>
-                <td colspan=2 class=widget_label>On</td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("User"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("About"); ?></td>
+                <td colspan=2 class=widget_label><?php echo _("On"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
@@ -500,8 +499,8 @@ function markComplete() {
                 <td colspan=2 class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
-                    <input class=button type=submit value="Add">
-                    <input class=button type=button onclick="javascript: markComplete();" value="Done">
+                    <input class=button type=submit value="<?php echo _("Add"); ?>">
+                    <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
                 </td>
             </tr>
             <?php  echo $activity_rows; ?>
@@ -516,13 +515,13 @@ function markComplete() {
         <!-- categories //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Categories</td>
+                <td class=widget_header><?php echo _("Categories"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content><?php  echo $categories; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?contact_id=<?php  echo $contact_id; ?>';" value="Manage"></td>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?contact_id=<?php  echo $contact_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
             </tr>
         </table>
 
@@ -565,6 +564,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.39  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
  * Revision 1.38  2004/07/14 22:12:00  neildogg
  * - Now uses $overall_id
  *

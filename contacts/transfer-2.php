@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.6 2004/07/20 20:34:23 introspectshun Exp $
+ * $Id: transfer-2.php,v 1.7 2004/07/21 15:20:04 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -45,7 +45,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = $contact_name . " - Transfer to Another Company";
+$page_title = $contact_name . " - " . _("Transfer to Another Company");
 start_page($page_title, true, $msg);
 
 ?>
@@ -60,14 +60,14 @@ start_page($page_title, true, $msg);
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Transfer to Another Company</td>
+                <td class=widget_header colspan=2><?php echo _("Transfer to Another Company"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><?php  echo ($company_menu) ? $company_menu : "No companies found"; ?></a></td>
+                <td class=widget_content><?php  echo ($company_menu) ? $company_menu : _("No companies found"); ?></a></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <? if($company_menu) { ?><input class=button type=submit name=save value="Save"> <input class=button type=submit name=everywhere value="Save and Update All Records"><?php } ?>
+                    <? if($company_menu) { ?><input class=button type=submit name=save value="<?php echo _("Save"); ?>"> <input class=button type=submit name=everywhere value="<?php echo _("Save and Update All Records"); ?>"><?php } ?>
                 </td>
             </tr>
 
@@ -90,6 +90,10 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.7  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
  * Revision 1.6  2004/07/20 20:34:23  introspectshun
  * - Replaced hard-coded host with $http_site_root
  *

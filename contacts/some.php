@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.26 2004/07/15 13:49:53 cpsource Exp $
+ * $Id: some.php,v 1.27 2004/07/21 15:20:04 introspectshun Exp $
  */
 
 //include the standard files
@@ -64,12 +64,12 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS 'Name', "
-       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
-       company_code AS 'Code',
-       title AS 'Title',
-       description AS 'Description',
-       u.username AS 'Owner' ";
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS '" . _("Name") . "', "
+       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS '" . _("Company") . "',
+       company_code AS '" . _("Code") . "',
+       title AS '" . _("Title") . "',
+       description AS '" . _("Description") . "',
+       u.username AS '" . _("Owner") . "' ";
 
 $from = "from contacts cont, companies c, users u ";
 
@@ -163,7 +163,7 @@ if ($rst) {
 }
 
 if ( !$recently_viewed_table_rows ) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed contacts</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed contacts") . '</td></tr>';
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -186,7 +186,7 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'contacts', '', 4);
 }
 
-$page_title = 'Contacts';
+$page_title = _("Contacts");
 start_page($page_title, true, $msg);
 
 ?>
@@ -205,13 +205,13 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=8>Search Criteria</td>
+                <td class=widget_header colspan=8><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Last Name</td>
-                <td class=widget_label>First Names</td>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>Company</td>
+                <td class=widget_label><?php echo _("Last Name"); ?></td>
+                <td class=widget_label><?php echo _("First Names"); ?></td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
         </tr>
         <tr>
           <td class=widget_content_form_element><input type=text name="last_name" size=18 maxlength=100 value="<?php  echo $last_name; ?>"></td>
@@ -221,16 +221,14 @@ start_page($page_title, true, $msg);
           </td>
         </tr>
         <tr>
-                <td class=widget_label>Code</td>
-                <td class=widget_label>Description</td>
-                <td class=widget_label>Category</td>
-                <td class=widget_label>Owner</td>
+                <td class=widget_label><?php echo _("Code"); ?></td>
+                <td class=widget_label><?php echo _("Description"); ?></td>
+                <td class=widget_label><?php echo _("Category"); ?></td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
             </tr>
             <tr>
-          <td width="25%" class=widget_content_form_element>
-<input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
-          <td width="25%" class=widget_content_form_element>
-<input type=text name="description" size=12 maxlength=100 value="<?php  echo $description; ?>"></td>
+          <td width="25%" class=widget_content_form_element><input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
+          <td width="25%" class=widget_content_form_element><input type=text name="description" size=12 maxlength=100 value="<?php  echo $description; ?>"></td>
           <td width="25%" class=widget_content_form_element>
             <?php  echo $contact_category_menu; ?>
           </td>
@@ -241,11 +239,11 @@ start_page($page_title, true, $msg);
 
         <tr>
           <td class=widget_content_form_element colspan=4>
-           <input name="submitted" type=submit class=button value="Search">
-           <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
+           <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
+           <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
 <?php
           if ( $use_self_contacts ) {
-            echo '<input class=button type=button onclick="javascript: createContact();" value="Create Contact for \'Self\'">';
+            echo '<input class=button type=button onclick="javascript: createContact();" value="' . _("Create Contact for 'Self'") . '">';
           }
 ?>
           </td>
@@ -268,12 +266,12 @@ $con->close();
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5>Recently Viewed</td>
+                <td class=widget_header colspan=5><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Contact</td>
-                <td class=widget_label>Company</td>
-                <td class=widget_label>Work Phone</td>
+                <td class=widget_label><?php echo _("Contact"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Work Phone"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
@@ -331,6 +329,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.27  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
  * Revision 1.26  2004/07/15 13:49:53  cpsource
  * - Added arr_vars sub-system.
  *

@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.18 2004/07/15 14:49:45 cpsource Exp $
+ * $Id: edit.php,v 1.19 2004/07/21 15:20:04 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,7 +16,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-// require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg        = isset($_GET['msg']) ? $_GET['msg'] : '';
 $contact_id = $_GET['contact_id'];
@@ -119,92 +118,92 @@ start_page($page_title, true, $msg);
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Contact Information</td>
+                <td class=widget_header colspan=2><?php echo _("Contact Information"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company</td>
+                <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content_form_element><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Division</td>
+                <td class=widget_label_right><?php echo _("Division"); ?></td>
                 <td class=widget_content_form_element><?php echo $division_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Address</td>
+                <td class=widget_label_right><?php echo _("Address"); ?></td>
                 <td class=widget_content_form_element><?php echo $address_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Salutation</td>
+                <td class=widget_label_right><?php echo _("Salutation"); ?></td>
                 <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>First&nbsp;Names</td>
+                <td class=widget_label_right><?php echo _("First Names"); ?></td>
                 <td class=widget_content_form_element><input type=text name=first_names value="<?php echo $first_names; ?>" size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Last&nbsp;Name</td>
+                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=last_name value="<?php echo $last_name; ?>" size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Gender</td>
+                <td class=widget_label_right><?php echo _("Gender"); ?></td>
                 <td class=widget_content_form_element>
                 <select name="gender">
-                    <option value="u" <?php if (($gender == "u") or ($gender == '')) {print " selected ";} ?>>Unknown
-                    <option value="m" <?php if ($gender == "m") {print " selected ";} ?>>Male
-                    <option value="f" <?php if ($gender == "f") {print " selected ";} ?>>Female
+                    <option value="u" <?php if (($gender == "u") or ($gender == '')) {print " selected ";} ?>><?php echo _("Unknown"); ?>
+                    <option value="m" <?php if ($gender == "m") {print " selected ";} ?>><?php echo _("Male"); ?>
+                    <option value="f" <?php if ($gender == "f") {print " selected ";} ?>><?php echo _("Female"); ?>
                 </select>
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Date of Birth</td>
+                <td class=widget_label_right><?php echo _("Date of Birth"); ?></td>
                 <td class=widget_content_form_element><input type=text name=date_of_birth value="<?php echo $date_of_birth; ?>" size=10></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Summary</td>
+                <td class=widget_label_right><?php echo _("Summary"); ?></td>
                 <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Title</td>
+                <td class=widget_label_right><?php echo _("Title"); ?></td>
                 <td class=widget_content_form_element><input type=text name=title value="<?php echo $title; ?>" size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Description</td>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>E-Mail</td>
+                <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
                 <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Work&nbsp;Phone</td>
+                <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=work_phone value='<?php echo $work_phone; ?>' size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Cell&nbsp;Phone</td>
+                <td class=widget_label_right><?php echo _("Cell Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=cell_phone value='<?php echo $cell_phone; ?>' size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Home&nbsp;Phone</td>
+                <td class=widget_label_right><?php echo _("Home Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=home_phone value='<?php echo $home_phone; ?>' size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Fax</td>
+                <td class=widget_label_right><?php echo _("Fax"); ?></td>
                 <td class=widget_content_form_element><input type=text name=fax value='<?php echo $fax; ?>' size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>AOL&nbsp;Name</td>
+                <td class=widget_label_right><?php echo _("AOL Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=aol_name value='<?php echo $aol_name; ?>' size=25></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Yahoo&nbsp;Name</td>
+                <td class=widget_label_right><?php echo _("Yahoo Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=yahoo_name value='<?php echo $yahoo_name; ?>' size=25></td>
             </tr>
             <tr>
-                <td class=widget_label_right>MSN&nbsp;Name</td>
+                <td class=widget_label_right><?php echo _("MSN Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=msn_name value='<?php echo $msn_name; ?>' size=25></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Interests</td>
+                <td class=widget_label_right><?php echo _("Interests"); ?></td>
                 <td class=widget_content_form_element><input type=text name=interests size=35 value='<?php echo $interests; ?>'></td>
             </tr>
             <tr>
@@ -224,16 +223,16 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=custom4 size=35 value="<?php  echo $custom4; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Profile</td>
+                <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <input class=button type=submit value="Save">
-                    <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';">
-                    <?php if ($contact_count > 1) {echo("<input type=button class=button onclick=\"javascript: location.href='delete.php?company_id=$company_id&contact_id=$contact_id';\" value='Delete' onclick=\"javascript: return confirm('Delete Contact?')\">\n");} ?>
-                    <input class=button type=button value="Transfer" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
-                    <input class=button type=button value="Edit Address" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=submit value="<?php echo _("Save"); ?>">
+                    <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';">
+                    <?php if ($contact_count > 1) {echo("<input type=button class=button onclick=\"javascript: location.href='delete.php?company_id=$company_id&contact_id=$contact_id';\" value='" . _("Delete") . "' onclick=\"javascript: return confirm('" . _("Delete Contact?") . "')\">\n");} ?>
+                    <input class=button type=button value="<?php echo _("Transfer"); ?>" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
                 </td>
             </tr>
         </table>
@@ -255,6 +254,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.19  2004/07/21 15:20:04  introspectshun
+ * - Localized strings for i18n/translation support
+ * - Removed include of lang file
+ *
  * Revision 1.18  2004/07/15 14:49:45  cpsource
  * - Define $msg from $_GET or else ''
  *
