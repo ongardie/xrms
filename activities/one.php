@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.42 2004/07/20 16:50:00 neildogg Exp $
+ * $Id: one.php,v 1.43 2004/07/21 11:48:47 cpsource Exp $
  */
 
 //include required files
@@ -362,6 +362,10 @@ function logTime() {
 
     </div>
 
+<?php
+		// stub out nonsense code
+		if ( 0 ) { 
+		  echo '
     <!-- right column //-->
     <div id="Sidebar">
         <!-- company information block //-->
@@ -370,7 +374,9 @@ function logTime() {
         <?php echo $contact_block; ?>
         <!-- sidebar plugins //-->
         <?php echo $relationship_link_rows; ?>
-    </div>
+    </div>';
+		}
+?>
 
 </div>
 
@@ -404,6 +410,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.43  2004/07/21 11:48:47  cpsource
+ * - Stub out unused right sidebar.
+ *
  * Revision 1.42  2004/07/20 16:50:00  neildogg
  * - Have to remove the hidden opportunity_description AGAIN
  *
