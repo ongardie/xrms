@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.26 2005/01/13 18:47:30 vanmer Exp $
+ * $Id: some.php,v 1.27 2005/02/10 02:31:40 braverock Exp $
  */
 
 //include required files
@@ -137,7 +137,7 @@ $where .= "and file_record_status = 'a'";
 
 $criteria_count = 0;
 
-if (strlen($file_id) > 0) {
+if (strlen($file_id) > 0 and is_numeric($file_id)) {
     $criteria_count++;
     $where .= " and f.file_id = " . $con->qstr($file_id, get_magic_quotes_gpc());
 }
@@ -418,6 +418,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.27  2005/02/10 02:31:40  braverock
+ * - add is_numeric check for file_id search
+ *   - this should be an advanced search field
+ *
  * Revision 1.26  2005/01/13 18:47:30  vanmer
  * - Basic ACL changes to allow display functionality to be restricted
  *
