@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.60 2004/08/19 20:43:51 neildogg Exp $
+ * $Id: one.php,v 1.61 2004/08/25 14:34:53 neildogg Exp $
  */
 
 //include required files
@@ -30,9 +30,11 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "activities", $activity_id);
 
-$sql = "select a.*, c.company_id, c.company_name, cont.first_names, cont.last_name
-from companies c, activities a left join contacts cont on a.contact_id = cont.contact_id
+$sql = "select a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name
+from companies c, activities a, addresses addr
+left join contacts cont on a.contact_id = cont.contact_id
 where a.company_id = c.company_id
+and c.default_primary_address = addr.address_id
 and activity_id = $activity_id
 and activity_record_status='a'";
 
@@ -52,6 +54,7 @@ if ($rst) {
     $on_what_id = $rst->fields['on_what_id'];
     $scheduled_at = date('Y-m-d H:i:s', strtotime($rst->fields['scheduled_at']));
     $ends_at = date('Y-m-d H:i:s', strtotime($rst->fields['ends_at']));
+    $local_time = calculate_time_zone_time($con, $rst->fields['daylight_savings_id'], $rst->fields['offset']);
     $activity_status = $rst->fields['activity_status'];
     $rst->close();
 } else {
@@ -216,6 +219,8 @@ if($on_what_table == 'opportunities') {
     $rst->close();
 }
 
+update_daylight_savings($con);
+
 $con->close();
 
 $page_title = _("Activity Details").': '.$activity_title;
@@ -340,6 +345,14 @@ function logTime() {
             </tr>
             <?php } ?>
             <tr>
+                <td class=widget_label_right><?php echo _("Local Time"); ?></td>
+                <td class=widget_content_form_element>
+                    <?php 
+                        //Remember to call update_daylight_savings($con);
+                        echo gmdate('Y-m-d H:i:s', $local_time); 
+                    ?>
+                </td>
+            <tr>
                 <td class=widget_label_right><?php echo _("Starts"); ?></td>
                 <td class=widget_content_form_element>
                     <?php jscalendar_includes(); ?>
@@ -425,6 +438,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.61  2004/08/25 14:34:53  neildogg
+ * - Displays local time
+ *  - Change position as you see fit
+ *
  * Revision 1.60  2004/08/19 20:43:51  neildogg
  * - Added jump to position in save and next
  *
