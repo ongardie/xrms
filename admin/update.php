@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.26 2004/07/28 20:40:45 neildogg Exp $
+ * $Id: update.php,v 1.27 2004/08/02 08:31:31 maulani Exp $
  */
 
 // where do we include from
@@ -240,6 +240,23 @@ if ($recCount == 0) {
     $rec = array();
     $rec['param_id'] = 'Audit Level';
     $rec['int_val'] = 4;
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is an Activities Default Behavior in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='Activities Default Behavior'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added an Activities Default Behavior system parameter.").'<BR><BR>';
+    $sql = "SELECT * FROM system_parameters WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['param_id'] = 'Activities Default Behavior';
+    $rec['string_val'] = $activities_default_behavior;
 
     $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
@@ -712,6 +729,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.27  2004/08/02 08:31:31  maulani
+ * - Create Activities Default Behavior system parameter.  Replaces vars.php
+ *   variable $activities_default_behavior
+ *
  * Revision 1.26  2004/07/28 20:40:45  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently

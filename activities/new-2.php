@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.24 2004/07/22 17:14:35 braverock Exp $
+ * $Id: new-2.php,v 1.25 2004/08/02 08:31:30 maulani Exp $
  */
 
 //where do we include from
@@ -170,13 +170,15 @@ $con->execute($ins);
 $activity_id = $con->insert_id();
 add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
 
-//close the connection
-$con->close();
-
 //if this is a mailto link, try to open the user's default mail application
 if ($email) {
     header ("Location: mailto:$email");
 }
+
+$activities_default_behavior = get_system_parameter($con, 'Activities Default Behavior');
+
+//close the connection
+$con->close();
 
 //now send them back where they came from
 if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
@@ -187,6 +189,10 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.25  2004/08/02 08:31:30  maulani
+ *- Create Activities Default Behavior system parameter.  Replaces vars.php
+ *  variable $activities_default_behavior
+ *
  *Revision 1.24  2004/07/22 17:14:35  braverock
  *- fixed problem with arr_vars subsystem
  *
