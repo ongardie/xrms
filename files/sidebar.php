@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.12 2005/01/09 02:34:25 vanmer Exp $
+ * $Id: sidebar.php,v 1.13 2005/01/12 02:20:28 introspectshun Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -16,6 +16,10 @@ $fileList=get_list($session_user_id, 'Read', false, 'files');
 if (!$fileList) { $file_rows=''; return false; }
 else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN ($fileList) "; }
 */
+
+// Avoid undefined errors until ACL is integrated
+$file_limit_sql = '';
+
 $file_rows = "<div id='file_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
@@ -109,6 +113,9 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.13  2005/01/12 02:20:28  introspectshun
+ * - Defined $file_limit_sql until ACL is implemented
+ *
  * Revision 1.12  2005/01/09 02:34:25  vanmer
  * - added commented ACL restriction on files
  * - added make_singular call instead of using $on_what_string for file sidebar
