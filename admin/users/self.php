@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.10 2004/07/20 12:45:22 cpsource Exp $
+ * $Id: self.php,v 1.11 2004/09/21 19:21:19 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -41,7 +41,7 @@ if ($rst) {
 }
 //show_test_values($username, $last_name, $first_names, $session_user_id, $user_id);
 
-$page_title = _("One User :")."$first_names $last_name";
+$page_title = _("One User") . " : " . "$first_names $last_name";
 start_page($page_title, true, $msg);
 
 ?>
@@ -110,6 +110,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.11  2004/09/21 19:21:19  introspectshun
+ *- Finished localizing strings for i18n compatibility
+ *
  *Revision 1.10  2004/07/20 12:45:22  cpsource
  *- Allow non-Admin users to change their passwords, but do so
  *  in a secure manner.
