@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.15 2004/10/18 03:32:26 gpowers Exp $
+ * $Id: new-2.php,v 1.16 2005/01/13 18:42:30 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('','Create');
 
 // declare passed in variables
 $arr_vars = array ( // local var name             // session variable name, flag
@@ -107,6 +107,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.16  2005/01/13 18:42:30  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.15  2004/10/18 03:32:26  gpowers
  * - added "edit address" option
  *

@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.11 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: edit-2.php,v 1.12 2005/01/13 18:42:30 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -13,9 +13,11 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
-
 $contact_id = $_POST['contact_id'];
+$on_what_id=$contact_id;
+
+$session_user_id = session_check('','Update');
+
 $address_id = $_POST['address_id'];
 $division_id = $_POST['division_id'];
 if (!$address_id) { $address_id=1; };
@@ -93,6 +95,9 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.12  2005/01/13 18:42:30  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.11  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'
