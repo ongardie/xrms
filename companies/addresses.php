@@ -148,8 +148,8 @@ start_page($page_title, true, $msg);
                 <td class=widget_label>Name</td>
                 <td class=widget_label>Body</td>
                 <td class=widget_label>Primary Default</td>
-                <td class=widget_label>Shipping Default</td>
                 <td class=widget_label>Billing Default</td>
+                <td class=widget_label>Shipping Default</td>
                 <td class=widget_label>Payment Default</td>
             </tr>
             <?php  echo $addresses; ?>
