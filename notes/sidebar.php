@@ -2,7 +2,7 @@
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.3 2004/04/07 19:38:26 maulani Exp $
+ * $Id: sidebar.php,v 1.4 2004/04/20 15:20:58 braverock Exp $
  */
 
 $note_rows = "<div id='note_sidebar'>
@@ -41,13 +41,22 @@ $rst = $con->execute($note_sql);
 
 if (strlen($rst->fields['username']) > 0) {
     while (!$rst->EOF) {
+    if ($contact_id) {
+        $return_url = "&return_url=/contacts/one.php?contact_id=" . $contact_id;
+    }
+    elseif ($company_id) {
+        $return_url = "&return_url=/companies/one.php?company_id=" . $company_id;
+    }
+    else {
+        $return_url = "&return_url=/private/home.php";
+    }
         $note_rows .= "
              <tr>
                  <td class=widget_content colspan=4>
                  <font class=note_label>"
                . $con->userdate($rst->fields['entered_at']) . " &bull; "
                . $rst->fields['username'] . " &bull;
-                 <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/companies/one.php?company_id=" . $company_id . "'>Edit</a>
+                 <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . $return_url . "'>Edit</a>
                  </font>
                  <br>"
                . $rst->fields['note_description'] .'
@@ -80,6 +89,11 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.4  2004/04/20 15:20:58  braverock
+ * - apply patch to fix return URL on delete
+ *   - fixes SF bugs 938049 & 938007
+ *   - SF patch 938625 submitted by Glenn Powers
+ *
  * Revision 1.3  2004/04/07 19:38:26  maulani
  * - Add CSS2 positioning
  * - Repair HTML to meet validation
