@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.2 2004/07/08 22:12:24 neildogg Exp $
+ * $Id: utils-database.php,v 1.3 2004/07/09 15:36:34 neildogg Exp $
  */
 
 /**
@@ -71,7 +71,26 @@ function make_singular($word) {
 }
 
 /**
+ * Returns the name/title format for the various tables
+ *
+ * @param string $table Table name
+ *
+ * @todo Add naming conventions as needed
+ */
+function table_name($table) {
+   if($table == "contacts") {
+       return array("first_names", "last_name");
+   }
+   else {
+       return array(make_singular($table) . "_name");
+   }
+} 
+
+/**
  * $Log: utils-database.php,v $
+ * Revision 1.3  2004/07/09 15:36:34  neildogg
+ * Returns array of values of usable names in a table
+ *
  * Revision 1.2  2004/07/08 22:12:24  neildogg
  * - Converts all current database names (and most plural words) to singular form
  *
