@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.36 2005/02/09 22:24:37 braverock Exp $
+ * $Id: some.php,v 1.37 2005/02/10 01:44:31 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,12 +23,12 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
-		   'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
-		   'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
-		   'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_SESSION ),
-		   'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
-		   );
+           'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
+           'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
+           'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
+           'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_SESSION ),
+           'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
+           );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
@@ -227,7 +227,8 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 <?php
-$_SESSION["search_sql"]=$sql;
+
+$_SESSION['search_sql']=$sql;
 
 
 
@@ -256,7 +257,7 @@ $columns = $pager_columns->GetUserColumns('default');
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value="_("Mail Merge")."></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value="._("Mail Merge")."></td></tr>";
  
 echo $pager_columns_selects;
 
@@ -327,6 +328,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.37  2005/02/10 01:44:31  braverock
+ * - fix malformed $_SESSION declaration to use single quoted array index
+ *   fixes "script possibly relies on a session side-effect" error
+ *
  * Revision 1.36  2005/02/09 22:24:37  braverock
  * - localized pager column headers
  * - de-localized AS clauses in SQL
