@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.28 2005/03/21 13:05:58 maulani Exp $
+ * $Id: index.php,v 1.29 2005/03/28 17:03:01 gpowers Exp $
  */
 
 //include required stuff
@@ -52,27 +52,6 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content><a href="data_clean.php"><?php echo _("Data Cleanup"); ?></a></td>
             </tr>
-            <tr>
-                <td class=widget_content>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class=widget_content>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class=widget_content>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class=widget_content>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class=widget_content>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class=widget_content>&nbsp;</td>
-            </tr>
-            <tr>
-                <td class=widget_content>&nbsp;</td>
-            </tr>
         </table>
 
 
@@ -121,6 +100,11 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content>
                     <a href="users/some.php"><?php echo _("Users"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="users/change-owner.php"><?php echo _("Change Record Owner"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -245,6 +229,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.29  2005/03/28 17:03:01  gpowers
+ * - added "Change Record Owner" Option under "Manage"
+ * - removed extraneous blank lines under "System Administration"
+ *
  * Revision 1.28  2005/03/21 13:05:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *
