@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.10 2004/04/27 13:43:24 gpowers Exp $
+ * $Id: some.php,v 1.11 2004/05/04 20:51:26 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -101,7 +101,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "select
  if(activity_status = 'o' and ends_at < now(), 'Yes', '-') as is_overdue,
- concat('<a href=\"one.php?activity_id=', activity_id, '\">', activity_title, '</a>') as 'Title',
+ concat('<a href=\"one.php?activity_id=', activity_id, '&return_url=/activities/some.php\">', activity_title, '</a>') as 'Title',
  activity_type_pretty_name as 'Type',
  concat('<a href=\"../contacts/one.php?contact_id=', cont.contact_id, '\">', cont.first_names, ' ', cont.last_name, '</a>') as 'Contact',
  concat('<a href=\"../companies/one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',
@@ -361,6 +361,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2004/05/04 20:51:26  braverock
+ * -set return_url on title link.
+ *   - fixes SF bug 947755 reported by Beth Macknik (maulani)
+ *
  * Revision 1.10  2004/04/27 13:43:24  gpowers
  * removed audit_items entry for searching. it is a duplicate of information
  * available in the httpd access log.
