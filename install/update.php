@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.2 2004/03/22 02:05:08 braverock Exp $
+ * $Id: update.php,v 1.3 2004/03/23 14:34:05 braverock Exp $
  */
 
 /**
@@ -70,7 +70,9 @@ if ($recCount == 0) {
 //should put a test here, but alter table is non-destructive
 $sql = "alter table case_priorities add case_priority_score_adjustment int not null after case_priority_display_html";
 $rst = $con->execute($sql);
-$rst->close();
+if ($rst) {
+    $rst->close();
+}
 // end case_priority_display_html
 
 //close the database connection, because we don't need it anymore
@@ -94,6 +96,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.3  2004/03/23 14:34:05  braverock
+ * - add check for result set before closing rst
+ *
  * Revision 1.2  2004/03/22 02:05:08  braverock
  * - add case_priority_score_adjustment to fix SF bug 906413
  *
