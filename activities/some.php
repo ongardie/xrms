@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.21 2004/06/21 20:51:01 introspectshun Exp $
+ * $Id: some.php,v 1.22 2004/06/22 11:04:16 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -105,8 +105,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug=1;
 
 $sql = "SELECT
-  (CASE WHEN (a.activity_status = 'o') AND (a.ends_at < " . time() . ") THEN 'Yes' ELSE '-' END) AS is_overdue," .
-  $con->Concat("'<a href=\"one.php?activity_id='", "activity_id", "'&return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS 'Title',
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS is_overdue,"
+  . $con->Concat("'<a href=\"one.php?activity_id='", "activity_id", "'&return_url=/activities/some.php\">'", "activity_title", "'</a>'")
+  . " AS 'Title',
   at.activity_type_pretty_name AS 'Type'," .
   $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "CAST(cont.contact_id AS CHAR)", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
   $con->Concat("'<a href=\"../companies/one.php?company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
@@ -374,6 +375,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.22  2004/06/22 11:04:16  braverock
+ * - fixed timestamp to be in proper database compliant mode
+ *
  * Revision 1.21  2004/06/21 20:51:01  introspectshun
  * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
  *
