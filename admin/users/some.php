@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.11 2005/01/08 01:31:34 introspectshun Exp $
+ * $Id: some.php,v 1.12 2005/01/09 15:27:52 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -136,12 +136,12 @@ function validate() {
         msgToDisplay += '<?php echo _("You must enter a username."); ?>';
     }
 
-    if (document.forms[0].new_lastname.value == '') {
+    if (document.forms[0].last_name.value == '') {
         numberOfErrors ++;
         msgToDisplay += '\n<?php echo _("You must enter a last name."); ?>';
     }
 
-    if (document.forms[0].new_lastname.value == '') {
+    if (document.forms[0].password.value == '') {
         numberOfErrors ++;
         msgToDisplay += '\n<?php echo _("You must enter a password."); ?>';
     }
@@ -163,6 +163,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2005/01/09 15:27:52  braverock
+ * - fix JS bug where checks are not on correct fields
+ *   resolves SF bug 1035378 reported by pnobrept
+ *
  * Revision 1.11  2005/01/08 01:31:34  introspectshun
  * - Fixed $table_rows undefined error
  *
