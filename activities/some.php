@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.67 2004/12/18 20:06:50 neildogg Exp $
+ * $Id: some.php,v 1.68 2004/12/18 20:25:47 neildogg Exp $
  */
 
 // handle includes
@@ -234,9 +234,9 @@ if (strlen($completed) > 0 and $completed != "all") {
     $sql .= " and a.activity_status = " . $con->qstr($completed, get_magic_quotes_gpc());
 }
 
-if (strlen($search_date) > 0) {
+if (strlen($search_date) > 0 && $start_end != 'all') {
     $criteria_count++;
-    
+
     if($start_end == 'start') {
         $field = 'scheduled_at';
     }
@@ -251,7 +251,6 @@ if (strlen($search_date) > 0) {
     } elseif ($before_after === 'on') {
         $sql .= " and CAST(a.$field AS date) = CAST(" . $offset . " AS date)";
     }
-    print $sql;
 }
 
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
@@ -481,6 +480,7 @@ start_page($page_title, true, $msg);
                     <select name="start_end">
                         <option value="end"<?php if($start_end == 'end') { print " selected"; }?>><?php echo _("Ends/Due"); ?></option>
                         <option value="start"<?php if($start_end == 'start') { print " selected"; }?>><?php echo _("Scheduled"); ?></option>
+                        <option value="all"<?php if($start_end == 'all') { print " selected"; }?>><?php echo _("All Dates"); ?></option>
                     </select>
                     <select name="before_after">
                         <option value=""<?php if (!$before_after) { print " selected"; } ?>><?php echo _("Before"); ?></option>
@@ -633,6 +633,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.68  2004/12/18 20:25:47  neildogg
+ * Added Search by All Dates
+ *
  * Revision 1.67  2004/12/18 20:06:50  neildogg
  * Added Search by Scheduled/Due and made ON date search accurate
  *
