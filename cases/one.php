@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.13 2004/06/07 18:58:50 gpowers Exp $
+ * $Id: one.php,v 1.14 2004/06/12 04:08:06 introspectshun Exp $
  */
 
 //include required files
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -89,7 +90,7 @@ cont.contact_id,
 cont.first_names as contact_first_names,
 cont.last_name as contact_last_name,
 u.username,
-if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
+(CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->SQLDate('Y-m-d') . ") THEN 1 ELSE 0 END) AS is_overdue
 from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
 where a.on_what_table = 'cases'
 and a.on_what_id = $case_id
@@ -153,7 +154,7 @@ if ($rst) {
     $rst->close();
 }
 
-$categories = implode($categories, ", ");
+$categories = implode(', ', $categories);
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -190,7 +191,7 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
-$sql = "select concat(first_names, ' ', last_name), contact_id from contacts where company_id = $company_id and contact_record_status = 'a' order by last_name";
+$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . ", contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a' ORDER BY last_name";
 $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
@@ -369,6 +370,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.14  2004/06/12 04:08:06  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.13  2004/06/07 18:58:50  gpowers
  * - removed duplicate line
  * - added nl2br() to case description for proper formatting

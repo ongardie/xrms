@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -66,19 +67,23 @@ if ($old_status != $case_status_id) {
 
 if (!$no_update) {
     //update the information from edit.php
-    $sql = "update cases set case_type_id = $case_type_id, 
-	case_status_id = $case_status_id, 
-	case_priority_id = $case_priority_id, 
-	contact_id = $contact_id, 
-	user_id = $user_id, 
-	case_title = " . $con->qstr($case_title, get_magic_quotes_gpc()) . ", 
-	case_description = " . $con->qstr($case_description, get_magic_quotes_gpc()) . ", 
-	due_at = " . $con->dbdate($due_at . ' 23:59:59') . ", 
-	last_modified_at = " . $con->dbtimestamp(mktime()) . ", 
-	last_modified_by = $session_user_id 
-	where case_id = $case_id";
+    $sql = "SELECT * FROM cases WHERE case_id = $case_id";
+    $rst = $con->execute($sql);
 
-    $con->execute($sql);
+    $rec = array();
+    $rec['case_type_id'] = $case_type_id;
+    $rec['case_status_id'] = $case_status_id;
+    $rec['case_priority_id'] = $case_priority_id;
+    $rec['contact_id'] = $contact_id;
+    $rec['user_id'] = $user_id;
+    $rec['case_title'] = $case_title;
+    $rec['case_description'] = $case_description;
+    $rec['due_at'] = $con->DBDate($due_at . ' 23:59:59');
+    $rec['last_modified_at'] = $con->DBTimestamp(mktime());
+    $rec['last_modified_by'] = $session_user_id;
+    
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
 
     header("Location: one.php?msg=saved&case_id=$case_id");
 }

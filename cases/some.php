@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.10 2004/05/10 13:08:36 maulani Exp $
+ * $Id: some.php,v 1.11 2004/06/12 04:08:06 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -91,8 +92,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
-
-$sql = "select concat('<a href=\"one.php?case_id=', ca.case_id, '\">', ca.case_title, '</a>') as 'Case', c.company_code as 'Company', u.username as 'Owner', cat.case_type_pretty_name as 'Type', cap.case_priority_pretty_name as 'Priority', cas.case_status_pretty_name as 'Status', date_format(ca.due_at, '%Y-%m-%d') as 'Due At' ";
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "CAST(ca.case_id AS VARCHAR(10))", "'\">'", "ca.case_title", "'</a>'") . " AS 'Case',
+c.company_code AS 'Company', u.username AS 'Owner', cat.case_type_pretty_name AS 'Type', cap.case_priority_pretty_name AS 'Priority',
+cas.case_status_pretty_name AS 'Status', " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS 'Due At' ";
 
 if ($case_category_id > 0) {
     $from = "from companies c, cases ca, case_types cat, case_priorities cap, case_statuses cas, users u, entity_category_map ecm ";
@@ -337,6 +339,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2004/06/12 04:08:06  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.10  2004/05/10 13:08:36  maulani
  * - Add level to audit trail
  * - Correct audit trail entry text

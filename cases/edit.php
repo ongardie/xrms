@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.7 2004/06/04 17:38:23 gpowers Exp $
+ * $Id: edit.php,v 1.8 2004/06/12 04:08:06 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -98,7 +99,7 @@ from categories c, category_scopes cs, category_category_scope_map ccsm
 where cs.category_scope_id = ccsm.category_scope_id
 and c.category_id = ccsm.category_id
 and cs.on_what_table = 'cases'
-and c.category_id not in (" . implode($array_of_categories, ',') . ")
+and c.category_id not in (" . implode(',', $array_of_categories) . ")
 and category_record_status = 'a'
 order by category_pretty_name";
 
@@ -112,8 +113,13 @@ if ($rst) {
     $rst->close();
 }
 
-//contact list
-$sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
+$sql = "
+SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name,
+  contact_id
+FROM contacts
+WHERE company_id = $company_id
+  AND contact_record_status = 'a'
+";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
@@ -268,6 +274,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.8  2004/06/12 04:08:06  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.7  2004/06/04 17:38:23  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags
