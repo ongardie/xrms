@@ -6,33 +6,42 @@
  *
  * @author Beth Macknik
  *
- * $Id: install-utils.inc,v 1.3 2004/07/22 11:12:56 maulani Exp $
+ * $Id: install-utils.inc,v 1.4 2004/07/28 17:25:10 braverock Exp $
  */
 
 /**
  * Stop everything and display the error.
  *
  */
-function install_fatal_error($error_msg = '') {
+function install_fatal_error($error_msg = '', $fatal=true ) {
 
     echo <<<EOQ
-    <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
-    <html>
-    <head>
-    <title>Test Results</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-$error_msg<BR>
-    </body>
-    </html>
+    <table>
+        <tr>
+            <td class=widget_header>
 EOQ;
-exit;
+    echo _("Test Results");
+    echo <<<EOQ
+            </td>
+        </tr>
+        <tr>
+            <td class=widget_error>
+                $error_msg
+            </td>
+        </tr>
+    </table>
+EOQ;
+
+    if ($fatal) { exit; };
+
 } // end install_fatal_error fn
 
 
 /**
  * $Log: install-utils.inc,v $
+ * Revision 1.4  2004/07/28 17:25:10  braverock
+ * - add optional fatal parameter to install_fatal_error fn
+ *
  * Revision 1.3  2004/07/22 11:12:56  maulani
  * - Change default characterset to UTF-8
  *
