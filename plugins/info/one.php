@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.7 2004/11/10 07:29:33 gpowers Exp $
+ * $Id: one.php,v 1.8 2005/01/03 17:35:42 gpowers Exp $
  *
  */
 
@@ -345,6 +345,8 @@ function openNewsWindow() {
             onclick="javascript: location.href='<?php echo "delete-2.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&return_url=$return_url"; ?>';">
           <input class=button type=button value="<?php echo _("New"); ?>"
             onclick="javascript: location.href='<?php echo "edit.php?info_id=0&info_type_id=$info_type_id&company_id=$company_id&return_url=$return_url"; ?>';">
+          <input class=button type=button value="<?php echo _("Back"); ?>"
+            onclick="javascript: location.href='<?php echo "../../companies/one.php?company_id=$company_id"; ?>';">
         </td>
       </tr>
     </table>
