@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.32 2004/08/06 14:21:16 neildogg Exp $
+ * $Id: some.php,v 1.33 2004/08/06 15:58:25 neildogg Exp $
  */
 
 //include the standard files
@@ -77,19 +77,15 @@ $where  = "where c.company_id = cont.company_id ";
 $where .= "and c.user_id = u.user_id ";
 $where .= "and contact_record_status = 'a'";
 
-$order_by = '';
-
 $criteria_count = 0;
 
 if (strlen($last_name) > 0) {
     $criteria_count++;
-    $order_by .= " (CASE WHEN (cont.last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ") THEN 0 ELSE 1 END), ";
     $where .= " and cont.last_name like " . $con->qstr('%' . $last_name . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($first_names) > 0) {
     $criteria_count++;
-    $order_by .= " (CASE WHEN (cont.first_names = " . $con->qstr($first_names, get_magic_quotes_gpc()) . ") THEN 0 ELSE 1 END), ";
     $where .= " and cont.first_names like " . $con->qstr('%' . $first_names . '%', get_magic_quotes_gpc());
 }
 
@@ -132,11 +128,18 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 $group_by = " group by contact_id";
 
 if ($sort_column == 1) {
-    $order_by .= "cont.last_name";
+    $order_by = "cont.last_name";
 } elseif ($sort_column == 2) {
-    $order_by .= "c.company_name";
+    $order_by = "c.company_name";
 } else {
-    $order_by .= $sort_column;
+    $order_by = $sort_column;
+}
+
+if(strlen($last_name)) {
+    $order_by .= ", (CASE WHEN (cont.last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ") THEN 0 ELSE 1 END) ";
+}
+if(strlen($first_names)) {
+    $order_by .= ", (CASE WHEN (cont.first_names = " . $con->qstr($first_names, get_magic_quotes_gpc()) . ") THEN 0 ELSE 1 END) ";
 }
 
 $order_by .= " $sort_order";
@@ -356,6 +359,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.33  2004/08/06 15:58:25  neildogg
+ * - Now adds exact match sort AFTER chosen sort
+ *
  * Revision 1.32  2004/08/06 14:21:16  neildogg
  * - Now puts exact name matches at the top of the array
  *  - Removed some undefined variables
