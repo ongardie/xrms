@@ -34,6 +34,23 @@ function get_group_users($acl_group, $acl_role = false) {
     return false;
 }
 
+function check_user_role($acl, $user_id, $role) {
+    global $acl_options;
+    if (!$acl)
+        $acl = new xrms_acl($acl_options);
+        
+    if (!$user_id) return false;
+    if (!$role) return false;
+    $role_id=get_role_id($acl, $role);
+    if (!$role_id) return false;
+    
+    
+    $roles=get_user_roles($acl, $user_id,false, false);
+    
+    if (in_array($role_id, $roles)) return true;
+    return false;
+}
+
 function check_role_access($acl=false, $user_id) {
     global $acl_options;
     global $on_what_table;
@@ -143,7 +160,7 @@ function get_role_name($acl=false, $role) {
     } else return $role;
 }
 
-function get_user_roles($acl=false, $user_id, $group=false) {
+function get_user_roles($acl=false, $user_id, $group=false, $use_role_names=true) {
     global $acl_options;
     
     if (!$acl) $acl = new xrms_acl($acl_options);
@@ -159,10 +176,12 @@ function get_user_roles($acl=false, $user_id, $group=false) {
     $RoleList = $acl->get_user_roles_by_array($group, $user_id);
     $UserRoleList=$RoleList['Roles'];
     if ($UserRoleList) {
-        foreach ($UserRoleList as $Role) {
-            $ret[]=get_role_name($acl, $Role);
-        }    
-        return $ret;
+        if ($use_role_names) {
+            foreach ($UserRoleList as $Role) {
+                $ret[]=get_role_name($acl, $Role);
+            }    
+            return $ret;
+        } else return $UserRoleList;
     }
     return array();
 }
