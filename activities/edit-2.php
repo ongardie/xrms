@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.25 2004/07/14 15:22:17 cpsource Exp $
+ * $Id: edit-2.php,v 1.26 2004/07/14 16:53:01 neildogg Exp $
  */
 
 //include required files
@@ -68,10 +68,6 @@ if ($scheduled_at > $ends_at) {
 
 // set the correct activity status flag
 $activity_status = ($activity_status == 'on') ? 'c' : 'o';
-//mark this activity as completed if follow up is to be scheduled
-if ($followup) { $activity_status = 'c'; }
-
-
 
 $contact_id = ($contact_id > 0) ? $contact_id : 'NULL';
 
@@ -133,7 +129,7 @@ if ($associate_activities = true ) {
         }
 
         //we can only guess at the association if there is only one item to associate to
-        if ($arr_count==1) {
+        if ($arr_count>=1) {
             if (count($case_arr)){
                 //echo '<pre>'.print_r($case_arr).'</pre>';
                 $on_what_table = 'cases';
@@ -222,6 +218,10 @@ if($on_what_table == 'opportunities' and (strlen($probability)>0)) {
 
 add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
 
+// if it's closed but wasn't before, allow the computer to perform an action if it wants to
+if($activity_status == 'c' && $current_activity_status != 'c') {
+    do_hook_function("run_on_completed", $activity_id);
+}
 
 //get sort_order field
 $sql = "select sort_order from " . strtolower($table_name) . "_statuses where " . strtolower($table_name) ."_status_id=$table_status_id";
@@ -379,6 +379,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.26  2004/07/14 16:53:01  neildogg
+ * - Removed duplicate code
+ *  - Fixed logic problem
+ *  - Added hook on completion (for automated tasks)
+ *
  * Revision 1.25  2004/07/14 15:22:17  cpsource
  * - Fixed various undefines, including:
  *     $opportunity_description
