@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.54 2004/07/21 05:54:06 maulani Exp $
+ * $Id: utils-misc.php,v 1.55 2004/07/21 06:29:45 maulani Exp $
  */
 
 /**
@@ -564,10 +564,12 @@ function set_system_parameter(&$con, $param, $new_val) {
     $rec[$my_field] = $set_val;
     
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    $sysst = $con->execute($upd);
-    if (!$sysst){
-        //there was a problem, notify the user
-        db_error_handler ($con, $upd);
+    if ($upd !='') {
+        $sysst = $con->execute($upd);
+        if (!$sysst){
+            //there was a problem, notify the user
+            db_error_handler ($con, $upd);
+        }
     }
 } //end fn set_system_parameter
 
@@ -876,6 +878,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.55  2004/07/21 06:29:45  maulani
+ * - Fix bug 994830 with patch from johnfawcett.  Check that sql is valid
+ *   in set_system_parameter.
+ *
  * Revision 1.54  2004/07/21 05:54:06  maulani
  * - Update audit functions to use logging level from system parameters
  *
