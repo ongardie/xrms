@@ -31,7 +31,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "One Priority Type : $company_source_pretty_name";
+$page_title = "One Company Source : $company_source_pretty_name";
 start_page($page_title);
 
 ?>
@@ -44,7 +44,7 @@ start_page($page_title);
         <input type=hidden name=company_source_id value="<?php  echo $company_source_id; ?>">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=4>Edit Priority Type Information</td>
+                <td class=widget_header colspan=4>Edit Company Source Information</td>
             </tr>
             <tr>
                 <td class=widget_label_right>Short Name</td>
@@ -72,17 +72,17 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action="delete.php" method=post onsubmit="javascript: return confirm('Delete Priority Type?');">
+        <form action="delete.php" method=post onsubmit="javascript: return confirm('Delete Company Source?');">
         <input type=hidden name=company_source_id value="<?php  echo $company_source_id; ?>">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=4>Delete Priority Type</td>
+                <td class=widget_header colspan=4>Delete Company Source</td>
             </tr>
             <tr>
                 <td class=widget_content>
-                Click the button below to remove this priority type from the system.
+                Click the button below to remove this company source from the system.
                 <p>Note: This action CANNOT be undone!
-                <p><input class=button type=submit value="Delete Priority Type">
+                <p><input class=button type=submit value="Delete Company Source">
                 </td>
             </tr>
         </table>
