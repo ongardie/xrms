@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.8 2004/04/16 14:46:27 maulani Exp $
+ * $Id: some.php,v 1.9 2004/04/20 14:42:14 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -41,6 +41,7 @@ if ($clear) {
     $case_id = $_POST['case_id'];
     $company_code = $_POST['company_code'];
     $company_type_id = $_POST['company_type_id'];
+    $case_type_id = $_POST['case_type_id'];
     $user_id = $_POST['user_id'];
     $case_status_id = $_POST['case_status_id'];
     $case_category_id = $_POST['case_category_id'];
@@ -132,9 +133,15 @@ if (strlen($case_status_id) > 0) {
     $criteria_count++;
     $where .= " and ca.case_status_id = $case_status_id";
 }
+
 if (strlen($case_id) > 0) {
     $criteria_count++;
     $where .= " and ca.case_id = $case_id ";
+}
+
+if (strlen($case_type_id) > 0) {
+    $criteria_count++;
+    $where .= " and ca.case_type_id = $case_type_id";
 }
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
@@ -330,6 +337,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2004/04/20 14:42:14  braverock
+ * - add search for case type
+ *   - fixes SF bug 930935
+ *
  * Revision 1.8  2004/04/16 14:46:27  maulani
  * - Clean HTML so page will validate
  *
