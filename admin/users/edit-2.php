@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.13 2005/01/13 17:56:13 vanmer Exp $
+ * $Id: edit-2.php,v 1.14 2005/02/10 23:48:40 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,6 +24,9 @@ $last_name       = $_POST['last_name'];
 $first_names     = $_POST['first_names'];
 $email           = $_POST['email'];
 $gmt_offset      = $_POST['gmt_offset'];
+if (array_key_exists('enabled',$_POST)) $enabled=true;
+else $enabled=false;
+$user_record_status = ($enabled) ? 'a' : 'd';
 
 $gmt_offset = (strlen($gmt_offset) > 0) ? $gmt_offset : 0;
 
@@ -49,6 +52,7 @@ $rec['first_names']     = $first_names;
 $rec['username']        = $new_username;
 $rec['email']           = $email;
 $rec['gmt_offset']      = $gmt_offset;
+$rec['user_record_status'] = $user_record_status;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 if ($upd) {
@@ -70,6 +74,9 @@ header("Location: self.php?msg=saved");
 
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.14  2005/02/10 23:48:40  vanmer
+ *- added handling of enabling/disabling user accounts
+ *
  *Revision 1.13  2005/01/13 17:56:13  vanmer
  *- added new ACL code to user management section
  *
