@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.97 2004/10/11 14:20:40 neildogg Exp $
+ * $Id: utils-misc.php,v 1.98 2004/10/22 07:26:03 gpowers Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -746,6 +746,10 @@ function get_formatted_address (&$con,$address_id) {
             $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
             eval("\$address_to_display = \"$address_format_string\";");
             // eval ("\$str = \"$str\";");
+            // Remove lines that contain only a comma (fixes SF Bug #1028807)
+            $address_to_display = preg_replace("/<br>, +<br>/", "<br>", $address_to_display);
+            // Remove blank lines
+            $address_to_display = preg_replace("/^<br>/", "", $address_to_display);
         }
     } else {
         // database error, return some useful information.
@@ -1291,6 +1295,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.98  2004/10/22 07:26:03  gpowers
+ * - In get_formatted_address(), Removed output lines that contain only a comma and blank lines (fixes SF Bug #1028807)
+ *
  * Revision 1.97  2004/10/11 14:20:40  neildogg
  * - Added further checks
  *
