@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.36 2005/02/09 15:25:18 braverock Exp $
+ * $Id: one.php,v 1.37 2005/02/10 01:49:27 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -25,7 +25,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 
-$sql = "select
+$sql = "SELECT
 o.*,
 c.company_id, c.company_name, c.company_code,
 d.division_name,
@@ -33,12 +33,13 @@ cont.first_names, cont.last_name, cont.work_phone, cont.email, cont.address_id,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
 u3.username as opportunity_owner_username, u4.username as account_owner_username,
 as1.account_status_display_html, r.rating_display_html, crm_status_display_html, os.opportunity_status_display_html, cam.campaign_title
-from
-companies c, contacts cont, users u1, users u2, users u3, users u4,
-account_statuses as1, ratings r, crm_statuses crm, opportunity_statuses os,
-opportunities o left join campaigns cam on o.campaign_id = cam.campaign_id
-left join company_division d on o.division_id=d.division_id
-where o.company_id = c.company_id
+FROM
+companies AS c, contacts AS cont,
+users AS u1, users AS u2, users AS u3, users AS u4,
+account_statuses AS as1, ratings AS r, crm_statuses AS crm, opportunity_statuses AS os,
+opportunities AS o LEFT JOIN campaigns AS cam on o.campaign_id = cam.campaign_id
+LEFT JOIN company_division AS d on o.division_id=d.division_id
+WHERE o.company_id = c.company_id
 and o.contact_id = cont.contact_id
 and o.entered_by = u1.user_id
 and o.last_modified_by = u2.user_id
@@ -463,6 +464,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.37  2005/02/10 01:49:27  braverock
+ * - improve SQL standardization for portability
+ *
  * Revision 1.36  2005/02/09 15:25:18  braverock
  * - localized the $ sign as a temporary workaround for internationalization of currencies
  *
