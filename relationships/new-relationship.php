@@ -70,7 +70,7 @@ foreach ($directions as $direction) {
         
         //options should be look like: <option value="2,from">Retains consultant contact</option>
         foreach ($optionsarray as $text=>$type) {
-            $options.='<option value="'. $type. '">'.$text."</option";
+            $options.='<option value="'. $type. '">'.$text."</option>";
         }
 
 $display_name = ucfirst($singular_table);
@@ -96,6 +96,9 @@ start_page($page_title, true, $msg);
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.9  2004/12/09 17:42:18  vanmer
+ * - fixed unclosed tag to allow options to display properly in internet explorer.
+ *
  * Revision 1.8  2004/12/01 18:33:41  vanmer
  * - New revision of the new-relationship.php page to more generally create relationships between entities
  * - Starts the creation process by selecting the relationship_type and direction
