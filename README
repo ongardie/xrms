@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.15 2004/09/10 20:05:35 braverock Exp $ **/
+/** $Id: README,v 1.16 2004/09/14 14:22:10 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -18,16 +18,26 @@ to fulfill your needs.
 ========================
 VERSION
 
-Development Snapshot.
+2004-09-14
 
 This version has had many many bug fixes and enhancements.  We have also
 added an automated installation, update, and data integrity process. See
 the file install/INSTALL for details.
 
-We recommend that if more than a few days has passed since the date on a
-release tarball that you consider downloading and installing a development
-snapshot instead.  These are normally quite stable, as the development team
-is probably using that code in production at their respective companies.
+This version of XRMS marks a major milestone: We are officially multi-language. 
+There are currently translations for Spanish, German, Brazilian Portugese, 
+Italian, Polish, Dutch, and Chinese, Simplified. Please join us in thanking 
+the translators for all their hard work.  If your native language is not
+English, please help the community by providing a translation, or providing 
+feedback and enhancements to translations already completed.  Contact the
+development team or the translator for more information on how to contribute.  
+
+
+We recommend that if more than a few days has passed since the date on a release
+tarball that you consider downloading and installing a development snapshot
+instead.  These are normally quite stable, as the development team is probably 
+using that code in production at their respective companies.
+
 
 This version of XRMS raises the MySQL recommendation to 4.x for better
 compatibility with the ADOdb Concat and Cast operators.  ADOdb attempts to mirror
@@ -390,6 +400,10 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.16  2004/09/14 14:22:10  braverock
+ * - add 2004-09-14 Release notes
+ * - add translation section to Version
+ *
  * Revision 1.15  2004/09/10 20:05:35  braverock
  * - added Roberto Durrer as Brazilan Portugese translator
  *
