@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.66 2004/11/26 17:26:19 braverock Exp $
+ * $Id: some.php,v 1.67 2004/12/18 20:06:50 neildogg Exp $
  */
 
 // handle includes
@@ -89,6 +89,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'company_id'          => array ( 'activities_company_id', arr_vars_SESSION ) ,
            // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
                    'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
+                   'start_end'        => array ( 'activities_start_end', arr_vars_SESSION ) ,                   
                    'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
                    'completed'           => array ( 'activities_completed', arr_vars_SESSION ) ,
                    'user_id'             => array ( 'activities_user_id', arr_vars_SESSION ) ,
@@ -114,7 +115,7 @@ else {
     if ( !$search_date ) {
         $search_date = date('Y-m-d', time());
     }
-    $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
+    $day_diff = round((strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400);
 }
 
 $offset = $con->OffsetDate($day_diff);
@@ -235,13 +236,22 @@ if (strlen($completed) > 0 and $completed != "all") {
 
 if (strlen($search_date) > 0) {
     $criteria_count++;
-    if (!$before_after) {
-        $sql .= " and a.ends_at < " . $offset;
-    } elseif ($before_after === 'after') {
-        $sql .= " and a.ends_at > " . $offset;
-    } elseif ($before_after === 'on') {
-        $sql .= " and a.ends_at = " . $offset;
+    
+    if($start_end == 'start') {
+        $field = 'scheduled_at';
     }
+    else {
+        $field = 'ends_at';
+    }
+    
+    if (!$before_after) {
+        $sql .= " and a.$field < " . $offset;
+    } elseif ($before_after === 'after') {
+        $sql .= " and a.$field > " . $offset;
+    } elseif ($before_after === 'on') {
+        $sql .= " and CAST(a.$field AS date) = CAST(" . $offset . " AS date)";
+    }
+    print $sql;
 }
 
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
@@ -459,7 +469,7 @@ start_page($page_title, true, $msg);
 <?php } //end if advanced search ?>
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
-                <td class=widget_label><?php echo _("End/Due Date"); ?></td>
+                <td class=widget_label><?php echo _("Search By Date"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Completed"); ?></td>
             </tr>
@@ -468,6 +478,10 @@ start_page($page_title, true, $msg);
                     <?php  echo $user_menu; ?>
                 </td>
                 <td class=widget_content_form_element>
+                    <select name="start_end">
+                        <option value="end"<?php if($start_end == 'end') { print " selected"; }?>><?php echo _("Ends/Due"); ?></option>
+                        <option value="start"<?php if($start_end == 'start') { print " selected"; }?>><?php echo _("Scheduled"); ?></option>
+                    </select>
                     <select name="before_after">
                         <option value=""<?php if (!$before_after) { print " selected"; } ?>><?php echo _("Before"); ?></option>
                         <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>><?php echo _("After"); ?></option>
@@ -537,10 +551,10 @@ start_page($page_title, true, $msg);
                     <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php
                         if ($company_count > 0) {
-                            echo "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";
+                            echo " <input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";
                         }
                         if(!$advanced_search) {
-                            echo '<input name="advanced_search" type=button class=button onclick="javascript: location.href=\'some.php?advanced_search=true\';" value="'._("Advanced Search").'">';
+                            echo ' <input name="advanced_search" type=button class=button onclick="javascript: location.href=\'some.php?advanced_search=true\';" value="'._("Advanced Search").'">';
                         }
                     ?>
                 </td>
@@ -619,6 +633,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.67  2004/12/18 20:06:50  neildogg
+ * Added Search by Scheduled/Due and made ON date search accurate
+ *
  * Revision 1.66  2004/11/26 17:26:19  braverock
  * - quote order by clause for i18n
  *
