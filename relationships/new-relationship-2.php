@@ -17,6 +17,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
+require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $relationship_name = $_POST['relationship_name'];
 $working_direction = $_POST['working_direction'];
@@ -48,9 +49,9 @@ $display_name = ucfirst($what_table);
 $display_name_singular = ucfirst($what_table_singular);
 
 if($working_direction == "both") {
-    $sql = "SELECT from_what_text, relationship_type_id
-            FROM relationship_types
-            WHERE relationship_name='" . $relationship_name . "'
+    $sql = "SELECT from_what_text, relationship_type_id 
+            FROM relationship_types 
+            WHERE relationship_name='" . $relationship_name . "' 
             AND relationship_status='a'
             UNION
             SELECT to_what_text, relationship_type_id
@@ -59,16 +60,16 @@ if($working_direction == "both") {
             AND relationship_status='a'";
 }
 else {
-    $sql = "SELECT " . $working_direction . "_what_text, relationship_type_id
-            FROM relationship_types
-            WHERE relationship_name='" . $relationship_name . "'
+    $sql = "SELECT " . $working_direction . "_what_text, relationship_type_id 
+            FROM relationship_types 
+            WHERE relationship_name='" . $relationship_name . "' 
             AND relationship_status='a'";
 }
 $rst = $con->execute($sql);
 $relationship_menu = $rst->getmenu2('relationship_type_id', '', false);
 $rst->close();
 
-$page_title = _("Add") .' '. $display_name_singular;
+$page_title = _("Add ". $display_name_singular);
 start_page($page_title, true, $msg);
 ?>
 
@@ -91,46 +92,46 @@ start_page($page_title, true, $msg);
                 <?php
 if ($search_on == '')
 {
-        echo _("Specify a search condition");
+	echo _("Specify a search condition");
 }
 else
 {
-        if(eregi("[a-zA-Z]", $search_on)) {
-    $search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
-    //If you want to make this work for other tables, you should be able to edit utils-database.php with the proper names
-    $name_order = implode(', ', array_reverse(table_name($what_table)));
-    $name_concat = $con->Concat(implode(', \' \', ', table_name($what_table)));
-
-    $sql = "select " . $name_concat . " as name, " . $what_table_singular . "_id
-            from " . $what_table . "
-            where " . $what_table_singular . "_record_status='a'
-            having name like " . $search_on . "
-            order by " . $name_order;
-    $rst = $con->execute($sql);
-    if($rst->rowcount()) {
-        echo $rst->getmenu2('on_what_id2', '', false);
-        echo " &nbsp; <input type=button class=button value='"._("More Info")."' "
-            . "onclick='document.forms[0]." . $what_table_singular
-            . "_id.value=document.forms[1].on_what_id2.options[document.forms[1].on_what_id2.selectedIndex].value; document.forms[0].submit();'>";
-    }
-    else {
-        echo _("There is no")." ". $what_table_singular . " ". _("by that name");
-    }
-}
-else {
-    $name_concat = $con->Concat(implode(', \' \', ', table_name($what_table)));
-    $sql = "select " . $what_table_singular . "_id, " . $name_concat . " as name
-            from " . $what_table . "
-            where " . $what_table_singular . "_id = " . $search_on . "
-            and " .$what_table_singular . "_record_status='a'";
-    $rst = $con->execute($sql);
-    if($rst->rowcount()) {
-        echo "<input type=hidden name=on_what_id2 value=$search_on>" . $rst->fields['name'] . "\n";
-    }
-    else {
-        echo _("There is no ")." ". $what_table_singular . " "._("by that ID");
-    }
-}
+	if(!eregi("[0-9]", $search_on)) {
+	    $search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
+	    //If you want to make this work for other tables, you should be able to edit utils-database.php with the proper names
+	    $name_order = implode(', ', array_reverse(table_name($what_table)));
+	    $name_concat = $con->Concat(implode(', \' \', ', table_name($what_table)));
+    
+	    $sql = "select " . $name_concat . " as name, " . $what_table_singular . "_id
+	            from " . $what_table . "
+	            where " . $what_table_singular . "_record_status='a'
+	            having name like " . $search_on . "
+	            order by " . $name_order;
+	    $rst = $con->execute($sql);
+	    if($rst->rowcount()) {
+	        echo $rst->getmenu2('on_what_id2', '', false);
+	        echo " &nbsp; <input type=button class=button value='"._("More Info")."' "
+	            . "onclick='document.forms[0]." . $what_table_singular 
+	            . "_id.value=document.forms[1].on_what_id2.options[document.forms[1].on_what_id2.selectedIndex].value; document.forms[0].submit();'>";
+	    }
+	    else {
+	        echo _("There is no ". $what_table_singular . " by that name");
+	    }
+	}
+	else {
+		$name_concat = $con->Concat(implode(', \' \', ', table_name($what_table)));
+	    $sql = "select " . $what_table_singular . "_id, " . $name_concat . " as name
+			from " . $what_table . "
+			where " . $what_table_singular . "_id = " . $search_on . "
+			and " .$what_table_singular . "_record_status='a'";
+	    $rst = $con->execute($sql);
+	    if($rst->rowcount()) {
+  	      echo "<input type=hidden name=on_what_id2 value=$search_on>" . $rst->fields['name'] . "\n";
+	    }
+	    else {
+	        echo _("There is no ". $what_table_singular . " by that ID");
+		}
+	}
 }
 ?>
                </td>
