@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.14 2004/03/07 14:07:57 braverock Exp $
+ * $Id: one.php,v 1.15 2004/04/10 16:25:29 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -116,24 +116,24 @@ if ($use_pretty_address == 't') {
 
 // most recent activities
 $sql_activities = "select activity_id,
-activity_title,
-scheduled_at,
-a.entered_at,
-a.on_what_table,
-a.on_what_id,
-activity_status,
-at.activity_type_pretty_name,
-cont.first_names as contact_first_names,
-cont.last_name as contact_last_name,
-u.username,
-if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
-from activity_types at, users u, activities a, contacts cont
-where a.contact_id = $contact_id
-and a.contact_id = cont.contact_id
-and a.user_id = u.user_id
-and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'
-order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
+                activity_title,
+                scheduled_at,
+                a.entered_at,
+                a.on_what_table,
+                a.on_what_id,
+                activity_status,
+                at.activity_type_pretty_name,
+                cont.first_names as contact_first_names,
+                cont.last_name as contact_last_name,
+                u.username,
+                if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
+                from activity_types at, users u, activities a, contacts cont
+                where a.contact_id = $contact_id
+                and a.contact_id = cont.contact_id
+                and a.user_id = u.user_id
+                and a.activity_type_id = at.activity_type_id
+                and a.activity_record_status = 'a'
+                order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
 
@@ -158,7 +158,9 @@ if ($rst) {
 
         if ($on_what_table == 'opportunities') {
             $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
-            $sql2 = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
+            $sql2 = "select opportunity_title as attached_to_name
+                    from opportunities
+                    where opportunity_id = $on_what_id";
         } elseif ($on_what_table == 'cases') {
             $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
             $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
@@ -176,7 +178,12 @@ if ($rst) {
         }
 
         $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= "<td class='$classname'>
+                                <a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id="
+                                . $rst->fields['activity_id'] . "'>"
+                                . $rst->fields['activity_title']
+                                . '</a></td>';
+
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . ">$attached_to_link</td>";
@@ -200,15 +207,15 @@ if ($division_id != '') {
 
 // associated with
 $categories_sql = "select category_display_html
-from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
-where ecm.on_what_table = 'contacts'
-and ecm.on_what_id = $contact_id
-and ecm.category_id = c.category_id
-and cs.category_scope_id = ccsm.category_scope_id
-and c.category_id = ccsm.category_id
-and cs.on_what_table = 'contacts'
-and category_record_status = 'a'
-order by category_display_html";
+        from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
+        where ecm.on_what_table = 'contacts'
+        and ecm.on_what_id = $contact_id
+        and ecm.category_id = c.category_id
+        and cs.category_scope_id = ccsm.category_scope_id
+        and c.category_id = ccsm.category_id
+        and cs.on_what_table = 'contacts'
+        and category_record_status = 'a'
+        order by category_display_html";
 
 $rst = $con->execute($categories_sql);
 $categories = array();
@@ -287,7 +294,7 @@ start_page($page_title, true, $msg);
 
 <object classid="clsid:FB7199AB-79BF-11d2-8D94-0000F875C541" codetype="application/x-oleobject" id="objMessengerApp" width="0" height="0"></object>
 
-<script language="javascript">
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function openMsnSession(strIMAddress) {
@@ -467,7 +474,7 @@ function markComplete() {
                 <td class=widget_content_form_element><input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';"></td>
             </tr>
         </table>
-
+     <script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/contacts/one.php?contact_id=<?php  echo $contact_id; ?>">
@@ -490,7 +497,8 @@ function markComplete() {
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php echo date('Y-m-d'); ?>">               <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a>
+<input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -533,12 +541,29 @@ function markComplete() {
     </tr>
 </table>
 
+<script>
+<!--
+
+// create calendar object(s) just after form tag closed
+// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
+// note: you can have as many calendar objects as you need for your application
+
+    var cal1 = new calendar1(document.forms[0].elements['scheduled_at']);
+    cal1.year_scroll = false;
+    cal1.time_comp = false;
+
+</script>
+
 <?php
 
 end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2004/04/10 16:25:29  braverock
+ * - add calendar pop-up to new activity
+ *   - apply SF patch 927141 submitted by "s-t"
+ *
  * Revision 1.14  2004/03/07 14:07:57  braverock
  * - use centralized side-bar code in advance of i18n conversion
  *
@@ -548,6 +573,5 @@ end_page();
  * Revision 1.12  2004/01/26 19:13:34  braverock
  * - added company division fields
  * - added phpdoc
- *
  */
 ?>
