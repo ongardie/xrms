@@ -1,5 +1,11 @@
 <?php
+/**
+ * Save the updated activity information to the database
+ *
+ * $Id: edit-2.php,v 1.4 2004/03/15 14:51:27 braverock Exp $
+ */
 
+//include required files
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -19,8 +25,17 @@ $activity_status = $_POST['activity_status'];
 $current_activity_status = $_POST['current_activity_status'];
 $user_id    = $_POST['user_id'];
 
-// if it's closed but wasn't before, update the closed_at timestamp
+//set scheduled_at to today if it is empty
+if (strlen($scheduled_at) = 0) {
+    $scheduled_at = date ("y-m-d");
+}
 
+// set ends_at to scheduled_at if it is empty
+if (strlen($ends_at) = 0) {
+    $ends_at = $scheduled_at;
+}
+
+// if it's closed but wasn't before, update the closed_at timestamp
 $activity_status = ($activity_status == 'on') ? 'c' : 'o';
 $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? date('Y-m-d h:i:s') : 'NULL';
 
@@ -30,16 +45,16 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 $sql = "update activities set
-activity_type_id = $activity_type_id,
-contact_id = $contact_id,
-activity_title = " . $con->qstr($activity_title, get_magic_quotes_gpc()) . ",
-activity_description = " . $con->qstr($activity_description, get_magic_quotes_gpc()) . ",
-user_id = " . $con->qstr($user_id, get_magic_quotes_gpc()) . ",
-scheduled_at = " . $con->dbtimestamp($scheduled_at . ' 23:59:59') . ",
-ends_at = " . $con->dbtimestamp($ends_at . ' 23:59:59') . ",
-completed_at = " . $con->dbdate($completed_at) . ",
-activity_status = " . $con->qstr($activity_status, get_magic_quotes_gpc()) . "
-where activity_id = $activity_id";
+        activity_type_id = $activity_type_id,
+        contact_id = $contact_id,
+        activity_title = " . $con->qstr($activity_title, get_magic_quotes_gpc()) . ",
+        activity_description = " . $con->qstr($activity_description, get_magic_quotes_gpc()) . ",
+        user_id = " . $con->qstr($user_id, get_magic_quotes_gpc()) . ",
+        scheduled_at = " . $con->dbtimestamp($scheduled_at . ' 23:59:59') . ",
+        ends_at = " . $con->dbtimestamp($ends_at . ' 23:59:59') . ",
+        completed_at = " . $con->dbdate($completed_at) . ",
+        activity_status = " . $con->qstr($activity_status, get_magic_quotes_gpc()) . "
+        where activity_id = $activity_id";
 
 //$con->debug = 1;
 $con->execute($sql);
@@ -47,4 +62,12 @@ $con->close();
 
 header("Location: " . $http_site_root . $return_url);
 
+/**
+ * $Log: edit-2.php,v $
+ * Revision 1.4  2004/03/15 14:51:27  braverock
+ * - fix ends-at display bug
+ * - make sure both scheduled_at and ends_at have legal values
+ * - add phpdoc
+ *
+ */
 ?>

@@ -1,5 +1,11 @@
 <?php
+/**
+ * Edit the details for a single Activity
+ *
+ * $Id: one.php,v 1.5 2004/03/15 14:51:28 braverock Exp $
+ */
 
+//include required files
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -36,8 +42,7 @@ if ($rst) {
     $on_what_table = $rst->fields['on_what_table'];
     $on_what_id = $rst->fields['on_what_id'];
     $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
-    if ($rst->fields['ends_at']!="") {$ends_at = $con->userdate($rst->fields['ends_at']);} else {$ends_at = "";}
-    
+    $ends_at = $con->userdate($rst->fields['ends_at']);
     $activity_status = $rst->fields['activity_status'];
     $rst->close();
 }
@@ -182,4 +187,16 @@ start_page($page_title, true, $msg);
 //-->
 </script>
 
-<?php end_page();; ?>
+<?php
+
+    end_page();
+
+/**
+ * $Log: one.php,v $
+ * Revision 1.5  2004/03/15 14:51:28  braverock
+ * - fix ends-at display bug
+ * - make sure both scheduled_at and ends_at have legal values
+ * - add phpdoc
+ *
+ */
+?>
