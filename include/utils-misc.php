@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.18 2004/05/04 23:48:02 maulani Exp $
+ * $Id: utils-misc.php,v 1.19 2004/05/07 21:30:39 maulani Exp $
  */
 
 /**
@@ -67,6 +67,22 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
 }
 
 /**
+ * Get the current system audit level
+ *
+ * @todo  Currently a stub that logs everything.  Will be data or vars.php based
+ *   0 - no logging
+ *   1 - inserts & updates
+ *   2 - and login/logout
+ *   3 - and views
+ *   4 - and searches
+ * 
+ * @return the audit level 
+ */
+function current_audit_level() {
+    return 4;  // 0 is the most restrictive level, 4 logs everything
+}
+
+/**
  * Add current item to the XRMS audit table
  *
  * @param  handle  $con database connection
@@ -76,19 +92,21 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
  * @param  integer $on_what_id what record are we viewing
  * @return void
  */
-function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_what_id) {
-    $sql = "insert into audit_items set
-            user_id = $user_id,
-            audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
-            on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
-            on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
-            remote_addr = \"" . $_SERVER['REMOTE_ADDR'] . "\",
-            remote_port = \"" . $_SERVER['REMOTE_PORT'] . "\",
-            session_id = \"" . $_COOKIE['PHPSESSID'] . "\",
-            audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
-
-    //$con->debug=1
-    $con->execute($sql);
+function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_what_id, $level=4) {
+    if ( $level <= current_audit_level() ) {
+		$sql = "insert into audit_items set
+				user_id = $user_id,
+				audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
+				on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
+				on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
+				remote_addr = \"" . $_SERVER['REMOTE_ADDR'] . "\",
+				remote_port = \"" . $_SERVER['REMOTE_PORT'] . "\",
+				session_id = \"" . $_COOKIE['PHPSESSID'] . "\",
+				audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
+	
+		//$con->debug=1
+		$con->execute($sql);
+    }
 }
 
 /**
@@ -402,6 +420,9 @@ function set_system_parameter($con, $param, $new_val) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.19  2004/05/07 21:30:39  maulani
+ * - Add audit-level to allow different levels of audit-logging
+ *
  * Revision 1.18  2004/05/04 23:48:02  maulani
  * - Added a system parameters table to the database.  This table can be used
  *   for items that would otherwise be dumped into the vars.php file. These

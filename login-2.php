@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.6 2004/05/07 17:22:56 maulani Exp $
+ * $Id: login-2.php,v 1.7 2004/05/07 21:30:39 maulani Exp $
  */
 require_once('include-locations.inc');
 
@@ -97,7 +97,7 @@ if ($rst && !$rst->EOF && $ldapok) {
     $_SESSION['username'] = $username;
     $_SESSION['language'] = $language;
     $_SESSION['gmt_offset'] = $gmt_offset;
-    add_audit_item($con, $session_user_id, 'login', '', '');
+    add_audit_item($con, $session_user_id, 'login', '', '', 2);
     header("Location: $target");
 } else {
     header("Location: $http_site_root/login.php?msg=noauth");
@@ -105,6 +105,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.7  2004/05/07 21:30:39  maulani
+ * - Add audit-level to allow different levels of audit-logging
+ *
  * Revision 1.6  2004/05/07 17:22:56  maulani
  * - Correct login audit entry so it leaves id blank instead of entering 0
  *
