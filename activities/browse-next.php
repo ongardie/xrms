@@ -14,7 +14,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.6 2004/07/02 17:55:14 neildogg Exp $
+ * $Id: browse-next.php,v 1.7 2004/07/07 21:43:33 neildogg Exp $
  */
 
 //include required files
@@ -43,7 +43,7 @@ $activity_type_id = $_GET['activity_type_id'];
 $pos = $_SESSION['pos'];
 
 // If the activity is part of the array, ie if they have already obtained an array, use the array.   
-if(is_array($next_to_check) and in_array($activity_id, $next_to_check) and ($pos > 0) and ($pos < count($next_to_check))) {
+if($next_to_check[$pos] and is_array($next_to_check) and in_array($activity_id, $next_to_check) and ($pos > 0) and ($pos < count($next_to_check))) {
     // If they try to traverse it out of order, simply move the array to around
     $input = array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
     array_splice($next_to_check, $pos-1, 0, $input[0]);
@@ -112,7 +112,9 @@ else {
             }
             elseif($rst->rowcount() > 0) {
                 while(!$rst->EOF) {
-                    $next_to_check[] = $rst->fields['activity_id'];
+                    if($rst->fields['activity_id']) {
+                        $next_to_check[] = $rst->fields['activity_id'];
+                    }
                     $rst->movenext();
                 }
                 $more_to_check = false;
@@ -142,7 +144,9 @@ else {
             }
             elseif($rst->rowcount() > 0) {
                 while(!$rst->EOF) {
-                    $next_to_check[] = $rst->fields['activity_id'];
+                    if($rst->fields['activity_id']) {
+                        $next_to_check[] = $rst->fields['activity_id'];
+                    }
                     $rst->movenext();
                 }
                 $more_to_check = false;
@@ -165,7 +169,7 @@ else {
             }
             elseif($rst->rowcount() > 0) {
                 while(!$rst->EOF) {
-                    if(!in_array($rst->fields['activity_id'], $next_to_check)) {
+                    if($rst->fields['activity_id'] and !in_array($rst->fields['activity_id'], $next_to_check)) {
                       $next_to_check[] = $rst->fields['activity_id'];
                     }
                     $rst->movenext();
@@ -180,7 +184,12 @@ else {
                 if(!$pos) {
                     array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
                 }    
-                header("Location: one.php?activity_id=" . $next_to_check[0]);
+                if($next_to_check[0]) {
+                    header("Location: one.php?activity_id=" . $next_to_check[0]);
+                }
+                else {
+                    $more_to_check = true;
+                }
                 $pos = 1;
             }   
             else {
@@ -200,6 +209,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.7  2004/07/07 21:43:33  neildogg
+ * - Fixed inexplicable empty [0] error
+ *
  * Revision 1.6  2004/07/02 17:55:14  neildogg
  * Massive logic change, cleaned up code significantly. Now works for all activities
  *
