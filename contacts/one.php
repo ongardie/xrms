@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.27 2004/06/04 13:50:24 braverock Exp $
+ * $Id: one.php,v 1.28 2004/06/04 17:20:30 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -457,7 +457,7 @@ function markComplete() {
                     <input class=button type=button value="<?php  echo 'Vcard'; ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';"></td>
             </tr>
         </table>
-     <script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+        <?php jscalendar_includes(); ?>
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/contacts/one.php?contact_id=<?php  echo $contact_id; ?>">
@@ -480,8 +480,12 @@ function markComplete() {
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php echo date('Y-m-d H:i:s'); ?>">               <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a>
-<input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
+                <td colspan=2 class=widget_content_form_element>
+                    <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                    <input class=button type=submit value="Add">
+                    <input class=button type=button onclick="javascript: markComplete();" value="Done">
+                </td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -522,15 +526,16 @@ function markComplete() {
 </div>
 
 <script language="JavaScript" type="text/javascript">
-<!--
 
-// create calendar object(s) just after form tag closed
-// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
-// note: you can have as many calendar objects as you need for your application
-
-    var cal1 = new calendar1(document.forms[0].elements['scheduled_at']);
-    cal1.year_scroll = false;
-    cal1.time_comp = false;
+Calendar.setup({
+        inputField     :    "f_date_c",      // id of the input field
+        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
+        showsTime      :    true,            // will display a time selector
+        button         :    "f_trigger_c",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
 
 </script>
 
@@ -540,6 +545,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.28  2004/06/04 17:20:30  gpowers
+ * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
+ * w/minor changes: changed includes to function, used complete php tags
+ *
  * Revision 1.27  2004/06/04 13:50:24  braverock
  * - update email link to improve activity tracking
  *
