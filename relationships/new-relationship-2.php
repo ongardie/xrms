@@ -18,6 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
+
 $possible_id = $_POST['possible_id'];
 $relationship_name = $_POST['relationship_name'];
 $working_direction = $_POST['working_direction'];
@@ -25,12 +26,20 @@ $on_what_id = $_POST['on_what_id'];
 $return_url = $_POST['return_url'];
 $search_on = ($_POST['possible_id']) ? $_POST['possible_id'] : $_POST['search_on'];
 
+if (getGlobalVar($relationship_type_direction,'relationship_type_direction')) {
+    $typedirection=explode(",",$relationship_type_direction);
+    $working_direction=$typedirection[1];
+    $relationship_type=$typedirection[0];
+}
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT from_what_table, to_what_table
+if ($relationship_type) { $where = "relationship_type_id=$relationship_type"; }
+else { $where = "relationship_name='$relationship_name'"; }
+$sql = "SELECT *
         FROM relationship_types
-        WHERE relationship_name='$relationship_name'";
+        WHERE $where";
 $rst = $con->execute($sql);
 
 if($working_direction == "from") {
@@ -47,33 +56,49 @@ $rst->close();
 
 $display_name = ucfirst($what_table);
 $display_name_singular = ucfirst($what_table_singular);
-
-if($working_direction == "both") {
-    $sql = "SELECT from_what_text, relationship_type_id
-            FROM relationship_types
-            WHERE relationship_name='" . $relationship_name . "'
-            AND relationship_status='a'
-            UNION
-            SELECT to_what_text, relationship_type_id
-            FROM relationship_types
-            WHERE relationship_name='" . $relationship_name . "'
-            AND relationship_status='a'";
-}
-else {
-    $sql = "SELECT " . $working_direction . "_what_text, relationship_type_id
-            FROM relationship_types
-            WHERE relationship_name='" . $relationship_name . "'
-            AND relationship_status='a'";
-}
-$rst = $con->execute($sql);
-if ($rst) {
-    $relationship_menu = $rst->getmenu2('relationship_type_id', '', false);
-    $rst->close();
+if (!$relationship_type) {
+    if($working_direction == "both") {
+        $sql = "SELECT from_what_text, relationship_type_id
+                FROM relationship_types
+                WHERE relationship_name='" . $relationship_name . "'
+                AND relationship_status='a'
+                UNION
+                SELECT to_what_text, relationship_type_id
+                FROM relationship_types
+                WHERE relationship_name='" . $relationship_name . "'
+                AND relationship_status='a'";
+    }
+    else {
+        $sql = "SELECT " . $working_direction . "_what_text, relationship_type_id
+                FROM relationship_types
+                WHERE relationship_name='" . $relationship_name . "'
+                AND relationship_status='a'";
+    }
+    $rst = $con->execute($sql);
+    if ($rst) {
+        $relationship_menu = $rst->getmenu2('relationship_type_id', '', false);
+        $rst->close();
+    } else {
+        db_error_handler ($con, $sql);
+    }
 } else {
-    db_error_handler ($con, $sql);
-}
+    //relationship type was explicitly specified
+    $table=$rst->fields[$working_direction.'_what_table'];
+    $text = strtolower($rst->fields[$working_direction."_what_text"]);
+    $singular_table=make_singular($table);
+        $name_order = implode(', ', array_reverse(table_name($table)));
+        $name_concat = $con->Concat(implode(', \' \', ', table_name($table)));    
+        $namesql = "SELECT $name_concat as name FROM $table WHERE $singular_table" . "_id=$on_what_id";
+        
+        $namerst = $con->execute($namesql);
+        if (!$namerst) { db_error_handler($con, $namesql); }
+        elseif ($namerst->numRows()>0) { 
+            $entityName = $namerst->fields["name"];
+        } else { $entityName = $singular_table; }
 
-$page_title = _("Add ". $display_name_singular);
+    $relationship_menu = ucfirst($singular_table).": $entityName $text <input type=hidden name=relationship_type_id value=$relationship_type>"; 
+}
+$page_title = _("Add Relationship for ". $display_name_singular);
 start_page($page_title, true, $msg);
 ?>
 
@@ -95,14 +120,18 @@ start_page($page_title, true, $msg);
             </tr>
                 <td class=widget_content_form_element><?php echo $relationship_menu; ?> &nbsp;
                 <?php
+/*
 if ($search_on == '')
 {
     echo _("Specify a search condition");
 }
 else
 {
-    if(!eregi("[0-9]", $search_on)) {
-        $search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
+*/
+    if($search_on=='' OR !eregi("[0-9]", $search_on)) {
+        if ($search_on!='') {
+            $search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
+        }
         //If you want to make this work for other tables, you should be able to edit utils-database.php with the proper names
         $name_order = implode(', ', array_reverse(table_name($what_table)));
         $name_concat = $con->Concat(implode(', \' \', ', table_name($what_table)));
@@ -110,9 +139,9 @@ else
         $sql = "select " . $name_concat . " as name, " . $what_table_singular . "_id
                 from " . $what_table . "
                 where " . $what_table_singular . "_record_status='a'
-                group by name, " . $what_table_singular . "_id, " . $name_order . "
-                having name like " . $search_on . "
-                order by " . $name_order;
+                group by name, " . $what_table_singular . "_id, " . $name_order;
+        if ($search_on!='') { $sql.= " having name like " . $search_on; }
+        $sql.="        order by " . $name_order;
         $rst = $con->execute($sql);
         if ($rst) {
             if($rst->rowcount()) {
@@ -146,14 +175,14 @@ else
             db_error_handler ($con, $sql);
         }
     }
-}
+//}
 ?>
                </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <input class=button type=submit value="<?php echo $page_title; ?>">
-                    <input class=button name=return type=submit value="<?php echo $page_title; ?> and Return">
+<!---                    <input class=button name=return type=submit value="<?php echo $page_title; ?> and Return">--->
                 </td>
             </tr>
         </table>
@@ -175,6 +204,10 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.17  2004/12/01 18:24:59  vanmer
+ * - changed to allow new-relationship-2 to be called using a type_id and direction (from new new-relationship.php)
+ * - changed to display relationship creation as a sentence
+ *
  * Revision 1.16  2004/09/29 21:25:40  braverock
  * - removed second two concats to replace with
  *    'group by name' and 'having name' clauses
