@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.39 2004/09/06 12:23:00 braverock Exp $
+ * $Id: update.php,v 1.40 2004/09/16 19:49:23 vanmer Exp $
  */
 
 // where do we include from
@@ -803,6 +803,11 @@ $sql ="CREATE TABLE time_zones (
 )";
         //execute
         $rst = $con->execute($sql);
+
+// add province as a key in time_zones, to fix missing KEY in database.php install (now fixed as well)
+$sql = "ALTER TABLE time_zones ADD KEY province (province)";
+$rst = $con->execute($sql);
+
 
 // Add values if none exist (future values will be added, hence the structure)
 $sql = "select count(*) as recCount from time_zones";
@@ -2314,6 +2319,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.40  2004/09/16 19:49:23  vanmer
+ * -added ALTER sql to add missing KEY for province in time_zones
+ *
  * Revision 1.39  2004/09/06 12:23:00  braverock
  * - add sort_order to case statuses
  *
