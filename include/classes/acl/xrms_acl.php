@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.2 2005/01/25 05:26:00 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.3 2005/01/27 00:12:53 neildogg Exp $
  */
 
 /*****************************************************************************/
@@ -300,7 +300,7 @@ class xrms_acl {
             }
             
             $wherestr = implode(" $operator ", $where);
-            $sql = "SELECT * FROM $on_what_table";
+            $sql = "SELECT $on_what_field FROM $on_what_table";
             if ($wherestr) {
                 $sql .= " WHERE $wherestr";
             }
@@ -2095,6 +2095,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.3  2005/01/27 00:12:53  neildogg
+ * - Restricted query to applicable field
+ *
  * Revision 1.2  2005/01/25 05:26:00  vanmer
  * - added functions for manipulating data sources in the ACL
  * - added parameters for newly added fields in ACL
