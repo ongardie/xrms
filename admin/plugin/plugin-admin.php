@@ -15,7 +15,7 @@
  * @author Philippe Mingo
  * @author Brian Peterson
  *
- * $Id: plugin-admin.php,v 1.5 2004/07/29 23:50:03 maulani Exp $
+ * $Id: plugin-admin.php,v 1.6 2004/08/04 10:54:33 cpsource Exp $
  * @package xrms
  * @subpackage plugins
  */
@@ -30,7 +30,7 @@ require_once($include_directory . 'plugin.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$plugin_submit = $_POST['plugin_submit'];
+$plugin_submit = isset($_POST['plugin_submit']) ? $_POST['plugin_submit'] : false;
 if ($plugin_submit=='true') {
     $plg = $_POST ['plg'];
 }
@@ -251,6 +251,12 @@ if ($plugin_submit == 'true') {
     if( $fp = @fopen( $cfgfile, 'w' ) ) {
         fwrite( $fp, "<?php\n"
                 . "/*** Plugins ***/\n"
+		. "if ( !defined('IN_XRMS') )"
+                . "    {"
+		. "        die('Hacking attempt');"
+		. "        exit;"
+		. "    }"
+		. "\n"
                 . "/**\n"
                 . " * To install plugins, just add elements to this array that have\n"
                 . " * the plugin directory name relative to the /plugins/ directory.\n"
@@ -293,6 +299,10 @@ echo '</table></form></p>';
 
 /**
  * $Log: plugin-admin.php,v $
+ * Revision 1.6  2004/08/04 10:54:33  cpsource
+ * - Resolve undefined usage of plugin_submit
+ *   Fix bug 1001879 to add hacking check to generated file.
+ *
  * Revision 1.5  2004/07/29 23:50:03  maulani
  * - update html to fix table row entry and general formatting
  *
