@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.10 2004/11/10 15:31:05 maulani Exp $
+ * $Id: data_clean.php,v 1.11 2005/01/09 15:54:43 maulani Exp $
  */
 
 // where do we include from
@@ -49,6 +49,16 @@ $rst = $con->execute($sql);
 
 $rec = array();
 $rec['first_names'] = '[first names]';
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$rst = $con->execute($upd);
+
+// Make sure that there is a company name for every company
+$sql = "SELECT * FROM companies WHERE company_name = ''";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['company_name'] = '[company name]';
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $rst = $con->execute($upd);
@@ -358,6 +368,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.11  2005/01/09 15:54:43  maulani
+ * - Set a company name for all companies that have a blank name
+ *
  * Revision 1.10  2004/11/10 15:31:05  maulani
  * - Add clean routine to fix bad entry in system_parameters that was corrupted
  *   by bug in SetSystemParamemeters routine
