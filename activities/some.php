@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.79 2004/12/26 21:58:18 braverock Exp $
+ * $Id: some.php,v 1.80 2004/12/27 13:15:54 braverock Exp $
  */
 
 // handle includes
@@ -228,8 +228,8 @@ if (strlen($user_id) > 0) {
     if($user_id == 'no') {
         $sql .= " and a.user_id = 0";
     }
-    elseif($user_id == 'current') {
-        $sql .= " and a.user_id = CURRENT_USER ";
+    elseif($user_id == 'cu') {
+        $sql .= " and a.user_id = $session_user_id ";
     }
     else {
         $sql .= " and a.user_id = $user_id ";
@@ -323,8 +323,12 @@ if($advanced_search) {
             GROUP BY activity_title
             ORDER BY activity_title";
     $rst = $con->execute($sql2);
-    $activity_menu = $rst->getmenu2('template_title', $template_title, true);
-    $rst->close();
+    if (!$rst) {
+        db_error_handler($con, $sql2);
+    } elseif ($rst->rowcount()) {
+        $activity_menu = $rst->getmenu2('template_title', $template_title, true);
+        $rst->close();
+    }
 }
 
 if($advanced_search) {
@@ -333,21 +337,36 @@ if($advanced_search) {
              FROM campaigns
              WHERE campaign_record_status = 'a'";
     $rst = $con->execute($sql2);
-    $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
-    $rst->close();
+    if (!$rst) {
+        db_error_handler($con, $sql2);
+    } elseif ($rst->rowcount()) {
+        $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
+        $rst->close();
+    }
 }
 
 //get menu for users
-$sql2 = "(SELECT 'Not Set', 'no') UNION (SELECT 'Current User', 'current') UNION (select username, user_id from users where user_record_status = 'a' order by username)";
+$sql2 = "(SELECT " . $con->qstr(_("Current User"),get_magic_quotes_gpc()) . ", 'cu')"
+       . " UNION (select username, user_id from users where user_record_status = 'a' order by username)"
+       . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", 'no')";
 $rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', $user_id, true);
-$rst->close();
+if (!$rst) {
+    db_error_handler($con, $sql);
+} elseif ($rst->rowcount()) {
+    $user_menu = $rst->getmenu2('user_id', $user_id, true);
+    $rst->close();
+}
 
 if($advanced_search) {
     //get menu for opportunity_statuses
     $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status='a'";
     $rst = $con->execute($sql2);
-    $opportunity_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, true);
+    if (!$rst) {
+        db_error_handler($con, $sql2);
+    } elseif ($rst->rowcount()) {
+        $opportunity_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, true);
+        $rst->close();
+    }
 }
 
 //get activity type menu
@@ -415,8 +434,7 @@ $sql_saved = "SELECT saved_title, saved_id
 $rst = $con->execute($sql_saved);
 if ( !$rst ) {
   db_error_handler($con, $sql_saved);
-}
-if( $rst->RowCount() ) {
+} elseif( $rst->RowCount() ) {
     $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
 } else {
   $saved_menu = '';
@@ -426,8 +444,6 @@ add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 
 //debug
 //echo $sql.'<br>';
-
-$sql = str_replace('CURRENT_USER', $session_user_id, $sql);
 
 // get company_count
 $rst = $con->execute($sql);
@@ -673,6 +689,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.80  2004/12/27 13:15:54  braverock
+ * - add additional database error handling to several of the search parameters
+ * - fix problem with CURRENT_USER on some browsers
+ * - localize 'Not Set' and 'Current User' strings
+ *
  * Revision 1.79  2004/12/26 21:58:18  braverock
  * - fix string quoting to resolve problems with French translation
  *
