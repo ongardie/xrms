@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.18 2004/04/29 20:19:13 braverock Exp $
+ * $Id: vars.php,v 1.19 2004/07/07 16:32:59 maulani Exp $
  */
 
 /**
@@ -31,6 +31,9 @@ $xrms_db_dbname = 'your_mysql_database';
 
 // where is this application, web-wise? (no trailing slash)
 $http_site_root = "http://www.yoursitename.com/xrms";
+
+// what domain should we use for cookies? (no trailing slash)
+$http_cookie_site = "www.yoursitename.com";
 
 //where is the appliation in the filesystem (no trailing slash)
 $xrms_file_root = "/full/path/to/xrms";
