@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.4 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: edit-address-2.php,v 1.5 2004/07/07 21:59:47 introspectshun Exp $
  */
 
 
@@ -70,9 +70,7 @@ if ($alt_address) {
 
 } else {
 
-    $sql = "SELECT * FROM addresses WHERE 1 = 2"; //select empty record as placeholder
-    $rst = $con->execute($sql);
-
+    //save to database
     $rec = array();
     $rec['company_id'] = $company_id;
     $rec['country_id'] = $country_id;
@@ -85,7 +83,8 @@ if ($alt_address) {
     $rec['address_body'] = $address_body;
     $rec['use_pretty_address'] = $use_pretty_address;
 
-    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $tbl = 'addresses';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
 
     $address_id = $con->insert_id();
@@ -111,6 +110,9 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.5  2004/07/07 21:59:47  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.4  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
@@ -120,7 +122,7 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.4 2004/06/15 17:26:21 introspectshun Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.5 2004/07/07 21:59:47 introspectshun Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing

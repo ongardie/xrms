@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.8 2004/06/15 14:26:56 gpowers Exp $
+ * $Id: new-2.php,v 1.9 2004/07/07 22:06:16 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -43,9 +43,7 @@ if ($file_entered_at == "")
 else
   { $file_entered_at = strtotime($file_entered_at . ' 23:59:59'); }
 
-$sql = "SELECT * FROM files WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['file_pretty_name'] = $file_pretty_name;
 $rec['file_description'] = $file_description;
@@ -56,7 +54,8 @@ $rec['on_what_id'] = $on_what_id;
 $rec['entered_at'] = $file_entered_at;
 $rec['entered_by'] = $session_user_id;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'files';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $file_id = $con->insert_id();
@@ -114,6 +113,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.9  2004/07/07 22:06:16  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.8  2004/06/15 14:26:56  gpowers
  * - correct time formats
  *

@@ -17,14 +17,13 @@ $email_template_body = $_POST['email_template_body'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM email_templates WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['email_template_title'] = $email_template_title;
 $rec['email_template_body'] = $email_template_body;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'email_templates';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $email_template_id = $con->insert_id();

@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.10 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: new-2.php,v 1.11 2004/07/07 21:59:47 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -47,9 +47,7 @@ $first_names = (strlen($first_names) > 0) ? $first_names : "[first names]";
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM contacts WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['address_id'] = $address_id;
@@ -81,7 +79,8 @@ $rec['entered_at'] = time();
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'contacts';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
@@ -90,6 +89,9 @@ header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id"
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.11  2004/07/07 21:59:47  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.10  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
