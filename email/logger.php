@@ -3,7 +3,7 @@
 *
 * Log an email message
 *
-* $Id: logger.php,v 1.1 2004/11/16 00:04:37 gpowers Exp $
+* $Id: logger.php,v 1.2 2005/02/10 14:40:03 maulani Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -112,6 +112,12 @@ $entered_at = $con->DBTimeStamp(time());
 # set entered_by
 $entered_by = $user_id;
 
+# set last_modified_at time
+$last_modified_at = $con->DBTimeStamp(time());
+
+# set last_modified_by
+$last_modified_by = $user_id;
+
 # set scheduled_at
 $scheduled_at =  $con->DBTimeStamp(strtotime($date));
 
@@ -128,7 +134,15 @@ $activity_status = "c"; # default to CLOSED status
 $activity_record_status = 'a';
 
 # make insert statment
-$insert = "INSERT INTO `activities` ( `activity_id` , `activity_type_id` , `user_id` , `company_id` , `contact_id` , `on_what_table` , `on_what_id` , `on_what_status` , `activity_title` , `activity_description` , `entered_at` , `entered_by` , `scheduled_at` , `ends_at` , `completed_at` , `activity_status` , `activity_record_status` ) VALUES ( '', '" . $activity_type_id . "', '" . $user_id . "', '" . $company_id . "', '" . $contact_id . "', '" . $on_what_table . "', '" . $on_what_id . "', '" . $on_what_status . "', " . $activity_title . ", " . $activity_description . ", " . $entered_at . ", '" . $entered_by . "', " . $scheduled_at . ", " . $ends_at . ", " . $completed_at . ", '" . $activity_status . "', '" . $activity_record_status . "');";
+$insert = "INSERT INTO `activities` ( `activity_id` , `activity_type_id` , `user_id` , `company_id` , 
+`contact_id` , `on_what_table` , `on_what_id` , `on_what_status` , `activity_title` , `activity_description` , 
+`entered_at` , `entered_by` , `last_modified_at` , `last_modified_by` , `scheduled_at` , `ends_at` , 
+`completed_at` , `activity_status` , `activity_record_status` ) 
+VALUES ( '', '" . $activity_type_id . "', '" . $user_id . "', '" . $company_id . "', '" . $contact_id . "', '
+". $on_what_table . "', '" . $on_what_id . "', '" . $on_what_status . "', " . $activity_title . ", 
+" . $activity_description . ", " . $entered_at . ", '" . $entered_by . ", " . $last_modified_at . ", '
+" . $last_modified_by . "', " . $scheduled_at . ", " . $ends_at . ", " . $completed_at . ", '
+" . $activity_status . "', '" . $activity_record_status . "');";
 
 $rst = $con->execute($insert);
 
@@ -139,6 +153,9 @@ $con->close();
 
 /**
 * $Log: logger.php,v $
+* Revision 1.2  2005/02/10 14:40:03  maulani
+* - Set last modified info when creating activities
+*
 * Revision 1.1  2004/11/16 00:04:37  gpowers
 * - email logging script (in development)
 *

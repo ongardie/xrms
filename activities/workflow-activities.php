@@ -6,7 +6,7 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * $Id: workflow-activities.php,v 1.10 2005/01/10 21:47:10 vanmer Exp $
+ * $Id: workflow-activities.php,v 1.11 2005/02/10 14:40:03 maulani Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -92,6 +92,8 @@ if ($rst) {
         $rec['activity_title'] = $activity_title;
         $rec['entered_at'] = time();
         $rec['entered_by'] = $user_id;
+        $rec['last_modified_at'] = time();
+        $rec['last_modified_by'] = $user_id;
         $rec['scheduled_at'] = time();
         $rec['activity_status'] = 'o';
         $rec['activity_record_status'] = $activity_record_status;
@@ -111,6 +113,9 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.11  2005/02/10 14:40:03  maulani
+ * - Set last modified info when creating activities
+ *
  * Revision 1.10  2005/01/10 21:47:10  vanmer
  * - added db_error_handler to the Insert SQL used for creating new activities
  *

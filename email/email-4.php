@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.9 2004/12/30 06:40:03 gpowers Exp $
+* $Id: email-4.php,v 1.10 2005/02/10 14:40:03 maulani Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -59,9 +59,11 @@ if ($rst) {
                         activity_title = '".addslashes($title)."',
                         activity_description = '".addslashes($output)."',
                         entered_at = ".$con->dbtimestamp(mktime()).",
+                        last_modified_at = ".$con->dbtimestamp(mktime()).",
+                        last_modified_by = $session_user_id,
                         scheduled_at=".$con->dbtimestamp(mktime()).",
                         ends_at=".$con->dbtimestamp(mktime()).",
-												activity_status ='c',
+						activity_status ='c',
                         entered_by = $session_user_id;";
                         $con->execute($sql_insert_activity);
         }
@@ -118,6 +120,9 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.10  2005/02/10 14:40:03  maulani
+* - Set last modified info when creating activities
+*
 * Revision 1.9  2004/12/30 06:40:03  gpowers
 * - removed extra single quote from titles
 * - added "DO NOT RELOAD" warning
