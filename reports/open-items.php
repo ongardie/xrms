@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.14 2004/12/30 21:55:29 braverock Exp $
+ * $Id: open-items.php,v 1.15 2005/01/03 04:38:13 ebullient Exp $
  */
 require_once('../include-locations.inc');
 
@@ -330,7 +330,7 @@ foreach ($userArray as $key => $user_id) {
             $output .= "        <th align=left>" . _("Case") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
-            if ($rst-NumRows()>0 {
+            if ($rst-NumRows()>0 ) {
                 while (!$rst->EOF) {
                     $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
                     $output .= "<td>" . $rst->fields['due_at'] . "&nbsp;&nbsp;</td>\n";
@@ -381,6 +381,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.15  2005/01/03 04:38:13  ebullient
+ * missing {
+ *
  * Revision 1.14  2004/12/30 21:55:29  braverock
  * - add additional database error handling
  * - localize additional strings
