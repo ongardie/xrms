@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.97 2005/03/07 17:15:32 daturaarutad Exp $
+ * $Id: one.php,v 1.98 2005/03/15 21:18:37 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -253,7 +253,6 @@ $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'def
 
 $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
-
 // selects the columns this user is interested in
 $pager_columns = new Pager_Columns('CompanyActivitiesPager', $columns, $default_columns, $activities_form_name);
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -261,9 +260,12 @@ $activities_pager_columns_selects = $pager_columns->GetSelectableColumnsWidget()
 
 $columns = $pager_columns->GetUserColumns('default');
 
+// This is for email/email.php and the mail merge button
+$_SESSION["search_sql"] = $sql_activities;
+
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
 
 $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $activities_form_name, 'CompanyActivitiesPager', $columns, false, true);
 $pager->AddEndRows($endrows);
@@ -305,11 +307,10 @@ $columns = $pager_columns->GetUserColumns('default');
 
 $new_contact_location="../contacts/new.php?company_id=$company_id";
 if ($division_id) $new_contact_location.= "&division_id=$division_id"; 
-	
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . ">" .
+            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id'\">" . 
 			render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
 
     // this is the callback function that the pager uses to fill in the calculated data.
@@ -679,7 +680,6 @@ function markComplete() {
                 <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?company_id=$company_id';"); ?>
                 <input class=button type=button value="<?php echo _("Admin"); ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
-                <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Addresses"); ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
                 <?php
                     if (!$division_id) {
@@ -822,6 +822,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.98  2005/03/15 21:18:37  daturaarutad
+ * fixed mail merge for contacts and activities
+ *
  * Revision 1.97  2005/03/07 17:15:32  daturaarutad
  * updated to speed up sql sorts in the pagers using sql_sort_column
  *
