@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.96 2005/03/07 12:14:44 maulani Exp $
+ * $Id: one.php,v 1.97 2005/03/07 17:15:32 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -212,10 +212,10 @@ TILLEND;
 //  list of most recent activities (note that the order of sql fields is important for the GUP_Pager)
 //
 $sql_activities = "SELECT " . 
-$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/companies/one.php%3Fcompany_id=$company_id\">'", "activity_title", "'</a>'") .  " AS  activity_title," . 
+$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/companies/one.php%3Fcompany_id=$company_id\">'", "activity_title", "'</a>'") .  " AS  activity_title_link," . 
 "u.username, at.activity_type_pretty_name, " . 
 $con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' . 
-"a.scheduled_at, a.on_what_table, a.on_what_id, a.entered_at, a.activity_status,     
+"a.scheduled_at, a.on_what_table, a.on_what_id, a.entered_at, a.activity_status, a.activity_title, cont.last_name, cont.first_names,     
 (CASE WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1 ELSE 0 END) AS is_overdue
 FROM activity_types at, users u, activities a
 LEFT JOIN contacts cont ON cont.contact_id = a.contact_id
@@ -244,14 +244,14 @@ if ($division_id) {
 
 // begin Activities Pager
 $columns = array();
-$columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title');
+$columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '10');
 $columns[] = array('name' => _('User'), 'index_sql' => 'username');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name');
+$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => '11,12');
 $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
 $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
 
-$default_columns = array('activity_title', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
+$default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
 
 // selects the columns this user is interested in
@@ -286,12 +286,12 @@ if ($division_id) {
 
 // begin Contacts Pager
 $columns = array();
-$columns[] = array('name' => _('Name'), 'index_sql' => 'name');
+$columns[] = array('name' => _('Name'), 'index_sql' => 'name', 'sql_sort_column' => '8,7');
 $columns[] = array('name' => _('Summary'), 'index_sql' => 'summary');
 $columns[] = array('name' => _('Title'), 'index_sql' => 'title');
 $columns[] = array('name' => _('Description'), 'index_sql' => 'description');
 $columns[] = array('name' => _('Phone'), 'index_calc' => 'phone');
-$columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email');
+$columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email', 'sql_sort_column' => '5');
 
 $default_columns = array('name','summary','title','description','phone','email');
 
@@ -822,6 +822,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.97  2005/03/07 17:15:32  daturaarutad
+ * updated to speed up sql sorts in the pagers using sql_sort_column
+ *
  * Revision 1.96  2005/03/07 12:14:44  maulani
  * - pass the db connection to the plugin
  *
