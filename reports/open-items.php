@@ -1,10 +1,8 @@
 <?php
 /**
- * Create a graph of activity for the requested user.
- *
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.6 2004/04/23 15:24:49 gpowers Exp $
+ * $Id: open-items.php,v 1.7 2004/04/28 15:44:23 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -19,15 +17,22 @@ $msg = $_GET['msg'];
 $user_id = $_GET['user_id'];
 $type = $_GET['type'];
 $friendly = $_GET['friendly'];
-$use_hr = 1; // comment this out to remove <hr>'s from between lines
 $send_email = $_GET['send_email'];
+$send_email_to = $_GET['send_email_to'];
+$all_users = $_GET['all_users'];
+$display = $_GET['display'];
 
-if ($send_email) {
-    $friendly = "y";
-}
+$use_hr = 1; // comment this out to remove <hr>'s from between lines
+$say_no_when_none = 1; // display "NO (CASES|ACTIVITIES|CAMPAIGNS|OPPORTUNITES} for First_Names Last_Name"
+
+$userArray = array();
+
+if ($friendly) {
+    $display = "";
+    }
 
 $page_title = "Open Items";
-if ($friendly != "y") {
+if (($display) || (!$friendly)) {
     start_page($page_title, true, $msg);
 }
 
@@ -42,27 +47,98 @@ $rst->close();
 ?>
 
 <?php
-if ($friendly != "y") {
-    $output .= "
+if (($display) || (!$friendly)) {
+    echo "
 <table>
+    <form action=open-items.php method=get>
+    <input type=hidden name=display value=y>
     <tr>
         <th>User</th>
         <th>Type</th>
         <th></th>
     </tr>
         <tr>
-            <form action=open-items.php method=get>
-                <td>" . $user_menu . "</td>
-                <td><select name=type>
-                    <option value=all>All</option>
-                    <option value=activities>Activities</option>
-                    <option value=campaigns>Campaigns</option>
-                    <option value=opportunities>Opportunities</option>
-                    <option value=cases>Cases</option>
-                    </select></td>
-                <td><input class=button type=submit value=Go></td>
-            </form>
+            <td>" . $user_menu . "</td>
+            <td>
+                <select name=type>
+                    <option value=all";
+
+if ($type == "all") {
+    echo " selected ";
+}
+
+echo ">All</option>
+                    <option value=activities";
+
+if ($type == "activities") {
+    echo " selected ";
+}
+
+echo ">Activities</option>
+                    <option value=campaigns";
+
+if ($type == "campaigns") {
+    echo " selected ";
+}
+
+echo ">Campaigns</option>
+                    <option value=opportunities";
+
+if ($type == "opportunities") {
+    echo " selected ";
+}
+
+echo ">Opportunities</option>
+                    <option value=cases";
+
+if ($type == "cases") {
+    echo " selected ";
+}
+
+echo ">Cases</option>
+                </select></td>
+            <td>
+                <input class=button type=submit value=Go>
+            </td>
         </tr>
+        <tr>
+            <td>
+                <input name=all_users type=checkbox ";
+
+    if ($all_users) {
+        echo "checked";
+    }
+
+    echo ">All Users
+            </td>
+            <td>
+                <input name=friendly type=checkbox ";
+
+    if ($friendly) {
+        echo "checked";
+    }
+
+    echo ">Printer Friendly
+            </td>
+            </td>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td align=right>
+                <input name=send_email type=checkbox ";
+
+    if ($send_email) {
+        echo "checked";
+    }
+
+    echo ">Send Email To:
+            </td>
+            <td>
+                <input name=send_email_to type=text value=" . $send_email_to . ">
+            </td>
+
+    </form>
 </table>
 <p>&nbsp;</p>
     ";
@@ -70,19 +146,37 @@ if ($friendly != "y") {
 ?>
 
 <?php
-if ($user_id) {
 
-    $sql = "select username, email from users where user_id = $user_id";
+if (($user_id) && (!$all_users)) {
+    $userArray = array($user_id);
+}
+
+if ($all_users) {
+    $sql = "select user_id from users";
+    $rst = $con->execute($sql);
+    while (!$rst->EOF) {
+        array_push($userArray, $rst->fields['user_id']);
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+if ($userArray) {
+foreach ($userArray as $key => $user_id) {
+
+    $sql = "select * from users where user_id = $user_id";
     $rst = $con->execute($sql);
     $username = $rst->fields['username'];
     $email = $rst->fields['email'];
+    $name =  $rst->fields['first_names'] . " " . $rst->fields['last_name']; 
     $rst->close();
+
     if (($type == "activities") || ($type == "all")) {
         $sql = "SELECT * from activities where activity_status = 'o' and activity_record_status = 'a' and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
 
-        if ($rst) {
-            $output .= "<p><font size=+2><b>OPEN ACTIVITIES for $username<b></font><br></p>\n";
+        if (!$rst->EOF) {
+            $output .= "<p><font size=+2><b>OPEN ACTIVITIES for $name<b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -117,7 +211,9 @@ if ($user_id) {
         $output .= "</table>";
         }
     else {
-        $output .= "<p><b>NO OPEN ACTIVITIES for $username<b><br></p>\n";
+        if ($say_no_when_none) {
+            $output .= "<p><b>NO OPEN ACTIVITIES for $name<b><br></p>\n";
+        }
     }
 
     } // End Activity Type
@@ -128,8 +224,8 @@ if ($user_id) {
                  and campaign_record_status = 'a'
                  and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
-        if ($rst) {
-            $output .= "<p><font size=+2><b>OPEN CAMPAIGNS for $username<b></font><br></p>\n";
+        if (!$rst->EOF) {
+            $output .= "<p><font size=+2><b>OPEN CAMPAIGNS for $name<b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -154,6 +250,11 @@ if ($user_id) {
             $rst->close();
             $output .= "</table>";
         }
+    else {
+        if ($say_no_when_none) {
+            $output .= "<p><b>NO OPEN CAMPAIGNS for $name<b><br></p>\n";
+        }
+    }
     } // End Campaigns Type
     if (($type == "opportunities") || ($type == "all")) {
         $sql = "SELECT * from opportunities, opportunity_statuses where
@@ -164,8 +265,8 @@ if ($user_id) {
                 order by entered_at ";
 
         $rst = $con->execute($sql);
-        if ($rst) {
-            $output .= "<p><font size=+2><b>OPEN OPPORTUNITIES for $username<b></font><br></p>\n";
+        if (!$rst->EOF) {
+            $output .= "<p><font size=+2><b>OPEN OPPORTUNITIES for $name<b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -197,6 +298,11 @@ if ($user_id) {
             $rst->close();
             $output .= "</table>";
         }
+    else {
+        if ($say_no_when_none) {
+            $output .= "<p><b>NO OPEN OPPORTUNITIES for $name<b><br></p>\n";
+        }
+    }
     } // End Opportunities Type
     if (($type == "cases") || ($type == "all")) {
         $sql = "SELECT * from cases, case_statuses where
@@ -207,8 +313,8 @@ if ($user_id) {
                 order by entered_at ";
 
         $rst = $con->execute($sql);
-        if ($rst) {
-            $output .= "<p><font size=+2><b>OPEN CASES for $username<b></font><br></p>\n";
+        if (!$rst->EOF) {
+            $output .= "<p><font size=+2><b>OPEN CASES for $name<b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -238,26 +344,43 @@ if ($user_id) {
             $output .= "</table>";
         }
         else {
-            $output .= "<p><b>NO OPEN CASES for $username<b><br></p>\n";
+            if ($say_no_when_none) {
+                $output .= "<p><b>NO OPEN CASES for $name<b><br></p>\n";
+            }
         }
     } // End Cases Type
-
-    //$rst->close();
-} // End If User
+} // End Foreach User
+} // End If UserArray
 
 $con->close();
-if ($send_email == "y") {
+if ($send_email) {
+    if ($send_email_to) {
+        $email = $send_email_to;
+    }
     $headers  = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
     mail($email, "XRMS: Open Items", $output, $headers);
+    if (($display) || ($friendly)) {
+        echo $output;
+    }
 }
 else {
     echo $output;
 }
-end_page();
+
+if (($display) || (!$friendly)) {
+    end_page();
+}
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.7  2004/04/28 15:44:23  gpowers
+ * added $say_no_when_none - shows "NO .. for .. " when no items present
+ * added no_items for opportunities and campaigns
+ * added send_email_to support on web form.
+ * changed from showing username to showing user's first_names last_name
+ * changed display html / display friendly / send email logic
+ *
  * Revision 1.6  2004/04/23 15:24:49  gpowers
  * Fixes Bug #938616, requires campaign_statuses.status_open_indicator
  *
