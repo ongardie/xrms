@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.4 2004/11/10 07:29:33 gpowers Exp $
+ * $Id: edit.php,v 1.5 2004/12/31 22:54:18 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -89,6 +89,10 @@ $info_type_id = $_GET['info_type_id'];
 
 $delete_return_url = urlencode("../../companies/one.php?company_id=$company_id");
 
+if (!$return_url) {
+    $return_url = "../../companies/one.php?company_id=$company_id";
+};
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
@@ -100,6 +104,14 @@ $rst = $con->execute($sql);
 if ($rst) {
     if (!$rst->EOF) {
         $info_type_id = $rst->fields['info_type_id'];
+    }
+}
+
+$sql = "SELECT display_on FROM info_display_map WHERE info_type_id = $info_type_id";
+$rst = $con->execute($sql);
+if ($rst) {
+    if (!$rst->EOF) {
+        $display_on = $rst->fields['display_on'];
     }
 }
 
@@ -179,13 +191,19 @@ $con->close();
             <?php echo $edit_server_details; ?>
           </td>
         </tr>
-        <?php foreach ($element_value as $element_id=>$value) { ?>
-          <tr>
-            <td class=widget_label_right><?php echo "$element_label[$element_id]"; ?></td>
-            <?php echo show_element($element_id,
-              $element_value[$element_id],$element_possvals[$element_id]); ?>
-          </tr>
-        <?php } ?>
+        <?php foreach ($element_value as $element_id=>$value) {
+if ((($element_label[$element_id] != "Name")
+  && ($display_on == "company_accounting"))
+  || ($display_on != "company_accounting")) {
+    echo "<tr> <td class=widget_label_right> "
+        . $element_label[$element_id]
+        . "</td>"
+        . show_element($element_id, $element_value[$element_id],$element_possvals[$element_id])
+        . "</tr>";
+} else {
+    echo "<input type=hidden name='element_$element_id' value='Formation'>";
+} 
+} ?>
         <tr>
           <td class=widget_content_form_element colspan=2>
             <input class=button type=submit value="Save Changes">&nbsp;

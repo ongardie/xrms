@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.5 2004/11/10 07:29:33 gpowers Exp $
+ * $Id: sidebar.php,v 1.6 2004/12/31 22:54:18 gpowers Exp $
  */
 
 // $con->debug = 1;
@@ -35,12 +35,14 @@ if ($toprst) {
         $info_type_id = $toprst->fields['info_type_id'];
         $info_type_name = $toprst->fields['info_type_name'];
 
+        if ($display_on != "company_accounting") {
         $info_rows .= "<div id='note_sidebar'>
             <table class=widget cellspacing=1 width=\"100%\">
             <tr>
             <td class=widget_header colspan=2>$info_type_name</td>
             </tr>\n
         ";
+        };
 
         #//Find which element_id contains the "Name"
         $sql = "SELECT element_id ";
@@ -91,10 +93,10 @@ if ($toprst) {
 
         if ($rst) {
           while (!$rst->EOF) {
-            $server_link = "<a href='$http_site_root/plugins/info/one.php";
+            $server_link = "<tr><td class=sublabel><a href='$http_site_root/plugins/info/one.php";
             $server_link .= "?info_id=".$rst->fields['info_id'];
             $server_link .= "&company_id=$company_id'>";
-            $server_link .= $rst->fields['value']."</a>";
+            $server_link .= $rst->fields['value']."</a></td><td></td></tr>";
 
     $fields = array();
     $values = array();
@@ -112,36 +114,53 @@ if ($toprst) {
                 $rst2 = $con->execute($sql2);
                 if ($rst2) {
                   if (!$rst2->EOF) {
-                    $server_link .= "<br />" . $field . ": "
-                        . $rst2->fields['value'];
+                    $server_link .= "<tr><td class=sublabel>" . $field . "</td><td class=clear>"
+                        . $rst2->fields['value'] . "</td></tr>";
                   }
                 }
              }
+        if ($display_on != "company_accounting") {
                 $info_rows .= "
                   <tr>
-                    <td class=widget_content>
+                    <td class=widget_content>";
+        };
+                $info_rows .= "
                       <font class=note_label>
                         $server_link
-                      </font>
+                      </font>";
+        if ($display_on != "company_accounting") {
+                $info_rows .= "
                     </td>
-                  </tr>
-                ";
+                  </tr>";
+        };
                 $rst->movenext();
             }
         }
 
        # Add New button
-       $info_rows .= "
-     <tr>
-        <td class=widget_content_form_element colspan=5>
-          <input class=button type=button value=\"New\"
-            onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&info_type_id=$info_type_id';\">
-        </td>
-     </tr>\n
-";
+
+        if ($display_on != "company_accounting") {
+           $info_rows .= "<tr>
+               <td class=widget_content_form_element colspan=5>";
+        };
+        if (!$server_link) {
+            if ($display_on == "company_accounting") {
+                 $info_rows .= "<tr><td colspan=2>";
+            };
+        $info_rows .= "<br />
+          <input class=button type=button value=\"" . _("New") . " " . $info_type_name . " Info\"
+            onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&info_type_id=$info_type_id';\">";
+        };
+        if ($display_on == "company_accounting") {
+             $info_rows .= "<tr><td colspan=2>";
+        };
+        if ($display_on != "company_accounting") {
+           $info_rows .= "</td>
+             </tr>\n";
 
        //now close the table, we're done
-       $info_rows .= "</table>\n</div>";
+            $info_rows .= "</table>\n</div>";
+        };
 
        $toprst->movenext();
     }

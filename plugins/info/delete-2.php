@@ -2,7 +2,7 @@
 /**
  * Mark a note as deleted
  *
- * $Id: delete-2.php,v 1.1 2004/07/22 19:49:48 gpowers Exp $
+ * $Id: delete-2.php,v 1.2 2004/12/31 22:54:18 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -34,10 +34,13 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: {$http_site_root}/{$return_url}");
+header("Location: {$http_site_root}/companies/{$return_url}");
 
 /**
  * $Log: delete-2.php,v $
+ * Revision 1.2  2004/12/31 22:54:18  gpowers
+ * - added ability to add info inside a larger content box
+ *
  * Revision 1.1  2004/07/22 19:49:48  gpowers
  * - enables deletion of an info item
  *
