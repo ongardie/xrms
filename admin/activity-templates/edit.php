@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.2 2004/06/14 20:50:11 introspectshun Exp $
+ * $Id: edit.php,v 1.3 2004/07/15 20:36:18 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,8 +44,7 @@ $rst->close();
 
 $con->close();
 
-
-$page_title = "Activity Template : " . ucwords($activity_title);
+$page_title = _("Activity Template: ") . ucwords($activity_title);
 start_page($page_title);
 
 ?>
@@ -58,26 +57,26 @@ start_page($page_title);
 		<input type=hidden name=return_url value="<?php echo $return_url; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=4>Edit Activity Template Information</td>
+				<td class=widget_header colspan=4><?php echo _("Edit Activity Template Information"); ?></td>
 			</tr>
-            		<tr>
-                		<td class=widget_label_right>Title</td>
+            <tr>
+                <td class=widget_label_right><?php echo _("Title"); ?></td>
 				<td class=widget_content_form_element><input type=text size=40 name="activity_title" value='<?php echo $activity_title; ?>'></td>
 			</tr>
 			<tr>
-                		<td class=widget_label_right>Duration</td>
+                <td class=widget_label_right><?php echo _("Duration"); ?></td>
 				<td class=widget_content_form_element><input type=text size=10 name="duration" value='<?php echo $duration; ?>'></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Type</td>
+				<td class=widget_label_right><?php echo _("Type"); ?></td>
 				<td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
 			</tr>
-                        <tr>
-                                <td class=widget_label_right_166px>Description</td>
+            <tr>
+                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
 				<td class=widget_content_form_element><textarea rows=8 cols=100 name="activity_description"><?php echo $activity_description ?></textarea></td>
-                        </tr>
+            </tr>
 			<tr>
-				<td class=widget_content colspan=2><input class=button type=submit value="Save Changes"></td>
+				<td class=widget_content colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
 			</tr>
 		</table>
 		</form>
@@ -88,24 +87,27 @@ start_page($page_title);
     <div id="Sidebar">
 
 	<form action=delete.php method=post>
-        <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>" onsubmit="javascript: return confirm('Delete Activity Template?');">
+        <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Activity Template?"); ?>');">
 	<input type=hidden name=on_what_table value="<?php echo $on_what_table; ?>">
 	<input type=hidden name=on_what_id value="<?php echo $on_what_id; ?>">
 	<input type=hidden name=return_url value="<?php echo $return_url; ?>">
         <table class=widget cellspacing=1>
              <tr>
-                   <td class=widget_header colspan=4>Delete Activity Template</td>
+                <td class=widget_header colspan=4><?php echo _("Delete Activity Template"); ?></td>
              </tr>
              <tr>
                    <td class=widget_content>
-                   Click the button below to remove this<br> activity template from the system.
-                   <p>Note: This action CANNOT be undone!
-                   <p><input class=button type=submit value="Delete Activity Template">
+                   <?php echo _("Click the button below to remove this")
+                            . '<br> '
+                            . _("activity template from the system.")
+                            . '<p>'
+                            . _("Note: This action CANNOT be undone!");
+                   ?>
+                   <p><input class=button type=submit value="<?php echo _("Delete Activity Template"); ?>">
                    </td>
              </tr>
         </table>
         </form>
-
 
     </div>
 </div>
@@ -116,6 +118,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.3  2004/07/15 20:36:18  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.2  2004/06/14 20:50:11  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

@@ -2,7 +2,7 @@
 /**
  * Manage Activity Templates
  *
- * $Id: some.php,v 1.2 2004/06/14 20:50:11 introspectshun Exp $
+ * $Id: some.php,v 1.3 2004/07/15 20:36:18 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -46,7 +46,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Manage Activity Templates";
+$page_title = _("Manage Activity Templates");
 start_page($page_title);
 
 ?>
@@ -56,12 +56,12 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Activity Templates</td>
+                <td class=widget_header colspan=4><?php echo _("Activity Templates"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Status</td>
-                <td class=widget_label>Linked Table</td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Status"); ?></td>
+                <td class=widget_label><?php echo _("Linked Table"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -82,6 +82,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.3  2004/07/15 20:36:18  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.2  2004/06/14 20:50:11  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
