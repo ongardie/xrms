@@ -19,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.6 2004/08/12 21:17:55 johnfawcett Exp $
+ * @version $Id: i18n.php,v 1.7 2004/08/17 10:48:43 johnfawcett Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -952,8 +952,45 @@ function is_conversion_safe($input_charset) {
     endswitch;
 } //end fn is_conversion_safe
 
+/* Function that applies gettext to the visible part of a select
+   menu.
+   Extracts the text between <option> and </option> using a 
+   perl regular expression. The translation is done within
+   the callback function translate_menu_item().
+
+   @param $menu is the untranslated select menu in html
+   @return string translated menu
+*/
+
+function translate_menu($menu)
+{
+	return preg_replace_callback('/(<option[^>]*>)(.*)(<\/option>)/U',
+		"translate_menu_item",$menu);
+}
+
+/* Callback function used in select menu translation
+   The value passed is an array of matches from the perl regular
+   expression match in translate_menu().
+   
+   @param $matches array of regular expression matches. 
+          Element [1] is the <option> part
+		  Element [2] is the text to be translated
+		  Element [3] is the </option> part
+   @return string the three elements concatenated with the
+          text translated via a call to gettext _()
+*/
+
+function translate_menu_item($matches)
+{
+return $matches[1].($matches[2]=='' ? $matches[2] : _($matches[2])).$matches[3];
+}
+
+
 /**
  * $Log: i18n.php,v $
+ * Revision 1.7  2004/08/17 10:48:43  johnfawcett
+ * - added functions for translating select menus
+ *
  * Revision 1.6  2004/08/12 21:17:55  johnfawcett
  * - updated set_up_language function to add $xrms_file_root as global, add
  *   slash to end of it when it is used
