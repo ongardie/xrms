@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: acl_results.php,v 1.2 2005/02/14 20:42:24 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -62,7 +62,7 @@ switch ($aclAction) {
         $rst=$con->execute($sql);
         if (!$rst) db_error_handler($con, $sql);
         $permissionMenu=$rst->getmenu2('Permission',$Permission,false);
-        $sql = "Select CONCAT(first_names,' ',last_name) as Name, user_id  FROM users";
+        $sql = "Select " . $xcon->CONCAT('first_names',"' '",'last_name')." as Name, user_id  FROM users";
         $rst=$xcon->execute($sql);
         if (!$rst) db_error_handler($xcon, $sql);
         $userMenu=$rst->getmenu2('aclUser',$object,false);
@@ -242,6 +242,9 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.2  2005/02/14 20:42:24  vanmer
+  * - added missing connection object to do concat with adodb in acl results
+  *
   * Revision 1.1  2005/01/13 17:16:15  vanmer
   * - Initial Commit for ACL Administration interface
   *
