@@ -19,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.7 2004/08/17 10:48:43 johnfawcett Exp $
+ * @version $Id: i18n.php,v 1.8 2004/08/19 19:59:54 johnfawcett Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -982,12 +982,36 @@ function translate_menu($menu)
 
 function translate_menu_item($matches)
 {
-return $matches[1].($matches[2]=='' ? $matches[2] : _($matches[2])).$matches[3];
+	return $matches[1].($matches[2]=='' ? '' : _($matches[2])).$matches[3];
 }
 
+/* Function used to translate data items that contain html tags
+   @param $s string to translate
+   @return string containing html and translation of enclosed text 
+*/
+
+function translate_data_item($s)
+{
+    $bare_text = tag_remove($s);
+    return str_replace($bare_text,_($bare_text),$s);
+}
+
+/* Function to strip <x> tags
+   @param $s string to be stripped
+   @return string without <x> tags
+*/
+
+function tag_remove($s)
+{
+    return preg_replace('/<[^>]*>/U',"",$s);
+}
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.8  2004/08/19 19:59:54  johnfawcett
+ * - function added which can translate only text within html tags leaving the
+ *   tags intact
+ *
  * Revision 1.7  2004/08/17 10:48:43  johnfawcett
  * - added functions for translating select menus
  *
