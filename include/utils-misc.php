@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.69 2004/07/29 23:50:56 maulani Exp $
+ * $Id: utils-misc.php,v 1.70 2004/07/31 12:08:06 cpsource Exp $
  */
 
 /**
@@ -956,7 +956,7 @@ function arr_vars_post_get ( $ary, $allow_none = false )
 {
   foreach ($ary as $key => $value) {
     if ( $allow_none ) {
-      $GLOBALS[$key] = isset($_REQUEST["$key"]) ? $_REQUEST["$key"] : '';
+      $GLOBALS[$key] = isset($_POST["$key"]) ? $_POST["$key"] : '';
     } else {
       $GLOBALS[$key] = $_POST["$key"];
     }
@@ -1024,6 +1024,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.70  2004/07/31 12:08:06  cpsource
+ * - Remove errant REQUEST from arr_vars
+ *
  * Revision 1.69  2004/07/29 23:50:56  maulani
  * -remove obsolete comment
  *
