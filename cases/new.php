@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.16 2005/01/11 23:10:32 braverock Exp $
+ * $Id: new.php,v 1.17 2005/03/01 18:51:39 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -80,6 +80,9 @@ $rst->close();
 //get case status menu
 $sql2 = "select case_status_pretty_name, case_status_id from case_statuses where case_type_id=$case_type_id AND case_status_record_status = 'a' order by sort_order, case_status_id";
 $rst = $con->execute($sql2);
+//added because if you dont have a case status set you wont be able to enter a record.
+if ($rst->RecordCount()==0){echo "There are no case statuses set for this case type - please set case status first <a href='../admin/case-statuses/some.php>here</a>.";exit;}
+
 
 // defining case_status_id before the call to getmenu2 means that this
 // option will be selected when the menu is generated.
@@ -227,6 +230,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.17  2005/03/01 18:51:39  niclowe
+ * Added error trap where there are no case statuses set for a particular case type
+ *
  * Revision 1.16  2005/01/11 23:10:32  braverock
  * - removed bad javascript window.open hack, now set empty anchor on current page
  *
