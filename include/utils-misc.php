@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.59 2004/07/22 11:12:55 maulani Exp $
+ * $Id: utils-misc.php,v 1.60 2004/07/22 12:03:37 cpsource Exp $
  */
 
 /**
@@ -644,7 +644,28 @@ function db_error_handler (&$con,$sql,$colspan=20) {
  *
  * @return string $phone_to_display
  */
+
+//
+// BUG - TBD - This routine returns bogus phone numbers of the form
+// (444) 113-3333 113-3333 from an imput string of (444) 113-3333
+//
+// here's a sample run:
+//   get_formatted_phone: entry, phone = (555) 555-4100
+//   phone = (555), extra = 555-4100
+//   RETURNS: (555) 555-4100 555-4100
+//
+// The chage I made to list/split doesn't effect the
+// outcome. Set 'local_debug' to true to see for yourself.
+//
 function get_formatted_phone ($con, $address_id, $phone) {
+
+  $local_debug = false;
+
+  if ( $local_debug ) {
+    $old_level = error_reporting(E_ALL);
+    echo "<br>get_formatted_phone: entry, phone = $phone<br>";
+  }
+
     $phone_to_display = $phone;
     $sql = "select
                 c.phone_format
@@ -661,7 +682,27 @@ function get_formatted_phone ($con, $address_id, $phone) {
 
     $pos = 0;
     $number_length = 0;
-    list($phone, $extra) = split(" ", $phone, 2);
+
+    if ( $local_debug ) {
+      list($phone, $extra) = split(" ", $phone, 2);
+    } else {
+      // do in a way that doesn't use undefined variables
+      $tmp = split(" ", $phone, 2);
+      if ( isset($tmp[0]) ) {
+	$phone = $tmp[0];
+      } else {
+	$phone = '';
+      }
+      if ( isset($tmp[1]) ) {
+	$extra = $tmp[1];
+      } else {
+	$extra = '';
+      }
+    }
+
+    if ( $local_debug ) {
+      echo "phone = $phone, extra = $extra<br>";
+    }
 
     if(strlen($expression)) {
         preg_match_all("|[#]+|", $expression, $matched);
@@ -681,6 +722,12 @@ function get_formatted_phone ($con, $address_id, $phone) {
     if($temp_phone) {
         $phone_to_display = $temp_phone;
     }
+
+    if ( $local_debug ) {
+      echo "RETURNS: $phone_to_display $extra<br>";
+      error_reporting( $old_level);
+    }
+
     return $phone_to_display . " " . $extra;
 }
 
@@ -952,6 +999,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.60  2004/07/22 12:03:37  cpsource
+ * - Got rid of undefined variable usage in get_formatted_phone
+ *   Documented a bug with get_formatted_phone
+ *
  * Revision 1.59  2004/07/22 11:12:55  maulani
  * - Change default characterset to UTF-8
  *
