@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.7 2004/07/14 20:19:50 cpsource Exp $
+ * $Id: sidebar.php,v 1.8 2004/07/25 16:47:38 johnfawcett Exp $
  */
 
 $file_rows = "<div id='file_sidebar'>
@@ -18,10 +18,10 @@ $file_rows = "<div id='file_sidebar'>
                 <td class=widget_header colspan=4>Files</td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Size</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Date</td>
+                <td class=widget_label>"._("Name")."</td>
+                <td class=widget_label>"._("Size")."</td>
+                <td class=widget_label>"._("Owner")."</td>
+                <td class=widget_label>"._("Date")."</td>
             </tr>\n";
 
 //build the files sql query
@@ -69,7 +69,7 @@ if (strlen($rst->fields['username']) > 0) {
     }
     $rst->close();
 } else {
-    $file_rows .= "            <tr> <td class=widget_content colspan=4> No attached files </td> </tr>\n";
+    $file_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached files")." </td> </tr>\n";
 }
 
 //put in the new button
@@ -81,7 +81,7 @@ if (strlen($on_what_table)>0){
                         <input type=hidden name=on_what_table value='$on_what_table'>
                         <input type=hidden name=on_what_id value='$on_what_id'>
                         <input type=hidden name=return_url value='/".$on_what_table."/one.php?".$on_what_string."_id=".$on_what_id."'>
-                        <input type=submit class=button value='New'>
+                        <input type=submit class=button value='"._("New")."'>
                 </td>
             </form>
             </tr>";
@@ -92,6 +92,9 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.8  2004/07/25 16:47:38  johnfawcett
+ * - added gettext calls
+ *
  * Revision 1.7  2004/07/14 20:19:50  cpsource
  * - Resolved $company_count not being set properly
  *   opportunities/some.php tried to set $this which can't be done in PHP V5
