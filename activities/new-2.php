@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.11 2004/05/10 13:07:20 maulani Exp $
+ * $Id: new-2.php,v 1.12 2004/06/04 13:23:45 braverock Exp $
  */
 
 //where do we include from
@@ -55,13 +55,16 @@ $on_what_id = ($on_what_id > 0) ? $on_what_id : 0;
 $company_id = ($company_id > 0) ? $company_id : 0;
 $contact_id = ($contact_id > 0) ? $contact_id : 0;
 
+//mark completed if it is an email
+if ($email) { $activity_status = 'c'; };
+
 //make our database connection
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
 if (!$scheduled_at) {
-    $scheduled_at = date('Y-m-d H:i:s');
+    $scheduled_at = "now";
 }
 
 if ($followup) {
@@ -116,6 +119,10 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.12  2004/06/04 13:23:45  braverock
+ *- fix date bug that would create invalid datestamp
+ *- mark new emails from mailto link as completed
+ *
  *Revision 1.11  2004/05/10 13:07:20  maulani
  *- Add level to audit trail
  *- Clean up audit trail text
