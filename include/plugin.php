@@ -12,7 +12,7 @@
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.2 2004/03/20 19:21:40 braverock Exp $
+ * $Id: plugin.php,v 1.3 2004/03/20 20:01:57 braverock Exp $
  * @package xrms
  */
 
@@ -42,7 +42,7 @@ function use_plugin ($name) {
         $function = "xrms_plugin_init_$name";
 
         // uncomment the following debug line to trace
-        echo 'executing '. $function;
+        // echo 'executing '. $function;
 
         if (function_exists($function)) {
             $function();
@@ -229,6 +229,9 @@ if (isset($plugins) && is_array($plugins)) {
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.3  2004/03/20 20:01:57  braverock
+ *  - comment out one of the debug statements (sorry)
+ *
  * Revision 1.2  2004/03/20 19:21:40  braverock
  *  - finalized main plugin loading code
  *
