@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.39 2004/07/22 13:58:27 neildogg Exp $
+ * $Id: some.php,v 1.40 2004/07/22 18:06:40 introspectshun Exp $
  */
 
 // handle includes
@@ -412,7 +412,7 @@ start_page($page_title, true, $msg);
                 </td>
                 <td class=widget_content_form_element colspan="2"> 
                     <input type=text name="saved_title" size=24> 
-                    <?php if($_SESSION['role_short_name'] === 'Admin') { ?>Add to Everyone <input type=checkbox name="group_item" value=1><? } ?>
+                    <?php if($_SESSION['role_short_name'] === 'Admin') { echo _("Add to Everyone"); ?> <input type=checkbox name="group_item" value=1><? } ?>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
@@ -496,6 +496,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.40  2004/07/22 18:06:40  introspectshun
+ * - Localized "Add to Everyone"
+ *
  * Revision 1.39  2004/07/22 13:58:27  neildogg
  * - Limit group saved-search functionality to admin
  *
