@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.1 2004/04/22 17:05:40 gpowers Exp $
+ * $Id: audit-items.php,v 1.2 2004/04/23 17:14:14 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -155,8 +155,7 @@ if ($user_id) {
                      $rst->fields['remote_addr'] . ">" . $rst->fields['remote_addr'] . "</a>" . 
                      "&nbsp;&nbsp;&nbsp;</td>\n";
                 echo "<td>" . $rst->fields['remote_port'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                echo "<td colspan=2>" . $rst->fields['session_id'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                echo "<td colspan=2>" . $rst->fields['http_user_agent'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                echo "<td colspan=4>" . $rst->fields['session_id'] . "&nbsp;&nbsp;&nbsp;</td>\n";
                 echo "<tr>\n";
                 echo "<tr><td colspan=6><hr></td></tr>\n";
             }
@@ -176,6 +175,10 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.2  2004/04/23 17:14:14  gpowers
+ * Removed http_user_agent from audit_items table. It is space consuming and
+ * redundant, as most httpd servers can be configured to log this information.
+ *
  * Revision 1.1  2004/04/22 17:05:40  gpowers
  * Added Audit Item Report
  *

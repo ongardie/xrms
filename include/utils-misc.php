@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.16 2004/04/23 15:12:35 gpowers Exp $
+ * $Id: utils-misc.php,v 1.17 2004/04/23 17:14:57 gpowers Exp $
  */
 
 /**
@@ -85,7 +85,6 @@ function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_wh
             remote_addr = \"" . $_SERVER['REMOTE_ADDR'] . "\",
             remote_port = \"" . $_SERVER['REMOTE_PORT'] . "\",
             session_id = \"" . $_COOKIE['PHPSESSID'] . "\",
-            http_user_agent = \"" . $_SERVER['HTTP_USER_AGENT'] . "\",
             audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
 
     //$con->debug=1
@@ -345,6 +344,10 @@ exit;
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.17  2004/04/23 17:14:57  gpowers
+ * Removed http_user_agent from audit_items table. It is space consuming and
+ * redundant, as most httpd servers can be configured to log this information.
+ *
  * Revision 1.16  2004/04/23 15:12:35  gpowers
  * added support for remote_add, remote_port, session_id, http_user_agent
  *
