@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.4 2004/04/23 15:07:29 gpowers Exp $
+ * $Id: update.php,v 1.5 2004/04/23 16:00:53 gpowers Exp $
  */
 
 /**
@@ -70,26 +70,24 @@ if ($recCount == 0) {
     }
 }
 
-// make sure that there is a case_priority_score_adjustment column
+//make sure that there is a case_priority_score_adjustment column
 //should put a test here, but alter table is non-destructive
 $sql = "alter table case_priorities add case_priority_score_adjustment int not null after case_priority_display_html";
 $rst = $con->execute($sql);
 // end case_priority_display_html
 
-//make sure that there is a line3 column in addresses
-//should put a test here, but alter table is non-destructive
-$sql = "alter table addresses add line3 varchar(255) after line2";
-$rst = $con->execute($sql);
-// end
-
 //make sure that there is a status_open_indicator column in campagins 
 //should put a test here, but alter table is non-destructive
+//This is used for reports/open-items.php and reports/completed-items.php reports
+//Similiar to opportunity_statuses, 'o' means open, anything else means "completed" for the completed-item report
 $sql = "alter table campaign_statuses add status_open_indicator char(1) not null default \"o\" after campaign_status_id";
 $rst = $con->execute($sql);
 // end
 
 //set "CLOSED" campagin status_open_indicator to "c"
 //should put a test here, but alter table is non-destructive
+//This is used for reports/open-items.php and reports/completed-items.php reports
+//This sets the default "Closed" campagin status with a status_open_indicator of "c" for "Closed"
 $sql = "update campaign_statuses set status_open_indicator = \"c\" where campaign_status_short_name = \"CLO\"";
 $rst = $con->execute($sql);
 // end
@@ -97,12 +95,20 @@ $rst = $con->execute($sql);
 //make sure that there is connection detail columns in the audit_items table
 //these are done separately in case one column already exists
 //should put a test here, but alter table is non-destructive
+//These items are used for "Connection Details" in reports/audit-items.php
+//remote_addr is the client's IP address. varchar(40) should be big enough for IPv6 addresses
 $sql = "alter table audit_items add remote_addr varchar(40) after audit_item_timestamp";
 $rst = $con->execute($sql);
+//remote_port is the client's requesting port.r
+// This is useful for comparing to network
+//packet dumps and tracing connections through firewalls.
 $sql = "alter table audit_items add remote_port int(6) after remote_addr";
 $rst = $con->execute($sql);
+//session_id stores _COOKIE["PHPSESSID"], used for tracking a user's session
 $sql = "alter table audit_items add session_id varchar(50) after remote_port";
 $rst = $con->execute($sql);
+//http_user_agent identifies the user's web browser and OS.
+//This is useful for tracing unauthorized access.
 $sql = "alter table audit_items add http_user_agent varchar(255) after session_id";
 $rst = $con->execute($sql);
 // end
@@ -162,6 +168,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.5  2004/04/23 16:00:53  gpowers
+ * Removed addresses.line3 - this was not an approved change
+ * Added comments telling the reasons for the changes
+ *
  * Revision 1.4  2004/04/23 15:07:29  gpowers
  * added addresses.line, campaign_statuses.status_open_indicator, audit_items.remote_addr, audit_items.remote_port, audit_items.session_id, audit_items.http_user_agent
  *
