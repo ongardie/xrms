@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.27 2005/02/14 21:43:14 vanmer Exp $
+ * $Id: some.php,v 1.28 2005/03/11 17:28:19 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,7 +29,7 @@ $arr_vars = array ( // local var name       // session variable name
          // unused // 'company_type_id'     => array ( 'cases_company_type_id', arr_vars_SESSION ),
          'case_type_id'        => array ( 'case_type_id', arr_vars_SESSION ),
          'user_id'             => array ( 'cases_user_id', arr_vars_SESSION ),
-         'case_status_id'      => array ( 'cases_case_status_id', arr_vars_SESSION ),
+         'case_status_id'      => array ( 'cases_case_status_id', arr_vars_GET_SESSION),
          'case_category_id'    => array ( 'cases_case_category_id', arr_vars_SESSION ),
          );
 
@@ -357,6 +357,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.28  2005/03/11 17:28:19  daturaarutad
+ * added GET to cases_case_status_id for linking to reports/graphs
+ *
  * Revision 1.27  2005/02/14 21:43:14  vanmer
  * - updated to reflect speed changes in ACL operation
  *

@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.56 2005/03/02 15:18:34 daturaarutad Exp $
+ * $Id: some.php,v 1.57 2005/03/11 17:28:39 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -26,11 +26,12 @@ $arr_vars = array ( // local var name       // session variable name
                    'company_category_id' => array('companies_company_category_id',arr_vars_SESSION),
                    'company_code'        => array('companies_company_code',arr_vars_SESSION),
                    'user_id'             => array('companies_user_id',arr_vars_SESSION),
-                   'crm_status_id'       => array('companies_crm_status_id',arr_vars_SESSION),
+                   'crm_status_id'       => array('companies_crm_status_id',arr_vars_GET_SESSION),
                    'industry_id'         => array('industry_id',arr_vars_SESSION),
                    'city'                => array('city',arr_vars_SESSION),
                    'state'               => array('state',arr_vars_SESSION)
                    );
+
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
@@ -396,6 +397,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.57  2005/03/11 17:28:39  daturaarutad
+ * added GET to cases_case_status_id for linking to reports/graphs
+ *
  * Revision 1.56  2005/03/02 15:18:34  daturaarutad
  * removed redundant mail merge button and corresponding query
  *
