@@ -2,7 +2,7 @@
 /**
  * The main page for the info plugin
  *
- * $Id: info.php,v 1.4 2004/11/10 07:29:33 gpowers Exp $
+ * $Id: info.php,v 1.5 2005/02/11 13:53:01 braverock Exp $
  */
 
 // include the common files
@@ -41,41 +41,41 @@ $sql .= ($sort_by_companyname) ? "companies.company_name" : "info.value";
 
 $rst = $con->execute($sql);
 
-start_page($server_info_heading);
+start_page($info_heading);
 ?>
 
 <div id="Main">
   <div id="Content">
     <table class=widget cellspacing=1 width="100%">
       <tr>
-         <td class=widget_header colspan=2><?php echo $server_list; ?></td>
+         <td class=widget_header colspan=2><?php echo $info_list; ?></td>
       </tr>
       <tr>
         <?php if ($sort_by_companyname) { ?>
           <td class=widget_label><?php echo $company_heading; ?></td>
-          <td class=widget_label><?php echo $server_heading; ?></td>
+          <td class=widget_label><?php echo $info_heading; ?></td>
         <?php } else { ?>
-          <td class=widget_label><?php echo $server_heading; ?></td>
+          <td class=widget_label><?php echo $info_heading; ?></td>
           <td class=widget_label><?php echo $company_heading; ?></td>
         <?php } ?>
       </tr>
       <?php
       if ($rst) {
             while (!$rst->EOF) {
-              $server_name = $rst->fields['value'];
+              $info_name = $rst->fields['value'];
               $company_name = $rst->fields['company_name'];
               $company_id = $rst->fields['company_id'];
               $info_id = $rst->fields['info_id'];
 
               $link = "one.php?info_id=$info_id&company_id=$company_id&return_url=$return_url";
-              $server_link = "<a href='$link'>$server_name</a>";
+              $info_link = "<a href='$link'>$info_name</a>";
 
               echo "<tr><td class=widget_content>";
               if ($sort_by_companyname) {
-                echo "$company_name</td><td class=widget_content>$server_link";
+                echo "$company_name</td><td class=widget_content>$info_link";
               }
               else {
-                echo "$server_link</td><td class=widget_content>$company_name";
+                echo "$info_link</td><td class=widget_content>$company_name";
               }
               echo "</td></tr>\n";
               $rst->movenext();
@@ -93,4 +93,11 @@ $con->close();
 
 end_page();
 
+/**
+ * $Log: info.php,v $
+ * Revision 1.5  2005/02/11 13:53:01  braverock
+ * - add phpdoc
+ * - remove references to server_info and replace with just info
+ *
+ */
 ?>
