@@ -8,7 +8,7 @@
  *
  * @todo Move variable substitutions for actvity templates into a user-definable table.
  *
- * $Id: workflow-activities.php,v 1.6 2004/07/07 21:51:11 braverock Exp $
+ * $Id: workflow-activities.php,v 1.7 2004/08/19 21:41:50 neildogg Exp $
  */
 
 $sql = "select * from activity_templates
@@ -21,15 +21,18 @@ $rst = $con->execute($sql);
 
 //generates insert statement to add activities to the current list
 $cnt = 0;
+if(!$activity_record_status) {
+    $activity_record_status = 'a';
+}
 if ($rst) {
     while (!$rst->EOF) {
 
         //get the field values from the next record in the query
         $activity_type_id = $rst->fields['activity_type_id'];
         $activity_title = $rst->fields['activity_title'];
+        $default_text = $rst->fields['default_text'];
         $activity_description = $rst->fields['activity_description'];
         $duration = $rst->fields['duration'];
-
 
         //calculate ends_at, based on duration and current date
         if ( is_numeric("$duration") ) {
@@ -78,7 +81,7 @@ if ($rst) {
         //save to database
         $rec = array();
         $rec['activity_type_id'] = $activity_type_id;
-        $rec['activity_description'] = '';
+        $rec['activity_description'] = $default_text;
         $rec['ends_at'] = strtotime($ends_at);
         $rec['user_id'] = $user_id;
         $rec['company_id'] = $company_id;
@@ -91,7 +94,7 @@ if ($rst) {
         $rec['entered_by'] = $user_id;
         $rec['scheduled_at'] = time();
         $rec['activity_status'] = 'o';
-        $rec['activity_record_status'] = 'a';
+        $rec['activity_record_status'] = $activity_record_status;
 
         $tbl = 'activities';
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -104,6 +107,10 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.7  2004/08/19 21:41:50  neildogg
+ * - Allows a default description added to
+ *  - auto created activities
+ *
  * Revision 1.6  2004/07/07 21:51:11  braverock
  * - fix parse error after $tbl change on line 97
  *
