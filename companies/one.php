@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.71 2004/12/31 22:31:33 vanmer Exp $
+ * $Id: one.php,v 1.72 2005/01/03 16:26:46 gpowers Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -31,6 +31,14 @@ $company_id = $_GET['company_id'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
+
+
+// make sure $accounting_rows is defined
+if ( !isset($accounting_rows) ) {
+  $accounting_rows = '';
+}
+//call the accounting hook
+$accounting_rows = do_hook_function('company_accounting', $accounting_rows);
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
@@ -491,6 +499,8 @@ function openNewsWindow() {
                                     <td class=sublabel><?php echo _("Terms"); ?></td>
                                     <td class=clear><?php echo $terms; ?> <?php echo _("days"); ?></td>
                                 </tr>
+                                <!-- accounting plugin -->
+                                <?php echo $accounting_rows; ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
@@ -676,6 +686,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.72  2005/01/03 16:26:46  gpowers
+ * - added company_accounting plugin hook
+ *
  * Revision 1.71  2004/12/31 22:31:33  vanmer
  * - forced menu text in activities section to use small text
  * - removed extraneous column from activity list
