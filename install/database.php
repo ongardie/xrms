@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.30 2005/02/10 14:29:29 maulani Exp $
+ * $Id: database.php,v 1.31 2005/03/20 01:45:54 maulani Exp $
  */
 
 /**
@@ -414,20 +414,6 @@ function company_db_tables($con, $table_list) {
                company_type_pretty_plural      varchar(100) not null default '',
                company_type_display_html       varchar(100) not null default '',
                company_type_record_status      char(1) default 'a'
-               )";
-        //execute
-        $rst = $con->execute($sql);
-        if (!$rst) {
-            db_error_handler ($con, $sql);
-        }
-    }
-
-    // company_company_type_map
-    // one row per association between each company and each type
-    if (!in_array('company_company_type_map',$table_list)) {
-        $sql ="create table company_company_type_map (
-               company_id              int not null default 0,
-               company_type_id         int not null default 0
                )";
         //execute
         $rst = $con->execute($sql);
@@ -1109,6 +1095,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.31  2005/03/20 01:45:54  maulani
+ * - Remove company_company_type_map table because it is not used.
+ *
  * Revision 1.30  2005/02/10 14:29:29  maulani
  * - Add last modified timestamp and user fields to activities
  *
