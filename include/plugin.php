@@ -12,12 +12,13 @@
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.1 2004/03/02 14:05:17 braverock Exp $
+ * $Id: plugin.php,v 1.2 2004/03/20 19:21:40 braverock Exp $
  * @package xrms
  */
 
 /** Everything needs vars.php */
 require_once($include_directory .'vars.php');
+require_once($include_directory .'plugin-cfg.php');
 
 global $xrms_plugin_hooks;
 $xrms_plugin_hooks = array();
@@ -30,14 +31,24 @@ $xrms_plugin_hooks = array();
  * @return void
  */
 function use_plugin ($name) {
-    if (file_exists($xrms_file_root . "/plugins/$name/setup.php")) {
-        include_once($xrms_file_root . "/plugins/$name/setup.php");
+
+    global $xrms_file_root;
+
+    // uncomment the following debug line to trace
+    // echo "<br> Looking for: ".$xrms_file_root."/plugins/".$name."/setup.php \n";
+
+    if (file_exists($xrms_file_root . '/plugins/'.$name.'/setup.php')) {
+        include_once($xrms_file_root . "/plugins/".$name."/setup.php");
         $function = "xrms_plugin_init_$name";
+
+        // uncomment the following debug line to trace
+        echo 'executing '. $function;
+
         if (function_exists($function)) {
             $function();
         }
     }
-}
+} //end use_plugin fn
 
 /***********************************************************************/
 /**
@@ -186,7 +197,7 @@ function soupNazi(){
 
     $soup_menu = array('Mozilla/3','Mozilla/2','Mozilla/1', 'Opera 4',
                        'Opera/4', 'OmniWeb', 'Lynx');
-    sqgetGlobalVar('HTTP_USER_AGENT', $user_agent, SQ_SERVER);
+    GetGlobalVar('HTTP_USER_AGENT', $user_agent);
     foreach($soup_menu as $browser) {
         if(stristr($user_agent, $browser)) {
             return 1;
@@ -194,20 +205,33 @@ function soupNazi(){
     }
     return 0;
 }
+
 /*************************************/
 /*** MAIN PLUGIN LOADING CODE HERE ***/
 /*************************************/
+global $plugins;
 
 /* On startup, register all plugins configured for use. */
 if (isset($plugins) && is_array($plugins)) {
     foreach ($plugins as $name) {
+        // uncomment the following debug line to trace
+        //echo 'calling use_plugin '. $name. '<br>';
+
+        // register the plugin hooks into the array
         use_plugin($name);
     }
+
+    // uncomment the following debug line to trace
+    //print_r ($xrms_plugin_hooks);
 }
+
 
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.2  2004/03/20 19:21:40  braverock
+ *  - finalized main plugin loading code
+ *
  * Revision 1.1  2004/03/02 14:05:17  braverock
  * Initial revision of Plugin Infrastructure code
  *
