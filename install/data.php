@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.8 2004/07/07 20:48:16 neildogg Exp $
+ * $Id: data.php,v 1.9 2004/07/12 12:56:21 braverock Exp $
  */
 
 /**
@@ -900,23 +900,25 @@ function campaign_db_data($con) {
 function activity_db_data($con) {
     // activity_types
      if (confirm_no_records($con, 'activity_types')) {
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('CTO', 'call to', 'calls to', 'call to')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('CTO', 'call to', 'calls to', 'call to',1)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('CFR', 'call from', 'calls from', 'call from')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('CFR', 'call from', 'calls from', 'call from',2)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('ETO', 'e-mail to', 'e-mails to', 'e-mail to')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('ETO', 'e-mail to', 'e-mails to', 'e-mail to',3)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('EFR', 'e-mail from', 'e-mails from', 'e-mail from')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('EFR', 'e-mail from', 'e-mails from', 'e-mail from',4)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('FTO', 'fax to', 'faxes to', 'fax to')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('FTO', 'fax to', 'faxes to', 'fax to',5)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('FFR', 'fax from', 'faxes from', 'fax from')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('FFR', 'fax from', 'faxes from', 'fax from',6)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('FFR', 'letter to', 'letter to', 'letter to')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('LTT', 'letter to', 'letter to', 'letter to',7)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('FFR', 'letter from', 'letter from', 'letter from')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('LTF', 'letter from', 'letter from', 'letter from',8)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html) values ('FFR', 'internal', 'internal', 'internal')";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('INT', 'internal', 'internal', 'internal',9)";
+        $rst = $con->execute($sql);
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('PRO', 'process', 'process', 'process',10)";
         $rst = $con->execute($sql);
     }
 
@@ -941,6 +943,10 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.9  2004/07/12 12:56:21  braverock
+ * - add sort_order to activity_types table on install
+ *   - resolves SF bug 987492 reported by kennyg1
+ *
  * Revision 1.8  2004/07/07 20:48:16  neildogg
  * - Added database structure changes
  *

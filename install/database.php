@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.11 2004/07/07 20:48:16 neildogg Exp $
+ * $Id: database.php,v 1.12 2004/07/12 12:56:21 braverock Exp $
  */
 
 /**
@@ -795,6 +795,7 @@ function activity_db_tables($con, $table_list) {
                activity_type_display_html         varchar(100) not null default '',
                activity_type_score_adjustment     int not null default 0,
                activity_type_record_status        char(1) not null default 'a'
+               sort_order                         tinyint not null default '1'
                )";
         //execute
         $rst = $con->execute($sql);
@@ -850,6 +851,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.12  2004/07/12 12:56:21  braverock
+ * - add sort_order to activity_types table on install
+ *   - resolves SF bug 987492 reported by kennyg1
+ *
  * Revision 1.11  2004/07/07 20:48:16  neildogg
  * - Added database structure changes
  *
