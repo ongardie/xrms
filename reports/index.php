@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.17 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: index.php,v 1.18 2004/07/21 11:59:29 cpsource Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,6 +13,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
+
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -159,6 +161,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.18  2004/07/21 11:59:29  cpsource
+ * - Define $msg from GET
+ *
  * Revision 1.17  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *
