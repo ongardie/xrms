@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.9 2004/07/15 17:41:30 cpsource Exp $
+ * $Id: sidebar.php,v 1.10 2004/07/15 20:55:51 neildogg Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -297,7 +297,7 @@ $relationship_link_rows .= "
                     <input type=hidden name=relationship_name value='" . $relationship_name . "'>
                     <input type=hidden name=on_what_id value='$overall_id'>
                     <input type=hidden name=working_direction value='$orig_working_direction'>
-                    <input type=hidden name=return_url value='/$what_table[$working_direction]/one.php?$what_table_singular[$working_direction]_id=$overall_id'>
+                    <input type=hidden name=return_url value='/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id=$overall_id'>
                     <input type=submit class=button value='New'>
                 </td>
             </form>
@@ -391,6 +391,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.10  2004/07/15 20:55:51  neildogg
+ * - Proper return URL
+ *
  * Revision 1.9  2004/07/15 17:41:30  cpsource
  * - Fix undef for relationship_link_rows.
  *
