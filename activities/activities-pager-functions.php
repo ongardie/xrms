@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Shared activity pager functions
+ *
+ * $Id: activities-pager-functions.php,v 1.2 2005/02/24 00:17:39 braverock Exp $
+ */
 
 function GetActivitiesPagerData($row) {
     global $http_site_root;
@@ -42,12 +46,10 @@ function GetActivitiesPagerData($row) {
     return $row;
 }
 
-
-
-
-
-
-
-
-
+/**
+ * $Log: activities-pager-functions.php,v $
+ * Revision 1.2  2005/02/24 00:17:39  braverock
+ * - add phpdoc
+ *
+ */
 ?>
