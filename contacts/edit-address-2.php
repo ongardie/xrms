@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.8 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: edit-address-2.php,v 1.9 2004/08/25 14:18:27 neildogg Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -97,6 +97,27 @@ if ($alt_address) {
     $address_id = $con->insert_id();
     add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
 
+    if($time_zone_offset = time_zone_offset($con, $address_id)) {
+        $sql = 'SELECT *
+                FROM addresses
+                WHERE address_id=' . $address_id;
+        $rst = $con->execute($sql);
+        if(!$rst) {
+            db_error_handler($con, $sql);
+        }
+        elseif(!$rst->EOF) {
+            $rec = array();
+            $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
+            $rec['offset'] = $time_zone_offset['offset'];
+
+            $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
+            $rst = $con->execute($upd);
+            if(!$rst) {
+                db_error_handler($con, $sql);
+            }
+        }
+    }
+
     $sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
     $rst = $con->execute($sql);
 
@@ -117,6 +138,9 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.9  2004/08/25 14:18:27  neildogg
+ * - Daylight savings now applied to all new addresses
+ *
  * Revision 1.8  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'
@@ -139,7 +163,7 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.8 2004/07/22 11:21:13 cpsource Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.9 2004/08/25 14:18:27 neildogg Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing

@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.18 2004/07/30 11:23:38 cpsource Exp $
+ * $Id: new-2.php,v 1.19 2004/08/25 14:18:56 neildogg Exp $
  */
 require_once('../include-locations.inc');
 
@@ -142,6 +142,27 @@ if (!$adr_rst) {
 // make that address the default, and set the customer and vendor references
 $address_id = $con->insert_id();
 
+if($time_zone_offset = time_zone_offset($con, $address_id)) {
+    $sql = 'SELECT *
+            FROM addresses
+            WHERE address_id=' . $address_id;
+    $rst = $con->execute($sql);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif(!$rst->EOF) {
+        $rec = array();
+        $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
+        $rec['offset'] = $time_zone_offset['offset'];
+
+        $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
+        $rst = $con->execute($upd);
+        if(!$rst) {
+            db_error_handler($con, $sql);
+        }
+    }
+} 
+
 $sql = "SELECT * FROM companies WHERE company_id = $company_id";
 $rst = $con->execute($sql);
 if (!$rst) {
@@ -196,6 +217,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.19  2004/08/25 14:18:56  neildogg
+ * - Daylight savings now applied to all new addresses
+ *
  * Revision 1.18  2004/07/30 11:23:38  cpsource
  * - Do standard msg processing
  *   Default use_pretty_address in new-2.php set to null

@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.26 2004/07/27 18:25:22 braverock Exp $
+ * $Id: import-companies-3.php,v 1.27 2004/08/25 14:18:45 neildogg Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -482,6 +482,28 @@ foreach ($filearray as $row) {
                 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
                 debugSql($ins);
                 $con->execute($ins);
+                
+                $address_id = $con->insert_id();
+                if($time_zone_offset = time_zone_offset($con, $address_id)) {
+                    $sql = 'SELECT *
+                            FROM addresses
+                            WHERE address_id=' . $address_id;
+                    $rst = $con->execute($sql);
+                    if(!$rst) {
+                        db_error_handler($con, $sql);
+                    }
+                    elseif(!$rst->EOF) {
+                        $rec = array();
+                        $rec['daylight_savings_id'] = $time_zone_offset['daylight_savings_id'];
+                        $rec['offset'] = $time_zone_offset['offset'];
+
+                        $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
+                        $rst = $con->execute($upd);
+                        if(!$rst) {
+                            db_error_handler($con, $sql);
+                        }
+                    }
+                } 
 
                 importMessage("Imported address '$address_line1'");
                 $address_id = $con->insert_id();
@@ -734,6 +756,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.27  2004/08/25 14:18:45  neildogg
+ * - Daylight savings now applied to all new addresses
+ *
  * Revision 1.26  2004/07/27 18:25:22  braverock
  * - fixed problem where GetUpdateSql function may return an empty string, and don't try to execute an empty query.
  *   - resolves SF bug 998856
