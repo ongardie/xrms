@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.61 2004/10/29 15:34:11 introspectshun Exp $
+ * $Id: some.php,v 1.62 2004/11/12 15:25:09 braverock Exp $
  */
 
 // handle includes
@@ -32,7 +32,7 @@ $arr_vars = array ( // local var name       // session variable name
            'delete_saved'       => arr_vars_POST_UNDEF,
            'browse'             => arr_vars_POST_UNDEF,
            );
-           
+
 $advanced_search = (isset($_GET['advanced_search'])) ? true : false;
 
 // get all passed in variables
@@ -87,7 +87,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'contact_id'          => array ( 'activities_contact_id', arr_vars_SESSION ) ,
                    'company'             => array ( 'activities_company', arr_vars_SESSION ) ,
                    'company_id'          => array ( 'activities_company_id', arr_vars_SESSION ) ,
-		   // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
+           // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
                    'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
                    'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
                    'completed'           => array ( 'activities_completed', arr_vars_SESSION ) ,
@@ -247,7 +247,7 @@ if (strlen($search_date) > 0) {
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     update_daylight_savings($con);
     $sql .= " and addr.daylight_savings_id = tds.daylight_savings_id";
-    
+
     $sql .= " and (hour(" . $con->DBTimeStamp(time()) . ") + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") >= " . $time_zone_between;
     $sql .= " and (hour(" . $con->DBTimeStamp(time()) . ") + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") <= " . $time_zone_between2;
 }
@@ -291,11 +291,11 @@ $sql .= " order by $order_by"; // is_overdue desc, a.scheduled_at, a.entered_at 
 
 if($advanced_search) {
     //get activities from templates
-    $sql2 = "SELECT activity_title, activity_title as activity_title2 
-            FROM activity_templates 
-            WHERE activity_template_record_status='a' 
+    $sql2 = "SELECT activity_title, activity_title as activity_title2
+            FROM activity_templates
+            WHERE activity_template_record_status='a'
             AND on_what_table = 'opportunity_statuses'
-            GROUP BY activity_title 
+            GROUP BY activity_title
             ORDER BY activity_title";
     $rst = $con->execute($sql2);
     $activity_menu = $rst->getmenu2('template_title', $template_title, true);
@@ -456,7 +456,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name="company_id" size=15 value="<?php  echo $company_id; ?>">
                 </td>
             </tr>
-<?php } ?>
+<?php } //end if advanced search ?>
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
                 <td class=widget_label><?php echo _("End/Due Date"); ?></td>
@@ -494,25 +494,25 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan="2">
-<?php
+            <?php
+                    //time zone handling code
                     $sql2 = "SELECT " . $con->concat("(CASE WHEN country_id%25 < 24 THEN lpad(country_id%25, 2, '0') ELSE '00' END)", "':00:00'") . " as counter, country_id%25 as counter2 from countries group by counter2 order by counter2";
                     $rst = $con->execute($sql2);
                     if(!$rst) {
                         db_error_handler($con, $sql2);
                     }
                     print $rst->getmenu2('time_zone_between', $time_zone_between, true);
-                ?>
- and 
-<?php
+                    echo ' and ';
                     $rst->movefirst();
                     print $rst->getmenu2('time_zone_between2', $time_zone_between2, true);
-                ?>
+                    //end timezone handling code
+            ?>
                 </td>
                 <td class=widget_content_form_element colspan="2">
                     <?php echo $opportunity_menu; ?>
                 </td>
             </tr>
-<? } ?>
+<?php } //end if advanced search ?>
             <tr>
                 <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
                 <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
@@ -522,7 +522,7 @@ start_page($page_title, true, $msg);
                     <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
                 </td>
                 <td class=widget_content_form_element colspan="2">
-                    <input type=text name="saved_title" size=24> 
+                    <input type=text name="saved_title" size=24>
                     <?php
                         if($_SESSION['role_short_name'] === 'Admin') {
                             echo _("Add to Everyone").' <input type=checkbox name="group_item" value=1>';
@@ -540,9 +540,8 @@ start_page($page_title, true, $msg);
                             echo "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";
                         }
                         if(!$advanced_search) {
+                            echo '<input name="advanced_search" type=button class=button onclick="javascript: location.href=\'some.php?advanced_search=true\';" value="'._("Advanced Search").'">';
                     ?>
-                    <input name="advanced_search" type=button class=button onclick="javascript: location.href='some.php?advanced_search=true';" value="<?php echo _("Advanced Search"); ?>">
-                    <?php } ?>
                 </td>
             </tr>
     </table>
@@ -619,19 +618,23 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.62  2004/11/12 15:25:09  braverock
+ * - fixed short php tags
+ * - cleaned up some other code formatting
+ *
  * Revision 1.61  2004/10/29 15:34:11  introspectshun
  * - Added option to search activities 'on' a specific date
  *
  * Revision 1.60  2004/09/21 18:21:28  introspectshun
  * - Changed table order in main query FROM clause
- *   - Join fails on MSSQL otherwise
+ * - Join fails on MSSQL otherwise
  *
  * Revision 1.59  2004/08/25 15:49:39  introspectshun
  * - Fixed errant variable name
  *
  * Revision 1.58  2004/08/25 15:01:17  neildogg
  * - Searches local time with proper constraints
- *  - Saves temporary searches properly
+ * - Saves temporary searches properly
  *
  * Revision 1.57  2004/08/19 20:37:20  neildogg
  * - Added many advanced search features
@@ -644,7 +647,7 @@ end_page();
  *
  * Revision 1.54  2004/08/16 21:02:09  neildogg
  * - Allows to find activities ending within a time range
- *  - (for all time zones)
+ *   (for all time zones)
  *
  * Revision 1.53  2004/08/16 14:39:23  maulani
  * - Override ADODB_Pager class for activities to allow customization
@@ -652,7 +655,7 @@ end_page();
  *
  * Revision 1.52  2004/08/05 18:42:56  neildogg
  * - Date offset now compatible thanks to
- *  - advice from David Rogers
+ *   advice from David Rogers
  *
  * Revision 1.51  2004/07/30 13:01:28  neildogg
  * - Restores $search_date using stored $day_diff
@@ -669,7 +672,7 @@ end_page();
  *
  * Revision 1.48  2004/07/26 16:13:00  neildogg
  * - Now it actually defines an undefined variable
- *  - instead of assigning it an empty string
+ *   instead of assigning it an empty string
  *
  * Revision 1.47  2004/07/23 21:46:54  cpsource
  * - Get rid of some undefined variable usages.
@@ -687,7 +690,7 @@ end_page();
  *
  * Revision 1.43  2004/07/22 22:00:24  introspectshun
  * - Updated date offset logic to use portable database code
- *   - Removed MySQL-centric date functions and conditional block
+ * - Removed MySQL-centric date functions and conditional block
  *
  * Revision 1.42  2004/07/22 19:59:03  neildogg
  * - Missed concat .
@@ -706,7 +709,7 @@ end_page();
  *
  * Revision 1.37  2004/07/21 20:32:19  neildogg
  * - Added ability to save searches
- *  - Any improvements welcome
+ *   Any improvements welcome
  *
  * Revision 1.36  2004/07/16 11:11:48  cpsource
  * - Remove unused $open_activities variable.
@@ -724,7 +727,7 @@ end_page();
  *
  * Revision 1.32  2004/07/13 14:18:19  neildogg
  * - Changed submit button name to another name
- *   - resolves SF bug 9888931 reported by braverock
+ *   resolves SF bug 9888931 reported by braverock
  *
  * Revision 1.31  2004/07/11 12:32:48  braverock
  * - eliminate manual table generation in favor of pager object
@@ -733,11 +736,11 @@ end_page();
  * Revision 1.30  2004/07/10 12:24:59  braverock
  * - fixed undefined activity_id
  * - fixed misdefined activity_type_pretty_name
- *   - fixes SF bugs reported by cpsource
+ * - fixes SF bugs reported by cpsource
  *
  * Revision 1.29  2004/07/10 12:14:53  braverock
  * - applied patch for undefined variables
- *   - modified from SF patch 979124 supplied by cpsource
+ * - modified from SF patch 979124 supplied by cpsource
  *
  * Revision 1.28  2004/07/09 18:35:07  introspectshun
  * - Removed CAST(x AS CHAR) for wider database compatibility
