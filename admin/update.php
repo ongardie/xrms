@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.17 2004/07/01 19:48:09 braverock Exp $
+ * $Id: update.php,v 1.18 2004/07/01 20:14:28 braverock Exp $
  */
 
 // where do we include from
@@ -337,16 +337,18 @@ if (confirm_no_records($con, 'relationships')) {
             if ($relationship_type_id) {
                 //now insert the row in the new table
                 if ($direction=='from'){
+                    $new_to_id   = $to_what_id;
+                    $new_from_id = $from_what_id;
+                } else {
                     $new_from_id = $to_what_id;
                     $new_to_id   = $from_what_id;
-                } else {
-                    $new_to_id = $to_what_id;
-                    $new_from_id = $from_what_id;
                 }
                 $sql = "insert into relationships
                 (from_what_id, to_what_id, relationship_type_id, established_at)
                 values (" . $new_from_id . ", " . $new_to_id . ", " . $relationship_type_id . ", $established_at)";
                 $ins_rst=$con->execute($sql);
+                //skip the next row to avoid dups
+                $rst->movenext();
             }
             $rst->movenext();
         }
@@ -657,6 +659,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.18  2004/07/01 20:14:28  braverock
+ * - changed relationship update script to avoid duplicate entries and correct  from/to order
+ *
  * Revision 1.17  2004/07/01 19:48:09  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts
