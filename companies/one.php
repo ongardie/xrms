@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.64 2004/07/29 23:52:08 maulani Exp $
+ * $Id: one.php,v 1.65 2004/08/03 11:18:35 cpsource Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -571,10 +571,6 @@ function openNewsWindow() {
                                     <td class=clear><?php echo $company_source; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php echo _("Industry"); ?></td>
-                                    <td class=clear><?php echo $industry_pretty_name; ?></td>
-                                </tr>
-                                <tr>
                                     <td class=sublabel><?php echo _("Employees"); ?></td>
                                     <td class=clear><?php  echo $employees; ?></td>
                                 </tr>
@@ -762,6 +758,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.65  2004/08/03 11:18:35  cpsource
+ * - Bug 993235 - industry repeat deleted
+ *
  * Revision 1.64  2004/07/29 23:52:08  maulani
  * -refine html to validate
  *
