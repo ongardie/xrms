@@ -7,8 +7,8 @@ echo "http://sourceforge.net/projects/webcalendar/"
 wget http://easynews.dl.sourceforge.net/sourceforge/webcalendar/WebCalendar-0.9.43.tgz
 echo "Untarring Archive:"
 tar xzvf WebCalendar-0.9.43.tgz
-echo "Creating Symbolic link to src"
-ln -s WebCalendar-0.9.43 src
+echo "Renaming WebCalendar-0.9.43 to src"
+mv WebCalendar-0.9.43 src
 echo ""
 echo "your php binary is at:"
 which php
