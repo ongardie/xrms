@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.90 2005/02/10 01:08:51 braverock Exp $
+ * $Id: some.php,v 1.91 2005/02/14 22:04:05 vanmer Exp $
  */
 
 // handle includes
@@ -293,11 +293,13 @@ if($campaign_id) {
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $sql .= " and 1 = 2";
 } else {
-    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    $list=acl_get_list($session_user_id, 'Read', false, $on_what_table);
     //print_r($list);
     if ($list) {
-        $list=implode(",",$list);
-        $sql .= " and a.activity_id IN ($list) ";
+        if ($list!==true) {
+            $list=implode(",",$list);
+            $sql .= " and a.activity_id IN ($list) ";
+        }
     } else { $sql .= ' AND 1 = 2 '; }
 }
 
@@ -697,6 +699,7 @@ $pager->Render($system_rows_per_page);
 $con->close();
 
 ?>
+
     </form>
     </div>
         <!-- right column //-->
@@ -764,6 +767,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.91  2005/02/14 22:04:05  vanmer
+ * - updated to reflect ACL speed updates
+ *
  * Revision 1.90  2005/02/10 01:08:51  braverock
  * - change order of LEFT OUTER JOIN query for MS SQL server portability
  *
