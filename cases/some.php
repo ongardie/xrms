@@ -63,8 +63,8 @@ if (!($sort_column == $current_sort_column)) {
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
 
-$ascending_order_image = " <img border=0 height=10 width=10 src=/img/asc.gif>";
-$descending_order_image = " <img border=0 height=10 width=10 src=/img/desc.gif>";
+$ascending_order_image = " <img border=0 height=10 width=10 src=../img/asc.gif>";
+$descending_order_image = " <img border=0 height=10 width=10 src=../img/desc.gif>";
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 $_SESSION['cases_sort_column'] = $sort_column;
