@@ -2,7 +2,7 @@
 /**
  * Export Search Results from opportunities/some.php
  *
- * $Id: export.php,v 1.9 2005/01/09 01:15:52 braverock Exp $
+ * $Id: export.php,v 1.10 2005/01/09 02:37:50 braverock Exp $
  */
 
 
@@ -81,7 +81,7 @@ if (!$rst) {
     db_error_handler ($con, $sql.$where);
 }
 
-$filename =  'opportunities_' . time() . '.csv';
+$filename =  'opportunities_' . date('Y-m-d_H-i') . '.csv';
 
 if ($rst) {
     $csvdata= rs2csv($rst);
@@ -106,6 +106,9 @@ echo $csvdata;
 
 /**
  *$Log: export.php,v $
+ *Revision 1.10  2005/01/09 02:37:50  braverock
+ *- changed date format in filename to a human readable form
+ *
  *Revision 1.9  2005/01/09 01:15:52  braverock
  *- changed to use string instead of an actual file
  *- updated to use SendDownLoadHeaders for broader browser (eg - IE) compatibility
