@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.11 2004/04/27 16:28:39 gpowers Exp $
+ * $Id: one.php,v 1.12 2004/04/27 16:42:07 gpowers Exp $
  */
 
 //include required files
@@ -41,10 +41,8 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $on_what_table = $rst->fields['on_what_table'];
     $on_what_id = $rst->fields['on_what_id'];
-//    $scheduled_at = $con->usertimestamp($rst->fields['scheduled_at'], "Y-m-d h:i A");
-//    $ends_at = $con->usertimestamp($rst->fields['ends_at'], "Y-m-d h:i A");
-    $scheduled_at = $rst->fields['scheduled_at'];
-    $ends_at = $rst->fields['ends_at'];
+    $scheduled_at = $rst->usertimestamp($rst->fields['scheduled_at'], "Y-m-d h:i A");
+    $ends_at = $rst->usertimestamp($rst->fields['ends_at'], "Y-m-d h:i A");
     $activity_status = $rst->fields['activity_status'];
     $rst->close();
 }
@@ -206,6 +204,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2004/04/27 16:42:07  gpowers
+ * fixed usertimestamp
+ *
  * Revision 1.11  2004/04/27 16:28:39  gpowers
  * added support for activity times.
  * NOTE: usertimestamp doesn't appear to work. I don't know why.
