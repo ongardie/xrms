@@ -1,15 +1,15 @@
 <?php
 /**
- * install/install.php - This page begins the installation process 
+ * install/install.php - This page begins the installation process
  *
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.6 2004/07/19 21:14:24 maulani Exp $
+ * $Id: install.php,v 1.7 2004/07/28 17:25:33 braverock Exp $
  */
 
-if (!defined('IN_XRMS')) { 
-    define('IN_XRMS', true); 
+if (!defined('IN_XRMS')) {
+    define('IN_XRMS', true);
 }
 
 // include the installation utility routines
@@ -23,6 +23,10 @@ require_once('../include-locations.inc');
 // get message
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
+$page_title = "Installation Complete";
+start_page($page_title, false, $msg);
+
+
 // now check to make sure that the include-locations file has been setup for use
 if ($include_directory == "/full/path/to/xrms/include/") {
     // Oops!  The include directory is still set to it's default value
@@ -32,7 +36,7 @@ if ($include_directory == "/full/path/to/xrms/include/") {
     $problem .= 'at the top level of the xrms installation.  Change the value ';
     $problem .= 'of the $include_directory variable to the correct path.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -46,7 +50,7 @@ if (!file_exists ($include_directory) ) {
     $problem .= 'at the top level of the xrms installation.  Change the value ';
     $problem .= 'of the $include_directory variable to the correct path.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -69,7 +73,7 @@ if ($xrms_db_username == "your_mysql_username") {
     $problem .= 'of the $xrms_db_username variable to the database username and ';
     $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -83,7 +87,7 @@ if ($xrms_db_password == "your_mysql_password") {
     $problem .= 'of the $xrms_db_password variable to the database password and ';
     $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -97,7 +101,7 @@ if ($xrms_db_dbname == "your_mysql_database") {
     $problem .= 'of the $xrms_db_dbname variable to the database name and ';
     $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -111,7 +115,7 @@ if ($http_site_root == "http://www.yoursitename.com/xrms") {
     $problem .= 'of the $http_site_root variable to the correct URL and ';
     $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -125,7 +129,7 @@ if ($xrms_file_root == "/full/path/to/xrms") {
     $problem .= 'of the $xrms_file_root variable to the correct path and ';
     $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -139,7 +143,7 @@ if (!file_exists ($xrms_file_root) ) {
     $problem .= 'in the include folder.  Change the value ';
     $problem .= 'of the $xrms_file_root variable to the correct path.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -153,7 +157,7 @@ if ($tmp_upload_directory == "/full/path/to/xrms/tmp/") {
     $problem .= 'of the $tmp_upload_directory variable to the correct path and ';
     $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -167,7 +171,7 @@ if (!file_exists ($tmp_upload_directory) ) {
     $problem .= 'in the include folder.  Change the value ';
     $problem .= 'of the $tmp_upload_directory variable to the correct path.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
 
@@ -192,28 +196,30 @@ if (!$connectiontest) {
     $problem .= 'Also make sure the database is running and can accept a connection ';
     $problem .= 'from this server. <BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
-    
+
     install_fatal_error($problem);
 }
-//if you can make a database connection make sure that you are running at least version 4 of MYSQL
+// if you can make a database connection make sure that you are running at least version 4 of MYSQL
 // otherwise alert the user to potential problems
 if($xrms_db_dbtype="mysql"){
-	//dont use adodb bcos i need the link identifier for mysql_get_server_info
-	$link = mysql_connect($xrms_db_server, $xrms_db_username, $xrms_db_password);
-	$ver=mysql_get_server_info($link);
-	mysql_close($link);//close the link when you are done with it.
+        // dont use adodb bcos i need the link identifier for mysql_get_server_info
+        $link = mysql_connect($xrms_db_server, $xrms_db_username, $xrms_db_password);
+        $ver  = mysql_get_server_info($link);
+        mysql_close($link);//close the link when you are done with it.
   if (version_compare($ver,"4.0.2")<0){
-		 //Ooops you are not running a compliant version of mysql
+    // Ooops! you are not running a compliant version of mysql
     // Now instruct the user in how to fix this problem
-    $problem = 'XRMS requires Mysql version 4.0.2 or above to work. <BR>';
-		$problem .='You are currently running MySql Server version '.$ver.'<BR>';
-    $problem .= 'At the moment, previous versions are not supported.';
-		
-    $problem .= 'Please install version 4.0.2 or greater of MySql, available here <a href="http://dev.mysql.com/downloads/">Mysql Downloads</a><BR>';
-    install_fatal_error($problem);
-		
+    $problem = '<p>WARNING: XRMS strongly recommends MySQL version 4.0.2 or above. <BR>';
+                $problem .='You are currently running MySQL Server version '.$ver.'<BR>';
+    $problem .= 'At the moment, MySQL version 3.23.x seems to work, but are not supported by the XRMS development team.</p>';
+
+    $problem .= '<p>Please install version 4.0.2 or greater of MySQL, available here:
+                 <a href="http://dev.mysql.com/downloads/">MySQL Downloads</a></p>';
+    install_fatal_error($problem, false);
+
   };
 }
+
 // create the database tables
 create_db_tables($con);
 
@@ -223,15 +229,12 @@ create_db_data($con);
 //close the connection
 $con->close();
 
-$page_title = "Installation Complete";
-start_page($page_title, false, $msg);
-
 ?>
 
 <BR>
-All of the tables have been created, and initial data has been populated.  
+All of the tables have been created, and initial data has been populated.
 <BR><BR>
-The initial user available is "user1" with a password of "user1".  You should change this 
+The initial user available is "user1" with a password of "user1".  You should change this
 as soon as you login.  (It can be changed in Users within the Administration section.)
 <BR><BR>
 You may now <a href="sample.php">create sample data</a> to try out the system, or
@@ -245,6 +248,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.7  2004/07/28 17:25:33  braverock
+ *- turned MySQL version check into a non-fatal warning
+ *
  *Revision 1.6  2004/07/19 21:14:24  maulani
  *- Add check to make sure that IN_XRMS is defined only once
  *- Fix database connection test with solution posed by Brian Peterson (braverock)
