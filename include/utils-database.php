@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.4 2004/07/14 11:50:50 cpsource Exp $
+ * $Id: utils-database.php,v 1.5 2004/07/14 20:54:33 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -84,16 +84,22 @@ function make_singular($word) {
  * @todo Add naming conventions as needed
  */
 function table_name($table) {
-   if($table == "contacts") {
-       return array("first_names", "last_name");
-   }
-   else {
-       return array(make_singular($table) . "_name");
-   }
+    if($table == "contacts") {
+        return array("first_names", "last_name");
+    }
+    elseif($table == "opportunities") {
+        return array("opportunity_title");
+    }
+    else {
+        return array(make_singular($table) . "_name");
+    }
 } 
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.5  2004/07/14 20:54:33  neildogg
+ * - Added name for opportunities table
+ *
  * Revision 1.4  2004/07/14 11:50:50  cpsource
  * - Added security feature IN_XRMS
  *
