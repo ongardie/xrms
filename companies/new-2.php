@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.8 2004/02/11 15:26:58 braverock Exp $
+ * $Id: new-2.php,v 1.9 2004/02/13 16:40:35 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -135,7 +135,7 @@ $sql_insert_contact = "insert into contacts set
                               entered_at = '. $con->dbtimestamp(mktime()) .",
                               entered_by = $session_user_id,
                               last_modified_by = $session_user_id,
-                              last_modified_by = " . $con->dbtimestamp(mktime());
+                              last_modified_at = " . $con->dbtimestamp(mktime());
 
 $con->execute($sql_insert_contact);
 
@@ -151,6 +151,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.9  2004/02/13 16:40:35  maulani
+ * Correct field on contact insert
+ *
  * Revision 1.8  2004/02/11 15:26:58  braverock
  * - added qstr around some optional fields
  * - changed sql queries to name=value notation for easier debugging
