@@ -8,7 +8,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.16 2004/08/23 13:39:39 neildogg Exp $
+ * $Id: browse-next.php,v 1.17 2004/12/18 21:36:59 neildogg Exp $
  */
 
 //include required files
@@ -53,7 +53,7 @@ if($saved_id) {
     }
     elseif($rst->rowcount()) {
         $sql = unserialize($rst->fields['saved_data']);
-        $sql = $sql['sql'];
+        $sql = str_replace('CURRENT_USER', $session_user_id, $sql['sql']);
         $sql = preg_replace("|^select|i", "select activity_id,", $sql);
     }
     $rst = $con->execute($sql);
@@ -142,6 +142,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.17  2004/12/18 21:36:59  neildogg
+ * Added support for current user search
+ *
  * Revision 1.16  2004/08/23 13:39:39  neildogg
  * - Errand variable name
  *
