@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.1 2004/06/09 16:52:14 gpowers Exp $
+ * $Id: edit-address.php,v 1.2 2004/06/10 17:49:19 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,7 +15,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 $contact_id = $_GET['contact_id'];
-$address_id = $_GET['address_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -27,6 +26,7 @@ $rst = $con->execute($sql);
 
 $contact_name = $rst->fields['first_names'] . ' ' . $rst->fields['last_name'];
 $company_id =  $rst->fields['company_id'];
+$address_id =  $rst->fields['address_id'];
 
 $sql = "select a.*, c.* from contacts c, addresses a where a.address_id = c.address_id and c.contact_id = $contact_id";
 
@@ -52,6 +52,71 @@ if (!$country_id) {$country_id = $default_country_id;}
 $country_menu = $rst->getmenu2('country_id', $country_id, false);
 $rst->close();
 
+$company_name = fetch_company_name($con, $company_id);
+
+$sql = "select * from companies c
+where c.company_record_status = 'a'
+and c.company_id = $company_id";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $show_company = false;
+        $company_addresses = "";
+        if ($rst->fields['default_primary_address'] == $address_id) {
+            $company_addresses .= 'Primary Address<br />';
+            $show_company = true;
+        }
+
+        if ($rst->fields['default_billing_address'] == $address_id) {
+            $company_addresses .= 'Billing Address<br />';
+            $show_company = true;
+        }
+
+        if ($rst->fields['default_shipping_address'] == $address_id) {
+            $company_addresses .= 'Shipping Address<br />';
+            $show_company = true;
+        }
+
+        if ($rst->fields['default_payment_address'] == $address_id) {
+            $company_addresses .= 'Payment Address<br />';
+            $show_company = true;
+        }
+
+        if ($show_company) {
+            $addresses .= '<tr>';
+            $addresses .= "<td class=widget_label_right><a href=../companies/edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['company_name'] . '</a><td class=widget_content>';
+            $addresses .= $company_addresses . "</td>";
+            $addresses .= '</tr>';
+        }
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+
+$sql = "select contact_id, company_id, address_id, last_name, first_names  from contacts
+        where address_id = " . $address_id;
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $addresses .= "<tr>"
+                    . "<td class=widget_label_right>"
+                    . fetch_company_name($con, $company_id)
+                    . "</td><td class=widget_content>"
+                    . "<a href=\"one.php?contact_id="
+                    . $rst->fields['contact_id'] . "\">"
+                    . $rst->fields['first_names'] . " "
+                    . $rst->fields['last_name'] . "</a><br />"
+                    . "</td>"
+                    . "<tr>";
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
 $con->close();
 
 
@@ -68,6 +133,21 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php echo $company_id; ?>>
         <input type=hidden name=address_id value=<?php echo $address_id; ?>>
         <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=2>This Address Is Also Used By</td>
+            </tr>
+            <?php echo $addresses; ?>
+            <tr>
+                <td class=widget_header colspan=2>Create New Address?</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class=widget_label colspan=2>
+                    Editing/Deleting this record will change the address for <em><b>ALL</b</em>
+                    companies and contacts listed abve.<br /><br />
+                    Create a New Address? <input type=checkbox name=new>
+                </td>
+            </tr>
             <tr>
                 <td class=widget_header colspan=2>Edit Address</td>
             </tr>
@@ -129,6 +209,10 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.2  2004/06/10 17:49:19  gpowers
+ * - added "This Address Is Also Used By" and "Create New Address?"
+ *   to avert unintended editing.
+ *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
  * - adapted from companies/edit-address.php
