@@ -2,14 +2,14 @@
 
 if ( !defined('IN_XRMS') )
 {
-  die('Hacking attempt');
+  die(_('Hacking attempt'));
   exit;
 }
 
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.14 2004/07/21 18:19:25 neildogg Exp $
+ * $Id: sidebar.php,v 1.15 2004/09/28 20:43:28 introspectshun Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -34,20 +34,22 @@ $note_rows = '<div id="note_sidebar">
 
 //build the notes sql query
 if (strlen($on_what_table)>0){
-    $note_sql = "select note_id, note_description, entered_by, entered_at, username, user_contact_id from notes, users
+  $note_sql = "select note_id, note_description, entered_by, entered_at, username, user_contact_id
+            from notes, users
             where notes.entered_by = users.user_id
             and on_what_table = '$on_what_table'
-            and on_what_id = $on_what_id
+            and on_what_id = '$on_what_id'
             and note_record_status = 'a'
             order by entered_at desc";
-    $rst = $con->execute($note_sql);
+  $rst = $con->execute($note_sql);
 } else {
-    $note_sql = "select note_id, note_description, entered_by, entered_at, on_what_table, on_what_id, username, user_contact_id from notes, users
+  $note_sql = "select note_id, note_description, entered_by, entered_at, on_what_table, on_what_id, username, user_contact_id
+            from notes, users
             where notes.entered_by = '$session_user_id'
             and notes.entered_by = users.user_id
             and note_record_status = 'a'
             order by entered_at";
-    $rst = $con->SelectLimit($note_sql, 5, 0);
+  $rst = $con->SelectLimit($note_sql, 5, 0);
 }
 
 //uncomment the debug line to see what's going on with the query
@@ -68,51 +70,51 @@ if (strlen($rst->fields['username']) > 0) {
   while (!$rst->EOF) {
     $attached_to_link ='';
     $on_what_name     ='';
-    $on_what_table    ='';
-    $note_company_id       ='';
-    $note_contact_id       ='';
+    $on_what_string   ='';
+    $note_company_id  ='';
+    $note_contact_id  ='';
 
     if (strlen($rst->fields['on_what_table']) > 0) {
       switch ($rst->fields['on_what_table']) {
-      case 'companies':
-	$on_what_table = 'company';
-	$note_company_id    = $rst->fields['on_what_id'];
-	break;
-      case 'contacts':
-	$on_what_table = 'contact';
-	$on_what_name = " " . $con->Concat("last_name","', '","first_names") . " AS on_what_name ";
-	$note_contact_id   = $rst->fields['on_what_id'];
-	break;
-      case 'opportunities':
-	$on_what_table = 'opportunity';
-	$on_what_name = 'opportunity_title AS on_what_name ';
-	break;
-      case 'cases':
-	$on_what_table = 'case';
-	$on_what_name = 'case_title AS on_what_name ';
-	break;
-      case 'campaigns':
-	$on_what_table = 'campaign';
-	$on_what_name = 'campaign_title AS on_what_name ';
-	break;
-      case 'users':
-	$on_what_table = 'user';
-	$on_what_name = 'username AS on_what_name ';
-	break;
+        case 'companies':
+          $on_what_string = 'company';
+	      $note_company_id    = $rst->fields['on_what_id'];
+          break;
+        case 'contacts':
+          $on_what_string = 'contact';
+          $on_what_name = $con->Concat("last_name","', '","first_names") . " AS on_what_name ";
+          $note_contact_id   = $rst->fields['on_what_id'];
+          break;
+        case 'opportunities':
+          $on_what_string = 'opportunity';
+          $on_what_name = 'opportunity_title AS on_what_name ';
+          break;
+        case 'cases':
+          $on_what_string = 'case';
+          $on_what_name = 'case_title AS on_what_name ';
+          break;
+        case 'campaigns':
+          $on_what_string = 'campaign';
+          $on_what_name = 'campaign_title AS on_what_name ';
+          break;
+        case 'users':
+          $on_what_string = 'user';
+          $on_what_name = 'username AS on_what_name ';
+          break;
       }
-      if (!$on_what_name) { $on_what_name = $on_what_table.'_name as on_what_name '; }
+      if (!$on_what_name) { $on_what_name = $on_what_string.'_name as on_what_name '; }
       $attached_sql = 'select '
-	. $on_what_name.', '
-	. $on_what_table.'_id '
-	. ' from '.$rst->fields['on_what_table']
-	. ' where '
-	. $on_what_table.'_id = '. $rst->fields['on_what_id'];
+                      . $on_what_name.', '
+                      . $on_what_string.'_id '
+                      . ' from '.$rst->fields['on_what_table']
+                      . ' where '
+                      . $on_what_string.'_id = '. $rst->fields['on_what_id'];
       $attached_rst = $con->SelectLimit($attached_sql, 1, 0);
       if ($attached_rst) {
-	$attached_to_link = "<a href=\"$http_site_root/". $rst->fields['on_what_table']
-	  .'/one.php?'. $on_what_table.'_id='
-	  .$rst->fields['on_what_id']
-	  .'">'.$attached_rst->fields['on_what_name'].'</a>';
+        $attached_to_link = "<a href=\"$http_site_root/". $rst->fields['on_what_table']
+                            .'/one.php?'. $on_what_string.'_id='
+                            . $rst->fields['on_what_id']
+                            .'">'.$attached_rst->fields['on_what_name'].'</a>';
       }
     } // if (strlen($rst->fields['on_what_table']) > 0) ...
 
@@ -129,18 +131,21 @@ if (strlen($rst->fields['username']) > 0) {
                  <td class=widget_content>
                  <font class=note_label>
                  $attached_to_link
+                 </font>
                  </td>
                  <td class=widget_content>
                  <font class=note_label>"
-      . $con->userdate($rst->fields['entered_at'])
-      . "</td>\n\t<td class=widget_content>
+               . $con->userdate($rst->fields['entered_at'])
+               . "</font>
+                 </td>\n\t<td class=widget_content>
                  <font class=note_label>"
-      . $rst->fields['username']
-      . "</td>\n\t<td class=widget_content>
+               . $rst->fields['username']
+               . "</font>
+                 </td>\n\t<td class=widget_content>
                  <font class=note_label>
                  <a href='" . $http_site_root . "/notes/edit.php?note_id=" . $rst->fields['note_id'] . $return_url . "'>"
-      . _("View/Edit")
-      . "</a>
+               . _("View/Edit")
+               . "</a>
                  </font>
                  </td>
              </tr>";
@@ -148,11 +153,12 @@ if (strlen($rst->fields['username']) > 0) {
              <tr>
                  <td class=widget_content colspan=4>
                  <font class=note_label>"
-      . nl2br(substr($rst->fields['note_description'],0,255)) .'
+               . nl2br(substr($rst->fields['note_description'],0,255))
+               . "</font>
                  </td>
-             </tr>';
+             </tr>";
 
-    // to next row
+        // to next row
     $rst->movenext();
 
   } // while (!$rst->EOF) ..
@@ -160,9 +166,9 @@ if (strlen($rst->fields['username']) > 0) {
   $rst->close();
 
 } else {
-    $note_rows .= "\n            <tr> <td class=widget_content colspan=4> "
-                 . _("No attached notes")
-                 . " </td> </tr>\n";
+  $note_rows .= "\n            <tr> <td class=widget_content colspan=4> "
+                . _("No attached notes")
+                . " </td> </tr>\n";
 } // if (strlen($rst->fields['username']) > 0) ...
 
 // put in the new button
@@ -172,13 +178,35 @@ if ( strlen( $on_what_table ) > 0 ) {
   if ( !isset($on_what_id) ) {
     $on_what_id = '';
   }
-  if ( !isset($on_what_string) ) {
-    $on_what_string = '';
+  if ( !isset($on_what_string) or ($on_what_string === '') ) {
+    // hate to repeat this functionality, but we have to have a value for on_what_string below
+    switch ($on_what_table) {
+      case 'companies':
+        $on_what_string = 'company';
+        break;
+      case 'contacts':
+        $on_what_string = 'contact';
+        break;
+      case 'opportunities':
+        $on_what_string = 'opportunity';
+        break;
+      case 'cases':
+        $on_what_string = 'case';
+        break;
+      case 'campaigns':
+        $on_what_string = 'campaign';
+        break;
+      case 'users':
+        $on_what_string = 'user';
+        break;
+      default:
+        $on_what_string = '';
+        break;
+    }
   }
 
-  if ( 1 ) {
-    // use single quote as string delimeter so that variables stand out with color editor
-    $note_rows .= '
+  // use single quote as string delimiter so that variables stand out with color editor
+  $note_rows .= '
             <tr>
             <form action="'.$http_site_root.'/notes/new.php" method="post">
                 <td class=widget_content_form_element colspan=4>
@@ -189,19 +217,6 @@ if ( strlen( $on_what_table ) > 0 ) {
                 </td>
             </form>
             </tr>';
-  } else {
-    $note_rows .= "
-            <tr>
-            <form action='".$http_site_root."/notes/new.php' method='post'>
-                <td class=widget_content_form_element colspan=4>
-                        <input type=hidden name=on_what_table value='$on_what_table'>
-                        <input type=hidden name=on_what_id value='$on_what_id'>
-                        <input type=hidden name=return_url value='/".$on_what_table."/one.php?".$on_what_string."_id=".$on_what_id."'>
-                        <input type=submit class=button value='"._("New")."'>
-                </td>
-            </form>
-            </tr>";
-  }
 }
 
 //now close the table, we're done
@@ -209,6 +224,12 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.15  2004/09/28 20:43:28  introspectshun
+ * - Added closing <font> tags to <td>s.
+ * - Value of $on_what_table is not overwritten in the while loop
+ *   - Now "New" button now displays when notes exist in list.
+ * - Updated code indenting to make file more manageable
+ *
  * Revision 1.14  2004/07/21 18:19:25  neildogg
  * - Stopped over-writing of variables if note was present
  *
