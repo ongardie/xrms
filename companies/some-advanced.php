@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.3 2004/06/29 14:43:21 maulani Exp $
+ * $Id: some-advanced.php,v 1.4 2004/07/01 15:50:25 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -110,7 +110,7 @@ if ($company_category_id > 0) {
     $from = "from companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u ";
 }
 
-$where .= "where c.industry_id = i.industry_id ";
+$where = "where c.industry_id = i.industry_id ";
 $where .= "and c.crm_status_id = crm.crm_status_id ";
 $where .= "and c.company_id = addr.company_id ";
 $where .= "and r.rating_id = c.rating_id ";
@@ -396,6 +396,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.4  2004/07/01 15:50:25  maulani
+ * - Fix bug 976220 reported by cpsource ($where used before defined)
+ *
  * Revision 1.3  2004/06/29 14:43:21  maulani
  * - Full implementation of advanced companies search
  *

@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.21 2004/07/01 13:37:25 braverock Exp $
+ * $Id: some.php,v 1.22 2004/07/01 15:50:25 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -124,7 +124,7 @@ if ($company_category_id > 0) {
 }
 
 $from  .= "LEFT JOIN addresses as addr on addr.address_id = c.default_primary_address ";
-$where .= "where c.industry_id = i.industry_id ";
+$where = "where c.industry_id = i.industry_id ";
 $where .= "and c.crm_status_id = crm.crm_status_id ";
 //remove next line because it makes companies without default addr not display
 //$where .= "and c.default_primary_address = addr.address_id ";
@@ -412,6 +412,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.22  2004/07/01 15:50:25  maulani
+ * - Fix bug 976220 reported by cpsource ($where used before defined)
+ *
  * Revision 1.21  2004/07/01 13:37:25  braverock
  * - compress quick search back onto one line now that advanced search exists
  *   - @todo add Category search to Advanced search
