@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.23 2004/06/21 20:48:47 introspectshun Exp $
+ * $Id: home.php,v 1.24 2004/06/25 03:21:17 braverock Exp $
  */
 
 // include the common files
@@ -146,7 +146,7 @@ $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_pag
 
 $classname = 'non_uploaded_file';
 
-if ($rst) {
+if ($rst->rowcount()>0) {
     while (!$rst->EOF) {
 
         $file_id = $rst->fields['file_id'];
@@ -178,7 +178,7 @@ $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_pag
 
 $classname = 'non_uploaded_file';
 
-if ($rst) {
+if ($rst->rowcount()>0) {
 
     while (!$rst->EOF) {
 
@@ -211,7 +211,7 @@ $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_pag
 
 $classname = 'non_uploaded_file';
 
-if ($rst) {
+if ($rst->rowcount()>0) {
     $nu_file_rows = "
         <table class=widget cellspacing=1 width='100%'>
             <tr>
@@ -336,7 +336,7 @@ $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_pag
 
 $classname = 'non_uploaded_file';
 
-if ($rst) {
+if ($rst->rowcount()>0) {
     while (!$rst->EOF) {
 
         $file_id = $rst->fields['file_id'];
@@ -368,7 +368,7 @@ $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_pag
 
 $classname = 'non_uploaded_file';
 
-if ($rst) {
+if ($rst->rowcount()>0) {
     while (!$rst->EOF) {
 
         $file_id = $rst->fields['file_id'];
@@ -474,6 +474,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.24  2004/06/25 03:21:17  braverock
+ * - modify so non-uploaded files only display when there are records (again)
+ *
  * Revision 1.23  2004/06/21 20:48:47  introspectshun
  * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
  *
