@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.46 2005/03/21 13:40:57 maulani Exp $
+ * $Id: some.php,v 1.47 2005/03/30 19:47:51 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -28,6 +28,7 @@ $arr_vars = array ( // local var name       // session variable name
            'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
            'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_GET_SESSION ),
            'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
+           'campaign_id'          => array ( 'opportunities_campaign_id', arr_vars_SESSION ) ,
            'industry_id' 			 => array ( 'industry_id', arr_vars_GET_SESSION ),
            );
 
@@ -72,6 +73,9 @@ $where  = "where opp.opportunity_status_id = os.opportunity_status_id ";
 $where .= "and opp.company_id = c.company_id ";
 $where .= "and opp.user_id = u.user_id ";
 $where .= "and opportunity_record_status = 'a' ";
+if($campaign_id) {
+    $where .= " AND opp.campaign_id = '$campaign_id'";
+}
 
 //added by Nic to be able to create mail merge to contacts
 $where.="and cont.contact_id=opp.contact_id ";
@@ -106,6 +110,7 @@ if (strlen($industry_id) > 0) {
     $criteria_count++;
     $where .= " and c.industry_id = $industry_id";
 }
+
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 } else {
@@ -137,6 +142,7 @@ order by r.recent_item_timestamp desc";
 $recently_viewed_table_rows = '';
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
+
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
@@ -147,6 +153,25 @@ if ($rst) {
         $recently_viewed_table_rows .= '</tr>';
         $rst->movenext();
     }
+    $rst->close();
+}
+
+//get campaign titles
+$sql2 = "SELECT campaign_title, campaign_id
+         FROM
+           campaigns AS c
+           JOIN campaign_statuses AS cs USING (campaign_status_id)
+         WHERE
+           c.campaign_record_status = 'a'
+           AND campaign_status_record_status = 'a'
+           AND status_open_indicator = 'o'
+           ";
+
+$rst = $con->execute($sql2);
+if (!$rst) {
+    db_error_handler($con, $sql2);
+} elseif ($rst->rowcount()) {
+    $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
     $rst->close();
 }
 
@@ -211,11 +236,14 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Opportunity Name"); ?></td>
-                <td colspan=2 class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Campaigns"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
-                <td colspan=2 class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
+            </tr>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
@@ -342,6 +370,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.47  2005/03/30 19:47:51  gpowers
+ * - added Campaigns to search/display (patch by glasshut@sf)
+ *
  * Revision 1.46  2005/03/21 13:40:57  maulani
  * - Remove redundant code by centralizing common user menu call
  *
