@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.58 2005/02/05 16:44:18 maulani Exp $
+ * $Id: update.php,v 1.59 2005/02/07 17:36:35 maulani Exp $
  */
 
 // where do we include from
@@ -352,7 +352,11 @@ if ($recCount == 0) {
 
     $rec = array();
     $rec['param_id'] = 'Activities Default Behavior';
-    $rec['string_val'] = $activities_default_behavior;
+    if (isset($activities_default_behavior)) {
+        $rec['string_val'] = $activities_default_behavior;
+    } else {
+        $rec['string_val'] = 'Fast';
+    }
     $rec['description'] = 'How will activities behave.  Options are Fast or Long.  Fast will keep user within current screen while Long will move to the activites/one screen for detailed description entry.';
 
     $tbl = 'system_parameters';
@@ -4198,6 +4202,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.59  2005/02/07 17:36:35  maulani
+ * - Test if variable exists before using it.  Will allow removal from vars.php
+ *   without breaking update.
+ *
  * Revision 1.58  2005/02/05 16:44:18  maulani
  * - Change report options to use system parameters
  *
