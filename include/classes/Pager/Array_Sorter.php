@@ -7,7 +7,7 @@
 *
 * Justin modified this function to assume arrays always! (used by Pager)
 *
-* $Id: Array_Sorter.php,v 1.4 2005/03/03 21:39:25 daturaarutad Exp $
+* $Id: Array_Sorter.php,v 1.5 2005/03/08 22:56:31 daturaarutad Exp $
 * @author Oliwier Ptak <aleczapka at gmx dot net>
 * @author Justin cooper <justin at braverock dot com>
 */
@@ -58,6 +58,7 @@ class array_sorter
        if ($remap)
        {
            $tmp = array();
+		   reset($array);
            while (list($id, $data) = each($array))
                $tmp[] = $data;
            return $tmp;
@@ -110,6 +111,9 @@ class array_sorter
 
 /**
 * $Log: Array_Sorter.php,v $
+* Revision 1.5  2005/03/08 22:56:31  daturaarutad
+* reset the array before calling each()
+*
 * Revision 1.4  2005/03/03 21:39:25  daturaarutad
 * another stab at tidy comments...
 *
