@@ -2,7 +2,7 @@
 /**
  * Show and edit the details for all crm statuses
  *
- * $Id: some.php,v 1.2 2004/02/22 17:05:09 braverock Exp $
+ * $Id: some.php,v 1.3 2004/03/19 03:46:33 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,7 +21,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        if (strlen($rst->fields['crm_status_display_html']) > 0) }
+        if (strlen($rst->fields['crm_status_display_html']) > 0) {
             $crm_status_display = $rst->fields['crm_status_display_html'];
         } else {
             $crm_status_display = $rst->fields['crm_status_pretty_name'];
@@ -103,6 +103,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.3  2004/03/19 03:46:33  braverock
+ * - reversed { on line 24
+ *   - patch committed by Jake Starbile ( zathras66 )
+ *
  * Revision 1.2  2004/02/22 17:05:09  braverock
  * - changed to show display_html
  *   Resolves SF bug 881277
