@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.27 2004/07/10 13:10:49 braverock Exp $
+ * $Id: home.php,v 1.28 2004/07/14 14:30:31 cpsource Exp $
  */
 
 // include the common files
@@ -331,6 +331,9 @@ if ($rst->rowcount()>0) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+  // else code for "if ($rst->rowcount()>0) ..." above. Make sure $nu_file_rows is always defined.
+  $nu_file_rows = '';
 }
 
 ////////////////////////////////////
@@ -479,6 +482,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.28  2004/07/14 14:30:31  cpsource
+ * - Make sure $nu_file_rows is always defined as something
+ *
  * Revision 1.27  2004/07/10 13:10:49  braverock
  * - applied undefined variables patch
  *   - applies SF patch  submitted by cpsource
