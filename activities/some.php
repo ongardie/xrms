@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.62 2004/11/12 15:25:09 braverock Exp $
+ * $Id: some.php,v 1.63 2004/11/12 15:30:12 braverock Exp $
  */
 
 // handle includes
@@ -541,6 +541,7 @@ start_page($page_title, true, $msg);
                         }
                         if(!$advanced_search) {
                             echo '<input name="advanced_search" type=button class=button onclick="javascript: location.href=\'some.php?advanced_search=true\';" value="'._("Advanced Search").'">';
+                        }
                     ?>
                 </td>
             </tr>
@@ -618,6 +619,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.63  2004/11/12 15:30:12  braverock
+ * - added closing } to resolve parse error
+ *
  * Revision 1.62  2004/11/12 15:25:09  braverock
  * - fixed short php tags
  * - cleaned up some other code formatting
