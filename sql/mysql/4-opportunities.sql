@@ -40,6 +40,8 @@ create table opportunity_statuses (
 	opportunity_status_pretty_plural							varchar(100) not null default '',
 	opportunity_status_display_html								varchar(100) not null default '',
 	opportunity_status_record_status							char(1) not null default 'a'
+	opportunity_status_long_desc								varchar(255) not null default '',
+
 );
 
 
