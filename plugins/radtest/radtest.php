@@ -45,7 +45,7 @@ start_page($page_title);
         <pre>
 <?php system("$radtest $username $password $radius_server:$radius_port $nas_port $shared_secret"); ?>
         </pre>
-        <a href="../../contacts/one.php?contact_id=<?php echo $contact_id; ?>">Back</a>
+        <a href="../../contacts/one.php?contact_id=<?php echo $contact_id; ?>"><?php echo _("Back"); ?></a>
     </div>
 </div>
 
@@ -55,11 +55,13 @@ end_page();
 
 /**
  * $Log: radtest.php,v $
+ * Revision 1.3  2004/07/22 13:43:50  gpowers
+ * - i18n'ed "Back" link
+ *
  * Revision 1.2  2004/07/22 13:32:41  gpowers
  * - put server vars and comment at head of file
  * - i18n'ed page title
  * - added phpdoc log
- *
  *
  */
 ?>
