@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.22 2004/09/02 15:06:57 maulani Exp $
+ * $Id: database.php,v 1.23 2004/09/16 19:45:28 vanmer Exp $
  */
 
 /**
@@ -787,7 +787,8 @@ function opportunity_db_tables($con, $table_list) {
                offset float NOT NULL default '0',
                confirmed char(1) NOT NULL default '',
                PRIMARY KEY  (time_zone_id),
-               KEY country_id (country_id)
+               KEY country_id (country_id),
+               KEY province (province)
                )";
         //execute
         $rst = $con->execute($sql);
@@ -1041,6 +1042,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.23  2004/09/16 19:45:28  vanmer
+ * -added KEY for province in definition of time_zone table
+ * -fixes problem with forced key during address addition
+ *
  * Revision 1.22  2004/09/02 15:06:57  maulani
  * - Add indexes to addresses city and province to speed company search
  *
