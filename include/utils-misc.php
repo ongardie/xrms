@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.42 2004/07/13 11:13:29 braverock Exp $
+ * $Id: utils-misc.php,v 1.43 2004/07/13 14:52:29 braverock Exp $
  */
 
 /**
@@ -29,7 +29,11 @@ function session_check($target='') {
     global $http_site_root;
     global $xrms_system_id;
 
-    $target = urlencode($_SERVER['REQUEST_URI']);
+    if (isset($_SERVER['REQUEST_URI'])) {
+        $target = urlencode($_SERVER['REQUEST_URI']);
+    } else {
+        $target = urlencode($_SERVER['PHP_SELF']);
+    }
 
     /**
     * Verify a session has been started.  If it hasn't, start a session up.
@@ -127,8 +131,12 @@ function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_wh
         $rec['audit_item_type'] = $audit_item_type;
         $rec['on_what_table'] = $on_what_table;
         $rec['on_what_id'] = $on_what_id;
-        $rec['remote_addr'] = $_SERVER['REMOTE_ADDR'];
-        $rec['remote_port'] = $_SERVER['REMOTE_PORT'];
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $rec['remote_addr'] = $_SERVER['REMOTE_ADDR'];
+        }
+        if (isset($_SERVER['REMOTE_PORT'])) {
+            $rec['remote_port'] = $_SERVER['REMOTE_PORT'];
+        }
         $rec['session_id'] = $_COOKIE['PHPSESSID'];
         $rec['audit_item_timestamp'] = time();
 
@@ -679,6 +687,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.43  2004/07/13 14:52:29  braverock
+ * - add additional isset tests to avoid unititialized var Notices
+ *
  * Revision 1.42  2004/07/13 11:13:29  braverock
  * - changed REQUEST_URI array index to single quotes, so it won't get passed as a string
  *
