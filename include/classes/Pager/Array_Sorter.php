@@ -1,6 +1,8 @@
 <?php
 
 // the following sort class came from http://us2.php.net/manual/en/function.uksort.php
+
+// Justin modified this function to assume arrays always! (used by Pager)
 /**
 * Handles multidimentional array sorting by a key (not recursive)
 *
@@ -56,12 +58,14 @@ class array_sorter
    */
    function _as_cmp($a, $b)
    {
+   	   // Justin modified this function to assume arrays always!
+
        //since uksort will pass here only indexes get real values from our array
-       if (!is_array($a) && !is_array($b))
-       {
+       //if (!is_array($a) && !is_array($b))
+       //{
            $a = $this->sarray[$a][$this->skey];
            $b = $this->sarray[$b][$this->skey];
-       }
+       //}
 
        //if string - use string comparision
 	   // justin changed to use is_numeric instead of ctype_digit, which fails on decimal points
