@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.5 2005/02/15 19:35:51 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.6 2005/02/16 17:55:51 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -309,10 +309,10 @@ class xrms_acl {
                 $ret['con']=$xcon;
                 return $ret;
             }
-            if ($limit) { $sql .=" LIMIT $limit"; }
-//            echo "<p>$sql<p>";
-                                    
-            $nrs = $xcon->execute($sql);
+            if ($limit) { $nrs=$xcon->SelectLimit($sql, $limit); }
+            else {
+                $nrs = $xcon->execute($sql);
+            }
             if (!$nrs) { db_error_handler($xcon, $sql); return false; }
             if ($nrs->numRows()>0) {
                 if ($nrs->numRows()==1) {
@@ -2107,6 +2107,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.6  2005/02/16 17:55:51  vanmer
+ * - removed non-standard LIMIT statement, switched to use adodb SelectLimit statement
+ *
  * Revision 1.5  2005/02/15 19:35:51  vanmer
  * - changed to reflect shorter fieldnames for controlled object relationships
  * - removed change made to get_controlled_object_data which broke the ACL
