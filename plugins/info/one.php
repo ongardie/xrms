@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.4 2004/07/22 18:21:35 gpowers Exp $
+ * $Id: one.php,v 1.5 2004/07/22 20:19:39 gpowers Exp $
  *
  */
 
@@ -36,6 +36,14 @@ $rst = $con->execute($sql);
 if ($rst) {
     if (!$rst->EOF) {
         $info_type_id = $rst->fields['info_type_id'];
+    }
+}
+
+$sql = "SELECT info_type_name FROM info_types WHERE info_type_id = $info_type_id";
+$rst = $con->execute($sql);
+if ($rst) {
+    if (!$rst->EOF) {
+        $info_type_name = $rst->fields['info_type_name'];
     }
 }
 
@@ -90,6 +98,9 @@ while (!$all_elements->EOF) {
   $data[$column] .= "\t<td class=sublabel>".$all_elements->fields['element_label']."</td>\n";
   $data[$column] .= "\t<td class=clear>".$print_value."</td>\n";
   $data[$column] .= "</tr>\n";
+  if ($all_elements->fields['element_label'] == 'Name') {
+    $item_name = $print_value;
+  }
   $all_elements->movenext();
 }
 
@@ -277,7 +288,7 @@ if (strlen($categories) == 0) {
     $categories = $strCompaniesOneNoCategoriesMessage;
 }
 
-$page_title = (strlen($strCompaniesOnePageTitle) > 0) ? $strCompaniesOnePageTitle . ' : ' . $company_name : $company_name;
+$page_title = $company_name . ": " . $info_type_name . ": " . $item_name;
 start_page($page_title, true, $msg);
 
 
@@ -326,9 +337,11 @@ function openNewsWindow() {
       </tr>
       <tr>
         <td class=widget_content_form_element>
-          <input class=button type=button value="Edit"
+          <input class=button type=button value="<?php echo _("Edit"); ?>"
             onclick="javascript: location.href='<?php echo "edit.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&return_url=$return_url"; ?>';">
-          <input class=button type=button value="New"
+          <input class=button type=button value="<?php echo _("Delete"); ?>"
+            onclick="javascript: location.href='<?php echo "delete-2.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&return_url=$return_url"; ?>';">
+          <input class=button type=button value="<?php echo _("New"); ?>"
             onclick="javascript: location.href='<?php echo "edit.php?info_id=0&info_type_id=$info_type_id&company_id=$company_id&return_url=$return_url"; ?>';">
         </td>
       </tr>
