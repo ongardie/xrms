@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.50 2004/07/27 19:50:41 neildogg Exp $
+ * $Id: some.php,v 1.51 2004/07/30 13:01:28 neildogg Exp $
  */
 
 // handle includes
@@ -65,6 +65,7 @@ if($saved_id) {
         }
         else {
             $_POST = unserialize($rst->fields['saved_data']);
+            $day_diff = $_POST['day_diff'];
         }
     }
     if($browse) {
@@ -98,10 +99,15 @@ arr_vars_get_all ( $arr_vars );
 // This will work for positive and negative intervals automatically, so no need for conditional assignment of offset
 // (a search for today will add an interval of '0 days')
 // Warning: if a user wants to save a search for a particular date, this won't allow it, as it defaults to recurring search
-if ( !$search_date ) {
-  $search_date = date('Y-m-d', time());
+if(isset($day_diff) and $day_diff) {
+    $search_date = date('Y-m-d', time() + ($day_diff * 86400));
 }
-$day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
+else {
+    if ( !$search_date ) {
+        $search_date = date('Y-m-d', time());
+    }
+    $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
+}
 
 $curdate = $con->DBTimeStamp(time());
 $offset = $con->OffsetDate($day_diff, 'curdate()');
@@ -243,6 +249,7 @@ $rst->close();
 // save search
 $saved_data = $_POST;
 $saved_data["sql"] = $sql;
+$saved_data["day_diff"] = $day_diff;
 
 $rec = array();
 $rec['saved_title'] = $saved_title;
@@ -488,6 +495,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.51  2004/07/30 13:01:28  neildogg
+ * - Restores $search_date using stored $day_diff
+ *
  * Revision 1.50  2004/07/27 19:50:41  neildogg
  * - Major changes to browse functionality
  *  - Removal of sidebar for "browse" button
