@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.19 2004/03/07 14:07:31 braverock Exp $
+ * $Id: one.php,v 1.20 2004/03/22 02:42:54 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centalized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -62,6 +62,9 @@ if ($rst) {
     $phone2 = $rst->fields['phone2'];
     $fax = $rst->fields['fax'];
     $url = $rst->fields['url'];
+    if ((substr($url, 0, 4)!=='http') and (strlen($url) >0)) {
+        $url = 'http://'.$url;
+    }
     $employees = $rst->fields['employees'];
     $revenue = $rst->fields['revenue'];
     $account_status = $rst->fields['account_status_display_html'];
@@ -625,6 +628,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.20  2004/03/22 02:42:54  braverock
+ * - add http:// in front of url's that don't have them
+ *   - fixes SF bug 906413
+ *
  * Revision 1.19  2004/03/07 14:07:31  braverock
  * - use centralized side-bar code in advance of i18n conversion
  *
