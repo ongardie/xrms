@@ -1,11 +1,13 @@
 <?php
 /**
  * Contact Information Sidebar
+ * /activities/browse-sidebar.php
  *
  * Include this file anywhere you want to show a summary of the company information
  *
  * @author Neil Roberts
  *
+ * $Id: browse-sidebar.php,v 1.2 2004/06/28 14:35:09 maulani Exp $
  */
 
 //add contact information block on sidebar
@@ -19,7 +21,7 @@ $browse_block = '<table class=widget cellspacing=1 width="100%">
 
 $sql = "select activity_type_id, activity_type_display_html
         from activity_types
-        order by sort_order desc";
+        order by $sort_column desc";
 
 $rst = $con->execute($sql);
 
@@ -45,7 +47,7 @@ $browse_block .= '<tr>
 
 $sql = "select activity_type_id, activity_type_display_html
         from activity_types
-        order by sort_order desc";
+        order by $sort_column desc";
 
 $rst = $con->execute($sql);
 
@@ -69,6 +71,10 @@ $browse_block .= "\n</table>";
 $rst->close();
 
 /**
- * $Log: *
+ * $Log: browse-sidebar.php,v $
+ * Revision 1.2  2004/06/28 14:35:09  maulani
+ * - Added dollar sign to sort-order variable
+ * - Added phpdoc
+ *
  */
 ?>
