@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.3 2004/06/03 18:39:40 gpowers Exp $
+ * $Id: sidebar.php,v 1.4 2004/06/04 16:42:04 gpowers Exp $
  */
 
 // add company information block on sidebar
@@ -29,36 +29,25 @@ $rst = $con->execute($sql);
 
 if ($rst) {
 
-    $phone = $rst->fields['phone'];
-    $phone2 = $rst->fields['phone2'];
-    $fax = $rst->fields['fax'];
-    $url = $rst->fields['url'];
-
-    // this phone number formatting will not be appropriate for non-US phones...
-    // $phone = "(" . substr($phone, 0, 3) . ") " . substr($phone, 3, 3) . "-" . substr($phone, 6, 4);
-    // $phone2 = " &nbsp; (" . substr($phone2, 0, 3) . ") " . substr($phone2, 3, 3) . "-" . substr($phone2, 6, 4);
-    // $fax = "(" . substr($fax, 0, 3) . ") " . substr($fax, 3, 3) . "-" . substr($fax, 6, 4);
-
     $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
                     . $rst->fields['company_name'] . "</td>\n\t</tr>"
                     . "\n\t<tr>\n\t\t<td class=widget_content>"
                     . get_formatted_address ($con, $rst->fields['default_primary_address'])
                     . "</td>\n\t</tr>";
 
-
-    if ($phone) {
+    if ($rst->fields['phone']) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                        . "Phone: " . $phone . "&nbsp;" . $phone2 . "</td>\n\t</tr>";
+                        . "Phone: " . $rst->fields['phone'] . "&nbsp;" . $rst->fields['phone2'] . "</td>\n\t</tr>";
     };
 
-    if ($fax) {
+    if ($rst->fields['fax']) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                        . "Fax: " . $fax . "</td>\n\t</tr>";
+                        . "Fax: " . $rst->fields['fax'] . "</td>\n\t</tr>";
     }
 
-    if ($url) {
+    if ($rst->fields['url']) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . "<a href=\"" . $url . "\" target=\"_new\">"
+                    . "<a href=\"" . $rst->fields['url'] . "\" target=\"_new\">"
                     . $url . "</a></td>\n\t</tr>";
     }
 
@@ -76,6 +65,12 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.4  2004/06/04 16:42:04  gpowers
+ * - removed reassignment of result fields to new var for consistancy with the
+ *     rest of XRMS.
+ * - removed phone number formatting code, which was commented out.
+ *     formatting code should be global, if at all.
+ *
  * Revision 1.3  2004/06/03 18:39:40  gpowers
  * Added Address, to be consistant with contacts sidebar.
  *
