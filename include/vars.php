@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.29 2004/08/03 16:03:46 neildogg Exp $
+ * $Id: vars.php,v 1.30 2004/08/03 16:26:03 cpsource Exp $
  */
 
 /**
@@ -305,5 +305,10 @@ $use_php_iconv = false;
  *
  */
 $use_self_contacts = false;
+
+/**
+ * Define the meaning of a newline
+ */
+$NEWLINE = "\n\r";
 
 ?>
