@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.26 2004/12/20 21:21:18 neildogg Exp $
+ * $Id: one.php,v 1.27 2005/01/06 20:51:17 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,10 +13,11 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+$opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
+$on_what_id=$opportunity_id;
 $session_user_id = session_check();
 
 $msg            = isset($_GET['msg']) ? $_GET['msg'] : '';
-$opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -27,6 +28,7 @@ update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 $sql = "select
 o.*,
 c.company_id, c.company_name, c.company_code,
+d.division_name,
 cont.first_names, cont.last_name, cont.work_phone, cont.email, cont.address_id,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
 u3.username as opportunity_owner_username, u4.username as account_owner_username,
@@ -35,6 +37,7 @@ from
 companies c, contacts cont, users u1, users u2, users u3, users u4,
 account_statuses as1, ratings r, crm_statuses crm, opportunity_statuses os,
 opportunities o left join campaigns cam on o.campaign_id = cam.campaign_id
+left join company_division d on o.division_id=d.division_id
 where o.company_id = c.company_id
 and o.contact_id = cont.contact_id
 and o.entered_by = u1.user_id
@@ -57,6 +60,8 @@ if ($rst) {
   if ( !$rst->EOF ) {
     // yes - there is a row
     $company_id = $rst->fields['company_id'];
+    $division_id = $rst->fields['division_id'];
+    $division_name=$rst->fields['division_name'];
     $company_name = $rst->fields['company_name'];
     $company_code = $rst->fields['company_code'];
     $contact_id = $rst->fields['contact_id'];
@@ -85,6 +90,8 @@ if ($rst) {
   } else {
     // no - there is no row
     $company_id = '';
+    $division_id = '';
+    $division_name = '';
     $company_name = '';
     $company_code = '';
     $contact_id = '';
@@ -354,6 +361,10 @@ function markComplete() {
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a> (<?php  echo $company_code; ?>)</td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel><?php echo _("Division"); ?></td>
+                                    <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>&division_id=<?php  echo $division_id; ?>"><?php  echo $division_name; ?></a></td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner_username; ?></td>
                                 </tr>
@@ -446,6 +457,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.27  2005/01/06 20:51:17  vanmer
+ * - moved setup of initial values to above session_check (for ACL)
+ * - added division to display of one opportunity, if available
+ *
  * Revision 1.26  2004/12/20 21:21:18  neildogg
  * - User 0 support in opportunities
  *
