@@ -2,12 +2,21 @@
 
 /**
 
-Please keep this file's interface and behavior synchronized with Array_Pager!
+ Pager for XRMS
+ based on ADOdb's pager
+ (still uses ADOdb's tohtml.php include file)
 
-
+ see opportunities/some.php for an example of usage
 
 
 */
+
+// specific code for tohtml
+GLOBAL $gSQLMaxRows,$gSQLBlockRows;
+
+$gSQLMaxRows   = 1000; // max no of rows to download
+$gSQLBlockRows = 20; // max no of rows per table block
+
 
 
 class XRMS_Pager {
@@ -47,8 +56,6 @@ class XRMS_Pager {
     var $pager_id;
     var $EndRows;
     var $maximize;
-
-
 
 
 
@@ -215,19 +222,19 @@ class XRMS_Pager {
 
       if ($this->startLinks && $start > 1) {
         $pos = $start - 1;
-        $numbers .= "<a href='javascript: ' . $this->pager_id . '_submitForm(" . $pos . ");'>" . $this->startLinks . "</a> ";
+        $numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $pos . ");'>" . $this->startLinks . "</a> ";
       }
 
       for($i=$start; $i <= $end; $i++) {
         if ($this->rs->AbsolutePage() == $i)
         $numbers .= "<font color=$this->linkSelectedColor><b>$i</b></font>  ";
         else
-        $numbers .= "<a href='javascript: ' . $this->pager_id . '_submitForm(" . $i . ");'>" . $i . "</a> ";
+        $numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $i . ");'>" . $i . "</a> ";
         // $numbers .= "<a href=$PHP_SELF?$link=$i>$i</a>  ";
 
       }
       if ($this->moreLinks && $end < $pages){
-        $numbers .= "<a href='javascript: ' . $this->pager_id . '_submitForm(" . $i . ");'>" . $this->moreLinks . "</a>  ";
+        $numbers .= "<a href='javascript:{$this->pager_id}_submitForm(" . $i . ");'>" . $this->moreLinks . "</a>  ";
       }
       print $numbers . ' &nbsp; ';
     }
@@ -242,27 +249,25 @@ class XRMS_Pager {
       }
     }
 
-
-	
-
-
 	function RenderGrid()
 	{
 
         // output headers
         $column_count = count($this->column_info);
         for($i=0; $i<$column_count; $i++) {
-            //echo "<td class=widget_label style=\"text-align: center; padding: 0em 0.5em 0em 0.5em;\"><a href='javascript: " . $this->pager_id . "_resort($i);' style=\"color: grey;\"><b>{$this->column_info[$i]['name']}</b></a>";
-		    $this->gridHeader[] = $this->column_info[$i]['name'];	
+		    //$this->gridHeader[] = "<td class=widget_label style=\"text-align: center; padding: 0em 0.5em 0em 0.5em;\"><a href='javascript: " . $this->pager_id . "_resort($i);' style=\"color: grey;\"><b>{$this->column_info[$i]['name']}</b></a>";
+		    //$this->gridHeader[] = "<td class=widget_label><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
+			$this->gridHeader[] = $this->column_info[$i]['name'];
+
         }
 
 	  	// adodb_pager code begin 
       	global $gSQLBlockRows; // used by rs2html to indicate how many rows to display
-      	include_once(ADODB_DIR.'/tohtml.inc.php');
+      	//include_once(ADODB_DIR.'/tohtml.inc.php');
       	ob_start();
       	$gSQLBlockRows = $this->rows;
 
-      	rs2html($this->rs,$this->gridAttributes,$this->gridHeader,$this->htmlSpecialChars,$this->selected_column,$this->selected_column_html, $this->pager_id . '_');
+      	$this->rs2html($this->rs,$this->gridAttributes,$this->gridHeader,$this->htmlSpecialChars,$this->selected_column,$this->selected_column_html, $this->pager_id . '_');
 
 		// Now we output our subtotal rows 
         $this->RenderTotals('Subtotals this page:', $this->SubtotalColumns);
@@ -360,7 +365,7 @@ class XRMS_Pager {
 
 	function Render($rows=10) {
 
-		$next_page_varname = $this->next_page_varname;
+		echo "<a name=\"{$this->pager_id}\"></a>\n";
 
         echo <<<END
             <script language="JavaScript" type="text/javascript">
@@ -368,6 +373,7 @@ class XRMS_Pager {
 
             function {$this->pager_id}_submitForm(nextPage) {
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = nextPage;
+				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
             }
 
@@ -375,16 +381,19 @@ class XRMS_Pager {
                 document.{$this->form_id}.{$this->pager_id}_sort_column.value = sortColumn + 1;
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
                 document.{$this->form_id}.{$this->pager_id}_resort.value = 1;
+				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
             }
             function {$this->pager_id}_maximize() {
                 document.{$this->form_id}.{$this->pager_id}_maximize.value = 'true';
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
+				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
 			}
 	        function {$this->pager_id}_unmaximize() {
                 document.{$this->form_id}.{$this->pager_id}_maximize.value = null;
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
+				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
 			}
 		
@@ -469,6 +478,157 @@ END;
             echo "</tr>";
         }
     }
+
+
+// RecordSet to HTML Table
+//------------------------------------------------------------
+// Convert a recordset to a html table. Multiple tables are generated
+// if the number of rows is > $gSQLBlockRows. This is because
+// web browsers normally require the whole table to be downloaded
+// before it can be rendered, so we break the output into several
+// smaller faster rendering tables.
+//
+// $rs: the recordset
+// $ztabhtml: the table tag attributes (optional)
+// $zheaderarray: contains the replacement strings for the headers (optional)
+//
+//  USAGE:
+//  include('adodb.inc.php');
+//  $db = ADONewConnection('mysql');
+//  $db->Connect('mysql','userid','password','database');
+//  $rs = $db->Execute('select col1,col2,col3 from table');
+//  rs2html($rs, 'BORDER=2', array('Title1', 'Title2', 'Title3'));
+//  $rs->Close();
+//
+// RETURNS: number of rows displayed
+// *** added parameters selected_column and selected_column_html to indicate which column is sorted and how
+
+function rs2html(&$rs,$ztabhtml=false,$zheaderarray=false,$htmlspecialchars=true,$selected_column=1,$selected_column_html='****', $pager_id = null) {
+    $s ='';
+    $rows=0;
+    $docnt = false;
+    GLOBAL $gSQLMaxRows,$gSQLBlockRows;
+
+    if (!$rs) {
+        printf(ADODB_BAD_RS,'rs2html');
+        return false;
+    }
+
+    // *** got rid of ztabhtml attributes here:
+    if (! $ztabhtml) $ztabhtml = "";
+    //else $docnt = true;
+    $typearr = array();
+
+    $ncols = $rs->FieldCount();
+
+	$ncols = count($this->column_info);
+
+    // *** commented out the line below b/c we don't want *another* freakin' table -- we just want rows
+    // $hdr = "<TABLE COLS=$ncols $ztabhtml>\n\n";
+    // made it 'ncols - 1' so that you can't sort by the delete button
+    $hdr = '';
+    for ($i=0; $i < $ncols; $i++) {
+        $field = $rs->FetchField($i);
+        if ($zheaderarray) $fname = $zheaderarray[$i];
+        else $fname = htmlspecialchars($field->name);
+        $typearr[$i] = $rs->MetaType($field->type,$field->max_length);
+        //print " $field->name $field->type $typearr[$i] ";
+        // no &nbsp; here... we don't want the link visible
+        if (strlen($fname)==0) $fname = '';
+        // *** and here below we just want stylized <td> elements, not <th>'s
+        // *** also we need to make these headers re-sort the results if asked
+        $hdr .= "<td class=widget_label ><a href='javascript: " . $pager_id . "resort($i);' ><b>$fname</b></a>";
+
+        if ($i == $selected_column) {
+            $hdr .= $selected_column_html;
+        }
+
+        $hdr .= "</td>";
+    }
+
+    // *** added <tr> and </tr> tags around $hdr
+    print "<tr>" . $hdr . "</tr>\n\n";
+    // smart algorithm - handles ADODB_FETCH_MODE's correctly!
+    $numoffset = isset($rs->fields[0]);
+    // added this for colors
+    $color_counter = 0;
+
+    while (!$rs->EOF) {
+
+        $color_counter++;
+        $classname = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
+
+        $s .= "<tr valign=top>\n";
+
+		for($i=0; $i<$ncols; $i++) {
+
+        //for ($i=0, $v=($numoffset) ? $rs->fields[0] : reset($rs->fields);
+            //$i < $ncols;
+            //$i++, $v = ($numoffset) ? @$rs->fields[$i] : next($rs->fields)) {
+
+            $type = $typearr[$i];
+
+            //$s .= "<td class=$classname>" . $v . "</td>\n";
+            $s .= "<td class=$classname>" . $rs->fields[$this->column_info[$i]['index']] . "</td>\n";
+
+
+            // *** for each of these types we want stylized <td> elements
+            /*
+            switch($type) {
+            case 'T':
+                $s .= " <td class=$classname>" . $rs->UserTimeStamp($v,"Y-M-d") . "&nbsp;</td>\n";
+            break;
+            case 'D':
+                $s .= " <td class=$classname>" . $rs->UserDate($v,"D d, M Y") . "&nbsp;</td>\n";
+            break;
+            case 'I':
+                $s .= " <td class=$classname>" . stripslashes((trim($v))) . "&nbsp;</TD>\n";
+                break;
+            case 'N':
+                if ($i == 8) {
+                    $s .= " <td class=$classname>$" . number_format(stripslashes((trim($v))), 2) . "&nbsp;</TD>\n";
+                } else {
+                    $s .= " <td class=$classname>" . stripslashes((trim($v))) . "&nbsp;</TD>\n";
+                }
+            break;
+            default:
+                if ($htmlspecialchars) $v = htmlspecialchars($v);
+                // *** good one $s .= " <td class=$classname>". str_replace("\n",'<br>',stripslashes((trim($v)))) ."&nbsp;</TD>\n";
+                $s .= " <td class=$classname>". stripslashes((trim($v))) ."&nbsp;</TD>\n";
+                break;
+            } // switch
+            */
+
+            // print "<li>$v - $i - $type - $numoffset - $color_counter</li>";
+
+        } // for
+        $s .= "</tr>\n\n";
+        $rows += 1;
+        if ($rows >= $gSQLMaxRows) {
+            $rows = "<p>Truncated at $gSQLMaxRows</p>";
+            break;
+        } // switch
+
+        $rs->MoveNext();
+
+        // additional EOF check to prevent a widow header
+        if (!$rs->EOF && $rows % $gSQLBlockRows == 0) {
+            //if (connection_aborted()) break;// not needed as PHP aborts script, unlike ASP
+            echo $s . "\n\n";
+            $s = $hdr;
+        }
+    } // end while
+
+    if (strlen($s) == 0) {
+        $s = "<tr><td colspan=13 class=widget_content>"._("No matches")."</td></tr>";
+    }
+    // if ($docnt) print "<H2>".$rows." Rows</H2>";
+
+    echo $s."\n\n";
+    return $rows;
+ }
+
+
 
 }
 
