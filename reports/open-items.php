@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.17 2005/01/30 12:52:02 maulani Exp $
+ * $Id: open-items.php,v 1.18 2005/02/05 16:44:19 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -23,8 +23,8 @@ $send_email_to = $_GET['send_email_to'];
 $all_users = $_GET['all_users'];
 $display = $_GET['display'];
 
-$use_hr = 1; // comment this out to remove <hr>'s from between lines
-$say_no_when_none = 1; // display "NO (CASES|ACTIVITIES|CAMPAIGNS|OPPORTUNITES} for First_Names Last_Name"
+$use_hr = get_system_parameter($con, 'Reports--Use Horizontal Rule');
+$say_no_when_none = get_system_parameter($con, 'Reports--Show No Items Found');
 
 $userArray = array();
 
@@ -203,7 +203,7 @@ foreach ($userArray as $key => $user_id) {
                 $rst6 = $con->execute($sql6);
                 $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
                 $output .= "<td><a href=\"" . $http_site_root . "/activities/one.php?activity_id=" . $rst->fields['activity_id'] . "\">" . $rst->fields['activity_title'] . "</a></td>\n</td>\n";
-                if ($use_hr) {
+                if ($use_hr =='y') {
                     $output .= "<tr><td colspan=7><hr></td></tr>\n";
                 }
                 $rst->movenext();
@@ -212,7 +212,7 @@ foreach ($userArray as $key => $user_id) {
         $output .= "</table>";
         }
     else {
-        if ($say_no_when_none) {
+        if ($say_no_when_none =='y') {
             $output .= "<p><b>" . _("NO OPEN ACTIVITIES for") . " $name</b><br></p>\n";
         }
     }
@@ -244,7 +244,7 @@ foreach ($userArray as $key => $user_id) {
                     $rst4 = $con->execute($sql4);
                     $output .= "<td>" . $rst4->fields['campaign_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
                     $output .= "<td><a href=\"" . $http_site_root . "/campaigns/one.php?campaign_id=" . $rst->fields['campaign_id'] . "\">" . $rst->fields['campaign_title'] . "</a></td>\n</td>\n";
-                    if ($use_hr) {
+                    if ($use_hr =='y') {
                         $output .= "<tr><td colspan=4><hr></td></tr>\n";
                     }
                     $rst->movenext();
@@ -254,7 +254,7 @@ foreach ($userArray as $key => $user_id) {
             $output .= "</table>";
         }
     else {
-        if ($say_no_when_none) {
+        if ($say_no_when_none =='y') {
             $output .= "<p><b>" . _("NO OPEN CAMPAIGNS for") . " $name</b><br></p>\n";
         }
     }
@@ -293,7 +293,7 @@ foreach ($userArray as $key => $user_id) {
                     $rst6 = $con->execute($sql6);
                     $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
                     $output .= "<td><a href=\"" . $http_site_root . "/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
-                    if ($use_hr) {
+                    if ($use_hr =='y') {
                         $output .= "<tr><td colspan=4><hr></td></tr>\n";
                     }
                     $rst->movenext();
@@ -303,7 +303,7 @@ foreach ($userArray as $key => $user_id) {
             $output .= "</table>";
         }
     else {
-        if ($say_no_when_none) {
+        if ($say_no_when_none =='y') {
             $output .= "<p><b>" . _("NO OPEN OPPORTUNITIES for") . " $name</b><br></p>\n";
         }
     }
@@ -341,7 +341,7 @@ foreach ($userArray as $key => $user_id) {
                     $rst6 = $con->execute($sql6);
                     $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
                     $output .= "<td><a href=\"" . $http_site_root . "/cases/one.php?case_id=" . $rst->fields['case_id'] . "\">" . $rst->fields['case_title'] . "</a></td>\n</td>\n";
-                    if ($use_hr) {
+                    if ($use_hr =='y') {
                         $output .= "<tr><td colspan=5><hr></td></tr>\n";
                     }
                     $rst->movenext();
@@ -351,7 +351,7 @@ foreach ($userArray as $key => $user_id) {
             $output .= "</table>";
         }
         else {
-            if ($say_no_when_none) {
+            if ($say_no_when_none =='y') {
                 $output .= "<p><b>" . _("NO OPEN CASES for") . " $name</b><br></p>\n";
             }
         }
@@ -383,6 +383,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.18  2005/02/05 16:44:19  maulani
+ * - Change report options to use system parameters
+ *
  * Revision 1.17  2005/01/30 12:52:02  maulani
  * - Add from email address to emailed reports
  *

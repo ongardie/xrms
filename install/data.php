@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.17 2005/01/30 12:52:01 maulani Exp $
+ * $Id: data.php,v 1.18 2005/02/05 16:44:18 maulani Exp $
  */
 
 /**
@@ -33,6 +33,10 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters (param_id, int_val, description) values ('Maximum RSS Feed Entries', 15, 'Maximum number of entries to include in any RSS feed.')";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters (param_id, string_val, description) values ('Sender Email Address', 'xrms@example.com', 'Email address to use as the sender address when sending reports via email.')";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('Reports--Use Horizontal Rule', 'y', 'Use horizontal rule on reports.')";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('Reports--Show No Items Found', 'n', 'Show text for items with no result on reports.')";
         $rst = $con->execute($sql);
     }
 
@@ -59,6 +63,14 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('RSS Feeds Enabled', 'n', 1)";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('RSS Feeds Enabled', 'y', 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Use Horizontal Rule', 'n', 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Use Horizontal Rule', 'y', 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Show No Items Found', 'n', 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Reports--Show No Items Found', 'y', 2)";
         $rst = $con->execute($sql);
     }
 
@@ -2435,6 +2447,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.18  2005/02/05 16:44:18  maulani
+ * - Change report options to use system parameters
+ *
  * Revision 1.17  2005/01/30 12:52:01  maulani
  * - Add from email address to emailed reports
  *

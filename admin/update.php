@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.57 2005/01/30 18:28:21 maulani Exp $
+ * $Id: update.php,v 1.58 2005/02/05 16:44:18 maulani Exp $
  */
 
 // where do we include from
@@ -403,6 +403,32 @@ if ($recCount == 0) {
     $con->execute($ins);
 }
 
+// Make sure that there is Reports--Use Horizontal Rule and Reports--Show No Items Found in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='Reports--Use Horizontal Rule'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Reports--Use Horizontal Rule and Reports--Show No Items Found system parameters.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Reports--Use Horizontal Rule';
+    $rec['string_val'] = 'y';
+    $rec['description'] = 'Use horizontal rule on reports.';
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $rec = array();
+    $rec['param_id'] = 'Reports--Show No Items Found';
+    $rec['string_val'] = 'n';
+    $rec['description'] = 'Show text for items with no result on reports.';
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
 // Make sure that there is options for the Audit Level in system_parameters_options
 $sql = "select count(*) as recCount from system_parameters_options where param_id='Audit Level'";
 $rst = $con->execute($sql);
@@ -490,6 +516,48 @@ if ($recCount == 0) {
 
     $rec = array();
     $rec['param_id'] = 'RSS Feeds Enabled';
+    $rec['string_val'] = 'n';
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters_options';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['string_val'] = 'y';
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the Reports--Use Horizontal Rule in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='Reports--Use Horizontal Rule'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Reports--Use Horizontal Rule system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Reports--Use Horizontal Rule';
+    $rec['string_val'] = 'n';
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters_options';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['string_val'] = 'y';
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the Reports--Show No Items Found in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='Reports--Show No Items Found'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Reports--Show No Items Found system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Reports--Show No Items Found';
     $rec['string_val'] = 'n';
     $rec['sort_order'] = 1;
     $tbl = 'system_parameters_options';
@@ -4130,6 +4198,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.58  2005/02/05 16:44:18  maulani
+ * - Change report options to use system parameters
+ *
  * Revision 1.57  2005/01/30 18:28:21  maulani
  * - Add system parameters descriptions
  *
