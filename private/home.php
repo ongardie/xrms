@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.42 2005/01/03 03:23:41 ebullient Exp $
+ * $Id: home.php,v 1.43 2005/01/11 23:21:10 vanmer Exp $
  */
 
 // include the common files
@@ -93,10 +93,16 @@ $activity_rows = '';
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_home_page);
 
+$_SESSION['browse_start']=time();
+$_SESSION["search_sql"]=$sql_activities;
+$pos=1;
+$_SESSION['pos']=$pos;
+$next_to_check=array();
 if ($rst) {
     while (!$rst->EOF) {
 
         $company_id = $rst->fields['company_id'];
+        $activity_id = $rst->fields['activity_id'];
         $company_name = $rst->fields['company_name'];
         $activity_title = $rst->fields['activity_title'];
         $activity_description = $rst->fields['activity_description'];
@@ -105,6 +111,7 @@ if ($rst) {
         $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
         $ends_at = $con->userdate($rst->fields['ends_at']);
         $activity_status = $rst->fields['activity_status'];
+        $next_to_check[]=$activity_id;        
 
         $attached_to_link = '';
         $attached_to_name = '';
@@ -146,7 +153,7 @@ if ($rst) {
         }
 
         $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/private/home.php&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?save_and_next=true&activity_id=" . $rst->fields['activity_id']."&return_url=/private/home.php" . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . "><a href='../companies/one.php?company_id=" . $rst->fields['company_id'] . "'>" . $rst->fields['company_name'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . "><a href='../contacts/one.php?contact_id=" . $rst->fields['contact_id'] . "'>" . $rst->fields['contact_first_names'] . ' ' .  $rst->fields['contact_last_name'] . '</a></td>';
@@ -158,6 +165,8 @@ if ($rst) {
     }
     $rst->close();
 }
+
+$_SESSION['next_to_check']=$next_to_check;
 
 ///////////////////////////////////
 // Show contacts non-uploaded files
@@ -498,6 +507,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.43  2005/01/11 23:21:10  vanmer
+ * - changed home.php to automatically populate the browse activities, so that save and next will operate off the user's activities
+ *
  * Revision 1.42  2005/01/03 03:23:41  ebullient
  * additional theme (green), make User Manual link not a "header"
  *
