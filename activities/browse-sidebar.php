@@ -7,7 +7,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-sidebar.php,v 1.2 2004/06/28 14:35:09 maulani Exp $
+ * $Id: browse-sidebar.php,v 1.3 2004/07/02 14:56:52 maulani Exp $
  */
 
 //add contact information block on sidebar
@@ -31,7 +31,7 @@ if(!$rst) {
 elseif($rst->rowcount() > 0) {
     while(!$rst->EOF) {
         $browse_block .= "\n<tr><td class=widget_content>"
-            . "<a href='browse-next.php?current_on_what_table=opportunities&current_activity_type_id=" . $rst->fields['activity_type_id'] . "'>"
+            . "<a href='browse-next.php?current_on_what_table=opportunities&amp;current_activity_type_id=" . $rst->fields['activity_type_id'] . "'>"
             . $rst->fields['activity_type_display_html'] . "</a></td></tr>";
         $rst->movenext();
     }
@@ -57,7 +57,7 @@ if(!$rst) {
 elseif($rst->rowcount() > 0) {
     while(!$rst->EOF) {
         $browse_block .= "\n<tr><td class=widget_content>"
-            . "<a href='browse-next.php?current_on_what_table=cases&current_activity_type_id=" . $rst->fields['activity_type_id'] . "'>"
+            . "<a href='browse-next.php?current_on_what_table=cases&amp;current_activity_type_id=" . $rst->fields['activity_type_id'] . "'>"
             . $rst->fields['activity_type_display_html'] . "</a></td></tr>";
         $rst->movenext();
     }
@@ -72,6 +72,9 @@ $rst->close();
 
 /**
  * $Log: browse-sidebar.php,v $
+ * Revision 1.3  2004/07/02 14:56:52  maulani
+ * - Repair HTML so page will validate
+ *
  * Revision 1.2  2004/06/28 14:35:09  maulani
  * - Added dollar sign to sort-order variable
  * - Added phpdoc
