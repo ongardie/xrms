@@ -137,7 +137,6 @@ table.widget .overdue_activity {
     border: 1px solid #ccc;                           /* disabled */
 }
 #page_header {
-    border:        1px solid rgb(137,164,122);        /* middle */
     border-top:    3px solid rgb(137,164,122);        /* middle */
     border-bottom: 2px solid rgb(137,164,122);        /* middle */
 }

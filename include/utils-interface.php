@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.38 2004/12/27 17:32:30 braverock Exp $
+ * $Id: utils-interface.php,v 1.39 2005/01/03 03:23:42 ebullient Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -146,7 +146,6 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     $curtheme = empty($css_theme) ? 'basic' : $css_theme;
     $cssroot = $http_site_root.'/css/';
 
-
     // Array containing list of named styles.
     //    array('basic' => '/path/to/basic.css');
     // If a particular style requires multiple files, specify them as a nested array
@@ -157,6 +156,9 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
         'basic-left' => array($cssroot.'basic/basic-left.css',
                               $cssroot.'basic/basic-left-ie.css',
                               $http_site_root.'/js/jscalendar/calendar-blue.css'),
+        'green'      => $cssroot.'green/green.css',
+        'green-left' => array($cssroot.'green/green-left.css',
+                              $cssroot.'green/green-left-ie.css'),
                       );
 ?>
 <!DOCTYPE HTML PUBLIC
@@ -313,6 +315,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.39  2005/01/03 03:23:42  ebullient
+ * additional theme (green), make User Manual link not a "header"
+ *
  * Revision 1.38  2004/12/27 17:32:30  braverock
  * - added hook 'loginbar' for plugins to reference near the logged in user text.
  *
@@ -320,65 +325,7 @@ EOQ;
  * added check for globally defined CSS theme ($css_theme) to start_page()
  *
  * Revision 1.36  2004/12/22 23:43:42  ebullient
- * Sorry for the lack of comment on the css adds - meant to commit all of them
- * together, and hit the wrong key.
- *
- * Anyway, the css additions are the new stylesheets, I should have some
- * more samples after the holiday.
- *
- * The sheets are broken up into pieces:
- *  All Media
- *   layout.css - major content blocks
- *   style.css  - basic fonts, table and form alignment, some padding
- *
- *  Print Media
- *   print.css  - what makes it look pretty in the print preview
- *
- *  Screen Media
- *   xrmsstyle.css - Additional font/margin/padding adjustments for the screen only
- *   xrmsstyle-ie.css - Making it pretty in IE too
- *
- *  Alternate Style Sheets - Screen Media
- *    (if you have Mozilla/Firefox, there are extensions to switch between them)
- *
- *  basic:
- *   basic.css - Default Colors/backgrounds, etc. Should look familiar
- *
- *  basic-left:
- *   basic-left.css - extension of basic.css with sidebar on the left side
- *   basic-left-ie.css - make left sidebar look nice in IE, too.
- *
- *  I did not get everything done that I wanted today - fell down a rabbit hole playing
- *  with fonts.
- *
- *  Left to do (if anyone wants to beat me to it, have a blast):
- *
- *   * Change pages with no Sidebar:
- *         use ContentFullWidth instead of Content
- *         remove empty Sidebar section
- *      (Reports, Open Activities, New/Edit Case, New/Edit Note, Manage Category, etc.)
- *
- *   * Add additional class to "Activity" and "Search" tables that appear on
- *     various forms so they don't print..
- *         <div class="noprint">
- *             <... Activity or Search table thing ..>
- *         </div>
- *
- *   * Surround generated report information in a Report tag..
- *         <div class="noprint">
- *             <.. form for report input parameters ..>
- *         </div>
- *         <div id="generated_report">
- *             <.. table containing report output ..>
- *         </div>
- *
- *   * Change some of the admin forms (like New Role and New User) so that the
- *     form is in the Content section, and not in the Sidebar. (In fact, you can
- *     then remove the sidebar, as in the first bullet).
- *
- * Happy Holidays!
- *
- * Erin
+ * New Stylesheets, changes to add <link .. > lines for new sheets
  *
  * Revision 1.35  2004/10/25 23:57:01  daturaarutad
  * Added a check to jscalendar_includes() so that the files are only included once.

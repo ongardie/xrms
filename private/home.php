@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.41 2004/10/01 20:09:39 introspectshun Exp $
+ * $Id: home.php,v 1.42 2005/01/03 03:23:41 ebullient Exp $
  */
 
 // include the common files
@@ -469,7 +469,7 @@ start_page($page_title,true,$msg);
                 <td class=widget_header><?php echo _("Documentation"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><a href="../doc/users/XRMS_User_Manual.pdf"><?php echo _("User Manual"); ?></a> (PDF)</td>
+                <td><a href="../doc/users/XRMS_User_Manual.pdf"><?php echo _("User Manual"); ?></a> (PDF)</td>
             </tr>
 <?php echo do_hook_function('home_docs'); ?>
         </table>
@@ -498,6 +498,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.42  2005/01/03 03:23:41  ebullient
+ * additional theme (green), make User Manual link not a "header"
+ *
  * Revision 1.41  2004/10/01 20:09:39  introspectshun
  * - Now only shows personal notes (should be user-configurable someplace?)
  * - Now uses notes sidebar form to create personal notes rather than "New Personal Note" form
