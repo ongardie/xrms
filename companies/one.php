@@ -21,17 +21,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
-$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, addresses.*, iso_code3, address_format_string
-        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses, countries, address_format_strings afs
-        where c.account_status_id = as1.account_status_id
-        and c.industry_id = i.industry_id
-        and c.rating_id = r.rating_id
-        and c.company_source_id = cs2.company_source_id
-        and c.crm_status_id = cs.crm_status_id
-        and c.user_id = u1.user_id
-        and c.default_primary_address = addresses.address_id
-        and addresses.country_id = countries.country_id
-        and countries.address_format_string_id = afs.address_format_string_id
+$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, addresses.*, iso_code3, address_format_string 
+        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3, addresses, countries, address_format_strings afs 
+        where c.account_status_id = as1.account_status_id 
+        and c.industry_id = i.industry_id 
+        and c.rating_id = r.rating_id 
+        and c.company_source_id = cs2.company_source_id 
+        and c.crm_status_id = cs.crm_status_id 
+        and c.user_id = u1.user_id 
+		and c.entered_by = u2.user_id 
+		and c.last_modified_by = u3.user_id 
+		and c.default_primary_address = addresses.address_id 
+		and addresses.country_id = countries.country_id 
+		and countries.address_format_string_id = afs.address_format_string_id 
         and c.company_id = $company_id";
 
 $rst = $con->execute($sql);
@@ -50,9 +52,9 @@ if ($rst) {
     $province = $rst->fields['province'];
     $postal_code = $rst->fields['postal_code'];
     $address_body = $rst->fields['address_body'];
-    $use_pretty_address = $rst->fields['use_pretty_address'];
-    $country = $rst->fields['iso_code3'];
-    $address_format_string = $rst->fields['address_format_string'];
+	$use_pretty_address = $rst->fields['use_pretty_address'];
+	$country = $rst->fields['iso_code3'];
+	$address_format_string = $rst->fields['address_format_string'];
     $phone = $rst->fields['phone'];
     $phone2 = $rst->fields['phone2'];
     $fax = $rst->fields['fax'];
@@ -81,11 +83,11 @@ $credit_limit = number_format($credit_limit, 2);
 $current_credit_limit = fetch_current_customer_credit_limit($extref1);
 
 if ($use_pretty_address == 't') {
-    $address_to_display = $address_body;
+	$address_to_display = $address_body;
 } else {
-    $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
-    eval("\$address_to_display = \"$address_format_string\";");
-    // eval ("\$str = \"$str\";");
+	$lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
+	eval("\$address_to_display = \"$address_format_string\";");
+	// eval ("\$str = \"$str\";");
 }
 
 if (strlen($url) > 0) {
@@ -96,23 +98,23 @@ if (strlen($url) > 0) {
 //  list of most recent activities
 //
 
-$sql_activities = "select activity_id,
-activity_title,
-scheduled_at,
-on_what_table,
-on_what_id,
-a.entered_at,
-activity_status,
-at.activity_type_pretty_name,
-cont.first_names as contact_first_names,
-cont.last_name as contact_last_name,
-u.username,
-if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
-from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
-where a.company_id = $company_id
-and a.user_id = u.user_id
-and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'
+$sql_activities = "select activity_id, 
+activity_title, 
+scheduled_at, 
+on_what_table, 
+on_what_id, 
+a.entered_at, 
+activity_status, 
+at.activity_type_pretty_name, 
+cont.first_names as contact_first_names, 
+cont.last_name as contact_last_name, 
+u.username, 
+if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue 
+from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id 
+where a.company_id = $company_id 
+and a.user_id = u.user_id 
+and a.activity_type_id = at.activity_type_id 
+and a.activity_record_status = 'a' 
 order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
@@ -133,12 +135,32 @@ if ($rst) {
         } else {
             $classname = 'closed_activity';
         }
-
+		
+		if ($on_what_table == 'opportunities') {
+			$attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
+		    $sql2 = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
+		} elseif ($on_what_table == 'cases') {
+		    $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
+		    $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
+		} else {
+		    $attached_to_link = "N/A";
+			$sql2 = "select * from companies where 1 = 2";
+		}
+		
+		$rst2 = $con->execute($sql2);
+		
+		if ($rst) {
+		    $attached_to_name = $rst2->fields['attached_to_name'];
+			$attached_to_link .= $attached_to_name . "</a>";
+		    $rst2->close();
+		}
+		
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php?company_id=$company_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . '</td>';
+        $activity_rows .= '<td class=' . $classname . ">$attached_to_link</td>";
         $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
         $activity_rows .= '</tr>';
         $rst->movenext();
@@ -153,7 +175,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $contact_rows .= '<tr>';
-        $contact_rows .= "<td class=widget_content><a href='$http_site_root/contacts/one.php?contact_id=" . $rst->fields['contact_id'] . "'>" . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
+        $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id=" . $rst->fields['contact_id'] . "'>" . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['summary'] . '</td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['title'] . '</td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['description'] . '</td>';
@@ -167,10 +189,15 @@ if ($rst) {
 
 // associated with
 
-$categories_sql = "select category_pretty_name
-from categories
-where category_record_status = 'a'
-and category_id in (select category_id from entity_category_map where on_what_table = 'companies' and on_what_id = $company_id)
+$categories_sql = "select category_pretty_name 
+from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
+where ecm.on_what_table = 'companies'
+and ecm.on_what_id = $company_id
+and ecm.category_id = c.category_id
+and cs.category_scope_id = ccsm.category_scope_id
+and c.category_id = ccsm.category_id
+and cs.on_what_table = 'companies'
+and category_record_status = 'a'
 order by category_pretty_name";
 
 $rst = $con->execute($categories_sql);
@@ -283,7 +310,7 @@ add_audit_item($con, $session_user_id, 'view company', 'companies', $company_id)
 $con->close();
 
 if (strlen($activity_rows) == 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=6>$strCompaniesOneNoActivitiesMessage</td></tr>";
+    $activity_rows = "<tr><td class=widget_content colspan=7>No activities</td></tr>";
 }
 
 if (strlen($contact_rows) == 0) {
@@ -348,23 +375,23 @@ function openNewsWindow() {
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel><?php  echo $strCompaniesOneCompanyNameLabel; ?></td>
+                                    <td width=1% class=sublabel>Name</td>
                                     <td class=clear><?php  echo $company_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCodeLabel; ?></td>
+                                    <td class=sublabel>Code</td>
                                     <td class=clear><?php  echo $company_code; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyTypesLabel; ?></td>
+                                    <td class=sublabel>Types</td>
                                     <td class=clear><?php  echo $company_type_list; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCRMStatusLabel; ?></td>
+                                    <td class=sublabel>CRM Status</td>
                                     <td class=clear><?php  echo $crm_status_pretty_name; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyUserLabel; ?></td>
+                                    <td class=sublabel>Acct. Owner</td>
                                     <td class=clear><?php  echo $owner_username; ?></td>
                                 </tr>
                                 <tr>
@@ -478,12 +505,12 @@ function openNewsWindow() {
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                <input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
-                <input class=button type=button value="<?php echo $strCompaniesOneAdminButton; ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';"> <input class=button type=button value="<?php echo $strCompaniesOneCloneButton; ?>" onclick="javascript: location.href='new.php?clone_id=<?php $company_id ?>';">
-                <input class=button type=button value="<?php echo $strCompaniesOneMailMergeButton; ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
-                <input class=button type=button value="<?php echo $strCompaniesOneNewsButton; ?>" onclick="javascript: openNewsWindow();">
-                <input class=button type=button value="<?php echo $strCompaniesOneAddressesButton; ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
-                </td>
+				<input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
+				<input class=button type=button value="<?php echo $strCompaniesOneAdminButton; ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';"> <input class=button type=button value="<?php echo $strCompaniesOneCloneButton; ?>" onclick="javascript: location.href='new.php?clone_id=<?php $company_id ?>';">
+				<input class=button type=button value="<?php echo $strCompaniesOneMailMergeButton; ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
+				<input class=button type=button value="<?php echo $strCompaniesOneNewsButton; ?>" onclick="javascript: openNewsWindow();">
+				<input class=button type=button value="<?php echo $strCompaniesOneAddressesButton; ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
+				</td>
             </tr>
         </table>
 
@@ -513,20 +540,22 @@ function openNewsWindow() {
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=6><?php  echo $strCompaniesOneActivitiesTitle; ?></td>
+                <td class=widget_header colspan=7><?php  echo $strCompaniesOneActivitiesTitle; ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php  echo $strCompaniesOneActivityTitleLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesOneActivityUserLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesOneActivityTypeLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesOneActivityContactLabel; ?></td>
-                <td colspan=2 class=widget_label><?php  echo $strCompaniesOneActivityStartsAtLabel; ?></td>
+                <td class=widget_label>Activity</td>
+                <td class=widget_label>User</td>
+                <td class=widget_label>Type</td>
+                <td class=widget_label>Contact</td>
+                <td class=widget_label>About</td>
+                <td colspan=2 class=widget_label>Starts</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title size=40></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
+                <td class=widget_content_form_element>&nbsp;</td>
                 <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at value="<?php echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
             </tr>
             <?php  echo $activity_rows; ?>
