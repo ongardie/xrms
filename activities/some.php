@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.57 2004/08/19 20:37:20 neildogg Exp $
+ * $Id: some.php,v 1.58 2004/08/25 15:01:17 neildogg Exp $
  */
 
 // handle includes
@@ -247,8 +247,8 @@ if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     update_daylight_savings($con);
     $sql .= " and addr.daylight_savings_id = tds.daylight_savings_id";
     
-    $sql .= " and hour(ends_at) + tds.current_hour_shift + addr.offset + " . date('Z')/3600 . " >= " . $time_zone_between;
-    $sql .= " and hour(ends_at) + tds.current_hour_shift + addr.offset + " . date('Z')/3600 . " <= " . $time_zone_between2;
+    $sql .= " and (hour(" . $con->DBTimeStamp(time()) . ") + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") >= " . $time_zone_between;
+    $sql .= " and (hour(" . $con->DBTimeStamp(time()) . ") + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") <= " . $time_zone_between2;
 }
 
 if($opportunity_status_id) {
@@ -327,6 +327,11 @@ $saved_data = $_POST;
 $saved_data["sql"] = $sql;
 $saved_data["day_diff"] = $day_diff;
 
+if(!$saved_title) {
+    $saved_title = "Current";
+    $group_item = 0;
+}
+
 $rec = array();
 $rec['saved_title'] = $saved_title;
 $rec['group_item'] = round($group_item);
@@ -336,10 +341,6 @@ $rec['user_id'] = $session_user_id;
 $rec['saved_data'] = str_replace("'", "\\'", serialize($saved_data));
 
 if($saved_title or $browse) {
-    if(!$saved_title) {
-        $saved_title = "Current";
-        $group_itme = 0;
-    }
     $sql_saved = "SELECT *
             FROM saved_actions
             WHERE (user_id=" . $session_user_id . "
@@ -616,6 +617,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.58  2004/08/25 15:01:17  neildogg
+ * - Searches local time with proper constraints
+ *  - Saves temporary searches properly
+ *
  * Revision 1.57  2004/08/19 20:37:20  neildogg
  * - Added many advanced search features
  *  - Search by template title, contact ID, company ID
