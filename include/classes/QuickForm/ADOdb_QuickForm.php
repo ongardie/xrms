@@ -9,13 +9,13 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.1 2005/01/10 14:34:14 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.2 2005/01/13 20:48:34 vanmer Exp $
  */
 
 
 
-	require_once "HTML/QuickForm.php";
-	require_once 'HTML/QuickForm/Renderer/Default.php';
+	require_once $include_directory."classes/HTML/QuickForm.php";
+	require_once $include_directory.'classes/HTML/QuickForm/Renderer/Default.php';
 	require_once "ADOdb_QuickForm_Controller.php";
 	require_once "ADOdb_QuickForm_Model.php";
 
