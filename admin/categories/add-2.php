@@ -12,6 +12,8 @@ $category_pretty_name = $_POST['category_pretty_name'];
 $category_pretty_plural = $_POST['category_pretty_plural'];
 $category_display_html = $_POST['category_display_html'];
 
+$session_user_id = session_check( $this );
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 

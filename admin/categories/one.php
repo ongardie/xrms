@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.4 2004/04/16 22:18:25 maulani Exp $
+ * $Id: one.php,v 1.5 2004/04/23 15:30:11 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,6 +13,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
 $category_id = $_GET['category_id'];
+
+$session_user_id = session_check( $this );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -155,6 +157,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.5  2004/04/23 15:30:11  gpowers
+ * added session_check
+ *
  * Revision 1.4  2004/04/16 22:18:25  maulani
  * - Add CSS2 Positioning
  *
