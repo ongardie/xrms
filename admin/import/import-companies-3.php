@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.18 2004/04/21 05:08:36 braverock Exp $
+ * $Id: import-companies-3.php,v 1.19 2004/05/03 13:41:44 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -410,7 +410,7 @@ foreach ($filearray as $row) {
                                    province      = '. $con->qstr($address_state) . ',
                                    address_body       = '. $con->qstr($address_body) . ',
                                    use_pretty_address = '. $con->qstr($address_use_pretty_address) . ',
-                                   postal_code   = '. $con->qstr($address_postal_code) .'
+                                   postal_code   = '. $con->qstr($address_postal_code) .',
                                    country_id = '. $con->qstr($address_country);
                 $con->execute($sql_insert_address);
                 $address_id = $con->insert_id();
@@ -653,6 +653,10 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.19  2004/05/03 13:41:44  braverock
+ * - missing comma in address insert
+ *   fixes bug reported by Stephan in Germany
+ *
  * Revision 1.18  2004/04/21 05:08:36  braverock
  * - remove get_magic_quotes_gpc() from qstr param list,
  *   it is unecessary in this context, and actively harmful
