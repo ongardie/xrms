@@ -14,7 +14,7 @@
 
  *
 
- * $Id: new-form.php,v 1.2 2004/07/16 03:34:04 niclowe Exp $
+ * $Id: new-form.php,v 1.3 2004/08/15 07:08:27 niclowe Exp $
 
  */
 
@@ -46,9 +46,14 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //FIRST THING, MAIL THE FORM AND THE RESPONSE JUST IN CASE IT SCREWS UP
 $email = $_POST['email'];
 //send form to sender
-$form_input_data.= "Form Variables: \nInput into XRMS\n>";
-foreach ($_POST as $key => $val)
-$form_input_data.= "$key =$val\n";
+$form_input_data.= "Form Variables input into XRMS\n";
+//what data do you put in the email
+$data_in_email=array("first_names","last_name","email","company_name","phone","postal_code","city","province","YourMessage");
+
+foreach ($_POST as $key => $val){
+if(in_array($key, $data_in_email))$form_input_data.= "$key: $val\n";
+}
+
 if($email_to_admin)mail($email_admin_address,"XRMS-Contact Us Form Submitted",$form_input_data,"From: $email");
 //send response to sender
 $sql="SELECT email_template_title, email_template_body from email_templates where email_template_id=$email_template_id";
@@ -446,6 +451,9 @@ header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_thi
 /**
 
  * $Log: new-form.php,v $
+ * Revision 1.3  2004/08/15 07:08:27  niclowe
+ * Reduced number of form variables (no hidden ones anymore) emailed to admin user.
+ *
  * Revision 1.2  2004/07/16 03:34:04  niclowe
  * initial upload
  *
