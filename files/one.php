@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.3 2004/03/07 14:05:28 braverock Exp $
+ * $Id: one.php,v 1.4 2004/03/24 12:29:56 braverock Exp $
  */
 
 //include required files
@@ -21,6 +21,8 @@ $file_id = $_GET['file_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+update_recent_items($con, $session_user_id, "files", $file_id);
 
 $sql = "select * from files, users where files.entered_by = users.user_id and file_id = $file_id";
 
@@ -42,11 +44,12 @@ start_page($page_title, true, $msg);
 
 ?>
 
+<script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
         <td class=lcol width=55% valign=top>
 
-        <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
+        <form enctype="multipart/form-data" action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=return_url value="<?php  echo $return_url ?>">
         <input type=hidden name=file_id value="<?php  echo $file_id ?>">
         <table class=widget cellspacing=1 width=100%>
@@ -68,6 +71,14 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right_166px>Description</td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description><?php  echo $file_description ?></textarea></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Change Date</td>
+                                <td class=widget_content_form_element><input type=text name=file_entered_at value="<?php  echo $entered_at; ?>"> <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Change File</td>
+                <td class=widget_content_form_element><input type=file name=file1></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input type=submit class=button value="Save Changes"> <input type=button class=button onclick="javascript: location.href='download.php?file_id=<?php  echo $file_id ?>';" value="Download"> <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo $return_url; ?>&file_id=<?php echo $file_id; ?>';" value="Delete"></td>
@@ -114,6 +125,17 @@ function validate() {
 
 initialize();
 
+<!--
+
+// create calendar object(s) just after form tag closed
+// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
+// note: you can have as many calendar objects as you need for your application
+
+    var cal1 = new calendar1(document.forms[0].elements['file_entered_at']);
+    cal1.year_scroll = false;
+    cal1.time_comp = false;
+
+//-->
 </script>
 
 <?php
@@ -122,6 +144,11 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.4  2004/03/24 12:29:56  braverock
+ *- update recently viewed items (braverock)
+ *- allow editing of file date
+ *- updated code provided by Olivier Colonna of Fontaine Consulting
+ *
  *Revision 1.3  2004/03/07 14:05:28  braverock
  *add phpdoc
  *
