@@ -3,7 +3,7 @@
  *
  * Companies by crm status report.
  *
- * $Id: companies-by-crm-status.php,v 1.9 2005/03/11 17:22:10 daturaarutad Exp $
+ * $Id: companies-by-crm-status.php,v 1.10 2005/03/15 01:28:56 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -137,7 +137,6 @@ function GetCompaniesByCRMStatusGraph($con, $user_id, $all_users) {
 		array_push($array_of_company_count_values, $company_count);
 		array_push($graph_url_array, $http_site_root . '/companies/some.php?companies_crm_status_id=' . $crm_status_id);
 		array_push($graph_legend_array, $rst1->fields['crm_status_pretty_plural']);
-	$graph_info['csim_alts'] = array('google', 'google','google','google','google','google','google','google','google');
 		// calcul de la chaine la plus longue
 		if (strlen($rst1->fields['crm_status_pretty_plural'])>$size_max_string )
 		{
@@ -199,8 +198,8 @@ function GetCompaniesByCRMStatusGraph($con, $user_id, $all_users) {
 
 /**
  * $Log: companies-by-crm-status.php,v $
- * Revision 1.9  2005/03/11 17:22:10  daturaarutad
- * updated to support client side image maps
+ * Revision 1.10  2005/03/15 01:28:56  daturaarutad
+ * moved graphing code back into original files
  *
  * Revision 1.8  2005/03/09 21:06:11  daturaarutad
  * updated to use Jean-Noel HAYART changes: user filtering
