@@ -14,6 +14,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/toexport.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $sql = " SELECT
   cont.salutation AS 'Salutation',
@@ -106,6 +107,9 @@ header("Location: {$http_site_root}/tmp/contacts-export.csv");
 
 /**
  * $Log: export-companies.php,v $
+ * Revision 1.4  2004/06/14 22:24:40  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ *
  * Revision 1.3  2004/03/15 14:15:07  braverock
  * - added code to export all available contact fields on contact/company export
  *   - new code provided by Olivier Colonna of Fontaine Consulting
