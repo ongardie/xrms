@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.80 2005/03/21 14:45:42 maulani Exp $
+ * $Id: one.php,v 1.81 2005/03/22 22:12:43 gpowers Exp $
  */
 
 //include required files
@@ -105,7 +105,7 @@ if ($rst) {
     $rst->close();
 }
 
-$show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ?Êtrue : false);
+$show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ?ï¿½true : false);
 $user_menu = get_user_menu($con, $user_id, $show_blank);
 
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
@@ -255,9 +255,15 @@ if($on_what_table == 'opportunities') {
     $rst->close();
 }
 
+// make sure $activity_content_bottom is defined
+if ( !isset($activity_content_bottom) ) {
+  $activity_content_bottom = '';
+}
+//call the activity_content_bottom hook
+$activity_content_bottom = do_hook_function('activity_content_bottom');
+
 /*********************************/
 /*** Include the sidebar boxes ***/
-
 
 if ($contact_id) {
     // include the contact sidebar code
@@ -471,7 +477,7 @@ function logTime() {
            <?php  echo $history_text; ?>
         </table>
         </form>
-
+		<?php echo $activity_content_bottom; ?>
     </div>
 
     <!-- right column //-->
@@ -519,6 +525,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.81  2005/03/22 22:12:43  gpowers
+ * - added activity_content_bottom plugin hook
+ *
  * Revision 1.80  2005/03/21 14:45:42  maulani
  * - Display optional id and other info about activity.  Option controlled
  *   with system parameter.  ID is useful for developers tracking bugs in
@@ -767,7 +776,7 @@ function logTime() {
  * - fixed multiple bugs with date-time formatting in activities
  * - correctly use dbtimestamp() date() and strtotime() fns
  * - add support for $default_followup_time config var
- *   - fixes SF bug  949779 reported by miguel Gonçalves (mig77)
+ *   - fixes SF bug  949779 reported by miguel Gonï¿½alves (mig77)
  *
  * Revision 1.12  2004/04/27 16:42:07  gpowers
  * - fixed usertimestamp
