@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.10 2005/02/15 15:08:30 ycreddy Exp $
+ * $Id: edit.php,v 1.11 2005/02/18 14:15:50 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -91,7 +91,7 @@ $return_url   = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
 
 if (!$return_url) {
-    $return_url = "../../companies/one.php?company_id=$company_id&division_id=$division_id";
+    $return_url = "/companies/one.php?company_id=$company_id&division_id=$division_id";
 };
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -243,6 +243,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.11  2005/02/18 14:15:50  braverock
+ * - fix fallback default return_url to be correct when contatenated w/ http_site_root
+ *   - patch supplied by Keith Edmunds
+ *
  * Revision 1.10  2005/02/15 15:08:30  ycreddy
  * Included adodb-params.php for Result Set lookup based on column name
  *
