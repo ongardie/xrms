@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.118 2005/03/07 00:58:44 maulani Exp $
+ * $Id: utils-misc.php,v 1.119 2005/03/10 18:09:32 ycreddy Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -687,7 +687,7 @@ function get_formatted_phone ($con, $address_id, $phone) {
 
     $phone = preg_replace("|[^0-9]+|", "", $phone);
 
-    if(strlen($expression)) {
+    if(trim($expression)) {
         preg_match_all("|[#]+|", $expression, $matched);
         $matched = $matched[0];
         foreach($matched as $match) {
@@ -1482,6 +1482,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.119  2005/03/10 18:09:32  ycreddy
+ * Using trim on phone_format to fix the empty string problem with SQL server
+ *
  * Revision 1.118  2005/03/07 00:58:44  maulani
  * - Show_test_values will now display arrays and objects
  *
