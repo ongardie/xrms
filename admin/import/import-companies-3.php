@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.20 2004/05/06 19:07:40 braverock Exp $
+ * $Id: import-companies-3.php,v 1.21 2004/05/06 19:24:56 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,10 +33,27 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
+/**
+ * function importFailedMessage - debug function for import
+ *
+ * @author Mark Spoorendonk
+ *
+ * @param string  $str
+ * @param optional boolean $success default=false
+ *
+ * @todo Add adodb error handler here... pass &$con as a parameter by reference
+ */
 function importFailedMessage($str) {
     return importMessage($str, false);
 }
 
+/**
+ * function debugSQL - debug function for import
+ *
+ * @author Mark Spoorendonk
+ *
+ * @param string  $sql
+ */
 function debugSql($sql) {
     return; // comment out this line for debuging
     echo "<code><pre>";
@@ -44,6 +61,14 @@ function debugSql($sql) {
     echo "</pre></code>\n";
 }
 
+/**
+ * function importMessage - debug function for import
+ *
+ * @author Mark Spoorendonk
+ *
+ * @param string  $str
+ * @param optional boolean $success default=true
+ */
 function importMessage($str, $success=true) {
     return; // comment out this line for debuging
     $color="#ffb0b0"; // red
@@ -225,12 +250,12 @@ foreach ($filearray as $row) {
         }
     }
 
-    //echo "<pre>"; print_r($GLOBALS); echo "</pre>"; // debug 
+    //echo "<pre>"; print_r($GLOBALS); echo "</pre>"; // debug
 
     if ((strlen($contact_first_names) == 0) && (strlen($contact_last_name) == 0)) {
         $contact_last_name   = 'Contact';
         $contact_first_names = 'Default';
-	importMessage("Creating default contact");
+        importMessage("Creating default contact");
     }
 
     if (strlen($company_name) > 0) {
@@ -247,11 +272,13 @@ foreach ($filearray as $row) {
                 entered_at = " . $con->qstr($entered_at) . ',
                 entered_by = ' . $con->qstr($entered_by) . ',
                 company_name = '. $con->qstr($company_name) .',';
-	importMessage("Created company '$company_name'");
+
+            importMessage("Created company '$company_name'");
         } else {
             $sql_insert_company = '
             update companies set ';
-	importMessage("Updated company '$company_name'");
+
+            importMessage("Updated company '$company_name'");
         }
 
         $sql_insert_company .=
@@ -375,7 +402,7 @@ foreach ($filearray as $row) {
                                             $company_code .
                                             " where company_id = $company_id";
             }
-	    debugSql($sql_update_company_code);
+            debugSql($sql_update_company_code);
             $con->execute($sql_update_company_code);
         }
 
@@ -383,7 +410,7 @@ foreach ($filearray as $row) {
         if (strlen($division_name) > 0) {
             $sql_insert_division = 'insert into company_division set
                                     division_name = '. $con->qstr($division_name);
-	    debugSql($sql_insert_division);
+            debugSql($sql_insert_division);
             $con->execute($sql_insert_division);
             $division_id = $con->insert_id();
         }
@@ -400,7 +427,7 @@ foreach ($filearray as $row) {
                                   line1 = '. $con->qstr($address_line1) .' and
                                   city = '. $con->qstr($address_city) ." and
                                   company_id = $company_id";
-	    debugSql($sql_check_address);
+            debugSql($sql_check_address);
             $rst = $con->execute($sql_check_address);
             if ($rst) {
                 $address_id = $rst->fields['address_id'];
@@ -410,35 +437,35 @@ foreach ($filearray as $row) {
                 //figure out a country, because country is required as well
                 if ($address_country) {
                     if (!is_numeric($address_country)){
-			// simplify the country to catalize the matching to existing country
-			// example: The Netherlands -> Netherlands
-			$country_simplified=$address_country;
-			$country_simplified=preg_replace("/\\bthe\\b/i", "", $country_simplified);
-			$country_simplified=preg_replace("/\\bunited\\b/i", "", $country_simplified);
-			$country_simplified=preg_replace("/\\bstates\\b/i", "", $country_simplified);
-			$country_simplified=preg_replace("/\\brepublic\\b/i", "", $country_simplified);
-			$country_simplified=preg_replace("/\\bof\\b/i", "", $country_simplified);
-			$country_simplified=trim($country_simplified);
+                        // simplify the country to catalize the matching to existing country
+                        // example: The Netherlands -> Netherlands
+                        $country_simplified=$address_country;
+                        $country_simplified=preg_replace("/\\bthe\\b/i", "", $country_simplified);
+                        $country_simplified=preg_replace("/\\bunited\\b/i", "", $country_simplified);
+                        $country_simplified=preg_replace("/\\bstates\\b/i", "", $country_simplified);
+                        $country_simplified=preg_replace("/\\brepublic\\b/i", "", $country_simplified);
+                        $country_simplified=preg_replace("/\\bof\\b/i", "", $country_simplified);
+                        $country_simplified=trim($country_simplified);
 
                         $country_sql = "select country_name, country_id from countries
                             where country_record_status = 'a' and
                             country_name like "
                             . $con->qstr('%' .$country_simplified.'%')
                             . " limit 1";
-			debugSql($country_sql);
-                        $addrrst = $con->execute($sql);
+                        debugSql($country_sql);
+                        $addrrst = $con->execute($country_sql);
                         if ($addrrst){
                             $address_country = $addrrst->fields('country_id');
                             $addrrst->close();
-			    importMessage("Country found: ".$address_country);
+                            importMessage("Country found: ".$address_country);
                         } else {
                             $address_country = $default_country_id;
-			    importFailedMessage("Failed to get country. Using default country");
+                            importFailedMessage("Failed to get country. Using default country");
                         }
                     }
                 } else {
                     $address_country = $default_country_id;
-		    importFailedMessage("Country not specified. Using default country");
+                    importFailedMessage("Country not specified. Using default country");
                 }
 
                 //insert the new address
@@ -453,14 +480,14 @@ foreach ($filearray as $row) {
                                    use_pretty_address = '. $con->qstr($address_use_pretty_address) . ',
                                    postal_code   = '. $con->qstr($address_postal_code) .',
                                    country_id = '. $con->qstr($address_country);
-	        debugSql($sql_insert_address);
+                debugSql($sql_insert_address);
                 $con->execute($sql_insert_address);
-		importMessage("Imported address '$address_line1'");
+                importMessage("Imported address '$address_line1'");
                 $address_id = $con->insert_id();
             }
-	    else {
-		importFailedMessage("Did not import address '$address_line1'");
-	    }
+        else {
+            importFailedMessage("Did not import address '$address_line1'");
+        }
             // if we don't have a default address, set them now
             // this is kind of naive first through the post choosing, but oh well
             if (!$default_address_id  && $address_id) {
@@ -471,7 +498,7 @@ foreach ($filearray as $row) {
                         default_shipping_address = $address_id,
                         default_payment_address = $address_id
                         where company_id = $company_id";
-		debugSql($sql_update_company_set_address_defaults);
+                debugSql($sql_update_company_set_address_defaults);
                 $con->execute($sql_update_company_set_address_defaults);
             }
         } // end address insert
@@ -481,14 +508,14 @@ foreach ($filearray as $row) {
                               first_names = '. $con->qstr($contact_first_names) . ' and
                               last_name   = '. $con->qstr($contact_last_name) . " and
                               company_id  = $company_id" ;
-	debugSql($sql_check_contact);
+        debugSql($sql_check_contact);
         $rst = $con->execute($sql_check_contact);
         if ($rst) {
             $contact_id = $rst->fields['contact_id'];
             //should probably echo here to indicate that we didn't import this contact
         }
         if (!$contact_id and $company_id) {
-	    // doesn't exist, create new one
+        // doesn't exist, create new one
             $sql_insert_contact = "insert into contacts set
                                        company_id  = $company_id,
                                        first_names = ". $con->qstr($contact_first_names) .',
@@ -581,13 +608,13 @@ foreach ($filearray as $row) {
                 $sql_insert_contact .= ',
                                        profile       = '. $con->qstr($contact_profile);
             }
-	    debugSql($sql_insert_contact);
+            debugSql($sql_insert_contact);
             $con->execute($sql_insert_contact);
-	    importMessage("Updated contact '$contact_first_names $contact_last_name'");
+            importMessage("Updated contact '$contact_first_names $contact_last_name'");
         } //end insert contact
-	else {
-	    importFailedMessage("Did not update contact '$contact_first_names $contact_last_name'");
-	}
+    else {
+        importFailedMessage("Did not update contact '$contact_first_names $contact_last_name'");
+    }
 
         //set the category if we got one
         if ($category_id) {
@@ -597,7 +624,7 @@ foreach ($filearray as $row) {
                                                         category_id = $category_id,
                                                         on_what_table = 'companies',
                                                         on_what_id = $company_id";
-	    debugSql($sql_insert_category_into_the_companies);
+            debugSql($sql_insert_category_into_the_companies);
             $con->execute($sql_insert_category_into_the_companies);
         }
 
@@ -708,6 +735,12 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.21  2004/05/06 19:24:56  braverock
+ * - fixed $country_sql patch
+ * - fixed code fomatting
+ * - added phpdoc for functions
+ * - added todo items
+ *
  * Revision 1.20  2004/05/06 19:07:40  braverock
  * - added additional debug information on import scripts
  *   - aaplied SF patch 947578 supplied by Marc Spoorendonk (grmbl)
