@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.36 2004/07/09 15:41:14 neildogg Exp $
+ * $Id: one.php,v 1.37 2004/07/13 15:48:59 cpsource Exp $
  */
 require_once('../include-locations.inc');
 
@@ -19,6 +19,9 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
+
+// make sure $msg is never undefined
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $contact_id = $_GET['contact_id'];
 
@@ -97,7 +100,11 @@ switch ($gender) {
         break;
 }
 
-if ($address_id) { $address_to_display = get_formatted_address($con, $address_id); }
+if ( $address_id ) {
+  $address_to_display = get_formatted_address($con, $address_id);
+} else {
+  $address_to_display = '';
+}
 
 // most recent activities
 $sql_activities = "
@@ -120,6 +127,7 @@ ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
 ";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
+$activity_rows = '';
 
 if ($rst) {
     while (!$rst->EOF) {
@@ -179,6 +187,7 @@ if ($rst) {
 }
 
 // division
+$division_row = '';
 if ($division_id != '') {
     $division_sql = "select division_id, division_name from company_division where division_id = $division_id";
     $div_rst = $con->execute($division_sql);
@@ -556,6 +565,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.37  2004/07/13 15:48:59  cpsource
+ * - Get rid of undefined variable usage.
+ *
  * Revision 1.36  2004/07/09 15:41:14  neildogg
  * - Uses the new, generic relationship sidebar
  *
