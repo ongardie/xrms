@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.30 2004/04/27 13:20:29 gpowers Exp $
+ * $Id: one.php,v 1.31 2004/05/04 15:41:25 gpowers Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -404,10 +404,6 @@ function openNewsWindow() {
                                     <td class=clear><?php  echo $company_code; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Types</td>
-                                    <td class=clear><?php  echo $company_type_list; ?></td>
-                                </tr>
-                                <tr>
                                     <td class=sublabel>CRM Status</td>
                                     <td class=clear><?php  echo $crm_status_pretty_name; ?></td>
                                 </tr>
@@ -649,6 +645,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.31  2004/05/04 15:41:25  gpowers
+ * Removed "Types" ($company_type_list) which was undefined and depreciated.
+ * It will be replaced with "Relationships" and/or "Industry".
+ *
  * Revision 1.30  2004/04/27 13:20:29  gpowers
  * added support for activity times.
  * start and end time default to current time.
