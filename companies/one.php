@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.89 2005/01/31 17:22:43 braverock Exp $
+ * $Id: one.php,v 1.90 2005/02/01 00:26:07 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -470,13 +470,6 @@ function markComplete() {
     document.forms[0].submit();
 }
 
-function openNewsWindow() {
-    window_url = "http://news.google.com/news?q=%22<?php  echo str_replace(' ', '+', $company_name); ?>%22";
-    window_name = "News";
-    window_attr = "";
-    window.open(window_url, window_name, window_attr);
-}
-
 //-->
 </script>
 
@@ -691,7 +684,6 @@ function openNewsWindow() {
                 <input class=button type=button value="<?php echo _("Admin"); ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
                 <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
-                <input class=button type=button value="<?php echo _("News"); ?>" onclick="javascript: openNewsWindow();">
                 <input class=button type=button value="<?php echo _("Addresses"); ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
                 <?php
                     if (!$division_id) {
@@ -830,6 +822,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.90  2005/02/01 00:26:07  braverock
+ * - remove 'News' button, as this functionaltiy has been moved to the weblinks plugin
+ *
  * Revision 1.89  2005/01/31 17:22:43  braverock
  * - Administer Divisions link hardcode to localhost - oops, fixed now
  *
