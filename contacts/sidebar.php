@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.6 2004/06/28 13:49:52 gpowers Exp $
+ * $Id: sidebar.php,v 1.7 2004/07/04 11:34:58 metamedia Exp $
  */
 
 //add contact information block on sidebar
@@ -19,7 +19,7 @@ $contact_block = '<table class=widget cellspacing=1 width="100%">
     </tr>'."\n";
 
 $sql = "select
-        first_names, last_name, work_phone, address_id, email
+        first_names, last_name, work_phone, address_id, email, cell_phone
         from contacts
         where
         contact_id=$contact_id";
@@ -40,6 +40,11 @@ if (!$rst->EOF) {
                         . $rst->fields['work_phone'] . "</strong></td>\n\t</tr>";
     }
 
+    if ($rst->fields['cell_phone']) {
+        $contact_block .= "<tr><td class=widget_content>Cell Phone: <strong>"
+                        . $rst->fields['cell_phone'] . "</strong></td>\n\t</tr>";
+    }
+
     if ($rst->fields['email']) {
         $contact_block .= "<tr>\n\t\t<td class=widget_content>"
                         . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
@@ -57,6 +62,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.7  2004/07/04 11:34:58  metamedia
+ * Now also displays cell phone number for contact.
+ *
  * Revision 1.6  2004/06/28 13:49:52  gpowers
  * - made contact name a link to contact page
  *
