@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.14 2004/07/07 20:46:25 neildogg Exp $
+ * $Id: index.php,v 1.15 2004/07/12 18:49:47 neildogg Exp $
  */
 
 //include required stuff
@@ -161,6 +161,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
+                    <a href="relationship-types/some.php">Relationship Types</a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
                     <a href="case-types/some.php">Case Types</a>
                 </td>
             </tr>
@@ -208,6 +213,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.15  2004/07/12 18:49:47  neildogg
+ * - Added link for relationship types management
+ *
  * Revision 1.14  2004/07/07 20:46:25  neildogg
  * - Added support for phone format editing
  *
