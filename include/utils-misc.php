@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.121 2005/03/15 22:18:05 vanmer Exp $
+ * $Id: utils-misc.php,v 1.122 2005/03/18 01:23:56 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -784,6 +784,7 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
             //end multiline address processing
         } else {
             //create our single line address
+            $address_array=array();
             if ($line1) { $address_array[]=$line1; } 
                 
             if ($city) { $address_array[]=$city; }
@@ -792,7 +793,7 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
 
             if ($country_name) { $address_array[]=$country; }
 
-           if ($address_array) {
+           if (count($address_array)>0) {
                 $address_to_display=implode(", ",$address_array);
            } else {
                 $address_to_display = '';
@@ -1482,6 +1483,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.122  2005/03/18 01:23:56  vanmer
+ * - added array and check if count of array is 0, instead of simple if check on variable
+ *
  * Revision 1.121  2005/03/15 22:18:05  vanmer
  * -readded exit command to allow ACL to properly restrict access to pages
  *
