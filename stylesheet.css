@@ -2,7 +2,7 @@ body {
   background-color: #eeeeee;
   margin: 1px;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
 }
 
 #page_header {
@@ -12,12 +12,12 @@ body {
   background-color: rgb(20%,40%,60%);
   color: #ffffee;
   font-family: tahoma;
-  font-size: 21pt;
+  font-size: xx-large;
   font-weight: normal;
   text-align: left;
   line-height: 70px;
   background-image: url("img/page_title_background.gif");
-  background-repeat: repeat-x
+  background-repeat: repeat-x;
   vertical-align: bottom;
 }
 
@@ -26,7 +26,7 @@ body {
   padding: 5px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
 }
 
@@ -48,7 +48,7 @@ body {
   padding: 5px;
   background-color: #ffeeee;
   font-family: verdana;
-  font-size: 10pt;
+  font-size: small;
   font-weight: bold;
   color: #333333;
   text-align: center;
@@ -87,7 +87,7 @@ td.widget_header {
   background-color: rgb(20%,40%,60%);
   color: #ffffee;
   font-family: verdana;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: bold;
   background-image: url("img/widget_header_background.gif");
 }
@@ -96,29 +96,28 @@ td.widget_label {
   padding: 5px;
   background-color: #eeeeee;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
   background-image: url("img/widget_label_background.gif");
-  white-space: nowrap;
 }
 td.widget_label_right {
   padding: 8px;
   background-color: #eeeeee;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
   text-align: right;
   background-image: url("img/widget_label_right_background.gif");
-  background-repeat: no repeat;
+  background-repeat: no-repeat;
   background-position: top right;
 }
 td.widget_label_center {
   padding: 5px;
   background-color: #eeeeee;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
   text-align: center;
@@ -129,17 +128,16 @@ td.widget_label_alt {
   padding: 5px;
   background-color: #eeeeee;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
   background-image: url("img/widget_label_alt_background.gif");
-  white-space: nowrap;
 }
 td.widget_label_alt_right {
   padding: 3px;
   background-color: #eeeeee;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
   text-align: right;
@@ -149,7 +147,7 @@ td.widget_label_alt_center {
   padding: 5px;
   background-color: #eeeeee;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
   text-align: center;
@@ -160,7 +158,7 @@ td.widget_label_right_91px {
   padding: 4px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
   text-align: right;
@@ -170,12 +168,12 @@ td.widget_label_right_166px {
   padding: 4px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
   text-align: right;
   background-image: url("img/widget_label_background_large.gif");
-  background-repeat: no repeat;
+  background-repeat: no-repeat;
   background-position: top right;
 }
 
@@ -184,7 +182,7 @@ td.widget_label_stock {
   background-color: #eeeeee;
   color: #666666;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   background-image: url("img/widget_label_alt_background.gif");
 }
@@ -192,16 +190,15 @@ td.widget_content_stock {
   padding: 5px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
-  white-space: nowrap;
 }
 
 td.widget_content {
   padding: 5px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
   vertical-align: top;
 }
@@ -209,7 +206,7 @@ td.widget_content_nowrap {
   padding: 5px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
   vertical-align: top;
   white-space: nowrap;
@@ -218,7 +215,7 @@ td.widget_content_center {
   padding: 5px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
   text-align: center;
 }
@@ -226,7 +223,7 @@ td.widget_content_right {
   padding: 5px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
   text-align: right;
 }
@@ -234,7 +231,7 @@ td.widget_content_graph {
   padding: 5px;
   background-color: #bbbbbb;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #ffffee;
   text-align: center;
 }
@@ -243,16 +240,15 @@ td.widget_content_market1 {
   padding: 5px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
-  white-space: nowrap;
 }
 
 td.widget_content_alt, widget_content_market2 {
   padding: 5px;
   background-color: #ffffee;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
 }
 
@@ -261,7 +257,7 @@ td.widget_content_form_element {
   vertical-align: middle;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
 }
 
@@ -270,9 +266,8 @@ td.widget_content_form_element_center {
   vertical-align: middle;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
-  white-space: nowrap;
   text-align: center;
 }
 
@@ -280,7 +275,7 @@ td.widget_label_pager_navbar {
   padding: 5px;
   background-color: #eeeeee;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #666666;
   text-align: center;
@@ -292,11 +287,10 @@ td.sublabel {
   padding-top: 1px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #666666;
   font-weight: bold;
   text-align: right;
-  white-space: nowrap;
 }
 td.clear {
   vertical-align: top;
@@ -304,43 +298,43 @@ td.clear {
   padding-top: 1px;
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: normal;
   color: #333333;
 }
 
-td.offer {
+/* td.offer {
   padding: 5px;
   background-color: White;
   font-family: tahoma;
-  font-size: 8pt;
+  font-size: xx-small;
 }
 td.requirement {
   padding: 5px;
   background-color: #eeeeee;
   font-family: tahoma;
-  font-size: 8pt;
-}
+  font-size: xx-small;
+} */
 
 td.open_activity {
   padding: 5px;
   background-color: White;
   font-family: arial;
-  font-size:9pt;
+  font-size: x-small;
   color: #333333;
 }
 td.closed_activity {
   padding: 5px;
-  background-color: Gainsboro;
+  background-color: #dcdcdc;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #333333;
 }
 td.overdue_activity {
   padding: 5px;
   background-color: #ff7777;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #ffffee;
 }
 
@@ -356,7 +350,7 @@ td.non_uploaded_file {
   padding: 5px;
   background-color: #ff7777;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: #ffffee;
   font-weight: bold;
 }
@@ -365,7 +359,9 @@ td.order_status_large {
   height: 50px;
   padding: 5px;
   background-color: White;
-  font: bold 14pt tahoma;
+  font-family: tahoma;
+  font-weight: bold;
+  font-size: large;
   color: #444444;
   text-align: center;
 }
@@ -407,14 +403,14 @@ td.widget_header_warning {
   background-color: #ff3333;
   color: White;
   font-family: verdana;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: bold;
 }
 td.widget_content_warning {
   padding: 3px;
   background-color: #eeeeee;
   font-family: verdana;
-  font-size: 9pt;
+  font-size: x-small;
   font-weight: bold;
   color: #ff3333;
   text-align: center;
@@ -432,7 +428,7 @@ a:hover {
 
 /* a.new {
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   color: White;
   text-decoration: none;
 } */
@@ -447,18 +443,18 @@ td.rcol {
 input, select, textarea {
   background-color: White;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   margin: 0px;
 }
 input.monospace, select.monospace, textarea.monospace {
   font-family: courier;
-  font-size: 9pt;
+  font-size: x-small;
 }
 input.button {
   border: 1px solid #999999;
   background-color: #ffcc99;
   font-family: arial;
-  font-size: 9pt;
+  font-size: x-small;
   margin: 0px;
 }
 
