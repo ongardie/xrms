@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.90 2004/08/30 14:09:23 neildogg Exp $
+ * $Id: utils-misc.php,v 1.91 2004/08/30 14:50:08 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -848,17 +848,22 @@ function time_zone_offset($con, $address_id) {
  */
 
  function calculate_time_zone_time($con, $daylight_savings_id, $offset) {
-    update_daylight_savings($con);
-    $sql = "SELECT current_hour_shift
-            FROM time_daylight_savings
-            WHERE daylight_savings_id=" . $daylight_savings_id;
-    $rst = $con->execute($sql);
+    if($daylight_savings_id) {
+        update_daylight_savings($con);
+        $sql = "SELECT current_hour_shift
+                FROM time_daylight_savings
+                WHERE daylight_savings_id=" . $daylight_savings_id;
+        $rst = $con->execute($sql);
+    }
 
     if(!$rst) {
         db_error_handler($con, $sql);
     }
-    elseif(!$rst->EOF and $daylight_savings_id) {
+    elseif(!$rst->EOF) {
         return time() + ($offset*3600) + ($rst->fields['current_hour_shift']*3600);
+    }
+    elseif($offset) {
+        return time() + ($offset*3600);
     }
     else {
         return false;
@@ -1270,6 +1275,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.91  2004/08/30 14:50:08  neildogg
+ * - Time zone now functions properly on missing variable
+ *
  * Revision 1.90  2004/08/30 14:09:23  neildogg
  * - Rollback errant commit
  *
