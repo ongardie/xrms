@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.13 2005/01/06 20:53:38 vanmer Exp $
+ * $Id: new.php,v 1.14 2005/01/07 02:00:01 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -124,7 +124,10 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
-                <td class=widget_content_form_element><?php  echo $case_status_menu ?></td>
+                <td class=widget_content_form_element>
+                    <?php  echo $case_status_menu ?>
+                    <a href="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Priority"); ?></td>
@@ -207,6 +210,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.14  2005/01/07 02:00:01  braverock
+ * - add link to case status pop-up
+ *
  * Revision 1.13  2005/01/06 20:53:38  vanmer
  * - added retrieve/display of division_id to edit and new pages
  *

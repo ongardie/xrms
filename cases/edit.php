@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.14 2005/01/06 20:53:38 vanmer Exp $
+ * $Id: edit.php,v 1.15 2005/01/07 01:59:31 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -174,8 +174,8 @@ confGoTo_includes();
 
         <form action=edit-2.php onsubmit="javascript: return validate();" method=post>
         <input type=hidden name=case_id value=<?php  echo $case_id; ?>>
-	<input type=hidden name=company_id value=<?php echo $company_id; ?>>
-	<input type=hidden name=on_what_table value=<?php echo "cases"; ?>>
+        <input type=hidden name=company_id value=<?php echo $company_id; ?>>
+        <input type=hidden name=on_what_table value=<?php echo "cases"; ?>>
 
 
         <table class=widget cellspacing=1>
@@ -204,7 +204,10 @@ confGoTo_includes();
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
-                <td class=widget_content_form_element><?php  echo $case_status_menu; ?></td>
+                <td class=widget_content_form_element>
+                    <?php  echo $case_status_menu; ?>
+                    <a href="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Priority"); ?></td>
@@ -231,7 +234,7 @@ confGoTo_includes();
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
 <?php
-		$quest  = _('Delete Case?');
+                $quest  = _('Delete Case?');
                 $button = _('Delete');
                 $to_url = "delete.php?case_id=$case_id";
                 confGoTo( $quest, $button, $to_url );
@@ -297,6 +300,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.15  2005/01/07 01:59:31  braverock
+ * - add link to case status pop-up
+ *
  * Revision 1.14  2005/01/06 20:53:38  vanmer
  * - added retrieve/display of division_id to edit and new pages
  *

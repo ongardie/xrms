@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.23 2005/01/06 20:54:36 vanmer Exp $
+ * $Id: one.php,v 1.24 2005/01/07 01:58:52 braverock Exp $
  */
 
 //include required files
@@ -220,7 +220,10 @@ start_page($page_title, true, $msg);
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Status"); ?></td>
-                                    <td class=clear><?php  echo $case_status_display_html; ?></td>
+                                    <td class=clear>
+                                        <?php  echo $case_status_display_html; ?>
+                                        <a href="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Priority"); ?></td>
@@ -347,6 +350,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.24  2005/01/07 01:58:52  braverock
+ * - add link to case status pop-up
+ *
  * Revision 1.23  2005/01/06 20:54:36  vanmer
  * - moved setup of initial values to above session_check (for ACL)
  * - added division to display of one case, if available
