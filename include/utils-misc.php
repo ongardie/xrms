@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.39 2004/07/06 21:28:40 neildogg Exp $
+ * $Id: utils-misc.php,v 1.40 2004/07/07 14:35:28 maulani Exp $
  */
 
 /**
@@ -432,6 +432,11 @@ function fetch_division_id($con, $division_name, $company_id) {
 function show_test_values($param1 = '', $param2 = '', $param3 = '', $param4 = '', $param5 = '') {
 
     $session_username = $_SESSION['username'];
+    $p1 = htmlentities ($param1, ENT_QUOTES );
+    $p2 = htmlentities ($param2, ENT_QUOTES );
+    $p3 = htmlentities ($param3, ENT_QUOTES );
+    $p4 = htmlentities ($param4, ENT_QUOTES );
+    $p5 = htmlentities ($param5, ENT_QUOTES );
 
     echo <<<EOQ
     <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
@@ -442,11 +447,11 @@ function show_test_values($param1 = '', $param2 = '', $param3 = '', $param4 = ''
     </head>
     <body>
     Username = $session_username<BR>
-    Param1   = $param1<BR>
-    Param2   = $param2<BR>
-    Param3   = $param3<BR>
-    Param4   = $param4<BR>
-    Param5   = $param5<BR>
+    Param1   = $p1<BR>
+    Param2   = $p2<BR>
+    Param3   = $p3<BR>
+    Param4   = $p4<BR>
+    Param5   = $p5<BR>
     </body>
     </html>
 EOQ;
@@ -685,6 +690,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.40  2004/07/07 14:35:28  maulani
+ * - Fix bug in show_test_values.  HTML entities need to be properly formatted for display
+ *
  * Revision 1.39  2004/07/06 21:28:40  neildogg
  * - Now supports multiple formatting, based on country
  * - New column in countries specifies format, e.g. (###) ###-####
