@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.24 2004/07/22 15:19:02 gpowers Exp $
+ * $Id: utils-interface.php,v 1.25 2004/07/25 13:07:55 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -68,8 +68,8 @@ function status_msg($msg) {
         // handle unknown messages
         default:
             if ( $msg ) {
-	            // at least TRY to return a message
-	            return _("$msg.");
+                    // at least TRY to return a message
+                    return _("$msg.");
             }
             break;
     }
@@ -161,7 +161,7 @@ function end_page() {
 /**
  * build salutation menu
  *
- * @todo localize this using gettext, not included strings.
+ * @todo move the salutation strings into the database, and make configurable
  *
  * @param integer $salutation
  * @return string $salutation_menu
@@ -170,9 +170,7 @@ function build_salutation_menu($salutation) {
 
     global $include_directory;
 
-    require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
-
-    // global $salutation_array;
+    $salutation_array = array(_("Mr."), _("Ms."), _("Mrs."), _("Miss"), _("Dr."), _("Rev."));
 
     $salutation_menu  = "<select name=salutation>";
     $salutation_menu .= "\n<option value=0 > ";
@@ -211,6 +209,11 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.25  2004/07/25 13:07:55  braverock
+ * - remove lang file require_once, as it is no longer used
+ * - move salutation array into the build_salutation_menu fn
+ * - localize the salutation strings in the array for now
+ *
  * Revision 1.24  2004/07/22 15:19:02  gpowers
  * - Added status_msg's
  *   - Fixed SF bug [ 993841 ] unhandled $msg's
