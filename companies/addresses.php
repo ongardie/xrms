@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.11 2004/06/09 18:05:56 gpowers Exp $
+ * $Id: addresses.php,v 1.12 2004/06/09 18:07:52 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -35,7 +35,6 @@ if ($rst) {
         $addresses .= '<tr>';
         $addresses .= "<td class=widget_label_right_91px><a href=edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a></td>';
         $address_to_display = get_formatted_address($con, $rst->fields['address_id']);
-        $addresses .= "<td class=widget_content>$address_to_display</td>";
 
         $sql2 = "select contact_id, address_id, last_name, first_names  from contacts
         where address_id = " . $rst->fields['address_id'];
@@ -46,6 +45,7 @@ if ($rst) {
                     . $rst2->fields['first_names'] . " "
                     . $rst2->fields['last_name'] . "</a></td>";
 
+        $addresses .= "<td class=widget_content>$address_to_display</td>";
         $addresses .= "<td class=widget_content><input type=radio name=default_primary_address value=" . $rst->fields['address_id'];
 
         if ($rst->fields['default_primary_address'] == $rst->fields['address_id']) {
@@ -184,6 +184,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.12  2004/06/09 18:07:52  gpowers
+ * - fixed reversal of "Used by Contacts" and "Formatted Address" columns
+ *
  * Revision 1.11  2004/06/09 18:05:56  gpowers
  * - added "Used by Contacts" which lists which contacts are using each
  *   address, this also allows Billing/Shipping/Payment address for a
