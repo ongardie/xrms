@@ -2,7 +2,7 @@
 /**
  * Add Former Name
  *
- * $Id: add-former-name.php,v 1.3 2004/05/06 13:33:39 gpowers Exp $
+ * $Id: add-former-name.php,v 1.4 2004/05/10 13:09:14 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -24,7 +24,7 @@ $sql = "insert into company_former_names (company_id, namechange_at, former_name
 
 $con->execute($sql);
 
-add_audit_item($con, $session_user_id, 'add former name', 'companies', $company_id);
+add_audit_item($con, $session_user_id, 'created', 'company_former_names', $company_id, 1);
 
 $con->close();
 
@@ -32,6 +32,9 @@ header("Location: former-names.php?company_id=$company_id");
 
 /**
  * $Log: add-former-name.php,v $
+ * Revision 1.4  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.3  2004/05/06 13:33:39  gpowers
  * changed return URL to former-names.php
  *

@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.11 2004/03/26 20:55:59 maulani Exp $
+ * $Id: new-2.php,v 1.12 2004/05/10 13:09:14 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -144,7 +144,7 @@ if (strlen($accounting_system) > 0) {
     add_accounting_vendor($con, $company_id, $company_name, $company_code, $vendor_credit_limit, $vendor_terms);
 }
 
-add_audit_item($con, $session_user_id, 'new company', 'companies', $company_id);
+add_audit_item($con, $session_user_id, 'created', 'companies', $company_id, 1);
 
 $con->close();
 
@@ -153,6 +153,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.12  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.11  2004/03/26 20:55:59  maulani
  * - Add audit trail to company-related items
  * - Add phpdoc

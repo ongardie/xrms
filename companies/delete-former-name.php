@@ -2,7 +2,7 @@
 /**
  * Add Former Name
  *
- * $Id: delete-former-name.php,v 1.1 2004/05/06 13:35:54 gpowers Exp $
+ * $Id: delete-former-name.php,v 1.2 2004/05/10 13:09:14 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -24,7 +24,7 @@ $sql = "delete from company_former_names where company_id = " . $company_id  . "
 
 $con->execute($sql);
 
-add_audit_item($con, $session_user_id, 'deleted former name', 'companies', $company_id);
+add_audit_item($con, $session_user_id, 'deleted', 'company_former_names', $company_id, 1);
 
 $con->close();
 
@@ -32,6 +32,9 @@ header("Location: former-names.php?company_id=$company_id");
 
 /**
  * $Log: delete-former-name.php,v $
+ * Revision 1.2  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.1  2004/05/06 13:35:54  gpowers
  * This implements the deletion of Former Names.
  *

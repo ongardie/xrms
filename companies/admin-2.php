@@ -2,7 +2,7 @@
 /**
  * Insert company admin items into the database
  *
- * $Id: admin-2.php,v 1.3 2004/03/26 20:55:59 maulani Exp $
+ * $Id: admin-2.php,v 1.4 2004/05/10 13:09:14 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -38,7 +38,7 @@ $extref1 = $rst->fields['extref1'];
 $extref2 = $rst->fields['extref2'];
 $rst->close();
 
-add_audit_item($con, $session_user_id, 'edit company admin', 'companies', $company_id);
+add_audit_item($con, $session_user_id, 'updated company admin', 'companies', $company_id, 1);
 
 $con->close();
 
@@ -49,6 +49,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: admin-2.php,v $
+ * Revision 1.4  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.3  2004/03/26 20:55:59  maulani
  * - Add audit trail to company-related items
  * - Add phpdoc

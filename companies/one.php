@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.34 2004/05/06 13:55:49 braverock Exp $
+ * $Id: one.php,v 1.35 2004/05/10 13:09:14 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -330,7 +330,7 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
-add_audit_item($con, $session_user_id, 'view company', 'companies', $company_id);
+add_audit_item($con, $session_user_id, 'viewed', 'companies', $company_id, 3);
 
 $con->close();
 
@@ -654,6 +654,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.35  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.34  2004/05/06 13:55:49  braverock
  * -add industry search to Companies
  *  - modified form of SF patch 949147 submitted by frenchman

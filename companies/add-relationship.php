@@ -2,7 +2,7 @@
 /**
  * Add Relationship
  *
- * $Id: add-relationship.php,v 1.2 2004/03/26 20:55:59 maulani Exp $
+ * $Id: add-relationship.php,v 1.3 2004/05/10 13:09:14 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -31,11 +31,13 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "insert into company_relationship (company_from_id, relationship_type, company_to_id, established_at) values (" . $company_id . ", '" . $relation_array[$relation] . "', " . $company2_id . ", now())";
 $con->execute($sql);
 
+add_audit_item($con, $session_user_id, 'created', 'company_relationship', $company_id, 1);
+
 
 $sql = "insert into company_relationship (company_from_id, relationship_type, company_to_id, established_at) values (" . $company2_id . ", '" . $relation_array[$relation2] . "', " . $company_id . ", now())";
 $con->execute($sql);
 
-add_audit_item($con, $session_user_id, 'add relationship', 'companies', $company_id);
+add_audit_item($con, $session_user_id, 'created', 'company_relationship', $company2_id, 1);
 
 $con->close();
 
@@ -43,6 +45,9 @@ header("Location: relationships.php?company_id=$company_id");
 
 /**
  * $Log: add-relationship.php,v $
+ * Revision 1.3  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.2  2004/03/26 20:55:59  maulani
  * - Add audit trail to company-related items
  * - Add phpdoc

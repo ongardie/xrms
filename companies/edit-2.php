@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.9 2004/03/26 20:55:59 maulani Exp $
+ * $Id: edit-2.php,v 1.10 2004/05/10 13:09:14 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -69,12 +69,15 @@ $sql = "update companies set
 
 $con->execute($sql);
 
-add_audit_item($con, $session_user_id, 'edit company', 'companies', $company_id);
+add_audit_item($con, $session_user_id, 'updated', 'companies', $company_id, 1);
 
 header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.10  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.9  2004/03/26 20:55:59  maulani
  * - Add audit trail to company-related items
  * - Add phpdoc

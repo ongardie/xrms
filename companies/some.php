@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.11 2004/05/06 13:55:49 braverock Exp $
+ * $Id: some.php,v 1.12 2004/05/10 13:09:14 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -251,7 +251,7 @@ $industry_menu = $rst->getmenu2('industry_id', $industry_id, true);
 $rst->close();
 
 if ($criteria_count > 0) {
-    add_audit_item($con, $session_user_id, 'search companies', '', '');
+    add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
 }
 
 $page_title = $strCompaniesSomePageTitle;
@@ -377,6 +377,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.11  2004/05/06 13:55:49  braverock
  * -add industry search to Companies
  *  - modified form of SF patch 949147 submitted by frenchman

@@ -2,7 +2,7 @@
 /**
  * Add Former Name
  *
- * $Id: delete-relationship.php,v 1.1 2004/05/06 13:35:24 gpowers Exp $
+ * $Id: delete-relationship.php,v 1.2 2004/05/10 13:09:14 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -27,7 +27,7 @@ $sql = "delete from company_relationship where company_from_id = " .  $con->qstr
 
 $con->execute($sql);
 
-add_audit_item($con, $session_user_id, 'deleted company relationship', 'companies', $company_id);
+add_audit_item($con, $session_user_id, 'deleted', 'company_relationship', $company_id, 1);
 
 $con->close();
 
@@ -35,6 +35,9 @@ header("Location: relationships.php?company_id=$company_from_id");
 
 /**
  * $Log: delete-relationship.php,v $
+ * Revision 1.2  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.1  2004/05/06 13:35:24  gpowers
  * This implements the deletion of relationships.
  *

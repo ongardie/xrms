@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.2 2004/03/26 20:55:59 maulani Exp $
+ * $Id: add-division.php,v 1.3 2004/05/10 13:09:14 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -35,7 +35,9 @@ $sql = "insert into company_division set
 
 $con->execute($sql);
 
-add_audit_item($con, $session_user_id, 'add division', 'companies', $company_id);
+$division_id = $con->insert_id();
+
+add_audit_item($con, $session_user_id, 'created', 'company_division', $division_id, 1);
 
 $con->close();
 
@@ -43,6 +45,9 @@ header("Location: divisions.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.3  2004/05/10 13:09:14  maulani
+ * - add level to audit trail
+ *
  * Revision 1.2  2004/03/26 20:55:59  maulani
  * - Add audit trail to company-related items
  * - Add phpdoc
