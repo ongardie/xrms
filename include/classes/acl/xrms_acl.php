@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.4 2005/02/14 21:28:36 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.5 2005/02/15 19:35:51 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -184,17 +184,17 @@ class xrms_acl {
      *
      * @param integer ControlledObject_id for which to find parents
      * @param integer on_what_id to specify which particular ControlledObject to check
-     * @param integer ControlledObjectRelationship_id optional parameter to specify in which ControlledObjectRelationship the referenced ControlledObject is the child
+     * @param integer CORelationship_id optional parameter to specify in which ControlledObjectRelationship the referenced ControlledObject is the child
      * @return Array containing an array indexed by ControlledObjectRelation_id, specifying the parent ControlledObject_id and on_what_id
      *
      **/
-    function get_object_relationship_parent($ControlledObject_id, $on_what_id, $ControlledObjectRelationship_id=false, $objectData=false) {
+    function get_object_relationship_parent($ControlledObject_id, $on_what_id, $CORelationship_id=false, $objectData=false) {
         $con = $this->DBConnection;
         $table = "ControlledObjectRelationship";
         $objectList=array();
         
-        $sql = "SELECT ControlledObjectRelationship_id, ParentControlledObject_id, on_what_field, on_what_table, on_what_child_field, on_what_parent_field, cross_table, singular FROM $table JOIN ControlledObject ON ControlledObject_id=ParentControlledObject_id WHERE ChildControlledObject_id=$ControlledObject_id";
-        if ($ControlledObjectRelationship_id) { $sql .=" AND ControlledObjectRelationship_id=$ControlledObjectRelationship_id"; }
+        $sql = "SELECT CORelationship_id, ParentControlledObject_id, on_what_field, on_what_table, on_what_child_field, on_what_parent_field, cross_table, singular FROM $table JOIN ControlledObject ON ControlledObject_id=ParentControlledObject_id WHERE ChildControlledObject_id=$ControlledObject_id";
+        if ($CORelationship_id) { $sql .=" AND CORelationship_id=$CORelationship_id"; }
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
         if ($rs->numRows()>0) {
@@ -214,7 +214,7 @@ class xrms_acl {
                         }
                     }
                     if (count($ret)>0) {
-                        $objectList[$rs->fields['ControlledObjectRelationship_id']] = $ret;
+                        $objectList[$rs->fields['CORelationship_id']] = $ret;
                     }                    
                 } else {
                     if (!$objectData) { $objectData = $this->get_controlled_object_data($ControlledObject_id, $on_what_id); }
@@ -222,11 +222,11 @@ class xrms_acl {
                         if ($rs->fields['singular']==1) {
                             $on_what_table=$objectData['on_what_table'];
                             if ($rs->fields['on_what_table']==$objectData['on_what_table']) {
-                                $objectList[$rs->fields['ControlledObjectRelationship_id']] = array('ControlledObject_id'=>$rs->fields['ParentControlledObject_id'],'on_what_id'=>$objectData['on_what_id']);
+                                $objectList[$rs->fields['CORelationship_id']] = array('ControlledObject_id'=>$rs->fields['ParentControlledObject_id'],'on_what_id'=>$objectData['on_what_id']);
                             }
                         }
                         else {
-                            $objectList[$rs->fields['ControlledObjectRelationship_id']] = array('ControlledObject_id'=>$rs->fields['ParentControlledObject_id'],'on_what_id'=>$objectData[$on_what_child_field]);
+                            $objectList[$rs->fields['CORelationship_id']] = array('ControlledObject_id'=>$rs->fields['ParentControlledObject_id'],'on_what_id'=>$objectData[$on_what_child_field]);
                         }
                     }
                 }
@@ -300,7 +300,7 @@ class xrms_acl {
             }
             
             $wherestr = implode(" $operator ", $where);
-            $sql = "SELECT $on_what_field FROM $on_what_table";
+            $sql = "SELECT * FROM $on_what_table";
             if ($wherestr) {
                 $sql .= " WHERE $wherestr";
             }
@@ -401,19 +401,21 @@ class xrms_acl {
      *
      * @param integer ControlledObject_id identifying which object to retrieve a list of groups
      * @param integer on_what_id identifying which particular object ID to search for
-     * @param integer $_ControlledObjectRelationship_id optionally specify which branch of the tree to search up
+     * @param integer $_CORelationship_id optionally specify which branch of the tree to search up
      * @return Array containing a collection of groups
      *
      **/
-    function get_object_groups_recursive($ControlledObject_id,$on_what_id,$_ControlledObjectRelationship_id=false) {
+    function get_object_groups_recursive($ControlledObject_id,$on_what_id,$_CORelationship_id=false) {
+//    	echo "$ControlledObject_id,$on_what_id,$_CORelationship_id=false";
+    	if (!$on_what_id) return false;
         //get the group list for this level
         $groupList = $this->get_object_groups($ControlledObject_id, $on_what_id);
         if (!$groupList) { $groupList = array(); }
         
         //get the list of parent objects
-        $objectParents = $this->get_object_relationship_parent($ControlledObject_id, $on_what_id, $_ControlledObjectRelationship_id);        
+        $objectParents = $this->get_object_relationship_parent($ControlledObject_id, $on_what_id, $_CORelationship_id);
         if ($objectParents AND is_array($objectParents)) {
-            foreach ($objectParents as $ControlledObjectRelationship_id => $aparent) {
+            foreach ($objectParents as $CORelationship_id => $aparent) {
                 //get the group list of all parent objects
                 if (!is_array(current($aparent))) $aparent=array($aparent);
                 foreach ($aparent as $parent) {
@@ -943,8 +945,8 @@ class xrms_acl {
        * @return integer RolePermission_id with new identifier for new entry for the relationship or false if duplicate/failed (or array if no on_what_id is specified)
        *
        */
-    function get_role_permission($Role_id=false, $ControlledObjectRelationship_id=false, $Scope=false, $Permission_id=false, $RolePermission_id=false) {
-        if (!$Role_id and !$ControlledObjectRelationship_id and !$RolePermission_id) { return false; }
+    function get_role_permission($Role_id=false, $CORelationship_id=false, $Scope=false, $Permission_id=false, $RolePermission_id=false) {
+        if (!$Role_id and !$CORelationship_id and !$RolePermission_id) { return false; }
         $tblName = "RolePermission";
         
         $con = $this->DBConnection;
@@ -953,7 +955,7 @@ class xrms_acl {
         if ($RolePermission_id) { $where[]="RolePermission_id=$RolePermission_id"; }
         else {
             if ($Role_id) { $where[]="Role_id=$Role_id"; }
-            if ($ControlledObjectRelationship_id) { $where[]="ControlledObjectRelationship_id=$ControlledObjectRelationship_id"; }
+            if ($CORelationship_id) { $where[]="CORelationship_id=$CORelationship_id"; }
             if ($Permission_id) { $where[]="Permission_id=$Permission_id"; }
             if ($Scope) { $where[]="Scope=" . $con->qstr($Scope,get_magic_quotes_gpc()); }
             
@@ -985,23 +987,23 @@ class xrms_acl {
        * Adds a permission on a type of controlled object to a role
        *
        * @param integer Role_id specifying which role to add this permission to
-       * @param integer ControlledObjectRelationship_id specifying which controlled object the permission applies to
+       * @param integer CORelationship_id specifying which controlled object the permission applies to
        * @param string Scope determining what scope the permission should apply to (currently World, Group and User)
        * @param integer Permission_id specifying which type of permission to add on this controlled object for this role
        * @return integer RolePermission_id with new identifier for role permission in the database or false if duplicate/failed
        *
        */
-     function add_role_permission ($Role_id, $ControlledObjectRelationship_id, $Scope, $Permission_id) {
-        if (!$Role_id or !$ControlledObjectRelationship_id or !$Scope or !$Permission_id) { return false; }
+     function add_role_permission ($Role_id, $CORelationship_id, $Scope, $Permission_id) {
+        if (!$Role_id or !$CORelationship_id or !$Scope or !$Permission_id) { return false; }
         
         $tblName="RolePermission";
         $con = $this->DBConnection;
         
         //no duplicates
-        if ($this->get_role_permission($Role_id, $ControlledObjectRelationship_id, $Scope, $Permission_id)!==false) { return false; }
+        if ($this->get_role_permission($Role_id, $CORelationship_id, $Scope, $Permission_id)!==false) { return false; }
         
         $RolePermissionRow['Role_id']=$Role_id;
-        $RolePermissionRow['ControlledObjectRelationship_id']=$ControlledObjectRelationship_id;
+        $RolePermissionRow['CORelationship_id']=$CORelationship_id;
         $RolePermissionRow['Scope']=$con->qstr($Scope);    
         $RolePermissionRow['Permission_id']=$Permission_id;        
         
@@ -1222,21 +1224,21 @@ class xrms_acl {
        *
        * @param integer ParentControlledObject_id to specify which object is the parent in the relationship
        * @param integer ChildControlledObject_id to specify which object is the child in the relationship
-       * @return integer ControlledObjectRelationship_id with new identifier for new entry for the relationship or false if duplicate/failed (or array if no on_what_id is specified)
+       * @return integer CORelationship_id with new identifier for new entry for the relationship or false if duplicate/failed (or array if no on_what_id is specified)
        *
        */
     function get_controlled_object_relationship($ParentControlledObject_id=false, 
                                                 $ChildControlledObject_id=false,
-                                                $ControlledObjectRelationship_id=false,
+                                                $CORelationship_id=false,
                                                 $IncludeControlledObject=false) 
         {
-//        if (!$ParentControlledObject_id and !$ChildControlledObject_id and !$ControlledObjectRelationship_id) { return false; }
+//        if (!$ParentControlledObject_id and !$ChildControlledObject_id and !$CORelationship_id) { return false; }
         $tblName = "ControlledObjectRelationship";
         
         $con = $this->DBConnection;
         $where=array();
         
-        if ($ControlledObjectRelationship_id) { $where[]="ControlledObjectRelationship_id=$ControlledObjectRelationship_id"; }
+        if ($CORelationship_id) { $where[]="CORelationship_id=$CORelationship_id"; }
         else {
             if ($ParentControlledObject_id) { $where[]="ParentControlledObject_id=$ParentControlledObject_id"; }
             if ($ChildControlledObject_id) { $where[]="ChildControlledObject_id=$ChildControlledObject_id"; }
@@ -1257,7 +1259,7 @@ class xrms_acl {
         if (!$rs) { db_error_handler($con, $sql); return false; }
         if ($rs->numRows()>1) {
             while (!$rs->EOF) {
-                $ret[$rs->fields['ControlledObjectRelationship_id']] = $rs->fields;
+                $ret[$rs->fields['CORelationship_id']] = $rs->fields;
                 $rs->movenext();
             }
             return $ret;
@@ -1276,7 +1278,7 @@ class xrms_acl {
        *
        * @param integer parentControlledObject_id identifier for parent controlled object
        * @param integer childControlledObject_id identifier for parent controlled object
-       * @return integer ControlledObjectRelationship_id with identifier for newly added ControlledObjectRelationship, or false if duplicate/failed
+       * @return integer CORelationship_id with identifier for newly added ControlledObjectRelationship, or false if duplicate/failed
        *
        */
     function add_controlled_object_relationship($parentControlledObject_id, $childControlledObject_id, $on_what_child_field=false, $on_what_parent_field=false, $cross_table=false, $singular=false) {
@@ -1312,16 +1314,16 @@ class xrms_acl {
        *
        * Deletes a parent-child relationship between controlled objects
        *
-       * @param integer ControlledObjectRelationship_id specifying which controlled object relationship to delete
+       * @param integer CORelationship_id specifying which controlled object relationship to delete
        * @return bool indicating success (true) or failure (false) of delete
        *
        */
-    function delete_controlled_object_relationship($ControlledObjectRelationship_id) {
-        if (!$ControlledObjectRelationship_id) { return false; }
+    function delete_controlled_object_relationship($CORelationship_id) {
+        if (!$CORelationship_id) { return false; }
         $tblName="ControlledObjectRelationship";
         $con = $this->DBConnection;
         
-        $sql = "Delete from $tblName WHERE ControlledObjectRelationship_id=$ControlledObjectRelationship_id";
+        $sql = "Delete from $tblName WHERE CORelationship_id=$CORelationship_id";
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
         else return true;         
@@ -1358,11 +1360,11 @@ class xrms_acl {
      *
      * Returns the parent in a ControlledObjectRelationship
      *
-     * @param integer ControlledObjectRelationship_id identifying group for which to retrieve the parent
+     * @param integer CORelationship_id identifying group for which to retrieve the parent
      * @return integer ParentControlledObject_id which is the parent in the specified relationship
      *
      **/
-    function get_controlled_object_relationship_parent($ControlledObjectRelationship_id) {
+    function get_controlled_object_relationship_parent($CORelationship_id) {
     
     }
 
@@ -1371,11 +1373,11 @@ class xrms_acl {
      *
      * Returns the child in a ControlledObjectRelationship
      *
-     * @param integer ControlledObjectRelationship_id identifying the ControlledObject for which to retrieve the child
+     * @param integer CORelationship_id identifying the ControlledObject for which to retrieve the child
      * @return integer ChildControlledObject_id which is the child in the specified relationship
      *
      **/
-    function get_controlled_object_relationship_child($ControlledObjectRelationship_id) {
+    function get_controlled_object_relationship_child($CORelationship_id) {
     
     }
 
@@ -1496,10 +1498,10 @@ class xrms_acl {
             //LOOP ON ALL ROLES HELD BY USER IN ALL GROUPS
             foreach ($RoleList as $urKey=>$Role) {
                 foreach ($ControlledObjectRelationships as $ControlledObjectRelationship) {
-                     $ControlledObjectRelationship_id=$ControlledObjectRelationship["ControlledObjectRelationship_id"];
+                     $CORelationship_id=$ControlledObjectRelationship["CORelationship_id"];
                     //Search for permission for all roles on controlled object relationships
-                    $RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission_id);
-//                    echo "$RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission_id)";
+                    $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id);
+//                    echo "$RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id)";
                     
                     if ($RolePermission) {
                         switch ($Scope) {
@@ -1547,10 +1549,10 @@ class xrms_acl {
         foreach ($GroupRoleList as $Group_id=>$RoleList) {
             foreach($RoleList as $Role) {
                 foreach ($ControlledObjectRelationships as $ControlledObjectRelationship) {
-                    $ControlledObjectRelationship_id=$ControlledObjectRelationship["ControlledObjectRelationship_id"];
+                    $CORelationship_id=$ControlledObjectRelationship["CORelationship_id"];
                     //Search for permission for all roles on controlled object relationships
-                    $RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission_id);
-//                    echo "<pre>                    $RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission_id)";
+                    $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id);
+//                    echo "<pre>                    $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id)";
                     if ($RolePermission) {
 //                        print_r($RolePermission);
                         //GROUP SCOPE
@@ -1695,14 +1697,14 @@ class xrms_acl {
      *
      * @param integer ControlledObject_id identifying which class of ControlledObject to check permissions on
      * @param integer User_id identifying which group to check permissions on
-     * @param integer _ControlledObjectRelationship_id optional, identifying in what relationship of the controlled object to check permissions on
+     * @param integer _CORelationship_id optional, identifying in what relationship of the controlled object to check permissions on
      * @param array PermissionList of Permission_id's to search for (or integer to only search for one)
      * @return array of Permission_ids on a class of ControlledObject for a user
     */    
     function get_permission_user_object(
                                                     $ControlledObject_id, 
                                                     $User_id, 
-                                                    $_ControlledObjectRelationship_id=false,
+                                                    $_CORelationship_id=false,
                                                     $PermissionList=false
                                                   )                                                  
     {
@@ -1731,17 +1733,17 @@ class xrms_acl {
         }
         if (!is_array($ScopeList)) { $ScopeList=array($ScopeList); }
         $FoundPermissionList=array();    
-        $ControlledObjectRelationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, $_ControlledObjectRelationship_id, true);
+        $ControlledObjectRelationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, $_CORelationship_id, true);
 
         if (!$ControlledObjectRelationships) { $ControlledObjectRelationships=array(); }
         if (!is_array(current($ControlledObjectRelationships)) AND (count($ControlledObjectRelationships)>0)) {
             //if only one is found and it is not an array, put it in an array
-            $ControlledObjectRelationships=array($ControlledObjectRelationships['ControlledObjectRelationship_id']=>$ControlledObjectRelationships);
+            $ControlledObjectRelationships=array($ControlledObjectRelationships['CORelationship_id']=>$ControlledObjectRelationships);
         }
 //        echo "SEARCHING CONTROLLED OBJECTS: <pre>"; print_r($ControlledObjectRelationships);
-        foreach ($ControlledObjectRelationships as $ControlledObjectRelationship_id=>$ControlledObjectRelationship_data) {
+        foreach ($ControlledObjectRelationships as $CORelationship_id=>$ControlledObjectRelationship_data) {
             foreach ($UserRoleList as $Role) {
-                $RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_id);
+                $RolePermission = $this->get_role_permission($Role, $CORelationship_id);
                 if ($RolePermission) {
                     if (!is_array(current($RolePermission))) $RolePermission=array($RolePermission);
                     foreach ($RolePermission as $IndividualRolePerm) {
@@ -1788,7 +1790,7 @@ class xrms_acl {
      * @param integer ControlledObject_id identifying which ControlledObject to check permissions on
      * @param integer on_what_id with the identifier for the controlled object in the table
      * @param integer User_id identifying which group to check permissions on
-     * @param integer ControlledObjectRelationship_id optional, identifying in what relationship of the controlled object to check permissions on
+     * @param integer CORelationship_id optional, identifying in what relationship of the controlled object to check permissions on
      * @param array PermissionList of Permission_id's to search for (or integer to only search for one)
      * @return array of Permission_ids on a particular ControlledObject for a user
      *
@@ -1797,7 +1799,7 @@ class xrms_acl {
                                                     $ControlledObject_id, 
                                                     $on_what_id, 
                                                     $User_id, 
-                                                    $_ControlledObjectRelationship_id=false,
+                                                    $_CORelationship_id=false,
                                                     $PermissionList=false,
                                                     $_ControlledObjectRelationships=false,
                                                     $_ScopeList=false
@@ -1835,7 +1837,7 @@ class xrms_acl {
         $UserRoleList=$UserRoleList['Roles'];
         
 /*        //Get the groups which this particular controlled object exist in
-        $GroupList = $this->get_object_groups($ControlledObject_id,$on_what_id, $_ControlledObjectRelationship_id);
+        $GroupList = $this->get_object_groups($ControlledObject_id,$on_what_id, $_CORelationship_id);
         if (!$GroupList) { $SearchGroups=false; }
         else {
             //Get the roles this user has within the groups found
@@ -1847,13 +1849,13 @@ class xrms_acl {
         }
         */
         //get the list of possible parents to this controlled object
-        $ControlledObjectRelationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, $_ControlledObjectRelationship_id, true);
+        $ControlledObjectRelationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, $_CORelationship_id, true);
         
         //if none are found, make a blank array
         if (!$ControlledObjectRelationships) { $ControlledObjectRelationships=array(); }
         if (!is_array(current($ControlledObjectRelationships)) AND (count($ControlledObjectRelationships)>0)) {
             //if only one is found and it is not an array, put it in an array
-            $ControlledObjectRelationships=array($ControlledObjectRelationships['ControlledObjectRelationship_id']=>$ControlledObjectRelationships);
+            $ControlledObjectRelationships=array($ControlledObjectRelationships['CORelationship_id']=>$ControlledObjectRelationships);
         }
         if ($_ControlledObjectRelationships) {
             //if any relationships are passed in, use them or add them in to the list to search
@@ -1885,7 +1887,7 @@ class xrms_acl {
                     case 'Group':
                         if (!$on_what_id) { $SearchGroups=false; }//echo "No id provided, cannot check permissions"; return false; }
                         if ($SearchGroups) {
-                            $GroupList = $this->get_object_groups($ControlledObject_id,$on_what_id, $_ControlledObjectRelationship_id);
+                            $GroupList = $this->get_object_groups($ControlledObject_id,$on_what_id, $_CORelationship_id);
                             if (!$GroupList) { $SearchGroups=false; }
                             else {
                                 //Get the roles this user has within the groups found
@@ -1932,13 +1934,13 @@ class xrms_acl {
                 }
 //                echo "SEARCHING FOR ROLES:<pre>"; print_r($RoleList); echo "</pre>";
                 //Loop through the relationships in which this controlled object exists
-                foreach ($ControlledObjectRelationships as $ControlledObjectRelationship_id => $ControlledObjectRelationship) {
-                    if ($ControlledObjectRelationship_id AND $ControlledObjectRelationship_id>0) {
+                foreach ($ControlledObjectRelationships as $CORelationship_id => $ControlledObjectRelationship) {
+                    if ($CORelationship_id AND $CORelationship_id>0) {
                         //Loop through the Roles a user has for this controlled object
                         foreach ($RoleList as $Role) {
 //                            echo "SEARCHING ROLE $Role<br>";
                             //get permissions for this role on this ControlledObjectRelationship with the current scope
-                            $RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_id, $Scope);
+                            $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope);
                             if ($RolePermission) {
                                 if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
                                 //add up all permissions found
@@ -1960,11 +1962,11 @@ class xrms_acl {
             }
         }
         //Get parent objects for this particular controlled object
-        $objectParents = $this->get_object_relationship_parent($ControlledObject_id, $on_what_id, $_ControlledObjectRelationship_id, $objectData);
+        $objectParents = $this->get_object_relationship_parent($ControlledObject_id, $on_what_id, $_CORelationship_id, $objectData);
 
         //If there are any parents, loops through them and get permissions on them
         if ($objectParents AND is_array($objectParents)) {
-            foreach ($objectParents as $ControlledObjectRelationship_id=>$aparent) {
+            foreach ($objectParents as $CORelationship_id=>$aparent) {
                 //Recurse into parent objects to get permissions, only searching for permissions we haven't found yet
                 if (!is_array(current($aparent))) $aparent=array($aparent);
                 foreach ($aparent as $parent) {
@@ -2105,6 +2107,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.5  2005/02/15 19:35:51  vanmer
+ * - changed to reflect shorter fieldnames for controlled object relationships
+ * - removed change made to get_controlled_object_data which broke the ACL
+ *
  * Revision 1.4  2005/02/14 21:28:36  vanmer
  * - adjusted to no longer select all entities when checking permissions
  *
