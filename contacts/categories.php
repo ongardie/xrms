@@ -2,7 +2,7 @@
 /**
  * Set categories for a contact
  *
- * $Id: categories.php,v 1.5 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: categories.php,v 1.6 2004/07/13 15:37:24 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,7 +15,9 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+
+// make sure $msg is never undefined
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $contact_id = $_GET['contact_id'];
 
@@ -51,6 +53,8 @@ $rst = $con->execute($sql);
 $array_of_categories = array();
 array_push($array_of_categories, 0);
 
+$associated_with = '';
+
 if ($rst) {
     while (!$rst->EOF) {
         $associated_with .= "<a href='remove-category.php?contact_id=$contact_id&category_id=" . $rst->fields['category_id'] . "'>" . $rst->fields['category_display_html'] . "</a><br>";
@@ -72,8 +76,10 @@ and category_record_status = 'a'
 order by category_display_html";
 
 $rst = $con->execute($sql);
+$not_associated_with = '';
 
 if ($rst) {
+
     while (!$rst->EOF) {
         $not_associated_with .= "<a href='add-category.php?contact_id=$contact_id&category_id=" . $rst->fields['category_id'] . "'>" . $rst->fields['category_display_html'] . "</a><br>";
         $rst->movenext();
@@ -124,6 +130,9 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.6  2004/07/13 15:37:24  cpsource
+ * - Get rid of uninitialized variable usage.
+ *
  * Revision 1.5  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
