@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.5 2004/07/07 21:59:47 introspectshun Exp $
+ * $Id: edit-address-2.php,v 1.6 2004/07/08 17:33:58 gpowers Exp $
  */
 
 
@@ -31,7 +31,7 @@ $use_pretty_address = $_POST['use_pretty_address'];
 $new = $_POST['new'];
 $alt_address = $_POST['alt_address'];
 
-$use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
+$use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -46,7 +46,7 @@ if ($alt_address) {
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
-    
+
     add_audit_item($con, $session_user_id, 'changed address', 'contacts', $contact_id, 1);
 } elseif ($address_id && !$new) {
     $sql = "SELECT * FROM addresses WHERE address_id = $address_id";
@@ -110,6 +110,9 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.6  2004/07/08 17:33:58  gpowers
+ * - corrected quoting on ? "t" : "f";
+ *
  * Revision 1.5  2004/07/07 21:59:47  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
@@ -122,7 +125,7 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.5 2004/07/07 21:59:47 introspectshun Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.6 2004/07/08 17:33:58 gpowers Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
