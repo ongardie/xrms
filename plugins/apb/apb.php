@@ -1,15 +1,4 @@
-<?
-
-// include the common files
-require_once('../../include-locations.inc');
-
-require_once($include_directory . 'vars.php');
-require_once($include_directory . 'utils-interface.php');
-require_once($include_directory . 'utils-misc.php');
-
-$session_user_id = session_check();
-$user_id = $session_user_id;
-
+<?php
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
 //
@@ -23,6 +12,18 @@ $user_id = $session_user_id;
 // 2001-09-04   Starting on version 1.0 [NPH] [LBS]
 //
 //####################################################################
+
+// include the common files
+require_once('../../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
+
+$session_user_id = session_check();
+$user_id = $session_user_id;
 
 //////////////////////////////////////////////////////////////////////
 // Security check.

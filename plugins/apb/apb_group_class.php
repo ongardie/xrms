@@ -1,4 +1,4 @@
-<?
+<?php
 
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
@@ -171,8 +171,6 @@ class Group {
                    AND g.user_id = " . $APB_SETTINGS['user_id'] . "
             ";
 
-            #print "<p><pre>$query</pre><p>\n\n";
-
             $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
             $row = mysql_fetch_assoc($result);
 
@@ -191,8 +189,9 @@ class Group {
 
         global $APB_SETTINGS;
 
-        $string   = "<b>".$this->link()."</b>";
         $group_id = $this->parent_id();
+
+        $string   =  " : " . $this->title;
 
         while ($group_id > 0) {
 
@@ -203,19 +202,15 @@ class Group {
                    AND g.user_id = " . $APB_SETTINGS['user_id'] . "
             ";
 
-            #print "<p><pre>$query</pre><p>\n\n";
-
             $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
             $row = mysql_fetch_assoc($result);
 
             $g = apb_group($row['group_id']);
-
-            $string = $g->link() . " :: " . $string;
-
+            $string =  " : " . $g->title . $string;
             $group_id = $g->parent_id();
         }
 
-        print "<a href='" . $APB_SETTINGS['home_url'] . "'>Home</a> :: " . $string;
+        return $string;
     }
 
 

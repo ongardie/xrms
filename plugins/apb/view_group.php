@@ -1,4 +1,4 @@
-<?
+<?php
 
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
@@ -15,51 +15,98 @@
 //####################################################################
 
 include_once('apb.php');
-apb_head();
+
+$page_title = _("Bookmarks");
+
+$id = $_GET['id'];
+$id || $id = 0;
+$g = apb_group($id);
+
+$page_title .= $g->print_group_path();
+start_page($page_title, true, $msg);
 
 $APB_SETTINGS['allow_edit_mode'] = '1';
-$APB_SETTINGS['allow_search_box'] = 1;
 
 $id = $_GET['id'];
 $id || $id = 0;
 
 ?>
-</center>
-<p><table cellpadding='0' cellspacing='0' border='0' width="100%">
-<tr><td>
-<?
 
-$g = apb_group($id);
-$g->print_group_path();
-print "<p>\n";
+<div id="Main">
+    <div id="Content">
+        <table class=widget>
+            <tr>
+                <td class=widget_header>Search</td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                <form method='get' action='search.php'>
+                <input name='keywords' value='' size='25'>
+                <br />
+                <input type='submit' name='submit' value='<?php echo _("Search"); ?>'>
+                </form>
+                </td>
+            </tr>
 
-
+<?php
+/*
 if ($g->number_of_bookmarks() >= 3) {
     $v = new TopInGroupView();
     $v->group_id = $g->id();
-//    $v->since_n_interval = "14";
     $v->template = 'topingroup';
     $v->output();
 }
+*/
 
 if ($g->number_of_child_groups() > 0) {
-    print "<b>Groups</b><p>\n";
+    echo "
+            <tr>
+                <td class=widget_header>
+                    " .  _("Groups") . "
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+";
     $g->print_group_children();
-    print "<p>\n";
+    echo "
+                </td>
+            </tr>
+    ";
 }
-
-if ($g->number_of_bookmarks() > 0) {
-    print "<b>Site Listings</b><p>\n";
-    $g->print_group_bookmarks();
-}
-
 
 ?>
-</td></tr>
-</table>
 
-<center>
+<?php
 
-<?
-apb_foot();
+if ($g->number_of_bookmarks() > 0) {
+    echo " 
+            <tr>
+                <td class=widget_header> 
+                    " .  _("Sites") . "
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+";
+    $g->print_group_bookmarks();
+    echo "
+                </td>
+            </tr>
+    ";
+}
+
+?>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id=Sidebar>
+    </div>
+    <?php apb_foot(); ?>
+</div>
+
+<?php
+end_page();
 ?>

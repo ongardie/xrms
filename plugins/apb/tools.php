@@ -1,7 +1,6 @@
 <?php
 
 include_once('apb.php');
-apb_head();
 
 echo "<h2>" . _("Tools") . "</h2>";
 

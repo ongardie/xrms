@@ -1,4 +1,4 @@
-<?
+<?php
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
 //
@@ -13,7 +13,6 @@
 //####################################################################
 
 include_once('apb.php');
-apb_head();
 
 //echo "[".$APB_SETTINGS['auth_user_id']."]";
 
@@ -40,19 +39,14 @@ if ($APB_SETTINGS['auth_user_id']) {
         {
             $g = apb_group($id);
 
-            ?>
-
-            <p>Group updated!
-
-            <p><?php echo $g->print_group_path() ?>
-
-            <p><a href='<?php echo $back_url ?>'>Go Back to Editing</a>
-
-            <?
+            echo "<p>" . _("Group updated!") . "</p>"
+                . "<p>" . $g->print_group_path() . "</p>"
+                . "<p><a href='" . $back_url . "'>"
+                . _("Go Back to Editing") . "</a></p>"
         }
         else
         {
-            error("Group edit failed!!");
+            error( _("Group edit failed!!") );
         }
     }
     // We're not doing the SQL editing (updating) yet, so display the form page.
@@ -88,20 +82,20 @@ if ($APB_SETTINGS['auth_user_id']) {
             <td>
                 <table width='100%'>
                     <tr>
-                        <td>Parent Group:</td>
+                        <td><?php echo _("Parent Group"); ?>:</td>
                         <td><?php groups_dropdown('form_group_parent_id', $parent_id, '[top level]', $form_group_id) ?></td>
                     </tr>
                     <tr>
-                        <td>Title:</td>
+                        <td><?php echo _("Title"); ?>:</td>
                         <td><input size="40" name="form_title" value="<?php echo stripslashes($form_title) ?>"></td>
                     </tr>
 <!-- Future Feature(s)
                     <tr>
-                        <td>Description:</td>
+                        <td><?php echo _("Description"); ?>:</td>
                         <td><input size="40" name="form_description" value="<?php echo stripslashes($form_description) ?>"></td>
                     </tr>
                     <tr>
-                        <td>Private:</td>
+                        <td><?php echo _("Private"); ?>:</td>
                         <td>
                             No <input type='radio' name='form_private' value='0' <?=
                                 (($form_private == '1') ? '' : ' CHECKED' ) ?> >
@@ -119,14 +113,14 @@ if ($APB_SETTINGS['auth_user_id']) {
             </form>
             <?
         } else {
-            error("You don't have permission to edit this group");
+            error( _("You don't have permission to edit this group") );
         }
 
     }
 
 } else {
 
-    print "<b>You must be logged in to edit groups</b><p>\n\n";
+    print "<p><b>" . _("You must be logged in to edit groups.") . "</b></p>\n";
 
 }
 

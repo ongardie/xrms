@@ -19,16 +19,7 @@
 //
 //####################################################################
 
-//include required files
-require_once('../../include-locations.inc');
-
-require_once($include_directory . 'vars.php');
-//require_once($include_directory . 'utils-interface.php');
-//require_once($include_directory . 'utils-misc.php');
-require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb-params.php');
-//require_once($include_directory . 'utils-accounting.php');
-
+include_once('apb.php');
 
 $action =  $_GET['action'];
 $form_id = $_POST['form_id'];
@@ -41,14 +32,9 @@ $form_url = $_POST['form_url'];
 $form_description = $_POST['form_description'];
 $form_private = $_POST['form_private'];
 
-include_once('apb.php');
-apb_head();
 
-// Check User Authentication
-if ($APB_SETTINGS['auth_user_id']) {
-
-    // Print Header
-    print "<h2>" . (($id) ? 'Edit' : 'Add') . " " . _("Bookmark") . "</h2>\n";
+$page_title = _("Bookmarks : Add");
+start_page($page_title, true, $msg);
 
     // If we're going to insert, we need to have a URL. [LBS 20020211]
     if ($action == 'insert_bookmark' && $form_url) {
@@ -102,7 +88,6 @@ if ($APB_SETTINGS['auth_user_id']) {
                        AND user_id = '".$APB_SETTINGS['auth_user_id']."'
                      LIMIT 1
                 ";
-                // print "<p>QUERY<pre>$query</pre><p>\n";
                 $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
                 if ($result) {
 
@@ -192,12 +177,16 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             ?>
 
-            <form action="<?php echo $SCRIPT_NAME; ?>?action=insert_bookmark" method="post">
-            <input type='hidden' name='back_url' value='<?php echo $HTTP_REFERER; ?>'>
-            <?php if ($id) { print "<input type='hidden' name='form_id' value='$id'>\n"; } ?>
-            <table>
+<div id=Main>
+    <div id=Content>
+        <table class=widget>
+                    <tr>
+                      <td class=widget_header>
+                        <?php echo _("Add a Bookmark"); ?>
+                      </td>
+                    </tr>
             <tr>
-            <td>
+            <td class=widget_content>
 
                 <?
 
@@ -208,12 +197,16 @@ if ($APB_SETTINGS['auth_user_id']) {
 
                     <table cellpadding="10" border="1" cellspacing="0" width='100%'>
                     <tr>
-                      <td>
+                      <td class=wdiget_content>
                         <table cellpadding="5" cellspacing="0" border="0" width="100%">
                         <tr>
+
+            <form action="<?php echo $SCRIPT_NAME; ?>?action=insert_bookmark" method="post">
+            <input type='hidden' name='back_url' value='<?php echo $HTTP_REFERER; ?>'>
+            <?php if ($id) { print "<input type='hidden' name='form_id' value='$id'>\n"; } ?>
                             <td><input type="radio" name="form_group_type" value="existing" checked></td>
                             <td><?php echo _("Existing Group"); ?>:</td>
-                            <td><?php groups_dropdown('form_group_id', $form_group_id); ?></td>
+                            <td><?php echo groups_dropdown('form_group_id', $form_group_id); ?></td>
                         </tr>
                         <tr>
                             <td colspan='3'><hr></td>
@@ -226,7 +219,7 @@ if ($APB_SETTINGS['auth_user_id']) {
                         <tr>
                             <td>&nbsp;</td>
                             <td><?php echo _("Parent Group"); ?>:</td>
-                            <td><?php groups_dropdown('form_group_parent_id', '0', '[top level]'); ?></td>
+                            <td><?php echo groups_dropdown('form_group_parent_id', '0', '[top level]'); ?></td>
                         </tr>
                         </table>
                       </td>
@@ -308,13 +301,8 @@ if ($APB_SETTINGS['auth_user_id']) {
 
     }
 
-} else {
-
-    echo "<p><b>" . _("You must be logged in to do whatever it is you wanted to do.") . "</b></p>\n";
-    echo  "<p>" . _("When you log in, you should select the 'Remember Me' option to avoid this in the future.") . "</p>\n\n";
-
-}
 
 apb_foot();
+end_page();
 
 ?>

@@ -1,4 +1,4 @@
-<?
+<?php
 
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
@@ -6,22 +6,14 @@
 // Filename: index.php
 // Authors:  L. Brandon Stone (lbstone.com)
 //           Nathanial P. Hendler (retards.org)
-//
-// 2001-09-05 03:35     Created
+//           Glenn Powers (glenn@net127.com)
 //
 //####################################################################
 
-//include required files
-require_once('../../include-locations.inc');
-
-require_once($include_directory . 'vars.php');
-//require_once($include_directory . 'utils-interface.php');
-//require_once($include_directory . 'utils-misc.php');
-require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb-params.php');
-//require_once($include_directory . 'utils-accounting.php');
-
 include_once('apb.php');
+
+$page_title = _("Bookmarks");
+start_page($page_title, true, $msg);
 
 $APB_SETTINGS['allow_edit_mode'] = 1;
 $APB_SETTINGS['allow_search_box'] = 1;
@@ -34,8 +26,6 @@ if ($number_of_bookmarks == 0)
     // the last bookmark. [LBS 20020211]
     $edit_mode = 0;
 }
-
-apb_head();
 
 if ($number_of_bookmarks == 0) {
 
@@ -63,33 +53,42 @@ if ($number_of_bookmarks == 0) {
     </tr>
     </table>
 
-    <?
+    <?php
 
     $APB_SETTINGS['allow_search_box'] = 0;
 } else {
 
+
+$directory_view = directory_view();
+// $top_groups = top_groups(5,5,14);
+
 ?>
 
-<table align='center' border='0' cellpadding="10" cellspacing="0">
-<tr>
-  <td valign='top' width="50%">
-<h2>Groups</h2>
-    <?
-    directory_view();
-    ?>
-  </td>
+<div id=Main>
+  <div id=Content>
+    <table class=widget>
+        <tr>
+            <td class=widget_header><?php echo  _("Groups"); ?></td>
+        </tr>
+        <tr>
+            <td class=widget_content>
+                <?php echo $directory_view; ?>
+            </td>
+        </tr>
+    </table>
+  </div>
+  <div id=Sidebar>
+    <?php echo $top_groups; ?>
+  </div>
 
-  <td>&nbsp;&nbsp;&nbsp;</td>
+<?php
 
-  <td valign='top' width="50%">
-    <?php top_groups(5,5,14); ?>
-  </td>
-</tr>
-</table>
+apb_foot();
 
-<?
+echo "</div>";
 
 }
 
-apb_foot();
+end_page();
+
 ?>

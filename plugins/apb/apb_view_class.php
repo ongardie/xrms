@@ -1,4 +1,4 @@
-<?
+<?php
 
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
@@ -42,10 +42,10 @@ class View {
         global $APB_SETTINGS;
 
         $this->set_template_files();
-        $this->construct_inner();
-        $inner = $this->inner_string_output;
-        #debug("INNER:".$inner);
-        include($APB_SETTINGS['template_path'] . $this->outer_file);
+        $inner .= $this->construct_inner();
+        $inner .= $this->inner_string_output;
+        //include($APB_SETTINGS['template_path'] . $this->outer_file);
+        return $inner;
     }
 
     function construct_inner () {

@@ -1,4 +1,4 @@
-<?
+<?php
 
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
@@ -6,30 +6,12 @@
 // Filename:    apb_common.php
 // Authors:     L. Brandon Stone (lbstone.com)
 //              Nathanial P. Hendler (retards.org)
-//
-// 2003-03-11   Added security check. [LBS]
-// 2001-11-17   fixed SELECTED bug in group dropdown if the sub
-//              group was beyond the second level. (NPH)
-// 2001-09-05   debug() and error() now write to a log file (NPH)
-// 2001-09-04   Starting on version 1.0 (NPH) (LBS)
-//
-// THE BASICS:
+//              Glenn Powers (glenn@net127.com) for XRMS
 //
 // This file should be included by anything that uses the apb bookmark
 // system.  It makes the db connection.  It handles authentication.
 // It sets up paths and urls.  It loads Classes.  It has the most
 // commonly needed procedural functions.
-//
-// NOTES:
-//
-// $APB_SETTINGS[] holds all settings for the program.
-//
-// $APB_SETTINGS['log_start'] is a string that can be set when you enter
-//      a function or a class or a section of php code.  It gets
-//      added to the begining of any logged output, so that you can
-//      get an idea of where in the program you are getting your
-//      output from.  Just remember to clear it when you leave a
-//      section.
 //
 //####################################################################
 
@@ -78,14 +60,10 @@ $APB_SETTINGS['program_name']     = 'Active PHP Bookmarks';
 // By default we allow the login button to be displayed. [LBS 20020211]
 $APB_SETTINGS["allow_login"] = 1;
 
-debug("About to do authentication...");
-
 /* Authentication */
 global $user_id;
 $APB_SETTINGS['auth_user_id'] = $user_id;
 $APB_SETTINGS['user_id']      = $user_id;
-debug("auth_user_id: $APB_SETTINGS[auth_user_id]", 4);
-debug("user_id: $APB_SETTINGS[user_id]", 4);
 
 if ($APB_SETTINGS['auth_user_id'] && $edit_mode) {
     $APB_SETTINGS['edit_mode'] = 1;
@@ -187,7 +165,7 @@ function directory_view ($group_id=0) {
             $g = apb_group($row['group_id']);
 
             if ($g->number_of_child_groups() || $g->number_of_bookmarks()) {
-                print "<b>".$g->link()."</b><br>\n";
+                $lines .= "<b>".$g->link()."</b><br>\n";
             }
 
             $query = "
@@ -200,39 +178,38 @@ function directory_view ($group_id=0) {
               ORDER BY total DESC
                  LIMIT 3
             ";
-            debug($query);
             if ($result2 = mysql_db_query($APB_SETTINGS['apb_database'], $query)) {
                 $temp_loop_count = 0;
                 while ($row2= mysql_fetch_assoc($result2)) {
                     $child_group = apb_group($row2['group_id']);
-                    if ($temp_loop_count > 0) { print ", "; }
+                    if ($temp_loop_count > 0) { $lines .= ", "; }
                     $temp_loop_count++;
-                    print $child_group->link();
+                    $lines .= $child_group->link();
                 }
-                if ($g->number_of_child_groups() > 3) { print "..."; }
-                print "<p>\n\n";
+                if ($g->number_of_child_groups() > 3) { $lines .=  "..."; }
+                $lines .= "<p>\n\n";
             }
         }
     } else {
 
         $g = apb_group($group_id);
-//        print "<font size='+1'>\n";
         $g->print_group_path();
-//        print "</font>\n";
-        print "<p>\n";
+        $lines .= "<p>\n";
 
         if ($g->number_of_child_groups() > 0) {
-            print "<font size='3'>Categories</font><p>\n";
+            $lines .=  _("Categories") . "<p>\n";
             $g->print_group_children();
-            print "<p>\n";
+            $lines .=  "<p>\n";
         }
 
         if ($g->number_of_bookmarks() > 0) {
-            print "<font size='3'>Site Listings</font><p>\n";
+            $lines .=  _("Site Listings") . "<p>\n";
             $g->print_group_bookmarks();
         }
 
     }
+
+    return $lines;
 }
 
 //###################################################
@@ -250,7 +227,7 @@ function groups_dropdown ($name, $selected_id='0', $null_name='', $dont_show=0) 
 	print "<select name='$name'>\n";
 
     if ($null_name) {
-        print "<option value='0'" . (($selected_id == 0) ? 'SELECTED' : '') . ">".$null_name."\n";
+        $lines .= "<option value='0'" . (($selected_id == 0) ? 'SELECTED' : '') . ">".$null_name."\n";
     }
 
 	$query = "
@@ -265,14 +242,15 @@ function groups_dropdown ($name, $selected_id='0', $null_name='', $dont_show=0) 
 
 	while ($row = mysql_fetch_assoc($result))
 	{
-		print
+		$lines .=
             "<option value='" . $row['group_id'] . "'" .
             (($selected_id == $row['group_id']) ? ' SELECTED' : '') .
             "> " . $row['group_title']. "\n";
 		do_group_dropdown_children($row[group_id], 3, $selected_id, $dont_show);
 	}
 
-	print "</select>\n\n";
+    $lines .= "</select>\n\n";
+    return $lines;
 }
 
 //###################################################
@@ -302,7 +280,7 @@ function do_group_dropdown_children ($id, $count, $selected_id=0, $dont_show=0) 
 		$string = str_repeat("&nbsp;", $count);
 		$string .= "- $row[group_title]";
 
-		print
+	$lines .=	
             "<option value='" . $row[group_id] . "'" .
             (($selected_id == $row['group_id']) ? ' SELECTED' : '') .
             ">" . $string . "\n";
@@ -311,6 +289,8 @@ function do_group_dropdown_children ($id, $count, $selected_id=0, $dont_show=0) 
         do_group_dropdown_children($row[group_id], $count, $selected_id, $dont_show);
 		$count -= 3;
     }
+
+return $lines;
 }
 
 
@@ -325,7 +305,6 @@ function top_groups($group_count=5, $bookmark_count=5, $since_n_interval=7) {
          WHERE g.group_parent_id = '0'
            AND g.user_id = " . $APB_SETTINGS['user_id'] . "
     ";
-    #print "<p><pre>$query</pre><p>\n\n";
 
     $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
 
@@ -334,21 +313,13 @@ function top_groups($group_count=5, $bookmark_count=5, $since_n_interval=7) {
     while ($row = mysql_fetch_assoc($result)) {
         $g = apb_group($row['group_id']);
         $child_groups = $g->return_child_groups();
-
-        #print "<b>" . $row['group_id'] . "</b><pre>";
-        #print_r ($child_groups);
-        #print "\n";
         $group_list = join(", ", $child_groups);
-        #print $group_list;
-        #print "</pre>\n\n";
 
         if ($APB_SETTINGS['auth_user_id'] && ($APB_SETTINGS['user_id'] == $APB_SETTINGS['auth_user_id'])) {
             $private_sql = "1 = 1";
         } else {
             $private_sql = "b.bookmark_private = 0";
         }
-
-//        $private_sql = "AND b.bookmark_private = 0";
 
         // Get total hits for each top level group for a period of time.
         $query2 = "
@@ -361,17 +332,13 @@ function top_groups($group_count=5, $bookmark_count=5, $since_n_interval=7) {
                AND b.group_id IN ($group_list)
                AND h.hit_date > DATE_SUB(NOW(), INTERVAL $since_n_interval DAY)
         ";
-//        print "<p><pre>$query2</pre><p>\n\n";
 
         $result2 = mysql_db_query($APB_SETTINGS['apb_database'], $query2);
         $row2 = mysql_fetch_array($result2);
-//        print "<B>TOTAL:</b> ".$row2['total']."<br>\n";
         $top_level_group_list[$row['group_id']] = $row2['total'];
-//        print "<hr>\n";
     }
 
     arsort($top_level_group_list);
-//    $top_level_group_list = array_slice($top_level_group_list, 0, $group_count);
 
     $c = 0;
     while (list ($gid, $hits) = each ($top_level_group_list)) {
@@ -386,56 +353,12 @@ function top_groups($group_count=5, $bookmark_count=5, $since_n_interval=7) {
             $v->template = 'home_topingroup';
             $v->limit = $bookmark_count;
             $v->since_n_interval = $since_n_interval;
-            $v->output();
+            $lines .= $v->output();
         }
         $count++;
     }
+    return $lines;
 }
-
-
-/*
-function top_groups($group_count=5, $bookmark_count=5, $since_n_interval=7) {
-
-    global $APB_SETTINGS;
-
-    $private_sql = "";
-
-    if ($APB_SETTINGS['auth_user_id']) {
-        $private_sql = "";
-    } else {
-        $private_sql = "AND b.bookmark_private = 0";
-    }
-
-    $query = "
-        SELECT b.group_id, count(*) as hits
-          FROM apb_hits h
-               LEFT JOIN apb_bookmarks b ON (h.bookmark_id = b.bookmark_id)
-         WHERE h.hit_date > DATE_SUB(NOW(), INTERVAL $since_n_interval DAY)
-           AND h.user_id = " . $APB_SETTINGS['user_id'] . "
-           " . $private_sql . "
-      GROUP BY b.group_id
-      ORDER BY hits DESC LIMIT $group_count
-    ";
-    #print "<p><pre>$query</pre><p>\n\n";
-
-    $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
-
-    while ($row = mysql_fetch_assoc($result)) {
-        if ($row['hits'] > 0) {
-            $g = apb_group($row['group_id']);
-            $v = new TopInGroupView();
-            $v->group_id = $g->id();
-            $v->title_string = $g->link();
-            $v->template = 'home_topingroup';
-            $v->limit = $bookmark_count;
-            $v->since_n_interval = $since_n_interval;
-            $v->output();
-            print "<br clear='all'><p>\n";
-        }
-    }
-}
-*/
-
 
 
 function get_number_of_users() {
@@ -484,13 +407,6 @@ function get_number_of_groups() {
     return $row['total'];
 }
 
-function apb_head() {
-    global $APB_SETTINGS;
-    global $edit_mode;
-
-    include($APB_SETTINGS['template_path'] . 'head.php');
-}
-
 function apb_foot() {
     global $APB_SETTINGS;
     global $cookie_username;
@@ -506,8 +422,6 @@ function apb_foot() {
 
 function debug ($string, $level = 3) {
     global $APB_SETTINGS;
-
-    #print "<b>POOP</b> " . $APB_SETTINGS['debug'] . " : $level<p>\n";
     if ($APB_SETTINGS['debug'] >= $level) {
         $debug_string = "<p><b>DEBUG: </b>";
         $debug_string .= "$string</p>\n";

@@ -15,8 +15,6 @@ include_once('apb.php');
 
 $keywords = $_GET['keywords'];
 
-apb_head();
-
 $APB_SETTINGS['allow_edit_mode'] = 1;
 
 // Clean up the data that's been passed to us [LBS 20020211].

@@ -1,4 +1,4 @@
-<?
+<?php
 //####################################################################
 // Active PHP Bookmarks - lbstone.com/apb/
 //
@@ -22,12 +22,10 @@ debug("Validate id: $id");
 $bm = apb_bookmark($id);
 
 if (! $bm->url()) {
-    debug("Not a valid id: $id");
     header ("Location: ".$APB_SETTINGS['apb_url']);
 }
 
 elseif ($bm->private() AND ! ($APB_SETTINGS['auth_user_id'] == $bm->user_id())) {
-    debug("Not a valid id: $id");
     header ("Location: ".$APB_SETTINGS['apb_url']);
 }
 
@@ -50,7 +48,6 @@ else {
 
     $result = mysql_db_query($APB_SETTINGS['apb_database'], $query);
 
-    debug("Location: ".$bm->url());
     header ("Location: ".$bm->url());
 }
 ?>

@@ -25,8 +25,6 @@ $APB_SETTINGS['allow_search_box'] = 1;
 
 $date = $_GET['date'];
 
-apb_head();
-
 ?>
 
 <p>
