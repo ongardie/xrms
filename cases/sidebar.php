@@ -9,8 +9,14 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.8 2004/07/16 07:11:17 introspectshun Exp $
+ * $Id: sidebar.php,v 1.9 2005/01/06 20:55:10 vanmer Exp $
  */
+/*
+Commented until ACL system is fully implemented
+$caseList=get_list($session_user_id, 'Read', false, 'cases');
+if (!$caseList) { $case_rows=''; return false; }
+else { $caseList=implode(",",$caseList); $case_limit_sql.=" AND cases.case_id IN ($caseList) "; }
+*/
 
 $case_rows = "<div id='case_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
@@ -57,13 +63,15 @@ if (strlen($rst->fields['username'])>0) {
 
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0))) {
+    $new_case_button=render_create_button("New",'submit');
     $case_rows .= "
             <tr>
                 <form action='".$http_site_root."/cases/new.php' method='post'>
                 <input type='hidden' name='company_id' value='$company_id'>
+                <input type='hidden' name='division_id' value='$division_id'>
                 <input type='hidden' name='contact_id' value='$contact_id'>
                 <td class=widget_content_form_element colspan=5>
-                    <input type=submit class=button value='" . _("New") . "'>
+                    $new_case_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/cases/some.php';\" value='" . _("Search") . "'>
                 </td>
                 </form>
@@ -82,6 +90,11 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.9  2005/01/06 20:55:10  vanmer
+ * - added division_id to new case sidebar button
+ * - added commented ACL authentication to top of sidebar
+ * - added call to render button to create New Case button
+ *
  * Revision 1.8  2004/07/16 07:11:17  introspectshun
  * - Localized strings for i18n/translation support
  *
