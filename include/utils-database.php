@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.1 2004/07/01 12:43:26 braverock Exp $
+ * $Id: utils-database.php,v 1.2 2004/07/08 22:12:24 neildogg Exp $
  */
 
 /**
@@ -56,7 +56,25 @@ function confirm_no_records(&$con, $table) {
 } // end confirm_no_records fn
 
 /**
+ * Makes any of the database names singular
+ *
+ * @param string $word to be singularized
+ */
+function make_singular($word) {
+    $word = preg_replace("|([^aeiou])s$|i", "\$1", $word);
+    $word = preg_replace("|ies$|i", "y", $word);
+    $word = preg_replace("|uses$|i", "us", $word);
+    $word = preg_replace("|ases$|i", "ase", $word);
+    $word = preg_replace("|ses$|i", "s", $word);
+    $word = preg_replace("|es$|i", "e", $word);
+    return $word;
+}
+
+/**
  * $Log: utils-database.php,v $
+ * Revision 1.2  2004/07/08 22:12:24  neildogg
+ * - Converts all current database names (and most plural words) to singular form
+ *
  * Revision 1.1  2004/07/01 12:43:26  braverock
  * - add utils-database.php file
  * - move list_db_tables and confirm_no_records fns to utils-database.php file
