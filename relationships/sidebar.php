@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.8 2004/07/15 13:47:34 neildogg Exp $
+ * $Id: sidebar.php,v 1.9 2004/07/15 17:41:30 cpsource Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -55,7 +55,7 @@ $display_name          = ucfirst($what_table[$working_direction]);
 $display_name_singular = ucfirst($what_table_singular[$working_direction]);
 $opposite_name         = ucfirst($what_table[$opposite_direction]);
 
-if(!$relationship_link_rows) {
+if ( !isset( $relationship_link_rows ) || !$relationship_link_rows ) {
     $relationship_link_rows = "";
 }
 
@@ -391,6 +391,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.9  2004/07/15 17:41:30  cpsource
+ * - Fix undef for relationship_link_rows.
+ *
  * Revision 1.8  2004/07/15 13:47:34  neildogg
  * - If using "both" user can choose either option from relationship type
  *
