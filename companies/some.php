@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.58 2005/03/11 20:22:08 daturaarutad Exp $
+ * $Id: some.php,v 1.59 2005/03/15 22:48:04 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -304,7 +304,9 @@ $columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status
 $columns[] = array('name' => _("Rating"), 'index_sql' => 'Rating');
 
 // selects the columns this user is interested in
-$default_columns =  array("name","code","user","industry","crm_status","account_status","rating");
+// no reason to set this if you don't want all by default
+$default_columns = null;
+// $default_columns =  array("name","code","user","industry","crm_status","account_status","rating");
 
 $pager_columns = new Pager_Columns('CompanyPager', $columns, $default_columns, 'CompanyForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -402,6 +404,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.59  2005/03/15 22:48:04  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.58  2005/03/11 20:22:08  daturaarutad
  * added company_source_id as a search criteria for linking with reports/graphs
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.51 2005/03/04 20:13:37 daturaarutad Exp $
+ * $Id: some.php,v 1.52 2005/03/15 22:51:59 daturaarutad Exp $
  */
 
 //include the standard files
@@ -271,10 +271,11 @@ if(!isset($contacts_next_page)) {
                   </table>';
       }
 $_SESSION["search_sql"]=$sql;
+	"company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name"; 
 
 $columns = array();
-$columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => '8,9');
-$columns[] = array('name' => _("Company"), 'index_sql' => 'company', 'sql_sort_column' => '10');
+$columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => 'cont.last_name,cont.first_names');
+$columns[] = array('name' => _("Company"), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name');
 $columns[] = array('name' => _("Code"), 'index_sql' => 'company_code');
 $columns[] = array('name' => _("Title"), 'index_sql' => 'title');
 $columns[] = array('name' => _("Description"), 'index_sql' => 'description');
@@ -283,7 +284,9 @@ $columns[] = array('name' => _("Owner"), 'index_sql' => 'username');
 
 
 // selects the columns this user is interested in
-$default_columns =  array('name','company','company_code','title','description','username');
+// no reason to set this if you don't want all by default
+$default_columns = null;
+// $default_columns =  array('name','company','company_code','title','description','username');
 
 $pager_columns = new Pager_Columns('ContactPager', $columns, $default_columns, 'ContactForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -370,6 +373,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.52  2005/03/15 22:51:59  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.51  2005/03/04 20:13:37  daturaarutad
  * tweaked the main query to speed things up when sorting on columns that use concat()
  *

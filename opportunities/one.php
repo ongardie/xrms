@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.42 2005/03/15 21:51:55 daturaarutad Exp $
+ * $Id: one.php,v 1.43 2005/03/15 22:57:43 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -172,13 +172,15 @@ WHERE a.on_what_table = 'opportunities'
 
     // begin Activities Pager
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '13');
-    $columns[] = array('name' => _('User'), 'index_sql' => 'username', 'sql_sort_column' => '12');
-    $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name', 'sql_sort_column' => '7');
-    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => '11,10');
-    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => '2', 'default_sort' => 'desc');
+    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title');
+    $columns[] = array('name' => _('User'), 'index_sql' => 'username', 'sql_sort_column' => 'u.username');
+    $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
+    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names');
+    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
     
-    $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
+	// no reason to set this if you don't want all by default
+	$default_columns = null;
+	// $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
 
 
     // selects the columns this user is interested in
@@ -488,6 +490,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.43  2005/03/15 22:57:43  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.42  2005/03/15 21:51:55  daturaarutad
  * fixed Mail Merge for activities pager
  *

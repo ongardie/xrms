@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.69 2005/03/15 21:58:37 daturaarutad Exp $
+ * $Id: one.php,v 1.70 2005/03/15 22:50:06 daturaarutad Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -163,13 +163,15 @@ WHERE a.contact_id = $contact_id
 
     // begin Activities Pager
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '9');
+    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'a.activity_title');
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
-    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => '4', 'default_sort' => 'desc');
+    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => 'a.scheduled_at', 'default_sort' => 'desc');
 
-    $default_columns = array('activity_status', 'activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
+	// no reason to set this if you don't want all by default
+	$default_columns = null;
+	// $default_columns = array('activity_status', 'activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
 
     // selects the columns this user is interested in
@@ -595,6 +597,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.70  2005/03/15 22:50:06  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.69  2005/03/15 21:58:37  daturaarutad
  * fixed Mail Merge for activities pager
  *

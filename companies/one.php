@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.98 2005/03/15 21:18:37 daturaarutad Exp $
+ * $Id: one.php,v 1.99 2005/03/15 22:46:26 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -244,14 +244,16 @@ if ($division_id) {
 
 // begin Activities Pager
 $columns = array();
-$columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => '10');
+$columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'a.activity_title');
 $columns[] = array('name' => _('User'), 'index_sql' => 'username');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => '11,12');
+$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'cont.last_name,cont.first_names');
 $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
 $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
 
-$default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
+// no reason to set this if you don't want all by default
+$default_columns = null;
+// $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
 // selects the columns this user is interested in
 $pager_columns = new Pager_Columns('CompanyActivitiesPager', $columns, $default_columns, $activities_form_name);
@@ -288,14 +290,16 @@ if ($division_id) {
 
 // begin Contacts Pager
 $columns = array();
-$columns[] = array('name' => _('Name'), 'index_sql' => 'name', 'sql_sort_column' => '8,7');
+$columns[] = array('name' => _('Name'), 'index_sql' => 'name', 'sql_sort_column' => 'last_name,first_names');
 $columns[] = array('name' => _('Summary'), 'index_sql' => 'summary');
 $columns[] = array('name' => _('Title'), 'index_sql' => 'title');
 $columns[] = array('name' => _('Description'), 'index_sql' => 'description');
 $columns[] = array('name' => _('Phone'), 'index_calc' => 'phone');
-$columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email', 'sql_sort_column' => '5');
+$columns[] = array('name' => _('E-Mail'), 'index_calc' => 'email', 'sql_sort_column' => 'email');
 
-$default_columns = array('name','summary','title','description','phone','email');
+// no reason to set this if you don't want all by default
+$default_columns = null;
+//$default_columns = array('name','summary','title','description','phone','email');
 
 
 // selects the columns this user is interested in
@@ -822,6 +826,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.99  2005/03/15 22:46:26  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.98  2005/03/15 21:18:37  daturaarutad
  * fixed mail merge for contacts and activities
  *

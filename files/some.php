@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.29 2005/03/02 22:57:37 daturaarutad Exp $
+ * $Id: some.php,v 1.30 2005/03/15 22:54:38 daturaarutad Exp $
  */
 
 //include required files
@@ -53,7 +53,7 @@ $f_case 		= false;
 
 $sql = "SELECT "
       . $con->Concat($con->qstr('<a id="'), 'file_pretty_name', $con->qstr('" href="' . $http_site_root . '/files/one.php?return_url=/private/home.php&amp;file_id='), 'file_id', $con->qstr('">'), "file_pretty_name", "'</a>'")
-      . " AS name, file_description as description,";
+      . " AS name, file_description as description, file_pretty_name, ";
 
 switch ($file_on_what) {
     case "contacts" : {
@@ -315,7 +315,7 @@ if ( $use_owl ) {
 
 
 $columns = array();
-$columns[] = array('name' => _("Name"), 'index_sql' => 'name');
+$columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => 'file_pretty_name');
 $columns[] = array('name' => _("Description"), 'index_sql' => 'description');
 
 if($f_contact) $columns[] = array('name' => _("Contact"), 'index_sql' => 'contact');
@@ -406,6 +406,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.30  2005/03/15 22:54:38  daturaarutad
+ * pager tuning sql_sort_column
+ *
  * Revision 1.29  2005/03/02 22:57:37  daturaarutad
  * updated to use the GUP_Pager class
  *
