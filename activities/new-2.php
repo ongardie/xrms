@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.15 2004/06/29 14:28:31 gpowers Exp $
+ * $Id: new-2.php,v 1.16 2004/07/07 21:27:37 introspectshun Exp $
  */
 
 //where do we include from
@@ -71,11 +71,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-$sql = "SELECT * FROM activities WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
-//initialize array to hold data to insert
-//set defaults if we didn't get values
+//save to database
 $rec = array();
 $rec['user_id'] = (strlen($user_id) > 0) ? $user_id : $session_user_id;
 $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
@@ -90,7 +86,8 @@ $rec['entered_at'] = time();
 $rec['scheduled_at'] = strtotime($scheduled_at);
 $rec['ends_at'] = strtotime($ends_at);
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'activities';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $activity_id = $con->insert_id();
@@ -113,6 +110,9 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.16  2004/07/07 21:27:37  introspectshun
+ *- Now passes a table name instead of a recordset into GetInsertSQL
+ *
  *Revision 1.15  2004/06/29 14:28:31  gpowers
  *- changed activity_description default to null
  *  - to save activity enter time
