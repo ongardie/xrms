@@ -16,10 +16,6 @@ $crm_status_id = $_POST['crm_status_id'];
 $user_id = $_POST['user_id'];
 $company_source_id = $_POST['company_source_id'];
 $industry_id = $_POST['industry_id'];
-$city  = $_POST['city'];
-$state = $_POST['state'];
-$postal_code = $_POST['postal_code'];
-$country = $_POST['country'];
 $phone = $_POST['phone'];
 $phone2 = $_POST['phone2'];
 $fax = $_POST['fax'];
@@ -30,13 +26,12 @@ $profile = $_POST['profile'];
 $account_status_id = 1;
 $rating_id = 1;
 
-
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "insert into companies (crm_status_id, company_source_id, industry_id, user_id, account_status_id, rating_id, company_name, company_code, phone, phone2, fax, url, city, state, postal_code, country, employees, revenue, profile, entered_at, entered_by, last_modified_at, last_modified_by)
-        values ($crm_status_id, $company_source_id, $industry_id, $user_id, $account_status_id, $rating_id, " . $con->qstr($company_name, get_magic_quotes_gpc()) . ", " . $con->qstr($company_code, get_magic_quotes_gpc()) . ", " . $con->qstr($phone, get_magic_quotes_gpc()) . ", " . $con->qstr($phone2, get_magic_quotes_gpc()) . ", " . $con->qstr($fax, get_magic_quotes_gpc()) . ", " . $con->qstr($url, get_magic_quotes_gpc()) . ", " . $con->qstr($city, get_magic_quotes_gpc()) . ", " . $con->qstr($state, get_magic_quotes_gpc()) . ", " . $con->qstr($postal_code, get_magic_quotes_gpc()) . ", " . $con->qstr($country, get_magic_quotes_gpc()) . ", " . $con->qstr($employees, get_magic_quotes_gpc()) . ", " . $con->qstr($revenue, get_magic_quotes_gpc()) . ", " . $con->qstr($profile, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
+$sql = "insert into companies (crm_status_id, company_source_id, industry_id, user_id, account_status_id, rating_id, company_name, company_code, phone, phone2, fax, url, employees, revenue, profile, entered_at, entered_by, last_modified_at, last_modified_by)
+        values ($crm_status_id, $company_source_id, $industry_id, $user_id, $account_status_id, $rating_id, " . $con->qstr($company_name, get_magic_quotes_gpc()) . ", " . $con->qstr($company_code, get_magic_quotes_gpc()) . ", " . $con->qstr($phone, get_magic_quotes_gpc()) . ", " . $con->qstr($phone2, get_magic_quotes_gpc()) . ", " . $con->qstr($fax, get_magic_quotes_gpc()) . ", " . $con->qstr($url, get_magic_quotes_gpc()) . ", " . $con->qstr($employees, get_magic_quotes_gpc()) . ", " . $con->qstr($revenue, get_magic_quotes_gpc()) . ", " . $con->qstr($profile, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
 
 $con->execute($sql);
 $company_id = $con->insert_id();
@@ -56,7 +51,7 @@ $con->execute("insert into addresses (company_id, address_name, address_body) va
 
 // make that address the default, and set the customer and vendor references
 $address_id = $con->insert_id();
-$con->execute("update companies set default_billing_address = $address_id, default_shipping_address = $address_id, default_payment_address = $address_id where company_id = $company_id");
+$con->execute("update companies set default_primary_address = $address_id, default_billing_address = $address_id, default_shipping_address = $address_id, default_payment_address = $address_id where company_id = $company_id");
 
 if (strlen($accounting_system) > 0) {
     add_accounting_customer($con, $company_id, $company_name, $company_code, $customer_credit_limit, $customer_terms);

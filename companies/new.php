@@ -107,18 +107,6 @@ value="<?php  echo $company_name; ?>"> <?php echo $required_indicator; ?></td>
 				<td class=widget_content_form_element><input type=text name=url size=30></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>City</td>
-				<td class=widget_content_form_element><input type=text name=city size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>State</td>
-				<td class=widget_content_form_element><input type=text name=state size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Country</td>
-				<td class=widget_content_form_element><input type=text name=country size=30></td>
-			</tr>
-			<tr>
 				<td class=widget_label_right>Employees</td>
 				<td class=widget_content_form_element><input type=text name=employees size=10></td>
 			</tr>
