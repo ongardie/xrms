@@ -19,7 +19,7 @@ CREATE TABLE `info` (
   `element_id` int(11) NOT NULL default '0',
   `value` text NOT NULL,
   `info_record_status` char(1) NOT NULL default 'a',
-  KEY `server_id` (`info_id`)
+  KEY `info_id` (`info_id`)
 ) TYPE=MyISAM;
 
 -- --------------------------------------------------------
