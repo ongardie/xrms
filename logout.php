@@ -2,7 +2,7 @@
 /**
  * Logout
  *
- * $Id: logout.php,v 1.3 2004/07/13 18:27:58 cpsource Exp $
+ * $Id: logout.php,v 1.4 2004/07/16 15:13:05 cpsource Exp $
  */
 
 require_once('include-locations.inc');
@@ -13,6 +13,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+ 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
@@ -29,6 +31,10 @@ $con->close();
 session_unset();
 session_destroy();
 
-header("Location: {$http_site_root}/login.php");
+if ( $msg ) {
+  $msg = "?msg=$msg";
+}
+
+header("Location: {$http_site_root}/login.php" . $msg);
 
 ?>

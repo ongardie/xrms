@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.3 2004/07/16 12:10:04 cpsource Exp $
+ * $Id: routing.php,v 1.4 2004/07/16 15:13:05 cpsource Exp $
  */
 
 //where do we include from
@@ -36,20 +36,24 @@ $sql = "select r.role_short_name as role
         where u.role_id=r.role_id
         and u.user_id = $session_user_id";
 
-//execute
+// execute - get role
+$role = '';
 $rst = $con->execute($sql);
+if ($rst) {
+    while (!$rst->EOF) {
+      // get our role
+      $role = $rst->fields['role'];
+      break;
+    }
+    // close the result set
+    $rst->close();
+}
 
-// get our role
-$role = $rst->fields['role'];
-
-// close the result set
-$rst->close();
+// add role to session
+$_SESSION['role'] = $role;
 
 // close the database connection
 $con->close();
-
-// add role to session
-$_SESSSION['role'] = $role;
 
 //if this is a mailto link, try to open the user's default mail application
 if ($role == 'Admin') {
@@ -62,6 +66,9 @@ if ($role == 'Admin') {
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.4  2004/07/16 15:13:05  cpsource
+ *- Prevent non-Admin's from running admin/index.php
+ *
  *Revision 1.3  2004/07/16 12:10:04  cpsource
  *- Add $role from routing to SESSION so that index.php
  *  can check we are Admin or Developer before we

@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.20 2004/07/16 13:52:00 braverock Exp $
+ * $Id: index.php,v 1.21 2004/07/16 15:13:05 cpsource Exp $
  */
 
 //include required stuff
@@ -22,17 +22,11 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $role    = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 $role_ok = false;
 
-echo "role = $role<br>";
-
 if ( $role == 'Admin' || $role == 'Developer' ) {
   $role_ok = true;
-}
-
-if ( 0 ) {
-if ( !$role_ok ) {
-  // not OK - bring them to logout, they've tried to hack the system
-  header("Location: " . $http_site_root . "/logout.php");
-}
+} else {
+  // not OK - bring them to logout as they've tried to hack the system
+  header("Location: " . $http_site_root . "/logout.php?msg=noauth");
 }
 
 // open a connection to the database
@@ -242,6 +236,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.21  2004/07/16 15:13:05  cpsource
+ * - Prevent non-Admin's from running admin/index.php
+ *
  * Revision 1.20  2004/07/16 13:52:00  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)
