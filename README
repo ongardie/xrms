@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.18 2005/01/12 22:54:13 braverock Exp $ **/
+/** $Id: README,v 1.19 2005/03/09 17:14:05 daturaarutad Exp $ **/
 
 ========================
 SUMMARY
@@ -221,9 +221,17 @@ http://www.squirrelmail.org/
 The calendar widget is the excellent Dynarch DTML Calendar jscalendar-0.9.6
 http://dynarch.com/mishoo/calendar.epl
 
-We also currently use Netscape's Javascript Graph Builder
-(written by Michael Bostock) for some reports.
-http://developer.netscape.com/docs/technote/javascript/graph/index.html
+We also currently use Aditus Consulting's JPGraph classes in some reports.
+http://www.aditus.nu/jpgraph/index.php
+
+Some administration pages currently make use of the PEAR HTML_QuickForm classes.
+These may be downloaded from http://pear.php.net/package/HTML_QuickForm or by 
+simply entering 'pear install HTML_QuickForm' on the command line, if you have
+PEAR installed.
+
+
+
+
 
 ========================
 NOTES
@@ -368,6 +376,7 @@ Brian Peterson    braverock      Acting Project Coordinator
 
 Andrew            s-t            Developer
 Olivier Colonna   obac           Developer
+Justin Cooper     daturaarutad   Developer
 John Fawcett      johnfawcett    Developer
 Ken Gregoire      kennyg1        Documentation
 Nic Lowe          niclowe        Developer
@@ -397,6 +406,9 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.19  2005/03/09 17:14:05  daturaarutad
+ * updated to reflect new jpgraph usage and HTML_QuickForm requirement; added myself as a developer
+ *
  * Revision 1.18  2005/01/12 22:54:13  braverock
  * - updates for 2005-01-12 release
  *
