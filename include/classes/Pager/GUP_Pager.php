@@ -3,7 +3,13 @@
  *
  * The Grand Unified Pager
  *
- * see @example for usage
+ * This pager was originally an extension of the adodb-pager.inc.php class that comes
+ * with ADOdb for PHP.  It has since taken on a few extra features that are described
+ * in this file.
+ * 
+ * The pager can get the data to be displayed from two sources
+ * -SQL Query passed in constructor
+ * -PHP Array passed in constructor
  * 
  * This pager can be passed an SQL query with the option to have a callback called for each row, 
  * or an array of data may be passed in.
@@ -13,9 +19,22 @@
  *
  * Information about the columns to display in the pager is passed in as a structured array, which
  * is described in the constructor docs below.
+ * 
+ * The pager creates many hidden form variables as well as some javascript code in order to track
+ * the sort order and etc.  These variables are prepended with the pager_id to avoid naming collisions.
  *
+ * Note: for the examples below you can run the programs (you need ACL role of Administrator) by 
+ * navigating to xrms/include/classes/Pager/examples/
+ *
+ * @example GUP_Pager.doc.1.php Simple example of basic pager usage with SQL
+ * @example GUP_Pager.doc.2.php Another pager example showing Totals and SubTotals columns
+ * @example GUP_Pager.doc.3.php Another pager example showing the use of types (type => currency)
+ * @example GUP_Pager.doc.4.php Another pager example showing Calculated Columns and callback usage
+ * @example GUP_Pager.doc.5.php Simple example of basic pager usage with Data
+ * @example GUP_Pager.doc.6.php Another pager example showing Grouping of SQL and Calculated data
+ * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.3 2005/02/11 01:49:03 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.4 2005/02/15 23:52:17 daturaarutad Exp $
  */
 
 
@@ -82,6 +101,11 @@ class GUP_Pager {
     {
         global $http_site_root;
 
+		if(empty($sql) && empty($data)) {
+			echo _('Warning: GUP_Pager must be passed either an SQL query or a data array');
+			return false;
+		}
+
       	$this->db 			= $db;
       	$this->sql 			= $sql;
         $this->data 		= $data;
@@ -105,7 +129,8 @@ class GUP_Pager {
 
 		if($refresh) { $this->use_cached	= false; }
 
-		if(!empty($this->group_mode)) { $this->maximize = true; }
+		if(!is_numeric($this->group_mode)) { unset($this->group_mode); }
+		if(isset($this->group_mode)) { $this->maximize = true; }
 
 		// begin sort stuff
         if (!strlen($this->sort_column) > 0) {
@@ -144,9 +169,9 @@ class GUP_Pager {
 
 		// this is so that we can refer to all columns by ['index'] later when it doesn't concern us if they are sql/calc/data
 		foreach($this->column_info as $k => $column) {
-			if($column['index_sql']) $this->column_info[$k]['index'] = $column['index_sql'];
-			if($column['index_calc']) $this->column_info[$k]['index'] = $column['index_calc'];
-			if($column['index_data']) $this->column_info[$k]['index'] = $column['index_data'];
+			if(isset($column['index_sql'])) $this->column_info[$k]['index'] = $column['index_sql'];
+			if(isset($column['index_calc'])) $this->column_info[$k]['index'] = $column['index_calc'];
+			if(isset($column['index_data'])) $this->column_info[$k]['index'] = $column['index_data'];
 		}
 
 
@@ -199,8 +224,11 @@ class GUP_Pager {
 
 
 		$this->GetData();
+
+		//print_r($this->data);
+
 		// if group mode or there is data and we're not at the first and last page simultaneously (only one page!)
-        if (!empty($this->group_mode)) {
+        if (isset($this->group_mode)) {
 			// makes Group: <select> [ungroup button]
         	$page_nav = $this->column_info[$this->group_mode]['name'] . ':' ;
         	$page_nav .= $this->group_select_widget;
@@ -246,7 +274,7 @@ class GUP_Pager {
 		*/
 		$cache_name = $this->pager_id . '_data';
 
-		if(!empty($this->group_mode)) {
+		if(isset($this->group_mode)) {
 			/* 
 				In group mode, we replace the normal sql query with the one passed in group_query_select
 				
@@ -257,11 +285,13 @@ class GUP_Pager {
 				
 			if($this->column_info[$this->group_mode]['group_query_list']) {
 
-				$old_fetch_mode = $this->db->SetFetchMode(ADODB_FETCH_NUM);
+
+				$old_fetch_mode = $this->db->fetchMode;
+				$this->db->SetFetchMode(ADODB_FETCH_NUM);
 
 				$group_values = $this->db->execute($this->column_info[$this->group_mode]['group_query_list']);
 
-				if($old_fetch_mode) { $this->db->SetFetchMode($old_fetch_mode);  }
+				$this->db->SetFetchMode($old_fetch_mode); 
 	
 				if(!$group_values) {
 					db_error_handler($this->db, $this->column_info[$this->group_mode]['group_query_list']);
@@ -335,7 +365,6 @@ class GUP_Pager {
 						$rs->MoveNext();
 					} 
 				} else {
-				print_r($this->data);
 					while (!$rs->EOF) {
             			$this->data[] =& $rs->fields;
 						$rs->MoveNext();
@@ -392,31 +421,35 @@ class GUP_Pager {
 		//echo "rows from {$this->start_data_row} to {$this->end_data_row}<br/>";
 
 
-		if(!empty($this->group_mode) && $this->column_info[$this->group_mode]['group_calc']) {
+		// this builds the group select for a calc'd column
+		if(isset($this->group_mode) && $this->column_info[$this->group_mode]['group_calc']) {
 			// build the select from the real data
 
 			$unique_ids = array();
 			$index = $this->column_info[$this->group_mode]['index'];
 
 	 		for($i=$this->start_data_row; $i<$this->end_data_row; $i++) {
-				$unique_ids[$this->data[$i][$index]] = true;
+				if(!isset($unique_ids[$this->data[$i][$index]])) { $unique_ids[$this->data[$i][$index]] = 0;  }
+				$unique_ids[$this->data[$i][$index]]++;
 			}
+
 			$this->group_select_widget = '<select name="' . $this->pager_id . "_group_id\" onchange='javascript:{$this->pager_id}_group(" . $this->group_mode . ");'"; 
 			foreach($unique_ids as $id => $v) {
+
+            	if(!isset($this->group_id)) {
+					echo "setting manually to $id";
+                	$this->group_id = $id;
+            	}
+
 				$this->group_select_widget .= "<option value=$id";
 				if($this->group_id == $id) { 
 					$this->group_select_widget .= " selected"; 
 				}
-				$this->group_select_widget .= ">$id</option>";
+				$this->group_select_widget .= ">$id ($v)</option>";
 			}
 			$this->group_select_widget .= '</select>';
-
-			//$this->group_select_widget =  $group_values->GetMenu2($this->pager_id . '_group_id', $this->group_id, false, false, 0, "onchange='javascript:{$this->pager_id}_group(" . $this->group_mode . ");'");
-
 		}
-
-
-
+		// data is now in $this->data
 	}
 
 	function Render_JS() {
@@ -461,7 +494,7 @@ class GUP_Pager {
                 document.{$this->form_id}.submit();
 			}
 	        function {$this->pager_id}_ungroup(groupColumn) {
-                document.{$this->form_id}.{$this->pager_id}_group_mode.value = '';
+                document.{$this->form_id}.{$this->pager_id}_group_mode.value = 'ungroup';
                 document.{$this->form_id}.{$this->pager_id}_maximize.value = '';
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
 				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
@@ -498,12 +531,9 @@ END;
 
         	$group_html = '';
 
-
         	if($this->column_info[$i]['group_query_list'] || $this->column_info[$i]['group_calc']) {
             	$group_html = "<a href='javascript: " . $this->pager_id . "_group($i);'><b>(" . _('G') . ")</b></a>";
         	}
-
-            //echo "<td class=widget_label ><a href='javascript: " . $this->pager_id . "_resort($i);'><b>{$this->column_info[$i]['name']}</b></a>";
 
 			$selected_column_header_html = '';
             if ($i == ($this->sort_column-1)) {
@@ -517,8 +547,6 @@ END;
         	} else {
             	$hdr .= "<td class=widget_label ><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
         	}
-
-
         }
 
         echo "<tr>$hdr</tr>";
@@ -737,7 +765,7 @@ END;
 			$cache_indicator = "";
 		}
 
-		if(!empty($this->group_mode)) {
+		if(isset($this->group_mode)) {
 			$size_buttons = '';
 		} else {
 			if($this->maximize) {
@@ -858,6 +886,12 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.4  2005/02/15 23:52:17  daturaarutad
+ * fixed a small bug with grouping for calculated data
+ * added a warning if $sql and $data are both empty
+ * added code to show number of rows in the grouping <select> for calc'd data
+ * fixed a ADODB_FETCH_MODE bug
+ *
  * Revision 1.3  2005/02/11 01:49:03  daturaarutad
  * updated to allow for grouping of calculated (non-sql) columns
  *
