@@ -1,0 +1,188 @@
+/**
+ * Simple XRMS theme
+ *
+ * This style sheet overlays the default XRMS sheets:
+ *    xrmsstyle.css, xrmsstyle-ie.css (if IE), and xrmsstyle-screen.css
+ *
+ * It is used with screen media only.
+ */
+/** ----------
+ * LAYOUT ADJUSTMENTS - to accomodate new font dimentions
+ */
+#loginbar {
+    top: 4px;
+    right: 8px;
+}
+#Main #Sidebar {
+    margin: 8px;
+}
+/** ----------
+ * FOREGROUND COLORS - black by default (body)
+ */
+#navline {
+    font-weight: normal;
+}
+/**
+ * default font settings for entire document
+ */
+body {
+    margin: 8px; /* Takes the pressure off the sides, easier on the eyes with some margin */
+    font-family: Verdana, Arial, Helvetica, sans-serif; /* easier font to read on screen than Arial */
+}
+/** ----------
+ * FOREGROUND COLORS - black by default (body)
+ */
+body {
+    color: #000;
+}
+table.widget td {
+    color: #999;
+}
+table.widget .sublabel {
+    color: #999;
+}
+#loginbar,
+#loginbar a,
+#page_header,
+table.widget .widget_header,
+table.widget .widget_content_graph,
+table.widget .overdue_activity,
+table.widget .non_uploaded_file  {
+  color: #003366;
+}
+/** -------
+ * FONT/TEXT SETTINGS
+ */
+input.button {
+    color: #666666;
+} 
+input.button:hover {
+    color: #003366;    
+} 
+table.widget td {
+    color: #333;
+}
+/** --------
+ * ANCHOR TAGS - colors/decorations
+ */
+a {
+    text-decoration: none;
+    color: #003366;
+}
+a:hover {
+    text-decoration: underline;
+    color: #333333;
+}
+a:link {
+    text-decoration: none;
+}
+/** --------
+ * BACKGROUND COLORS - light gray by default (body)
+ */
+body {
+    background-color: #fff;
+}
+table.widget {
+    background-color: #fff; /* Affects lines in tables */
+}
+input.button {
+    background-color: #ffff99;
+}
+table.widget th,
+table.widget td {
+    background-color: #fff;
+}
+table.widget .closed_activity {
+    color: #ccc;
+}
+#msg {
+    background-color: #ff9;
+}
+table.widget .widget_content_alt,
+table.widget .widget_content_market2 {
+    background-color: #ffe;
+}
+table.widget .scheduled_activity {
+    background-color: #eef;
+}
+table.widget .widget_content_graph {
+    background-color: #bbb;
+}
+table.widget .non_uploaded_file,
+table.widget .overdue_activity {
+    color: #660000;
+}
+#page_header,
+table.widget .widget_header,
+table.widget .widget_label {
+    background-color: #eee; /* Principal color setting */
+}
+/** -------
+ * BACKGROUND/BORDER SETTINGS
+ * Specified URIs are relative to the stylesheet, not the loaded page
+ */
+#navline {
+    background-color: #eee; /* Principal color setting */
+    border: 1px solid #ddd;
+}
+#page_header {
+    border: none;
+    background-color: transparent;
+    line-height: 40px;
+}
+#msg {
+    border: 1px solid #ddd;
+}
+input.button {
+    border: 1px solid #ccccff;
+}
+table.widget {
+    border: 1px solid #ddd;
+}
+
+/**
+ * PADDING and MARGINS
+ */
+table.widget td {
+    padding: 3px; /* use whitespace as separator */
+}
+#page_header,
+table.widget .widget_header {
+    padding: 8px;
+}
+table.widget .widget_label {
+    text-align: center; 
+    padding: 1px 1px 1px 1px;
+}
+input.button {
+    margin: 3px 2px;
+    padding: 1px;
+}
+#navline {
+    padding: 8px 4px;
+    margin: 2px;
+}
+form,
+img,
+input,
+select,
+textarea {
+    margin: 3px;
+}
+table.widget_content {
+    margin: 2px;
+}
+table.widget .widget_content_graph table {
+    margin: 4px auto 4px auto; 
+}
+table.widget .sublabel {
+    padding-right: 4px;
+}
+#msg {
+    padding: 6px 4px;
+    margin: 4px;
+}
+#Main,
+#Sidebar {
+    padding-top: 4px;
+}
