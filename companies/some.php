@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.19 2004/06/29 14:43:21 maulani Exp $
+ * $Id: some.php,v 1.20 2004/07/01 13:21:06 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -332,10 +332,10 @@ start_page($page_title, true, $msg);
 <input type=text name="state" size=5 value="<?php echo $state; ?>"></td>
         </tr>
         <tr>
-          <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search">
+          <td class=widget_content_form_element colspan=4><input name="submit_form" type=submit class=button value="Search">
             <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
             <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
-            <input type=button class=button onclick="javascript: location.href='advanced-search.php';" value="Advanced Search"> 
+            <input type=button class=button onclick="javascript: location.href='advanced-search.php';" value="Advanced Search">
           </td>
         </tr>
       </table>
@@ -417,6 +417,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.20  2004/07/01 13:21:06  braverock
+ * - change name of submit to submit_form to not conflict with js
+ *   - patch supplied by David Uhlman
+ *
  * Revision 1.19  2004/06/29 14:43:21  maulani
  * - Full implementation of advanced companies search
  *
