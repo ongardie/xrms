@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.10 2005/01/09 01:05:02 vanmer Exp $
+  * $Id: email.php,v 1.11 2005/03/15 18:06:44 daturaarutad Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -50,7 +50,7 @@
 		  //Nic: DO SOMETHING DIFFERENT FOR COMPANIES BECAUSE YOU HAVE TO GET THE CONTACT IDS FROM WITHIN THE COMPANY
 			//I only pass companies the end of the sql, ie the from and the where.
 			//I should have really done this in the first place for all of them.
-      $from=$_SESSION["search_sql"]["from"];
+      		$from=$_SESSION["search_sql"]["from"];
 			//var_dump($_SESSION["search_sql"]);
 			$where=$_SESSION["search_sql"]["where"];
 			$order_by=$_SESSION["search_sql"]["order"];
@@ -68,9 +68,10 @@
       $sql.=" AND cont.contact_id IS NOT NULL ";
       //look out for group bys...
       if($groupby)$sql.="GROUP BY ".$groupby;
-			$sql.=" ORDER BY ".$orderby;
+	  if($orderby)$sql.=" ORDER BY ".$orderby;
 			break;
     }
+
 
     $rst = $con->execute($sql);
 
@@ -150,6 +151,9 @@
 
     /**
     * $Log: email.php,v $
+    * Revision 1.11  2005/03/15 18:06:44  daturaarutad
+    * now we check for order by value before appending to query
+    *
     * Revision 1.10  2005/01/09 01:05:02  vanmer
     * - added check to see if templates exist.  If not, do not show continue button
     *
