@@ -9,8 +9,14 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.11 2004/10/01 14:21:26 introspectshun Exp $
+ * $Id: sidebar.php,v 1.12 2005/01/06 20:46:58 vanmer Exp $
  */
+/*
+Commented until ACL system is implemented
+$opList=get_list($session_user_id, 'Read', false, 'opportunities');
+if (!$opList) { $opportunity_rows=''; return false; }
+else { $opList=implode(",",$opList); $opportunity_limit_sql.=" AND opportunities.opportunity_id IN ($opList) "; }
+*/
 
 $opportunity_rows = "<div id='opportunity_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
@@ -37,7 +43,7 @@ order by close_at, sort_order";
 //$con->debug=1;
 
 //execute our query
-$rst = $con->SelectLimit($opportunity_sql, $xrms_sql_limit, 0);
+$rst = $con->SelectLimit($opportunity_sql, 5, 0);
 
 if (strlen($rst->fields['username'])>0) {
     while (!$rst->EOF) {
@@ -56,13 +62,15 @@ if (strlen($rst->fields['username'])>0) {
 
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0)) ) {
+    $new_button=render_create_button('New','submit');
     $opportunity_rows .= "
             <tr>
                 <form action='".$http_site_root."/opportunities/new.php' method='post'>
                 <input type='hidden' name='company_id' value='$company_id'>
+                <input type='hidden' name='division_id' value='$division_id'>
                 <input type='hidden' name='contact_id' value='$contact_id'>
                 <td class=widget_content_form_element colspan=4>
-                    <input type=submit class=button value='" . _("New") . "'>
+                    $new_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
                 </form>
@@ -81,6 +89,11 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.12  2005/01/06 20:46:58  vanmer
+ * - added division_id to new opportunity sidebar button
+ * - added commented ACL authentication to top of sidebar
+ * - added call to render button to create New Opportunity button
+ *
  * Revision 1.11  2004/10/01 14:21:26  introspectshun
  * - Fixed a typo so xrms_sql_limit now works
  *
