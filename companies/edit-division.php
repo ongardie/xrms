@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.8 2005/01/25 00:05:29 vanmer Exp $
+ * $Id: edit-division.php,v 1.9 2005/02/08 17:03:37 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -46,6 +46,9 @@ $rst->close();
 $sidebar='';
 $sidebar=do_hook_function('division_sidebar_bottom',$sidebar);
 
+$edit_division_form_extra='';
+$edit_division_form = do_hook_function('edit_division_form', &$edit_division_form_extra, $division_id);
+
 if (!$sidebar) $sidebar = '&nbsp';
 
 $con->close();
@@ -81,6 +84,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=description><?php echo $description; ?></textarea></td>
             </tr>
+            <?php echo $edit_division_form_extra; ?>
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <?php echo render_edit_button("Save Changes"); ?>
@@ -106,6 +110,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.9  2005/02/08 17:03:37  vanmer
+ * - added hook for division edit page form display
+ *
  * Revision 1.8  2005/01/25 00:05:29  vanmer
  * - added hook for a division sidebar
  * - added output for sidebar
