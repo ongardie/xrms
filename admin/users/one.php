@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.14 2004/07/20 12:48:50 cpsource Exp $
+ * $Id: one.php,v 1.15 2004/07/25 16:02:12 johnfawcett Exp $
  */
 
 //include required files
@@ -56,7 +56,7 @@ if($my_company_id) {
 
 $con->close();
 
-$page_title = _('One User :') . $first_names . ' ' . $last_name;
+$page_title = _("User Details") . ': ' . $first_names . ' ' . $last_name;
 start_page($page_title);
 
 ?>
@@ -120,7 +120,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete User?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete User").'?'; ?>');">
         <input type=hidden name=edit_user_id value="<?php  echo $edit_user_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -152,6 +152,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2004/07/25 16:02:12  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext strings
+ *
  * Revision 1.14  2004/07/20 12:48:50  cpsource
  * - Require 'Admin' to run.
  *

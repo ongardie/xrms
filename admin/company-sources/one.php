@@ -4,7 +4,7 @@
  *
  * Description
  *
- * $Id: one.php,v 1.7 2004/07/16 23:51:36 cpsource Exp $
+ * $Id: one.php,v 1.8 2004/07/25 15:51:17 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -40,7 +40,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Company Source : ").$company_source_pretty_name;
+$page_title = _("Company Source Details").': '.$company_source_pretty_name;
 start_page($page_title);
 
 ?>
@@ -80,7 +80,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Company Source?"); ?>');">
+        <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Company Source").'?'; ?>');">
         <input type=hidden name=company_source_id value="<?php  echo $company_source_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -112,6 +112,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 15:51:17  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext strings
+ *
  * Revision 1.7  2004/07/16 23:51:36  cpsource
  * - require session_check ( 'Admin' )
  *

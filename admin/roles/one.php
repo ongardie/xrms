@@ -4,7 +4,7 @@
  *
  * Edit roles
  *
- * $Id: one.php,v 1.5 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: one.php,v 1.6 2004/07/25 15:58:46 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -37,7 +37,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Role :").$role_pretty_name;
+$page_title = _("Role Details").': '.$role_pretty_name;
 start_page($page_title);
 
 ?>
@@ -74,7 +74,7 @@ start_page($page_title);
 		</form>
 
 		<form action=delete.php method=post>
-		<input type=hidden name=role_id value="<?php  echo $role_id;; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Role?"); ?>');">
+		<input type=hidden name=role_id value="<?php  echo $role_id;; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Role").'?'; ?>');">
 		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=4><?php echo _("Delete Role"); ?></td>
@@ -105,6 +105,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.6  2004/07/25 15:58:46  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext strings
+ *
  * Revision 1.5  2004/07/16 23:51:38  cpsource
  * - require session_check ( 'Admin' )
  *

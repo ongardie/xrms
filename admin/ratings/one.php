@@ -2,7 +2,7 @@
 /**
  * Show details of a single rating
  *
- * $Id: one.php,v 1.6 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: one.php,v 1.7 2004/07/25 15:56:42 johnfawcett Exp $
  */
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -34,7 +34,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Rating : ").$rating_pretty_name;
+$page_title = _("Rating Details").': '.$rating_pretty_name;
 start_page($page_title);
 
 ?>
@@ -70,7 +70,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Rating?"); ?>');">
+        <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Rating").'?'; ?>');">
         <input type=hidden name=rating_id value="<?php  echo $rating_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -102,6 +102,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/25 15:56:42  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext strings
+ *
  * Revision 1.6  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *
