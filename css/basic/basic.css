@@ -77,6 +77,8 @@ table.widget .overdue_activity {
 table.widget .widget_header,
 table.widget .widget_label {
     background-color: rgb(20%,40%,60%);
+}
+table.widget .widget_label {
 	text-align: center; 
 	padding: 0em 0.5em 0em 0.5em;
 }
