@@ -2,7 +2,7 @@
 /**
  * Export Search Results from opportunities/some.php
  *
- * $Id: export.php,v 1.11 2005/03/21 23:13:57 daturaarutad Exp $
+ * $Id: export.php,v 1.12 2005/03/21 23:34:18 daturaarutad Exp $
  */
 
 
@@ -77,8 +77,6 @@ if (strlen($opportunity_status_id) > 0) {
 $where.="and cont.contact_id=opp.contact_id ";
 
 
-echo "$sql $where";
-
 $rst = $con->execute($sql.$where);
 
 if (!$rst) {
@@ -110,6 +108,9 @@ echo $csvdata;
 
 /**
  *$Log: export.php,v $
+ *Revision 1.12  2005/03/21 23:34:18  daturaarutad
+ *removed debug echo
+ *
  *Revision 1.11  2005/03/21 23:13:57  daturaarutad
  *added contacts join to the export query to match some.php
  *
