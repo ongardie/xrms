@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.37 2004/07/21 20:32:19 neildogg Exp $
+ * $Id: some.php,v 1.38 2004/07/21 22:39:04 neildogg Exp $
  */
 
 // handle includes
@@ -27,14 +27,15 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // check for saved search
 $arr_vars = array ( // local var name       // session variable name
            'saved_id'           => array ( 'saved_id', arr_vars_SESSION ) ,
-           'saved_title'         => array ( 'saved_title', arr_vars_SESSION ) ,
-           'group_item'          => array ( 'group_item', arr_vars_SESSION ) ,
+           'saved_title'        => array ( 'saved_title', arr_vars_SESSION ) ,
+           'group_item'         => array ( 'group_item', arr_vars_SESSION ) ,
+           'delete_saved'       => array ( 'delete_saved', arr_vars_SESSION ) ,
            );
 
 arr_vars_get_all ( $arr_vars );
 
 if($saved_id) {
-    $sql = "SELECT saved_data
+    $sql = "SELECT saved_data, saved_status
             FROM saved_actions
             WHERE saved_id=" . $saved_id . "
             AND (user_id=" . $session_user_id . "
@@ -45,7 +46,16 @@ if($saved_id) {
         db_error_handler($con, $sql);
     }
     elseif($rst->rowcount()) {
-        $_POST = unserialize($rst->fields['saved_data']);
+        if($delete_saved) {
+            $rec = array();
+            $rec['saved_status'] = 'd';
+            
+            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            $con->execute($upd);
+        }
+        else {
+            $_POST = unserialize($rst->fields['saved_data']);
+        }
     }
 }
 
@@ -264,7 +274,7 @@ $sql_saved = "SELECT saved_title, saved_id
         AND saved_status='a'";
 $rst = $con->execute($sql_saved);
 if($rst->rowcount()) {
-    $saved_menu = $rst->getmenu2('saved_id', 0, true);
+    $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
 }
 
 // Stub out $open_activities is never used. The ENTIRE code base
@@ -392,7 +402,8 @@ start_page($page_title, true, $msg);
                 <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan="2"><?php echo ($saved_menu) ? $saved_menu : "No saved searches"; ?>
+                <td class=widget_content_form_element colspan="2">
+                    <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?> 
                 </td>
                 <td class=widget_content_form_element colspan="2"> <input type=text name="saved_title" size=24> Add to Everyone <input type=checkbox name="group_item" value=1>
             </tr>
@@ -478,6 +489,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.38  2004/07/21 22:39:04  neildogg
+ * - Allow saved search deletion
+ *
  * Revision 1.37  2004/07/21 20:32:19  neildogg
  * - Added ability to save searches
  *  - Any improvements welcome
