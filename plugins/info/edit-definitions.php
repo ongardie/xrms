@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit-definitions.php,v 1.5 2005/02/10 13:42:18 braverock Exp $
+ * $Id: edit-definitions.php,v 1.6 2005/02/11 19:05:08 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -168,16 +168,17 @@ $msg = $_GET['msg'];
 # Always retrieve, and pass on, server and company ID
 $info_id = $_GET['info_id'];
 $company_id = $_GET['company_id'];
+$contact_id = $_GET['contact_id'];
+$division_id = $_GET['division_id'];
 //$return_url = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
-
 //if (!$return_url) {
     $return_url = urlencode("/plugins/info/edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id");
 //} else {
 //    $return_url = urlencode($return_url);
 //}
 
-$back_url = "$http_site_root/plugins/info/one.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id";
+$back_url = "$http_site_root/plugins/info/one.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&contact_id=$contact_id&division_id=$division_id";
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
