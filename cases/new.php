@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.6 2004/06/03 16:15:33 braverock Exp $
+ * $Id: new.php,v 1.7 2004/06/04 17:37:35 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -60,7 +60,7 @@ start_page($page_title, true, $msg);
 
 ?>
 
-<script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+<?php jscalendar_includes(); ?>
 
 <div id="Main">
     <div id="Content">
@@ -97,7 +97,10 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Due By</td>
-                <td class=widget_content_form_element><input type=text size=12 name=due_at value="<?php echo date('Y-m-d') ?>">&nbsp;<a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a></td>
+                <td class=widget_content_form_element>
+                    <input type=text ID="f_date_d" name=due_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Description</td>
@@ -147,17 +150,16 @@ function validate() {
 
 initialize();
 
-<!--
+    Calendar.setup({
+        inputField     :    "f_date_d",      // id of the input field
+        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
+        showsTime      :    true,            // will display a time selector
+        button         :    "f_trigger_d",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
 
-// create calendar object(s) just after form tag closed
-// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
-// note: you can have as many calendar objects as you need for your application
-
-    var cal1 = new calendar1(document.forms[0].elements['due_at']);
-    cal1.year_scroll = true;
-    cal1.time_comp = false;
-
-//-->
 </script>
 
 <?php
@@ -166,6 +168,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.7  2004/06/04 17:37:35  gpowers
+ * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
+ * w/minor changes: changed includes to function, used complete php tags
+ *
  * Revision 1.6  2004/06/03 16:15:33  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
