@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.40 2004/07/07 14:35:28 maulani Exp $
+ * $Id: utils-misc.php,v 1.41 2004/07/07 22:26:41 introspectshun Exp $
  */
 
 /**
@@ -89,16 +89,15 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
 
     $con->execute($sql1);
 
-    $sql2 = "SELECT * FROM recent_items WHERE 1 = 2"; //select empty record as placeholder
-    $rst = $con->execute($sql2);
-
+    //save to database
     $rec = array();
     $rec['user_id'] = $user_id;
     $rec['on_what_table'] = $on_what_table;
     $rec['on_what_id'] = $on_what_id;
     $rec['recent_item_timestamp'] = time();
 
-    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $tbl = 'recent_items';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
 }
 
@@ -131,9 +130,7 @@ function current_audit_level() {
 function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_what_id, $level=4) {
     $log_level = current_audit_level();
     if ($level <= $log_level) {
-        $sql = "SELECT * FROM audit_items WHERE 1 = 2"; //select empty record as placeholder
-        $rst = $con->execute($sql);
-
+        //save to database
         $rec = array();
         $rec['user_id'] = $user_id;
         $rec['audit_item_type'] = $audit_item_type;
@@ -144,7 +141,8 @@ function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_wh
         $rec['session_id'] = $_COOKIE['PHPSESSID'];
         $rec['audit_item_timestamp'] = time();
 
-        $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+        $tbl = 'audit_items';
+        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
     }
 }
@@ -690,6 +688,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.41  2004/07/07 22:26:41  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.40  2004/07/07 14:35:28  maulani
  * - Fix bug in show_test_values.  HTML entities need to be properly formatted for display
  *
