@@ -52,7 +52,7 @@ $how_many_rows_to_import_per_page = 10;
 /* STYLE OPTIONS */
 
 // replace this with HTML or another image
-$required_indicator = "<img height=12 width=12 alt=required src=/img/required.gif>";
+$required_indicator = "<img height=12 width=12 alt=required src=$http_site_root/img/required.gif>";
 
 // if vertical space is tight, shrink this down and change the font size in the stylesheet
 // these shouldn't even be here, though... all style info should be set in the stylesheet
