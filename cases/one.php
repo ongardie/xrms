@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.8 2004/03/21 15:25:26 braverock Exp $
+ * $Id: one.php,v 1.9 2004/04/10 14:59:47 braverock Exp $
  */
 
 //include required files
@@ -203,7 +203,7 @@ if (strlen($categories) == 0) {
     $categories = "No categories";
 }
 
-$page_title = "One Case : $case_title";
+$page_title = "Case #$case_id: $case_title";
 start_page($page_title, true, $msg);
 
 ?>
@@ -374,6 +374,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/04/10 14:59:47  braverock
+ * - display Case Id on Case details screen
+ *   - apply SF patch 925619 submitted by Glenn Powers
+ *
  * Revision 1.8  2004/03/21 15:25:26  braverock
  * - fixed a bug where there are no contacts for a company.
  *
