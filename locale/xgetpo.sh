@@ -72,7 +72,7 @@ xgettext ${XGETTEXT_OPTIONS} -j install/*.php
 xgettext ${XGETTEXT_OPTIONS} -j js/*.php
 xgettext ${XGETTEXT_OPTIONS} -j js/jscalendar/*.php
 #xgettext ${XGETTEXT_OPTIONS} -j js/jscalendar/lang/*.php
-#xgettext ${XGETTEXT_OPTIONS} -j locale/*.php
+xgettext ${XGETTEXT_OPTIONS} -j locale/*.php
 #xgettext ${XGETTEXT_OPTIONS} -j locale/de_DE/*.php
 #xgettext ${XGETTEXT_OPTIONS} -j locale/en_US/*.php
 #xgettext ${XGETTEXT_OPTIONS} -j locale/es_ES/*.php
