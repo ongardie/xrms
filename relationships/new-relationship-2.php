@@ -17,7 +17,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $relationship_name = $_POST['relationship_name'];
 $working_direction = $_POST['working_direction'];
