@@ -1,241 +1,253 @@
 <?php
+/**
+ * Strings file that will soon be replaced by localized strings in the code
+ *
+ * $Id: english.php,v 1.5 2004/07/19 02:33:46 braverock Exp $
+ */
 
 //  general
 
 $salutation_array = array("Mr.", "Ms.", "Mrs.", "Miss", "Dr.", "Rev.");
 
-$strYes = "Yes";
-$strNo = "No";
-$strNever = "Never";
+$strYes = _("Yes") ;
+$strNo = _("No") ;
+$strNever = _("Never") ;
 
 // account statuses
 
-$strAccountStatus = "Account Status";
-$strAccountStatusPageTitle = "One Account Status";
-$strAccountStatuses = "Manage Account Statuses";
-$strAccountStatusesPageTitle = "Account Statuses";
+$strAccountStatus = _("Account Status") ;
+$strAccountStatusPageTitle = _("One Account Status") ;
+$strAccountStatuses = _("Manage Account Statuses") ;
+$strAccountStatusesPageTitle = _("Account Statuses") ;
 
 // activities
 
-$strActivities = "Activities";
-$strActivity = "Activity";
-$strActivityAttachedToLabel = "Attached To";
-$strActivityDescriptionToLabel = "Description";
-$strActivityTitleLabel = "Subject";
-$strActivityUserLabel = "Owner";
-$strAdd = "Add";
+$strActivities = _("Activities") ;
+$strActivity = _("Activity") ;
+$strActivityAttachedToLabel = _("Attached To") ;
+$strActivityDescriptionToLabel = _("Description") ;
+$strActivityTitleLabel = _("Subject") ;
+$strActivityUserLabel = _("Owner") ;
+$strAdd = _("Add") ;
 
 // addresses
 
-$strAddress = "Address";
+$strAddress = _("Address") ;
 
 // admin
 
-$strAdministration = "Administration";
+$strAdministration = _("Administration") ;
 
 // campaigns
 
-$strCampaign = "Campaign";
-$strCampaignPageTitle = "One Campaign";
-$strCampaigns = "Campaigns";
+$strCampaign = _("Campaign") ;
+$strCampaignPageTitle = _("One Campaign") ;
+$strCampaigns = _("Campaigns") ;
 
 // cases
 
-$strCase = "Case";
-$strCasePageTitle = "One Case";
-$strCases = "Cases";
+$strCase = _("Case") ;
+$strCasePageTitle = _("One Case") ;
+$strCases = _("Cases") ;
 
 // categories
 
-$strCategory = "Category";
-$strCategories = "Categories";
+$strCategory = _("Category") ;
+$strCategories = _("Categories") ;
 
-$strCategoriesSomePageTitle = "Manage Categories";
-$strCategoriesOnePageTitle = "One Category";
+$strCategoriesSomePageTitle = _("Manage Categories") ;
+$strCategoriesOnePageTitle = _("One Category") ;
 
 // companies - some
 
-$strCompaniesSomePageTitle = "Companies";
+$strCompaniesSomePageTitle = _("Companies") ;
 
-$strCompaniesSomeSearchCriteriaTitle = "Search Criteria";
-$strCompaniesSomeSearchResultsTitle = "Search Results";
-$strCompaniesSomeOptionsTitle = "Options";
-$strCompaniesSomeRecentlyViewedTitle = "Recently Viewed";
+$strCompaniesSomeSearchCriteriaTitle = _("Search Criteria") ;
+$strCompaniesSomeSearchResultsTitle = _("Search Results") ;
+$strCompaniesSomeOptionsTitle = _("Options") ;
+$strCompaniesSomeRecentlyViewedTitle = _("Recently Viewed") ;
 
-$strCompaniesSomeSearchButton = "Search";
-$strCompaniesSomeClearSearchButton = "Clear Search";
-$strCompaniesSomeMailMergeButton = "Mail Merge";
+$strCompaniesSomeSearchButton = _("Search") ;
+$strCompaniesSomeClearSearchButton = _("Clear Search") ;
+$strCompaniesSomeMailMergeButton = _("Mail Merge") ;
 
-$strCompaniesSomeNewCompanyLink = "Add New Company";
+$strCompaniesSomeNewCompanyLink = _("Add New Company") ;
 
-$strCompaniesSomeCompanyAccountStatusLabel = "Account Status";
-$strCompaniesSomeCompanyCategoryLabel = "Category";
-$strCompaniesSomeCompanyCityLabel = "City";
-$strCompaniesSomeCompanyCodeLabel = "Code";
-$strCompaniesSomeCompanyCountryLabel = "Country";
-$strCompaniesSomeCompanyNameLabel = "Company Name";
-$strCompaniesSomeCompanyIndustrylabel = "Industry";
-$strCompaniesSomeCompanyCRMStatusLabel = "CRM Status";
-$strCompaniesSomeCompanyRatingLabel = "Rating";
-$strCompaniesSomeCompanyStateLabel = "State";
-$strCompaniesSomeCompanyUserLabel = "Owner";
+$strCompaniesSomeCompanyAccountStatusLabel = _("Account Status") ;
+$strCompaniesSomeCompanyCategoryLabel = _("Category") ;
+$strCompaniesSomeCompanyCityLabel = _("City") ;
+$strCompaniesSomeCompanyCodeLabel = _("Code") ;
+$strCompaniesSomeCompanyCountryLabel = _("Country") ;
+$strCompaniesSomeCompanyNameLabel = _("Company Name") ;
+$strCompaniesSomeCompanyIndustrylabel = _("Industry") ;
+$strCompaniesSomeCompanyCRMStatusLabel = _("CRM Status") ;
+$strCompaniesSomeCompanyRatingLabel = _("Rating") ;
+$strCompaniesSomeCompanyStateLabel = _("State") ;
+$strCompaniesSomeCompanyUserLabel = _("Owner") ;
 
-$strCompaniesSomeNoRecentlyViewedMessage = "No recently viewed companies";
+$strCompaniesSomeNoRecentlyViewedMessage = _("No recently viewed companies") ;
 
 // companies - one
 
-$strCompaniesOnePageTitle = "";
-$strCompaniesOneCompanyDetailsTitle = "Company Details";
-$strCompaniesOneContactsTitle = "Contacts";
-$strCompaniesOneActivitiesTitle = "Activities";
-$strCompaniesOneCategoriesTitle = "Categories";
-$strCompaniesOneNotesTitle = "Notes";
-$strCompaniesOneOpportunitiesTitle = "Opportunities";
-$strCompaniesOneCasesTitle = "Cases";
-$strCompaniesOneFilesTitle = "Files";
+$strCompaniesOnePageTitle = _("") ;
+$strCompaniesOneCompanyDetailsTitle = _("Company Details") ;
+$strCompaniesOneContactsTitle = _("Contacts") ;
+$strCompaniesOneActivitiesTitle = _("Activities") ;
+$strCompaniesOneCategoriesTitle = _("Categories") ;
+$strCompaniesOneNotesTitle = _("Notes") ;
+$strCompaniesOneOpportunitiesTitle = _("Opportunities") ;
+$strCompaniesOneCasesTitle = _("Cases") ;
+$strCompaniesOneFilesTitle = _("Files") ;
 
-$strCompaniesOneEditButton = "Edit";
-$strCompaniesOneAdminButton = "Admin";
-$strCompaniesOneCloneButton = "Clone";
-$strCompaniesOneMailMergeButton = "Mail Merge";
-$strCompaniesOneNewsButton = "News";
-$strCompaniesOneAddressesButton = "Addresses";
-$strCompaniesOneManageCategoriesButton = "Manage";
-$strCompaniesOneMoreOpportunitiesButton = "More";
-$strCompaniesOneNewOpportunityButton = "New";
-$strCompaniesOneMoreCasesButton = "More";
-$strCompaniesOneNewCaseButton = "New";
-$strCompaniesOneNewFileButton = "New";
-$strCompaniesOneNewContactButton = "New";
-$strCompaniesOneAddActivityButton = "Add";
-$strCompaniesOneDoneActivityButton = "Done";
+$strCompaniesOneEditButton = _("Edit") ;
+$strCompaniesOneAdminButton = _("Admin") ;
+$strCompaniesOneCloneButton = _("Clone") ;
+$strCompaniesOneMailMergeButton = _("Mail Merge") ;
+$strCompaniesOneNewsButton = _("News") ;
+$strCompaniesOneAddressesButton = _("Addresses") ;
+$strCompaniesOneManageCategoriesButton = _("Manage") ;
+$strCompaniesOneMoreOpportunitiesButton = _("More") ;
+$strCompaniesOneNewOpportunityButton = _("New") ;
+$strCompaniesOneMoreCasesButton = _("More") ;
+$strCompaniesOneNewCaseButton = _("New") ;
+$strCompaniesOneNewFileButton = _("New") ;
+$strCompaniesOneNewContactButton = _("New") ;
+$strCompaniesOneAddActivityButton = _("Add") ;
+$strCompaniesOneDoneActivityButton = _("Done") ;
 
-$strCompaniesOneCompanyNameLabel = "Name";
-$strCompaniesOneCompanyCodeLabel = "Code";
-$strCompaniesOneCompanyUserLabel = "Owner";
-$strCompaniesOneCompanyCRMStatusLabel = "Status";
-$strCompaniesOneCompanyPhoneLabel = "Phone";
-$strCompaniesOneCompanyPhone2Label = "Alt. Phone";
-$strCompaniesOneCompanyFaxLabel = "Fax";
-$strCompaniesOneCompanyURLLabel = "URL";
-$strCompaniesOneCompanyCityLabel = "City";
-$strCompaniesOneCompanyStateLabel = "State";
-$strCompaniesOneCompanyCountryLabel = "Country";
-$strCompaniesOneCompanyAccountStatusLabel = "Account Status";
-$strCompaniesOneCompanyCreditLimitLabel = "Credit Limit";
-$strCompaniesOneCompanyRatingLabel = "Rating";
-$strCompaniesOneCompanyTermsLabel = "Terms";
-$strCompaniesOneCompanySourceLabel = "Source";
-$strCompaniesOneCompanyIndustryLabel = "Industry";
-$strCompaniesOneCompanyEmployeesLabel = "Employees";
-$strCompaniesOneCompanyRevenueLabel = "Revenue";
-$strCompaniesOneCompanyHasExtranetAccessLabel = "Has Extranet Access";
-$strCompaniesOneCompanyLastExtranetVisitLabel = "Last Extranet Visit";
+$strCompaniesOneCompanyNameLabel = _("Name") ;
+$strCompaniesOneCompanyCodeLabel = _("Code") ;
+$strCompaniesOneCompanyUserLabel = _("Owner") ;
+$strCompaniesOneCompanyCRMStatusLabel = _("Status") ;
+$strCompaniesOneCompanyPhoneLabel = _("Phone") ;
+$strCompaniesOneCompanyPhone2Label = _("Alt. Phone") ;
+$strCompaniesOneCompanyFaxLabel = _("Fax") ;
+$strCompaniesOneCompanyURLLabel = _("URL") ;
+$strCompaniesOneCompanyCityLabel = _("City") ;
+$strCompaniesOneCompanyStateLabel = _("State") ;
+$strCompaniesOneCompanyCountryLabel = _("Country") ;
+$strCompaniesOneCompanyAccountStatusLabel = _("Account Status") ;
+$strCompaniesOneCompanyCreditLimitLabel = _("Credit Limit") ;
+$strCompaniesOneCompanyRatingLabel = _("Rating") ;
+$strCompaniesOneCompanyTermsLabel = _("Terms") ;
+$strCompaniesOneCompanySourceLabel = _("Source") ;
+$strCompaniesOneCompanyIndustryLabel = _("Industry") ;
+$strCompaniesOneCompanyEmployeesLabel = _("Employees") ;
+$strCompaniesOneCompanyRevenueLabel = _("Revenue") ;
+$strCompaniesOneCompanyHasExtranetAccessLabel = _("Has Extranet Access") ;
+$strCompaniesOneCompanyLastExtranetVisitLabel = _("Last Extranet Visit") ;
 
-$strCompaniesOneContactNameLabel = "Name";
-$strCompaniesOneContactSummaryLabel = "Summary";
-$strCompaniesOneContactTitleLabel = "Title";
-$strCompaniesOneContactDescriptionLabel = "Description";
-$strCompaniesOneContactPhoneLabel = "Phone";
-$strCompaniesOneContactEmailLabel = "E-Mail";
+$strCompaniesOneContactNameLabel = _("Name") ;
+$strCompaniesOneContactSummaryLabel = _("Summary") ;
+$strCompaniesOneContactTitleLabel = _("Title") ;
+$strCompaniesOneContactDescriptionLabel = _("Description") ;
+$strCompaniesOneContactPhoneLabel = _("Phone") ;
+$strCompaniesOneContactEmailLabel = _("E-Mail") ;
 
-$strCompaniesOneActivityTitleLabel = "Title";
-$strCompaniesOneActivityUserLabel = "User";
-$strCompaniesOneActivityStartsAtLabel = "Date";
-$strCompaniesOneActivityContactLabel = "Contact";
-$strCompaniesOneActivityTypeLabel = "Type";
+$strCompaniesOneActivityTitleLabel = _("Title") ;
+$strCompaniesOneActivityUserLabel = _("User") ;
+$strCompaniesOneActivityStartsAtLabel = _("Date") ;
+$strCompaniesOneActivityContactLabel = _("Contact") ;
+$strCompaniesOneActivityTypeLabel = _("Type") ;
 
-$strCompaniesOneOpportunityNameLabel = "Name";
-$strCompaniesOneOpportunityClosesAtLabel = "Closes";
-$strCompaniesOneOpportunityUserLabel = "Owner";
-$strCompaniesOneOpportunityStatusLabel = "Status";
+$strCompaniesOneOpportunityNameLabel = _("Name") ;
+$strCompaniesOneOpportunityClosesAtLabel = _("Closes") ;
+$strCompaniesOneOpportunityUserLabel = _("Owner") ;
+$strCompaniesOneOpportunityStatusLabel = _("Status") ;
 
-$strCompaniesOneCaseTitleLabel = "Name";
-$strCompaniesOneCaseDueAtLabel = "Due";
-$strCompaniesOneCaseUserLabel = "Owner";
-$strCompaniesOneCaseStatusLabel = "Status";
-$strCompaniesOneCasePriorityLabel = "Priority";
+$strCompaniesOneCaseTitleLabel = _("Name") ;
+$strCompaniesOneCaseDueAtLabel = _("Due") ;
+$strCompaniesOneCaseUserLabel = _("Owner") ;
+$strCompaniesOneCaseStatusLabel = _("Status") ;
+$strCompaniesOneCasePriorityLabel = _("Priority") ;
 
-$strCompaniesOneFileNameLabel = "Name";
-$strCompaniesOneFileEnteredAtLabel = "Created";
-$strCompaniesOneFileSizeLabel = "Owner";
-$strCompaniesOneFileEnteredByLabel = "User";
+$strCompaniesOneFileNameLabel = _("Name") ;
+$strCompaniesOneFileEnteredAtLabel = _("Created") ;
+$strCompaniesOneFileSizeLabel = _("Owner") ;
+$strCompaniesOneFileEnteredByLabel = _("User") ;
 
-$strCompaniesOneNoContactsMessage = "No contacts";
-$strCompaniesOneNoActivitiesMessage = "No activities";
-$strCompaniesOneNoCategoriesMessage = "No associated categories";
-$strCompaniesOneNoOpportunitiesMessage = "No opportunities";
-$strCompaniesOneNoNotesMessage = "No notes";
-$strCompaniesOneNoCasesMessage = "No cases";
-$strCompaniesOneNoFilesMessage = "No files";
+$strCompaniesOneNoContactsMessage = _("No contacts") ;
+$strCompaniesOneNoActivitiesMessage = _("No activities") ;
+$strCompaniesOneNoCategoriesMessage = _("No associated categories") ;
+$strCompaniesOneNoOpportunitiesMessage = _("No opportunities") ;
+$strCompaniesOneNoNotesMessage = _("No notes") ;
+$strCompaniesOneNoCasesMessage = _("No cases") ;
+$strCompaniesOneNoFilesMessage = _("No files") ;
 
 // contacts - some
 
-$strContactsSome = "Contact";
-$strContacts = "Contacts";
-$strCountry = "Country";
-$strCustomer = "Customer";
+$strContactsSome = _("Contact") ;
+$strContacts = _("Contacts") ;
+$strCountry = _("Country") ;
+$strCustomer = _("Customer") ;
 
-$strDeleteButton = "Delete";
-$strDeleteQuestion = "Delete?";
-$strDeleteActivityButton = "Delete Activity";
-$strDeleteActivityQuestion = "Delete This Activity?";
-$strDeleteCampaignButton = "Delete Campaign";
-$strDeleteCampaignQuestion = "Delete This Campaign?";
-$strDeleteCaseButton = "Delete Case";
-$strDeleteCaseQuestion = "Delete This Case?";
-$strDeleteCompanyButton = "Delete Company";
-$strDeleteCompanyQuestion = "Delete This Company?";
-$strDeleteContactButton = "Delete Contact";
-$strDeleteContactQuestion = "Delete This Contact?";
-$strDeleteOpportunityButton = "Delete Opportunity";
-$strDeleteOpportunityQuestion = "Delete This Opportunity?";
-$strDescription = "Description";
-$strDisplayHTML = "Display HTML";
-$strDone = "Done";
+$strDeleteButton = _("Delete") ;
+$strDeleteQuestion = _("Delete?") ;
+$strDeleteActivityButton = _("Delete Activity") ;
+$strDeleteActivityQuestion = _("Delete This Activity?") ;
+$strDeleteCampaignButton = _("Delete Campaign") ;
+$strDeleteCampaignQuestion = _("Delete This Campaign?") ;
+$strDeleteCaseButton = _("Delete Case") ;
+$strDeleteCaseQuestion = _("Delete This Case?") ;
+$strDeleteCompanyButton = _("Delete Company") ;
+$strDeleteCompanyQuestion = _("Delete This Company?") ;
+$strDeleteContactButton = _("Delete Contact") ;
+$strDeleteContactQuestion = _("Delete This Contact?") ;
+$strDeleteOpportunityButton = _("Delete Opportunity") ;
+$strDeleteOpportunityQuestion = _("Delete This Opportunity?") ;
+$strDescription = _("Description") ;
+$strDisplayHTML = _("Display HTML") ;
+$strDone = _("Done") ;
 
-$strEndsAt = "Ends At";
+$strEndsAt = _("Ends At") ;
 
-$strFirstNames = "First Names";
+$strFirstNames = _("First Names") ;
 
-$strHome = "Home";
+$strHome = _("Home") ;
 
-$strLastName = "Last Name";
+$strLastName = _("Last Name") ;
 
-$strMailMergeButton = "Mail Merge";
+$strMailMergeButton = _("Mail Merge") ;
 
-$strNewCompanyLink = "Add New Company";
+$strNewCompanyLink = _("Add New Company") ;
 
-$strOpportunities = "Opportunities";
-$strOpportunitiesPageTitle = "Opportunities";
-$strOpportunity = "Opportunity";
-$strOpportunityPageTitle = "One Opportunity";
-$strOptions = "Options";
-$strOwner = "Owner";
+$strOpportunities = _("Opportunities") ;
+$strOpportunitiesPageTitle = _("Opportunities") ;
+$strOpportunity = _("Opportunity") ;
+$strOpportunityPageTitle = _("One Opportunity") ;
+$strOptions = _("Options") ;
+$strOwner = _("Owner") ;
 
-$strPrettyName = "Pretty Name";
-$strPrettyPlural = "Pretty Plural";
+$strPrettyName = _("Pretty Name") ;
+$strPrettyPlural = _("Pretty Plural") ;
 
-$strRating = "Rating";
-$strRatingPageTitle = "One Rating";
-$strRatings = "Ratings";
-$strRatingsPageTitle = "Manage Ratings";
-$strRecentlyViewed = "Recently Viewed";
+$strRating = _("Rating") ;
+$strRatingPageTitle = _("One Rating") ;
+$strRatings = _("Ratings") ;
+$strRatingsPageTitle = _("Manage Ratings") ;
+$strRecentlyViewed = _("Recently Viewed") ;
 
-$strSaveChanges = "Save Changes";
-$strSearch = "Search";
-$strSearchCriteria = "Search Criteria";
-$strSearchResults = "Search Results";
-$strShortName = "Short Name";
-$strStartsAt = "Starts At";
-$strSummary = "Summary";
+$strSaveChanges = _("Save Changes") ;
+$strSearch = _("Search") ;
+$strSearchCriteria = _("Search Criteria") ;
+$strSearchResults = _("Search Results") ;
+$strShortName = _("Short Name") ;
+$strStartsAt = _("Starts At") ;
+$strSummary = _("Summary") ;
 
-$strTitle = "Title";
+$strTitle = _("Title") ;
 
-$strUser = "User";
-$strUsers = "Users";
+$strUser = _("User") ;
+$strUsers = _("Users") ;
 
-$strVendor = "Vendor";
-$strVendors = "Vendors";
+$strVendor = _("Vendor") ;
+$strVendors = _("Vendors") ;
 
+/**
+ * $Log: english.php,v $
+ * Revision 1.5  2004/07/19 02:33:46  braverock
+ * - localize all strings for i18n
+ *   - this file will eventually go away, but this is a quick way to get these into xrms.pot
+ *
+ */
 ?>
