@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.28 2004/07/07 18:06:18 neildogg Exp $
+ * $Id: one.php,v 1.29 2004/07/07 22:23:18 neildogg Exp $
  */
 
 //include required files
@@ -208,7 +208,26 @@ start_page($page_title, true, $msg);
 ?>
 
 <script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+<script language="JavaScript" type="text/javascript">
+function logTime() {
+    var date = new Date();
+    var d = date.getDate();
+    var day = (d < 10) ? '0' + d : d;
+    var m = date.getMonth() + 1;
+    var month = (m < 10) ? '0' + m : m;
+    var yy = date.getYear();
+    var year = (yy < 1000) ? yy + 1900 : yy;
 
+    var h = date.getHours();
+    var hour = (h < 10) ? '0' + h : h;
+    var mm = date.getMinutes();
+    var minute = (mm < 10) ? '0' + mm : mm;
+    var s = date.getSeconds();
+    var second = (s < 10) ? '0' + s : s;
+
+    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+}
+</script>
 <div id="Main">
 
     <div id="Content">
@@ -261,7 +280,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element>
                 <select name=probability>
                     <?php for($i = 0; $i <= 100; $i += 10) { ?>
-                    <option value="<?php echo $i; ?>"<?php echo $probability[$i]; ?>><? echo $i; ?>%
+                    <option value="<?php echo $i; ?>"<?php echo $probability[$i]; ?>><?php echo $i; ?>%
                     <?php } ?>
                 </select>
                 </td>
@@ -287,8 +306,12 @@ start_page($page_title, true, $msg);
             if($on_what_table == 'opportunities') {
             ?> 
             <tr>
-                <td class=widget_label_right_166px>Opportunity Description</td>
-                <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea></td>
+                <td class=widget_label_right_166px>Opportunity Notes</td>
+                <td class=widget_content_form_element>
+                    <textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea>
+                    <input class=button value="Insert Log" type=button onclick="var now = new Date(); form.opportunity_description.value = 
+                        logTime() + ' by ' + form.user_id.options[form.user_id.selectedIndex].text + ': \n\n' + form.opportunity_description.value">
+                </td>
             </tr>
             <?php } ?>
             <tr>
@@ -340,7 +363,6 @@ start_page($page_title, true, $msg);
 
 </div>
 
-
 <script type="text/javascript">
     Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
@@ -371,6 +393,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.29  2004/07/07 22:23:18  neildogg
+ * - Fixed lack of <?php in probability printing\n- Added logging formatting in opportunity notes
+ *
  * Revision 1.28  2004/07/07 18:06:18  neildogg
  * - Added sticky opportunity description
  *
