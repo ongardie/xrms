@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.26 2004/06/03 16:32:38 braverock Exp $
+ * $Id: utils-misc.php,v 1.27 2004/06/07 16:27:11 gpowers Exp $
  */
 
 /**
@@ -561,6 +561,7 @@ function get_formatted_address (&$con,$address_id) {
     $rst = $con->execute($sql);
 
     if ($rst) {
+      if ($rst->fields['city']) {
         $address_body = $rst->fields['address_body'];
         $line1 = $rst->fields['line1'];
         $line2 = $rst->fields['line2'];
@@ -577,6 +578,7 @@ function get_formatted_address (&$con,$address_id) {
             $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
             eval("\$address_to_display = \"$address_format_string\";");
             // eval ("\$str = \"$str\";");
+      }
         }
     } else {
         // database error, return some useful information.
@@ -590,6 +592,10 @@ function get_formatted_address (&$con,$address_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.27  2004/06/07 16:27:11  gpowers
+ * - get_formatted_address() will now not return an address if there is
+ * no "city". This is to prevent blank addresses from displaying.
+ *
  * Revision 1.26  2004/06/03 16:32:38  braverock
  * - fixed typo
  *
