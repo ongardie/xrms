@@ -32,7 +32,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $rst = $con->execute($sql);
 
-$fp = fopen('/web/xrms_demo/tmp/contacts.csv', 'w');
+$fp = fopen($xrms_file_root . '/tmp/contacts.csv', 'w');
 
 // if (($fp) && ($rst)) {
 	rs2csvfile($rst, $fp);
