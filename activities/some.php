@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.47 2004/07/23 21:46:54 cpsource Exp $
+ * $Id: some.php,v 1.48 2004/07/26 16:13:00 neildogg Exp $
  */
 
 // handle includes
@@ -95,10 +95,9 @@ arr_vars_get_all ( $arr_vars );
 // (a search for today will add an interval of '0 days')
 // Warning: if a user wants to save a search for a particular date, this won't allow it, as it defaults to recurring search
 if ( !$search_date ) {
-  $day_diff = 0;
-} else {
-  $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
+  $search_date = date('Y-m-d', time());
 }
+$day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
 
 $curdate = $con->DBTimeStamp(time());
 $offset = $con->OffsetDate($day_diff, $curdate);
@@ -480,6 +479,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.48  2004/07/26 16:13:00  neildogg
+ * - Now it actually defines an undefined variable
+ *  - instead of assigning it an empty string
+ *
  * Revision 1.47  2004/07/23 21:46:54  cpsource
  * - Get rid of some undefined variable usages.
  *
