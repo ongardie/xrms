@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.105 2005/01/09 02:46:06 braverock Exp $
+ * $Id: utils-misc.php,v 1.106 2005/01/09 17:02:57 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -45,9 +45,10 @@ function session_startup () {
  * Otherwise, we return the session id to our current caller.
  *
  * @param string $c_role - the user's role
+ * @param string $action - optionally specify what action to check user permission for (defaults to Read)
  * @return integer user_id of the logged in user
  */
-function session_check($c_role='') {
+function session_check($c_role='', $action='Read') {
 
     global $http_site_root;
     global $xrms_system_id;
@@ -1411,6 +1412,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.106  2005/01/09 17:02:57  vanmer
+ * - added optional action parameter to session check, for ACL permissions
+ * - checking in now to allow other ACL-related changes to operate properly before ACL is checked in
+ *
  * Revision 1.105  2005/01/09 02:46:06  braverock
  * - added additional test for $_SERVER['REQUEST_URI'] to handle IIS on XP lack of setting var
  *
