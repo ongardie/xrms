@@ -19,131 +19,95 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 
 GetGlobalVar($return_url,'return_url');
-GetGlobalVar($relationships,'relationships');
-parse_str($relationships);
 GetGlobalVar($msg, 'msg');
+GetGlobalVar($relationship_entities,'relationship_entities');
+GetGlobalVar($relationship_entity, 'relationship_entity');
+    
+//retrieve relationship array provided by one.php pages (urlencoded and serialized by relationships/sidebar.php)
+$relationship_entities_array=unserialize(urldecode($relationship_entities));
+
+
+if ($relationship_entity) {
+    //Split relationship entity into table and ID (comma separated to start with)
+    $relationship_entity_array=explode(",",$relationship_entity);
+    $relationship_entity_table=array_shift($relationship_entity_array);
+    $relationship_entity_id = array_shift($relationship_entity_array);
+} else {
+    //otherwise default to the first relationship type available
+    $relationship_entity_table=key($relationship_entities_array);
+    $relationship_entity_id=current($relationship_entities_array);
+}
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT rt2.from_what_table, rt2.to_what_table
-        FROM relationship_types AS rt, relationship_types AS rt2
-        WHERE rt.relationship_type_id = $relationship_type_id
-        AND rt.from_what_table = rt2.from_what_table
-        AND rt.to_what_table = rt2.to_what_table
-        AND rt2.relationship_status = 'a'
-        GROUP BY rt2.from_what_table, rt2.to_what_table
-        ORDER BY rt2.relationship_type_id";
-$rst = $con->execute($sql);
+$singular_table=make_singular($relationship_entity_table);
 
-if(!$rst) {
-    db_error_handler($con, $sql);
-}
-elseif(!$rst->EOF) {
-    if($working_direction == "from") {
-        $opposite_direction = "to";
-    }
-    else {
-        $opposite_direction = "from";
-    }
-    
-    if($working_direction == "both") {
-        $on_what_table = $rst->fields['from_what_table'];
-        $working_table = $rst->fields['from_what_table'];
-        $what_table = false;
-    }
-    else {
-        $on_what_table = $rst->fields[$working_direction . '_what_table'];
-        $working_table = $rst->fields[$working_direction . '_what_table'];
-        $what_table = $rst->fields[$opposite_direction . '_what_table'];
-    }
-    
-    $singular_table = make_singular($on_what_table);
-    
-    $display_name = ucfirst(make_singular($working_table));
-    
-    $contact_rows = '';
-    if($working_table == "companies" and $what_table == "contacts") {
-        $sql = "(SELECT 'Enter other contact' AS name,
-                0 AS contact_id)
-                UNION
-                (SELECT " .
-                $con->Concat("first_names", "' '", "last_name") . " AS name,
-                contact_id
-                FROM contacts
-                WHERE company_id=" . $on_what_id . "
-                AND contact_record_status='a'
-                ORDER BY last_name)";
-        $rst2 = $con->execute($sql);
-        if(!$rst2) {
-            db_error_handler($con, $sql);
-        }
-        elseif(!$rst2->EOF) {
-            $contact_rows = $rst2->GetMenu2('possible_id', null, false);
-        }
-    }
-    
-    //Create query to get the name of the entity, either contact first/last name or _name
-    $name_to_get = $con->Concat(implode(", ' ' , ", table_name($on_what_table)));
+//Loop on entities for which a relationship could be created on
+foreach ($relationship_entities_array as $rel_table=>$rel_id) {
+    $rel_singular_table = make_singular($rel_table);
+    $name_to_get = $con->Concat(implode(", ' ' , ", table_name($rel_table)));
     $sql = "SELECT $name_to_get AS name
-            FROM $on_what_table
-            WHERE $singular_table" . "_id = $on_what_id";
-
-    $rst2 = $con->execute($sql);
-    if (!$rst2) {
-        db_error_handler($con, $sql);
-    }
-    elseif(!$rst2->EOF) { 
-        $name = $rst2->fields["name"];
-        $rst2->close();
-    }
-    else {
-        $name = $singular_table;
-        $rst2->close();
-    }
+            FROM $rel_table
+            WHERE $rel_singular_table" . "_id = $rel_id";
+    $rel_rst=$con->execute($sql);
     
-    if($working_direction == 'both') {
-        $directions = array('from', 'to');
-    }
-    else {
-        $directions = array($working_direction);
-    }
+    //retrieve name of entity
+    $entity_name=$rel_rst->fields['name'];
+    
+    //check to see if currently created entry was selected by the user
+    if ($rel_id==$relationship_entity_id AND $rel_table==$relationship_entity_table) $rel_selected=' SELECTED';
+    else $rel_selected='';
+    
+    //add option for the entity, table,id as value
+    $entity_options.="\n<option VALUE=\"$rel_table,$rel_id\" $rel_selected>".ucfirst($rel_singular_table).": $entity_name\n";    
+}
+if (count($relationship_entities_array)>1) {
+    $entity_select = "<SELECT id='relationship_entity' name='relationship_entity' onchange=\"javascript:restrictByEntity();\">";
+    $entity_select.=$entity_options."</SELECT>";
+} else {
+    //use hidden variable if only one entity is available
+    $entity_select = "<input type=hidden name=relationship_entity value=\"$rel_type,$rel_id\">" . ucfirst($rel_singular_table).": $entity_name\n";
+}
 
-    $optionsarray = array();
+$directions=array('from','to');
+$optionsarray=array();
+//loop over the possible directions between relationships
+foreach ($directions as $direction) {
     //search for this table in relationships in this direction
-    $sql = "SELECT *
-            FROM relationship_types
-            WHERE from_what_table = '{$rst->fields['from_what_table']}'
-            AND to_what_table = '{$rst->fields['to_what_table']}'
-            AND relationship_status='a'
-            ORDER BY relationship_type_id";
-    $rst2 = $con->execute($sql);
-    if(!$rst2) {
-        db_error_handler($con, $sql);
-    }
-    elseif(!$rst2->EOF) {
-        while (!$rst2->EOF) {
-            //loop over the possible directions between relationships
-            foreach ($directions as $direction) {
-                if($direction == 'from') {
-                    $opposite = 'to';
-                }
-                else {
-                  $opposite = 'from';
-                }
-
-                //make array keyed on text (should be unique), and set to relationship_type,direction
-                $optionsarray[strtolower($rst2->fields[$direction . '_what_text']) . ' ' . make_singular($rst2->fields[$opposite . '_what_table'])] = $rst2->fields['relationship_type_id'] . ',' . $direction;
-            }
-            $rst2->movenext();
+    $sql="SELECT *
+    FROM relationship_types
+    WHERE {$direction}_what_table = " . $con->qstr($relationship_entity_table)
+  . " ORDER BY {$direction}_what_table";
+    $rst = $con->execute($sql);
+    if ($direction=='from') { $opposite='to'; } else { $opposite='from'; }
+    if (!$rst) { db_error_handler($con, $sql); }
+    if ($rst->numRows()>0) {
+        while (!$rst->EOF) {
+            $opposite_table=$rst->fields[$opposite.'_what_table'];
+            //make array keyed on text (should be unique), and set to relationship_type,direction
+            //keep in array by table this relationship connects to, for sorting purposes
+            $optionsarray[$opposite_table][strtolower($rst->fields[$direction.'_what_text']).' '.                    make_singular($rst->fields[$opposite.'_what_table'])]=$rst->fields['relationship_type_id'].','.$direction;
+            $rst->movenext();
         }
     }
-}
+    
+}        
+        
+    //break down and append all relationship type options, sort by table then type then direction
+    $full_optionsarray=array();
+    foreach ($optionsarray as $otable=>$optionset) {
+        //sort and append each table to the full set of options
+        asort($optionset);
+        $full_optionsarray=array_merge($full_optionsarray,$optionset);
+    }
+    
+    reset($full_optionsarray);
 
 $options = '';
 
 //options should be look like: <option value="2,from">Retains consultant contact</option>
-foreach ($optionsarray as $text => $type) {
+foreach ($full_optionsarray as $text => $type) {
     $options .= "
                     <option value=\"$type\">$text</option>";
 }
@@ -154,6 +118,14 @@ $page_title = _("Add Relationship for ") . $display_name;
 
 start_page($page_title, true, $msg);
 ?>
+<script language=JavaScript>
+<!--
+function restrictByEntity() {
+    entity=document.getElementById("relationship_entity");
+    location.href = 'new-relationship.php?relationship_entities=<?php echo urlencode($relationship_entities); ?>&relationship_entity=' + entity.value + '&return_url=<?php echo $return_url; ?>';
+}
+//-->
+</script>
 <div id="Main">
     <div id="Content">
         <form action=new-relationship-2.php method=post>
@@ -162,11 +134,10 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_content_form_element><?php echo $display_name . ': ' .$name; ?>
+                 <td class=widget_content_form_element><?php echo $entity_select; ?>
                     <select name=relationship_type_direction><?php echo $options; ?>
 
                     </select>
-                    <?php print $contact_rows; ?>
                     <input type=text size=8 name=search_on>
                 </td></tr>
             <tr><td class=widget_content_form_element><input type=submit class=button name=relSearch value="<?php echo _("Search"); ?>"></td></tr>
@@ -175,6 +146,10 @@ start_page($page_title, true, $msg);
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.15  2005/01/12 18:16:59  vanmer
+ * - updated to allow multiple intial entities to be created, all from single page
+ * - reloads to restrict list of possible relationship_types upon initital entity selection
+ *
  * Revision 1.14  2005/01/11 17:19:33  neildogg
  * - Fairly large update to make it work as it should
  *
