@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.71 2004/12/30 00:13:16 maulani Exp $
+ * $Id: one.php,v 1.72 2004/12/31 13:46:51 braverock Exp $
  */
 
 //include required files
@@ -113,7 +113,7 @@ if ($rst) {
     $entered_by_firstname = $rst->fields['first_names'];
     $entered_by_lastname = $rst->fields['last_name'];
     if ($entered_by_lastname != '') {
-         $entered_by_text = 'Entered by ' . $entered_by_firstname . ' ' . $entered_by_lastname;
+         $entered_by_text = _("Entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname;
     } else {
          $entered_by_text = '';
     }
@@ -135,6 +135,7 @@ if ($company_id) {
     FROM contacts
     WHERE company_id = $company_id
     AND contact_record_status = 'a'
+    ORDER BY last_name, first_names
     ";
     $rst = $con->execute($sql);
     if ($rst) {
@@ -486,6 +487,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.72  2004/12/31 13:46:51  braverock
+ * - localize 'Entered by'
+ * - sort contact list by last_name, first_names
+ *
  * Revision 1.71  2004/12/30 00:13:16  maulani
  * - Display Entered by User data in addition to assigned user
  *
