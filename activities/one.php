@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.41 2004/07/20 11:25:26 braverock Exp $
+ * $Id: one.php,v 1.42 2004/07/20 16:50:00 neildogg Exp $
  */
 
 //include required files
@@ -250,7 +250,6 @@ function logTime() {
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
         <input type=hidden name=table_name value="<?php echo $table_name ?>">
         <input type=hidden name=table_status_id value="<?php echo $table_status_id ?>">
-        <input type=hidden name=opportunity_description value="<?php echo $opportunity_description ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -405,6 +404,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.42  2004/07/20 16:50:00  neildogg
+ * - Have to remove the hidden opportunity_description AGAIN
+ *
  * Revision 1.41  2004/07/20 11:25:26  braverock
  * - removed second jscalendar_includes call
  *   - it is unecessary, and causes a stack overflow on IE 6
