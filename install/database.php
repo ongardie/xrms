@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.8 2004/06/03 16:23:13 braverock Exp $
+ * $Id: database.php,v 1.9 2004/06/04 14:54:08 braverock Exp $
  */
 
 /**
@@ -507,7 +507,7 @@ function company_db_tables($con, $table_list) {
                 on_what_id              int not null default 0,
                 activity_title          varchar(100) not null default '',
                 activity_description    text not null default '',
-                duration                smallint not null default 0,
+                duration                varchar(20) default 1 not null,
                 sort_order              tinyint not null default 1,
                 activity_template_record_status         char not null default 'a'
                 )";
@@ -814,6 +814,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.9  2004/06/04 14:54:08  braverock
+ * - change activity_templates duration to varchar for advanced date functionality
+ *
  * Revision 1.8  2004/06/03 16:23:13  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall

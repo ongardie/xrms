@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.9 2004/06/03 16:14:56 braverock Exp $
+ * $Id: update.php,v 1.10 2004/06/04 14:53:48 braverock Exp $
  */
 
 /**
@@ -179,7 +179,7 @@ $sql = "create table if not exists activity_templates (
                 on_what_id              int not null default 0,
                 activity_title          varchar(100) not null default '',
                 activity_description    text not null default '',
-                duration                smallint not null default 0,
+                duration                varchar(20) default 1 not null,
                 sort_order              tinyint not null default 1,
                 activity_template_record_status         char not null default 'a'
                 )";
@@ -207,6 +207,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.10  2004/06/04 14:53:48  braverock
+ * - change activity_templates duration to varchar for advanced date functionality
+ *
  * Revision 1.9  2004/06/03 16:14:56  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
