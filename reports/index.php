@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.20 2005/01/03 04:36:10 ebullient Exp $
+ * $Id: index.php,v 1.21 2005/02/10 03:52:47 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -125,10 +125,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content><a href="audit-items.php"><?php echo _("Audit Items"); ?></a></td>
                 <td class=widget_content><?php echo _("List Audit Items by Date and User"); ?></td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td class=widget_content><a href="sales-automation.php"><?php echo _("Sales Force Automation"); ?></a></td>
                 <td class=widget_content><?php echo _("Measure performance of users over a selectable timeframe"); ?></td>
-            </tr>
+            </tr> -->
             <tr>
                 <td class=widget_content colspan="2">
                     <form action="user-activity.php" method=post>
@@ -157,6 +157,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.21  2005/02/10 03:52:47  braverock
+ * - remove sales-automation link until we can rewrite the dashboard report
+ *
  * Revision 1.20  2005/01/03 04:36:10  ebullient
  * make reports/index.php use full width
  *
