@@ -4,7 +4,7 @@
  *
  * Edit campaign-statuses
  *
- * $Id: one.php,v 1.6 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: one.php,v 1.7 2004/07/25 15:32:02 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -38,7 +38,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Campaign Status : ").$campaign_status_pretty_name;
+$page_title = _("Campaign Status Details").': '.$campaign_status_pretty_name;
 start_page($page_title);
 
 ?>
@@ -85,16 +85,16 @@ start_page($page_title);
         </form>
 
         <form action=delete.php method=post>
-        <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Opportunity Status?"); ?>');">
+        <input type=hidden name=campaign_status_id value="<?php  echo $campaign_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Campaign Status").'?'; ?>');">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Delete Opportunity Status"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Delete Campaign Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
                 <?php echo _("Click the button below to remove this account status from the system."); ?>
                 <p><?php echo _("Note: This action CANNOT be undone!"); ?>
-                <p><input class=button type=submit value="<?php echo _("Delete Opportunity Status"); ?>">
+                <p><input class=button type=submit value="<?php echo _("Delete Campaign Status"); ?>">
                 </td>
             </tr>
         </table>
@@ -116,6 +116,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/25 15:32:02  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext strings
+ * - modified references to opportunities to campagins
+ *
  * Revision 1.6  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *
