@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.17 2004/06/12 07:01:10 introspectshun Exp $
+ * $Id: home.php,v 1.18 2004/06/12 16:19:20 braverock Exp $
  */
 
 // include the common files
@@ -49,7 +49,7 @@ require_once("../notes/sidebar.php");
 /*********************************/
 
 //uncomment the debug line to see what's going on with the query
-// $con->debug = 1;
+$con->debug = 1;
 
 $sql_activities = "
 SELECT
@@ -58,7 +58,7 @@ SELECT
   c.company_name, cont.contact_id, cont.first_names as contact_first_names,
   cont.last_name as contact_last_name,
 CASE
-  WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
+  WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->DBTimeStamp(time()) . ")) THEN 1
   ELSE 0
 END AS is_overdue
 FROM activity_types at, companies c, activities a
@@ -119,8 +119,8 @@ if ($rst) {
             } else if (mktime() < $scheduled_at){
                 $classname = 'scheduled_activity';
             } else {
-            	$classname = 'open_activity';
-        	}
+                $classname = 'open_activity';
+                }
         } else {
             $classname = 'closed_activity';
         }
@@ -475,6 +475,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.18  2004/06/12 16:19:20  braverock
+ * - convert timestamp to work wuith adodb changes
+ *
  * Revision 1.17  2004/06/12 07:01:10  introspectshun
  * - Now use ADODB Concat function.
  *
