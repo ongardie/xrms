@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.11 2004/07/25 18:26:22 johnfawcett Exp $
+ * $Id: one.php,v 1.12 2004/07/25 18:38:17 johnfawcett Exp $
  */
 
 //uinclude required common files
@@ -213,7 +213,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_content>
-                <?php echo _("Click the button below to remove this company source from the system."); ?>
+                <?php echo _("Click the button below to permanently remove this item."); ?>
                 <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
                 <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                 </td>
@@ -232,6 +232,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2004/07/25 18:38:17  johnfawcett
+ * - corrected erroneously pasted string
+ *
  * Revision 1.11  2004/07/25 18:26:22  johnfawcett
  * - standardized page title
  * - standardized delete text and button
