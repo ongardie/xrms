@@ -1,5 +1,21 @@
 <?php
+/**
+ * utils-misc.php - this file contains non-UI utility functions for XRMS
+ *
+ * Functions in this file may be used throughout XRMS.
+ * Almost all files in the system include this file.
+ *
+ * @author Chris Woofter
+ *
+ * $Id: utils-misc.php,v 1.4 2004/01/26 19:24:51 braverock Exp $
+ */
 
+/**
+ * Check to see if there is a session initialized, and send to logon if there isn't one.
+ *
+ * @param string $target the page the user was trying to go to
+ * @return integer user_id of the logged in user
+ */
 function session_check($target='') {
 
     global $http_site_root;
@@ -23,61 +39,62 @@ function session_check($target='') {
 
 }
 
-function translate_msg($msg) {
-    switch ($msg) {
-        case 'noauth':
-            return "We could not authenticate you.  Please try again.";
-            break;
-        case 'saved':
-            return "Changes saved.";
-            break;
-        case 'activity_added':
-            return "Activity added.";
-            break;
-        case 'contact_added':
-            return "Contact added.";
-            break;
-        case 'company_added':
-            return "Company added.";
-            break;
-    }
-}
-
-function build_salutation_menu($salutation) {
-    
-    require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
-    
-    // global $salutation_array;
-    
-    $salutation_menu = "<select name=salutation>";
-    
-    for ($i = 0; $i < sizeof($salutation_array); $i++) {
-        $salutation_menu .= "\n<option value='" . $salutation_array[$i] . "'";
-        if ($salutation == $salutation_array[$i]) {
-            $salutation_menu .= " selected";
-        }
-        $salutation_menu .= ">" . $salutation_array[$i];
-    }
-    
-    $salutation_menu .= "\n</select>";
-    
-    return $salutation_menu;
-}
-
+/**
+ * Add current item to the recent items list for this area of XRMS
+ *
+ * @param  handle  $con database connection
+ * @param  integer $user_id
+ * @param  string  $on_what_table where are we in the interface?
+ * @param  integer $on_what_id what record are we viewing
+ * @return void
+ */
 function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
-    $sql1 = "delete from recent_items where user_id = $user_id and on_what_table = '" . $on_what_table . "' and on_what_id = $on_what_id";
-    $sql2 = "insert into recent_items (user_id, on_what_table, on_what_id, recent_item_timestamp) values ($user_id, '" . $on_what_table . "', $on_what_id, " . $con->dbtimestamp(time()) . ")";
-    // print $sql;
+    $sql1 = "delete from recent_items where
+             user_id = $user_id and
+             on_what_table = '" . $on_what_table . "'
+             and on_what_id = $on_what_id";
+
+    $sql2 = "insert into recent_items set
+             user_id       =  $user_id,
+             on_what_table = " . $on_what_table . ",
+             on_what_id    = $on_what_id,
+             recent_item_timestamp = " . $con->dbtimestamp(time()) . ")";
+
+    // $con->debug=1;
     $con->execute($sql1);
     $con->execute($sql2);
 }
 
+/**
+ * Add current item to the XRMS audit table
+ *
+ * @param  handle  $con database connection
+ * @param  integer $user_id
+ * @param  string  $audit_item_type
+ * @param  string  $on_what_table   where are we in the interface?
+ * @param  integer $on_what_id what record are we viewing
+ * @return void
+ */
 function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_what_id) {
-    $sql = "insert into audit_items (user_id, audit_item_type, on_what_table, on_what_id, audit_item_timestamp) values ($user_id, " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ", " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ", " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(time()) . ")";
+    $sql = "insert into audit_items set
+            user_id = $user_id,
+            audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
+            on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
+            on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
+            audit_item_timestamp = " . $con->dbtimestamp(time()) . ")";
+
+    //$con->debug=1
     $con->execute($sql);
 }
 
-// just in case we need it at some point...
+/**
+ * Fetch the company name from the database
+ * just in case we need it at some point...
+ *
+ * @param  handle  $con adodb database connection handle
+ * @param  integer $company_id
+ * @return string  $company_name
+ */
 function fetch_company_name($con, $company_id) {
 
     $rst_company_name = $con->execute("select company_name from companies where company_id = $company_id");
@@ -89,7 +106,13 @@ function fetch_company_name($con, $company_id) {
     return $company_name;
 }
 
-// this nifty function came from someone up at php.net
+/**
+ * Return the filesize in human readable string
+ * this nifty function came from someone up at php.net
+ *
+ * @param  integer $file_size
+ * @return string  file size rounded and typed with size
+ */
 function pretty_filesize($file_size) {
     $a = array("B", "KB", "MB", "GB", "TB", "PB");
     $pos = 0;
@@ -101,4 +124,90 @@ function pretty_filesize($file_size) {
     return round($file_size,2)." ".$a[$pos];
 }
 
+/**
+ * Get the contents of the CSV file as an array
+ *
+ * modified from a function on php.net
+ *
+ * @param  handle  $file           handle to the uploaded file
+ * @param  boolean $hasFieldNames  should we get the filed list off the first line
+ * @param  char    $delimiter      delimiter for the CSV file
+ * @param  char    $enclosure      are the fields enclosed in anything (like quotes)
+ *
+ * @return array   $result         array in the form of rows with keys and values
+ */
+function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure='') {
+   $result = Array();
+
+   //@todo There must be a better way of finding out the size of the longest row... until then
+   $size = filesize($file) +1;
+   $file = fopen($file, 'r');
+
+   if ($hasFieldNames) $keys = fgetcsv($file, $size, $delimiter, $enclosure);
+   while ($row = fgetcsv($file, $size, $delimiter, $enclosure)) {
+       $n = count($row); $res=array();
+       for($i = 0; $i < $n; $i++) {
+           $idx = ($hasFieldNames) ? $keys[$i] : $i;
+           $res[$idx] = $row[i];
+       }
+       $result[] = $res;
+   }
+   fclose($file);
+   return $result;
+}
+
+/**
+ * Search for the var $name in $_SESSION, $_POST, $_GET,
+ * $_COOKIE, or $_SERVER and set it in provided var.
+ *
+ * example:
+ *    getGlobalVar('username',$username);
+ *  -- no quotes around last param!
+ *
+ * modified from Squirrelmail
+ *
+ * @param string $name variable to search for
+ * @param @$value value found to pass back
+ * @return boolean
+ *
+ * Returns FALSE if variable is not found.
+ * Returns TRUE if it is.
+ */
+function getGlobalVar( &$value, $name ) {
+
+    if( isset($_SESSION[$name]) ) {
+        $value = $_SESSION[$name];
+        return TRUE;
+        break;
+    }
+    if( isset($_POST[$name]) ) {
+        $value = $_POST[$name];
+        return TRUE;
+        break;
+    }
+    if ( isset($_GET[$name]) ) {
+        $value = $_GET[$name];
+        return TRUE;
+        break;
+    }
+    if ( isset($_COOKIE[$name]) ) {
+        $value = $_COOKIE[$name];
+        return TRUE;
+        break;
+    }
+    if ( isset($_SERVER[$name]) ) {
+        $value = $_SERVER[$name];
+        return TRUE;
+        break;
+    }
+    return FALSE;
+}
+
+/**
+ * $Log: utils-misc.php,v $
+ * Revision 1.4  2004/01/26 19:24:51  braverock
+ * - added getGlobalVar fn
+ * - added phpdoc
+ *
+ */
 ?>
