@@ -1,15 +1,15 @@
 XRMS - README
 
-/** $Id: README,v 1.6 2004/05/04 15:18:38 gpowers Exp $ **/
----
+=============================================================
+/** $Id: README,v 1.7 2004/05/08 13:58:42 braverock Exp $ **/
 
+========================
 SUMMARY
 
 XRMS is a web-based application for managing business entities such as
 employees, customers, contacts, activities with those contacts, etc.
 
----
-
+========================
 VERSION
 
 20 April 2004
@@ -18,53 +18,31 @@ This version has had many many bug fixes and enhancements.  We have also
 added an automated installation, update, and data integrity process. See
 the file install/INSTALL for details.
 
----
-
+========================
 COPYRIGHTS
 
 Copyright (c) 2000-2003 Chris Woofter <chris_at_brokerstream_dot_com>
 Copyright (c) 2003-2004 XRMS Development Team
 
----
-
-LICENSE
-
-Licensed under the Open Software License version 2.0
-
-A copy of this license -- called LICENSE -- is in this folder.
-
----
-
-CREDITS
-
-XRMS includes, and makes extensive use of, John Lim's excellent ADOdb database abstraction library.
-http://php.weblogs.com/adodb/
-
-We also currently use Netscape's Javascript Graph Builder (written by Michael Bostock) for some reports.
-http://developer.netscape.com/docs/technote/javascript/graph/index.html
-
-The date-picker widget is from SoftComplex -- it's their Tigra Calendar.
-http://www.softcomplex.com/
-
----
-
+========================
 REQUIREMENTS
 
-Currently, you'll need MySQL v 3.23 (v4.0 recommended) and PHP v4.2 (or higher) for XRMS.
-XRMS should work without modification on SAPDB/MaxDB if you need a really huge installation
+Currently, you'll need MySQL v 3.23 (v4.x recommended) and PHP v4.2 (or higher) for XRMS.
+XRMS is being ported to PostgresSQL, stay tuned to the Forums for more information.
+XRMS should work without modification on SAPDB/MaxDB if you need a really huge installation.
 
 XRMS is reported to work well under several Linux/Unix flavors, Mac OSX, and Windows Servers.
 
 XRMS is regularly tested with most modern browsers, please report any problems.
 
----
-
+========================
 INSTALLATION
 
 See the file INSTALL in the install/ directory.
 
----
+========================
 IMPORTING YOUR DATA
+
 To import companies, export a .csv file of companies and contacts.
 We've included templates for many common CRM/SFA applications, such as
 Microsoft Outlook, Act!, SalesForce.com, and Goldmine, as well as a 'default'
@@ -75,9 +53,10 @@ default values, and upload the file.  You will be able to preview the upload bef
 you actualy commit to loading everything into the database.
 
 We've tried to make the import 'safe'.
-The import scripts run multiple checks on each record and attempt to not overwrite
+The import scripts run multiple checks on each record and attempts to not overwrite
 existing data, or create duplicate records.  We make broad allowances for missing
-data fields: as long as you have a Company Name, things should work.
+data fields: as long as you have a Company Name (and a City for addresses),
+things should work.
 
 The default template includes the following fields:
     //company info
@@ -126,6 +105,7 @@ The default template includes the following fields:
     contact_custom3
     contact_custom4
     contact_profile
+    gender
 
     //address info
     address_name
@@ -139,11 +119,41 @@ The default template includes the following fields:
     use_pretty_address
 
 If you wish to use the default template, name the columns in your .csv
-file as the columns are named above.
+file as the columns are named above.  Don't worry if your file doesn't
+have all the columns, or if the columns are in a different order.
+The import routine uses the column names to determine which fields to
+map things to, but it doesn't assume 'perfect data'.  Company name
+is required.  If you want to import an address, City is required.
+All other data will be handled safely if it is missing (we think).
 
-You may also create your own templates, and submit them for inclusion with XRMS.
+You may also create your own templates, and submit them for
+inclusion with XRMS.
 
----
+If you create a template for a third party CRM or contact management
+application, or if you need help creating a template, please contact
+the development team so that we may assist you and so that we may
+include the new template in the next release.
+
+========================
+LICENSE
+
+Licensed under the Open Software License version 2.0
+
+A copy of this license -- called LICENSE -- is in this folder.
+
+========================
+CREDITS
+
+XRMS includes, and makes extensive use of, John Lim's excellent ADOdb database abstraction library.
+http://php.weblogs.com/adodb/
+
+We also currently use Netscape's Javascript Graph Builder (written by Michael Bostock) for some reports.
+http://developer.netscape.com/docs/technote/javascript/graph/index.html
+
+The date-picker widget is from SoftComplex -- it's their Tigra Calendar.
+http://www.softcomplex.com/
+
+========================
 NOTES
 
 1. For now, it's all in English, but translation capabilities are in progress.
@@ -156,10 +166,10 @@ NOTES
 3. Dates are expected to be in 'YYYY-MM-DD' format... the date-picker widget
    should handle this automatically.
 
-4. I never finished some mail-merge stuff, but the mail-merge functionality is now
+4. We never finished some mail-merge stuff, but the mail-merge functionality is now
    available for preliminary testing and bug-fixing.
 
-5. I'm still trying to figure out how best to include a flexible security layer
+5. We're still trying to figure out how best to include a flexible security layer
    (roles, permissions, etc.) into XRMS, so for now, there's only limited ability
    to limit what a logged-in user may do.  We've got some ideas for this, but it
    really is difficult to make this both flexible and convenient.
@@ -170,9 +180,70 @@ NOTES
 
 7. If you've got suggestions, please pass them along!
 
----
-HINTS, installation on Windows
 ========================
+CONTRIBUTING to XRMS
+
+Many people have asked how they may contribute code back to XRMS.
+We'll try to address most of those questions here.
+
+If you wish to contribute documentation to XRMS, please contact the
+a member of the development team or post to the Sourceforge Forums.
+
+If you wish to contribute code to XRMS, you should be working from
+the most current code possible.  In the case of bug fixes, this may
+save you some work (someone else may have fixed it already), and in the
+case of enhancements or other more complex patches, it will save work
+for the developers by making very clear what has changed. For large,
+sweeping changes, you probably want to discuss your proposed change on
+the Sourceforge Forums, so that the development team and the XRMS user
+community can comment on your proposed changes.
+
+If you want to integrate third party software to XRMS, you should probably
+familiarize yourself with the Plugin architecture, as that is what plugins
+are for.  If you find yourself needing more plugin hooks as you develop your
+plugin, let the development team know by posting to the Plugins
+Forum on Sourceforge.  Somebody there will be happy to help you.
+
+Start with a clean checkout from CVS or with a release tarball or snapshot.
+The rest of these instructions will assume that you are worknig from a
+snapshot tarball, which uncompresses to a directory called xrms.devel.
+Change as required for your installation.
+
+Update your installation from CVS using the following command from the
+directory above your working directory:
+
+cvs -d :pserver:anonymous@cvs.sf.net:/cvsroot/xrms update xrms.devel/
+
+You will see cvs 'P' - Patch, 'U' Update, and possibly 'M' Merge your files
+(vars.php and include-locations.inc will most likely 'M' merge)
+
+Make the changes you need to this code.  Make a 'clean' copy of the files
+you intend to modify, you'll need it later for creating the patch.
+
+Do frequent CVS updates.
+We recommend doing a CVS update before each development session.
+This makes life easier for everybody.
+Always do a CVS update immediately before submitting patch files, and
+resolve any conflicts.
+
+Once you've made your changes and are happy with the result, create a
+patch file for each file you changed using the following command:
+
+diff -u3 origfile changedfile >> filename.patch
+
+the -u3 parameter to diff is very important, because it creates a 'unified'
+diff with several lines of context.  This allows the patch program to find
+where to insert the changed lines, even if the file has changed slightly
+since the patch was generated.
+
+Post your patch with a description of the changes to the Sourceforge
+Patches Forum.  One of the XRMS developers will review it and commit your
+changes to CVS.  Thanks for your interest in contributing to XRMS!
+
+========================
+HINTS
+
+Installation on Windows
 
 While editing the above mentioned php files you will have
 to change the path name to XRMS.
@@ -181,9 +252,8 @@ backslashes "\", as commonly used in windows),
 e.g. "C:/Program Files/Apache
 Group/Apache/htdocs/xrms"
 
-HINTS, preventing some common errors
-==============================
-To prevent to get too many php warning messages you
+Preventing some common errors
+To prevent getting too many php warning messages you
 might want to modify your php.ini as follows:
 ; - Show all errors, except for notices
 error_reporting = E_ALL & ~E_NOTICE
@@ -192,8 +262,9 @@ If you get errors like "Warning: Cannot modify header
 information -.. " the set the following option in your php.ini:
 output_buffering = On
 
+=======
 HINTS, daily reports
-==============================
+
 To have daily reports emailed, put one or more of the following lines into
 the crontab of your web server (adjust paths as nessecary):
 
@@ -209,9 +280,13 @@ To have a daily report of ALL users completed items report emailed:
 To have a daily report of A user's completed items report emailed:
 0 23 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./completed-items.php "&send_email=y&type=all&user_id=1" >> /dev/null)
 
+============================================================
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.7  2004/05/08 13:58:42  braverock
+ * - updated import section
+ *
  * Revision 1.6  2004/05/04 15:18:38  gpowers
  * added daily report HINTS
  *
