@@ -6,13 +6,20 @@
  * Licensed under the GNU GPL. For full terms see the file COPYING.
  * Ported for use in XRMS by Brian Peterson
  *
+ * This subsystem provides wrappers around the PHP standard gettext functions.
+ *
+ * See:
+ * http://www.php.net/manual/en/function.gettext.php
+ * http://www.php.net/manual/en/function.bindtextdomain.php
+ * http://www.php.net/manual/en/function.setlocale.php
+ *
  * This file contains various functions that are needed to do
  * internationalization of XRMS.
  *
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.4 2004/08/06 14:47:07 braverock Exp $
+ * @version $Id: i18n.php,v 1.5 2004/08/12 11:02:55 braverock Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -176,6 +183,9 @@ function set_up_language($xrms_language, $do_search = false, $default = false) {
         $xrms_language = $xrms_default_language;
         $xrms_language = $xrms_default_language;
     }
+
+    //echo "XRMS Language = ".$xrms_language.'<br>';
+
     $xrms_notAlias = $xrms_language;
 
     // Catching removed translation
@@ -188,6 +198,8 @@ function set_up_language($xrms_language, $do_search = false, $default = false) {
     while (isset($languages[$xrms_notAlias]['ALIAS'])) {
         $xrms_notAlias = $languages[$xrms_notAlias]['ALIAS'];
     }
+
+    //echo "XRMS Language Alias = ".$xrms_notAlias.'<br>';
 
     // now do all the additional checks and set the appropriate variables for language display
 
@@ -942,6 +954,9 @@ function is_conversion_safe($input_charset) {
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.5  2004/08/12 11:02:55  braverock
+ * - add comments and some more debug code
+ *
  * Revision 1.4  2004/08/06 14:47:07  braverock
  * - push in changes to turn on i18n gettext
  *
