@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.9 2005/02/28 00:00:17 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.10 2005/03/01 15:47:53 daturaarutad Exp $
  */
 
 
@@ -458,6 +458,9 @@ class GUP_Pager {
 		// data is now in $this->data
 	}
 
+	/**
+	* private function Render_JS outputs the Javascript functions and hidden form variables
+	*/
 	function Render_JS() {
         echo <<<END
             <script language="JavaScript" type="text/javascript">
@@ -530,13 +533,12 @@ END;
         ob_start();
 
         $color_counter = 0;
+		$col_classnames = array();
 
-		$css_classnames = null;
-
-        // output headers
         $column_count = count($this->column_info);
     	$hdr = '';
 
+        // do the headers
         for($i=0; $i<$column_count; $i++) {
 
         	$group_html = '';
@@ -557,10 +559,17 @@ END;
         	} else {
             	$hdr .= "<td class=widget_label ><a href='javascript: " . $this->pager_id . "_resort($i);' ><b>{$this->column_info[$i]['name']}</b></a>";
         	}
+
+			// set the column css
+			if($this->column_info[$i]['css_classname']) {
+				$col_classnames[$i] = $this->column_info[$i]['css_classname'];
+			} else {
+				$col_classnames[$i] = '';
+			}
+
         }
 
         echo "<tr>$hdr</tr>";
-
 
 		/*  Grouping:
 			Get the index of the column that is being grouped
@@ -576,7 +585,7 @@ END;
 		}
 
 
-
+        // main data loop
         for($i=$this->start_data_row; $i<$this->end_data_row; $i++) {
 
 			// in group mode, skip this value if it's not one we're interested in.
@@ -584,12 +593,11 @@ END;
 				continue;
 			}
 
-			if($this->data[$i]['GUP_Pager_TD_Classname']) {
-				$classname = $this->data[$i]['GUP_Pager_TD_Classname'];
-			} else {
-            	$classname = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
-			}
+           	$row_classnames = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
 
+			if($this->data[$i]['Pager_TD_CSS_All_Rows']) {
+				$row_classnames .= ' ' . $this->data[$i]['Pager_TD_CSS_All_Rows'];
+			} 
 
             $color_counter++;
 
@@ -599,17 +607,16 @@ END;
 
                 if($this->column_info[$j]['type']) {
                     if('currency' == $this->column_info[$j]['type']) {
-                        echo "<td class='$classname'>$" . number_format($this->data[$i][$this->column_info[$j]['index']], 2, '.', ',') . "</td>\n";
+                        echo "<td class='$row_classnames {$col_classname[$j]}'>$" . number_format($this->data[$i][$this->column_info[$j]['index']], 2, '.', ',') . "</td>\n";
                     } elseif('date' == $this->column_info[$j]['type']) {
-                        echo "<td class='$classname'>" . format_date($this->data[$i][$this->column_info[$j]['index']]) . "</td>\n";
+                        echo "<td class='$row_classnames {$col_classname[$j]}'>" . format_date($this->data[$i][$this->column_info[$j]['index']]) . "</td>\n";
                     } elseif('int' == $this->column_info[$j]['type']) {
-                        echo "<td class='$classname'>" . number_format($this->data[$i][$this->column_info[$j]['index']], 0, '.',',') . "</td>\n";
+                        echo "<td class='$row_classnames {$col_classname[$j]}'>" . number_format($this->data[$i][$this->column_info[$j]['index']], 0, '.',',') . "</td>\n";
                     } else {
-                        echo "<td class='$classname'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
+                        echo "<td class='$row_classnames {$col_classname[$j]}'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
                     }
                 } else {
-                    echo "<td class='$classname'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
-
+                    echo "<td class='$row_classnames {$col_classnames[$j]}'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
                 }
             }
             echo  "</tr>\n";
@@ -968,6 +975,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.10  2005/03/01 15:47:53  daturaarutad
+ * expanded the ability to specify CSS styles for rows and columns
+ *
  * Revision 1.9  2005/02/28 00:00:17  daturaarutad
  * comments on all functions
  *
