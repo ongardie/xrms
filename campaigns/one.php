@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.16 2005/01/11 13:25:46 braverock Exp $
+ * $Id: one.php,v 1.17 2005/01/13 18:10:55 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -13,10 +13,12 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+$campaign_id = $_GET['campaign_id'];
+$on_what_id=$campaign_id;
+
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$campaign_id = $_GET['campaign_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -145,7 +147,7 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?campaign_id=<?php  echo $campaign_id; ?>';"></td>
+                <td class=widget_content_form_element><?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?campaign_id=$campaign_id';"); ?></td>
             </tr>
         </table>
 
@@ -175,6 +177,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.17  2005/01/13 18:10:55  vanmer
+ * - Basic ACL changes to allow view functionality to be restricted
+ * - Altered to use render_button functions
+ *
  * Revision 1.16  2005/01/11 13:25:46  braverock
  * - removed on_what_string hack, changed to use standard make_singular function
  *
