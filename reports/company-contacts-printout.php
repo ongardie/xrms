@@ -2,7 +2,7 @@
 /**
  * Search and view summary information on multiple companies and thier contacts for printing.
  *
- * $Id: company-contacts-printout.php,v 1.1 2004/06/04 23:16:26 braverock Exp $
+ * $Id: company-contacts-printout.php,v 1.2 2004/06/05 16:03:16 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -43,6 +43,7 @@ if ($clear) {
     $city = $_POST ['city'];
     $state = $_POST ['state'];
     $user_id = $_POST['user_id'];
+    $printer_friendly= $_POST['printer_friendly'];
 } else {
     $sort_column = $_SESSION['campaigns_sort_column'];
     $current_sort_column = $_SESSION['campaigns_current_sort_column'];
@@ -175,12 +176,22 @@ if ($criteria_count > 0) {
 }
 
 $page_title = "Contact Call List";
-start_page($page_title, true, $msg);
+
+
+if ($printer_friendly) {
+    $show_navbar = false;
+} else {
+    $show_navbar = true;
+}
+
+start_page($page_title, $show_navbar, $msg);
 
 ?>
 
 <div id="Main">
     <div>
+
+<?php if ($show_navbar) { ?>
 
         <form action=company-contacts-printout.php method=post>
         <input type=hidden name=use_post_vars value=1>
@@ -210,13 +221,18 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name="state" size=5 value="<?php echo $state; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=8>
+                <td class=widget_content_form_element colspan=4>
                     <input class=button type=submit value="Search">
+                </td>
+                <td class=widget_content_form_element>
+                    <input type="checkbox" name="printer_friendly" value="true" checked>Format for Printer
                 </td>
             </tr>
 
         </table>
         </form>
+
+<?php } //end printer friendly check ?>
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
@@ -321,6 +337,9 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.2  2004/06/05 16:03:16  braverock
+ * - added print friendly formatting check
+ *
  * Revision 1.1  2004/06/04 23:16:26  braverock
  * - add company contact summary printable report
  *
