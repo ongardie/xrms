@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.11 2004/02/04 21:56:16 braverock Exp $
+ * $Id: utils-misc.php,v 1.12 2004/02/24 17:30:15 maulani Exp $
  */
 
 /**
@@ -82,7 +82,7 @@ function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_wh
             audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
             on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
             on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
-            audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s")) . ")";
+            audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
 
     //$con->debug=1
     $con->execute($sql);
@@ -298,9 +298,42 @@ function fetch_division_id($con, $division_name, $company_id) {
     return $division_id;
 }
 
+/**
+ * Stop everything and display parameters selected by the programmer.
+ * This is a development test routine only, and should not be used in production code.
+ *
+ * @param1-5 Variables that the programmer needs to see
+ */
+function show_test_values($param1 = '', $param2 = '', $param3 = '', $param4 = '', $param5 = '') {
+
+    $session_username = $_SESSION['username'];
+
+    echo <<<EOQ
+    <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+    <html>
+    <head>
+    <title>Test Results</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    </head>
+    <body>
+    Username = $session_username<BR>
+    Param1   = $param1<BR>
+    Param2   = $param2<BR>
+    Param3   = $param3<BR>
+    Param4   = $param4<BR>
+    Param5   = $param5<BR>
+    </body>
+    </html>
+EOQ;
+exit;
+} // end show_test_values fn
+
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.12  2004/02/24 17:30:15  maulani
+ * Repair audit trail SQL and add test function
+ *
  * Revision 1.11  2004/02/04 21:56:16  braverock
  * - added comments to munging code in CSVtoArray
  * - updated date functions
