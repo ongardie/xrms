@@ -77,7 +77,7 @@ start_page($page_title, true, $msg);
 				<td class=widget_header>Import/Export</td>
 			</tr>
 			<tr>
-				<td class=widget_content><a href=import/import-companies.php>Import Companies/Contacts</a></td>
+				<td class=widget_content><a href=import/import-companies.php>Import Companies/Contacts (somewhat broken right now)</a></td>
 			</tr>
 			<tr>
 				<td class=widget_content><a href=export/export-companies.php>Export Companies/Contacts</a></td>
