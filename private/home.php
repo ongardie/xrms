@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.13 2004/04/07 13:50:54 maulani Exp $
+ * $Id: home.php,v 1.14 2004/04/19 03:43:34 braverock Exp $
  */
 
 // include the common files
@@ -444,6 +444,12 @@ start_page($page_title);
 
             <!-- notes //-->
             <?php  echo $note_rows; ?>
+            <form action="../notes/new.php" method="post">
+                <input type="hidden" name="on_what_table" value="users">
+                <input type="hidden" name="on_what_id" value=<?php echo $session_user_id ?>>
+                <input type="hidden" name="return_url" value="/private/home.php">
+                <input type="submit" class=button value="New Personal Note">
+            </form>
 
     </div>
 </div>
@@ -454,6 +460,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.14  2004/04/19 03:43:34  braverock
+ *  - Add Personal Notes
+ *    - apply SF patch 934480 submitted by Glenn Powers
+ *
  * Revision 1.13  2004/04/07 13:50:54  maulani
  * - Set CSS2 positioning for the home page
  *
