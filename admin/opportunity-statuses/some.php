@@ -79,6 +79,10 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text name=opportunity_status_display_html size=30></td>
             </tr>
             <tr>
+                <td class=widget_label_right>Long Description</td>
+                <td class=widget_content_form_element><input type=text size=60 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
             </tr>
         </table>
