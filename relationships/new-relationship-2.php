@@ -109,7 +109,7 @@ else {
             and " .$what_table_singular . "_record_status='a'";
     $rst = $con->execute($sql);
     if($rst->rowcount()) {
-        echo "<input type=hidden name=on_what_id value=$search_on>" . $rst->fields['name'] . "\n";
+        echo "<input type=hidden name=on_what_id2 value=$search_on>" . $rst->fields['name'] . "\n";
     }
     else {
         echo "There is no " . $what_table_singular . " by that ID";
