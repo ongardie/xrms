@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.49 2004/07/09 15:41:14 neildogg Exp $
+ * $Id: one.php,v 1.50 2004/07/10 12:40:07 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -179,6 +179,11 @@ $rst = $con->execute($sql);
 $contacts = $rst->rowcount();
 if ($rst) {
     while (!$rst->EOF) {
+        // make sure $contact_rows is set for later
+        if ( !isset($contact_rows) ) {
+            $contact_rows = '';
+        }
+
         $contact_rows .= "\n<tr>";
         $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
                         . $rst->fields['contact_id'] . "'>"
@@ -673,6 +678,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.50  2004/07/10 12:40:07  braverock
+ * - initialize $contact_rows
+ *   - applies SF patch 977476 submitted by cpsource
+ *
  * Revision 1.49  2004/07/09 15:41:14  neildogg
  * - Uses the new, generic relationship sidebar
  *
