@@ -10,6 +10,6 @@ if ( !defined('IN_XRMS') )
 $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 
 // Force Lower-case Keys
-$ADODB_ASSOC_CASE = 0;
+define('ADODB_ASSOC_CASE', 0);
 
 ?>
