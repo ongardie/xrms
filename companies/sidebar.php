@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.9 2004/07/21 21:00:41 neildogg Exp $
+ * $Id: sidebar.php,v 1.10 2004/07/21 23:00:45 neildogg Exp $
  */
 
 // add company information block on sidebar
@@ -61,8 +61,7 @@ if ($rst) {
 
     if ($rst->fields['url']) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-	                   . "<a href=\"" . $url . "\" target=\"_new\">"
-                       . $url . "</a></td>\n\t</tr>";
+	                   . "<a href=\"" . $url . "\" target=\"_new\">Web Site</a></td>\n\t</tr>";
     }
 
   } // if ( !$rst->EOF ) ...
@@ -83,6 +82,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.10  2004/07/21 23:00:45  neildogg
+ * - URL can be ugly/long, replaced with 'Web Site'
+ *
  * Revision 1.9  2004/07/21 21:00:41  neildogg
  * - Added get_formatted_phone
  *
