@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.8 2005/01/08 06:23:41 gpowers Exp $
+ * $Id: divisions.php,v 1.9 2005/01/13 18:22:50 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,6 +15,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+
+$on_what_table='company_division';
 $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -84,7 +86,7 @@ start_page($page_title, true, $msg);
 			<td class=widget_content_form_element><textarea rows=8 cols=80 name=description></textarea></td>
 		</tr>
 		<tr>
-			<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
+			<td class=widget_content_form_element colspan=2><?php echo render_create_button('Add'); ?></td>
 		</tr>
 	</table>
 	</form>
@@ -108,6 +110,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.9  2005/01/13 18:22:50  vanmer
+ * - Basic ACL changes to allow display functionality to be restricted
+ *
  * Revision 1.8  2005/01/08 06:23:41  gpowers
  * - added "Add/Edit Addresses" Link
  *

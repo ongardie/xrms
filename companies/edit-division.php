@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.6 2005/01/06 21:54:26 vanmer Exp $
+ * $Id: edit-division.php,v 1.7 2005/01/13 18:22:23 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,11 +13,14 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$on_what_table='company_division';
+$division_id = $_GET['division_id'];
+$on_what_id=$division_id;
+
+$session_user_id = session_check('','Update');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_GET['company_id'];
 $address_id = $_GET['address_id'];
-$division_id = $_GET['division_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -75,7 +78,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=description><?php echo $description; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input class=button type=button value="<?php echo _("Delete Division"); ?>" onclick="javascript: location.href='delete-division.php?company_id=<?php echo $company_id ?>&division_id=<?php echo $division_id ?>';"></td>
+                <td class=widget_content_form_element colspan=2>
+                    <?php echo render_edit_button("Save Changes"); ?>
+                    <?php echo render_delete_button("Delete Division",'button',"javascript: location.href='delete-division.php?company_id=$company_id&division_id=$division_id';"); ?>                
+                 </td>
             </tr>
         </table>
         </form>
@@ -96,6 +102,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.7  2005/01/13 18:22:23  vanmer
+ * - Basic ACL changes to allow display functionality to be restricted
+ *
  * Revision 1.6  2005/01/06 21:54:26  vanmer
  * - added address_id load/display to division UI, to specify an address for a division
  *
