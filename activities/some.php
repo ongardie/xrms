@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.96 2005/03/01 21:56:45 daturaarutad Exp $
+ * $Id: some.php,v 1.97 2005/03/02 15:15:44 daturaarutad Exp $
  */
 
 // handle includes
@@ -441,21 +441,6 @@ add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 //debug
 //echo $sql.'<br>';
 
-// get company_count
-$rst = $con->execute($sql);
-$company_count = 0;
-if ( $rst ) {
-  while (!$rst->EOF) {
-    $company_count += 1;
-    break;                // we only care if we have more than 0, so stop here
-    $rst->movenext();
-  }
-  $rst->close();
-}
-
-//debug
-//echo 'company_count = ' . $company_count;
-
 $page_title = _("Open Activities");
 start_page($page_title, true, $msg);
 
@@ -642,9 +627,6 @@ start_page($page_title, true, $msg);
                     <input name="browse" type=submit class=button value="<?php echo _("Browse"); ?>">
                     <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php
-                        if ($company_count > 0) {
-                            echo " <input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";
-                        }
                         if(!$advanced_search) {
                             echo ' <input name="advanced_search" type=button class=button onclick="javascript: location.href=\'some.php?advanced_search=true\';" value="'._("Advanced Search").'">';
                         }
@@ -682,8 +664,8 @@ $columns = $pager_columns->GetUserColumns('default');
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-            <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+            <input type=button class=button onclick=\"javascript: exportIt();\" value=\"" . _('Export') ."\">
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
 
 echo $pager_columns_selects;
 
@@ -763,6 +745,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.97  2005/03/02 15:15:44  daturaarutad
+ * removed redundant mail merge button and corresponding query
+ *
  * Revision 1.96  2005/03/01 21:56:45  daturaarutad
  * set the css_classname for right-align on numerics in pager
  *

@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.55 2005/02/28 22:41:49 daturaarutad Exp $
+ * $Id: some.php,v 1.56 2005/03/02 15:18:34 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -138,19 +138,6 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 }
 
 $sql .= $from . $where;
-
-// note: $sql is the list of companies we will be selecting
-// we need to determine the $company_count from it.
-$rst = $con->execute($sql);
-$company_count = 0;
-if ( $rst ) {
-  while (!$rst->EOF) {
-    $company_count += 1;
-    break;                // we only care if we have more than 0, so stop here
-    $rst->movenext();
-  }
-  $rst->close();
-}
 
 $sql_recently_viewed = "select
 c.company_id,
@@ -289,11 +276,6 @@ start_page($page_title, true, $msg);
             <td class=widget_content_form_element colspan=6>
                 <input name="submit_form" type=submit class=button value="<?php echo _("Search"); ?>">
                 <input name="clear_search" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
-                <?php
-                    if ($company_count > 0) {
-                        print "<input class=button type=button onclick='javascript: bulkEmail()' value='". _("Bulk E-Mail")."'>";
-                    };
-                ?>
                 <input name="advanced_search" type=button class=button onclick="javascript: location.href='advanced-search.php';" value="<?php echo _("Advanced Search"); ?>">
             </td>
         </tr>
@@ -414,6 +396,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.56  2005/03/02 15:18:34  daturaarutad
+ * removed redundant mail merge button and corresponding query
+ *
  * Revision 1.55  2005/02/28 22:41:49  daturaarutad
  * changed columns to be index_sql so that the pager knows it doesnt have to get the whole data set
  *
