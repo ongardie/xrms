@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.23 2004/07/21 23:50:36 introspectshun Exp $
+ * $Id: utils-interface.php,v 1.24 2004/07/22 15:19:02 gpowers Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -22,16 +22,46 @@ function status_msg($msg) {
     switch ($msg) {
 
       // handle know messages
+        case 'company_added':
+            return _("Company Added.");
+        case 'company_deleted':
+            return _("Company Deleted.");
+        case 'contact_added':
+            return _("Contact Added.");
+        case 'contact_deleted':
+            return _("Contact Deleted.");
+        case 'address_added':
+            return _("Address Added.");
+        case 'address_deleted':
+            return _("Address Deleted.");
+
+        case 'campaign_added':
+            return _("Campaign Added.");
+        case 'campaign_deleted':
+            return _("Campaign Deleted.");
+        case 'opportunity_added':
+            return _("Opportunity Added.");
+        case 'opportunity_deleted':
+            return _("Opportunity Deleted.");
+        case 'activity_added':
+            return _("Activity Added.");
+        case 'activity_deleted':
+            return _("Activity Deleted.");
+        case 'case_added':
+            return _("Case Added.");
+        case 'case_deleted':
+            return _("Case Deleted.");
+
+        case 'added':
+            return _("Added.");
+        case 'deleted':
+            return _("Deleted.");
+        case 'password_no_match':
+            return _("Password Does Not Match.");
         case 'noauth':
             return _("We could not authenticate you.") . ' ' . _("Please try again.");
         case 'saved':
             return _("Changes saved.");
-        case 'activity_added':
-            return _("Activity added.");
-        case 'contact_added':
-            return _("Contact added.");
-        case 'company_added':
-            return _("Company added.");
         case 'no_change':
             return _("Status not changed.") . ' ' . _("This activity is still open.");
 
@@ -181,6 +211,13 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.24  2004/07/22 15:19:02  gpowers
+ * - Added status_msg's
+ *   - Fixed SF bug [ 993841 ] unhandled $msg's
+ *     - Submitted By: cpsource - cpsource
+ *   - Also changed list order (to improve ease of code editing)
+ *   - Checked and added matched Add/Delete pairs
+ *
  * Revision 1.23  2004/07/21 23:50:36  introspectshun
  * - Finished localizing strings for i18n/l10n support
  *
