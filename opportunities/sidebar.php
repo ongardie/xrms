@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.1 2004/03/07 14:02:28 braverock Exp $
+ * $Id: sidebar.php,v 1.2 2004/03/15 16:51:28 braverock Exp $
  */
 
 $opportunity_rows = "
@@ -23,7 +23,7 @@ where opportunities.opportunity_status_id = opportunity_statuses.opportunity_sta
 and opportunities.user_id = users.user_id
 and opportunity_record_status = 'a'
 $opportunity_limit_sql
-order by close_at
+order by close_at, sort_order
 limit 5";
 
 //uncomment the debug line to see what's going on with the query
@@ -74,6 +74,9 @@ $opportunity_rows .= "        </table>\n";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.2  2004/03/15 16:51:28  braverock
+ * - add sort_order to opportunity sidebar
+ *
  * Revision 1.1  2004/03/07 14:02:28  braverock
  * Initital Checkin of side-bar centralization
  *
