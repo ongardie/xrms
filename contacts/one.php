@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.55 2005/01/13 18:43:59 vanmer Exp $
+ * $Id: one.php,v 1.56 2005/01/22 14:35:59 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -63,7 +63,7 @@ if ($rst) {
     $date_of_birth = $con->userdate($rst->fields['date_of_birth']);
     $gender = $rst->fields['gender'];
     $summary = $rst->fields['summary'];
-    $e = $rst->fields['title'];
+    $title = $rst->fields['title'];
     $description = $rst->fields['description'];
     $profile = $rst->fields['profile'];
     $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
@@ -561,6 +561,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.56  2005/01/22 14:35:59  braverock
+ * - fixed mis-assignment of title to $e instead of $title, looks like a cut and paste error
+ *   Resolves SF Bug #1106290 reported by fu22ba55
+ *
  * Revision 1.55  2005/01/13 18:43:59  vanmer
  * - Basic ACL changes to allow display functionality to be restricted
  *
