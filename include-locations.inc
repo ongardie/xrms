@@ -13,12 +13,12 @@
  * The error reporting level for XRMS is intentionally set to
  * E_ALL and not E_NOTICE.  This should allow all real errors and warnings to
  * show up without bothering us with notices about variables that are assumed to
- * be inititalized to NULL values.
+ * be initalized to NULL values.
  *
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.15 2004/12/21 19:36:14 braverock Exp $
+ * $Id: include-locations.inc,v 1.16 2004/12/21 19:38:57 braverock Exp $
  */
 
 //
@@ -30,17 +30,20 @@ if (!defined('IN_XRMS')) {
 }
 
 // include trailing slash in path
-$include_directory = "/var/www/html/xrms/include/";
+$include_directory = "/full/path/to/xrms/";
 
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
-// error_reporting(E_ALL ^E_NOTICE);
+error_reporting(E_ALL ^E_NOTICE);
 
 //uncomment the next line to turn notices on
 //error_reporting(E_ALL);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.16  2004/12/21 19:38:57  braverock
+ * roll back errant commit
+ *
  * Revision 1.15  2004/12/21 19:36:14  braverock
  * - improved display of screen table
  * - fixed code formatting
