@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.29 2004/08/19 13:14:05 maulani Exp $
+ * $Id: some.php,v 1.30 2004/11/21 17:29:43 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,16 +20,16 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'sort_column'             => array ( 'opportunities_sort_column', arr_vars_SESSION ),
-		   'current_sort_column'     => array ( 'opportunities_current_sort_column', arr_vars_SESSION ),
-		   'sort_order'              => array ( 'opportunities_sort_order', arr_vars_SESSION ),
-		   'current_sort_order'      => array ( 'opportunities_current_sort_order', arr_vars_SESSION ),
-		   'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
-		   'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
-		   'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
-		   'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_SESSION ),
-		   'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
-		   );
+           'sort_column'             => array ( 'opportunities_sort_column', arr_vars_SESSION ),
+           'current_sort_column'     => array ( 'opportunities_current_sort_column', arr_vars_SESSION ),
+           'sort_order'              => array ( 'opportunities_sort_order', arr_vars_SESSION ),
+           'current_sort_order'      => array ( 'opportunities_current_sort_order', arr_vars_SESSION ),
+           'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
+           'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
+           'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
+           'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_SESSION ),
+           'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
+           );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
@@ -60,19 +60,21 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
-$sql = "SELECT " .
-  $con->Concat("'<a href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'") . " AS '" . _("Opportunity") . "',
-  c.company_name AS 'Company', u.username AS '" . _("Owner") . "',
+$sql = "SELECT "
+. $con->Concat("'<a href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
+. " AS " . $con->qstr( _("Opportunity"),get_magic_quotes_gpc()) . ",
+  c.company_name AS 'Company', u.username AS " . $con->qstr(_("Owner"),get_magic_quotes_gpc()) . ",
   CASE
     WHEN (opp.size > 0) THEN opp.size
     ELSE 0
-  END AS '" . _("Opportunity Size") . "',
+  END AS " . $con->qstr( _("Opportunity Size"),get_magic_quotes_gpc()) . ",
   CASE
     WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100)
     ELSE 0
-  END AS '" . _("Weighted Size") . "',
-  os.opportunity_status_pretty_name AS '" . _("Status") . "', $close_at AS '" . _("Close Date") . "'
-";
+  END AS " . $con->qstr(_("Weighted Size"),get_magic_quotes_gpc()) . ",
+  os.opportunity_status_pretty_name AS " . $con->qstr( _("Status"), get_magic_quotes_gpc()) . ","
+  . " $close_at AS " . $con->qstr( _("Close Date"),get_magic_quotes_gpc());
+
 
 if ($opportunity_category_id > 0) {
     $from = "FROM companies c, opportunities opp, opportunity_statuses os, users u, entity_category_map ecm ";
@@ -319,6 +321,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.30  2004/11/21 17:29:43  braverock
+ * - fix select to use $con->qstr so that translations work
+ *
  * Revision 1.29  2004/08/19 13:14:05  maulani
  * - Add specific type pager to ease overriding of layout function
  *
