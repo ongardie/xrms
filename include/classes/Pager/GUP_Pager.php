@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.6 2005/02/24 21:30:40 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.7 2005/02/24 23:53:26 daturaarutad Exp $
  */
 
 
@@ -109,7 +109,7 @@ class GUP_Pager {
     {
         global $http_site_root;
 
-		if(empty($sql) && empty($data)) {
+		if(empty($sql) && !isset($data)) {
 			echo _('Warning: GUP_Pager must be passed either an SQL query or a data array');
 			return false;
 		}
@@ -925,6 +925,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.7  2005/02/24 23:53:26  daturaarutad
+ * allow empty $data to be passed in, showing No Matches
+ *
  * Revision 1.6  2005/02/24 21:30:40  daturaarutad
  * Fixed up some of the CSS styles
  * Moved the SQL sort order code into a new function
