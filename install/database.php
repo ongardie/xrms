@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.18 2004/08/03 15:51:00 neildogg Exp $
+ * $Id: database.php,v 1.19 2004/08/11 16:56:01 gpowers Exp $
  */
 
 /**
@@ -790,8 +790,7 @@ function opportunity_db_tables($con, $table_list) {
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
-    }
-    
+
     // create the time_zones table if we need it
         $sql ="CREATE TABLE time_zones (
                time_zone_id int(11) NOT NULL auto_increment,
@@ -810,7 +809,6 @@ function opportunity_db_tables($con, $table_list) {
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
-    }
 
 } // end opportunity_db_tables fn
 
@@ -1058,6 +1056,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.19  2004/08/11 16:56:01  gpowers
+ * - Removed extra }'s
+ *   - missing 'if' statements?
+ *
  * Revision 1.18  2004/08/03 15:51:00  neildogg
  * - Added daylight savings and time zones tables and data for US
  *
