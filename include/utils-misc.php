@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.12 2004/02/24 17:30:15 maulani Exp $
+ * $Id: utils-misc.php,v 1.13 2004/04/09 19:53:11 braverock Exp $
  */
 
 /**
@@ -153,6 +153,7 @@ function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure=
     foreach ($keys as $key) {
         //munge the array key
         $key = str_replace(' ', '_', trim(strtolower($key)));
+        $key =  preg_replace("/[-#\*.]/i",'', $key);
         //assign the munged key to the temp array
         $cleankeys[] = $key;
     }
@@ -331,6 +332,9 @@ exit;
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.13  2004/04/09 19:53:11  braverock
+ * - add better header munging for csv import fn
+ *
  * Revision 1.12  2004/02/24 17:30:15  maulani
  * Repair audit trail SQL and add test function
  *
