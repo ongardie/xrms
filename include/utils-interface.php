@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.35 2004/10/25 23:57:01 daturaarutad Exp $
+ * $Id: utils-interface.php,v 1.36 2004/12/22 23:43:42 ebullient Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -33,64 +33,98 @@ set_up_language($xrms_default_language, true, true);
  * This utility function will take a status code and turn it into a status message.
  */
 function status_msg($msg) {
-    switch ($msg) {
+  switch ($msg) {
 
-      // handle know messages
+      // handle known messages
     case 'no_case':
       return _("No Case To Delete.");
 
-        case 'company_added':
-            return _("Company Added.");
-        case 'company_deleted':
-            return _("Company Deleted.");
-        case 'contact_added':
-            return _("Contact Added.");
-        case 'contact_deleted':
-            return _("Contact Deleted.");
-        case 'address_added':
-            return _("Address Added.");
-        case 'address_deleted':
-            return _("Address Deleted.");
+    case 'company_added':
+      return _("Company Added.");
+    case 'company_deleted':
+      return _("Company Deleted.");
+    case 'contact_added':
+      return _("Contact Added.");
+    case 'contact_deleted':
+      return _("Contact Deleted.");
+    case 'address_added':
+      return _("Address Added.");
+    case 'address_deleted':
+      return _("Address Deleted.");
 
-        case 'campaign_added':
-            return _("Campaign Added.");
-        case 'campaign_deleted':
-            return _("Campaign Deleted.");
-        case 'opportunity_added':
-            return _("Opportunity Added.");
-        case 'opportunity_deleted':
-            return _("Opportunity Deleted.");
-        case 'activity_added':
-            return _("Activity Added.");
-        case 'activity_deleted':
-            return _("Activity Deleted.");
-        case 'case_added':
-            return _("Case Added.");
-        case 'case_deleted':
-            return _("Case Deleted.");
+    case 'campaign_added':
+      return _("Campaign Added.");
+    case 'campaign_deleted':
+      return _("Campaign Deleted.");
+    case 'opportunity_added':
+      return _("Opportunity Added.");
+    case 'opportunity_deleted':
+      return _("Opportunity Deleted.");
+    case 'activity_added':
+      return _("Activity Added.");
+    case 'activity_deleted':
+      return _("Activity Deleted.");
+    case 'case_added':
+      return _("Case Added.");
+    case 'case_deleted':
+      return _("Case Deleted.");
 
-        case 'added':
-            return _("Added");
-        case 'deleted':
-            return _("Deleted");
-        case 'password_no_match':
-            return _("Password Does Not Match.");
-        case 'noauth':
-            return _("We could not authenticate you.") . ' ' . _("Please try again.");
-        case 'saved':
-            return _("Changes saved.");
-        case 'no_change':
-            return _("Status not changed.") . ' ' . _("This activity is still open.");
+    case 'added':
+      return _("Added");
+    case 'deleted':
+      return _("Deleted");
+    case 'password_no_match':
+      return _("Password Does Not Match.");
+    case 'noauth':
+      return _("We could not authenticate you.") . ' ' . _("Please try again.");
+    case 'saved':
+      return _("Changes saved.");
+    case 'no_change':
+      return _("Status not changed.") . ' ' . _("This activity is still open.");
 
-        // handle unknown messages
-        default:
-            if ( $msg ) {
-                    // at least TRY to return a message
-                    return _("$msg");
-            }
-            break;
-    }
+    // handle unknown messages
+    default:
+      if ( $msg ) {
+        // at least TRY to return a message
+        return _("$msg");
+      }
+      break;
+  }
 } //end status_msg fn
+
+function http_root_href($url, $text, $title = NULL) {
+    global $http_site_root;
+    if ( empty($title) )
+        $title = $text;
+    return '<a title="'.$title.'" href="'.$http_site_root.$url.'">'.$text.'</a>';
+}
+
+function css_link($url, $name = null, $alt = true, $mtype = 'screen') { 
+    global $http_site_root;
+
+    if ( empty($url) )
+        return '';
+
+    $onlyIE = strpos($url, '-ie') !== false;
+    $ie1 = ( $onlyIE ) ? "<!--[if IE]>\n" : '';
+    $ie2 = ( $onlyIE ) ? "<![endif]-->\n" : ''; 
+
+    if ( strpos($url, 'print') !== false )
+        $mtype = 'print';
+
+    $href  = 'href="'.$url.'" '; 
+    $media = 'media="'.$mtype.'" ';
+
+    if ( empty($name) ) {
+        $title = '';
+        $rel   = 'rel="stylesheet"';
+    } else {
+        $title =  empty($name) ? '' : 'title="'.$name.'" ';
+        $rel   = 'rel="'.( $alt ? 'alternate ' : '' ).'stylesheet" ';
+    }
+
+    return $ie1.'  <link '.$media.$title.$rel.'type="text/css" '.$href." />\n".$ie2;
+}
 
 /**
  * function start_page
@@ -103,56 +137,93 @@ function status_msg($msg) {
  */
 function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
-    global $page_title_height;
     global $http_site_root;
     global $app_title;
 
     $msg = status_msg($msg);
 
-    $stylesheet = "$http_site_root/stylesheet.css";
+    $curtheme = 'basic';
+    $cssroot = $http_site_root.'/css/';
 
-
-    echo <<<EOQ
-    <!DOCTYPE HTML PUBLIC
+    // Array containing list of named styles.
+    //    array('basic' => '/path/to/basic.css');
+    // If a particular style requires multiple files, specify them as a nested array
+    //    array('multi' => array('first.css','second.css','third.css'));
+    $cssthemes = array(
+        'basic'      => array($cssroot.'basic/basic.css', 
+                              $http_site_root.'/js/jscalendar/calendar-blue.css'),
+        'basic-left' => array($cssroot.'basic/basic-left.css',
+                              $cssroot.'basic/basic-left-ie.css',
+                              $http_site_root.'/js/jscalendar/calendar-blue.css'),
+                      );
+?>
+<!DOCTYPE HTML PUBLIC 
     "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd" >
-    <html>
-    <head>
-    <title>$app_title : $page_title</title>
-    <link rel=stylesheet href="$stylesheet">
-    <link rel=stylesheet  type="text/css" href="$http_site_root/js/jscalendar/calendar-blue.css">
-    </head>
-    <body>
-    <div id="page_header">$page_title</div>\n
-EOQ;
+    "http://www.w3.org/TR/html4/loose.dtd" />
+<html>
+<head>
+  <title><?php echo "$app_title : $page_title"; ?></title>
+<?php 
+    // CSS styles that apply to all media: basic layout and font/size attributes
+    echo css_link($cssroot.'layout.css', null, false, 'all');
+    echo css_link($cssroot.'style.css', null, false, 'all'); 
+    // CSS styles that apply only to printed page - should after any 'all' media
+    echo css_link($cssroot.'print.css'); 
+    // CSS styles that apply only to screen rendering 
+    echo css_link($cssroot.'xrmsstyle.css'); 
+    // base layout and style mods for display in IE
+    echo css_link($cssroot.'xrmsstyle-ie.css'); 
 
-    if ($show_navbar) {
-      $session_username = $_SESSION['username'];
-      echo '<div id="navline"><span id="navbar">'
-           . "<a href=\"$http_site_root/private/home.php\">" . _("Home") . "</a> &bull; \n"
-           . "<a href=\"$http_site_root/activities/some.php\">" . _("Activities") . "</a> &bull; \n"
-           . "<a href=\"$http_site_root/companies/some.php\">" . _("Companies") . "</a> &bull; \n"
-           . "<a href=\"$http_site_root/contacts/some.php\">" . _("Contacts") . "</a> &bull; \n"
-           . "<a href=\"$http_site_root/campaigns/some.php\">" . _("Campaigns") . "</a> &bull; \n"
-           . "<a href=\"$http_site_root/opportunities/some.php\">" . _("Opportunities") . "</a> &bull; \n"
-           . "<a href=\"$http_site_root/cases/some.php\">" . _("Cases") . "</a> &bull; \n"
-           . "<a href=\"$http_site_root/files/some.php\">" . _("Files") . "</a> &bull; \n";
-
-      //place the menu_line hook before Reports and Adminstration link
-      do_hook ('menuline');
-
-      echo "<a href=\"$http_site_root/reports/index.php\">" . _("Reports") . "</a> &bull; \n"
-           . "<a href=\"$http_site_root/admin/routing.php\">" . _("Administration") . "</a>"
-           . '</span> <div id="loginbar">'
-           . _("Logged in as") . ': ' . $session_username . " &bull; \n<a href=\"$http_site_root/logout.php\">" . _("Logout") . "</a></div> "
-           . "</div>\n";
+    // Add stylesheets for defined themes (see comment above, re: $cssthemes)
+    // If the URI contains -ie, treat as an ie-only stylesheet
+    foreach ( $cssthemes as $theme => $attr )
+    {
+        if ( is_string($attr) ) {
+            // Simple string format: $themename => $themeURI
+            echo css_link($attr, $theme, ($theme != $curtheme));
+        } elseif ( is_array($attr) ) {
+            // Array of URIs for defined theme
+            foreach ( $attr as $cssfile )
+                echo css_link($cssfile, $theme, ($theme != $curtheme));
+        }
     }
+?>
+</head>
+<body>
+  <div id="page_header"><?php echo $page_title; ?></div>
+<?php 
+  // Show navbar..
+  if ($show_navbar) {
+    $session_username = $_SESSION['username'];
+?>
+  <div id="loginbar">
+    <?php echo _("Logged in as") .': ' . $session_username .' &bull; '
+               . http_root_href('/logout.php',             _("Logout")); ?>
+  </div>
+  <div id="navline">
+      <?php echo http_root_href('/private/home.php',       _("Home")); ?> &bull;
+      <?php echo http_root_href('/activities/some.php',    _("Activities")); ?> &bull;
+      <?php echo http_root_href('/companies/some.php',     _("Companies")); ?> &bull;
+      <?php echo http_root_href('/contacts/some.php',      _("Contacts")); ?> &bull;
+      <?php echo http_root_href('/campaigns/some.php',     _("Campaigns")); ?> &bull;
+      <?php echo http_root_href('/opportunities/some.php', _("Opportunities")); ?> &bull;
+      <?php echo http_root_href('/cases/some.php',         _("Cases")); ?> &bull;
+      <?php echo http_root_href('/files/some.php',         _("Files")); ?> &bull;
 
-    if (strlen($msg) > 0) echo <<<EOQ
-        <div id="msg">
-            {$msg}
-        </div>\n
-EOQ;
+<?php   
+    //place the menu_line hook before Reports and Adminstration link
+    do_hook ('menuline');
+?>
+      <?php echo http_root_href('/reports/index.php',      _("Reports")); ?> &bull;
+      <?php echo http_root_href('/admin/routing.php',      _("Administration")); ?>
+  </div><!-- end of navline -->
+<?php
+  }
+
+  // Show $msg, if present
+  if (strlen($msg) > 0) {  
+    echo '  <div id="msg">'. $msg ."</div>\n";
+  }
 } // end start_page fn
 
 /**
@@ -165,19 +236,19 @@ EOQ;
  *
  * Any common page footer would end this.
  */
-function end_page() {
+function end_page($use_hook = true) {
 
     /**
      * place the end_page hook before we close the body and html
      * I don't think any of the tables should still be open, so a
      * hook writer would need to add thier own structure.
      */
+  if ( $use_hook )
     do_hook ('end_page');
-
-    echo "
-    </body>
-    </html>\n";
-
+?>
+</body>
+</html>
+<?php
 } //end end_page fn
 
 /**
@@ -236,6 +307,67 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.36  2004/12/22 23:43:42  ebullient
+ * Sorry for the lack of comment on the css adds - meant to commit all of them
+ * together, and hit the wrong key.
+ *
+ * Anyway, the css additions are the new stylesheets, I should have some
+ * more samples after the holiday.
+ *
+ * The sheets are broken up into pieces:
+ *  All Media
+ *   layout.css - major content blocks
+ *   style.css  - basic fonts, table and form alignment, some padding
+ *
+ *  Print Media
+ *   print.css  - what makes it look pretty in the print preview
+ *
+ *  Screen Media
+ *   xrmsstyle.css - Additional font/margin/padding adjustments for the screen only
+ *   xrmsstyle-ie.css - Making it pretty in IE too
+ *
+ *  Alternate Style Sheets - Screen Media
+ *    (if you have Mozilla/Firefox, there are extensions to switch between them)
+ *
+ *  basic:
+ *   basic.css - Default Colors/backgrounds, etc. Should look familiar
+ *
+ *  basic-left:
+ *   basic-left.css - extension of basic.css with sidebar on the left side
+ *   basic-left-ie.css - make left sidebar look nice in IE, too.
+ *
+ *  I did not get everything done that I wanted today - fell down a rabbit hole playing
+ *  with fonts.
+ *
+ *  Left to do (if anyone wants to beat me to it, have a blast):
+ *
+ *   * Change pages with no Sidebar:
+ *         use ContentFullWidth instead of Content
+ *         remove empty Sidebar section
+ *      (Reports, Open Activities, New/Edit Case, New/Edit Note, Manage Category, etc.)
+ *
+ *   * Add additional class to "Activity" and "Search" tables that appear on
+ *     various forms so they don't print..
+ *         <div class="noprint">
+ *             <... Activity or Search table thing ..>
+ *         </div>
+ *
+ *   * Surround generated report information in a Report tag..
+ *         <div class="noprint">
+ *             <.. form for report input parameters ..>
+ *         </div>
+ *         <div id="generated_report">
+ *             <.. table containing report output ..>
+ *         </div>
+ *
+ *   * Change some of the admin forms (like New Role and New User) so that the
+ *     form is in the Content section, and not in the Sidebar. (In fact, you can
+ *     then remove the sidebar, as in the first bullet).
+ *
+ * Happy Holidays!
+ *
+ * Erin
+ *
  * Revision 1.35  2004/10/25 23:57:01  daturaarutad
  * Added a check to jscalendar_includes() so that the files are only included once.
  *
