@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.45 2004/07/22 23:58:35 braverock Exp $
+ * $Id: some.php,v 1.46 2004/07/23 11:29:59 braverock Exp $
  */
 
 // handle includes
@@ -19,7 +19,6 @@ require_once($include_directory . 'adodb-params.php');
 
 // create session
 $session_user_id = session_check();
-error_reporting ('E_ALL');
 
 // Start connection
 $con = &adonewconnection($xrms_db_dbtype);
@@ -92,7 +91,7 @@ arr_vars_get_all ( $arr_vars );
 // (a search for today will add an interval of '0 days')
 // Warning: if a user wants to save a search for a particular date, this won't allow it, as it defaults to recurring search
 $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
-$curdate = $con->DBTimeStamp();
+$curdate = $con->DBTimeStamp(time());
 $offset = $con->OffsetDate($day_diff, $curdate);
 
 if (!strlen($sort_column) > 0) {
@@ -467,6 +466,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.46  2004/07/23 11:29:59  braverock
+ * - remove hard-coded error_reporting
+ * - add time() param to DBTimeStamp call
+ *
  * Revision 1.45  2004/07/22 23:58:35  braverock
  * - further cleanup in formatting to minimize possibility of parse errors
  *
