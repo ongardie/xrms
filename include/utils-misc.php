@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.13 2004/04/09 19:53:11 braverock Exp $
+ * $Id: utils-misc.php,v 1.14 2004/04/10 11:52:05 braverock Exp $
  */
 
 /**
@@ -332,6 +332,9 @@ exit;
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.14  2004/04/10 11:52:05  braverock
+ * - remove trailing whitespace
+ *
  * Revision 1.13  2004/04/09 19:53:11  braverock
  * - add better header munging for csv import fn
  *

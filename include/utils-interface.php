@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.10 2004/04/09 19:54:42 braverock Exp $
+ * $Id: utils-interface.php,v 1.11 2004/04/10 11:51:14 braverock Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -155,6 +155,9 @@ function build_salutation_menu($salutation) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.11  2004/04/10 11:51:14  braverock
+ * - remove trailing whitespace
+ *
  * Revision 1.10  2004/04/09 19:54:42  braverock
  * - add Activities to top menu
  *
