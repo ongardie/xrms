@@ -2,7 +2,7 @@
 /**
  * Mark a note as deleted
  *
- * $Id: delete-2.php,v 1.2 2004/12/31 22:54:18 gpowers Exp $
+ * $Id: delete-2.php,v 1.3 2005/02/10 13:42:18 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,14 +23,13 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-$sql = "SELECT * FROM info WHERE info_id = $info_id";
-$rst = $con->execute($sql);
-
+$tbl = 'info';
 $rec = array();
 $rec['info_record_status'] = 'd';
 
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+if (!$con->AutoExecute($tbl, $rec, 'UPDATE', "info_id = $info_id")) {
+    db_error_handler ($con, $ins);
+}
 
 $con->close();
 
@@ -38,6 +37,10 @@ header("Location: {$http_site_root}/companies/{$return_url}");
 
 /**
  * $Log: delete-2.php,v $
+ * Revision 1.3  2005/02/10 13:42:18  braverock
+ * - update to newest info plugin provided by Keith Edmunds
+ *   - now uses ADOdb for database access
+ *
  * Revision 1.2  2004/12/31 22:54:18  gpowers
  * - added ability to add info inside a larger content box
  *

@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit-definitions.php,v 1.4 2004/11/10 07:29:33 gpowers Exp $
+ * $Id: edit-definitions.php,v 1.5 2005/02/10 13:42:18 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -35,7 +35,7 @@ function possible_element_types ($type, $element_id) {
   case "textarea":
     $html = '<SELECT name="element_type['.$element_id.']">\n';
     $html .= '<OPTION';
-    if ("text" == $type) {
+    if (("text" == $type) || ("name" == $type)) {
       $html .= " SELECTED";
     }
     $html .= " VALUE=text>$text</OPTION>\n";
@@ -68,6 +68,11 @@ function possible_element_types ($type, $element_id) {
     $html .= "$checkbox";
     break;
 
+  case "name":
+    $html = "<INPUT TYPE=hidden NAME=\"element_type[$element_id]\" VALUE=\"name\">\n";
+    $html .= $text;
+    break;
+
   default:
     assert(true);
     echo "Unreconised element type ($type)";
@@ -80,7 +85,6 @@ function show_row ($fields) {
 
   global $text, $textarea, $radio,$checkbox, $select, $info_type_id;
 
-  # Special-case element_id=1 as this is the element name (must be a text type and enabled)
   foreach ($fields as $key=>$value) {
     $$key = $value;
   }
@@ -89,10 +93,10 @@ function show_row ($fields) {
   $label_html .= "\n\t</td>\n";
 
   $type_html = "\t<td>\n\t\t";
-#  if (1 == $element_id) {
-#    $type_html .= "<INPUT TYPE=hidden NAME=\"element_type[$element_id]\" VALUE=\"text\">\n";
-#    $type_html .= "$text";
-#  }
+
+  # Element type 'name' is handled specially
+  $name_element = ($element_type == 'name');
+  
   if (is_array($element_type)) {
     # we are constructing a new element, so list all types in $type
     $type_html .= "<SELECT name=\"element_type[$element_id]\">\n";
@@ -103,8 +107,8 @@ function show_row ($fields) {
     $type_html .= "\t\t</SELECT>\n";
   }
   else {
-    $type_html .= possible_element_types($element_type, $element_id);
-    $type_html .= "\n\t</td>\n";
+      $type_html .= possible_element_types($element_type, $element_id);
+      $type_html .= "\n\t</td>\n";
   }
 
   $column_html = "\t<td>\n\t\t<input type=text size=2 ";
@@ -126,31 +130,30 @@ function show_row ($fields) {
   $possible_values_html .= "\n\t</td>\n";
 
   $enabled_html = "\t<td>\n\t\t";
-  if (1 == $element_id) {
-    $enabled_html .= "<INPUT TYPE=hidden NAME=\"element_enabled[1]\" VALUE=\"1\">\n";
-    $enabled_html .= "Yes";
+  if ($name_element) {
+    $enabled_html .= "<INPUT TYPE=hidden NAME=\"element_enabled[$element_id]\" VALUE=\"1\">\n";
+    $enabled_html .= _("Yes");
   }
   else {
-    $enabled_html .= "<input type=checkbox value=1 ";
-    $enabled_html .= "name=\"element_enabled[$element_id]\"";
-    if ($element_enabled) $enabled_html .= " CHECKED";
+  $enabled_html .= "<input type=checkbox value=1 ";
+  $enabled_html .= "name=\"element_enabled[$element_id]\"";
+  if ($element_enabled) $enabled_html .= " CHECKED";
   }
   $enabled_html .= "\n\t</td>\n";
 
 // DISPLAY IN SIDEBAR?
 
   $element_display_in_sidebar_html = "\t<td>\n\t\t";
- // if (1 == $element_display_in_sidebar) {
-//    $enabled_html .= "<INPUT TYPE=hidden NAME=\"element_display_in_sidebar[1]\" VALUE=\"1\">\n";
-//    $element_display_in_sidebar .= "Yes";
-//  }
-//  else {
-    $element_display_in_sidebar_html .= "<input type=checkbox value=1 ";
-    $element_display_in_sidebar_html .= "name=\"element_display_in_sidebar[$element_id]\"";
-    if ($element_display_in_sidebar) {
-        $element_display_in_sidebar_html .= " CHECKED";
+  if ($name_element) {
+      $element_display_in_sidebar_html .= "-";
   }
-//  }
+  else {
+      $element_display_in_sidebar_html .= "<input type=checkbox value=1 ";
+      $element_display_in_sidebar_html .= "name=\"element_display_in_sidebar[$element_id]\"";
+      if ($element_display_in_sidebar) {
+          $element_display_in_sidebar_html .= " CHECKED";
+      }
+  }
   $element_display_in_sidebar_html .= "\n\t</td>\n";
 
   $info_type_id_html = "<INPUT TYPE=hidden NAME=\"info_type_id[$element_id]\" VALUE=\"$info_type_id\">";

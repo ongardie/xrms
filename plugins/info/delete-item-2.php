@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: delete-item-2.php,v 1.3 2005/01/08 07:55:55 gpowers Exp $
+ * $Id: delete-item-2.php,v 1.4 2005/02/10 13:42:18 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -29,8 +29,13 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-$sql = "UPDATE info SET info_record_status = 'd' WHERE info_id = " . $info_id;
-$con->execute($sql);
+$tbl = 'info_record';
+$rec = array();
+$rec['info_record_status'] = 'd';
+
+if (!$con->AutoExecute($tbl, $rec, 'UPDATE', "info_id = $info_id")) {
+    db_error_handler ($con, $ins);
+}
 
 $con->close();
 

@@ -2,7 +2,7 @@
 /**
  * Edit info element definitions
  *
- * $Id: edit-definitions-2.php,v 1.4 2004/11/10 07:29:33 gpowers Exp $
+ * $Id: edit-definitions-2.php,v 1.5 2005/02/10 13:42:18 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -70,15 +70,16 @@ foreach ($_POST['element_label'] as $element_id=>$dummy) {
         if (($column == 'info_type_id') && (!$tmp[$column])) {
             $tmp[$column] = $info_type_id[$element_id];
         }
+        # Always enable "name" type and don't allow empty string for label
+        if (($column ==  'element_type') && 
+            ($tmp[$column] == 'name') &&
+            (!$tmp['element_label'])) {
+                $tmp[$column] = _("Name");
+        }
     }
 
     $submitted[$element_id] = $tmp;
 }
-
-# Do not allow null name (element 1)
-# if (empty($submitted[1])) {
-#     $submitted[1] = "DEFAULTNAME";
-# }
 
 # Get exising values and check against those submitted
 $sql = "SELECT * FROM info_element_definitions WHERE info_type_id=" . $post_info_type_id;
@@ -86,41 +87,24 @@ $all_elements = $con->execute($sql);
 
 if ($all_elements) {
     while (!$all_elements->EOF) {
-
-        $do_update = false;
-        $sql2 = "UPDATE info_element_definitions SET ";
-
         $element_id = $all_elements->fields['element_id'];
+        $rec = array();
         foreach($columns as $column) {
             $submitted_value = $submitted[$element_id][$column];
-            # If element_enabled is NULL then set to 0
-            if ("element_enabled" == $column) {
+            # If element_enabled or element_display_in_sidebar is NULL
+            # then set to 0
+            if (("element_enabled" == $column) || 
+                            ('element_display_in_sidebar' == $column)) {
                 if (is_null($submitted_value)) {
                     $submitted_value = 0;
                 }
             }
-            if ($all_elements->fields[$column] != $submitted_value) {
-                # Value has changed; generate sql update clause
-                $update = "$column='$submitted_value'";
-                # If this is the first change just add to sql...
-                if (!$do_update) {
-                    $sql2 .= $update;
-                    # and flag that an update is required
-                    $do_update = true;
-                }
-                else {
-                    # we need to precede sql with a comma
-                    $sql2 .= ",".$update;
-                }
-            }
+            $rec[$column] = $submitted_value;
         }
-        if ($do_update) {
-            $sql2 .= " WHERE element_id='".$element_id."'";
-            $status = $con_write->execute($sql2);
-            if (!$status) {
-                db_error_handler ($con_write, $sql2);
-                exit;
-            }
+        $tbl = 'info_element_definitions';
+        if (!$con->AutoExecute($tbl, $rec, 'UPDATE',
+                    "element_id = $element_id")) {
+            db_error_handler ($con, $upd);
         }
         $all_elements->movenext();
     }
@@ -128,41 +112,23 @@ if ($all_elements) {
 
 # Now check for new element and add it if it exists
 if ($new_element) {
-    $fields = array();
-    $values = array();
+#    $fields = array();
+#    $values = array();
+    $rec = array();
     foreach ($submitted[0] as $field=>$value) {
-        $fields[] = $field;
-        $values[] = $value;
-    }
-
-    #echo "<pre>";var_dump($fields);echo "<br>";var_dump($values);echo "</pre>";
-    $sql = "INSERT INTO info_element_definitions (";
-    $first_time = true;
-    foreach ($fields as $field) {
-        if ($first_time) {
-            $sql .= $field;
-            $first_time = false;
-        }
-        else {
-            $sql .= ", $field";
+        $rec[$field] = $value;
+        # If element_enabled or element_display_in_sidebar is NULL
+        # then set to 0
+        if (("element_enabled" == $field) || 
+                        ('element_display_in_sidebar' == $field)) {
+            if (is_null($value)) {
+                $rec[$field] = 0;
+            }
         }
     }
-    $sql .= ") VALUES (";
-    $first_time = true;
-    foreach ($values as $value) {
-        if ($first_time) {
-            $sql .= "'$value'";
-            $first_time = false;
-        }
-        else {
-            $sql .= ", '$value'";
-        }
-    }
-    $sql .= ")";
-    $status = $con_write->execute($sql);
-    if (!$status) {
-        db_error_handler ($con, $sql);
-        exit;
+    $tbl = 'info_element_definitions';
+    if (!$con->AutoExecute($tbl, $rec, 'INSERT')) {
+        db_error_handler ($con, $ins);
     }
 }
 

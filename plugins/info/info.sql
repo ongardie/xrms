@@ -3,14 +3,12 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generation Time: Jan 23, 2005 at 11:06 AM
+-- Generation Time: Jan 23, 2005 at 11:42 PM
 -- Server version: 4.0.23
 -- PHP Version: 4.3.10-2
 -- 
 -- Database: `xrmstest`
 -- 
-
--- --------------------------------------------------------
 
 -- 
 -- Table structure for table `info`
@@ -46,7 +44,7 @@ CREATE TABLE `info_display_map` (
 CREATE TABLE `info_element_definitions` (
   `element_id` int(11) NOT NULL auto_increment,
   `element_label` varchar(50) NOT NULL default '',
-  `element_type` enum('text','select','radio','checkbox','textarea') NOT NULL default 'text',
+  `element_type` enum('text','select','radio','checkbox','textarea','name') NOT NULL default 'text',
   `element_column` varchar(10) NOT NULL default '1',
   `element_order` smallint(6) NOT NULL default '0',
   `element_default_value` varchar(50) NOT NULL default '',
