@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.101 2004/12/24 15:52:58 braverock Exp $
+ * $Id: utils-misc.php,v 1.102 2005/01/04 16:27:55 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -820,7 +820,6 @@ function time_zone_offset($con, $address_id) {
                             (CASE WHEN (city = " . $con->qstr($city) . ") THEN 0 ELSE 1 END) AS has_city,
                             (CASE WHEN (postal_code='" . $postal_code . "') THEN 0 ELSE 1 END) AS has_postal_code
                         FROM time_zones
-                        FORCE INDEX (country_id, province)
                         WHERE country_id=" . $country_id . "
                         AND province = '" . $province . "'";
         }
@@ -1408,6 +1407,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.102  2005/01/04 16:27:55  neildogg
+ * - Removed force index
+ *
  * Revision 1.101  2004/12/24 15:52:58  braverock
  * add function SendDownloadHeaders ported from Squirrelmail
  *
