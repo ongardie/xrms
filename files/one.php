@@ -53,8 +53,7 @@ start_page($page_title, true, $msg);
 			</tr>
 			<tr>
 				<td class=widget_label_right>Uploaded</td>
-				<td class=widget_content_form_element><?php  echo $entered_at ?> by <?php echo $username; 
-?></td>
+				<td class=widget_content_form_element><?php  echo $entered_at ?> by <?php echo $username; ?></td>
 			</tr>
 			<tr>
 				<td class=widget_label_right>Size</td>
@@ -65,10 +64,7 @@ start_page($page_title, true, $msg);
 				<td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description><?php  echo $file_description ?></textarea></td>
 			</tr>
 			<tr>
-				<td class=widget_content_form_element colspan=2><input type=submit class=button value="Save 
-Changes"> <input type=button class=button onclick="javascript: location.href='download.php?file_id=<?php  echo $file_id 
-?>';" value="Download"> <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo
-$return_url; ?>&file_id=<?php echo $file_id; ?>';" value="Delete"></td>
+				<td class=widget_content_form_element colspan=2><input type=submit class=button value="Save Changes"> <input type=button class=button onclick="javascript: location.href='download.php?file_id=<?php  echo $file_id ?>';" value="Download"> <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo $return_url; ?>&file_id=<?php echo $file_id; ?>';" value="Delete"></td>
 			</tr>
 		</table>
 		</form>
