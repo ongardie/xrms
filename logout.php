@@ -2,7 +2,7 @@
 /**
  * Logout
  *
- * $Id: logout.php,v 1.2 2004/05/07 21:30:39 maulani Exp $
+ * $Id: logout.php,v 1.3 2004/07/13 18:27:58 cpsource Exp $
  */
 
 require_once('include-locations.inc');
@@ -21,7 +21,11 @@ add_audit_item($con, $session_user_id, 'logout', '', '', 2);
 
 $con->close();
 
-session_start();
+//
+// Note: session_start is not needed here, as session_check()
+// guarantees we have a valid session
+//session_start();
+
 session_unset();
 session_destroy();
 
