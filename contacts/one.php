@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.32 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: one.php,v 1.33 2004/06/21 13:56:44 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -40,28 +40,6 @@ and c.user_id = u3.user_id
 and c.account_status_id = as1.account_status_id
 and c.crm_status_id = crm.crm_status_id
 and contact_id = $contact_id";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 $rst = $con->execute($sql);
 
@@ -568,6 +546,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.33  2004/06/21 13:56:44  gpowers
+ * - removed extra blank lines
+ *
  * Revision 1.32  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
