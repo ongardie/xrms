@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.7 2004/03/07 14:07:14 braverock Exp $
+ * $Id: one.php,v 1.8 2004/03/21 15:25:26 braverock Exp $
  */
 
 //include required files
@@ -192,8 +192,10 @@ $rst->close();
 
 $sql = "select concat(first_names, ' ', last_name), contact_id from contacts where company_id = $company_id and contact_record_status = 'a' order by last_name";
 $rst = $con->execute($sql);
-$contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
-$rst->close();
+if ($rst) {
+    $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
+    $rst->close();
+}
 
 $con->close();
 
@@ -372,6 +374,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/03/21 15:25:26  braverock
+ * - fixed a bug where there are no contacts for a company.
+ *
  * Revision 1.7  2004/03/07 14:07:14  braverock
  * - use centralized side-bar code in advance of i18n conversion
  *
