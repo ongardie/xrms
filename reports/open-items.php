@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.13 2004/09/02 22:51:17 maulani Exp $
+ * $Id: open-items.php,v 1.14 2004/12/30 21:55:29 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -176,7 +176,7 @@ foreach ($userArray as $key => $user_id) {
         $sql = "SELECT * from activities where activity_status = 'o' and activity_record_status = 'a' and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
 
-        if (!$rst->EOF) {
+        if ($rst && !$rst->EOF) {
             $output .= "<p><font size=+2><b>" . _("OPEN ACTIVITIES") . " for $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
@@ -225,7 +225,7 @@ foreach ($userArray as $key => $user_id) {
                  and campaign_record_status = 'a'
                  and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
-        if (!$rst->EOF) {
+        if ($rst && !$rst->EOF) {
             $output .= "<p><font size=+2><b>" . _("OPEN CAMPAIGNS for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
@@ -236,19 +236,21 @@ foreach ($userArray as $key => $user_id) {
             $output .= "        <th align=left>" . _("Campaign") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
-            while (!$rst->EOF) {
-                $output .= "<tr>\n<td>" . $rst->fields['starts_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td>" . $rst->fields['ends_at'] . "&nbsp;&nbsp;</td>\n";
-                $sql4 = "SELECT campaign_type_pretty_name from campaign_types where campaign_type_id = " . $rst->fields['campaign_type_id'];
-                $rst4 = $con->execute($sql4);
-                $output .= "<td>" . $rst4->fields['campaign_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"" . $http_site_root . "/campaigns/one.php?campaign_id=" . $rst->fields['campaign_id'] . "\">" . $rst->fields['campaign_title'] . "</a></td>\n</td>\n";
-                if ($use_hr) {
-                    $output .= "<tr><td colspan=4><hr></td></tr>\n";
+            if ($rst->Numrows()>0) {
+                while (!$rst->EOF) {
+                    $output .= "<tr>\n<td>" . $rst->fields['starts_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                    $output .= "<td>" . $rst->fields['ends_at'] . "&nbsp;&nbsp;</td>\n";
+                    $sql4 = "SELECT campaign_type_pretty_name from campaign_types where campaign_type_id = " . $rst->fields['campaign_type_id'];
+                    $rst4 = $con->execute($sql4);
+                    $output .= "<td>" . $rst4->fields['campaign_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
+                    $output .= "<td><a href=\"" . $http_site_root . "/campaigns/one.php?campaign_id=" . $rst->fields['campaign_id'] . "\">" . $rst->fields['campaign_title'] . "</a></td>\n</td>\n";
+                    if ($use_hr) {
+                        $output .= "<tr><td colspan=4><hr></td></tr>\n";
+                    }
+                    $rst->movenext();
                 }
-                $rst->movenext();
+                $rst->close();
             }
-            $rst->close();
             $output .= "</table>";
         }
     else {
@@ -258,7 +260,7 @@ foreach ($userArray as $key => $user_id) {
     }
     } // End Campaigns Type
     if (($type == "opportunities") || ($type == "all")) {
-        $sql = "SELECT o.opportunity_id, o.company_id, o.contact_id, o.opportunity_title, 
+        $sql = "SELECT o.opportunity_id, o.company_id, o.contact_id, o.opportunity_title,
                 o.entered_at, s.opportunity_status_pretty_name
                 from opportunities o, opportunity_statuses s
                 where s.status_open_indicator = 'o'
@@ -268,7 +270,7 @@ foreach ($userArray as $key => $user_id) {
                 order by o.entered_at ";
 
         $rst = $con->execute($sql);
-        if (!$rst->EOF) {
+        if ($rst && !$rst->EOF) {
             $output .= "<p><font size=+2><b>" . ("OPEN OPPORTUNITIES for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
@@ -280,22 +282,24 @@ foreach ($userArray as $key => $user_id) {
             $output .= "        <th align=left>" . ("Opportunity") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
-            while (!$rst->EOF) {
-                $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td>" . $rst->fields['opportunity_status_pretty_name'] . "&nbsp;&nbsp;</td>\n";
-                $sql5 = "SELECT company_name from companies where company_id = " . $rst->fields['company_id'];
-                $rst5 = $con->execute($sql5);
-                $output .= "<td>" . $rst5->fields['company_name'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
-                $rst6 = $con->execute($sql6);
-                $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"" . $http_site_root . "/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
-                if ($use_hr) {
-                    $output .= "<tr><td colspan=4><hr></td></tr>\n";
+            if ($rst->NumRows() >0) {
+                while (!$rst->EOF) {
+                    $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                    $output .= "<td>" . $rst->fields['opportunity_status_pretty_name'] . "&nbsp;&nbsp;</td>\n";
+                    $sql5 = "SELECT company_name from companies where company_id = " . $rst->fields['company_id'];
+                    $rst5 = $con->execute($sql5);
+                    $output .= "<td>" . $rst5->fields['company_name'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                    $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
+                    $rst6 = $con->execute($sql6);
+                    $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                    $output .= "<td><a href=\"" . $http_site_root . "/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
+                    if ($use_hr) {
+                        $output .= "<tr><td colspan=4><hr></td></tr>\n";
+                    }
+                    $rst->movenext();
                 }
-                $rst->movenext();
+                $rst->close();
             }
-            $rst->close();
             $output .= "</table>";
         }
     else {
@@ -314,7 +318,7 @@ foreach ($userArray as $key => $user_id) {
                 order by c.entered_at ";
 
         $rst = $con->execute($sql);
-        if (!$rst->EOF) {
+        if ($rst && !$rst->EOF) {
             $output .= "<p><font size=+2><b>" . _("OPEN CASES for")." $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
@@ -326,22 +330,24 @@ foreach ($userArray as $key => $user_id) {
             $output .= "        <th align=left>" . _("Case") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
-            while (!$rst->EOF) {
-                $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td>" . $rst->fields['due_at'] . "&nbsp;&nbsp;</td>\n";
-                $sql5 = "SELECT company_name from companies where company_id = " . $rst->fields['company_id'];
-                $rst5 = $con->execute($sql5);
-                $output .= "<td>" . $rst5->fields['company_name'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
-                $rst6 = $con->execute($sql6);
-                $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"" . $http_site_root . "/cases/one.php?case_id=" . $rst->fields['case_id'] . "\">" . $rst->fields['case_title'] . "</a></td>\n</td>\n";
-                if ($use_hr) {
-                    $output .= "<tr><td colspan=5><hr></td></tr>\n";
+            if ($rst-NumRows()>0 {
+                while (!$rst->EOF) {
+                    $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                    $output .= "<td>" . $rst->fields['due_at'] . "&nbsp;&nbsp;</td>\n";
+                    $sql5 = "SELECT company_name from companies where company_id = " . $rst->fields['company_id'];
+                    $rst5 = $con->execute($sql5);
+                    $output .= "<td>" . $rst5->fields['company_name'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                    $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
+                    $rst6 = $con->execute($sql6);
+                    $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
+                    $output .= "<td><a href=\"" . $http_site_root . "/cases/one.php?case_id=" . $rst->fields['case_id'] . "\">" . $rst->fields['case_title'] . "</a></td>\n</td>\n";
+                    if ($use_hr) {
+                        $output .= "<tr><td colspan=5><hr></td></tr>\n";
+                    }
+                    $rst->movenext();
                 }
-                $rst->movenext();
+                $rst->close();
             }
-            $rst->close();
             $output .= "</table>";
         }
         else {
@@ -375,6 +381,10 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.14  2004/12/30 21:55:29  braverock
+ * - add additional database error handling
+ * - localize additional strings
+ *
  * Revision 1.13  2004/09/02 22:51:17  maulani
  * - Cleaned up SQL
  * - Fixed copy & paste bugs
