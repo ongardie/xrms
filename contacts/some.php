@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.38 2004/09/21 18:34:15 introspectshun Exp $
+ * $Id: some.php,v 1.39 2004/10/26 18:40:54 introspectshun Exp $
  */
 
 //include the standard files
@@ -165,6 +165,7 @@ and contact_record_status = 'a'
 group by cont.contact_id,
 cont.first_names,
 cont.last_name,
+c.company_id,
 c.company_name,
 cont.address_id,
 cont.work_phone
@@ -360,6 +361,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.39  2004/10/26 18:40:54  introspectshun
+ * - Fixed Recent Items query for db compatibility
+ *
  * Revision 1.38  2004/09/21 18:34:15  introspectshun
  * - Recommitting revised include of include-locations-location.inc
  *
