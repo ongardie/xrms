@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: edit-address.php,v 1.8 2004/07/30 11:23:38 cpsource Exp $
+ * $Id: edit-address.php,v 1.9 2004/08/02 22:28:11 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'confgoto.php');
 
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -48,6 +49,9 @@ $con->close();
 
 $page_title = $company_name . " - " . _("Edit Address");
 start_page($page_title, true, $msg);
+
+// include confGoTo javascrip module
+confGoTo_includes();
 
 ?>
 
@@ -95,10 +99,19 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right_91px><?php echo _("Address Body"); ?></td>
-                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> <?php echo _("Use"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> 
+                  <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> <?php echo _("Use"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input class=button type=button value="<?php echo _("Delete Address"); ?>" onclick="javascript: location.href='delete-address.php?company_id=<?php echo $company_id ?>&address_id=<?php echo $address_id ?>';"></td>
+                <td class=widget_content_form_element colspan=2>
+                  <input class=button type=submit value="<?php echo _("Save Changes"); ?>"> 
+<?php
+        		  $quest = _("Delete Address?");
+        		  $button = _("Delete Address");
+				  $to_url = "delete-address.php?company_id=$company_id&address_id=$address_id";
+				  confGoTo( $quest, $button, $to_url );
+?>
+                </td>
             </tr>
         </table>
         </form>
@@ -119,6 +132,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.9  2004/08/02 22:28:11  maulani
+ * - Have delete address button use confGoTo confirmation dialog to confirm delete
+ *
  * Revision 1.8  2004/07/30 11:23:38  cpsource
  * - Do standard msg processing
  *   Default use_pretty_address in new-2.php set to null
