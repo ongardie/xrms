@@ -12,12 +12,12 @@ $session_user_id = session_check();
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$con->close();
-
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql2);
 $user_menu = $rst->getmenu2('user_id', '', false);
 $rst->close();
+
+$con->close();
 
 $page_title = 'Reports';
 start_page($page_title, true, $msg);
@@ -74,8 +74,10 @@ start_page($page_title, true, $msg);
 				<td class=widget_content>How many cases are in each stage of the case resolution process?</td>
 			</tr>
 			<tr>
-				<td class=widget_content>&nbsp;</td>
-				<td class=widget_content>&nbsp;</td>
+				<td colspan=2 class=widget_label_center>User Reports</td>
+			</tr>
+			<tr>
+				<td class=widget_content colspan="2"><form action="user-activity.php" method=post>Activity Report for <?= $user_menu ?> <input class=button type=submit value="Go"></form></td>
 			</tr>
 		</table>
 
