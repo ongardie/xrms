@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.20 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: edit.php,v 1.21 2004/07/29 11:23:04 cpsource Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'confgoto.php');
 
 $session_user_id = session_check();
 
@@ -105,6 +106,9 @@ $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
 $con->close();
+
+// include confGoTo javascrip module
+confGoTo_includes();
 
 $page_title = $first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
@@ -230,9 +234,17 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan=2>
                     <input class=button type=submit value="<?php echo _("Save"); ?>">
                     <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';">
-                    <?php if ($contact_count > 1) {echo("<input type=button class=button onclick=\"javascript: location.href='delete.php?company_id=$company_id&contact_id=$contact_id';\" value='" . _("Delete") . "' onclick=\"javascript: return confirm('" . _("Delete Contact?") . "')\">\n");} ?>
+<?php
+		if ( $contact_count > 1 ) {
+		  $quest = _("Delete Contact?");
+		  $button = _("Delete");
+		  $to_url = "delete.php?company_id=$company_id&contact_id=$contact_id";
+		  confGoTo( $quest, $button, $to_url );
+		}
+?>
                     <input class=button type=button value="<?php echo _("Transfer"); ?>" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
                     <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+
                 </td>
             </tr>
         </table>
@@ -254,6 +266,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.21  2004/07/29 11:23:04  cpsource
+ * - Added confGoTo sub-system for Delete confirm.
+ *
  * Revision 1.20  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'
