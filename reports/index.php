@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.15 2004/07/15 17:30:01 introspectshun Exp $
+ * $Id: index.php,v 1.16 2004/07/17 17:52:45 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -86,7 +86,11 @@ start_page($page_title, true, $msg);
                 <td colspan=2 class=widget_header>Reports</td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Opportunity</td>
+                <td colspan=2 class=widget_label_center>Company Reports</td>
+            </tr>
+            <tr>
+                <td class=widget_content><a href="companies-list.php">Company List</a></td>
+                <td class=widget_content>List of companies, addresses and phone numbers</td>
             </tr>
             <tr>
                 <td class=widget_content><a href="company-contacts-printout.php">Contacts at Companies</a></td>
@@ -155,6 +159,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.16  2004/07/17 17:52:45  braverock
+ * - Add Companies List report contributed by John Fawcett
+ *
  * Revision 1.15  2004/07/15 17:30:01  introspectshun
  * - Fixed errant CVS Commit.
  *
