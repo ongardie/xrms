@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.10 2004/07/25 15:41:01 johnfawcett Exp $
+ * $Id: edit.php,v 1.11 2004/07/25 19:25:45 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -213,7 +213,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=case_description><?php  echo $case_description; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?case_id=<?php echo $case_id ?>';" value='<?php echo _("Delete Case"); ?>'></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?case_id=<?php echo $case_id ?>';" value='<?php echo _("Delete"); ?>'></td>
             </tr>
         </table>
         </form>
@@ -274,6 +274,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.11  2004/07/25 19:25:45  johnfawcett
+ * - standardized delete button
+ *
  * Revision 1.10  2004/07/25 15:41:01  johnfawcett
  * - corrected page title
  *
