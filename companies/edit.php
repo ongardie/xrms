@@ -1,4 +1,9 @@
 <?php
+/**
+ * Edit company details
+ *
+ * $Id: edit.php,v 1.5 2004/01/26 19:18:29 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -200,4 +205,15 @@ function validate() {
 //-->
 </script>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: edit.php,v $
+ * Revision 1.5  2004/01/26 19:18:29  braverock
+ * - cleaned up sql format
+ * - added phpdoc
+ *
+ */
+?>
