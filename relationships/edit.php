@@ -16,7 +16,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $working_direction = $_GET['working_direction'];
 $on_what_table = $_GET['on_what_table'];
@@ -80,6 +79,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.4  2004/07/25 13:18:48  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.3  2004/07/25 13:13:04  braverock
  * - remove lang file require_once, as it is no longer used
  *
@@ -96,6 +98,5 @@ end_page();
  * Revision 1.1  2004/07/01 19:48:10  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts
- *
  */
 ?>

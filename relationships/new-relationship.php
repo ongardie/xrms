@@ -17,7 +17,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $on_what_id = $_POST['on_what_id'];
 $working_direction = $_POST['working_direction'];
@@ -88,6 +87,9 @@ end_page();
 
 /**
  * $Log: new-relationship.php,v $
+ * Revision 1.3  2004/07/25 13:13:04  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.2  2004/07/18 18:10:22  braverock
  * - convert all strings for i18n/translation
  *   - applies i18n patch contributed by John Fawcett
@@ -107,4 +109,3 @@ end_page();
  *
  */
 ?>
-

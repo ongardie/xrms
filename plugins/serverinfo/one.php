@@ -2,7 +2,7 @@
 /**
  * Details about one server
  *
- * $Id: one.php,v 1.1 2004/07/06 19:57:02 gpowers Exp $
+ * $Id: one.php,v 1.2 2004/07/25 13:16:59 braverock Exp $
  *
  */
 
@@ -18,8 +18,7 @@ require_once($include_directory . 'utils-accounting.php');
 require_once('serverinfo.inc');
 
 $this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
+$session_user_id = session_check( );
 
 $msg = $_GET['msg'];
 
@@ -66,7 +65,7 @@ while (!$all_elements->EOF) {
   $column = $all_elements->fields['element_column'];
 
   # If this server doesn't have this element defined, use default value
-  $value = (array_key_exists($element_id, $this_server)) ? 
+  $value = (array_key_exists($element_id, $this_server)) ?
     $this_server[$element_id] : $all_elements->fields['element_default_value'];
 
   # Use words for checkbox status
@@ -389,11 +388,11 @@ function openNewsWindow() {
       </tr>
       <tr>
         <td class=widget_content_form_element>
-          <input class=button type=button value="Edit" 
+          <input class=button type=button value="Edit"
             onclick="javascript: location.href='<?php echo
-           
+
 "edit.php?server_id=$server_id&company_id=$company_id&return_url=$http_site_root/plugins/serverinfo/one.php"; ?>';">
-          <input class=button type=button value="New" 
+          <input class=button type=button value="New"
             onclick="javascript: location.href='<?php echo
             "edit.php?server_id=0&company_id=$company_id&return_url=$return_url"; ?>';">
         </td>
@@ -508,4 +507,10 @@ Calendar.setup({
 
 end_page();
 
+/**
+ * $Log: one.php,v $
+ * Revision 1.2  2004/07/25 13:16:59  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
+ */
 ?>

@@ -2,7 +2,9 @@
 /**
  * Search and view summary information on multiple companies and thier contacts for printing.
  *
- * $Id: company-contacts-printout.php,v 1.6 2004/07/24 15:47:14 braverock Exp $
+ * @author Brian Peterson
+ *
+ * $Id: company-contacts-printout.php,v 1.7 2004/07/25 13:15:28 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,8 +20,6 @@ require_once($include_directory . 'adodb-params.php');
 $_SESSION['language'] = 'english';
 
 $session_user_id = session_check();
-
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
 $offset = $_POST['offset'];
@@ -339,6 +339,9 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.7  2004/07/25 13:15:28  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.6  2004/07/24 15:47:14  braverock
  * - remove lang/english.php variables
  * - fixed other localized strings for i18n
