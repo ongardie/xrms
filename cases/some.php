@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.21 2004/07/30 11:43:10 cpsource Exp $
+ * $Id: some.php,v 1.22 2004/08/18 00:06:15 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -67,8 +67,11 @@ cas.case_status_pretty_name AS '" . _("Status") . "', " . $con->SQLDate('Y-m-d',
 if ($case_category_id > 0) {
     $from = "from companies c, cases ca, case_types cat, case_priorities cap, case_statuses cas, users u, entity_category_map ecm ";
 } else {
-    $from = "from companies c, cases ca, case_types cat, case_priorities cap, case_statuses cas, users u ";
+    $from = "from companies c, cases ca, case_types cat, case_priorities cap, case_statuses cas, users u  ";
 }
+
+//added by Nic to be able to create mail merge to contacts
+$from.=",contacts cont ";
 
 $where  = "where ca.case_status_id = cas.case_status_id ";
 $where .= "and ca.case_priority_id = cap.case_priority_id ";
@@ -76,6 +79,9 @@ $where .= "and ca.case_type_id = cat.case_type_id ";
 $where .= "and ca.company_id = c.company_id ";
 $where .= "and ca.user_id = u.user_id ";
 $where .= "and case_record_status = 'a'";
+
+//added by Nic to be able to create mail merge to contacts
+$where.="and cont.contact_id=ca.contact_id ";
 
 $criteria_count = 0;
 
@@ -260,7 +266,7 @@ start_page($page_title, true, $msg);
         </form>
 
 <?php
-
+$_SESSION["search_sql"]=$sql;
 $pager = new ADODB_Pager($con, $sql, 'cases', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
@@ -299,9 +305,22 @@ function initialize() {
 initialize();
 
 function bulkEmail() {
-    document.forms[0].action = "../email/index.php";
+    document.forms[0].action = "../email/email.php";
     document.forms[0].submit();
 }
+function exportIt() {
+    //document.forms[0].action = "export.php";
+    //document.forms[0].submit();
+    // reset the form so that post-export searches work
+    //document.forms[0].action = "some.php";
+		alert('Export functionality hasnt been implemented yet for multiple cases')
+}
+
+//function bulkEmail() {
+//    document.forms[0].action = "../email/email.php";
+//    document.forms[0].submit();
+	//	alert('Mail Merge functionality hasnt been implemented yet for multiple cases')
+//}
 
 function clearSearchCriteria() {
     location.href = "some.php?clear=1";
@@ -328,6 +347,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.22  2004/08/18 00:06:15  niclowe
+ * Fixed bug 941839 - Mail Merge not working
+ *
  * Revision 1.21  2004/07/30 11:43:10  cpsource
  * - Check for db errors and record found before setting
  *     case_prority_id

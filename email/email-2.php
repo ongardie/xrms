@@ -3,7 +3,7 @@
  *
  * Email 2.
  *
- * $Id: email-2.php,v 1.7 2004/08/04 21:46:42 introspectshun Exp $
+ * $Id: email-2.php,v 1.8 2004/08/18 00:06:16 niclowe Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -21,12 +21,13 @@ $email_template_id = (strlen($_POST['email_template_id']) > 0) ? $_POST['email_t
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-$sql = "SELECT * FROM users WHERE user_id = $session_user_id";
+//$con->debug=true;
+$sql = "SELECT * FROM users WHERE user_id = '".$session_user_id."'";
 $rst = $con->execute($sql);
 
 $rec = array();
-$rec['last_hit'] = time();
+$rec['last_hit'] = Time();
+
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
@@ -159,6 +160,9 @@ end_page();
 
 /**
  * $Log: email-2.php,v $
+ * Revision 1.8  2004/08/18 00:06:16  niclowe
+ * Fixed bug 941839 - Mail Merge not working
+ *
  * Revision 1.7  2004/08/04 21:46:42  introspectshun
  * - Localized strings for i18n/l10n support
  * - All paths now relative to include-locations-location.inc

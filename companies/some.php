@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.39 2004/08/17 10:56:44 johnfawcett Exp $
+ * $Id: some.php,v 1.40 2004/08/18 00:06:16 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -324,7 +324,7 @@ start_page($page_title, true, $msg);
   </form>
 
 <?php
-
+$_SESSION["search_sql"]=$sql;
 $pager = new ADODB_Pager($con, $sql, 'companies', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
@@ -374,9 +374,18 @@ function submitForm(companiesNextPage) {
     document.forms[0].submit();
 }
 
+function exportIt() {
+    //document.forms[0].action = "export.php";
+    //document.forms[0].submit();
+    // reset the form so that post-export searches work
+    //document.forms[0].action = "some.php";
+		alert('Export functionality hasnt been implemented yet for multiple companies')
+}
+
 function bulkEmail() {
-    document.forms[0].action = "../email/email.php";
-    document.forms[0].submit();
+//    document.forms[0].action = "../email/email.php";
+//    document.forms[0].submit();
+		alert('Mail Merge functionality hasnt been implemented yet for multiple companies')
 }
 
 function clearSearchCriteria() {
@@ -399,6 +408,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.40  2004/08/18 00:06:16  niclowe
+ * Fixed bug 941839 - Mail Merge not working
+ *
  * Revision 1.39  2004/08/17 10:56:44  johnfawcett
  * - added translate_menu call to Industries select menu
  *

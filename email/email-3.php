@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.8 2004/08/04 21:46:42 introspectshun Exp $
+ * $Id: email-3.php,v 1.9 2004/08/18 00:06:17 niclowe Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -30,10 +30,13 @@ $_SESSION['email_template_title'] = serialize($email_template_title);
 $_SESSION['email_template_body'] = serialize($email_template_body);
 
 $array_of_contacts = unserialize($_SESSION['array_of_contacts']);
+
 if (is_array($array_of_contacts))
 	$imploded_contacts = implode(',', $array_of_contacts);
 else
 	echo _("WARNING: No array of contacts!") . "<br>";
+	
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
@@ -108,6 +111,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.9  2004/08/18 00:06:17  niclowe
+ * Fixed bug 941839 - Mail Merge not working
+ *
  * Revision 1.8  2004/08/04 21:46:42  introspectshun
  * - Localized strings for i18n/l10n support
  * - All paths now relative to include-locations-location.inc

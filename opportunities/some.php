@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.27 2004/07/29 10:04:20 cpsource Exp $
+ * $Id: some.php,v 1.28 2004/08/18 00:06:17 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -75,15 +75,21 @@ $sql = "SELECT " .
 ";
 
 if ($opportunity_category_id > 0) {
-    $from = "from companies c, opportunities opp, opportunity_statuses os, users u, entity_category_map ecm ";
+    $from = "FROM companies c, opportunities opp, opportunity_statuses os, users u, entity_category_map ecm ";
 } else {
-    $from = "from companies c, opportunities opp, opportunity_statuses os, users u ";
+    $from = "FROM companies c, opportunities opp, opportunity_statuses os, users u ";
 }
+
+//added by Nic to be able to create mail merge to contacts
+$from.=",contacts cont ";
 
 $where  = "where opp.opportunity_status_id = os.opportunity_status_id ";
 $where .= "and opp.company_id = c.company_id ";
 $where .= "and opp.user_id = u.user_id ";
-$where .= "and opportunity_record_status = 'a'";
+$where .= "and opportunity_record_status = 'a' ";
+
+//added by Nic to be able to create mail merge to contacts
+$where.="and cont.contact_id=opp.contact_id ";
 
 $criteria_count = 0;
 
@@ -237,7 +243,7 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 <?php
-
+$_SESSION["search_sql"]=$sql;
 $pager = new ADODB_Pager($con, $sql, 'opportunities', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
@@ -276,7 +282,7 @@ function initialize() {
 initialize();
 
 function bulkEmail() {
-    document.forms[0].action = "../email/email.php";
+    document.forms[0].action = "../email/email.php?scope=opportunities";
     document.forms[0].submit();
 }
 
@@ -313,6 +319,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.28  2004/08/18 00:06:17  niclowe
+ * Fixed bug 941839 - Mail Merge not working
+ *
  * Revision 1.27  2004/07/29 10:04:20  cpsource
  * - Rid some undefines.
  *

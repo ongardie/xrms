@@ -3,7 +3,7 @@
  *
  * Email.
  *
- * $Id: index.php,v 1.5 2004/08/04 21:46:42 introspectshun Exp $
+ * $Id: index.php,v 1.6 2004/08/18 00:06:17 niclowe Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -26,7 +26,7 @@ $sql = "SELECT * FROM users WHERE user_id = $session_user_id";
 $rst = $con->execute($sql);
 
 $rec = array();
-$rec['last_hit'] = $time();
+$rec['last_hit'] = Time();
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
@@ -94,6 +94,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.6  2004/08/18 00:06:17  niclowe
+ * Fixed bug 941839 - Mail Merge not working
+ *
  * Revision 1.5  2004/08/04 21:46:42  introspectshun
  * - Localized strings for i18n/l10n support
  * - All paths now relative to include-locations-location.inc
