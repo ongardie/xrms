@@ -505,11 +505,12 @@ function openNewsWindow() {
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-				<input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
-				<input class=button type=button value="<?php echo $strCompaniesOneAdminButton; ?>" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';"> <input class=button type=button value="<?php echo $strCompaniesOneCloneButton; ?>" onclick="javascript: location.href='new.php?clone_id=<?php $company_id ?>';">
-				<input class=button type=button value="<?php echo $strCompaniesOneMailMergeButton; ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
-				<input class=button type=button value="<?php echo $strCompaniesOneNewsButton; ?>" onclick="javascript: openNewsWindow();">
-				<input class=button type=button value="<?php echo $strCompaniesOneAddressesButton; ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
+				<input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
+				<input class=button type=button value="Admin" onclick="javascript:location.href='admin.php?company_id=<?php echo $company_id; ?>';"> 
+                <input class=button type=button value="Clone" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
+				<input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
+				<input class=button type=button value="News" onclick="javascript: openNewsWindow();">
+				<input class=button type=button value="Addresses" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
 				</td>
             </tr>
         </table>
@@ -520,16 +521,16 @@ function openNewsWindow() {
                 <td class=widget_header colspan=6><?php  echo $strCompaniesOneContactsTitle; ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php  echo $strCompaniesOneContactNameLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesOneContactSummaryLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesOneContactTitleLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesOneContactDescriptionLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesOneContactPhoneLabel; ?></td>
-                <td class=widget_label><?php  echo $strCompaniesOneContactEmailLabel; ?></td>
+                <td class=widget_label>Name</td>
+                <td class=widget_label>Summary</td>
+                <td class=widget_label>Title</td>
+                <td class=widget_label>Description</td>
+                <td class=widget_label>Phone</td>
+                <td class=widget_label>E-Mail</td>
             </tr>
             <?php  echo $contact_rows; ?>
             <tr>
-                <td class=widget_content_form_element colspan=6><input type=button class=button onclick="location.href='<?php echo $http_site_root; ?>/contacts/new.php?company_id=<?php echo $company_id; ?>';" value="<?php echo $strCompaniesOneNewContactButton; ?>"></td>
+                <td class=widget_content_form_element colspan=6><input type=button class=button onclick="location.href='../contacts/new.php?company_id=<?php echo $company_id; ?>';" value="New"></td>
             </tr>
         </table>
 
