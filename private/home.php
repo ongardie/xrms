@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.29 2004/07/14 14:41:00 cpsource Exp $
+ * $Id: home.php,v 1.30 2004/07/14 19:02:04 gpowers Exp $
  */
 
 // include the common files
@@ -48,6 +48,9 @@ require_once("../files/sidebar.php");
 
 //include the notes sidebar
 require_once("../notes/sidebar.php");
+
+//call the sidebar hook
+$sidebar_rows = do_hook_function('private_sidebar_bottom', $sidebar_rows);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -477,6 +480,9 @@ start_page($page_title);
                 <input type="submit" class=button value="New Personal Note">
             </form>
 
+        <!-- sidebar plugins //-->
+        <?php echo $sidebar_rows; ?>
+
     </div>
 </div>
 
@@ -486,6 +492,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.30  2004/07/14 19:02:04  gpowers
+ * - added 'private_sidebar_bottom' plugin hook
+ *   - for info plugin
+ *
  * Revision 1.29  2004/07/14 14:41:00  cpsource
  * - Defined $files_rows so it wouldn't be used undefined.
  *   selected a.activity_description so it would be pulled from db
