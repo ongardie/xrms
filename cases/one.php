@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.26 2005/01/09 17:23:19 vanmer Exp $
+ * $Id: one.php,v 1.27 2005/01/10 21:49:02 vanmer Exp $
  */
 
 //include required files
@@ -142,7 +142,7 @@ if ($rst) {
         }
 
         $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$activity_contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/cases/one.php?case_id=$case_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . "</td>";
@@ -249,7 +249,7 @@ start_page($page_title, true, $msg);
                                     <td class=sublabel><?php echo _("Status"); ?></td>
                                     <td class=clear>
                                         <?php  echo $case_status_display_html; ?>
-                                        <a href="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                                        <a href="#" onclick="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -389,6 +389,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.27  2005/01/10 21:49:02  vanmer
+ * - fixed javascript popup for status definitions to no longer redirect page
+ * - fixed return_url to cases to allow activities to be completed and returned to the case, not the contact
+ *
  * Revision 1.26  2005/01/09 17:23:19  vanmer
  * - added javascript needed for marking an activity as done on entry
  * - switched interface buttons from html to calling render_button functions
