@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.15 2004/08/03 21:42:26 neildogg Exp $
+ * $Id: sidebar.php,v 1.16 2004/08/03 22:03:20 neildogg Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -55,7 +55,7 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
-$contact_block = '<script language=text/javascript>
+$contact_block = '<script language="JavaScript" type="text/javascript">
     var temp = new Image();
     var newsrc;
 
@@ -175,6 +175,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.16  2004/08/03 22:03:20  neildogg
+ * - Malformed script tag, my bad
+ *
  * Revision 1.15  2004/08/03 21:42:26  neildogg
  * - Sidebar variable changing
  *
