@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.23 2004/05/21 14:04:01 braverock Exp $
+ * $Id: utils-misc.php,v 1.24 2004/05/21 14:11:28 braverock Exp $
  */
 
 /**
@@ -513,6 +513,20 @@ function set_system_parameter(&$con, $param, $new_val) {
  *
  * @param handle &$con handle to the database connection
  * @param string $sql SQL that was attempted
+ *
+ * @example
+ * <code><pre>
+ *    $rst = $con->execute($sql);
+ *
+ *    if ($rst) {
+ *        // do stuff to process result set
+ *    } else {
+ *        // no result set, something is wrong
+ *        // call db_error_handler fn to get some useful data
+ *        db_error_handler (&$con,$sql)
+ *    }
+ * </pre></code>
+ *
  */
 function db_error_handler (&$con,$sql) {
         $error = $con->ErrorMsg();
@@ -574,6 +588,9 @@ function get_formatted_address (&$con,$address_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.24  2004/05/21 14:11:28  braverock
+ * - add example code to db_error_handler fn
+ *
  * Revision 1.23  2004/05/21 14:04:01  braverock
  * - added db_error_handler code to get_formatted_address fn
  *
