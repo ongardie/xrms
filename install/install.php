@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.3 2004/07/02 18:58:49 maulani Exp $
+ * $Id: install.php,v 1.4 2004/07/13 12:57:10 cpsource Exp $
  */
 
 // include the installation utility routines
@@ -15,6 +15,9 @@ require_once('data.php');
 
 // where do we include from
 require_once('../include-locations.inc');
+
+// get message
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 // now check to make sure that the include-locations file has been setup for use
 if ($include_directory == "/full/path/to/xrms/include/") {
@@ -238,6 +241,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.4  2004/07/13 12:57:10  cpsource
+ *Make sure $msg is always defined.
+ *
  *Revision 1.3  2004/07/02 18:58:49  maulani
  *- add mySQL version check patch #980507 submitted by Nic Lowe
  *  Modified to check for version 4.0.2
