@@ -1,11 +1,20 @@
 <?php
+/**
+ * Show and edit the details for a single opportunity status
+ *
+ * Called from admin/opportunity-status/some.php
+ *
+ * $Id: one.php,v 1.3 2004/01/25 18:39:41 braverock Exp $
+ */
 
+//uinclude required common files
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
+//check to see if we are logged in
 $session_user_id = session_check();
 
 $opportunity_status_id = $_GET['opportunity_status_id'];
@@ -104,4 +113,15 @@ start_page($page_title);
     </tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: one.php,v $
+ * Revision 1.3  2004/01/25 18:39:41  braverock
+ * - fixed insert bugs so long_desc will be disoplayed and inserted properly
+ * - added phpdoc
+ *
+ */
+?>

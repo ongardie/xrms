@@ -1,13 +1,24 @@
 <?php
+/**
+ * Display all the opportunity statuses, and give the user the option to
+ * add new statuses.
+ *
+ * @todo modify all opportunity status uses to use a sort order
+ *
+ * $Id: some.php,v 1.3 2004/01/25 18:39:41 braverock Exp $
+ */
 
+//include required XRMS common files
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
+//check to see if the user is logged in
 $session_user_id = session_check();
 
+//connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
@@ -16,8 +27,23 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?opportunity_status_id=' . $rst->fields['opportunity_status_id'] . '>' . $rst->fields['opportunity_status_pretty_name'] . '</a></td><td class=widget_content>'. htmlspecialchars($rst->fields['opportunity_status_long_desc']) . '</td>';
+        $table_rows .= "\n<tr>";
+            $table_rows .= '<td class=widget_content>'
+                         . '<a href=one.php?opportunity_status_id='
+                         . $rst->fields['opportunity_status_id']
+                         . '>';
+
+            if (strlen ($opportunity_status_display_html) > 0) {
+                $table_rows .= $rst->fields['opportunity_status_pretty_html'];
+            } else {
+                $table_rows .= $rst->fields['opportunity_status_pretty_name'];
+            }
+
+            $table_rows .= '</a></td>'
+                         . '<td class=widget_content>'
+                         . htmlspecialchars($rst->fields['opportunity_status_long_desc'])
+                         . '</td>';
+
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -92,4 +118,15 @@ start_page($page_title);
     </tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.3  2004/01/25 18:39:41  braverock
+ * - fixed insert bugs so long_desc will be disoplayed and inserted properly
+ * - added phpdoc
+ *
+ */
+?>
