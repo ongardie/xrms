@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.53 2005/01/24 14:10:15 maulani Exp $
+ * $Id: update.php,v 1.54 2005/01/25 05:55:58 vanmer Exp $
  */
 
 // where do we include from
@@ -4036,11 +4036,55 @@ $con->execute($sql);
 //add address_id to the company_division table (for use in assigning addresses to a division)
 $sql="ALTER TABLE `company_division` ADD `address_id` INT UNSIGNED AFTER `company_id`";
 $con->execute($sql);
+    
+    $table_list = list_db_tables($con);
+    if (!in_array('user_preference_types',$table_list)) {
+        $sql="CREATE TABLE `user_preference_types` (
+        `user_preference_type_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+        `user_preference_name` VARCHAR( 64 ) NOT NULL ,
+        `user_preference_pretty_name` VARCHAR( 128 ) NOT NULL ,
+        `user_preference_description` VARCHAR( 255 ) NOT NULL ,
+        `allow_multiple_flag` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+        `allow_user_edit_flag` TINYINT( 1 ) DEFAULT '0' NOT NULL ,
+        `user_preference_type_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
+        `preference_type_created_on` DATETIME NOT NULL ,
+        `user_preference_type_modified_on` DATETIME NOT NULL ,
+        `user_preference_created_by` INT NOT NULL ,
+        `user_preference_modified_by` INT NOT NULL ,
+        PRIMARY KEY ( `user_preference_type_id` )
+        )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
+    if (!in_array('user_preferences',$table_list)) {
+        $sql="CREATE TABLE `user_preferences` (
+        `user_preference_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+        `user_preference_type_id` INT UNSIGNED NOT NULL ,
+        `user_preference_name` VARCHAR( 255 ) ,
+        `user_preference_value` LONGTEXT NOT NULL ,
+        `user_preference_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
+        `user_preference_modified_on` DATETIME NOT NULL ,
+        PRIMARY KEY ( `user_preference_id` ) ,
+        INDEX ( `user_preference_type_id` )
+        );";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
 
 install_upgrade_acl($con);
 
 //close the database connection, because we don't need it anymore
 $con->close();
+
+do_hook('update_xrms');
 
 $page_title = _("Update Complete");
 start_page($page_title, true, $msg);
@@ -4060,6 +4104,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.54  2005/01/25 05:55:58  vanmer
+ * - added tables for user preferences
+ * - added hook for plugins to run updates after all other updates are completed
+ *
  * Revision 1.53  2005/01/24 14:10:15  maulani
  * - Fix system_parameters_options update
  *
