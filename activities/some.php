@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.6 2004/04/09 21:11:42 braverock Exp $
+ * $Id: some.php,v 1.7 2004/04/14 22:48:28 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -80,8 +80,8 @@ if (!($sort_column == $current_sort_column)) {
 
 $opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
 $sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-$ascending_order_image = " <img border=0 height=10 width=10 src=../img/asc.gif>";
-$descending_order_image = " <img border=0 height=10 width=10 src=../img/desc.gif>";
+$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
+$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 $_SESSION['activities_sort_column'] = $sort_column;
@@ -104,8 +104,8 @@ $sql = "select
  if(activity_status = 'o' and ends_at < now(), 'Yes', '-') as is_overdue,
  activity_title as 'Title',
  activity_type_pretty_name as 'Type',
- concat('<a href=../contacts/one.php?contact_id=', cont.contact_id, '>', cont.first_names, ' ', cont.last_name, '</a>') as 'Contact',
- concat('<a href=../companies/one.php?company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',
+ concat('<a href=\"../contacts/one.php?contact_id=', cont.contact_id, '\">', cont.first_names, ' ', cont.last_name, '</a>') as 'Contact',
+ concat('<a href=\"../companies/one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',
  date_format(scheduled_at, '%Y-%m-%d') as 'Scheduled',
  date_format(ends_at, '%Y-%m-%d') as 'Due'
 from companies c, users u, activity_types at, activities a left outer join contacts cont on cont.contact_id = a.contact_id
@@ -213,17 +213,20 @@ $page_title = "Open Activities";
 start_page($page_title);
 
 ?>
-<script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
+<script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-    <tr>
-        <td class=lcol width=65% valign=top>        <form action=some.php method=post>        <input type=hidden name=use_post_vars value=1>        <input type=hidden name=contacts_next_page value="<?php  echo $contacts_next_page; ?>">
+<div id="Main">
+    <div id="Content">
+
+        <form action=some.php method=post>        
+        <input type=hidden name=use_post_vars value=1>        
+        <input type=hidden name=contacts_next_page value="<?php  echo $contacts_next_page; ?>">
         <input type=hidden name=resort value="0">
         <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=8>Search Criteria</td>
             </tr>
@@ -243,15 +246,15 @@ start_page($page_title);
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element>
                     <select name="before_after">
-                        <option value=""<?php if (!$before_after) { print " selected"; } ?>">Before</option>
+                        <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
                         <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
                     </select>
-                    <input type=text name="date" size=20 value="<?php  echo $date; ?>"> <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a>
+                    <input type=text name="date" size=20 value="<?php  echo $date; ?>"> <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif" alt=""></a>
                 </td>
                 <td class=widget_content_form_element><?php  echo $type_menu; ?></td>
                 <td class=widget_content_form_element>
                     <select name="completed">
-                        <option value="all"<?php if ($completed == "all") { print " selected"; } ?>">All</option>
+                        <option value="all"<?php if ($completed == "all") { print " selected"; } ?>>All</option>
                         <option value="o"<?php if ($completed == "o" or !$completed) { print " selected"; } ?>>Non-Completed</option>
                         <option value="c"<?php if ($completed == "c") { print " selected"; } ?>>Completed</option>
                     </select>
@@ -271,18 +274,15 @@ $con->close();
 
 ?>
 
-        </td>
-        <!-- gutter //-->
-        <td class=gutter width=2%>
-        &nbsp;
-        </td>
-        <!-- right column //-->
-        <td class=rcol width=33% valign=top>
+    </div>
 
-        </td>
-    </tr>
-</table>
-<script language=javascript>
+        <!-- right column //-->
+    <div id="Sidebar">
+
+    </div>
+</div>
+
+<script language="JavaScript" type="text/javascript">
 <!--
 
 function initialize() {
@@ -336,6 +336,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/04/14 22:48:28  maulani
+ * - Add CSS2 positioning
+ * - Fix minor HTML problems
+ * - Update HTML so it will validate
+ *
  * Revision 1.6  2004/04/09 21:11:42  braverock
  * - add check for activity_record_status = 'a'
  *   - fixes SF bug 932545 reported by Beth (maulani)
