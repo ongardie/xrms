@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.63 2004/09/02 23:20:21 maulani Exp $
+ * $Id: one.php,v 1.64 2004/09/13 21:59:03 introspectshun Exp $
  */
 
 //include required files
@@ -32,7 +32,7 @@ update_recent_items($con, $session_user_id, "activities", $activity_id);
 update_daylight_savings($con);
 
 $sql = "select a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name
-from companies c, activities a, addresses addr
+from companies c, addresses addr, activities a
 left join contacts cont on a.contact_id = cont.contact_id
 where a.company_id = c.company_id
 and c.default_primary_address = addr.address_id
@@ -439,6 +439,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.64  2004/09/13 21:59:03  introspectshun
+ * - Changed order of tables in main query.
+ *   - MSSQL chokes on the JOIN otherwise.
+ *
  * Revision 1.63  2004/09/02 23:20:21  maulani
  * - Reduce textarea width to fit on 1024 wide screen
  *
