@@ -24,7 +24,7 @@
 * 	1		34		34			true
 *
 * @author Justin Cooper
-* $Id: Session_Var_Watcher.php,v 1.2 2005/03/21 21:20:07 daturaarutad Exp $
+* $Id: Session_Var_Watcher.php,v 1.3 2005/03/29 23:05:36 daturaarutad Exp $
 */
 
 class SessionVarWatcher {
@@ -44,7 +44,7 @@ class SessionVarWatcher {
 	}
     function RegisterLocalVars($vars) {
 		foreach($vars as $k => $v) $this->local_vars[$k] = $v;
-		foreach($vars as $k => $v) echo "$k-$v<br>";
+		//foreach($vars as $k => $v) echo "$k-$v<br>";
 	}
     function RegisterLocalVar($k, $v) {
 		$this->local_vars[$k] = $v;
@@ -92,6 +92,9 @@ class SessionVarWatcher {
 
 /**
 * $Log: Session_Var_Watcher.php,v $
+* Revision 1.3  2005/03/29 23:05:36  daturaarutad
+* removed debug output
+*
 * Revision 1.2  2005/03/21 21:20:07  daturaarutad
 * removed echo
 *
