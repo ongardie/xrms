@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.3 2004/04/13 15:47:12 maulani Exp $
+ * $Id: update.php,v 1.4 2004/04/23 15:07:29 gpowers Exp $
  */
 
 /**
@@ -76,6 +76,45 @@ $sql = "alter table case_priorities add case_priority_score_adjustment int not n
 $rst = $con->execute($sql);
 // end case_priority_display_html
 
+//make sure that there is a line3 column in addresses
+//should put a test here, but alter table is non-destructive
+$sql = "alter table addresses add line3 varchar(255) after line2";
+$rst = $con->execute($sql);
+// end
+
+//make sure that there is a status_open_indicator column in campagins 
+//should put a test here, but alter table is non-destructive
+$sql = "alter table campaign_statuses add status_open_indicator char(1) not null default \"o\" after campaign_status_id";
+$rst = $con->execute($sql);
+// end
+
+//set "CLOSED" campagin status_open_indicator to "c"
+//should put a test here, but alter table is non-destructive
+$sql = "update campaign_statuses set status_open_indicator = \"c\" where campaign_status_short_name = \"CLO\"";
+$rst = $con->execute($sql);
+// end
+
+//make sure that there is connection detail columns in the audit_items table
+//these are done separately in case one column already exists
+//should put a test here, but alter table is non-destructive
+$sql = "alter table audit_items add remote_addr varchar(40) after audit_item_timestamp";
+$rst = $con->execute($sql);
+$sql = "alter table audit_items add remote_port int(6) after remote_addr";
+$rst = $con->execute($sql);
+$sql = "alter table audit_items add session_id varchar(50) after remote_port";
+$rst = $con->execute($sql);
+$sql = "alter table audit_items add http_user_agent varchar(255) after session_id";
+$rst = $con->execute($sql);
+// end
+
+//make sure that there is a status_open_indicator column in campagins 
+//should put a test here, but alter table is non-destructive
+$sql = "alter table campaign_statuses add status_open_indicator char(1) not null default 'o' after campaign_status_id";
+$rst = $con->execute($sql);
+// end case_priority_display_html
+
+
+
 // Fix problem introduced by buggy Mar 19, 2004 install code
 // This will modify the initial data appropriately
 $sql = "update address_format_strings set address_format_string='";
@@ -123,6 +162,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.4  2004/04/23 15:07:29  gpowers
+ * added addresses.line, campaign_statuses.status_open_indicator, audit_items.remote_addr, audit_items.remote_port, audit_items.session_id, audit_items.http_user_agent
+ *
  * Revision 1.3  2004/04/13 15:47:12  maulani
  * - add data integrity check so all companies have addresses
  *
