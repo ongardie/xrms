@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.48 2004/07/25 16:15:25 johnfawcett Exp $
+ * $Id: one.php,v 1.49 2004/07/25 20:06:57 johnfawcett Exp $
  */
 
 //include required files
@@ -353,7 +353,7 @@ function logTime() {
                     <input class=button type=submit name="save" value="<?php echo _("Save Changes"); ?>">
                     <input class=button type=submit name="saveandnext" value="<?php echo _("Save and Next"); ?>">
                     <input class=button type=submit name="followup" value="<?php echo _("Schedule Followup"); ?>">
-                    <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='<?php echo _("Delete Activity"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Activity?"); ?>');">
+                    <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='<?php echo _("Delete"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Activity?"); ?>');">
                 </td>
             </tr>
         </table>
@@ -403,6 +403,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.49  2004/07/25 20:06:57  johnfawcett
+ * - standardized delete button
+ *
  * Revision 1.48  2004/07/25 16:15:25  johnfawcett
  * - unified page title
  *
