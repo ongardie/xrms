@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.8 2004/07/16 05:28:14 introspectshun Exp $
+ * $Id: edit.php,v 1.9 2004/07/25 15:23:36 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -57,7 +57,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = _("One Campaign :") . $campaign_title;
+$page_title = _("Edit Campaign") .': '. $campaign_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -112,7 +112,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=campaign_description><?php  echo $campaign_description; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?campaign_id=<?php  echo $campaign_id; ?>';" value='<?php echo _("Delete Campaign"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Campaign?"); ?>');"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?campaign_id=<?php  echo $campaign_id; ?>';" value='<?php echo _("Delete Campaign"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Campaign").'?'; ?>');"></td>
             </tr>
         </table>
         </form>
@@ -183,6 +183,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.9  2004/07/25 15:23:36  johnfawcett
+ * - corrected page title
+ * - removed punctuation from gettext string
+ *
  * Revision 1.8  2004/07/16 05:28:14  introspectshun
  * - Localized strings for i18n/translation support
  *
