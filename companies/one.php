@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.101 2005/03/22 21:51:07 gpowers Exp $
+ * $Id: one.php,v 1.102 2005/04/04 14:54:05 gpowers Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -53,13 +53,6 @@ if ( !isset($accounting_rows) ) {
 }
 //call the accounting hook
 $accounting_rows = do_hook_function('company_accounting_inline_display', $accounting_rows);
-
-// make sure $company_buttons is defined
-if ( !isset($company_buttons) ) {
-  $company_button = '';
-}
-//call the copmany_buttons hook
-$company_buttons = do_hook_function('company_buttons', $company_buttons);
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
@@ -410,6 +403,13 @@ if ( !isset($bottom_rows) ) {
 }
 //call the sidebar hook
 $bottom_rows = do_hook_function('company_content_bottom', $bottom_rows);
+
+// make sure $company_buttons is defined
+if ( !isset($company_buttons) ) {
+  $company_button = '';
+}
+//call the copmany_buttons hook
+$company_buttons = do_hook_function('company_buttons', $company_buttons);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -833,6 +833,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.102  2005/04/04 14:54:05  gpowers
+ * - moved company_buttons plugin hook to sidebar hook area
+ *   - $company_name needs to be defined for the weblinks plugin
+ *
  * Revision 1.101  2005/03/22 21:51:07  gpowers
  * - moved up company_buttons hook
  *   - it's now called before the db connection is closed
