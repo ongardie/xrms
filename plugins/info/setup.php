@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.12 2005/02/11 13:56:00 braverock Exp $
+ * $Id: setup.php,v 1.13 2005/03/07 18:36:00 vanmer Exp $
  */
 
 
@@ -26,7 +26,7 @@ function xrms_plugin_init_info () {
       = 'company_content_bottom';
     $xrms_plugin_hooks['plugin_admin']['info'] = 'info_setup';
     $xrms_plugin_hooks['xrms_install']['info'] = 'info_install';
-    $xrms_plugin_hooks['xrms_update']['info'] = 'info_install';
+    $xrms_plugin_hooks['xrms_update']['info'] = 'info_update';
 }
 
 function display_on_menu () {
@@ -65,6 +65,17 @@ function info_install($con) {
     if (!in_array('info',$tables)) {
         execute_batch_sql_file($con, $xrms_file_root.'/plugins/info/info.sql');
     }
+}
+
+function info_update($con) {
+    $update_sql = "ALTER TABLE `info_element_definitions` CHANGE `element_type` `element_type` ENUM( 'text', 'select', 'radio', 'checkbox', 'textarea', 'name' ) DEFAULT 'text' NOT NULL ";
+    $rst=$con->execute($update_sql);
+    if (!$rst) db_error_handler($con, $update_sql);
+    
+    $update_sql = "UPDATE `info_element_definitions` SET element_type = 'name' WHERE element_label = 'Name'";
+    $rst=$con->execute($update_sql);
+    if (!$rst) db_error_handler($con, $update_sql);
+    
 }
 
 function company_content_bottom ($_sidebar) {
