@@ -1,6 +1,4 @@
 <?php
-session_start();
-$_SESSION['session_user_id'] = 'admin';
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');

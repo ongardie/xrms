@@ -14,11 +14,12 @@
 
  *
 
- * $Id: new-form.php,v 1.3 2004/08/15 07:08:27 niclowe Exp $
+ * $Id: new-form.php,v 1.4 2004/08/30 05:50:38 niclowe Exp $
 
  */
 
-
+session_start();
+$_SESSION['session_user_id'] = $_POST['user_id'];
 
 include_once('vars_webform.inc');
 // receives POST's from your web site and imports the company into XRMS, then redirects back to your web site
@@ -451,6 +452,10 @@ header("Location: $after_adding_new_companies_from_your_web_site_redirect_to_thi
 /**
 
  * $Log: new-form.php,v $
+ * Revision 1.4  2004/08/30 05:50:38  niclowe
+ * fixed bug where you no session was registered - thereby making the whole form useless (ie it didnt put the data in the database unless you were logged into XRMS - not good for anonymous website forms)
+ * Sorry for those who have used this and not realised (it took me a while to figure it out myself..)
+ *
  * Revision 1.3  2004/08/15 07:08:27  niclowe
  * Reduced number of form variables (no hidden ones anymore) emailed to admin user.
  *
