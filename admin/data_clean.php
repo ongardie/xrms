@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @todo: Active companies should always have active addresses
  *
- * $Id: data_clean.php,v 1.6 2004/04/21 21:54:35 maulani Exp $
+ * $Id: data_clean.php,v 1.7 2004/06/14 18:13:51 introspectshun Exp $
  */
 
 // where do we include from
@@ -19,6 +19,7 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 // vars.php sets all of the installation-specific variables
 require_once($include_directory . 'vars.php');
@@ -33,12 +34,24 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $msg = '';
 
 // Make sure that there is a last name for every contact
-$sql = "update contacts set last_name='[last name]' where last_name=''";
+$sql = "SELECT * FROM contacts WHERE last_name = ''";
 $rst = $con->execute($sql);
 
+$rec = array();
+$rec['last_name'] = '[last name]';
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$rst = $con->execute($upd);
+
 // Make sure that there is a first name for every contact
-$sql = "update contacts set first_names='[first names]' where first_names=''";
+$sql = "SELECT * FROM contacts WHERE first_names = ''";
 $rst = $con->execute($sql);
+
+$rec = array();
+$rec['first_names'] = '[first names]';
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$rst = $con->execute($upd);
 
 // There needs to be at least one contact for each company
 $sql = "SELECT companies.company_id, companies.company_record_status ";
@@ -52,17 +65,22 @@ if ($companies_to_fix > 0) {
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
         $company_record_status = $rst->fields['company_record_status'];
-        $sql = "insert into contacts set
-                company_id = $company_id,
-                last_name = 'Contact',
-                first_names = 'Default',
-                contact_record_status = '$company_record_status',
-                entered_by = $session_user_id,
-                entered_at = " . $con->dbtimestamp(mktime()) . ",
-                last_modified_at = " . $con->dbtimestamp(mktime()) . ",
-                last_modified_by = $session_user_id";
 
-        $con->execute($sql);
+        $sql2 = "SELECT * FROM contacts WHERE 1 = 2"; //select empty record as placeholder
+        $rst2 = $con->execute($sql2);
+        
+        $rec = array();
+        $rec['company_id'] = $company_id;
+        $rec['last_name'] = 'Contact';
+        $rec['first_names'] = 'Default';
+        $rec['contact_record_status'] = $company_record_status;
+        $rec['entered_by'] = $session_user_id;
+        $rec['entered_at'] = time();
+        $rec['last_modified_at'] = time();
+        $rec['last_modified_by'] = $session_user_id;
+
+        $ins = $con->GetInsertSQL($rst2, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
 
         $rst->movenext();
     }
@@ -81,16 +99,21 @@ if ($companies_to_fix > 0) {
     $msg .= "Need to create active contacts for $companies_to_fix active companies<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
-        $sql = "insert into contacts set
-                company_id = $company_id,
-                last_name = 'Contact',
-                first_names = 'Default',
-                entered_by = $session_user_id,
-                entered_at = " . $con->dbtimestamp(mktime()) . ",
-                last_modified_at = " . $con->dbtimestamp(mktime()) . ",
-                last_modified_by = $session_user_id";
 
-        $con->execute($sql);
+        $sql2 = "SELECT * FROM contacts WHERE 1 = 2"; //select empty record as placeholder
+        $rst2 = $con->execute($sql2);
+        
+        $rec = array();
+        $rec['company_id'] = $company_id;
+        $rec['last_name'] = 'Contact';
+        $rec['first_names'] = 'Default';
+        $rec['entered_by'] = $session_user_id;
+        $rec['entered_at'] = time();
+        $rec['last_modified_at'] = time();
+        $rec['last_modified_by'] = $session_user_id;
+
+        $ins = $con->GetInsertSQL($rst2, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
 
         $rst->movenext();
     }
@@ -108,12 +131,18 @@ if ($companies_to_fix > 0) {
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
         $company_record_status = $rst->fields['company_record_status'];
-        $sql = "insert into addresses set
-                company_id = $company_id,
-                country_id = $default_country_id,
-                address_name = 'Main',
-                address_record_status = '$company_record_status'";
-        $con->execute($sql);
+        
+        $sql2 = "SELECT * FROM addresses WHERE 1 = 2"; //select empty record as placeholder
+        $rst2 = $con->execute($sql2);
+        
+        $rec = array();
+        $rec['company_id'] = $company_id;
+        $rec['country_id'] = $default_country_id;
+        $rec['address_name'] = 'Main';
+        $rec['address_record_status'] = $company_record_status;
+
+        $ins = $con->GetInsertSQL($rst2, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
 
         $rst->movenext();
     }
@@ -132,12 +161,17 @@ if ($companies_to_fix > 0) {
     $msg .= "Need to create active addresses for $companies_to_fix active companies<BR><BR>";
     while (!$rst->EOF) {
         $company_id = $rst->fields['company_id'];
-        $sql = "insert into addresses set
-                company_id = $company_id,
-                country_id = $default_country_id,
-                address_name = 'Main'";
 
-        $con->execute($sql);
+        $sql2 = "SELECT * FROM addresses WHERE 1 = 2"; //select empty record as placeholder
+        $rst2 = $con->execute($sql2);
+        
+        $rec = array();
+        $rec['company_id'] = $company_id;
+        $rec['country_id'] = $default_country_id;
+        $rec['address_name'] = 'Main';
+
+        $ins = $con->GetInsertSQL($rst2, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
 
         $rst->movenext();
     }
@@ -165,10 +199,14 @@ if ($companies_to_fix > 0) {
         $ast = $con->execute($sql);
         $address_id = $ast->fields['the_address'];
 
-        $sql = "update companies set
-                default_primary_address = $address_id
-                where company_id=$company_id";
-        $con->execute($sql);
+        $sql2 = "SELECT * FROM companies WHERE company_id = $company_id";
+        $rst2 = $con->execute($sql2);
+        
+        $rec = array();
+        $rec['default_primary_address'] = $address_id;
+        
+        $upd = $con->GetUpdateSQL($rst2, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
 
         $rst->movenext();
     }
@@ -196,10 +234,14 @@ if ($companies_to_fix > 0) {
         $ast = $con->execute($sql);
         $address_id = $ast->fields['the_address'];
 
-        $sql = "update companies set
-                default_billing_address = $address_id
-                where company_id=$company_id";
-        $con->execute($sql);
+        $sql2 = "SELECT * FROM companies WHERE company_id = $company_id";
+        $rst2 = $con->execute($sql2);
+        
+        $rec = array();
+        $rec['default_billing_address'] = $address_id;
+        
+        $upd = $con->GetUpdateSQL($rst2, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
 
         $rst->movenext();
     }
@@ -227,10 +269,14 @@ if ($companies_to_fix > 0) {
         $ast = $con->execute($sql);
         $address_id = $ast->fields['the_address'];
 
-        $sql = "update companies set
-                default_shipping_address = $address_id
-                where company_id=$company_id";
-        $con->execute($sql);
+        $sql2 = "SELECT * FROM companies WHERE company_id = $company_id";
+        $rst2 = $con->execute($sql2);
+        
+        $rec = array();
+        $rec['default_shipping_address'] = $address_id;
+        
+        $upd = $con->GetUpdateSQL($rst2, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
 
         $rst->movenext();
     }
@@ -258,10 +304,14 @@ if ($companies_to_fix > 0) {
         $ast = $con->execute($sql);
         $address_id = $ast->fields['the_address'];
 
-        $sql = "update companies set
-                default_payment_address = $address_id
-                where company_id=$company_id";
-        $con->execute($sql);
+        $sql2 = "SELECT * FROM companies WHERE company_id = $company_id";
+        $rst2 = $con->execute($sql2);
+        
+        $rec = array();
+        $rec['default_payment_address'] = $address_id;
+        
+        $upd = $con->GetUpdateSQL($rst2, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
 
         $rst->movenext();
     }
@@ -287,6 +337,10 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.7  2004/06/14 18:13:51  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.6  2004/04/21 21:54:35  maulani
  * - Add additional company <--> address relationship verifications
  *

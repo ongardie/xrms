@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.1 2004/03/12 15:46:51 maulani Exp $
+ * $Id: routing.php,v 1.2 2004/06/14 18:13:51 introspectshun Exp $
  */
 
 //where do we include from
@@ -19,6 +19,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 //check to make sure we are logged on
 $session_user_id = session_check();
@@ -54,6 +55,10 @@ if ($role == 'Admin') {
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.2  2004/06/14 18:13:51  introspectshun
+ *- Add adodb-params.php include for multi-db compatibility.
+ *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  *Revision 1.1  2004/03/12 15:46:51  maulani
  *Temporary change for use until full access control is implemented
  *- Block non-admin users from the administration screen

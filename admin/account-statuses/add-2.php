@@ -5,6 +5,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -16,8 +17,17 @@ $account_status_display_html = $_POST['account_status_display_html'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "insert into account_statuses (account_status_short_name, account_status_pretty_name, account_status_pretty_plural, account_status_display_html) values (" . $con->qstr($account_status_short_name, get_magic_quotes_gpc()) . ", " . $con->qstr($account_status_pretty_name, get_magic_quotes_gpc()) . ", " . $con->qstr($account_status_pretty_plural, get_magic_quotes_gpc()) . ", " . $con->qstr($account_status_display_html, get_magic_quotes_gpc()) . ")";
-$con->execute($sql);
+$sql = "SELECT * FROM account_statuses WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['account_status_short_name'] = $account_status_short_name;
+$rec['account_status_pretty_name'] = $account_status_pretty_name;
+$rec['account_status_pretty_plural'] = $account_status_pretty_plural;
+$rec['account_status_display_html'] = $account_status_display_html;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $con->close();
 

@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.11 2004/06/13 09:13:20 braverock Exp $
+ * $Id: update.php,v 1.12 2004/06/14 18:13:51 introspectshun Exp $
  */
 
 /**
@@ -22,6 +22,7 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 // vars.php sets all of the installation-specific variables
 require_once($include_directory . 'vars.php');
@@ -41,8 +42,17 @@ $rst = $con->execute($sql);
 $recCount = $rst->fields['recCount'];
 if ($recCount == 0) {
     $msg .= 'Added an Admin role.<BR><BR>';
-    $sql ="insert into roles (role_short_name, role_pretty_name, role_pretty_plural, role_display_html) values ('Admin', 'Admin', 'Admin', 'Admin')";
+    $sql = "SELECT * FROM roles WHERE 1 = 2"; //select empty record as placeholder
     $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['role_short_name'] = 'Admin';
+    $rec['role_pretty_name'] = 'Admin';
+    $rec['role_pretty_plural'] = 'Admin';
+    $rec['role_display_html'] = 'Admin';
+    
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
 }
 
 
@@ -60,13 +70,31 @@ if ($recCount == 0) {
     if (!$rst) {
         // Oops.  The real problem is that we have no users.  Create one with admin access
         $msg .= 'Add user1 with Admin access.<BR><BR>';
-        $sql ="insert into users (role_id, username, password, last_name, first_names, email, language) values ($role_id, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english')";
+        $sql = "SELECT * FROM roles WHERE 1 = 2"; //select empty record as placeholder
         $rst = $con->execute($sql);
+
+        $rec = array();
+        $rec['role_id'] = $role_id;
+        $rec['username'] = 'user1';
+        $rec['password'] = '24c9e15e52afc47c225b757e7bee1f9d';
+        $rec['last_name'] = 'One';
+        $rec['first_names'] = 'User';
+        $rec['email'] = 'user1@somecompany.com';
+        $rec['language'] = 'english';
+
+        $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
     } else {
         $user_id = $rst->fields['user_id'];
         $msg .= "Give Admin access to $user_id.<BR><BR>";
-        $sql ="update users set role_id=$role_id where user_id=$user_id";
+        $sql = "SELECT * FROM users WHERE user_id = $user_id";
         $rst = $con->execute($sql);
+        
+        $rec = array();
+        $rec['role_id'] = $role_id;
+        
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
     }
 }
 
@@ -88,8 +116,14 @@ $rst = $con->execute($sql);
 //should put a test here, but alter table is non-destructive
 //This is used for reports/open-items.php and reports/completed-items.php reports
 //This sets the default "Closed" campagin status with a status_open_indicator of "c" for "Closed"
-$sql = "update campaign_statuses set status_open_indicator = \"c\" where campaign_status_short_name = \"CLO\"";
+$sql = "SELECT * FROM campaign_statuses WHERE campaign_status_short_name = 'CLO'";
 $rst = $con->execute($sql);
+
+$rec = array();
+$rec['status_open_indicator'] = 'c';
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 // end
 
 //add sort order to activity statuses
@@ -127,12 +161,15 @@ $rst = $con->execute($sql);
 
 // Fix problem introduced by buggy Mar 19, 2004 install code
 // This will modify the initial data appropriately
-$sql = "update address_format_strings set address_format_string='";
-$sql .= '$lines<br>$city, $province $postal_code<br>$country';
-$sql .= "' where address_format_string!='";
-$sql .= '$lines<br>$city, $province $postal_code<br>$country';
-$sql .= "' and address_format_string_id=1";
+$sql = "SELECT * FROM address_format_strings WHERE address_format_string != '" .
+'$lines<br>$city, $province $postal_code<br>$country' . "' AND address_format_string_id=1";
 $rst = $con->execute($sql);
+
+$rec = array();
+$rec['address_format_string'] = '$lines<br>$city, $province $postal_code<br>$country';
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 // Add indexes so data integrity checks take a reasonable about of time
 $sql = "create index company_id on addresses (company_id)";
@@ -166,8 +203,15 @@ $rst = $con->execute($sql);
 $recCount = $rst->fields['recCount'];
 if ($recCount == 0) {
     $msg .= 'Added a default GST offset.<BR><BR>';
-    $sql ="insert into system_parameters (param_id, int_val) values ('Default GST Offset', -5)";
+    $sql = "SELECT * FROM system_parameters WHERE 1 = 2"; //select empty record as placeholder
     $rst = $con->execute($sql);
+    
+    $rec = array();
+    $rec['param_id'] = 'Default GST Offset';
+    $rec['int_val'] = -5;
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
 }
 
 //add statuses to activities
@@ -211,6 +255,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.12  2004/06/14 18:13:51  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.11  2004/06/13 09:13:20  braverock
  * - add sort_order to activity_types
  *

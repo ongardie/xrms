@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.11 2004/06/03 16:14:40 braverock Exp $
+ * $Id: index.php,v 1.12 2004/06/14 18:13:51 introspectshun Exp $
  */
 
 //include required stuff
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 //set target and see if we are logged in
 $this = $_SERVER['REQUEST_URI'];
@@ -190,11 +191,12 @@ start_page($page_title, true, $msg);
                     <a href="country-address-format/index.php">Country Address Formats</a>
                 </td>
             </tr>
-	    <tr>
+	        <tr>
                 <td class=widget_content>
                     <a href="activity-templates/some.php">Activity Templates</a>
                 </td>
             </tr>
+
 
         </table>
 
@@ -208,6 +210,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.12  2004/06/14 18:13:51  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.11  2004/06/03 16:14:40  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
