@@ -2,7 +2,7 @@
 /**
  * Commit the new Activity Type to the database
  *
- * $Id: add-2.php,v 1.6 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: add-2.php,v 1.7 2004/12/30 18:57:58 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,7 +30,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $rec = array();
 
 //check for the sort order to use
-$sort_sql = 'select MAX(sort_order) from activity_types';
+$sort_sql = 'select MAX(sort_order) from activity_types WHERE activity_type_record_status = \'a\'';
 $sort_order = $con->GetOne($sort_sql);
 if ($sort_order) {
     $rec['sort_order'] = $sort_order+1;
@@ -59,6 +59,10 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.7  2004/12/30 18:57:58  braverock
+ * - only work with active activity types
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.6  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *
