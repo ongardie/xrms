@@ -1,4 +1,12 @@
 <?php
+/** 
+Ê* files/new-2.php - This file uploads new files to the server 
+Ê* 
+Ê* Files that are uploaded to the server are moved to the 
+ * correct folder and a database entry is made.
+Ê* 
+Ê* $Id: new-2.php,v 1.2 2004/03/03 23:53:42 maulani Exp $
+Ê*/ 
 
 require_once('../include-locations.inc');
 
@@ -28,7 +36,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "insert into files (file_pretty_name, file_description, file_filesystem_name, file_size, on_what_table, on_what_id, entered_at, entered_by) values (" . $con->qstr($file_pretty_name, get_magic_quotes_gpc()) . ", " . $con->qstr($file_description, get_magic_quotes_gpc()) . ", " . $con->qstr($filename, get_magic_quotes_gpc()) . ", $filesize, " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ", $on_what_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
+$sql = "insert into files (file_pretty_name, file_description, file_filesystem_name, file_size, file_type, on_what_table, on_what_id, entered_at, entered_by) values (" . $con->qstr($file_pretty_name, get_magic_quotes_gpc()) . ", " . $con->qstr($file_description, get_magic_quotes_gpc()) . ", " . $con->qstr($filename, get_magic_quotes_gpc()) . ", $filesize, " . $con->qstr($filetype, get_magic_quotes_gpc()) . ", " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ", $on_what_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
 $con->execute($sql);
 
 $file_id = $con->insert_id();
@@ -44,4 +52,13 @@ $con->close();
 
 header("Location: " . $http_site_root . $return_url);
 
-?>
+/** 
+Ê* $Log: new-2.php,v $
+Ê* Revision 1.2  2004/03/03 23:53:42  maulani
+Ê* - changed to record file type (mime)
+Ê* -Â Usestype when downloading file
+Ê* - add phpdoc
+Ê*
+Ê* 
+Ê*/ 
+?> 

@@ -39,3 +39,5 @@ create table company_division (
 );
 
 ALTER TABLE `contacts` ADD `division_id` INT NOT NULL AFTER `company_id` ;
+
+ALTER TABLE `files` ADD `file_type` varchar(100) NOT NULL default '' AFTER `file_size` ;

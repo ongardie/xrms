@@ -1,4 +1,12 @@
 <?php
+/** 
+Ê* files/download.php - This file downloads files from server 
+Ê* 
+Ê* Files that have been stored on the server are downloaded to 
+ * the user's default location.
+Ê* 
+Ê* $Id: download.php,v 1.2 2004/03/03 23:53:42 maulani Exp $
+Ê*/ 
 
 require_once('../include-locations.inc');
 
@@ -23,6 +31,7 @@ if ($rst) {
 	$file_pretty_name = $rst->fields['file_pretty_name'];
 	$file_filesystem_name = $rst->fields['file_filesystem_name'];
 	$file_description = $rst->fields['file_description'];
+	$file_type = $rst->fields['file_type'];
 	$entered_at = $con->userdate($rst->fields['entered_at']);
 	$username = $rst->fields['username'];
 	$file_size = pretty_filesize($rst->fields['file_size']);
@@ -54,10 +63,19 @@ if (isset($_SERVER["HTTPS"])) {
 header("Content-Disposition:$disposition; filename=\"".trim(htmlentities($file_original_name))."\"");
 header("Content-Description: ".trim(htmlentities($file_original_name)));
 header("Content-Length: ".(string)(filesize($file_to_open)));
-// header("Content-Type: $mime_type");
+header("Content-Type: $file_type");
 
 $fp = fopen($file_to_open, 'rb');
 fpassthru($fp);
 exit();
 
-?>
+/** 
+Ê* $Log: download.php,v $
+Ê* Revision 1.2  2004/03/03 23:53:42  maulani
+Ê* - changed to record file type (mime)
+Ê* -Â Usestype when downloading file
+Ê* - add phpdoc
+Ê*
+Ê* 
+Ê*/ 
+?> 

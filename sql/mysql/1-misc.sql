@@ -24,6 +24,7 @@ create table files (
 	file_description											text not null default '',
 	file_filesystem_name										varchar(100) not null default '',
 	file_size													int not null default 0,
+	file_type													varchar(100) not null default '',
 	on_what_table												varchar(100) not null default '',
 	on_what_id													int not null default 0,
 	entered_at													datetime,
