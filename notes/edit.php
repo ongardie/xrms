@@ -39,7 +39,7 @@ start_page($page_title, true, $msg);
 
         <form action=edit-2.php method=post>
         <input type="hidden" name="note_id" value="<?php echo $note_id; ?>">
-        <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
+        <input type="hidden" name="return_url" value="<?php echo $return_url; ?>">
         <table class=widget cellspacing=1 width=100%>
             <tr>
                 <td class=widget_header>Edit Note</td>
@@ -51,7 +51,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content><textarea rows=5 cols=80 name=note_description><?php echo $note_description ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element>
+                    <input class=button type=submit value="Save Changes">
+                    <input type=button class=button onclick="javascript: location.href='delete.php?return_url=<?php echo $return_url; ?>&note_id=<?php echo $note_id; ?>';" value="Delete">
+                </td>
             </tr>
         </table>
         </form>
