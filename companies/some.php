@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.13 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: some.php,v 1.14 2004/06/12 16:15:06 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -105,7 +105,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 
 $sql = "
-SELECT " . $con->Concat("'<a href=\"one.php?company_id='","CAST(c.company_id AS VARCHAR(10))","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
+SELECT " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
 c.company_code AS '$strCompaniesSomeCompanyCodeLabel',
 u.username AS '$strCompaniesSomeCompanyUserLabel',
 industry_pretty_name as '$strCompaniesSomeCompanyIndustrylabel',
@@ -380,6 +380,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.14  2004/06/12 16:15:06  braverock
+ * - remove CAST on CONCAT - databases should implicitly convert numeric to string and VARCHAR is not universally supported
+ *
  * Revision 1.13  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.
