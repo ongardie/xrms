@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.14 2004/06/26 15:23:18 braverock Exp $
+ * $Id: some.php,v 1.15 2004/07/09 18:35:39 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -89,7 +89,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $starts_at = $con->SQLDate('Y-M-D', 'starts_at');
 $ends_at = $con->SQLDate('Y-M-D', 'ends_at');
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "CAST(cam.campaign_id AS CHAR)", "'\">'" , "cam.campaign_title", "'</a>'") . " AS 'Campaign',
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "cam.campaign_id", "'\">'" , "cam.campaign_title", "'</a>'") . " AS 'Campaign',
   camt.campaign_type_pretty_name AS 'Type', cams.campaign_status_pretty_name AS 'Status', u.username AS 'Owner',
   $starts_at AS 'Starts', $ends_at AS 'Ends'
 ";
@@ -339,6 +339,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2004/07/09 18:35:39  introspectshun
+ * - Removed CAST(x AS CHAR) for wider database compatibility
+ * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
+ *
  * Revision 1.14  2004/06/26 15:23:18  braverock
  * - change search layout to two rows to improve CSS positioning
  *   - applied modified version of SF patch #971474 submitted by s-t

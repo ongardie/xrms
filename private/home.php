@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.24 2004/06/25 03:21:17 braverock Exp $
+ * $Id: home.php,v 1.25 2004/07/09 18:47:27 introspectshun Exp $
  */
 
 // include the common files
@@ -252,42 +252,42 @@ if ($rst->rowcount()>0) {
         }
         switch ($file_on_what) {
             case "contacts" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS CHAR)", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "contacts_of_companies" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS CHAR)", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
                       . " AS 'Name',"
-                      . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+                      . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                       . " AS 'Company',";
                 break;
             }
             case "companies" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "campaigns" : {
-                $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "CAST(camp.campaign_id AS CHAR)", "'\">'", "camp.campaign_title", "'</a>'")
+                $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
                        . " AS 'Campaign',";
                 break;
             }
             case "opportunities" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "CAST(opportunity_id AS CHAR)", "'\">'", "opp.opportunity_title", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "cases" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "CAST(case_id AS CHAR)", "'\">'", "cases.case_title", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
@@ -474,6 +474,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.25  2004/07/09 18:47:27  introspectshun
+ * - Removed CAST(x AS CHAR) for wider database compatibility
+ * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
+ *
  * Revision 1.24  2004/06/25 03:21:17  braverock
  * - modify so non-uploaded files only display when there are records (again)
  *

@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.4 2004/07/01 15:50:25 maulani Exp $
+ * $Id: some-advanced.php,v 1.5 2004/07/09 18:41:10 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -92,7 +92,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 $sql = "
-SELECT distinct " . $con->Concat("'<a href=\"one.php?company_id='","CAST(c.company_id AS CHAR)","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
+SELECT distinct " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
 c.company_code AS '$strCompaniesSomeCompanyCodeLabel',
 u.username AS '$strCompaniesSomeCompanyUserLabel',
 industry_pretty_name as '$strCompaniesSomeCompanyIndustrylabel',
@@ -396,6 +396,10 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.5  2004/07/09 18:41:10  introspectshun
+ * - Removed CAST(x AS CHAR) for wider database compatibility
+ * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
+ *
  * Revision 1.4  2004/07/01 15:50:25  maulani
  * - Fix bug 976220 reported by cpsource ($where used before defined)
  *

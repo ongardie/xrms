@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.18 2004/06/26 15:42:57 braverock Exp $
+ * $Id: some.php,v 1.19 2004/07/09 18:43:33 introspectshun Exp $
  */
 
 //include the standard files
@@ -104,8 +104,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "CAST(cont.contact_id AS CHAR)", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS 'Name', "
-       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS 'Name', "
+       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
        company_code AS 'Code',
        title AS 'Title',
        description AS 'Description',
@@ -359,6 +359,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.19  2004/07/09 18:43:33  introspectshun
+ * - Removed CAST(x AS CHAR) for wider database compatibility
+ * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
+ *
  * Revision 1.18  2004/06/26 15:42:57  braverock
  * - change search layout to two rows to improve CSS positioning
  *   - applied modified version of SF patch #971474 submitted by s-t

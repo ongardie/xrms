@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.16 2004/06/24 20:00:21 introspectshun Exp $
+ * $Id: some.php,v 1.17 2004/07/09 18:46:17 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -89,7 +89,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
 $sql = "SELECT " .
-  $con->Concat("'<a href=\"one.php?opportunity_id='", "CAST(opp.opportunity_id AS CHAR)", "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
+  $con->Concat("'<a href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
   c.company_name AS 'Company', u.username AS 'Owner',
   CASE
     WHEN (opp.size > 0) THEN opp.size
@@ -324,6 +324,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2004/07/09 18:46:17  introspectshun
+ * - Removed CAST(x AS CHAR) for wider database compatibility
+ * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
+ *
  * Revision 1.16  2004/06/24 20:00:21  introspectshun
  * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
  *
