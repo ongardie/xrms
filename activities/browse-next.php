@@ -8,7 +8,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.17 2004/12/18 21:36:59 neildogg Exp $
+ * $Id: browse-next.php,v 1.18 2004/12/23 16:05:54 neildogg Exp $
  */
 
 //include required files
@@ -26,7 +26,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug=1;
 
 // An array of activity IDs within activity type. Allows changes to be made without activities repeating.
-$next_to_check = isset($_SESSION['next_to_check']) ? $_SESSION['next_to_check'] : '';
+$next_to_check = isset($_SESSION['next_to_check']) ? $_SESSION['next_to_check'] : array();
 // The current activity ID that was being viewed through activities/one.php.
 $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
 // The saved ID used if using "Saved Search Browse"
@@ -40,7 +40,7 @@ if(isset($_GET['pos']) and !$pos) {
 
 if($saved_id) {
     $pos = 0;
-    $next_to_check = array();
+    $_SESSION['browse_start'] = time(); 
     $sql = "SELECT saved_data
             FROM saved_actions
             WHERE saved_id=" . $saved_id . "
@@ -66,6 +66,19 @@ if($saved_id) {
             $rst->movenext();
         }
     }
+}
+
+while($next_to_check[$pos]) {
+    $time_sql = "SELECT recent_item_id
+                 FROM recent_items
+                 WHERE on_what_table = 'activities'
+                 AND on_what_id = {$next_to_check[$pos]}
+                 AND recent_item_timestamp > " . $con->DBTimeStamp($_SESSION['browse_start']);
+    $time_rst = $con->execute($time_sql); 
+    if(!$time_rst->rowCount()) {
+        break;
+    }
+    ++$pos;
 }
 
 //If we've created the next_to_check array from outside (ie the saved query)
@@ -142,6 +155,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.18  2004/12/23 16:05:54  neildogg
+ * - Makes sure not to visit an activity already visited by another user
+ *
  * Revision 1.17  2004/12/18 21:36:59  neildogg
  * Added support for current user search
  *
