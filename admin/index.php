@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.4 2004/03/21 18:15:36 braverock Exp $
+ * $Id: index.php,v 1.5 2004/03/23 21:46:57 braverock Exp $
  */
 
 //include required stuff
@@ -87,7 +87,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_header>Import/Export</td>
             </tr>
             <tr>
-                <td class=widget_content><a href=import/import-companies.php>Import Companies/Contacts (somewhat broken right now)</a></td>
+                <td class=widget_content><a href=import/import-companies.php>Import Companies/Contacts</a></td>
             </tr>
             <tr>
                 <td class=widget_content><a href=export/export-companies.php>Export Companies/Contacts</a></td>
@@ -172,6 +172,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.5  2004/03/23 21:46:57  braverock
+ * -remove (somewhat broken right now)
+ *  SF bug 921912
+ *
  * Revision 1.4  2004/03/21 18:15:36  braverock
  * - add plugin admin link to administration menu
  *
