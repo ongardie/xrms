@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.46 2004/07/22 14:06:00 neildogg Exp $
+ * $Id: one.php,v 1.47 2004/07/25 12:27:42 braverock Exp $
  */
 
 //include required files
@@ -15,7 +15,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
 $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
@@ -371,7 +370,7 @@ function logTime() {
         <!-- sidebar plugins //-->
         <?php echo $relationship_link_rows; ?>
     </div>
-    
+
 </div>
 
 <script type="text/javascript">
@@ -404,6 +403,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.47  2004/07/25 12:27:42  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.46  2004/07/22 14:06:00  neildogg
  * - Errant commit, rollback to 1.44
  *

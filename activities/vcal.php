@@ -4,7 +4,7 @@
  *
  * This page allows for export vcal for a single activity.
  *
- * $Id: vcal.php,v 1.3 2004/06/15 18:03:33 introspectshun Exp $
+ * $Id: vcal.php,v 1.4 2004/07/25 12:27:43 braverock Exp $
 
  */
 //include required files
@@ -16,7 +16,6 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $activity_id = $_GET['activity_id'];
 $return_url = $_GET['return_url'];
@@ -69,8 +68,6 @@ and contact_id = $contact_id";
 
 $rst = $con->execute($sql);
 
-
-
 if ($rst) {
     $last_name = $rst->fields['last_name'];
     $first_names = $rst->fields['first_names'];
@@ -87,20 +84,6 @@ if ($rst) {
     $country = $rst->fields['iso_code3'];
     $rst->close();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 $rst = "BEGIN:VCALENDAR
 VERSION:1.0
@@ -124,23 +107,21 @@ END:VEVENT
 
 END:VCALENDAR";
 
-
-
 $filename =  'activity_' . $session_user_id . '.vcs';
 
 $fp = fopen($tmp_export_directory . $filename, 'w');
 
 fwrite($fp,$rst);
 
-
-
 $con->close();
 
 header("Location: {$http_site_root}/export/{$filename}");
 
-
 /**
  * $Log: vcal.php,v $
+ * Revision 1.4  2004/07/25 12:27:43  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.3  2004/06/15 18:03:33  introspectshun
  * - Fixe merge problem caused by incompatible line breaks.
  *
@@ -152,10 +133,6 @@ header("Location: {$http_site_root}/export/{$filename}");
  * Export one activity into the vCalendar format.
  * Submitted By: frenchman
  *
- * 
- *
- *
  * Revision 1.0 2004/04/16 frenchman
- * 
  */
 ?>

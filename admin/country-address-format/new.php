@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: new.php,v 1.5 2004/07/16 23:51:36 cpsource Exp $
+ * $Id: new.php,v 1.6 2004/07/25 12:30:58 braverock Exp $
  */
 
 //include required files
@@ -18,8 +18,6 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check( 'Admin' );
-
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
 $address_format_string = $_POST['address_format_string'];
@@ -62,6 +60,9 @@ $return_url = "/admin/country-address-format/index.php";
 header("Location: {$http_site_root}/{$return_url}");
 /**
  * $Log: new.php,v $
+ * Revision 1.6  2004/07/25 12:30:58  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.5  2004/07/16 23:51:36  cpsource
  * - require session_check ( 'Admin' )
  *

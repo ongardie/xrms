@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: delete.php,v 1.4 2004/07/16 23:51:36 cpsource Exp $
+ * $Id: delete.php,v 1.5 2004/07/25 12:30:58 braverock Exp $
  */
 //include required files
 require_once('../../include-locations.inc');
@@ -17,8 +17,6 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check( 'Admin' );
-
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
 $address_format_string_id = $_GET['address_format_string_id'];
@@ -46,6 +44,9 @@ header("Location: {$http_site_root}/{$return_url}");
 
 /**
  * $Log: delete.php,v $
+ * Revision 1.5  2004/07/25 12:30:58  braverock
+ * - remove lang file require_once, as it is no longer used
+ *
  * Revision 1.4  2004/07/16 23:51:36  cpsource
  * - require session_check ( 'Admin' )
  *
