@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.9 2004/07/20 19:38:31 introspectshun Exp $
+ * $Id: new.php,v 1.10 2004/07/30 11:11:12 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $company_id = $_POST['company_id'];
 $contact_id = $_POST['contact_id'];
@@ -33,6 +33,11 @@ $rst->close();
 //get a campaign menu
 $sql2 = "select campaign_title, campaign_id from campaigns where campaign_record_status = 'a' order by campaign_title";
 $rst = $con->execute($sql2);
+if ( $rst && !$rst->EOF ) {
+  $campaign_id = $rst->fields['campaign_id'];
+} else {
+  $campaign_id = '';
+}
 $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
 $rst->close();
 
@@ -45,6 +50,11 @@ $rst->close();
 //get the opportunity status menu
 $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
+if ( $rst && !$rst->EOF ) {
+  $opportunity_status_id = $rst->fields['opportunity_status_id'];
+} else {
+  $opportunity_status_id = '';
+}
 $opportunity_status_menu = $rst->getmenu2('opportunity_status_id', $opportunity_status_id, false);
 $rst->close();
 
@@ -182,6 +192,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.10  2004/07/30 11:11:12  cpsource
+ * - Improved msg handling
+ *   Got campaign_id and opportunity_status_id from database so
+ *     getmenu2 would work properly.
+ *
  * Revision 1.9  2004/07/20 19:38:31  introspectshun
  * - Localized strings for i18n/translation support
  *

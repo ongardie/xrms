@@ -2,7 +2,7 @@
 /**
  * Set categories for an opportunity
  *
- * $Id: categories.php,v 1.5 2004/07/20 19:38:31 introspectshun Exp $
+ * $Id: categories.php,v 1.6 2004/07/30 11:11:11 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,7 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $opportunity_id = $_GET['opportunity_id'];
 
@@ -124,6 +124,11 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.6  2004/07/30 11:11:11  cpsource
+ * - Improved msg handling
+ *   Got campaign_id and opportunity_status_id from database so
+ *     getmenu2 would work properly.
+ *
  * Revision 1.5  2004/07/20 19:38:31  introspectshun
  * - Localized strings for i18n/translation support
  *
