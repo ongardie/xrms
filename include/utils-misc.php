@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.14 2004/04/10 11:52:05 braverock Exp $
+ * $Id: utils-misc.php,v 1.15 2004/04/16 16:35:33 braverock Exp $
  */
 
 /**
@@ -142,8 +142,16 @@ function pretty_filesize($file_size) {
 function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure='') {
     $result_arr = Array();
 
-    $size = filesize($file) +1;
+    if (!substr_count($file,"http://")) {
+        //urls don't have a filesize, so, don't check it.
+        $size = filesize($file) +1;
+    }
     $handle = fopen($file, 'r');
+    if (!$handle) {
+        echo "Unable to open file: $file \n";
+        echo "Please correct this error.";
+        exit;
+    }
 
     if ($hasFieldNames) $keys = fgetcsv($handle, 4096, $delimiter);
 
@@ -175,6 +183,7 @@ function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure=
     fclose($handle);
 
     return $result_arr;
+
 } //end CSVtoArray fn
 
 /**
@@ -332,6 +341,10 @@ exit;
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.15  2004/04/16 16:35:33  braverock
+ * - add check for url so that we don't get a filesize error
+ *   when getting CSV data from a http stream
+ *
  * Revision 1.14  2004/04/10 11:52:05  braverock
  * - remove trailing whitespace
  *
