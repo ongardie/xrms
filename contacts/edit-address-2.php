@@ -2,11 +2,10 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.7 2004/07/19 21:11:39 cpsource Exp $
+ * $Id: edit-address-2.php,v 1.8 2004/07/22 11:21:13 cpsource Exp $
  */
 
-
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -118,6 +117,10 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.8  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.7  2004/07/19 21:11:39  cpsource
  * - Use arr_vars for getting POST'ed data.
  *
@@ -136,7 +139,7 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.7 2004/07/19 21:11:39 cpsource Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.8 2004/07/22 11:21:13 cpsource Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing

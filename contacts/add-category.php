@@ -1,6 +1,6 @@
 <?php
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -40,6 +40,10 @@ header("Location: categories.php?contact_id=$contact_id");
 
 /**
  * $Log: add-category.php,v $
+ * Revision 1.5  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.4  2004/07/13 09:30:16  cpsource
  * Add cvs logging.
  *

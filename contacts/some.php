@@ -4,11 +4,11 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.28 2004/07/21 21:06:08 neildogg Exp $
+ * $Id: some.php,v 1.29 2004/07/22 11:21:13 cpsource Exp $
  */
 
 //include the standard files
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -241,17 +241,21 @@ start_page($page_title, true, $msg);
           <td class=widget_content_form_element colspan=4>
            <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
-<?php
-          if ( $use_self_contacts ) {
-            echo '<input class=button type=button onclick="javascript: createContact();" value="' . _("Create Contact for 'Self'") . '">';
-          }
-?>
           </td>
         </tr>
         </table>
         </form>
 
 <?php
+	  if ( $use_self_contacts ) {
+	    echo '<table class=widget cellspacing=1 width="100%">
+                    <tr>
+                      <td class=widget_content_form_element colspan=4>
+                       <input class=button type=button onclick="javascript: createContact();" value="' . _('Create Contact for \'Self\'') . '">
+                      </td>
+                    </tr>
+                  </table>';
+	  }
 
 $pager = new ADODB_Pager($con, $sql, 'contacts', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
@@ -329,6 +333,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.29  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.28  2004/07/21 21:06:08  neildogg
  * - Added get_formatted_phone
  *

@@ -2,11 +2,10 @@
 /**
  * delete address for a contact
  *
- * $Id: delete-address.php,v 1.2 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: delete-address.php,v 1.3 2004/07/22 11:21:13 cpsource Exp $
  */
 
-
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -50,6 +49,10 @@ header("Location: one.php?msg=deleted&contact_id=$contact_id");
 
 /**
  * $Log: delete-address.php,v $
+ * Revision 1.3  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.2  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

@@ -7,9 +7,9 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.40 2004/07/21 21:05:35 neildogg Exp $
+ * $Id: one.php,v 1.41 2004/07/22 11:21:13 cpsource Exp $
  */
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -232,23 +232,23 @@ $on_what_string = 'contact';
 
 //include the Cases sidebar
 $case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
-require_once("../cases/sidebar.php");
+require_once( $include_locations_location . 'cases/sidebar.php');
 
 //include the opportunities sidebar
 $opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
-require_once("../opportunities/sidebar.php");
+require_once( $include_locations_location . 'opportunities/sidebar.php');
 
 //include the contacts-companies sidebar
 $working_direction = "from";
 $relationship_name = "company link";
 $overall_id = $contact_id;
-require_once("../relationships/sidebar.php");
+require_once( $include_locations_location . 'relationships/sidebar.php');
 
 //include the files sidebar
-require_once("../files/sidebar.php");
+require_once( $include_locations_location . 'files/sidebar.php');
 
 //include the notes sidebar
-require_once("../notes/sidebar.php");
+require_once( $include_locations_location . 'notes/sidebar.php');
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -564,6 +564,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.41  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.40  2004/07/21 21:05:35  neildogg
  * - Added get_formatted_phone
  *

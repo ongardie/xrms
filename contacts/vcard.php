@@ -4,9 +4,9 @@
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.5 2004/06/28 13:38:49 braverock Exp $
+ * $Id: vcard.php,v 1.6 2004/07/22 11:21:13 cpsource Exp $
  */
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -95,6 +95,10 @@ header("Location: {$http_site_root}/export/{$filename}");
 
 /**
  * $Log: vcard.php,v $
+ * Revision 1.6  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.5  2004/06/28 13:38:49  braverock
  * - save with unix line endings
  * - fix log phpdoc
@@ -105,7 +109,7 @@ header("Location: {$http_site_root}/export/{$filename}");
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.5 2004/06/28 13:38:49 braverock Exp $
+ * $Id: vcard.php,v 1.6 2004/07/22 11:21:13 cpsource Exp $
  */
 require_once('../include-locations.inc');
 
@@ -200,7 +204,7 @@ header("Location: {$http_site_root}/export/{$filename}");
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.5 2004/06/28 13:38:49 braverock Exp $
+ * $Id: vcard.php,v 1.6 2004/07/22 11:21:13 cpsource Exp $
  */
 require_once('../include-locations.inc');
 
@@ -295,7 +299,7 @@ header("Location: {$http_site_root}/export/{$filename}");
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.5 2004/06/28 13:38:49 braverock Exp $
+ * $Id: vcard.php,v 1.6 2004/07/22 11:21:13 cpsource Exp $
  */
 require_once('../include-locations.inc');
 
@@ -383,6 +387,10 @@ header("Location: {$http_site_root}/export/{$filename}");
 
 /**
  * $Log: vcard.php,v $
+ * Revision 1.6  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.5  2004/06/28 13:38:49  braverock
  * - save with unix line endings
  * - fix log phpdoc

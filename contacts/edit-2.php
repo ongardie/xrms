@@ -2,9 +2,10 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.10 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: edit-2.php,v 1.11 2004/07/22 11:21:13 cpsource Exp $
  */
-require_once('../include-locations.inc');
+
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -92,6 +93,10 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.11  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.10  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

@@ -2,10 +2,11 @@
 /**
  * Export contacts from the search rwsults from contacts/some.php
  *
- * $Id: export.php,v 1.4 2004/07/13 21:17:19 braverock Exp $
+ * $Id: export.php,v 1.5 2004/07/22 11:21:13 cpsource Exp $
  */
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
+
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
@@ -134,6 +135,10 @@ header("Location: {$http_site_root}/export/{$filename}");
 
 /**
  * $Log: export.php,v $
+ * Revision 1.5  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.4  2004/07/13 21:17:19  braverock
  * - fixed a couple of limitng bugs
  * - add phpdoc to start of file

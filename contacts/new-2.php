@@ -2,9 +2,10 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.13 2004/07/19 20:56:20 cpsource Exp $
+ * $Id: new-2.php,v 1.14 2004/07/22 11:21:13 cpsource Exp $
  */
-require_once('../include-locations.inc');
+
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -99,6 +100,10 @@ header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id"
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.14  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.13  2004/07/19 20:56:20  cpsource
  * - Use arr_vars for POSTED arguments
  *

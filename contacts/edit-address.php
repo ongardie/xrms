@@ -2,10 +2,10 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.5 2004/07/21 15:20:04 introspectshun Exp $
+ * $Id: edit-address.php,v 1.6 2004/07/22 11:21:13 cpsource Exp $
  */
 
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -236,6 +236,10 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.6  2004/07/22 11:21:13  cpsource
+ * - All paths now relative to include-locations-location.inc
+ *   Code cleanup for Create Contact for 'Self'
+ *
  * Revision 1.5  2004/07/21 15:20:04  introspectshun
  * - Localized strings for i18n/translation support
  * - Removed include of lang file
