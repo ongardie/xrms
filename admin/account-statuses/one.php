@@ -4,7 +4,7 @@
  *
  * Edit account-status
  *
- * $Id: one.php,v 1.6 2004/07/16 23:51:33 cpsource Exp $
+ * $Id: one.php,v 1.7 2004/07/25 15:00:20 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -37,7 +37,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Account Status:")." $account_status_pretty_name";
+$page_title = _("Account Status Details").": $account_status_pretty_name";
 start_page($page_title);
 
 ?>
@@ -63,7 +63,7 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text size=20 name=account_status_pretty_name value="<?php  echo $account_status_pretty_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>_("Full Plural")</td>
+                <td class=widget_label_right><?php echo _("Full Plural"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=account_status_pretty_plural value="<?php  echo $account_status_pretty_plural; ?>"></td>
             </tr>
             <tr>
@@ -77,7 +77,7 @@ start_page($page_title);
         </form>
 
         <form action=delete.php method=post>
-        <input type=hidden name=account_status_id value="<?php  echo $account_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Account Status?"); ?>');">
+        <input type=hidden name=account_status_id value="<?php  echo $account_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Account Status").'?'; ?>');">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Account Status"); ?></td>
@@ -118,6 +118,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/25 15:00:20  johnfawcett
+ * - unified page title
+ * - corrected gettext call
+ * - removed punctuation from gettext string
+ *
  * Revision 1.6  2004/07/16 23:51:33  cpsource
  * - require session_check ( 'Admin' )
  *
