@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.88 2005/01/26 22:37:15 vanmer Exp $
+ * $Id: some.php,v 1.89 2005/02/09 22:24:03 braverock Exp $
  */
 
 // handle includes
@@ -154,22 +154,22 @@ if(strlen($time_zone_between) and strlen($time_zone_between2)) {
 
 $sql = "SELECT
   (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS "
-  . $con->qstr(_("Overdue"),get_magic_quotes_gpc()) . ", "
-  ." at.activity_type_pretty_name AS " . $con->qstr(_("Type"),get_magic_quotes_gpc()) . ","
+  . $con->qstr("overdue",get_magic_quotes_gpc()) . ", "
+  ." at.activity_type_pretty_name AS " . $con->qstr("type",get_magic_quotes_gpc()) . ","
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
-  . " AS " . $con->qstr(_("Contact"),get_magic_quotes_gpc()) . ","
+  . " AS " . $con->qstr("contact",get_magic_quotes_gpc()) . ","
   . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
-  . " AS " . $con->qstr(_("Title"),get_magic_quotes_gpc()) . ", "
-  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS " . $con->qstr(_("Scheduled"),get_magic_quotes_gpc()) . ", "
-  . $con->SQLDate('Y-m-d','a.ends_at') . " AS " . $con->qstr(_("Due"),get_magic_quotes_gpc()) . ", "
+  . " AS " . $con->qstr("title",get_magic_quotes_gpc()) . ", "
+  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS " . $con->qstr("scheduled",get_magic_quotes_gpc()) . ", "
+  . $con->SQLDate('Y-m-d','a.ends_at') . " AS " . $con->qstr("due",get_magic_quotes_gpc()) . ", "
   . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-  . " AS " . $con->qstr(_("Company"),get_magic_quotes_gpc()) . ",
-  u.username AS " . $con->qstr(_("Owner"),get_magic_quotes_gpc()) . ", ";
+  . " AS " . $con->qstr("company",get_magic_quotes_gpc()) . ",
+  u.username AS " . $con->qstr("owner",get_magic_quotes_gpc()) . ", ";
 if($sort_column == 9) {
-    $sql .= " o.probability AS " . $con->qstr(_("%"),get_magic_quotes_gpc());
+    $sql .= " o.probability AS " . $con->qstr("%",get_magic_quotes_gpc());
 }
 else {
-    $sql .= " 'n/a' AS " . $con->qstr(_("%"),get_magic_quotes_gpc()) . " ";
+    $sql .= " 'n/a' AS " . $con->qstr("%",get_magic_quotes_gpc()) . " ";
 }
 $sql .= "FROM companies c, activity_types at, addresses addr";
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
@@ -653,20 +653,20 @@ start_page($page_title, true, $msg);
 $_SESSION["search_sql"]=$sql;
 
 $columns = array();
-$columns[] = array('name' => _('Overdue'), 'index' => 'Overdue');
-$columns[] = array('name' => _('Type'), 'index' => 'Type');
-$columns[] = array('name' => _('Contact'), 'index' => 'Contact');
-$columns[] = array('name' => _('Title'), 'index' => 'Title');
-$columns[] = array('name' => _('Scheduled'), 'index' => 'Scheduled');
-$columns[] = array('name' => _('Due'), 'index' => 'Due');
-$columns[] = array('name' => _('Company'), 'index' => 'Company');
-$columns[] = array('name' => _('Owner'), 'index' => 'Owner');
+$columns[] = array('name' => _('Overdue'), 'index' => 'overdue');
+$columns[] = array('name' => _('Type'), 'index' => 'type');
+$columns[] = array('name' => _('Contact'), 'index' => 'contact');
+$columns[] = array('name' => _('Title'), 'index' => 'title');
+$columns[] = array('name' => _('Scheduled'), 'index' => 'scheduled');
+$columns[] = array('name' => _('Due'), 'index' => 'due');
+$columns[] = array('name' => _('Company'), 'index' => 'company');
+$columns[] = array('name' => _('Owner'), 'index' => 'owner');
 $columns[] = array('name' => _('%'), 'index' => '%');
 
 
 
 // selects the columns this user is interested in
-$default_columns =  array('Overdue', 'Type', 'Contact', 'Title', 'Scheduled', 'Due', 'Company', 'Owner', '%');
+$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner', '%');
 
 $pager_columns = new Pager_Columns('ActivitiesPager', $columns, $default_columns, 'ActivitiesData');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -762,6 +762,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.89  2005/02/09 22:24:03  braverock
+ * - localized pager column headers
+ * - de-localized AS clauses in SQL
+ *
  * Revision 1.88  2005/01/26 22:37:15  vanmer
  * - altered query to allow activities table to always directly preceed LEFT OUTER JOINS, to fix sql server error
  *

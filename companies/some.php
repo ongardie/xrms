@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.49 2005/01/25 22:01:54 daturaarutad Exp $
+ * $Id: some.php,v 1.50 2005/02/09 22:25:49 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -45,13 +45,13 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 
 $sql = "
-SELECT " . $con->Concat("'<a id=\"'" , "c.company_name", "'\" href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '"._("Company Name")."',
-c.company_code AS '"._("Company Code")."',
-u.username AS '"._("User")."',
-industry_pretty_name as '"._("Industry")."',
-crm_status_pretty_name AS '"._("CRM Status")."',
-as1.account_status_display_html AS '"._("Account Status")."',
-r.rating_display_html AS '"._("Rating")."' ";
+SELECT " . $con->Concat("'<a id=\"'" , "c.company_name", "'\" href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . ' AS "name",
+c.company_code AS "code" ,
+u.username AS "user" ,
+industry_pretty_name as "industry" ,
+crm_status_pretty_name AS "crm_status" ,
+as1.account_status_display_html AS "account_status" ,
+r.rating_display_html AS "rating"' . "\n";
 
 $criteria_count = 0;
 
@@ -303,16 +303,16 @@ $_SESSION["search_sql"]["from"]=$from;
 $_SESSION["search_sql"]["where"]=$where;
 
 $columns = array();
-$columns[] = array('name' => _('Company Name'), 'index' => 'Company Name');
-$columns[] = array('name' => _('Company Code'), 'index' => 'Company Code');
-$columns[] = array('name' => _('User'), 'index' => 'User');
-$columns[] = array('name' => _('Industry'), 'index' => 'Industry');
-$columns[] = array('name' => _('CRM Status'), 'index' => 'CRM Status');
-$columns[] = array('name' => _('Account Status'), 'index' => 'Account Status');
-$columns[] = array('name' => _('Rating'), 'index' => 'Rating');
+$columns[] = array('name' => _("Company Name"), 'index' => 'name');
+$columns[] = array('name' => _("Company Code"), 'index' => 'code');
+$columns[] = array('name' => _("User"), 'index' => 'user');
+$columns[] = array('name' => _("Industry"), 'index' => 'industry');
+$columns[] = array('name' => _("CRM Status"), 'index' => 'crm_status');
+$columns[] = array('name' => _("Account Status"), 'index' => 'account_status');
+$columns[] = array('name' => _("Rating"), 'index' => 'Rating');
 
 // selects the columns this user is interested in
-$default_columns =  array('Company Name', 'Company Code', 'User', 'Industry', 'CRM Status', 'Account Status', 'Rating');
+$default_columns =  array("name","code","user","industry","crm_status","account_status","rating");
 
 $pager_columns = new Pager_Columns('CompanyPager', $columns, $default_columns, 'CompanyForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -324,8 +324,8 @@ $columns = $pager_columns->GetUserColumns('default');
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-            <input type=button class=button onclick=\"javascript: exportIt();\" value='Export'>
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value="_("Mail Merge")."></td></tr>";
 
 echo $pager_columns_selects;
 
@@ -410,6 +410,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.50  2005/02/09 22:25:49  braverock
+ * - localized pager column headers
+ * - de-localized AS clauses in SQL
+ *
  * Revision 1.49  2005/01/25 22:01:54  daturaarutad
  * updated to use new XRMS_Pager and Pager_Columns to implement selectable columns
  *

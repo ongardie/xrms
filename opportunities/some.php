@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.35 2005/01/31 01:10:35 daturaarutad Exp $
+ * $Id: some.php,v 1.36 2005/02/09 22:24:37 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -44,18 +44,18 @@ $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
 $sql = "SELECT "
 . $con->Concat("'<a href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
-. " AS " . $con->qstr( _("Opportunity"),get_magic_quotes_gpc()) . ",
-  c.company_name AS 'Company', u.username AS " . $con->qstr(_("Owner"),get_magic_quotes_gpc()) . ",
+. " AS " . $con->qstr( _("opportunity"),get_magic_quotes_gpc()) . ",
+  c.company_name AS 'company', u.username AS " . $con->qstr(_("owner"),get_magic_quotes_gpc()) . ",
   CASE
     WHEN (opp.size > 0) THEN opp.size
     ELSE 0
-  END AS " . $con->qstr( _("Opportunity Size"),get_magic_quotes_gpc()) . ",
+  END AS " . $con->qstr( _("opportunity_size"),get_magic_quotes_gpc()) . ",
   CASE
     WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100)
     ELSE 0
-  END AS " . $con->qstr(_("Weighted Size"),get_magic_quotes_gpc()) . ",
-  os.opportunity_status_pretty_name AS " . $con->qstr( _("Status"), get_magic_quotes_gpc()) . ","
-  . " $close_at AS " . $con->qstr( _("Close Date"),get_magic_quotes_gpc()) . ' ';
+  END AS " . $con->qstr(_("weighted_size"),get_magic_quotes_gpc()) . ",
+  os.opportunity_status_pretty_name AS " . $con->qstr( _("status"), get_magic_quotes_gpc()) . ","
+  . " $close_at AS " . $con->qstr( _("close_date"),get_magic_quotes_gpc()) . ' ';
 
 
 if ($opportunity_category_id > 0) {
@@ -232,18 +232,18 @@ $_SESSION["search_sql"]=$sql;
 
 
 $columns = array();
-$columns[] = array('name' => 'Opportunity', 'index' => 'Opportunity');
-$columns[] = array('name' => 'Company', 'index' => 'Company');
-$columns[] = array('name' => 'Owner', 'index' => 'Owner');
-$columns[] = array('name' => 'Opportunity Size', 'index' => 'Opportunity Size', 'subtotal' => true);
-$columns[] = array('name' => 'Weighted Size', 'index' => 'Weighted Size', 'subtotal' => true);
-$columns[] = array('name' => 'Status', 'index' => 'Status');
-$columns[] = array('name' => 'Close Date', 'index' => 'Close Date');
+$columns[] = array('name' => _("Opportunity"), 'index' => 'opportunity');
+$columns[] = array('name' => _("Company"), 'index' => 'company');
+$columns[] = array('name' => _("Owner"), 'index' => 'owner');
+$columns[] = array('name' => _("Opportunity Size"), 'index' => 'opportunity_size', 'subtotal' => true);
+$columns[] = array('name' => _("Weighted Size"), 'index' => 'weighted_size', 'subtotal' => true);
+$columns[] = array('name' => _("Status"), 'index' => 'status');
+$columns[] = array('name' => _("Close Date"), 'index' => 'close_date');
 
 
 
 // selects the columns this user is interested in
-$default_columns =  array('Opportunity', 'Company', 'Owner', 'Opportunity Size', 'Weighted Size', 'Status', 'Close Date');
+$default_columns =  array('opportunity', 'company', 'owner', 'opportunity_size', 'weighted_size', 'status', 'close_date');
 
 $pager_columns = new Pager_Columns('Opportunity', $columns, $default_columns, 'OpportunityData');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -254,9 +254,9 @@ $columns = $pager_columns->GetUserColumns('default');
 
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
-			$pager_columns_button
-			<input type=button class=button onclick=\"javascript: exportIt();\" value='Export'>
-			<input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+            $pager_columns_button
+            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value="_("Mail Merge")."></td></tr>";
  
 echo $pager_columns_selects;
 
@@ -327,6 +327,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.36  2005/02/09 22:24:37  braverock
+ * - localized pager column headers
+ * - de-localized AS clauses in SQL
+ *
  * Revision 1.35  2005/01/31 01:10:35  daturaarutad
  * add subtotal for opportunity size and weighted size columns
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.44 2005/01/25 22:04:16 daturaarutad Exp $
+ * $Id: some.php,v 1.45 2005/02/09 22:25:20 braverock Exp $
  */
 
 //include the standard files
@@ -299,14 +299,14 @@ if(!isset($contacts_next_page)) {
 $_SESSION["search_sql"]=$sql;
 
 $columns = array();
-$columns[] = array('name' => 'Name', 'index' => 'Name');
-$columns[] = array('name' => 'Company', 'index' => 'Company');
-$columns[] = array('name' => 'Owner', 'index' => 'Owner');
+$columns[] = array('name' => _("Name"), 'index' => 'Name');
+$columns[] = array('name' => _("Company"), 'index' => 'Company');
+$columns[] = array('name' => _("Owner"), 'index' => 'Owner');
 
 
 
 // selects the columns this user is interested in
-$default_columns =  array('Name', 'Company', 'Owner');
+$default_columns =  array(_("Name"),_("Company"),_("Owner"));
 
 $pager_columns = new Pager_Columns('ContactPager', $columns, $default_columns, 'ContactForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -318,8 +318,8 @@ $columns = $pager_columns->GetUserColumns('default');
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-            <input type=button class=button onclick=\"javascript: exportIt();\" value='Export'>
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value='Mail Merge'></td></tr>";
+            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value="_("Mail Merge")."></td></tr>";
 
 echo $pager_columns_selects;
 
@@ -404,6 +404,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.45  2005/02/09 22:25:20  braverock
+ * - localized pager column headers
+ * - de-localized AS clauses in SQL
+ *
  * Revision 1.44  2005/01/25 22:04:16  daturaarutad
  * updated to use new XRMS_Pager and Pager_Columns to implement selectable columns
  *
