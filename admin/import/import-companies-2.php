@@ -16,11 +16,9 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * @todo add additional contact fields so that you can enter more data about contacts
- * @todo modify CSVtoArray fn to do a trim, strtolower, and replace spaces with underscores in array element names
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-2.php,v 1.3 2004/02/10 13:31:44 braverock Exp $
+ * $Id: import-companies-2.php,v 1.4 2004/04/09 22:08:38 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -63,7 +61,7 @@ echo <<<TILLEND
         <input type=hidden name=rating_id value="$rating_id">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=29>Preview Data</td>
+                <td class=widget_header colspan=54>Preview Data</td>
             </tr>
 
         <tr>
@@ -71,13 +69,13 @@ echo <<<TILLEND
             <td class=widget_header colspan=4>Company</td>
 
             <!-- contact info //-->
-            <td class=widget_header colspan=6>Contact Info</td>
+            <td class=widget_header colspan=22>Contact Info</td>
 
             <!-- address info //-->
-            <td class=widget_header colspan=5>Address</td>
+            <td class=widget_header colspan=9>Address</td>
 
             <!-- address info //-->
-            <td class=widget_header colspan=18>Additional Company Info</td>
+            <td class=widget_header colspan=19>Additional Company Info</td>
 
         </tr>
        <tr>
@@ -93,17 +91,38 @@ echo <<<TILLEND
            <td class=widget_content>Last Name</td>
            <td class=widget_content>Email</td>
            <td class=widget_content>Work Phone</td>
+           <td class=widget_content>Cell Phone</td>
            <td class=widget_content>Home Phone</td>
            <td class=widget_content>Fax</td>
+           <td class=widget_content>Division</td>
+           <td class=widget_content>Salutation</td>
+           <td class=widget_content>Date of Birth</td>
+           <td class=widget_content>Summary</td>
+           <td class=widget_content>Title</td>
+           <td class=widget_content>Description</td>
+           <td class=widget_content>AOL</td>
+           <td class=widget_content>Yahoo</td>
+           <td class=widget_content>MSN</td>
+           <td class=widget_content>Interests</td>
+           <td class=widget_content>Custom 1</td>
+           <td class=widget_content>Custom 2</td>
+           <td class=widget_content>Custom 3</td>
+           <td class=widget_content>Custom 4</td>
+           <td class=widget_content>Profile</td>
 
            <!-- address info //-->
+           <td class=widget_content>Address Name</td>
            <td class=widget_content>Line 1</td>
            <td class=widget_content>Line 2</td>
            <td class=widget_content>City</td>
            <td class=widget_content>State</td>
            <td class=widget_content>Postal Code</td>
+           <td class=widget_content>Country</td>
+           <td class=widget_content>Address Body</td>
+           <td class=widget_content>Use Pretty Address</td>
 
            <!-- extra company info //-->
+           <td class=widget_content>Code</td>
            <td class=widget_content>Phone</td>
            <td class=widget_content>Alt. Phone</td>
            <td class=widget_content>Fax</td>
@@ -135,6 +154,9 @@ switch ($delimiter) {
         break;
     case 'pipe':
         $delimiter = "|";
+        break;
+    case 'semi-colon':
+        $delimiter = ";";
         break;
 }
 
@@ -168,33 +190,54 @@ foreach ($filearray as $row) {
     $extref1             = $row['extref1'];
     $extref2             = $row['extref2'];
     $extref3             = $row['extref3'];
-    $custom1             = $row['custom1'];
-    $custom2             = $row['custom2'];
-    $custom3             = $row['custom3'];
-    $custom4             = $row['custom4'];
+    $company_custom1     = $row['company_custom1'];
+    $company_custom2     = $row['company_custom2'];
+    $company_custom3     = $row['company_custom3'];
+    $company_custom4     = $row['company_custom4'];
     $employees           = $row['employees'];
     $revenue             = $row['revenue'];
     $credit_limit        = $row['credit_limit'];
     $terms               = $row['terms'];
-    $profile             = $row['profile'];
+    $company_profile     = $row['company_profile'];
+    $company_code        = $row['company_code'];
     $company_phone       = $row['phone'];
     $company_phone2      = $row['phone2'];
     $company_fax         = $row['fax'];
 
     //contact info
-    $contact_first_names = $row['first_name'];
-    $contact_last_name   = $row['last_name'];
-    $contact_email       = htmlspecialchars($row['email']);
-    $contact_work_phone  = $row['work_phone'];
-    $contact_home_phone  = $row['home_phone'];
-    $contact_fax         = $row['fax'];
+    $contact_first_names   = $row['first_name'];
+    $contact_last_name     = $row['last_name'];
+    $contact_email         = htmlspecialchars($row['email']);
+    $contact_work_phone    = $row['work_phone'];
+    $contact_home_phone    = $row['home_phone'];
+    $contact_fax           = $row['fax'];
+    $contact_division      = $row['division'];
+    $contact_salutation    = $row['salutation'];
+    $contact_date_of_birth = $row['date_of_birth'];
+    $contact_summary       = $row['summary'];
+    $contact_title         = $row['title'];
+    $contact_description   = $row['description'];
+    $contact_cell_phone    = $row['cell_phone'];
+    $contact_aol           = $row['aol'];
+    $contact_yahoo         = $row['yahoo'];
+    $contact_msn           = $row['msn'];
+    $contact_interests     = $row['interests'];
+    $contact_custom1       = $row['contact_custom1'];
+    $contact_custom2       = $row['contact_custom2'];
+    $contact_custom3       = $row['contact_custom3'];
+    $contact_custom4       = $row['contact_custom4'];
+    $contact_profile       = $row['contact_profile'];
 
     //address info
-    $address_line1       = $row['line1'];
-    $address_line2       = $row['line2'];
-    $address_city        = $row['city'];
-    $address_state       = $row['state'];
-    $address_postal_code = $row['postal_code'];
+    $address_name               = $row['address_name'];
+    $address_line1              = $row['line1'];
+    $address_line2              = $row['line2'];
+    $address_city               = $row['city'];
+    $address_state              = $row['state'];
+    $address_postal_code        = $row['postal_code'];
+    $address_country            = $row['country'];
+    $address_body               = $row['address_body'];
+    $address_use_pretty_address = $row['use_pretty_address'];
 
 
     // does this company exist,
@@ -223,17 +266,38 @@ foreach ($filearray as $row) {
            <td class=widget_content>$contact_last_name</td>
            <td class=widget_content>$contact_email</td>
            <td class=widget_content>$contact_work_phone</td>
+           <td class=widget_content>$contact_cell_phone</td>
            <td class=widget_content>$contact_home_phone</td>
            <td class=widget_content>$contact_fax</td>
+           <td class=widget_content>$contact_division</td>
+           <td class=widget_content>$contact_salutation</td>
+           <td class=widget_content>$contact_date_of_birth</td>
+           <td class=widget_content>$contact_summary</td>
+           <td class=widget_content>$contact_title</td>
+           <td class=widget_content>$contact_description</td>
+           <td class=widget_content>$contact_aol</td>
+           <td class=widget_content>$contact_yahoo</td>
+           <td class=widget_content>$contact_msn</td>
+           <td class=widget_content>$contact_interests</td>
+           <td class=widget_content>$contact_custom1</td>
+           <td class=widget_content>$contact_custom2</td>
+           <td class=widget_content>$contact_custom3</td>
+           <td class=widget_content>$contact_custom4</td>
+           <td class=widget_content>$contact_profile</td>
 
            <!-- address info //-->
+           <td class=widget_content>$address_name</td>
            <td class=widget_content>$address_line1</td>
            <td class=widget_content>$address_line2</td>
            <td class=widget_content>$address_city</td>
            <td class=widget_content>$address_state</td>
            <td class=widget_content>$address_postal_code</td>
+           <td class=widget_content>$address_country</td>
+           <td class=widget_content>$address_body</td>
+           <td class=widget_content>$address_use_pretty_address</td>
 
            <!-- extra company info //-->
+           <td class=widget_content>$company_code</td>
            <td class=widget_content>$company_phone</td>
            <td class=widget_content>$company_phone2</td>
            <td class=widget_content>$company_fax</td>
@@ -243,15 +307,15 @@ foreach ($filearray as $row) {
            <td class=widget_content>$extref1</td>
            <td class=widget_content>$extref2</td>
            <td class=widget_content>$extref3</td>
-           <td class=widget_content>$custom1</td>
-           <td class=widget_content>$custom2</td>
-           <td class=widget_content>$custom3</td>
-           <td class=widget_content>$custom4</td>
+           <td class=widget_content>$company_custom1</td>
+           <td class=widget_content>$company_custom2</td>
+           <td class=widget_content>$company_custom3</td>
+           <td class=widget_content>$company_custom4</td>
            <td class=widget_content>$employees</td>
            <td class=widget_content>$revenue</td>
            <td class=widget_content>$credit_limit</td>
            <td class=widget_content>$terms</td>
-           <td class=widget_content>$profile</td>
+           <td class=widget_content>$company_profile</td>
 
        </tr>
 TILLEND;
@@ -288,6 +352,10 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.4  2004/04/09 22:08:38  braverock
+ * - allow import of all fields in the XRMS database
+ * - integrated patches provided by Olivier Colonna of Fontaine Consulting
+ *
  * Revision 1.3  2004/02/10 13:31:44  braverock
  * - change url to 'website'
  * - fixed syntax errror on insert

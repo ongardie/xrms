@@ -20,11 +20,9 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * @todo add additional contact fields so that you can enter more data about contacts
- * @todo modify CSVtoArray fn to do a trim, strtolower, and replace spaces with underscores in array element names
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-3.php,v 1.12 2004/02/10 22:45:56 braverock Exp $
+ * $Id: import-companies-3.php,v 1.13 2004/04/09 22:08:38 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -57,7 +55,7 @@ echo <<<TILLEND
    <tr>
        <table class=widget cellspacing=1 width=100%>
            <tr>
-               <td class=widget_header colspan=29>Preview Data</td>
+               <td class=widget_header colspan=54>Preview Data</td>
            </tr>
 
        <tr>
@@ -65,13 +63,13 @@ echo <<<TILLEND
            <td class=widget_header colspan=4>Company</td>
 
            <!-- contact info //-->
-           <td class=widget_header colspan=7>Contact Info</td>
+           <td class=widget_header colspan=22>Contact Info</td>
 
            <!-- address info //-->
-           <td class=widget_header colspan=8>Address</td>
+           <td class=widget_header colspan=9>Address</td>
 
            <!-- address info //-->
-           <td class=widget_header colspan=15>Additional Company Info</td>
+           <td class=widget_header colspan=19>Additional Company Info</td>
        </tr>
 
        <tr>
@@ -88,18 +86,38 @@ echo <<<TILLEND
            <td class=widget_content>Last Name</td>
            <td class=widget_content>Email</td>
            <td class=widget_content>Work Phone</td>
+           <td class=widget_content>Cell Phone</td>
            <td class=widget_content>Home Phone</td>
            <td class=widget_content>Fax</td>
+           <td class=widget_content>Division</td>
+           <td class=widget_content>Salutation</td>
+           <td class=widget_content>Date of Birth</td>
+           <td class=widget_content>Summary</td>
+           <td class=widget_content>Title</td>
+           <td class=widget_content>Description</td>
+           <td class=widget_content>AOL</td>
+           <td class=widget_content>Yahoo</td>
+           <td class=widget_content>MSN</td>
+           <td class=widget_content>Interests</td>
+           <td class=widget_content>Custom 1</td>
+           <td class=widget_content>Custom 2</td>
+           <td class=widget_content>Custom 3</td>
+           <td class=widget_content>Custom 4</td>
+           <td class=widget_content>Profile</td>
 
            <!-- address info //-->
-           <td class=widget_content>Address ID</td>
+           <td class=widget_content>Address Name</td>
            <td class=widget_content>Line 1</td>
            <td class=widget_content>Line 2</td>
            <td class=widget_content>City</td>
            <td class=widget_content>State</td>
            <td class=widget_content>Postal Code</td>
+           <td class=widget_content>Country</td>
+           <td class=widget_content>Address Body</td>
+           <td class=widget_content>Use Pretty Address</td>
 
            <!-- extra company info //-->
+           <td class=widget_content>Code</td>
            <td class=widget_content>Phone</td>
            <td class=widget_content>Alt. Phone</td>
            <td class=widget_content>Fax</td>
@@ -132,6 +150,9 @@ switch ($delimiter) {
     case 'pipe':
         $delimiter = "|";
         break;
+    case 'semi-colon':
+        $delimiter = ";";
+        break;
 }
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -149,7 +170,6 @@ $last_modified_by = $session_user_id;
 
 //get the data array
 $filearray = CSVtoArray($tmp_upload_directory . 'companies-to-import.txt', true , $delimiter, $enclosure);
-// @todo modify CSVtoArray fn to do a strtolower and replace spaces with underscores in array element names
 // @todo could better accomodate microsoft outlook by looking for outlook field names
 
 //debug line to view the array
@@ -179,34 +199,54 @@ foreach ($filearray as $row) {
     $extref1             = $row['extref1'];
     $extref2             = $row['extref2'];
     $extref3             = $row['extref3'];
-    $custom1             = $row['custom1'];
-    $custom2             = $row['custom2'];
-    $custom3             = $row['custom3'];
-    $custom4             = $row['custom4'];
+    $company_custom1     = $row['company_custom1'];
+    $company_custom2     = $row['company_custom2'];
+    $company_custom3     = $row['company_custom3'];
+    $company_custom4     = $row['company_custom4'];
     $employees           = $row['employees'];
     $revenue             = $row['revenue'];
     $credit_limit        = $row['credit_limit'];
     $terms               = $row['terms'];
-    $profile             = $row['profile'];
+    $company_profile     = $row['company_profile'];
+    $company_code        = $row['company_code'];
     $company_phone       = $row['phone'];
     $company_phone2      = $row['phone2'];
     $company_fax         = $row['fax'];
 
     //contact info
-    $contact_first_names = $row['first_name'];
-    $contact_last_name   = $row['last_name'];
-    $contact_email       = htmlspecialchars($row['email']);
-    $contact_work_phone  = $row['work_phone'];
-    $contact_home_phone  = $row['home_phone'];
-    $contact_fax         = $row['fax'];
+    $contact_first_names   = $row['first_name'];
+    $contact_last_name     = $row['last_name'];
+    $contact_email         = htmlspecialchars($row['email']);
+    $contact_work_phone    = $row['work_phone'];
+    $contact_home_phone    = $row['home_phone'];
+    $contact_fax           = $row['fax'];
+    $contact_division      = $row['division'];
+    $contact_salutation    = $row['salutation'];
+    $contact_date_of_birth = $row['date_of_birth'];
+    $contact_summary       = $row['summary'];
+    $contact_title         = $row['title'];
+    $contact_description   = $row['description'];
+    $contact_cell_phone    = $row['cell_phone'];
+    $contact_aol           = $row['aol'];
+    $contact_yahoo         = $row['yahoo'];
+    $contact_msn           = $row['msn'];
+    $contact_interests     = $row['interests'];
+    $contact_custom1       = $row['contact_custom1'];
+    $contact_custom2       = $row['contact_custom2'];
+    $contact_custom3       = $row['contact_custom3'];
+    $contact_custom4       = $row['contact_custom4'];
+    $contact_profile       = $row['contact_profile'];
 
     //address info
-    $address_name        = $row['address_name'];
-    $address_line1       = $row['line1'];
-    $address_line2       = $row['line2'];
-    $address_city        = $row['city'];
-    $address_state       = $row['state'];
-    $address_postal_code = $row['postal_code'];
+    $address_name               = $row['address_name'];
+    $address_line1              = $row['line1'];
+    $address_line2              = $row['line2'];
+    $address_city               = $row['city'];
+    $address_state              = $row['state'];
+    $address_postal_code        = $row['postal_code'];
+    $address_country            = $row['country'];
+    $address_body               = $row['address_body'];
+    $address_use_pretty_address = $row['use_pretty_address'];
 
 
     // does this company exist,
@@ -223,7 +263,7 @@ foreach ($filearray as $row) {
     }
 
     if ((strlen($contact_first_names) == 0) && (strlen($contact_last_name) == 0)) {
-        $contact_last_name = 'Contact';
+        $contact_last_name   = 'Contact';
         $contact_first_names = 'Default';
     }
 
@@ -254,15 +294,15 @@ foreach ($filearray as $row) {
 
         if ($legal_name) {
             $sql_insert_company .= ',
-            legal_name       = '. $con->qstr($legal_name, get_magic_quotes_gpc());
+            legal_name    = '. $con->qstr($legal_name, get_magic_quotes_gpc());
         }
         if ($company_website) {
             $sql_insert_company .= ',
-            url              = '. $con->qstr($company_website, get_magic_quotes_gpc());
+            url           = '. $con->qstr($company_website, get_magic_quotes_gpc());
         }
         if ($company_taxid) {
             $sql_insert_company .= ',
-            tax_id           = '. $con->qstr($company_taxid, get_magic_quotes_gpc());
+            tax_id        = '. $con->qstr($company_taxid, get_magic_quotes_gpc());
         }
         if ($extref1) {
             $sql_insert_company .= ',
@@ -276,25 +316,25 @@ foreach ($filearray as $row) {
             $sql_insert_company .= ',
             extref3       = '. $con->qstr($extref3, get_magic_quotes_gpc());
         }
-        if ($custom1) {
+        if ($company_custom1) {
             $sql_insert_company .= ',
-            custom1       = '. $con->qstr($custom1, get_magic_quotes_gpc());
+            custom1       = '. $con->qstr($company_custom1, get_magic_quotes_gpc());
         }
-        if ($custom2) {
+        if ($company_custom2) {
             $sql_insert_company .= ',
-            custom2       = '. $con->qstr($custom2, get_magic_quotes_gpc());
+            custom2       = '. $con->qstr($company_custom2, get_magic_quotes_gpc());
         }
-        if ($custom3) {
+        if ($company_custom3) {
             $sql_insert_company .= ',
-            custom3       = '. $con->qstr($custom3, get_magic_quotes_gpc());
+            custom3       = '. $con->qstr($company_custom3, get_magic_quotes_gpc());
         }
-        if ($custom4) {
+        if ($company_custom4) {
             $sql_insert_company .= ',
-            custom4       = '. $con->qstr($custom4, get_magic_quotes_gpc());
+            custom4       = '. $con->qstr($company_custom4, get_magic_quotes_gpc());
         }
-        if ($exployees) {
+        if ($employees) {
             $sql_insert_company .= ',
-            exployees       = '. $con->qstr($exployees, get_magic_quotes_gpc());
+            employees     = '. $con->qstr($employees, get_magic_quotes_gpc());
         }
         if ($revenue) {
             $sql_insert_company .= ',
@@ -302,25 +342,29 @@ foreach ($filearray as $row) {
         }
         if ($credit_limit) {
             $sql_insert_company .= ',
-            credit_limit       = '. $con->qstr($credit_limit, get_magic_quotes_gpc());
+            credit_limit  = '. $con->qstr($credit_limit, get_magic_quotes_gpc());
         }
         if ($terms) {
             $sql_insert_company .= ',
-            terms       = '. $con->qstr($terms, get_magic_quotes_gpc());
+            terms         = '. $con->qstr($terms, get_magic_quotes_gpc());
         }
-        if ($profile) {
+        if ($company_profile) {
             $sql_insert_company .= ',
-            profile       = '. $con->qstr($profile, get_magic_quotes_gpc());
+            profile       = '. $con->qstr($company_profile, get_magic_quotes_gpc());
+        }
+        if ($company_code) {
+            $sql_insert_company .= ',
+            company_code  = '. $con->qstr($company_code, get_magic_quotes_gpc());
         }
         //set phone numbers only if the company didn't already exist
         if (!$company_id) {
             if ($company_phone) {
                 $sql_insert_company .= ',
-                phone       = '. $con->qstr($company_phone, get_magic_quotes_gpc());
+                phone     = '. $con->qstr($company_phone, get_magic_quotes_gpc());
             }
             if ($company_phone2) {
                 $sql_insert_company .= ',
-                phone2       = '. $con->qstr($company_phone2, get_magic_quotes_gpc());
+                phone2    = '. $con->qstr($company_phone2, get_magic_quotes_gpc());
             }
             if ($company_fax) {
                 $sql_insert_company .= ',
@@ -337,11 +381,17 @@ foreach ($filearray as $row) {
         //create the company code if this is a new company
         if (!$company_id) {
             $company_id = $con->insert_id();
+            if (!$company_code) {
             $sql_update_company_code = "update companies set
                                         company_code = " .
                                         $con->qstr('C' . $company_id, get_magic_quotes_gpc()) .
                                         " where company_id = $company_id";
-
+            } else {
+                $sql_update_company_code = "update companies set
+                                            company_code = " .
+                                            $company_code .
+                                            " where company_id = $company_id";
+            }
             $con->execute($sql_update_company_code);
         }
 
@@ -379,6 +429,9 @@ foreach ($filearray as $row) {
                                    line2         = '. $con->qstr($address_line2, get_magic_quotes_gpc()) .',
                                    city          = '. $con->qstr($address_city, get_magic_quotes_gpc()) . ',
                                    province      = '. $con->qstr($address_state, get_magic_quotes_gpc()) . ',
+                                   country_id         = '. $con->qstr($address_country, get_magic_quotes_gpc()) . ',
+                                   address_body       = '. $con->qstr($address_body, get_magic_quotes_gpc()) . ',
+                                   use_pretty_address = '. $con->qstr($address_use_pretty_address, get_magic_quotes_gpc()) . ',
                                    postal_code   = '. $con->qstr($address_postal_code, get_magic_quotes_gpc());
                 $con->execute($sql_insert_address);
                 $address_id = $con->insert_id();
@@ -440,7 +493,66 @@ foreach ($filearray as $row) {
                 $sql_insert_contact .= ',
                                        email       = '. $con->qstr($contact_email, get_magic_quotes_gpc());
             }
-
+            if ($contact_salutation){
+                $sql_insert_contact .= ',
+                                       salutation       = '. $con->qstr($contact_salutation, get_magic_quotes_gpc());
+            }
+            if ($contact_date_of_birth){
+                $sql_insert_contact .= ',
+                                       date_of_birth       = '. $con->qstr($contact_date_of_birth, get_magic_quotes_gpc());
+            }
+            if ($contact_summary){
+                $sql_insert_contact .= ',
+                                       summary       = '. $con->qstr($contact_summary, get_magic_quotes_gpc());
+            }
+            if ($contact_title){
+                $sql_insert_contact .= ',
+                                       title       = '. $con->qstr($contact_title, get_magic_quotes_gpc());
+            }
+            if ($contact_description){
+                $sql_insert_contact .= ',
+                                       description       = '. $con->qstr($contact_description, get_magic_quotes_gpc());
+            }
+            if ($contact_cell_phone){
+                $sql_insert_contact .= ',
+                                       cell_phone       = '. $con->qstr($contact_cell_phone, get_magic_quotes_gpc());
+            }
+            if ($contact_aol){
+                $sql_insert_contact .= ',
+                                       aol_name       = '. $con->qstr($contact_aol, get_magic_quotes_gpc());
+            }
+            if ($contact_yahoo){
+                $sql_insert_contact .= ',
+                                       yahoo_name       = '. $con->qstr($contact_yahoo, get_magic_quotes_gpc());
+            }
+            if ($contact_msn){
+                $sql_insert_contact .= ',
+                                       msn_name       = '. $con->qstr($contact_msn, get_magic_quotes_gpc());
+            }
+            if ($contact_interests){
+                $sql_insert_contact .= ',
+                                       interests       = '. $con->qstr($contact_interests, get_magic_quotes_gpc());
+            }
+            if ($contact_custom1){
+                $sql_insert_contact .= ',
+                                       custom1       = '. $con->qstr($contact_custom1, get_magic_quotes_gpc());
+            }
+            if ($contact_custom2){
+                $sql_insert_contact .= ',
+                                       custom2       = '. $con->qstr($contact_custom2, get_magic_quotes_gpc());
+            }
+            if ($contact_custom3){
+                $sql_insert_contact .= ',
+                                       custom3       = '. $con->qstr($contact_custom3, get_magic_quotes_gpc());
+            }
+            if ($contact_custom4){
+                $sql_insert_contact .= ',
+                                       custom4       = '. $con->qstr($contact_custom4, get_magic_quotes_gpc());
+            }
+            if ($contact_profile){
+                $sql_insert_contact .= ',
+                                       profile       = '. $con->qstr($contact_profile, get_magic_quotes_gpc());
+            }
             $con->execute($sql_insert_contact);
         } //end insert contact
 
@@ -472,18 +584,38 @@ foreach ($filearray as $row) {
            <td class=widget_content>$contact_last_name</td>
            <td class=widget_content>$contact_email</td>
            <td class=widget_content>$contact_work_phone</td>
+           <td class=widget_content>$contact_cell_phone</td>
            <td class=widget_content>$contact_home_phone</td>
            <td class=widget_content>$contact_fax</td>
+           <td class=widget_content>$contact_division</td>
+           <td class=widget_content>$contact_salutation</td>
+           <td class=widget_content>$contact_date_of_birth</td>
+           <td class=widget_content>$contact_summary</td>
+           <td class=widget_content>$contact_title</td>
+           <td class=widget_content>$contact_description</td>
+           <td class=widget_content>$contact_aol</td>
+           <td class=widget_content>$contact_yahoo</td>
+           <td class=widget_content>$contact_msn</td>
+           <td class=widget_content>$contact_interests</td>
+           <td class=widget_content>$contact_custom1</td>
+           <td class=widget_content>$contact_custom2</td>
+           <td class=widget_content>$contact_custom3</td>
+           <td class=widget_content>$contact_custom4</td>
+           <td class=widget_content>$contact_profile</td>
 
            <!-- address info //-->
-           <td class=widget_content>$address_id</td>
+           <td class=widget_content>$address_name</td>
            <td class=widget_content>$address_line1</td>
            <td class=widget_content>$address_line2</td>
            <td class=widget_content>$address_city</td>
            <td class=widget_content>$address_state</td>
            <td class=widget_content>$address_postal_code</td>
+           <td class=widget_content>$address_country</td>
+           <td class=widget_content>$address_body</td>
+           <td class=widget_content>$address_use_pretty_address</td>
 
            <!-- extra company info //-->
+           <td class=widget_content>$company_code</td>
            <td class=widget_content>$company_phone</td>
            <td class=widget_content>$company_phone2</td>
            <td class=widget_content>$company_fax</td>
@@ -493,15 +625,15 @@ foreach ($filearray as $row) {
            <td class=widget_content>$extref1</td>
            <td class=widget_content>$extref2</td>
            <td class=widget_content>$extref3</td>
-           <td class=widget_content>$custom1</td>
-           <td class=widget_content>$custom2</td>
-           <td class=widget_content>$custom3</td>
-           <td class=widget_content>$custom4</td>
+           <td class=widget_content>$company_custom1</td>
+           <td class=widget_content>$company_custom2</td>
+           <td class=widget_content>$company_custom3</td>
+           <td class=widget_content>$company_custom4</td>
            <td class=widget_content>$employees</td>
            <td class=widget_content>$revenue</td>
            <td class=widget_content>$credit_limit</td>
            <td class=widget_content>$terms</td>
-           <td class=widget_content>$profile</td>
+           <td class=widget_content>$company_profile</td>
 
        </tr>
 
@@ -537,6 +669,10 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.13  2004/04/09 22:08:38  braverock
+ * - allow import of all fields in the XRMS database
+ * - integrated patches provided by Olivier Colonna of Fontaine Consulting
+ *
  * Revision 1.12  2004/02/10 22:45:56  braverock
  * - fixed typo noticed by Beth
  *
