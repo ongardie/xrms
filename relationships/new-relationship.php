@@ -42,7 +42,7 @@ $what_table_singular = make_singular($what_table);
 $display_name = ucfirst($what_table_singular);
 
 $con->close();
-$page_title = "Add " . $display_name;
+$page_title = _("Add")." " . $display_name;
 
 start_page($page_title, true, $msg);
 
@@ -58,16 +58,16 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Search for <?php echo $display_name; ?></td>
+                <td class=widget_header><?php echo _("Search for")." ".$display_name; ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name or ID</td>
+                <td class=widget_label><?php echo _("Name or ID"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="search_on"> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=submit value="Search"></td>
+                <td class=widget_content_form_element><input class=button type=submit value="<?php echo _("Search"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -88,6 +88,10 @@ end_page();
 
 /**
  * $Log: new-relationship.php,v $
+ * Revision 1.2  2004/07/18 18:10:22  braverock
+ * - convert all strings for i18n/translation
+ *   - applies i18n patch contributed by John Fawcett
+ *
  * Revision 1.1  2004/07/14 14:08:53  neildogg
  * - Add new relationship now in /relationships directory
  *

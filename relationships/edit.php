@@ -28,7 +28,7 @@ $return_url = $_GET['return_url'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$page_title = "Edit Association";
+$page_title = _("Edit Association");
 start_page($page_title, true, $msg);
 
 $rst = $con->execute("select * from relationships where relationship_id='$relationship_id'");
@@ -51,7 +51,7 @@ $rst->close();
         <input type="hidden" name="relationship_id" value="<?php echo $relationship_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Name</td>
+                <td class=widget_header><?php echo _("Name"); ?></td>
             </tr>
                 <td class=widget_content_form_element>
                     <?php echo $name; ?>
@@ -59,7 +59,7 @@ $rst->close();
             </tr>
             <tr>
                 <td class=widget_content_form_element>
-                    <input class=button type=submit name=unassociate value="Unassociate">
+                    <input class=button type=submit name=unassociate value="<?php echo _("Unassociate"); ?>">
                 </td>
             </tr>
         </table>
@@ -81,6 +81,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.2  2004/07/18 18:10:22  braverock
+ * - convert all strings for i18n/translation
+ *   - applies i18n patch contributed by John Fawcett
+ *
  * Revision 1.1  2004/07/09 15:33:42  neildogg
  * New, generic programs that utilize the new relationships table
  *

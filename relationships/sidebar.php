@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.10 2004/07/15 20:55:51 neildogg Exp $
+ * $Id: sidebar.php,v 1.11 2004/07/18 18:10:22 braverock Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -86,10 +86,10 @@ $rst->close();
 $relationship_link_rows .= "<div id='company_link_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
-                <td colspan=2 class=widget_header colspan=4>Associated $opposite_name</td>
+                <td colspan=2 class=widget_header colspan=4>"._("Associated")." $opposite_name</td>
             </tr>
             <tr>
-                <td class=widget_label>$opposite_name</td><td align=right class=widget_label>Other $display_name</td>
+                <td class=widget_label>$opposite_name</td><td align=right class=widget_label>"._("Other")." $display_name</td>
             </tr>\n";
             
 for($i = 0; $i <= $loop; $i++) {
@@ -172,7 +172,7 @@ for($i = 0; $i <= $loop; $i++) {
                 . "&relationship_id=" . $rst->fields['relationship_id']
                 . "&return_url=" . $what_table[$working_direction]
                 . "/one.php?$what_table_singular[$working_direction]_id=$overall_id"
-                . "'>Edit</a>";
+                . "'>"._("Edit")."</a>";
             if($address) {
                 $relationship_link_rows .= "<br>" . $address;
             }
@@ -286,7 +286,7 @@ for($i = 0; $i <= $loop; $i++) {
 }
 
 if(!$found) {
-    $relationship_link_rows .= "            <tr> <td class=widget_content colspan=4> No attached " . $what_table[$working_direction] . " </td> </tr>\n";;
+    $relationship_link_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached")." " . $what_table[$working_direction] . " </td> </tr>\n";;
 }
 
 //put in the new button
@@ -298,7 +298,7 @@ $relationship_link_rows .= "
                     <input type=hidden name=on_what_id value='$overall_id'>
                     <input type=hidden name=working_direction value='$orig_working_direction'>
                     <input type=hidden name=return_url value='/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id=$overall_id'>
-                    <input type=submit class=button value='New'>
+                    <input type=submit class=button value='"._("New")."'>
                 </td>
             </form>
             </tr>";
@@ -391,6 +391,10 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.11  2004/07/18 18:10:22  braverock
+ * - convert all strings for i18n/translation
+ *   - applies i18n patch contributed by John Fawcett
+ *
  * Revision 1.10  2004/07/15 20:55:51  neildogg
  * - Proper return URL
  *

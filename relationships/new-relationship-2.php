@@ -69,9 +69,8 @@ $rst = $con->execute($sql);
 $relationship_menu = $rst->getmenu2('relationship_type_id', '', false);
 $rst->close();
 
-$page_title = "Add " . $display_name_singular;
+$page_title = _("Add") .' '. $display_name_singular;
 start_page($page_title, true, $msg);
-
 ?>
 
 <div id="Main">
@@ -91,8 +90,13 @@ start_page($page_title, true, $msg);
             </tr>
                 <td class=widget_content_form_element><?php echo $relationship_menu; ?> &nbsp;
                 <?php
-
-if(eregi("[a-zA-Z]", $search_on)) {
+if ($search_on == '')
+{
+	echo _("Specify a search condition");
+}
+else
+{
+	if(eregi("[a-zA-Z]", $search_on)) {
     $search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
     //If you want to make this work for other tables, you should be able to edit utils-database.php with the proper names
     $name_order = implode(', ', array_reverse(table_name($what_table)));
@@ -106,12 +110,12 @@ if(eregi("[a-zA-Z]", $search_on)) {
     $rst = $con->execute($sql);
     if($rst->rowcount()) {
         echo $rst->getmenu2('on_what_id2', '', false);
-        echo " &nbsp; <input type=button class=button value='More Info' "
+        echo " &nbsp; <input type=button class=button value='"._("More Info")."' "
             . "onclick='document.forms[0]." . $what_table_singular 
             . "_id.value=document.forms[1].on_what_id2.options[document.forms[1].on_what_id2.selectedIndex].value; document.forms[0].submit();'>";
     }
     else {
-        echo "There is no " . $what_table_singular . " by that name";
+        echo _("There is no")." ". $what_table_singular . " ". _("by that name");
     }
 }
 else {
@@ -125,10 +129,10 @@ else {
         echo "<input type=hidden name=on_what_id2 value=$search_on>" . $rst->fields['name'] . "\n";
     }
     else {
-        echo "There is no " . $what_table_singular . " by that ID";
+        echo _("There is no ")." ". $what_table_singular . " "._("by that ID");
     }
 }
-
+}
 ?>
                </td>
             </tr>
