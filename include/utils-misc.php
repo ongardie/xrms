@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.9 2004/02/04 18:38:11 braverock Exp $
+ * $Id: utils-misc.php,v 1.10 2004/02/04 21:18:12 braverock Exp $
  */
 
 /**
@@ -146,7 +146,15 @@ function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure=
     $handle = fopen($file, 'r');
 
     if ($hasFieldNames) $keys = fgetcsv($handle, 4096, $delimiter);
-    //add trim,strtolower, and strreplace here for Outlook support
+
+    //trim,strtolower, and strreplace keys for Outlook support
+
+    $cleankeys = array();
+    foreach ($keys as $key) {
+      $key = str_replace(' ', '_', trim(strtolower($key)));
+      $cleankeys[] = $key; 
+    }
+    $keys = $cleankeys;
 
     while ($row = fgetcsv($handle, 4096, $delimiter))
     {
@@ -290,6 +298,9 @@ function fetch_division_id($con, $division_name, $company_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.10  2004/02/04 21:18:12  braverock
+ * - add key munging for trim,strtolower, and str_replace of array keys in CSVtoArray fn
+ *
  * Revision 1.9  2004/02/04 18:38:11  braverock
  * -minor fixes to CSVtoArray and fetch_division_if fns
  *
