@@ -48,16 +48,16 @@ else {
 $display_name = ucfirst(make_singular($working_table));
 
 if($working_table == "companies" and $what_table == "contacts") {
-    $sql = "SELECT 'Enter other contact' AS name,
-            0 AS contact_id
+    $sql = "(SELECT 'Enter other contact' AS name,
+            0 AS contact_id)
             UNION
             (SELECT " .
             $con->Concat("first_names", "' '", "last_name") . " AS name,
             contact_id
             FROM contacts
             WHERE company_id=" . $on_what_id . "
-            AND contact_record_status='a'
-            ORDER BY last_name, first_names)";
+            AND contact_record_status='a')
+            ORDER BY name";
 
     $rst = $con->execute($sql);
     
@@ -65,8 +65,8 @@ if($working_table == "companies" and $what_table == "contacts") {
 
 }
 elseif($working_table == "contacts" and $working_direction == "both") {
-    $sql = "SELECT 'Enter other contact' AS name,
-            0 AS contact_id
+    $sql = "(SELECT 'Enter other contact' AS name,
+            0 AS contact_id)
             UNION
             (SELECT " .
             $con->Concat("c2.first_names", "' '", "c2.last_name") . " AS name,
@@ -75,8 +75,8 @@ elseif($working_table == "contacts" and $working_direction == "both") {
             WHERE c.contact_id=" . $on_what_id . "
             AND c2.contact_id!=" . $on_what_id . "
             AND c.company_id=c2.company_id
-            AND c2.contact_record_status='a'
-            ORDER BY c2.last_name, c2.first_names)";
+            AND c2.contact_record_status='a')
+            ORDER BY name";
             
     $rst = $con->execute($sql);
     
@@ -138,6 +138,10 @@ end_page();
 
 /**
  * $Log: new-relationship.php,v $
+ * Revision 1.7  2004/09/13 23:41:12  introspectshun
+ * - Made queries multi-db compatible.
+ * - When using ORDER BY with a UNION, use column alias not column name or position (deprecated forms)
+ *
  * Revision 1.6  2004/07/30 15:03:50  neildogg
  * - Cleaned up code and gave contact menu to contacts/both
  *
