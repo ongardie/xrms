@@ -9,9 +9,9 @@ alter table companies drop city;
 alter table companies drop state;
 alter table companies drop country;
 
-alter table contacts add country_id int not null;
+alter table contacts add address_id int not null;
 
-alter table addresses add country_id int not null;
+alter table addresses add address_id int not null;
 alter table addresses add line1 varchar(255) not null;
 alter table addresses add line2 varchar(255) not null;
 alter table addresses add city varchar(255) not null;
