@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.47 2004/07/01 19:48:10 braverock Exp $
+ * $Id: one.php,v 1.48 2004/07/08 19:42:32 neildogg Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -176,6 +176,7 @@ $sql = "select * from contacts where company_id = $company_id
 
 $rst = $con->execute($sql);
 
+$contacts = $rst->rowcount();
 if ($rst) {
     while (!$rst->EOF) {
         $contact_rows .= "\n<tr>";
@@ -553,7 +554,7 @@ function openNewsWindow() {
         <!-- contacts //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6><?php  echo $strCompaniesOneContactsTitle; ?></td>
+                <td class=widget_header colspan=6><?php echo $contacts; ?> <?php  echo $strCompaniesOneContactsTitle; ?></td>
             </tr>
             <tr>
                 <td class=widget_label>Name</td>
@@ -669,6 +670,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.48  2004/07/08 19:42:32  neildogg
+ * Added Contacts count
+ *
  * Revision 1.47  2004/07/01 19:48:10  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts
