@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.7 2004/06/12 03:27:32 introspectshun Exp $
+ * $Id: edit.php,v 1.8 2004/07/16 05:28:14 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -57,7 +57,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = "One Campaign : $campaign_title";
+$page_title = _("One Campaign :") . $campaign_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -71,48 +71,48 @@ start_page($page_title, true, $msg);
         <input type=hidden name=campaign_id value=<?php  echo $campaign_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Campaign Details</td>
+                <td class=widget_header colspan=2><?php echo _("Campaign Details"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Campaign&nbsp;Title</td>
+                <td class=widget_label_right><?php echo _("Campaign Title"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=campaign_title value="<?php  echo $campaign_title; ?>"> <?php  echo $required_indicator; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Type</td>
+                <td class=widget_label_right><?php echo _("Type"); ?></td>
                 <td class=widget_content_form_element><?php  echo $campaign_type_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Status</td>
+                <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element><?php  echo $campaign_status_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Owner</td>
+                <td class=widget_label_right><?php echo _("Owner"); ?></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Starts On</td>
+                <td class=widget_label_right><?php echo _("Starts On"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=starts_at value="<?php  echo $starts_at; ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Ends On</td>
+                <td class=widget_label_right><?php echo _("Ends On"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
            </tr>
             <tr>
-                <td class=widget_label_right>Cost</td>
+                <td class=widget_label_right><?php echo _("Cost"); ?></td>
                 <td class=widget_content_form_element><input type=text size=10 name=cost value="<?php  echo $cost; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Description</td>
+                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=campaign_description><?php  echo $campaign_description; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input type=button class=button onclick="javascript: location.href='delete.php?campaign_id=<?php  echo $campaign_id; ?>';" value='Delete Campaign' onclick="javascript: return confirm('Delete Campaign?');"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?campaign_id=<?php  echo $campaign_id; ?>';" value='<?php echo _("Delete Campaign"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Campaign?"); ?>');"></td>
             </tr>
         </table>
         </form>
@@ -140,7 +140,7 @@ function validate() {
 
     if (document.forms[0].campaign_title.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter a campaign title.';
+        msgToDisplay += '\n<?php echo _("You must enter a campaign title."); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -183,6 +183,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.8  2004/07/16 05:28:14  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.7  2004/06/12 03:27:32  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

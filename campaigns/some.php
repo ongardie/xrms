@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.16 2004/07/15 13:56:11 cpsource Exp $
+ * $Id: some.php,v 1.17 2004/07/16 05:28:14 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,9 +61,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $starts_at = $con->SQLDate('Y-M-D', 'starts_at');
 $ends_at = $con->SQLDate('Y-M-D', 'ends_at');
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "cam.campaign_id", "'\">'" , "cam.campaign_title", "'</a>'") . " AS 'Campaign',
-  camt.campaign_type_pretty_name AS 'Type', cams.campaign_status_pretty_name AS 'Status', u.username AS 'Owner',
-  $starts_at AS 'Starts', $ends_at AS 'Ends'
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "cam.campaign_id", "'\">'" , "cam.campaign_title", "'</a>'") . " AS '" . _("Campaign") . "',
+  camt.campaign_type_pretty_name AS '" . _("Type") . "', cams.campaign_status_pretty_name AS '" . _("Status") . "', u.username AS '" . _("Owner") . "',
+  $starts_at AS '" . _("Starts") . "', $ends_at AS '" . _("Ends") . "'
 ";
 
 if ($campaign_category_id > 0) {
@@ -143,7 +143,7 @@ if ($rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed campaigns</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed campaigns") . '</td></tr>';
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -176,7 +176,7 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'campaigns', '', 4);
 }
 
-$page_title = 'Campaigns';
+$page_title = _("Campaigns");
 start_page($page_title, true, $msg);
 
 ?>
@@ -185,21 +185,21 @@ start_page($page_title, true, $msg);
     <div id="Content">
 
     <form action=some.php method=post>
-        <input type=hidden name=use_post_vars value=1>
-        <input type=hidden name=campaigns_next_page value="<?php  echo $campaigns_next_page ?>">
-        <input type=hidden name=resort value="0">
-        <input type=hidden name=current_sort_column value="<?php  echo $sort_column ?>">
-        <input type=hidden name=sort_column value="<?php  echo $sort_column ?>">
-        <input type=hidden name=current_sort_order value="<?php  echo $sort_order ?>">
-        <input type=hidden name=sort_order value="<?php  echo $sort_order ?>">
+    <input type=hidden name=use_post_vars value=1>
+    <input type=hidden name=campaigns_next_page value="<?php  echo $campaigns_next_page ?>">
+    <input type=hidden name=resort value="0">
+    <input type=hidden name=current_sort_column value="<?php  echo $sort_column ?>">
+    <input type=hidden name=sort_column value="<?php  echo $sort_column ?>">
+    <input type=hidden name=current_sort_order value="<?php  echo $sort_order ?>">
+    <input type=hidden name=sort_order value="<?php  echo $sort_order ?>">
     <table class=widget cellspacing=1 width="100%">
         <tr>
-            <td class=widget_header colspan=3>Search Criteria</td>
+            <td class=widget_header colspan=3><?php echo _("Search Criteria"); ?></td>
         </tr>
         <tr>
-            <td width="36%" class=widget_label>Campaign Name</td>
-            <td width="35%" class=widget_label>Type</td>
-            <td width="29%" class=widget_label>Owner</td>
+            <td width="36%" class=widget_label><?php echo _("Campaign Name<"); ?>/td>
+            <td width="35%" class=widget_label><?php echo _("Type"); ?></td>
+            <td width="29%" class=widget_label><?php echo _("Owner"); ?></td>
         </tr>
         <tr>
             <td class=widget_content_form_element><input type=text name="campaign_title" size=20 value="<?php  echo $campaign_title ?>"></td>
@@ -211,9 +211,9 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td class=widget_content_form_element>Category</td>
-            <td class=widget_content_form_element>Media</td>
-            <td class=widget_content_form_element>Status</td>
+            <td class=widget_content_form_element><?php echo _("Category"); ?></td>
+            <td class=widget_content_form_element><?php echo _("Media"); ?></td>
+            <td class=widget_content_form_element><?php echo _("Status"); ?></td>
         </tr>
         <tr>
             <td width="33%" class=widget_content_form_element>
@@ -227,9 +227,9 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td class=widget_content_form_element colspan=3><input name="submit" type=submit class=button value="Search">
-                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
-                <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";} ?>
+            <td class=widget_content_form_element colspan=3><input name="submit" type=submit class=button value="<?php echo _("Search"); ?>">
+                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
+                <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";} ?>
             </td>
         </tr>
     </table>
@@ -251,22 +251,22 @@ $con->close();
         <!-- new campaign //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=2>Options</td>
+                <td class=widget_header colspan=2><?php echo _("Options"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="new.php">Add New Campaign</a></td>
+                <td class=widget_content><a href="new.php"><?php echo _("Add New Campaign"); ?></a></td>
             </tr>
         </table>
 
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5>Recently Viewed</td>
+                <td class=widget_header colspan=5><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Campaign</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Status</td>
+                <td class=widget_label><?php echo _("Campaign"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Status"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows ?>
         </table>
@@ -313,6 +313,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2004/07/16 05:28:14  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.16  2004/07/15 13:56:11  cpsource
  * - Add support for arr_vars sub-system.
  *

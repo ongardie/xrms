@@ -2,7 +2,7 @@
 /**
  * Edit a campaign
  *
- * $Id: one.php,v 1.9 2004/06/12 03:27:32 introspectshun Exp $
+ * $Id: one.php,v 1.10 2004/07/16 05:28:14 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -110,18 +110,18 @@ if ($rst) {
 $con->close();
 
 if (strlen($note_rows) == 0) {
-    $note_rows = "<tr><td class=widget_content colspan=4>No notes</td></tr>";
+    $note_rows = "<tr><td class=widget_content colspan=4>" . _("No notes") . "</td></tr>";
 }
 
 if (strlen($categories) == 0) {
-    $categories = "No categories";
+    $categories = _("No categories");
 }
 
 if (strlen($file_rows) == 0) {
-    $file_rows = "<tr><td class=widget_content colspan=4>No files</td></tr>";
+    $file_rows = "<tr><td class=widget_content colspan=4>" . _("No files") . "</td></tr>";
 }
 
-$page_title = "One Campaign : $campaign_title";
+$page_title = _("One Campaign : ") . $campaign_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -131,7 +131,7 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Campaign Details</td>
+                <td class=widget_header><?php echo _("Campaign Details"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -141,19 +141,19 @@ start_page($page_title, true, $msg);
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel>Title</td>
+                                    <td width=1% class=sublabel><?php echo _("Title"); ?></td>
                                     <td class=clear><?php echo $campaign_title; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Type</td>
+                                    <td class=sublabel><?php echo _("Type"); ?></td>
                                     <td class=clear><?php echo $campaign_type_display_html; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Status</td>
+                                    <td class=sublabel><?php echo _("Status"); ?></td>
                                     <td class=clear><?php echo $campaign_status_display_html; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Cost</td>
+                                    <td class=sublabel><?php echo _("Cost"); ?></td>
                                     <td class=clear><?php echo number_format($cost, 2); ?></td>
                                 </tr>
                                 <tr>
@@ -161,11 +161,11 @@ start_page($page_title, true, $msg);
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Created</td>
+                                    <td class=sublabel><?php echo _("Created"); ?></td>
                                     <td class=clear><?php echo $entered_at; ?> (<?php  echo $entered_by; ?>)</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Last Modified</td>
+                                    <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
                                 </tr>
                                 </table>
@@ -185,7 +185,7 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?campaign_id=<?php  echo $campaign_id; ?>';"></td>
+                <td class=widget_content_form_element><input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?campaign_id=<?php  echo $campaign_id; ?>';"></td>
             </tr>
         </table>
 
@@ -197,13 +197,13 @@ start_page($page_title, true, $msg);
         <!-- categories //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Categories</td>
+                <td class=widget_header><?php echo _("Categories"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content><?php  echo $categories; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?campaign_id=<?php  echo $campaign_id; ?>';" value="Manage"></td>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?campaign_id=<?php  echo $campaign_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
             </tr>
         </table>
 
@@ -214,11 +214,11 @@ start_page($page_title, true, $msg);
         <input type="hidden" name="return_url" value="/campaigns/one.php?campaign_id=<?php echo $campaign_id ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Notes</td>
+                <td class=widget_header><?php echo _("Notes"); ?></td>
             </tr>
             <?php echo $note_rows; ?>
             <tr>
-                <td class=widget_content_form_element colspan=4><input type=submit class=button value="New"></td>
+                <td class=widget_content_form_element colspan=4><input type=submit class=button value="<?php echo _("New"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -230,18 +230,18 @@ start_page($page_title, true, $msg);
         <input type=hidden name=return_url value="/campaigns/one.php?campaign_id=<?php  echo $campaign_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=5>Files</td>
+                <td class=widget_header colspan=5><?php echo _("Files"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Size</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Date</td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Size"); ?></td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
+                <td class=widget_label><?php echo _("Date"); ?></td>
 
             </tr>
             <?php  echo $file_rows; ?>
             <tr>
-                <td class=widget_content_form_element colspan=5><input type=submit class=button value="New"></td>
+                <td class=widget_content_form_element colspan=5><input type=submit class=button value="<?php echo _("New"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -255,6 +255,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2004/07/16 05:28:14  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.9  2004/06/12 03:27:32  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.
