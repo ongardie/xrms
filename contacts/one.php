@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.73 2005/03/22 00:06:51 braverock Exp $
+ * $Id: one.php,v 1.74 2005/03/22 21:55:12 gpowers Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -43,6 +43,13 @@ if ( !isset($accounting_rows) ) {
 }
 //call the accounting hook
 $accounting_rows = do_hook_function('contact_accounting_inline_display', $accounting_rows);
+
+// make sure $contact_buttons is defined
+if ( !isset($contact_buttons) ) {
+  $contact_buttons = '';
+}
+//call the one_contact_buttons hook
+$contact_buttons = do_hook_function('one_contact_buttons', $contact_buttons);
 
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
@@ -491,7 +498,7 @@ function markComplete() {
             <tr>
                 <td class=widget_content_form_element>
                     <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?contact_id=$contact_id';"); ?>
-                    <?php do_hook('one_contact_buttons'); ?>
+                    <?php echo $contact_buttons; ?>
                 </td>
             </tr>
         </table>
@@ -605,6 +612,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.74  2005/03/22 21:55:12  gpowers
+ * - moved up one_contact_buttons hook
+ *   - it's now called before the db connection is closed
+ *   - now it's in the same area as the company_accounting hook
+ *
  * Revision 1.73  2005/03/22 00:06:51  braverock
  * - add trim around if checks in details table to decide whether to print empty data
  *
