@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.5 2004/06/12 06:33:16 introspectshun Exp $
+ * $Id: sidebar.php,v 1.6 2004/07/14 12:08:19 cpsource Exp $
  */
 
 $case_rows = "<div id='case_sidebar'>
@@ -49,7 +49,7 @@ if (strlen($rst->fields['username'])>0) {
 }
 
 //put in the new and search buttons
-if ((strlen($company_id) > 0)  or (strlen($contact_id) > 0)) {
+if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0))) {
     $case_rows .= "
             <tr>
                 <form action='".$http_site_root."/cases/new.php' method='post'>
@@ -75,6 +75,9 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.6  2004/07/14 12:08:19  cpsource
+ * - Fix uninitialized variable usage
+ *
  * Revision 1.5  2004/06/12 06:33:16  introspectshun
  * - Now use ADODB SelectLimit function.
  *
