@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.6 2004/07/07 21:53:13 introspectshun Exp $
+ * $Id: add-division.php,v 1.7 2005/01/06 21:53:22 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,6 +17,7 @@ $session_user_id = session_check();
 
 $company_id = $_POST['company_id'];
 $division_name = $_POST['division_name'];
+$address_id = $_POST['address_id'];
 $description = $_POST['description'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -28,6 +29,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $rec = array();
 $rec['company_id'] = $company_id;
 $rec['division_name'] = $division_name;
+$rec['address_id'] = $address_id;
 $rec['description'] = $description;
 $rec['entered_at'] = time();
 $rec['entered_by'] = $session_user_id;
@@ -48,6 +50,9 @@ header("Location: divisions.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.7  2005/01/06 21:53:22  vanmer
+ * - added address_id to new/edit-2 retrieve/store methods, to specify an address for a division
+ *
  * Revision 1.6  2004/07/07 21:53:13  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *

@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.3 2004/06/12 17:10:24 gpowers Exp $
+ * $Id: edit-division-2.php,v 1.4 2005/01/06 21:53:22 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,6 +17,7 @@ $session_user_id = session_check();
 
 $division_id = $_POST['division_id'];
 $company_id = $_POST['company_id'];
+$address_id = $_POST['address_id'];
 $division_name = $_POST['division_name'];
 $description = $_POST['description'];
 
@@ -32,6 +33,7 @@ $rst = $con->execute($sql);
 
 $rec = array();
 $rec['division_id'] = $division_id;
+$rec['address_id'] = $address_id;
 $rec['division_name'] = $division_name;
 $rec['description'] = $description;
 $rec['last_modified_at'] = time();
@@ -44,6 +46,9 @@ header("Location: divisions.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.4  2005/01/06 21:53:22  vanmer
+ * - added address_id to new/edit-2 retrieve/store methods, to specify an address for a division
+ *
  * Revision 1.3  2004/06/12 17:10:24  gpowers
  * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
  *   GetUpdateSQL()
