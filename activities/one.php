@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.65 2004/10/08 19:30:43 gpowers Exp $
+ * $Id: one.php,v 1.66 2004/10/31 14:14:30 braverock Exp $
  */
 
 //include required files
@@ -130,34 +130,6 @@ if ($company_id) {
 
 // add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
 
-if ($contact_id) {
-    // include the contact sidebar code
-    require_once ('../contacts/sidebar.php');
-} else {
-  $contact_block = '';
-}
-
-if ($company_id) {
-    // include the company sidebar code
-    require_once ('../companies/sidebar.php');
-}
-
-//include the contacts-companies sidebar
-if ($contact_id) {
-    $relationship_name = "company link";
-    $working_direction = "from";
-    $overall_id = $contact_id;
-    require("../relationships/sidebar.php");
-}
-
-//include the files sidebar
-$on_what_table = 'activities';
-$on_what_id = $activity_id;
-$on_what_string = 'activity';
-require_once( '../files/sidebar.php');
-
-//Add optional tables
-$sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom');
 
 /* add opportunities/case/campaign combo box */
 //get singular form of table name (from on_what_table field)
@@ -225,6 +197,48 @@ if($on_what_table == 'opportunities') {
     $opportunity_description = $rst->fields['opportunity_description'];
     $rst->close();
 }
+
+/*********************************/
+/*** Include the sidebar boxes ***/
+
+//set up our substitution variables for use in the sidebars
+$ori_on_what_table = $on_what_table;
+$ori_on_what_id = $on_what_id;
+$on_what_table = 'activities';
+$on_what_id = $activity_id;
+$on_what_string = 'activity';
+
+if ($contact_id) {
+    // include the contact sidebar code
+    require_once ('../contacts/sidebar.php');
+} else {
+  $contact_block = '';
+}
+
+if ($company_id) {
+    // include the company sidebar code
+    require_once ('../companies/sidebar.php');
+}
+
+//include the contacts-companies sidebar
+if ($contact_id) {
+    $relationship_name = "company link";
+    $working_direction = "from";
+    $overall_id = $contact_id;
+    require("../relationships/sidebar.php");
+}
+
+//include the files sidebar
+require_once( '../files/sidebar.php');
+
+//Add optional tables
+$sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom');
+
+//set on_what_table back to what it was before the sidebar includes
+$on_what_table = $ori_on_what_table;
+$on_what_id    = $ori_on_what_id;
+/** End of the sidebar includes **/
+/*********************************/
 
 $con->close();
 
@@ -334,7 +348,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Activity Notes"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=75 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <?php
             if($on_what_table == 'opportunities') {
@@ -342,7 +356,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Opportunity Notes"); ?></td>
                 <td class=widget_content_form_element>
-                    <textarea rows=10 cols=80 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
+                    <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
                     <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('Enter note', ''); document.forms[0].opportunity_description.value =
                         logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page(); ?>'; document.forms[0].submit();">
                     <?php do_hook('opportunity_notes_buttons'); ?>
@@ -352,9 +366,9 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Local Time"); ?></td>
                 <td class=widget_content_form_element>
-                    <?php 
+                    <?php
                         //Remember to call update_daylight_savings($con);
-                        echo gmdate('Y-m-d H:i:s', $local_time); 
+                        echo gmdate('Y-m-d H:i:s', $local_time);
                     ?>
                 </td>
             </tr>
@@ -391,9 +405,9 @@ function logTime() {
                     <input class=button type=submit name="followup" value="<?php echo _("Schedule Followup"); ?>">
 
 <?php
-		confGoTo ( _('Delete Activity?'),
-			   _('Delete'),
-			   'delete.php?activity_id='.$activity_id.'&return_url='.urlencode($return_url));
+        confGoTo ( _('Delete Activity?'),
+               _('Delete'),
+               'delete.php?activity_id='.$activity_id.'&return_url='.urlencode($return_url));
 ?>
                 </td>
             </tr>
@@ -447,6 +461,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.66  2004/10/31 14:14:30  braverock
+ * - fixed bug that overwrote table_name, breaking link w/ opportunities/cases
+ * - moved sidebar code lower in page, resolved issues with overwriting values
+ * - adjusted width of textareas to solve CSS layout problem in IE
+ *
  * Revision 1.65  2004/10/08 19:30:43  gpowers
  * - added file attachment sidebar to activities
  *
