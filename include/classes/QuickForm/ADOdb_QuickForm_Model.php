@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.2 2005/01/31 16:50:12 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.3 2005/02/14 16:39:31 daturaarutad Exp $
 */
 
 
@@ -320,7 +320,7 @@ class ADOdb_QuickForm_Model {
 			// set up the Values
 			//$con = $this->DBStructure['dbh'];
 			//$this->Values[$field] = $con->qstr(fread(fopen($file_tmp_location, "r"), $file_size));
-			$this->Values[$field] = fread(fopen($file_tmp_location, "r"), $file_size);
+			$this->Values[$field] = fread(fopen($file_tmp_location, "r"), filesize($file_tmp_location));
 			$this->Values[$this->DBStructure['fields'][$i]['sizeField']] = $file_size;
 			$this->Values[$this->DBStructure['fields'][$i]['nameField']] = $file_name;
 			$this->Values[$this->DBStructure['fields'][$i]['typeField']] = $file_type;
