@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupUser.php,v 1.3 2005/03/05 00:52:34 daturaarutad Exp $
+ * $Id: one_GroupUser.php,v 1.4 2005/03/09 17:25:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -74,7 +74,7 @@ global $symbol_precendence;
   $model->ReadSchemaFromDB($con, 'GroupUser');
   $model->SetPrimaryKeyName('GroupUser_id');
   $model->SetDisplayNames(array('Group_name' => 'Group Name')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
-  $model->SetForeignKeyField('user_id', 'User', 'users', 'user_id', $xcon->CONCAT('first_names',"' '",'last_name'),$xcon,array('' => ' Select One'));
+  $model->SetForeignKeyField('user_id', 'User', 'users', 'user_id', $xcon->CONCAT('last_name',"', '",'first_names'),$xcon,array('' => ' Select One'),'last_name, first_names');
   $model->SetForeignKeyField('Group_id', 'Group', 'Groups', 'Group_id', 'Group_name', null, array('' => ' Select One'));
   $model->SetForeignKeyField('ChildGroup_id', 'Child Group', 'Groups', 'Group_id', 'Group_name', null, array('NULL' => ' Select One'));
   $model->SetForeignKeyField('Role_id', 'Role', 'Role', 'Role_id', 'Role_name', null, array('' => ' Select One'));
@@ -108,6 +108,10 @@ end_page();
 
 /**
  * $Log: one_GroupUser.php,v $
+ * Revision 1.4  2005/03/09 17:25:03  vanmer
+ * - changed user list output to show last name first, then first names
+ * - changed sort order of user list to sort on last name, first names
+ *
  * Revision 1.3  2005/03/05 00:52:34  daturaarutad
  * manually setting primary keys until mssql driver supports metacolumns fully
  *
