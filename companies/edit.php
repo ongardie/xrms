@@ -22,7 +22,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_name = $rst->fields['company_name'];
-    $company_legal_name = $rst->fields['company_legal_name'];
+    $legal_name = $rst->fields['legal_name'];
     $company_code = $rst->fields['company_code'];
     $crm_status_id = $rst->fields['crm_status_id'];
     $user_id = $rst->fields['user_id'];
@@ -90,7 +90,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Legal&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text size=40 name=company_legal_name value="<?php echo $company_legal_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=40 name=legal_name value="<?php echo $legal_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Company&nbsp;Code</td>

@@ -77,7 +77,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Legal&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text size=50 name=company_legal_name value="<?php echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=50 name=legal_name value="<?php echo $company_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Company&nbsp;Code</td>
@@ -195,23 +195,23 @@ start_page($page_title, true, $msg);
         </table>
 
         <table class=widget cellspacing=1 width="100%">
-			<tr>
-				<td class=widget_header colspan=2>Contact Information</td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>First&nbsp;Names</td>
-				<td class=widget_content_form_element><input type=text name=first_names size=30 value="Default"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Last&nbsp;Name</td>
-				<td class=widget_content_form_element><input type=text name=last_name size=30 value="Contact"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>E-Mail</td>
-				<td class=widget_content_form_element><input type=text name=email size=30></td>
-			</tr>
+            <tr>
+                <td class=widget_header colspan=2>Contact Information</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>First&nbsp;Names</td>
+                <td class=widget_content_form_element><input type=text name=first_names size=30 value="Default"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Last&nbsp;Name</td>
+                <td class=widget_content_form_element><input type=text name=last_name size=30 value="Contact"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>E-Mail</td>
+                <td class=widget_content_form_element><input type=text name=email size=30></td>
+            </tr>
         </table>
-        
+
         </td>
     </tr>
 </table>

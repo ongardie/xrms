@@ -38,7 +38,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_name = $rst->fields['company_name'];
-    $company_legal_name = $rst->fields['company_legal_name'];
+    $legal_name = $rst->fields['legal_name'];
     $tax_id = $rst->fields['tax_id'];
     $company_code = $rst->fields['company_code'];
     $crm_status_pretty_name = $rst->fields['crm_status_pretty_name'];
@@ -391,7 +391,7 @@ function openNewsWindow() {
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
                                     <td width=1% class=sublabel>Legal Name</td>
-                                    <td class=clear><?php  echo $company_legal_name; ?></td>
+                                    <td class=clear><?php  echo $legal_name; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Code</td>
