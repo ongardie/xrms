@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.32 2004/07/27 09:26:06 cpsource Exp $
+ * $Id: edit-2.php,v 1.33 2004/07/27 10:02:14 cpsource Exp $
  */
 
 //include required files
@@ -20,31 +20,37 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-// get all posted data
-$return_url              = $_POST['return_url'];
-$activity_id             = $_POST['activity_id'];
-$activity_type_id        = $_POST['activity_type_id'];
-$contact_id              = $_POST['contact_id'];
-$activity_title          = $_POST['activity_title'];
-$activity_description    = $_POST['activity_description'];
-$scheduled_at            = $_POST['scheduled_at'];
-$ends_at                 = $_POST['ends_at'];
-$activity_status         = $_POST['activity_status'];
-$current_activity_status = $_POST['current_activity_status'];
-$user_id                 = $_POST['user_id'];
-$on_what_table           = $_POST['on_what_table'];
-$on_what_id              = $_POST['on_what_id'];
-$company_id              = $_POST['company_id'];
-$email_to                = $_POST['email_to'];
-$table_name              = $_POST['table_name'];
-$table_status_id         = $_POST['table_status_id'];
+// POST'ed in data
+$arr_vars = array (
+		   // posted data
+		   'return_url' => arr_vars_POST ,
+		   'activity_id' => arr_vars_POST ,
+		   'activity_type_id' => arr_vars_POST ,
+		   'contact_id' => arr_vars_POST ,
+		   'activity_title' => arr_vars_POST ,
+		   'activity_description' => arr_vars_POST ,
+		   'scheduled_at' => arr_vars_POST ,
+		   'ends_at' => arr_vars_POST ,
+		   'activity_status' => arr_vars_POST ,
+		   'current_activity_status' => arr_vars_POST ,
+		   'user_id' => arr_vars_POST ,
+		   'on_what_table' => arr_vars_POST ,
+		   'on_what_id' => arr_vars_POST ,
+		   'company_id' => arr_vars_POST ,
+		   'email_to' => arr_vars_POST ,
+		   'table_name' => arr_vars_POST ,
+		   'table_status_id' => arr_vars_POST ,
 
-// optionally posted data
-$opportunity_description = isset($_POST['opportunity_description']) ? $_POST['opportunity_description'] : '';
-$probability             = isset($_POST['probability']) ? $_POST['probability'] : '';
-$followup                = isset($_POST['followup'])    ? $_POST['followup']    : '';
-$saveandnext             = isset($_POST['saveandnext']) ? $_POST['saveandnext'] : '';
-$switch_opportunity      = isset($_POST['switch_opportunity']) ? $_POST['switch_opportunity'] : '';
+		   // optionally posted data
+		   'opportunity_description' => arr_vars_POST_UNDEF ,
+		   'probability' => arr_vars_POST_UNDEF ,
+		   'followup' => arr_vars_POST_UNDEF ,
+		   'saveandnext' => arr_vars_POST_UNDEF ,
+		   'switch_opportunity' => arr_vars_POST_UNDEF ,
+		   );
+
+// get posted data
+arr_vars_post_with_cmd ( $arr_vars );
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -408,6 +414,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.33  2004/07/27 10:02:14  cpsource
+ * - Add routine arr_vars_post_with_cmd and test.
+ *
  * Revision 1.32  2004/07/27 09:26:06  cpsource
  * - Move opportunity_description to the optionally passed area.
  *

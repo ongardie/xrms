@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.65 2004/07/22 17:15:10 braverock Exp $
+ * $Id: utils-misc.php,v 1.66 2004/07/27 10:02:15 cpsource Exp $
  */
 
 /**
@@ -794,6 +794,10 @@ define ( "arr_vars_GET_STRLEN_SESSION", 3 );  // try a GET first with length > 0
 define ( "arr_vars_REQUEST"           , 4 );  // just try a POST/GET
 define ( "arr_vars_REQUEST_SESSION"   , 5 );  // just try a POST/GET
 
+// for function arr_vars_post_with_cmd ( $ary )
+define ( "arr_vars_POST"              , 6 );  // just try a POST
+define ( "arr_vars_POST_UNDEF"        , 7 );  // try a POST then set to null if undef
+
 //
 // get all variables
 //
@@ -870,6 +874,7 @@ function arr_vars_get_all ( $ary, $post_vars = false )
     arr_vars_session_get ( $ary );
   }
 }
+
 // clear all variables
 function arr_vars_clear ( $ary )
 {
@@ -877,6 +882,7 @@ function arr_vars_clear ( $ary )
     $GLOBALS[$key] = '';
   }
 }
+
 // get variables from session
 function arr_vars_session_get ( $ary )
 {
@@ -923,6 +929,7 @@ function arr_vars_session_get ( $ary )
       }
   }
 }
+
 // set all session variables
 function arr_vars_session_set ( $ary )
 {
@@ -930,6 +937,7 @@ function arr_vars_session_set ( $ary )
     $_SESSION["$value[0]"] = $GLOBALS[$key];
   }
 }
+
 // get all posted variables
 function arr_vars_post_get ( $ary, $allow_none = false )
 {
@@ -942,6 +950,33 @@ function arr_vars_post_get ( $ary, $allow_none = false )
   }
 }
 
+// get all posted variables with cmd
+//
+// accept an array of the form:
+//
+//    array ( 'variable-name' => BEHAVIOR, ... )
+//
+function arr_vars_post_with_cmd ( $ary )
+{
+  foreach ($ary as $key => $value) {
+    $flag = $value;
+    switch ( $flag )
+      {
+      case arr_vars_POST:
+	$GLOBALS[$key] = $_POST["$key"];
+	break;
+
+      case arr_vars_POST_UNDEF:
+	$GLOBALS[$key] = isset($_POST["$key"]) ? $_POST["$key"] : '';
+	break;
+
+      default:
+        echo "utils-misc.php::arr_vars_post_get_with_cmd: unknown flag = $flag<br>";
+	exit;
+      }
+  }
+}
+
 // show program variables
 function arr_vars_show_pgm_vars ( $ary )
 {
@@ -951,6 +986,7 @@ function arr_vars_show_pgm_vars ( $ary )
     echo '$' . $key . ' = ' . $GLOBALS[$key] . '<br>';
   }
 }
+
 // show session variables
 function arr_vars_show_ses_vars ( $ary )
 {
@@ -975,6 +1011,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.66  2004/07/27 10:02:15  cpsource
+ * - Add routine arr_vars_post_with_cmd and test.
+ *
  * Revision 1.65  2004/07/22 17:15:10  braverock
  * - fixed problem with arr_vars subsystem
  *
