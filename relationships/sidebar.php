@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.28 2005/02/10 13:13:28 braverock Exp $
+ * $Id: sidebar.php,v 1.29 2005/02/11 20:25:45 vanmer Exp $
  */
 
 require_once('relationship_functions.php');
@@ -59,6 +59,8 @@ $relationship_link_rows = '';
         
         //get possible relationship types for this table
         $relationship_types=get_relationship_types($con, $_on_what_table);
+        if (!$relationship_types) continue;
+        if (!is_array($relationship_types)) continue;
         //get possible ids
         $relationship_type_ids=array_keys($relationship_types);
         //make string out of possible ids
@@ -314,6 +316,9 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.29  2005/02/11 20:25:45  vanmer
+ * - added check to ensure that relationship types actually get returned before using them
+ *
  * Revision 1.28  2005/02/10 13:13:28  braverock
  * - add debug commands (commented) so that we can continue to optimize this
  *
