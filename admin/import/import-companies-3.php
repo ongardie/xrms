@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.25 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: import-companies-3.php,v 1.26 2004/07/27 18:25:22 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -350,10 +350,12 @@ foreach ($filearray as $row) {
             //UPDATE
             $sql = "SELECT * FROM companies WHERE company_id = $company_id";
             $rst = $con->execute($sql);
-                    
+
             $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
             debugSql($upd);
-            $con->execute($upd);
+            if (strlen($upd)>0) {
+                $con->execute($upd);
+            }
         } else {
             //INSERT
             $tbl = 'companies';
@@ -392,19 +394,21 @@ foreach ($filearray as $row) {
             $rst = $con->execute($sql);
             $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
             debugSql($upd);
-            $con->execute($upd);
+            if (strlen($upd)>0) {
+                $con->execute($upd);
+            }
         }
 
         //check to see if we need to insert a division
         if (strlen($division_name) > 0) {
             $rec = array();
             $rec['division_name'] = $division_name;
-            
+
             $tbl = 'company_division';
             $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
             debugSql($ins);
             $con->execute($ins);
-            
+
             $division_id = $con->insert_id();
         }
 
@@ -473,12 +477,12 @@ foreach ($filearray as $row) {
                 $rec['use_pretty_address'] = $address_use_pretty_address;
                 $rec['postal_code'] = $address_postal_code;
                 $rec['country_id'] = $address_country;
-                
+
                 $tbl = 'addresses';
                 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
                 debugSql($ins);
                 $con->execute($ins);
-                
+
                 importMessage("Imported address '$address_line1'");
                 $address_id = $con->insert_id();
             }
@@ -490,16 +494,18 @@ foreach ($filearray as $row) {
             if (!$default_address_id  && $address_id) {
                 $sql = "SELECT * FROM companies WHERE company_id = $company_id";
                 $rst = $con->execute($sql);
-                
+
                 $rec = array();
                 $rec['default_primary_address'] = $address_id;
                 $rec['default_billing_address'] = $address_id;
                 $rec['default_shipping_address'] = $address_id;
                 $rec['default_payment_address'] = $address_id;
-                
+
                 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
                 debugSql($upd);
-                $con->execute($upd);
+                if (strlen($upd)>0) {
+                    $con->execute($upd);
+                }
                 $default_address_id = $address_id;
             }
         } // end address insert
@@ -525,7 +531,7 @@ foreach ($filearray as $row) {
             $rec['entered_by'] = $entered_by;
             $rec['last_modified_at'] = $last_modified_at;
             $rec['last_modified_by'] = $last_modified_by;
-            
+
             if ($address_id) {
                 $rec['address_id'] = $address_id;
             } else {
@@ -594,14 +600,14 @@ foreach ($filearray as $row) {
             if ($gender){
                 $rec['gender'] = $gender;
             }
-        
+
             $tbl = 'contacts';
             $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
             debugSql($ins);
             $con->execute($ins);
-            
+
             importMessage("Updated contact '$contact_first_names $contact_last_name'");
-            
+
         } //end insert contact
     else {
         importFailedMessage("Did not update contact '$contact_first_names $contact_last_name'");
@@ -728,6 +734,10 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.26  2004/07/27 18:25:22  braverock
+ * - fixed problem where GetUpdateSql function may return an empty string, and don't try to execute an empty query.
+ *   - resolves SF bug 998856
+ *
  * Revision 1.25  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *
