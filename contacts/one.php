@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.15 2004/04/10 16:25:29 braverock Exp $
+ * $Id: one.php,v 1.16 2004/04/12 16:20:38 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -171,7 +171,7 @@ if ($rst) {
 
         $rst2 = $con->execute($sql2);
 
-        if ($rst) {
+       if ($rst2) {
             $attached_to_name = $rst2->fields['attached_to_name'];
             $attached_to_link .= $attached_to_name . "</a>";
             $rst2->close();
@@ -560,6 +560,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.16  2004/04/12 16:20:38  maulani
+ * - Fix bug where check was erroneously made for $rst instead of $rst2
+ *
  * Revision 1.15  2004/04/10 16:25:29  braverock
  * - add calendar pop-up to new activity
  *   - apply SF patch 927141 submitted by "s-t"
