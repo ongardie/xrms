@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.24 2005/01/12 02:08:01 introspectshun Exp $
+ * $Id: sidebar.php,v 1.25 2005/01/12 20:23:13 vanmer Exp $
  */
 
 if(empty($relationships)) {
@@ -54,7 +54,6 @@ for($j = 0; $j <= $expand; $j++) {
             GROUP BY relationship_type_id, relationship_name, from_what_table, to_what_table
             ORDER BY relationship_type_id";
     $rst = $con->execute($sql);
-    
     if(!$rst) {
         db_error_handler($con, $sql);
     }
@@ -116,12 +115,7 @@ for($j = 0; $j <= $expand; $j++) {
                             AND r.relationship_status='a'
                             AND r." . $opposite_direction . "_what_id=" . $what[$opposite_direction]['singular'] . "_id
                             AND r.relationship_type_id = rt.relationship_type_id
-                            AND r.{$opposite_direction}_what_id NOT IN (" . implode(', ', $current_ids) . ")
-                            AND r.relationship_id NOT IN (" . implode(', ', $relationship_ids) . ")
-                            GROUP BY c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get
-                            . ", rt.relationship_type_id, rt.relationship_name, rt.from_what_table, rt.to_what_table, rt.from_what_text,
-                               rt.to_what_text, rt.relationship_status, rt.pre_formatting, rt.post_formatting,
-                               r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status";
+                            AND r.relationship_id NOT IN (" . implode(', ', $relationship_ids) . ")";
 
                     $rst2 = $con->execute($sql);
                     if(!$rst2) {
@@ -206,24 +200,7 @@ for($j = 0; $j <= $expand; $j++) {
                                     $agent_count = $rst3->fields['agent_count'];
                                     $rst3->close();
                                 }
-        
-                                $sql = "SELECT line1, city, province
-                                        FROM addresses
-                                        WHERE company_id = " . $current_id;
-                                $rst3 = $con->execute($sql);
-                                if(!$rst3) {
-                                    db_error_handler($con, $sql);
-                                }
-                                elseif(!$rst3->EOF) {
-                                    $address = explode(" ", $rst3->fields['line1']);
-                                    while(count($address) > 3) {
-                                        array_pop($address);
-                                    }
-                                    $address = implode(" ", $address) . ", " 
-                                        . $rst3->fields['city'] . ", " 
-                                        . $rst3->fields['province'];
-                                    $rst3->close();
-                                }
+                                $address=get_formatted_address($con, false, $current_id, true);
                             }
         
                             $opportunity_id = '';
@@ -307,24 +284,7 @@ for($j = 0; $j <= $expand; $j++) {
                                                 $agent_count = $rst4->fields['agent_count'];
                                                 $rst4->close();
                                             }
-                    
-                                            $sql = "SELECT line1, city, province
-                                                    FROM addresses
-                                                    WHERE company_id = $current_id2";
-                                            $rst4 = $con->execute($sql);
-                                            if(!$rst4) {
-                                                db_error_handler($con, $sql);
-                                            }
-                                            elseif(!$rst4->EOF) {
-                                                $address = explode(" ", $rst4->fields['line1']);
-                                                while(count($address) > 3) {
-                                                    array_pop($address);
-                                                }
-                                                $address = implode(" ", $address) . ", " 
-                                                    . $rst4->fields['city'] . ", " 
-                                                    . $rst4->fields['province'];
-                                                $rst4->close();
-                                            }
+                                            $address = get_formatted_address($con, false, $current_id2, true);
                                         }
                     
                                         $opportunity_id = 0;
@@ -432,6 +392,7 @@ else {
             <tr>
                 <td class=widget_label colspan=2 align=center>" . _("Add Relationship") . "</td>";
 }
+
 $relationship_link_rows .= "
             <tr>
             <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
@@ -439,57 +400,9 @@ $relationship_link_rows .= "
                 <input type=hidden name=return_url value=\"" . current_page() . "\">
                 <td class=widget_content_form_element colspan=2>";
 
-$sql = "SELECT COUNT(DISTINCT relationship_name) AS multiple, relationship_name, relationship_type_id, from_what_table, to_what_table
-        FROM relationship_types
-        WHERE (from_what_table IN ('" . implode("', '", array_keys($relationships)) . "')
-            OR to_what_table IN ('" . implode("', '", array_keys($relationships)) . "'))
-        AND relationship_status = 'a'
-        GROUP BY relationship_type_id, relationship_name, from_what_table, to_what_table
-        ORDER BY relationship_type_id";
-$rst = $con->execute($sql);
-if(!$rst) {
-    db_error_handler($con, $sql);
-}
-else {
-    $relationship_link_rows .= "
-                <select name=relationships>";
-    while(!$rst->EOF) {
-        if($rst->fields['from_what_table'] == $rst->fields['to_what_table']) {
-            if($rst->fields['multiple'] == 1) {
-                $relationship_name = $rst->fields['relationship_name'];
-            }
-            else {
-                $relationship_name = $rst->fields['from_what_table'] . ' -&gt; ' . $rst->fields['to_what_table'];
-            }
-            $relationship_link_rows .= "
-                  <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=both&relationship_type_id={$rst->fields['relationship_type_id']}\">$relationship_name</option>";            
-        }
-        else {
-            if(isset($relationships[$rst->fields['from_what_table']])) {
-                $relationship_name = "({$rst->fields['from_what_table']} -&gt; {$rst->fields['to_what_table']})";
-                if($rst->fields['multiple'] == 1) {
-                    $relationship_name = "{$rst->fields['relationship_name']} " . $relationship_name;
-                }
-                $relationship_link_rows .= "
-                  <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=from&relationship_type_id={$rst->fields['relationship_type_id']}\">$relationship_name</option>";
-            }
-            if(isset($relationships[$rst->fields['to_what_table']])) {            
-                $relationship_name = "({$rst->fields['to_what_table']} -&gt; {$rst->fields['from_what_table']})";
-                if($rst->fields['multiple'] == 1) {
-                    $relationship_name = "{$rst->fields['relationship_name']} " . $relationship_name;
-                }
-                $relationship_link_rows .= "
-                  <option value=\"on_what_id={$relationships[$rst->fields['to_what_table']]}&working_direction=to&relationship_type_id={$rst->fields['relationship_type_id']}\">$relationship_name</option>";
-            }
-        }
-        $rst->movenext();
-    }
-    $relationship_link_rows .= "
-                </select>";
-}
-
+$relationship_link_rows.='<input type=hidden name="relationship_entities" value="'.urlencode(serialize($relationships)).'">';
 $relationship_link_rows .= "
-                    <input type=submit class=button value=\""._("Next")."\">
+                    <input type=submit class=button value=\""._("New Relationship")."\">
                 </td>
             </form>
             </tr><!-- Form End -->";
@@ -498,6 +411,11 @@ $relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.25  2005/01/12 20:23:13  vanmer
+ * - removed unneeded Group By out of relationship query
+ * - removed unneeded NOT IN query, overly restrictive from deprecated method
+ * - altered address lookup to use centralized function
+ *
  * Revision 1.24  2005/01/12 02:08:01  introspectshun
  * - Extended GROUP BY clauses to include all fields for db compatibility
  * - Added tests for undefined indexes
