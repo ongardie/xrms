@@ -1,11 +1,4 @@
 <?php
-
-if ( !defined('IN_XRMS') )
-{
-  die('Hacking attempt');
-  exit;
-}
-
 /**
  * Contact Information Sidebar
  *
@@ -16,8 +9,14 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.8 2004/07/14 14:49:27 cpsource Exp $
+ * $Id: sidebar.php,v 1.9 2004/07/14 22:04:48 braverock Exp $
  */
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
 
 //add contact information block on sidebar
 $contact_block = '<table class=widget cellspacing=1 width="100%">
@@ -25,15 +24,17 @@ $contact_block = '<table class=widget cellspacing=1 width="100%">
         <td class=widget_header colspan=5>Contact Information</td>
     </tr>'."\n";
 
-$sql = "select
-        first_names, last_name, work_phone, address_id, email, cell_phone
-        from contacts
-        where
-        contact_id=$contact_id";
+if ($contact_id) {
+    $sql = "select
+            first_names, last_name, work_phone, address_id, email, cell_phone
+            from contacts
+            where
+            contact_id=$contact_id";
 
-$rst = $con->execute($sql);
+    $rst = $con->execute($sql);
+}
 
-if (!$rst->EOF) {
+if ($rst && $rst->RecordCount()>=1) {
 
     $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
                     . '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
@@ -69,6 +70,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.9  2004/07/14 22:04:48  braverock
+ * - added code to avoid object not defined error
+ *
  * Revision 1.8  2004/07/14 14:49:27  cpsource
  * - All sidebar.php's now support IN_XRMS security feature.
  *
