@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.9 2004/07/16 07:11:17 introspectshun Exp $
+ * $Id: edit.php,v 1.10 2004/07/25 15:41:01 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -150,7 +150,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = _("One Case : ") . $case_title;
+$page_title = _("Edit Case #") . $case_id . ": " . $case_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -274,6 +274,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.10  2004/07/25 15:41:01  johnfawcett
+ * - corrected page title
+ *
  * Revision 1.9  2004/07/16 07:11:17  introspectshun
  * - Localized strings for i18n/translation support
  *
