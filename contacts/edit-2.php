@@ -10,6 +10,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 $session_user_id = session_check();
 
 $contact_id = $_POST['contact_id'];
+$address_id = $_POST['address_id'];
 $first_names = $_POST['first_names'];
 $last_name = $_POST['last_name'];
 $summary = $_POST['summary'];
@@ -32,7 +33,8 @@ $custom4 = $_POST['custom4'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update contacts set last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ", 
+$sql = "update contacts set address_id = $address_id, 
+last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ", 
 first_names = " . $con->qstr($first_names, get_magic_quotes_gpc()) . ", 
 summary = " . $con->qstr($summary, get_magic_quotes_gpc()) . ", 
 title = " . $con->qstr($title, get_magic_quotes_gpc()) . ", 
