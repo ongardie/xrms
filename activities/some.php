@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.51 2004/07/30 13:01:28 neildogg Exp $
+ * $Id: some.php,v 1.52 2004/08/05 18:42:56 neildogg Exp $
  */
 
 // handle includes
@@ -110,7 +110,7 @@ else {
 }
 
 $curdate = $con->DBTimeStamp(time());
-$offset = $con->OffsetDate($day_diff, 'curdate()');
+$offset = $con->OffsetDate($day_diff);
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -495,6 +495,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.52  2004/08/05 18:42:56  neildogg
+ * - Date offset now compatible thanks to
+ *  - advice from David Rogers
+ *
  * Revision 1.51  2004/07/30 13:01:28  neildogg
  * - Restores $search_date using stored $day_diff
  *
