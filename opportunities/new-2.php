@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.7 2004/07/07 22:39:46 introspectshun Exp $
+ * $Id: new-2.php,v 1.8 2005/01/06 20:48:19 vanmer Exp $
  */
 
 //include common files
@@ -22,6 +22,7 @@ $size = $_POST['size'];
 $probability = $_POST['probability'];
 $user_id = $_POST['user_id'];
 $company_id = $_POST['company_id'];
+$division_id = $_POST['division_id'];
 $contact_id = $_POST['contact_id'];
 $campaign_id = $_POST['campaign_id'];
 $opportunity_title = $_POST['opportunity_title'];
@@ -39,6 +40,7 @@ $rec = array();
 $rec['opportunity_status_id'] = $opportunity_status_id;
 $rec['user_id'] = $user_id;
 $rec['company_id'] =  $company_id;
+$rec['division_id'] =  $division_id;
 $rec['contact_id'] = $contact_id;
 $rec['campaign_id'] = $campaign_id;
 $rec['opportunity_title'] = $opportunity_title;
@@ -72,6 +74,9 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.8  2005/01/06 20:48:19  vanmer
+ * - added retrieve/save of division_id to edit and new pages
+ *
  * Revision 1.7  2004/07/07 22:39:46  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *

@@ -20,6 +20,7 @@ $case_title = $_POST['case_title'];
 $case_description = $_POST['case_description'];
 $due_at = $_POST['due_at'];
 $company_id = $_POST['company_id'];
+$division_id = $_POST['division_id'];
 $on_what_table = $_POST['on_what_table'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -77,6 +78,7 @@ if ( ! $no_update ) {
     $rec['case_status_id'] = $case_status_id;
     $rec['case_priority_id'] = $case_priority_id;
     $rec['contact_id'] = $contact_id;
+    $rec['division_id'] = $division_id;
     $rec['user_id'] = $user_id;
     $rec['case_title'] = $case_title;
     $rec['case_description'] = $case_description;

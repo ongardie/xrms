@@ -13,6 +13,7 @@ $session_user_id = session_check();
 $opportunity_id = $_POST['opportunity_id'];
 $opportunity_status_id = $_POST['opportunity_status_id'];
 $contact_id = $_POST['contact_id'];
+$division_id = $_POST['division_id'];
 $campaign_id = $_POST['campaign_id'];
 $user_id = $_POST['user_id'];
 $opportunity_title = $_POST['opportunity_title'];
@@ -81,6 +82,7 @@ if (!$no_update) {
     $rec = array();
     $rec['opportunity_status_id'] = $opportunity_status_id;
     $rec['contact_id'] = $contact_id;
+    $rec['division_id'] = $division_id;
     $rec['campaign_id'] = $campaign_id;
     $rec['user_id'] = $user_id;
     $rec['size'] = $size;
