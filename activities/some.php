@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.69 2004/12/18 21:21:31 neildogg Exp $
+ * $Id: some.php,v 1.70 2004/12/18 21:34:27 neildogg Exp $
  */
 
 // handle includes
@@ -222,7 +222,15 @@ if (strlen($company_id)) {
 
 if (strlen($user_id) > 0) {
     $criteria_count++;
-    $sql .= " and a.user_id = $user_id ";
+    if($user_id == 'no') {
+        $sql .= " and a.user_id = 0";
+    }
+    elseif($user_id == 'current') {
+        $sql .= " and a.user_id = CURRENT_USER ";
+    }
+    else {
+        $sql .= " and a.user_id = $user_id ";
+    }
 }
 
 if (strlen($activity_type_id) > 0) {
@@ -327,7 +335,7 @@ if($advanced_search) {
 }            
 
 //get menu for users
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
+$sql2 = "(SELECT 'Not Set', 'no') UNION (SELECT 'Current User', 'current') UNION (select username, user_id from users where user_record_status = 'a' order by username)";
 $rst = $con->execute($sql2);
 $user_menu = $rst->getmenu2('user_id', $user_id, true);
 $rst->close();
@@ -415,6 +423,8 @@ add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 
 //debug
 //echo $sql.'<br>';
+
+$sql = str_replace('CURRENT_USER', $session_user_id, $sql);
 
 // get company_count
 $rst = $con->execute($sql);
@@ -654,6 +664,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.70  2004/12/18 21:34:27  neildogg
+ * Added empty user and current user search (great for saved searches)
+ *
  * Revision 1.69  2004/12/18 21:21:31  neildogg
  * Added advanced search by Campaign
  *
