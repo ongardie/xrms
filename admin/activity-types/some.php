@@ -2,7 +2,7 @@
 /**
  * Manage Activity Types
  *
- * $Id: some.php,v 1.12 2004/11/28 17:30:45 braverock Exp $
+ * $Id: some.php,v 1.13 2005/01/11 22:31:17 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,11 +27,11 @@ if ($rst) {
                 $table_rows .= '<td class=widget_content><a href=one.php?activity_type_id=' . $rst->fields['activity_type_id'] . '>' . $rst->fields['activity_type_pretty_name'] . '</a></td>';
         $table_rows .= '<td class=widget_content>';
         if($rst->fields['sort_order'] != 1) {
-           $table_rows .= "<a href='../sort.php?direction=up&sort_order=" . $rst->fields['sort_order']
+           $table_rows .= "<a href='../sort.php?direction=up&resort_id=".$rst->fields['activity_type_id']."&sort_order=" . $rst->fields['sort_order']
                 . "&table_name=activity_type&return_url=/admin/activity-types/some.php'>"._("up")."</a>\n";
         }
         if($rst->fields['sort_order'] != $rst->rowcount()) {
-            $table_rows .= "<a href='../sort.php?direction=down&sort_order=" . $rst->fields['sort_order']
+            $table_rows .= "<a href='../sort.php?direction=down&resort_id=".$rst->fields['activity_type_id']."&sort_order=" . $rst->fields['sort_order']
                 . "&table_name=activity_type&return_url=/admin/activity-types/some.php'>"._("down")."</a>\n";
         }
                 $table_rows .= '</tr>';
@@ -105,6 +105,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.13  2005/01/11 22:31:17  vanmer
+ * - added resort_id to allow click up or down on an activity to type to actually the sort_order of that activity_type, rather than the one with the same sort_order and lowest activity_type_id
+ *
  * Revision 1.12  2004/11/28 17:30:45  braverock
  * - localized strings for i18n
  *
