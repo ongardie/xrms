@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.4 2004/06/04 16:42:04 gpowers Exp $
+ * $Id: sidebar.php,v 1.5 2004/06/28 13:48:11 gpowers Exp $
  */
 
 // add company information block on sidebar
@@ -30,7 +30,8 @@ $rst = $con->execute($sql);
 if ($rst) {
 
     $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . $rst->fields['company_name'] . "</td>\n\t</tr>"
+                    . '<a href="../companies/one.php?company_id=' . $company_id . '">'
+                    . $rst->fields['company_name'] . "</a></td>\n\t</tr>"
                     . "\n\t<tr>\n\t\t<td class=widget_content>"
                     . get_formatted_address ($con, $rst->fields['default_primary_address'])
                     . "</td>\n\t</tr>";
@@ -65,6 +66,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.5  2004/06/28 13:48:11  gpowers
+ * - made company name a link to company page
+ *
  * Revision 1.4  2004/06/04 16:42:04  gpowers
  * - removed reassignment of result fields to new var for consistancy with the
  *     rest of XRMS.
