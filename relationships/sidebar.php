@@ -7,7 +7,7 @@ if ( !defined('IN_XRMS') )
 }
 
 /**
- * Associated Companies Sidebar
+ * Associated Relationships Sidebar
  *
  * Include this file anywhere you want to show other relationships
  *
@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.12 2004/07/25 22:47:31 johnfawcett Exp $
+ * $Id: sidebar.php,v 1.13 2004/07/27 20:56:42 neildogg Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -87,9 +87,6 @@ $relationship_link_rows .= "<div id='company_link_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
                 <td colspan=2 class=widget_header colspan=4>"._("Associated ". $opposite_name)."</td>
-            </tr>
-            <tr>
-                <td class=widget_label>"._($opposite_name)."</td><td align=right class=widget_label>"._("Other ". $display_name)."</td>
             </tr>\n";
             
 for($i = 0; $i <= $loop; $i++) {
@@ -112,6 +109,12 @@ for($i = 0; $i <= $loop; $i++) {
         db_error_handler($con, $sql);
     }
     elseif($rst->rowcount()) {
+        if($i == 0) {
+            $relationship_link_rows .= "<tr>
+                <td class=widget_label>" . _($opposite_name) . "</td>
+                <td align=right class=widget_label>" . _("Other ". $display_name) . "</td>
+            </tr>\n";
+        }
         $found += $rst->rowcount();
         while(!$rst->EOF) {
             $current_id = $rst->fields[$what_table_singular[$opposite_direction] . '_id'];
@@ -391,6 +394,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.13  2004/07/27 20:56:42  neildogg
+ * - Removed categories if no records found
+ *
  * Revision 1.12  2004/07/25 22:47:31  johnfawcett
  * - updated gettext strings
  *
