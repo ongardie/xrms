@@ -233,7 +233,7 @@ function find_object_by_base($acl=false, $role=false) {
     $path=$_SERVER['PHP_SELF'];
     
     $dir = dirname($path);
-    $dir_array=explode(DIRECTORY_SEPARATOR,$dir);
+    $dir_array=explode('/',$dir);
     $last_dir=array_pop($dir_array);
     //last directory is also table name
     
