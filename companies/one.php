@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.57 2004/07/20 14:02:39 cpsource Exp $
+ * $Id: one.php,v 1.58 2004/07/21 18:52:09 introspectshun Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -588,7 +588,7 @@ function openNewsWindow() {
                 <td class=widget_header colspan=6><?php echo $num_contacts; ?> <?php echo _("Contacts"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name<"); ?>/td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
                 <td class=widget_label><?php echo _("Summary"); ?></td>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Description"); ?></td>
@@ -713,6 +713,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.58  2004/07/21 18:52:09  introspectshun
+ * - Fixed broken </td>
+ *
  * Revision 1.57  2004/07/20 14:02:39  cpsource
  * - Beagle bites sqirrel - got rid of getGlobalVars and
  *     upgraded to arr_vars sub-system.
