@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.45 2004/08/05 15:25:34 braverock Exp $
+ * $Id: one.php,v 1.46 2004/09/17 20:04:46 neildogg Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -104,6 +104,16 @@ if ( $address_id ) {
 } else {
   $address_to_display = '';
 }
+
+$sql_activity_types = "
+SELECT
+  opportunity_status_pretty_name, opportunity_status_id
+FROM opportunity_statuses
+WHERE opportunity_status_record_status = 'a'
+ORDER by sort_order
+";
+$rst = $con->execute($sql_activity_types);
+$opportunity_status_rows = $rst->GetMenu2('opportunity_status_id', null, true);
 
 // most recent activities
 $sql_activities = "
@@ -506,6 +516,16 @@ function markComplete() {
                     <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
                 </td>
             </tr>
+            <tr>
+                <td class=widget_content_form_element>
+                  <?php echo $opportunity_status_rows; ?>
+                </td>
+                <td class=widget_content>
+                  <?php echo _("OR"); ?>
+                </td>
+                <td colspan=4 class=widget_content>
+                </td>
+            </tr>
             <?php  echo $activity_rows; ?>
         </table>
         </form>
@@ -567,6 +587,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.46  2004/09/17 20:04:46  neildogg
+ * - Added optional auto creation of opportunity
+ *  - from contact screen along with auto
+ *  - launching activities on opportunity status
+ *
  * Revision 1.45  2004/08/05 15:25:34  braverock
  * - fixed mailto link for activity creation
  *

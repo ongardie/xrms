@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.27 2004/08/05 15:12:22 braverock Exp $
+ * $Id: new-2.php,v 1.28 2004/09/17 20:04:29 neildogg Exp $
  */
 
 //where do we include from
@@ -44,6 +44,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'user_id'          => array ( 'user_id' , arr_vars_REQUEST_SESSION ),
                    'email'            => array ( 'email' , arr_vars_REQUEST_SESSION ),
                    'followup'         => array ( 'followup' , arr_vars_REQUEST_SESSION ),
+                   'opportunity_status_id'  => array ( 'opportunity_status_id' , arr_vars_REQUEST_SESSION ),
                    );
 
 // get all passed in variables
@@ -147,26 +148,54 @@ if ($associate_activities = true ) {
 } // end associate code
 
 //save to database
+
 $rec['user_id']          = (strlen($user_id) > 0) ? $user_id : $session_user_id;
-$rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
-$rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
-$rec['on_what_status']   = ($on_what_status > 0) ? $on_what_status : 0;
-$rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : "[none]";
-$rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
-$rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
-$rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
 $rec['company_id']       = ($company_id > 0) ? $company_id : 0;
 $rec['contact_id']       = ($contact_id > 0) ? $contact_id : 0;
 $rec['entered_at']       = time();
-$rec['scheduled_at']     = strtotime($scheduled_at);
+$rec['entered_by']       = $session_user_id;
 $rec['ends_at']          = strtotime($ends_at);
+$rec['opportunity_status_id'] = $opportunity_status_id;
 
-$tbl = 'activities';
-$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con->execute($ins);
+if(empty($opportunity_status_id)) {
+    $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
+    $rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
+    $rec['on_what_status']   = ($on_what_status > 0) ? $on_what_status : 0;
+    $rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : "[none]";
+    $rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
+    $rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
+    $rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
+    $rec['scheduled_at']     = strtotime($scheduled_at);
+}
+else {
+    $rec['opportunity_status']  = "o";
+    $rec['opportunity_title'] = (strlen($activity_title) > 0) ? $activity_title : "[none]";
+    $rec['last_modified_at'] = time();
+    $rec['last_modified_by'] = $session_user_id;
+}
 
-$activity_id = $con->insert_id();
-add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
+if(empty($opportunity_status_id)) {
+    $tbl = 'activities';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $activity_id = $con->insert_id();
+    add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
+}
+else {
+    $tbl = 'opportunities';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $opportunity_id = $con->insert_id();
+    add_audit_item($con, $session_user_id, 'created', 'opportunities', $opportunity_id, 1);
+    
+    $on_what_table_template = "opportunity_statuses";
+    $on_what_id_template = $opportunity_status_id;
+    $on_what_table = "opportunities";
+    $on_what_id = $opportunity_id;
+    require $xrms_file_root . "/activities/workflow-activities.php";
+}
 
 //if this is a mailto link, try to open the user's default mail application
 if ($email) {
@@ -181,12 +210,19 @@ $con->close();
 //now send them back where they came from
 if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
     header("Location: " . $http_site_root . $return_url);
+} elseif(!empty($opportunity_status_id)) {
+    header("Location: " . $http_site_root . "/opportunitis/one.php?return_url=" . $return_url . "&opportunity_id=" . $opportunity_id);
 } else {  //If Long activities are the default, send them to edit the activity
     header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
 }
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.28  2004/09/17 20:04:29  neildogg
+ *- Added optional auto creation of opportunity
+ * - from contact screen along with auto
+ * - launching activities on opportunity status
+ *
  *Revision 1.27  2004/08/05 15:12:22  braverock
  *- remove obsolete comment
  *
