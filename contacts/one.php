@@ -162,10 +162,15 @@ if ($rst) {
 
 // associated with
 
-$categories_sql = "select category_pretty_name
-from categories
-where category_record_status = 'a'
-and category_id in (select category_id from entity_category_map where on_what_table = 'contacts' and on_what_id = $contact_id)
+$categories_sql = "select category_pretty_name 
+from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
+where ecm.on_what_table = 'contacts'
+and ecm.on_what_id = $contact_id
+and ecm.category_id = c.category_id
+and cs.category_scope_id = ccsm.category_scope_id
+and c.category_id = ccsm.category_id
+and cs.on_what_table = 'contacts'
+and category_record_status = 'a'
 order by category_pretty_name";
 
 $rst = $con->execute($categories_sql);
