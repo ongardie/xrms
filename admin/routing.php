@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.2 2004/06/14 18:13:51 introspectshun Exp $
+ * $Id: routing.php,v 1.3 2004/07/16 12:10:04 cpsource Exp $
  */
 
 //where do we include from
@@ -39,10 +39,17 @@ $sql = "select r.role_short_name as role
 //execute
 $rst = $con->execute($sql);
 
+// get our role
 $role = $rst->fields['role'];
 
-//close the connection
+// close the result set
+$rst->close();
+
+// close the database connection
 $con->close();
+
+// add role to session
+$_SESSSION['role'] = $role;
 
 //if this is a mailto link, try to open the user's default mail application
 if ($role == 'Admin') {
@@ -55,6 +62,15 @@ if ($role == 'Admin') {
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.3  2004/07/16 12:10:04  cpsource
+ *- Add $role from routing to SESSION so that index.php
+ *  can check we are Admin or Developer before we
+ *  allow users to run admin.
+ *
+ *  Without this check, someone who's not logged in as anything
+ *  can point their browser at xrms/admin/index.php and run
+ *  the script.
+ *
  *Revision 1.2  2004/06/14 18:13:51  introspectshun
  *- Add adodb-params.php include for multi-db compatibility.
  *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.

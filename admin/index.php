@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.16 2004/07/14 16:24:22 maulani Exp $
+ * $Id: index.php,v 1.17 2004/07/16 12:10:03 cpsource Exp $
  */
 
 //include required stuff
@@ -15,16 +15,30 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-//connect to the database
+// get display message
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+
+// get and check role (Admin, Developer) OK, else we should fail
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
+if ( !(strcmp($role,'Admin') || strcmp($role,'Developer')) ) {
+   // not OK - bring them to logout
+   header("Location: " . $http_site_root . "/logout.php");
+}
+
+// open a connection to the database
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-//get the user info
-$sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql2);
-$user_menu = $rst->getmenu2('user_id', '', false);
-$rst->close();
+// stub out
+if ( 0 ) {
+  // get the user info
+  $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
+  $rst = $con->execute($sql2);
+  $user_menu = $rst->getmenu2('user_id', '', false);
+  $rst->close();
+}
 
+// close the connection to the database
 $con->close();
 
 $page_title = 'Administration';
@@ -218,6 +232,15 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.17  2004/07/16 12:10:03  cpsource
+ * - Add $role from routing to SESSION so that index.php
+ *   can check we are Admin or Developer before we
+ *   allow users to run admin.
+ *
+ *   Without this check, someone who's not logged in as anything
+ *   can point their browser at xrms/admin/index.php and run
+ *   the script.
+ *
  * Revision 1.16  2004/07/14 16:24:22  maulani
  * - Add system parameters modification to administrative functions
  *
