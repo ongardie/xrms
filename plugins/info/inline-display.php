@@ -2,17 +2,31 @@
 /**
  * Sidebar box for info
  *
- * $Id: inline-display.php,v 1.1 2005/03/21 15:11:01 gpowers Exp $
+ * $Id: inline-display.php,v 1.2 2005/03/24 17:42:07 gpowers Exp $
  */
 
-global $contact_id;
+global $company_id, $contact_id;
 
+    if (!$contact_id) {
+        $contact_id = 0;
+    }
+    
+    if (!$company_id) {
+    	    $sql = "SELECT company_id
+            FROM contacts
+            WHERE contact_id = '" . $contact_id . "'
+            LIMIT 1";
+    $rst = $con->execute($sql);
+    $company_id = $rst->fields['company_id'];
+    }
+    
     // Find the elements to display in sidebar under name
     // (there may be none)
-    $sql = "SELECT info_type_id ";
-    $sql .= "FROM info_display_map ";
-    $sql .= "WHERE display_on = '" . $display_on . "' ";
-    $sql .= "LIMIT 1";
+    $sql = "SELECT info_type_id
+            FROM info_display_map
+            WHERE display_on = '" . $display_on . "'
+        	AND record_status = 'a'
+            LIMIT 1";
     $rst = $con->execute($sql);
 
     if ($rst) {
@@ -42,32 +56,28 @@ global $contact_id;
     }
 
     // Generate list of instances of this info type
-    $sql = "SELECT distinct info.info_id FROM info, info_map ";
+    $sql = "SELECT info.info_id FROM info, info_map ";
     $sql .= "WHERE info.info_id=info_map.info_id ";
-    $sql .= "AND info_map.info_type_id = '" . $info_type_id . "' ";
+    //$sql .= "AND info_map.info_type_id = '" . $info_type_id . "' ";
     //$sql .= "AND info.element_id = $name_element_id ";
     
-    if ($company_id) {
-        $sql .= "AND info_map.company_id = $company_id ";
-    } else {
-        $company_id = 0;
-    }
+    //if ($company_id) {
+        $sql .= "AND info_map.company_id = '" . $company_id ."' ";
+    //}
 
     if ($division_id) {
         $sql .= "AND info_map.division_id = '" . $division_id . "' ";
     }
 
-    if ($contact_id) {
+    //if ($contact_id) {
         $sql .= "AND info_map.contact_id = '" . $contact_id . "' ";
-    } else {
-        $contact_id = 0;
-    }
+    //}
     
     if  (!$division_id) {
         $sql .= "AND info_map.division_id = '' ";
     }
 
-    $sql .= "AND info.info_record_status='a'";
+    $sql .= "AND info.info_record_status='a' LIMIT 1";
     $rst = $con->execute($sql);
 
     if (!$rst) {

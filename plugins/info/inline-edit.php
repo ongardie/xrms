@@ -2,13 +2,13 @@
 /**
  * Edit item details
  *
- * $Id: inline-edit.php,v 1.1 2005/03/21 15:11:01 gpowers Exp $
+ * $Id: inline-edit.php,v 1.2 2005/03/24 17:42:08 gpowers Exp $
  */
 
 # Always retrieve, and pass on, company_id, contact_id, division_id, and info_idd
 
 global $company_id, $contact_id;
-
+// $con->debug = 1;
   if (!$contact_id) {
         $contact_id = 0;
     }
@@ -21,10 +21,11 @@ $new_info = $_GET['new_info'];
 
     // Find the elements to display in sidebar under name
     // (there may be none)
-    $sql = "SELECT info_type_id ";
-    $sql .= "FROM info_display_map ";
-    $sql .= "WHERE display_on = '" . $display_on . "' ";
-    $sql .= "LIMIT 1";
+    $sql = "SELECT info_type_id
+            FROM info_display_map
+            WHERE display_on = '" . $display_on . "' 
+    	    AND record_status = 'a'
+            LIMIT 1";
     $rst = $con->execute($sql);
 
     if ($rst) {
@@ -112,8 +113,12 @@ $all_elements = $con->execute($sql);
 # If this is a new info, every element will be added
 # with a default value later
 $this_info = array();
-  $sql = "SELECT info.info_id FROM info_map, info WHERE company_id = '" . $company_id
-    . "' AND info.info_id = info_map.info_id AND info_map.contact_id = '" . $contact_id . "' ";
+  $sql = "SELECT info.info_id
+          FROM info_map, info
+          WHERE company_id = '" . $company_id . "'
+          AND info.info_id = info_map.info_id
+          AND info_map.contact_id = '" . $contact_id . "'
+          AND info.info_record_status ='a'";
 
   $rst = $con->execute($sql);
 
@@ -122,7 +127,7 @@ $this_info = array();
 		$info_id = $rst->fields['info_id'];
 
 if (!$new_info) {
-  $sql = "SELECT value, element_id FROM info WHERE info_id='$info_id'";
+  $sql = "SELECT value, element_id FROM info WHERE info_id='$info_id' AND info_record_status ='a'";
   $rst = $con->execute($sql);
 
   # Build an array indexed by element_id
@@ -187,19 +192,15 @@ $sidebar_string .= "
     			<input type=hidden name=info_type_id value=" . $info_type_id . ">
     			<input type=hidden name=return_url value=" . $return_url . ">
 ";
-
-
-//Show Admininstrators the "Add Custom Fields" Button:
-//if (check_user_role(false, $session_user_id, 'Administrator')) {
-            $sidebar_string .= "<tr><td></td><td><input class=button type=button
-              value=\"" . _("Add/Edit Custom Fields") . "\" onclick=\"javascript:
-              location.href='../plugins/info/edit-definitions.php?info_id=" . $info_id . "&info_type_id=" . $info_type_id . "&contact_id=" . $contact_id . "&company_id=" . $company_id . "&division_id=" . $division_id . "&return_url=" . $return_url . "';\"></td></tr>";
-//}
             
 return $sidebar_string;
 
 /**
  * $Log: inline-edit.php,v $
+ * Revision 1.2  2005/03/24 17:42:08  gpowers
+ * - moved admin button to admin screen
+ * - fixed bug when removing and adding info types
+ *
  * Revision 1.1  2005/03/21 15:11:01  gpowers
  * - inline display/edit of info items
  *

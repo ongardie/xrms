@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.14 2005/03/18 20:54:37 gpowers Exp $
+ * $Id: setup.php,v 1.15 2005/03/24 17:42:08 gpowers Exp $
  */
 
 
@@ -68,8 +68,31 @@ function display_on_menu () {
 }
 
 function info_setup() {
-    global $http_site_root;
-    echo "<tr><td class=widget_content>\n<a href='$http_site_root/plugins/info/admin/some.php'>Manage Info Types</a>\n</td>\n</tr>\n";
+    global $http_site_root, $xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname;
+    $con = &adonewconnection($xrms_db_dbtype);
+	$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    // $con->debug = 1;
+    
+	echo "<tr><td class=widget_content>\n<a href='$http_site_root/plugins/info/admin/some.php'>Manage Info Types</a>\n</td>\n</tr>\n";
+    
+        // Find the elements to display in sidebar under name
+    // (there may be none)
+    $sql = "SELECT t.info_type_id, t.info_type_name 
+            FROM info_display_map m
+            LEFT JOIN info_types t ON m.info_type_id = t.info_type_id
+            WHERE display_on in ('company_accounting','contact_accounting')
+            AND t.info_type_record_status = 'a'";
+    $rst = $con->execute($sql);
+
+    if ($rst) {
+        if (!$rst->EOF) {
+			while (!$rst->EOF) {
+        		$info_type_id = $rst->fields['info_type_id'];
+    			echo "<tr><td><a href=\"../plugins/info/edit-definitions.php?info_type_id=" . $rst->fields['info_type_id'] . "\">" . $rst->fields['info_type_name'] . "</td></tr>";
+			$rst->movenext();
+ 	       }
+    	}
+	}
 }
 
 function info_install($con) {
