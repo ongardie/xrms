@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.28 2004/07/14 14:30:31 cpsource Exp $
+ * $Id: home.php,v 1.29 2004/07/14 14:41:00 cpsource Exp $
  */
 
 // include the common files
@@ -58,7 +58,7 @@ require_once("../notes/sidebar.php");
 $sql_activities = "
 SELECT
   a.activity_id, a.activity_title, a.scheduled_at, a.ends_at, a.on_what_table, a.on_what_id,
-  a.entered_at, a.activity_status, at.activity_type_pretty_name, c.company_id,
+  a.entered_at, a.activity_status, a.activity_description, at.activity_type_pretty_name, c.company_id,
   c.company_name, cont.contact_id, cont.first_names as contact_first_names,
   cont.last_name as contact_last_name,
 CASE
@@ -74,6 +74,8 @@ WHERE a.user_id = $session_user_id
   AND a.activity_record_status = 'a'
 ORDER BY is_overdue DESC, a.scheduled_at, a.entered_at
 ";
+
+$activity_rows = '';
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_home_page);
 
@@ -150,6 +152,8 @@ $sql_files = "select * from files f, contacts cont where file_size = 0 and f.ent
 $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
 
 $classname = 'non_uploaded_file';
+
+$files_rows = '';
 
 if ($rst->rowcount()>0) {
     while (!$rst->EOF) {
@@ -482,6 +486,11 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.29  2004/07/14 14:41:00  cpsource
+ * - Defined $files_rows so it wouldn't be used undefined.
+ *   selected a.activity_description so it would be pulled from db
+ *   Defined $activity_rows so it wouldn't be used undefined.
+ *
  * Revision 1.28  2004/07/14 14:30:31  cpsource
  * - Make sure $nu_file_rows is always defined as something
  *
