@@ -2,7 +2,7 @@
 /**
 * Manage Case Statuses
 *
-* $Id: some.php,v 1.8 2004/12/31 17:24:30 braverock Exp $
+* $Id: some.php,v 1.9 2004/12/31 17:52:56 braverock Exp $
 *
 * @todo manage case statuses by type
 *       will require working on creating the rows by type,
@@ -40,7 +40,7 @@ if ($rst) {
 
       //add descriptions
       $table_rows .= '<td class=widget_content>'
-                  . htmlspecialchars($rst->fields['opportunity_status_long_desc'])
+                  . htmlspecialchars($rst->fields['case_status_long_desc'])
                   . '</td>';
                   
       //sets up ordering links in the table
@@ -94,26 +94,55 @@ start_page($page_title);
 	<form action=new-2.php method=post>
 	<table class=widget cellspacing=1>
 		<tr>
-			<td class=widget_header colspan=2><?php echo _("Add New Case Status"); ?></td>
+			<td class=widget_header colspan=2>
+            <?php echo _("Add New Case Status"); ?>
+         </td>
 		</tr>
 		<tr>
-			<td class=widget_label_right><?php echo _("Short Name"); ?> </td>
-			<td class=widget_content_form_element><input type=text name=case_status_short_name size=10></td>
+			<td class=widget_label_right>
+            <?php echo _("Short Name"); ?>
+         </td>
+			<td class=widget_content_form_element>
+            <input type=text name=case_status_short_name size=10>
+         </td>
 		</tr>
 		<tr>
-			<td class=widget_label_right><?php echo _("Full Name"); ?></td>
-			<td class=widget_content_form_element><input type=text name=case_status_pretty_name size=20></td>
+			<td class=widget_label_right>
+            <?php echo _("Full Name"); ?>
+         </td>
+			<td class=widget_content_form_element>
+            <input type=text name=case_status_pretty_name size=20>
+         </td>
 		</tr>
 		<tr>
-			<td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
-			<td class=widget_content_form_element><input type=text name=case_status_pretty_plural size=20></td>
+			<td class=widget_label_right>
+            <?php echo _("Full Plural Name"); ?>
+         </td>
+			<td class=widget_content_form_element>
+            <input type=text name=case_status_pretty_plural size=20>
+         </td>
 		</tr>
 		<tr>
-			<td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-			<td class=widget_content_form_element><input type=text name=case_status_display_html size=30></td>
+			<td class=widget_label_right>
+            <?php echo _("Display HTML"); ?>
+         </td>
+			<td class=widget_content_form_element>
+            <input type=text name=case_status_display_html size=30>
+         </td>
 		</tr>
+      <tr>
+         <td class=widget_label_right>
+            <?php echo _("Description"); ?>
+         </td>
+         <td class=widget_content_form_element>
+            <input type=text size=30 name=case_status_long_desc>
+         </td>
+      </tr>
+      
 		<tr>
-			<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
+			<td class=widget_content_form_element colspan=2>
+            <input class=button type=submit value="<?php echo _("Add"); ?>">
+         </td>
 		</tr>
 	</table>
 	</form>
@@ -127,6 +156,9 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.9  2004/12/31 17:52:56  braverock
+* - add description for consistency
+*
 * Revision 1.8  2004/12/31 17:24:30  braverock
 * - cleaned up code formatting
 * - added description column to match opportunity statuses

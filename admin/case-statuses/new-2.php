@@ -13,6 +13,7 @@ $case_status_short_name = $_POST['case_status_short_name'];
 $case_status_pretty_name = $_POST['case_status_pretty_name'];
 $case_status_pretty_plural = $_POST['case_status_pretty_plural'];
 $case_status_display_html = $_POST['case_status_display_html'];
+$case_status_long_desc = $_POST['case_status_long_desc'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -29,6 +30,7 @@ $rec['case_status_short_name'] = $case_status_short_name;
 $rec['case_status_pretty_name'] = $case_status_pretty_name;
 $rec['case_status_pretty_plural'] = $case_status_pretty_plural;
 $rec['case_status_display_html'] = $case_status_display_html;
+$rec['case_status_long_desc'] = $case_status_long_desc;
 $rec['sort_order'] = $sort_order;
 
 $tbl = "case_statuses";

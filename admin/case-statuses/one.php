@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.8 2004/07/25 17:52:37 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2004/12/31 17:52:21 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -29,9 +29,12 @@ if ($rst) {
         $case_status_short_name = $rst->fields['case_status_short_name'];
         $case_status_pretty_name = $rst->fields['case_status_pretty_name'];
         $case_status_pretty_plural = $rst->fields['case_status_pretty_plural'];
+        $case_status_long_desc = $rst->fields['case_status_long_desc'];
         $case_status_display_html = $rst->fields['case_status_display_html'];
 
         $rst->close();
+} else {
+   db_error_handler ($con,$sql);
 }
 
 
@@ -119,19 +122,23 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Short Name"); ?></td>
-                <td class=widget_content_form_element><input type=text size=10 name=case_status_short_name value="<?php  echo $case_status_short_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=10 name=case_status_short_name value="<?php echo $case_status_short_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Full Name"); ?></td>
-                <td class=widget_content_form_element><input type=text size=20 name=case_status_pretty_name value="<?php  echo $case_status_pretty_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=20 name=case_status_pretty_name value="<?php echo $case_status_pretty_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Full Plural"); ?></td>
-                <td class=widget_content_form_element><input type=text size=20 name=case_status_pretty_plural value="<?php  echo $case_status_pretty_plural; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=20 name=case_status_pretty_plural value="<?php echo $case_status_pretty_plural; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-                <td class=widget_content_form_element><input type=text size=60 name=case_status_display_html value="<?php  echo $case_status_display_html; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=60 name=case_status_display_html value="<?php echo $case_status_display_html; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Long Description"); ?></td>
+                <td class=widget_content_form_element><input type=text size=80 name=case_status_long_desc value="<?php echo $case_status_long_desc; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
@@ -208,6 +215,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/12/31 17:52:21  braverock
+ * - add description for consistency
+ *
  * Revision 1.8  2004/07/25 17:52:37  johnfawcett
  * - corrected bug: ambigous column name (sort order) in select $sql_activity_templates
  * - corrected bug: no confirmation asked for on delete
