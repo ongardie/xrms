@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.3 2005/02/14 16:39:31 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.4 2005/03/03 17:35:03 daturaarutad Exp $
 */
 
 
@@ -466,7 +466,7 @@ class ADOdb_QuickForm_Model {
 	
     	if (!$rst) { db_error_handler($dbh,$sql); exit; }
 	
-    	$sql = $dbh->GetUpdateSQL($rst, $this->Values, true, false, true);
+    	$sql = $dbh->GetUpdateSQL($rst, $this->Values, true, false, ADODB_FORCE_NULL);
 	
     	if($sql) {
       	$rst=$dbh->execute($sql);
@@ -487,8 +487,8 @@ class ADOdb_QuickForm_Model {
 		// only quote enums on Insert
 		$quoted_values = $this->QuoteValues();
 	
-    	$sql = $dbh->GetInsertSQL($tablename, $quoted_values, false);
-	
+    	$sql = $dbh->GetInsertSQL($tablename, $quoted_values, false, ADODB_FORCE_IGNORE);
+
     	if($sql) {
       		$rst=$dbh->execute($sql);
       		if (!$rst) { db_error_handler($dbh,$sql); exit; }
