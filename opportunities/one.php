@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.18 2004/06/14 17:41:36 introspectshun Exp $
+ * $Id: one.php,v 1.19 2004/07/14 22:24:25 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,12 +24,17 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 
-$sql = "select o.*, c.company_id, c.company_name, c.company_code,
+$sql = "select
+o.*,
+c.company_id, c.company_name, c.company_code,
 cont.first_names, cont.last_name, cont.work_phone, cont.email,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
 u3.username as opportunity_owner_username, u4.username as account_owner_username,
 as1.account_status_display_html, r.rating_display_html, crm_status_display_html, os.opportunity_status_display_html, cam.campaign_title
-from companies c, contacts cont, users u1, users u2, users u3, users u4, account_statuses as1, ratings r, crm_statuses crm, opportunity_statuses os, opportunities o left join campaigns cam on o.campaign_id = cam.campaign_id
+from
+companies c, contacts cont, users u1, users u2, users u3, users u4,
+account_statuses as1, ratings r, crm_statuses crm, opportunity_statuses os,
+opportunities o left join campaigns cam on o.campaign_id = cam.campaign_id
 where o.company_id = c.company_id
 and o.contact_id = cont.contact_id
 and o.entered_by = u1.user_id
@@ -72,6 +77,8 @@ if ($rst) {
     $entered_by = $rst->fields['entered_by_username'];
     $last_modified_by = $rst->fields['last_modified_by_username'];
     $rst->close();
+} else {
+    db_error_handler ($con, $sql);
 }
 
 // most recent activities
@@ -127,6 +134,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler ($con, $sql_activities);
 }
 
 $categories_sql = "select category_pretty_name
@@ -149,6 +158,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler ($con, $categories_sql);
 }
 
 $categories = implode(', ', $categories);
@@ -184,14 +195,22 @@ require_once("../notes/sidebar.php");
 // get user name menu
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
+if ($rst) {
 $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
 $rst->close();
+} else {
+    db_error_handler ($con, $sql);
+}
 
 //get activity type menu
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
 $rst = $con->execute($sql);
-$activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
-$rst->close();
+if ($rst) {
+    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+    $rst->close();
+} else {
+    db_error_handler ($con, $sql);
+}
 
 // get contact names
 $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . ", contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a' ORDER BY last_name";
@@ -199,6 +218,8 @@ $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
     $rst->close();
+} else {
+    db_error_handler ($con, $sql);
 }
 
 
@@ -413,6 +434,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.19  2004/07/14 22:24:25  braverock
+ * - cleaned up some of the SQL syntax
+ * - added db_error_handler and rst checks around all queries
+ *
  * Revision 1.18  2004/06/14 17:41:36  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
