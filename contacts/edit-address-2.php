@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.6 2004/07/08 17:33:58 gpowers Exp $
+ * $Id: edit-address-2.php,v 1.7 2004/07/19 21:11:39 cpsource Exp $
  */
 
 
@@ -16,20 +16,28 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$address_id = $_POST['address_id'];
-$company_id = $_POST['company_id'];
-$contact_id = $_POST['contact_id'];
-$country_id = $_POST['country_id'];
-$address_name = $_POST['address_name'];
-$address_body = $_POST['address_body'];
-$line1 = $_POST['line1'];
-$line2 = $_POST['line2'];
-$city = $_POST['city'];
-$province = $_POST['province'];
-$postal_code = $_POST['postal_code'];
-$use_pretty_address = $_POST['use_pretty_address'];
-$new = $_POST['new'];
-$alt_address = $_POST['alt_address'];
+// declare passed in variables
+$arr_vars = array ( // local var name             // session variable name, flag
+
+		   'address_id' => array ( 'address_id' , arr_vars_SESSION ),
+		   'company_id' => array ( 'company_id' , arr_vars_SESSION ),
+		   'contact_id' => array ( 'contact_id' , arr_vars_SESSION ),
+		   'country_id' => array ( 'country_id' , arr_vars_SESSION ),
+		   'address_name' => array ( 'address_name' , arr_vars_SESSION ),
+		   'address_body' => array ( 'address_body' , arr_vars_SESSION ),
+		   'line1' => array ( 'line1' , arr_vars_SESSION ),
+		   'line2' => array ( 'line2' , arr_vars_SESSION ),
+		   'city' => array ( 'city' , arr_vars_SESSION ),
+		   'province' => array ( 'province' , arr_vars_SESSION ),
+		   'postal_code' => array ( 'postal_code' , arr_vars_SESSION ),
+		   'use_pretty_address' => array ( 'use_pretty_address' , arr_vars_SESSION ),
+		   'new' => array ( 'new' , arr_vars_SESSION ),
+		   'alt_address' => array ( 'alt_address' , arr_vars_SESSION ),
+
+		   );
+
+// get all passed in variables
+arr_vars_get_all ( $arr_vars , true );
 
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
@@ -110,6 +118,9 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.7  2004/07/19 21:11:39  cpsource
+ * - Use arr_vars for getting POST'ed data.
+ *
  * Revision 1.6  2004/07/08 17:33:58  gpowers
  * - corrected quoting on ? "t" : "f";
  *
@@ -125,7 +136,7 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.6 2004/07/08 17:33:58 gpowers Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.7 2004/07/19 21:11:39 cpsource Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
