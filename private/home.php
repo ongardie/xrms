@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.16 2004/05/27 20:45:36 gpowers Exp $
+ * $Id: home.php,v 1.17 2004/06/12 07:01:10 introspectshun Exp $
  */
 
 // include the common files
@@ -16,6 +16,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 //set target and see if we are logged in
 $this = $_SERVER['REQUEST_URI'];
@@ -50,28 +51,25 @@ require_once("../notes/sidebar.php");
 //uncomment the debug line to see what's going on with the query
 // $con->debug = 1;
 
-$sql_activities = "select activity_id,
-activity_title,
-scheduled_at,
-ends_at,
-a.on_what_table,
-a.on_what_id,
-a.entered_at,
-activity_status,
-at.activity_type_pretty_name,
-c.company_id,
-c.company_name,
-cont.contact_id,
-cont.first_names as contact_first_names,
-cont.last_name as contact_last_name,
-if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
-from activity_types at, companies c, activities a left join contacts cont on a.contact_id = cont.contact_id
-where a.user_id = $session_user_id
-and a.activity_type_id = at.activity_type_id
-and a.company_id = c.company_id
-and a.activity_status = 'o'
-and a.activity_record_status = 'a'
-order by is_overdue desc, a.scheduled_at, a.entered_at";
+$sql_activities = "
+SELECT
+  a.activity_id, a.activity_title, a.scheduled_at, a.ends_at, a.on_what_table, a.on_what_id,
+  a.entered_at, a.activity_status, at.activity_type_pretty_name, c.company_id,
+  c.company_name, cont.contact_id, cont.first_names as contact_first_names,
+  cont.last_name as contact_last_name,
+CASE
+  WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
+  ELSE 0
+END AS is_overdue
+FROM activity_types at, companies c, activities a
+LEFT JOIN contacts cont on a.contact_id = cont.contact_id
+WHERE a.user_id = $session_user_id
+  AND a.activity_type_id = at.activity_type_id
+  AND a.company_id = c.company_id
+  AND a.activity_status = 'o'
+  AND a.activity_record_status = 'a'
+ORDER BY is_overdue DESC, a.scheduled_at, a.entered_at
+";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_home_page);
 
@@ -255,38 +253,43 @@ if ($rst) {
         }
         switch ($file_on_what) {
             case "contacts" : {
-                $fsql .= "
-                concat('<a href=$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '>', cont.first_names, ' ', cont.last_name, '</a>') as 'Name',
-                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS VARCHAR(10))", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
+                       . " AS 'Name',"
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . " AS 'Company',";
                 break;
             }
             case "contacts_of_companies" : {
-                $fsql .= "
-                concat('<a href=$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '>', cont.last_name, ' ', cont.first_names, '</a>') as 'Name',
-                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS VARCHAR(10))", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+                      . " AS 'Name',"
+                      . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                      . " AS 'Company',";
                 break;
             }
             case "companies" : {
-                $fsql .= "
-                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Name',
-                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . " AS 'Name',"
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . " AS 'Company',";
                 break;
             }
             case "campaigns" : {
-                $fsql .= "
-                concat('<a href=$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id=', camp.campaign_id, '>', camp.campaign_title, '</a>') as 'Campaign',";
+                $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "CAST(camp.campaign_id AS VARCHAR(10))", "'\">'", "camp.campaign_title", "'</a>'")
+                       . " AS 'Campaign',";
                 break;
             }
             case "opportunities" : {
-                $fsql .= "
-                concat('<a href=$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id=', opportunity_id, '>', opp.opportunity_title, '</a>') as 'Name',
-                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "CAST(opportunity_id AS VARCHAR(10))", "'\">'", "opp.opportunity_title", "'</a>'")
+                       . " AS 'Name',"
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . " AS 'Company',";
                 break;
             }
             case "cases" : {
-                $fsql .= "
-                concat('<a href=$http_site_root/cases/one.php?return_url=/private/home.php&case_id=', case_id, '>', cases.case_title, '</a>') as 'Name',
-                concat('<a href=$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company',";
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "CAST(case_id AS VARCHAR(10))", "'\">'", "cases.case_title", "'</a>'")
+                       . " AS 'Name',"
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . " AS 'Company',";
                 break;
             }
             default : {
@@ -472,6 +475,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.17  2004/06/12 07:01:10  introspectshun
+ * - Now use ADODB Concat function.
+ *
  * Revision 1.16  2004/05/27 20:45:36  gpowers
  * Added "Documentation" Sidebar box with link to User Manual (PDF)
  *
