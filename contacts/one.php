@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.44 2004/08/02 15:56:49 gpowers Exp $
+ * $Id: one.php,v 1.45 2004/08/05 15:25:34 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -345,7 +345,11 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("E-Mail"); ?></td>
-                                    <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&return_url=$http_site_root/contacts/one.php?contact_id=$contact_id'\" >" . htmlspecialchars($email); ?></a></td>
+
+                                    <td class=clear>
+                                    <a href='mailto:<?php echo $email."' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&return_url=$http_site_root/contacts/one.php?contact_id=$contact_id";?>'">
+                                    <?php echo htmlspecialchars($email); ?></a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Work Phone"); ?></td>
@@ -563,6 +567,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.45  2004/08/05 15:25:34  braverock
+ * - fixed mailto link for activity creation
+ *
  * Revision 1.44  2004/08/02 15:56:49  gpowers
  * - removed "Vcard" button
  *   - moved to "Vcard" plugin
