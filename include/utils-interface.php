@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.46 2005/02/10 23:20:49 daturaarutad Exp $
+ * $Id: utils-interface.php,v 1.47 2005/02/14 21:27:13 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -241,12 +241,9 @@ if (!function_exists('check_permission_bool')) {
 }
 
 //hack to fake ACL authentication until acl is completely integrated
-if (!function_exists('get_list')) {
-    function get_list($user, $object) {
-        for ($i=0; $i<2000; $i++) {
-            $ret[]=$i;
-        }
-        return $ret;
+if (!function_exists('acl_get_list')) {
+    function acl_get_list($user, $object) {
+        return true;
     }
 }
 
@@ -544,6 +541,9 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.47  2005/02/14 21:27:13  vanmer
+ * - updated fake acl_get_list to reflect expected behavior of real acl_get_list
+ *
  * Revision 1.46  2005/02/10 23:20:49  daturaarutad
  * added function for including javascript tooltip code
  *
