@@ -4,7 +4,7 @@
  *
  * Save the changes from a user-level self-change
  *
- * $Id: self-2.php,v 1.4 2004/05/13 16:36:46 braverock Exp $
+ * $Id: self-2.php,v 1.5 2004/06/14 22:50:14 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -26,8 +27,17 @@ $gmt_offset = (strlen($gmt_offset) > 0) ? $gmt_offset : 0;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update users set last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ", first_names = " . $con->qstr($first_names, get_magic_quotes_gpc()) . ", email = " . $con->qstr($email, get_magic_quotes_gpc()) . ", gmt_offset = $gmt_offset where user_id = $edit_user_id";
-$con->execute($sql);
+$sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['last_name'] = $last_name;
+$rec['first_names'] = $first_names;
+$rec['email'] = $email;
+$rec['gmt_offset'] = $gmt_offset;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 add_audit_item($con, $session_user_id, 'updated', 'users', $edit_user_id, 1);
 
@@ -37,6 +47,10 @@ header("Location: " . $http_site_root . "/private/home.php");
 
 /**
  *$Log: self-2.php,v $
+ *Revision 1.5  2004/06/14 22:50:14  introspectshun
+ *- Add adodb-params.php include for multi-db compatibility.
+ *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  *Revision 1.4  2004/05/13 16:36:46  braverock
  *- modified to work safely even when register_globals=on
  *  (!?! == dumb administrators ?!?)

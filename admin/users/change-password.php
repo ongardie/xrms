@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.4 2004/05/13 16:36:46 braverock Exp $
+ * $Id: change-password.php,v 1.5 2004/06/14 22:50:14 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,6 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -62,6 +63,10 @@ end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.5  2004/06/14 22:50:14  introspectshun
+ *- Add adodb-params.php include for multi-db compatibility.
+ *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  *Revision 1.4  2004/05/13 16:36:46  braverock
  *- modified to work safely even when register_globals=on
  *  (!?! == dumb administrators ?!?)

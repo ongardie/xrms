@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.6 2004/05/17 17:23:43 braverock Exp $
+ * $Id: one.php,v 1.7 2004/06/14 22:50:14 introspectshun Exp $
  */
 
 //include required files
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -126,6 +127,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/06/14 22:50:14  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.6  2004/05/17 17:23:43  braverock
  * - change $username to not conflict when register_globals is on (?!?)
  *   - fixed SF bug 952670 - credit to jmaguire123 and sirjo for troubleshooting

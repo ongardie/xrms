@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.4 2004/05/13 16:36:46 braverock Exp $
+ * $Id: self.php,v 1.5 2004/06/14 22:50:14 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,6 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -100,6 +101,10 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.5  2004/06/14 22:50:14  introspectshun
+ *- Add adodb-params.php include for multi-db compatibility.
+ *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  *Revision 1.4  2004/05/13 16:36:46  braverock
  *- modified to work safely even when register_globals=on
  *  (!?! == dumb administrators ?!?)

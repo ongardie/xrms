@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.6 2004/05/13 16:36:46 braverock Exp $
+ * $Id: change-password-2.php,v 1.7 2004/06/14 22:50:14 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,6 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -26,9 +27,14 @@ if ($password == $confirm_password) {
     $con = &adonewconnection($xrms_db_dbtype);
     $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-    $sql = "update users set password = " . $con->qstr($password, get_magic_quotes_gpc()) . " where user_id = $edit_user_id";
+    $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
+    $rst = $con->execute($sql);
 
-    $con->execute($sql);
+    $rec = array();
+    $rec['password'] = $password;
+    
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
 
     add_audit_item($con, $session_user_id, 'change password', 'users', $edit_user_id, 1);
 
@@ -41,6 +47,10 @@ if ($password == $confirm_password) {
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.7  2004/06/14 22:50:14  introspectshun
+ *- Add adodb-params.php include for multi-db compatibility.
+ *- Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  *Revision 1.6  2004/05/13 16:36:46  braverock
  *- modified to work safely even when register_globals=on
  *  (!?! == dumb administrators ?!?)
