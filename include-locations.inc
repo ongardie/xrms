@@ -18,8 +18,14 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.10 2004/07/13 13:11:54 cpsource Exp $
+ * $Id: include-locations.inc,v 1.11 2004/07/14 11:47:06 cpsource Exp $
  */
+
+//
+// A security feature that helps prevent malicious users
+// from attempting to execute scripts out of order
+//
+define('IN_XRMS', true);
 
 // include trailing slash in path
 $include_directory = "/full/path/to/xrms/include/";
@@ -34,6 +40,9 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.11  2004/07/14 11:47:06  cpsource
+ * - Add security feature IN_XRMS
+ *
  * Revision 1.10  2004/07/13 13:11:54  cpsource
  * - Add new-line to end-of-file so emacs emerges work
  *
