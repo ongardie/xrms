@@ -18,11 +18,12 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
+$possible_id = $_POST['possible_id'];
 $relationship_name = $_POST['relationship_name'];
 $working_direction = $_POST['working_direction'];
 $on_what_id = $_POST['on_what_id'];
 $return_url = $_POST['return_url'];
-$search_on = $_POST['search_on'];
+$search_on = ($_POST['possible_id']) ? $_POST['possible_id'] : $_POST['search_on'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);

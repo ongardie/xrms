@@ -36,9 +36,29 @@ if($working_direction == "from") {
 else {
     $opposite_direction = "from";
 }
+
+$working_table = $rst->fields[$working_direction . '_what_table'];
 $what_table = $rst->fields[$opposite_direction . '_what_table'];
 $what_table_singular = make_singular($what_table);
 $display_name = ucfirst($what_table_singular);
+
+if($working_table == "companies" and $what_table == "contacts") {
+    $sql = "SELECT 'Enter other contact' AS name,
+            0 AS contact_id
+            UNION
+            (SELECT " .
+            $con->Concat("first_names", "' '", "last_name") . " AS name,
+            contact_id
+            FROM contacts
+            WHERE company_id=" . $on_what_id . "
+            AND contact_record_status='a'
+            ORDER BY last_name, first_names)";
+
+    $rst = $con->execute($sql);
+    
+    $contact_menu = $rst->getmenu2('possible_id', ' ', false);
+
+}
 
 $con->close();
 $page_title = _("Add " . $display_name);
@@ -63,7 +83,14 @@ start_page($page_title, true, $msg);
                 <td class=widget_label><?php echo _("Name or ID"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="search_on"> <?php  echo $required_indicator ?></td>
+                <td class=widget_content_form_element>
+                    <?php
+                        if($working_table == "companies") {
+                            echo $contact_menu;
+                        }
+                    ?>
+                    <input type=text size=18 maxlength=100 name="search_on"> <?php  echo $required_indicator ?>
+                </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input class=button type=submit value="<?php echo _("Search"); ?>"></td>
@@ -87,6 +114,9 @@ end_page();
 
 /**
  * $Log: new-relationship.php,v $
+ * Revision 1.5  2004/07/28 17:59:39  neildogg
+ * - Added drop down box if added a contact to a company
+ *
  * Revision 1.4  2004/07/25 22:48:30  johnfawcett
  * - updated gettext strings
  *
