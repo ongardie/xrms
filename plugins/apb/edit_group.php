@@ -82,23 +82,23 @@ if ($APB_SETTINGS['auth_user_id']) {
             <p>
             <form action="<?= $SCRIPT_NAME ?>?action=edit_group" method="post">
             <input type='hidden' name='back_url' value='<?= $HTTP_REFERER ?>'>
-            <? if ($id) { print "<input type='hidden' name='id' value='$id'>\n"; } ?>
+            <?php if ($id) { print "<input type='hidden' name='id' value='$id'>\n"; } ?>
             <table>
             <tr>
             <td>
                 <table width='100%'>
                     <tr>
                         <td>Parent Group:</td>
-                        <td><? groups_dropdown('form_group_parent_id', $parent_id, '[top level]', $form_group_id) ?></td>
+                        <td><?php groups_dropdown('form_group_parent_id', $parent_id, '[top level]', $form_group_id) ?></td>
                     </tr>
                     <tr>
                         <td>Title:</td>
-                        <td><input size="40" name="form_title" value="<? echo stripslashes($form_title) ?>"></td>
+                        <td><input size="40" name="form_title" value="<?php echo stripslashes($form_title) ?>"></td>
                     </tr>
 <!-- Future Feature(s)
                     <tr>
                         <td>Description:</td>
-                        <td><input size="40" name="form_description" value="<? echo stripslashes($form_description) ?>"></td>
+                        <td><input size="40" name="form_description" value="<?php echo stripslashes($form_description) ?>"></td>
                     </tr>
                     <tr>
                         <td>Private:</td>

@@ -197,7 +197,7 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             <form action="<?= $SCRIPT_NAME ?>?action=insert_bookmark" method="post">
             <input type='hidden' name='back_url' value='<?= $HTTP_REFERER ?>'>
-            <? if ($id) { print "<input type='hidden' name='form_id' value='$id'>\n"; } ?>
+            <?php if ($id) { print "<input type='hidden' name='form_id' value='$id'>\n"; } ?>
             <table>
             <tr>
             <td>
@@ -216,7 +216,7 @@ if ($APB_SETTINGS['auth_user_id']) {
                         <tr>
                             <td><input type="radio" name="form_group_type" value="existing" checked></td>
                             <td>Existing Group:</td>
-                            <td><? groups_dropdown('form_group_id', $form_group_id) ?></td>
+                            <td><?php groups_dropdown('form_group_id', $form_group_id) ?></td>
                         </tr>
                         <tr>
                             <td colspan='3'><hr></td>
@@ -224,12 +224,12 @@ if ($APB_SETTINGS['auth_user_id']) {
                         <tr>
                             <td><input type="radio" name="form_group_type" value="new"></td>
                             <td>New Group:</td>
-                            <td><input name="form_group_title" size="20" value="<? echo $form_group_title ?>"></td>
+                            <td><input name="form_group_title" size="20" value="<?php echo $form_group_title ?>"></td>
                         </tr>
                         <tr>
                             <td>&nbsp;</td>
                             <td>Parent Group:</td>
-                            <td><? groups_dropdown('form_group_parent_id', '0', '[top level]') ?></td>
+                            <td><?php groups_dropdown('form_group_parent_id', '0', '[top level]') ?></td>
                         </tr>
                         </table>
                       </td>
@@ -251,7 +251,7 @@ if ($APB_SETTINGS['auth_user_id']) {
                       <td>
                         <table width="100%" cellpadding="5" cellspacing="0">
                         <tr>
-                            <td align="center">New Group: <input name="form_group_title" size="20" value="<? echo $form_group_title ?>"></td>
+                            <td align="center">New Group: <input name="form_group_title" size="20" value="<?php echo $form_group_title ?>"></td>
                         </tr>
                         </table>
                       </td>
@@ -268,15 +268,15 @@ if ($APB_SETTINGS['auth_user_id']) {
                 <table width='100%'>
                     <tr>
                         <td>Title:</td>
-                        <td><input size="40" name="form_title" value="<? echo stripslashes($form_title) ?>"></td>
+                        <td><input size="40" name="form_title" value="<?php echo stripslashes($form_title) ?>"></td>
                     </tr>
                     <tr>
                         <td>URL:</td>
-                        <td><input size="40" name="form_url" value="<? echo $form_url ?>"></td>
+                        <td><input size="40" name="form_url" value="<?php echo $form_url ?>"></td>
                     </tr>
                     <tr>
                         <td>Description:</td>
-                        <td><input size="40" name="form_description" value="<? echo stripslashes($form_description) ?>"></td>
+                        <td><input size="40" name="form_description" value="<?php echo stripslashes($form_description) ?>"></td>
                     </tr>
                     <tr>
                         <td>Private:</td>
@@ -296,13 +296,13 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             </form>
 
-         <? if ($id) { ?>
-         <form action="<? echo $SCRIPT_NAME ?>?action=delete_bookmark&bookmark_id=<? echo $id ?>" method="post">
+         <?php if ($id) { ?>
+         <form action="<?php echo $SCRIPT_NAME ?>?action=delete_bookmark&bookmark_id=<?php echo $id ?>" method="post">
          <input type='hidden' name='back_url' value='<?= $HTTP_REFERER ?>'>
          <p><input type="submit" value="Delete Bookmark" onClick="return confirm('Are you sure you want to delete this bookmark?')">
          </form>
 
-         <? } ?>
+         <?php } ?>
 
             <?
         } else {

@@ -29,7 +29,7 @@ if ($edit_mode) {  echo "<h2 class='warning'>Edit Mode</h2>"; }
 
 ?>
 
-<? if ($APB_SETTINGS['allow_search_box']) { ?>
+<?php if ($APB_SETTINGS['allow_search_box']) { ?>
 
     <p>
     <form method='get' action='search.php'>
@@ -38,7 +38,7 @@ if ($edit_mode) {  echo "<h2 class='warning'>Edit Mode</h2>"; }
     </form>
     </p>
 
-<? } ?>
+<?php } ?>
 
 <p>
 <table cellpadding="5" align="center" cellspacing="0" border="0">
@@ -46,11 +46,11 @@ if ($edit_mode) {  echo "<h2 class='warning'>Edit Mode</h2>"; }
 
   <!-- HOME -->
   <td align="center">
-    <a href="<? echo $APB_SETTINGS['apb_url'] ?>"><img src="images/tb_home.gif" border="0"><br><font size='1'>Bookmarks Home</font></a>
+    <a href="<?php echo $APB_SETTINGS['apb_url'] ?>"><img src="images/tb_home.gif" border="0"><br><font size='1'>Bookmarks Home</font></a>
   </td>
 
   <!-- EDIT MODE -->
-  <? if ($APB_SETTINGS['auth_user_id'] && $APB_SETTINGS['allow_edit_mode']) { ?>
+  <?php if ($APB_SETTINGS['auth_user_id'] && $APB_SETTINGS['allow_edit_mode']) { ?>
   <td align="center">
     <?
         if ($APB_SETTINGS['edit_mode']) {
@@ -63,35 +63,35 @@ if ($edit_mode) {  echo "<h2 class='warning'>Edit Mode</h2>"; }
 
         } else {
             ?>
-            <a href="<?= $SCRIPT_NAME ?>?edit_mode=1<? if ($QUERY_STRING) { echo "&".$QUERY_STRING; } ?>"><img src="images/tb_edit.gif" border="0"><br><font size='1'>Enter Edit Mode</font></a>
+            <a href="<?= $SCRIPT_NAME ?>?edit_mode=1<?php if ($QUERY_STRING) { echo "&".$QUERY_STRING; } ?>"><img src="images/tb_edit.gif" border="0"><br><font size='1'>Enter Edit Mode</font></a>
             <?
         }
     ?>
   </td>
-  <? } ?>
+  <?php } ?>
 
   <!-- ADD BOOKMARK -->
-  <? if ($APB_SETTINGS['auth_user_id']) { ?>
+  <?php if ($APB_SETTINGS['auth_user_id']) { ?>
   <td align="center">
-    <a href="<? echo $APB_SETTINGS['apb_url'] ?>add_bookmark.php"><img src="images/tb_new.gif" border="0"><br><font size='1'>Add Bookmark</font></font></a>
+    <a href="<?php echo $APB_SETTINGS['apb_url'] ?>add_bookmark.php"><img src="images/tb_new.gif" border="0"><br><font size='1'>Add Bookmark</font></font></a>
   </td>
-  <? } ?>
+  <?php } ?>
 
   <!-- ADD GROUP -->
 <!--
-  <? if ($APB_SETTINGS['auth_user_id']) { ?>
+  <?php if ($APB_SETTINGS['auth_user_id']) { ?>
   <td align="center">
-    <a href="<? echo $APB_SETTINGS['apb_url'] ?>add_group.php"><img src="images/tb_open.gif" border="0"><br><font size='1'>Add Group</font></font></a>
+    <a href="<?php echo $APB_SETTINGS['apb_url'] ?>add_group.php"><img src="images/tb_open.gif" border="0"><br><font size='1'>Add Group</font></font></a>
   </td>
-  <? } ?>
+  <?php } ?>
 -->
 
   <!-- SETUP -->
-  <? if ($APB_SETTINGS['auth_user_id']) { ?>
+  <?php if ($APB_SETTINGS['auth_user_id']) { ?>
   <td align="center">
     <a href="tools.php"><img src="images/tb_preferences.gif" border="0"><br><font size='1'>Tools</font></a>
   </td>
-  <? } ?>
+  <?php } ?>
 
 </tr>
 </table>

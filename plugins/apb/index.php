@@ -47,7 +47,7 @@ if ($number_of_bookmarks == 0) {
       If you don't do this now, you can always do it later in the
       '<a href='tools.php'>Setup</a>' section.
 
-      <? if (!$APB_SETTINGS['auth_user_id']) { echo "<p><font color='red'>By the way, you can't really do anything until you're logged in.</font>"; } ?>
+      <?php if (!$APB_SETTINGS['auth_user_id']) { echo "<p><font color='red'>By the way, you can't really do anything until you're logged in.</font>"; } ?>
 
       </td>
     </tr>
@@ -72,7 +72,7 @@ if ($number_of_bookmarks == 0) {
   <td>&nbsp;&nbsp;&nbsp;</td>
 
   <td valign='top' width="50%">
-    <? top_groups(5,5,14); ?>
+    <?php top_groups(5,5,14); ?>
   </td>
 </tr>
 </table>

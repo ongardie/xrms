@@ -18,7 +18,7 @@ apb_head();
 
 <h2>Setup QuickAdd</h2>
 
-<? if ($APB_SETTINGS['auth_user_id']) { ?>
+<?php if ($APB_SETTINGS['auth_user_id']) { ?>
 
 <p><table cellpadding="0" cellspacing="0" width="70%" align="center" border="0">
 <tr>
@@ -33,7 +33,7 @@ apb_head();
 </tr>
 </table>
 
-<? } else { ?>
+<?php } else { ?>
 
 <p>You must be logged into access this feature of APB.
 

@@ -110,7 +110,7 @@ print "<p><b>$number_of_results</b> result".$s." for \"<b>".htmlentities(stripsl
    <p>
    <form>
    <input type='hidden' name='action' value='search'>
-   <input name='keywords' value="<? echo htmlentities(stripslashes($keywords)) ?>">
+   <input name='keywords' value="<?php echo htmlentities(stripslashes($keywords)) ?>">
    <input type='submit' name='Submit' value='Search'>
    </form>
 <?

@@ -39,7 +39,7 @@ include($APB_SETTINGS['template_path'] . "head_design.php");
 ?>
 
 <center>
-<h1><? echo $html_title ?></h1>
+<h1><?php echo $html_title ?></h1>
 
 <?
 
