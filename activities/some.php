@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.92 2005/02/15 15:17:30 ycreddy Exp $
+ * $Id: some.php,v 1.93 2005/02/15 20:52:00 vanmer Exp $
  */
 
 // handle includes
@@ -342,8 +342,8 @@ if (!isset($user_id)) {
 
 //get menu for users
 $sql2 = "(SELECT " . $con->qstr(_("Current User"),get_magic_quotes_gpc()) . ", '-1')"
-	. " UNION (select username, CAST(user_id AS VARCHAR(255)) from users where user_record_status = 'a')"
-       . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", '-2')";
+	. " UNION (select username, user_id from users where user_record_status = 'a')"
+       . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", '-2')  ORDER BY 1";
 $rst = $con->execute($sql2);
 if (!$rst) {
     db_error_handler($con, $sql2);
@@ -767,6 +767,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.93  2005/02/15 20:52:00  vanmer
+ * - removed broken cast statement from activities user list sql
+ * - added order by statement to activities user list sql
+ *
  * Revision 1.92  2005/02/15 15:17:30  ycreddy
  * Changed the SQL query that fetches users to make it compatible with SQL Server
  *
