@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.6 2004/04/23 17:11:41 gpowers Exp $
+ * $Id: update.php,v 1.7 2004/04/25 23:09:56 braverock Exp $
  */
 
 /**
@@ -76,7 +76,7 @@ $sql = "alter table case_priorities add case_priority_score_adjustment int not n
 $rst = $con->execute($sql);
 // end case_priority_display_html
 
-//make sure that there is a status_open_indicator column in campagins 
+//make sure that there is a status_open_indicator column in campagins
 //should put a test here, but alter table is non-destructive
 //This is used for reports/open-items.php and reports/completed-items.php reports
 //Similiar to opportunity_statuses, 'o' means open, anything else means "completed" for the completed-item report
@@ -109,13 +109,17 @@ $sql = "alter table audit_items add session_id varchar(50) after remote_port";
 $rst = $con->execute($sql);
 // end
 
-//make sure that there is a status_open_indicator column in campagins 
+//make sure that there is a status_open_indicator column in campagins
 //should put a test here, but alter table is non-destructive
 $sql = "alter table campaign_statuses add status_open_indicator char(1) not null default 'o' after campaign_status_id";
 $rst = $con->execute($sql);
 // end case_priority_display_html
 
-
+//make sure that the contacts table has a division_id filed, since folks with a 12Jan install won't have it
+//should put a test here, but alter table is non-destructive
+$sql = "alter table contacts add division_id int not null after company_id";
+$rst = $con->execute($sql);
+//end division_id update
 
 // Fix problem introduced by buggy Mar 19, 2004 install code
 // This will modify the initial data appropriately
@@ -164,6 +168,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.7  2004/04/25 23:09:56  braverock
+ * add division_id alter table command to resolve problems from upgrading from 12Jan
+ *
  * Revision 1.6  2004/04/23 17:11:41  gpowers
  * Removed http_user_agent from audit_items table. It is space consuming and
  * redundant, as most httpd servers can be configured to log this information.
