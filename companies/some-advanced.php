@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.14 2004/08/30 12:52:38 neildogg Exp $
+ * $Id: some-advanced.php,v 1.15 2004/08/30 13:20:17 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -50,37 +50,37 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'sort_column'         => array ( 'sort_column'         , arr_vars_SESSION),
-		   'current_sort_column' => array ( 'current_sort_column' , arr_vars_SESSION),
-		   'sort_order'          => array ( 'sort_order'          , arr_vars_SESSION),
-		   'current_sort_order'  => array ( 'current_sort_order'  , arr_vars_SESSION),
-
-		   'company_name' => array ( 'company_name' , arr_vars_SESSION),
-		   'legal_name' => array ( 'legal_name' , arr_vars_SESSION),
-		   'company_code' => array ( 'company_code' , arr_vars_SESSION),
-		   'crm_status_id' => array ( 'crm_status_id' , arr_vars_SESSION),
-		   'company_source_id' => array ( 'company_source_id' , arr_vars_SESSION),
-		   'industry_id' => array ( 'industry_id' , arr_vars_SESSION),
-		   'user_id' => array ( 'user_id' , arr_vars_SESSION),
-		   'phone' => array ( 'phone' , arr_vars_SESSION),
-		   'phone2' => array ( 'phone2' , arr_vars_SESSION),
-		   'fax' => array ( 'fax' , arr_vars_SESSION),
-		   'url' => array ( 'url' , arr_vars_SESSION),
-		   'employees' => array ( 'employees' , arr_vars_SESSION),
-		   'revenue' => array ( 'revenue' , arr_vars_SESSION),
-		   'custom1' => array ( 'custom1' , arr_vars_SESSION),
-		   'custom2' => array ( 'custom2' , arr_vars_SESSION),
-		   'custom3' => array ( 'custom3' , arr_vars_SESSION),
-		   'custom4' => array ( 'custom4' , arr_vars_SESSION),
-		   'profile' => array ( 'profile' , arr_vars_SESSION),
-		   'address_name' => array ( 'address_name' , arr_vars_SESSION),
-		   'line1' => array ( 'line1' , arr_vars_SESSION),
-		   'line2' => array ( 'line2' , arr_vars_SESSION),
-		   'city' => array ( 'city' , arr_vars_SESSION),
-		   'province' => array ( 'province' , arr_vars_SESSION),
-		   'postal_code' => array ( 'postal_code' , arr_vars_SESSION),
-		   'country_id' => array ( 'country_id' , arr_vars_SESSION),
-		   'address_body' => array ( 'address_body' , arr_vars_SESSION),
+                    'company_name'        => array('companies_company_name',arr_vars_SESSION),
+                    'legal_name'          => array('companies_legal_name',arr_vars_SESSION),
+                    'company_code'        => array('companies_company_code',arr_vars_SESSION),
+                    'crm_status_id'       => array('companies_crm_status_id',arr_vars_SESSION),
+                    'company_source_id'   => array('companies_company_source_id',arr_vars_SESSION),
+                    'industry_id'         => array('companies_industry_id',arr_vars_SESSION),
+                    'user_id'             => array('companies_user_id',arr_vars_SESSION),
+                    'phone' => array ( 'companies_phone' , arr_vars_SESSION),
+                    'phone2' => array ( 'companies_phone2' , arr_vars_SESSION),
+                    'fax' => array ( 'companies_fax' , arr_vars_SESSION),
+                    'url' => array ( 'companies_url' , arr_vars_SESSION),
+                    'employees' => array ( 'companies_employees' , arr_vars_SESSION),
+                    'revenue' => array ( 'companies_revenue' , arr_vars_SESSION),
+                    'custom1' => array ( 'companies_custom1' , arr_vars_SESSION),
+                    'custom2' => array ( 'companies_custom2' , arr_vars_SESSION),
+                    'custom3' => array ( 'companies_custom3' , arr_vars_SESSION),
+             		   'custom4' => array ( 'companies_custom4' , arr_vars_SESSION),
+             		   'profile' => array ( 'companies_profile' , arr_vars_SESSION),
+             		   'address_name' => array ( 'companies_address_name' , arr_vars_SESSION),
+             		   'line1' => array ( 'companies_line1' , arr_vars_SESSION),
+	             	   'line2' => array ( 'companies_line2' , arr_vars_SESSION),
+	             	   'city' => array ( 'companies_city' , arr_vars_SESSION),
+	             	   'province' => array ( 'companies_province' , arr_vars_SESSION),
+	             	   'postal_code' => array ( 'companies_postal_code' , arr_vars_SESSION),
+	             	   'country_id' => array ( 'companies_country_id' , arr_vars_SESSION),
+	             	   'address_body' => array ( 'companies_address_body' , arr_vars_SESSION),
+        
+	             	   'sort_column'         => array ( 'sort_column'         , arr_vars_SESSION),
+	             	   'current_sort_column' => array ( 'current_sort_column' , arr_vars_SESSION),
+	             	   'sort_order'          => array ( 'sort_order'          , arr_vars_SESSION),
+	             	   'current_sort_order'  => array ( 'current_sort_order'  , arr_vars_SESSION),
                    );
 
 // get all passed in variables
@@ -447,6 +447,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.15  2004/08/30 13:20:17  neildogg
+ * - Robustified search
+ *
  * Revision 1.14  2004/08/30 12:52:38  neildogg
  * - Got rid of use_post_vars which overrode
  *  - saved session vars

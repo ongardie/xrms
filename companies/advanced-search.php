@@ -4,7 +4,7 @@
  *
  * This is the advanced screen that allows many more search fields
  *
- * $Id: advanced-search.php,v 1.7 2004/08/12 20:45:59 niclowe Exp $
+ * $Id: advanced-search.php,v 1.8 2004/08/30 13:20:17 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -35,7 +35,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 // a string of the html menu
 //
 
-function check_and_get ( $con, $sql, $nam )
+function check_and_get ( $con, $sql, $nam, $default = false )
 {
   $rst = $con->execute($sql);
 
@@ -44,11 +44,8 @@ function check_and_get ( $con, $sql, $nam )
   }
   if ( !$rst->EOF && $nam ) {
     $GLOBALS[$nam] = $rst->fields[$nam];
-    $tmp = $rst->getmenu2($nam, "", true);
-  } else {
-    $tmp = $rst->getmenu2($nam, "", true);
   }
-	
+  $tmp = $rst->getmenu2($nam, $default, true);	
 
   $rst->close();
 
@@ -57,7 +54,38 @@ function check_and_get ( $con, $sql, $nam )
 
 $session_user_id = session_check();
 
-$company_name = '';
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+                    'company_name'        => array('companies_company_name',arr_vars_SESSION),
+                    'legal_name'          => array('companies_legal_name',arr_vars_SESSION),
+                    'company_code'        => array('companies_company_code',arr_vars_SESSION),
+                    'crm_status_id'       => array('companies_crm_status_id',arr_vars_SESSION),
+                    'company_source_id'   => array('companies_company_source_id',arr_vars_SESSION),
+                    'industry_id'         => array('companies_industry_id',arr_vars_SESSION),
+                    'user_id'             => array('companies_user_id',arr_vars_SESSION),
+                    'phone' => array ( 'companies_phone' , arr_vars_SESSION),
+                    'phone2' => array ( 'companies_phone2' , arr_vars_SESSION),
+                    'fax' => array ( 'companies_fax' , arr_vars_SESSION),
+                    'url' => array ( 'companies_url' , arr_vars_SESSION),
+                    'employees' => array ( 'companies_employees' , arr_vars_SESSION),
+                    'revenue' => array ( 'companies_revenue' , arr_vars_SESSION),
+                    'custom1' => array ( 'companies_custom1' , arr_vars_SESSION),
+                    'custom2' => array ( 'companies_custom2' , arr_vars_SESSION),
+                    'custom3' => array ( 'companies_custom3' , arr_vars_SESSION),
+             		   'custom4' => array ( 'companies_custom4' , arr_vars_SESSION),
+             		   'profile' => array ( 'companies_profile' , arr_vars_SESSION),
+             		   'address_name' => array ( 'companies_address_name' , arr_vars_SESSION),
+             		   'line1' => array ( 'companies_line1' , arr_vars_SESSION),
+	             	   'line2' => array ( 'companies_line2' , arr_vars_SESSION),
+	             	   'city' => array ( 'companies_city' , arr_vars_SESSION),
+	             	   'province' => array ( 'companies_province' , arr_vars_SESSION),
+	             	   'postal_code' => array ( 'companies_postal_code' , arr_vars_SESSION),
+	             	   'country_id' => array ( 'companies_country_id' , arr_vars_SESSION),
+	             	   'address_body' => array ( 'companies_address_body' , arr_vars_SESSION),
+                   );
+
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -66,35 +94,37 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
-$user_menu = check_and_get($con,$sql2,'user_id');
+$user_menu = check_and_get($con,$sql2,'user_id',$user_id);
 
-$sql2 = "select category_pretty_name, c.category_id
-from categories c, category_scopes cs, category_category_scope_map ccsm
-where c.category_id = ccsm.category_id
-and cs.on_what_table =  'companies'
-and ccsm.category_scope_id = cs.category_scope_id
-and category_record_status =  'a'
-order by category_pretty_name";
-$company_category_menu = check_and_get($con,$sql2,'category_id');
+//This is not used
+//$sql2 = "select category_pretty_name, c.category_id
+//from categories c, category_scopes cs, category_category_scope_map ccsm
+//where c.category_id = ccsm.category_id
+//and cs.on_what_table =  'companies'
+//and ccsm.category_scope_id = cs.category_scope_id
+//and category_record_status =  'a'
+//order by category_pretty_name";
+//$company_category_menu = check_and_get($con,$sql2,'category_id');
 
-$sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
-$company_type_menu = check_and_get($con,$sql2,'company_type_id');
+//Also not used
+//$sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
+//$company_type_menu = check_and_get($con,$sql2,'company_type_id');
 //$company_type_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
-$crm_status_menu = check_and_get($con,$sql2,'crm_status_id');
+$crm_status_menu = check_and_get($con,$sql2,'crm_status_id',$crm_status_id);
 //$crm_status_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
-$company_source_menu = check_and_get($con,$sql2,'company_source_id');
+$company_source_menu = check_and_get($con,$sql2,'company_source_id',$company_source_id);
 //$company_source_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
-$industry_menu = check_and_get($con,$sql2,'industry_id');
+$industry_menu = check_and_get($con,$sql2,'industry_id',$industry_id);
 //$industry_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
-$country_menu = check_and_get($con,$sql2,'country_id');
+$country_menu = check_and_get($con,$sql2,'country_id',$country_id);
 //$country_menu = check_and_get($con,$sql2,'');
 
 $page_title = _("Companies");
@@ -122,11 +152,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Legal Name"); ?></td>
-                <td class=widget_content_form_element><input type=text size=50 name=legal_name value="<?php echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=50 name=legal_name value="<?php echo $legal_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company Code"); ?></td>
-                <td class=widget_content_form_element><input type=text size=10 name=company_code></td>
+                <td class=widget_content_form_element><input type=text size=10 name=company_code value="<?php echo $company_code; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("CRM Status"); ?></td>
@@ -146,47 +176,47 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Phone"); ?></td>
-                <td class=widget_content_form_element><input type=text name=phone></td>
+                <td class=widget_content_form_element><input type=text name=phone value="<?php echo $phone; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Alt. Phone"); ?></td>
-                <td class=widget_content_form_element><input type=text name=phone2></td>
+                <td class=widget_content_form_element><input type=text name=phone2 value="<?php echo $phone2; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Fax"); ?></td>
-                <td class=widget_content_form_element><input type=text name=fax></td>
+                <td class=widget_content_form_element><input type=text name=fax value="<?php echo $fax; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("URL"); ?></td>
-                <td class=widget_content_form_element><input type=text name=url size=50></td>
+                <td class=widget_content_form_element><input type=text name=url size=50 value="<?php echo $url; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Employees"); ?></td>
-                <td class=widget_content_form_element><input type=text name=employees size=10></td>
+                <td class=widget_content_form_element><input type=text name=employees size=10 value="<?php echo $employees; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Revenue"); ?></td>
-                <td class=widget_content_form_element><input type=text name=revenue size=10></td>
+                <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php echo $revenue; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom1_label ?></td>
-                <td class=widget_content_form_element><input type=text name=custom1 size=30 ></td>
+                <td class=widget_content_form_element><input type=text name=custom1 size=30 value="<?php echo $custom1; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom2_label ?></td>
-                <td class=widget_content_form_element><input type=text name=custom2 size=30 ></td>
+                <td class=widget_content_form_element><input type=text name=custom2 size=30 value="<?php echo $custom2; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom3_label ?></td>
-                <td class=widget_content_form_element><input type=text name=custom3 size=30 ></td>
+                <td class=widget_content_form_element><input type=text name=custom3 size=30 value="<?php echo $custom3; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom4_label ?></td>
-                <td class=widget_content_form_element><input type=text name=custom4 size=30 ></td>
+                <td class=widget_content_form_element><input type=text name=custom4 size=30 value="<?php echo $custom4; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=70 name=profile></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=70 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
         </table>
 
@@ -205,27 +235,27 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Address Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=address_name size=30></td>
+                <td class=widget_content_form_element><input type=text name=address_name size=30 value="<?php echo $address_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Line 1"); ?></td>
-                <td class=widget_content_form_element><input type=text name=line1 size=30></td>
+                <td class=widget_content_form_element><input type=text name=line1 size=30 value="<?php echo $line1; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Line 2"); ?></td>
-                <td class=widget_content_form_element><input type=text name=line2 size=30></td>
+                <td class=widget_content_form_element><input type=text name=line2 size=30 value="<?php echo $line2; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("City"); ?></td>
-                <td class=widget_content_form_element><input type=text name=city size=30></td>
+                <td class=widget_content_form_element><input type=text name=city size=30 value="<?php echo $city; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("State/Province"); ?></td>
-                <td class=widget_content_form_element><input type=text name=province size=20></td>
+                <td class=widget_content_form_element><input type=text name=province size=20 value="<?php echo $province; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
-                <td class=widget_content_form_element><input type=text name=postal_code size=10></td>
+                <td class=widget_content_form_element><input type=text name=postal_code size=10 value="<?php echo $postal_code; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Country"); ?></td>
@@ -233,10 +263,13 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right_91px><?php echo _("Override Address"); ?></td>
-                <td class=widget_content_form_element><textarea rows=5 cols=40 name=address_body></textarea></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=40 name=address_body value="<?php echo $address_body; ?>"></textarea></td>
             </tr>
              <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Search"); ?>"></td>
+                <td class=widget_content_form_element colspan=2>
+                    <input class=button type=submit value="<?php echo _("Search"); ?>">
+                    <input name="clear_search" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
+                </td>
             </tr>
         </table>
 
@@ -269,6 +302,9 @@ function bulkEmail() {
     document.forms[0].submit();
 }
 
+function clearSearchCriteria() {
+    location.href = "advanced-search.php?clear=1";
+}
 
 //-->
 </script>
@@ -279,6 +315,9 @@ end_page();
 
 /**
  * $Log: advanced-search.php,v $
+ * Revision 1.8  2004/08/30 13:20:17  neildogg
+ * - Robustified search
+ *
  * Revision 1.7  2004/08/12 20:45:59  niclowe
  * fixed bug 1008238 - advanced company search not displaying first record of menu drop downs, and not searching properly for drop down items.
  *
