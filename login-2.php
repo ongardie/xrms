@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.12 2004/07/14 15:00:10 braverock Exp $
+ * $Id: login-2.php,v 1.13 2004/07/19 21:55:53 maulani Exp $
  */
 require_once('include-locations.inc');
 
@@ -22,7 +22,30 @@ $target   = $_POST['target'];
 
 
 $con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$connectiontest = $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+if (!$connectiontest) {
+    // Oops!  We do not have a valid database connection
+    // Now instruct the user in how to fix this problem
+    $problem = 'XRMS cannot connect to the database.  Have the administrator check the database ';
+    $problem .= 'parameters in include/vars.php to make sure they are correct.';
+    $problem .= 'Also make sure the database is running and can accept a connection ';
+    $problem .= 'from this server. <BR><BR>';
+    
+    install_fatal_error($problem);
+        echo <<<EOQ
+        <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+        <html>
+        <head>
+        <title>Test Results</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        </head>
+        <body>
+        $problem<BR>
+        </body>
+        </html>
+EOQ;
+    exit;
+}
 // $con->debug = 1;
 
 $ldapok = true;
@@ -116,6 +139,10 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.13  2004/07/19 21:55:53  maulani
+ * - Add test that we are able to connect to the database.  Fail with
+ *   an appropriate error message if the database is not available
+ *
  * Revision 1.12  2004/07/14 15:00:10  braverock
  * - changed session_start to new session_startup fn
  *   - without this change, new login was impossible
