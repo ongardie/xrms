@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: index.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: index.php,v 1.2 2005/01/13 21:13:58 vanmer Exp $
  *
  * @todo write dashboard
  */
@@ -54,7 +54,7 @@ start_page($page_title,true, $msg);
         <tr><td class=widget_header>Dashboard</td></tr>
             <tr>
                 <td class=widget_content width="75%" valign=top>
-           Aren't ACL's great? 
+          <?php echo _("This is the Access Control List system for XRMS"); ?>.<p>  <?php echo _("Please select a section to manage from the sidebar") ?>.
                 </td>
             </tr>
         </table>
@@ -66,6 +66,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.2  2005/01/13 21:13:58  vanmer
+ * - altered flippant text to reflect production environments
+ *
  * Revision 1.1  2005/01/13 17:16:15  vanmer
  * - Initial Commit for ACL Administration interface
  *
