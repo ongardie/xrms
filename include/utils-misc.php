@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.36 2004/06/28 18:53:57 gpowers Exp $
+ * $Id: utils-misc.php,v 1.37 2004/07/01 12:43:26 braverock Exp $
  */
 
 /**
@@ -625,8 +625,16 @@ function get_formatted_address (&$con,$address_id) {
  */
 require_once($include_directory . 'i18n.php');
 
+/** Include the database utilities file */
+require_once($include_directory . 'utils-database.php');
+
+
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.37  2004/07/01 12:43:26  braverock
+ * - add utils-database.php file
+ * - move list_db_tables and confirm_no_records fns to utils-database.php file
+ *
  * Revision 1.36  2004/06/28 18:53:57  gpowers
  * - commented out null target checking code
  *   - it does not appear to be nessacary
