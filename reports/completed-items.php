@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.6 2004/04/28 15:46:02 gpowers Exp $
+ * $Id: completed-items.php,v 1.7 2004/05/06 15:55:29 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -373,7 +373,7 @@ $con->close();
 if ($send_email) {
     $headers  = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
-    mail($email, "$app_title: $page_title", $output, $headers);
+    mail($send_email_to, "$app_title: $page_title", $output, $headers);
     if (($display) || ($friendly)) {
         echo $output;
     }
@@ -387,6 +387,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.7  2004/05/06 15:55:29  maulani
+ * - Fixes bug 949294 where email was misdirected
+ *
  * Revision 1.6  2004/04/28 15:46:02  gpowers
  * added $say_no_when_none - shows "NO .. for .. " when no items present
  * added no_items for opportunities and campaigns
