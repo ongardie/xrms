@@ -1,0 +1,147 @@
+<?php
+/**
+ * Form for creating a new server
+ *
+ * $Id: new.php,v 1.1 2004/07/06 19:57:02 gpowers Exp $
+ */
+
+require_once('../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+
+require_once('serverinfo.inc');
+
+$session_user_id = session_check();
+$msg = $_GET['msg'];
+
+$return_url = $_POST['return_url'];
+
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+//$con->debug = 1;
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    $attached_to_name = $rst->fields['attached_to_name'];
+    $rst->close();
+}
+
+$con->close();
+
+$page_title = "Attach File";
+start_page($page_title, true, $msg);
+
+?>
+
+<?php jscalendar_includes(); ?>
+
+<div id="Main">
+    <div id="Content">
+
+        <form enctype="multipart/form-data" action=new-2.php method=post>
+        <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_file_size; ?>">
+        <input type=hidden name=on_what_table value="<?php  echo $on_what_table ?>">
+        <input type=hidden name=on_what_id value="<?php  echo $on_what_id ?>">
+        <input type=hidden name=return_url value="<?php  echo $return_url ?>">
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=2>File Information</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Attached&nbsp;To</td>
+                <td class=widget_content_form_element><?php echo $attached_to_name; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>File&nbsp;Name</td>
+                <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right_166px>Description</td>
+                <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description></textarea></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Date</td>
+                <td class=widget_content_form_element>
+                    <input type=text ID="f_date_c" name=file_entered_at value="<?php  echo $file_entered_at; ?>">
+                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Upload</td>
+                <td class=widget_content_form_element><input type=file name=file1></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Upload"></td>
+            </tr>
+        </table>
+        </form>
+
+    </div>
+
+        <!-- right column //-->
+    <div id="Sidebar">
+
+        &nbsp;
+
+    </div>
+
+</div>
+
+<script language="JavaScript" type="text/javascript">
+
+function initialize() {
+    document.forms[0].file_pretty_name.focus();
+}
+
+initialize();
+
+
+</script>
+
+Calendar.setup({
+        inputField     :    "f_date_c",      // id of the input field
+        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
+        showsTime      :    true,            // will display a time selector
+        button         :    "f_trigger_c",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
+
+<?php
+
+end_page();
+
+/**
+ * $Log: new.php,v $
+ * Revision 1.1  2004/07/06 19:57:02  gpowers
+ * - Server Info Plugin by Keith Edmunds
+ *
+ * Revision 1.1  2004/07/01 22:43:22  kae
+ * First release version
+ *
+ * Revision 1.7  2004/06/04 17:28:03  gpowers
+ * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
+ * w/minor changes: changed includes to function, used complete php tags
+ *
+ * Revision 1.6  2004/04/17 16:04:30  maulani
+ * - Add CSS2 positioning
+ *
+ * Revision 1.5  2004/04/16 22:22:06  maulani
+ * - Add CSS2 positioning
+ *
+ * Revision 1.4  2004/04/08 17:00:11  maulani
+ * - Update javascript declaration
+ * - Add phpdoc
+ *
+ * Revision 1.3  2004/03/24 12:28:01  braverock
+ * - allow editing of more file proprerties
+ * - updated code provided by Olivier Colonna of Fontaine Consulting
+ * - add phpdoc
+ *
+ */
+?>
