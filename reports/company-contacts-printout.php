@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: company-contacts-printout.php,v 1.7 2004/07/25 13:15:28 braverock Exp $
+ * $Id: company-contacts-printout.php,v 1.8 2004/12/21 19:36:14 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,7 +17,7 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 //set the language
-$_SESSION['language'] = 'english';
+//$_SESSION['language'] = 'english';
 
 $session_user_id = session_check();
 
@@ -27,15 +27,16 @@ $clear = ($_GET['clear'] == 1) ? 1 : 0;
 $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
 $resort = $_POST['resort'];
 
+$sort_column = '';
+$current_sort_column = '';
+$sort_order = '';
+$current_sort_order = '';
+$company_name = '';
+$user_id = '';
+$city = '';
+$state = '';
 
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $company_name = '';
-    $user_id = '';
-} elseif ($use_post_vars) {
+if ($use_post_vars) {
     $sort_column = $_POST['sort_column'];
     $current_sort_column = $_POST['current_sort_column'];
     $sort_order = $_POST['sort_order'];
@@ -45,6 +46,7 @@ if ($clear) {
     $state = $_POST ['state'];
     $user_id = $_POST['user_id'];
     $printer_friendly= $_POST['printer_friendly'];
+    $company_category_id = $_REQUEST['company_category_id'];
 } else {
     $sort_column = $_SESSION['campaigns_sort_column'];
     $current_sort_column = $_SESSION['campaigns_current_sort_column'];
@@ -89,7 +91,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 
 $sql = "select " . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS "
-        ._("Company").", c.company_id, c.default_primary_address \n" ;
+        .$con->qstr(_("Company"),get_magic_quotes_gpc()).", c.company_id, c.default_primary_address \n" ;
 
 $criteria_count = 0;
 
@@ -339,6 +341,10 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.8  2004/12/21 19:36:14  braverock
+ * - improved display of screen table
+ * - fixed code formatting
+ *
  * Revision 1.7  2004/07/25 13:15:28  braverock
  * - remove lang file require_once, as it is no longer used
  *

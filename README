@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.16 2004/09/14 14:22:10 braverock Exp $ **/
+/** $Id: README,v 1.17 2004/12/21 19:36:14 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -24,18 +24,18 @@ This version has had many many bug fixes and enhancements.  We have also
 added an automated installation, update, and data integrity process. See
 the file install/INSTALL for details.
 
-This version of XRMS marks a major milestone: We are officially multi-language. 
-There are currently translations for Spanish, German, Brazilian Portugese, 
-Italian, Polish, Dutch, and Chinese, Simplified. Please join us in thanking 
+This version of XRMS marks a major milestone: We are officially multi-language.
+There are currently translations for Spanish, German, Brazilian Portugese,
+Italian, Polish, Dutch, and Chinese, Simplified. Please join us in thanking
 the translators for all their hard work.  If your native language is not
-English, please help the community by providing a translation, or providing 
+English, please help the community by providing a translation, or providing
 feedback and enhancements to translations already completed.  Contact the
-development team or the translator for more information on how to contribute.  
+development team or the translator for more information on how to contribute.
 
 
 We recommend that if more than a few days has passed since the date on a release
 tarball that you consider downloading and installing a development snapshot
-instead.  These are normally quite stable, as the development team is probably 
+instead.  These are normally quite stable, as the development team is probably
 using that code in production at their respective companies.
 
 
@@ -388,6 +388,7 @@ Brunno Barrera                   Translator - Spanish
 Sebastian Becker                 Translator - German
 Roberto Durrer                   Translator - Brazilian Portugese
 John Fawcett                     Translator - Italian
+Jean-Noel Hayart                 Translator - French
 Piotr Kabath                     Translator - Polish
 Bert-Jan van Rein                Translator - Dutch
 Junbao Wu                        Translator - Chinese, Simplified
@@ -400,6 +401,10 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.17  2004/12/21 19:36:14  braverock
+ * - improved display of screen table
+ * - fixed code formatting
+ *
  * Revision 1.16  2004/09/14 14:22:10  braverock
  * - add 2004-09-14 Release notes
  * - add translation section to Version
@@ -414,10 +419,10 @@ suggestions, bug fixes, and discussion contributed by each of you.
  * - push in changes to turn on i18n gettext
  *
  * Revision 1.12  2004/07/25 12:25:19  johnfawcett
- * Added John Fawcett, SF id johnfawcett as Developer.
+ * - added John Fawcett, SF id johnfawcett as Developer.
  *
  * Revision 1.11  2004/07/12 19:47:44  cpsource
- * Added Cal Page, SF id cpsource as Developer.
+ * - Added Cal Page, SF id cpsource as Developer.
  *
  * Revision 1.10  2004/07/11 14:31:27  braverock
  * - added Developer Credits section
