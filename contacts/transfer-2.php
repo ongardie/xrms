@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.5 2004/07/20 14:25:59 neildogg Exp $
+ * $Id: transfer-2.php,v 1.6 2004/07/20 20:34:23 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -53,7 +53,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action="https://68.162.84.101/xrms/companies/one.php" method=get target="_blank">
+        <form action="<?php echo $http_site_root; ?>/companies/one.php" method=get target="_blank">
             <input type="hidden" name="company_id">
         </form>
         <form action=transfer-3.php method=post>
@@ -90,6 +90,9 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.6  2004/07/20 20:34:23  introspectshun
+ * - Replaced hard-coded host with $http_site_root
+ *
  * Revision 1.5  2004/07/20 14:25:59  neildogg
  * - Search by ID
  *
