@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.14 2004/06/30 11:39:25 braverock Exp $
+ * $Id: addresses.php,v 1.15 2004/07/19 12:52:01 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,8 +15,8 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$msg = $_GET['msg'];
-$company_id = $_GET['company_id'];
+$msg        = isset($_GET['msg'])     ? $_GET['msg']     : '';
+$company_id = isset($_GET['company_id']) ? $_GET['company_id'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -30,6 +30,7 @@ and c.company_id = a.company_id
 and c.company_id = $company_id";
 $rst = $con->execute($sql);
 
+$addresses = '';
 if ($rst) {
     while (!$rst->EOF) {
         $addresses .= '<tr>';
@@ -188,6 +189,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.15  2004/07/19 12:52:01  cpsource
+ * - Fix undefined variable usages.
+ *
  * Revision 1.14  2004/06/30 11:39:25  braverock
  * - fixes a bug in showing contacts using address
  *   - patch supplied by David Uhlman
