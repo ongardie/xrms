@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.27 2004/07/14 17:01:21 maulani Exp $
+ * $Id: vars.php,v 1.28 2004/07/15 21:27:06 maulani Exp $
  */
 
 /**
@@ -256,7 +256,7 @@ $show_alternative_names   = false;
  * This option enables reading of Eastern multibyte encodings.
  * Functions that provide this support are very cpu and memory intensive.
  * Don't enable this option unless you really need it.
- * @global bool $agresive_decoding
+ * @global bool $aggresive_decoding
  */
 $aggresive_decoding = false;
 
