@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.1 2005/01/13 17:07:16 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.2 2005/01/25 05:26:00 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -1075,7 +1075,87 @@ class xrms_acl {
         return false;
      }
 
+    /*****************************************************************************/
+    /** function get_data_source
+      *
+      * Returns data about the data source
+      *
+      * @param string data_source_name with name to search for
+      * @param integer data_source_id identifying the data source in the database or false if not found
+      * @return array containing data source information
+      * 
+      */
+    function get_data_source($data_source_name=false, $data_source_id=false) {
+        $tblName="data_source";
+        $con = $this->DBConnection;
+        if ($data_source_name) { $where="data_source_name=" . $con->qstr($data_source_name, get_magic_quotes_gpc()); }
+        elseif ($data_source_id) { $where="data_source_id=$data_source_id"; }
+        if (!$where) { return false; } //echo "No Controlled object selected"; return false; }        
+        //Search for exact record
+        $sql = "SELECT * from $tblName WHERE $where"; 
+        $rs = $con->execute($sql);
+        if (!$rs) { db_error_handler($con, $sql); return false; }
+        if ($rs->numRows()==1) {
+            return $rs->fields;
+        } else {
+            return false;
+        }    
+    }
+                 
+     /*****************************************************************************/
+     /** function add_data_source
+       *
+       * Adds a controlled object to the list of controlled objects
+       *
+       * @param string name of new data source
+       * @return integer data_source_id with identifier for newly added data_source, or false if duplicate/failed
+       *
+       */
+    function add_data_source($data_source_name) {
+        $tblName="data_source";
+        $con = $this->DBConnection;
+        
+        //Find data source, if already defined
+        if ($this->get_data_source($data_source_name)!==false) { return false; }
+        else {
+            //Create array to insert
+            $data_sourceRow['data_source_name']=$data_source_name;
+            $data_sourceRow['on_what_table']=$on_what_table;
+            $data_sourceRow['on_what_field']=$on_what_field;          
             
+            //Create insert statement
+            $sql = $con->getInsertSQL($tblName, $data_sourceRow, false);
+            //Execute insert
+            $rs=$con->execute($sql);
+            if (!$rs) { db_error_handler($con, $sql); return false; }
+            //Find and return newly added ID
+            $data_sourceID = $con->Insert_ID();
+            
+            return $data_sourceID;
+        }
+    }
+     
+     /*****************************************************************************/
+     /** function delete_data_source
+       *
+       * Deletes a data source from the system
+       *
+       * @param integer data_source_id specifying which role permission to delete
+       * @return bool indicating success (true) or failure (false) of delete
+       *
+       */
+    function delete_data_source($data_source_id) {
+        if (!$data_source_id) { return false; }
+        $tblName="data_source";
+        $con = $this->DBConnection;
+        
+        $sql = "Delete from $tblName WHERE data_source_id=$data_source_id";
+        $rs = $con->execute($sql);
+        if (!$rs) { db_error_handler($con, $sql); return false; }
+        else return true;     
+    
+    }    
+    
      /*****************************************************************************/
      /** function add_controlled_object
        *
@@ -1087,7 +1167,7 @@ class xrms_acl {
        * @return integer ControlledObject_id with identifier for newly added ControlledObject, or false if duplicate/failed
        *
        */
-    function add_controlled_object($ControlledObject_name, $on_what_table, $on_what_field, $data_source_id=false) {
+    function add_controlled_object($ControlledObject_name, $on_what_table, $on_what_field, $user_field=false, $data_source_id=false) {
         $tblName="ControlledObject";
         $con = $this->DBConnection;
         
@@ -1099,6 +1179,7 @@ class xrms_acl {
             $ControlledObjectRow['on_what_table']=$on_what_table;
             $ControlledObjectRow['on_what_field']=$on_what_field;          
             $ControlledObjectRow['data_source_id']=$data_source_id;
+            if ($user_field) $ControlledObjectRows['user_field']=$user_field;
             
             //Create insert statement
             $sql = $con->getInsertSQL($tblName, $ControlledObjectRow, false);
@@ -1170,8 +1251,9 @@ class xrms_acl {
             $sql = "SELECT * FROM $tblName ";
         }
         if ($whereclause) $sql.= " WHERE $whereclause";
-         
+        
         $rs = $con->execute($sql);
+        
         if (!$rs) { db_error_handler($con, $sql); return false; }
         if ($rs->numRows()>1) {
             while (!$rs->EOF) {
@@ -1197,20 +1279,22 @@ class xrms_acl {
        * @return integer ControlledObjectRelationship_id with identifier for newly added ControlledObjectRelationship, or false if duplicate/failed
        *
        */
-    function add_controlled_object_relationship($parentControlledObject_id, $childControlledObject_id, $on_what_child_field=false) {
+    function add_controlled_object_relationship($parentControlledObject_id, $childControlledObject_id, $on_what_child_field=false, $on_what_parent_field=false, $cross_table=false, $singular=false) {
     
-        if (!$parentControlledObject_id or !$childControlledObject_id) { return false; }
+        if (!$parentControlledObject_id AND !$childControlledObject_id) { return false; }
         
         $con=$this->DBConnection;
         $tblName = "ControlledObjectRelationship";
         
         //ensure no duplicates
-        if ($this->get_controlled_object_relationship($parentControlledObject_id, $childControlledObject_id) != false) { return false; }
-        
+        if ($this->get_controlled_object_relationship($parentControlledObject_id, $childControlledObject_id) !== false) { return false; }
             //Create array to insert
             $ControlledObjectRow['ParentControlledObject_id']=$parentControlledObject_id;
             $ControlledObjectRow['ChildControlledObject_id']=$childControlledObject_id;
             if ($on_what_child_field) { $ControlledObjectRow['on_what_child_field']=$on_what_child_field; }
+            if ($on_what_parent_field) { $ControlledObjectRow['on_what_parent_field']=$on_what_parent_field; }
+            if ($cross_table) { $ControlledObjectRow['cross_table']=$cross_table; }
+            if ($singular) { $ControlledObjectRow['singular']=$singular; }
             
             //Create insert statement
             $sql = $con->getInsertSQL($tblName, $ControlledObjectRow, false);
@@ -2011,6 +2095,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.2  2005/01/25 05:26:00  vanmer
+ * - added functions for manipulating data sources in the ACL
+ * - added parameters for newly added fields in ACL
+ *
  * Revision 1.1  2005/01/13 17:07:16  vanmer
  * - Initial Revision of the ACL Install, Wrapper, Class and configuration files
  *
