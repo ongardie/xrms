@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Create a graph of activity for the requested user.
+ *
+ * $Id: user-activity.php,v 1.2 2004/01/26 15:52:42 braverock Exp $
+ */
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -27,83 +31,96 @@ $rst1 = $con->execute($sql1);
 $graph_legend_array = array();
 
 while (!$rst1->EOF) {
-    
+
     for ($i = 0; $i <= 12; $i++) {
-	    
-    	$start_date = date("Y-m-d", mktime(0,0,0, date('m') - $i, 1,date('Y')));
-	    $end_date = date("Y-m-d", mktime(0,0,0, date('m') - $i + 1, 1,date('Y')));
-        
+
+        $start_date = date("Y-m-d", mktime(0,0,0, date('m') - $i, 1,date('Y')));
+        $end_date = date("Y-m-d", mktime(0,0,0, date('m') - $i + 1, 1,date('Y')));
+
         $sql2 = "SELECT count(*) AS activity_count from activities where user_id = $user_id and activity_type_id = " . $rst1->fields['activity_type_id'] . " and entered_at between " . $con->qstr($start_date, get_magic_quotes_gpc()) . " and " . $con->qstr($end_date, get_magic_quotes_gpc());
         $rst2 = $con->execute($sql2);
-	    	
-       	if ($rst2) {
-        	$activity_count = $rst2->fields['activity_count'];
-	   	    $rst2->close();
-       	}
-        
-       	if (!$activity_count) {
-	       	$activity_count = 0;
-       	}
-        
-	    $array_of_activity_count_values_for_one_user[$i] = $activity_count;
-        
+
+        if ($rst2) {
+            $activity_count = $rst2->fields['activity_count'];
+            $rst2->close();
+        }
+
+        if (!$activity_count) {
+            $activity_count = 0;
+        }
+
+        $array_of_activity_count_values_for_one_user[$i] = $activity_count;
+
     }
-    
-	$graph_rows .= "g.addRow(" . implode(',', array_reverse($array_of_activity_count_values_for_one_user)) . ");\n";
+
+    $graph_rows .= "g.addRow(" . implode(',', array_reverse($array_of_activity_count_values_for_one_user)) . ");\n";
     array_push($graph_legend_array, "'" . $rst1->fields['activity_type_pretty_plural'] . "'");
     $rst1->movenext();
-	
+
 }
 
 $rst1->close();
 $con->close();
+
+$graph_legend = implode(',', $graph_legend_array);
 
 $page_title = "Activity Summary : $username";
 start_page($page_title, true, $msg);
 
 ?>
 
-<SCRIPT LANGUAGE="JavaScript1.2" SRC="../../js/graph.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript1.2" SRC="<?php  echo $http_site_root; ?>/js/graph.js"></SCRIPT>
 
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=75% valign=top>
+    <tr>
+        <td class=lcol width=75% valign=top>
 
-		<table class=widget cellspacing=1 width=100%>
-			<tr>
-				<td class=widget_header>Activity Summary</td>
-			</tr>
-			<tr>
-				<td class=widget_label_center>Activity Summary</td>
-			</tr>
-			<tr>
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header>Activity Summary</td>
+            </tr>
+            <tr>
+                <td class=widget_label_center>Activity Summary</td>
+            </tr>
+            <tr>
 
-				<td class=widget_content_graph>
-				<SCRIPT LANGUAGE="JavaScript1.2">
-				var g = new Graph(<?= $report_graph_width ?>,<?= $report_graph_height ?>);
-                <?= $graph_rows ?>
-				g.scale = 1;
-				g.setXScaleValues(<?= list_of_months() ?>);
-				g.stacked = true;
-				g.setLegend(<?= implode(',', $graph_legend_array) ?>);
-				g.build();
-				</SCRIPT>
-				</td>
-				
-			</tr>
+                <td class=widget_content_graph>
+                <SCRIPT LANGUAGE="JavaScript1.2">
+                var g = new Graph(<?php echo $report_graph_width . ' , ' . $report_graph_height; ?>);
+                <?php echo $graph_rows; ?>
+                g.scale = 1;
+                g.setXScaleValues(<?php echo list_of_months(); ?>);
+                g.stacked = true;
+                g.setLegend(<?php echo $graph_legend; ?>);
+                g.build();
+                </SCRIPT>
+                </td>
 
-		</table>
-		
-		</td>
-		<!-- gutter //-->
-		<td class=gutter width=2%>
-		&nbsp;
-		</td>
-		<!-- right column //-->
-		<td class=rcol width=23% valign=top>
+            </tr>
 
-		</td>
-	</tr>
+        </table>
+
+        </td>
+        <!-- gutter //-->
+        <td class=gutter width=2%>
+        &nbsp;
+        </td>
+        <!-- right column //-->
+        <td class=rcol width=23% valign=top>
+
+        </td>
+    </tr>
 </table>
 
-<? end_page(); ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: user-activity.php,v $
+ * Revision 1.2  2004/01/26 15:52:42  braverock
+ * - fixed short tags
+ * - added phpdoc
+ *
+ */
+?>
