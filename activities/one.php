@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.18 2004/06/03 16:29:58 gpowers Exp $
+ * $Id: one.php,v 1.19 2004/06/03 16:31:05 gpowers Exp $
  */
 
 //include required files
@@ -94,10 +94,10 @@ if ($rst) {
 // add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
 
 // include the contact sidebar code
-// require_once ('../contacts/sidebar.php');
+require_once ('../contacts/sidebar.php');
 
 // include the company sidebar code
-// require_once ('../companies/sidebar.php');
+require_once ('../companies/sidebar.php');
 
 
 /* add opportunities/case/campaign combo box */
@@ -286,6 +286,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.19  2004/06/03 16:31:05  gpowers
+ * my bad. they exist now.
+ *
  * Revision 1.18  2004/06/03 16:29:58  gpowers
  * commented out the includes for the contact sidebar code and
  * the company sidebar code. these sidebars do not appear to exist.
