@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.12 2004/09/02 17:05:47 maulani Exp $
+ * $Id: open-items.php,v 1.13 2004/09/02 22:51:17 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -153,7 +153,7 @@ if (($user_id) && (!$all_users)) {
 }
 
 if ($all_users) {
-    $sql = "select user_id from users";
+    $sql = "select user_id from users where user_record_status = 'a' order by last_name, first_names";
     $rst = $con->execute($sql);
     while (!$rst->EOF) {
         array_push($userArray, $rst->fields['user_id']);
@@ -258,12 +258,14 @@ foreach ($userArray as $key => $user_id) {
     }
     } // End Campaigns Type
     if (($type == "opportunities") || ($type == "all")) {
-        $sql = "SELECT * from opportunities, opportunity_statuses where
-                status_open_indicator = 'o'
-                and opportunity_record_status = 'a'
-                and opportunity_statuses.opportunity_status_id = opportunities.opportunity_status_id
-                and user_id = $user_id
-                order by entered_at ";
+        $sql = "SELECT o.opportunity_id, o.company_id, o.contact_id, o.opportunity_title, 
+                o.entered_at, s.opportunity_status_pretty_name
+                from opportunities o, opportunity_statuses s
+                where s.status_open_indicator = 'o'
+                and o.opportunity_record_status = 'a'
+                and s.opportunity_status_id = o.opportunity_status_id
+                and o.user_id = $user_id
+                order by o.entered_at ";
 
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
@@ -272,7 +274,7 @@ foreach ($userArray as $key => $user_id) {
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
             $output .= "        <th align=left>" . ("Entered") . "</th>";
-            $output .= "        <th align=left>" . ("Type") . "</th>";
+            $output .= "        <th align=left>" . ("Status") . "</th>";
             $output .= "        <th align=left>" . ("Company") . "</th>";
             $output .= "        <th align=left>" . ("Contact") . "</th>";
             $output .= "        <th align=left>" . ("Opportunity") . "</th>";
@@ -280,10 +282,7 @@ foreach ($userArray as $key => $user_id) {
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             while (!$rst->EOF) {
                 $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td>" . $rst->fields['ends_at'] . "&nbsp;&nbsp;</td>\n";
-                $sql4 = "SELECT opportunity_type_pretty_name from campaign_types where opportunity_type_id = " . $rst->fields['opportunity_type_id'];
-                $rst4 = $con->execute($sql4);
-                $output .= "<td>" . $rst4->fields['opportunity_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
+                $output .= "<td>" . $rst->fields['opportunity_status_pretty_name'] . "&nbsp;&nbsp;</td>\n";
                 $sql5 = "SELECT company_name from companies where company_id = " . $rst->fields['company_id'];
                 $rst5 = $con->execute($sql5);
                 $output .= "<td>" . $rst5->fields['company_name'] . "&nbsp;&nbsp;&nbsp;</td>\n";
@@ -306,12 +305,13 @@ foreach ($userArray as $key => $user_id) {
     }
     } // End Opportunities Type
     if (($type == "cases") || ($type == "all")) {
-        $sql = "SELECT * from cases, case_statuses where
-                status_open_indicator = 'o'
-                and case_record_status = 'a'
-                and case_statuses.case_status_id = cases.case_status_id
-                and user_id = $user_id
-                order by entered_at ";
+        $sql = "SELECT c.entered_at, c.due_at, c.company_id, c.contact_id, c.case_id, c.case_title
+                from cases c, case_statuses s
+                where s.status_open_indicator = 'o'
+                and c.case_record_status = 'a'
+                and s.case_status_id = c.case_status_id
+                and c.user_id = $user_id
+                order by c.entered_at ";
 
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
@@ -375,6 +375,11 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.13  2004/09/02 22:51:17  maulani
+ * - Cleaned up SQL
+ * - Fixed copy & paste bugs
+ * - Eliminated deleted users from the all users reports
+ *
  * Revision 1.12  2004/09/02 17:05:47  maulani
  * - Fix bug 1021252 bad opportunities link.  Patch submitted by Steve Weiss, sweiss_1966
  *
