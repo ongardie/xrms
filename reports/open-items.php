@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.10 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: open-items.php,v 1.11 2004/07/25 13:13:15 johnfawcett Exp $
  */
 require_once('../include-locations.inc');
 
@@ -181,12 +181,12 @@ foreach ($userArray as $key => $user_id) {
             $output .= "<table>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>" . _("Start</th>";
-            $output .= "        <th align=left>" . _("End</th>";
-            $output .= "        <th align=left>" . _("Type</th>";
-            $output .= "        <th align=left>" . _("Company</th>";
-            $output .= "        <th align=left>" . _("Contact</th>";
-            $output .= "        <th align=left>" . _("Activity</th>";
+            $output .= "        <th align=left>" . _("Start") ."</th>";
+            $output .= "        <th align=left>" . _("End") . "</th>";
+            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Company") . "</th>";
+            $output .= "        <th align=left>" . _("Contact") . "</th>";
+            $output .= "        <th align=left>" . _("Activity") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -315,7 +315,7 @@ foreach ($userArray as $key => $user_id) {
 
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>" . _("OPEN CASES for $name</b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("OPEN CASES for")." $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -375,6 +375,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.11  2004/07/25 13:13:15  johnfawcett
+ * - tidied up gettext calls and removed parse error
+ *
  * Revision 1.10  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *
