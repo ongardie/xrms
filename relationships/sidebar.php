@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.20 2005/01/10 22:15:43 neildogg Exp $
+ * $Id: sidebar.php,v 1.21 2005/01/10 23:02:33 neildogg Exp $
  */
 
 if(empty($relationships)) {
@@ -182,7 +182,7 @@ for($j = 0; $j <= $expand; $j++) {
                             $current_ids[] = $current_id;
         
                             $agent_count = 0;
-                            if($what[$opposite_direction]['table'] == "companies") {
+                            if($what[$opposite_direction]['table'] == "companies" && !empty($relationships['companies'])) {
                                 $sql = "SELECT COUNT(contact_id) as agent_count
                                         FROM contacts
                                         WHERE company_id = " . $relationships['companies'] . "
@@ -478,6 +478,9 @@ $relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.21  2005/01/10 23:02:33  neildogg
+ * - Fixed error on empty values
+ *
  * Revision 1.20  2005/01/10 22:15:43  neildogg
  * - Complete independance from relationship names granted
  *
