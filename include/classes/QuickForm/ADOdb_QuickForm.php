@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.3 2005/01/13 20:58:12 vanmer Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.4 2005/03/03 22:30:32 daturaarutad Exp $
  */
 
 
@@ -286,14 +286,20 @@
 						$dbh = $this->DBH;
 					}
 
+					$old_fetch_mode = $dbh->SetFetchMode(ADODB_FETCH_NUM);
+
 			  		$rst=$dbh->execute($sql);
 	
 			  		if (!$rst) { db_error_handler($dbh,$sql); exit; }
 
 					while (!$rst->EOF) {
 						// update for array
-						$select[$rst->fields[$field['foreignKey']]] =  $rst->fields[$field['foreignFields']];
+						$select[$rst->fields[0]] =  $rst->fields[1];
 						$rst->MoveNext();
+					}
+
+					if($old_fetch_mode) {
+						$dbh->SetFetchMode($old_fetch_mode);
 					}
 				}
 				$form->addElement($field['type'], $field_name, $field['displayName'], $select);
