@@ -2,7 +2,7 @@
 /**
  * Manage campaign types
  *
- * $Id: one.php,v 1.7 2004/07/25 15:36:37 johnfawcett Exp $
+ * $Id: one.php,v 1.8 2004/07/25 17:37:27 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -71,7 +71,7 @@ start_page($page_title);
 		</table>
 		</form>
 
-		<form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Campaign Type").'?'; ?>');">
+		<form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Campaign Type?"); ?>');">
 		<input type=hidden name=campaign_type_id value="<?php  echo $campaign_type_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
@@ -79,9 +79,9 @@ start_page($page_title);
 			</tr>
 			<tr>
 				<td class=widget_content>
-				<?php echo _("Click the button below to remove this campaign type from the system."); ?>
+				<?php echo _("Click the button below to permanently remove this item."); ?>
 				<p><?php echo _("Note: This action CANNOT be undone!"); ?>
-				<p><input class=button type=submit value="<?php echo _("Delete Campaign Type"); ?>">
+				<p><input class=button type=submit value="<?php echo _("Delete"); ?>">
 				</td>
 			</tr>
 		</table>
@@ -103,6 +103,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 17:37:27  johnfawcett
+ * - reinserted ? in gettext string - needed by some languages
+ * - standardized delete text and button
+ *
  * Revision 1.7  2004/07/25 15:36:37  johnfawcett
  * - unified page title
  * - removed punctuation from gettext strings
