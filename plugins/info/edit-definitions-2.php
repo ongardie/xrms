@@ -2,7 +2,7 @@
 /**
  * Edit info element definitions
  *
- * $Id: edit-definitions-2.php,v 1.2 2004/07/22 18:29:58 gpowers Exp $
+ * $Id: edit-definitions-2.php,v 1.3 2004/07/22 18:36:12 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -168,6 +168,6 @@ if ($new_element) {
 $con->close();
 $con_write->close();
 
-header("Location: " . $http_site_root . $return_url");
+header("Location: " . $http_site_root . $return_url);
 
 ?>
