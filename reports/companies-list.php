@@ -24,6 +24,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -183,7 +184,7 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
 		$sql2 .= "and ecm.on_what_table = 'companies' and ecm.on_what_id = c.company_id ";
 		$sql2 .= "and ecm.category_id = ca.category_id and cs.category_scope_id = ccsm.category_scope_id ";
 		$sql2 .= "and ca.category_id = ccsm.category_id and cs.on_what_table = 'companies' ";
-		$sql2 .= "and category_record_status = 'a' and ca.category_id=$company_category_id ";
+		$sql2 .= "and category_record_status = 'a' and ca.category_id='$company_category_id' ";
 	}
 	$sql2 .= "order by 1";
 	$rst = $con->execute($sql2);
@@ -199,13 +200,13 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
             $output .= "<td$w6>" . nbsp($rst->fields['country_name']) . "</td>";
             $output .= "<td$w7>" . nbsp($rst->fields['phone']) . "</td>";
 		    $company_id = $rst->fields['company_id'];
-    		$sql3  = "select note_description from notes where on_what_id=$company_id and ";
-			$sql3 .= "on_what_table='companies' and note_record_status='a' order by entered_at desc limit 1";
+    		$sql3  = "select note_description from notes where on_what_id='$company_id' and ";
+			$sql3 .= "on_what_table='companies' and note_record_status='a' order by entered_at desc";
             $categories_sql  = "select category_display_html ";
 			$categories_sql .= "from categories c, category_scopes cs, category_category_scope_map ccsm, ";
 			$categories_sql .= "entity_category_map ecm ";
 			$categories_sql .= "where ecm.on_what_table = 'companies' ";
-			$categories_sql .= "and ecm.on_what_id = $company_id ";
+			$categories_sql .= "and ecm.on_what_id = '$company_id' ";
 			$categories_sql .= "and ecm.category_id = c.category_id ";
 			$categories_sql .= "and cs.category_scope_id = ccsm.category_scope_id ";
 			$categories_sql .= "and c.category_id = ccsm.category_id ";
@@ -226,16 +227,16 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
 			$categories = implode($categories, ", ");
 			$output .= "<td$w8>" . nbsp( $categories)  . "</td>";
 			$output .= "<td$w9>" . nbsp($rst->fields['username']) . "</td>";
-			$rst2 = $con->execute($sql3);
+			$rst2 = $con->SelectLimit($sql3, 1, 0);
 			if ($rst2)
 			{
 				$output .= "<td$w10>" . nbsp($rst2->fields['note_description']) . "</td>";
+                $rst2->close();
 			}
 			else
 			{
 				$output .= "<td$w10>&nbsp;</td>";
 			}
-			$rst2->close();
 			$output .= "</tr>\n";
 		$rst->movenext();
 		}
@@ -248,7 +249,7 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
 	return $output;
 }
 
-// return a condiation on field based on boolean combination of AND or OR
+// return a condition on field based on boolean combination of AND or OR
 // This function should probably be extended to evalute more complex expression
 // including brackets, >=. At the moment its fairly simple 
 
@@ -286,7 +287,7 @@ function multi_cond ($field,$cond)
 
 function nbsp($in)
 {
-	if(trim($in) != '') return $in;
+	if (trim($in) !== '') return $in;
 	return '&nbsp;';
 }
 ?>
