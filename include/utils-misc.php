@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.24 2004/05/21 14:11:28 braverock Exp $
+ * $Id: utils-misc.php,v 1.25 2004/05/21 22:37:30 maulani Exp $
  */
 
 /**
@@ -579,7 +579,7 @@ function get_formatted_address (&$con,$address_id) {
     } else {
         // database error, return some useful information.
         ob_start();
-        db_error_handler (&$con,$sql);
+        db_error_handler ($con,$sql);
         $address_to_display = ob_get_contents();
         ob_get_clean();
     }
@@ -588,6 +588,10 @@ function get_formatted_address (&$con,$address_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.25  2004/05/21 22:37:30  maulani
+ * - remove call-time pass by reference.  Function is already declared for
+ *   pass by reference.
+ *
  * Revision 1.24  2004/05/21 14:11:28  braverock
  * - add example code to db_error_handler fn
  *
