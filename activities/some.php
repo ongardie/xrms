@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.53 2004/08/16 14:39:23 maulani Exp $
+ * $Id: some.php,v 1.54 2004/08/16 21:02:09 neildogg Exp $
  */
 
 // handle includes
@@ -89,6 +89,8 @@ $arr_vars = array ( // local var name       // session variable name
                    'user_id'             => array ( 'activities_user_id', arr_vars_SESSION ) ,
                    // 'date'                => array ( 'date', arr_vars_SESSION ) ,
                    'search_date'         => array ( 'activities_date', arr_vars_SESSION ) ,
+                   'time_zone_between'   => array ( 'time_zone_between', arr_vars_SESSION ) ,
+                   'time_zone_between2'  => array ( 'time_zone_between2', arr_vars_SESSION ) ,
                    );
 
 // get all passed in variables
@@ -143,6 +145,10 @@ arr_vars_session_set ( $arr_vars );
 /** End of the sidebar includes **
 //*********************************/
 
+if(strlen($time_zone_between) and strlen($time_zone_between2)) {
+    update_daylight_savings($con);
+}
+
 $sql = "SELECT
   (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS '" . _("Overdue") . "',"
   ." at.activity_type_pretty_name AS '" . _("Type") . "',"
@@ -153,12 +159,16 @@ $sql = "SELECT
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS '" . _("Due") . "', "
   . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS '" . _("Company") . "',
   u.username AS '" . _("Owner") . "'
-  FROM companies c, users u, activity_types at, activities a
-  LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
+  FROM companies c, users u, activity_types at, activities a, addresses addr";
+if(strlen($time_zone_between) and strlen($time_zone_between2)) {
+    $sql .= ", time_daylight_savings tds";
+}
+$sql .= " LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
   WHERE a.company_id = c.company_id
   AND a.activity_record_status = 'a'
   AND at.activity_type_id = a.activity_type_id
-  AND a.user_id = u.user_id";
+  AND a.user_id = u.user_id
+  AND c.default_primary_address=addr.address_id";
 
 $criteria_count = 0;
 
@@ -199,6 +209,14 @@ if (strlen($search_date) > 0) {
     } else {
         $sql .= " and a.ends_at > " . $offset;
     }
+}
+
+if(strlen($time_zone_between) and strlen($time_zone_between2)) {
+    update_daylight_savings($con);
+    $sql .= " and addr.daylight_savings_id = tds.daylight_savings_id";
+    
+    $sql .= " and hour(ends_at) + tds.current_hour_shift + addr.offset + " . date('Z')/3600 . " >= " . $time_zone_between;
+    $sql .= " and hour(ends_at) + tds.current_hour_shift + addr.offset + " . date('Z')/3600 . " <= " . $time_zone_between2;
 }
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
@@ -394,6 +412,26 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
+                <td class=widget_label colspan="4"><?php echo _("Local Time Between"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan="4">
+<?php
+                    $sql2 = "SELECT " . $con->concat("(CASE WHEN country_id%25 < 24 THEN lpad(country_id%25, 2, '0') ELSE '00' END)", "':00:00'") . " as counter, country_id%25 as counter2 from countries group by counter2 order by counter2";
+                    $rst = $con->execute($sql2);
+                    if(!$rst) {
+                        db_error_handler($con, $sql2);
+                    }
+                    print $rst->getmenu2('time_zone_between', $time_zone_between, true);
+                ?>
+ and 
+<?php
+                    $rst->movefirst();
+                    print $rst->getmenu2('time_zone_between2', $time_zone_between2, true);
+                ?>
+                </td>
+            </tr>
+            <tr>
                 <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
                 <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
             </tr>
@@ -495,6 +533,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.54  2004/08/16 21:02:09  neildogg
+ * - Allows to find activities ending within a time range
+ *  - (for all time zones)
+ *
  * Revision 1.53  2004/08/16 14:39:23  maulani
  * - Override ADODB_Pager class for activities to allow customization
  * - Customization still todo
