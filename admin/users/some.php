@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.12 2005/01/09 15:27:52 braverock Exp $
+ * $Id: some.php,v 1.13 2005/01/09 15:53:05 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,7 +26,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $table_rows = '<tr>';
+        $table_rows .= '<tr>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['role_pretty_name'] . '</td>';
@@ -163,6 +163,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.13  2005/01/09 15:53:05  braverock
+ * - fix missing .= in $table_rows
+ *
  * Revision 1.12  2005/01/09 15:27:52  braverock
  * - fix JS bug where checks are not on correct fields
  *   resolves SF bug 1035378 reported by pnobrept
