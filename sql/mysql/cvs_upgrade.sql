@@ -16,3 +16,26 @@ CREATE TABLE `company_relationship` (
   KEY `company_from_id` (`company_from_id`,`company_to_id`)
 ) TYPE=MyISAM; 
 
+
+-- each company can have zero or more divisions.  This is probably not usefult for small companies, so its' use is optional.
+
+create table company_division (
+	division_id                      int not null primary key auto_increment,
+	company_id                       int not null,
+	user_id                          int not null default 0,
+	company_source_id                int not null default 0,
+	industry_id                      int not null default 0,
+	division_name                    varchar(100) not null default '',
+	description                      text not null default '',
+	entered_at                       datetime,
+	entered_by                       int not null default 0,
+	last_modified_at                 datetime,
+	last_modified_by                 int not null default 0,
+	custom1                          varchar(100) not null default '',
+	custom2                          varchar(100) not null default '',
+	custom3                          varchar(100) not null default '',
+	custom4                          varchar(100) not null default '',
+	division_record_status           char(1) default 'a'
+);
+
+ALTER TABLE `contacts` ADD `division_id` INT NOT NULL AFTER `company_id` ;
