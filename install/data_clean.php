@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: data_clean.php,v 1.2 2004/04/09 17:13:28 braverock Exp $
+ * $Id: data_clean.php,v 1.3 2004/04/12 14:35:19 maulani Exp $
  */
 
 // where do we include from
@@ -36,8 +36,11 @@ $rst = $con->execute($sql);
 $sql = "update contacts set first_names='[first names]' where first_names=''";
 $rst = $con->execute($sql);
 
-// Make sure that the database has the correct legal_name column
-$sql = "alter table companies change company_legal_name legal_name varchar( 100 ) not mull";
+// There needs to be at least one contact for each company
+$sql = "SELECT companies.company_id ";
+$sql .= "FROM companies ";
+$sql .= "LEFT JOIN contacts ON companies.company_id = contacts.company_id ";
+$sql .= "WHERE contacts.company_id IS NULL";
 $rst = $con->execute($sql);
 
 //close the database connection, because we don't need it anymore
@@ -60,6 +63,9 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.3  2004/04/12 14:35:19  maulani
+ * - move structure change to update.php
+ *
  * Revision 1.2  2004/04/09 17:13:28  braverock
  * - added alter table command to change company_legal_name to legal_name
  *   (only relevant for upgraded old installations)
