@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.1 2004/03/18 01:07:18 maulani Exp $
+ * $Id: database.php,v 1.2 2004/03/22 02:05:07 braverock Exp $
  */
 
 /**
@@ -157,7 +157,7 @@ function misc_db_tables($con, $table_list) {
         //execute
         $rst = $con->execute($sql);
     }
-    
+
 } // end misc_db_tables fn
 
 
@@ -180,7 +180,7 @@ function user_db_tables($con, $table_list) {
         //execute
         $rst = $con->execute($sql);
     }
-    
+
     // users
     if (!in_array('users',$table_list)) {
         $sql ="create table users (
@@ -199,7 +199,7 @@ function user_db_tables($con, $table_list) {
         //execute
         $rst = $con->execute($sql);
     }
-    
+
 } // end user_db_tables fn
 
 
@@ -210,10 +210,10 @@ function user_db_tables($con, $table_list) {
  */
 function company_db_tables($con, $table_list) {
     // company_sources
-    // where did each company come from?  how did they hear about us?  I like options like "trade show" and 
-    // "advertisement", but you could just as easily use more specific items -- e.g., "June Telemarketing" -- to track how 
-    // many leads are coming from each source.  These company sources are different from campaigns, which are only 
-    // associated with opportunities.  Of course, if you don't have any need to track this information, you can just rename 
+    // where did each company come from?  how did they hear about us?  I like options like "trade show" and
+    // "advertisement", but you could just as easily use more specific items -- e.g., "June Telemarketing" -- to track how
+    // many leads are coming from each source.  These company sources are different from campaigns, which are only
+    // associated with opportunities.  Of course, if you don't have any need to track this information, you can just rename
     // it and use the picklist to store another type of information entirely.
     if (!in_array('company_sources',$table_list)) {
         $sql ="create table company_sources (
@@ -230,8 +230,8 @@ function company_db_tables($con, $table_list) {
     }
 
     // industries
-    // a user-readable list of industries -- by default I suggest things like "mining", "consulting", etc. But feel free 
-    // to modify this for your particular needs... if you deal with restaurants exclusively, you might want to use values 
+    // a user-readable list of industries -- by default I suggest things like "mining", "consulting", etc. But feel free
+    // to modify this for your particular needs... if you deal with restaurants exclusively, you might want to use values
     // like "Mexican", "Thai", or "Caribbean".
     if (!in_array('industries',$table_list)) {
         $sql ="create table industries (
@@ -247,7 +247,7 @@ function company_db_tables($con, $table_list) {
     }
 
     // ratings
-    // I think it's helpful to have some record of how good/reliable each company in your system is... just a quick "good", 
+    // I think it's helpful to have some record of how good/reliable each company in your system is... just a quick "good",
     // "fair", or "poor" is enough for me, but you might add "excellent" or "horrible" if you need more options.
     if (!in_array('ratings',$table_list)) {
         $sql ="create table ratings (
@@ -263,28 +263,28 @@ function company_db_tables($con, $table_list) {
     }
 
     // account_statuses
-    // Some of you need to make sure that your customers have valid contracts, have paid their bills, aren't over their 
+    // Some of you need to make sure that your customers have valid contracts, have paid their bills, aren't over their
     // credit limits, etc.
     if (!in_array('account_statuses',$table_list)) {
         $sql ="create table account_statuses (
-               account_status_id           int not null primary key auto_increment,
+               account_status_id               int not null primary key auto_increment,
                account_status_short_name       varchar(10) not null default '',
                account_status_pretty_name      varchar(100) not null default '',
-               account_status_pretty_plural        varchar(100) not null default '',
+               account_status_pretty_plural    varchar(100) not null default '',
                account_status_display_html     varchar(100) not null default '',
-               account_status_record_status        char(1) default 'a'
+               account_status_record_status    char(1) default 'a'
                )";
         //execute
         $rst = $con->execute($sql);
     }
 
     // company_types
-    // Companies can belong to zero or more of these types, but this table is here to represent high-level relationships 
-    // with your organization: partner, vendor, customer, competitor, etc.  If you're just using XRMS to track customers, 
+    // Companies can belong to zero or more of these types, but this table is here to represent high-level relationships
+    // with your organization: partner, vendor, customer, competitor, etc.  If you're just using XRMS to track customers,
     // you won't have much need for these and they can safely be ignored.
     if (!in_array('company_types',$table_list)) {
         $sql ="create table company_types (
-               company_type_id             int not null primary key auto_increment,
+               company_type_id                 int not null primary key auto_increment,
                company_type_short_name         varchar(10) not null default '',
                company_type_pretty_name        varchar(100) not null default '',
                company_type_pretty_plural      varchar(100) not null default '',
@@ -300,32 +300,32 @@ function company_db_tables($con, $table_list) {
     if (!in_array('company_company_type_map',$table_list)) {
         $sql ="create table company_company_type_map (
                company_id              int not null default 0,
-               company_type_id             int not null default 0
+               company_type_id         int not null default 0
                )";
         //execute
         $rst = $con->execute($sql);
     }
 
     // crm_statuses
-    // Did you just find out about this company, or is this an old, well-developed account?  I like traditional options here 
-    // such as Lead, Prospect, Developed, etc.  Eventually we'll probably add a crm_status_transitions table to keep 
+    // Did you just find out about this company, or is this an old, well-developed account?  I like traditional options here
+    // such as Lead, Prospect, Developed, etc.  Eventually we'll probably add a crm_status_transitions table to keep
     // tabs on how well companies are moving along through the CRM process.
     if (!in_array('crm_statuses',$table_list)) {
         $sql ="create table crm_statuses (
                crm_status_id               int not null primary key auto_increment,
-               crm_status_short_name           varchar(10) not null default '',
-               crm_status_pretty_name          varchar(100) not null default '',
-               crm_status_pretty_plural        varchar(100) not null default '',
-               crm_status_display_html         varchar(100) not null default '',
-               crm_status_record_status        char(1) default 'a'
+               crm_status_short_name       varchar(10) not null default '',
+               crm_status_pretty_name      varchar(100) not null default '',
+               crm_status_pretty_plural    varchar(100) not null default '',
+               crm_status_display_html     varchar(100) not null default '',
+               crm_status_record_status    char(1) default 'a'
                )";
         //execute
         $rst = $con->execute($sql);
     }
 
     // companies
-    // this is the Big Daddy table of companies/organizations.  Lots of references to the above-mentioned tables, a few 
-    // things that should probably be stored in other software (credit_limit, terms), and three "extref" columns to store 
+    // this is the Big Daddy table of companies/organizations.  Lots of references to the above-mentioned tables, a few
+    // things that should probably be stored in other software (credit_limit, terms), and three "extref" columns to store
     // keys to link these companies with their representations in other software for reporting/integration purposes.
     if (!in_array('companies',$table_list)) {
         $sql ="create table companies (
@@ -371,8 +371,8 @@ function company_db_tables($con, $table_list) {
     }
 
     // addresses
-    // each company can have one or more address (one gets automatically added with the company) -- and you can select via 
-    // radio button which one should be the default for billing, shipping, and payments.  I think this might be better as a 
+    // each company can have one or more address (one gets automatically added with the company) -- and you can select via
+    // radio button which one should be the default for billing, shipping, and payments.  I think this might be better as a
     // "facilities" table, with contacts belonging to one facility, but for now this should be good enough.
     if (!in_array('addresses',$table_list)) {
         $sql ="create table addresses (
@@ -419,9 +419,9 @@ function company_db_tables($con, $table_list) {
     }
 
     // contacts
-    // I could have made separate tables for titles ("President", "Marketing Director", etc.) and summaries 
-    // ("Decision Maker", "Influencer", etc.) but constraining these often seems to just get in the way.  If you'd 
-    // like to use specific values here, just come to some kind of agreement as to what they should be and have 
+    // I could have made separate tables for titles ("President", "Marketing Director", etc.) and summaries
+    // ("Decision Maker", "Influencer", etc.) but constraining these often seems to just get in the way.  If you'd
+    // like to use specific values here, just come to some kind of agreement as to what they should be and have
     // your employees use them consistently.
     if (!in_array('contacts',$table_list)) {
         $sql ="create table contacts (
@@ -463,7 +463,7 @@ function company_db_tables($con, $table_list) {
     }
 
     // email_templates
-    // for the bulk e-mail stuff, where you can store things like "Dear ##CONTACT_FIRST_NAMES## - " and the system will 
+    // for the bulk e-mail stuff, where you can store things like "Dear ##CONTACT_FIRST_NAMES## - " and the system will
     // replace the ##CONTACT_FIRST_NAMES## token with the contact's actual first names
     if (!in_array('email_templates',$table_list)) {
         $sql ="create table email_templates (
@@ -477,13 +477,13 @@ function company_db_tables($con, $table_list) {
     }
 
     // company_former_names
-    // Keep track of company name changes 
+    // Keep track of company name changes
     if (!in_array('company_former_names',$table_list)) {
         $sql ="create table company_former_names (
-               company_id int(11) NOT NULL default '0',
-               namechange_at datetime NOT NULL default '0000-00-00 00:00:00',
-               former_name varchar(100) NOT NULL default '',
-               description varchar(100) default NULL,
+               company_id       int(11) NOT NULL default '0',
+               namechange_at    datetime NOT NULL default '0000-00-00 00:00:00',
+               former_name      varchar(100) NOT NULL default '',
+               description      varchar(100) default NULL,
                KEY company_id (company_id)
                )";
         //execute
@@ -491,15 +491,15 @@ function company_db_tables($con, $table_list) {
     }
 
     // company_relationship
-    // Track relationships between companies 
+    // Track relationships between companies
     if (!in_array('company_relationship',$table_list)) {
         $sql ="create table company_relationship (
-               company_from_id int(11) NOT NULL default '0',
-               relationship_type varchar(100) NOT NULL default '',
-               company_to_id int(11) NOT NULL default '0',
-               established_at datetime NOT NULL default '0000-00-00 00:00:00',
+               company_from_id      int(11) NOT NULL default '0',
+               relationship_type    varchar(100) NOT NULL default '',
+               company_to_id        int(11) NOT NULL default '0',
+               established_at       datetime NOT NULL default '0000-00-00 00:00:00',
                KEY company_from_id (company_from_id,company_to_id)
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -535,7 +535,7 @@ function opportunity_db_tables($con, $table_list) {
                closed_at                    datetime,
                closed_by                    int not null default 0,
                opportunity_record_status    char(1) default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -552,7 +552,7 @@ function opportunity_db_tables($con, $table_list) {
                opportunity_status_display_html  varchar(100) not null default '',
                opportunity_status_record_status char(1) not null default 'a',
                opportunity_status_long_desc     varchar(255) not null default ''
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -568,27 +568,27 @@ function case_db_tables($con, $table_list) {
     // cases
     if (!in_array('cases',$table_list)) {
         $sql ="create table cases (
-               case_id             int not null primary key auto_increment,
+               case_id                 int not null primary key auto_increment,
                case_type_id            int not null default 0,
                case_status_id          int not null default 0,
                case_priority_id        int not null default 0,
-               company_id          int not null default 0,
-               contact_id          int not null default 0,
-               user_id             int not null default 0,
-               priority            int not null default 0,
-               case_title          varchar(100) not null default '',
+               company_id              int not null default 0,
+               contact_id              int not null default 0,
+               user_id                 int not null default 0,
+               priority                int not null default 0,
+               case_title              varchar(100) not null default '',
                case_description        text not null default '',
-               due_at              datetime,
-               entered_at          datetime,
-               entered_by          int not null default 0,
+               due_at                  datetime,
+               entered_at              datetime,
+               entered_by              int not null default 0,
                last_modified_at        datetime,
                last_modified_by        int not null default 0,
-               owned_at            datetime,
-               owned_by            int not null default 0,
-               closed_at           datetime,
-               closed_by           int not null default 0,
+               owned_at                datetime,
+               owned_by                int not null default 0,
+               closed_at               datetime,
+               closed_by               int not null default 0,
                case_record_status      char(1) not null default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -602,7 +602,7 @@ function case_db_tables($con, $table_list) {
                case_type_pretty_plural     varchar(100) not null default '',
                case_type_display_html      varchar(100) not null default '',
                case_type_record_status     char(1) not null default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -618,7 +618,7 @@ function case_db_tables($con, $table_list) {
                case_status_pretty_plural   varchar(100) not null default '',
                case_status_display_html    varchar(100) not null default '',
                case_status_record_status   char(1) not null default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -626,13 +626,14 @@ function case_db_tables($con, $table_list) {
     // case_priorities
     if (!in_array('case_priorities',$table_list)) {
         $sql ="create table case_priorities (
-               case_priority_id        int not null primary key auto_increment,
-               case_priority_short_name    varchar(10) not null default '',
-               case_priority_pretty_name   varchar(100) not null default '',
-               case_priority_pretty_plural varchar(100) not null default '',
-               case_priority_display_html  varchar(100) not null default '',
-               case_priority_record_status char(1) not null default 'a'
-               )"; 
+               case_priority_id                 int not null primary key auto_increment,
+               case_priority_short_name         varchar(10) not null default '',
+               case_priority_pretty_name        varchar(100) not null default '',
+               case_priority_pretty_plural      varchar(100) not null default '',
+               case_priority_display_html       varchar(100) not null default '',
+               case_priority_score_adjustment   int not null,
+               case_priority_record_status      char(1) not null default 'a'
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -654,7 +655,7 @@ function campaign_db_tables($con, $table_list) {
                campaign_type_pretty_plural                                 varchar(100) not null default '',
                campaign_type_display_html                                  varchar(100) not null default '',
                campaign_type_record_status                                 char(3) not null default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -668,7 +669,7 @@ function campaign_db_tables($con, $table_list) {
                campaign_status_pretty_plural                               varchar(100) not null default '',
                campaign_status_display_html                                varchar(100) not null default '',
                campaign_status_record_status                               char(3) not null default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -690,7 +691,7 @@ function campaign_db_tables($con, $table_list) {
                last_modified_at                                            datetime,
                last_modified_by                                            int not null default 0,
                campaign_record_status                                      char(1) not null default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -704,11 +705,11 @@ function campaign_db_tables($con, $table_list) {
  */
 function activity_db_tables($con, $table_list) {
     // activity_types
-    // I've used default activity types like "call to," "call from," "e-mail to," "e-mail from," etc.  Using these, 
-    // you'd probably end up writing things like "Introduction," "Sent Marketing Materials," or "Received Bank/Trade 
-    // References" in the subject line for each activity.  If your organization has a more defined process for customer 
-    // relationships, you might change these to reflect stages of that process.  For example, you might insert activity types 
-    // like "Introduction," "Sent Marketing Materials," "Received Bank/Trade References," etc., in which case you could make 
+    // I've used default activity types like "call to," "call from," "e-mail to," "e-mail from," etc.  Using these,
+    // you'd probably end up writing things like "Introduction," "Sent Marketing Materials," or "Received Bank/Trade
+    // References" in the subject line for each activity.  If your organization has a more defined process for customer
+    // relationships, you might change these to reflect stages of that process.  For example, you might insert activity types
+    // like "Introduction," "Sent Marketing Materials," "Received Bank/Trade References," etc., in which case you could make
     // the subject lines even more descriptive.
     if (!in_array('activity_types',$table_list)) {
         $sql ="create table activity_types (
@@ -719,14 +720,14 @@ function activity_db_tables($con, $table_list) {
                activity_type_display_html         varchar(100) not null default '',
                activity_type_score_adjustment     int not null default 0,
                activity_type_record_status        char(1) not null default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
 
     // activities
-    // Activities are assumed to belong to exactly one company, contact, opportunity, or case, because I think (hope) this 
-    // may be good enough.  The ideal data model should be more complicated, and an activity should probably be called 
+    // Activities are assumed to belong to exactly one company, contact, opportunity, or case, because I think (hope) this
+    // may be good enough.  The ideal data model should be more complicated, and an activity should probably be called
     // something like "work effort,"  but I can't find a data model that seems right.
     if (!in_array('activities',$table_list)) {
         $sql ="create table activities (
@@ -746,7 +747,7 @@ function activity_db_tables($con, $table_list) {
                completed_at                    datetime,
                activity_status                 char(1) default 'o',
                activity_record_status          char(1) default 'a'
-               )"; 
+               )";
         //execute
         $rst = $con->execute($sql);
     }
@@ -773,6 +774,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.2  2004/03/22 02:05:07  braverock
+ * - add case_priority_score_adjustment to fix SF bug 906413
+ *
  * Revision 1.1  2004/03/18 01:07:18  maulani
  * - Create installation tests to check whether the include location and
  *   vars.php have been configured.
