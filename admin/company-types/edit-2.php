@@ -9,18 +9,18 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 
-$industry_id = $_POST['industry_id'];
-$industry_short_name = $_POST['industry_short_name'];
-$industry_pretty_name = $_POST['industry_pretty_name'];
-$industry_pretty_plural = $_POST['industry_pretty_plural'];
-$industry_display_html = $_POST['industry_display_html'];
+$company_type_id = $_POST['company_type_id'];
+$company_type_short_name = $_POST['company_type_short_name'];
+$company_type_pretty_name = $_POST['company_type_pretty_name'];
+$company_type_pretty_plural = $_POST['company_type_pretty_plural'];
+$company_type_display_html = $_POST['company_type_display_html'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update industries set industry_short_name = " . $con->qstr($industry_short_name) . ", industry_pretty_name = " . $con->qstr($industry_pretty_name) . ", industry_pretty_plural = " . $con->qstr($industry_pretty_plural) . ", industry_display_html = " . $con->qstr($industry_display_html) . " WHERE industry_id = $industry_id";
+$sql = "update company_types set company_type_short_name = " . $con->qstr($company_type_short_name) . ", company_type_pretty_name = " . $con->qstr($company_type_pretty_name) . ", company_type_pretty_plural = " . $con->qstr($company_type_pretty_plural) . ", company_type_display_html = " . $con->qstr($company_type_display_html) . " WHERE company_type_id = $company_type_id";
 $con->execute($sql);
 
-header("Location: one.php?industry_id=$industry_id");
+header("Location: one.php?company_type_id=$company_type_id");
 
 ?>

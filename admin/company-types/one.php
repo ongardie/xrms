@@ -9,26 +9,26 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 
-$industry_id = $_GET['industry_id'];
+$company_type_id = $_GET['company_type_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "select * from industries where industry_id = $industry_id";
+$sql = "select * from company_types where company_type_id = $company_type_id";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
 
-    $industry_short_name = $rst->fields['industry_short_name'];
-    $industry_pretty_name = $rst->fields['industry_pretty_name'];
-    $industry_pretty_plural = $rst->fields['industry_pretty_plural'];
-    $industry_display_html = $rst->fields['industry_display_html'];
+    $company_type_short_name = $rst->fields['company_type_short_name'];
+    $company_type_pretty_name = $rst->fields['company_type_pretty_name'];
+    $company_type_pretty_plural = $rst->fields['company_type_pretty_plural'];
+    $company_type_display_html = $rst->fields['company_type_display_html'];
 
     $rst->close();
 }
 
-$page_title = $industry_pretty_name;
+$page_title = $company_type_pretty_name;
 start_page($page_title);
 
 ?>
@@ -38,26 +38,26 @@ start_page($page_title);
         <td class=lcol width=25% valign=top>
 
         <form action=edit-2.php method=post>
-        <input type=hidden name=industry_id value="<?php  echo $industry_id; ?>">
+        <input type=hidden name=company_type_id value="<?php  echo $company_type_id; ?>">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=4>Edit Industry Information</td>
+                <td class=widget_header colspan=4>Edit Company Type Information</td>
             </tr>
             <tr>
                 <td class=widget_label_right>Short Name</td>
-                <td class=widget_content_form_element><input type=text name=industry_short_name value="<?php  echo $industry_short_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=company_type_short_name value="<?php  echo $company_type_short_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Full Name</td>
-                <td class=widget_content_form_element><input type=text name=industry_pretty_name value="<?php  echo $industry_pretty_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=company_type_pretty_name value="<?php  echo $company_type_pretty_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Full Plural</td>
-                <td class=widget_content_form_element><input type=text name=industry_pretty_plural value="<?php  echo $industry_pretty_plural; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=company_type_pretty_plural value="<?php  echo $company_type_pretty_plural; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Display HTML</td>
-                <td class=widget_content_form_element><input type=text name=industry_display_html value="<?php  echo $industry_display_html; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=company_type_display_html value="<?php  echo $company_type_display_html; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
@@ -66,16 +66,16 @@ start_page($page_title);
         </form>
 
         <form action=delete.php method=post>
-        <input type=hidden name=industry_id value="<?php  echo $industry_id; ?>">
+        <input type=hidden name=company_type_id value="<?php  echo $company_type_id; ?>">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=4>Delete Industry</td>
+                <td class=widget_header colspan=4>Delete Company Type</td>
             </tr>
             <tr>
                 <td class=widget_content>
-                Click the button below to remove this Industry from the system.
+                Click the button below to remove this company type from the system.
                 <p>Note: This action CANNOT be undone!
-                <p><input class=button type=submit value="Delete Industry">
+                <p><input class=button type=submit value="Delete Company Type">
                 </td>
             </tr>
         </table>
