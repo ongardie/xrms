@@ -308,6 +308,34 @@ insert into email_templates (email_template_title, email_template_body) values (
 insert into email_templates (email_template_title, email_template_body) values ('Customer Service Inquiry', '');
 
 
+-- 
+-- Keep track of company name changes 
+-- 
+
+CREATE TABLE `company_former_names` (
+  `company_id` int(11) NOT NULL default '0',
+  `namechange_at` datetime NOT NULL default '0000-00-00 00:00:00',
+  `former_name` varchar(100) NOT NULL default '',
+  `description` varchar(100) default NULL,
+  KEY `company_id` (`company_id`)
+) TYPE=MyISAM; 
+
+
+-- 
+-- Track relationships between companies 
+-- 
+
+CREATE TABLE `company_relationship` (
+  `company_from_id` int(11) NOT NULL default '0',
+  `relationship_type` varchar(100) NOT NULL default '',
+  `company_to_id` int(11) NOT NULL default '0',
+  `established_at` datetime NOT NULL default '0000-00-00 00:00:00',
+  KEY `company_from_id` (`company_from_id`,`company_to_id`)
+) TYPE=MyISAM; 
+
+
+
+
 -- ---------------------------------------------------------------------------------------------------------------
 -- If you'd like to have some sample data in your system (you can always remove it later), I recommend leaving the 
 -- following lines in this file.  If the idea of having an "unclean" database bothers you, though, just erase them 
