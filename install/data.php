@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.10 2004/07/13 18:15:59 neildogg Exp $
+ * $Id: data.php,v 1.11 2004/07/15 21:26:20 maulani Exp $
  */
 
 /**
@@ -21,6 +21,8 @@ function misc_db_data($con) {
     // system_parameters
     if (confirm_no_records($con, 'system_parameters')) {
         $sql ="insert into system_parameters (param_id, int_val) values ('Default GST Offset', -5)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, int_val) values ('Audit Level', 4)";
         $rst = $con->execute($sql);
     }
 
@@ -943,6 +945,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.11  2004/07/15 21:26:20  maulani
+ * - Add Audit Level as a system parameter
+ *
  * Revision 1.10  2004/07/13 18:15:59  neildogg
  * - Add database entries to allow a contact to be tied to the user
  *

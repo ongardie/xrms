@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.20 2004/07/13 18:15:44 neildogg Exp $
+ * $Id: update.php,v 1.21 2004/07/15 21:26:20 maulani Exp $
  */
 
 // where do we include from
@@ -212,6 +212,23 @@ if ($recCount == 0) {
     $rec = array();
     $rec['param_id'] = 'Default GST Offset';
     $rec['int_val'] = -5;
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is an Audit Level in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='Audit Level'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= 'Added an Audit Level.<BR><BR>';
+    $sql = "SELECT * FROM system_parameters WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['param_id'] = 'Audit Level';
+    $rec['int_val'] = 4;
 
     $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
@@ -667,6 +684,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.21  2004/07/15 21:26:20  maulani
+ * - Add Audit Level as a system parameter
+ *
  * Revision 1.20  2004/07/13 18:15:44  neildogg
  * - Add database entries to allow a contact to be tied to the user
  *
