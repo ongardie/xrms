@@ -18,6 +18,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 <head>
 <title>$page_title</title>
 <link rel=stylesheet href=$stylesheet>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <body>
 <table class=page_header cellspacing=1 width='100%'>
@@ -31,6 +32,7 @@ if ($show_navbar) echo <<<EOQ
 	<tr>
         <td>
         <table class=navbar cellspacing=0 width='100%'>
+        <tr>
 		<td class=navbar width='80%'>
 			<a href="$http_site_root/private/home.php">Home</a> &bull; 
 			<a href="$http_site_root/companies/some.php">Companies</a> &bull; 
@@ -45,6 +47,7 @@ if ($show_navbar) echo <<<EOQ
 		<td class=navbar align=right>
 			Logged in as: $session_username &bull; <a href="$http_site_root/logout.php">Logout</a>
 		</td>
+		</tr>
         </table>
         </td>
 	</tr>
