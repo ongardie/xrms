@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.4 2004/03/25 22:14:00 maulani Exp $
+ * $Id: update.php,v 1.5 2004/03/26 16:17:00 maulani Exp $
  */
 
 /**
@@ -78,10 +78,10 @@ if ($rst) {
 // Fix problem introduced by buggy Mar 19, 2004 install code
 // This will modify the initial data appropriately
 $sql = "update address_format_strings set address_format_string='";
-$sql .= '$lines<br>$city, $province $postal_code<br>$country ';
-$sql .= "'where address_format_string!='";
-$sql .= '$lines<br>$city, $province $postal_code<br>$country ';
-$sql .= "'and address_format_string_id=1";
+$sql .= '$lines<br>$city, $province $postal_code<br>$country';
+$sql .= "' where address_format_string!='";
+$sql .= '$lines<br>$city, $province $postal_code<br>$country';
+$sql .= "' and address_format_string_id=1";
 $rst = $con->execute($sql);
 
 
@@ -105,8 +105,8 @@ end_page();
 
 /**
  * $Log: update.php,v $
- * Revision 1.4  2004/03/25 22:14:00  maulani
- * -  Add fix to repair bad address_format_string created by buggy install code
+ * Revision 1.5  2004/03/26 16:17:00  maulani
+ * - Cleanup formatting
  *
  * Revision 1.3  2004/03/23 14:34:05  braverock
  * - add check for result set before closing rst
