@@ -2,7 +2,7 @@
 /**
  * Insert item details into the database
  *
- * $Id: edit-2.php,v 1.4 2004/07/22 18:35:38 gpowers Exp $
+ * $Id: edit-2.php,v 1.5 2004/11/10 07:29:32 gpowers Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -114,6 +114,6 @@ foreach ($passed_values as $element_id=>$value) {
 
 $con->close();
 
-header("Location: " . $http_site_root . $return_url);
+header("Location: " . $return_url);
 
 ?>

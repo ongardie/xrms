@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.6 2004/07/25 14:32:42 johnfawcett Exp $
+ * $Id: one.php,v 1.7 2004/11/10 07:29:33 gpowers Exp $
  *
  */
 
@@ -24,8 +24,9 @@ $msg = $_GET['msg'];
 $info_id = $_GET['info_id'];
 $info_type_id = $_GET['info_type_id'];
 $company_id = $_GET['company_id'];
+global $http_site_root;
 
-$return_url = urlencode("/plugins/info/one.php?info_id=" . $info_id . "&info_type_id=" . $info_type_id . "&company_id=" . $company_id);
+$return_url = urlencode("one.php?info_id=" . $info_id . "&info_type_id=" . $info_type_id . "&company_id=" . $company_id);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -185,7 +186,7 @@ if ($all_elements) {
             $rst->close();
         }
 
-        $return_url = urlencode("/plugins/info/one.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id");
+        $return_url = urlencode("one.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id");
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?company_id=$company_id&activity_id=" . $all_elements->fields['activity_id'] . "&return_url=$return_url'>" . $all_elements->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $all_elements->fields['username'] . '</td>';
@@ -337,6 +338,7 @@ function openNewsWindow() {
       </tr>
       <tr>
         <td class=widget_content_form_element>
+<?php $return_url = urlencode("one.php?info_id=" . $info_id . "&info_type_id=" . $info_type_id . "&company_id=" . $company_id);?>
           <input class=button type=button value="<?php echo _("Edit"); ?>"
             onclick="javascript: location.href='<?php echo "edit.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id&return_url=$return_url"; ?>';">
           <input class=button type=button value="<?php echo _("Delete"); ?>"

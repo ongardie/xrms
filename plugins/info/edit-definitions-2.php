@@ -2,7 +2,7 @@
 /**
  * Edit info element definitions
  *
- * $Id: edit-definitions-2.php,v 1.3 2004/07/22 18:36:12 gpowers Exp $
+ * $Id: edit-definitions-2.php,v 1.4 2004/11/10 07:29:33 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -46,6 +46,7 @@ $columns = array(
   'element_order',
   'element_default_value',
   'element_possible_values',
+  'element_display_in_sidebar',
   'element_enabled',
   'info_type_id',
 );

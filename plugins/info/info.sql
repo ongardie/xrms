@@ -27,6 +27,7 @@ CREATE TABLE `info_element_definitions` (
   `element_possible_values` varchar(100) NOT NULL default '',
   `element_enabled` smallint(6) NOT NULL default '1',
   `info_type_id` int(11) NOT NULL default '0',
+  `element_display_in_sidebar` smallint(6) NOT NULL default '0',
   PRIMARY KEY  (`element_id`)
 ) TYPE=MyISAM AUTO_INCREMENT=2 ;
 
@@ -34,7 +35,7 @@ CREATE TABLE `info_element_definitions` (
 # Table structure for table `info_element_definitions`
 #
 
-INSERT INTO `info_element_definitions` VALUES (1, 'Name', 'text', '1', 0, '', '', 1, 0);
+INSERT INTO `info_element_definitions` VALUES (1, 'Name', 'text', '1', 0, '', '', 1, 0, 1);
 
 # --------------------------------------------------------
 
@@ -63,7 +64,7 @@ CREATE TABLE `info_types` (
   `to_what_table` varchar(24) NOT NULL default '',
   `from_what_text` varchar(32) NOT NULL default '',
   `to_what_text` varchar(32) NOT NULL default '',
-  `info_type_status` char(1) NOT NULL default 'a',
+  `info_type_record_status` char(1) NOT NULL default 'a',
   `pre_formatting` varchar(25) default NULL,
   `post_formatting` varchar(25) default NULL,
   `info_type_order` int(11) NOT NULL default '0',

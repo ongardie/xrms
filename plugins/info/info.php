@@ -2,7 +2,7 @@
 /**
  * The main page for the info plugin
  *
- * $Id: info.php,v 1.3 2004/07/22 18:29:58 gpowers Exp $
+ * $Id: info.php,v 1.4 2004/11/10 07:29:33 gpowers Exp $
  */
 
 // include the common files
@@ -20,7 +20,7 @@ $session_user_id = session_check();
 
 $msg = $_GET['msg'];
 
-$return_url = "/plugins/info/info.php";
+$return_url = "info.php";
 
 //connect to the database
 $con = &adonewconnection($xrms_db_dbtype);

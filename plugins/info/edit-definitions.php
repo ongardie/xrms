@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit-definitions.php,v 1.3 2004/07/22 20:07:54 gpowers Exp $
+ * $Id: edit-definitions.php,v 1.4 2004/11/10 07:29:33 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -137,10 +137,25 @@ function show_row ($fields) {
   }
   $enabled_html .= "\n\t</td>\n";
 
-  $info_type_id_html = "<INPUT TYPE=hidden NAME=\"info_type_id[$element_id]\" VALUE=\"$info_type_id\">";
+// DISPLAY IN SIDEBAR?
 
+  $element_display_in_sidebar_html = "\t<td>\n\t\t";
+ // if (1 == $element_display_in_sidebar) {
+//    $enabled_html .= "<INPUT TYPE=hidden NAME=\"element_display_in_sidebar[1]\" VALUE=\"1\">\n";
+//    $element_display_in_sidebar .= "Yes";
+//  }
+//  else {
+    $element_display_in_sidebar_html .= "<input type=checkbox value=1 ";
+    $element_display_in_sidebar_html .= "name=\"element_display_in_sidebar[$element_id]\"";
+    if ($element_display_in_sidebar) {
+        $element_display_in_sidebar_html .= " CHECKED";
+  }
+//  }
+  $element_display_in_sidebar_html .= "\n\t</td>\n";
+
+  $info_type_id_html = "<INPUT TYPE=hidden NAME=\"info_type_id[$element_id]\" VALUE=\"$info_type_id\">";
   return "<tr>\n".$label_html.$type_html.$column_html.$order_html.
-    $default_value_html.$possible_values_html.$enabled_html.$info_type_id_html."</tr>\n";
+    $default_value_html.$possible_values_html.$element_display_in_sidebar_html.$enabled_html.$info_type_id_html."</tr>\n";
 }
 
 $session_user_id = session_check();
@@ -200,7 +215,9 @@ $new_element = array(
   "element_order" => "",
   "element_default_value" => "",
   "element_possible_values" => "",
+  "element_dispaly_in_sidebar" => 0,
   "element_enabled" => 1,
+  "element_display_in_sidebar" => 0,
   "element_info_type_id" => 0,
 );
 
@@ -221,7 +238,7 @@ start_page($page_title, true);
           <td class=widget_header colspan=7>Edit Server Info</td>
         </tr>
         <tr>
-          <th>Label</th><th>Type</th><th>Column</th><th>Order</th><th>Default Value</th><th>Possible Values</th><th>Enabled</th>
+          <th>Label</th><th>Type</th><th>Column</th><th>Order</th><th>Default Value</th><th>Possible Values</th><th>Display in Sidebar</th><th>Enabled</th>
         </tr>
         <?php
           if ($rst) {

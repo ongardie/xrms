@@ -2,20 +2,20 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.4 2004/09/09 12:29:37 braverock Exp $
+ * $Id: sidebar.php,v 1.5 2004/11/10 07:29:33 gpowers Exp $
  */
 
-//$con->debug = 1;
+// $con->debug = 1;
 
 global $display_on;
 
 # set a reasonable default
 if (!$display_on) {
-    $display_on = "company_sidebar";
+    $display_on = "company_sidebar_bottom";
 }
 
 $sql = "SELECT info_types.info_type_id, info_types.info_type_name FROM info_types, info_display_map ";
-$sql .= "WHERE info_types.info_type_status = 'a' ";
+$sql .= "WHERE info_types.info_type_record_status = 'a' ";
 if ($display_on != "all") {
     $sql .= "AND info_display_map.display_on = '" . $display_on . "' ";
 }
@@ -23,6 +23,7 @@ $sql .= "AND info_types.info_type_id = info_display_map.info_type_id ";
 $sql .= "ORDER BY info_types.info_type_order ";
 
 $toprst = $con->execute($sql);
+
 if (!$toprst) {
   db_error_handler ($con, $sql);
   exit;
@@ -34,7 +35,7 @@ if ($toprst) {
         $info_type_id = $toprst->fields['info_type_id'];
         $info_type_name = $toprst->fields['info_type_name'];
 
-        $info_rows = "<div id='note_sidebar'>
+        $info_rows .= "<div id='note_sidebar'>
             <table class=widget cellspacing=1 width=\"100%\">
             <tr>
             <td class=widget_header colspan=2>$info_type_name</td>
@@ -53,6 +54,22 @@ if ($toprst) {
         }
 
 
+        $sql = "SELECT element_id,  element_label ";
+        $sql .= "FROM info_element_definitions ";
+        $sql .= "WHERE element_display_in_sidebar = 1 ";
+        $sql .= "AND info_type_id = $info_type_id ";
+        $sql .= "AND element_label NOT LIKE 'Name' ";
+        $sql .= "ORDER BY element_order";
+        $rst = $con->execute($sql);
+        if ($rst) {
+            while (!$rst->EOF) {
+                $element[$rst->fields['element_label']]
+                    = $rst->fields['element_id'];
+                $rst->movenext();
+            }
+        }
+
+
         #//build the info sql query
         $sql = "SELECT info.value, info.info_id FROM info, info_map ";
         $sql .= "WHERE info.info_id=info_map.info_id ";
@@ -62,9 +79,9 @@ if ($toprst) {
             $company_id = 0;
         }
         $sql .= "AND info_map.info_type_id=$info_type_id  ";
-if ($name_element_id) {
-        $sql .= "AND info.element_id=$name_element_id ";
-}
+        if ($name_element_id) {
+            $sql .= "AND info.element_id=$name_element_id ";
+        }
         $sql .= "AND info.info_record_status='a'";
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -73,12 +90,33 @@ if ($name_element_id) {
         }
 
         if ($rst) {
-            while (!$rst->EOF) {
-                $server_link = "<a href='$http_site_root/plugins/info/one.php";
-                $server_link .= "?info_id=".$rst->fields['info_id'];
-                $server_link .= "&company_id=$company_id'>";
-                $server_link .= $rst->fields['value']."</a>";
+          while (!$rst->EOF) {
+            $server_link = "<a href='$http_site_root/plugins/info/one.php";
+            $server_link .= "?info_id=".$rst->fields['info_id'];
+            $server_link .= "&company_id=$company_id'>";
+            $server_link .= $rst->fields['value']."</a>";
 
+    $fields = array();
+    $values = array();
+    foreach ($element as $field=>$value) {
+        $fields[] = $field;
+        $values[] = $value;
+    }
+
+    foreach ($fields as $field) {
+
+     $value = $element[$field];
+                $sql2 = "SELECT info.value, info.info_id FROM info, info_map ";
+                $sql2 .= "WHERE info.info_id = " . $rst->fields['info_id'];
+                $sql2 .= " AND info.element_id=$value ";
+                $rst2 = $con->execute($sql2);
+                if ($rst2) {
+                  if (!$rst2->EOF) {
+                    $server_link .= "<br />" . $field . ": "
+                        . $rst2->fields['value'];
+                  }
+                }
+             }
                 $info_rows .= "
                   <tr>
                     <td class=widget_content>
@@ -92,21 +130,23 @@ if ($name_element_id) {
             }
         }
 
-        //now close the table, we're done
-        $info_rows .= "</table>\n</div>";
-
-        $toprst->movenext();
-    }
-}
-# Add New button
-$info_rows .= "
+       # Add New button
+       $info_rows .= "
      <tr>
         <td class=widget_content_form_element colspan=5>
           <input class=button type=button value=\"New\"
             onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&info_type_id=$info_type_id';\">
         </td>
-     </tr>\n;
+     </tr>\n
 ";
+
+       //now close the table, we're done
+       $info_rows .= "</table>\n</div>";
+
+       $toprst->movenext();
+    }
+}
+
 echo $info_rows;
 
 # End Info Type Loop
