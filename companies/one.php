@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.80 2005/01/10 20:47:48 neildogg Exp $
+ * $Id: one.php,v 1.81 2005/01/12 02:38:50 introspectshun Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -21,7 +21,9 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $company_id = $_GET['company_id'];
-$division_id=$_GET['division_id'];
+if (isset($_GET['division_id'])) {
+    $division_id = $_GET['division_id'];
+}
 
 global $on_what_id;
 $on_what_id=$company_id;
@@ -155,7 +157,7 @@ if (strlen($url) > 0) {
 }
 
 //if division_id is specified, look up the name
-if ($division_id) {
+if (isset($division_id)) {
     $sql = "SELECT division_name, address_id FROM company_division WHERE division_id=$division_id";
     $rst=$con->execute($sql);
     if (!$rst) {
@@ -206,7 +208,7 @@ WHERE a.company_id = $company_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'
 ";
-if ($division_id) {
+if (isset($division_id)) {
     $sql_activities.=" AND (a.on_what_table='company_division' AND a.on_what_id=$division_id";
     $sql_activities.=" OR a.on_what_table='opportunities' AND o.division_id=$division_id";
     $sql_activities.=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
@@ -277,7 +279,7 @@ if ($rst) {
 $sql = "select * from contacts where company_id = $company_id
         and contact_record_status = 'a'
 ";
-if ($division_id) {
+if (isset($division_id)) {
     $sql .=" AND division_id=$division_id";
 }
 $sql .="
@@ -347,12 +349,12 @@ require_once($include_directory . 'categories-sidebar.php');
 
 //include the Cases sidebar
 $case_limit_sql = "and cases.".make_singular($on_what_table)."_id = $on_what_id";
-if ($division_id) { $case_limit_sql .=" AND cases.division_id=$division_id"; }
+if (isset($division_id)) { $case_limit_sql .=" AND cases.division_id=$division_id"; }
 require_once("../cases/sidebar.php");
 
 //include the opportunities sidebar
 $opportunity_limit_sql = "and opportunities.".make_singular($on_what_table)."_id = $on_what_id";
-if ($division_id) { $opportunity_limit_sql .=" AND opportunities.division_id=$division_id"; }
+if (isset($division_id)) { $opportunity_limit_sql .=" AND opportunities.division_id=$division_id"; }
 require_once("../opportunities/sidebar.php");
 
 //include the contacts-companies sidebar
@@ -429,11 +431,11 @@ if (!$former_name_rows) {
     $former_name_rows = "";
 }
 
-if (!$relationship_rows) {
+if (!isset($relationship_rows)) {
     $relationship_rows = "";
 }
 
-if (!$division_name) {
+if (!isset($division_name)) {
     $page_title = _("Company Details") . ' : ' . $company_name;
 } else {
     $page_title = $company_name . ' : ' . $division_name;
@@ -695,7 +697,7 @@ function openNewsWindow() {
             <tr>
                 <td class=widget_content_form_element colspan=6>
                     <?php $new_contact_location="../contacts/new.php?company_id=$company_id";
-                            if ($division_id) $new_contact_location.= "&division_id=$division_id"; ?>
+                            if (isset($division_id)) $new_contact_location.= "&division_id=$division_id"; ?>
                     <?php echo render_create_button("New",'button',"location.href='$new_contact_location';"); ?>
             </td>
             </tr>
@@ -711,11 +713,11 @@ function openNewsWindow() {
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
 
-        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>&division_id=<?php echo $division_id; ?>">
+        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?><?php echo (isset($division_id)) ? "&division_id=" . $division_id : ''; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
         <input type=hidden name=use_post_vars value="1">
-        <?php if ($division_id) { $on_what_table='company_division'; $on_what_id=$division_id; } ?>
+        <?php if (isset($division_id)) { $on_what_table='company_division'; $on_what_id=$division_id; } ?>
         <input type=hidden name=on_what_table        value="<?php echo $on_what_table; ?>">
         <input type=hidden name=on_what_id           value="<?php echo $on_what_id; ?>">
         <input type=hidden name=activity_description value="">
@@ -804,6 +806,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.81  2005/01/12 02:38:50  introspectshun
+ * - Added tests for undefined division_id
+ *
  * Revision 1.80  2005/01/10 20:47:48  neildogg
  * - Changed to support new relationship sidebar variable requirement
  *
