@@ -2,7 +2,7 @@
 /**
  * Edit a note
  *
- * $Id: edit.php,v 1.7 2004/06/21 14:25:00 braverock Exp $
+ * $Id: edit.php,v 1.8 2004/07/16 14:59:57 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -34,7 +34,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Edit Note";
+$page_title = _("Edit Note");
 start_page($page_title, true, $msg);
 
 //pull out some strings so gettext will see them
@@ -86,6 +86,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.8  2004/07/16 14:59:57  braverock
+ * - localize $page_title
+ *
  * Revision 1.7  2004/06/21 14:25:00  braverock
  * - localized strings for i18n/internationalization/translation support
  *
