@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.11 2004/07/30 09:55:34 cpsource Exp $
+ * $Id: edit.php,v 1.12 2005/01/13 18:00:10 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,10 +14,10 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
-$session_user_id = session_check();
+$campaign_id = $_GET['campaign_id'];
+$session_user_id = session_check('','Update');
 
 $msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
-$campaign_id = $_GET['campaign_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -193,6 +193,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.12  2005/01/13 18:00:10  vanmer
+ * - Basic ACL changes to allow edit functionality to be restricted
+ *
  * Revision 1.11  2004/07/30 09:55:34  cpsource
  * - Add confGoTo sub-system
  *   Make msg defined to '' if not passed in
