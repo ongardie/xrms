@@ -1,9 +1,9 @@
 /**
- * XRMS font, margin, and padding adjustments for 
+ * XRMS font, margin, and padding adjustments for
  * better display on screen
  */
 #page_header {
-    font-size: xx-large;
+    font-size: x-large;
 }
 #msg,
 #loginbar,
@@ -16,6 +16,8 @@ table.widget .small,
 table.widget .widget_label,
 table.widget .widget_label_right,
 table.widget .widget_label_center,
+table.widget .widget_content,
+table.widget .widget_content_alt,
 table.widget .widget_content_form_element,
 table.widget .widget_content_form_element_center,
 table.widget input.button {
@@ -30,7 +32,7 @@ table.widget input.button {
 }
 #Sidebar input,
 #Sidebar input.button,
-#Sidebar table.widget .small, 
+#Sidebar table.widget .small,
 #Sidebar table.widget .widget_label,
 #Sidebar table.widget .widget_label_right,
 #Sidebar table.widget .widget_label_center,
