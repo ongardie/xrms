@@ -4,10 +4,10 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
+ * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.59 2005/01/26 22:43:03 vanmer Exp $
+ * $Id: one.php,v 1.60 2005/02/10 04:35:19 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -34,7 +34,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
 $sql = "select cont.*,
-c.company_id, company_name, company_code,
+c.company_id, company_name, company_code, home_address_id
 u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner,
 account_status_display_html, crm_status_display_html
 from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm
@@ -51,6 +51,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     $company_id = $rst->fields['company_id'];
     $address_id = $rst->fields['address_id'];
+    $home_address_id = $rst->fields['home_address_id'];
     $company_name = $rst->fields['company_name'];
     $company_code = $rst->fields['company_code'];
     $division_id  = $rst->fields['division_id'];
@@ -104,11 +105,16 @@ switch ($gender) {
 }
 
 if ( $address_id ) {
-  $address_to_display = get_formatted_address($con, $address_id);
+  $business_address = get_formatted_address($con, $address_id);
 } else {
-  $address_to_display = '';
+  $business_address = '';
 }
 
+if ( $home_address_id ) {
+  $home_address = get_formatted_address($con, $home_address_id);
+} else {
+  $home_address .= '';
+}
 $sql_opportunity_types = "
 SELECT
   opportunity_status_pretty_name, opportunity_status_id
@@ -368,23 +374,29 @@ function markComplete() {
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
+                                <?php if ($yahoo_name) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Yahoo! IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($yahoo_name) > 0) {echo("<a href='ymsgr:sendim?$yahoo_name'><img border=0 src='http://opi.yahoo.com/online?u=$yahoo_name&m=g&t=3'></a>");}; ?>
                                     </td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($msn_name) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("MSN IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($msn_name) > 0) {echo("<a href=\"javascript: openMsnSession('$msn_name');\">$msn_name</a>");}; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($aol_name) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("AOL IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($aol_name) > 0) {echo("<a href='aim:goim?screenname=$aol_name'>$aol_name</a>");}; ?>
                                     </td>
                                 </tr>
+                                <?php }; ?>
                                 </table>
 
                             </td>
@@ -417,29 +429,41 @@ function markComplete() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php echo _("Address"); ?></td>
-                                    <td class=clear><?php echo $address_to_display ?></td>
+                                    <td class=sublabel><?php echo _("Business Address"); ?></td>
+                                    <td class=clear><?php echo $business_address ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php echo _("Home Address"); ?></td>
+                                    <td class=clear><?php echo $home_address ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
+                                <?php if ($custom1) { ?>
                                 <tr>
-                                    <td width=1% class=sublabel><?php  echo $contact_custom1_label; ?></td>
+                                    <td width=1% class=sublabel><?php echo _($contact_custom1_label); ?></td>
                                     <td class=clear><?php  echo $custom1; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($custom2) { ?>
                                 <tr>
-                                    <td class=sublabel><?php  echo $contact_custom2_label; ?></td>
+                                    <td class=sublabel><?php echo _($contact_custom2_label); ?></td>
                                     <td class=clear><?php  echo $custom2; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($custom3) { ?>
                                 <tr>
-                                    <td class=sublabel><?php  echo $contact_custom3_label; ?></td>
+                                    <td class=sublabel><?php echo _($contact_custom3_label); ?></td>
                                     <td class=clear><?php  echo $custom3; ?></td>
                                 </tr>
+                                <?php }; ?>
+                                <?php if ($custom4) { ?>
                                 <tr>
-                                    <td class=sublabel><?php  echo $contact_custom4_label; ?></td>
+                                    <td class=sublabel><?php echo _($contact_custom4_label); ?></td>
                                     <td class=clear><?php  echo $custom4; ?></td>
                                 </tr>
+                                <?php }; ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
@@ -564,6 +588,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.60  2005/02/10 04:35:19  braverock
+ * - add display support for home_address_id
+ * - hide seldom used and custom fields if they don't have values
+ *
  * Revision 1.59  2005/01/26 22:43:03  vanmer
  * - altered SQL query to allow activities table to appear directly before LEFT OUTER JOIN
  *
