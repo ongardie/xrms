@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.41 2004/07/07 22:26:41 introspectshun Exp $
+ * $Id: utils-misc.php,v 1.42 2004/07/13 11:13:29 braverock Exp $
  */
 
 /**
@@ -29,16 +29,7 @@ function session_check($target='') {
     global $http_site_root;
     global $xrms_system_id;
 
-/* This code should not be nessacary
-    if ($target= '') {
-        $target=$http_site_root.'/private/home.php';
-    } else {
-        $target=$http_site_root.$target;
-    }
-    $target=urlencode($target);
-*/
-
-    $target = urlencode($_SERVER["REQUEST_URI"]);
+    $target = urlencode($_SERVER['REQUEST_URI']);
 
     /**
     * Verify a session has been started.  If it hasn't, start a session up.
@@ -620,7 +611,7 @@ function get_formatted_phone ($con, $address_id, $phone) {
             $phone_to_display = $expression;
         }
     }
-    $temp_phone = do_hook_function("data_format_phone", $phone, $phone_to_display); 
+    $temp_phone = do_hook_function("data_format_phone", $phone, $phone_to_display);
     if($temp_phone) {
         $phone_to_display = $temp_phone;
     }
@@ -688,6 +679,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.42  2004/07/13 11:13:29  braverock
+ * - changed REQUEST_URI array index to single quotes, so it won't get passed as a string
+ *
  * Revision 1.41  2004/07/07 22:26:41  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
