@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.5 2004/07/22 20:19:39 gpowers Exp $
+ * $Id: one.php,v 1.6 2004/07/25 14:32:42 johnfawcett Exp $
  *
  */
 
@@ -391,7 +391,7 @@ function openNewsWindow() {
         <div id='category_sidebar'>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header><?php  echo _("Catagories"); ?></td>
+                <td class=widget_header><?php  echo _("Categories"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content><?php  echo $categories; ?></td>
