@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.13 2005/02/11 13:56:29 braverock Exp $
+ * $Id: sidebar.php,v 1.14 2005/02/15 15:05:03 ycreddy Exp $
  */
 
 //$con->debug = 1;
@@ -49,11 +49,11 @@ while (!$toprst->EOF) {
     };
 
     // Find which element_id contains the "Name"
-    $sql = "SELECT element_id ";
+    $sql = "SELECT TOP 1 element_id ";
     $sql .= "FROM info_element_definitions ";
     $sql .= "WHERE element_type = 'name' ";
     $sql .= "AND info_type_id = $info_type_id ";
-    $sql .= "LIMIT 1 ";
+    //$sql .= "LIMIT 1 ";
     $rst = $con->execute($sql);
 
     # Every info type MUST have a a 'name' element
