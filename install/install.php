@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.12 2005/01/13 17:32:43 vanmer Exp $
+ * $Id: install.php,v 1.13 2005/01/25 06:04:39 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -244,6 +244,8 @@ create_db_data($con);
 // install ACL data
 install_upgrade_acl($con);
 
+//run plugin installation, pass adodb database connection
+do_hook_function('xrms_install', $con);
 
 //close the connection
 $con->close();
@@ -273,6 +275,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.13  2005/01/25 06:04:39  vanmer
+ *- added hook for plugins to run at xrms install
+ *
  *Revision 1.12  2005/01/13 17:32:43  vanmer
  **** empty log message ***
  *
