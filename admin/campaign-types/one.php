@@ -2,7 +2,7 @@
 /**
  * Manage campaign types
  *
- * $Id: one.php,v 1.6 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: one.php,v 1.7 2004/07/25 15:36:37 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -35,7 +35,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Campaign Type : ").$campaign_type_pretty_name;
+$page_title = _("Campaign Type Details").': '.$campaign_type_pretty_name;
 start_page($page_title);
 
 ?>
@@ -71,7 +71,7 @@ start_page($page_title);
 		</table>
 		</form>
 
-		<form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Campaign Type?"); ?>');">
+		<form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Campaign Type").'?'; ?>');">
 		<input type=hidden name=campaign_type_id value="<?php  echo $campaign_type_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
@@ -103,6 +103,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/25 15:36:37  johnfawcett
+ * - unified page title
+ * - removed punctuation from gettext strings
+ *
  * Revision 1.6  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *
