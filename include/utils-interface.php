@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.47 2005/02/14 21:27:13 vanmer Exp $
+ * $Id: utils-interface.php,v 1.48 2005/03/04 13:31:39 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -169,14 +169,19 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     // If a particular style requires multiple files, specify them as a nested array
     //    array('multi' => array('first.css','second.css','third.css'));
     $cssthemes = array(
-        'basic'      => array($cssroot.'basic/basic.css',
-                              $http_site_root.'/js/jscalendar/calendar-blue.css'),
-        'basic-left' => array($cssroot.'basic/basic-left.css',
-                              $cssroot.'basic/basic-left-ie.css',
-                              $http_site_root.'/js/jscalendar/calendar-blue.css'),
-        'green'      => $cssroot.'green/green.css',
-        'green-left' => array($cssroot.'green/green-left.css',
-                              $cssroot.'green/green-left-ie.css'),
+        'basic'       => array($cssroot.'basic/basic.css',
+                               $http_site_root.'/js/jscalendar/calendar-blue.css'),
+        'basic-left'  => array($cssroot.'basic/basic-left.css',
+                               $cssroot.'basic/basic-left-ie.css',
+                               $http_site_root.'/js/jscalendar/calendar-blue.css'),
+        'green'       => $cssroot.'green/green.css',
+        'green-left'  => array($cssroot.'green/green-left.css',
+                               $cssroot.'green/green-left-ie.css'),
+        'simple'      => array($cssroot.'simple/simple.css',
+                               $cssroot.'simple/calendar-simple.css'),
+        'simple-left' => array($cssroot.'simple/simple-left.css',
+                               $cssroot.'simple/simple-left-ie.css',
+                               $cssroot.'simple/calendar-simple.css')
                       );
 ?>
 <!DOCTYPE HTML PUBLIC
@@ -541,6 +546,10 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.48  2005/03/04 13:31:39  braverock
+ * - add 'simple' CSS styles to the array
+ *   @todo make CSS theme selectable from system parameters and user prefs
+ *
  * Revision 1.47  2005/02/14 21:27:13  vanmer
  * - updated fake acl_get_list to reflect expected behavior of real acl_get_list
  *
