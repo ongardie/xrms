@@ -4,7 +4,7 @@
  * 
  * Displays Audit entries and new activity counts.  Needs work.
  * 
- * $Id: dashboard.php,v 1.4 2004/04/08 18:13:28 maulani Exp $ 
+ * $Id: dashboard.php,v 1.5 2004/04/16 14:44:31 maulani Exp $ 
  */ 
 
 require_once('../../include-locations.inc');
@@ -176,13 +176,11 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<!-- left column //-->
-		<td class=lcol width=63% valign=top>
-	
+<div id="Main">
+    <div id="Content">
+
 			<!-- new today //-->
-			<table class=widget cellspacing=1 width=100%>
+			<table class=widget cellspacing=1 width="100%">
 				<tr>
 					<td class=widget_header>Something</td>
 				</tr>
@@ -190,19 +188,15 @@ start_page($page_title);
 					<td class=widget_content>Not sure what to put here yet.</td>
 				</tr>
 			</table>
-	
-    	</td>
-    	
-		<!-- gutter //-->
-		<td class=gutter width=2%>
-			&nbsp;
-		</td>
-		
-		<!-- right column //-->
-		<td class=rcol width=35% valign=top>
-			
+
+
+    </div>
+
+        <!-- right column //-->
+    <div id="Sidebar">
+
 			<!-- new today //-->
-			<table class=widget cellspacing=1 width=100%>
+			<table class=widget cellspacing=1 width="100%">
 				<tr>
 					<td class=widget_header colspan=8>New</td>
 				</tr>
@@ -245,7 +239,7 @@ start_page($page_title);
 			</table>
 	
 			<!-- system snapshot //-->
-			<table class=widget cellspacing=1 width=100%>
+			<table class=widget cellspacing=1 width="100%">
 				<tr>
 					<td class=widget_header colspan=4>Audit Items</td>
 				</tr>
@@ -256,10 +250,10 @@ start_page($page_title);
 				</tr>
 				<?php  echo $audit_items; ?>
 			</table>
-			
-		</td>
-	</tr>
-</table>
+
+    </div>
+
+</div>
 
 <?php 
 
@@ -267,6 +261,11 @@ end_page();
 
 /** 
  * $Log: dashboard.php,v $
+ * Revision 1.5  2004/04/16 14:44:31  maulani
+ * - Add CSS2 positioning
+ * - Cleanup HTML so page validates
+ * - Add phpdoc
+ *
  * Revision 1.4  2004/04/08 18:13:28  maulani
  * - Ignore deleted records in new counts
  *
