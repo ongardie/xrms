@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.21 2004/07/07 23:09:32 d2uhlman Exp $
+ * $Id: vars.php,v 1.22 2004/07/13 16:46:54 braverock Exp $
  */
 
 /**
@@ -139,6 +139,14 @@ $company_custom4_label = "(Custom 4)";
 //  Options are "Fast" or "Long"
 
 $activities_default_behavior = "Fast";
+
+// Activities Association Behavior
+// Often, staff are sloppy about associateting Activities with 
+// Opportunities or Cases.  If this option is set to true,
+// XRMS will automatically associate the activity if there is only
+// *one* open Opportunity or Case
+$associate_activities = true;
+
 
 /** Optional LDAP configuration parameters **/
 /**
