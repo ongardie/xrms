@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.50 2004/07/16 16:35:47 cpsource Exp $
+ * $Id: utils-misc.php,v 1.51 2004/07/19 14:24:18 cpsource Exp $
  */
 
 /**
@@ -757,7 +757,7 @@ define ( "arr_vars_GET_SESSION"       , 2 );  // try a GET first, and then if it
 define ( "arr_vars_GET_STRLEN_SESSION", 3 );  // try a GET first with length > 0, and then if it fails, do a SESSION
 
 // get all variables
-function arr_vars_get_all ( $ary )
+function arr_vars_get_all ( $ary, $post_vars = false )
 {
   global $clear;
   global $use_post_vars;
@@ -774,16 +774,20 @@ function arr_vars_get_all ( $ary )
   } else {
     $clear = 0;
   }
-  if ( isset($_POST['use_post_vars']) ) {
-    $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
+  if ( $post_vars ) {
+    $use_post_vars = 1;
   } else {
-    $use_post_vars = 0;
+    if ( isset($_POST['use_post_vars']) ) {
+      $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
+    } else {
+      $use_post_vars = 0;
+    }
   }
 
   if ( $clear ) {
     arr_vars_clear ( $ary );
   } elseif ( $use_post_vars ) {
-    arr_vars_post_get ( $ary );
+    arr_vars_post_get ( $ary, $post_vars );
   } else {
     arr_vars_session_get ( $ary );
   }
@@ -840,10 +844,14 @@ function arr_vars_session_set ( $ary )
   }
 }
 // get all posted variables
-function arr_vars_post_get ( $ary )
+function arr_vars_post_get ( $ary, $allow_none = false )
 {
   foreach ($ary as $key => $value) {
-    $GLOBALS[$key] = $_POST["$key"];
+    if ( $allow_none ) {
+      $GLOBALS[$key] = isset($_POST["$key"]) ? $_POST["$key"] : '';
+    } else {
+      $GLOBALS[$key] = $_POST["$key"];
+    }
   }
 }
 
@@ -861,6 +869,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.51  2004/07/19 14:24:18  cpsource
+ * - Add override of $use_post_vars in arr_vars_get_all
+ *
  * Revision 1.50  2004/07/16 16:35:47  cpsource
  * - Add argument to session_check to accept a minimum role.
  *
