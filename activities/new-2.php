@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.32 2005/01/09 13:58:51 braverock Exp $
+ * $Id: new-2.php,v 1.33 2005/01/09 14:54:02 braverock Exp $
  */
 
 //where do we include from
@@ -161,7 +161,7 @@ if(empty($opportunity_status_id)) {
     $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
     $rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
     $rec['on_what_status']   = ($on_what_status > 0) ? $on_what_status : 0;
-    $rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : "[none]";
+    $rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
     $rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
     $rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
     $rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
@@ -169,7 +169,7 @@ if(empty($opportunity_status_id)) {
 }
 else {
     $rec['opportunity_status']  = "o";
-    $rec['opportunity_title'] = (strlen($activity_title) > 0) ? $activity_title : "[none]";
+    $rec['opportunity_title'] = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
     $rec['last_modified_at'] = time();
     $rec['last_modified_by'] = $session_user_id;
 }
@@ -222,6 +222,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.33  2005/01/09 14:54:02  braverock
+ *- localize [none]
+ *
  *Revision 1.32  2005/01/09 13:58:51  braverock
  *- use of single = instead of == in comparison for $associate_activities
  *  Solves SF bug 1098200 submitted by Fu22Ba55
