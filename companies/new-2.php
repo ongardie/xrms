@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.16 2004/07/16 10:52:14 braverock Exp $
+ * $Id: new-2.php,v 1.17 2004/07/16 12:22:36 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -57,7 +57,7 @@ $last_name = $_POST['last_name'];
 $email = $_POST['email'];
 
 $address_name = (strlen($address_name) > 0) ? $address_name : '[address]';
-$use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
+$use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -196,6 +196,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.17  2004/07/16 12:22:36  braverock
+ * - fixed bug in quoting of use_pretty_address
+ *
  * Revision 1.16  2004/07/16 10:52:14  braverock
  * - add db_error_handler fn calls around all SQL queries for more error feedback
  *
