@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.17 2004/08/02 22:09:55 maulani Exp $
+ * $Id: addresses.php,v 1.18 2004/08/03 13:41:15 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -98,7 +98,7 @@ start_page($page_title, true, $msg);
 ?>
 
 <div id="Main">
-    <div id="Content">
+    <div id="ContentFullWidth">
 
         <!-- existing addresses //-->
         <form action=set-address-defaults.php method=post>
@@ -174,13 +174,6 @@ start_page($page_title, true, $msg);
         </form>
 
     </div>
-
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
 </div>
 
 <?php
@@ -189,6 +182,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.18  2004/08/03 13:41:15  maulani
+ * - Use full width since sidebar not needed
+ *
  * Revision 1.17  2004/08/02 22:09:55  maulani
  * - Company addresses screen will no longer show deleted contacts
  *
