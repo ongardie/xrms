@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.18 2005/02/14 21:43:45 vanmer Exp $
+ * $Id: some-advanced.php,v 1.19 2005/03/20 01:49:45 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -355,9 +355,6 @@ and category_record_status =  'a'
 order by category_pretty_name";
 $company_category_menu = check_and_get($con,$sql2,'category_id');
 
-$sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
-$company_type_menu = check_and_get($con,$sql2,'company_type_id');
-
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
 $crm_status_menu = check_and_get($con,$sql2,'crm_status_id');
 
@@ -455,6 +452,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.19  2005/03/20 01:49:45  maulani
+ * - Remove obsolete code
+ *
  * Revision 1.18  2005/02/14 21:43:45  vanmer
  * - updated to reflect speed changes in ACL operation
  *

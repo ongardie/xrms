@@ -4,7 +4,7 @@
  *
  * This is the advanced screen that allows many more search fields
  *
- * $Id: advanced-search.php,v 1.8 2004/08/30 13:20:17 neildogg Exp $
+ * $Id: advanced-search.php,v 1.9 2005/03/20 01:45:09 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -105,11 +105,6 @@ $user_menu = check_and_get($con,$sql2,'user_id',$user_id);
 //and category_record_status =  'a'
 //order by category_pretty_name";
 //$company_category_menu = check_and_get($con,$sql2,'category_id');
-
-//Also not used
-//$sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
-//$company_type_menu = check_and_get($con,$sql2,'company_type_id');
-//$company_type_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
 $crm_status_menu = check_and_get($con,$sql2,'crm_status_id',$crm_status_id);
@@ -315,6 +310,9 @@ end_page();
 
 /**
  * $Log: advanced-search.php,v $
+ * Revision 1.9  2005/03/20 01:45:09  maulani
+ * - Remove obsolete code
+ *
  * Revision 1.8  2004/08/30 13:20:17  neildogg
  * - Robustified search
  *
