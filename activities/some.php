@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.95 2005/02/28 22:18:38 daturaarutad Exp $
+ * $Id: some.php,v 1.96 2005/03/01 21:56:45 daturaarutad Exp $
  */
 
 // handle includes
@@ -665,7 +665,7 @@ $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled');
 $columns[] = array('name' => _('Due'), 'index_sql' => 'due');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-$columns[] = array('name' => _('%'), 'index_sql' => '%');
+$columns[] = array('name' => _('%'), 'index_sql' => '%', 'css_classname' => 'right');
 
 
 
@@ -763,6 +763,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.96  2005/03/01 21:56:45  daturaarutad
+ * set the css_classname for right-align on numerics in pager
+ *
  * Revision 1.95  2005/02/28 22:18:38  daturaarutad
  * changed columns to be index_sql so that the pager knows it doesnt have to get the whole data set
  *

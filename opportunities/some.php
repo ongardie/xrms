@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.41 2005/02/16 16:15:27 daturaarutad Exp $
+ * $Id: some.php,v 1.42 2005/03/01 21:56:55 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -246,8 +246,8 @@ $columns = array();
 $columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
-$columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true);
-$columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true);
+$columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
+$columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date');
 
@@ -338,6 +338,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.42  2005/03/01 21:56:55  daturaarutad
+ * set the css_classname for right-align on numerics in pager
+ *
  * Revision 1.41  2005/02/16 16:15:27  daturaarutad
  * fixed a bug $list should have been $acl_id_list, removed some commented out lines
  *
