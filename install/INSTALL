@@ -1,7 +1,7 @@
 XRMS Installation READ_ME
 
 Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.5 2004/07/26 04:21:48 braverock Exp $
+$Id: INSTALL,v 1.6 2004/09/09 12:26:52 braverock Exp $
 
 INSTALLATION
 ============
@@ -31,6 +31,11 @@ the instructions in the file.
 The vars.php file is located within the include folder.
 It contains all of the implementation specific variables such as database
 location and password.  Edit this file to set these items.
+
+After setting your vars.php variables, you will need to make certain that the
+temporary directory, file storage directory, and export directories are all
+writable by the web server.  These are the directories defined by the vars.php
+variables: $tmp_upload_directory, $file_storage_directory, $tmp_export_directory
 
 Now, to setup the database schema and basic dataset, point your web browser to:
 
@@ -117,6 +122,9 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.6  2004/09/09 12:26:52  braverock
+ * - add note about setting write permissions on temp, storage, and export directories
+ *
  * Revision 1.5  2004/07/26 04:21:48  braverock
  * - added notes on temporary file cleanup to INSTALL docs.
  *   - adresses SF Feature request 946925
