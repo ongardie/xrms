@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.35 2004/07/31 12:14:59 cpsource Exp $
+ * $Id: some.php,v 1.36 2004/07/31 12:23:19 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -320,10 +320,9 @@ start_page($page_title, true, $msg);
                     if ($company_count > 0) {
                         print "<input class=button type=button onclick='javascript: bulkEmail()' value='". _("Bulk E-Mail")."'>";
                     };
-if ( 0 ) {
+if ( 1 ) {
   //
   // doesn't seem to work
-  // re-enable this when you get it going
   //
                 //mark Advanced Search as experimental for now.
                 print "\n\t\t"
@@ -411,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.36  2004/07/31 12:23:19  cpsource
+ * - Reactivate advanced search feature
+ *
  * Revision 1.35  2004/07/31 12:14:59  cpsource
  * - Stub advanced search as it doesn't seem to work.
  *
