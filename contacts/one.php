@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.37 2004/07/13 15:48:59 cpsource Exp $
+ * $Id: one.php,v 1.38 2004/07/14 22:12:00 neildogg Exp $
  */
 require_once('../include-locations.inc');
 
@@ -242,7 +242,7 @@ require_once("../opportunities/sidebar.php");
 //include the contacts-companies sidebar
 $working_direction = "from";
 $relationship_name = "company link";
-$from_what_id = $contact_id;
+$overall_id = $contact_id;
 require_once("../relationships/sidebar.php");
 
 //include the files sidebar
@@ -565,6 +565,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.38  2004/07/14 22:12:00  neildogg
+ * - Now uses $overall_id
+ *
  * Revision 1.37  2004/07/13 15:48:59  cpsource
  * - Get rid of undefined variable usage.
  *

@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.36 2004/07/14 18:30:37 neildogg Exp $
+ * $Id: one.php,v 1.37 2004/07/14 22:10:49 neildogg Exp $
  */
 
 //include required files
@@ -134,10 +134,12 @@ if ($company_id) {
 }
 
 //include the contacts-companies sidebar
-$relationship_name = "company link";
-$working_direction = "from";
-$from_what_id = $contact_id;
-require_once("../relationships/sidebar.php");
+if($contact_id) {
+    $relationship_name = "company link";
+    $working_direction = "from";
+    $overall_id = $contact_id;
+    require("../relationships/sidebar.php");
+}
 
 /* add opportunities/case/campaign combo box */
 //get singular form of table name (from on_what_table field)
@@ -401,6 +403,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.37  2004/07/14 22:10:49  neildogg
+ * - Now uses $overall_id
+ *
  * Revision 1.36  2004/07/14 18:30:37  neildogg
  * - I don't have a calender1.js file, correct if wrong
  *  - For some reason someone added a second opportunity_description, removed
