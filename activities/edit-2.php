@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.48 2005/01/09 13:58:51 braverock Exp $
+ * $Id: edit-2.php,v 1.49 2005/01/09 17:26:29 vanmer Exp $
  */
 
 //include required files
@@ -18,7 +18,6 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
 
 // POST'ed in data
 $arr_vars = array (
@@ -51,7 +50,11 @@ $arr_vars = array (
 
 // get posted data
 arr_vars_post_with_cmd ( $arr_vars );
-
+$on_what_id=$activity_id;
+$session_user_id = session_check('','Update');
+if (!$return_url) {
+    $return_url='/activities/some.php';
+}
 // set the correct activity status flag
 if ($activity_status == 'on') {
     $activity_status = 'c';
@@ -431,7 +434,7 @@ if ($email_to) {
 }
 
 if ($followup) {
-    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( 'Follow-up ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&on_what_status=$old_status&return_url=$return_url&followup=true" );
+    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( _("Follow-up") . ' ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&on_what_status=$old_status&return_url=$return_url&followup=true" );
 } elseif($saveandnext) {
     header("Location: browse-next.php?activity_id=$activity_id");
 } else {
@@ -440,6 +443,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.49  2005/01/09 17:26:29  vanmer
+ * - moved session_check after get/post variable are processed (for ACL)
+ * - added default return_url if none specified from calling pages
+ * - internationalized follow up string when creating a follow-up activity
+ *
  * Revision 1.48  2005/01/09 13:58:51  braverock
  * - use of single = instead of == in comparison for $associate_activities
  *   Solves SF bug 1098200 submitted by Fu22Ba55
