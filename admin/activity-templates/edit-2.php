@@ -2,7 +2,7 @@
 /**
  * save an updated an activity template to database after editing it.
  *
- * $Id: edit-2.php,v 1.4 2004/08/19 21:55:09 neildogg Exp $
+ * $Id: edit-2.php,v 1.5 2005/01/11 22:26:35 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -20,6 +20,7 @@ $activity_description = $_POST['activity_description'];
 $default_text = $_POST['default_text'];
 $activity_title = $_POST['activity_title'];
 $duration = $_POST['duration'];
+$sort_order = $_POST['sort_order'];
 $return_url = $_POST['return_url'];
 
 if (strlen($return_url) == 0) {
@@ -38,6 +39,7 @@ $rec['activity_type_id'] = $activity_type_id;
 $rec['activity_description'] = $activity_description;
 $rec['default_text'] = $default_text;
 $rec['activity_title'] = $activity_title;
+$rec['sort_order'] = $sort_order;
 $rec['duration'] = $duration;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());

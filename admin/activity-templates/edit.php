@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.6 2004/08/19 21:55:09 neildogg Exp $
+ * $Id: edit.php,v 1.7 2005/01/11 22:28:29 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,6 +33,7 @@ if ($rst) {
         $default_text = $rst->fields['default_text'];
 	$activity_type_id = $rst->fields['activity_type_id'];
 	$duration = $rst->fields['duration'];	
+	$sort_order = $rst->fields['sort_order'];	
 	
 	$rst->close();
 }
@@ -79,6 +80,10 @@ start_page($page_title);
                 <td class=widget_label_right_166px><?php echo _("Default Text"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=100 name="default_text"><?php echo $default_text; ?></textarea></td>
             </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Sort Order"); ?></td>
+                <td class=widget_content_form_element><input type=text size=2 name="sort_order" value='<?php echo $sort_order; ?>'></td>
+            </tr>
 			<tr>
 				<td class=widget_content colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
 			</tr>
@@ -121,6 +126,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.7  2005/01/11 22:28:29  vanmer
+ * - added option to explicitly set sort order on activity template
+ *
  * Revision 1.6  2004/08/19 21:55:09  neildogg
  * - Adds input for default text in templated activity
  *
