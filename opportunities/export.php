@@ -2,7 +2,7 @@
 /**
  * Export Search Results from opportunities/some.php
  *
- * $Id: export.php,v 1.10 2005/01/09 02:37:50 braverock Exp $
+ * $Id: export.php,v 1.11 2005/03/21 23:13:57 daturaarutad Exp $
  */
 
 
@@ -44,7 +44,7 @@ SELECT
   END AS 'Weighted Size',
   os.opportunity_status_pretty_name AS 'Status',
   $close_at AS 'Close Date'
-FROM opportunities opp, companies c, opportunity_statuses os, users u
+FROM opportunities opp, companies c, opportunity_statuses os, users u, contacts cont
 WHERE opp.company_id = c.company_id
   AND opp.user_id = u.user_id
   AND opp.opportunity_status_id = os.opportunity_status_id
@@ -74,6 +74,10 @@ if (strlen($user_id) > 0) {
 if (strlen($opportunity_status_id) > 0) {
     $where .= " and opp.opportunity_status_id = $opportunity_status_id";
 }
+$where.="and cont.contact_id=opp.contact_id ";
+
+
+echo "$sql $where";
 
 $rst = $con->execute($sql.$where);
 
@@ -106,6 +110,9 @@ echo $csvdata;
 
 /**
  *$Log: export.php,v $
+ *Revision 1.11  2005/03/21 23:13:57  daturaarutad
+ *added contacts join to the export query to match some.php
+ *
  *Revision 1.10  2005/01/09 02:37:50  braverock
  *- changed date format in filename to a human readable form
  *
