@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.8 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: transfer-2.php,v 1.9 2005/01/25 03:50:48 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -67,7 +67,10 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                    <? if($company_menu) { ?><input class=button type=submit name=save value="<?php echo _("Save"); ?>"> <input class=button type=submit name=everywhere value="<?php echo _("Save and Update All Records"); ?>"><?php } ?>
+                    <?php if($company_menu) { ?>
+                          <input class=button type=submit name=save value="<?php echo _("Save"); ?>"> 
+                          <input class=button type=submit name=everywhere value="<?php echo _("Save and Update All Records"); ?>">
+                    <?php } ?>
                 </td>
             </tr>
 
@@ -90,6 +93,9 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.9  2005/01/25 03:50:48  braverock
+ * - removed errant short tag
+ *
  * Revision 1.8  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'
