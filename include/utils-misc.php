@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.100 2004/11/10 15:10:18 maulani Exp $
+ * $Id: utils-misc.php,v 1.101 2004/12/24 15:52:58 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -768,14 +768,14 @@ function get_formatted_address (&$con,$address_id) {
 
         // added for mapquest plugin
         global $use_mapquest_link;
-				// added for whereis plugin
-				global $use_whereis_link;
+                // added for whereis plugin
+                global $use_whereis_link;
         if ($use_mapquest_link == "y") {
             // this is defined in plugins/mapquest/setup.php:
             return mapquest($line1, $city, $province, $iso_code2, $address_to_display);
-				}elseif ($use_whereis_link == "y"){
+                }elseif ($use_whereis_link == "y"){
             // this is defined in plugins/whereis/setup.php:
-            return whereis($line1, $city, $province, $iso_code2, $address_to_display);				
+            return whereis($line1, $city, $province, $iso_code2, $address_to_display);
         } else {
             return $address_to_display;
         }
@@ -1285,6 +1285,115 @@ function arr_vars_show_ses_vars ( $ary )
 }
 
 /**
+ * function SendDownloadHeaders - send file to the browser
+ *
+ * Original Source: SM core src/download.php
+ * moved here to make it available to other code, and separate
+ * front end from back end functionality.
+ *
+ * @param string $type0 first half of mime type
+ * @param string $type1 second half of mime type
+ * @param string $filename filename to tell the browser for downloaded file
+ * @param boolean $force whether to force the download dialog to pop
+ * @param optional integer $filesize send the Content-Header and length to the browser
+ * @return void
+ */
+ function SendDownloadHeaders($type0, $type1, $filename, $force, $filesize=0) {
+     global $languages, $xrms__language;
+     $isIE = $isIE6 = 0;
+
+     $get= 'HTTP_USER_AGENT';
+     $HTTP_USER_AGENT = '';
+     getGlobalVar($get, $HTTP_USER_AGENT);
+
+     if (strstr($HTTP_USER_AGENT, 'compatible; MSIE ') !== false &&
+         strstr($HTTP_USER_AGENT, 'Opera') === false) {
+         $isIE = 1;
+     }
+
+     if (strstr($HTTP_USER_AGENT, 'compatible; MSIE 6') !== false &&
+         strstr($HTTP_USER_AGENT, 'Opera') === false) {
+         $isIE6 = 1;
+     }
+
+     if (isset($languages[$squirrelmail_language]['XTRA_CODE']) &&
+         function_exists($languages[$squirrelmail_language]['XTRA_CODE'])) {
+         $filename =
+         $languages[$squirrelmail_language]['XTRA_CODE']('downloadfilename', $filename, $HTTP_USER_AGENT);
+     } else {
+         $filename = ereg_replace('[\\/:\*\?"<>\|;]', '_', str_replace('&nbsp;', ' ', $filename));
+     }
+
+     // A Pox on Microsoft and it's Internet Explorer!
+     //
+     // IE has lots of bugs with file downloads.
+     // It also has problems with SSL.  Both of these cause problems
+     // for us in this function.
+     //
+     // See this article on Cache Control headers and SSL
+     // http://support.microsoft.com/default.aspx?scid=kb;en-us;323308
+     //
+     // The best thing you can do for IE is to upgrade to the latest
+     // version
+     //set all the Cache Control Headers for IE
+     if ($isIE) {
+         header ("Pragma: public");
+         header ("Cache-Control: no-store, max-age=0, no-cache, must-revalidate"); # HTTP/1.1
+         header ("Cache-Control: post-check=0, pre-check=0", false);
+         header ("Cache-control: private");
+
+         //set the inline header for IE, we'll add the attachment header later if we need it
+         header ("Content-Disposition: inline; filename=$filename");
+     }
+
+     if (!$force) {
+         // Try to show in browser window
+         header ("Content-Disposition: inline; filename=\"$filename\"");
+         header ("Content-Type: $type0/$type1; name=\"$filename\"");
+     } else {
+         // Try to pop up the "save as" box
+
+         // IE makes this hard.  It pops up 2 save boxes, or none.
+         // http://support.microsoft.com/support/kb/articles/Q238/5/88.ASP
+         // http://support.microsoft.com/default.aspx?scid=kb;EN-US;260519
+         // But, according to Microsoft, it is "RFC compliant but doesn't
+         // take into account some deviations that allowed within the
+         // specification."  Doesn't that mean RFC non-compliant?
+         // http://support.microsoft.com/support/kb/articles/Q258/4/52.ASP
+
+         // all browsers need the application/octet-stream header for this
+         header ("Content-Type: application/octet-stream; name=\"$filename\"");
+
+         // http://support.microsoft.com/support/kb/articles/Q182/3/15.asp
+         // Do not have quotes around filename, but that applied to
+         // "attachment"... does it apply to inline too?
+         header ("Content-Disposition: attachment; filename=\"$filename\"");
+
+         if ($isIE && !$isIE6) {
+             // This combination seems to work mostly.  IE 5.5 SP 1 has
+             // known issues (see the Microsoft Knowledge Base)
+
+             // This works for most types, but doesn't work with Word files
+             header ("Content-Type: application/download; name=\"$filename\"");
+
+             // These are spares, just in case.  :-)
+             //header("Content-Type: $type0/$type1; name=\"$filename\"");
+             //header("Content-Type: application/x-msdownload; name=\"$filename\"");
+             //header("Content-Type: application/octet-stream; name=\"$filename\"");
+         } else {
+             // another application/octet-stream forces download for Netscape
+             header ("Content-Type: application/octet-stream; name=\"$filename\"");
+         }
+     }
+
+     //send the content-length header if the calling function provides it
+     if ($filesize > 0) {
+         header("Content-Length: $filesize");
+     }
+
+}  // end fn SendDownloadHeaders
+
+/**
  * Include the i18n files, as every file with output will need them
  *
  * @todo sort out a better include strategy to simplify it across
@@ -1299,6 +1408,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.101  2004/12/24 15:52:58  braverock
+ * add function SendDownloadHeaders ported from Squirrelmail
+ *
  * Revision 1.100  2004/11/10 15:10:18  maulani
  * - Fix bug introduced when update sql changed to use GetUpdateSQL routine.
  *   Quotes will no longer be added to string system parameters
