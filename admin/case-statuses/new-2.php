@@ -23,10 +23,7 @@ $sql = "select sort_order from case_statuses where case_status_record_status='a'
 $rst = $con->execute($sql);
 $sort_order = $rst->fields['sort_order'] + 1;
 
-//put in new record
-$sql = "SELECT * FROM case_statuses WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['case_status_short_name'] = $case_status_short_name;
 $rec['case_status_pretty_name'] = $case_status_pretty_name;
@@ -34,7 +31,8 @@ $rec['case_status_pretty_plural'] = $case_status_pretty_plural;
 $rec['case_status_display_html'] = $case_status_display_html;
 $rec['sort_order'] = $sort_order;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = "case_statuses";
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
