@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.108 2005/01/10 16:42:08 neildogg Exp $
+ * $Id: utils-misc.php,v 1.109 2005/01/10 16:55:14 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1004,12 +1004,21 @@ function current_page($vars = false) {
         }
     }
     if(count($parts)) {
-        if($vars && !strstr($parts[1], $vars)) {
-            return $page . '?' . $parts[1] . '&' . $vars;
+        parse_str($vars, $vars);
+        parse_str($parts[1], $parts);
+        foreach($vars as $key => $value) {
+            if(in_array($key, array_keys($parts))) {
+                unset($parts[$key]);
+            }
         }
-        else {
-            return $page . '?' . $parts[1];
+        $parts = array_merge($parts, $vars);
+
+        $page .= '?';
+        foreach ($parts as $key => $value) {
+            $page .= '&' . $key . '=' . $value;
         }
+        
+        return $page;
     }
     else {
         if($vars) {
@@ -1422,6 +1431,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.109  2005/01/10 16:55:14  neildogg
+ * - Properly replaces variables if duplicated
+ *
  * Revision 1.108  2005/01/10 16:42:08  neildogg
  * - Now returns proper context in relation to site root and prevents double variables
  *
