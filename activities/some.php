@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.71 2004/12/20 14:45:55 neildogg Exp $
+ * $Id: some.php,v 1.72 2004/12/20 15:51:37 neildogg Exp $
  */
 
 // handle includes
@@ -308,7 +308,7 @@ if ($sort_column == 1) {
 
 $order_by .= " $sort_order";
 
-$sql .= " order by ". $con->qstr($order_by,get_magic_quotes_gpc()); // is_overdue desc, a.scheduled_at, a.entered_at desc";
+$sql .= " order by $order_by"; // is_overdue desc, a.scheduled_at, a.entered_at desc";
 //activities Pager table is rendered below by ADOdb pager
 
 if($advanced_search) {
@@ -664,6 +664,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.72  2004/12/20 15:51:37  neildogg
+ * - Because you can't order by a string
+ *
  * Revision 1.71  2004/12/20 14:45:55  neildogg
  * - Changed user table to a left join to allow an empty user search
  *
