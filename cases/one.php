@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.34 2005/03/07 16:38:12 daturaarutad Exp $
+ * $Id: one.php,v 1.35 2005/03/14 18:52:36 daturaarutad Exp $
  */
 
 //include required files
@@ -131,7 +131,7 @@ and a.activity_record_status = 'a'";
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => '12,11');
-    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at');
+    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
 
     $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
 
@@ -434,6 +434,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.35  2005/03/14 18:52:36  daturaarutad
+ * added default_sort to On column of activities pager
+ *
  * Revision 1.34  2005/03/07 16:38:12  daturaarutad
  * added sql_sort_column to speed up pager sorting
  *
