@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.18 2004/06/12 16:19:20 braverock Exp $
+ * $Id: home.php,v 1.19 2004/06/12 16:46:55 braverock Exp $
  */
 
 // include the common files
@@ -49,7 +49,7 @@ require_once("../notes/sidebar.php");
 /*********************************/
 
 //uncomment the debug line to see what's going on with the query
-$con->debug = 1;
+//$con->debug = 1;
 
 $sql_activities = "
 SELECT
@@ -58,7 +58,7 @@ SELECT
   c.company_name, cont.contact_id, cont.first_names as contact_first_names,
   cont.last_name as contact_last_name,
 CASE
-  WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->DBTimeStamp(time()) . ")) THEN 1
+  WHEN ((a.activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ")) THEN 1
   ELSE 0
 END AS is_overdue
 FROM activity_types at, companies c, activities a
@@ -253,42 +253,42 @@ if ($rst) {
         }
         switch ($file_on_what) {
             case "contacts" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS VARCHAR(10))", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "contacts_of_companies" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS VARCHAR(10))", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
                       . " AS 'Name',"
-                      . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                      . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                       . " AS 'Company',";
                 break;
             }
             case "companies" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "campaigns" : {
-                $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "CAST(camp.campaign_id AS VARCHAR(10))", "'\">'", "camp.campaign_title", "'</a>'")
+                $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id ", "'\">'", "camp.campaign_title", "'</a>'")
                        . " AS 'Campaign',";
                 break;
             }
             case "opportunities" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "CAST(opportunity_id AS VARCHAR(10))", "'\">'", "opp.opportunity_title", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "cases" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "CAST(case_id AS VARCHAR(10))", "'\">'", "cases.case_title", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
@@ -475,6 +475,12 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.19  2004/06/12 16:46:55  braverock
+ * - remove CAST on CONCAT
+ *    - databases should implicitly convert numeric to string and
+ *    - VARCHAR is not universally supported
+ * - changed is_overdue to work with ends_at
+ *
  * Revision 1.18  2004/06/12 16:19:20  braverock
  * - convert timestamp to work wuith adodb changes
  *
