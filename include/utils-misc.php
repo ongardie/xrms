@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.71 2004/08/02 08:34:16 maulani Exp $
+ * $Id: utils-misc.php,v 1.72 2004/08/02 10:01:39 cpsource Exp $
  */
 
 /**
@@ -495,6 +495,8 @@ exit;
  * @param string $param System Parameter to be retrieved
  */
 function get_system_parameter(&$con, $param) {
+
+  $my_val = '';
 
     $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
     $sysst = $con->execute($sql);
@@ -1024,6 +1026,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.72  2004/08/02 10:01:39  cpsource
+ * - Define default value of my_val as '' for the impared developer
+ *
  * Revision 1.71  2004/08/02 08:34:16  maulani
  * - Force get_system_parameter to throw an error if value not found
  *
