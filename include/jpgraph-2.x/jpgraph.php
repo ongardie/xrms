@@ -4,7 +4,7 @@
 // Description:	PHP4 Graph Plotting library. Base module.
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph.php,v 1.2 2005/03/30 18:58:07 daturaarutad Exp $
+// Ver:		$Id: jpgraph.php,v 1.3 2005/04/01 17:13:03 daturaarutad Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2001,2002,2003,2004 Johan Persson Aditus Consulting
@@ -1637,7 +1637,8 @@ class Graph {
 	// scaling you also have to supply the tick steps as well.
 	if( (!$this->yscale->IsSpecified() && count($this->plots)==0) ||
 	    ($this->y2scale!=null && !$this->y2scale->IsSpecified() && count($this->y2plots)==0) ) {
-	    $e = count($this->y2plots)." plots found.<br>\n";
+	    $e = count($this->plots)." plots found.<br>\n";
+	    $e .= count($this->y2plots)." y2plots found.<br>\n";
 	    $e .= "Can't draw unspecified Y-scale.<br>\nYou have either:<br>\n";
 	    $e .= "1. Specified an Y axis for autoscaling but have not supplied any plots<br>\n";
 	    $e .= "2. Specified a scale manually but have forgot to specify the tick steps";
