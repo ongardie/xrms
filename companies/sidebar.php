@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.10 2004/07/21 23:00:45 neildogg Exp $
+ * $Id: sidebar.php,v 1.11 2004/07/27 20:40:04 neildogg Exp $
  */
 
 // add company information block on sidebar
@@ -47,16 +47,22 @@ if ($rst) {
                    . get_formatted_address ($con, $rst->fields['default_primary_address'])
                    . "</td>\n\t</tr>";
 
+    if($rst->fields['phone'] or $rst->fields['fax']) {
+        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>";
+    }
+
     if ($rst->fields['phone']) {
-        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                        . _("Phone") . ": " . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['phone'])
+        $company_block .= _("Phone") . ": " . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['phone'])
                         . "&nbsp;" . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['phone2'])
-                        . "</td>\n\t</tr>";
-    };
+                        . "<br>";
+    }
 
     if ($rst->fields['fax']) {
-        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                        . _("Fax") . ": " . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['fax']) . "</td>\n\t</tr>";
+        $company_block .= _("Fax") . ": " . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['fax']);
+    }
+
+    if($rst->fields['phone'] or $rst->fields['fax']) {
+        $company_block .= "</td>\n\t</tr>";
     }
 
     if ($rst->fields['url']) {
@@ -82,6 +88,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.11  2004/07/27 20:40:04  neildogg
+ * - Removed unnecessary tr's
+ *
  * Revision 1.10  2004/07/21 23:00:45  neildogg
  * - URL can be ugly/long, replaced with 'Web Site'
  *

@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.12 2004/07/27 20:22:48 neildogg Exp $
+ * $Id: sidebar.php,v 1.13 2004/07/27 20:39:57 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -52,10 +52,24 @@ if ($rst && $rst->RecordCount()>=1) {
                         . "</td>\n\t</tr>";
     }
 
+    if ($rst->fields['cell_phone'] or $rst->fields['work_phone'] or $rst->fields['home_phone']) {
+        $contact_block .= "<tr><td class=widget_content>";
+    }
+    
     if ($rst->fields['cell_phone']) {
-        $contact_block .= "<tr><td class=widget_content>" . _("Cell Phone") . ": <strong>"
+        $contact_block .= _("Cell Phone") . ": <strong>"
                         . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']) 
-                        . "</strong></td>\n\t</tr>";
+                        . "</strong><br>";
+    }
+    
+    if ($rst->fields['work_phone']) {
+        $contact_block .= _("Work Phone") . ": <strong>"
+                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
+                        . "</strong><br>";
+    }
+
+    if ($rst->fields['cell_phone'] or $rst->fields['work_phone']) {
+        $contact_block .= "</td>\n\t</tr>";
     }
 
     if ($rst->fields['email']) {
@@ -75,6 +89,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.13  2004/07/27 20:39:57  neildogg
+ * - Removed unnecessary tr's
+ *
  * Revision 1.12  2004/07/27 20:22:48  neildogg
  * - Stopped potentially repeating address
  *
