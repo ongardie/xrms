@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.8 2004/07/07 21:53:13 introspectshun Exp $
+ * $Id: add-address.php,v 1.9 2004/07/19 14:25:09 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,16 +15,22 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$company_id = $_POST['company_id'];
-$country_id = $_POST['country_id'];
-$address_name = $_POST['address_name'];
-$line1 = $_POST['line1'];
-$line2 = $_POST['line2'];
-$city = $_POST['city'];
-$province = $_POST['province'];
-$postal_code = $_POST['postal_code'];
-$address_body = $_POST['address_body'];
-$use_pretty_address = $_POST['use_pretty_address'];
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+                   'company_id'         => array('companies_company_id',arr_vars_SESSION),
+                   'country_id'         => array('companies_country_id',arr_vars_SESSION),
+                   'address_name'       => array('companies_address_name',arr_vars_SESSION),
+                   'line1'              => array('companies_line1',arr_vars_SESSION),
+                   'line2'              => array('companies_line2',arr_vars_SESSION),
+                   'city'               => array('companies_city',arr_vars_SESSION),
+                   'province'           => array('companies_province',arr_vars_SESSION),
+                   'postal_code'        => array('companies_postal_code',arr_vars_SESSION),
+                   'address_body'       => array('companies_address_body',arr_vars_SESSION),
+                   'use_pretty_address' => array('companies_use_pretty_address',arr_vars_SESSION),
+		   );
+
+// get all POST'ed variables, null out any not sent over
+arr_vars_get_all ( $arr_vars, true );
 
 $address_name = (strlen($address_name) > 0) ? $address_name : '[address]';
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
@@ -51,16 +57,22 @@ $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $address_id = $con->insert_id();
-
 add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
 
-$con->execute($sql);
+// TBD - BUG - $sql is undefined ??? - stub it out for now
+// but hopefully, someone will come along and fix it.
+//$con->execute($sql);
+
 $con->close();
 
 header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.9  2004/07/19 14:25:09  cpsource
+ * - General cleanup
+ *   Also noted bug with $sql not defined.
+ *
  * Revision 1.8  2004/07/07 21:53:13  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
