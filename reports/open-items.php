@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.5 2004/04/22 22:30:56 gpowers Exp $
+ * $Id: open-items.php,v 1.6 2004/04/23 15:24:49 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -122,7 +122,9 @@ if ($user_id) {
 
     } // End Activity Type
     if (($type == "campaigns") || ($type == "all")) {
-         $sql = "SELECT * from campaigns where campaign_status_id IN ('1','2','3')
+         $sql = "SELECT * from campaign_statuses, campaigns where
+                 campaign_statuses.campaign_status_id = campaigns.campaign_status_id
+                 and campaign_statuses.status_open_indicator = 'o'
                  and campaign_record_status = 'a'
                  and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
@@ -256,6 +258,9 @@ end_page();
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.6  2004/04/23 15:24:49  gpowers
+ * Fixes Bug #938616, requires campaign_statuses.status_open_indicator
+ *
  * Revision 1.5  2004/04/22 22:30:56  gpowers
  * fixed duplicate lines in report
  *
