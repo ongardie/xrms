@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.1 2004/04/20 13:34:42 braverock Exp $
+ * $Id: open-items.php,v 1.2 2004/04/20 15:02:44 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -167,7 +167,12 @@ if ($user_id) {
         }
     } // End Campaigns Type
     if (($type == "opportunities") || ($type == "all")) {
-        $sql = "SELECT * from opportunities where opportunity_status_id IN ('1','2','3','4','8') and opportunity_record_status = 'a' and user_id = $user_id order by entered_at ";
+        $sql = "SELECT * from opportunities where
+                status_open_indicator = 'o'
+                and opportunity_record_status = 'a'
+                and user_id = $user_id
+                order by entered_at ";
+
         $rst = $con->execute($sql);
         if ($rst) {
             $output .= "<p><font size=+2><b>OPEN OPPORTUNITIES for $username<b></font><br></p>\n";
@@ -204,7 +209,12 @@ if ($user_id) {
         }
     } // End Opportunities Type
     if (($type == "cases") || ($type == "all")) {
-        $sql = "SELECT * from cases where case_status_id in ('1','2','3') and case_record_status = 'a' and user_id = $user_id order by entered_at ";
+        $sql = "SELECT * from cases where
+                status_open_indicator = 'o'
+                and case_record_status = 'a'
+                and user_id = $user_id
+                order by entered_at ";
+
         $rst = $con->execute($sql);
         if ($rst) {
             $output .= "<p><font size=+2><b>OPEN CASES for $username<b></font><br></p>\n";
@@ -257,6 +267,10 @@ end_page();
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.2  2004/04/20 15:02:44  braverock
+ * - removed hard coding of open status indicators for cases and opportunities
+ *   - partially fixes SF bug 938616
+ *
  * Revision 1.1  2004/04/20 13:34:42  braverock
  * - add activity times report
  * - add open items report
