@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.7 2004/03/09 13:39:39 braverock Exp $
+ * $Id: some.php,v 1.8 2004/03/09 13:47:42 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -149,13 +149,17 @@ if (strlen($company_code) > 0) {
 if (strlen($city) > 0) {
     $criteria_count++;
     $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
-    $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
-    $where .= " and addr.city LIKE " . $con->qstr($city, get_magic_quotes_gpc());
+    if (!strlen($state) > 0) {
+        $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
+    }
+    $where .= " and addr.city LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc()) ;
 }
 
 if (strlen($state) > 0) {
     $criteria_count++;
-    $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
+    if (!strlen($city) > 0) {
+        $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
+    }
     $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
     $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
 }
@@ -360,6 +364,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/03/09 13:47:42  braverock
+ * - fixed duplicate city,state display when both are in search terms
+ *
  * Revision 1.7  2004/03/09 13:39:39  braverock
  * - fixed broken city and state search
  * - add phpdoc
