@@ -2,7 +2,7 @@
 /**
  * Manage Company Types
  *
- * $Id: some.php,v 1.8 2004/07/16 23:51:36 cpsource Exp $
+ * $Id: some.php,v 1.9 2004/11/26 16:02:06 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,7 +24,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?company_type_id=' . $rst->fields['company_type_id'] . '>' . $rst->fields['company_type_pretty_name'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href=one.php?company_type_id=' . $rst->fields['company_type_id'] . '>' . _($rst->fields['company_type_pretty_name']) . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -90,6 +90,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.9  2004/11/26 16:02:06  braverock
+ * - localized strings for i18n
+ *
  * Revision 1.8  2004/07/16 23:51:36  cpsource
  * - require session_check ( 'Admin' )
  *
