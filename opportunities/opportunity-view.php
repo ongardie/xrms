@@ -2,7 +2,7 @@
 /**
  * View an opportunity
  *
- * $Id: opportunity-view.php,v 1.4 2004/04/17 15:59:59 maulani Exp $
+ * $Id: opportunity-view.php,v 1.5 2004/06/14 17:41:36 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -67,6 +68,11 @@ end_page();
 
 /**
  * $Log: opportunity-view.php,v $
+ * Revision 1.5  2004/06/14 17:41:36  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, Concat and Date functions.
+ *
  * Revision 1.4  2004/04/17 15:59:59  maulani
  * - Add CSS2 positioning
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.10 2004/06/05 16:24:13 braverock Exp $
+ * $Id: edit.php,v 1.11 2004/06/14 17:41:36 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -100,7 +101,7 @@ from categories c, category_scopes cs, category_category_scope_map ccsm
 where cs.category_scope_id = ccsm.category_scope_id
 and c.category_id = ccsm.category_id
 and cs.on_what_table = 'opportunities'
-and c.category_id not in (" . implode($array_of_categories, ',') . ")
+and c.category_id not in (" . implode(',', $array_of_categories) . ")
 and category_record_status = 'a'
 order by category_pretty_name";
 
@@ -115,7 +116,12 @@ if ($rst) {
 }
 
 //contact menu
-$sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
+$sql = "
+SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id
+FROM contacts
+WHERE company_id = '" . $company_id ."'
+  AND contact_record_status = 'a'
+";
 $rst = $con->execute($sql);
 $contact_menu = $rst->getmenu2('contact_id', $contact_id, false);
 $rst->close();
@@ -280,6 +286,11 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.11  2004/06/14 17:41:36  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, Concat and Date functions.
+ *
  * Revision 1.10  2004/06/05 16:24:13  braverock
  * - reverse probability sort order to 0->100
  *

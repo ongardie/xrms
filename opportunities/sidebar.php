@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.5 2004/04/19 12:12:10 braverock Exp $
+ * $Id: sidebar.php,v 1.6 2004/06/14 17:41:36 introspectshun Exp $
  */
 
 $opportunity_rows = "<div id='opportunity_sidebar'>
@@ -24,14 +24,13 @@ and opportunities.user_id = users.user_id
 and opportunity_record_status = 'a'
 and opportunity_statuses.status_open_indicator = 'o'
 $opportunity_limit_sql
-order by close_at, sort_order
-limit 5";
+order by close_at, sort_order";
 
 //uncomment the debug line to see what's going on with the query
 //$con->debug=1;
 
 //execute our query
-$rst = $con->execute($opportunity_sql);
+$rst = $con->SelectLimit($opportunity_sql, 1, 0);
 
 if (strlen($rst->fields['username'])>0) {
     while (!$rst->EOF) {
@@ -75,6 +74,11 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.6  2004/06/14 17:41:36  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, Concat and Date functions.
+ *
  * Revision 1.5  2004/04/19 12:12:10  braverock
  * - show only open opportunities in sidebar
  *

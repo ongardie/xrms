@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.12 2004/05/10 13:08:36 maulani Exp $
+ * $Id: some.php,v 1.13 2004/06/14 17:41:36 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 //set target and see if we are logged in
 $this = $_SERVER['REQUEST_URI'];
@@ -89,13 +90,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
-$sql = "select concat('<a href=\"one.php?opportunity_id=', opp.opportunity_id, '\">', opp.opportunity_title, '</a>') as 'Opportunity',
-               c.company_name as 'Company',
-               u.username as 'Owner',
-               if (size > 0, size, 0) as 'Opportunity Size',
-               if (size > 0, size*probability/100, 0) as 'Weighted Size',
-               os.opportunity_status_pretty_name as 'Status',
-               $close_at as 'Close Date' ";
+$sql = "SELECT " .
+  $con->Concat("'<a href=\"one.php?opportunity_id='", "CAST(opp.opportunity_id AS VARCHAR(10))", "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
+  c.company_name AS 'Company', u.username AS 'Owner',
+  CASE
+    WHEN (opp.size > 0) THEN opp.size
+    ELSE 0
+  END AS 'Opportunity Size',
+  CASE
+    WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100)
+    ELSE 0
+  END AS 'Weighted Size',
+  os.opportunity_status_pretty_name AS 'Status', $close_at AS 'Close Date'
+";
 
 if ($opportunity_category_id > 0) {
     $from = "from companies c, opportunities opp, opportunity_statuses os, users u, entity_category_map ecm ";
@@ -319,6 +326,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.13  2004/06/14 17:41:36  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, Concat and Date functions.
+ *
  * Revision 1.12  2004/05/10 13:08:36  maulani
  * - Add level to audit trail
  * - Correct audit trail entry text

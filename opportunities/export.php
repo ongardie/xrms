@@ -5,6 +5,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'adodb/toexport.inc.php');
 
 //set target and see if we are logged in
@@ -23,19 +24,28 @@ $opportunity_category_id = $_POST['opportunity_category_id'];
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
-$sql = "select opp.opportunity_title as 'Opportunity Title',
-company_name as 'Company',
-u.username as 'Owner',
-if (size > 0, size, 0) as 'Opportunity Size',
-probability/100 as 'Probability',
-if (size > 0, size*probability/100, 0) as 'Weighted Size',
-os.opportunity_status_pretty_name as 'Status',
-$close_at as 'Close Date'
-from opportunities opp, companies c, opportunity_statuses os, users u, entity_category_map ecm
-where opp.company_id = c.company_id
-and opp.user_id = u.user_id
-and opp.opportunity_status_id = os.opportunity_status_id
-and opportunity_record_status = 'a' ";
+$sql = "
+SELECT
+  opp.opportunity_title AS 'Opportunity Title',
+  c.company_name AS 'Company',
+  u.username AS 'Owner',
+  CASE
+    WHEN (opp.size > 0) THEN opp.size
+    ELSE 0
+  END AS 'Opportunity Size',
+  (opp.probability / 100) AS 'Probability',
+  CASE
+    WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100)
+    ELSE 0
+  END AS 'Weighted Size',
+  os.opportunity_status_pretty_name AS 'Status',
+  $close_at AS 'Close Date'
+FROM opportunities opp, companies c, opportunity_statuses os, users u
+WHERE opp.company_id = c.company_id
+  AND opp.user_id = u.user_id
+  AND opp.opportunity_status_id = os.opportunity_status_id
+  AND opp.opportunity_record_status = 'a'
+";
 
 if ($opportunity_category_id > 0) {
     $where .= " and ecm.on_what_table = 'opportunities'

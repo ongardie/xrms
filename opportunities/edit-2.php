@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -71,20 +72,24 @@ if ($old_status != $opportunity_status_id) {
 
 if (!$no_update) {
     //update the information from edit.php
-    $sql = "update opportunities set opportunity_status_id = $opportunity_status_id, 
-	contact_id = $contact_id, 
-	campaign_id = $campaign_id, 
-	user_id = $user_id, 
-	size = $size, 
-	probability = $probability, 
-	opportunity_title = " . $con->qstr($opportunity_title, get_magic_quotes_gpc()) . ", 
-	opportunity_description = " . $con->qstr($opportunity_description, get_magic_quotes_gpc()) . ", 
-	close_at = " . $con->dbdate($close_at . ' 23:59:59') . ", 
-	last_modified_at = " . $con->dbtimestamp(mktime()) . ", 
-	last_modified_by = $session_user_id 
-	where opportunity_id = $opportunity_id";
+    $sql = "SELECT * FROM opportunities WHERE opportunity_id = $opportunity_id";
+    $rst = $con->execute($sql);
 
-    $con->execute($sql);
+    $rec = array();
+    $rec['opportunity_status_id'] = $opportunity_status_id;
+    $rec['contact_id'] = $contact_id;
+    $rec['campaign_id'] = $campaign_id;
+    $rec['user_id'] = $user_id;
+    $rec['size'] = $size;
+    $rec['probability'] = $probability;
+    $rec['opportunity_title'] = $opportunity_title;
+    $rec['opportunity_description'] = $opportunity_description;
+    $rec['close_at'] = $con->DBDate($close_at . ' 23:59:59');
+    $rec['last_modified_at'] = time();
+    $rec['last_modified_by'] = $session_user_id;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
 
     header("Location: one.php?msg=saved&opportunity_id=$opportunity_id");
 }

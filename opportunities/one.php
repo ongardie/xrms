@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.17 2004/06/04 13:49:33 braverock Exp $
+ * $Id: one.php,v 1.18 2004/06/14 17:41:36 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -75,26 +76,25 @@ if ($rst) {
 
 // most recent activities
 
-$sql_activities = "select activity_id,
-    activity_title,
-    scheduled_at,
-    a.entered_at,
-    a.on_what_table,
-    a.on_what_id,
-    activity_status,
-    at.activity_type_pretty_name,
-    cont.contact_id,
-    cont.first_names as contact_first_names,
-    cont.last_name as contact_last_name,
-    u.username,
-    if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
-    from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
-    where a.on_what_table = 'opportunities'
-    and a.on_what_id = $opportunity_id
-    and a.user_id = u.user_id
-    and a.activity_type_id = at.activity_type_id
-    and a.activity_record_status = 'a'
-    order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
+$sql_activities = "
+SELECT
+  a.activity_id, a.activity_title, a.scheduled_at, a.on_what_table, a.on_what_id,
+  a.entered_at, a.activity_status, at.activity_type_pretty_name,
+  cont.contact_id, cont.first_names AS contact_first_names,
+  cont.last_name AS contact_last_name, u.username,
+CASE
+  WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
+  ELSE 0
+END AS is_overdue
+FROM activity_types at, users u, activities a
+LEFT JOIN contacts cont ON a.contact_id = cont.contact_id
+WHERE a.on_what_table = 'opportunities'
+  AND a.on_what_id = $opportunity_id
+  AND a.user_id = u.user_id
+  AND a.activity_type_id = at.activity_type_id
+  AND a.activity_record_status = 'a'
+ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
+";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
 
@@ -151,7 +151,7 @@ if ($rst) {
     $rst->close();
 }
 
-$categories = implode($categories, ", ");
+$categories = implode(', ', $categories);
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -194,7 +194,7 @@ $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
 // get contact names
-$sql = "select concat(first_names, ' ', last_name), contact_id from contacts where company_id = $company_id and contact_record_status = 'a' order by last_name";
+$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . ", contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a' ORDER BY last_name";
 $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
@@ -413,6 +413,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.18  2004/06/14 17:41:36  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, Concat and Date functions.
+ *
  * Revision 1.17  2004/06/04 13:49:33  braverock
  * - update email link to improve activity tracking
  *
