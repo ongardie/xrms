@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.3 2004/03/23 14:34:05 braverock Exp $
+ * $Id: update.php,v 1.4 2004/03/25 22:14:00 maulani Exp $
  */
 
 /**
@@ -75,6 +75,16 @@ if ($rst) {
 }
 // end case_priority_display_html
 
+// Fix problem introduced by buggy Mar 19, 2004 install code
+// This will modify the initial data appropriately
+$sql = "update address_format_strings set address_format_string='";
+$sql .= '$lines<br>$city, $province $postal_code<br>$country ';
+$sql .= "'where address_format_string!='";
+$sql .= '$lines<br>$city, $province $postal_code<br>$country ';
+$sql .= "'and address_format_string_id=1";
+$rst = $con->execute($sql);
+
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -89,13 +99,15 @@ Your database has been updated.
 You may now <a href="../login.php">login</a> to get started.
 
 
-
 <?php
 
 end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.4  2004/03/25 22:14:00  maulani
+ * -  Add fix to repair bad address_format_string created by buggy install code
+ *
  * Revision 1.3  2004/03/23 14:34:05  braverock
  * - add check for result set before closing rst
  *
