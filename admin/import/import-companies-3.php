@@ -24,7 +24,7 @@
  * @todo modify CSVtoArray fn to do a trim, strtolower, and replace spaces with underscores in array element names
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-3.php,v 1.5 2004/02/04 18:39:58 braverock Exp $
+ * $Id: import-companies-3.php,v 1.6 2004/02/10 13:31:44 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -174,7 +174,7 @@ foreach ($filearray as $row) {
     $company_name        = $row['company_name'];
     $legal_name          = $row['legal_name'];
     $division_name       = $row['division_name'];
-    $company_website     = $row['url'];
+    $company_website     = $row['website'];
     $company_taxid       = $row['tax_id'];
     $extref1             = $row['extref1'];
     $extref2             = $row['extref2'];
@@ -230,7 +230,7 @@ foreach ($filearray as $row) {
     if (strlen($company_name) > 0) {
         // start putting together our query
         if (!$company_id) {
-            $sql_insert_company = "
+            $sql_insert_company .= "
             insert into companies set
                 user_id = $user_id,
                 crm_status_id = $crm_status_id,
@@ -242,7 +242,7 @@ foreach ($filearray as $row) {
                 entered_by = ' . $con->qstr($entered_by, get_magic_quotes_gpc()) . ',
                 company_name = '. $con->qstr($company_name, get_magic_quotes_gpc()) .',';
         } else {
-            $sql_insert_company = '
+            $sql_insert_company .= '
             update companies set ';
         }
 
@@ -253,77 +253,77 @@ foreach ($filearray as $row) {
             last_modified_by = ' . $con->qstr($last_modified_by, get_magic_quotes_gpc());
 
         if ($legal_name) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             legal_name       = '. $con->qstr($legal_name, get_magic_quotes_gpc());
         }
         if ($company_website) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             url              = '. $con->qstr($company_website, get_magic_quotes_gpc());
         }
         if ($company_taxid) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             tax_id           = '. $con->qstr($company_taxid, get_magic_quotes_gpc());
         }
         if ($extref1) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             extref1       = '. $con->qstr($extref1, get_magic_quotes_gpc());
         }
         if ($extref2) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             extref2       = '. $con->qstr($extref2, get_magic_quotes_gpc());
         }
         if ($extref3) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             extref3       = '. $con->qstr($extref3, get_magic_quotes_gpc());
         }
         if ($custom1) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             custom1       = '. $con->qstr($custom1, get_magic_quotes_gpc());
         }
         if ($custom2) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             custom2       = '. $con->qstr($custom2, get_magic_quotes_gpc());
         }
         if ($custom3) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             custom3       = '. $con->qstr($custom3, get_magic_quotes_gpc());
         }
         if ($custom4) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             custom4       = '. $con->qstr($custom4, get_magic_quotes_gpc());
         }
         if ($exployees) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             exployees       = '. $con->qstr($exployees, get_magic_quotes_gpc());
         }
         if ($revenue) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             revenue       = '. $con->qstr($revenue, get_magic_quotes_gpc());
         }
         if ($credit_limit) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             credit_limit       = '. $con->qstr($credit_limit, get_magic_quotes_gpc());
         }
         if ($terms) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             terms       = '. $con->qstr($terms, get_magic_quotes_gpc());
         }
         if ($profile) {
-            $sql_insert_company = ',
+            $sql_insert_company .= ',
             profile       = '. $con->qstr($profile, get_magic_quotes_gpc());
         }
         //set phone numbers only if the company didn't already exist
         if (!$company_id) {
             if ($phone) {
-                $sql_insert_company = ',
+                $sql_insert_company .= ',
                 phone       = '. $con->qstr($phone, get_magic_quotes_gpc());
             }
             if ($phone2) {
-                $sql_insert_company = ',
+                $sql_insert_company .= ',
                 phone2       = '. $con->qstr($phone2, get_magic_quotes_gpc());
             }
             if ($fax) {
-                $sql_insert_company = ',
+                $sql_insert_company .= ',
                 fax       = '. $con->qstr($fax, get_magic_quotes_gpc());
             }
         }
@@ -537,6 +537,10 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.6  2004/02/10 13:31:44  braverock
+ * - change url to 'website'
+ * - fixed syntax errror on insert
+ *
  * Revision 1.5  2004/02/04 18:39:58  braverock
  * - major update to import functionality
  * - add phpdoc

@@ -20,7 +20,7 @@
  * @todo modify CSVtoArray fn to do a trim, strtolower, and replace spaces with underscores in array element names
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-2.php,v 1.2 2004/02/04 18:39:58 braverock Exp $
+ * $Id: import-companies-2.php,v 1.3 2004/02/10 13:31:44 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -163,7 +163,7 @@ foreach ($filearray as $row) {
     $company_name        = $row['company_name'];
     $legal_name          = $row['legal_name'];
     $division_name       = $row['division_name'];
-    $company_website     = $row['url'];
+    $company_website     = $row['website'];
     $company_taxid       = $row['tax_id'];
     $extref1             = $row['extref1'];
     $extref2             = $row['extref2'];
@@ -288,6 +288,10 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.3  2004/02/10 13:31:44  braverock
+ * - change url to 'website'
+ * - fixed syntax errror on insert
+ *
  * Revision 1.2  2004/02/04 18:39:58  braverock
  * - major update to import functionality
  * - add phpdoc
