@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.40 2005/01/06 15:41:57 vanmer Exp $
+ * $Id: utils-interface.php,v 1.41 2005/01/09 17:04:54 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -210,14 +210,14 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
 //hack to fake ACL authentication until acl is completely integrated
 if (!function_exists('check_object_permission_bool')) {
-    function check_object_permission_bool($user, $object, $action, $table) {
+    function check_object_permission_bool($user, $object=false, $action='Read', $table=false) {
         return true;
     }
 }
 
 //hack to fake ACL authentication until acl is completely integrated
 if (!function_exists('check_permission_bool')) {
-    function check_permission_bool($user, $object, $id, $action, $table) {
+    function check_permission_bool($user, $object=false, $id, $action='Read', $table=false) {
         return true;
     }
 }
@@ -269,8 +269,9 @@ function render_nav_line() {
     //place the menu_line hook before Reports and Adminstration link
     do_hook ('menuline');
 ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, false, 'Read', 'reports')) echo http_root_href('/reports/index.php',      _("Reports")); ?> &bull;
-      <?php echo http_root_href('/admin/routing.php',      _("Administration")); ?>
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false,  'Read', 'reports')) echo http_root_href('/reports/index.php',      _("Reports")) . ' &bull; '; ?> 
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], 'Administration', 'Read' )) echo http_root_href('/admin/routing.php',      _("Administration")). ' &bull; '; ?>
+      <?php echo http_root_href('/admin/users/self.php', _("Preferences")); ?>
   </div><!-- end of navline -->
 <?php
 
@@ -430,6 +431,10 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.41  2005/01/09 17:04:54  vanmer
+ * - added needed defaults to optional parameters in ACL stub functions
+ * - added Preferences link to take a user to their own edit page
+ *
  * Revision 1.40  2005/01/06 15:41:57  vanmer
  * - split up navigation line into seperate function from start_page
  * - added fake ACL functions to allow ACL integration to continue without breaking existing systems
