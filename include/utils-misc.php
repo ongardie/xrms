@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.74 2004/08/02 11:40:53 maulani Exp $
+ * $Id: utils-misc.php,v 1.75 2004/08/02 20:20:48 neildogg Exp $
  */
 
 /**
@@ -758,7 +758,159 @@ function get_formatted_address (&$con,$address_id) {
  * @param object $con Database Connection
  * @param int $address_id ID of address
  *
+ * @return array $array("daylight_savings_id" => int, "offset", float)
+ * @return boolean False if no records
  */
+ 
+function time_zone_offet($con, $address_id) {
+    global $only_confirmed_time_zones;
+    $sql = "SELECT country_id, province, city, postal_code
+            FROM addresses
+            WHERE address_id=" . $address_id;
+    $rst = $con->execute($sql);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif(!$rst->EOF) {
+        $country_id = $rst->fields['country_id'];
+        $province = $rst->fields['province'];
+        $city = $rst->fields['city'];
+        $postal_code = $rst->fields['postal_code'];
+        
+        $sql = "SELECT daylight_savings_id, offset, confirmed,
+                    if(province='" . $province . "', 0, 1) as has_province, 
+                    if(city='" . $city . "', 0, 1) as has_city,
+                    if(postal_code='" . $postal_code . "', 0, 1) as has_postal_code
+                FROM time_zones 
+                WHERE country_id=" . $country_id . "
+                ORDER BY has_province, has_city, has_postal_code limit 1";
+        $rst = $con->execute($sql);
+        if(!$rst) {
+            db_error_handler($con, $sql);
+        }
+        elseif(!$rst->EOF) {
+            $confirmed = $rst->fields['confirmed'];
+            if($only_confirmed_time_zones == 'n' or ($only_confirmed_time_zones == 'y' and $confirmed_time_zones == 'y')) {
+                $daylight_savings_id = $rst->fields['daylight_savings_id'];
+                $offset = $rst->fields['offset'];
+            
+                return array("daylight_savings_id" => $daylight_savings_id, "offset" => $offset);
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+/** 
+ * Calculate time zone offset
+ *
+ * Returns timestamp based on daylight savings ID and offset
+ * You must use gmdate() rather than date() on this tiem
+ *
+ * @author Neil Roberts
+ *
+ * @param object $con Database Connection
+ * @param int $daylight_savings_id ID of daylight savings
+ * @param float offset Amount of offset in hours
+ *
+ * @return timestamp Time
+ */
+ 
+ function calculate_time_zone_time($con, $daylight_savings_id, $offset) {
+    update_daylight_savings($con);
+    $sql = "SELECT current_hour_shift
+            FROM time_daylight_savings
+            WHERE daylight_savings_id=" . $daylight_savings_id;
+    $rst = $con->execute($sql);
+    
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif(!$rst->EOF) {
+        return time() + ($offset*3600) + ($rst->fields['current_hour_shift']*3600);
+    }
+ }
+ 
+ /**
+  * Update daylight savings
+  *
+  * Must be run before a search (but only once a day)
+  * in order for a comparison
+  * to be done in the search pages.
+  *
+  * @author Neil Roberts
+  *
+  * @param object $con Database Connection
+  *
+  */
+  
+function update_daylight_savings($con) {
+    $sql = "SELECT *
+            FROM time_daylight_savings
+            WHERE last_update < curdate()";
+    $rst = $con->execute($sql);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    else {
+        while(!$rst->EOF) {
+            $daylight_savings_id = $rst->fields['daylight_savings_id'];
+            $start_position = $rst->fields['start_position'];
+            $start_day = $rst->fields['start_day'];
+            $start_month = $rst->fields['start_month'];
+            $end_day = $rst->fields['end_day'];
+            $end_month = $rst->fields['end_month'];
+            $hour_shift = $rst->fields['hour_shift'];
+            
+            if(!$start_month) {
+                $current_hour_shift = $hour_shift;
+            }
+            else {
+                if($start_position == "last") {
+                    // This should always work because there are no daylight months in Dec
+                    ++$start_month;
+                }
+                $start_timestamp = strtotime("$start_position $start_day", strtotime(date("Y-$start_month-1", time())));
+                if($end_position == "last") {
+                    ++$end_month;
+                }
+                $end_timestamp = strtotime("$end_position $end_day", strtotime(date("Y-$end_month-1", time())));
+                
+                if($start_month < $end_month) {
+                    if(($start_timestamp <= time()) and ($end_timestamp > time())) {
+                        $current_hour_shift = $hour_shift;
+                    }
+                    else {
+                        $current_hour_shift = 0;
+                    }
+                }
+                else {
+                    if((time() <= $start_timestamp) or (time() >= $end_timestamp)) {
+                        $current_hour_shift = $hour_shift;
+                    }
+                    else {
+                        $current_hour_shift = 0;
+                    }
+                }
+            }
+            
+            $con->execute("UPDATE time_daylight_savings 
+                           SET current_hour_shift=" . $current_hour_shift . ",
+                               last_update=" . $con->DBTimeStamp(time()) . "
+                           WHERE daylight_savings_id=" . $daylight_savings_id);
+            
+            $rst->movenext();
+        }
+    }
+}
 
 /**
  * The arr_vars sub-system
@@ -1029,6 +1181,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.75  2004/08/02 20:20:48  neildogg
+ * - 3 functions added to manage daylight savings
+ *
  * Revision 1.74  2004/08/02 11:40:53  maulani
  * - Force exit since db_error_handler only presents the error and does not exit
  *
