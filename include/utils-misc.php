@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.68 2004/07/28 20:43:03 neildogg Exp $
+ * $Id: utils-misc.php,v 1.69 2004/07/29 23:50:56 maulani Exp $
  */
 
 /**
@@ -129,9 +129,8 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id, $recen
 }
 
 /**
- * Get the current system audit level
+ * Get the current system audit level from the system parameters table
  *
- * @todo  Currently a stub that logs everything.  Will be data or vars.php based
  *   0 - no logging
  *   1 - inserts & updates
  *   2 - and login/logout
@@ -1025,6 +1024,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.69  2004/07/29 23:50:56  maulani
+ * -remove obsolete comment
+ *
  * Revision 1.68  2004/07/28 20:43:03  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
