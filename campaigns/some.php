@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.13 2004/06/21 20:53:16 introspectshun Exp $
+ * $Id: some.php,v 1.14 2004/06/26 15:23:18 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -210,7 +210,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post>
+    <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=campaigns_next_page value="<?php  echo $campaigns_next_page ?>">
         <input type=hidden name=resort value="0">
@@ -218,31 +218,48 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order ?>">
-        <table class=widget cellspacing=1 width="100%">
-            <tr>
-                <td class=widget_header colspan=6>Search Criteria</td>
-            </tr>
-            <tr>
-                <td class=widget_label>Campaign Name</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Category</td>
-                <td class=widget_label>Media</td>
-                <td class=widget_label>Status</td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name="campaign_title" size=20 value="<?php  echo $campaign_title ?>"></td>
-                <td class=widget_content_form_element><?php  echo $campaign_type_menu ?></td>
-                <td class=widget_content_form_element><?php  echo $user_menu ?></td>
-                <td class=widget_content_form_element><?php  echo $campaign_category_menu ?></td>
-                <td class=widget_content_form_element><input type=text name=media size=12 value="<?php  echo $media ?>"></td>
-                <td class=widget_content_form_element><?php  echo $campaign_status_menu ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=6><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";} ?> </td>
-            </tr>
-        </table>
-        </form>
+    <table class=widget cellspacing=1 width="100%">
+        <tr>
+            <td class=widget_header colspan=3>Search Criteria</td>
+        </tr>
+        <tr>
+            <td width="36%" class=widget_label>Campaign Name</td>
+            <td width="35%" class=widget_label>Type</td>
+            <td width="29%" class=widget_label>Owner</td>
+        </tr>
+        <tr>
+            <td class=widget_content_form_element><input type=text name="campaign_title" size=20 value="<?php  echo $campaign_title ?>"></td>
+            <td class=widget_content_form_element>
+                <?php  echo $campaign_type_menu ?>
+            </td>
+            <td class=widget_content_form_element>
+                <?php  echo $user_menu ?>
+            </td>
+        </tr>
+        <tr>
+            <td class=widget_content_form_element>Category</td>
+            <td class=widget_content_form_element>Media</td>
+            <td class=widget_content_form_element>Status</td>
+        </tr>
+        <tr>
+            <td width="33%" class=widget_content_form_element>
+                <?php  echo $campaign_category_menu ?>
+            </td>
+            <td width="33%" class=widget_content_form_element>
+                <input type=text name=media size=12 value="<?php  echo $media ?>">
+            </td>
+            <td width="33%" class=widget_content_form_element>
+                <?php  echo $campaign_status_menu ?>
+            </td>
+        </tr>
+        <tr>
+            <td class=widget_content_form_element colspan=3><input name="submit" type=submit class=button value="Search">
+                <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
+                <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";} ?>
+            </td>
+        </tr>
+    </table>
+    </form>
 
 <?php
 
@@ -322,6 +339,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.14  2004/06/26 15:23:18  braverock
+ * - change search layout to two rows to improve CSS positioning
+ *   - applied modified version of SF patch #971474 submitted by s-t
+ *
  * Revision 1.13  2004/06/21 20:53:16  introspectshun
  * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
  *
