@@ -15,7 +15,7 @@
  * @author Philippe Mingo
  * @author Brian Peterson
  *
- * $Id: plugin-admin.php,v 1.1 2004/03/21 18:14:05 braverock Exp $
+ * $Id: plugin-admin.php,v 1.2 2004/06/28 13:55:06 gpowers Exp $
  * @package xrms
  * @subpackage plugins
  */
@@ -172,10 +172,8 @@ start_page($page_title);
 
 $newcfg = array();
 
-echo "<form method=post name=plugin-admin>"
-    . "<center><table width=95% >"
-    . "<tr><td>"
-    . "<table width=100% cellspacing=0 bgcolor=\"$color[4]\">"
+echo "<p><br /><br /><form method=post name=plugin-admin>"
+    . "<table align=center cellspacing=0 bgcolor=\"$color[4]\">"
     . "<input type=hidden name=plugin_submit value=true>";
     //. "<tr><th colspan=2>" . _("Plugin Administration") . "</th></tr>",
 
@@ -291,10 +289,15 @@ if ($plugin_submit == 'true') {
     }
 } //end write check
 
-echo '</table></td></tr></table></form>';
+echo '</table></form></p>';
 
 /**
  * $Log: plugin-admin.php,v $
+ * Revision 1.2  2004/06/28 13:55:06  gpowers
+ * - HTML layout changes, to improve rendering
+ *   - removed outer of two nested tables
+ *   - enclosed <form> and <table> inside of <p>
+ *
  * Revision 1.1  2004/03/21 18:14:05  braverock
  * Initial Revision of Plugin Administration page
  *
