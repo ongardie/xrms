@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.43 2004/12/07 22:24:02 vanmer Exp $
+ * $Id: update.php,v 1.44 2004/12/31 17:57:20 braverock Exp $
  */
 
 // where do we include from
@@ -162,6 +162,15 @@ $con->execute($upd);
 //This is used for reports/open-items.php and reports/completed-items.php reports
 //'o' means open, anything else means "completed" for the completed-item report
 $sql = "alter table case_statuses add status_open_indicator char(1) not null default 'o' after case_status_id";
+$rst = $con->execute($sql);
+//add a long description for consistency
+$sql = "ALTER TABLE `case_statuses` ADD `case_status_long_desc` VARCHAR( 200 ) NOT NULL";
+$rst = $con->execute($sql);
+//link case statuses to a case type for workflow
+$sql = "ALTER TABLE `case_statuses` ADD `case_type_id` INT DEFAULT '1' NOT NULL AFTER `case_status_display_html`";
+$rst = $con->execute($sql);
+//add an index
+$sql = "ALTER TABLE `case_statuses` ADD INDEX ( `case_type_id` ) ";
 $rst = $con->execute($sql);
 // end
 
@@ -3848,6 +3857,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.44  2004/12/31 17:57:20  braverock
+ * - added description column to case_statuses to match opportunity_statuses
+ *
  * Revision 1.43  2004/12/07 22:24:02  vanmer
  * - added missing fields to relationship_types
  *
