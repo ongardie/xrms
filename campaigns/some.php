@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.15 2004/07/09 18:35:39 introspectshun Exp $
+ * $Id: some.php,v 1.16 2004/07/15 13:56:11 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,43 +17,22 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
-$offset = $_POST['offset'];
-$clear = ($_GET['clear'] == 1) ? 1 : 0;
-$use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-$resort = $_POST['resort'];
 
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $campaign_title = '';
-    $user_id = '';
-    $campaign_type_id = '';
-    $campaign_status_id = '';
-    $campaign_category_id = '';
-} elseif ($use_post_vars) {
-    $sort_column = $_POST['sort_column'];
-    $current_sort_column = $_POST['current_sort_column'];
-    $sort_order = $_POST['sort_order'];
-    $current_sort_order = $_POST['current_sort_order'];
-    $campaign_title = $_POST['campaign_title'];
-    $user_id = $_POST['user_id'];
-    $campaign_type_id = $_POST['campaign_type_id'];
-    $campaign_status_id = $_POST['campaign_status_id'];
-    $campaign_category_id = $_POST['campaign_category_id'];
-} else {
-    $sort_column = $_SESSION['campaigns_sort_column'];
-    $current_sort_column = $_SESSION['campaigns_current_sort_column'];
-    $sort_order = $_SESSION['campaigns_sort_order'];
-    $current_sort_order = $_SESSION['campaigns_current_sort_order'];
-    $campaign_title = $_SESSION['campaigns_campaign_title'];
-    $user_id = $_SESSION['campaigns_user_id'];
-    $campaign_type_id = $_SESSION['campaigns_campaign_type_id'];
-    $campaign_status_id = $_SESSION['campaigns_campaign_status_id'];
-    $campaign_category_id = $_SESSION['campaigns_campaign_category_id'];
-}
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+		   'sort_column'          => array ( 'campaigns_sort_column', arr_vars_SESSION), 
+		   'current_sort_column'  => array ( 'campaigns_current_sort_column', arr_vars_SESSION), 
+		   'sort_order'           => array ( 'campaigns_sort_order', arr_vars_SESSION), 
+		   'current_sort_order'   => array ( 'campaigns_current_sort_order', arr_vars_SESSION), 
+		   'campaign_title'       => array ( 'campaigns_campaign_title', arr_vars_SESSION), 
+		   'user_id'              => array ( 'campaigns_user_id', arr_vars_SESSION), 
+		   'campaign_type_id'     => array ( 'campaigns_campaign_type_id', arr_vars_SESSION), 
+		   'campaign_status_id'   => array ( 'campaigns_campaign_status_id', arr_vars_SESSION), 
+		   'campaign_category_id' => array ( 'campaigns_campaign_category_id', arr_vars_SESSION), 
+		   );
+
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -72,15 +51,8 @@ $ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif"
 $descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-$_SESSION['campaigns_sort_column'] = $sort_column;
-$_SESSION['campaigns_current_sort_column'] = $sort_column;
-$_SESSION['campaigns_sort_order'] = $sort_order;
-$_SESSION['campaigns_current_sort_order'] = $sort_order;
-$_SESSION['campaigns_campaign_title'] = $campaign_title;
-$_SESSION['campaigns_campaign_type_id'] = $campaign_type_id;
-$_SESSION['campaigns_campaign_status_id'] = $campaign_status_id;
-$_SESSION['campaigns_campaign_category_id'] = $campaign_category_id;
-$_SESSION['campaigns_user_id'] = $user_id;
+// set all session variables
+arr_vars_session_set ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -100,7 +72,7 @@ if ($campaign_category_id > 0) {
     $from = "from campaigns cam, campaign_types camt, campaign_statuses cams, users u ";
 }
 
-$where .= "where cam.campaign_type_id = camt.campaign_type_id ";
+$where  = "where cam.campaign_type_id = camt.campaign_type_id ";
 $where .= "and cam.campaign_status_id = cams.campaign_status_id ";
 $where .= "and cam.user_id = u.user_id ";
 $where .= "and campaign_record_status = 'a'";
@@ -153,6 +125,8 @@ and r.on_what_table = 'campaigns'
 and r.on_what_id = cam.campaign_id
 and campaign_record_status = 'a'
 order by r.recent_item_timestamp desc";
+
+$recently_viewed_table_rows = '';
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
@@ -339,6 +313,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.16  2004/07/15 13:56:11  cpsource
+ * - Add support for arr_vars sub-system.
+ *
  * Revision 1.15  2004/07/09 18:35:39  introspectshun
  * - Removed CAST(x AS CHAR) for wider database compatibility
  * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
