@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.41 2004/07/22 19:57:49 neildogg Exp $
+ * $Id: some.php,v 1.42 2004/07/22 19:59:03 neildogg Exp $
  */
 
 // handle includes
@@ -173,7 +173,7 @@ if (strlen($user_id) > 0) {
 
 if (strlen($activity_type_id) > 0) {
     $criteria_count++;
-    $sql .= " and a.activity_type_id = " $activity_type_id . " ";
+    $sql .= " and a.activity_type_id = " . $activity_type_id . " ";
 }
 
 if (strlen($completed) > 0 and $completed != "all") {
@@ -496,6 +496,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.42  2004/07/22 19:59:03  neildogg
+ * - Missed concat .
+ *
  * Revision 1.41  2004/07/22 19:57:49  neildogg
  * - activity_type_id is an ID
  *
