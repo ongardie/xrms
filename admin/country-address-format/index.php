@@ -6,7 +6,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: index.php,v 1.2 2004/06/14 22:12:05 introspectshun Exp $
+ * $Id: index.php,v 1.3 2004/06/16 20:57:25 gpowers Exp $
  */
 
 //include required files
@@ -19,8 +19,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
+
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
@@ -67,6 +67,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.3  2004/06/16 20:57:25  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.2  2004/06/14 22:12:05  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

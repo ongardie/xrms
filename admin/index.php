@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.12 2004/06/14 18:13:51 introspectshun Exp $
+ * $Id: index.php,v 1.13 2004/06/16 20:54:59 gpowers Exp $
  */
 
 //include required stuff
@@ -13,9 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-//set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 //connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
@@ -210,6 +208,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.13  2004/06/16 20:54:59  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.12  2004/06/14 18:13:51  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

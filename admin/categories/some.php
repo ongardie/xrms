@@ -2,7 +2,7 @@
 /**
  * Manage Categories
  *
- * $Id: some.php,v 1.5 2004/06/14 21:52:23 introspectshun Exp $
+ * $Id: some.php,v 1.6 2004/06/16 20:55:58 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -92,6 +92,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2004/06/16 20:55:58  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.5  2004/06/14 21:52:23  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.

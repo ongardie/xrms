@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: voicemail.php,v 1.1 2004/05/06 13:45:45 gpowers Exp $
+ * $Id: voicemail.php,v 1.2 2004/06/16 21:00:37 gpowers Exp $
  */
 
 // include the common files
@@ -15,9 +15,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-//set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $msg = $_GET['msg'];
 
@@ -101,7 +99,7 @@ echo "Mailbox: ". $mailbox . "<br>";
 <?php
 $vmdir="/var/spool/asterisk/voicemail/$context/$exten/$mailbox";
 
-if ($handle = opendir($vmdir)) { 
+if ($handle = opendir($vmdir)) {
    chdir ($vmdir);
    while (false !== ($filename = readdir($handle))) {
       if (preg_match("/txt/i", $filename)) {

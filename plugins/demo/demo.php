@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: demo.php,v 1.3 2004/05/04 23:55:30 maulani Exp $
+ * $Id: demo.php,v 1.4 2004/06/16 21:00:36 gpowers Exp $
  */
 
 // include the common files
@@ -15,9 +15,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-//set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $msg = $_GET['msg'];
 
@@ -88,6 +86,10 @@ end_page();
 
 /**
  * $Log: demo.php,v $
+ * Revision 1.4  2004/06/16 21:00:36  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.3  2004/05/04 23:55:30  maulani
  * - Add CSS2 positioning to plugin demo.
  *

@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: mrtg.php,v 1.1 2004/05/06 15:13:58 gpowers Exp $
+ * $Id: mrtg.php,v 1.2 2004/06/16 21:00:36 gpowers Exp $
  */
 
 // include the common files
@@ -15,9 +15,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-//set target and see if we are logged in
-$this = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $msg = $_GET['msg'];
 
@@ -71,6 +69,10 @@ end_page();
 
 /**
  * $Log: mrtg.php,v $
+ * Revision 1.2  2004/06/16 21:00:36  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.1  2004/05/06 15:13:58  gpowers
  * This is a simple plugin for including an MRTG page in XRMS.
  *

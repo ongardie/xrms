@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.8 2004/06/14 21:52:23 introspectshun Exp $
+ * $Id: one.php,v 1.9 2004/06/16 20:55:58 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check( $this );
+$session_user_id = session_check();
 
 $category_id = $_GET['category_id'];
 
@@ -158,6 +158,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/06/16 20:55:58  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
  * Revision 1.8  2004/06/14 21:52:23  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
