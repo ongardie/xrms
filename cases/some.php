@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.24 2005/01/09 03:22:33 braverock Exp $
+ * $Id: some.php,v 1.25 2005/01/13 18:13:36 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
+$on_what_table='cases';
 $session_user_id = session_check();
 
 // declare passed in variables
@@ -122,6 +123,13 @@ if (strlen($case_type_id) > 0) {
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
+} else {
+    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    //print_r($list);
+    if ($list) {
+        $list=implode(",",$list);
+        $where .= " and ca.case_id IN ($list) ";
+    } else { $where .= ' AND 1 = 2 '; }
 }
 
 if ($sort_column == 1) {
@@ -347,6 +355,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.25  2005/01/13 18:13:36  vanmer
+ * - Basic ACL changes to allow display functionality to be restricted
+ *
  * Revision 1.24  2005/01/09 03:22:33  braverock
  * - modified to use company name rather than company code
  * - modified to turn on export
