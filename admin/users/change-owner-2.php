@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-owner-2.php,v 1.1 2005/03/28 17:04:20 gpowers Exp $
+ * $Id: change-owner-2.php,v 1.2 2005/03/28 17:49:02 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -39,27 +39,47 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $tables = array('companies', 'activities', 'campaigns', 'opportunities', 'cases');
 
 foreach ($tables as $table) {
-// echo "T: " . $table . "<br />";
 	
-	// function blah () {
-    $sql = "SELECT * FROM " . $table . " WHERE user_id = '" . $current_user_id . "'";
+	$singular = make_singular ($table);
+	
+    $sql = "SELECT * FROM " . $table . "
+            WHERE user_id = '" . $current_user_id . "'
+ 			AND " . $singular . "_record_status = 'a' ";
+ 			
+    switch ($table) {
+    	case "activities":
+    	$sql .= "AND activity_status = 'o'";
+    	break;
+    }
+    
     $rst = $con->execute($sql);
 
-    $rec = array();
-    $rec['user_id'] = $new_user_id;
+    if ($rst) {
+    	if (!$rst->EOF) {
+	    	$rec = array();
+    		$rec['user_id'] = $new_user_id;
     
-    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    $con->execute($upd);
+    		$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    		$con->execute($upd);
 
-    // add_audit_item($con, $session_user_id, 'changed owner', $table, $current_user_id, 1);
+    		add_audit_item($con, $session_user_id, 'changed owner', $table, $current_user_id, 1);
+    	}
+   	} else {
+    	    db_error_handler ($con, $sql);
+    }
 }
 
     $con->close();
 
-    header("Location: change-owner.php?msg=Owners%20Updated");
+    $msg = urlencode(_("Record Owners Changed"));
+    
+    header("Location: ../index.php?msg=" . $msg);
 
 /**
  *$Log: change-owner-2.php,v $
+ *Revision 1.2  2005/03/28 17:49:02  gpowers
+ *- limited to changing open activities and active records
+ *
  *Revision 1.1  2005/03/28 17:04:20  gpowers
  *- Implemented "Change Record Owner" Function
  *

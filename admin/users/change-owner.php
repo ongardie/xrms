@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-owner.php,v 1.1 2005/03/28 17:04:20 gpowers Exp $
+ * $Id: change-owner.php,v 1.2 2005/03/28 17:49:10 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -89,6 +89,7 @@ if ($rst3) {
                 </tr>
             </table>
         </form>
+        <?php echo _("This will change the owner of open activities, companies, campaigns, opportunities and cases."); ?>
     </div>
 
         <!-- right column //-->
@@ -105,6 +106,9 @@ end_page();
 
 /**
  *$Log: change-owner.php,v $
+ *Revision 1.2  2005/03/28 17:49:10  gpowers
+ *- limited to changing open activities and active records
+ *
  *Revision 1.1  2005/03/28 17:04:20  gpowers
  *- Implemented "Change Record Owner" Function
  *
