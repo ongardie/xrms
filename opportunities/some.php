@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.31 2004/12/02 03:14:05 vanmer Exp $
+ * $Id: some.php,v 1.32 2004/12/30 19:12:28 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -160,7 +160,7 @@ if ($rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed opportunities</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed opportunities") . '</td></tr>';
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -321,6 +321,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.32  2004/12/30 19:12:28  braverock
+ * - localize strings
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.31  2004/12/02 03:14:05  vanmer
  * - added space to main opportunity query to fix pager page display bug
  *
