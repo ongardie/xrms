@@ -108,7 +108,7 @@ if ($rst) {
 } else {
     echo "<p>" . _("There was a problem with your export") . ":\n";
     if (!$csvdata) {
-        echo "<br>" . _("Unable to create file") . ": $xrms_file_root.$tmp_export_directory/$filename \n";
+        echo "<br>" . _("Unable to create file") . ": $filename \n";
     }
     if (!$rst) {
         db_error_handler($con,$sql);
@@ -122,6 +122,9 @@ echo $csvdata;
 
 /**
  * $Log: export.php,v $
+ * Revision 1.6  2005/01/29 13:08:45  braverock
+ * - change error message to reflect the fact that we no longer use the export directory here
+ *
  * Revision 1.5  2005/01/09 03:38:34  braverock
  * - modified to use SendDownLoadHeaders
  * - modified to send data directly,rather than writing a file
