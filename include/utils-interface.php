@@ -3,7 +3,7 @@
  * Common user interface functions file.
  *
  *
- * $Id: utils-interface.php,v 1.4 2004/01/26 19:23:39 braverock Exp $
+ * $Id: utils-interface.php,v 1.5 2004/02/16 20:14:11 maulani Exp $
  */
 
 /**
@@ -85,6 +85,9 @@ EOQ;
             </table>
             </td>
         </tr>
+EOQ;
+
+    echo <<<EOQ
     </table>
 
 EOQ;
@@ -142,6 +145,9 @@ function build_salutation_menu($salutation) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.5  2004/02/16 20:14:11  maulani
+ * Close table tag when nav bar not used
+ *
  * Revision 1.4  2004/01/26 19:23:39  braverock
  * - moved interface functions from utils-misc.php
  *
