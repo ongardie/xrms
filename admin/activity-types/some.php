@@ -2,7 +2,7 @@
 /**
  * Manage Activity Types
  *
- * $Id: some.php,v 1.3 2004/04/16 22:18:23 maulani Exp $
+ * $Id: some.php,v 1.4 2004/06/13 09:13:57 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,6 +24,15 @@ if ($rst) {
 	while (!$rst->EOF) {
 		$table_rows .= '<tr>';
 		$table_rows .= '<td class=widget_content><a href=one.php?activity_type_id=' . $rst->fields['activity_type_id'] . '>' . $rst->fields['activity_type_pretty_name'] . '</a></td>';
+        $table_rows .= '<td class=widget_content>';
+        if($rst->fields['sort_order'] != 1) {
+           $table_rows .= "<a href='../sort.php?direction=up&sort_order=" . $rst->fields['sort_order']
+                . "&table_name=activity_type&return_url=/admin/activity-types/some.php'>up</a>\n";
+        }
+        if($rst->fields['sort_order'] != $rst->rowcount()) {
+            $table_rows .= "<a href='../sort.php?direction=down&sort_order=" . $rst->fields['sort_order']
+                . "&table_name=activity_type&return_url=/admin/activity-types/some.php'>down</a>\n";
+        }
 		$table_rows .= '</tr>';
 		$rst->movenext();
 	}
@@ -45,7 +54,7 @@ start_page($page_title);
 				<td class=widget_header colspan=4>Activity Types</td>
 			</tr>
 			<tr>
-				<td class=widget_label>Name</td>
+				<td class=widget_label>Name</td><td class=widget_label width=15%>Move</td>
 			</tr>
 			<?php  echo $table_rows; ?>
 		</table>
@@ -95,6 +104,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.4  2004/06/13 09:13:57  braverock
+ * - add sort_order to activity_types
+ *
  * Revision 1.3  2004/04/16 22:18:23  maulani
  * - Add CSS2 Positioning
  *

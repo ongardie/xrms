@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.10 2004/06/04 14:53:48 braverock Exp $
+ * $Id: update.php,v 1.11 2004/06/13 09:13:20 braverock Exp $
  */
 
 /**
@@ -91,6 +91,10 @@ $rst = $con->execute($sql);
 $sql = "update campaign_statuses set status_open_indicator = \"c\" where campaign_status_short_name = \"CLO\"";
 $rst = $con->execute($sql);
 // end
+
+//add sort order to activity statuses
+//should put a test here, but alter table is non-destructive
+$sql = "ALTER TABLE `activity_types` ADD `sort_order` TINYINT NOT NULL DEFAULT='1' AFTER `activity_type_record_status`";
 
 //make sure that there is connection detail columns in the audit_items table
 //these are done separately in case one column already exists
@@ -207,6 +211,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.11  2004/06/13 09:13:20  braverock
+ * - add sort_order to activity_types
+ *
  * Revision 1.10  2004/06/04 14:53:48  braverock
  * - change activity_templates duration to varchar for advanced date functionality
  *
