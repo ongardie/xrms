@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.40 2004/11/29 12:31:04 braverock Exp $
+ * $Id: some.php,v 1.41 2005/01/06 17:14:43 braverock Exp $
  */
 
 //include the standard files
@@ -141,7 +141,8 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 }
 
-$group_by = " group by contact_id";
+//gorup by shouldn't be needed, contact_id is already unique
+//$group_by = " group by contact_id";
 
 if ($sort_column == 1) {
     $order_by = "cont.last_name";
@@ -160,7 +161,7 @@ if(strlen($first_names)) {
 
 $order_by .= " $sort_order";
 
-$sql .= $from . $where . $group_by . " order by $order_by";
+$sql .= $from . $where . " order by $order_by";
 
 $sql_recently_viewed = "select
 cont.contact_id,
@@ -391,6 +392,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.41  2005/01/06 17:14:43  braverock
+ * - remove group by clause, as contact_id is already unique
+ *   improves MS SQL Server compatibility
+ *
  * Revision 1.40  2004/11/29 12:31:04  braverock
  * - fixed i18n localization quoting problems in SQL
  * - modified sql to not contain seldom used search fields if search term not present
