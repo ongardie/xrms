@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.13 2004/06/10 20:30:07 braverock Exp $
+ * $Id: edit-2.php,v 1.14 2004/06/11 16:18:15 braverock Exp $
  */
 
 //include required files
@@ -133,7 +133,7 @@ if ($table_name != "attached to") {
 
     //check if there are open activities left
     $sql = "select * from activities
-             where on_what_status=$old_status
+             where on_what_status='$old_status'
              and on_what_table='$on_what_table'
              and on_what_id=$on_what_id
              and contact_id=$contact_id
@@ -142,8 +142,11 @@ if ($table_name != "attached to") {
              and activity_record_status='a'";
 
     $rst = $con->execute($sql);
-    $activity_return_id = $rst->fields['activity_id'];
-
+    if ($rst) {
+        $activity_return_id = $rst->fields['activity_id'];
+    } else {
+        db_error_handler ($con, $sql);
+    }
 
     //check if there are open activities from this status
     // if no more activities are open, advance status
@@ -241,6 +244,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.14  2004/06/11 16:18:15  braverock
+ * - added more checking around activity_edit_id
+ *
  * Revision 1.13  2004/06/10 20:30:07  braverock
  * - added ability to edit probability on linked opportunity
  *   - code contributed by Neil Roberts
