@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.79 2005/03/21 14:38:31 maulani Exp $
+ * $Id: one.php,v 1.80 2005/03/21 14:45:42 maulani Exp $
  */
 
 //include required files
@@ -110,31 +110,39 @@ $user_menu = get_user_menu($con, $user_id, $show_blank);
 
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
 
-//get user info for who entered the activity
-$sql = "select first_names, last_name from users where user_id = $entered_by";
-$rst = $con->execute($sql);
-if ($rst) {
-    $entered_by_firstname = $rst->fields['first_names'];
-    $entered_by_lastname = $rst->fields['last_name'];
-    $history_text = _("ID") . ' ' . $activity_id . ' ' . 
-					_("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' . 
-					_("at") . ' ' . $entered_at . '. ';
-    $rst->close();
+if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
+	$history_text = '<tr> <td class=widget_content colspan=2>';
+	
+	//get user info for who entered the activity
+	$sql = "select first_names, last_name from users where user_id = $entered_by";
+	$rst = $con->execute($sql);
+	if ($rst) {
+		$entered_by_firstname = $rst->fields['first_names'];
+		$entered_by_lastname = $rst->fields['last_name'];
+		$history_text .= _("ID") . ' ' . $activity_id . ' ' . 
+						 _("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' . 
+						 _("at") . ' ' . $entered_at . '. ';
+		$rst->close();
+	} else {
+		db_error_handler($con, $sql);
+	}
+	
+	//get user info for who modified the activity
+	$sql = "select first_names, last_name from users where user_id = $last_modified_by";
+	$rst = $con->execute($sql);
+	if ($rst) {
+		$last_modified_by_firstname = $rst->fields['first_names'];
+		$last_modified_by_lastname = $rst->fields['last_name'];
+		$history_text .= _("Last modified by") . ' ' . $last_modified_by_firstname . ' ' . $last_modified_by_lastname . ' ' . 
+						 _("at") . ' ' . $last_modified_at . '.';
+		$rst->close();
+	} else {
+		db_error_handler($con, $sql);
+	}
+	
+	$history_text .= '</td> </tr>';
 } else {
-    db_error_handler($con, $sql);
-}
-
-//get user info for who modified the activity
-$sql = "select first_names, last_name from users where user_id = $last_modified_by";
-$rst = $con->execute($sql);
-if ($rst) {
-    $last_modified_by_firstname = $rst->fields['first_names'];
-    $last_modified_by_lastname = $rst->fields['last_name'];
-	$history_text .= _("Last modified by") . ' ' . $last_modified_by_firstname . ' ' . $last_modified_by_lastname . ' ' . 
-					 _("at") . ' ' . $last_modified_at . '.';
-    $rst->close();
-} else {
-    db_error_handler($con, $sql);
+$history_text = '';
 }
 
 //get activity type menu
@@ -460,9 +468,7 @@ function logTime() {
 
                 </td>
             </tr>
-           <tr>
-                <td class=widget_content colspan=2> <?php  echo $history_text; ?> </td>
-           </tr>
+           <?php  echo $history_text; ?>
         </table>
         </form>
 
@@ -513,6 +519,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.80  2005/03/21 14:45:42  maulani
+ * - Display optional id and other info about activity.  Option controlled
+ *   with system parameter.  ID is useful for developers tracking bugs in
+ *   production.
+ *
  * Revision 1.79  2005/03/21 14:38:31  maulani
  * - Having unassigned activities is now an option that can be set in
  *   system parameters.  Installations that do not need activity pools
