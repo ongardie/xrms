@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.12 2004/07/20 19:38:31 introspectshun Exp $
+ * $Id: edit.php,v 1.13 2004/07/25 20:28:05 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -225,7 +225,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value='<?php echo _("Delete Opportunity"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Opportunity?"); ?>');"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input type=button class=button onclick="javascript: location.href='delete.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value='<?php echo _("Delete"); ?>' onclick="javascript: return confirm('<?php echo _("Delete Opportunity?"); ?>');"></td>
             </tr>
         </table>
         </form>
@@ -286,6 +286,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.13  2004/07/25 20:28:05  johnfawcett
+ * - standardized delete button
+ *
  * Revision 1.12  2004/07/20 19:38:31  introspectshun
  * - Localized strings for i18n/translation support
  *
