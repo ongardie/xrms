@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.17 2004/07/16 12:22:36 braverock Exp $
+ * $Id: new-2.php,v 1.18 2004/07/30 11:23:38 cpsource Exp $
  */
 require_once('../include-locations.inc');
 
@@ -50,7 +50,7 @@ $city = $_POST['city'];
 $province = $_POST['province'];
 $postal_code = $_POST['postal_code'];
 $address_body = $_POST['address_body'];
-$use_pretty_address = $_POST['use_pretty_address'];
+$use_pretty_address = isset($_POST['use_pretty_address']) ? $_POST['use_pretty_address'] : '';
 
 $first_names = $_POST['first_names'];
 $last_name = $_POST['last_name'];
@@ -196,6 +196,10 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.18  2004/07/30 11:23:38  cpsource
+ * - Do standard msg processing
+ *   Default use_pretty_address in new-2.php set to null
+ *
  * Revision 1.17  2004/07/16 12:22:36  braverock
  * - fixed bug in quoting of use_pretty_address
  *

@@ -4,7 +4,7 @@
  *
  * @todo put back in established at date picker in form
  *
- * $Id: relationships.php,v 1.10 2004/07/21 19:17:57 introspectshun Exp $
+ * $Id: relationships.php,v 1.11 2004/07/30 11:23:38 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,7 +17,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_GET['company_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -146,6 +146,10 @@ end_page();
 
 /**
  * $Log: relationships.php,v $
+ * Revision 1.11  2004/07/30 11:23:38  cpsource
+ * - Do standard msg processing
+ *   Default use_pretty_address in new-2.php set to null
+ *
  * Revision 1.10  2004/07/21 19:17:57  introspectshun
  * - Localized strings for i18n/l10n support
  *

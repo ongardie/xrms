@@ -2,7 +2,7 @@
 /**
  * set categories for a company
  *
- * $Id: categories.php,v 1.6 2004/07/21 19:17:56 introspectshun Exp $
+ * $Id: categories.php,v 1.7 2004/07/30 11:23:38 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,7 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $company_id = $_GET['company_id'];
 
@@ -128,6 +128,10 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.7  2004/07/30 11:23:38  cpsource
+ * - Do standard msg processing
+ *   Default use_pretty_address in new-2.php set to null
+ *
  * Revision 1.6  2004/07/21 19:17:56  introspectshun
  * - Localized strings for i18n/l10n support
  *

@@ -2,7 +2,7 @@
 /**
  * Add Category
  *
- * $Id: add-category.php,v 1.4 2004/07/07 21:53:13 introspectshun Exp $
+ * $Id: add-category.php,v 1.5 2004/07/30 11:23:38 cpsource Exp $
  */
 require_once('../include-locations.inc');
 
@@ -13,7 +13,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $company_id = $_GET['company_id'];
 $category_id = $_GET['category_id'];
@@ -46,6 +46,10 @@ header("Location: categories.php?company_id=$company_id");
 
 /**
  * $Log: add-category.php,v $
+ * Revision 1.5  2004/07/30 11:23:38  cpsource
+ * - Do standard msg processing
+ *   Default use_pretty_address in new-2.php set to null
+ *
  * Revision 1.4  2004/07/07 21:53:13  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
