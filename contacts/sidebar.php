@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.3 2004/06/03 17:17:01 gpowers Exp $
+ * $Id: sidebar.php,v 1.4 2004/06/03 18:41:26 gpowers Exp $
  */
 
 //add contact information block on sidebar
@@ -35,7 +35,7 @@ if (!$rst->EOF) {
                     . "</td>\n\t</tr>";
 
     if ($rst->fields['work_phone']) {
-        $contact_block .= "<tr><td class=widget_content>"
+        $contact_block .= "<tr><td class=widget_content>Work Phone: "
                         . $rst->fields['work_phone'] . "&nbsp; </td>\n\t</tr>";
     }
 
@@ -56,6 +56,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.4  2004/06/03 18:41:26  gpowers
+ * Added "Work Phone: " for consistancy with companies sidebar
+ *
  * Revision 1.3  2004/06/03 17:17:01  gpowers
  * - added email display, with link
  * - only show email or work_phone if they exist
