@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.9 2004/04/17 16:03:45 maulani Exp $
+ * $Id: edit.php,v 1.10 2004/04/22 11:28:14 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -72,8 +72,8 @@ $sql = "select division_name, division_id
 $rst = $con->execute($sql);
 if ($rst) {
     $division_menu = $rst->getmenu2('division_id', $division_id, true);
+    $rst->close();
 }
-$rst->close();
 
 $salutation_menu = build_salutation_menu($salutation);
 
@@ -243,6 +243,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.10  2004/04/22 11:28:14  braverock
+ * - move $rst->close() inside result loop for division lookup
+ *
  * Revision 1.9  2004/04/17 16:03:45  maulani
  * - Add CSS2 positioning
  *
