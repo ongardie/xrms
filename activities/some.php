@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.42 2004/07/22 19:59:03 neildogg Exp $
+ * $Id: some.php,v 1.43 2004/07/22 22:00:24 introspectshun Exp $
  */
 
 // handle includes
@@ -89,14 +89,13 @@ arr_vars_get_all ( $arr_vars );
 // $search_date = date('Y-m-d', time());     
 // I don't know what the bug is, but this creates a relative search
 //  so that it can be used as a recurring search. Neat, huh?
+// (introspectshun) Updated to use portable database code; removed MySQL-centric date functions
+// This will work for positive and negative intervals automatically, so no need for conditional assignment of offset
+// (a search for today will add an interval of '0 days')
+// Warning: if a user wants to save a search for a particular date, this won't allow it, as it defaults to recurring search
 $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
-$offset = " curdate() ";
-if($day_diff > 0) {
-    $offset .= " + interval " . $day_diff . " day ";
-}
-elseif($day_diff < 0) {
-    $offset .= " - interval " . -$day_diff . " day ";
-}
+$curdate = $con->DBTimeStamp;
+$offset = $con->OffsetDate($day_diff, $curdate);
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -496,6 +495,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.43  2004/07/22 22:00:24  introspectshun
+ * - Updated date offset logic to use portable database code
+ *   - Removed MySQL-centric date functions and conditional block
+ *
  * Revision 1.42  2004/07/22 19:59:03  neildogg
  * - Missed concat .
  *
