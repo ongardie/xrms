@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.23 2004/07/29 10:04:20 cpsource Exp $
+ * $Id: one.php,v 1.24 2004/07/30 10:05:36 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -142,6 +142,8 @@ ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
 ";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
+
+$activity_rows = '';
 
 if ($rst) {
     while (!$rst->EOF) {
@@ -471,6 +473,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.24  2004/07/30 10:05:36  cpsource
+ * - Remove undefines
+ *     activity_rows
+ *
  * Revision 1.23  2004/07/29 10:04:20  cpsource
  * - Rid some undefines.
  *
