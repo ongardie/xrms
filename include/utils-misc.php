@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.15 2004/04/16 16:35:33 braverock Exp $
+ * $Id: utils-misc.php,v 1.16 2004/04/23 15:12:35 gpowers Exp $
  */
 
 /**
@@ -82,6 +82,10 @@ function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_wh
             audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
             on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
             on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
+            remote_addr = \"" . $_SERVER['REMOTE_ADDR'] . "\",
+            remote_port = \"" . $_SERVER['REMOTE_PORT'] . "\",
+            session_id = \"" . $_COOKIE['PHPSESSID'] . "\",
+            http_user_agent = \"" . $_SERVER['HTTP_USER_AGENT'] . "\",
             audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
 
     //$con->debug=1
@@ -341,6 +345,9 @@ exit;
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.16  2004/04/23 15:12:35  gpowers
+ * added support for remote_add, remote_port, session_id, http_user_agent
+ *
  * Revision 1.15  2004/04/16 16:35:33  braverock
  * - add check for url so that we don't get a filesize error
  *   when getting CSV data from a http stream
