@@ -3,7 +3,7 @@
  * Save the updated activity information to the database
  *
  *
- * $Id: browse-next.php,v 1.3 2004/06/24 19:58:47 braverock Exp $
+ * $Id: browse-next.php,v 1.4 2004/06/24 20:19:01 introspectshun Exp $
  */
 
 //include required files
@@ -64,7 +64,7 @@ else {
                 where a.activity_type_id=$activity_type
                 and a.activity_status = 'o'
                 and a.activity_record_status='a'
-                and a.ends_at < now()
+                and a.ends_at < " . $con->DBTimestamp(time()) . "
                 and a.user_id = $session_user_id
                 and a.on_what_table='$current_on_what_table'
                 and a.on_what_id=" . $current_on_what_table_singular . "_id
@@ -93,7 +93,7 @@ else {
                 where a.activity_type_id=$activity_type
                 and a.activity_status = 'o'
                 and a.activity_record_status='a'
-                and a.ends_at >= now()
+                and a.ends_at >= " . $con->DBTimestamp(time()) . "
                 and a.user_id = $session_user_id
                 and a.on_what_table = '$current_on_what_table'
                 and a.on_what_id=" . $current_on_what_table_singular . "_id";
@@ -149,6 +149,9 @@ else {
 $con->close();
 
 /**
- * $Log: %
+ * $Log: browse-next.php,v $
+ * Revision 1.4  2004/06/24 20:19:01  introspectshun
+ * - Updated time formats in SELECTs to use DBTimestamp()
+ *
  */
 ?>
