@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.21 2004/07/21 21:10:28 neildogg Exp $
+ * $Id: one.php,v 1.22 2004/07/25 14:03:48 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -233,7 +233,7 @@ if (strlen($activity_rows) == 0) {
     $activity_rows = "<tr><td class=widget_content colspan=6>No activities</td></tr>";
 }
 
-$page_title = _("One Opportunity") . " : " . $opportunity_title;
+$page_title = _("Opportunity Details") . " : " . $opportunity_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -335,7 +335,7 @@ function markComplete() {
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a> (<?php  echo $company_code; ?>)</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel><?php echo _("Acct. Owner"); ?></td>
+                                    <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner_username; ?></td>
                                 </tr>
                                 <tr>
@@ -434,6 +434,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.22  2004/07/25 14:03:48  johnfawcett
+ * - modified string Acct. to Account to unify across application
+ * - standardized page title
+ *
  * Revision 1.21  2004/07/21 21:10:28  neildogg
  * - Added get_formatted_phone
  *
