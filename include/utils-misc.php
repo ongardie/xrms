@@ -1,11 +1,4 @@
 <?php
-
-if ( !defined('IN_XRMS') )
-{
-  die('Hacking attempt');
-  exit;
-}
-
 /**
  * utils-misc.php - this file contains non-UI utility functions for XRMS
  *
@@ -15,8 +8,14 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.78 2004/08/05 14:47:56 neildogg Exp $
+ * $Id: utils-misc.php,v 1.79 2004/08/05 14:56:00 braverock Exp $
  */
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
 
 /**
  * strip any tags added to the url from PHP_SELF.
@@ -695,7 +694,7 @@ function get_formatted_phone ($con, $address_id, $phone) {
     if(isset($extra) && $extra) {
         $phone_to_display .= " x" . $extra;
     }
-    
+
     return $phone_to_display;
 }
 
@@ -746,7 +745,7 @@ function get_formatted_address (&$con,$address_id) {
     return $address_to_display;
 } //end fn get_formatted_address
 
-/** 
+/**
  * Time zone offset
  *
  * This returns the GMT offset for a number it can be sure of
@@ -761,7 +760,7 @@ function get_formatted_address (&$con,$address_id) {
  * @return array $array("daylight_savings_id" => int, "offset", float)
  * @return boolean False if no records
  */
- 
+
 function time_zone_offet($con, $address_id) {
     global $only_confirmed_time_zones;
     $sql = "SELECT country_id, province, city, postal_code
@@ -776,12 +775,12 @@ function time_zone_offet($con, $address_id) {
         $province = $rst->fields['province'];
         $city = $rst->fields['city'];
         $postal_code = $rst->fields['postal_code'];
-        
+
         $sql = "SELECT daylight_savings_id, offset, confirmed,
-                    if(province='" . $province . "', 0, 1) as has_province, 
+                    if(province='" . $province . "', 0, 1) as has_province,
                     if(city='" . $city . "', 0, 1) as has_city,
                     if(postal_code='" . $postal_code . "', 0, 1) as has_postal_code
-                FROM time_zones 
+                FROM time_zones
                 WHERE country_id=" . $country_id . "
                 ORDER BY has_province, has_city, has_postal_code limit 1";
         $rst = $con->execute($sql);
@@ -793,7 +792,7 @@ function time_zone_offet($con, $address_id) {
             if($only_confirmed_time_zones == 'n' or ($only_confirmed_time_zones == 'y' and $confirmed_time_zones == 'y')) {
                 $daylight_savings_id = $rst->fields['daylight_savings_id'];
                 $offset = $rst->fields['offset'];
-            
+
                 return array("daylight_savings_id" => $daylight_savings_id, "offset" => $offset);
             }
             else {
@@ -809,7 +808,7 @@ function time_zone_offet($con, $address_id) {
     }
 }
 
-/** 
+/**
  * Calculate time zone offset
  *
  * Returns timestamp based on daylight savings ID and offset
@@ -823,14 +822,14 @@ function time_zone_offet($con, $address_id) {
  *
  * @return timestamp Time
  */
- 
+
  function calculate_time_zone_time($con, $daylight_savings_id, $offset) {
     update_daylight_savings($con);
     $sql = "SELECT current_hour_shift
             FROM time_daylight_savings
             WHERE daylight_savings_id=" . $daylight_savings_id;
     $rst = $con->execute($sql);
-    
+
     if(!$rst) {
         db_error_handler($con, $sql);
     }
@@ -838,7 +837,7 @@ function time_zone_offet($con, $address_id) {
         return time() + ($offset*3600) + ($rst->fields['current_hour_shift']*3600);
     }
  }
- 
+
  /**
   * Update daylight savings
   *
@@ -851,7 +850,7 @@ function time_zone_offet($con, $address_id) {
   * @param object $con Database Connection
   *
   */
-  
+
 function update_daylight_savings($con) {
     $sql = "SELECT *
             FROM time_daylight_savings
@@ -869,7 +868,7 @@ function update_daylight_savings($con) {
             $end_day = $rst->fields['end_day'];
             $end_month = $rst->fields['end_month'];
             $hour_shift = $rst->fields['hour_shift'];
-            
+
             if(!$start_month) {
                 $current_hour_shift = $hour_shift;
             }
@@ -883,7 +882,7 @@ function update_daylight_savings($con) {
                     ++$end_month;
                 }
                 $end_timestamp = strtotime("$end_position $end_day", strtotime(date("Y-$end_month-1", time())));
-                
+
                 if($start_month < $end_month) {
                     if(($start_timestamp <= time()) and ($end_timestamp > time())) {
                         $current_hour_shift = $hour_shift;
@@ -901,12 +900,12 @@ function update_daylight_savings($con) {
                     }
                 }
             }
-            
-            $con->execute("UPDATE time_daylight_savings 
+
+            $con->execute("UPDATE time_daylight_savings
                            SET current_hour_shift=" . $current_hour_shift . ",
                                last_update=" . $con->DBTimeStamp(time()) . "
                            WHERE daylight_savings_id=" . $daylight_savings_id);
-            
+
             $rst->movenext();
         }
     }
@@ -919,7 +918,7 @@ function update_daylight_savings($con) {
  *
  * @author Neil Roberts
  */
- 
+
 function current_page() {
     global $http_site_root;
     $page = '';
@@ -1162,18 +1161,40 @@ function arr_vars_post_with_cmd ( $ary )
     switch ( $flag )
       {
       case arr_vars_POST:
-	$GLOBALS[$key] = $_POST["$key"];
-	break;
+        $GLOBALS[$key] = $_POST["$key"];
+        break;
 
       case arr_vars_POST_UNDEF:
-	$GLOBALS[$key] = isset($_POST["$key"]) ? $_POST["$key"] : '';
-	break;
+        $GLOBALS[$key] = isset($_POST["$key"]) ? $_POST["$key"] : '';
+        break;
 
       default:
         echo "utils-misc.php::arr_vars_post_get_with_cmd: unknown flag = $flag<br>";
-	exit;
+        exit;
       }
   }
+}
+
+function arr_vars_get_get ( $ary, $allow_none = false )
+{
+    foreach ($ary as $key => $value) {
+        if ( $allow_none ) {
+            $GLOBALS[$key] = isset($_GET["$key"]) ? $_GET["$key"] : '';
+        } else {
+            $GLOBALS[$key] = $_GET["$key"];
+        }
+    }
+}
+
+function arr_vars_get_request ( $ary, $allow_none = false )
+{
+    foreach ($ary as $key => $value) {
+        if ( $allow_none ) {
+            $GLOBALS[$key] = isset($_REQUEST["$key"]) ? $_REQUEST["$key"] : '';
+        } else {
+            $GLOBALS[$key] = $_REQUEST["$key"];
+        }
+    }
 }
 
 // show program variables
@@ -1210,6 +1231,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.79  2004/08/05 14:56:00  braverock
+ * - add arr_vars functions for special cases
+ *
  * Revision 1.78  2004/08/05 14:47:56  neildogg
  * - Fixed my undefined variable
  *
