@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.6 2005/02/16 17:55:51 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.7 2005/02/23 20:54:19 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -249,6 +249,7 @@ class xrms_acl {
     function get_object_adodbconnection($data_source_name='default') {
        $xcon = &adonewconnection($this->DBOptions[$data_source_name]['db_dbtype']);
        $xcon->nconnect($this->DBOptions[$data_source_name]['db_server'], $this->DBOptions[$data_source_name]['db_username'], $this->DBOptions[$data_source_name]['db_password'], $this->DBOptions[$data_source_name]['db_dbname']);
+//       $xcon->debug=1;
        return $xcon;
     }
     /*****************************************************************************/
@@ -945,8 +946,8 @@ class xrms_acl {
        * @return integer RolePermission_id with new identifier for new entry for the relationship or false if duplicate/failed (or array if no on_what_id is specified)
        *
        */
-    function get_role_permission($Role_id=false, $CORelationship_id=false, $Scope=false, $Permission_id=false, $RolePermission_id=false) {
-        if (!$Role_id and !$CORelationship_id and !$RolePermission_id) { return false; }
+    function get_role_permission($Roles=false, $CORelationships=false, $Scopes=false, $Permission_id=false, $RolePermission_id=false) {
+        if (!$Roles and !$CORelationships and !$RolePermission_id) { return false; }
         $tblName = "RolePermission";
         
         $con = $this->DBConnection;
@@ -954,11 +955,27 @@ class xrms_acl {
         
         if ($RolePermission_id) { $where[]="RolePermission_id=$RolePermission_id"; }
         else {
-            if ($Role_id) { $where[]="Role_id=$Role_id"; }
-            if ($CORelationship_id) { $where[]="CORelationship_id=$CORelationship_id"; }
+            if ($Roles) { 
+                if (is_array($Roles)) { $where[]="Role_id IN (".implode(",",$Roles) .")"; }
+                else{ $where[]="Role_id=$Roles"; }
+            }
+            if ($CORelationships) {
+                if (is_array($CORelationships)) { $where[]="CORelationship_id IN (".implode(",",$CORelationships) .")"; }
+                else{ $where[]="CORelationship_id=$CORelationships"; }
+            }
             if ($Permission_id) { $where[]="Permission_id=$Permission_id"; }
-            if ($Scope) { $where[]="Scope=" . $con->qstr($Scope,get_magic_quotes_gpc()); }
-            
+            if ($Scopes) { 
+                if (!is_array($Scopes)) $Scopes=array($Scopes);
+                $scopewhere=array();
+                $scopewhere_str=false;
+                foreach ($Scopes as $Scope) {
+                    $scopewhere[]="(Scope=" . $con->qstr($Scope,get_magic_quotes_gpc()) . ")"; 
+                }
+                if (count($scopewhere)>0) {
+                    $scopewhere_str=implode(" OR ",$scopewhere);
+                 }
+                if ($scopewhere_str) $where[]="($scopewhere_str)";
+            }                
         }
         $whereclause = implode (" and ", $where);
         //Search within group specified
@@ -1460,7 +1477,10 @@ class xrms_acl {
 //        $objectsLeft = $ControlledObjectCompleteList;
         $objectsFound=array();
                 
-        //Get list of roles and groups for the user
+        //by default, search for user permissions
+        $searchUser=true;        
+        
+        //Get list of roles and groups for the user        
         $UserGroups = $this->get_group_user(false, $User_id);
         if (!$UserGroups) { return false;}
         foreach ($UserGroups as $UserGroup) { $GroupList[] = $UserGroup['Group_id']; }
@@ -1471,87 +1491,72 @@ class xrms_acl {
         //Get list of controlled object relationships for which this is the child
         $ControlledObjectRelationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, false, true);
         if (!$ControlledObjectRelationships) { echo "No controlled object relationships found, failing."; return false; }     
-        if (!is_array(current($ControlledObjectRelationships))) { $ControlledObjectRelationships=array($ControlledObjectRelationships); }
-       
-        $ScopeList=$this->get_scope_list();
-        foreach ($ScopeList as $Scope) {
-//            echo "Processing Scope $Scope at Level $ControlledObject_id<br>";
-             switch ($Scope) {
-                case 'World':
-                     //WORLD SCOPE, use all roles
-                    $RoleList=$UserRoleList;
-                    break;
-                case 'User':
-                    reset($ControlledObjectRelationships);
-                    $FirstRelationship=current($ControlledObjectRelationships);
-                    $user_field=$FirstRelationship['user_field'];
-                    if (!$user_field) $user_field='user_id';
-                    //if there is no user info on this level, simply do not search for it
-                    if (!$this->check_field_exists($ControlledObject_id, $user_field)) continue 2;
-                    $RoleList=$UserRoleList;
-                    break;
-                case 'Group':
-                    //Leave group handling seperately
-                    continue 2;
-                    break;
-            }
+        if (!is_array(current($ControlledObjectRelationships))) {
+            $ControlledObjectRelationships=array($ControlledObjectRelationships['CORelationship_id']=>$ControlledObjectRelationships); 
+        }
+        $ControlledObjectRelationship_ids=array_keys($ControlledObjectRelationships);
+
+//        $ScopeList=$this->get_scope_list();
+            
             //LOOP ON ALL ROLES HELD BY USER IN ALL GROUPS
-            foreach ($RoleList as $urKey=>$Role) {
-                foreach ($ControlledObjectRelationships as $ControlledObjectRelationship) {
-                     $CORelationship_id=$ControlledObjectRelationship["CORelationship_id"];
+//            foreach ($RoleList as $urKey=>$Role) {
+//                foreach ($ControlledObjectRelationships as $ControlledObjectRelationship) {
+//                     $CORelationship_id=$ControlledObjectRelationship["CORelationship_id"];
                     //Search for permission for all roles on controlled object relationships
-                    $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id);
+                    $Scopes=array('World','User');
+                    $RolePermissions = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, $Scopes, $Permission_id);
 //                    echo "$RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id)";
                     
-                    if ($RolePermission) {
-                        switch ($Scope) {
-                            //WORLD SCOPE
-                            case 'World':
-                                //If found, return whole list, and groups/roles
-                                $ret=array();
-//                                $ret['controlled_objects']=$ControlledObjectCompleteList;
-                                $ret['ALL']=true;
-                                $ret['groups']=$GroupList;
-                                $ret['roles']=$RoleList;
-                                return $ret;
-                                break;
-                            case 'User':
-                                 //USER SCOPE
-                                 //Search for user permissions on this object type
-                                //If found, query all objects with this user_id, add to list
-                                $fieldRestrict=array();
-                                $fieldRestrict[$user_field]=$User_id;
-                                $UserList=$this->get_field_list($ControlledObject_id, $fieldRestrict);
-                                if ($UserList) {
-                                    //Restrict master list of objects, if empty, return the whole thing
-                                    //If not, next scope
-                                    $objectsFound=array_merge($objectsFound, $UserList);
-/* COMMENTED BECAUSE WE LONGER HAVE A COMPLETE LIST TO COMPARE AGAINST */                                  
-/*
-                                    $objectsLeft = array_diff($ControlledObjectCompleteList, $objectsFound);
-                                    if (count($objectsLeft)==0) {
-                                        $ret=array();
-                                        $ret['controlled_objects']=$ControlledObjectCompleteList;
-                                        $ret['ALL']=true;
-                                        $ret['groups']=$GroupList;
-                                        $ret['roles']=$RoleList;
-                                        return $ret;
+                    if ($RolePermissions) {
+                        if (!is_array(current($RolePermissions))) { $RolePermissions=array($RolePermissions); }
+                        foreach ($RolePermissions as $RolePermission) {
+                            switch ($RolePermission['Scope']) {
+                                //WORLD SCOPE
+                                case 'World':
+                                    //If found, return whole list, and groups/roles
+                                    $ret=array();
+    //                                $ret['controlled_objects']=$ControlledObjectCompleteList;
+                                    $ret['ALL']=true;
+                                    $ret['groups']=$GroupList;
+                                    $ret['roles']=$RoleList;
+                                    return $ret;
+                                    break;
+                                case 'User':
+                                    //USER SCOPE
+                                    //check to ensure that the user field exists in for the controlled object before applying user permissions
+                                    if ($searchUser) {
+                                        reset($ControlledObjectRelationships);
+                                        $FirstRelationship=current($ControlledObjectRelationships);
+                                        $user_field=$FirstRelationship['user_field'];
+                                        if (!$user_field) $user_field='user_id';
+                                        //if there is no user info on this level, simply do not search for it
+                                        if (!$this->check_field_exists($ControlledObject_id, $user_field)) { $searchUser=false;  continue;}
+                                                                                
+                                        //Search for user permissions on this object type
+                                        //If found, query all objects with this user_id, add to list
+                                        $fieldRestrict=array();
+                                        $fieldRestrict[$user_field]=$User_id;
+                                        $UserList=$this->get_field_list($ControlledObject_id, $fieldRestrict);
+                                        if ($UserList) {
+                                            //Restrict master list of objects, if empty, return the whole thing
+                                            //If not, next scope
+                                            $objectsFound=array_merge($objectsFound, $UserList);
+                                        }
                                     }
-*/                                    
-                                }
                                 break;
+                            }
                         }
-                    }
-                }
-            }
-        }
+                    }// end if role permission if
+//                }// end role list foreach
+ //           } // end COR foreach
+//        }
         $Scope='Group';
         foreach ($GroupRoleList as $Group_id=>$RoleList) {
             foreach($RoleList as $Role) {
-                foreach ($ControlledObjectRelationships as $ControlledObjectRelationship) {
-                    $CORelationship_id=$ControlledObjectRelationship["CORelationship_id"];
+//                foreach ($ControlledObjectRelationships as $ControlledObjectRelationship) {
+//                    $CORelationship_id=$ControlledObjectRelationship["CORelationship_id"];
                     //Search for permission for all roles on controlled object relationships
-                    $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id);
+                    $RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_ids, $Scope, $Permission_id);
 //                    echo "<pre>                    $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id)";
                     if ($RolePermission) {
 //                        print_r($RolePermission);
@@ -1571,21 +1576,9 @@ class xrms_acl {
                         //If not, next scope
                         if ($FoundGroupList) {
                             $objectsFound=array_merge($objectsFound, $FoundGroupList);
-/* COMMENTED BECAUSE WE LONGER HAVE A COMPLETE LIST TO COMPARE AGAINST */                                  
-/*
-                            $objectsLeft = array_diff($ControlledObjectCompleteList, $objectsFound);
-                            if (count($objectsLeft)==0) {
-                                $ret=array();
-                                $ret['controlled_objects']=$ControlledObjectCompleteList;
-                                $ret['ALL']=true;
-                                $ret['groups']=$GroupList;
-                                $ret['roles']=$RoleList;
-                                return $ret;
-                            }
-*/                            
                         }
                     }
-                }
+//                } // end CORelationship loop
             }
         }
 //        echo "AFTER USER AND WORLD AND GROUP, WE HAVE<pre>"; print_r($objectsFound); echo "\nok!</pre>";
@@ -1740,10 +1733,10 @@ class xrms_acl {
             //if only one is found and it is not an array, put it in an array
             $ControlledObjectRelationships=array($ControlledObjectRelationships['CORelationship_id']=>$ControlledObjectRelationships);
         }
+        $ControlledObjectRelationship_ids=array_keys($ControlledObjectRelationships);
 //        echo "SEARCHING CONTROLLED OBJECTS: <pre>"; print_r($ControlledObjectRelationships);
-        foreach ($ControlledObjectRelationships as $CORelationship_id=>$ControlledObjectRelationship_data) {
-            foreach ($UserRoleList as $Role) {
-                $RolePermission = $this->get_role_permission($Role, $CORelationship_id);
+            //foreach ($UserRoleList as $Role) {
+                $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids);
                 if ($RolePermission) {
                     if (!is_array(current($RolePermission))) $RolePermission=array($RolePermission);
                     foreach ($RolePermission as $IndividualRolePerm) {
@@ -1757,7 +1750,8 @@ class xrms_acl {
                         }
                     }
                 }
-            }
+         //} // end role foreach
+        foreach ($ControlledObjectRelationships as $CORelationship_id=>$ControlledObjectRelationship_data) {
             if ($ControlledObjectRelationship_data['ParentControlledObject_id'] AND $ControlledObjectRelationship_data['ParentControlledObject_id']>0) {
 //                echo "\nLOOPING TO PARENT\n";
                 $parentPermissionList=$this->get_permission_user_object($ControlledObjectRelationship_data['ParentControlledObject_id'], $User_id, false, $leftPermissions);
@@ -1828,26 +1822,14 @@ class xrms_acl {
         $SearchLevel=true;
         //by default, search for group permissions
         $SearchGroups=true;
-        //by default, do not search for user permissions
-        $SearchUser=false;
+        //by default, attempt to search for user permissions
+        $SearchUser=true;
                       
         //Get all roles for user
         $UserRoleList = $this->get_user_roles_by_array(false, $User_id);
         if (!$UserRoleList) { $SearchLevel=false; }
         $UserRoleList=$UserRoleList['Roles'];
-        
-/*        //Get the groups which this particular controlled object exist in
-        $GroupList = $this->get_object_groups($ControlledObject_id,$on_what_id, $_CORelationship_id);
-        if (!$GroupList) { $SearchGroups=false; }
-        else {
-            //Get the roles this user has within the groups found
-            $GroupRoleList = $this->get_user_roles_by_array ($GroupList,  $User_id);
-            if (!$GroupRoleList) { $SearchGroups=false; }
-            else {
-                $GroupRoleList=$GroupRoleList['Roles'];
-            }
-        }
-        */
+            
         //get the list of possible parents to this controlled object
         $ControlledObjectRelationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, $_CORelationship_id, true);
         
@@ -1872,95 +1854,93 @@ class xrms_acl {
         //If no controlled object relationhips were found at all, do not search this level, move to parents
         if (!$ControlledObjectRelationships OR !is_array($ControlledObjectRelationships)) { $SearchLevel=false; }
         
+        
+        
         //echo "Searching controlled object relationships:<pre>\n"; print_r($ControlledObjectRelationships); echo "</pre>";        
         //If no information was found for this level, move on
         if ($SearchLevel) {
-//            echo "SEARCHING<br>";
-            //Loop through the scope list, starting from World -> Group -> User
-            foreach ($ScopeList as $Scope) {
-                switch ($Scope) {
-                    case 'World':
-//                        echo "SEARCHING WORLD PERMISSIONS<br>";
-                        //search all roles for world permissions
-                        $RoleList = $UserRoleList;
-                    break;
-                    case 'Group':
-                        if (!$on_what_id) { $SearchGroups=false; }//echo "No id provided, cannot check permissions"; return false; }
-                        if ($SearchGroups) {
-                            $GroupList = $this->get_object_groups($ControlledObject_id,$on_what_id, $_CORelationship_id);
-                            if (!$GroupList) { $SearchGroups=false; }
-                            else {
-                                //Get the roles this user has within the groups found
-                                $GroupRoleList = $this->get_user_roles_by_array ($GroupList,  $User_id);
-                                if (!$GroupRoleList) { $SearchGroups=false; }
-                                else {
-                                    $GroupRoleList=$GroupRoleList['Roles'];
-                                }
-                            }
-                        }
+            $ControlledObjectRelationship_ids=array_keys($ControlledObjectRelationships);
+            $Scopes=array('World');
+            if ($SearchUser) $Scopes[]='User';
+            $ApplyUserPerms=$SearchUser;
+            $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, $Scopes);
+            if ($RolePermission) {
+                if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
+                //add up all permissions found
+                /* @todo Add checks to see if permissions propagate up/down */
+                foreach ($RolePermission as $IndividualRolePerm) {
+                    //merge permissions with each individual permission
+                    $newPerm_id=$IndividualRolePerm['Permission_id'];
+                    switch ($IndividualRolePerm['Scope']) {
+                        case 'User':
+                            //we found user permissions, so check if we have user permissions enabled for this object
+                            if (!$SearchUser) { $newPerm_id=false; }                           
+                            else { 
+                                //check to see if we have already checked the object for user searchability
+                                if (!$ApplyUserPerms) {
+                                    // if no particular object is given, cannot search user record
+                                    if (!$on_what_id) { $SearchUser=false; $newPerm_id=false;}//echo "No id provided, cannot check permissions"; return false; }
+                                    else {
+                                        reset($ControlledObjectRelationships);
+                                        $FirstRelationship=current($ControlledObjectRelationships);
 
-                        if (!$SearchGroups) {
-                            continue 2;
-                        }
-//                        echo "SEARCHING GROUP PERMISSIONS<br>";
-                        //search only roles in groups that this object is part of (and parent groups)
-                        $RoleList = $GroupRoleList;
-                    break;
-                    case 'User':
-                        if (!$on_what_id) { $SearchUser=false; }//echo "No id provided, cannot check permissions"; return false; }
-                        
-                        reset($ControlledObjectRelationships);
-                        $FirstRelationship=current($ControlledObjectRelationships);
-                        
-                        $user_field=$FirstRelationship['user_field'];
-                        if (!$user_field) $user_field='user_id';
-                        //Check to see if user owns object before applying user permissions
-                        if ($on_what_id) {
-                            $objectData=$this->get_controlled_object_data($ControlledObject_id, $on_what_id);
-                            if ($objectData[$user_field]==$User_id) {
-                                $SearchUser=true;
-                            }
-                        }
-                    
-                        //if we don't control this object, do not use user permissions
-                        if (!$SearchUser) {
-                            continue 2;
-                        } else {
-//                            echo "SEARCHING USER PERMISSIONS<br>";
-                            //otherwise search in all roles for the user
-                           $RoleList = $UserRoleList;
-                        }
-                    break;
-                }
-//                echo "SEARCHING FOR ROLES:<pre>"; print_r($RoleList); echo "</pre>";
-                //Loop through the relationships in which this controlled object exists
-                foreach ($ControlledObjectRelationships as $CORelationship_id => $ControlledObjectRelationship) {
-                    if ($CORelationship_id AND $CORelationship_id>0) {
-                        //Loop through the Roles a user has for this controlled object
-                        foreach ($RoleList as $Role) {
-//                            echo "SEARCHING ROLE $Role<br>";
-                            //get permissions for this role on this ControlledObjectRelationship with the current scope
-                            $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope);
-                            if ($RolePermission) {
-                                if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
-                                //add up all permissions found
-                                /* @todo Add checks to see if permissions propagate up/down */
-                                foreach ($RolePermission as $IndividualRolePerm) {
-                                    //merge permissions with each individual permission
-                                    $FoundPermissionList = array_unique(array_merge($FoundPermissionList, array($IndividualRolePerm['Permission_id'])));
-                                    //find what permissions we have left to search for
-                                    $leftPermissions = array_diff($PermissionList,$FoundPermissionList);
-                                    if (count($leftPermissions)==0) {
-                                        //if we found all the permissions we are searching for, return
-                                        return $FoundPermissionList;
+                                        $user_field=$FirstRelationship['user_field'];
+                                        if (!$user_field) $user_field='user_id';
+                                        $objectData=$this->get_controlled_object_data($ControlledObject_id, $on_what_id);
+                                        if ($objectData[$user_field]!=$User_id) {
+                                            $SearchUser=false;
+                                            $newPerm_id=false;                               
+                                        } else { $ApplyUserPerms=true; }
                                     }
                                 }
-                            } 
-                        }
+                            }
+                        break;
+                    }
+                    if ($newPerm_id) {
+                        $FoundPermissionList[]=$newPerm_id;
+                        $leftPermissions = array_diff($PermissionList,$FoundPermissionList);
+                        if (count($leftPermissions)==0) {
+                            //if we found all the permissions we are searching for, return
+                            return $FoundPermissionList;
+                        }                     
                     }
                 }
-            }
-        }
+            } //end if role permission 
+
+            if (!$on_what_id) { $SearchGroups=false; }//echo "No id provided, cannot check permissions"; return false; }
+            if ($SearchGroups) {
+                $GroupList = $this->get_object_groups($ControlledObject_id,$on_what_id, $_CORelationship_id);
+                if (!$GroupList) { $SearchGroups=false; }
+                else {
+                    //Get the roles this user has within the groups found
+                    $GroupRoleList = $this->get_user_roles_by_array ($GroupList,  $User_id);
+                    if (!$GroupRoleList) { $SearchGroups=false; }
+                    else {
+                        $GroupRoleList=$GroupRoleList['Roles'];
+                    }
+                }
+                if ($SearchGroups) {
+                    $Scopes=array('Group');
+                    $RolePermission = $this->get_role_permission($GroupRoleList, $ControlledObjectRelationship_ids, $Scopes);
+                    if ($RolePermission) {
+                        if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
+                        //add up all permissions found
+                        /* @todo Add checks to see if permissions propagate up/down */
+                        foreach ($RolePermission as $IndividualRolePerm) {
+                            //merge permissions with each individual permission
+                            $FoundPermissionList = array_unique(array_merge($FoundPermissionList, array($IndividualRolePerm['Permission_id'])));
+                            //find what permissions we have left to search for
+                            $leftPermissions = array_diff($PermissionList,$FoundPermissionList);
+                            if (count($leftPermissions)==0) {
+                                //if we found all the permissions we are searching for, return
+                                return $FoundPermissionList;
+                            }
+                        }
+                    } //end if role permission
+                }                         
+            } //end search groups check
+        } // end search level check
+        
         //Get parent objects for this particular controlled object
         $objectParents = $this->get_object_relationship_parent($ControlledObject_id, $on_what_id, $_CORelationship_id, $objectData);
 
@@ -2099,7 +2079,7 @@ class xrms_acl {
      *
      **/
     function get_controlled_object_list() {
-        
+        return true;
     }
     
     
@@ -2107,6 +2087,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.7  2005/02/23 20:54:19  vanmer
+ * - altered logic of permission checks to use SQL to loop instead of looping and then using SQL
+ * - extended get_role_permission to allow arrays to be passed instead of single parameters
+ *
  * Revision 1.6  2005/02/16 17:55:51  vanmer
  * - removed non-standard LIMIT statement, switched to use adodb SelectLimit statement
  *
