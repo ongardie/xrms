@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.74 2004/12/23 16:16:24 neildogg Exp $
+ * $Id: some.php,v 1.75 2004/12/24 15:57:49 braverock Exp $
  */
 
 // handle includes
@@ -90,7 +90,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'campaign_id'          => array ( 'activities_campaign_id', arr_vars_SESSION ) ,
            // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
                    'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
-                   'start_end'        => array ( 'activities_start_end', arr_vars_SESSION ) ,                   
+                   'start_end'        => array ( 'activities_start_end', arr_vars_SESSION ) ,
                    'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
                    'completed'           => array ( 'activities_completed', arr_vars_SESSION ) ,
                    'user_id'             => array ( 'activities_user_id', arr_vars_SESSION ) ,
@@ -252,7 +252,7 @@ if (strlen($search_date) > 0 && $start_end != 'all') {
     else {
         $field = 'ends_at';
     }
-    
+
     if (!$before_after) {
         $sql .= " and a.$field < " . $offset;
     } elseif ($before_after === 'after') {
@@ -332,7 +332,7 @@ if($advanced_search) {
     $rst = $con->execute($sql2);
     $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
     $rst->close();
-}            
+}
 
 //get menu for users
 $sql2 = "(SELECT 'Not Set', 'no') UNION (SELECT 'Current User', 'current') UNION (select username, user_id from users where user_record_status = 'a' order by username)";
@@ -449,10 +449,10 @@ start_page($page_title, true, $msg);
 <?php jscalendar_includes(); ?>
 
 <div id="Main">
-    <div id="Content">
+    <div id="ContentFullWidth">
 
     <form action=some.php method=post>
-        <input type=hidden name=advanced_search value="<?php echo $advanced_search; ?>">        
+        <input type=hidden name=advanced_search value="<?php echo $advanced_search; ?>">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=activities_next_page value="<?php  echo $activities_next_page; ?>">
         <input type=hidden name=resort value="0">
@@ -606,9 +606,14 @@ $con->close();
     </div>
 
         <!-- right column //-->
+    <?php
+    /*
     <div id="Sidebar">
 
     </div>
+    */
+    //no sidebar here yet, so make the table expand
+    ?>
 </div>
 
 <script language="JavaScript" type="text/javascript">
@@ -665,6 +670,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.75  2004/12/24 15:57:49  braverock
+ * - expand to use ContentFullWidth with new CSS
+ *
  * Revision 1.74  2004/12/23 16:16:24  neildogg
  * - Adjusted since advanced search is always submitted as a variable
  *
