@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.16 2004/07/21 20:30:30 neildogg Exp $
+ * $Id: database.php,v 1.17 2004/07/28 20:41:52 neildogg Exp $
  */
 
 /**
@@ -40,6 +40,7 @@ function misc_db_tables($con, $table_list) {
                recent_item_id                          int not null primary key auto_increment,
                user_id                                 int not null default 0,
                on_what_table                           varchar(100) not null default '',
+               recent_action                           varchar(100) not null default '',
                on_what_id                              int not null default 0,
                recent_item_timestamp                   timestamp
                )";
@@ -996,6 +997,12 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.17  2004/07/28 20:41:52  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.16  2004/07/21 20:30:30  neildogg
  * - Added saved_actions table
  *

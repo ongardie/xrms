@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.25 2004/07/20 19:43:02 introspectshun Exp $
+ * $Id: some.php,v 1.26 2004/07/28 20:42:27 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -130,6 +130,7 @@ $sql .= $from . $where . " order by $order_by";
 $sql_recently_viewed = "select * from recent_items r, companies c, opportunities opp, opportunity_statuses os
 where r.user_id = $session_user_id
 and r.on_what_table = 'opportunities'
+and r.recent_action = ''
 and c.company_id = opp.company_id
 and opp.opportunity_status_id = os.opportunity_status_id
 and r.on_what_id = opp.opportunity_id
@@ -314,6 +315,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.26  2004/07/28 20:42:27  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.25  2004/07/20 19:43:02  introspectshun
  * - Localized SQL aliias strings for i18n/translation support
  *

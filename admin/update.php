@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.25 2004/07/28 11:50:19 braverock Exp $
+ * $Id: update.php,v 1.26 2004/07/28 20:40:45 neildogg Exp $
  */
 
 // where do we include from
@@ -97,6 +97,11 @@ if ($recCount == 0) {
 $sql = "alter table case_priorities add case_priority_score_adjustment int not null after case_priority_display_html";
 $rst = $con->execute($sql);
 // end case_priority_display_html
+
+//make sure that there is a recent_action column
+$sql = "alter table recent_items add recent_action varchar(100) not null after on_what_table";
+$rst = $con->execute($sql);
+// end recent_action
 
 //make sure that there is a status_open_indicator column in campagins
 //should put a test here, but alter table is non-destructive
@@ -707,6 +712,12 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.26  2004/07/28 20:40:45  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.25  2004/07/28 11:50:19  braverock
  * - add sort order to opportunity statuses
  *

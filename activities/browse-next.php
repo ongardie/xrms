@@ -8,7 +8,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.13 2004/07/27 22:02:45 cpsource Exp $
+ * $Id: browse-next.php,v 1.14 2004/07/28 20:44:43 neildogg Exp $
  */
 
 //include required files
@@ -77,8 +77,54 @@ elseif($saved_id or ($next_to_check[$pos] and is_array($next_to_check) and in_ar
         array_splice($next_to_check, $pos-1, 0, $input[0]);
     }
 
-    header("Location: one.php?save_and_next=true&activity_id=" . $next_to_check[$pos]);
+    for($i = $pos; $i < count($next_to_check); $i++) {
+        $activity_id=$next_to_check[$i];
+        
+        //Check for old items
+        $sql = "SELECT a.activity_id, r.recent_item_timestamp
+                FROM activities as a, recent_items as r, contacts as c
+                WHERE r.user_id=" . $session_user_id . " 
+                AND a.activity_id=" . $activity_id . "
+                AND r.on_what_table='activities_companies' 
+                AND r.recent_action='sidebar_view'
+                AND a.company_id=r.on_what_id 
+                AND a.contact_id=c.contact_id
+                AND c.work_phone=''
+                AND c.cell_phone=''";
+        $rst = $con->execute($sql);
+        if(!$rst) {
+            db_error_handler($con, $sql);
+        }
+        elseif($rst->rowcount()) {
+            $recent_timestamp = $rst->fields['recent_item_timestamp'];
+        }
+        else {
+            $recent_timestamp = 0;
+        }
 
+        if($recent_timestamp) {
+            $recent_timestamp .= strtotime(substr($recent_timestamp, 0, 4) . "-"
+                                         . substr($recent_timestamp, 4, 2) . "-"
+                                         . substr($recent_timestamp, 6, 2) . " "
+                                         . substr($recent_timestamp, 8, 2) . ":"
+                                         . substr($recent_timestamp, 10, 2) . ":"
+                                         . substr($recent_timestamp, 12, 2));
+        }
+        
+        if($recent_timestamp < time() - 900) {
+            $input = array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
+            array_splice($next_to_check, $pos, 0, $input[0]);
+            break;
+        }
+            
+    }
+
+    if($i == count($next_to_check)) {
+        header("Location: some.php");
+    }
+    else {
+        header("Location: one.php?save_and_next=true&activity_id=" . $next_to_check[$pos]);
+    }
     $pos++;
 }
 else {
@@ -92,6 +138,12 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.14  2004/07/28 20:44:43  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.13  2004/07/27 22:02:45  cpsource
  * - Remove undefines
  *

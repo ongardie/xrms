@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.20 2004/07/16 03:14:55 introspectshun Exp $
+ * $Id: some.php,v 1.21 2004/07/28 20:44:06 neildogg Exp $
  */
 
 //include required files
@@ -222,6 +222,7 @@ $sql .= $from . $where . " order by $order_by";
 $sql_recently_viewed = "select * from recent_items r, files f
 where r.user_id = $session_user_id
 and r.on_what_table = 'files'
+and r.recent_action = ''
 and r.on_what_id = f.file_id
 and file_record_status = 'a'
 order by r.recent_item_timestamp desc";
@@ -400,6 +401,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.21  2004/07/28 20:44:06  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.20  2004/07/16 03:14:55  introspectshun
  * - Localized SQL aliias strings for i18n/translation support
  *

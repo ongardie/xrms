@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.67 2004/07/27 10:21:50 cpsource Exp $
+ * $Id: utils-misc.php,v 1.68 2004/07/28 20:43:03 neildogg Exp $
  */
 
 /**
@@ -102,11 +102,16 @@ function session_check($c_role='') {
  * @param  integer $on_what_id what record are we viewing
  * @return void
  */
-function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
+function update_recent_items($con, $user_id, $on_what_table, $on_what_id, $recent_action=false) {
+
+    if(!$recent_action) {
+        $recent_action = '';
+    }
 
     $sql1 = "delete from recent_items where
              user_id = $user_id
              and on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc())  ."
+             and recent_action = " . $con->qstr($recent_action, get_magic_quotes_gpc()) . "
              and on_what_id = $on_what_id";
 
     $con->execute($sql1);
@@ -737,6 +742,20 @@ function get_formatted_address (&$con,$address_id) {
     return $address_to_display;
 } //end fn get_formatted_address
 
+/** 
+ * Time zone offset
+ *
+ * This returns the GMT offset for a number it can be sure of
+ * Otherwise, it calls a hook to find the time
+ * Otherwise, it does nothing
+ *
+ * @author Neil Roberts
+ *
+ * @param object $con Database Connection
+ * @param int $address_id ID of address
+ *
+ */
+
 /**
  * The arr_vars sub-system
  *
@@ -1006,6 +1025,12 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.68  2004/07/28 20:43:03  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.67  2004/07/27 10:21:50  cpsource
  * - Fix some undefs
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.20 2004/07/25 14:29:34 johnfawcett Exp $
+ * $Id: some.php,v 1.21 2004/07/28 20:43:25 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -123,6 +123,7 @@ where r.user_id = $session_user_id
 and cam.campaign_type_id = camt.campaign_type_id
 and cam.campaign_status_id = cams.campaign_status_id
 and r.on_what_table = 'campaigns'
+and r.recent_action = 'view'
 and r.on_what_id = cam.campaign_id
 and campaign_record_status = 'a'
 order by r.recent_item_timestamp desc";
@@ -326,6 +327,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.21  2004/07/28 20:43:25  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.20  2004/07/25 14:29:34  johnfawcett
  * - corrected gettext call
  *

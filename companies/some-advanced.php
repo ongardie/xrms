@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.6 2004/07/21 19:17:57 introspectshun Exp $
+ * $Id: some-advanced.php,v 1.7 2004/07/28 20:41:31 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -261,6 +261,7 @@ $sql .= $from . $where . " order by $order_by";
 $sql_recently_viewed = "select * from recent_items r, companies c, crm_statuses crm
 where r.user_id = $session_user_id
 and r.on_what_table = 'companies'
+and r.recent_action = ''
 and c.crm_status_id = crm.crm_status_id
 and r.on_what_id = c.company_id
 and company_record_status = 'a'
@@ -391,6 +392,12 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.7  2004/07/28 20:41:31  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.6  2004/07/21 19:17:57  introspectshun
  * - Localized strings for i18n/l10n support
  *

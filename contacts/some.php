@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.29 2004/07/22 11:21:13 cpsource Exp $
+ * $Id: some.php,v 1.30 2004/07/28 20:43:49 neildogg Exp $
  */
 
 //include the standard files
@@ -142,6 +142,7 @@ $sql .= $from . $where . $group_by . " order by $order_by";
 $sql_recently_viewed = "select * from recent_items r, contacts cont, companies c
 where r.user_id = $session_user_id
 and r.on_what_table = 'contacts'
+and r.recent_action = ''
 and c.company_id = cont.company_id
 and r.on_what_id = cont.contact_id
 and contact_record_status = 'a'
@@ -333,6 +334,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.30  2004/07/28 20:43:49  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.29  2004/07/22 11:21:13  cpsource
  * - All paths now relative to include-locations-location.inc
  *   Code cleanup for Create Contact for 'Self'

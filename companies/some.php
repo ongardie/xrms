@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.33 2004/07/25 12:43:25 braverock Exp $
+ * $Id: some.php,v 1.34 2004/07/28 20:41:30 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -187,6 +187,7 @@ crm.crm_status_record_status
 from recent_items r, companies c, crm_statuses crm
 where r.user_id = $session_user_id
 and r.on_what_table = 'companies'
+and r.recent_action = ''
 and c.crm_status_id = crm.crm_status_id
 and r.on_what_id = c.company_id
 and company_record_status = 'a'
@@ -404,6 +405,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.34  2004/07/28 20:41:30  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.33  2004/07/25 12:43:25  braverock
  * - remove lang file require_once, as it is no longer used
  *

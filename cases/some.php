@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.19 2004/07/20 22:08:24 cpsource Exp $
+ * $Id: some.php,v 1.20 2004/07/28 20:41:04 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -130,6 +130,7 @@ $sql .= $from . $where . " order by $order_by";
 $sql_recently_viewed = "select * from recent_items r, companies c, cases ca, case_statuses cas
 where r.user_id = $session_user_id
 and r.on_what_table = 'cases'
+and r.recent_action = ''
 and c.company_id = ca.company_id
 and ca.case_status_id = cas.case_status_id
 and r.on_what_id = ca.case_id
@@ -322,6 +323,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.20  2004/07/28 20:41:04  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.19  2004/07/20 22:08:24  cpsource
  * - get rid of company_type_id as it's unused
  *

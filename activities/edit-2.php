@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.34 2004/07/27 14:44:04 neildogg Exp $
+ * $Id: edit-2.php,v 1.35 2004/07/28 20:44:43 neildogg Exp $
  */
 
 //include required files
@@ -150,6 +150,21 @@ if ($associate_activities = true ) {
         }
     } //end empty on_what_table check
 } // end associate code
+
+$sql = "SELECT contact_id
+        FROM contacts
+        WHERE contact_id=" . $contact_id . "
+        AND cell_phone=''
+        AND work_phone=''";
+$rst = $con->execute($sql);
+if(!$rst) {
+    db_error_handler($con, $sql);
+}
+elseif($rst->rowcount()) {
+    if($company_id) {
+        update_recent_items($con, $session_user_id, "activities", "sidebar_view", $company_id);
+    }
+}
 
 $sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
 $rst = $con->execute($sql);
@@ -402,6 +417,12 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.35  2004/07/28 20:44:43  neildogg
+ * - Added field recent_action to recent_items
+ *  - Same function works transparently
+ *  - Current items have recent_action=''
+ *  - update_recent_items has new optional parameter
+ *
  * Revision 1.34  2004/07/27 14:44:04  neildogg
  * - Removed unnecessary code
  *  - Changed $sql variable to proper variable
