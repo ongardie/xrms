@@ -1,21 +1,22 @@
 <?php
-/*
- * Author: Brad Marshall
- * Date: 05/26/04
+/**
  * Description: This file re-sorts the statuses when the user clicks
- *   the 'up' or 'down' button. 
+ *   the 'up' or 'down' button.
  *
+ * @author Brad Marshall
+ *
+ * $Id: sort.php,v 1.3 2004/06/24 20:02:53 braverock Exp $
  */
 
 
 require_once('../include-locations.inc');
-                                                                                                                             
+
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-                                                                                                                             
+
 $session_user_id = session_check();
 
 $direction = $_GET['direction'];
@@ -42,16 +43,21 @@ if ($activity_template == 1) {
     $on_what_table = $table_name . "es";
     $table_name = "activity_template";
 } else {
-    $table_name_plural = $table_name . "es";
+    if(substr($table_name, -1, 1) == "e") {
+        $table_name_plural = $table_name . "s";
+    }
+    else {
+        $table_name_plural = $table_name . "es";
+    }
     $on_what_table = $table_name;
 }
 
 
 //retrieve the sort_order and id value in the two rows to be swapped
-$sql = "select sort_order, " . $table_name . "_id from $table_name_plural 
-	where (sort_order=$sort_order or sort_order=$swap) ";
+$sql = "select sort_order, " . $table_name . "_id from $table_name_plural
+        where (sort_order=$sort_order or sort_order=$swap) ";
 if ($activity_template == 1) {
-	$sql .= "and on_what_table='$on_what_table' and on_what_id=$on_what_id "; 
+        $sql .= "and on_what_table='$on_what_table' and on_what_id=$on_what_id ";
 }
 $sql .= "and (" . $table_name . "_record_status='a')";
 
@@ -92,4 +98,11 @@ $rst = $con->execute($upd);
 //reload the page to see the new order
 header ('Location: ' . $http_site_root . $return_url);
 
+/**
+ *$Log: sort.php,v $
+ *Revision 1.3  2004/06/24 20:02:53  braverock
+ *- minor enhancements to sort functionality
+ *- add phpdoc
+ *
+ */
 ?>
