@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.4 2004/07/19 22:18:09 neildogg Exp $
+ * $Id: transfer-2.php,v 1.5 2004/07/20 14:25:59 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,7 +29,12 @@ $rst = $con->execute($sql);
 $contact_name = $rst->fields['first_names'] . ' ' . $rst->fields['last_name'];
 $company_id =  $rst->fields['company_id'];
 
-$sql = "select company_name, company_id from companies where company_name like '%" . $company_name . "%' and company_record_status = 'a' order by company_name";
+if(eregi("[a-zA-Z]", $company_name)) {
+    $sql = "select company_name, company_id from companies where company_name like '%" . $company_name . "%' and company_record_status = 'a' order by company_name";
+}
+else {
+    $sql = "select company_name, company_id from companies where company_id = '" . $company_name . "' and company_record_status = 'a'";
+}
 $rst = $con->execute($sql);
 
 if($rst->rowcount()) {
@@ -85,6 +90,9 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.5  2004/07/20 14:25:59  neildogg
+ * - Search by ID
+ *
  * Revision 1.4  2004/07/19 22:18:09  neildogg
  * - Added company search box
  *  - Added move all records with contact
