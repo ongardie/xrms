@@ -24,9 +24,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "SELECT * FROM cases WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['case_type_id'] = $case_type_id;
 $rec['case_status_id'] = $case_status_id;
@@ -42,7 +40,8 @@ $rec['entered_by'] = $session_user_id;
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'cases';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $case_id = $con->insert_id();

@@ -24,15 +24,14 @@ and on_what_table = 'campaigns'
 and on_what_id = $campaign_id";
 $con->execute($sql);
 
-$sql = "SELECT * FROM entity_category_map WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['category_id'] = $category_id;
 $rec['on_what_table'] = 'campaigns';
 $rec['on_what_id'] = $campaign_id;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = 'entity_category_map';
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
