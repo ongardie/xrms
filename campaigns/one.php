@@ -2,7 +2,7 @@
 /**
  * Edit a campaign
  *
- * $Id: one.php,v 1.8 2004/04/17 16:02:40 maulani Exp $
+ * $Id: one.php,v 1.9 2004/06/12 03:27:32 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -70,7 +71,7 @@ if ($rst) {
     $rst->close();
 }
 
-$categories = implode($categories, ", ");
+$categories = implode(', ', $categories);
 
 $sql = "select note_id, note_description, entered_by, entered_at, username from notes, users
 where notes.entered_by = users.user_id
@@ -254,6 +255,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/06/12 03:27:32  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.8  2004/04/17 16:02:40  maulani
  * - Add CSS2 positioning
  *

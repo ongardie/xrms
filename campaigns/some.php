@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.10 2004/05/10 13:08:36 maulani Exp $
+ * $Id: some.php,v 1.11 2004/06/12 03:27:32 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -88,7 +89,10 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $starts_at = $con->SQLDate('Y-M-D', 'starts_at');
 $ends_at = $con->SQLDate('Y-M-D', 'ends_at');
 
-$sql = "select concat('<a href=\"one.php?campaign_id=', cam.campaign_id, '\">', cam.campaign_title, '</a>') as 'Campaign', camt.campaign_type_pretty_name as 'Type', cams.campaign_status_pretty_name as 'Status', u.username as 'Owner', $starts_at as 'Starts', $ends_at as 'Ends' ";
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?campaign_id='", "CAST(cam.campaign_id AS varchar(10))", "'\">'" , "cam.campaign_title", "'</a>'") . " AS 'Campaign',
+  camt.campaign_type_pretty_name AS 'Type', cams.campaign_status_pretty_name AS 'Status', u.username AS 'Owner',
+  $starts_at AS 'Starts', $ends_at AS 'Ends'
+";
 
 if ($campaign_category_id > 0) {
     $from = "from campaigns cam, campaign_types camt, campaign_statuses cams, users u, entity_category_map ecm ";
@@ -318,6 +322,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2004/06/12 03:27:32  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.10  2004/05/10 13:08:36  maulani
  * - Add level to audit trail
  * - Correct audit trail entry text

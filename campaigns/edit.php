@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.6 2004/06/04 17:44:05 gpowers Exp $
+ * $Id: edit.php,v 1.7 2004/06/12 03:27:32 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -28,7 +29,7 @@ $sql = "select * from campaigns where campaign_id = $campaign_id";
 $rst = $con->execute($sql);
 
 if ($rst) {
-    $campaign_status_id = $rst->fields['case_status_id'];
+    $campaign_status_id = $rst->fields['campaign_status_id'];
     $campaign_type_id = $rst->fields['campaign_type_id'];
     $user_id = $rst->fields['user_id'];
     $campaign_title = $rst->fields['campaign_title'];
@@ -182,6 +183,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.7  2004/06/12 03:27:32  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * - Corrected order of arguments to implode() function.
+ *
  * Revision 1.6  2004/06/04 17:44:05  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags
