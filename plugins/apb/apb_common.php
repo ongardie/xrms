@@ -486,7 +486,6 @@ function get_number_of_groups() {
 
 function apb_head() {
     global $APB_SETTINGS;
-    global $DOCUMENT_ROOT;
     global $edit_mode;
 
     include($APB_SETTINGS['template_path'] . 'head.php');
@@ -495,7 +494,6 @@ function apb_head() {
 function apb_foot() {
     global $APB_SETTINGS;
     global $cookie_username;
-    global $DOCUMENT_ROOT;
     global $QUERY_STRING;
     global $id;
     global $action;
