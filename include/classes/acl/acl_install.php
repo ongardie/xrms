@@ -49,11 +49,11 @@ function install_upgrade_acl($con=false) {
     $rst = $con->execute($sql);
     if (!$rst) db_error_handler($con, $sql);
     if ($rst->numRows()>0) {
-        if ($rst->fields['CORelationship_id']) {
-            $sql = "ALTER TABLE `RolePermission` CHANGE `CORelationship_id` `CORelationship_id` INT( 10 ) UNSIGNED DEFAULT '0' NOT NULL";
+        if ($rst->fields['ControlledObjectRelationship_id']) {
+            $sql = "ALTER TABLE `RolePermission` CHANGE `ControlledObjectRelationship_id` `CORelationship_id` INT( 10 ) UNSIGNED DEFAULT '0' NOT NULL";
             $rst=$con->execute($sql);
             if (!$rst) db_error_handler($con, $sql);
-            $sql = "ALTER TABLE `ControlledObjectRelationship` CHANGE `CORelationship_id` `CORelationship_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
+            $sql = "ALTER TABLE `ControlledObjectRelationship` CHANGE `ControlledObjectRelationship_id` `CORelationship_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
             $rst=$con->execute($sql);
             if (!$rst) db_error_handler($con, $sql);
         }
