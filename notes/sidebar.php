@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.11 2004/07/14 21:34:44 cpsource Exp $
+ * $Id: sidebar.php,v 1.12 2004/07/21 12:23:07 cpsource Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -151,17 +151,50 @@ if (strlen($rst->fields['username']) > 0) {
       . nl2br(substr($rst->fields['note_description'],0,255)) .'
                  </td>
              </tr>';
+
+    // to next row
     $rst->movenext();
+
   } // while (!$rst->EOF) ..
+
   $rst->close();
+
 } else {
     $note_rows .= "\n            <tr> <td class=widget_content colspan=4> "
                  . _("No attached notes")
                  . " </td> </tr>\n";
 } // if (strlen($rst->fields['username']) > 0) ...
 
-//put in the new button
-if (strlen($on_what_table)>0){
+// put in the new button
+
+//
+// BUG - TBD - The 'new' function is stubbed out here as
+//   $on_what_table
+//   $on_what_id
+//   $on_what_string
+// all depend on which row above you are working with.
+//
+// Therefore, you can't pass anything reliable to
+// notes/new.php, therefore, the code was
+// removed until someone comes along and fixes the design.
+//
+
+if ( 0 && strlen( $on_what_table ) > 0 ) {
+
+  if ( 1 ) {
+    // use single quote as string delimeter so that variables stand out with color editor
+    $note_rows .= '
+            <tr>
+            <form action="'.$http_site_root.'/notes/new.php" method="post">
+                <td class=widget_content_form_element colspan=4>
+                        <input type=hidden name=on_what_table value="'.$on_what_table.'">
+                        <input type=hidden name=on_what_id value="'.$on_what_id.'">
+                        <input type=hidden name=return_url value="/'.$on_what_table.'/one.php?'.$on_what_string.'_id='.$on_what_id.'">
+                        <input type=submit class=button value="'._("New").'">
+                </td>
+            </form>
+            </tr>';
+  } else {
     $note_rows .= "
             <tr>
             <form action='".$http_site_root."/notes/new.php' method='post'>
@@ -173,6 +206,7 @@ if (strlen($on_what_table)>0){
                 </td>
             </form>
             </tr>";
+  }
 }
 
 //now close the table, we're done
@@ -180,6 +214,9 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.12  2004/07/21 12:23:07  cpsource
+ * - Stubbed out 'new' function, as design is bogus.
+ *
  * Revision 1.11  2004/07/14 21:34:44  cpsource
  * - Attempt to fix undefine usage for
  *     $contact_id
