@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.46 2004/07/23 11:29:59 braverock Exp $
+ * $Id: some.php,v 1.47 2004/07/23 21:46:54 cpsource Exp $
  */
 
 // handle includes
@@ -32,7 +32,11 @@ $arr_vars = array ( // local var name       // session variable name
            'delete_saved'       => array ( 'delete_saved', arr_vars_SESSION ) ,
            );
 
+// get all passed in variables
 arr_vars_get_all ( $arr_vars );
+
+// get SESSION variables for saved search
+// arr_vars_session_get ( $arr_vars );
 
 if($saved_id) {
     $sql = "SELECT saved_data, saved_status
@@ -73,12 +77,12 @@ $arr_vars = array ( // local var name       // session variable name
                    'title'               => array ( 'activities_title', arr_vars_SESSION ) ,
                    'contact'             => array ( 'activities_contact', arr_vars_SESSION ) ,
                    'company'             => array ( 'activities_company', arr_vars_SESSION ) ,
-                   'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
+		   // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
                    'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
                    'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
                    'completed'           => array ( 'activities_completed', arr_vars_SESSION ) ,
                    'user_id'             => array ( 'activities_user_id', arr_vars_SESSION ) ,
-                   'date'                => array ( 'date', arr_vars_SESSION ) ,
+                   // 'date'                => array ( 'date', arr_vars_SESSION ) ,
                    'search_date'         => array ( 'activities_date', arr_vars_SESSION ) ,
                    );
 
@@ -90,7 +94,12 @@ arr_vars_get_all ( $arr_vars );
 // This will work for positive and negative intervals automatically, so no need for conditional assignment of offset
 // (a search for today will add an interval of '0 days')
 // Warning: if a user wants to save a search for a particular date, this won't allow it, as it defaults to recurring search
-$day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
+if ( !$search_date ) {
+  $day_diff = 0;
+} else {
+  $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
+}
+
 $curdate = $con->DBTimeStamp(time());
 $offset = $con->OffsetDate($day_diff, $curdate);
 
@@ -274,8 +283,13 @@ $sql_saved = "SELECT saved_title, saved_id
         AND saved_action='search'
         AND saved_status='a'";
 $rst = $con->execute($sql_saved);
-if($rst->rowcount()) {
+if ( !$rst ) {
+  db_error_handler($con, $sql_saved);
+}
+if( $rst->RowCount() ) {
     $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
+} else {
+  $saved_menu = '';
 }
 
 add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
@@ -466,6 +480,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.47  2004/07/23 21:46:54  cpsource
+ * - Get rid of some undefined variable usages.
+ *
  * Revision 1.46  2004/07/23 11:29:59  braverock
  * - remove hard-coded error_reporting
  * - add time() param to DBTimeStamp call
