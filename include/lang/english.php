@@ -74,6 +74,7 @@ $strCompaniesSomeCompanyCityLabel = "City";
 $strCompaniesSomeCompanyCodeLabel = "Code";
 $strCompaniesSomeCompanyCountryLabel = "Country";
 $strCompaniesSomeCompanyNameLabel = "Company Name";
+$strCompaniesSomeCompanyIndustrylabel = "Industry";
 $strCompaniesSomeCompanyCRMStatusLabel = "CRM Status";
 $strCompaniesSomeCompanyRatingLabel = "Rating";
 $strCompaniesSomeCompanyStateLabel = "State";
