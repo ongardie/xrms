@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.5 2004/04/08 16:59:15 maulani Exp $
+ * $Id: some.php,v 1.6 2004/04/10 14:53:57 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -26,6 +26,7 @@ if ($clear) {
     $sort_order = '';
     $current_sort_order = '';
     $case_title = '';
+    $case_id = '';
     $company_code = '';
     $company_type_id = '';
     $user_id = '';
@@ -37,6 +38,7 @@ if ($clear) {
     $sort_order = $_POST['sort_order'];
     $current_sort_order = $_POST['current_sort_order'];
     $case_title = $_POST['case_title'];
+    $case_id = $_POST['case_id'];
     $company_code = $_POST['company_code'];
     $company_type_id = $_POST['company_type_id'];
     $user_id = $_POST['user_id'];
@@ -48,6 +50,7 @@ if ($clear) {
     $sort_order = $_SESSION['cases_sort_order'];
     $current_sort_order = $_SESSION['cases_current_sort_order'];
     $case_title = $_SESSION['cases_case_title'];
+    $case_id = $_SESSION['cases_case_id'];
     $company_code = (strlen($_GET['company_code']) > 0) ? $_GET['company_code'] : $_SESSION['cases_company_code'];
     $company_type_id = $_SESSION['cases_company_type_id'];
     $user_id = $_SESSION['cases_user_id'];
@@ -77,6 +80,7 @@ $_SESSION['cases_current_sort_column'] = $sort_column;
 $_SESSION['cases_sort_order'] = $sort_order;
 $_SESSION['cases_current_sort_order'] = $sort_order;
 $_SESSION['cases_case_title'] = $case_title;
+$_SESSION['cases_case_id'] = $case_id;
 $_SESSION['cases_company_code'] = $company_code;
 $_SESSION['cases_case_category_id'] = $case_category_id;
 $_SESSION['cases_user_id'] = $user_id;
@@ -127,6 +131,10 @@ if (strlen($user_id) > 0) {
 if (strlen($case_status_id) > 0) {
     $criteria_count++;
     $where .= " and ca.case_status_id = $case_status_id";
+}
+if (strlen($case_id) > 0) {
+    $criteria_count++;
+    $where .= " and ca.case_id = $case_id ";
 }
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
@@ -224,19 +232,25 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order ?>">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=6>Search Criteria</td>
+                <td class=widget_header colspan=4>Search Criteria</td>
             </tr>
             <tr>
-                <td class=widget_label>Case Name</td>
+                <td class=widget_label colspan=2>Case Name</td>
+                <td class=widget_label>Case Number</td>
                 <td class=widget_label>Company</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=2><input type=text name="case_title" size=20 value="<?php  echo $case_title ?>"></td>
+                <td class=widget_content_form_element><input type=text name="case_id" size=20 value="<?php  echo $case_id ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_code" size=6 value="<?php  echo $company_code ?>"></td>
+            </tr>
+            <tr>
                 <td class=widget_label>Owner</td>
                 <td class=widget_label>Category</td>
                 <td class=widget_label>Type</td>
                 <td class=widget_label>Status</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name="case_title" size=20 value="<?php  echo $case_title ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_code" size=6 value="<?php  echo $company_code ?>"></td>
                 <td class=widget_content_form_element><?php  echo $user_menu ?></td>
                 <td class=widget_content_form_element><?php  echo $case_category_menu ?></td>
                 <td class=widget_content_form_element><?php  echo $case_type_menu ?></td>
@@ -321,6 +335,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2004/04/10 14:53:57  braverock
+ * - add search by Case ID
+ * - applied SF patch 925621 submitted by Glenn Powers
+ *
  * Revision 1.5  2004/04/08 16:59:15  maulani
  * - Update javascript declaration
  * - Add phpdoc
