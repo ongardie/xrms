@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.20 2005/01/11 17:08:38 maulani Exp $
+ * $Id: login-2.php,v 1.21 2005/03/18 14:55:50 maulani Exp $
  */
 require_once('include-locations.inc');
 
@@ -95,7 +95,7 @@ if ($xrms_use_ldap) {
                $rec = array();
                $rec['role_id'] = $xrms_ldap['default_role_id'];
                $rec['last_name'] = $info[0]['sn'][0];
-               $rec['first_names'] = $info[0]['givenName'][0];
+               $rec['first_names'] = $info[0]['givenname'][0];
                $rec['username'] = $info[0]['uid'][0];
                $rec['password'] = 'NOPASSWORD';
                $rec['email'] = $info[0]['mail'][0];
@@ -106,7 +106,7 @@ if ($xrms_use_ldap) {
                $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
                $rst = $con->execute($ins);
                if (!$rst) {
-                  db_error_handler ($con,$sql);
+                  db_error_handler ($con, $ins);
                }
                // and now pull the data we just inserted
                $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc());
@@ -179,6 +179,10 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.21  2005/03/18 14:55:50  maulani
+ * - Fix creating new user after LDAP Authentication.  Patch submitted by
+ *   markcallen (Mark Allen) in bug report 1121632.
+ *
  * Revision 1.20  2005/01/11 17:08:38  maulani
  * - Added parameter for LDAP Version.  Some LDAP Version 3 installations
  *   require this option to be set.  Initial parameter setting is version 2
