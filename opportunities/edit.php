@@ -167,7 +167,8 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Status</td>
-                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?>
+                &nbsp;<a href='opportunity-view.php' target=new>View Statuses</a></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Owner</td>
