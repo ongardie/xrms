@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.85 2005/01/22 15:07:25 braverock Exp $
+ * $Id: one.php,v 1.86 2005/01/24 02:49:35 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -272,7 +272,9 @@ if ($rst) {
         }
 
         $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php%3Fcompany_id=$company_id%26division_id=$division_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php%3Fcompany_id=$company_id";
+        ($division_id) ? $activity_rows .= "%26division_id=" . $division_id : '';
+        $activity_rows .= "&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . '</td>';
@@ -319,7 +321,7 @@ if ($rst) {
                         . $rst->fields['first_names']. " " .$rst->fields['last_name']
                         . "&company_id=$company_id&contact_id="
                         . $contact_id
-                        ."&email=true&return_url=/companies/one.php?company_id=$company_id'\" >"
+                        ."&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id'\" >"
                         . htmlspecialchars($rst->fields['email'])
                         . '</a></td>';
         $contact_rows .= "\n</tr>";
@@ -728,7 +730,7 @@ function openNewsWindow() {
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
 
-        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?><?php echo ($division_id) ? "&division_id=" . $division_id : ''; ?>">
+        <input type=hidden name=return_url value="/companies/one.php%3Fcompany_id=<?php  echo $company_id; ?><?php echo ($division_id) ? "%26division_id=" . $division_id : ''; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
         <input type=hidden name=use_post_vars value="1">
@@ -821,6 +823,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.86  2005/01/24 02:49:35  braverock
+ * - properly urlencode return_url strings
+ * - add check for division_id before includign it in return_url
+ *
  * Revision 1.85  2005/01/22 15:07:25  braverock
  * - add sort order to activity_types menu
  *
