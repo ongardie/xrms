@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.22 2004/07/20 14:02:39 cpsource Exp $
+ * $Id: new-2.php,v 1.23 2004/07/20 14:07:47 cpsource Exp $
  */
 
 //where do we include from
@@ -49,26 +49,7 @@ $arr_vars = array ( // local var name       // session variable name
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
 
-// beagle bites squirrel
-if ( 0 ) {
-  //now pull all the required variables from $_GET or $_POST
-  getGlobalVar($return_url , 'return_url');
-  //need check in here for missing return_url, set to calling page
-  getGlobalVar($activity_type_id , 'activity_type_id');
-  getGlobalVar($on_what_table , 'on_what_table');
-  getGlobalVar($on_what_id , 'on_what_id');
-  getGlobalVar($on_what_status , 'on_what_status');
-  getGlobalVar($activity_title , 'activity_title');
-  getGlobalVar($activity_description , 'activity_description');
-  getGlobalVar($activity_status , 'activity_status');
-  getGlobalVar($scheduled_at , 'scheduled_at');
-  getGlobalVar($ends_at , 'ends_at');
-  getGlobalVar($company_id , 'company_id');
-  getGlobalVar($contact_id , 'contact_id');
-  getGlobalVar($user_id    , 'user_id');
-  getGlobalVar($email , 'email');
-  getGlobalVar($followup , 'followup');
-}
+// beagle bites squirrel - getGlobalVar calls removed
 
 //mark completed if it is an email
 if ($email) { $activity_status = 'c'; };
@@ -208,6 +189,9 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.23  2004/07/20 14:07:47  cpsource
+ *- Remove unused calls to getGlobalVar's
+ *
  *Revision 1.22  2004/07/20 14:02:39  cpsource
  *- Beagle bites sqirrel - got rid of getGlobalVars and
  *    upgraded to arr_vars sub-system.
