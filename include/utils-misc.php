@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.120 2005/03/11 16:58:59 daturaarutad Exp $
+ * $Id: utils-misc.php,v 1.121 2005/03/15 22:18:05 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -89,7 +89,7 @@ function session_check($c_role='', $action='Read') {
       if ( !$role_ok ) {
         // we are logged in, go straight to logout.php
 	header("Location: $http_site_root" . "/private/home.php?msg=noauth");
-        //exit;
+        exit;
       }
       // just return our current session id
       return $_SESSION['session_user_id'];
@@ -1482,6 +1482,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.121  2005/03/15 22:18:05  vanmer
+ * -readded exit command to allow ACL to properly restrict access to pages
+ *
  * Revision 1.120  2005/03/11 16:58:59  daturaarutad
  * fixed order of operations bug in arr_vars_get_all by adding ()
  *
