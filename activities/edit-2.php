@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.51 2005/01/12 21:00:02 vanmer Exp $
+ * $Id: edit-2.php,v 1.52 2005/01/13 18:40:09 vanmer Exp $
  */
 
 //include required files
@@ -384,8 +384,11 @@ if ($table_name !== "attached to") {
         if ($no_update) {
             if ($activity_return_id)
                 $return_url = "/activities/one.php?msg=no_change&activity_id=$activity_return_id";
-            elseif ($return_url)
-                $return_url.='?msg=no_change';
+            elseif ($return_url) {
+                if (strpos($return_url,'?')!==false) { $sep='&'; }
+                else { $sep='?'; }
+                $return_url.=$sep.'msg=no_change';
+             }
              else 
                 $return_url="/private/home.php?msg=no_change";
         }
@@ -473,6 +476,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.52  2005/01/13 18:40:09  vanmer
+ * - ensure that if parameters are already set for return_url that msg is simply appended
+ *
  * Revision 1.51  2005/01/12 21:00:02  vanmer
  * - altered to redirect to different URLS when next activity id is not available
  * - altered to use type comparison for different statuses
