@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.17 2004/04/21 05:02:48 braverock Exp $
+ * $Id: import-companies-3.php,v 1.18 2004/04/21 05:08:36 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -220,12 +220,12 @@ foreach ($filearray as $row) {
                 user_id = $user_id,
                 crm_status_id = $crm_status_id,
                 company_source_id= $company_source_id,
-                industry_id = " . $con->qstr($industry_id, get_magic_quotes_gpc()) . ",
+                industry_id = " . $con->qstr($industry_id) . ",
                 account_status_id = $account_status_id,
                 rating_id = $rating_id,
-                entered_at = " . $con->qstr($entered_at, get_magic_quotes_gpc()) . ',
-                entered_by = ' . $con->qstr($entered_by, get_magic_quotes_gpc()) . ',
-                company_name = '. $con->qstr($company_name, get_magic_quotes_gpc()) .',';
+                entered_at = " . $con->qstr($entered_at) . ',
+                entered_by = ' . $con->qstr($entered_by) . ',
+                company_name = '. $con->qstr($company_name) .',';
         } else {
             $sql_insert_company = '
             update companies set ';
@@ -234,86 +234,86 @@ foreach ($filearray as $row) {
         $sql_insert_company .=
             "
             company_record_status = 'a' ,
-            last_modified_at = " . $con->qstr($last_modified_at, get_magic_quotes_gpc()) . ',
-            last_modified_by = ' . $con->qstr($last_modified_by, get_magic_quotes_gpc());
+            last_modified_at = " . $con->qstr($last_modified_at) . ',
+            last_modified_by = ' . $con->qstr($last_modified_by);
 
         if ($legal_name) {
             $sql_insert_company .= ',
-            legal_name    = '. $con->qstr($legal_name, get_magic_quotes_gpc());
+            legal_name    = '. $con->qstr($legal_name);
         }
         if ($company_website) {
             $sql_insert_company .= ',
-            url           = '. $con->qstr($company_website, get_magic_quotes_gpc());
+            url           = '. $con->qstr($company_website);
         }
         if ($company_taxid) {
             $sql_insert_company .= ',
-            tax_id        = '. $con->qstr($company_taxid, get_magic_quotes_gpc());
+            tax_id        = '. $con->qstr($company_taxid);
         }
         if ($extref1) {
             $sql_insert_company .= ',
-            extref1       = '. $con->qstr($extref1, get_magic_quotes_gpc());
+            extref1       = '. $con->qstr($extref1);
         }
         if ($extref2) {
             $sql_insert_company .= ',
-            extref2       = '. $con->qstr($extref2, get_magic_quotes_gpc());
+            extref2       = '. $con->qstr($extref2);
         }
         if ($extref3) {
             $sql_insert_company .= ',
-            extref3       = '. $con->qstr($extref3, get_magic_quotes_gpc());
+            extref3       = '. $con->qstr($extref3);
         }
         if ($company_custom1) {
             $sql_insert_company .= ',
-            custom1       = '. $con->qstr($company_custom1, get_magic_quotes_gpc());
+            custom1       = '. $con->qstr($company_custom1);
         }
         if ($company_custom2) {
             $sql_insert_company .= ',
-            custom2       = '. $con->qstr($company_custom2, get_magic_quotes_gpc());
+            custom2       = '. $con->qstr($company_custom2);
         }
         if ($company_custom3) {
             $sql_insert_company .= ',
-            custom3       = '. $con->qstr($company_custom3, get_magic_quotes_gpc());
+            custom3       = '. $con->qstr($company_custom3);
         }
         if ($company_custom4) {
             $sql_insert_company .= ',
-            custom4       = '. $con->qstr($company_custom4, get_magic_quotes_gpc());
+            custom4       = '. $con->qstr($company_custom4);
         }
         if ($employees) {
             $sql_insert_company .= ',
-            employees     = '. $con->qstr($employees, get_magic_quotes_gpc());
+            employees     = '. $con->qstr($employees);
         }
         if ($revenue) {
             $sql_insert_company .= ',
-            revenue       = '. $con->qstr($revenue, get_magic_quotes_gpc());
+            revenue       = '. $con->qstr($revenue);
         }
         if ($credit_limit) {
             $sql_insert_company .= ',
-            credit_limit  = '. $con->qstr($credit_limit, get_magic_quotes_gpc());
+            credit_limit  = '. $con->qstr($credit_limit);
         }
         if ($terms) {
             $sql_insert_company .= ',
-            terms         = '. $con->qstr($terms, get_magic_quotes_gpc());
+            terms         = '. $con->qstr($terms);
         }
         if ($company_profile) {
             $sql_insert_company .= ',
-            profile       = '. $con->qstr($company_profile, get_magic_quotes_gpc());
+            profile       = '. $con->qstr($company_profile);
         }
         if ($company_code) {
             $sql_insert_company .= ',
-            company_code  = '. $con->qstr($company_code, get_magic_quotes_gpc());
+            company_code  = '. $con->qstr($company_code);
         }
         //set phone numbers only if the company didn't already exist
         if (!$company_id) {
             if ($company_phone) {
                 $sql_insert_company .= ',
-                phone     = '. $con->qstr($company_phone, get_magic_quotes_gpc());
+                phone     = '. $con->qstr($company_phone);
             }
             if ($company_phone2) {
                 $sql_insert_company .= ',
-                phone2    = '. $con->qstr($company_phone2, get_magic_quotes_gpc());
+                phone2    = '. $con->qstr($company_phone2);
             }
             if ($company_fax) {
                 $sql_insert_company .= ',
-                fax       = '. $con->qstr($company_fax, get_magic_quotes_gpc());
+                fax       = '. $con->qstr($company_fax);
             }
         }
         //now set the where clause if the company existed
@@ -343,7 +343,7 @@ foreach ($filearray as $row) {
             if (!$company_code) {
             $sql_update_company_code = "update companies set
                                         company_code = " .
-                                        $con->qstr('C' . $company_id, get_magic_quotes_gpc()) .
+                                        $con->qstr('C' . $company_id) .
                                         " where company_id = $company_id";
             } else {
                 $sql_update_company_code = "update companies set
@@ -357,7 +357,7 @@ foreach ($filearray as $row) {
         //check to see if we need to insert a division
         if (strlen($division_name) > 0) {
             $sql_insert_division = 'insert into company_division set
-                                    division_name = '. $con->qstr($division_name, get_magic_quotes_gpc());
+                                    division_name = '. $con->qstr($division_name);
             $con->execute($sql_insert_division);
             $division_id = $con->insert_id();
         }
@@ -371,8 +371,8 @@ foreach ($filearray as $row) {
 
             // now check to see if we already have an address that matches line1 and city
             $sql_check_address = 'select address_id from addresses where
-                                  line1 = '. $con->qstr($address_line1, get_magic_quotes_gpc()) .' and
-                                  city = '. $con->qstr($address_city, get_magic_quotes_gpc()) ." and
+                                  line1 = '. $con->qstr($address_line1) .' and
+                                  city = '. $con->qstr($address_city) ." and
                                   company_id = $company_id";
             $rst = $con->execute($sql_check_address);
             if ($rst) {
@@ -386,7 +386,7 @@ foreach ($filearray as $row) {
                         $country_sql = "select country_name, country_id from countries
                             where country_record_status = 'a' and
                             country name like "
-                            . $con->qstr('%' .$address_country.'%', get_magic_quotes_gpc())
+                            . $con->qstr('%' .$address_country.'%')
                             . " limit 1";
                         $addrrst = $con->execute($sql);
                         if ($addrrst){
@@ -403,15 +403,15 @@ foreach ($filearray as $row) {
                 //insert the new address
                 $sql_insert_address = "insert into addresses set
                                    company_id    = $company_id,
-                                   address_name  = ". $con->qstr($address_name, get_magic_quotes_gpc()) .',
-                                   line1         = '. $con->qstr($address_line1, get_magic_quotes_gpc()) .',
-                                   line2         = '. $con->qstr($address_line2, get_magic_quotes_gpc()) .',
-                                   city          = '. $con->qstr($address_city, get_magic_quotes_gpc()) . ',
-                                   province      = '. $con->qstr($address_state, get_magic_quotes_gpc()) . ',
-                                   address_body       = '. $con->qstr($address_body, get_magic_quotes_gpc()) . ',
-                                   use_pretty_address = '. $con->qstr($address_use_pretty_address, get_magic_quotes_gpc()) . ',
-                                   postal_code   = '. $con->qstr($address_postal_code, get_magic_quotes_gpc()) .'
-                                   country_id = '. $con->qstr($address_country, get_magic_quotes_gpc());
+                                   address_name  = ". $con->qstr($address_name) .',
+                                   line1         = '. $con->qstr($address_line1) .',
+                                   line2         = '. $con->qstr($address_line2) .',
+                                   city          = '. $con->qstr($address_city) . ',
+                                   province      = '. $con->qstr($address_state) . ',
+                                   address_body       = '. $con->qstr($address_body) . ',
+                                   use_pretty_address = '. $con->qstr($address_use_pretty_address) . ',
+                                   postal_code   = '. $con->qstr($address_postal_code) .'
+                                   country_id = '. $con->qstr($address_country);
                 $con->execute($sql_insert_address);
                 $address_id = $con->insert_id();
             }
@@ -431,8 +431,8 @@ foreach ($filearray as $row) {
 
         //check to see if we should insert a contact
         $sql_check_contact = 'select contact_id, first_names, last_name from contacts where
-                              first_names = '. $con->qstr($contact_first_names, get_magic_quotes_gpc()) . ' and
-                              last_name   = '. $con->qstr($contact_last_name, get_magic_quotes_gpc()) . "and
+                              first_names = '. $con->qstr($contact_first_names) . ' and
+                              last_name   = '. $con->qstr($contact_last_name) . "and
                               company_id  = $company_id" ;
         $rst = $con->execute($sql_check_contact);
         if ($rst) {
@@ -442,12 +442,12 @@ foreach ($filearray as $row) {
         if (!$contact_id and $company_id) {
             $sql_insert_contact = "insert into contacts set
                                        company_id  = $company_id,
-                                       first_names = ". $con->qstr($contact_first_names, get_magic_quotes_gpc()) .',
-                                       last_name   =' . $con->qstr($contact_last_name, get_magic_quotes_gpc()) .',
-                                       entered_at  =' . $con->qstr($entered_at, get_magic_quotes_gpc()) .',
-                                       entered_by  =' . $con->qstr($entered_by, get_magic_quotes_gpc()) .',
-                                       last_modified_at = ' . $con->qstr($last_modified_at, get_magic_quotes_gpc()) . ',
-                                       last_modified_by = ' . $con->qstr($last_modified_by, get_magic_quotes_gpc());
+                                       first_names = ". $con->qstr($contact_first_names) .',
+                                       last_name   =' . $con->qstr($contact_last_name) .',
+                                       entered_at  =' . $con->qstr($entered_at) .',
+                                       entered_by  =' . $con->qstr($entered_by) .',
+                                       last_modified_at = ' . $con->qstr($last_modified_at) . ',
+                                       last_modified_by = ' . $con->qstr($last_modified_by);
             if ($address_id) {
                 $sql_insert_contact .= ',
                                        address_id  = '. $con->qstr($address_id,  get_magic_quotes_gpc()) ;
@@ -458,79 +458,79 @@ foreach ($filearray as $row) {
             }
             if ($contact_work_phone){
                 $sql_insert_contact .= ',
-                                       work_phone  = '. $con->qstr($contact_work_phone, get_magic_quotes_gpc());
+                                       work_phone  = '. $con->qstr($contact_work_phone);
             }
             if ($contact_home_phone){
                 $sql_insert_contact .= ',
-                                       home_phone  = '. $con->qstr($contact_home_phone, get_magic_quotes_gpc());
+                                       home_phone  = '. $con->qstr($contact_home_phone);
             }
             if ($contact_fax){
                 $sql_insert_contact .= ',
-                                       fax         = '. $con->qstr($contact_fax, get_magic_quotes_gpc());
+                                       fax         = '. $con->qstr($contact_fax);
             }
             if ($contact_email){
                 $sql_insert_contact .= ',
-                                       email       = '. $con->qstr($contact_email, get_magic_quotes_gpc());
+                                       email       = '. $con->qstr($contact_email);
             }
             if ($contact_salutation){
                 $sql_insert_contact .= ',
-                                       salutation       = '. $con->qstr($contact_salutation, get_magic_quotes_gpc());
+                                       salutation       = '. $con->qstr($contact_salutation);
             }
             if ($contact_date_of_birth){
                 $sql_insert_contact .= ',
-                                       date_of_birth       = '. $con->qstr($contact_date_of_birth, get_magic_quotes_gpc());
+                                       date_of_birth       = '. $con->qstr($contact_date_of_birth);
             }
             if ($contact_summary){
                 $sql_insert_contact .= ',
-                                       summary       = '. $con->qstr($contact_summary, get_magic_quotes_gpc());
+                                       summary       = '. $con->qstr($contact_summary);
             }
             if ($contact_title){
                 $sql_insert_contact .= ',
-                                       title       = '. $con->qstr($contact_title, get_magic_quotes_gpc());
+                                       title       = '. $con->qstr($contact_title);
             }
             if ($contact_description){
                 $sql_insert_contact .= ',
-                                       description       = '. $con->qstr($contact_description, get_magic_quotes_gpc());
+                                       description       = '. $con->qstr($contact_description);
             }
             if ($contact_cell_phone){
                 $sql_insert_contact .= ',
-                                       cell_phone       = '. $con->qstr($contact_cell_phone, get_magic_quotes_gpc());
+                                       cell_phone       = '. $con->qstr($contact_cell_phone);
             }
             if ($contact_aol){
                 $sql_insert_contact .= ',
-                                       aol_name       = '. $con->qstr($contact_aol, get_magic_quotes_gpc());
+                                       aol_name       = '. $con->qstr($contact_aol);
             }
             if ($contact_yahoo){
                 $sql_insert_contact .= ',
-                                       yahoo_name       = '. $con->qstr($contact_yahoo, get_magic_quotes_gpc());
+                                       yahoo_name       = '. $con->qstr($contact_yahoo);
             }
             if ($contact_msn){
                 $sql_insert_contact .= ',
-                                       msn_name       = '. $con->qstr($contact_msn, get_magic_quotes_gpc());
+                                       msn_name       = '. $con->qstr($contact_msn);
             }
             if ($contact_interests){
                 $sql_insert_contact .= ',
-                                       interests       = '. $con->qstr($contact_interests, get_magic_quotes_gpc());
+                                       interests       = '. $con->qstr($contact_interests);
             }
             if ($contact_custom1){
                 $sql_insert_contact .= ',
-                                       custom1       = '. $con->qstr($contact_custom1, get_magic_quotes_gpc());
+                                       custom1       = '. $con->qstr($contact_custom1);
             }
             if ($contact_custom2){
                 $sql_insert_contact .= ',
-                                       custom2       = '. $con->qstr($contact_custom2, get_magic_quotes_gpc());
+                                       custom2       = '. $con->qstr($contact_custom2);
             }
             if ($contact_custom3){
                 $sql_insert_contact .= ',
-                                       custom3       = '. $con->qstr($contact_custom3, get_magic_quotes_gpc());
+                                       custom3       = '. $con->qstr($contact_custom3);
             }
             if ($contact_custom4){
                 $sql_insert_contact .= ',
-                                       custom4       = '. $con->qstr($contact_custom4, get_magic_quotes_gpc());
+                                       custom4       = '. $con->qstr($contact_custom4);
             }
             if ($contact_profile){
                 $sql_insert_contact .= ',
-                                       profile       = '. $con->qstr($contact_profile, get_magic_quotes_gpc());
+                                       profile       = '. $con->qstr($contact_profile);
             }
             $con->execute($sql_insert_contact);
         } //end insert contact
@@ -653,6 +653,11 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.18  2004/04/21 05:08:36  braverock
+ * - remove get_magic_quotes_gpc() from qstr param list,
+ *   it is unecessary in this context, and actively harmful
+ *    see: http://phplens.com/adodb/reference.functions.qstr.html
+ *
  * Revision 1.17  2004/04/21 05:02:48  braverock
  * - add data cleanup button to end of import process
  *
