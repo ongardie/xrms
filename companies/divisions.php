@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.10 2005/01/25 23:30:57 vanmer Exp $
+ * $Id: divisions.php,v 1.11 2005/01/26 22:49:09 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -80,7 +80,7 @@ start_page($page_title, true, $msg);
 		</tr>
             <tr>
                 <td class=widget_label><?php echo _("Address"); ?></td>
-                <td class=widget_content_form_element><?php echo $address_menu; ?><?php echo '<a href="http://localhost/xrms/companies/addresses.php?company_id=' . $company_id .'">' . _("Add/Edit Addresses") . '</a>'; ?></td>
+                <td class=widget_content_form_element><?php echo $address_menu; ?><?php echo '<a href="addresses.php?company_id=' . $company_id .'">' . _("Add/Edit Addresses") . '</a>'; ?></td>
             </tr>
 		<tr>
 			<td class=widget_label><?php echo _("Division Description"); ?></td>
@@ -112,6 +112,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.11  2005/01/26 22:49:09  gpowers
+ * - removed "localhost" from add/edit address URL
+ *
  * Revision 1.10  2005/01/25 23:30:57  vanmer
  * - added new hook for addition to form for adding new division
  *
