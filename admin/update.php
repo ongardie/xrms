@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.47 2005/01/10 21:47:12 braverock Exp $
+ * $Id: update.php,v 1.48 2005/01/11 17:08:39 maulani Exp $
  */
 
 // where do we include from
@@ -316,6 +316,22 @@ if ($recCount == 0) {
     $rec = array();
     $rec['param_id'] = 'Activities Default Behavior';
     $rec['string_val'] = $activities_default_behavior;
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is an LDAP Version in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='LDAP Version'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added an LDAP Version system parameter.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'LDAP Version';
+    $rec['int_val'] = 3;
 
     $tbl = 'system_parameters';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -3873,6 +3889,11 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.48  2005/01/11 17:08:39  maulani
+ * - Added parameter for LDAP Version.  Some LDAP Version 3 installations
+ *   require this option to be set.  Initial parameter setting is version 2
+ *   since most current installations probably use v2.
+ *
  * Revision 1.47  2005/01/10 21:47:12  braverock
  * - make activity_description a nullable field
  *

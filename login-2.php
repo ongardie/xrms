@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.19 2005/01/09 15:50:29 braverock Exp $
+ * $Id: login-2.php,v 1.20 2005/01/11 17:08:38 maulani Exp $
  */
 require_once('include-locations.inc');
 
@@ -56,6 +56,9 @@ if ($xrms_use_ldap) {
      ini_set ('error_reporting', 0);
      $ds=ldap_connect($xrms_ldap["server"]);  // connect to the LDAP server!
      if ($ds) {
+          $ldap_version = get_system_parameter($con, "LDAP Version");
+	      ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldap_version);
+
           $r=ldap_bind($ds, $xrms_ldap["search_user"], $xrms_ldap["search_pw"]);  //authenticate as the search user specified
           //specify which attributes to fetch from ldap
           $justthese = array ("dn","uid","givenName","sn","mail");
@@ -176,6 +179,11 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.20  2005/01/11 17:08:38  maulani
+ * - Added parameter for LDAP Version.  Some LDAP Version 3 installations
+ *   require this option to be set.  Initial parameter setting is version 2
+ *   since most current installations probably use v2.
+ *
  * Revision 1.19  2005/01/09 15:50:29  braverock
  * - add db_error_handler on all queries
  *
