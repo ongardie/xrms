@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.42 2004/08/19 13:14:05 maulani Exp $
+ * $Id: some.php,v 1.43 2004/08/20 17:14:40 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -225,12 +225,12 @@ $rst->close();
 
 $sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
 $rst = $con->execute($sql2);
-$company_type_menu = $rst->getmenu2('company_type_id', $company_type_id, true);
+$company_type_menu = translate_menu($rst->getmenu2('company_type_id', $company_type_id, true));
 $rst->close();
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
 $rst = $con->execute($sql2);
-$crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, true);
+$crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', $crm_status_id, true));
 $rst->close();
 
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
@@ -408,6 +408,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.43  2004/08/20 17:14:40  braverock
+ * - add translate_menu for additional menus in search
+ *
  * Revision 1.42  2004/08/19 13:14:05  maulani
  * - Add specific type pager to ease overriding of layout function
  *
