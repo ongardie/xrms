@@ -43,7 +43,7 @@ start_page($page_title, true, $msg);
 		<td class=lcol width=45% valign=top>
 
 		<form action=new-2.php method=post>
-		<input type=hidden name=company_id value="<?php  echo $company_id; ?>">
+		<input type=hidden name=company_id value="<?php echo $company_id; ?>">
 		<table class=widget cellspacing=1 width=100%>
 			<tr>
 				<td class=widget_header colspan=2>Contact Information</td>

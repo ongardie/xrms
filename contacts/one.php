@@ -474,8 +474,7 @@ function markComplete() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="<?php  echo
-$strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';"></td>
+                <td class=widget_content_form_element><input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';"></td>
             </tr>
         </table>
 
@@ -524,7 +523,7 @@ $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?con
                 <td class=widget_content><?php  echo $categories; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?company_id=<?php  echo $company_id; ?>';" value="Manage"></td>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?contact_id=<?php  echo $contact_id; ?>';" value="Manage"></td>
             </tr>
         </table>
 
