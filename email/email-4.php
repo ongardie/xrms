@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.11 2005/03/17 20:05:26 jswalter Exp $
+* $Id: email-4.php,v 1.12 2005/03/17 22:07:33 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -95,7 +95,7 @@ if ($rst) {
                         user_id = $session_user_id,
                         company_id = ".$rst->fields['company_id'].",
                         contact_id = ".$rst->fields['contact_id'].",
-                        activity_title = '".addslashes($title)."',
+                        activity_title = '".addslashes($email_template_title)."',
                         activity_description = '".addslashes($output)."',
                         entered_at = ".$con->dbtimestamp(mktime()).",
                         last_modified_at = ".$con->dbtimestamp(mktime()).",
@@ -104,7 +104,11 @@ if ($rst) {
                         ends_at=".$con->dbtimestamp(mktime()).",
                         activity_status ='c',
                         entered_by = $session_user_id;";
-                        $con->execute($sql_insert_activity);
+                        $act_rst = $con->execute($sql_insert_activity);
+                        if ( ! $act_rst )
+                        {
+                            db_error_handler( $con, $sql_insert_activity );
+                        }
         //}
         $rst->movenext();
     }
@@ -159,6 +163,11 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.12  2005/03/17 22:07:33  braverock
+*
+* - modified to store subject of email as activity title
+* - modified to use db_error_handler
+*
 * Revision 1.11  2005/03/17 20:05:26  jswalter
 *  - revamped sendmail operation completly
 *  - removed the use of internal PHP 'mail()' call
