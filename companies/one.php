@@ -5,10 +5,10 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.23 2004/04/08 17:00:59 maulani Exp $
+ * $Id: one.php,v 1.24 2004/04/10 16:12:29 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
- * @todo create a centalized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
+ * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
 
 //include required files
@@ -556,6 +556,7 @@ function openNewsWindow() {
             </tr>
         </table>
 
+        <script language="JavaScript" type="text/javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
         <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
@@ -579,7 +580,9 @@ function openNewsWindow() {
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at value="<?php echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at value="<?php echo date('Y-m-d'); ?>">
+              <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a>
+<input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -625,6 +628,19 @@ function openNewsWindow() {
         </td>
     </tr>
 </table>
+<script>
+<!--
+
+// create calendar object(s) just after form tag closed
+// specify form element as the only parameter (document.forms['formname'].elements['inputname']);
+// note: you can have as many calendar objects as you need for your application
+
+    var cal1 = new calendar1(document.forms[0].elements['scheduled_at']);
+    cal1.year_scroll = false;
+    cal1.time_comp = false;
+
+//-->
+</script>
 
 <?php
 
@@ -632,9 +648,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.24  2004/04/10 16:12:29  braverock
+ * - add calendar pop-up to date entry in new activity
+ *   - apply SF patch 927141 submitted by "s-t"
+ *
  * Revision 1.23  2004/04/08 17:00:59  maulani
  * - Update javascript declaration
- * - Add phpdoc
  *
  * Revision 1.22  2004/04/07 13:50:54  maulani
  * - Set CSS2 positioning for the home page
@@ -659,6 +678,5 @@ end_page();
  * Revision 1.16  2004/01/26 19:18:02  braverock
  * - added company division pages and fields
  * - added phpdoc
- *
  */
 ?>
