@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.27 2005/01/06 20:51:17 vanmer Exp $
+ * $Id: one.php,v 1.28 2005/01/07 01:55:07 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -314,7 +314,10 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Status"); ?></td>
-                                    <td class=clear><?php  echo $opportunity_status_display_html; ?></td>
+                                    <td class=clear>
+                                        <?php  echo $opportunity_status_display_html; ?>
+                                        <a href="javascript:window.open('opportunity-view.php');"><?php echo _("Status Definitions"); ?></a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Closes"); ?></td>
@@ -444,7 +447,7 @@ function markComplete() {
 
         <!-- files //-->
         <?php echo $file_rows; ?>
-        
+
         <!-- relationships //-->
         <?php echo $relationship_link_rows; ?>
 
@@ -457,6 +460,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.28  2005/01/07 01:55:07  braverock
+ * - add Status definitions link
+ *
  * Revision 1.27  2005/01/06 20:51:17  vanmer
  * - moved setup of initial values to above session_check (for ACL)
  * - added division to display of one opportunity, if available
