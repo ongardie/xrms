@@ -14,7 +14,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.10 2004/07/21 23:27:39 neildogg Exp $
+ * $Id: browse-next.php,v 1.11 2004/07/23 12:45:47 neildogg Exp $
  */
 
 //include required files
@@ -78,15 +78,43 @@ if($saved_id) {
     }
 }
 //If we've created the next_to_check array from outside (ie the saved query)
-elseif(($activity_type_id == 0) and ($pos >= count($next_to_check))) {
+elseif((!count($activity_type_ids)) and ($pos >= count($next_to_check))) {
     header("Location: some.php");
 }
 // If the activity is part of the array, ie if they have already obtained an array, use the array.   
 elseif($next_to_check[$pos] and is_array($next_to_check) and in_array($activity_id, $next_to_check) and ($pos > 0) and ($pos < count($next_to_check))) {
     // If they try to traverse it out of order, simply move the array to around
+    $temp_activity_id = $activity_id;
+    for($i = $pos; $i < count($next_to_check); $i++) {
+        $mktime = mktime();
+        $sql = "SELECT (last_modified_at > (now() - interval 15 minute)) as time
+                FROM companies c, activities a
+                WHERE a.activity_id=$temp_activity_id
+                AND a.company_id=c.company_id";
+        $rst = $con->execute($sql);
+        if(!$rst) {
+            db_error_handler($con, $sql);
+        }
+        elseif($rst->rowcount()) {
+            if($rst->fields['time']) {
+                $temp_activity_id = $next_to_check[$i+1];
+            }
+            else {
+                $input = array_splice($next_to_check, array_search($temp_activity_id, $next_to_check), 1);
+                array_splice($next_to_check, $pos, 0, $input[0]);
+                break;
+            }
+        }
+    }
+    
     $input = array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
     array_splice($next_to_check, $pos-1, 0, $input[0]);
-    header("Location: one.php?save_and_next=true&activity_id=" . $next_to_check[$pos]);
+    if($i == count($next_to_check)) {
+        header("Location: some.php");
+    }
+    else {
+        header("Location: one.php?save_and_next=true&activity_id=" . $next_to_check[$pos]);
+    }
     $pos++;
 }
 else {
@@ -250,6 +278,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.11  2004/07/23 12:45:47  neildogg
+ * - Avoid the viewing of companies recently viewed
+ *
  * Revision 1.10  2004/07/21 23:27:39  neildogg
  * - General bug fixes (if only 1 element in search)
  *  - No need for opportunities table in first search
