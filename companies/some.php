@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.22 2004/07/01 15:50:25 maulani Exp $
+ * $Id: some.php,v 1.23 2004/07/02 17:38:18 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -118,7 +118,7 @@ $criteria_count = 0;
 
 if ($company_category_id > 0) {
     $criteria_count++;
-    $from = "from companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
+    $from = "from companies c, industries i, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
 } else {
     $from = "from companies c, industries i, crm_statuses crm, ratings r, account_statuses as1, users u ";
 }
@@ -311,13 +311,13 @@ start_page($page_title, true, $msg);
             <td class=widget_content_form_element>
                 <?php  echo $company_category_menu; ?>
             </td>
-            <td width="25%" class=widget_content_form_element>
+            <td class=widget_content_form_element>
                 <?php  echo $industry_menu; ?>
             </td>
-            <td width="25%" class=widget_content_form_element>
+            <td class=widget_content_form_element>
                 <input type=text name="city" size=10 value="<?php  echo $city; ?>">
             </td>
-            <td width="25%" class=widget_content_form_element>
+            <td class=widget_content_form_element>
                 <input type=text name="state" size=5 value="<?php echo $state; ?>">
             </td>
         </tr>
@@ -412,6 +412,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.23  2004/07/02 17:38:18  maulani
+ * - Fix addresses reference in sql in patch submitted by Nic Lowe (niclowe)
+ * - Patch # 981927
+ *
  * Revision 1.22  2004/07/01 15:50:25  maulani
  * - Fix bug 976220 reported by cpsource ($where used before defined)
  *
