@@ -34,6 +34,37 @@ function get_group_users($acl_group, $acl_role = false) {
     return false;
 }
 
+function check_acl_object_recursion($ParentControlledObject_id, $ChildControlledObject_id) {
+    global $acl_options;
+    $acl = new xrms_acl($acl_options);
+    $ControlledObjectRelationships = $acl->get_controlled_object_relationship(false, $ControlledObject_id, false, true);
+    foreach ($ControlledObjectRelationships as $cor_id => $cor) {
+        if ($cor['ParentControlledObject_id']) {
+            if ($cor['ParentControlledObject_id']==$ChildControlledObject_id) {
+                return false;
+            }
+            $ret = check_acl_object_recursion($cor['ParentControlledObject_id'],$ChildControlledObject_id);
+            if (!$ret) return false;
+        }
+    }
+    return true;
+}
+function check_acl_group_recursion($Group_id, $ChildGroup_id) {
+    global $acl_options;
+    $acl = new xrms_acl($acl_options);
+    
+    $groupList = $acl->get_group_user(false, false, false, $Group_id);
+    if ($Group_id==$ChildGroup_id) return false;
+     if ($groupList and is_array($groupList)) {
+        foreach ($groupList as $gkey=>$group) {
+            if ($group['Group_id']==$ChildGroup_id) return false;
+            $recurse=check_acl_group_recursion($group['Group_id'], $ChildGroup_id);
+            if (!$recurse) return false;
+        }
+    }
+    return true;
+}
+
 function check_user_role($acl, $user_id, $role) {
     global $acl_options;
     if (!$acl)
