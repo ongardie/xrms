@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.4 2004/05/13 16:36:46 braverock Exp $
+ * $Id: some.php,v 1.5 2004/05/17 17:23:43 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -91,7 +91,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right>Username</td>
-                <td class=widget_content_form_element><input type=text name=username></td>
+                <td class=widget_content_form_element><input type=text name=new_username></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Password</td>
@@ -129,6 +129,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2004/05/17 17:23:43  braverock
+ * - change $username to not conflict when register_globals is on (?!?)
+ *   - fixed SF bug 952670 - credit to jmaguire123 and sirjo for troubleshooting
+ *
  * Revision 1.4  2004/05/13 16:36:46  braverock
  * - modified to work safely even when register_globals=on
  *   (!?! == dumb administrators ?!?)

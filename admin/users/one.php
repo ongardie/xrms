@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.5 2004/05/13 16:36:46 braverock Exp $
+ * $Id: one.php,v 1.6 2004/05/17 17:23:43 braverock Exp $
  */
 
 //include required files
@@ -26,7 +26,7 @@ $rst = $con->execute($sql);
 if ($rst) {
 
     $user_type_id = $rst->fields['user_type_id'];
-    $username = $rst->fields['username'];
+    $new_username = $rst->fields['username'];
     $first_names = $rst->fields['first_names'];
     $last_name = $rst->fields['last_name'];
     $email = $rst->fields['email'];
@@ -72,7 +72,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right>Username</td>
-                <td class=widget_content_form_element><input type=text name=username value="<?php  echo $username; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=new_username value="<?php  echo $new_username; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>E-Mail</td>
@@ -126,6 +126,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.6  2004/05/17 17:23:43  braverock
+ * - change $username to not conflict when register_globals is on (?!?)
+ *   - fixed SF bug 952670 - credit to jmaguire123 and sirjo for troubleshooting
+ *
  * Revision 1.5  2004/05/13 16:36:46  braverock
  * - modified to work safely even when register_globals=on
  *   (!?! == dumb administrators ?!?)
