@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.10 2004/09/30 20:23:52 dmazand Exp $
+ * $Id: sidebar.php,v 1.11 2004/10/01 14:21:26 introspectshun Exp $
  */
 
 $opportunity_rows = "<div id='opportunity_sidebar'>
@@ -37,7 +37,7 @@ order by close_at, sort_order";
 //$con->debug=1;
 
 //execute our query
-$rst = $con->SelectLimit($opportunity_sql, $xrm_sql_limit, 0);
+$rst = $con->SelectLimit($opportunity_sql, $xrms_sql_limit, 0);
 
 if (strlen($rst->fields['username'])>0) {
     while (!$rst->EOF) {
@@ -81,6 +81,9 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.11  2004/10/01 14:21:26  introspectshun
+ * - Fixed a typo so xrms_sql_limit now works
+ *
  * Revision 1.10  2004/09/30 20:23:52  dmazand
  * added xrms_sql_limit to define the number or opportunities displayed in the sidebar. Configure in vars.php
  *
