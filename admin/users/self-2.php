@@ -4,7 +4,7 @@
  *
  * Save the changes from a user-level self-change
  *
- * $Id: self-2.php,v 1.2 2004/05/10 13:07:20 maulani Exp $
+ * $Id: self-2.php,v 1.3 2004/05/10 20:54:31 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,6 +12,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+
+$session_user_id = session_check();
 
 $user_id = $_POST['user_id'];
 $last_name = $_POST['last_name'];
@@ -31,10 +33,14 @@ add_audit_item($con, $user_id, 'updated', 'users', $user_id, 1);
 
 $con->close();
 
-header("Location: " . $http_site_root . "/admin/routing.php");
+header("Location: " . $http_site_root . "/private/home.php");
 
 /**
  *$Log: self-2.php,v $
+ *Revision 1.3  2004/05/10 20:54:31  maulani
+ *- Fix bug 951490.  Unprivileged users will now return to the home screen
+ *  after modifying their user records.
+ *
  *Revision 1.2  2004/05/10 13:07:20  maulani
  *- Add level to audit trail
  *- Clean up audit trail text

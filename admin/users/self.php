@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.2 2004/04/16 22:18:27 maulani Exp $
+ * $Id: self.php,v 1.3 2004/05/10 20:54:31 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -45,7 +45,7 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
 
-		<form action=edit-2.php method=post>
+		<form action=self-2.php method=post>
 		<input type=hidden name=user_id value="<?php  echo $session_user_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
@@ -97,6 +97,10 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.3  2004/05/10 20:54:31  maulani
+ *- Fix bug 951490.  Unprivileged users will now return to the home screen
+ *  after modifying their user records.
+ *
  *Revision 1.2  2004/04/16 22:18:27  maulani
  *- Add CSS2 Positioning
  *
