@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.11 2004/08/14 21:41:51 niclowe Exp $
+ * $Id: some-advanced.php,v 1.12 2004/08/19 13:14:05 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,7 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
 // a helper routine to retrieve one field from a table
@@ -371,7 +371,7 @@ start_page($page_title, true, $msg);
 
 <?php
 
-$pager = new ADODB_Pager($con, $sql, 'companies', false, $sort_column-1, $pretty_sort_order);
+$pager = new Companies_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
@@ -436,6 +436,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.12  2004/08/19 13:14:05  maulani
+ * - Add specific type pager to ease overriding of layout function
+ *
  * Revision 1.11  2004/08/14 21:41:51  niclowe
  * added adodb pager to advanced search - fixed minor incorrect, non bug inducing form parameters
  *

@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.23 2004/08/05 14:34:19 introspectshun Exp $
+ * $Id: some.php,v 1.24 2004/08/19 13:14:05 maulani Exp $
  */
 
 //include required files
@@ -12,7 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
@@ -338,7 +338,7 @@ if ( $use_owl ) {
   echo "<input class=button type=button onclick='javascript: owl()' value='"._("Owl File Management")."'><br><br>";
 }
 
-$pager = new ADODB_Pager($con, $sql, 'files', false, $sort_column-1, $pretty_sort_order);
+$pager = new Files_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
@@ -410,6 +410,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.24  2004/08/19 13:14:05  maulani
+ * - Add specific type pager to ease overriding of layout function
+ *
  * Revision 1.23  2004/08/05 14:34:19  introspectshun
  * - Localized remaining option/button strings for i18n/l10n support
  *

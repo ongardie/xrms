@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.41 2004/08/19 12:01:53 braverock Exp $
+ * $Id: some.php,v 1.42 2004/08/19 13:14:05 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
@@ -325,7 +325,7 @@ start_page($page_title, true, $msg);
 
 <?php
 $_SESSION["search_sql"]=$sql;
-$pager = new ADODB_Pager($con, $sql, 'companies', false, $sort_column-1, $pretty_sort_order);
+$pager = new Companies_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
@@ -408,6 +408,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.42  2004/08/19 13:14:05  maulani
+ * - Add specific type pager to ease overriding of layout function
+ *
  * Revision 1.41  2004/08/19 12:01:53  braverock
  * - added space after Rating so that the $from clause wouldn't collide
  *   - fixes SF bug 996549 using suggestion from Roberto Durrer (durrer)

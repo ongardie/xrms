@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.21 2004/07/28 20:43:25 neildogg Exp $
+ * $Id: some.php,v 1.22 2004/08/19 13:14:04 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
@@ -251,7 +251,7 @@ start_page($page_title, true, $msg);
 
 <?php
 
-$pager = new ADODB_Pager($con,$sql, 'campaigns', false, $sort_column-1, $pretty_sort_order);
+$pager = new Campaigns_Pager($con,$sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
@@ -327,6 +327,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.22  2004/08/19 13:14:04  maulani
+ * - Add specific type pager to ease overriding of layout function
+ *
  * Revision 1.21  2004/07/28 20:43:25  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
