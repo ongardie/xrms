@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.10 2004/07/11 14:31:27 braverock Exp $ **/
+/** $Id: README,v 1.11 2004/07/12 19:47:44 cpsource Exp $ **/
 
 ========================
 SUMMARY
@@ -375,6 +375,7 @@ David Rogers      introspectshun Developer
 David Uhlman      d2uhlman       Developer
 Neil Williams     metamedia      Developer
 Aaron van Meerten vanmer         Developer
+Cal Page          cpsource       Developer
 
 XRMS also contains code contributed by many, many users.
 The XRMS Development Team is grateful for all of the code,
@@ -384,6 +385,9 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.11  2004/07/12 19:47:44  cpsource
+ * Added Cal Page, SF id cpsource as Developer.
+ *
  * Revision 1.10  2004/07/11 14:31:27  braverock
  * - added Developer Credits section
  *
