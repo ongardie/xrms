@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.15 2004/08/30 13:20:17 neildogg Exp $
+ * $Id: some-advanced.php,v 1.16 2004/08/30 14:08:46 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -77,10 +77,10 @@ $arr_vars = array ( // local var name       // session variable name
 	             	   'country_id' => array ( 'companies_country_id' , arr_vars_SESSION),
 	             	   'address_body' => array ( 'companies_address_body' , arr_vars_SESSION),
         
-	             	   'sort_column'         => array ( 'sort_column'         , arr_vars_SESSION),
-	             	   'current_sort_column' => array ( 'current_sort_column' , arr_vars_SESSION),
-	             	   'sort_order'          => array ( 'sort_order'          , arr_vars_SESSION),
-	             	   'current_sort_order'  => array ( 'current_sort_order'  , arr_vars_SESSION),
+	             	   'sort_column'         => array ( 'sort_column'         , arr_vars_REQUEST),
+	             	   'current_sort_column' => array ( 'current_sort_column' , arr_vars_REQUEST),
+	             	   'sort_order'          => array ( 'sort_order'          , arr_vars_REQUEST),
+	             	   'current_sort_order'  => array ( 'current_sort_order'  , arr_vars_REQUEST),
                    );
 
 // get all passed in variables
@@ -447,6 +447,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.16  2004/08/30 14:08:46  neildogg
+ * - Grab sorting values
+ *
  * Revision 1.15  2004/08/30 13:20:17  neildogg
  * - Robustified search
  *
