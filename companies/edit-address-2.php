@@ -1,4 +1,10 @@
 <?php
+/**
+ * Database updates for Edit address for a company
+ *
+ * $Id: edit-address-2.php,v 1.4 2004/06/09 17:39:51 gpowers Exp $
+ */
+
 
 require_once('../include-locations.inc');
 
@@ -31,4 +37,10 @@ $con->execute($sql);
 
 header("Location: addresses.php?msg=saved&company_id=$company_id");
 
+/**
+ * $Log: edit-address-2.php,v $
+ * Revision 1.4  2004/06/09 17:39:51  gpowers
+ * - added $Id and $Log tags
+ *
+*/
 ?>

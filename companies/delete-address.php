@@ -1,4 +1,10 @@
 <?php
+/**
+ * delete address for a company
+ *
+ * $Id: delete-address.php,v 1.3 2004/06/09 17:43:59 gpowers Exp $
+ */
+
 
 require_once('../include-locations.inc');
 
@@ -23,4 +29,11 @@ $con->close();
 
 header("Location: addresses.php?msg=address_deleted&company_id=$company_id");
 
+/**
+ * $Log: delete-address.php,v $
+ * Revision 1.3  2004/06/09 17:43:59  gpowers
+ * - added $Id and $Log tags
+ *
+ *
+*/
 ?>
