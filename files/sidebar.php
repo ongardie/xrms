@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.8 2004/07/25 16:47:38 johnfawcett Exp $
+ * $Id: sidebar.php,v 1.9 2004/08/03 18:05:56 cpsource Exp $
  */
 
 $file_rows = "<div id='file_sidebar'>
@@ -23,6 +23,9 @@ $file_rows = "<div id='file_sidebar'>
                 <td class=widget_label>"._("Owner")."</td>
                 <td class=widget_label>"._("Date")."</td>
             </tr>\n";
+
+//uncomment the debug line to see what's going on with the query
+//$con->debug=1;
 
 //build the files sql query
 if (strlen($on_what_table)>0){
@@ -42,11 +45,18 @@ if (strlen($on_what_table)>0){
     $rst = $con->SelectLimit($file_sql, 5, 0);
 }
 
-//uncomment the debug line to see what's going on with the query
-//$con->debug=1;
+// any errors ???
+if ( !$rst ) {
+  // yep - report it
+  db_error_handler($con, $file_sql);
+}
 
 if (strlen($rst->fields['username']) > 0) {
     while (!$rst->EOF) {
+
+      // get contact id
+      $contact_id = $rst->fields['user_contact_id'];
+
         $file_rows .= "
              <tr>";
         if ($rst->fields['file_size'] == "0")
@@ -92,6 +102,9 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.9  2004/08/03 18:05:56  cpsource
+ * - Set mime type when database entry is created
+ *
  * Revision 1.8  2004/07/25 16:47:38  johnfawcett
  * - added gettext calls
  *

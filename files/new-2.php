@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.11 2004/07/30 12:59:19 cpsource Exp $
+ * $Id: new-2.php,v 1.12 2004/08/03 18:05:56 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,6 +15,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'mime/mime-array.php');
 
 $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -96,6 +97,7 @@ $rst = $con->execute($sql);
 
 $rec = array();
 $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
+$rec['file_type']            = mime_get_type ( $file_name );
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
@@ -111,6 +113,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.12  2004/08/03 18:05:56  cpsource
+ * - Set mime type when database entry is created
+ *
  * Revision 1.11  2004/07/30 12:59:19  cpsource
  * - Handle $msg in the standard way
  *   Fix problem with Date field displaying garbage because

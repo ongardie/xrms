@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.11 2004/07/30 12:59:19 cpsource Exp $
+ * $Id: new.php,v 1.12 2004/08/03 18:05:56 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
+
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $on_what_table = $_POST['on_what_table'];
@@ -135,6 +136,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.12  2004/08/03 18:05:56  cpsource
+ * - Set mime type when database entry is created
+ *
  * Revision 1.11  2004/07/30 12:59:19  cpsource
  * - Handle $msg in the standard way
  *   Fix problem with Date field displaying garbage because
