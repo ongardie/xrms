@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.26 2004/07/10 12:00:48 braverock Exp $
+ * $Id: home.php,v 1.27 2004/07/10 13:10:49 braverock Exp $
  */
 
 // include the common files
@@ -21,7 +21,12 @@ require_once($include_directory . 'adodb-params.php');
 //see if we are logged in
 $session_user_id = session_check();
 
-$msg = $_GET['msg'];
+// get call arguments
+if ( isset($_GET['msg']) ) {
+    $msg = $_GET['msg'];
+} else {
+    $msg = '';
+}
 
 //connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
@@ -474,6 +479,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.27  2004/07/10 13:10:49  braverock
+ * - applied undefined variables patch
+ *   - applies SF patch  submitted by cpsource
+ *
  * Revision 1.26  2004/07/10 12:00:48  braverock
  * - changed xrms_user_manual.pdf to XRMS_User_Manual.pdf
  *   - resolves SF bug 987496 reported by kennyg1
