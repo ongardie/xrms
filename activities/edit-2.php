@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.18 2004/06/15 19:20:22 introspectshun Exp $
+ * $Id: edit-2.php,v 1.19 2004/06/21 16:10:07 braverock Exp $
  */
 
 //include required files
@@ -106,10 +106,15 @@ if($on_what_table == 'opportunities' and strlen ($probability)) {
     $rec['probability'] = $probability;
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
-    $prob_rst= $con->execute($upd);
-
-    if (!$prob_rst) { db_error_handler ($con, $upd); }
-    $prob_rst->close();
+    if (strlen($upd)) {
+        //update the probability
+        $prob_rst= $con->execute($upd);
+        if (!$prob_rst) {
+            db_error_handler ($con, $upd);
+        } else {
+            $prob_rst->close();
+        }
+    }
 }
 
 add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
@@ -265,7 +270,7 @@ if ($followup) {
     header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( 'Follow-up ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&return_url=$return_url&followup=true" );
 } elseif($saveandnext) {
     $pos++;
-    header("Location: browse-next.php?current_on_what_table=" . $current_on_what_table 
+    header("Location: browse-next.php?current_on_what_table=" . $current_on_what_table
         . "&current_activity_type_id=" . $current_activity_type_id . "&pos=" . $pos);
 } else {
     header("Location: " . $http_site_root . $return_url);
@@ -273,6 +278,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.19  2004/06/21 16:10:07  braverock
+ * - improved error handling around changes to Probability
+ *
  * Revision 1.18  2004/06/15 19:20:22  introspectshun
  * - Save and Next now uses GetUpdateSQL()
  *
