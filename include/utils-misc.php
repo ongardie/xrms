@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.43 2004/07/13 14:52:29 braverock Exp $
+ * $Id: utils-misc.php,v 1.44 2004/07/13 22:57:36 cpsource Exp $
  */
 
 /**
@@ -19,7 +19,24 @@
 $_SERVER['PHP_SELF'] = strip_tags($_SERVER['PHP_SELF']);
 
 /**
- * Check to see if there is a session initialized, and send to logon if there isn't one.
+ * Verify a session has been started.  If it hasn't, start a session up.
+ * php.net doesn't tell you that $_SESSION (even though autoglobal),
+ * is not created unless a session is started, unlike $_POST, $_GET and such
+ */
+function session_startup () {
+  $sessid = session_id();
+  if ( empty( $sessid ) ) {
+    // only call session_start once
+    session_start();
+  }
+}
+
+/**
+ * First, create a valid session if not already done so.
+ * Then, check to see if we are logged in,
+ * and if not, we just go straight to login.php.
+ *
+ * Otherwise, we return the session id to our current caller.
  *
  * @param string $target the page the user was trying to go to
  * @return integer user_id of the logged in user
@@ -29,41 +46,25 @@ function session_check($target='') {
     global $http_site_root;
     global $xrms_system_id;
 
+    // get our eventual target
     if (isset($_SERVER['REQUEST_URI'])) {
         $target = urlencode($_SERVER['REQUEST_URI']);
     } else {
         $target = urlencode($_SERVER['PHP_SELF']);
     }
 
-    /**
-    * Verify a session has been started.  If it hasn't, start a session up.
-    * php.net doesn't tell you that $_SESSION (even though autoglobal),
-    * is not created unless a session is started, unlike $_POST, $_GET and such
-    */
-    $sessid = session_id();
-    if ( empty( $sessid ) ) {
-        session_start();
+    // make sure the session has started
+    session_startup();
+
+    // make sure we've logged in
+    if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
+      // we are logged in - just return our current session id
+      return $_SESSION['session_user_id'];
     }
 
-    if ((!$_SESSION['session_user_id'] > 0) || (strcmp($_SESSION['xrms_system_id'], $xrms_system_id) != 0)) {
-        //this hack prevents the login script from recursively calling itself
-        $spath = $_SERVER['PHP_SELF'];
-        $i = strlen($spath);
-        for ($j = $i-1;$j>=0;$j--)
-            { if ($spath[$j] == '/') { break; } }
-
-        $justfile = substr($spath,$j+1);
-
-        if($justfile=="login.php"){//do nothing
-        } else {
-            header("Location: $http_site_root" . "/login.php?target=$target");
-            //don't know why, but the exit causes problems in some installations...
-            //exit;
-        }
-    }
-
-    return $_SESSION['session_user_id'];
-
+    // we are not logged in, go straight to login.php
+    header("Location: $http_site_root" . "/login.php?target=$target");
+    //exit;
 }
 
 /**
@@ -302,11 +303,11 @@ function getGlobalVar( &$value, $name ) {
  */
 function xrms_session_register ($var, $name) {
 
-    session_check();
+  session_startup();
 
     $_SESSION["$name"] = $var;
 
-    session_register("$name");
+  session_register("$name");
 }
 
 /**
@@ -319,7 +320,7 @@ function xrms_session_register ($var, $name) {
  */
 function xrms_session_unregister ($name) {
 
-    session_check();
+    session_startup();
 
     unset($_SESSION[$name]);
 
@@ -687,6 +688,13 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.44  2004/07/13 22:57:36  cpsource
+ * - Coded noew session_startup() routine to create session
+ *   Modified session_check() to make it run faster and
+ *     eleminate the recursive calling.
+ *   Modified xrms_session_register() and xrms_session_unregister() to call
+ *     session_startup()
+ *
  * Revision 1.43  2004/07/13 14:52:29  braverock
  * - add additional isset tests to avoid unititialized var Notices
  *
