@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.62 2004/08/26 14:41:31 neildogg Exp $
+ * $Id: one.php,v 1.63 2004/09/02 23:20:21 maulani Exp $
  */
 
 //include required files
@@ -328,7 +328,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Activity Notes"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=80 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=75 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <?php
             if($on_what_table == 'opportunities') {
@@ -439,6 +439,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.63  2004/09/02 23:20:21  maulani
+ * - Reduce textarea width to fit on 1024 wide screen
+ *
  * Revision 1.62  2004/08/26 14:41:31  neildogg
  * - Display nothing if no daylight savings in address
  *
