@@ -21,6 +21,22 @@ $session_user_id = session_check();
 
 start_page();
 
+?>
+
+<h3>
+Another pager example showing Calculated Columns and callback usage
+</h3>
+
+<p>
+As you'll notice, the callback is only called for the rows that are being displayed.
+However, if the user clicks to sort on a column that is calculated, the entire data
+set will be run.
+</p>
+
+
+<?php
+
+
 if(check_user_role(false, $session_user_id, 'Administrator')) {
 
 global $con;
@@ -48,7 +64,7 @@ echo "Note: you may need to hit the pager's refresh button if you are wondering 
 
 
 // constructor: GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true)
-$pager = new GUP_Pager($con, $sql, 'get_calculated_row', 'List of Activities', 'activities_form', 'ActivitiesPager', $columns, true);
+$pager = new GUP_Pager($con, $sql, 'get_calculated_row', 'List of Activities', 'activities_form', 'example4_ActivitiesPager', $columns, true);
 
 echo '<form name="activities_form" method=post>';
 // output the html that is the pager.

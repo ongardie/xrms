@@ -3,7 +3,7 @@
 
 /**
 
-GUP Pager example showing totaling capability
+GUP basic Pager example 
 
 */
 
@@ -16,6 +16,14 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 $session_user_id = session_check();
 
 start_page();
+?>
+
+<h3> 
+GUP basic Pager example 
+</h3>
+
+<?php
+
 
 if(check_user_role(false, $session_user_id, 'Administrator')) {
 	$con = &adonewconnection($xrms_db_dbtype);
@@ -34,7 +42,7 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
 	
 	
 	// constructor: GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true)
-	$pager = new GUP_Pager($con, $sql, null, 'List of Activities', 'activities_form', 'ActivitiesPager', $columns, true);
+	$pager = new GUP_Pager($con, $sql, null, 'List of Activities', 'activities_form', 'example1_ActivitiesPager', $columns, true);
 	
 	echo '<form name="activities_form" method=post>';
 	// output the html that is the pager.

@@ -15,6 +15,16 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 $session_user_id = session_check();
 
 start_page();
+?>
+
+<h3>
+Simple example of basic pager usage with Array (not SQL)
+</h3>
+
+
+
+<?php
+
 
 if(check_user_role(false, $session_user_id, 'Administrator')) {
 
@@ -49,7 +59,7 @@ echo "Note: you may need to hit the pager's refresh button if you are wondering 
 
 
 // constructor: GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true)
-$pager = new GUP_Pager($con, '', $data, 'List of Activities', 'activities_form', 'ActivitiesPager', $columns, true);
+$pager = new GUP_Pager($con, '', $data, 'List of Activities', 'activities_form', 'example5_ActivitiesPager', $columns, true);
 
 echo '<form name="activities_form" method=post>';
 // output the html that is the pager.

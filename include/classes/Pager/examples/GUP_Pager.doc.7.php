@@ -57,7 +57,7 @@ $columns[] = array('name' => 'Activity Description', 'index_sql' => 'activity_de
 
 
 // constructor: GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true)
-$pager = new GUP_Pager($con, $sql, 'get_calculated_row', 'List of Activities', 'activities_form', 'ActivitiesPager', $columns, true);
+$pager = new GUP_Pager($con, $sql, 'get_calculated_row', 'List of Activities', 'activities_form', 'example7_ActivitiesPager', $columns, true);
 
 echo '<form name="activities_form" method=post>';
 echo 'User Input:<input type="text" name="user_input" value="23">';
