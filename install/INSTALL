@@ -1,7 +1,7 @@
 XRMS Installation READ_ME
 
 Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.4 2004/07/25 19:29:43 braverock Exp $
+$Id: INSTALL,v 1.5 2004/07/26 04:21:48 braverock Exp $
 
 INSTALLATION
 ============
@@ -80,6 +80,33 @@ This is a non-destructive routine to bring your system up to date.
 starting from code older than the March date above, contact the
 development team for assistance, as the process is more complicated.
 
+TEMP FILE CLEANUP
+=================
+
+XRMS creates temporary files for exports, places imports in a directory, etc.
+
+We recommend that you implement an automated directory
+cleaning application like tmpwatch.
+Managing temporary files is a facility best left
+to routine system administration, not XRMS directly.
+
+Most distributions come with some temp-file cleanup utility.
+ (tmpwatch is distributed with Red Hat, Mandrake, and many
+others)  Usually, this temporary file cleanup utility runs
+on a daily basis, and cleans out old files.
+
+For tmpwatch, you would add the following lines to your
+/etc/cron.daily/tmpwatch script under linux
+(adjust paths as needed)
+
+/usr/sbin/tmpwatch -f 48 /var/www/html/xrms/export/
+/usr/sbin/tmpwatch -f 48 /var/www/html/xrms/upload/
+
+The lines above will delete any files that have not been
+accessed in 48 hours from the export and upload directories.
+(24 hours would have been a fine number as well)
+
+
 MISC
 ====
 
@@ -90,6 +117,10 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.5  2004/07/26 04:21:48  braverock
+ * - added notes on temporary file cleanup to INSTALL docs.
+ *   - adresses SF Feature request 946925
+ *
  * Revision 1.4  2004/07/25 19:29:43  braverock
  * - added more explicit instructions on Upgrading
  *
