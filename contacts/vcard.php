@@ -4,7 +4,7 @@
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.8 2004/12/24 16:16:15 braverock Exp $
+ * $Id: vcard.php,v 1.9 2004/12/24 16:25:57 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -81,20 +81,17 @@ END:VCARD";
 
 $filesize = strlen($vcard);
 
-$filename =  'contact_' . $contact_id . '.vcf';
+$filename =  $last_name . '.' . $first_names . '.vcf';
 
-//$fp = fopen($tmp_export_directory . $filename, 'w');
-
-//fwrite($fp,$rst);
-
-
-//header("Location: {$http_site_root}/export/{$filename}");
 SendDownloadHeaders("text", "x-vcard", $filename, false, $filesize);
 echo $vcard;
 exit;
 
 /**
  * $Log: vcard.php,v $
+ * Revision 1.9  2004/12/24 16:25:57  braverock
+ * -modified to use lastname.firstname.vcf as vcard filenname
+ *
  * Revision 1.8  2004/12/24 16:16:15  braverock
  * - modified to use SendDownloadHeaders
  *
