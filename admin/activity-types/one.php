@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.8 2004/07/25 15:05:00 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2004/07/25 17:28:19 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -79,7 +79,7 @@ start_page($page_title);
         </table>
         </form>
 
-        <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Activity Type").'?'; ?>');">
+        <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Activity Type?"); ?>');">
         <input type=hidden name=activity_type_id value="<?php  echo $activity_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -87,10 +87,12 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_content>
-	          <?php echo _("Click the button below to remove this activity type from the system."); ?>
+	          <?php echo _("Click the button below to permanently remove this item."); ?>
                 <p>
 		    <?php echo _("Note: This action CANNOT be undone!"); ?>
-                <p><input class=button type=submit value="<?php echo _("Delete Activity Type"); ?>">
+                </p>
+                <p><input class=button type=submit value="<?php echo _("Delete"); ?>">
+                </p>
                 </td>
             </tr>
         </table>
@@ -112,6 +114,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2004/07/25 17:28:19  johnfawcett
+ * - reinserted ? in gettext - needed for some languages
+ * - standardized delete text and button
+ *
  * Revision 1.8  2004/07/25 15:05:00  johnfawcett
  * - unified page title
  * - removed punctuation from gettext string
