@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.70 2004/12/30 20:09:40 vanmer Exp $
+ * $Id: one.php,v 1.71 2004/12/31 22:31:33 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -324,7 +324,7 @@ $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contac
 
 $rst = $con->execute($sql);
 if ($rst) {
-    $contact_menu = $rst->getmenu2('contact_id', '', true);
+    $contact_menu = $rst->getmenu2('contact_id', '', true, false, 0, 'style="font-size: x-small"');
     $rst->close();
 } else {
     db_error_handler ($con, $sql);
@@ -333,7 +333,7 @@ if ($rst) {
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 if ($rst) {
-    $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
+    $user_menu = $rst->getmenu2('user_id', $session_user_id, false, false, 0, 'style="font-size: x-small"');
     $rst->close();
 } else {
     db_error_handler ($con, $sql);
@@ -342,7 +342,7 @@ if ($rst) {
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
 $rst = $con->execute($sql);
 if ($rst) {
-    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false, false, 0, 'style="font-size: x-small"');
     $rst->close();
 } else {
     db_error_handler ($con, $sql);
@@ -601,7 +601,7 @@ function openNewsWindow() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=7><?php echo _("Activities"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
@@ -609,7 +609,7 @@ function openNewsWindow() {
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Contact"); ?></td>
                 <td class=widget_label><?php echo _("About"); ?></td>
-                <td colspan=2 class=widget_label><?php echo _("Starts"); ?></td>
+                <td class=widget_label><?php echo _("Starts"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
@@ -617,8 +617,8 @@ function openNewsWindow() {
                 <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php echo $contact_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
-                <td colspan=2 class=widget_content_form_element>
-                    <input type=text ID="f_date_d" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                <td class=widget_content_form_element>
+                    <input type=text size=10 ID="f_date_d" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                     <input class=button type=submit value="<?php echo _("Add"); ?>">
                     <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
@@ -676,6 +676,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.71  2004/12/31 22:31:33  vanmer
+ * - forced menu text in activities section to use small text
+ * - removed extraneous column from activity list
+ * - limited size of start date input to allow activities to not spill over into sidebar
+ *
  * Revision 1.70  2004/12/30 20:09:40  vanmer
  * - moved company_id above session_check (prelude to ACL)
  * - removed relationship information from main company section (now all included in sidebar)
