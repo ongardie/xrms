@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.10 2004/02/04 21:18:12 braverock Exp $
+ * $Id: utils-misc.php,v 1.11 2004/02/04 21:56:16 braverock Exp $
  */
 
 /**
@@ -59,7 +59,7 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
              user_id       =  $user_id,
              on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
              on_what_id    = $on_what_id,
-             recent_item_timestamp = " . $con->dbtimestamp(time());
+             recent_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
 
     // $con->debug=1;
     $con->execute($sql1);
@@ -82,7 +82,7 @@ function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_wh
             audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
             on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
             on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
-            audit_item_timestamp = " . $con->dbtimestamp(time()) . ")";
+            audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s")) . ")";
 
     //$con->debug=1
     $con->execute($sql);
@@ -148,12 +148,15 @@ function CSVtoArray($file, $hasFieldNames = false, $delimiter = ',', $enclosure=
     if ($hasFieldNames) $keys = fgetcsv($handle, 4096, $delimiter);
 
     //trim,strtolower, and strreplace keys for Outlook support
-
+    //create a temporary array to put things in
     $cleankeys = array();
     foreach ($keys as $key) {
-      $key = str_replace(' ', '_', trim(strtolower($key)));
-      $cleankeys[] = $key; 
+        //munge the array key
+        $key = str_replace(' ', '_', trim(strtolower($key)));
+        //assign the munged key to the temp array
+        $cleankeys[] = $key;
     }
+    //copy the cleaned array to the $keys array
     $keys = $cleankeys;
 
     while ($row = fgetcsv($handle, 4096, $delimiter))
@@ -298,6 +301,10 @@ function fetch_division_id($con, $division_name, $company_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.11  2004/02/04 21:56:16  braverock
+ * - added comments to munging code in CSVtoArray
+ * - updated date functions
+ *
  * Revision 1.10  2004/02/04 21:18:12  braverock
  * - add key munging for trim,strtolower, and str_replace of array keys in CSVtoArray fn
  *
