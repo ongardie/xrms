@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.5 2004/04/16 22:18:25 maulani Exp $
+ * $Id: import-companies.php,v 1.6 2004/04/19 14:21:54 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -96,6 +96,22 @@ $con->close();
                     <input type=radio name=delimiter value='semi-colon'>semi-colon</td>
             </tr>
             <tr>
+                <td class=widget_label_right>File Format</td>
+                <td class=widget_content_form_element><select name="file_format">
+<?php
+if ($handle = opendir('.')) {
+   while (false !== ($filename = readdir($handle))) {
+      if (preg_match("/import-template/i", $filename)) {
+         preg_match("/(import-template-)([^\.]+)(.php)/i",$filename,$format_name);
+         echo "<option value=\"" . $format_name[2] . "\">$format_name[2]</option>";
+         };
+      };
+};
+?>
+                </select>
+                </td>
+            </tr>
+            <tr>
                 <td class=widget_label_right>Acct. Owner</td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
@@ -144,6 +160,12 @@ $con->close();
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.6  2004/04/19 14:21:54  braverock
+ * - add additional look-ups and tests on import
+ * - improve error reporting
+ * - revise process to use templates
+ *   - makes use of material from SF patch 926925 by Glenn Powers
+ *
  * Revision 1.5  2004/04/16 22:18:25  maulani
  * - Add CSS2 Positioning
  *

@@ -16,9 +16,8 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-2.php,v 1.5 2004/04/16 22:18:25 maulani Exp $
+ * $Id: import-companies-2.php,v 1.6 2004/04/19 14:21:53 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -37,6 +36,8 @@ $industry_id = $_POST['industry_id'];
 $account_status_id = $_POST['account_status_id'];
 $rating_id = $_POST['rating_id'];
 $category_id = $_POST['category_id'];
+$file_format=$_POST['file_format'];
+$template='import-template-' . $file_format . '.php';
 
 move_uploaded_file($_FILES['file1']['tmp_name'], $tmp_upload_directory . 'companies-to-import.txt');
 
@@ -51,6 +52,7 @@ echo <<<TILLEND
         <td class=lcol width=65% valign=top>
 
         <form action="import-companies-3.php" method="post">
+        <input type=hidden name=file_format value="$file_format">
         <input type=hidden name=delimiter value="$delimiter">
         <input type=hidden name=user_id value="$user_id">
         <input type=hidden name=category_id value="$category_id">
@@ -181,64 +183,7 @@ foreach ($filearray as $row) {
 
     //assign array values to variables
 
-    //company info
-    $company_name        = $row['company_name'];
-    $legal_name          = $row['legal_name'];
-    $division_name       = $row['division_name'];
-    $company_website     = $row['website'];
-    $company_taxid       = $row['tax_id'];
-    $extref1             = $row['extref1'];
-    $extref2             = $row['extref2'];
-    $extref3             = $row['extref3'];
-    $company_custom1     = $row['company_custom1'];
-    $company_custom2     = $row['company_custom2'];
-    $company_custom3     = $row['company_custom3'];
-    $company_custom4     = $row['company_custom4'];
-    $employees           = $row['employees'];
-    $revenue             = $row['revenue'];
-    $credit_limit        = $row['credit_limit'];
-    $terms               = $row['terms'];
-    $company_profile     = $row['company_profile'];
-    $company_code        = $row['company_code'];
-    $company_phone       = $row['phone'];
-    $company_phone2      = $row['phone2'];
-    $company_fax         = $row['fax'];
-
-    //contact info
-    $contact_first_names   = $row['first_name'];
-    $contact_last_name     = $row['last_name'];
-    $contact_email         = htmlspecialchars($row['email']);
-    $contact_work_phone    = $row['work_phone'];
-    $contact_home_phone    = $row['home_phone'];
-    $contact_fax           = $row['fax'];
-    $contact_division      = $row['division'];
-    $contact_salutation    = $row['salutation'];
-    $contact_date_of_birth = $row['date_of_birth'];
-    $contact_summary       = $row['summary'];
-    $contact_title         = $row['title'];
-    $contact_description   = $row['description'];
-    $contact_cell_phone    = $row['cell_phone'];
-    $contact_aol           = $row['aol'];
-    $contact_yahoo         = $row['yahoo'];
-    $contact_msn           = $row['msn'];
-    $contact_interests     = $row['interests'];
-    $contact_custom1       = $row['contact_custom1'];
-    $contact_custom2       = $row['contact_custom2'];
-    $contact_custom3       = $row['contact_custom3'];
-    $contact_custom4       = $row['contact_custom4'];
-    $contact_profile       = $row['contact_profile'];
-
-    //address info
-    $address_name               = $row['address_name'];
-    $address_line1              = $row['line1'];
-    $address_line2              = $row['line2'];
-    $address_city               = $row['city'];
-    $address_state              = $row['state'];
-    $address_postal_code        = $row['postal_code'];
-    $address_country            = $row['country'];
-    $address_body               = $row['address_body'];
-    $address_use_pretty_address = $row['use_pretty_address'];
-
+    require($template);
 
     // does this company exist,
     $company_id  = fetch_company_id($con, $company_name);
@@ -352,6 +297,12 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.6  2004/04/19 14:21:53  braverock
+ * - add additional look-ups and tests on import
+ * - improve error reporting
+ * - revise process to use templates
+ *   - makes use of material from SF patch 926925 by Glenn Powers
+ *
  * Revision 1.5  2004/04/16 22:18:25  maulani
  * - Add CSS2 Positioning
  *

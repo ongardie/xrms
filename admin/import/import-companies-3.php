@@ -17,12 +17,13 @@
  * into the database.  This is where the final data validation is done,
  * and data is compared against existing data.
  *
- * @author Chris Woofter
  * @author Brian Peterson
+ * @author Chris Woofter
  *
- * @todo could better accomodate microsoft Outlook by looking for outlook field names
+ * @todo put more feedback into the company import process
+ * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.14 2004/04/16 22:18:25 maulani Exp $
+ * $Id: import-companies-3.php,v 1.15 2004/04/19 14:21:54 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -42,6 +43,8 @@ $industry_id = $_POST['industry_id'];
 $account_status_id = $_POST['account_status_id'];
 $rating_id = $_POST['rating_id'];
 $category_id = $_POST['category_id'];
+$file_format=$_POST['file_format'];
+$template='import-template-' . $file_format . '.php';
 
 $pointer = (strlen($_POST['pointer']) > 0) ? $_POST['pointer'] : 0;
 
@@ -189,65 +192,7 @@ foreach ($filearray as $row) {
 
 
     //assign array values to variables
-
-    //company info
-    $company_name        = $row['company_name'];
-    $legal_name          = $row['legal_name'];
-    $division_name       = $row['division_name'];
-    $company_website     = $row['website'];
-    $company_taxid       = $row['tax_id'];
-    $extref1             = $row['extref1'];
-    $extref2             = $row['extref2'];
-    $extref3             = $row['extref3'];
-    $company_custom1     = $row['company_custom1'];
-    $company_custom2     = $row['company_custom2'];
-    $company_custom3     = $row['company_custom3'];
-    $company_custom4     = $row['company_custom4'];
-    $employees           = $row['employees'];
-    $revenue             = $row['revenue'];
-    $credit_limit        = $row['credit_limit'];
-    $terms               = $row['terms'];
-    $company_profile     = $row['company_profile'];
-    $company_code        = $row['company_code'];
-    $company_phone       = $row['phone'];
-    $company_phone2      = $row['phone2'];
-    $company_fax         = $row['fax'];
-
-    //contact info
-    $contact_first_names   = $row['first_name'];
-    $contact_last_name     = $row['last_name'];
-    $contact_email         = htmlspecialchars($row['email']);
-    $contact_work_phone    = $row['work_phone'];
-    $contact_home_phone    = $row['home_phone'];
-    $contact_fax           = $row['fax'];
-    $contact_division      = $row['division'];
-    $contact_salutation    = $row['salutation'];
-    $contact_date_of_birth = $row['date_of_birth'];
-    $contact_summary       = $row['summary'];
-    $contact_title         = $row['title'];
-    $contact_description   = $row['description'];
-    $contact_cell_phone    = $row['cell_phone'];
-    $contact_aol           = $row['aol'];
-    $contact_yahoo         = $row['yahoo'];
-    $contact_msn           = $row['msn'];
-    $contact_interests     = $row['interests'];
-    $contact_custom1       = $row['contact_custom1'];
-    $contact_custom2       = $row['contact_custom2'];
-    $contact_custom3       = $row['contact_custom3'];
-    $contact_custom4       = $row['contact_custom4'];
-    $contact_profile       = $row['contact_profile'];
-
-    //address info
-    $address_name               = $row['address_name'];
-    $address_line1              = $row['line1'];
-    $address_line2              = $row['line2'];
-    $address_city               = $row['city'];
-    $address_state              = $row['state'];
-    $address_postal_code        = $row['postal_code'];
-    $address_country            = $row['country'];
-    $address_body               = $row['address_body'];
-    $address_use_pretty_address = $row['use_pretty_address'];
-
+    require($template);
 
     // does this company exist,
     $company_id  = fetch_company_id($con, $company_name);
@@ -377,6 +322,20 @@ foreach ($filearray as $row) {
         }
 
         $con->execute($sql_insert_company);
+        $error='';
+        $error = $con->ErrorMsg();
+        // figure out where to print this out.
+        if ($error) {
+            echo "<tr><td class=widget_error colspan=54>"
+                 ."<br> Unable to insert/update Company $company_name."
+                 ."Please correct this error.<br>"
+                 . htmlspecialchars($error)
+                 ."<br> I tried to execute: <br>"
+                 . htmlspecialchars ($create_instrument)
+                 ."</td></tr></table>";
+            //now skip to the next record
+            continue;
+        }
 
         //create the company code if this is a new company
         if (!$company_id) {
@@ -421,6 +380,26 @@ foreach ($filearray as $row) {
                 //should probably echo here to indicate that we didn't import this address
             }
             if (!$address_id and $company_id) {
+                //figure out a country, because country seems to be required as well
+                if ($address_country) {
+                    if !is_numeric($address_country)){
+                        $country_sql = "select country_name, country_id from countries
+                            where country_record_status = 'a' and
+                            country name like "
+                            . $con->qstr('%' .$address_country.'%', get_magic_quotes_gpc())
+                            " limit 1";
+                        $addrrst = $con->execute($sql);
+                        if ($addrrst){
+                            $address_country = $addrrst->fields('country_id');
+                            $addrrst->close();
+                        } else {
+                            $address_country = $default_country_id;
+                        }
+                    }
+                } else {
+                    $address_country = $default_country_id;
+                }
+
                 //insert the new address
                 $sql_insert_address = "insert into addresses set
                                    company_id    = $company_id,
@@ -429,10 +408,10 @@ foreach ($filearray as $row) {
                                    line2         = '. $con->qstr($address_line2, get_magic_quotes_gpc()) .',
                                    city          = '. $con->qstr($address_city, get_magic_quotes_gpc()) . ',
                                    province      = '. $con->qstr($address_state, get_magic_quotes_gpc()) . ',
-                                   country_id         = '. $con->qstr($address_country, get_magic_quotes_gpc()) . ',
                                    address_body       = '. $con->qstr($address_body, get_magic_quotes_gpc()) . ',
                                    use_pretty_address = '. $con->qstr($address_use_pretty_address, get_magic_quotes_gpc()) . ',
-                                   postal_code   = '. $con->qstr($address_postal_code, get_magic_quotes_gpc());
+                                   postal_code   = '. $con->qstr($address_postal_code, get_magic_quotes_gpc()) .'
+                                   country_id = '. $con->qstr($address_country, get_magic_quotes_gpc());
                 $con->execute($sql_insert_address);
                 $address_id = $con->insert_id();
             }
@@ -558,6 +537,8 @@ foreach ($filearray as $row) {
 
         //set the category if we got one
         if ($category_id) {
+            //should add an is_numeric check and other logic here
+
             $sql_insert_category_into_the_companies = "insert into entity_category_map set
                                                         category_id = $category_id,
                                                         on_what_table = 'companies',
@@ -565,7 +546,7 @@ foreach ($filearray as $row) {
             $con->execute($sql_insert_category_into_the_companies);
         }
 
-    } //end check for company_name
+    } // end company_name insert/update check
 
 
     //now show the row
@@ -669,6 +650,12 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.15  2004/04/19 14:21:54  braverock
+ * - add additional look-ups and tests on import
+ * - improve error reporting
+ * - revise process to use templates
+ *   - makes use of material from SF patch 926925 by Glenn Powers
+ *
  * Revision 1.14  2004/04/16 22:18:25  maulani
  * - Add CSS2 Positioning
  *
