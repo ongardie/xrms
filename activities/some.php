@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.18 2004/06/12 18:15:59 braverock Exp $
+ * $Id: some.php,v 1.19 2004/06/13 09:15:07 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -139,7 +139,7 @@ if (strlen($company) > 0) {
 
 if (strlen($user_id) > 0) {
     $criteria_count++;
-    $sql .= " and a.entered_by like " . $con->qstr('%' . $user_id . '%', get_magic_quotes_gpc());
+    $sql .= " and a.user_id = $user_id ";
 }
 
 if (strlen($activity_type_id) > 0) {
@@ -374,6 +374,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.19  2004/06/13 09:15:07  braverock
+ * - add Save & Next functionality
+ *   - code contributed by Neil Roberts
+ *
  * Revision 1.18  2004/06/12 18:15:59  braverock
  * - fix DBTimestamp errors after upgrade
  * - remove CAST, as it is not standard across databases

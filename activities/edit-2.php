@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.16 2004/06/12 15:43:51 braverock Exp $
+ * $Id: edit-2.php,v 1.17 2004/06/13 09:15:07 braverock Exp $
  */
 
 //include required files
@@ -32,6 +32,7 @@ $activity_status = $_POST['activity_status'];
 $current_activity_status = $_POST['current_activity_status'];
 $user_id    = $_POST['user_id'];
 $followup   = $_POST['followup'];
+$saveandnext = $_POST['saveandnext'];
 $on_what_table = $_POST['on_what_table'];
 $on_what_id = $_POST['on_what_id'];
 $company_id = $_POST['company_id'];
@@ -39,6 +40,9 @@ $email_to = $_POST['email_to'];
 $table_name = $_POST['table_name'];
 $table_status_id = $_POST['table_status_id'];
 $probability = $_POST['probability'];
+$current_activity_type_id = $_POST['current_activity_type_id'];
+$pos = $_POST['pos'];
+$current_on_what_table = $_POST['current_on_what_table'];
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -88,12 +92,21 @@ $upd = $con->GetUpdateSQL($rst, $rec, $forceUpdate=false, $magicq=get_magic_quot
 $rst = $con->execute($upd);
 
 if($on_what_table == 'opportunities' and strlen ($probability)) {
+    //Need old probability to see if pos should actually move
+    $sql = "select probability
+        from opportunities
+        where opportunity_id = $on_what_id";
+    $prob_rst = $con->execute($sql);
+    $old_probability = $prob_rst->fields['probability'];
+    $prob_rst->close();
+
     $sql = "update opportunities set
         probability = $probability
         where opportunity_id = $on_what_id";
 
     $prob_rst= $con->execute($sql);
     if (!$prob_rst) { db_error_handler ($con, $sql); }
+    $prob_rst->close();
 }
 
 add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
@@ -247,12 +260,20 @@ if ($email_to) {
 
 if ($followup) {
     header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( 'Follow-up ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&return_url=$return_url&followup=true" );
+} elseif($saveandnext) {
+    $pos++;
+    header("Location: browse-next.php?current_on_what_table=" . $current_on_what_table 
+        . "&current_activity_type_id=" . $current_activity_type_id . "&pos=" . $pos);
 } else {
     header("Location: " . $http_site_root . $return_url);
 }
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.17  2004/06/13 09:15:07  braverock
+ * - add Save & Next functionality
+ *   - code contributed by Neil Roberts
+ *
  * Revision 1.16  2004/06/12 15:43:51  braverock
  * - changed all timestamps to work properly with ADODB getinsertsql/getupdatesql
  *

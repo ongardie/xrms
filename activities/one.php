@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.23 2004/06/11 21:20:11 introspectshun Exp $
+ * $Id: one.php,v 1.24 2004/06/13 09:15:07 braverock Exp $
  */
 
 //include required files
@@ -20,6 +20,7 @@ require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 $msg = $_GET['msg'];
 $activity_id = $_GET['activity_id'];
 $return_url = $_GET['return_url'];
+$pos = $_GET['pos'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -36,6 +37,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $activity_type_id = $rst->fields['activity_type_id'];
+    $current_activity_type_id = $rst->fields['activity_type_id'];
     $activity_title = $rst->fields['activity_title'];
     $activity_description = $rst->fields['activity_description'];
     $user_id = $rst->fields['user_id'];
@@ -43,11 +45,14 @@ if ($rst) {
     $company_name = $rst->fields['company_name'];
     $contact_id = $rst->fields['contact_id'];
     $on_what_table = $rst->fields['on_what_table'];
+    $current_on_what_table = $rst->fields['on_what_table'];
     $on_what_id = $rst->fields['on_what_id'];
     $scheduled_at = date('Y-m-d H:i:s', strtotime($rst->fields['scheduled_at']));
     $ends_at = date('Y-m-d H:i:s', strtotime($rst->fields['ends_at']));
     $activity_status = $rst->fields['activity_status'];
     $rst->close();
+} else {
+    db_error_handler($con, $sql);
 }
 
 if($on_what_table == 'opportunities') {
@@ -193,11 +198,15 @@ start_page($page_title, true, $msg);
         <form action=edit-2.php method=post>
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
         <input type=hidden name=current_activity_status value="<?php  echo $activity_status; ?>">
+        <input type=hidden name=activity_status value="<?php  echo $activity_status; ?>">
         <input type=hidden name=activity_id value="<?php  echo $activity_id; ?>">
         <input type=hidden name=company_id value="<?php  echo $company_id; ?>">
         <input type=hidden name=on_what_table value="<?php  echo $on_what_table; ?>">
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
         <input type=hidden name=table_name value="<?php echo $table_name ?>">
+        <input type=hidden name=current_activity_type_id value="<?php echo $activity_type_id; ?>">
+        <input type=hidden name=pos value="<?php echo $pos; ?>">
+        <input type=hidden name=current_on_what_table value="<?php echo $on_what_table; ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -293,6 +302,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <input class=button type=submit name="save" value="Save Changes">
+                    <input class=button type=submit name="saveandnext" value="Save and Next">
                     <input class=button type=submit name="followup" value="Schedule Followup">
                     <input type=button class=button onclick="javascript: location.href='delete.php?activity_id=<?php echo $activity_id; ?>&return_url=<?php echo urlencode($return_url); ?>';" value='Delete Activity' onclick="javascript: return confirm('Delete Activity?');">
                 </td>
@@ -343,6 +353,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.24  2004/06/13 09:15:07  braverock
+ * - add Save & Next functionality
+ *   - code contributed by Neil Roberts
+ *
  * Revision 1.23  2004/06/11 21:20:11  introspectshun
  * - Now use ADODB Concat and Date functions.
  *
