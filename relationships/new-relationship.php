@@ -37,10 +37,15 @@ else {
     $opposite_direction = "from";
 }
 
-$working_table = $rst->fields[$working_direction . '_what_table'];
-$what_table = $rst->fields[$opposite_direction . '_what_table'];
-$what_table_singular = make_singular($what_table);
-$display_name = ucfirst($what_table_singular);
+if($working_direction == "both") {
+    $working_table = $rst->fields['from_what_table'];
+    $what_table = false;
+}
+else {
+    $working_table = $rst->fields[$working_direction . '_what_table'];
+    $what_table = $rst->fields[$opposite_direction . '_what_table'];
+}
+$display_name = ucfirst(make_singular($working_table));
 
 if($working_table == "companies" and $what_table == "contacts") {
     $sql = "SELECT 'Enter other contact' AS name,
@@ -58,6 +63,25 @@ if($working_table == "companies" and $what_table == "contacts") {
     
     $contact_menu = $rst->getmenu2('possible_id', ' ', false);
 
+}
+elseif($working_table == "contacts" and $working_direction == "both") {
+    $sql = "SELECT 'Enter other contact' AS name,
+            0 AS contact_id
+            UNION
+            (SELECT " .
+            $con->Concat("c2.first_names", "' '", "c2.last_name") . " AS name,
+            c2.contact_id
+            FROM contacts c, contacts c2
+            WHERE c.contact_id=" . $on_what_id . "
+            AND c2.contact_id!=" . $on_what_id . "
+            AND c.company_id=c2.company_id
+            AND c2.contact_record_status='a'
+            ORDER BY c2.last_name, c2.first_names)";
+            
+    $rst = $con->execute($sql);
+    
+    $contact_menu = $rst->getmenu2('possible_id', ' ', false);
+    
 }
 
 $con->close();
@@ -85,7 +109,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content_form_element>
                     <?php
-                        if($working_table == "companies") {
+                        if($contact_menu) {
                             echo $contact_menu;
                         }
                     ?>
@@ -114,6 +138,9 @@ end_page();
 
 /**
  * $Log: new-relationship.php,v $
+ * Revision 1.6  2004/07/30 15:03:50  neildogg
+ * - Cleaned up code and gave contact menu to contacts/both
+ *
  * Revision 1.5  2004/07/28 17:59:39  neildogg
  * - Added drop down box if added a contact to a company
  *
