@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.70 2004/12/27 15:57:21 braverock Exp $
+ * $Id: one.php,v 1.71 2004/12/30 00:13:16 maulani Exp $
  */
 
 //include required files
@@ -47,6 +47,7 @@ if ($rst) {
     $activity_title = $rst->fields['activity_title'];
     $activity_description = $rst->fields['activity_description'];
     $user_id = $rst->fields['user_id'];
+    $entered_by = $rst->fields['entered_by'];
     $company_id = $rst->fields['company_id'];
     $company_name = $rst->fields['company_name'];
     $contact_id = $rst->fields['contact_id'];
@@ -104,6 +105,22 @@ $rst = $con->execute($sql);
 //There is a blank user here ON PURPOSE.
 $user_menu = $rst->getmenu2('user_id', $user_id, true);
 $rst->close();
+
+//get user info for who entered the activity
+$sql = "select first_names, last_name from users where user_id = $entered_by";
+$rst = $con->execute($sql);
+if ($rst) {
+    $entered_by_firstname = $rst->fields['first_names'];
+    $entered_by_lastname = $rst->fields['last_name'];
+    if ($entered_by_lastname != '') {
+         $entered_by_text = 'Entered by ' . $entered_by_firstname . ' ' . $entered_by_lastname;
+    } else {
+         $entered_by_text = '';
+    }
+    $rst->close();
+} else {
+    db_error_handler($con, $sql);
+}
 
 //get activity type menu
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
@@ -352,7 +369,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("User"); ?></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?> <?php  echo $entered_by_text; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Activity Notes"); ?></td>
@@ -469,6 +486,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.71  2004/12/30 00:13:16  maulani
+ * - Display Entered by User data in addition to assigned user
+ *
  * Revision 1.70  2004/12/27 15:57:21  braverock
  * - localize "Switch Opportunity"
  *
