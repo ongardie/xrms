@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.25 2004/06/26 15:17:14 braverock Exp $
+ * $Id: some.php,v 1.26 2004/07/02 15:22:44 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -118,7 +118,7 @@ require_once("browse-sidebar.php");
 
 $sql = "SELECT
   (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS is_overdue,"
-  . $con->Concat("'<a href=\"one.php?activity_id='", "activity_id", "'&return_url=/activities/some.php\">'", "activity_title", "'</a>'")
+  . $con->Concat("'<a href=\"one.php?activity_id='", "activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
   . " AS 'Title',
   at.activity_type_pretty_name AS 'Type'," .
   $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "CAST(cont.contact_id AS CHAR)", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
@@ -277,12 +277,12 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5>Search Criteria</td>
+                <td class=widget_header colspan=4>Search Criteria</td>
             </tr>
         <tr>
             <td colspan="2" class=widget_label>Title</td>
-            <td width="22%" class=widget_label>Contact</td>
-            <td width="26%" class=widget_label>Company</td>
+            <td class=widget_label>Contact</td>
+            <td class=widget_label>Company</td>
         </tr>
         <tr>
             <td colspan="2" class=widget_content_form_element> <input type=text name="title" size=24 value="<?php  echo $title; ?>">
@@ -293,27 +293,27 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td width="18%" class=widget_label>Owner</td>
-            <td width="34%" class=widget_label>End/Due Date</td>
+            <td class=widget_label>Owner</td>
+            <td class=widget_label>End/Due Date</td>
             <td class=widget_label>Type</td>
-            <td colspan=2 class=widget_label>Completed</td>
+            <td class=widget_label>Completed</td>
         </tr>
         <tr>
-            <td width="18%" class=widget_content_form_element>
+            <td class=widget_content_form_element>
                 <?php  echo $user_menu; ?>
             </td>
-            <td width="34%" class=widget_content_form_element>
+            <td class=widget_content_form_element>
                 <select name="before_after">
                     <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
                     <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
                 </select>
                 <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
-                <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
+                <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif" alt="">
             </td>
-            <td width="22%" class=widget_content_form_element>
+            <td class=widget_content_form_element>
                 <?php  echo $type_menu; ?>
             </td>
-            <td colspan=2 class=widget_content_form_element>
+            <td class=widget_content_form_element>
                 <select name="completed">
                     <option value="all"<?php if ($completed == "all") { print " selected"; } ?>>All</option>
                     <option value="o"<?php if ($completed == "o" or !$completed) { print " selected"; } ?>>Non-Completed</option>
@@ -322,7 +322,7 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td class=widget_content_form_element colspan=5><input name="submit" type=submit class=button value="Search">
+            <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search">
                 <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
                 <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
             </td>
@@ -350,7 +350,6 @@ $con->close();
 </div>
 
 <script language="JavaScript" type="text/javascript">
-<!--
 
 function initialize() {
     document.forms[0].title.focus();
@@ -404,6 +403,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.26  2004/07/02 15:22:44  maulani
+ * - Fix formatting and HTML so page will validate
+ *
  * Revision 1.25  2004/06/26 15:17:14  braverock
  * - change search layout to two pages to improve CSS positioning
  *   - applied modified version of SF patch # 971474submitted by s-t
