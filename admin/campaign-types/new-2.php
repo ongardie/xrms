@@ -17,15 +17,14 @@ $campaign_type_display_html = $_POST['campaign_type_display_html'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM campaign_types WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['campaign_type_short_name'] = $campaign_type_short_name;
 $rec['campaign_type_pretty_name'] = $campaign_type_pretty_name;
 $rec['campaign_type_pretty_plural'] = $campaign_type_pretty_plural;
 $rec['campaign_type_display_html'] = $campaign_type_display_html;
 
+$tbl = "campaign_types";
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 

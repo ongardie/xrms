@@ -21,9 +21,7 @@ $activity_type_score_adjustment = ($activity_type_score_adjustment > 0) ? $activ
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM activity_types WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['activity_type_short_name'] = $activity_type_short_name;
 $rec['activity_type_pretty_name'] = $activity_type_pretty_name;
@@ -31,7 +29,8 @@ $rec['activity_type_pretty_plural'] = $activity_type_pretty_plural;
 $rec['activity_type_display_html'] = $activity_type_display_html;
 $rec['activity_type_score_adjustment'] = $activity_type_score_adjustment;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = "activity_types";
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();

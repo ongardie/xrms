@@ -2,7 +2,7 @@
 /**
  * Insert a new Case Priority into the database
  *
- * $Id: add-2.php,v 1.3 2004/06/14 21:17:06 introspectshun Exp $
+ * $Id: add-2.php,v 1.4 2004/07/15 21:21:36 introspectshun Exp $
  */
 
 //include required files
@@ -28,9 +28,7 @@ $case_priority_score_adjustment = ($case_priority_score_adjustment > 0) ? $case_
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM case_priorities WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['case_priority_short_name'] = $case_priority_short_name;
 $rec['case_priority_pretty_name'] = $case_priority_pretty_name;
@@ -38,7 +36,8 @@ $rec['case_priority_pretty_plural'] = $case_priority_pretty_plural;
 $rec['case_priority_display_html'] = $case_priority_display_html;
 $rec['case_priority_score_adjustment'] = $case_priority_score_adjustment;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = "case_priorities";
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
@@ -47,6 +46,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.4  2004/07/15 21:21:36  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.3  2004/06/14 21:17:06  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
