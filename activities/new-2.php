@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.7 2004/04/26 01:54:45 braverock Exp $
+ * $Id: new-2.php,v 1.8 2004/04/27 15:17:08 gpowers Exp $
  */
 
 //where do we include from
@@ -38,6 +38,7 @@ getGlobalVar($activity_title , 'activity_title');
 getGlobalVar($activity_description , 'activity_description');
 getGlobalVar($activity_status , 'activity_status');
 getGlobalVar($scheduled_at , 'scheduled_at');
+getGlobalVar($ends_at , 'ends_at');
 getGlobalVar($company_id , 'company_id');
 getGlobalVar($contact_id , 'contact_id');
 getGlobalVar($user_id    , 'user_id');
@@ -53,14 +54,17 @@ $on_what_id = ($on_what_id > 0) ? $on_what_id : 0;
 $company_id = ($company_id > 0) ? $company_id : 0;
 $contact_id = ($contact_id > 0) ? $contact_id : 0;
 
+if (!$scheduled_at) {
+    $scheduled_at = $con->dbtimestamp(mktime());
+}
+
+if (!$ends_at) {
+    $ends_at = $scheduled_at;
+}
+
 //make our database connection
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-//munge the scheduled time into a time that we can use
-$scheduled_at = (strlen($scheduled_at) > 0) ? $con->dbtimestamp($scheduled_at . ' 23:59:59') : $con->dbtimestamp(mktime());
-$ends_at = $scheduled_at;
-
 //$con->debug = 1;
 
 // define our query
@@ -76,14 +80,15 @@ $sql = "insert into activities
         activity_title = '. $con->qstr($activity_title, get_magic_quotes_gpc()) . ',
         activity_description = '. $con->qstr($activity_note, get_magic_quotes_gpc()) . ',
         entered_at = '. $con->dbtimestamp(mktime()) .',
-        scheduled_at = '. $scheduled_at . ',
-        ends_at = '. $ends_at . ',
+        scheduled_at = ' . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($scheduled_at))) . ',
+        ends_at = ' . $con->dbtimestamp(date ('Y-m-d H:i:s', strtotime($ends_at))) . ',
         activity_status = ' . $con->qstr($activity_status, get_magic_quotes_gpc());
 
 //insert it aready
 $con->execute($sql);
 
 $activity_id = $con->insert_id();
+add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id);
 
 //close the connection
 $con->close();
@@ -102,6 +107,11 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.8  2004/04/27 15:17:08  gpowers
+ *added support for activity times
+ *added support passing ends_at (defaults to scheduled_at)
+ *added audit item
+ *
  *Revision 1.7  2004/04/26 01:54:45  braverock
  *add ability to schedule a followup activity based on the current activity
  *
