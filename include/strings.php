@@ -31,5 +31,6 @@ $s = _("Contacts");
 $s = _("Companies");
 $s = _("No attached contacts");
 $s = _("No attached companies");
+$s = _("companies/contacts");
 
 ?>
