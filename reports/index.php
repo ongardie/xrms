@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.10 2004/06/05 16:03:39 braverock Exp $
+ * $Id: index.php,v 1.11 2004/06/07 16:39:53 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -33,10 +33,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td colspan=2 class=widget_header>Reports</td>
+                <td colspan=2 class=widget_header>Graphs</td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Company Reports</td>
+                <td colspan=2 class=widget_label_center>Company</td>
             </tr>
             <tr>
                 <td class=widget_content><a href="companies-by-crm-status.php">Companies by CRM Status</a></td>
@@ -51,11 +51,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content>How many of your accounts come from each source?</td>
             </tr>
             <tr>
-                <td class=widget_content><a href="company-contacts-printout.php">Contacts at Companies</a></td>
-                <td class=widget_content>Printable contact summary information for Companies in search Results.</td>
-            </tr>
-            <tr>
-                <td colspan=2 class=widget_label_center>Opportunity Reports</td>
+                <td colspan=2 class=widget_label_center>Opportunity</td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -76,11 +72,24 @@ start_page($page_title, true, $msg);
                 <td class=widget_content>How much potential revenue is tied to companies in each industry?</td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Case Reports</td>
+                <td colspan=2 class=widget_label_center>Case</td>
             </tr>
             <tr>
                 <td class=widget_content><a href="cases-by-case-status.php">Cases by Status</a></td>
                 <td class=widget_content>How many cases are in each stage of the case resolution process?</td>
+            </tr>
+        </table>
+
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td colspan=2 class=widget_header>Reports</td>
+            </tr>
+            <tr>
+                <td colspan=2 class=widget_label_center>Opportunity</td>
+            </tr>
+            <tr>
+                <td class=widget_content><a href="company-contacts-printout.php">Contacts at Companies</a></td>
+                <td class=widget_content>Printable contact summary information for Companies in search Results.</td>
             </tr>
             <tr>
                 <td colspan=2 class=widget_label_center>User Reports</td>
@@ -137,6 +146,11 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.11  2004/06/07 16:39:53  gpowers
+ * - Separated "Graphs" and "Reports"
+ * - Correctly labelled graphs as "Graphs"
+ *   (Users have reported being confused by the former label.)
+ *
  * Revision 1.10  2004/06/05 16:03:39  braverock
  * - fixed typo in link
  *
