@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.6 2004/05/17 16:12:30 braverock Exp $
+ * $Id: one.php,v 1.7 2004/06/03 16:28:23 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -157,6 +157,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/06/03 16:28:23  braverock
+ * - remove newline at end of file
+ *
  * Revision 1.6  2004/05/17 16:12:30  braverock
  * - applied patch to move $_GET after session_check
  *   - suggested to fix SF bug 955310 by Sergio Dominici (sirjo)
@@ -173,4 +176,3 @@ end_page();
  *
  */
 ?>
-
