@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.11 2004/07/21 21:00:33 neildogg Exp $
+ * $Id: sidebar.php,v 1.12 2004/07/27 20:22:48 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -25,28 +25,31 @@ $contact_block = '<table class=widget cellspacing=1 width="100%">
     </tr>'."\n";
 
 if ($contact_id) {
-    $sql = "select
-            first_names, last_name, work_phone, address_id, email, cell_phone
-            from contacts
-            where
-            contact_id=$contact_id";
+    $sql = "SELECT first_names, last_name, work_phone, address_id, email, cell_phone, company_id
+            FROM contacts
+            WHERE contact_id=$contact_id";
 
     $rst = $con->execute($sql);
+    
+    $sql = "SELECT default_primary_address
+            FROM companies
+            WHERE company_id=" . $rst->fields['company_id'];
+
+    $rst2 = $con->execute($sql);
+    
 }
 
 if ($rst && $rst->RecordCount()>=1) {
 
     $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
                     . '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
-                    . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a></td>\n\t</tr>"
-                    . "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . get_formatted_address ($con, $rst->fields['address_id'])
-                    . "</td>\n\t</tr>";
-
-    if ($rst->fields['work_phone']) {
-        $contact_block .= "<tr><td class=widget_content>" . _("Work Phone") . ": <strong>"
-                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
-                        . "</strong></td>\n\t</tr>";
+                    . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a><br>"
+                    . '<a href="../companies/one.php?company_id=' . $rst->fields['company_id'] . '">'
+                    . $rst->fields['company_name'] . "</a></td>\n\t</tr>";
+    if($rst->fields['address_id'] != $rst2->fields['default_primary_address']) {
+        $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+                        . get_formatted_address ($con, $rst->fields['address_id'])
+                        . "</td>\n\t</tr>";
     }
 
     if ($rst->fields['cell_phone']) {
@@ -72,6 +75,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.12  2004/07/27 20:22:48  neildogg
+ * - Stopped potentially repeating address
+ *
  * Revision 1.11  2004/07/21 21:00:33  neildogg
  * - Added get_formatted_phone
  *
