@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.23 2004/09/16 19:45:28 vanmer Exp $
+ * $Id: database.php,v 1.24 2004/12/31 18:08:03 braverock Exp $
  */
 
 /**
@@ -862,6 +862,8 @@ function case_db_tables($con, $table_list) {
                case_status_pretty_name     varchar(100) not null default '',
                case_status_pretty_plural   varchar(100) not null default '',
                case_status_display_html    varchar(100) not null default '',
+               case_status_long_desc       varchar(200) not null default '',
+               case_type_id                int not null default '1',
                case_status_record_status   char(1) not null default 'a'
                )";
         //execute
@@ -1042,6 +1044,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.24  2004/12/31 18:08:03  braverock
+ * - add case_type_id FK to case_statuses
+ * - add long_desc to case_statuses for consistency
+ *
  * Revision 1.23  2004/09/16 19:45:28  vanmer
  * -added KEY for province in definition of time_zone table
  * -fixes problem with forced key during address addition
