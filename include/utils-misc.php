@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.86 2004/08/16 16:06:11 neildogg Exp $
+ * $Id: utils-misc.php,v 1.87 2004/08/16 19:51:06 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -889,6 +889,7 @@ function update_daylight_savings($con) {
             $start_position = $rst->fields['start_position'];
             $start_day = $rst->fields['start_day'];
             $start_month = $rst->fields['start_month'];
+            $end_position = $rst->fields['end_position'];
             $end_day = $rst->fields['end_day'];
             $end_month = $rst->fields['end_month'];
             $hour_shift = $rst->fields['hour_shift'];
@@ -1266,6 +1267,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.87  2004/08/16 19:51:06  neildogg
+ * - Missing end_position definition
+ *
  * Revision 1.86  2004/08/16 16:06:11  neildogg
  * - Quotes city properly
  *
