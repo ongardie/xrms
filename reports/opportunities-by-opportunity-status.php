@@ -23,7 +23,10 @@ $total_opportunity_count = 0;
 
 while (!$rst1->EOF) {
 
-    $sql2 = "SELECT count(*) AS opportunity_count from opportunities where user_id = $session_user_id and opportunity_status_id = " . $rst1->fields['opportunity_status_id'] . " and opportunity_record_status = 'a'";
+    $sql2 = "SELECT count(*) AS opportunity_count 
+	from opportunities 
+	where opportunity_status_id = " . $rst1->fields['opportunity_status_id'] . " 
+	and opportunity_record_status = 'a'";
     $rst2 = $con->execute($sql2);
 
     if ($rst2) {
@@ -41,7 +44,7 @@ while (!$rst1->EOF) {
 
 }
 
-$graph_rows .= "g.addRow(" . implode(',', array_reverse($array_of_opportunity_count_values)) . ");\n";
+$graph_rows .= "g.addRow(" . implode(',', $array_of_opportunity_count_values) . ");\n";
 
 $rst1->close();
 $con->close();

@@ -26,7 +26,6 @@ while (!$rst1->EOF) {
 
     $sql2 = "select count(*) AS opportunity_count from opportunities, companies
     where opportunities.company_id = companies.company_id
-    and opportunities.user_id = $session_user_id
     and industry_id = " . $rst1->fields['industry_id'] . "
     and opportunity_record_status = 'a'";
     $rst2 = $con->execute($sql2);
@@ -46,7 +45,7 @@ while (!$rst1->EOF) {
 
 }
 
-$graph_rows .= "g.addRow(" . implode(',', array_reverse($array_of_opportunity_count_values)) . ");\n";
+$graph_rows .= "g.addRow(" . implode(',', $array_of_opportunity_count_values) . ");\n";
 
 $rst1->close();
 $con->close();

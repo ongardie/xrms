@@ -23,7 +23,9 @@ $total_company_count = 0;
 
 while (!$rst1->EOF) {
 
-    $sql2 = "SELECT count(*) AS company_count from companies where user_id = $session_user_id and crm_status_id = " . $rst1->fields['crm_status_id'];
+    $sql2 = "SELECT count(*) AS company_count 
+	from companies 
+	where crm_status_id = " . $rst1->fields['crm_status_id'];
     $rst2 = $con->execute($sql2);
 
     if ($rst2) {
@@ -41,7 +43,7 @@ while (!$rst1->EOF) {
 
 }
 
-$graph_rows .= "g.addRow(" . implode(',', /*array_reverse(*/$array_of_company_count_values/*)*/) . ");\n";
+$graph_rows .= "g.addRow(" . implode(',', $array_of_company_count_values) . ");\n";
 
 $rst1->close();
 $con->close();
