@@ -37,6 +37,6 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: one.php?activity_type_id=$activity_type_id");
+header("Location: some.php");
 
 ?>

@@ -37,6 +37,6 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: one.php?company_source_id=$company_source_id");
+header("Location: some.php");
 
 ?>

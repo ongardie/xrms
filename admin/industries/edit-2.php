@@ -31,6 +31,6 @@ $rec['industry_display_html'] = $industry_display_html;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
-header("Location: one.php?industry_id=$industry_id");
+header("Location: some.php");
 
 ?>
