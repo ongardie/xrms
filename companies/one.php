@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.36 2004/05/21 13:06:10 maulani Exp $
+ * $Id: one.php,v 1.37 2004/05/27 18:44:13 gpowers Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -227,7 +227,10 @@ if ($rst) {
         $linecounter +=1;
         $established_at = $con->userdate($rst->fields['established_at']);
         $relationship_rows .= ($linecounter == '1') ? '<tr><td class=sublabel>Relationship</td>' : '<tr><td class=sublabel>&nbsp;</td>';
-        $relationship_rows .= '<td class=clear>' . $rst->fields['relationship_type'] . ' ' . $rst->fields['company_name'] . ' ' . $established_at . '</td>';
+        $relationship_rows .= '<td class=clear>' . $rst->fields['relationship_type'] . ' '
+            . '<a href="one.php?company_id=' . $rst->fields['company_to_id']
+            . '">' . $rst->fields['company_name'] . '</a> '
+            . $established_at . '</td>';
         $relationship_rows .= '</tr>';
         $rst->movenext();
     }
@@ -626,6 +629,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.37  2004/05/27 18:44:13  gpowers
+ * Added a link to other companies in relationships
+ *
  * Revision 1.36  2004/05/21 13:06:10  maulani
  * - Create get_formatted_address function which centralizes the address
  *   formatting code into one routine in utils-misc.
