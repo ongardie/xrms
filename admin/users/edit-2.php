@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.10 2004/07/20 11:40:06 cpsource Exp $
+ * $Id: edit-2.php,v 1.11 2004/10/13 07:59:16 niclowe Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -52,11 +52,15 @@ $con->close();
 
 if ( $_SESSION['role_short_name'] == 'Admin' ) {
   header("Location: some.php");
-}
+}else{
 header("Location: self.php?msg=saved");
+}
 
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.11  2004/10/13 07:59:16  niclowe
+ *fixed bug  1003428
+ *
  *Revision 1.10  2004/07/20 11:40:06  cpsource
  *- Fixed multiple errors
  *   misc undefined variables being used, g....
