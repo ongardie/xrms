@@ -59,8 +59,15 @@ start_page($page_title, true, $msg);
                 <td class=widget_header colspan=2>Search for Contact/Company</td>
             </tr>
             <tr>
-                <td class=widget_label>Name or ID</td>
-                <td class=widget_content_form_element><input type=text size=40 name="search_on"> <?php  echo $required_indicator ?></td>
+                <td class=widget_label>Name or ID</td><td class=widget_label><?php if($working_direction == "to") echo "Last Name"; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="search_on"> <?php  echo $required_indicator ?>
+                <td class=widget_content_form_element>
+<?php if($working_direction == "to") { ?>
+<input type=text size=12 maxlength=100 name="search_on_last">
+<?php } ?>
+                </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="Search"></td>
@@ -84,6 +91,9 @@ end_page();
 
 /**
  * $Log: new-company.php,v $
+ * Revision 1.3  2004/07/07 21:19:38  neildogg
+ * -Added first/last name search
+ *
  * Revision 1.2  2004/07/05 22:13:27  introspectshun
  * - Include adodb-params.php
  *
