@@ -2,7 +2,7 @@
 /**
  * View the system parameters
  *
- * $Id: some.php,v 1.2 2004/07/14 16:46:03 maulani Exp $
+ * $Id: some.php,v 1.3 2004/12/30 19:04:20 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,7 +33,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Manage System Parameters";
+$page_title = _("Manage System Parameters");
 start_page($page_title);
 
 ?>
@@ -43,10 +43,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>System Parameters</td>
+                <td class=widget_header colspan=4><?php echo _("System Parameters"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Parameter</td>
+                <td class=widget_label><?php echo _("Parameter"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -61,12 +61,14 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.3  2004/12/30 19:04:20  braverock
+ * - localize strings
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.2  2004/07/14 16:46:03  maulani
  * - Fix URL encode bug
  *
  * Revision 1.1  2004/07/14 16:23:37  maulani
  * - Add administrator capability to modify system parameters
- *
- *
  */
 ?>

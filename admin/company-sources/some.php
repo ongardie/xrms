@@ -4,7 +4,7 @@
  *
  * List company sources
  *
- * $Id: some.php,v 1.6 2004/07/16 23:51:36 cpsource Exp $
+ * $Id: some.php,v 1.7 2004/12/30 19:01:18 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,7 +27,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?company_source_id=' . $rst->fields['company_source_id'] . '>' . $rst->fields['company_source_pretty_name'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href=one.php?company_source_id=' . $rst->fields['company_source_id'] . '>' . _($rst->fields['company_source_pretty_name']) . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -99,6 +99,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2004/12/30 19:01:18  braverock
+ * - localize strings
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.6  2004/07/16 23:51:36  cpsource
  * - require session_check ( 'Admin' )
  *
