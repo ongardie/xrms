@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.39 2004/06/04 13:46:00 braverock Exp $
+ * $Id: one.php,v 1.40 2004/06/04 14:30:13 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -183,7 +183,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $contact_rows .= '<tr>';
+        $contact_rows .= "\n<tr>";
         $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
                         . $rst->fields['contact_id'] . "'>"
                         . $rst->fields['last_name'] . ', ' . $rst->fields['first_names']
@@ -192,13 +192,16 @@ if ($rst) {
         $contact_rows .= '<td class=widget_content>' . $rst->fields['title'] . '</td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['description'] . '</td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['work_phone'] . '</td>';
-        $contact_rows .= "<td class=widget_content><a href='mailto:"
+        $contact_rows .= "\n\t<td class=widget_content><a href='mailto:"
                         . $rst->fields['email']
                         . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&contact_id=$contact_id&activity_title=email to "
                         . $rst->fields['first_names']. " " .$rst->fields['last_name']
-                        . "&company_id=$company_id&email=true&return_url=$http_site_root/companies/one.php?company_id=$company_id'\" >"
-                        . htmlspecialchars($rst->fields['email']). '</a></td>';
-        $contact_rows .= '</tr>';
+                        . "&company_id=$company_id&contact_id="
+                        . $rst->fields['contact_id']
+                        ."&email=true&return_url=$http_site_root/companies/one.php?company_id=$company_id'\" >"
+                        . htmlspecialchars($rst->fields['email'])
+                        . '</a></td>';
+        $contact_rows .= "\n</tr>";
         $rst->movenext();
     }
     $rst->close();
@@ -632,6 +635,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.40  2004/06/04 14:30:13  braverock
+ * - add contact_id field to mailto link
+ *
  * Revision 1.39  2004/06/04 13:46:00  braverock
  * - update email link to improve activity tracking
  *
