@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: data_clean.php,v 1.1 2004/04/07 20:16:21 maulani Exp $
+ * $Id: data_clean.php,v 1.2 2004/04/09 17:13:28 braverock Exp $
  */
 
 // where do we include from
@@ -36,6 +36,10 @@ $rst = $con->execute($sql);
 $sql = "update contacts set first_names='[first names]' where first_names=''";
 $rst = $con->execute($sql);
 
+// Make sure that the database has the correct legal_name column
+$sql = "alter table companies change company_legal_name legal_name varchar( 100 ) not mull";
+$rst = $con->execute($sql);
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -56,6 +60,10 @@ end_page();
 
 /**
  * $Log: data_clean.php,v $
+ * Revision 1.2  2004/04/09 17:13:28  braverock
+ * - added alter table command to change company_legal_name to legal_name
+ *   (only relevant for upgraded old installations)
+ *
  * Revision 1.1  2004/04/07 20:16:21  maulani
  * - Set of routines to cleanup common data problems
  *
