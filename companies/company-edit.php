@@ -14,6 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
@@ -82,6 +83,9 @@ end_page();
 
 /**
  * $Log: company-edit.php,v $
+ * Revision 1.2  2004/07/05 22:13:27  introspectshun
+ * - Include adodb-params.php
+ *
  * Revision 1.1  2004/07/01 19:48:10  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts
