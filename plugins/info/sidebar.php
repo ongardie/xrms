@@ -2,22 +2,17 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.8 2005/01/08 06:25:14 gpowers Exp $
+ * $Id: sidebar.php,v 1.9 2005/01/08 21:43:06 gpowers Exp $
  */
 
 // $con->debug = 1;
 
 global $display_on;
 
-// exit if no $display_on
-if (!$display_on) {
-    return;
-}
-
 // Set imbedded
 if ($display_on != "company_accounting") {
     $company_accounting = 1;
-};
+}
 
 $sql = "SELECT info_types.info_type_id, info_types.info_type_name FROM info_types, info_display_map ";
 $sql .= "WHERE info_types.info_type_record_status = 'a' ";
