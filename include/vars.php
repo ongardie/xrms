@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.23 2004/07/13 18:08:52 cpsource Exp $
+ * $Id: vars.php,v 1.24 2004/07/13 18:14:19 neildogg Exp $
  */
 
 /**
@@ -92,6 +92,9 @@ $default_country_id = 218;
 
 // replace this with your organization's name
 $system_company_name = 'XRMS';
+
+// replace this with the xrms company id
+$my_company_id = 3621;
 
 // so that order numbers can be continuous with whatever you're using now
 $order_number_seed = 1000;
