@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.81 2005/01/07 14:20:54 neildogg Exp $
+ * $Id: some.php,v 1.82 2005/01/07 15:55:56 braverock Exp $
  */
 
 // handle includes
@@ -220,10 +220,20 @@ if (strlen($company_id)) {
 
 if (strlen($user_id) > 0) {
     $criteria_count++;
-    if($user_id == 'no') {
+    if($user_id == '-2') {
+        //Not Set
+        $sql .= " and a.user_id = 0";
+    }
+    elseif($user_id == '-1') {
+        //Current User
+        $sql .= " and a.user_id = $session_user_id ";
+    }
+    elseif($user_id == 'no') {
+        //Not Set
         $sql .= " and a.user_id = 0";
     }
     elseif($user_id == 'cu') {
+        //Current User
         $sql .= " and a.user_id = $session_user_id ";
     }
     else {
@@ -340,10 +350,14 @@ if($advanced_search) {
     }
 }
 
+if (!isset($user_id)) {
+   $user_id=$session_user_id;
+}
+
 //get menu for users
-$sql2 = "(SELECT " . $con->qstr(_("Current User"),get_magic_quotes_gpc()) . ", 'cu')"
+$sql2 = "(SELECT " . $con->qstr(_("Current User"),get_magic_quotes_gpc()) . ", '-1')"
        . " UNION (select username, user_id from users where user_record_status = 'a' order by username)"
-       . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", 'no')";
+       . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", '-2')";
 $rst = $con->execute($sql2);
 if (!$rst) {
     db_error_handler($con, $sql);
@@ -684,6 +698,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.82  2005/01/07 15:55:56  braverock
+ * - convert search params for UNION to string, int types
+ *   enhances SQL portability across databases that require compatible types
+ * - added check for old strings to not break saved searches
+ *
  * Revision 1.81  2005/01/07 14:20:54  neildogg
  * - Saved search was being incorrectly called, moved restrictions to deletion only
  *
