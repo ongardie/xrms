@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.19 2004/06/03 16:31:05 gpowers Exp $
+ * $Id: one.php,v 1.20 2004/06/03 17:29:04 gpowers Exp $
  */
 
 //include required files
@@ -253,11 +253,10 @@ start_page($page_title, true, $msg);
 
     <!-- right column //-->
     <div id="Sidebar">
-        <!-- contact information block //-->
-        <?php echo $contact_block; ?>
-
         <!-- company information block //-->
         <?php echo $company_block; ?>
+        <!-- contact information block //-->
+        <?php echo $contact_block; ?>
     </div>
 
 </div>
@@ -286,6 +285,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.20  2004/06/03 17:29:04  gpowers
+ * changed the order of the sidebars(contact,company) to match the order in
+ * the form to the left (company,contact)
+ *
  * Revision 1.19  2004/06/03 16:31:05  gpowers
  * my bad. they exist now.
  *
