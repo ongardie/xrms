@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.1 2005/01/13 17:08:20 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.2 2005/01/25 05:28:20 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -41,6 +41,7 @@ Class ACLTest extends PHPUnit_TestCase {
         $this->controlled_objectTable="blah";
         $this->controlled_objectField="blah";
         $this->controlled_objectDataSource=1;
+        $this->data_sourceName="blah";
     }
  
 
@@ -58,7 +59,7 @@ Class ACLTest extends PHPUnit_TestCase {
        $this->controlled_objectTable=NULL;
        $this->controlled_objectField=NULL;
        $this->controlled_objectDataSource=NULL;
-       
+       $this->data_sourceName=NULL;
     }
     
    function test_add_role($name=false) {
@@ -84,12 +85,37 @@ Class ACLTest extends PHPUnit_TestCase {
        $this->assertTrue($result,"Delete of role $role: $roleid should succeed");
     }
 
-   function test_add_controlled_object($name=false, $table=false, $field=false, $data_source=false) {
+      function test_add_data_source($name=false) {
+        if (!$name) { $name = $this->data_sourceName; }
+       $result = $this->acl->add_data_source( $name);
+       $this->assertTrue($result!==false, "data_source addition failed");
+        return $result;
+    }
+
+    function test_get_data_source($data_source=false) {
+        if (!$data_source) { $data_source=$this->data_sourceName; }
+       $result = $this->acl->get_data_source($data_source);
+       $this->assertTrue($result!==false, "data_source locate failed");
+       $this->assertTrue(is_array($result),"data_source returned is not an array.");
+       return $result;
+   } 
+
+   function test_delete_data_source($data_source=false) {
+        if (!$data_source) { $data_source=$this->data_sourceName; }
+       $result = $this->test_get_data_source($data_source);
+       $data_sourceid= $result['data_source_id'];
+       $result=$this->acl->delete_data_source($data_sourceid);
+       $this->assertTrue($result,"Delete of data_source $data_source: $data_sourceid should succeed");
+    }
+
+    
+   
+   function test_add_controlled_object($name=false, $table=false, $field=false, $user_field=false $data_source=false) {
        if (!$name) { $name = $this->controlled_objectName; }
        if (!$table) { $table = $this->controlled_objectTable; }
        if (!$field) { $field = $this->controlled_objectField; }
        if (!$data_source) { $data_source = $this->controlled_objectDataSource; }
-       $result = $this->acl->add_controlled_object( $name,$table,$field, $data_source);
+       $result = $this->acl->add_controlled_object( $name,$table,$field, $user_field, $data_source);
        $this->assertTrue($result!==false, "ControlledObject addition of $name failed");
        return $result;
     }
@@ -505,10 +531,10 @@ Class ACLTest extends PHPUnit_TestCase {
         $on_what_parent_id=4;
         $on_what_child_id = 3;
 
-        $controlled_objectresult1 = $this->test_add_controlled_object($ControlledObject1,$table1,$field1,$data_source1);
+        $controlled_objectresult1 = $this->test_add_controlled_object($ControlledObject1,$table1,$field1,false, $data_source1);
         $this->assertTrue($controlled_objectresult1,"Failed to add controlled object $ControlledObject1 for group assignment");
 
-        $controlled_objectresult2 = $this->test_add_controlled_object($ControlledObject2,$table2,$field2,$data_source2);
+        $controlled_objectresult2 = $this->test_add_controlled_object($ControlledObject2,$table2,$field2,false, $data_source2);
         $this->assertTrue($controlled_objectresult2,"Failed to add controlled object $ControlledObject2 for group assignment");
         
         $groupresult1 = $this->test_add_group($Group1);
@@ -840,7 +866,7 @@ Class ACLTest extends PHPUnit_TestCase {
     function test_get_object_relationship_parent($_ParentControlledObject=false, $_ControlledObject=false, $on_what_id=false, $_ControlledObjectRelationship=false, $_ChildField=false) {
         if (!$_ParentControlledObject) { 
             $ParentControlledObject=$this->controlled_objectName."Company"; 
-            $ParentControlledObject_id=$this->test_add_controlled_object($ParentControlledObject,"companies","company_id",1); 
+            $ParentControlledObject_id=$this->test_add_controlled_object($ParentControlledObject,"companies","company_id",false, 1); 
         } else { 
             $ParentControlledObject=$_ParentControlledObject; 
             $ParentControlledObjectData = $this->test_get_controlled_object($ParentControlledObject);
@@ -849,7 +875,7 @@ Class ACLTest extends PHPUnit_TestCase {
         if (!$on_what_id) { $on_what_id=3; }
         if (!$_ControlledObject) { 
             $ControlledObject=$this->controlled_objectName."Activity";
-            $ControlledObject_id=$this->test_add_controlled_object($ControlledObject,"activities","activity_id",1); 
+            $ControlledObject_id=$this->test_add_controlled_object($ControlledObject,"activities","activity_id",false, 1); 
         } else { 
             $ControlledObject=$_ControlledObject; 
             $ControlledObjectData = $this->test_get_controlled_object($ControlledObject);
@@ -943,7 +969,7 @@ Class ACLTest extends PHPUnit_TestCase {
         
     function test_get_field_list() {
         $ControlledObject = $this->controlled_objectName.'Company';
-        $ControlledObject_id = $this->test_add_controlled_object($ControlledObject, 'companies','company_id',1);        
+        $ControlledObject_id = $this->test_add_controlled_object($ControlledObject, 'companies','company_id',false, 1);        
     
         $ret=$this->acl->get_field_list($ControlledObject_id, array());
 //        print_r($ret);
@@ -956,7 +982,7 @@ Class ACLTest extends PHPUnit_TestCase {
     
     function test_get_restricted_object_list_basic() {
         $ControlledObject = $this->controlled_objectName.'Company';
-        $ControlledObject_id = $this->test_add_controlled_object($ControlledObject, 'companies','company_id',1);
+        $ControlledObject_id = $this->test_add_controlled_object($ControlledObject, 'companies','company_id',false, 1);
 
         $Role = $this->roleName;
         $Role_id = $this->test_add_role($Role);
@@ -1019,7 +1045,7 @@ Class ACLTest extends PHPUnit_TestCase {
 
     function test_get_permission_user_object($object=false, $User_id=false, $Permission='Read') {
         $ControlledObject = $this->controlled_objectName.'Company';
-        $ControlledObject_id = $this->test_add_controlled_object($ControlledObject, 'companies','company_id',1);        
+        $ControlledObject_id = $this->test_add_controlled_object($ControlledObject, 'companies','company_id',false, 1);        
         $Role = $this->roleName;
         $Role_id = $this->test_add_role($Role);
         
@@ -1079,6 +1105,10 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.2  2005/01/25 05:28:20  vanmer
+ * - added tests for newly added data source manipulation functions
+ * - added parameters for changed ACL controlled object functions
+ *
  * Revision 1.1  2005/01/13 17:08:20  vanmer
  * - Initial Revision of the ACL PHPUnit test class
  *
