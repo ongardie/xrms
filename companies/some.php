@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.47 2004/12/31 21:14:30 braverock Exp $
+ * $Id: some.php,v 1.48 2005/01/13 18:28:06 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -148,6 +148,12 @@ if (strlen($industry_id) > 0) {
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
+} else {
+    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    if ($list) {
+        $list=implode(",",$list);
+        $where .= " and c.company_id IN ($list) ";
+    } else { $where .= ' AND 1 = 2 '; }
 }
 
 if ($sort_column == 1) {
@@ -410,6 +416,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.48  2005/01/13 18:28:06  vanmer
+ * - ACL restriction on search
+ *
  * Revision 1.47  2004/12/31 21:14:30  braverock
  * - sort select lists in search
  *

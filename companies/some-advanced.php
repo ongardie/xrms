@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.16 2004/08/30 14:08:46 neildogg Exp $
+ * $Id: some-advanced.php,v 1.17 2005/01/13 18:23:47 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -291,6 +291,12 @@ if ( $country_id ) {
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
+} else {
+    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    if ($list) {
+        $list=implode(",",$list);
+        $where .= " and c.company_id IN ($list) ";
+    } else { $where .= ' AND 1 = 2 '; }
 }
 
 if ($sort_column == 1) {
@@ -447,6 +453,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.17  2005/01/13 18:23:47  vanmer
+ * - ACL restriction on search
+ *
  * Revision 1.16  2004/08/30 14:08:46  neildogg
  * - Grab sorting values
  *
