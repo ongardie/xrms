@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.103 2005/01/08 23:32:40 braverock Exp $
+ * $Id: utils-misc.php,v 1.104 2005/01/09 00:30:33 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -691,7 +691,9 @@ function get_formatted_phone ($con, $address_id, $phone) {
             $phone_to_display = $expression;
         }
     }
-    $temp_phone = do_hook_function("data_format_phone", $phone, $phone_to_display);
+    $phone_array['phone']=$phone;
+    $phone_array['phone_to_display']=$phone_to_display;
+    $temp_phone = do_hook_function("data_format_phone", $phone_array);
     if($temp_phone) {
         $phone_to_display = $temp_phone;
     }
@@ -1406,6 +1408,12 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.104  2005/01/09 00:30:33  braverock
+ * - change data_format_phone hook to pass an array instead of multiple params
+ *   'eval' call in do_hook_function to support multiple parameters
+ *    was causing problems w/ sidebar hooks that passed strings containing php
+ * - plugins that use data_format_phone will need to use expand fn to separate the array
+ *
  * Revision 1.103  2005/01/08 23:32:40  braverock
  * - change current_page fn to use $_SERVER['REQUEST_URI'] instead of getenv('REQUEST_URI')
  *   IIS doesn't allow getenv calls, so you need to use $_SERVER for portability
