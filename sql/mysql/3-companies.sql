@@ -238,6 +238,7 @@ create table contacts (
 	title														varchar(100) not null default '',
 	description													varchar(100) not null default '',
 	email														varchar(100) not null default '',
+    email_status                                                char(1) default 'a',
 	work_phone													varchar(50) not null default '',
 	cell_phone													varchar(50) not null default '',
 	home_phone													varchar(50) not null default '',
