@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.96 2004/09/24 21:45:16 niclowe Exp $
+ * $Id: utils-misc.php,v 1.97 2004/10/11 14:20:40 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -864,7 +864,7 @@ function time_zone_offset($con, $address_id) {
  */
 
  function calculate_time_zone_time($con, $daylight_savings_id, $offset) {
-    if($daylight_savings_id) {
+    if(!empty($daylight_savings_id)) {
         update_daylight_savings($con);
         $sql = "SELECT current_hour_shift
                 FROM time_daylight_savings
@@ -1291,6 +1291,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.97  2004/10/11 14:20:40  neildogg
+ * - Added further checks
+ *
  * Revision 1.96  2004/09/24 21:45:16  niclowe
  * added support for whereis plugin (very similiar to mapquest)
  *
