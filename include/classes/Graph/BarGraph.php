@@ -6,7 +6,7 @@
 *	creating bar charts.
 *
 *	@author daturaarutad
-*	$Id: BarGraph.php,v 1.5 2005/03/17 21:02:31 daturaarutad Exp $
+*	$Id: BarGraph.php,v 1.6 2005/04/01 23:00:12 daturaarutad Exp $
 */
 
 global $jpgraph_include_directory;
@@ -216,32 +216,23 @@ function InitGraph() {
 
 }
 
-function & PlotFactory($type, $data)  {
-
-	global $jpgraph_include_directory;
-
-	switch($type) {
-
-		case 'line':
-			require_once($jpgraph_include_directory . 'jpgraph_line.php');
-			return new LinePlot($data);
-		case 'bar':
-			require_once($jpgraph_include_directory . 'jpgraph_bar.php');
-			return new BarPlot($data);
-	}
-}
-
 function InitPlots() {
+	global $jpgraph_include_directory;
 	// create the plots and add them to the graph
 	switch($this->graph_info['graph_type']) {
 
 		case 'single_bar':
 		case 'single_line':
 
-			if('single_bar' == $this->graph_info['graph_type']) $plottype = 'bar';
-			if('single_line' == $this->graph_info['graph_type']) $plottype = 'line';
-
-			$plot = $this->PlotFactory($plottype, $this->graph_info['data']);
+			if('single_bar' == $this->graph_info['graph_type']) {
+				require_once($jpgraph_include_directory . 'jpgraph_bar.php');
+				$plot = new BarPlot($this->graph_info['data']);
+				$plottype = 'bar';
+			} elseif('single_line' == $this->graph_info['graph_type']) {
+				require_once($jpgraph_include_directory . 'jpgraph_line.php');
+				$plot = new LinePlot($this->graph_info['data']);
+				$plottype = 'line';
+			}
 
 			if(is_array($this->graph_info['legend'])) {
 				$plot->SetLegend($this->graph_info['legend']);
@@ -353,6 +344,9 @@ function DisplayCSIM($url, $filename, $map_name, $border = 0) {
 
 /**
 * $Log: BarGraph.php,v $
+* Revision 1.6  2005/04/01 23:00:12  daturaarutad
+* removed PlotFactory()
+*
 * Revision 1.5  2005/03/17 21:02:31  daturaarutad
 * check if Axis::SetCSIMTargets exists before calling it
 *
