@@ -28,6 +28,6 @@ $con->execute($sql);
 
 $con->close();
 
-header("Location: one.php?campaign_id=$campaign_id");
+header("Location: categories.php?campaign_id=$campaign_id");
 
 ?>
