@@ -38,7 +38,8 @@ $sql = "select to_what_id
     from relationships
     where relationship_type_id = $relationship_type_id
     and $working_direction" . "_what_id=$on_what_id
-    and $opposite_direction" . "_what_id=$on_what_id2";
+    and $opposite_direction" . "_what_id=$on_what_id2
+    and relationship_status='a'";
 $rst = $con->execute($sql);
 
 if ($rst) {
