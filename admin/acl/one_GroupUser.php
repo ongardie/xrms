@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupUser.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: one_GroupUser.php,v 1.2 2005/02/28 21:45:13 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,11 +33,39 @@ global $symbol_precendence;
 
 
 	getGlobalVar($return_url, 'return_url');
-
-
+        getGlobalVar($msg, 'msg');
+        getGlobalVar($form_action,'form_action');
+        
+        if ($form_action=='create' OR $form_action=='update') {
+            getGlobalVar($Group_id, 'Group_id');
+            getGlobalVar($user_id, 'user_id');
+            getGlobalVar($Role_id,'Role_id');
+            getGlobalVar($ChildGroup_id,'ChildGroup_id');
+            
+            if (($Group_id AND $user_id AND $Role_id AND ($ChildGroup_id!='NULL')) OR (!$Group_id AND !$user_id AND !$Role_id AND ($ChildGroup_id=='NULL'))) {
+                $mymsg=_("Please select either a User/Group/Role combination or a Group/Child Group combination");
+            }
+            if ($user_id AND (!$Group_id OR !$Role_id)) {
+                $mymsg ="Please select a Group/Role for this user";
+            }
+            if (($ChildGroup_id!='NULL') AND !$Group_id) {
+                $mymsg="Please select a group for selected child group to exist in";
+            }
+            if ($ChildGroup_id AND $Group_id) {
+                if (!check_acl_group_recursion($Group_id, $ChildGroup_id)) {
+                    $mymsg="Group/Child Group combination fails recursion check.";
+                }
+            }
+            if ($mymsg) {
+                $msg=$mymsg;
+                if (count($_POST)>0) {
+                    $_POST['form_action']='new';
+                } else { $_GET['form_action']='new';}
+            }
+        }
 	$page_title = 'Manage Group Users';
         $css_theme='basic-left';
-	start_page($page_title);
+	start_page($page_title, true, $msg);
 
   require_once($include_directory ."classes/QuickForm/ADOdb_QuickForm.php");
 
@@ -79,6 +107,9 @@ end_page();
 
 /**
  * $Log: one_GroupUser.php,v $
+ * Revision 1.2  2005/02/28 21:45:13  vanmer
+ * - added error checking to not allow broken records to be added to the group user table
+ *
  * Revision 1.1  2005/01/13 17:16:15  vanmer
  * - Initial Commit for ACL Administration interface
  *
