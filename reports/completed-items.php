@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.1 2004/04/20 13:34:42 braverock Exp $
+ * $Id: completed-items.php,v 1.2 2004/04/20 19:37:27 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -85,22 +85,7 @@ if ($friendly != "y") {
 
 <?php
 if ($user_id) {
-//    if ($user_id == "all") {
-//        $sql = "select user_id from users";
-//        $rst = $con->execute($sql);
-//        while (!$rst->EOF) {
-//            $user_id = $rst->fields['username'];
-//            output_user ( $user_id );
-//            $rst->movenext();
-//        }
-//    }
-//    else {
-//        output_user ( $user_id );
-//    }
-//}
 
-
-//function output_user ( $user_id ) {
     $sql = "select username, email from users where user_id = $user_id";
     $rst = $con->execute($sql);
     $username = $rst->fields['username'];
@@ -181,7 +166,13 @@ if ($user_id) {
         }
     } // End Campaigns Type
     if (($type == "opportunities") || ($type == "all")) {
-        $sql = "SELECT * from opportunities where opportunity_status_id IN ('5','6','7') and opportunity_record_status = 'a' and user_id = $user_id and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc()) . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . " order by entered_at ";
+        $sql = "SELECT * from opportunities, opportunity_statuses where
+                status_open_indicator = 'c'
+                and opportunity_record_status = 'a'
+                and user_id = $user_id
+                and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc())
+              . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
+                order by entered_at";
         $rst = $con->execute($sql);
         if ($rst) {
             $output .= "<p><font size=+2><b>COMPLETED OPPORTUNITIES for $username<b></font><br></p>\n";
@@ -218,7 +209,14 @@ if ($user_id) {
         }
     } // End Opportunities Type
     if (($type == "cases") || ($type == "all")) {
-        $sql = "SELECT * from cases where case_status_id in ('4','5') and case_record_status = 'a' and user_id = $user_id and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc()) . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . " order by entered_at ";
+        $sql = "SELECT * from cases, case_statuses where
+                status_open_indicator = 'c'
+                and case_record_status = 'a'
+                and user_id = $user_id
+                and entered_at between " . $con->qstr($starting, get_magic_quotes_gpc())
+              . " and " . $con->qstr($ending, get_magic_quotes_gpc()) . "
+              order by entered_at";
+
         $rst = $con->execute($sql);
         if ($rst) {
             $output .= "<p><font size=+2><b>COMPLETED CASES for $username<b></font><br></p>\n";
@@ -255,7 +253,7 @@ if ($user_id) {
         }
     } // End Cases Type
 
-    $rst->close();
+    //$rst->close();
 } // End If User
 
 $con->close();
@@ -271,6 +269,10 @@ end_page();
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.2  2004/04/20 19:37:27  braverock
+ * - cleaned up sql formatting to handle more cases and be less error prone
+ *   - partially fixes SF bugs 938616 & 938620
+ *
  * Revision 1.1  2004/04/20 13:34:42  braverock
  * - add activity times report
  * - add open items report

@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.2 2004/04/20 15:02:44 braverock Exp $
+ * $Id: open-items.php,v 1.3 2004/04/20 19:37:28 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -71,22 +71,7 @@ if ($friendly != "y") {
 
 <?php
 if ($user_id) {
-//    if ($user_id == "all") {
-//        $sql = "select user_id from users";
-//        $rst = $con->execute($sql);
-//        while (!$rst->EOF) {
-//            $user_id = $rst->fields['username'];
-//            output_user ( $user_id );
-//            $rst->movenext();
-//        }
-//    }
-//    else {
-//        output_user ( $user_id );
-//    }
-//}
 
-
-//function output_user ( $user_id ) {
     $sql = "select username, email from users where user_id = $user_id";
     $rst = $con->execute($sql);
     $username = $rst->fields['username'];
@@ -167,7 +152,7 @@ if ($user_id) {
         }
     } // End Campaigns Type
     if (($type == "opportunities") || ($type == "all")) {
-        $sql = "SELECT * from opportunities where
+        $sql = "SELECT * from opportunities, opportunity_statuses where
                 status_open_indicator = 'o'
                 and opportunity_record_status = 'a'
                 and user_id = $user_id
@@ -209,7 +194,7 @@ if ($user_id) {
         }
     } // End Opportunities Type
     if (($type == "cases") || ($type == "all")) {
-        $sql = "SELECT * from cases where
+        $sql = "SELECT * from cases, case_statuses where
                 status_open_indicator = 'o'
                 and case_record_status = 'a'
                 and user_id = $user_id
@@ -251,7 +236,7 @@ if ($user_id) {
         }
     } // End Cases Type
 
-    $rst->close();
+    //$rst->close();
 } // End If User
 
 $con->close();
@@ -267,6 +252,10 @@ end_page();
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.3  2004/04/20 19:37:28  braverock
+ * - cleaned up sql formatting to handle more cases and be less error prone
+ *   - partially fixes SF bugs 938616 & 938620
+ *
  * Revision 1.2  2004/04/20 15:02:44  braverock
  * - removed hard coding of open status indicators for cases and opportunities
  *   - partially fixes SF bug 938616
