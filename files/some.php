@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.11 2004/06/21 14:25:32 braverock Exp $
+ * $Id: some.php,v 1.12 2004/06/21 20:41:37 introspectshun Exp $
  */
 
 //include required files
@@ -96,46 +96,46 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 $sql = "SELECT "
-      . $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='","file_id","'\">'","file_pretty_name", "'</a>'")
-      . " AS '"._("Name")."', file_description as '"._("Description")."',";
+      . $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='","CAST(file_id AS CHAR)","'\">'","file_pretty_name", "'</a>'")
+      . " AS 'Name', file_description as 'Description',";
 
 switch ($file_on_what) {
     case "contacts" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS '"._("Contact")."',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '"._("Company")."',";
+        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS CHAR)", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+              . " AS 'Contact',"
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+              . " AS 'Company',";
         break;
     }
     case "contacts_of_companies" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS '"._("Contact")."',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '"._("Company")."',";
+        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS CHAR)", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+              . " AS 'Contact',"
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+              . " AS 'Company',";
         break;
     }
     case "companies" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '"._("Company")."',";
+        $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+              . " AS 'Company',";
         break;
     }
     case "campaigns" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
-              . " AS '"._("Campaign")."',";
+        $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "CAST(camp.campaign_id AS CHAR)", "'\">'", "camp.campaign_title", "'</a>'")
+              . " AS 'Campaign',";
         break;
     }
     case "opportunities" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
-              . " AS '"._("Opportunity")."',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '"._("Company")."',";
+        $sql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "CAST(opportunity_id AS CHAR)", "'\">'", "opp.opportunity_title", "'</a>'")
+              . " AS 'Opportunity',"
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+              . " AS 'Company',";
         break;
     }
     case "cases" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
-              . " AS '"._("Case")."',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS '"._("Company")."',";
+        $sql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "CAST(case_id AS CHAR)", "'\">'", "cases.case_title", "'</a>'")
+              . " AS 'Case',"
+              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
+              . " AS 'Company',";
         break;
     }
     default : {
@@ -144,7 +144,7 @@ switch ($file_on_what) {
 }
 
 $sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS 'Date'," .
-        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS '"._("ID")."' ";
+        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id='", "CAST(file_id AS CHAR)", "'\">'", "CAST(file_id AS CHAR)", "'</a>'") . " AS 'ID' ";
 
 $from = "from ";
 switch ($file_on_what) {
@@ -414,6 +414,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.12  2004/06/21 20:41:37  introspectshun
+ * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
+ *
  * Revision 1.11  2004/06/21 14:25:32  braverock
  * - localized strings for i18n/internationalization/translation support
  *
