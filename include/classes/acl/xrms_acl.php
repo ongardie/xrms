@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.8 2005/03/01 21:50:23 ycreddy Exp $
+ * $Id: xrms_acl.php,v 1.9 2005/03/02 20:38:39 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -287,7 +287,7 @@ class xrms_acl {
             if ($on_what_id) {
                 $restrictionFields[$on_what_field]=$on_what_id;
             }
-
+            
             $where=array();
             if ($restrictionFields AND count($restrictionFields)>0) {
                 foreach ($restrictionFields as $key=>$value) {
@@ -295,7 +295,9 @@ class xrms_acl {
                         //array of values, seach for all of them
                         $where[]="($key IN (" . implode(",",$value)."))";
                     } else {
-                        $where[]="($key=$value)";
+                        if ($value) {
+                            $where[]="($key=$value)";
+                        }
                     }                       
                 }
             }
@@ -1596,8 +1598,10 @@ class xrms_acl {
                     if ($recurse['ALL']) {
  //                       echo "FOUND ALL PARENTS in $ParentObject<pre>"; print_r($Relationship); echo "</pre>";
                         if ($Relationship['singular']==1) {
+                            $fieldRestrict=array();
                             $fieldRestrict['on_what_table']=$con->qstr($Relationship['parent_table']);
                             //get the list of objects who are owned by this parent table
+//                            echo "GETTING LIST SINGULAR WITH ALL"; print_r($fieldRestrict);
                             $ParentList=$this->get_field_list($ControlledObject_id, $fieldRestrict);
 //                            echo "ALREADY FOUND: <pre>"; print_r($objectsFound); echo "</pre>";
 //                            print_r($ParentList);
@@ -1624,7 +1628,9 @@ class xrms_acl {
                             return $ret;
                         }
                     }
-                    $ParentIDs = $recurse['controlled_objects'];
+                    if ($recurse['ALL']) {
+                        $ParentIDs = $recurse['controlled_objects'];
+                    } else $ParentIDs=false;                
                     //walk to the top level, stop when we have no parent
                     $fieldRestrict=array();
                     if ($Relationship['singular']==1) {
@@ -1648,8 +1654,9 @@ class xrms_acl {
                         }
                     }
                     //Use parent restricted list to find all controlled object IDs to which this object is a child
-                    $fieldRestrict[$on_what_child_field]=$ParentIDs;
-//                    print_r($fieldRestrict);
+                    if ($ParentIDs) {
+                        $fieldRestrict[$on_what_child_field]=$ParentIDs;
+                    }
                     $ParentList=$this->get_field_list($ControlledObject_id, $fieldRestrict, $find_field, $on_what_table);
 //                    echo "<p>$ParentList=\$this->get_field_list($ControlledObject_id, $fieldRestrict, $find_field, $on_what_table)";
                     if ($ParentList) {
@@ -1670,7 +1677,7 @@ class xrms_acl {
                 }
             }
         }
-
+        
         if (count($objectsFound)>0) {        
             $ret=array();
             $ret['controlled_objects']=$objectsFound;
@@ -2087,6 +2094,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.9  2005/03/02 20:38:39  vanmer
+ * - fixed singular relationship checking to reflect new restrict object list
+ *
  * Revision 1.8  2005/03/01 21:50:23  ycreddy
  * Removing the extra qstr call when setting the Scope in add_role_permission
  *
