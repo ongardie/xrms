@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.22 2004/07/15 17:15:51 introspectshun Exp $
+ * $Id: some.php,v 1.23 2004/07/17 11:56:36 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,8 +17,8 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 //set target and see if we are logged in
-$tmp = $_SERVER['REQUEST_URI'];
-$session_user_id = session_check( $tmp );
+//$tmp = $_SERVER['REQUEST_URI'];
+$session_user_id = session_check( '' );
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -314,6 +314,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.23  2004/07/17 11:56:36  cpsource
+ * - Null out call arguments to session_check()
+ *
  * Revision 1.22  2004/07/15 17:15:51  introspectshun
  * - Fixed errant CVS Commit. Updated s-t's code to reflect recent HTML tweaks and removed empty column in search table.
  *
