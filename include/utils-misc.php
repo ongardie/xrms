@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.83 2004/08/12 11:01:48 braverock Exp $
+ * $Id: utils-misc.php,v 1.84 2004/08/13 19:35:12 gpowers Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -695,7 +695,18 @@ function get_formatted_phone ($con, $address_id, $phone) {
         $phone_to_display .= " x" . $extra;
     }
 
-    return $phone_to_display;
+    // don't return an empty link:
+    if ($phone_to_display) {
+
+        // for the CTI/dial plugin:
+        global $use_dial_link;
+        if ($use_dial_link == "y") {
+            // this is defined in plugins/cti/setup.php:
+            return phone_link_to_display($phone, $phone_to_display);
+        } else {
+            return $phone_to_display;
+        }
+    }
 }
 
 /**
@@ -1242,6 +1253,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.84  2004/08/13 19:35:12  gpowers
+ * - added support for CTI/dial plugin (link phone number to dial function)
+ *   - added a conditional check to avoid returning an empty link
+ *
  * Revision 1.83  2004/08/12 11:01:48  braverock
  * - remove the gettext.php include, because i18n.php will include it if it needs to.
  *
