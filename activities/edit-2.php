@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.40 2004/10/18 14:12:11 vanmer Exp $
+ * $Id: edit-2.php,v 1.41 2004/11/15 16:16:16 neildogg Exp $
  */
 
 //include required files
@@ -167,7 +167,7 @@ if(!$rst) {
 }
 elseif($rst->rowcount()) {
     if($company_id) {
-        update_recent_items($con, $session_user_id, "activities", "sidebar_view", $company_id);
+        update_recent_items($con, $session_user_id, "activities", $company_id, "sidebar_view");
     }
 }
 
@@ -433,6 +433,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.41  2004/11/15 16:16:16  neildogg
+ * Improperly ordered function call
+ *
  * Revision 1.40  2004/10/18 14:12:11  vanmer
  * - fixed auto-advance workflow bug
  * - now checks for activities in the next status before advancing
