@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.15 2005/03/17 19:43:12 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.16 2005/03/25 23:49:38 daturaarutad Exp $
  */
 
 
@@ -85,7 +85,9 @@ class GUP_Pager {
 	var $buffer_output;
 	var $rows_displayed = 0;
 
+	var $show_cached_indicator = false;
 
+	var $modify_data_functions = array();
     /**
     * see @example for details
     *
@@ -337,8 +339,8 @@ class GUP_Pager {
 		}
 
 		if($_SESSION[$cache_name] && $this->use_cached) {
-			$this->using_cache = true;
 			$this->data = $_SESSION[$cache_name];
+			$this->using_cache = true;
 
 		} else {
 
@@ -467,6 +469,15 @@ class GUP_Pager {
 			$this->group_select_widget .= '</select>';
 		}
 		// data is now in $this->data
+		if($this->modify_data_functions) {
+			foreach($this->modify_data_functions as $fn) {
+				if(function_exists($fn)) 
+					$this->data = call_user_func($fn, $this->data);
+			}
+		}
+	}
+	function AddModifyDataCallback($fn) {
+		$this->modify_data_functions[] = $fn;
 	}
 
 	/**
@@ -804,9 +815,14 @@ END;
 		global $http_site_root;
 
 		$colspan = count($this->column_info);
+		
+		//  same as usual except the refresh button isn't clickable 
+		// (this is for instances where the data is entirely calculated and out of our control.)
+		if($this->show_cached_indicator) {
+			$cache_indicator = "<img border=0 src=\"$http_site_root/img/refresh.gif\"> ";
 
-		if($this->using_cache) {
-			$cache_indicator = '<input type="button" class="button" value="(cached)" onclick=javascript:' . $this->pager_id . '_refresh();>';
+		} elseif($this->using_cache) {
+			//$cache_indicator = '<input type="button" class="button" value="(cached)" onclick=javascript:' . $this->pager_id . '_refresh();>';
 			$cache_indicator = "<a onmouseover=\"this.T_OFFSETX=-360; this.T_OFFSETY=10; return escape('" . _('Refresh Data') . "')\" href=javascript:{$this->pager_id}_refresh();><img alt=\"" . _('Refresh Pager') . "\" border=0 src=\"$http_site_root/img/refresh.gif\"></a> ";
 		} else {
 			$cache_indicator = "";
@@ -918,45 +934,10 @@ END;
 		$this->get_only_visible = false;
 	}
 	/**
-	* public method to render the totals and subtotals columns
-	* This function takes a CGI variable name and handles the 'watching' by comparing with
-	* the values in $_SESSION
-	* 
-	* @param array plain array of CGI variable names
+	* public method to show the cache indicator
 	*/
-	function CheckCacheWatchedCGIVars($vars) {
-		$prepend = $this->pager_id . '_pager_session_cache_';
-		
-		foreach($vars as $var) {
-			$v = null;
-			getGlobalVar($v, $var);
-
-			if(array_key_exists($prepend . $var, $_SESSION) && $_SESSION[$prepend . $var] != $v) {
-				//echo "$var has changed from {$_SESSION[$prepend . $var]} to $v, flushing the cache<br/>";
-				$this->use_cached = false;
-			}
-			$_SESSION[$prepend . $var] = $v;
-		}
-	}
-	/**
-	* public method to render the totals and subtotals columns
-	* This function takes a variable name and a value and handles the 'watching' by comparing with
-	* the values in $_SESSION
-	* 
-	* @param array assoc array of variable names and their values
-	*/
-	function CheckCacheWatchedLocalVar($varname, $value) {
-		$prepend = $this->pager_id . '_pager_session_cache_';
-		
-		if(!array_key_exists($prepend . $varname, $_SESSION)) {
-			//echo "no entry in cache for $varname<br>";
-			$this->use_cached = false;
-		}
-		if(array_key_exists($prepend . $varname, $_SESSION) && $_SESSION[$prepend . $varname] != $value) {
-			//echo "$varname has changed from {$_SESSION[$prepend . $varname]} to $value, flushing the cache<br/>";
-			$this->use_cached = false;
-		}
-		$_SESSION[$prepend . $varname] = $value;
+	function SetCachedIndicator() {
+		$this->show_cached_indicator = true;
 	}
 	/**
 	*  Private function to append the order by clause to the SQL query
@@ -986,6 +967,11 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.16  2005/03/25 23:49:38  daturaarutad
+ * Added ModifyData callback
+ * fixed up some of the caching
+ * fixed cache indicator
+ *
  * Revision 1.15  2005/03/17 19:43:12  daturaarutad
  * don't use the cache if there is no sql and the data is not a function
  *
