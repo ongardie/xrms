@@ -86,6 +86,12 @@ $company_custom2_label = "(Custom 2)";
 $company_custom3_label = "(Custom 3)";
 $company_custom4_label = "(Custom 4)";
 
+// Activities default creation behavior.  Change to long if your users always need
+//  to enter more detail for activities
+//  Options are "Fast" or "Long"
+
+$activities_default_behavior = "Fast";
+
 /** Optional LDAP configuration parameters **/
 /**
  * Set $xrms_use_ldap to truw to tur on LDAP

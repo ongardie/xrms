@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.5 2004/02/06 22:47:36 maulani Exp $
+ * $Id: new-2.php,v 1.6 2004/02/10 16:19:34 maulani Exp $
  */
 
 //where do we include from
@@ -81,6 +81,8 @@ $sql = "insert into activities
 //insert it aready
 $con->execute($sql);
 
+$activity_id = $con->insert_id();
+
 //close the connection
 $con->close();
 
@@ -90,10 +92,17 @@ if ($email) {
 }
 
 //now send them back where they came from
-header("Location: " . $http_site_root . $return_url);
+if ($activities_default_behavior == "Fast") {
+    header("Location: " . $http_site_root . $return_url);
+} else {  //If Long activities are the default, send them to edit the activity
+    header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
+}
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.6  2004/02/10 16:19:34  maulani
+ *Make default activity creation behavior configurable
+ *
  *Revision 1.5  2004/02/06 22:47:36  maulani
  *Use ends_at to determine if activity is overdue
  *
