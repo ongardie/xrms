@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.8 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: open-items.php,v 1.9 2004/07/20 17:26:48 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -169,7 +169,7 @@ foreach ($userArray as $key => $user_id) {
     $rst = $con->execute($sql);
     $username = $rst->fields['username'];
     $email = $rst->fields['email'];
-    $name =  $rst->fields['first_names'] . " " . $rst->fields['last_name']; 
+    $name =  $rst->fields['first_names'] . " " . $rst->fields['last_name'];
     $rst->close();
 
     if (($type == "activities") || ($type == "all")) {
@@ -202,7 +202,7 @@ foreach ($userArray as $key => $user_id) {
                 $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
                 $rst6 = $con->execute($sql6);
                 $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"../activities/one.php?activity_id=" . $rst->fields['activity_id'] . "\">" . $rst->fields['activity_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "/activities/one.php?activity_id=" . $rst->fields['activity_id'] . "\">" . $rst->fields['activity_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=7><hr></td></tr>\n";
                 }
@@ -242,7 +242,7 @@ foreach ($userArray as $key => $user_id) {
                 $sql4 = "SELECT campaign_type_pretty_name from campaign_types where campaign_type_id = " . $rst->fields['campaign_type_id'];
                 $rst4 = $con->execute($sql4);
                 $output .= "<td>" . $rst4->fields['campaign_type_pretty_name'] . "&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"../campaigns/one.php?campaign_id=" . $rst->fields['campaign_id'] . "\">" . $rst->fields['campaign_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "/campaigns/one.php?campaign_id=" . $rst->fields['campaign_id'] . "\">" . $rst->fields['campaign_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=4><hr></td></tr>\n";
                 }
@@ -261,7 +261,7 @@ foreach ($userArray as $key => $user_id) {
         $sql = "SELECT * from opportunities, opportunity_statuses where
                 status_open_indicator = 'o'
                 and opportunity_record_status = 'a'
-                and opportunity_statuses.opportunity_status_id = opportunities.opportunity_status_id 
+                and opportunity_statuses.opportunity_status_id = opportunities.opportunity_status_id
                 and user_id = $user_id
                 order by entered_at ";
 
@@ -290,7 +290,7 @@ foreach ($userArray as $key => $user_id) {
                 $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
                 $rst6 = $con->execute($sql6);
                 $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"../opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "\">" . $rst->fields['opportunity_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=4><hr></td></tr>\n";
                 }
@@ -335,7 +335,7 @@ foreach ($userArray as $key => $user_id) {
                 $sql6 = "SELECT last_name, first_names from contacts where contact_id = " . $rst->fields['contact_id'];
                 $rst6 = $con->execute($sql6);
                 $output .= "<td>" . $rst6->fields['last_name'] . ", " . $rst6->fields['first_names'] . "&nbsp;&nbsp;&nbsp;</td>\n";
-                $output .= "<td><a href=\"../cases/one.php?case_id=" . $rst->fields['case_id'] . "\">" . $rst->fields['case_title'] . "</a></td>\n</td>\n";
+                $output .= "<td><a href=\"" . $http_site_root . "/cases/one.php?case_id=" . $rst->fields['case_id'] . "\">" . $rst->fields['case_title'] . "</a></td>\n</td>\n";
                 if ($use_hr) {
                     $output .= "<tr><td colspan=5><hr></td></tr>\n";
                 }
@@ -375,6 +375,10 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.9  2004/07/20 17:26:48  gpowers
+ * - fixed links in report
+ *   - relative links didn't work in email report
+ *
  * Revision 1.8  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
