@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.37 2004/07/01 12:43:26 braverock Exp $
+ * $Id: utils-misc.php,v 1.38 2004/07/02 18:54:34 neildogg Exp $
  */
 
 /**
@@ -571,6 +571,32 @@ function db_error_handler (&$con,$sql,$colspan=20) {
 } //end fn db_error_handler
 
 /**
+ * function get_formatted_phone : get the phone number and format it
+ *
+ * A hook exists here that can override the phone formatting, for any desired reason.
+ * e.g. If we don't implement foreign phone formatting here, it can be in a plug in.
+ *
+ * @author Neil Roberts
+ *
+ * @param int $phone Phone number to be formatted
+ *
+ * @return string $phone_to_display
+ */
+function get_formatted_phone ($phone) {
+    global $default_country_id;
+    $phone_to_display = do_hook_function('data_format_phone', $phone);
+    if(!$phone_to_display) {
+        if(($default_country_id == 218) and (strlen($phone) == 10)) {
+            $phone_to_display = "(" . substr($phone, 0, 3) . ") " . substr($phone, 3, 3) . "-" . substr($phone, 6);
+        }
+        else {
+            $phone_to_display = $phone;
+        }
+    } 
+    return $phone_to_display;
+}
+
+/**
  * function get_formatted_address : get the address and format it
  *
  * @author Beth Macknik
@@ -631,6 +657,12 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.38  2004/07/02 18:54:34  neildogg
+ * - Added get_formatted_phone to misc utils
+ * - Supports hook to override default formatting types.
+ * - Formatting only works with country code of US and a # length of 10 ATM.
+ * - No formatting calls added yet, please advise on this implementation.
+ *
  * Revision 1.37  2004/07/01 12:43:26  braverock
  * - add utils-database.php file
  * - move list_db_tables and confirm_no_records fns to utils-database.php file
