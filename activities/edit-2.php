@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.21 2004/07/02 17:59:45 neildogg Exp $
+ * $Id: edit-2.php,v 1.22 2004/07/07 18:06:18 neildogg Exp $
  */
 
 //include required files
@@ -26,6 +26,7 @@ $activity_type_id = $_POST['activity_type_id'];
 $contact_id = $_POST['contact_id'];
 $activity_title = $_POST['activity_title'];
 $activity_description = $_POST['activity_description'];
+$opportunity_description = $_POST['opportunity_description'];
 $scheduled_at = $_POST['scheduled_at'];
 $ends_at = $_POST['ends_at'];
 $activity_status = $_POST['activity_status'];
@@ -87,6 +88,18 @@ $rec['activity_status'] = $activity_status;
 $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
 $rst = $con->execute($upd);
 
+if($on_what_table == 'opportunities') {
+    //Update Opportunity Description
+    $sql = "SELECT * FROM opportunities WHERE opportunity_id = " . $on_what_id;
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['opportunity_description'] = $opportunity_description;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq);
+    $rst = $con->execute($upd);
+}
+  
 if($on_what_table == 'opportunities' and strlen ($probability)) {
     //Need old probability to see if pos should actually move
     $sql = "select probability
@@ -273,6 +286,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.22  2004/07/07 18:06:18  neildogg
+ * - Added sticky opportunity description
+ *
  * Revision 1.21  2004/07/02 17:59:45  neildogg
  * - Variable passed properly to browse-next.php
  *

@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.27 2004/07/02 18:09:19 neildogg Exp $
+ * $Id: one.php,v 1.28 2004/07/07 18:06:18 neildogg Exp $
  */
 
 //include required files
@@ -64,7 +64,8 @@ if($on_what_table == 'opportunities') {
     $rst = $con->execute($sql);
 
     if($rst) {
-        $probability = $rst->fields['probability'];
+        $probability = array();  
+        $probability[$rst->fields['probability']] = ' selected';
     }
 }
 
@@ -192,6 +193,13 @@ if ($is_linked) {
 
 $table_name=ucwords($table_name);
 
+if($on_what_table == 'opportunities') {
+    $sql = "select opportunity_description from opportunities where opportunity_id='$on_what_id'";
+    $rst = $con->execute($sql);
+    $opportunity_description = $rst->fields['opportunity_description'];
+    $rst->close();
+}
+
 $con->close();
 
 $page_title = $activity_title;
@@ -252,17 +260,9 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right>Probability&nbsp;(%)</td>
                 <td class=widget_content_form_element>
                 <select name=probability>
-                    <option value="0"<?php if ($probability == '0') {echo ' selected';}; ?>>0%
-                    <option value="10"<?php if ($probability == '10') {echo ' selected';}; ?>>10%
-                    <option value="20"<?php if ($probability == '20') {echo ' selected';}; ?>>20%
-                    <option value="30"<?php if ($probability == '30') {echo ' selected';}; ?>>30%
-                    <option value="40"<?php if ($probability == '40') {echo ' selected';}; ?>>40%
-                    <option value="50"<?php if ($probability == '50') {echo ' selected';}; ?>>50%
-                    <option value="60"<?php if ($probability == '60') {echo ' selected';}; ?>>60%
-                    <option value="70"<?php if ($probability == '70') {echo ' selected';}; ?>>70%
-                    <option value="80"<?php if ($probability == '80') {echo ' selected';}; ?>>80%
-                    <option value="90"<?php if ($probability == '90') {echo ' selected';}; ?>>90%
-                    <option value="100"<?php if ($probability == '100') {echo ' selected';}; ?>>100%
+                    <?php for($i = 0; $i <= 100; $i += 10) { ?>
+                    <option value="<?php echo $i; ?>"<?php echo $probability[$i]; ?>><? echo $i; ?>%
+                    <?php } ?>
                 </select>
                 </td>
             </tr>
@@ -283,6 +283,14 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right_166px>Description</td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
+            <?php 
+            if($on_what_table == 'opportunities') {
+            ?> 
+            <tr>
+                <td class=widget_label_right_166px>Opportunity Description</td>
+                <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea></td>
+            </tr>
+            <?php } ?>
             <tr>
                 <td class=widget_label_right>Starts</td>
                 <td class=widget_content_form_element>
@@ -363,6 +371,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.28  2004/07/07 18:06:18  neildogg
+ * - Added sticky opportunity description
+ *
  * Revision 1.27  2004/07/02 18:09:19  neildogg
  * - Added contact-company sidebar to activities page as per new support in companies/company-sidebar.php.
  *
