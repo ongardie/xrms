@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.41 2005/03/14 18:44:34 daturaarutad Exp $
+ * $Id: one.php,v 1.42 2005/03/15 21:51:55 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -165,6 +165,10 @@ WHERE a.on_what_table = 'opportunities'
         }
     } else { $sql_activities .= ' AND 1 = 2 '; }
 
+	// Save the search for Mail Merge in activities pager
+	$_SESSION["search_sql"]=$sql_activities;
+
+
 
     // begin Activities Pager
     $columns = array();
@@ -187,7 +191,7 @@ WHERE a.on_what_table = 'opportunities'
     $endrows = "<tr><td class=widget_content_form_element colspan=10>
                 $pager_columns_button
                 <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
 
 
     $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'OpportunityActivitiesPager', $columns, false, true);
@@ -469,12 +473,24 @@ function markComplete() {
     </div>
 </div>
 
+
+<script language="JavaScript" type="text/javascript">
+function bulkEmail() {
+    document.forms[0].action = "../email/email.php";
+    document.forms[0].submit();
+}
+</script>
+
+
 <?php
 
 end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.42  2005/03/15 21:51:55  daturaarutad
+ * fixed Mail Merge for activities pager
+ *
  * Revision 1.41  2005/03/14 18:44:34  daturaarutad
  * added default_sort to On column of activities pager
  *
