@@ -18,11 +18,11 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.7 2004/01/28 20:28:36 braverock Exp $
+ * $Id: include-locations.inc,v 1.8 2004/03/24 18:12:43 maulani Exp $
  */
 
 // include trailing slash in path
-$include_directory = "/full/path/to/xrms/include/";
+$include_directory = "/Library/WebServer/Documents/xrms1/include/";
 
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
@@ -34,6 +34,9 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.8  2004/03/24 18:12:43  maulani
+ * - add phpdoc
+ *
  * Revision 1.7  2004/01/28 20:28:36  braverock
  * - set error_reporting level
  * - add phpdoc and instructions to docblock

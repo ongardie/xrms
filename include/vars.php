@@ -5,7 +5,7 @@
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.13 2004/03/22 22:10:23 braverock Exp $
+ * $Id: vars.php,v 1.14 2004/03/24 18:12:45 maulani Exp $
  */
 
 /**
@@ -25,21 +25,21 @@
  */
 $xrms_db_dbtype = 'mysql';
 $xrms_db_server = 'localhost';
-$xrms_db_username = 'your_mysql_username';
-$xrms_db_password = 'your_mysql_password';
-$xrms_db_dbname = 'your_mysql_database';
+$xrms_db_username = 'xrms';
+$xrms_db_password = '141330';
+$xrms_db_dbname = 'xrms';
 
 // where is this application, web-wise? (no trailing slash)
-$http_site_root = "http://www.yoursitename.com/xrms";
+$http_site_root = "http://localhost/xrms1";
 
 //where is the appliation in the filesystem (no trailing slash)
-$xrms_file_root = "/full/path/to/xrms";
+$xrms_file_root = "/Library/Webserver/Documents/xrms1";
 
 // directory where uploaded files should go
 // make sure these directories are writable by the apache user
 $max_file_size = 200000;
-$tmp_upload_directory = "/full/path/to/xrms/tmp/";
-$file_storage_directory = "/full/path/to/xrms/files/storage/";
+$tmp_upload_directory = "/Library/Webserver/Documents/xrms1/tmp/";
+$file_storage_directory = "/Library/Webserver/FileStorage/";
 
 //uncomment this if you are having trouble with file uploads
 //ini_set ('upload_tmp_dir', $tmp_upload_directory);
@@ -50,7 +50,7 @@ $file_storage_directory = "/full/path/to/xrms/files/storage/";
 // this needs to be relative to the xrms web root
 // (browser needs to be able to see it)
 // (no trailing slash)
-$tmp_export_directory = "/full/path/to/xrms/export/";
+$tmp_export_directory = "/tmp";
 
 // accounting software integration is in the works, but for now
 $accounting_system = ''; // no integration
@@ -69,7 +69,7 @@ $app_title = 'XRMS';
 $default_country_id = 218;
 
 // replace this with your organization's name
-$system_company_name = 'XRMS';
+$system_company_name = 'Fresnel Technologies, Inc.';
 
 // so that order numbers can be continuous with whatever you're using now
 $order_number_seed = 1000;
@@ -100,23 +100,23 @@ $after_adding_new_companies_from_your_web_site_redirect_to_this_page = "http://w
 
 // label up to four custom fields for contact information
 
-$contact_custom1_label = "(Custom 1)";
+$contact_custom1_label = "Mailstop";
 $contact_custom2_label = "(Custom 2)";
 $contact_custom3_label = "(Custom 3)";
 $contact_custom4_label = "(Custom 4)";
 
 // label up to four custom fields for company information
 
-$company_custom1_label = "(Custom 1)";
-$company_custom2_label = "(Custom 2)";
-$company_custom3_label = "(Custom 3)";
-$company_custom4_label = "(Custom 4)";
+$company_custom1_label = "Tech Contact";
+$company_custom2_label = "Tooling";
+$company_custom3_label = "Shipway";
+$company_custom4_label = "Tax ID";
 
 // Activities default creation behavior.  Change to long if your users always need
 //  to enter more detail for activities
 //  Options are "Fast" or "Long"
 
-$activities_default_behavior = "Fast";
+$activities_default_behavior = "Long";
 
 /** Optional LDAP configuration parameters **/
 /**
@@ -128,7 +128,7 @@ $activities_default_behavior = "Fast";
  */
 $xrms_use_ldap = false; //set to true if you want ldap authenthication
     //all other ldap params are useless if $xrms_use_ldap is false
-    $xrms_ldap["server"] = "localhost";                             //ldap server address
+    $xrms_ldap["server"] = "serverx.morning.fresneltech.com";       //ldap server address
     $xrms_ldap["search_user"] = "cn=search,ou=services,o=barcet";   //user name to do the search as (leave blank for anonymous login)
     $xrms_ldap["search_pw"] = "search";                             //password for the user to do the search as (leave blank for anonymous login)
     $xrms_ldap["search_context"] = "o=novell";                      //context where to start the search in the tree
