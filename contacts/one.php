@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.50 2004/12/20 20:12:15 neildogg Exp $
+ * $Id: one.php,v 1.51 2004/12/24 16:20:17 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -499,16 +499,17 @@ function markComplete() {
                     <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>">
                 </td>
             </tr>
+<?php /* removed this functionality because it *breaks* the auto-association code.
             <tr>
-                <td class=widget_content_form_element>
+                <td colspan=4 class=widget_content_form_element>
                   <?php echo $opportunity_status_rows; ?>
                 </td>
                 <td class=widget_content>
-                  <?php echo _("OR"); ?>
-                </td>
-                <td colspan=4 class=widget_content>
                 </td>
             </tr>
+*/
+?>
+
             <?php  echo $activity_rows; ?>
         </table>
         </form>
@@ -563,6 +564,13 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.51  2004/12/24 16:20:17  braverock
+ * - removed opportunity status code becasue it breaks existing $associate_activities code
+ * - fixed formatting problems
+ * - reinserting this code will require checking for existing opportunity
+ *   checking for existing case
+ *   not breaking existing $associate_activities code
+ *
  * Revision 1.50  2004/12/20 20:12:15  neildogg
  * - Left join allows empty user
  *
