@@ -2,7 +2,7 @@
 /**
  * commit a new user to the Database
  *
- * $Id: add-2.php,v 1.8 2004/12/30 19:06:26 braverock Exp $
+ * $Id: add-2.php,v 1.9 2005/01/13 17:56:13 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -46,6 +46,11 @@ $rst = $con->execute($ins);
 if(!$rst) {
     db_error_handler($con, $ins);
 }
+$user_id=$con->Insert_ID();
+if (!$group) {
+    $group="Users";
+}
+add_user_group(false, $group, $user_id, $role_id);
 
 $con->close();
 
@@ -53,6 +58,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.9  2005/01/13 17:56:13  vanmer
+ * - added new ACL code to user management section
+ *
  * Revision 1.8  2004/12/30 19:06:26  braverock
  * - add db_error_handler
  * - patch provided by Ozgur Cayci

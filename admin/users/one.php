@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.16 2004/07/25 19:14:59 johnfawcett Exp $
+ * $Id: one.php,v 1.17 2005/01/13 17:56:13 vanmer Exp $
  */
 
 //include required files
@@ -42,6 +42,8 @@ $sql2 = "select role_pretty_name, role_id from roles where role_record_status = 
 $rst = $con->execute($sql2);
 $role_menu = $rst->getmenu2('role_id', $role_id, false);
 $rst->close();
+//hack to show ACL roles
+$role_menu=get_role_list(false, true, 'role_id', $role_id); 
 
 if($my_company_id) {
     $sql = "select " . $con->Concat("last_name", "', '", "first_names") . " AS contact_name,
@@ -152,6 +154,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.17  2005/01/13 17:56:13  vanmer
+ * - added new ACL code to user management section
+ *
  * Revision 1.16  2004/07/25 19:14:59  johnfawcett
  * - reinserted ? in gettext string - needed by some languages
  * - standardized delete text and button

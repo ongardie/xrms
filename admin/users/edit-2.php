@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.12 2004/12/30 19:06:58 braverock Exp $
+ * $Id: edit-2.php,v 1.13 2005/01/13 17:56:13 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -32,7 +32,14 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
 $rst = $con->execute($sql);
-
+if ($rst->fields['role_id']!=$role_id) {
+    if (!$group) {
+        $group="Users";
+    }
+    if (!delete_user_group(false, false, $group, $edit_user_id, $rst->fields['role_id'])) echo _("Failed to add user to group.");
+    $ret=add_user_group(false, $group, $edit_user_id, $role_id);
+    if (!is_array($ret)) echo _("Failed to add user to group.");
+}
 $rec = array();
 
 $rec['role_id']         = $role_id;
@@ -44,13 +51,14 @@ $rec['email']           = $email;
 $rec['gmt_offset']      = $gmt_offset;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$rst = $con->execute($upd);
-
-if(!$rst) {
-    db_error_handler($con, $upd);
+if ($upd) {
+    $rst = $con->execute($upd);
+    if(!$rst) {
+        db_error_handler($con, $upd);
+    }
+    
+    add_audit_item($con, $session_user_id, 'updated', 'users', $edit_user_id, 1);
 }
-
-add_audit_item($con, $session_user_id, 'updated', 'users', $edit_user_id, 1);
 
 $con->close();
 
@@ -62,6 +70,9 @@ header("Location: self.php?msg=saved");
 
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.13  2005/01/13 17:56:13  vanmer
+ *- added new ACL code to user management section
+ *
  *Revision 1.12  2004/12/30 19:06:58  braverock
  *- add db_error_handler
  *- patch provided by Ozgur Cayci

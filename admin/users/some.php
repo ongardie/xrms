@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.13 2005/01/09 15:53:05 braverock Exp $
+ * $Id: some.php,v 1.14 2005/01/13 17:56:13 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,10 +18,11 @@ $session_user_id = session_check( 'Admin' );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con->debug=1;
 
-$sql = "select * from users, roles
-where users.role_id = roles.role_id
-and user_record_status = 'a' order by last_name, first_names";
+$sql = "select *, Role.Role_name from users, Role
+WHERE user_record_status = 'a' AND users.role_id=Role.Role_id order by last_name, first_names";
+
 $rst = $con->execute($sql);
 
 if ($rst) {
@@ -29,20 +30,19 @@ if ($rst) {
         $table_rows .= '<tr>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
-        $table_rows .= '<td class=widget_content>' . $rst->fields['role_pretty_name'] . '</td>';
+        $table_rows .= '<td class=widget_content>' . $rst->fields['Role_name'] . '</td>';
         $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
     $rst->close();
 } else {
+    db_error_handler($con, $sql);
     $table_rows = '<tr><td>'._("Unable to get data from database").'</td> </tr>';
 }
 
-$sql2 = "select role_pretty_name, role_id from roles where role_record_status = 'a' order by role_id";
-$rst = $con->execute($sql2);
-$role_menu = $rst->getmenu2('role_id', '', false);
-$rst->close();
+//hack to show ACL roles
+$role_menu=get_role_list();
 
 $default_gst = get_system_parameter($con, 'Default GST Offset');
 $con->close();
@@ -163,6 +163,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.14  2005/01/13 17:56:13  vanmer
+ * - added new ACL code to user management section
+ *
  * Revision 1.13  2005/01/09 15:53:05  braverock
  * - fix missing .= in $table_rows
  *
