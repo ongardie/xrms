@@ -108,6 +108,9 @@ table.widget .widget_label {
 table.widget .widget_header {
     background-image: url(../../img/widget_header_background.gif);
 }
+table.widget .widget_label_center {
+    background-image: url(../../img/widget_label_background.gif);
+}
 table.widget .widget_label_right {
     background-image: url(../../img/widget_label_right_background.gif);
     background-repeat: no-repeat;
