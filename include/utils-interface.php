@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.36 2004/12/22 23:43:42 ebullient Exp $
+ * $Id: utils-interface.php,v 1.37 2004/12/23 20:05:29 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -139,11 +139,13 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
     global $http_site_root;
     global $app_title;
+	global $css_theme;
 
     $msg = status_msg($msg);
 
-    $curtheme = 'basic';
+   	$curtheme = empty($css_theme) ? 'basic' : $css_theme;
     $cssroot = $http_site_root.'/css/';
+
 
     // Array containing list of named styles.
     //    array('basic' => '/path/to/basic.css');
@@ -307,6 +309,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.37  2004/12/23 20:05:29  daturaarutad
+ * added check for globally defined CSS theme ($css_theme) to start_page()
+ *
  * Revision 1.36  2004/12/22 23:43:42  ebullient
  * Sorry for the lack of comment on the css adds - meant to commit all of them
  * together, and hit the wrong key.
