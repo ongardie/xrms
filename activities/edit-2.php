@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.39 2004/08/16 15:18:15 neildogg Exp $
+ * $Id: edit-2.php,v 1.40 2004/10/18 14:12:11 vanmer Exp $
  */
 
 //include required files
@@ -321,13 +321,22 @@ if ($table_name != "attached to") {
         if ($old_status != $table_status_id) {
             $no_update = false;
         } else {
-            $no_update = false;
             $sort_order++;
-            $sql = "select * from " . $table_name . "_statuses
-                where sort_order=$sort_order
-                and " . $table_name . "_status_record_status='a'";
-            $rst = $con->execute($sql);
-            $table_status_id = $rst->fields[$table_name . '_status_id'];
+            
+            //look for activity_templates defined for the next status in the workflow
+            $sql = "select * from activity_templates where on_what_table=" . $con->qstr($table_name.'_statuses') . " AND on_what_id=$sort_order";
+            $rst=$con->execute($sql);
+            if (!$rst) { db_error_handler($con,$sql); }
+            
+            //if there are templates defined for the next status, find it
+            if ($rst->numRows()>0) {
+                $no_update = false;
+                $sql = "select * from " . $table_name . "_statuses
+                    where sort_order=$sort_order
+                    and " . $table_name . "_status_record_status='a'";
+                $rst = $con->execute($sql);
+                $table_status_id = $rst->fields[$table_name . '_status_id'];
+            }
         }
     }
 
@@ -424,6 +433,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.40  2004/10/18 14:12:11  vanmer
+ * - fixed auto-advance workflow bug
+ * - now checks for activities in the next status before advancing
+ *
  * Revision 1.39  2004/08/16 15:18:15  neildogg
  * - Removed $old_sort_order as it is used nowhere else
  *  - and eg was being used on opportunities table
