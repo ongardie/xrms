@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.17 2004/12/30 21:57:08 braverock Exp $
+ * $Id: edit.php,v 1.18 2005/01/06 20:50:06 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -34,6 +34,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_id = $rst->fields['company_id'];
+    $division_id = $rst->fields['division_id'];
     $company_name = $rst->fields['company_name'];
     $contact_id = $rst->fields['contact_id'];
     $campaign_id = $rst->fields['campaign_id'];
@@ -116,6 +117,12 @@ $rst = $con->execute($sql2);
 $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
 $rst->close();
 
+//division menu
+$sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
+$rst = $con->execute($sql2);
+$division_menu = $rst->getmenu2('division_id', $division_id, true);
+$rst->close();
+
 //opportunity status menu
 $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
@@ -153,6 +160,10 @@ confGoTo_includes();
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content_form_element><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Division"); ?></td>
+                <td class=widget_content_form_element><?php  echo $division_menu; ?></a></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
@@ -276,6 +287,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.18  2005/01/06 20:50:06  vanmer
+ * - added retrieve/display of division_id to edit and new pages
+ *
  * Revision 1.17  2004/12/30 21:57:08  braverock
  * - localize strings
  * - remove obsolete lines

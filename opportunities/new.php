@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.10 2004/07/30 11:11:12 cpsource Exp $
+ * $Id: new.php,v 1.11 2005/01/06 20:50:06 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,6 +17,7 @@ $session_user_id = session_check();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $company_id = $_POST['company_id'];
+$division_id = $_POST['division_id'];
 $contact_id = $_POST['contact_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -39,6 +40,12 @@ if ( $rst && !$rst->EOF ) {
   $campaign_id = '';
 }
 $campaign_menu = $rst->getmenu2('campaign_id', $campaign_id, true);
+$rst->close();
+
+//division menu
+$sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
+$rst = $con->execute($sql2);
+$division_menu = $rst->getmenu2('division_id', $division_id, true);
 $rst->close();
 
 //get a username menu
@@ -79,6 +86,10 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php echo _("Opportunity Title"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=opportunity_title> <?php echo $required_indicator; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Division"); ?></td>
+                <td class=widget_content_form_element><?php  echo $division_menu; ?></a></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
@@ -192,6 +203,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.11  2005/01/06 20:50:06  vanmer
+ * - added retrieve/display of division_id to edit and new pages
+ *
  * Revision 1.10  2004/07/30 11:11:12  cpsource
  * - Improved msg handling
  *   Got campaign_id and opportunity_status_id from database so

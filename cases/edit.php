@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.13 2004/08/02 12:04:46 cpsource Exp $
+ * $Id: edit.php,v 1.14 2005/01/06 20:53:38 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -31,6 +31,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_id = $rst->fields['company_id'];
+    $division_id = $rst->fields['division_id'];
     $contact_id = $rst->fields['contact_id'];
     $case_status_id = $rst->fields['case_status_id'];
     $case_priority_id = $rst->fields['case_priority_id'];
@@ -43,7 +44,6 @@ if ($rst) {
 }
 
 $company_name = fetch_company_name($con, $company_id);
-
 
 // associated with
 
@@ -133,6 +133,12 @@ $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', $user_id, false);
 $rst->close();
 
+//division menu
+$sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
+$rst = $con->execute($sql2);
+$division_menu = $rst->getmenu2('division_id', $division_id, true);
+$rst->close();
+
 //case priority list
 $sql2 = "select case_priority_pretty_name, case_priority_id from case_priorities where case_priority_record_status = 'a' order by case_priority_id";
 $rst = $con->execute($sql2);
@@ -183,6 +189,10 @@ confGoTo_includes();
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content_form_element><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Division"); ?></td>
+                <td class=widget_content_form_element><?php  echo $division_menu; ?></a></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
@@ -287,6 +297,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.14  2005/01/06 20:53:38  vanmer
+ * - added retrieve/display of division_id to edit and new pages
+ *
  * Revision 1.13  2004/08/02 12:04:46  cpsource
  * - Per bug 997663, add confirm for delete of cases.
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.12 2004/08/13 13:35:54 maulani Exp $
+ * $Id: new.php,v 1.13 2005/01/06 20:53:38 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,6 +17,7 @@ $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $company_id = $_POST['company_id'];
+$division_id = $_POST['division_id'];
 $contact_id = $_POST['contact_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -34,6 +35,12 @@ $rst->close();
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
+$rst->close();
+
+//division menu
+$sql2 = "select division_name, division_id from company_division where company_id=$company_id order by division_name";
+$rst = $con->execute($sql2);
+$division_menu = $rst->getmenu2('division_id', $division_id, true);
 $rst->close();
 
 //get case priority menu
@@ -102,6 +109,10 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php echo _("Case Title"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=case_title> <?php  echo $required_indicator ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Division"); ?></td>
+                <td class=widget_content_form_element><?php  echo $division_menu; ?></a></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Contact"); ?></td>
@@ -196,6 +207,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.13  2005/01/06 20:53:38  vanmer
+ * - added retrieve/display of division_id to edit and new pages
+ *
  * Revision 1.12  2004/08/13 13:35:54  maulani
  * - Fix bug 1008689
  *  - Correct errant sql sort order.
