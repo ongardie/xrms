@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.31 2004/05/04 15:41:25 gpowers Exp $
+ * $Id: one.php,v 1.32 2004/05/04 16:19:23 gpowers Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -514,6 +514,13 @@ function openNewsWindow() {
                                     <td class=sublabel><?php  echo $company_custom4_label; ?></td>
                                     <td class=clear><?php  echo $custom4; ?></td>
                                 </tr>
+                                <tr>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <?php echo $relationship_rows; ?>
+                                </tr>
                             </table>
 
                             </td>
@@ -645,6 +652,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.32  2004/05/04 16:19:23  gpowers
+ * Enabled the display of relationships
+ *
  * Revision 1.31  2004/05/04 15:41:25  gpowers
  * Removed "Types" ($company_type_list) which was undefined and depreciated.
  * It will be replaced with "Relationships" and/or "Industry".
