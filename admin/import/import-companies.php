@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.11 2004/09/22 22:05:07 introspectshun Exp $
+ * $Id: import-companies.php,v 1.12 2004/10/01 14:11:37 introspectshun Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -101,10 +101,11 @@ $con->close();
                 <td class=widget_content_form_element><select name="file_format">
 <?php
 if ($handle = opendir('.')) {
+   $mask = '/^(import-template-)([^\.]+)(.php)$/i';
    while (false !== ($filename = readdir($handle))) {
-      if (preg_match("/import-template/i", $filename)) {
-         preg_match("/(import-template-)([^\.]+)(.php)/i",$filename,$format_name);
-         echo "<option value=\"" . $format_name[2] . "\">$format_name[2]</option>";
+      if (preg_match($mask, $filename)) {
+         preg_match($mask,$filename,$format_name);
+         echo "<option value=\"" . $format_name[2] . "\">" . $format_name[2] . "</option>";
          };
       };
 };
@@ -161,6 +162,10 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.12  2004/10/01 14:11:37  introspectshun
+ * - Fine-tuned regex to limit list of import templates to
+ *   just those that start with 'import-template' and end with 'php'
+ *
  * Revision 1.11  2004/09/22 22:05:07  introspectshun
  * - Added ADODB params include for multi-db compatibility
  *
