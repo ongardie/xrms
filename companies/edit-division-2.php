@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.5 2005/01/13 18:23:15 vanmer Exp $
+ * $Id: edit-division-2.php,v 1.6 2005/01/28 23:05:29 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -45,10 +45,13 @@ $rec['last_modified_by'] = $session_user_id;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
-header("Location: divisions.php?msg=saved&company_id=$company_id");
+header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.6  2005/01/28 23:05:29  braverock
+ * - change return url to send you back to companies/one.php
+ *
  * Revision 1.5  2005/01/13 18:23:15  vanmer
  * - Basic ACL changes to allow create/delete functionality to be restricted
  *
