@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.5 2004/06/15 19:43:05 gpowers Exp $
+ * $Id: sidebar.php,v 1.6 2004/06/28 13:49:52 gpowers Exp $
  */
 
 //add contact information block on sidebar
@@ -29,7 +29,8 @@ $rst = $con->execute($sql);
 if (!$rst->EOF) {
 
     $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                    . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</td>\n\t</tr>"
+                    . '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
+                    . $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a></td>\n\t</tr>"
                     . "\n\t<tr>\n\t\t<td class=widget_content>"
                     . get_formatted_address ($con, $rst->fields['address_id'])
                     . "</td>\n\t</tr>";
@@ -56,6 +57,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.6  2004/06/28 13:49:52  gpowers
+ * - made contact name a link to contact page
+ *
  * Revision 1.5  2004/06/15 19:43:05  gpowers
  * - made Contact Work Phone <strong> so it's easier to see what number
  *   I should be calling next.
