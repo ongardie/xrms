@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.55 2004/07/30 09:45:24 cpsource Exp $
+ * $Id: one.php,v 1.56 2004/07/30 10:03:10 cpsource Exp $
  */
 
 //include required files
@@ -127,6 +127,8 @@ if ($company_id) {
 if ($contact_id) {
     // include the contact sidebar code
     require_once ('../contacts/sidebar.php');
+} else {
+  $contact_block = '';
 }
 
 if ($company_id) {
@@ -379,9 +381,9 @@ function logTime() {
         <!-- company information block //-->
         <?php echo $company_block; ?>
         <!-- contact information block //-->
-        <?php echo $contact_block; ?>
+        <?php if ( $contact_block) echo $contact_block; ?>
         <!-- sidebar plugins //-->
-        <?php echo $relationship_link_rows; ?>
+        <?php if ( isset($relationship_link_rows) && $relationship_link_rows ) echo $relationship_link_rows; ?>
     </div>
 
 </div>
@@ -416,6 +418,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.56  2004/07/30 10:03:10  cpsource
+ * - Remove undefines
+ *     contact_block
+ *     relationship_link_rows
+ *
  * Revision 1.55  2004/07/30 09:45:24  cpsource
  * - Place confGoTo setup later in startup sequence.
  *
