@@ -24,7 +24,7 @@ function opportunitynotes() {
     }
     
     $buttons = array();
-    $buttons[] = array('value' => 'Left Message', 'onclick' => "document.forms[0].ends_at.value='" . $new_time . "'; document.forms[0].opportunity_description.value = logTime() + ' Message left by " . $_SESSION['username'] . "\\n' + document.forms[0].opportunity_description.value;");
+    $buttons[] = array('value' => 'Left Message', 'onclick' => "document.forms[0].ends_at.value='" . $new_time . "'; document.forms[0].opportunity_description.value = logTime() + ' Message left by " . $_SESSION['username'] . "\\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '" . current_page() . "'; document.forms[0].submit();");
     if($save_and_next) {
         $buttons[] = array('type' => 'submit', 'name' => 'saveandnext', 'value' => 'Save + 2 Days', 'onclick' => "document.forms[0].ends_at.value='" . $new_time . "';");
     }
