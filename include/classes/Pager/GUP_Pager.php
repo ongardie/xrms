@@ -27,14 +27,20 @@
  * navigating to xrms/include/classes/Pager/examples/
  *
  * @example GUP_Pager.doc.1.php Simple example of basic pager usage with SQL
+ *  
  * @example GUP_Pager.doc.2.php Another pager example showing Totals and SubTotals columns
+ *  
  * @example GUP_Pager.doc.3.php Another pager example showing the use of types (type => currency)
+ *  
  * @example GUP_Pager.doc.4.php Another pager example showing Calculated Columns and callback usage
+ *  
  * @example GUP_Pager.doc.5.php Simple example of basic pager usage with Data
+ *  
  * @example GUP_Pager.doc.6.php Another pager example showing Grouping of SQL and Calculated data
+ *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.5 2005/02/17 07:59:22 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.6 2005/02/24 21:30:40 daturaarutad Exp $
  */
 
 
@@ -77,6 +83,7 @@ class GUP_Pager {
 	var $using_cached = false;	// whether or not we are currently using cached data
 	var $group_mode = false;
 	var $buffer_output;
+	var $rows_displayed = 0;
 
 
     /**
@@ -156,19 +163,11 @@ class GUP_Pager {
 
 		// here we add the ORDER BY clause to the SQL query.
 		// this is done seperately for grouping later because we don't know enough yet to contruct it for grouping
-		if($this->column_info[$this->sort_column-1]['sql_sort_column']) {
-			// let the user specify a numericly indexed column from the sql query to sort on for this displayed pager column
-        	$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'];
-        	$order_by .= " " . $this->sort_order;
-			$this->sql .= " $order_by";
-			$this->get_only_visible = true;
+		if($this->column_info[$this->sort_column-1]['index_sql']) {
+			$this->SetUpSQLOrderByClause();
+		}
 
-		} elseif($this->column_info[$this->sort_column-1]['index_sql']) {
-        	$order_by = " order by " . $this->sort_column;
-        	$order_by .= " " . $this->sort_order;
-			$this->sql .= " $order_by";
-			$this->get_only_visible = true;
-		} 
+		//echo $this->sql;
 		// end sort stuff
 
 		// this is so that we can refer to all columns by ['index'] later when it doesn't concern us if they are sql/calc/data
@@ -319,20 +318,9 @@ class GUP_Pager {
 
 				// change the sql query to the group select
 				$this->sql = str_replace('XXX-value-XXX', $this->group_id, $this->column_info[$this->group_mode]['group_query_select']);
-	
-				// set up an order by clause if the sort column is coming from SQL
-				if($this->column_info[$this->sort_column-1]['sql_sort_column']) {
-        			$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'];
-        			$order_by .= " " . $this->sort_order;
-					$this->sql .= " $order_by";
-					$this->get_only_visible = true;
-		
-				} elseif($this->column_info[$this->sort_column-1]['index_sql']) {
-        			$order_by = " order by " . $this->sort_column;
-        			$order_by .= " " . $this->sort_order;
-					$this->sql .= " $order_by";
-					$this->get_only_visible = true;
-				} 
+				if($this->column_info[$this->sort_column-1]['index_sql']) {
+					$this->SetUpSQLOrderByClause();
+				}
 			}
 		}
 
@@ -397,8 +385,10 @@ class GUP_Pager {
 			// in the same dir as us...
 			require_once('Array_Sorter.php');
 
-            $sorter = new array_sorter($this->data, $this->column_info[$this->sort_column-1]['index'], ($this->sort_order == "asc") ? true : false);
-            $this->data = $sorter->sortit();
+			if(count($this->data)) {
+            	$sorter = new array_sorter($this->data, $this->column_info[$this->sort_column-1]['index'], ($this->sort_order == "asc") ? true : false);
+            	$this->data = $sorter->sortit();
+			}
 
 			
             // then output rows 34-43 par example
@@ -537,6 +527,8 @@ END;
 
         $color_counter = 0;
 
+		$css_classnames = null;
+
         // output headers
         $column_count = count($this->column_info);
     	$hdr = '';
@@ -581,7 +573,6 @@ END;
 
 
 
-
         for($i=$this->start_data_row; $i<$this->end_data_row; $i++) {
 
 			// in group mode, skip this value if it's not one we're interested in.
@@ -589,8 +580,13 @@ END;
 				continue;
 			}
 
+			if($this->data[$i]['GUP_Pager_TD_Classname']) {
+				$classname = $this->data[$i]['GUP_Pager_TD_Classname'];
+			} else {
+            	$classname = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
+			}
 
-            $classname = (($color_counter % 2) == 1) ? "widget_content" : "widget_content_alt";
+
             $color_counter++;
 
             echo  "<tr valign=top>\n";
@@ -599,16 +595,16 @@ END;
 
                 if($this->column_info[$j]['type']) {
                     if('currency' == $this->column_info[$j]['type']) {
-                        echo "<td align=right class=$classname>$" . number_format($this->data[$i][$this->column_info[$j]['index']], 2, '.', ',') . "</td>\n";
+                        echo "<td class='$classname'>$" . number_format($this->data[$i][$this->column_info[$j]['index']], 2, '.', ',') . "</td>\n";
                     } elseif('date' == $this->column_info[$j]['type']) {
-                        echo "<td align=right class=$classname>" . format_date($this->data[$i][$this->column_info[$j]['index']]) . "</td>\n";
+                        echo "<td class='$classname'>" . format_date($this->data[$i][$this->column_info[$j]['index']]) . "</td>\n";
                     } elseif('int' == $this->column_info[$j]['type']) {
-                        echo "<td align=right class=$classname>" . number_format($this->data[$i][$this->column_info[$j]['index']], 0, '.',',') . "</td>\n";
+                        echo "<td class='$classname'>" . number_format($this->data[$i][$this->column_info[$j]['index']], 0, '.',',') . "</td>\n";
                     } else {
-                        echo "<td align=right class=$classname>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
+                        echo "<td class='$classname'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
                     }
                 } else {
-                    echo "<td align=right class=$classname>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
+                    echo "<td class='$classname'>" . $this->data[$i][$this->column_info[$j]['index']] . "</td>\n";
 
                 }
             }
@@ -620,19 +616,24 @@ END;
                     $this->SubtotalColumns[$index] += $this->data[$i][$index];
                 }
             }
+			$this->rows_displayed++;
         }
 
-        // tally me totals
-        if(is_array($this->TotalColumns)) {
-            for($i=0; $i< count($this->data); $i++) {
-                foreach($this->TotalColumns as $index => $k) {
-                    $this->TotalColumns[$index] += $this->data[$i][$index];
-                }
-            }
-        }
-        // only do the first one if we're not on the first page
-        $this->RenderTotals(_('Subtotals this page:'), $this->SubtotalColumns);
-        $this->RenderTotals(_('Totals:'), $this->TotalColumns);
+		if($this->rows_displayed > 0) {
+        	// tally me totals
+        	if(is_array($this->TotalColumns)) {
+            	for($i=0; $i< count($this->data); $i++) {
+                	foreach($this->TotalColumns as $index => $k) {
+                    	$this->TotalColumns[$index] += $this->data[$i][$index];
+                	}
+            	}
+        	}
+        	// only do the first one if we're not on the first page
+        	$this->RenderTotals(_('Subtotals this page:'), $this->SubtotalColumns);
+        	$this->RenderTotals(_('Totals:'), $this->TotalColumns);
+		} else {
+			echo '<tr><td colspan="' . $column_count . '" class="widget_content">' . _('No Matches') . '</td></tr>';
+		}
 
         $s = ob_get_contents();
         ob_end_clean();
@@ -766,7 +767,7 @@ END;
 	/**
 	* this function assembles the html elements for final composition of the pager
 	*/
-    function RenderLayout($page_nav,$grid,$page_count,$attributes='class=widget cellspacing=1 cellpadding=0 border=0 width="100%"')
+    function RenderLayout($page_nav,$grid,$page_count)
     {
 		global $http_site_root;
 
@@ -791,7 +792,7 @@ END;
 			}
 		}
 
-       	echo "<table class=widget cellspacing=1 cellpadding=0 border=0 width=\"100%\">
+       	echo "<table class=widget cellspacing=1 width=\"100%\">
 				<tr><td colspan=$colspan class=widget_header align=left>
 					<table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
 						<tr><td class=widget_header align=left>{$this->caption}</td>
@@ -802,10 +803,10 @@ END;
 
         if ($page_nav != '&nbsp;') {
             echo "<tr><td colspan=$colspan>".
-            "<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
-            "<tr><td class=widget_label align=left>$page_count </td><td align=right class=widget_label>$page_nav </td></tr>".
-            "</table>".
-            "</td></tr>\n";
+            			"<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
+            			"<tr><td class=widget_label align=left>$page_count </td><td align=right class=widget_label>$page_nav </td></tr>".
+            			"</table>".
+            	 "</td></tr>\n";
         }
 
         echo $grid;
@@ -896,10 +897,40 @@ END;
 		}
 		$_SESSION[$prepend . $varname] = $value;
 	}
+	function SetUpSQLOrderByClause() {
+	
+		// set up an order by clause if the sort column is coming from SQL
+		if(!isset($this->column_info[$this->sort_column-1]['sql_sort_column'])) {
+			
+			$sql_query_column = 0;
+
+			foreach($this->column_info as $key => $pager_column) {
+
+				if($pager_column['index_sql']) {
+                	$sql_query_column++;
+                	if(!isset($pager_column['sql_sort_column'])) {
+                    	//echo "setting query col to $sql_query_column for {$pager_column['index_sql']}<br/>";
+                    	$this->column_info[$key]['sql_sort_column'] = $sql_query_column;
+                	}
+            	}
+			}
+		} 
+		$order_by = " order by " . $this->column_info[$this->sort_column-1]['sql_sort_column'];
+
+		$order_by .= " " . $this->sort_order;
+		$this->sql .= " $order_by";
+		$this->get_only_visible = true;
+	}
 }
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.6  2005/02/24 21:30:40  daturaarutad
+ * Fixed up some of the CSS styles
+ * Moved the SQL sort order code into a new function
+ * Added ability to set custom TD CSS classname for activities pager
+ * No longer calling sorter class when there is no data to sort
+ *
  * Revision 1.5  2005/02/17 07:59:22  daturaarutad
  * added output buffering to capture echos
  *
