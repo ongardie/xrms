@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.77 2004/12/26 15:58:19 braverock Exp $
+ * $Id: some.php,v 1.78 2004/12/26 19:41:06 braverock Exp $
  */
 
 // handle includes
@@ -295,7 +295,7 @@ if ($sort_column == 1) {
 } elseif ($sort_column == 4) {
     $order_by = "activity_title";
 } elseif ($sort_column == 5) {
-    $order_by = _("Scheduled");
+    $order_by = $con->qstr(_("Scheduled"),get_magic_quotes_gpc());
 } elseif ($sort_column == 6) {
     $order_by = "a.ends_at";
 } elseif ($sort_column == 7) {
@@ -673,6 +673,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.78  2004/12/26 19:41:06  braverock
+ * - fix string quoting to resolve problems with French translation
+ *
  * Revision 1.77  2004/12/26 15:58:19  braverock
  * - fix string quoting to resolve problems with French translation
  *
