@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.113 2005/01/12 20:08:41 vanmer Exp $
+ * $Id: utils-misc.php,v 1.114 2005/01/12 20:29:57 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -1042,9 +1042,11 @@ function current_page($vars = false, $anchor = false) {
         $parts = array_merge($parts, $vars);
 
         $page .= '?';
+	$pagevars=array();
         foreach ($parts as $key => $value) {
-            $page .= '&' . $key . '=' . $value;
+            $pagevars[]= $key . '=' . $value;
         }
+	$page .= implode('&',$pagevars);
     }
     else {
         if($vars) {
@@ -1458,6 +1460,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.114  2005/01/12 20:29:57  braverock
+ * - altered to not append & to first variable
+ *
  * Revision 1.113  2005/01/12 20:08:41  vanmer
  * - added optional parameters to formatted_address function to look up company address, also provides one line output
  *
