@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: Groups_list.php,v 1.1 2005/01/13 17:16:14 vanmer Exp $
+ * $Id: Groups_list.php,v 1.2 2005/02/14 23:31:22 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat('"<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_Groups.php?form_action=edit&return_url=Groups_list.php&Group_id="', 'Group_id', '"\'\">"') . "AS LINK, Groups.* FROM Groups order by $order_by";
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_Groups.php?form_action=edit&return_url=Groups_list.php&Group_id="), 'Group_id', $con->qstr("\'\">")) . "AS LINK, Groups.* FROM Groups order by $order_by";
 
 $css_theme='basic-left';
 start_page($page_title);
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: Groups_list.php,v $
+ * Revision 1.2  2005/02/14 23:31:22  vanmer
+ * - altered to use qstr for concat
+ *
  * Revision 1.1  2005/01/13 17:16:14  vanmer
  * - Initial Commit for ACL Administration interface
  *
