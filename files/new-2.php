@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.7 2004/06/12 07:20:40 introspectshun Exp $
+ * $Id: new-2.php,v 1.8 2004/06/15 14:26:56 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -39,9 +39,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 if ($file_entered_at == "")
-  { $file_entered_at = $con->dbtimestamp(mktime()); }
+  { $file_entered_at = time(); }
 else
-  { $file_entered_at = $con->dbtimestamp($file_entered_at . ' 23:59:59'); }
+  { $file_entered_at = strtotime($file_entered_at . ' 23:59:59'); }
 
 $sql = "SELECT * FROM files WHERE 1 = 2"; //select empty record as placeholder
 $rst = $con->execute($sql);
@@ -114,6 +114,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.8  2004/06/15 14:26:56  gpowers
+ * - correct time formats
+ *
  * Revision 1.7  2004/06/12 07:20:40  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *

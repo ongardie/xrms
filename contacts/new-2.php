@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.8 2004/01/26 19:13:34 braverock Exp $
+ * $Id: new-2.php,v 1.9 2004/06/15 14:29:00 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -76,8 +76,8 @@ $sql = "insert into contacts set
         custom3 = " . $con->qstr($custom3, get_magic_quotes_gpc()) . ",
         custom4 = " . $con->qstr($custom4, get_magic_quotes_gpc()) . ",
         entered_by = $session_user_id,
-        entered_at = " . $con->dbtimestamp(mktime()) . ",
-        last_modified_at = " . $con->dbtimestamp(mktime()) . ",
+        entered_at = " . time() . ",
+        last_modified_at = " . time() . ",
         last_modified_by = $session_user_id"
         ;
 
@@ -90,6 +90,9 @@ header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id"
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.9  2004/06/15 14:29:00  gpowers
+ * - correct time formats
+ *
  * Revision 1.8  2004/01/26 19:13:34  braverock
  * - added company division fields
  * - added phpdoc
