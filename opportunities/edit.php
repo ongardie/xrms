@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.16 2004/07/30 09:45:29 cpsource Exp $
+ * $Id: edit.php,v 1.17 2004/12/30 21:57:08 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -47,18 +47,6 @@ if ($rst) {
     $rst->close();
 }
 
-// associated with
-/*
-
-$sql = "select category_id, category_pretty_name
-from categories
-where category_record_status = 'a'
-and category_id in (select ccsm.category_id from category_category_scope_map ccsm, category_scopes cs where ccsm.category_scope_id = cs.category_scope_id and cs.on_what_table = 'opportunities')
-and category_id in (select category_id from entity_category_map where on_what_table = 'opportunities' and on_what_id = $opportunity_id)
-order by category_pretty_name";
-
-*/
-
 $sql = "select c.category_id, category_pretty_name
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
 where ecm.on_what_table = 'opportunities'
@@ -83,18 +71,6 @@ if ($rst) {
     $rst->close();
 }
 
-
-// not associated with
-/*
-
-$sql = "select category_id, category_pretty_name
-from categories
-where category_record_status = 'a'
-and category_id in (select ccsm.category_id from category_category_scope_map ccsm, category_scopes cs where ccsm.category_scope_id = cs.category_scope_id and cs.on_what_table = 'opportunities')
-and category_id not in (select category_id from entity_category_map where on_what_table = 'opportunities' and on_what_id = $opportunity_id)
-order by category_pretty_name";
-
-*/
 
 $sql = "select c.category_id, category_pretty_name
 from categories c, category_scopes cs, category_category_scope_map ccsm
@@ -189,7 +165,7 @@ confGoTo_includes();
             <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?>
-                &nbsp;<a href='opportunity-view.php' target=new><?php echo ("View Statuses"); ?></a></td>
+                &nbsp;<a href='opportunity-view.php' target=new><?php echo _("View Statuses"); ?></a></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Owner"); ?></td>
@@ -300,6 +276,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.17  2004/12/30 21:57:08  braverock
+ * - localize strings
+ * - remove obsolete lines
+ *
  * Revision 1.16  2004/07/30 09:45:29  cpsource
  * - Place confGoTo setup later in startup sequence.
  *
