@@ -188,7 +188,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=case_description><?php  echo $case_description; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input type=button class=button onclick="javascript: location.href='delete.php?company_id=$company_id&contact_id=$contact_id';" value='Delete' onclick="javascript: return confirm('Delete Contact?');"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input type=button class=button onclick="javascript: location.href='delete.php?case_id=<?php echo $case_id ?>';" value='Delete Case'></td>
             </tr>
         </table>
         </form>
