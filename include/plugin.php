@@ -12,7 +12,7 @@
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.7 2005/01/09 00:25:38 vanmer Exp $
+ * $Id: plugin.php,v 1.8 2005/03/17 20:49:50 gpowers Exp $
  * @package xrms
  */
 
@@ -99,7 +99,7 @@ function do_hook_function($name, $parm=NULL) {
         foreach ($xrms_plugin_hooks[$name] as $function) {
             /* Add something to set correct gettext domain for plugin. */
             if (function_exists($function)) {
-                $ret = $function($parm);
+                $ret .= $function($parm);
             }
         }
     }
@@ -213,6 +213,9 @@ if (isset($plugins) && is_array($plugins)) {
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.8  2005/03/17 20:49:50  gpowers
+ * - fixed bug: "only displays one plugin per hook"
+ *
  * Revision 1.7  2005/01/09 00:25:38  vanmer
  * - altered do_hook_function to original behavior to allow variables to be passed by reference, and not be interpreted using eval()
  *
