@@ -4,12 +4,12 @@
  *
  * Include this file anywhere you want to show other companies/customers tied to this contact
  *
- * @param integer $contact_id The contact_id should be set before including this file
+ * @param integer $contact_id/$company_id The contact_id or company_id should be set before including this file
  *
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: company-sidebar.php,v 1.1 2004/07/01 19:48:10 braverock Exp $
+ * $Id: company-sidebar.php,v 1.2 2004/07/02 18:03:24 neildogg Exp $
  */
 
 $what_table['from'] = "contacts";
@@ -44,7 +44,7 @@ if ($relationship_type_query) {
         $relationship_type_id = $relationship_type_query->fields['relationship_type_id'];
 
         $relationship_arr[$relationship_type_id]['pre_formatting'] = $relationship_type_query->fields['pre_formatting'];
-        $relationship_arr[$relationship_type_id]['pre_formatting'] = $relationship_type_query->fields['post_formatting'];
+        $relationship_arr[$relationship_type_id]['post_formatting'] = $relationship_type_query->fields['post_formatting'];
         $relationship_arr[$relationship_type_id]['from_what_text'] = $relationship_type_query->fields['from_what_text'];
         $relationship_arr[$relationship_type_id]['to_what_text'] = $relationship_type_query->fields['to_what_text'];
         $relationship_type_ids[] = $relationship_type_query->fields['relationship_type_id'];
@@ -150,7 +150,7 @@ if($rst->rowcount()) {
             $name = $rst->fields['company_name'];
         }
         $company_link_rows .= "<tr><td class=$class colspan=2 align=left>\n"
-                . $relationship_arr[$rst->fields['relationship_type_id']]['to_what_text']."&nbsp;"
+                . $relationship_arr[$rst->fields['relationship_type_id']][$working_direction . '_what_text'].":<br>"
                 . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting']
                 . "<a href='$http_site_root/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id="
                 . $current_id . "'>" . $name . "</a>" . $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "\n"
@@ -194,6 +194,7 @@ if($rst->rowcount()) {
                     $name = $rst2->fields['company_name'];
                 }
                 $company_link_rows .= "<tr><td class=widget_content colspan=2 align=right>\n"
+                    . $relationship_arr[$rst2->fields['relationship_type_id']][$opposite_direction . '_what_text'].":<br>"
                     . $relationship_arr[$rst2->fields['relationship_type_id']]['pre_formatting']
                     . "<a href='$http_site_root/$what_table[$working_direction]/one.php?$what_table_singular[$working_direction]_id="
                     . $current_contact_id . "'>" . $name . '</a>'
@@ -282,11 +283,13 @@ if($expand_id) {
         $name['from'] = $rst->fields['first_names'] . " " . $rst->fields['last_name'];
         $name['to'] = $rst->fields['company_name'];
         if(!in_array($rst->fields[$what_table_singular[$opposite_direction] . '_id'], $current_ids)) {
-             $company_link_rows .= "<tr><td class=widget_content><a href='$http_site_root/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id="
+             $company_link_rows .= "<tr><td class=widget_content>"
+                 . $relationship_arr[$rst->fields['relationship_type_id']][$working_direction . '_what_text'].":<br>"
+                 . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting']
+                 . "<a href='$http_site_root/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id="
                  . $rst->fields[$what_table_singular[$opposite_direction] . '_id'] . "'>"
-             . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting']
-             . $name[$opposite_direction] . "</a>"
-             . $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "<br>\n";
+                 . $name[$opposite_direction] . "</a>"
+                 . $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "<br>\n";
              if($working_direction == "from") {
                  $company_link_rows .= $rst->fields['city'] . ", " . $rst->fields['province'] . "</td></tr>\n";
              }
@@ -300,6 +303,9 @@ if($expand_id) {
 
 /**
  * $Log: company-sidebar.php,v $
+ * Revision 1.2  2004/07/02 18:03:24  neildogg
+ * Some light bug fixes and added relationship text around all entries.
+ *
  * Revision 1.1  2004/07/01 19:48:10  braverock
  * - add new configurable relationships code
  *   - adapted from patches submitted by Neil Roberts
