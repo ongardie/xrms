@@ -4,7 +4,7 @@
  *
  * Displays Audit entries and new activity counts.  Needs work.
  *
- * $Id: dashboard.php,v 1.8 2004/07/14 02:07:38 s-t Exp $
+ * $Id: dashboard.php,v 1.9 2004/07/15 17:44:34 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -249,8 +250,14 @@ end_page();
 
 /**
  * $Log: dashboard.php,v $
+ * Revision 1.9  2004/07/15 17:44:34  introspectshun
+ * - Fixed errant CVS Commit.
+ *
  * Revision 1.8  2004/07/14 02:07:38  s-t
  * cvs commit dashboard.php
+ *
+ * Revision 1.7  2004/05/27 12:03:03  braverock
+ * - added additional database error handling
  *
  * Revision 1.6  2004/04/20 20:03:07  braverock
  * - add additional activity reporting to the admin interface
