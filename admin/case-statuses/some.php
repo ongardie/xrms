@@ -2,7 +2,7 @@
 /**
 * Manage Case Statuses
 *
-* $Id: some.php,v 1.11 2005/02/10 01:57:32 braverock Exp $
+* $Id: some.php,v 1.12 2005/02/24 12:42:46 braverock Exp $
 *
 * @todo manage case statuses by type
 *       will require working on creating the rows by type,
@@ -24,14 +24,20 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //print_r($_SESSION);
 getGlobalVar($acase_type_id,'acase_type_id');
 
-$sql = "select case_type_pretty_name,case_type_id FROM case_types";
+$sql = "SELECT case_type_pretty_name,case_type_id
+        FROM case_types
+        WHERE case_type_record_status = 'a'
+        ORDER BY case_type_pretty_name";
 $rst = $con->execute($sql);
 if (!$rst) { db_error_handler($con, $sql); }
 else { $type_menu= $rst->getmenu2('acase_type_id',$acase_type_id, true, false, 1, "id=acase_type_id onchange=javascript:restrictByCaseType();"); }
 
 
 if ($acase_type_id) {
-    $sql = "select * from case_statuses where case_status_record_status = 'a' AND case_type_id=$acase_type_id order by case_type_id, sort_order";
+    $sql = "SELECT *
+            FROM case_statuses
+            WHERE case_status_record_status = 'a' AND case_type_id=$acase_type_id
+            ORDER BY case_type_id, sort_order";
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); }
 
@@ -188,6 +194,11 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.12  2005/02/24 12:42:46  braverock
+* - improve SQL formatting
+* - only show case statuses/types that have an 'a'ctive status
+*   - modified from patch submitted by Keith Edmunds
+*
 * Revision 1.11  2005/02/10 01:57:32  braverock
 * - clean up code formatting
 * - make sure only active statuses are shown
