@@ -34,12 +34,12 @@ $rec['campaign_status_id'] = $campaign_status_id;
 $rec['user_id'] = $user_id;
 $rec['campaign_title'] = $campaign_title;
 $rec['campaign_description'] = $campaign_description;
-$rec['starts_at'] = $con->dbtimestamp($starts_at);
-$rec['ends_at'] = $con->dbtimestamp($ends_at);
+$rec['starts_at'] = $starts_at;
+$rec['ends_at'] = $ends_at;
 $rec['cost'] = $cost;
-$rec['entered_at'] = $con->dbtimestamp(mktime());
+$rec['entered_at'] = time();
 $rec['entered_by'] = $session_user_id;
-$rec['last_modified_at'] = $con->dbtimestamp(mktime());
+$rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
