@@ -4,7 +4,7 @@
  *
  * This is the advanced screen that allows many more search fields
  *
- * $Id: advanced-search.php,v 1.5 2004/07/31 12:11:04 cpsource Exp $
+ * $Id: advanced-search.php,v 1.6 2004/07/31 16:23:09 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -22,6 +22,19 @@ require_once($include_directory . 'adodb-params.php');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 // a helper routine to retrieve one field from a table
+//
+// Call:
+//
+// $con - db connection
+// $sql - the sql statement to execute
+// $nam - the option to highlight - if it's '', then first option is
+//        the default and it is blank.
+//
+// Return:
+//
+// a string of the html menu
+//
+
 function check_and_get ( $con, $sql, $nam )
 {
   $rst = $con->execute($sql);
@@ -29,13 +42,13 @@ function check_and_get ( $con, $sql, $nam )
   if ( !$rst ) {
     db_error_handler($con, $sql);
   }
-  if ( !$rst->EOF ) {
+  if ( !$rst->EOF && $nam ) {
     $GLOBALS[$nam] = $rst->fields[$nam];
+    $tmp = $rst->getmenu2($nam, $GLOBALS[$nam], true);
   } else {
-    $GLOBALS[$nam] = '';
+    $tmp = $rst->getmenu2($nam, '', true);
   }
 
-  $tmp = $rst->getmenu2($nam, $GLOBALS[$nam], true);
   $rst->close();
 
   return $tmp;
@@ -64,19 +77,24 @@ order by category_pretty_name";
 $company_category_menu = check_and_get($con,$sql2,'category_id');
 
 $sql2 = "select company_type_pretty_name, company_type_id from company_types where company_type_record_status = 'a' order by company_type_id";
-$company_type_menu = check_and_get($con,$sql2,'company_type_id');
+//$company_type_menu = check_and_get($con,$sql2,'company_type_id');
+$company_type_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
-$crm_status_menu = check_and_get($con,$sql2,'crm_status_id');
+//$crm_status_menu = check_and_get($con,$sql2,'crm_status_id');
+$crm_status_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
-$company_source_menu = check_and_get($con,$sql2,'company_source_id');
+//$company_source_menu = check_and_get($con,$sql2,'company_source_id');
+$company_source_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
-$industry_menu = check_and_get($con,$sql2,'industry_id');
+//$industry_menu = check_and_get($con,$sql2,'industry_id');
+$industry_menu = check_and_get($con,$sql2,'');
 
 $sql2 = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
-$country_menu = check_and_get($con,$sql2,'country_id');
+//$country_menu = check_and_get($con,$sql2,'country_id');
+$country_menu = check_and_get($con,$sql2,'');
 
 $page_title = _("Companies");
 start_page($page_title, true, $msg);
@@ -260,6 +278,9 @@ end_page();
 
 /**
  * $Log: advanced-search.php,v $
+ * Revision 1.6  2004/07/31 16:23:09  cpsource
+ * - Make default menu items blank
+ *
  * Revision 1.5  2004/07/31 12:11:04  cpsource
  * - Fixed multiple undefines and subsequent hidden bugs
  *   Used arr_vars for retrieving POST'ed variables

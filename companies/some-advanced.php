@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.8 2004/07/31 12:11:04 cpsource Exp $
+ * $Id: some-advanced.php,v 1.9 2004/07/31 16:23:09 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,6 +15,18 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 // a helper routine to retrieve one field from a table
+//
+// Call:
+//
+// $con - db connection
+// $sql - the sql statement to execute
+// $nam - the option to highlight - if it's '', then first option is
+//        the default and it is blank.
+//
+// Return:
+//
+// a string of the html menu
+//
 function check_and_get ( $con, $sql, $nam )
 {
   $rst = $con->execute($sql);
@@ -22,13 +34,13 @@ function check_and_get ( $con, $sql, $nam )
   if ( !$rst ) {
     db_error_handler($con, $sql);
   }
-  if ( !$rst->EOF ) {
+  if ( !$rst->EOF && $nam ) {
     $GLOBALS[$nam] = $rst->fields[$nam];
+    $tmp = $rst->getmenu2($nam, $GLOBALS[$nam], true);
   } else {
-    $GLOBALS[$nam] = '';
+    $tmp = $rst->getmenu2($nam, '', true);
   }
 
-  $tmp = $rst->getmenu2($nam, $GLOBALS[$nam], true);
   $rst->close();
 
   return $tmp;
@@ -147,52 +159,52 @@ if ($company_category_id > 0) {
     $where .= " and ecm.on_what_table = 'companies' and ecm.on_what_id = c.company_id and ecm.category_id = $company_category_id ";
 }
 
-if (strlen($company_name) > 0) {
+if ( $company_name ) {
     $criteria_count++;
     $where .= " and c.company_name like " . $con->qstr($company_name, get_magic_quotes_gpc());
 }
 
-if (strlen($legal_name) > 0) {
+if ( $legal_name ) {
     $criteria_count++;
     $where .= " and c.legal_name like " . $con->qstr($legal_name, get_magic_quotes_gpc());
 }
 
-if (strlen($company_code) > 0) {
+if ( $company_code ) {
     $criteria_count++;
     $where .= " and c.company_code = " . $con->qstr($company_code, get_magic_quotes_gpc());
 }
 
-if (strlen($crm_status_id) > 0) {
+if ( $crm_status_id ) {
     $criteria_count++;
     $where .= " and c.crm_status_id = $crm_status_id";
 }
 
-if (strlen($company_source_id) > 0) {
+if ( $company_source_id ) {
     $criteria_count++;
     $where .= " and c.company_source_id = $company_source_id";
 }
 
-if (strlen($industry_id) > 0) {
+if ( $industry_id ) {
     $criteria_count++;
     $where .= " and c.industry_id = $industry_id";
 }
 
-if (strlen($user_id) > 0) {
+if ( $user_id ) {
     $criteria_count++;
     $where .= " and c.user_id = $user_id";
 }
 
-if (strlen($phone) > 0) {
+if ( $phone ) {
     $criteria_count++;
     $where .= " and c.phone like " . $con->qstr($phone, get_magic_quotes_gpc());
 }
 
-if (strlen($phone2) > 0) {
+if ( $phone2 ) {
     $criteria_count++;
     $where .= " and c.phone2 like " . $con->qstr($phone2, get_magic_quotes_gpc());
 }
 
-if (strlen($fax) > 0) {
+if ( $fax ) {
     $criteria_count++;
     $where .= " and c.fax like " . $con->qstr($fax, get_magic_quotes_gpc());
 }
@@ -202,76 +214,75 @@ if (strlen($url) > 0) {
     $where .= " and c.url like " . $con->qstr($url, get_magic_quotes_gpc());
 }
 
-if (strlen($employees) > 0) {
+if ( $employees ) {
     $criteria_count++;
     $where .= " and c.employees like " . $con->qstr($employees, get_magic_quotes_gpc());
 }
 
-if (strlen($revenue) > 0) {
+if ( $revenue ) {
     $criteria_count++;
     $where .= " and c.revenue like " . $con->qstr($revenue, get_magic_quotes_gpc());
 }
 
-if (strlen($custom1) > 0) {
+if ( $custom1 ) {
     $criteria_count++;
     $where .= " and c.custom1 like " . $con->qstr($custom1, get_magic_quotes_gpc());
 }
 
-if (strlen($custom2) > 0) {
+if ( $custom2 ) {
     $criteria_count++;
     $where .= " and c.custom2 like " . $con->qstr($custom2, get_magic_quotes_gpc());
 }
 
-if (strlen($custom3) > 0) {
+if ( $custom3 ) {
     $criteria_count++;
     $where .= " and c.custom3 like " . $con->qstr($custom3, get_magic_quotes_gpc());
 }
 
-if (strlen($custom4) > 0) {
+if ( $custom4 ) {
     $criteria_count++;
     $where .= " and c.custom4 like " . $con->qstr($custom4, get_magic_quotes_gpc());
 }
 
-if (strlen($profile) > 0) {
+if ( $profile ) {
     $criteria_count++;
     $where .= " and c.profile like " . $con->qstr($profile, get_magic_quotes_gpc());
 }
 
-if (strlen($address_name) > 0) {
+if ( $address_name ) {
     $criteria_count++;
     $where .= " and addr.address_name like " . $con->qstr($address_name, get_magic_quotes_gpc());
 }
 
-if (strlen($line1) > 0) {
+if ( $line1 ) {
     $criteria_count++;
     $where .= " and addr.line1 like " . $con->qstr($line1, get_magic_quotes_gpc());
 }
 
-if (strlen($line2) > 0) {
+if ( $line2 ) {
     $criteria_count++;
     $where .= " and addr.line2 like " . $con->qstr($line2, get_magic_quotes_gpc());
 }
 
-if (strlen($city) > 0) {
+if ( $city ) {
     $criteria_count++;
     $where .= " and addr.city like " . $con->qstr($city, get_magic_quotes_gpc());
 }
 
-if (strlen($province) > 0) {
+if ( $province ) {
     $criteria_count++;
     $where .= " and addr.province like " . $con->qstr($province, get_magic_quotes_gpc());
 }
 
-if (strlen($postal_code) > 0) {
+if ( $postal_code ) {
     $criteria_count++;
     $where .= " and addr.postal_code like " . $con->qstr($postal_code, get_magic_quotes_gpc());
 }
 
-if (strlen($country_id) > 0) {
+if ( $country_id ) {
     $criteria_count++;
     $where .= " and addr.country_id = $country_id";
 }
-
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
@@ -286,6 +297,8 @@ if ($sort_column == 1) {
 $order_by .= " $sort_order";
 
 $sql .= $from . $where . " order by $order_by";
+
+//echo "sql = $sql<br>";
 
 $sql_recently_viewed = "select * from recent_items r, companies c, crm_statuses crm
 where r.user_id = $session_user_id
@@ -413,6 +426,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.9  2004/07/31 16:23:09  cpsource
+ * - Make default menu items blank
+ *
  * Revision 1.8  2004/07/31 12:11:04  cpsource
  * - Fixed multiple undefines and subsequent hidden bugs
  *   Used arr_vars for retrieving POST'ed variables
