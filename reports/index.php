@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.19 2004/07/25 19:31:11 johnfawcett Exp $
+ * $Id: index.php,v 1.20 2005/01/03 04:36:10 ebullient Exp $
  */
 require_once('../include-locations.inc');
 
@@ -32,9 +32,10 @@ start_page($page_title, true, $msg);
 ?>
 
 <div id="Main">
-    <div id="Content">
+    <div id="ContentFullWidth">
 
         <table class=widget cellspacing=1 width="100%">
+            <col id="report" width="30%"><col id="description">
             <tr>
                 <td colspan=2 class=widget_header><?php echo _("Graphs"); ?></td>
             </tr>
@@ -84,6 +85,7 @@ start_page($page_title, true, $msg);
         </table>
 
         <table class=widget cellspacing=1 width="100%">
+            <col id="report" width="30%"><col id="description">
             <tr>
                 <td colspan=2 class=widget_header><?php echo _("Reports"); ?></td>
             </tr>
@@ -147,12 +149,6 @@ start_page($page_title, true, $msg);
 
     </div>
 
-    <!-- right column //-->
-    <div id="Sidebar">
-
-
-    </div>
-
 </div>
 
 <?php
@@ -161,6 +157,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.20  2005/01/03 04:36:10  ebullient
+ * make reports/index.php use full width
+ *
  * Revision 1.19  2004/07/25 19:31:11  johnfawcett
  * - corrected gettext string
  *
