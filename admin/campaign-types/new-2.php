@@ -25,7 +25,7 @@ $rec['campaign_type_pretty_plural'] = $campaign_type_pretty_plural;
 $rec['campaign_type_display_html'] = $campaign_type_display_html;
 
 $tbl = "campaign_types";
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
