@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.57 2004/07/21 10:11:58 cpsource Exp $
+ * $Id: utils-misc.php,v 1.58 2004/07/21 13:35:04 cpsource Exp $
  */
 
 /**
@@ -781,7 +781,47 @@ define ( "arr_vars_GET"               , 1 );  // just try a GET
 define ( "arr_vars_GET_SESSION"       , 2 );  // try a GET first, and then if it fails, do a SESSION
 define ( "arr_vars_GET_STRLEN_SESSION", 3 );  // try a GET first with length > 0, and then if it fails, do a SESSION
 
+//
 // get all variables
+//
+// Description: Get variables passed into a php script
+//
+// Do so as follows:
+//
+// 1) if the script is started with http://somehost/xrms/some-script.php?clear=1
+//    then all variables in $ary[0..n-1] are set to '' and then
+//    arr_vars_get_all will return.
+//
+// 2) if $post_vars is false and $_POST['usr_post_vars'] is set to 1
+//    then all variables in $ary[0..n-1] are set to $_POST[$ary[0..n-1]]. If
+//    the variable hasn't been POST'ed and you have full error logging on
+//    an unused variable error will be generated. Then,
+//    arr_vars_get_all will return.
+//
+// 3) if $post_vars is true
+//    then all variables in $ary[0..n-1] are set to $_POST[$ary[0..n-1]]. If
+//    the variable hasn't been POST'ed, a '' will be used instead. Then,
+//    arr_vars_get_all will return.
+//
+// 4) Otherwise, the subroutine will attempt to retrieve $ary[0..n-1] as
+//    indicated by the BEHAVIOR stored in $ary[0..n-1][1]. Refer to the
+//    BEHAVIOR flags just above.
+//
+//       arr_vars_SESSION
+//         the datasource is $_SESSION[$ary[0..n-1][0]] and if that isn't defined, use ''
+//
+//       arr_vars_GET
+//         the datasource is $_GET[$ary[0..n-1][0]] and if that isn't defined, use ''
+//
+//       arr_vars_GET_SESSION
+//         the datasource is $_GET[$ary[0..n-1][0]] and if that isn't defined, treat as
+//         arr_vars_SESSION.
+//
+//       arr_vars_GET_STRLEN_SESSION
+//         the datasource is $_GET[$ary[0..n-1][0]] and if the length of the result is 0 or undefined, treat as
+//         arr_vars_SESSION.
+//
+
 function arr_vars_get_all ( $ary, $post_vars = false )
 {
   global $clear;
@@ -912,6 +952,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.58  2004/07/21 13:35:04  cpsource
+ * - Document function arr_vars_get_all
+ *
  * Revision 1.57  2004/07/21 10:11:58  cpsource
  * - Fixed problems with get_system_parameter whereby it ASS-UMED
  *   the record existed in the table.
