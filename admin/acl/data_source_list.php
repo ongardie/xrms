@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: data_source_list.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: data_source_list.php,v 1.2 2005/02/15 00:30:56 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat('"<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_data_source.php?form_action=edit&return_url=data_source_list.php&data_source_id="', 'data_source_id', '"\'\">"') . "AS LINK, data_source_id as 'ID', data_source_name as 'Data Source Name' FROM data_source order by $order_by";
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_data_source.php?form_action=edit&return_url=data_source_list.php&data_source_id="), 'data_source_id', $con->qstr("'\">")) . "AS LINK, data_source_id as 'ID', data_source_name as 'Data Source Name' FROM data_source order by $order_by";
 
 $css_theme='basic-left';
 start_page($page_title);
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: data_source_list.php,v $
+ * Revision 1.2  2005/02/15 00:30:56  vanmer
+ * - requoted strings for general use
+ *
  * Revision 1.1  2005/01/13 17:16:15  vanmer
  * - Initial Commit for ACL Administration interface
  *
