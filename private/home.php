@@ -115,11 +115,11 @@ start_page($page_title);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
     <tr>
-        <td class=lcol width=75% valign=top>
+        <td class=lcol width="75%" valign=top>
 
-        <table class=widget cellspacing=1 width=100%>
+        <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=7>Open Activities</td>
             </tr>
@@ -141,7 +141,7 @@ start_page($page_title);
         &nbsp;
         </td>
         <!-- right column //-->
-        <td class=rcol width=24% valign=top>
+        <td class=rcol width="24%" valign=top>
 
         </td>
     </tr>

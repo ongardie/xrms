@@ -31,9 +31,9 @@ start_page($page_title, false, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width=100% height=80%>
+<table border=0 cellpadding=0 cellspacing=0 width="100%" height="80%">
     <tr>
-        <td width=33% valign=top>
+        <td width="33%" valign=top>
 
         &nbsp;
 
@@ -65,7 +65,7 @@ start_page($page_title, false, $msg);
         </td>
 
         <!-- right column //-->
-        <td width=33% valign=top>
+        <td width="33%" valign=top>
 
         &nbsp;
 
@@ -73,7 +73,7 @@ start_page($page_title, false, $msg);
     </tr>
 </table>
 
-<script language=javascript>
+<script type="text/javascript">
 <!--
 
 function initialize() {
