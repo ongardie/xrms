@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.28 2004/09/17 20:04:29 neildogg Exp $
+ * $Id: new-2.php,v 1.29 2004/09/21 18:19:30 introspectshun Exp $
  */
 
 //where do we include from
@@ -211,13 +211,16 @@ $con->close();
 if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
     header("Location: " . $http_site_root . $return_url);
 } elseif(!empty($opportunity_status_id)) {
-    header("Location: " . $http_site_root . "/opportunitis/one.php?return_url=" . $return_url . "&opportunity_id=" . $opportunity_id);
+    header("Location: " . $http_site_root . "/opportunities/one.php?return_url=" . $return_url . "&opportunity_id=" . $opportunity_id);
 } else {  //If Long activities are the default, send them to edit the activity
     header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
 }
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.29  2004/09/21 18:19:30  introspectshun
+ *- Corrected mispelling of opportunities directory
+ *
  *Revision 1.28  2004/09/17 20:04:29  neildogg
  *- Added optional auto creation of opportunity
  * - from contact screen along with auto
