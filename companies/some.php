@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.53 2005/02/14 21:43:45 vanmer Exp $
+ * $Id: some.php,v 1.54 2005/02/25 03:43:43 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-require_once($include_directory . 'classes/Pager/XRMS_Pager.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 $session_user_id = session_check();
@@ -301,8 +301,10 @@ start_page($page_title, true, $msg);
 
 <?php
 //Nic - I did this different than the other some.phps because it is a more complex sql you have to write to retrieve company email records
-$_SESSION["search_sql"]["from"]=$from;
-$_SESSION["search_sql"]["where"]=$where;
+$searchsql = array();
+$searchsql['from'] = $from;
+$searchsql['where'] = $where;
+$_SESSION['search_sql'] = $searchsql;
 
 $columns = array();
 $columns[] = array('name' => _("Company Name"), 'index' => 'name');
@@ -332,7 +334,7 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
 echo $pager_columns_selects;
 
 
-$pager = new XRMS_Pager($con, $sql, _('Search Results'), 'CompanyForm', 'CompanyPager', $columns);
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CompanyForm', 'CompanyPager', $columns);
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
@@ -412,6 +414,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.54  2005/02/25 03:43:43  daturaarutad
+ * fixed search_sql for email, updated to use GUP_Pager
+ *
  * Revision 1.53  2005/02/14 21:43:45  vanmer
  * - updated to reflect speed changes in ACL operation
  *
