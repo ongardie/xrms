@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.9 2004/07/14 14:49:27 cpsource Exp $
+ * $Id: sidebar.php,v 1.10 2004/07/14 19:04:41 gpowers Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -123,7 +123,7 @@ if (strlen($rst->fields['username']) > 0) {
                . $rst->fields['username']
                . "</td>\n\t<td class=widget_content>
                  <font class=note_label>
-                 <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . $return_url . "'>"
+                 <a href='" . $http_site_root . "/notes/edit.php?note_id=" . $rst->fields['note_id'] . $return_url . "'>"
                . _("View/Edit")
                . "</a>
                  </font>
@@ -165,6 +165,10 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.10  2004/07/14 19:04:41  gpowers
+ * - added $http_site_root to Edit link
+ *   - needed for calls from plugins
+ *
  * Revision 1.9  2004/07/14 14:49:27  cpsource
  * - All sidebar.php's now support IN_XRMS security feature.
  *
