@@ -67,17 +67,18 @@ if ($rst) {
 
 $categories = implode($categories, ", ");
 
-$sql = "select * from notes
-where on_what_table = 'campaigns' and on_what_id = $campaign_id
+$sql = "select note_id, note_description, entered_by, entered_at, username from notes, users
+where notes.entered_by = users.user_id
+and on_what_table = 'campaigns' and on_what_id = $campaign_id
 and note_record_status = 'a' order by entered_at desc";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $note_rows .= '<tr>';
-        $note_rows .= '<td class=widget_content>' . $rst->fields['note_description'] . '</td>';
-        $note_rows .= '</tr>';
+        $note_rows .= "<tr>";
+        $note_rows .= "<td class=widget_content>" . $con->userdate($rst->fields['entered_at']) . " &bull; " . $rst->fields['username'] . " &bull; <a href='../notes/edit.php?note_id=" . $rst->fields['note_id'] . "&return_url=/campaigns/one.php?campaign_id=" . $campaign_id . "'>Edit</a><br>" . $rst->fields['note_description'] . "</td>";
+        $note_rows .= "</tr>";
         $rst->movenext();
     }
     $rst->close();
@@ -205,17 +206,17 @@ start_page($page_title, true, $msg);
         </table>
 
         <!-- notes //-->
-        <form action="<?php  echo $http_site_root; ?>/notes/new.php" method="post">
-        <input type=hidden name=on_what_table value="campaigns">
-        <input type=hidden name=on_what_id value="<?php  echo $campaign_id; ?>">
-        <input type=hidden name=return_url value="/campaigns/one.php?campaign_id=<?php  echo $campaign_id; ?>">
+        <form action="../notes/new.php" method="post">
+        <input type="hidden" name="on_what_table" value="campaigns">
+        <input type="hidden" name="on_what_id" value="<?php echo $campaign_id ?>">
+        <input type="hidden" name="return_url" value="/campaigns/one.php?campaign_id=<?php echo $campaign_id ?>">
         <table class=widget cellspacing=1 width=100%>
             <tr>
                 <td class=widget_header>Notes</td>
             </tr>
-            <?php  echo $note_rows; ?>
+            <?php echo $note_rows; ?>
             <tr>
-                <td class=widget_content_form_element><input type=submit class=button value="New"></td>
+                <td class=widget_content_form_element colspan=4><input type=submit class=button value="New"></td>
             </tr>
         </table>
         </form>
