@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.5 2004/04/23 16:00:53 gpowers Exp $
+ * $Id: update.php,v 1.6 2004/04/23 17:11:41 gpowers Exp $
  */
 
 /**
@@ -107,10 +107,6 @@ $rst = $con->execute($sql);
 //session_id stores _COOKIE["PHPSESSID"], used for tracking a user's session
 $sql = "alter table audit_items add session_id varchar(50) after remote_port";
 $rst = $con->execute($sql);
-//http_user_agent identifies the user's web browser and OS.
-//This is useful for tracing unauthorized access.
-$sql = "alter table audit_items add http_user_agent varchar(255) after session_id";
-$rst = $con->execute($sql);
 // end
 
 //make sure that there is a status_open_indicator column in campagins 
@@ -168,6 +164,14 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.6  2004/04/23 17:11:41  gpowers
+ * Removed http_user_agent from audit_items table. It is space consuming and
+ * redundant, as most httpd servers can be configured to log this information.
+ *
+ * If anyone has run the previsous version of this script, no harm will be
+ * done, they will just have an extra column in the audit table. But, I wanted
+ * to patch this ASAP, to minize the number of people who might run it.
+ *
  * Revision 1.5  2004/04/23 16:00:53  gpowers
  * Removed addresses.line3 - this was not an approved change
  * Added comments telling the reasons for the changes
