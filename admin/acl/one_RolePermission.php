@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_RolePermission.php,v 1.1 2005/01/13 17:16:16 vanmer Exp $
+ * $Id: one_RolePermission.php,v 1.2 2005/02/15 19:51:58 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -42,7 +42,7 @@ global $symbol_precendence;
 
   require_once($include_directory ."classes/QuickForm/ADOdb_QuickForm.php");
 
-            $sql = "SELECT ControlledObjectRelationship_id as ID, Child.ControlledObject_name as ChildName, Parent.ControlledObject_name as ParentName
+            $sql = "SELECT CORelationship_id as ID, Child.ControlledObject_name as ChildName, Parent.ControlledObject_name as ParentName
             FROM ControlledObjectRelationship LEFT OUTER JOIN ControlledObject AS Parent ON
             Parent.ControlledObject_id=ControlledObjectRelationship.ParentControlledObject_id
             JOIN ControlledObject AS Child ON Child.ControlledObject_id=ControlledObjectRelationship.ChildControlledObject_id";
@@ -58,7 +58,7 @@ global $symbol_precendence;
   $model->ReadSchemaFromDB($con, 'RolePermission');
   $model->SetDisplayNames(array('Group_name' => 'Group Name')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
 
-  $model->SetForeignKeyField('ControlledObjectRelationship_id', 'Controlled Object Relationship', null, null, null, null, $relationships);
+  $model->SetForeignKeyField('CORelationship_id', 'Controlled Object Relationship', null, null, null, null, $relationships);
   $model->SetForeignKeyField('Role_id', 'Role', 'Role', 'Role_id', 'Role_name');
   $model->SetForeignKeyField('Permission_id', 'Permission', 'Permission', 'Permission_id', 'Permission_name');
   
@@ -91,6 +91,9 @@ end_page();
 
 /**
  * $Log: one_RolePermission.php,v $
+ * Revision 1.2  2005/02/15 19:51:58  vanmer
+ * - updated to reflect new fieldnames
+ *
  * Revision 1.1  2005/01/13 17:16:16  vanmer
  * - Initial Commit for ACL Administration interface
  *

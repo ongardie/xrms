@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.1 2005/01/13 17:16:16 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.2 2005/02/15 19:51:59 vanmer Exp $
  *
  */
 
@@ -53,26 +53,28 @@ if ($gridrole_id) {
     $acl_options=$options;
     $acl = new xrms_acl($acl_options);
     $relationships = $acl->get_controlled_object_relationship(false, false, false,true);
-    if (!is_array($relationships)) { $msg="Error, relationships failed"; }
-    if (!is_array(current($relationships))) { $relationships=array($relationships); }
-    $permissions = $acl->get_permissions_list();
-    $permcount = count($permissions);
-    foreach ($permissions as $pkey=>$perm) {
-        $Perm_data=$acl->get_permission(false, $perm);
-        $permission_names[$pkey]=$Perm_data['Permission_name'];
-    }
-    $scopes = $acl->get_scope_list();
-    foreach ($scopes as $scope) {
-        foreach ($permissions as $perm) {
-            foreach ($relationships as $cor => $relationship) {
-                $rolePerm=$acl->get_role_permission($gridrole_id, $cor, $scope, $perm);
-                if ($rolePerm) {
-                    $current_permissions[$scope][$cor][$perm]=1;
-                } else $current_permissions[$scope][$cor][$perm]=0;
-            }
+    if (!is_array($relationships)) { $msg="Error, relationships failed";} else {
+        if (!is_array(current($relationships))) { $relationships=array($relationships); }
+        $permissions = $acl->get_permissions_list();
+        $permcount = count($permissions);
+        foreach ($permissions as $pkey=>$perm) {
+            $Perm_data=$acl->get_permission(false, $perm);
+            $permission_names[$pkey]=$Perm_data['Permission_name'];
         }
-    
+        $scopes = $acl->get_scope_list();
+        foreach ($scopes as $scope) {
+            foreach ($permissions as $perm) {
+                foreach ($relationships as $cor => $relationship) {
+                    $rolePerm=$acl->get_role_permission($gridrole_id, $cor, $scope, $perm);
+                    if ($rolePerm) {
+                        $current_permissions[$scope][$cor][$perm]=1;
+                    } else $current_permissions[$scope][$cor][$perm]=0;
+                }
+            }
+        
+        }
     }
+
 }
 $css_theme='basic-left';
 start_page($page_title, true, $msg);

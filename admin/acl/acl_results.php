@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.2 2005/02/14 20:42:24 vanmer Exp $
+ * $Id: acl_results.php,v 1.3 2005/02/15 19:51:39 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -199,7 +199,7 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false) {
                 $sql .= " order by $order_by";
             }
             if ($extrafield) {
-                $radiofield="CONCAT('<input type=radio name=on_what_id value=',$on_what_field,'>') as on_what_id";
+                $radiofield=$ret['con']->qstr("<input type=radio name=on_what_id value=$on_what_field>") ." as on_what_id";
                 if(preg_match("|SELECT([^\e]*)FROM([^\e]*)|", $sql, $matched)) {
                     $fields = trim($matched[1]);
                     if ($fields=='*') {
@@ -242,6 +242,9 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.3  2005/02/15 19:51:39  vanmer
+  * - updated to reflect new fieldnames
+  *
   * Revision 1.2  2005/02/14 20:42:24  vanmer
   * - added missing connection object to do concat with adodb in acl results
   *
