@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -16,9 +17,14 @@ $return_url = $_POST['return_url'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "update notes set note_description = " . $con->qstr($note_description, get_magic_quotes_gpc()) . " where note_id = $note_id";
+$sql = "SELECT * FROM notes WHERE note_id = $note_id";
+$rst = $con->execute($sql);
 
-$con->execute($sql);
+$rec = array();
+$rec['note_description'] = $note_description;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 $con->close();
 

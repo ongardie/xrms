@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $return_url = $_POST['return_url'];
@@ -18,9 +19,18 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "insert into notes (on_what_table, on_what_id, note_description, entered_at, entered_by) values (" . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ", $on_what_id, " . $con->qstr($note_description, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
-// print $sql;
-$con->execute($sql);
+$sql = "SELECT * FROM notes WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['on_what_table'] = $on_what_table;
+$rec['on_what_id'] = $on_what_id;
+$rec['note_description'] = $note_description;
+$rec['entered_at'] = $con->DBTimestamp(mktime());
+$rec['entered_by'] = $session_user_id;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $con->close();
 
