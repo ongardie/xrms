@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.7 2005/01/06 21:53:22 vanmer Exp $
+ * $Id: add-division.php,v 1.8 2005/01/13 18:23:15 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,7 +13,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$on_what_table='company_division';
+$session_user_id = session_check('','Create');
 
 $company_id = $_POST['company_id'];
 $division_name = $_POST['division_name'];
@@ -50,6 +51,9 @@ header("Location: divisions.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.8  2005/01/13 18:23:15  vanmer
+ * - Basic ACL changes to allow create/delete functionality to be restricted
+ *
  * Revision 1.7  2005/01/06 21:53:22  vanmer
  * - added address_id to new/edit-2 retrieve/store methods, to specify an address for a division
  *
