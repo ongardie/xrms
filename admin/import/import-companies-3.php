@@ -24,7 +24,7 @@
  * @todo modify CSVtoArray fn to do a trim, strtolower, and replace spaces with underscores in array element names
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-3.php,v 1.9 2004/02/10 16:57:24 braverock Exp $
+ * $Id: import-companies-3.php,v 1.10 2004/02/10 17:15:14 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -314,17 +314,17 @@ foreach ($filearray as $row) {
         }
         //set phone numbers only if the company didn't already exist
         if (!$company_id) {
-            if ($phone) {
+            if ($company_phone) {
                 $sql_insert_company .= ',
-                phone       = '. $con->qstr($phone, get_magic_quotes_gpc());
+                phone       = '. $con->qstr($company_phone, get_magic_quotes_gpc());
             }
-            if ($phone2) {
+            if ($company_phone2) {
                 $sql_insert_company .= ',
-                phone2       = '. $con->qstr($phone2, get_magic_quotes_gpc());
+                phone2       = '. $con->qstr($company_phone2, get_magic_quotes_gpc());
             }
-            if ($fax) {
+            if ($company_fax) {
                 $sql_insert_company .= ',
-                fax       = '. $con->qstr($fax, get_magic_quotes_gpc());
+                fax       = '. $con->qstr($company_fax, get_magic_quotes_gpc());
             }
         }
         //now set the where clause if the company existed
@@ -537,6 +537,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.10  2004/02/10 17:15:14  braverock
+ * - added extra error checknig around phone import
+ *
  * Revision 1.9  2004/02/10 16:57:24  braverock
  * - fixed address line 2 insert
  *
