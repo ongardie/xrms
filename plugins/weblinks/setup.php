@@ -20,7 +20,7 @@ function weblinks() {
     global $city;
     global $postal_code;
 
-    echo "
+    $weblinks_rows = "
 <form name=\"weblink\">
 <select name=\"menu\" onChange=\"location=document.weblink.menu.options[document.weblink.menu.selectedIndex].value;\" value=\"GO\">
 
@@ -33,13 +33,16 @@ function weblinks() {
 ";
 
     if ($postal_code) {
-        echo "<option value=\"http://factfinder.census.gov/servlet/SAFFFacts?_event=Search&geo_id=01000US&_geoContext=&_street=" . urlencode($line1) . "&_county=&_cityTown=" . urlencode($city) . "&_state=&_zip=" . urlencode($postal_code) . "&_lang=en&_sse=on\">" . _('US Census Data') . "</option>";
+        $weblinks_rows .= "<option value=\"http://factfinder.census.gov/servlet/SAFFFacts?_event=Search&geo_id=01000US&_geoContext=&_street=" . urlencode($line1) . "&_county=&_cityTown=" . urlencode($city) . "&_state=&_zip=" . urlencode($postal_code) . "&_lang=en&_sse=on\">" . _('US Census Data') . "</option>";
 }
 
-   echo "
+   $weblinks_rows .= "
 </select>
 </form>
 ";
+
+   return $weblinks_rows;
+   
 }
 
 ?>

@@ -15,7 +15,7 @@ function vcard() {
     global $custom1;
     global $custom2;
     global $contact_id;
-    echo " <input class=button type=button value=\"" .  _("Vcard") ."\" onclick=\"javascript: location.href='vcard.php?contact_id=" . $contact_id . "';\">";
+    return " <input class=button type=button value=\"" .  _("Vcard") ."\" onclick=\"javascript: location.href='vcard.php?contact_id=" . $contact_id . "';\">";
 
 }
 

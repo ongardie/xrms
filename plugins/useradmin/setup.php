@@ -1,18 +1,16 @@
 <?php
 /*
 *
-* User Admin XRMS Plugin v0.1
+* User Administration XRMS Plugin v0.1
 *
 * copyright 2004 Glenn Powers <glenn@user127.com>
 * Licensed Under the Open Software License v. 2.0
 *
 */
 
-// must match directory name
 function xrms_plugin_init_useradmin() {
     global $xrms_plugin_hooks;
     $xrms_plugin_hooks['menuline']['useradmin'] = 'useradmin';
-//    $xrms_plugin_hooks['one_contact_buttons']['radtest'] = 'radtest';
 }
 
 function useradmin() {
