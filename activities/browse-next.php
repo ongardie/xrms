@@ -14,7 +14,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.8 2004/07/21 22:21:41 neildogg Exp $
+ * $Id: browse-next.php,v 1.9 2004/07/21 22:54:06 neildogg Exp $
  */
 
 //include required files
@@ -72,6 +72,9 @@ if($saved_id) {
         }
         header("Location: one.php?save_and_next=true&activity_id=" . $next_to_check[0]);
         $pos = 1;
+    }
+    else {
+        header("Location: some.php");
     }
 }
 //If we've created the next_to_check array from outside (ie the saved query)
@@ -245,6 +248,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.9  2004/07/21 22:54:06  neildogg
+ * - Go back if there are none
+ *
  * Revision 1.8  2004/07/21 22:21:41  neildogg
  * - Rearranged sidebar
  *  - Now can browse saved searches
