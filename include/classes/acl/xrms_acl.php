@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.3 2005/01/27 00:12:53 neildogg Exp $
+ * $Id: xrms_acl.php,v 1.4 2005/02/14 21:28:36 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -1451,10 +1451,11 @@ class xrms_acl {
             $Permission_id=$Permission['Permission_id'];
         }
         //Get list of objects with this controlledobject_id
-        $ControlledObjectCompleteList = $this->get_field_list($ControlledObject_id, array());
+        //COMMENTED BECAUSE THIS IS TOO EXPENSIVE
+//        $ControlledObjectCompleteList = $this->get_field_list($ControlledObject_id, array());
         
         //still have entire list to restrict
-        $objectsLeft = $ControlledObjectCompleteList;
+//        $objectsLeft = $ControlledObjectCompleteList;
         $objectsFound=array();
                 
         //Get list of roles and groups for the user
@@ -1506,7 +1507,7 @@ class xrms_acl {
                             case 'World':
                                 //If found, return whole list, and groups/roles
                                 $ret=array();
-                                $ret['controlled_objects']=$ControlledObjectCompleteList;
+//                                $ret['controlled_objects']=$ControlledObjectCompleteList;
                                 $ret['ALL']=true;
                                 $ret['groups']=$GroupList;
                                 $ret['roles']=$RoleList;
@@ -1523,6 +1524,8 @@ class xrms_acl {
                                     //Restrict master list of objects, if empty, return the whole thing
                                     //If not, next scope
                                     $objectsFound=array_merge($objectsFound, $UserList);
+/* COMMENTED BECAUSE WE LONGER HAVE A COMPLETE LIST TO COMPARE AGAINST */                                  
+/*
                                     $objectsLeft = array_diff($ControlledObjectCompleteList, $objectsFound);
                                     if (count($objectsLeft)==0) {
                                         $ret=array();
@@ -1532,6 +1535,7 @@ class xrms_acl {
                                         $ret['roles']=$RoleList;
                                         return $ret;
                                     }
+*/                                    
                                 }
                                 break;
                         }
@@ -1565,6 +1569,8 @@ class xrms_acl {
                         //If not, next scope
                         if ($FoundGroupList) {
                             $objectsFound=array_merge($objectsFound, $FoundGroupList);
+/* COMMENTED BECAUSE WE LONGER HAVE A COMPLETE LIST TO COMPARE AGAINST */                                  
+/*
                             $objectsLeft = array_diff($ControlledObjectCompleteList, $objectsFound);
                             if (count($objectsLeft)==0) {
                                 $ret=array();
@@ -1574,6 +1580,7 @@ class xrms_acl {
                                 $ret['roles']=$RoleList;
                                 return $ret;
                             }
+*/                            
                         }
                     }
                 }
@@ -1601,6 +1608,8 @@ class xrms_acl {
 //                            print_r($ParentList);
                             if ($ParentList) {
                                 $objectsFound=array_unique(array_merge($objectsFound, $ParentList));
+/* COMMENTED BECAUSE WE LONGER HAVE A COMPLETE LIST TO COMPARE AGAINST */                                  
+/*
                                 $objectsLeft = array_diff($ControlledObjectCompleteList, $objectsFound);
                                 if (count($objectsLeft)==0) {
                                     $ret=array();
@@ -1610,9 +1619,10 @@ class xrms_acl {
                                     $ret['roles']=$recurse['roles'];
                                     return $ret;
                                 }
+*/                                
                             }
                         } else {
-                            $ret['controlled_objects']=$ControlledObjectCompleteList;
+//                            $ret['controlled_objects']=$ControlledObjectCompleteList;
                             $ret['ALL']=true;
                             $ret['groups']=$recurse['groups'];
                             $ret['roles']=$recurse['roles'];
@@ -1649,6 +1659,8 @@ class xrms_acl {
 //                    echo "<p>$ParentList=\$this->get_field_list($ControlledObject_id, $fieldRestrict, $find_field, $on_what_table)";
                     if ($ParentList) {
                         $objectsFound=array_merge($objectsFound, $ParentList);
+/* COMMENTED BECAUSE WE LONGER HAVE A COMPLETE LIST TO COMPARE AGAINST */                                  
+/*
                         $objectsLeft = array_diff($ControlledObjectCompleteList, $objectsFound);
                         if (count($objectsLeft)==0) {
                             $ret=array();
@@ -1658,6 +1670,7 @@ class xrms_acl {
                             $ret['roles']=$recurse['roles'];
                             return $ret;
                         }
+*/                        
                     }
                 }
             }
@@ -1668,10 +1681,7 @@ class xrms_acl {
             $ret['controlled_objects']=$objectsFound;
             $ret['groups']=$GroupList;
             $ret['roles']=$UserRoleList;
-                
-            if (count($objectsLeft)==0) {
-                $ret['ALL']=true;
-            }
+            $ret['ALL']=false;
             return $ret;
         } else {
             return false;
@@ -2095,6 +2105,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.4  2005/02/14 21:28:36  vanmer
+ * - adjusted to no longer select all entities when checking permissions
+ *
  * Revision 1.3  2005/01/27 00:12:53  neildogg
  * - Restricted query to applicable field
  *
