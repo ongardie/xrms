@@ -2,7 +2,7 @@
 
 if ( !defined('IN_XRMS') )
 {
-  die('Hacking attempt');
+  die(_("Hacking attempt"));
   exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.15 2004/08/21 20:13:48 johnfawcett Exp $
+ * $Id: sidebar.php,v 1.16 2004/09/13 23:35:36 introspectshun Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -103,7 +103,7 @@ for($i = 0; $i <= $loop; $i++) {
             AND r.relationship_type_id in (" . implode(',', $relationship_type_ids) . ")
             AND r.relationship_status='a'
             AND r." . $opposite_direction . "_what_id=" . $what_table_singular[$opposite_direction] . "_id
-            GROUP BY c." . $what_table_singular[$opposite_direction] . "_id";
+            /* GROUP BY c." . $what_table_singular[$opposite_direction] . "_id */";
 
     //uncomment the debug line to see what's going on with the query
     //$con->debug=1;
@@ -351,7 +351,7 @@ $relationship_link_rows .= "<!-- Form Start --></table>\n</div>
                     <option>"._("Choose a relationship")."</option>
                     " . $new_options . "
                     </select>
-                    <input type=submit value=\""._("Next")."\">
+                    <input type=submit class=button value=\""._("Next")."\">
                 </td>
             </form>
             </tr><!-- Form End -->";
@@ -444,6 +444,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.16  2004/09/13 23:35:36  introspectshun
+ * - Added CSS class to "Next" button
+ *
  * Revision 1.15  2004/08/21 20:13:48  johnfawcett
  * - added gettext calls to new strings
  *
