@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.14 2004/07/09 18:44:50 introspectshun Exp $
+ * $Id: some.php,v 1.15 2004/07/14 02:04:12 s-t Exp $
  */
 
 //include required files
@@ -13,7 +13,6 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
-require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -95,47 +94,43 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
-$sql = "SELECT "
-      . $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&amp;file_id='","file_id","'\">'","file_pretty_name", "'</a>'")
-      . " AS 'Name', file_description as 'Description',";
+        $sql = "select
+        concat('<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id=', file_id, '\">',file_pretty_name, '</a>') as 'Name',
+        file_description as 'Description',";
 
 switch ($file_on_what) {
     case "contacts" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&amp;contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS 'Contact',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+        $sql .= "
+        concat('<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '\">', cont.last_name, ' ', cont.first_names, '</a>') as 'Contact',
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     case "contacts_of_companies" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&amp;contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
-              . " AS 'Contact',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+        $sql .= "
+        concat('<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id=', contact_id, '\">', cont.last_name, ' ', cont.first_names, '</a>') as 'Contact',
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     case "companies" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+        $sql .= "
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     case "campaigns" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&amp;campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
-              . " AS 'Campaign',";
+        $sql .= "
+        concat('<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id=', camp.campaign_id, '\">', camp.campaign_title, '</a>') as 'Campaign',";
         break;
     }
     case "opportunities" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&amp;opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
-              . " AS 'Opportunity',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+        $sql .= "
+        concat('<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id=', opportunity_id, '\">', opp.opportunity_title, '</a>') as 'Opportunity',
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     case "cases" : {
-        $sql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&amp;case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
-              . " AS 'Case',"
-              . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
-              . " AS 'Company',";
+        $sql .= "
+        concat('<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id=', case_id, '\">', cases.case_title, '</a>') as 'Case',
+        concat('<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',";
         break;
     }
     default : {
@@ -143,8 +138,8 @@ switch ($file_on_what) {
         }
 }
 
-$sql .= $con->SQLDate('Y-m-d','f.entered_at') . " AS 'Date'," .
-        $con->Concat("'<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&amp;file_id='", "file_id", "'\">'", "file_id", "'</a>'") . " AS 'ID' ";
+$sql .= "date_format(f.entered_at, '%Y-%m-%d') as 'Date',
+         concat('<a href=\"$http_site_root/files/one.php?return_url=/private/home.php&file_id=', file_id, '\">', file_id, '</a>') as 'ID'";
 
 $from = "from ";
 switch ($file_on_what) {
@@ -290,7 +285,7 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'files', '', 4);
 }
 
-$page_title = _("Files");
+$page_title = 'Files';
 start_page($page_title, true, $msg);
 
 ?>
@@ -306,46 +301,55 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=7><?php echo _("Search Criteria"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("File ID"); ?></td>
-                <td class=widget_label><?php echo _("File Name"); ?></td>
-                <td class=widget_label><?php echo _("File Description"); ?></td>
-                <td class=widget_label><?php echo _("On What"); ?></td>
-                <td class=widget_label><?php echo _("On what Name"); ?></td>
-                <td class=widget_label><?php echo _("Date"); ?></td>
-                <td class=widget_label><?php echo _("Owner"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name="file_id" size=5 value="<?php  echo $file_id ?>"></td>
-                <td class=widget_content_form_element><input type=text name="file_name" size=12 value="<?php  echo $file_name ?>"></td>
-                <td class=widget_content_form_element><input type=text name="file_description" size=12 value="<?php  echo $file_description ?>"></td>
-                <td class=widget_content_form_element>
-                    <select name="file_on_what">
-                        <option value="default"<?php if ($file_on_what == "") { echo " selected"; } ?>></option>
-                        <option value="contacts"<?php if ($file_on_what == "contacts" ) { echo " selected"; } ?>>Contacts</option>
-                        <option value="contacts_of_companies"<?php if ($file_on_what == "contacts_of_companies") { echo " selected"; } ?>>Contacts of Companies</option>
-                        <option value="companies"<?php if ($file_on_what == "companies") { echo " selected"; } ?>>Companies</option>
-                        <option value="campaigns"<?php if ($file_on_what == "campaigns") { echo " selected"; } ?>>Campaigns</option>
-                        <option value="opportunities"<?php if ($file_on_what == "opportunities") { echo " selected"; } ?>>Opportunities</option>
-                        <option value="cases"<?php if ($file_on_what == "cases") { echo " selected"; } ?>>Cases</option>
-                    </select>
-                </td>
-                <td class=widget_content_form_element><input type=text name="file_on_what_name" size=12 value="<?php echo $file_on_what_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="file_date" size=8 value="<?php echo $file_date; ?>"></td>
-                <td class=widget_content_form_element><?php echo $user_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=7>
-                    <input class=button type=submit value="Search"> 
-                    <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
-                    <?php if ($company_count > 0) {echo "<input class=button type=button onclick='javascript: bulkEmail()' value='"._("Bulk E-Mail")."'>";}; ?>
-                </td>
-            </tr>
-        </table>
+        
+      <table width="100%" cellspacing=1 class=widget>
+        <tr> 
+          <td class=widget_header colspan=4>Search Criteria</td>
+        </tr>
+        <tr> 
+          <td class=widget_label>File ID</td>
+          <td class=widget_label>File Name</td>
+          <td class=widget_label>File Description</td>
+          <td class=widget_label>On What</td>
+        </tr>
+        <tr> 
+          <td width="25%" class=widget_content_form_element>
+<input type=text name="file_id" size=5 value="<?php  echo $file_id ?>"></td>
+          <td width="25%" class=widget_content_form_element>
+<input type=text name="file_name" size=12 value="<?php  echo $file_name ?>"></td>
+          <td width="25%" class=widget_content_form_element>
+<input type=text name="file_description" size=12 value="<?php  echo $file_description ?>"></td>
+          <td width="25%" class=widget_content_form_element> 
+            <select name="file_on_what">
+              <option value="default"<?php if ($file_on_what == "") { print " selected"; } ?>></option>
+              <option value="contacts"<?php if ($file_on_what == "contacts" ) { print " selected"; } ?>>Contacts</option>
+              <option value="contacts_of_companies"<?php if ($file_on_what == "contacts_of_companies") { print " selected"; } ?>>Contacts 
+              of Companies</option>
+              <option value="companies"<?php if ($file_on_what == "companies") { print " selected"; } ?>>Companies</option>
+              <option value="campaigns"<?php if ($file_on_what == "campaigns") { print " selected"; } ?>>Campaigns</option>
+              <option value="opportunities"<?php if ($file_on_what == "opportunities") { print " selected"; } ?>>Opportunities</option>
+              <option value="cases"<?php if ($file_on_what == "cases") { print " selected"; } ?>>Cases</option>
+            </select> </td>
+        </tr>
+        <tr> 
+          <td colspan=2 class=widget_content_form_element>On what Name</td>
+          <td class=widget_content_form_element>Date</td>
+          <td class=widget_content_form_element>Owner</td>
+        </tr>
+        <tr> 
+          <td colspan=2 class=widget_content_form_element><input type=text name="file_on_what_name" size=12 value="<?php  echo $file_on_what_name ?>"></td>
+          <td class=widget_content_form_element><input type=text name="file_date" size=8 value="<?php  echo $file_date ?>"></td>
+          <td class=widget_content_form_element> 
+            <?php  echo $user_menu ?>
+          </td>
+        </tr>
+        <tr> 
+          <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search"> 
+            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search"> 
+            <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
+          </td>
+        </tr>
+      </table>
         </form>
         <p>
 <?php
@@ -364,13 +368,13 @@ $con->close();
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Recently Viewed"); ?></td>
+                <td class=widget_header colspan=4>Recently Viewed</td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Name"); ?></td>
-                <td class=widget_label><?php echo _("Size"); ?></td>
-                <td class=widget_label><?php echo _("Date"); ?></td>
-                <td class=widget_label><?php echo _("File ID"); ?></td>
+                <td class=widget_label>Name</td>
+                <td class=widget_label>Size</td>
+                <td class=widget_label>Date</td>
+                <td class=widget_label>File ID</td>
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
@@ -417,25 +421,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
- * Revision 1.14  2004/07/09 18:44:50  introspectshun
- * - Removed CAST(x AS CHAR) for wider database compatibility
- * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
+ * Revision 1.15  2004/07/14 02:04:12  s-t
+ * cvs commit some.php
  *
- * Revision 1.13  2004/06/24 15:54:23  maulani
- * - Fix html errors so search button displays and page validates
- *
- * Revision 1.12  2004/06/21 20:41:37  introspectshun
- * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
- *
- * Revision 1.11  2004/06/21 14:25:32  braverock
- * - localized strings for i18n/internationalization/translation support
- *
- * Revision 1.10  2004/06/12 18:23:51  braverock
- * - remove CAST, as it is not standard across databases
- *   - database should explicitly convert number to string for CONCAT
- *
- * Revision 1.9  2004/06/12 07:20:40  introspectshun
- * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ * Revision 1.9 2004/07/13 Cartika
+ *- add split level search criteria
  *
  * Revision 1.8  2004/05/10 13:07:21  maulani
  * - Add level to audit trail
