@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.29 2004/06/08 02:21:56 braverock Exp $
+ * $Id: utils-misc.php,v 1.30 2004/06/11 20:26:30 introspectshun Exp $
  */
 
 /**
@@ -71,15 +71,19 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
              and on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc())  ."
              and on_what_id = $on_what_id";
 
-    $sql2 = "insert into recent_items set
-             user_id       =  $user_id,
-             on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
-             on_what_id    = $on_what_id,
-             recent_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
-
-    // $con->debug=1;
     $con->execute($sql1);
-    $con->execute($sql2);
+
+    $sql2 = "SELECT * FROM recent_items WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql2);
+
+    $rec = array();
+    $rec['user_id'] = $user_id;
+    $rec['on_what_table'] = $on_what_table;
+    $rec['on_what_id'] = $on_what_id;
+    $rec['recent_item_timestamp'] = $con->dbtimestamp(date("Y-m-d H:i:s"));
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
 }
 
 /**
@@ -110,19 +114,22 @@ function current_audit_level() {
  */
 function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_what_id, $level=4) {
     $log_level = current_audit_level();
-    if ( $level <= $log_level ) {
-                $sql = "insert into audit_items set
-                                user_id = $user_id,
-                                audit_item_type = " . $con->qstr($audit_item_type, get_magic_quotes_gpc()) . ",
-                                on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
-                                on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
-                                remote_addr = '" . $_SERVER['REMOTE_ADDR'] . "',
-                                remote_port = '" . $_SERVER['REMOTE_PORT'] . "',
-                                session_id = '" . $_COOKIE['PHPSESSID'] . "',
-                                audit_item_timestamp = " . $con->dbtimestamp(date("Y-m-d H:i:s"));
+    if ($level <= $log_level) {
+        $sql = "SELECT * FROM audit_items WHERE 1 = 2"; //select empty record as placeholder
+        $rst = $con->execute($sql);
+        
+        $rec = array();
+        $rec['user_id'] = $user_id;
+        $rec['audit_item_type'] = $audit_item_type;
+        $rec['on_what_table'] = $on_what_table;
+        $rec['on_what_id'] = $on_what_id;
+        $rec['remote_addr'] = $_SERVER['REMOTE_ADDR'];
+        $rec['remote_port'] = $_SERVER['REMOTE_PORT'];
+        $rec['session_id'] = $_COOKIE['PHPSESSID'];
+        $rec['audit_item_timestamp'] = $con->dbtimestamp(date("Y-m-d H:i:s"));
 
-                //$con->debug=1
-                $con->execute($sql);
+        $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
     }
 }
 
@@ -591,6 +598,9 @@ function get_formatted_address (&$con,$address_id) {
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.30  2004/06/11 20:26:30  introspectshun
+ * - Now use ADODB GetInsertSQL and GetUpdateSQL functions.
+ *
  * Revision 1.29  2004/06/08 02:21:56  braverock
  * - add optional $colspan parameter to db_error_handler fn for better formatting
  *
