@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.17 2004/06/13 09:15:07 braverock Exp $
+ * $Id: edit-2.php,v 1.18 2004/06/15 19:20:22 introspectshun Exp $
  */
 
 //include required files
@@ -76,7 +76,6 @@ $sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
 $rst = $con->execute($sql);
 //$con->debug = 1;
 
-//initialize array for updating db
 $rec = array();
 $rec['activity_type_id'] = $activity_type_id;
 $rec['contact_id'] = $contact_id;
@@ -88,7 +87,7 @@ $rec['ends_at'] = strtotime($ends_at);
 $rec['completed_at'] = $completed_at;
 $rec['activity_status'] = $activity_status;
 
-$upd = $con->GetUpdateSQL($rst, $rec, $forceUpdate=false, $magicq=get_magic_quotes_gpc());
+$upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
 $rst = $con->execute($upd);
 
 if($on_what_table == 'opportunities' and strlen ($probability)) {
@@ -100,12 +99,16 @@ if($on_what_table == 'opportunities' and strlen ($probability)) {
     $old_probability = $prob_rst->fields['probability'];
     $prob_rst->close();
 
-    $sql = "update opportunities set
-        probability = $probability
-        where opportunity_id = $on_what_id";
+    $sql = "SELECT * FROM opportunities WHERE opportunity_id = $on_what_id";
+    $rst = $con->execute($sql);
 
-    $prob_rst= $con->execute($sql);
-    if (!$prob_rst) { db_error_handler ($con, $sql); }
+    $rec = array();
+    $rec['probability'] = $probability;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
+    $prob_rst= $con->execute($upd);
+
+    if (!$prob_rst) { db_error_handler ($con, $upd); }
     $prob_rst->close();
 }
 
@@ -270,6 +273,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.18  2004/06/15 19:20:22  introspectshun
+ * - Save and Next now uses GetUpdateSQL()
+ *
  * Revision 1.17  2004/06/13 09:15:07  braverock
  * - add Save & Next functionality
  *   - code contributed by Neil Roberts
