@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.45 2004/08/26 23:16:28 niclowe Exp $
+ * $Id: some.php,v 1.46 2004/10/28 22:17:02 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -176,7 +176,6 @@ if ( $rst ) {
 $sql_recently_viewed = "select
 c.company_id,
 c.company_name,
-c.company_code,
 max(r.recent_item_timestamp) as lasttime
 from recent_items r, companies c
 where r.user_id = $session_user_id
@@ -185,8 +184,7 @@ and r.recent_action = ''
 and r.on_what_id = c.company_id
 and c.company_record_status = 'a'
 group by company_id,
-c.company_name,
-c.company_code
+c.company_name
 order by lasttime desc";
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
@@ -196,7 +194,7 @@ $recently_viewed_table_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?company_id=' . $rst->fields['company_id'] . '">' . $rst->fields['company_name'] . ' (' . $rst->fields['company_code'] . ')</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?company_id=' . $rst->fields['company_id'] . '">' . $rst->fields['company_name'] . '</a></td>';
         $recently_viewed_table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -412,6 +410,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.46  2004/10/28 22:17:02  gpowers
+ * - removed company_code from Recently Viewed Sidebar
+ *   - If anyone wants to keep it, let me know and I'll revert this patch and create a new patch with a $show_company_code_in_sidebars var.
+ *
  * Revision 1.45  2004/08/26 23:16:28  niclowe
  * Enabled mail merge functionality for companies/some.php
  * Sorted pre-sending email checkbox page by company then contact lastname
