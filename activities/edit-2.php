@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.46 2004/12/20 21:47:59 neildogg Exp $
+ * $Id: edit-2.php,v 1.47 2005/01/06 17:24:32 introspectshun Exp $
  */
 
 //include required files
@@ -398,9 +398,7 @@ if ($rst) {
 
 if ($activity_status == 'o') {
     $activity_status_long = "Open";
-}
-
-if ($activity_status == 'c') {
+} elseif ($activity_status == 'c') {
     $activity_status_long = "Closed";
 }
 
@@ -442,6 +440,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.47  2005/01/06 17:24:32  introspectshun
+ * - Combined conditional for status label
+ *
  * Revision 1.46  2004/12/20 21:47:59  neildogg
  * - Changed to handle a custom return_url (fixed)
  *
