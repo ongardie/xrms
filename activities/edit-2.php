@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.37 2004/08/11 18:44:18 braverock Exp $
+ * $Id: edit-2.php,v 1.38 2004/08/13 10:22:12 cpsource Exp $
  */
 
 //include required files
@@ -286,6 +286,9 @@ if ($rst) {
 }
 
 
+// null out old_status
+$old_status = '';
+
 /* this saves case/opportunity status changes to the database when they are changed in one.php */
 $table_name = strtolower($table_name);
 if ($table_name != "attached to") {
@@ -422,6 +425,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.38  2004/08/13 10:22:12  cpsource
+ * - Define a default value for old_status
+ *
  * Revision 1.37  2004/08/11 18:44:18  braverock
  * - allow clearing a previously set activity completion
  *
