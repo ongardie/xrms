@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.32 2004/07/09 15:50:56 neildogg Exp $
+ * $Id: one.php,v 1.33 2004/07/09 19:41:02 neildogg Exp $
  */
 
 //include required files
@@ -313,7 +313,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right_166px>Opportunity Notes</td>
                 <td class=widget_content_form_element>
-                    <textarea rows=10 cols=100 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea>
+                    <textarea rows=10 cols=90 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
                     <input class=button value="Insert Log" type=button onclick="var now = new Date(); form.opportunity_description.value =
                         logTime() + ' by ' + form.user_id.options[form.user_id.selectedIndex].text + ': \n\n' + form.opportunity_description.value">
                 </td>
@@ -398,6 +398,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.33  2004/07/09 19:41:02  neildogg
+ * - Now matches normal description textarea width\n- Break before Insert button
+ *
  * Revision 1.32  2004/07/09 15:50:56  neildogg
  * - Uses the new, generic relationship sidebar
  *
