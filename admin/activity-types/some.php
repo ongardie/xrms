@@ -2,7 +2,7 @@
 /**
  * Manage Activity Types
  *
- * $Id: some.php,v 1.9 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: some.php,v 1.10 2004/07/19 21:31:09 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -41,7 +41,7 @@ if ($rst) {
 }
 $con->close();
 
-$page_title = "Manage Activity Types";
+$page_title = _("Manage Activity Types");
 start_page($page_title);
 
 ?>
@@ -49,51 +49,51 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
 
-                <table class=widget cellspacing=1>
-                        <tr>
-                                <td class=widget_header colspan=4><?php echo _("Activity Types"); ?></td>
-                        </tr>
-                        <tr>
-                                <td class=widget_label>Name</td><td class=widget_label width=15%><?php echo _("Move"); ?></td>
-                        </tr>
-                        <?php  echo $table_rows; ?>
-                </table>
+		<table class=widget cellspacing=1>
+			<tr>
+                <td class=widget_header colspan=4><?php echo _("Activity Types"); ?></td>
+			</tr>
+			<tr>
+                <td class=widget_label>Name</td><td class=widget_label width=15%><?php echo _("Move"); ?></td>
+			</tr>
+			<?php  echo $table_rows; ?>
+		</table>
 
     </div>
 
-        <!-- right column //-->
+    <!-- right column //-->
     <div id="Sidebar">
 
-                <form action="add-2.php" method=post>
-                <table class=widget cellspacing=1>
-                        <tr>
-                                <td class=widget_header colspan=2><?php echo _("Add New Activity Type"); ?></td>
-                        </tr>
-                        <tr>
-                                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
-                                <td class=widget_content_form_element><input type=text name=activity_type_short_name size=30></td>
-                        </tr>
-                        <tr>
-                                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
-                                <td class=widget_content_form_element><input type=text name=activity_type_pretty_name size=30></td>
-                        </tr>
-                        <tr>
-                                <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
-                                <td class=widget_content_form_element><input type=text name=activity_type_pretty_plural size=30></td>
-                        </tr>
-                        <tr>
-                                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
-                                <td class=widget_content_form_element><input type=text name=activity_type_display_html size=30></td>
-                        </tr>
-                        <tr>
-                                <td class=widget_label_right><?php echo _("Score Adjustment"); ?></td>
-                                <td class=widget_content_form_element><input type=text name=activity_type_score_adjustment size=5></td>
-                        </tr>
-                        <tr>
-                                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
-                        </tr>
-                </table>
-                </form>
+		<form action="add-2.php" method=post>
+		<table class=widget cellspacing=1>
+			<tr>
+                <td class=widget_header colspan=2><?php echo _("Add New Activity Type"); ?></td>
+			</tr>
+			<tr>
+                <td class=widget_label_right><?php echo _("Short Name"); ?></td>
+				<td class=widget_content_form_element><input type=text name=activity_type_short_name size=30></td>
+			</tr>
+			<tr>
+                <td class=widget_label_right><?php echo _("Full Name"); ?></td>
+				<td class=widget_content_form_element><input type=text name=activity_type_pretty_name size=30></td>
+			</tr>
+			<tr>
+                <td class=widget_label_right><?php echo _("Full Plural Name"); ?></td>
+				<td class=widget_content_form_element><input type=text name=activity_type_pretty_plural size=30></td>
+			</tr>
+			<tr>
+                <td class=widget_label_right><?php echo _("Display HTML"); ?></td>
+				<td class=widget_content_form_element><input type=text name=activity_type_display_html size=30></td>
+			</tr>
+			<tr>
+                <td class=widget_label_right><?php echo _("Score Adjustment"); ?></td>
+				<td class=widget_content_form_element><input type=text name=activity_type_score_adjustment size=5></td>
+			</tr>
+			<tr>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
+			</tr>
+		</table>
+		</form>
 
     </div>
 </div>
@@ -104,6 +104,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/07/19 21:31:09  introspectshun
+ * - Added i18n string for $page_title
+ *
  * Revision 1.9  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *
