@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.53 2004/07/20 14:04:41 cpsource Exp $
+ * $Id: utils-misc.php,v 1.54 2004/07/21 05:54:06 maulani Exp $
  */
 
 /**
@@ -135,8 +135,9 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
  *
  * @return the audit level
  */
-function current_audit_level() {
-    return 4;  // 0 is the most restrictive level, 4 logs everything
+function current_audit_level(&$con) {
+    $level = get_system_parameter($con, "Audit Level");
+    return $level;  // 0 is the most restrictive level, 4 logs everything
 }
 
 /**
@@ -149,8 +150,8 @@ function current_audit_level() {
  * @param  integer $on_what_id what record are we viewing
  * @return void
  */
-function add_audit_item($con, $user_id, $audit_item_type, $on_what_table, $on_what_id, $level=4) {
-    $log_level = current_audit_level();
+function add_audit_item(&$con, $user_id, $audit_item_type, $on_what_table, $on_what_id, $level=4) {
+    $log_level = current_audit_level($con);
     if ($level <= $log_level) {
         //save to database
         $rec = array();
@@ -875,6 +876,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.54  2004/07/21 05:54:06  maulani
+ * - Update audit functions to use logging level from system parameters
+ *
  * Revision 1.53  2004/07/20 14:04:41  cpsource
  * - Deprecated getGlobalVars. It's replaced by the arr_vars sub-system.
  *
