@@ -8,9 +8,9 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.114 2005/01/12 20:29:57 braverock Exp $
+ * $Id: utils-misc.php,v 1.115 2005/01/13 17:51:18 vanmer Exp $
  */
-
+require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
 {
   die(_('Hacking attempt'));
@@ -52,6 +52,8 @@ function session_check($c_role='', $action='Read') {
 
     global $http_site_root;
     global $xrms_system_id;
+    global $on_what_table;
+    global $on_what_id;
 
     // get our eventual target
     if (isset($_SERVER['REQUEST_URI'])) {
@@ -78,10 +80,15 @@ function session_check($c_role='', $action='Read') {
 
     // make sure we've logged in
     if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
+      if ($on_what_id)
+         $role_ok = check_permission_bool($_SESSION['session_user_id'], false, $on_what_id, $action, $on_what_table);
+      else
+         $role_ok = check_object_permission_bool($_SESSION['session_user_id'], false, $action, $on_what_table);
+      
       // we are logged in
       if ( !$role_ok ) {
         // we are logged in, go straight to logout.php
-        header("Location: $http_site_root" . "/logout.php?msg=noauth");
+	header("Location: $http_site_root" . "/private/home.php?msg=noauth");
         //exit;
       }
       // just return our current session id
@@ -1042,11 +1049,11 @@ function current_page($vars = false, $anchor = false) {
         $parts = array_merge($parts, $vars);
 
         $page .= '?';
-	$pagevars=array();
+        $pagevars=array();
         foreach ($parts as $key => $value) {
-            $pagevars[]= $key . '=' . $value;
+            $pagevars[] = $key . '=' . $value;
         }
-	$page .= implode('&',$pagevars);
+        $page .= implode('&',$pagevars);
     }
     else {
         if($vars) {
@@ -1460,6 +1467,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.115  2005/01/13 17:51:18  vanmer
+ * - added ACL requirement to utils-misc.php (MAY BREAK existing installs unless update is run)
+ * - added ACL restriction into session_check
+ *
  * Revision 1.114  2005/01/12 20:29:57  braverock
  * - altered to not append & to first variable
  *
