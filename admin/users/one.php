@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.18 2005/02/10 23:46:13 vanmer Exp $
+ * $Id: one.php,v 1.19 2005/03/31 21:39:11 gpowers Exp $
  */
 
 //include required files
@@ -57,6 +57,13 @@ if($my_company_id) {
     $rst = $con->execute($sql);
     $contact_menu = $rst->getmenu2('user_contact_id', $user_contact_id, true);
 }
+
+// make sure $sidebar_rows is defined
+if ( !isset($sidebar_rows) ) {
+  $sidebar_rows = '';
+}
+//call the sidebar hook
+$sidebar_rows = do_hook_function('admin_user_edit_sidebar', $sidebar_rows);
 
 $con->close();
 
@@ -149,7 +156,7 @@ start_page($page_title);
         <!-- right column //-->
     <div id="Sidebar">
 
-        &nbsp;
+        <?php echo $sidebar_rows; ?>
 
     </div>
 </div>
@@ -160,6 +167,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.19  2005/03/31 21:39:11  gpowers
+ * - added sidebar plugin hook
+ *
  * Revision 1.18  2005/02/10 23:46:13  vanmer
  * - added enabled flag to reflect user account status
  *
