@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.9 2004/04/08 15:41:01 maulani Exp $
+ * $Id: some.php,v 1.10 2004/04/12 16:24:41 maulani Exp $
  */
 
 //include the standard files
@@ -255,12 +255,12 @@ start_page($page_title, true, $msg);
                 <td class=widget_label>Owner</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name="last_name" size=10 maxlength=100 value="<?php  echo $last_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="first_names" size=10 maxlength=100 value="<?php  echo $first_names; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="title" size=5 maxlength=100 value="<?php  echo $title; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_name" size=10 maxlength=100 value="<?php  echo $company_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_code" size=5 maxlength=10 value="<?php  echo $company_code; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="description" size=10 maxlength=100 value="<?php  echo $description; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="last_name" size=9 maxlength=100 value="<?php  echo $last_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="first_names" size=9 maxlength=100 value="<?php  echo $first_names; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="title" size=4 maxlength=100 value="<?php  echo $title; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_name" size=9 maxlength=100 value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="description" size=4 maxlength=100 value="<?php  echo $description; ?>"></td>
                 <td class=widget_content_form_element><?php  echo $contact_category_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
@@ -337,6 +337,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.10  2004/04/12 16:24:41  maulani
+ * - Adjust sizing to fit screen in IE6
+ *
  * Revision 1.9  2004/04/08 15:41:01  maulani
  * - Fix width problem
  *
