@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.54 2005/01/25 05:55:58 vanmer Exp $
+ * $Id: update.php,v 1.55 2005/01/29 19:40:05 vanmer Exp $
  */
 
 // where do we include from
@@ -4063,6 +4063,7 @@ $con->execute($sql);
     if (!in_array('user_preferences',$table_list)) {
         $sql="CREATE TABLE `user_preferences` (
         `user_preference_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+        `user_id` INT( 11 ) UNSIGNED NOT NULL,
         `user_preference_type_id` INT UNSIGNED NOT NULL ,
         `user_preference_name` VARCHAR( 255 ) ,
         `user_preference_value` LONGTEXT NOT NULL ,
@@ -4080,6 +4081,9 @@ $con->execute($sql);
 
 
 install_upgrade_acl($con);
+
+$sql = "ALTER TABLE user_preferences ADD user_id INT( 11 ) UNSIGNED NOT NULL";
+$con->execute($sql);
 
 //close the database connection, because we don't need it anymore
 $con->close();
@@ -4104,6 +4108,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.55  2005/01/29 19:40:05  vanmer
+ * - added errorneously missing user_id field to user preferences table
+ *
  * Revision 1.54  2005/01/25 05:55:58  vanmer
  * - added tables for user preferences
  * - added hook for plugins to run updates after all other updates are completed
