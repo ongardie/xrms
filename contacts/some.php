@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.30 2004/07/28 20:43:49 neildogg Exp $
+ * $Id: some.php,v 1.31 2004/08/03 20:31:06 maulani Exp $
  */
 
 //include the standard files
@@ -139,14 +139,28 @@ $order_by .= " $sort_order";
 
 $sql .= $from . $where . $group_by . " order by $order_by";
 
-$sql_recently_viewed = "select * from recent_items r, contacts cont, companies c
+$sql_recently_viewed = "select 
+cont.contact_id,
+cont.first_names,
+cont.last_name,
+c.company_name,
+cont.address_id,
+cont.work_phone,
+max(r.recent_item_timestamp) as lasttime
+from recent_items r, contacts cont, companies c
 where r.user_id = $session_user_id
 and r.on_what_table = 'contacts'
 and r.recent_action = ''
 and c.company_id = cont.company_id
 and r.on_what_id = cont.contact_id
 and contact_record_status = 'a'
-order by r.recent_item_timestamp desc";
+group by cont.contact_id,
+cont.first_names,
+cont.last_name,
+c.company_name,
+cont.address_id,
+cont.work_phone
+order by lasttime desc";
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
@@ -154,7 +168,8 @@ $recently_viewed_table_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">';
+        $recently_viewed_table_rows .= $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) . '</td>';
         $recently_viewed_table_rows .= '</tr>';
@@ -334,6 +349,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.31  2004/08/03 20:31:06  maulani
+ * - Fix recently viewed items to remove duplicates
+ * - Optimize SQL for recently viewed items to remove unused columns
+ *
  * Revision 1.30  2004/07/28 20:43:49  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
