@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.9 2004/07/10 11:40:26 braverock Exp $ **/
+/** $Id: README,v 1.10 2004/07/11 14:31:27 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -356,10 +356,37 @@ To have a daily report of ALL users completed items report emailed:
 To have a daily report of a single user's completed items report emailed:
 0 23 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./completed-items.php "&send_email=y&type=all&user_id=1" >> /dev/null)
 
+========================
+XRMS Development Team
+
+Name              SF ID          Role
+------------------------------------------------------------
+Chris Woofter     cdwtech        Original Author of XRMS
+Brian Peterson    braverock      Acting Project Coordinator
+
+Andrew            s-t            Developer
+Olivier Colonna   obac           Developer
+Ken Gregoire      kennyg1        Documentation
+Nic Lowe          niclowe        Developer
+Beth Macknik      maulani        Developer
+Glenn Powers      gpowers        Developer
+Neil Roberts      neildogg       Developer
+David Rogers      introspectshun Developer
+David Uhlman      d2uhlman       Developer
+Neil Williams     metamedia      Developer
+Aaron van Meerten vanmer         Developer
+
+XRMS also contains code contributed by many, many users.
+The XRMS Development Team is grateful for all of the code,
+suggestions, bug fixes, and discussion contributed by each of you.
+
 ============================================================
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.10  2004/07/11 14:31:27  braverock
+ * - added Developer Credits section
+ *
  * Revision 1.9  2004/07/10 11:40:26  braverock
  * - minor edits to cvs instructions
  * - fixed typos
