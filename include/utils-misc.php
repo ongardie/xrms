@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.107 2005/01/10 15:52:08 neildogg Exp $
+ * $Id: utils-misc.php,v 1.108 2005/01/10 16:42:08 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -989,12 +989,12 @@ function update_daylight_savings($con) {
  */
 function current_page($vars = false) {
     global $http_site_root;
-    $page = '';
+    $page = $http_site_root;
     $site_directories = explode('/', $http_site_root);
 
     if(!isset($_SERVER['REQUEST_URI'])) {
       $_SERVER['REQUEST_URI'] = substr($_SERVER['argv'][0], strpos($_SERVER['argv'][0], ';') + 1);
-    }  
+    }
     $request_uri = $_SERVER['REQUEST_URI'];
     $parts = explode('?', $request_uri, 2);
     $directories = explode('/', $parts[0]);
@@ -1004,7 +1004,7 @@ function current_page($vars = false) {
         }
     }
     if(count($parts)) {
-        if($vars) {
+        if($vars && !strstr($parts[1], $vars)) {
             return $page . '?' . $parts[1] . '&' . $vars;
         }
         else {
@@ -1422,6 +1422,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.108  2005/01/10 16:42:08  neildogg
+ * - Now returns proper context in relation to site root and prevents double variables
+ *
  * Revision 1.107  2005/01/10 15:52:08  neildogg
  * - Can now pass variables to tack on to the end of current_page
  *
