@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.7 2005/02/23 20:54:19 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.8 2005/03/01 21:50:23 ycreddy Exp $
  */
 
 /*****************************************************************************/
@@ -1021,7 +1021,7 @@ class xrms_acl {
         
         $RolePermissionRow['Role_id']=$Role_id;
         $RolePermissionRow['CORelationship_id']=$CORelationship_id;
-        $RolePermissionRow['Scope']=$con->qstr($Scope);    
+        $RolePermissionRow['Scope']=$Scope;    
         $RolePermissionRow['Permission_id']=$Permission_id;        
         
         //Create insert statement
@@ -2087,6 +2087,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.8  2005/03/01 21:50:23  ycreddy
+ * Removing the extra qstr call when setting the Scope in add_role_permission
+ *
  * Revision 1.7  2005/02/23 20:54:19  vanmer
  * - altered logic of permission checks to use SQL to loop instead of looping and then using SQL
  * - extended get_role_permission to allow arrays to be passed instead of single parameters
