@@ -4,7 +4,7 @@
  * 
  * List system users.
  * 
- * $Id: some.php,v 1.2 2004/04/16 14:44:32 maulani Exp $ 
+ * $Id: some.php,v 1.3 2004/05/10 20:55:11 maulani Exp $ 
  */ 
 
 require_once('../../include-locations.inc');
@@ -43,6 +43,7 @@ $rst = $con->execute($sql2);
 $role_menu = $rst->getmenu2('role_id', '', false);
 $rst->close();
 
+$default_gst = get_system_parameter($con, 'Default GST Offset');
 $con->close();
 
 $page_title = "Manage Users";
@@ -108,7 +109,7 @@ start_page($page_title);
 			</tr>
 			<tr>
 				<td class=widget_label_right>GMT Offset</td>
-				<td class=widget_content_form_element><input type=text size=5 name=gmt_offset></td>
+				<td class=widget_content_form_element><input type=text size=5 name=gmt_offset value='<?php echo $default_gst; ?>'></td>
 			</tr>
 			<tr>
 				<td class=widget_label_right>Allow Access</td>
@@ -130,6 +131,9 @@ end_page();
 
 /** 
  * $Log: some.php,v $
+ * Revision 1.3  2004/05/10 20:55:11  maulani
+ * - Auto-fill the default GST offset
+ *
  * Revision 1.2  2004/04/16 14:44:32  maulani
  * - Add CSS2 positioning
  * - Cleanup HTML so page validates
