@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.12 2004/05/04 15:30:33 gpowers Exp $
+ * $Id: one.php,v 1.13 2004/06/07 18:58:50 gpowers Exp $
  */
 
 //include required files
@@ -64,10 +64,9 @@ if ($rst) {
     $case_status_display_html = $rst->fields['case_status_display_html'];
     $case_priority_display_html = $rst->fields['case_priority_display_html'];
     $case_type_display_html = $rst->fields['case_type_display_html'];
-    $case_description = $rst->fields['case_description'];
     $account_owner_username = $rst->fields['account_owner_username'];
     $case_title = $rst->fields['case_title'];
-    $case_description = $rst->fields['case_description'];
+    $case_description = nl2br($rst->fields['case_description']);
     $case_owner_username = $rst->fields['case_owner_username'];
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
@@ -370,6 +369,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2004/06/07 18:58:50  gpowers
+ * - removed duplicate line
+ * - added nl2br() to case description for proper formatting
+ *
  * Revision 1.12  2004/05/04 15:30:33  gpowers
  * Changed display of $profile (which was undefined) to $case_description
  *
