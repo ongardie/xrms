@@ -6,7 +6,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: index.php,v 1.3 2004/06/16 20:57:25 gpowers Exp $
+ * $Id: index.php,v 1.4 2004/07/07 20:46:26 neildogg Exp $
  */
 
 //include required files
@@ -31,11 +31,11 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$page_title = "Address Country Format";
+$page_title = "Country Localization Formats";
 start_page($page_title, true, $msg);
 
 
-$sql = "select country_id, country_name, countries.address_format_string_id, address_format_strings.address_format_string_id, address_format_string from address_format_strings, countries where address_format_strings.address_format_string_id = countries.address_format_string_id";
+$sql = "select country_id, country_name, phone_format, countries.address_format_string_id, address_format_strings.address_format_string_id, address_format_string from address_format_strings, countries where address_format_strings.address_format_string_id = countries.address_format_string_id";
 
 $rst = $con->execute($sql);
 
@@ -43,6 +43,7 @@ if ($rst) {
     echo "<table align=center>
 <tr>
 <td class=widget_header>Country</td>
+<td class=widget_header>Phone Format</td>
 <td class=widget_header>Address Format</td>
 <td class=widget_header></td>
 </tr>
@@ -52,8 +53,14 @@ if ($rst) {
         $address_format_string = $rst->fields['address_format_string'];
         $address_format_string_id = $rst->fields['address_format_string_id'];
         $country_id = $rst->fields['country_id'];
+        $phone_format = $rst->fields['phone_format'];
         echo "<tr>
 <td class=widget_label_right>$country</td>
+<td class=widget_content nowrap><form method=post action=edit-2.php>
+    <input type=hidden name=country_id value=$country_id>
+    <input size=18 maxlength=100 name=phone_format value='$phone_format'>
+    <input type=submit value=Update class=button>
+</form></td>
 <td class=widget_content>$address_format_string</td>
 <td class=widget_content><a href=edit.php?address_format_string_id=" . $address_format_string_id ."&country_id=" . $country_id . ">EDIT</a></td>
 </tr>";
@@ -67,6 +74,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.4  2004/07/07 20:46:26  neildogg
+ * - Added support for phone format editing
+ *
  * Revision 1.3  2004/06/16 20:57:25  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5

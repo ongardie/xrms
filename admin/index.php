@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.13 2004/06/16 20:54:59 gpowers Exp $
+ * $Id: index.php,v 1.14 2004/07/07 20:46:25 neildogg Exp $
  */
 
 //include required stuff
@@ -186,7 +186,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
-                    <a href="country-address-format/index.php">Country Address Formats</a>
+                    <a href="country-address-format/index.php">Country Localization Formats</a>
                 </td>
             </tr>
 	        <tr>
@@ -208,6 +208,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.14  2004/07/07 20:46:25  neildogg
+ * - Added support for phone format editing
+ *
  * Revision 1.13  2004/06/16 20:54:59  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5

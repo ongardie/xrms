@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: edit-2.php,v 1.3 2004/06/16 20:57:25 gpowers Exp $
+ * $Id: edit-2.php,v 1.4 2004/07/07 20:46:26 neildogg Exp $
  */
 //include required files
 require_once('../../include-locations.inc');
@@ -22,19 +22,25 @@ require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $msg = $_GET['msg'];
 $address_format_string_id = $_GET['address_format_string_id'];
-$country_id = $_GET['country_id'];
+$country_id = $_REQUEST['country_id'];
+$phone_format = $_POST['phone_format'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-if (($country_id) && ($address_format_string_id)) {
+if ($country_id) {
 
     $sql = "SELECT * FROM countries WHERE country_id = $country_id";
     $rst = $con->execute($sql);
 
     $rec = array();
-    $rec['address_format_string_id'] = $address_format_string_id;
+    if($address_format_string_id) {
+        $rec['address_format_string_id'] = $address_format_string_id;
+    }
+    elseif($phone_format) {
+        $rec['phone_format'] = $phone_format;
+    }
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $rst = $con->execute($upd);
@@ -49,6 +55,9 @@ header("Location: {$http_site_root}/{$return_url}");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.4  2004/07/07 20:46:26  neildogg
+ * - Added support for phone format editing
+ *
  * Revision 1.3  2004/06/16 20:57:25  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5
