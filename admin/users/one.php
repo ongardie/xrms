@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.12 2004/07/20 10:46:46 cpsource Exp $
+ * $Id: one.php,v 1.13 2004/07/20 11:40:06 cpsource Exp $
  */
 
 //include required files
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check( 'Admin' );
+$session_user_id = session_check();
 
 $edit_user_id = $_GET['edit_user_id'];
 
@@ -27,13 +27,13 @@ $rst = $con->execute($sql);
 if ($rst) {
 
     $user_contact_id = $rst->fields['user_contact_id'];
-    $new_username = $rst->fields['username'];
-    $first_names = $rst->fields['first_names'];
-    $last_name = $rst->fields['last_name'];
-    $email = $rst->fields['email'];
-    $role_id = $rst->fields['role_id'];
-    $gmt_offset = $rst->fields['gmt_offset'];
-    $language = $rst->fields['language'];
+    $new_username    = $rst->fields['username'];
+    $first_names     = $rst->fields['first_names'];
+    $last_name       = $rst->fields['last_name'];
+    $email           = $rst->fields['email'];
+    $role_id         = $rst->fields['role_id'];
+    $gmt_offset      = $rst->fields['gmt_offset'];
+    $language        = $rst->fields['language'];
 
     $rst->close();
 }
@@ -66,6 +66,10 @@ start_page($page_title);
 
         <form action=edit-2.php method=post>
         <input type=hidden name=edit_user_id value="<?php  echo $edit_user_id; ?>">
+
+        <input type=hidden name=user_contact_id value="<?php  echo $user_contact_id; ?>">
+        <input type=hidden name=role_id value="<?php  echo $role_id; ?>">
+
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Edit User Information"); ?></td>
@@ -148,6 +152,14 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2004/07/20 11:40:06  cpsource
+ * - Fixed multiple errors
+ *    misc undefined variables being used, g....
+ *    non Admin users could end up at some.php and effect other users
+ *    made self.php goto self-2.php instead of edit-2.php
+ *    non Admin users can now admin their own user name only.
+ *    added a successful update promit to private/index.php
+ *
  * Revision 1.12  2004/07/20 10:46:46  cpsource
  * - Fixed syntax error at line 59
  *

@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.6 2004/07/20 10:43:16 cpsource Exp $
+ * $Id: routing.php,v 1.7 2004/07/20 11:40:05 cpsource Exp $
  */
 
 //where do we include from
@@ -30,54 +30,30 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 //$con->debug = 1;
 
-if ( 0 ) {
-  //
-  // depricated - role_short_name now set by login-2.php
-  //
+// close the database connection
+$con->close();
 
-  // define our query
-  $sql = "select r.role_short_name as role
-        from roles r, users u
-        where u.role_id=r.role_id
-        and u.user_id = $session_user_id";
+$role = $_SESSION['role_short_name'];
 
-  // execute - get role
-  $role = '';
-  $rst = $con->execute($sql);
-  if ($rst) {
-    while (!$rst->EOF) {
-      // get our role
-      $role = $rst->fields['role'];
-      break;
-    }
-    // close the result set
-    $rst->close();
-  }
-
-  // add role to session
-  $_SESSION['role'] = $role;
-
-  // close the database connection
-  $con->close();
+//if this is a mailto link, try to open the user's default mail application
+if ($role == 'Admin') {
+  header("Location: " . $http_site_root . "/admin/index.php");
+} elseif ($role == 'Developer') {
+  header("Location: " . $http_site_root . "/admin/index.php");
 } else {
-
-  // close the database connection
-  $con->close();
-
-  $role = $_SESSION['role_short_name'];
-
-  //if this is a mailto link, try to open the user's default mail application
-  if ($role == 'Admin') {
-    header("Location: " . $http_site_root . "/admin/index.php");
-  } elseif ($role == 'Developer') {
-    header("Location: " . $http_site_root . "/admin/index.php");
-  } else {
-    header("Location: " . $http_site_root . "/admin/users/self.php");
-  }
+  header("Location: " . $http_site_root . "/admin/users/self.php");
 }
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.7  2004/07/20 11:40:05  cpsource
+ *- Fixed multiple errors
+ *   misc undefined variables being used, g....
+ *   non Admin users could end up at some.php and effect other users
+ *   made self.php goto self-2.php instead of edit-2.php
+ *   non Admin users can now admin their own user name only.
+ *   added a successful update promit to private/index.php
+ *
  *Revision 1.6  2004/07/20 10:43:16  cpsource
  *- Moved SESSION['role'] to SESSION['role_short_name']
  *  role is now set in login-2.php instead of admin/routing.php

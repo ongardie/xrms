@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.8 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: self.php,v 1.9 2004/07/20 11:40:06 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,9 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check( 'Admin' );
+$session_user_id = session_check();
+
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -26,28 +28,34 @@ $rst = $con->execute($sql);
 
 if ($rst) {
 
-    $role_id = $rst->fields['role_id'];
-    $username = $rst->fields['username'];
-    $first_names = $rst->fields['first_names'];
-    $last_name = $rst->fields['last_name'];
-    $email = $rst->fields['email'];
-    $gmt_offset = $rst->fields['gmt_offset'];
-    $language = $rst->fields['language'];
+    $user_contact_id = $rst->fields['user_contact_id'];
+    $role_id         = $rst->fields['role_id'];
+    $new_username    = $rst->fields['username'];
+    $first_names     = $rst->fields['first_names'];
+    $last_name       = $rst->fields['last_name'];
+    $email           = $rst->fields['email'];
+    $gmt_offset      = $rst->fields['gmt_offset'];
+    $language        = $rst->fields['language'];
 
     $rst->close();
 }
 //show_test_values($username, $last_name, $first_names, $session_user_id, $user_id);
 
 $page_title = _("One User :")."$first_names $last_name";
-start_page($page_title);
+start_page($page_title, true, $msg);
 
 ?>
 
 <div id="Main">
     <div id="Content">
 
-        <form action=edit-2.php method=post>
+        <form action=self-2.php method=post>
         <input type=hidden name=edit_user_id value="<?php  echo $session_user_id; ?>">
+
+        <input type=hidden name=user_contact_id value="<?php  echo $user_contact_id; ?>">
+        <input type=hidden name=role_id value="<?php  echo $role_id; ?>">
+        <input type=hidden name=new_username value="<?php  echo $new_username; ?>">
+
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Edit User Information"); ?></td>
@@ -62,7 +70,7 @@ start_page($page_title);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Username"); ?></td>
-                <td class=widget_content_form_element><?php  echo $username; ?></td>
+                <td class=widget_content_form_element><?php  echo $new_username; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
@@ -101,6 +109,14 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.9  2004/07/20 11:40:06  cpsource
+ *- Fixed multiple errors
+ *   misc undefined variables being used, g....
+ *   non Admin users could end up at some.php and effect other users
+ *   made self.php goto self-2.php instead of edit-2.php
+ *   non Admin users can now admin their own user name only.
+ *   added a successful update promit to private/index.php
+ *
  *Revision 1.8  2004/07/16 23:51:38  cpsource
  *- require session_check ( 'Admin' )
  *

@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.9 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: edit-2.php,v 1.10 2004/07/20 11:40:06 cpsource Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,14 +16,14 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
-$edit_user_id = $_POST['edit_user_id'];
+$edit_user_id    = $_POST['edit_user_id'];
 $user_contact_id = $_POST['user_contact_id'];
-$role_id = $_POST['role_id'];
-$new_username = $_POST['new_username'];
-$last_name = $_POST['last_name'];
-$first_names = $_POST['first_names'];
-$email = $_POST['email'];
-$gmt_offset = $_POST['gmt_offset'];
+$role_id         = $_POST['role_id'];
+$new_username    = $_POST['new_username'];
+$last_name       = $_POST['last_name'];
+$first_names     = $_POST['first_names'];
+$email           = $_POST['email'];
+$gmt_offset      = $_POST['gmt_offset'];
 
 $gmt_offset = (strlen($gmt_offset) > 0) ? $gmt_offset : 0;
 
@@ -34,13 +34,14 @@ $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
 $rst = $con->execute($sql);
 
 $rec = array();
-$rec['role_id'] = $role_id;
+
+$rec['role_id']         = $role_id;
 $rec['user_contact_id'] = $user_contact_id;
-$rec['last_name'] = $last_name;
-$rec['first_names'] = $first_names;
-$rec['username'] = $new_username;
-$rec['email'] = $email;
-$rec['gmt_offset'] = $gmt_offset;
+$rec['last_name']       = $last_name;
+$rec['first_names']     = $first_names;
+$rec['username']        = $new_username;
+$rec['email']           = $email;
+$rec['gmt_offset']      = $gmt_offset;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
@@ -49,10 +50,21 @@ add_audit_item($con, $session_user_id, 'updated', 'users', $edit_user_id, 1);
 
 $con->close();
 
-header("Location: some.php");
+if ( $_SESSION['role_short_name'] == 'Admin' ) {
+  header("Location: some.php");
+}
+header("Location: self.php?msg=saved");
 
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.10  2004/07/20 11:40:06  cpsource
+ *- Fixed multiple errors
+ *   misc undefined variables being used, g....
+ *   non Admin users could end up at some.php and effect other users
+ *   made self.php goto self-2.php instead of edit-2.php
+ *   non Admin users can now admin their own user name only.
+ *   added a successful update promit to private/index.php
+ *
  *Revision 1.9  2004/07/16 23:51:38  cpsource
  *- require session_check ( 'Admin' )
  *
