@@ -101,11 +101,11 @@ if ($APB_SETTINGS['auth_user_id']) {
 
                     <p>Bookmark saved!
 
-                    <p><?= $g->print_group_path() ?>
+                    <p><?php echo $g->print_group_path() ?>
 
-                    <p><?= $b->link() ?>
+                    <p><?php echo $b->link() ?>
 
-                    <p><a href='<?= $back_url ?>'>Go Back to Editing</a>
+                    <p><a href='<?php echo $back_url ?>'>Go Back to Editing</a>
 
                     <?
                 } else {
@@ -138,9 +138,9 @@ if ($APB_SETTINGS['auth_user_id']) {
 
                 <p>Bookmark saved!
 
-                <p><?= $g->print_group_path() ?>
+                <p><?php echo $g->print_group_path() ?>
 
-                <p><?= $b->link() ?>
+                <p><?php echo $b->link() ?>
 
                 <?
 
@@ -166,7 +166,7 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             ?>
 
-            <p><a href='<?= $back_url ?>'>Go Back to Editing</a>
+            <p><a href='<?php echo $back_url ?>'>Go Back to Editing</a>
 
             <?
 
@@ -195,8 +195,8 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             ?>
 
-            <form action="<?= $SCRIPT_NAME ?>?action=insert_bookmark" method="post">
-            <input type='hidden' name='back_url' value='<?= $HTTP_REFERER ?>'>
+            <form action="<?php echo $SCRIPT_NAME ?>?action=insert_bookmark" method="post">
+            <input type='hidden' name='back_url' value='<?php echo $HTTP_REFERER ?>'>
             <?php if ($id) { print "<input type='hidden' name='form_id' value='$id'>\n"; } ?>
             <table>
             <tr>
@@ -292,13 +292,13 @@ if ($APB_SETTINGS['auth_user_id']) {
             </tr>
             </table>
 
-            <p><center><input type="submit" value="<?= (($id) ? 'Edit' : 'Add') ?> Bookmark"></center>
+            <p><center><input type="submit" value="<?php echo (($id) ? 'Edit' : 'Add') ?> Bookmark"></center>
 
             </form>
 
          <?php if ($id) { ?>
          <form action="<?php echo $SCRIPT_NAME ?>?action=delete_bookmark&bookmark_id=<?php echo $id ?>" method="post">
-         <input type='hidden' name='back_url' value='<?= $HTTP_REFERER ?>'>
+         <input type='hidden' name='back_url' value='<?php echo $HTTP_REFERER ?>'>
          <p><input type="submit" value="Delete Bookmark" onClick="return confirm('Are you sure you want to delete this bookmark?')">
          </form>
 

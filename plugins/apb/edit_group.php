@@ -44,9 +44,9 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             <p>Group updated!
 
-            <p><?= $g->print_group_path() ?>
+            <p><?php echo $g->print_group_path() ?>
 
-            <p><a href='<?= $back_url ?>'>Go Back to Editing</a>
+            <p><a href='<?php echo $back_url ?>'>Go Back to Editing</a>
 
             <?
         }
@@ -77,11 +77,11 @@ if ($APB_SETTINGS['auth_user_id']) {
 
             ?>
 
-            <p><?= $g->print_group_path() ?>
+            <p><?php echo $g->print_group_path() ?>
 
             <p>
-            <form action="<?= $SCRIPT_NAME ?>?action=edit_group" method="post">
-            <input type='hidden' name='back_url' value='<?= $HTTP_REFERER ?>'>
+            <form action="<?php echo $SCRIPT_NAME ?>?action=edit_group" method="post">
+            <input type='hidden' name='back_url' value='<?php echo $HTTP_REFERER ?>'>
             <?php if ($id) { print "<input type='hidden' name='id' value='$id'>\n"; } ?>
             <table>
             <tr>

@@ -63,7 +63,7 @@ if ($edit_mode) {  echo "<h2 class='warning'>Edit Mode</h2>"; }
 
         } else {
             ?>
-            <a href="<?= $SCRIPT_NAME ?>?edit_mode=1<?php if ($QUERY_STRING) { echo "&".$QUERY_STRING; } ?>"><img src="images/tb_edit.gif" border="0"><br><font size='1'>Enter Edit Mode</font></a>
+            <a href="<?php echo $SCRIPT_NAME ?>?edit_mode=1<?php if ($QUERY_STRING) { echo "&".$QUERY_STRING; } ?>"><img src="images/tb_edit.gif" border="0"><br><font size='1'>Enter Edit Mode</font></a>
             <?
         }
     ?>

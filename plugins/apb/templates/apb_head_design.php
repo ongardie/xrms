@@ -1,7 +1,7 @@
 <html>
 <head>
-<title><?= $html_title ?></title>
-<link rel="stylesheet" href="<?= $APB_SETTINGS['apb_url'] ?>templates/apb.css" type="text/css">
+<title><?php echo $html_title ?></title>
+<link rel="stylesheet" href="<?php echo $APB_SETTINGS['apb_url'] ?>templates/apb.css" type="text/css">
 </head>
 
 <body link="333333" vlink="555555" alink="CCCCCC" bgcolor="FFFFFF">

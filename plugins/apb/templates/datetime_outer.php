@@ -1,8 +1,8 @@
 <table cellpadding="0" cellpadding="0">
 <tr>
   <td>
-<p><b><?= $this->title_string ?></b>
-<p><?= $inner ?>
+<p><b><?php echo $this->title_string ?></b>
+<p><?php echo $inner ?>
   </td>
 </tr>
 </table>

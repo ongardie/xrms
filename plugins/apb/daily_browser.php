@@ -47,8 +47,8 @@ if ($APB_SETTINGS['daily_browsing_public'] == 1 OR $APB_SETTINGS['auth_user_id']
 
 	<table align='center' width='100%'>
 	<tr>
-	<td align='left' valign='bottom'>&lt;-- <a href='?date=<?= $yesterday ?><?php if ($edit_mode) print "&edit_mode=$edit_mode" ?>'><?= $yesterday ?></a></td>
-	<td align='center' valign='center'><center><?= $now_full ?></center></td>
+	<td align='left' valign='bottom'>&lt;-- <a href='?date=<?php echo $yesterday ?><?php if ($edit_mode) print "&edit_mode=$edit_mode" ?>'><?php echo $yesterday ?></a></td>
+	<td align='center' valign='center'><center><?php echo $now_full ?></center></td>
 	<td align='right' valign='bottom'>
 
 

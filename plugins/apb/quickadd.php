@@ -27,7 +27,7 @@ apb_head();
   <p>Drag the following link to your browser's toolbar, or add this link to your browser's "favorites".
   You can then use this link to <b>automatically add any site that you're viewing</b> to APB.
 
-  <p align="center"><a href="javascript:document.location = '<?= $APB_SETTINGS['apb_url'] ?>add_bookmark.php?form_title=' + escape(document.title) + '&form_url=' + escape(document.location)" onClick="javascript:alert('You must drag this link to your browser\'s toolbar or add it to your favorites.'); return false">Add to Bookmarks</a>
+  <p align="center"><a href="javascript:document.location = '<?php echo $APB_SETTINGS['apb_url'] ?>add_bookmark.php?form_title=' + escape(document.title) + '&form_url=' + escape(document.location)" onClick="javascript:alert('You must drag this link to your browser\'s toolbar or add it to your favorites.'); return false">Add to Bookmarks</a>
 
   </td>
 </tr>
