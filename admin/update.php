@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.22 2004/07/16 13:52:00 braverock Exp $
+ * $Id: update.php,v 1.23 2004/07/16 18:52:43 cpsource Exp $
  */
 
 // where do we include from
@@ -22,7 +22,7 @@ require_once($include_directory . 'adodb-params.php');
 // vars.php sets all of the installation-specific variables
 require_once($include_directory . 'vars.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 // make a database connection
 $con = &adonewconnection($xrms_db_dbtype);
@@ -684,6 +684,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.23  2004/07/16 18:52:43  cpsource
+ * - Add role check inside of session_check
+ *
  * Revision 1.22  2004/07/16 13:52:00  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)

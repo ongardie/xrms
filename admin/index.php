@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.21 2004/07/16 15:13:05 cpsource Exp $
+ * $Id: index.php,v 1.22 2004/07/16 18:52:43 cpsource Exp $
  */
 
 //include required stuff
@@ -13,21 +13,10 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 // get display message
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-
-// get and check role (Admin, Developer) OK, else we should fail
-$role    = isset($_SESSION['role']) ? $_SESSION['role'] : '';
-$role_ok = false;
-
-if ( $role == 'Admin' || $role == 'Developer' ) {
-  $role_ok = true;
-} else {
-  // not OK - bring them to logout as they've tried to hack the system
-  header("Location: " . $http_site_root . "/logout.php?msg=noauth");
-}
 
 // open a connection to the database
 $con = &adonewconnection($xrms_db_dbtype);
@@ -236,6 +225,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.22  2004/07/16 18:52:43  cpsource
+ * - Add role check inside of session_check
+ *
  * Revision 1.21  2004/07/16 15:13:05  cpsource
  * - Prevent non-Admin's from running admin/index.php
  *

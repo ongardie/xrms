@@ -5,7 +5,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: sort.php,v 1.3 2004/06/24 20:02:53 braverock Exp $
+ * $Id: sort.php,v 1.4 2004/07/16 18:52:43 cpsource Exp $
  */
 
 
@@ -17,7 +17,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $direction = $_GET['direction'];
 $sort_order = $_GET['sort_order'];
@@ -100,6 +100,9 @@ header ('Location: ' . $http_site_root . $return_url);
 
 /**
  *$Log: sort.php,v $
+ *Revision 1.4  2004/07/16 18:52:43  cpsource
+ *- Add role check inside of session_check
+ *
  *Revision 1.3  2004/06/24 20:02:53  braverock
  *- minor enhancements to sort functionality
  *- add phpdoc

@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.4 2004/07/16 15:13:05 cpsource Exp $
+ * $Id: routing.php,v 1.5 2004/07/16 18:52:43 cpsource Exp $
  */
 
 //where do we include from
@@ -22,7 +22,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 //check to make sure we are logged on
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 //make our database connection
 $con = &adonewconnection($xrms_db_dbtype);
@@ -66,6 +66,9 @@ if ($role == 'Admin') {
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.5  2004/07/16 18:52:43  cpsource
+ *- Add role check inside of session_check
+ *
  *Revision 1.4  2004/07/16 15:13:05  cpsource
  *- Prevent non-Admin's from running admin/index.php
  *
