@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.13 2004/07/19 21:55:53 maulani Exp $
+ * $Id: login-2.php,v 1.14 2004/07/19 21:59:42 maulani Exp $
  */
 require_once('include-locations.inc');
 
@@ -27,11 +27,9 @@ if (!$connectiontest) {
     // Oops!  We do not have a valid database connection
     // Now instruct the user in how to fix this problem
     $problem = 'XRMS cannot connect to the database.  Have the administrator check the database ';
-    $problem .= 'parameters in include/vars.php to make sure they are correct.';
+    $problem .= 'parameters in vars.php to make sure they are correct.  ';
     $problem .= 'Also make sure the database is running and can accept a connection ';
     $problem .= 'from this server. <BR><BR>';
-    
-    install_fatal_error($problem);
         echo <<<EOQ
         <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
         <html>
@@ -139,6 +137,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.14  2004/07/19 21:59:42  maulani
+ * - Remove errant cut and paste code and assumption of vars.php location
+ *
  * Revision 1.13  2004/07/19 21:55:53  maulani
  * - Add test that we are able to connect to the database.  Fail with
  *   an appropriate error message if the database is not available
