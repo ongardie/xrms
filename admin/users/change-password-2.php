@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.2 2004/03/12 15:37:07 maulani Exp $
+ * $Id: change-password-2.php,v 1.3 2004/03/12 16:20:58 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -30,13 +30,16 @@ if ($password == $confirm_password) {
     
     $con->close();
     
-    header("Location: " . $http_site_root . "/admin/index.php");
+    header("Location: " . $http_site_root . "/admin/routing.php");
 } else {
     header("Location: change-password.php?msg=password_no_match");
 }
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.3  2004/03/12 16:20:58  maulani
+ *- correct redirect URL
+ *
  *Revision 1.2  2004/03/12 15:37:07  maulani
  *- Require new passwords be entered twice for validation
  *- Add phpdoc
