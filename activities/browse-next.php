@@ -1,10 +1,20 @@
 <?php
 /**
- * Browser to the next Activity in the list
+ * Browse to the next Activity in the list
+ *
+ * This script can be reached through two different ways.
+ * The first is by using the browse-sidebar.php file and clicking on an activity type.
+ * The second is by using the save and next button on an activity.
+ * In either case, we generate a session list of activity types and activity IDs
+ * The activity list is ordered by: expired activities, activities with probabilities, activities ending first
+ * We traverse the activities until there are none left. If we skip ahead, the list gets reordered.
+ * When there are none left, it drops to the next activity type. When there are none left, it returns to the activities main page.
+ *
+ * @params int $activity_type_id or $activity_id
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.5 2004/06/25 03:11:47 braverock Exp $
+ * $Id: browse-next.php,v 1.6 2004/07/02 17:55:14 neildogg Exp $
  */
 
 //include required files
@@ -17,175 +27,182 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-
-if($_GET['current_on_what_table']) {
-  $activity_type = $_GET['current_activity_type_id'];
-  $current_on_what_table = $_GET['current_on_what_table'];
-  $pos = 0;
-}
-else {
-  $next_to_check = $_SESSION['next_to_check'];
-  $pos = $_SESSION['pos'];
-  $activity_type = $_SESSION['activity_type'];
-  $current_on_what_table = $_SESSION['current_on_what_table'];
-}
-
-$_SESSION['current_on_what_table'] = $current_on_what_table;
-
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-//$con->debug = 1;
+//$con->debug=1;
 
-if($current_on_what_table == "opportunities") {
-    $current_on_what_table_singular = "opportunity";
-}
-elseif($current_on_what_table == "cases") {
-    $current_on_what_table_singular = "case";
-}
+// An array of activity IDs within activity type. Allows changes to be made without activities repeating.
+$next_to_check = $_SESSION['next_to_check'];
+// The array of activity type IDs that will be traversed
+$activity_type_ids = $_SESSION['activity_type_ids'];
+// The current activity ID that was being viewed through activities/one.php. Will not be set if using "Browse" on activities/some.php
+$activity_id = $_GET['activity_id'];
+// The activity type used if using "Browse"
+$activity_type_id = $_GET['activity_type_id'];
+// The last position in the activity IDs
+$pos = $_SESSION['pos'];
 
-if(($pos > 0) and ($pos < sizeof($next_to_check))) {
+// If the activity is part of the array, ie if they have already obtained an array, use the array.   
+if(is_array($next_to_check) and in_array($activity_id, $next_to_check) and ($pos > 0) and ($pos < count($next_to_check))) {
+    // If they try to traverse it out of order, simply move the array to around
+    $input = array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
+    array_splice($next_to_check, $pos-1, 0, $input[0]);
     header("Location: one.php?activity_id=" . $next_to_check[$pos]);
     $pos++;
-    $_SESSION['pos'] = $pos;
 }
 else {
+    // If someone skips between categories, they may still have a position. If they do, it would force a type traversal. So reset it.
+    $pos = 0;
+    // If we're not coming from the "Browse" functionality, get the activity ID
+    if(!$activity_type_id) {
+        $rst = $con->execute("select activity_type_id from activities where activity_id = '$activity_id'");
+        $activity_type_id = $rst->fields['activity_type_id'];
+        $rst->close();
+    }
+    // If there is not yet an array of IDs (either coming from the browse, or from the first save & next), create one 
+    if(!count($activity_type_ids)) {
+        $sql = "select activity_type_id
+            from activity_types
+            order by sort_order";
+        $rst = $con->execute($sql);
+        if(!$rst) {
+            db_error_handler($con, $sql);
+        }
+        elseif($rst->rowcount() > 0) {
+            while(!$rst->EOF) {
+                $activity_type_ids[] = $rst->fields['activity_type_id'];
+                $rst->movenext();
+            }
+        }
+        $rst->close();
+    }
+
     $next_to_check = array();
     $more_to_check = true;
-    //Loop until all solutions are exhausted
-    while($more_to_check) {
 
-        $next_to_check = array();
-
-        //Only grab activities is $pos has been reset (ie on first load, or after the category has changed)
-        if($pos == 0) {
-            //Find items within activity_type_id, that have expired
-            //Important because it's sorted by lateness first, not probability
-            $sql = "select a.activity_id
-                from activities as a ";
-            if (strlen($current_on_what_table)>0) {
-                $sql .=   " , $current_on_what_table ";
-            }
-            $sql .= "
-                where a.activity_status = 'o'
-                and a.activity_record_status='a'
-                and a.ends_at < " . $con->DBTimestamp(time()) . "
-                and a.user_id = $session_user_id ";
-
-            if ($on_what_table == "opportunities") {
-                $sql .= ", o.probability desc";
-            }
-            if (strlen($activity_type)>0) {
-                $sql .= "\n and a.activity_type_id=$activity_type";
-            }
-            if (strlen($current_on_what_table)>0) {
-                $sql .= "\n and a.on_what_table='$current_on_what_table'
-                            and a.on_what_id="
-                            . $current_on_what_table_singular . "_id ";
-            }
-
-            $sql .= "\n order by a.ends_at asc";
-
-            $rst = $con->execute($sql);
-            if(!$rst) {
-                $more_to_check = false;
-                db_error_handler($con, $sql);
-            }
-            elseif($rst->rowcount() > 0) {
-                while(!$rst->EOF) {
-                    $next_to_check[] = $rst->fields['activity_id'];
-                    $rst->movenext();
-                }
-                $more_to_check = false;
-                $rst->close();
-            }
-            else {
-                $more_to_check = false;
-            }
-
-            //Get the remaining activities, sorting by probability(if applicable), then date
-            $sql = "select a.activity_id
-                from activities as a ";
-            if (strlen($current_on_what_table)>0) {
-                $sql .=   " , $current_on_what_table ";
-            }
-            $sql .= "
-                where a.activity_status = 'o'
-                and a.activity_record_status='a'
-                and a.ends_at >= " . $con->DBTimestamp(time()) . "
-                and a.user_id = $session_user_id ";
-
-            if ($on_what_table == "opportunities") {
-                $sql .= ", o.probability desc";
-            }
-            if (strlen($activity_type)>0) {
-                $sql .= "\n and a.activity_type_id=$activity_type";
-            }
-            if (strlen($current_on_what_table)>0) {
-                $sql .= "\n and a.on_what_table='$current_on_what_table'
-                            and a.on_what_id="
-                            . $current_on_what_table_singular . "_id ";
-            }
-
-            if($current_on_what_table == "opportunities") {
-                $sql .= " order by probability desc, a.ends_at asc";
-            }
-            else {
-                $sql .= " order by a.ends_at asc";
-            }
-            $rst = $con->execute($sql);
-            if(!$rst) {
-                $more_to_check = false;
-                db_error_handler($con, $sql);
-            }
-            elseif($rst->rowcount() > 0) {
-                while(!$rst->EOF) {
-                    $next_to_check[] = $rst->fields['activity_id'];
-                    $rst->movenext();
-                }
-                $more_to_check = false;
-                $rst->close();
-            }
-            else {
-                $more_to_check = false;
-            }
-
+    // Please check the logic before you decide that an infinite loop might result. I've taken great care to make sure there is none.
+    $start = time();
+    while($more_to_check and (time() - $start < 3)) {
+        // $pos is greater than zero only if it has traversed outside of the array
+        if($pos > 0) {
+            // Go to the next activity_type_id
+            $activity_type_id = $activity_type_ids[array_search($activity_type_id, $activity_type_ids) + 1];
         }
-
-        if($more_to_check) {
-            $sql = "select activity_type_id
-                from activity_types ";
-            if ($activity_type > 0) {
-                $sql .= "\n where activity_type_id < $activity_type ";
-            }
-            $sql .= "\n order by activity_type_id desc";
-            $rst = $con->execute($sql);
-            if(!$rst) {
-                db_error_handler($con, $sql);
-            }
-            elseif($rst->rowcount() > 0) {
-                $pos = 0;
-                $activity_type = $rst->fields['activity_type_id'];
-                $rst->close();
-            }
-            else {
-                $more_to_check = false;
-                header("Location: some.php");
-            }
+        // Here is an example of a loop break. If there are no activites left to check, we go to the main activites page.
+        if(!$activity_type_id) {
+            header("Location: some.php");
+            $more_to_check = false;
         }
         else {
-            $_SESSION['next_to_check'] = $next_to_check;
-            $_SESSION['pos'] = 1;
-            header("Location: one.php?activity_id=" . $next_to_check[0]);
+            //Find items within activity_type_id, that have expired
+            //Important because it's sorted by lateness first
+            $sql = "select activity_id
+                from activities
+                where activity_status = 'o'
+                and activity_record_status='a'
+                and ends_at < " . $con->DBTimestamp(time()) . "
+                and user_id = $session_user_id 
+                and on_what_table='opportunities'
+                and activity_type_id=$activity_type_id
+                order by ends_at desc"; 
+            $rst = $con->execute($sql);
+            if(!$rst) {
+                $more_to_check = false;
+                db_error_handler($con, $sql);
+            }
+            elseif($rst->rowcount() > 0) {
+                while(!$rst->EOF) {
+                    $next_to_check[] = $rst->fields['activity_id'];
+                    $rst->movenext();
+                }
+                $more_to_check = false;
+                $rst->close();
+            }
+            else {
+                // We don't break the loop, because if we don't find any results, we want to drop to the next lower activity_type_id (see top of loop)
+            }
+        
+            //Get the remaining activities, if they have a probability, sorted by probability, then date 
+            $sql = "select a.activity_id
+                from activities as a,
+                opportunities as o
+                where a.activity_status = 'o'
+                and a.activity_record_status = 'a'
+                and a.ends_at >= " . $con->DBTimestamp(time()) . "
+                and a.user_id = $session_user_id
+                and a.activity_type_id=$activity_type_id
+                and a.on_what_table='opportunities'
+                and o.probability > 0
+                and a.on_what_id=o.opportunity_id
+                order by probability desc, a.ends_at asc";
+            $rst = $con->execute($sql);
+            if(!$rst) {
+                $more_to_check = false;
+                db_error_handler($con, $sql);
+            }
+            elseif($rst->rowcount() > 0) {
+                while(!$rst->EOF) {
+                    $next_to_check[] = $rst->fields['activity_id'];
+                    $rst->movenext();
+                }
+                $more_to_check = false;
+                $rst->close();
+            }
+
+            //Get the remaining activities, including those with probability (we will error check in a second) 
+            $sql = "select activity_id
+                from activities
+                where activity_status = 'o'
+                and activity_record_status = 'a'
+                and ends_at >= " . $con->DBTimestamp(time()) . "
+                and user_id = $session_user_id
+                and activity_type_id=$activity_type_id
+                order by ends_at asc";
+            $rst = $con->execute($sql);
+            if(!$rst) {
+                $more_to_check = false;
+                db_error_handler($con, $sql);
+            }
+            elseif($rst->rowcount() > 0) {
+                while(!$rst->EOF) {
+                    if(!in_array($rst->fields['activity_id'], $next_to_check)) {
+                      $next_to_check[] = $rst->fields['activity_id'];
+                    }
+                    $rst->movenext();
+                }
+                $more_to_check = false;
+                $rst->close();
+            }
+
+            // If the loop was broken, go to the "first" element in the array
+            if(!$more_to_check) {
+                // If we're doing save and next from a random page, we don't want the starting activity ID in the list
+                if(!$pos) {
+                    array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
+                }    
+                header("Location: one.php?activity_id=" . $next_to_check[0]);
+                $pos = 1;
+            }   
+            else {
+                // If the first loop on the first occurrence produces nothing (unlikely) drop through activity type IDs
+                $pos = 1;
+            }
         }
     }
 }
 
 $_SESSION['activity_type'] = $activity_type;
+$_SESSION['next_to_check'] = $next_to_check;
+$_SESSION['activity_type_ids'] = $activity_type_ids;
+$_SESSION['pos'] = $pos;
 
 $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.6  2004/07/02 17:55:14  neildogg
+ * Massive logic change, cleaned up code significantly. Now works for all activities
+ *
  * Revision 1.5  2004/06/25 03:11:47  braverock
  * - add error handling to avoid empty result sets and endless loops
  *
