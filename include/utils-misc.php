@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.98 2004/10/22 07:26:03 gpowers Exp $
+ * $Id: utils-misc.php,v 1.99 2004/10/26 17:29:02 introspectshun Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -120,11 +120,15 @@ function update_recent_items($con, $user_id, $on_what_table, $on_what_id, $recen
     $rec['user_id'] = $user_id;
     $rec['on_what_table'] = $on_what_table;
     $rec['on_what_id'] = $on_what_id;
+    $rec['recent_action'] = $recent_action;
     $rec['recent_item_timestamp'] = time();
 
     $tbl = 'recent_items';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-    $con->execute($ins);
+    $rst = $con->execute($ins);
+    if (!$rst) {
+        db_error_handler($con, $ins);
+    }
 }
 
 /**
@@ -748,8 +752,8 @@ function get_formatted_address (&$con,$address_id) {
             // eval ("\$str = \"$str\";");
             // Remove lines that contain only a comma (fixes SF Bug #1028807)
             $address_to_display = preg_replace("/<br>, +<br>/", "<br>", $address_to_display);
-            // Remove blank lines
-            $address_to_display = preg_replace("/^<br>/", "", $address_to_display);
+            // Remove blank lines (double <br>s)
+            $address_to_display = preg_replace("/<br>(\s+)<br>/", "<br>", $address_to_display);
         }
     } else {
         // database error, return some useful information.
@@ -1295,6 +1299,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.99  2004/10/26 17:29:02  introspectshun
+ * - Remove blank lines in address by getting rid of double BRs (fixed)
+ *   - couldn't match BR at beginning of string due to nl2br call earlier
+ *
  * Revision 1.98  2004/10/22 07:26:03  gpowers
  * - In get_formatted_address(), Removed output lines that contain only a comma and blank lines (fixes SF Bug #1028807)
  *
