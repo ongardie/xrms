@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.12 2004/06/12 18:28:34 braverock Exp $
+ * $Id: some.php,v 1.13 2004/06/21 20:54:57 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -92,7 +92,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS 'Case',
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "CAST(ca.case_id AS CHAR)", "'\">'", "ca.case_title", "'</a>'") . " AS 'Case',
 c.company_code AS 'Company', u.username AS 'Owner', cat.case_type_pretty_name AS 'Type', cap.case_priority_pretty_name AS 'Priority',
 cas.case_status_pretty_name AS 'Status', " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS 'Due At' ";
 
@@ -339,6 +339,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.13  2004/06/21 20:54:57  introspectshun
+ * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
+ *
  * Revision 1.12  2004/06/12 18:28:34  braverock
  * - remove CAST, as it is not standard across databases
  *   - database should explicitly convert number to string for CONCAT

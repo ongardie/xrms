@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.15 2004/06/16 20:42:02 gpowers Exp $
+ * $Id: some.php,v 1.16 2004/06/21 20:56:29 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -105,7 +105,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 $sql = "
-SELECT " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
+SELECT " . $con->Concat("'<a href=\"one.php?company_id='","CAST(c.company_id AS CHAR)","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
 c.company_code AS '$strCompaniesSomeCompanyCodeLabel',
 u.username AS '$strCompaniesSomeCompanyUserLabel',
 industry_pretty_name as '$strCompaniesSomeCompanyIndustrylabel',
@@ -380,6 +380,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.16  2004/06/21 20:56:29  introspectshun
+ * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
+ *
  * Revision 1.15  2004/06/16 20:42:02  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5

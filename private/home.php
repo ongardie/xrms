@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.22 2004/06/21 16:02:18 braverock Exp $
+ * $Id: home.php,v 1.23 2004/06/21 20:48:47 introspectshun Exp $
  */
 
 // include the common files
@@ -205,7 +205,7 @@ if ($rst) {
 
 ////////////////////////////////////
 // Show campaigns non-uploaded files
-$sql_files = "select * from files f, where file_size = 0 and f.entered_by = ".$session_user_id . " order by file_id asc";
+$sql_files = "select * from files f where file_size = 0 and f.entered_by = ". $session_user_id . " order by file_id asc";
 
 $rst = $con->selectlimit($sql_files, $display_how_many_activities_on_company_page);
 
@@ -252,42 +252,42 @@ if ($rst) {
         }
         switch ($file_on_what) {
             case "contacts" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS CHAR)", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "contacts_of_companies" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "contact_id", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/contacts/one.php?return_url=/private/home.php&contact_id='", "CAST(contact_id AS CHAR)", "'\">'", "cont.last_name", "' '", "cont.first_names", "'</a>'")
                       . " AS 'Name',"
-                      . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                      . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
                       . " AS 'Company',";
                 break;
             }
             case "companies" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "campaigns" : {
-                $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "camp.campaign_id ", "'\">'", "camp.campaign_title", "'</a>'")
+                $fsql .= $con->concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&campaign_id='", "CAST(camp.campaign_id AS CHAR)", "'\">'", "camp.campaign_title", "'</a>'")
                        . " AS 'Campaign',";
                 break;
             }
             case "opportunities" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "opportunity_id", "'\">'", "opp.opportunity_title", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/opportunities/one.php?return_url=/private/home.php&opportunity_id='", "CAST(opportunity_id AS CHAR)", "'\">'", "opp.opportunity_title", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
             case "cases" : {
-                $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "case_id", "'\">'", "cases.case_title", "'</a>'")
+                $fsql .= $con->Concat("'<a href=\"$http_site_root/cases/one.php?return_url=/private/home.php&case_id='", "CAST(case_id AS CHAR)", "'\">'", "cases.case_title", "'</a>'")
                        . " AS 'Name',"
-                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+                       . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'")
                        . " AS 'Company',";
                 break;
             }
@@ -474,6 +474,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.23  2004/06/21 20:48:47  introspectshun
+ * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
+ *
  * Revision 1.22  2004/06/21 16:02:18  braverock
  * - fixed timestamp to be in proper database compliant mode
  *

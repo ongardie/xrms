@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.20 2004/06/15 14:13:36 gpowers Exp $
+ * $Id: some.php,v 1.21 2004/06/21 20:51:01 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -105,14 +105,14 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug=1;
 
 $sql = "SELECT
-  (CASE WHEN (activity_status = 'o') AND (ends_at < " . time() . ") THEN 'Yes' ELSE '-' END) AS is_overdue," .
+  (CASE WHEN (a.activity_status = 'o') AND (a.ends_at < " . time() . ") THEN 'Yes' ELSE '-' END) AS is_overdue," .
   $con->Concat("'<a href=\"one.php?activity_id='", "activity_id", "'&return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS 'Title',
-  activity_type_pretty_name AS 'Type'," .
-  $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
-  $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
+  at.activity_type_pretty_name AS 'Type'," .
+  $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "CAST(cont.contact_id AS CHAR)", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS 'Contact'," .
+  $con->Concat("'<a href=\"../companies/one.php?company_id='", "CAST(c.company_id AS CHAR)", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
   u.username AS 'Owner'," .
-  $con->SQLDate('Y-m-d','scheduled_at') . " AS 'Scheduled'," .
-  $con->SQLDate('Y-m-d','ends_at') . " AS 'Due'
+  $con->SQLDate('Y-m-d','a.scheduled_at') . " AS 'Scheduled'," .
+  $con->SQLDate('Y-m-d','a.ends_at') . " AS 'Due'
   FROM companies c, users u, activity_types at, activities a
   LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
   WHERE a.company_id = c.company_id
@@ -155,9 +155,9 @@ if (strlen($completed) > 0 and $completed != "all") {
 if (strlen($search_date) > 0) {
     $criteria_count++;
     if (!$before_after) {
-        $sql .= " and a.ends_at < " . strtotime($search_date);
+        $sql .= " and a.ends_at < " . $con->qstr($search_date, get_magic_quotes_gpc());
     } else {
-        $sql .= " and a.ends_at > " . strtotime($search_date);
+        $sql .= " and a.ends_at > " . $con->qstr($search_date, get_magic_quotes_gpc());
     }
 }
 
@@ -374,6 +374,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.21  2004/06/21 20:51:01  introspectshun
+ * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
+ *
  * Revision 1.20  2004/06/15 14:13:36  gpowers
  * - corrected time formats: changed DBTimeStamp(time()) to time()
  *   -  DBTimeStamp(time()) does not work with MySQL
