@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.8 2005/01/03 06:37:19 ebullient Exp $
+ * $Id: audit-items.php,v 1.9 2005/02/10 21:49:14 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -24,6 +24,8 @@ $connection_details = $_GET['connection_details'];
 $all_dates = $_GET['all_dates'];
 $all_users = $_GET['all_users'];
 
+if(!isset($user_id)) $user_id=$session_user_id;
+
 $page_title = _("Audit Log");
 start_page($page_title, true, $msg);
 
@@ -33,7 +35,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
-$user_menu = $rst->getmenu2('user_id', '', false);
+$user_menu = $rst->getmenu2('user_id', $user_id, false);
 $rst->close();
 ?>
 <form action="audit-items.php" method=get>
@@ -178,6 +180,9 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.9  2005/02/10 21:49:14  maulani
+ * - Default to current user instead of first alphabetically
+ *
  * Revision 1.8  2005/01/03 06:37:19  ebullient
  * update reports - graphs centered on page, reports surrounded by divs
  *
