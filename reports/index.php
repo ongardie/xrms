@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.8 2004/05/09 03:56:37 braverock Exp $
+ * $Id: index.php,v 1.9 2004/06/04 23:16:26 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -49,6 +49,10 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content><a href="companies-by-company-source.php">Companies by Source</a></td>
                 <td class=widget_content>How many of your accounts come from each source?</td>
+            </tr>
+            <tr>
+                <td class=widget_content><a href="company-contact-printout.php">Contacts at Companies</a></td>
+                <td class=widget_content>Printable contact summary information for Companies in search Results.</td>
             </tr>
             <tr>
                 <td colspan=2 class=widget_label_center>Opportunity Reports</td>
@@ -133,6 +137,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.9  2004/06/04 23:16:26  braverock
+ * - add company contact summary printable report
+ *
  * Revision 1.8  2004/05/09 03:56:37  braverock
  * - add plugin hook for reports
  *
