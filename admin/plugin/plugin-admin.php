@@ -15,7 +15,7 @@
  * @author Philippe Mingo
  * @author Brian Peterson
  *
- * $Id: plugin-admin.php,v 1.4 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: plugin-admin.php,v 1.5 2004/07/29 23:50:03 maulani Exp $
  * @package xrms
  * @subpackage plugins
  */
@@ -172,9 +172,9 @@ start_page($page_title);
 
 $newcfg = array();
 
-echo "<p><br /><br /><form method=post name=plugin-admin>"
-    . "<table align=center cellspacing=0 bgcolor=\"$color[4]\">"
-    . "<input type=hidden name=plugin_submit value=true>";
+echo "<p><br><br>\n<form method=post name=plugin-admin>\n"
+    . "<table align=center cellspacing=0>\n"
+    . "<input type=hidden name=plugin_submit value=true>\n";
     //. "<tr><th colspan=2>" . _("Plugin Administration") . "</th></tr>",
 
 /* Special Plugins Block */
@@ -183,8 +183,8 @@ echo "<p><br /><br /><form method=post name=plugin-admin>"
 parseConfig( $cfgfile );
 
 // echo '<html><table>';
-echo "<tr bgcolor=\"$color[0]\"><th colspan=2>" .
-     _("Plugins") . '</th></tr>';
+echo "<tr><th colspan=2>" .
+     _("Plugins") . "</th></tr>\n";
 
 
   $plugpath = $xrms_file_root . '/plugins/';
@@ -229,7 +229,7 @@ echo "<tr bgcolor=\"$color[0]\"><th colspan=2>" .
             $i++;
         }
       }
-      echo '<tr><td colspan=2><input type=hidden name=plg value=on><center><table><tr><td>';
+      echo "<tr><td colspan=2><input type=hidden name=plg value=on><center><table></td></tr>\n";
       foreach ( $op_plugin as $plg ) {
         if ( in_array( $plg, $plugins ) ) {
             $sw = ' checked';
@@ -293,6 +293,9 @@ echo '</table></form></p>';
 
 /**
  * $Log: plugin-admin.php,v $
+ * Revision 1.5  2004/07/29 23:50:03  maulani
+ * - update html to fix table row entry and general formatting
+ *
  * Revision 1.4  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *
