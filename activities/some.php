@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.7 2004/04/14 22:48:28 maulani Exp $
+ * $Id: some.php,v 1.8 2004/04/20 12:53:48 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -102,10 +102,11 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "select
  if(activity_status = 'o' and ends_at < now(), 'Yes', '-') as is_overdue,
- activity_title as 'Title',
+ concat('<a href=\"one.php?activity_id=', activity_id, '\">', activity_title, '</a>') as 'Title',
  activity_type_pretty_name as 'Type',
  concat('<a href=\"../contacts/one.php?contact_id=', cont.contact_id, '\">', cont.first_names, ' ', cont.last_name, '</a>') as 'Contact',
  concat('<a href=\"../companies/one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',
+ u.username as 'Owner',
  date_format(scheduled_at, '%Y-%m-%d') as 'Scheduled',
  date_format(ends_at, '%Y-%m-%d') as 'Due'
 from companies c, users u, activity_types at, activities a left outer join contacts cont on cont.contact_id = a.contact_id
@@ -159,7 +160,35 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     $sql .= " and 1 = 2";
 }
 
-$sql .= " order by is_overdue desc, a.scheduled_at, a.entered_at desc";
+
+if ($sort_column == 1) {
+    $order_by = "is_overdue";
+} elseif ($sort_column == 2) {
+    $order_by = "activity_title";
+} elseif ($sort_column == 3) {
+    $order_by = "activity_type_pretty_name";
+} elseif ($sort_column == 4) {
+    $order_by = "cont.last_name";
+} elseif ($sort_column == 5) {
+    $order_by = "c.company_name";
+} elseif ($sort_column == 6) {
+    $order_by = "owner";
+} elseif ($sort_column == 7) {
+    $order_by = "Scheduled";
+} elseif ($sort_column == 8) {
+    $order_by = "Due";
+
+} else {
+    $order_by = $sort_column;
+}
+
+
+$order_by .= " $sort_order";
+
+echo $order_by;
+
+
+$sql .= " order by $order_by"; // is_overdue desc, a.scheduled_at, a.entered_at desc";
 
 $rst = $con->execute($sql);
 
@@ -218,9 +247,9 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post>        
-        <input type=hidden name=use_post_vars value=1>        
-        <input type=hidden name=contacts_next_page value="<?php  echo $contacts_next_page; ?>">
+        <form action=some.php method=post>
+        <input type=hidden name=use_post_vars value=1>
+        <input type=hidden name=activities_next_page value="<?php  echo $activities_next_page; ?>">
         <input type=hidden name=resort value="0">
         <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
@@ -308,13 +337,13 @@ function clearSearchCriteria() {
 }
 
 function submitForm(adodbNextPage) {
-    document.forms[0].contacts_next_page.value = adodbNextPage;
+    document.forms[0].activities_next_page.value = adodbNextPage;
     document.forms[0].submit();
 }
 
 function resort(sortColumn) {
     document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].contacts_next_page.value = '';
+    document.forms[0].activities_next_page.value = '';
     document.forms[0].resort.value = 1;
     document.forms[0].submit();
 }
@@ -336,6 +365,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.8  2004/04/20 12:53:48  braverock
+ * - add direct link to activity
+ * - add owner in the list
+ * - fix bug with sorting options
+ *   - apply SF patch 938385 submitted by frenchman
+ *
  * Revision 1.7  2004/04/14 22:48:28  maulani
  * - Add CSS2 positioning
  * - Fix minor HTML problems
