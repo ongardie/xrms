@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.58 2004/08/25 15:01:17 neildogg Exp $
+ * $Id: some.php,v 1.59 2004/08/25 15:49:39 introspectshun Exp $
  */
 
 // handle includes
@@ -84,7 +84,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'title'               => array ( 'activities_title', arr_vars_SESSION ) ,
                    'template_title'      => array ( 'activities_template_title', arr_vars_SESSION ) ,
                    'contact'             => array ( 'activities_contact', arr_vars_SESSION ) ,
-                   'contact_id'          => array ( 'activities_contect_id', arr_vars_SESSION ) ,
+                   'contact_id'          => array ( 'activities_contact_id', arr_vars_SESSION ) ,
                    'company'             => array ( 'activities_company', arr_vars_SESSION ) ,
                    'company_id'          => array ( 'activities_company_id', arr_vars_SESSION ) ,
 		   // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
@@ -117,7 +117,6 @@ else {
     $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
 }
 
-$curdate = $con->DBTimeStamp(time());
 $offset = $con->OffsetDate($day_diff);
 
 if (!strlen($sort_column) > 0) {
@@ -145,7 +144,7 @@ $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descendi
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
-//uncomment this to see what's gonig on with the database
+//uncomment this to see what's going on with the database
 //$con->debug=1;
 
 /*********************************
@@ -617,6 +616,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.59  2004/08/25 15:49:39  introspectshun
+ * - Fixed errant variable name
+ *
  * Revision 1.58  2004/08/25 15:01:17  neildogg
  * - Searches local time with proper constraints
  *  - Saves temporary searches properly
