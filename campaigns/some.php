@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.27 2005/03/02 19:36:52 daturaarutad Exp $
+ * $Id: some.php,v 1.28 2005/03/02 20:48:59 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,10 +23,6 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-                   'sort_column'          => array ( 'campaigns_sort_column', arr_vars_SESSION),
-                   'current_sort_column'  => array ( 'campaigns_current_sort_column', arr_vars_SESSION),
-                   'sort_order'           => array ( 'campaigns_sort_order', arr_vars_SESSION),
-                   'current_sort_order'   => array ( 'campaigns_current_sort_order', arr_vars_SESSION),
                    'campaign_title'       => array ( 'campaigns_campaign_title', arr_vars_SESSION),
                    'user_id'              => array ( 'campaigns_user_id', arr_vars_SESSION),
                    'campaign_type_id'     => array ( 'campaigns_campaign_type_id', arr_vars_SESSION),
@@ -330,6 +326,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.28  2005/03/02 20:48:59  daturaarutad
+ * forgot to remove sorting variables from arr_list
+ *
  * Revision 1.27  2005/03/02 19:36:52  daturaarutad
  * updated to use the GUP_Pager class
  *
