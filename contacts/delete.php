@@ -28,4 +28,10 @@ $con->close();
 
 header("Location: {$http_site_root}/companies/one.php?company_id=$company_id&msg=contact_deleted");
 
+/**
+ * $Log: delete.php,v $
+ * Revision 1.3  2004/07/13 09:34:51  cpsource
+ * Add cvs logging.
+ *
+ */
 ?>

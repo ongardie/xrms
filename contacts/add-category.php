@@ -38,4 +38,11 @@ $con->close();
 
 header("Location: categories.php?contact_id=$contact_id");
 
+/**
+ * $Log: add-category.php,v $
+ * Revision 1.4  2004/07/13 09:30:16  cpsource
+ * Add cvs logging.
+ *
+ */
+
 ?>
