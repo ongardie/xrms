@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.6 2004/02/02 02:51:16 braverock Exp $
+ * $Id: new.php,v 1.7 2004/02/15 02:18:12 maulani Exp $
  */
 
 /* Include required files */
@@ -52,17 +52,17 @@ $rst->close();
 
 $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
 $rst = $con->execute($sql2);
-$company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, true);
+$company_source_menu = $rst->getmenu2('company_source_id', $company_source_id, false);
 $rst->close();
 
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_pretty_name";
 $rst = $con->execute($sql2);
-$industry_menu = $rst->getmenu2('industry_id', $industry_id, true);
+$industry_menu = $rst->getmenu2('industry_id', $industry_id, false);
 $rst->close();
 
 $sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
 $rst = $con->execute($sql);
-$country_menu = $rst->getmenu2('country_id', $default_country_id, true);
+$country_menu = $rst->getmenu2('country_id', $default_country_id, false);
 $rst->close();
 
 $con->close();
@@ -100,11 +100,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Company Source</td>
-                <td class=widget_content_form_element><?php  echo $company_source_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $company_source_menu; ?> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Industry</td>
-                <td class=widget_content_form_element><?php  echo $industry_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $industry_menu; ?> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Owner</td>
@@ -174,7 +174,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Address&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text name=address_name size=30 value="Main"></td>
+                <td class=widget_content_form_element><input type=text name=address_name size=30 value="Main"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Line 1</td>
@@ -198,7 +198,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Country</td>
-                <td class=widget_content_form_element><?php echo $country_menu ?></td>
+                <td class=widget_content_form_element><?php echo $country_menu ?> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right_91px>Override&nbsp;Address</td>
@@ -213,11 +213,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>First&nbsp;Names</td>
-                <td class=widget_content_form_element><input type=text name=first_names size=30 value="Default"></td>
+                <td class=widget_content_form_element><input type=text name=first_names size=30 value="Default"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Last&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text name=last_name size=30 value="Contact"></td>
+                <td class=widget_content_form_element><input type=text name=last_name size=30 value="Contact"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>E-Mail</td>
@@ -266,6 +266,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.7  2004/02/15 02:18:12  maulani
+ * force popup menus to have valid values
+ *
  * Revision 1.6  2004/02/02 02:51:16  braverock
  * - fixed small display bug
  * - added phpdoc
