@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.23 2004/08/19 13:12:16 maulani Exp $
+ * $Id: some.php,v 1.24 2005/01/09 03:22:33 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,19 +18,19 @@ $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'sort_column'         => array ( 'cases_sort_column', arr_vars_SESSION ),
-		   'current_sort_column' => array ( 'cases_current_sort_column', arr_vars_SESSION ),
-		   'sort_order'          => array ( 'cases_sort_order', arr_vars_SESSION ),
-		   'current_sort_order'  => array ( 'cases_current_sort_order', arr_vars_SESSION ),
-		   'case_title'          => array ( 'cases_case_title', arr_vars_SESSION ),
-		   'case_id'             => array ( 'cases_case_id', arr_vars_SESSION ),
-		   'company_code'        => array ( 'cases_company_code', arr_vars_GET_STRLEN_SESSION ),
-		   // unused // 'company_type_id'     => array ( 'cases_company_type_id', arr_vars_SESSION ),
-		   'case_type_id'        => array ( 'case_type_id', arr_vars_SESSION ),
-		   'user_id'             => array ( 'cases_user_id', arr_vars_SESSION ),
-		   'case_status_id'      => array ( 'cases_case_status_id', arr_vars_SESSION ),
-		   'case_category_id'    => array ( 'cases_case_category_id', arr_vars_SESSION ),
-		   );
+         'sort_column'         => array ( 'cases_sort_column', arr_vars_SESSION ),
+         'current_sort_column' => array ( 'cases_current_sort_column', arr_vars_SESSION ),
+         'sort_order'          => array ( 'cases_sort_order', arr_vars_SESSION ),
+         'current_sort_order'  => array ( 'cases_current_sort_order', arr_vars_SESSION ),
+         'case_title'          => array ( 'cases_case_title', arr_vars_SESSION ),
+         'case_id'             => array ( 'cases_case_id', arr_vars_SESSION ),
+         'company_name'        => array ( 'cases_company_name', arr_vars_GET_STRLEN_SESSION ),
+         // unused // 'company_type_id'     => array ( 'cases_company_type_id', arr_vars_SESSION ),
+         'case_type_id'        => array ( 'case_type_id', arr_vars_SESSION ),
+         'user_id'             => array ( 'cases_user_id', arr_vars_SESSION ),
+         'case_status_id'      => array ( 'cases_case_status_id', arr_vars_SESSION ),
+         'case_category_id'    => array ( 'cases_case_category_id', arr_vars_SESSION ),
+         );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
@@ -61,7 +61,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 $sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS '" . _("Case") . "',
-c.company_code AS '" . _("Company") . "', u.username AS '" . _("Owner") . "', cat.case_type_pretty_name AS '" . _("Type") . "', cap.case_priority_pretty_name AS '" . _("Priority") . "',
+c.company_name AS '" . _("Company") . "', u.username AS '" . _("Owner") . "', cat.case_type_pretty_name AS '" . _("Type") . "', cap.case_priority_pretty_name AS '" . _("Priority") . "',
 cas.case_status_pretty_name AS '" . _("Status") . "', " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS '" . _("Due") . "' ";
 
 if ($case_category_id > 0) {
@@ -95,9 +95,9 @@ if (strlen($case_title) > 0) {
     $where .= " and ca.case_title like " . $con->qstr('%' . $case_title . '%', get_magic_quotes_gpc());
 }
 
-if (strlen($company_code) > 0) {
+if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_code = " . $con->qstr($company_code, get_magic_quotes_gpc());
+    $where .= " and c.company_name = " . $con->qstr($company_name, get_magic_quotes_gpc());
 }
 
 if (strlen($user_id) > 0) {
@@ -151,7 +151,7 @@ if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
         $recently_viewed_table_rows .= '<td class=widget_content><a href="'.$http_site_root.'/cases/one.php?case_id=' . $rst->fields['case_id'] . '">' . $rst->fields['case_title'] . '</a></td>';
-        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_code'] . '</td>';
+        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['case_status_pretty_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['due_at']) . '</td>';
         $recently_viewed_table_rows .= '</tr>';
@@ -238,14 +238,14 @@ start_page($page_title, true, $msg);
                 <td class=widget_header colspan=4><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label colspan=2><?php echo _("Case Name"); ?></td>
+                <td class=widget_label><?php echo _("Case Name"); ?></td>
                 <td class=widget_label><?php echo _("Case Number"); ?></td>
-                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label colspan=2><?php echo _("Company"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input type=text name="case_title" size=20 value="<?php  echo $case_title ?>"></td>
-                <td class=widget_content_form_element><input type=text name="case_id" size=20 value="<?php  echo $case_id ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_code" size=6 value="<?php  echo $company_code ?>"></td>
+                <td class=widget_content_form_element><input type=text name="case_title" value="<?php  echo $case_title ?>"></td>
+                <td class=widget_content_form_element><input type=text name="case_id" size=5 value="<?php  echo $case_id ?>"></td>
+                <td class=widget_content_form_element colspan=2><input type=text name="company_name" value="<?php  echo $company_name ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
@@ -309,11 +309,11 @@ function bulkEmail() {
     document.forms[0].submit();
 }
 function exportIt() {
-    //document.forms[0].action = "export.php";
-    //document.forms[0].submit();
+    document.forms[0].action = "export.php";
+    document.forms[0].submit();
     // reset the form so that post-export searches work
-    //document.forms[0].action = "some.php";
-		alert('Export functionality hasnt been implemented yet for multiple cases')
+    document.forms[0].action = "some.php";
+    // alert('Export functionality hasnt been implemented yet for multiple cases')
 }
 
 //function bulkEmail() {
@@ -347,6 +347,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.24  2005/01/09 03:22:33  braverock
+ * - modified to use company name rather than company code
+ * - modified to turn on export
+ *
  * Revision 1.23  2004/08/19 13:12:16  maulani
  * - Add specific pager to override formatting
  *
