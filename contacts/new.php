@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.18 2004/10/18 04:33:46 gpowers Exp $
+ * $Id: new.php,v 1.19 2005/01/06 18:39:00 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -27,6 +27,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 if ( isset($_GET['company_id']) ) {
   // was passed in
   $company_id = $_GET['company_id'];
+  $division_id = $_GET['division_id'];
 } elseif ( $use_self_contacts ) {
   // get from database
   $sql = "select company_id from companies where company_name = 'Self'";
@@ -65,10 +66,8 @@ if ( isset($company_id) ) {
         division_record_status = 'a'";
   $rst = $con->execute($sql);
   if ($rst) {
-    if ( !$rst->EOF ) {
+    if ( !$rst->EOF AND !$division_id ) {
       $division_id = $rst->fields['division_id'];
-    } else {
-      $division_id = '';
     }
     $division_menu = $rst->getmenu2('division_id', $division_id, true);
     $rst->close();
@@ -262,6 +261,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.19  2005/01/06 18:39:00  vanmer
+ * - allow pages calling new contact page to specify division_id and have it set properly when page displays
+ *
  * Revision 1.18  2004/10/18 04:33:46  gpowers
  * - corrected spelling mistake
  *
