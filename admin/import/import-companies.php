@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.2 2004/02/04 18:39:58 braverock Exp $
+ * $Id: import-companies.php,v 1.3 2004/03/07 14:37:45 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -52,7 +52,7 @@ $rst->close();
 
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_pretty_name";
 $rst = $con->execute($sql2);
-$industry_menu = $rst->getmenu2('industry_id', $industry_id, true);
+$industry_menu = $rst->getmenu2('industry_id', $industry_id, false);
 $rst->close();
 
 $sql = "select account_status_pretty_name, account_status_id from account_statuses where account_status_record_status = 'a'";
@@ -135,6 +135,10 @@ $con->close();
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.3  2004/03/07 14:37:45  braverock
+ * - make Industry a required field on import
+ *   credit to tjm-fc for suggesting this in response to SF bug 904296
+ *
  * Revision 1.2  2004/02/04 18:39:58  braverock
  * - major update to import functionality
  * - add phpdoc
