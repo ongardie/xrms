@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.56 2004/07/17 13:15:03 braverock Exp $
+ * $Id: one.php,v 1.57 2004/07/20 14:02:39 cpsource Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -609,9 +609,21 @@ function openNewsWindow() {
 
         <!-- activities //-->
         <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
+
         <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
+        <input type=hidden name=use_post_vars value="1">
+
+        <input type=hidden name=on_what_table        value="<?php echo $on_what_table; ?>">
+        <input type=hidden name=on_what_id           value="<?php echo $on_what_id; ?>">
+        <input type=hidden name=on_what_string       value="<?php echo $on_what_string; ?>">
+        <input type=hidden name=activity_description value="''">
+        <input type=hidden name=email                value="''">
+        <input type=hidden name=followup             value="''">
+        <input type=hidden name=on_what_status       value="''">
+        <input type=hidden name=ends_at              value="''">
+
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=7><?php echo _("Activities"); ?></td>
@@ -701,6 +713,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.57  2004/07/20 14:02:39  cpsource
+ * - Beagle bites sqirrel - got rid of getGlobalVars and
+ *     upgraded to arr_vars sub-system.
+ *   Fixed bug whereby companies/one.php couldn't create
+ *     activities.
+ *
  * Revision 1.56  2004/07/17 13:15:03  braverock
  * - localize all strings for i18n/translation
  * - add db_error_handler on all queries

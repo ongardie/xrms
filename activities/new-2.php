@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.21 2004/07/14 22:58:17 introspectshun Exp $
+ * $Id: new-2.php,v 1.22 2004/07/20 14:02:39 cpsource Exp $
  */
 
 //where do we include from
@@ -27,26 +27,48 @@ require_once($include_directory . 'adodb-params.php');
 //check to make sure we are logged on
 $session_user_id = session_check();
 
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+		   'return_url'       => array ( 'return_url' , arr_vars_SESSION ),
+		   'activity_type_id' => array ( 'activity_type_id' , arr_vars_SESSION ),
+		   'on_what_table'    => array ( 'on_what_table' , arr_vars_SESSION ),
+		   'on_what_id'       => array ( 'on_what_id' , arr_vars_SESSION ),
+		   'on_what_status'   => array ( 'on_what_status' , arr_vars_SESSION ),
+		   'activity_title'   => array ( 'activity_title' , arr_vars_SESSION ),
+		   'activity_description' => array ( 'activity_description' , arr_vars_SESSION ),
+		   'activity_status'  => array ( 'activity_status' , arr_vars_SESSION ),
+		   'scheduled_at'     => array ( 'scheduled_at' , arr_vars_SESSION ),
+		   'ends_at'          => array ( 'ends_at' , arr_vars_SESSION ),
+		   'company_id'       => array ( 'company_id' , arr_vars_SESSION ),
+		   'contact_id'       => array ( 'contact_id' , arr_vars_SESSION ),
+		   'user_id'          => array ( 'user_id' , arr_vars_SESSION ),
+		   'email'            => array ( 'email' , arr_vars_SESSION ),
+		   'followup'         => array ( 'followup' , arr_vars_SESSION ),
+		   );
 
-//now pull all the required variables from $_GET or $_POST
-getGlobalVar($return_url , 'return_url');
-//need check in here for missing return_url, set to calling page
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
 
-getGlobalVar($activity_type_id , 'activity_type_id');
-getGlobalVar($on_what_table , 'on_what_table');
-getGlobalVar($on_what_id , 'on_what_id');
-getGlobalVar($on_what_status , 'on_what_status');
-getGlobalVar($activity_title , 'activity_title');
-getGlobalVar($activity_description , 'activity_description');
-getGlobalVar($activity_status , 'activity_status');
-getGlobalVar($scheduled_at , 'scheduled_at');
-getGlobalVar($ends_at , 'ends_at');
-getGlobalVar($company_id , 'company_id');
-getGlobalVar($contact_id , 'contact_id');
-getGlobalVar($user_id    , 'user_id');
-getGlobalVar($email , 'email');
-getGlobalVar($followup , 'followup');
-
+// beagle bites squirrel
+if ( 0 ) {
+  //now pull all the required variables from $_GET or $_POST
+  getGlobalVar($return_url , 'return_url');
+  //need check in here for missing return_url, set to calling page
+  getGlobalVar($activity_type_id , 'activity_type_id');
+  getGlobalVar($on_what_table , 'on_what_table');
+  getGlobalVar($on_what_id , 'on_what_id');
+  getGlobalVar($on_what_status , 'on_what_status');
+  getGlobalVar($activity_title , 'activity_title');
+  getGlobalVar($activity_description , 'activity_description');
+  getGlobalVar($activity_status , 'activity_status');
+  getGlobalVar($scheduled_at , 'scheduled_at');
+  getGlobalVar($ends_at , 'ends_at');
+  getGlobalVar($company_id , 'company_id');
+  getGlobalVar($contact_id , 'contact_id');
+  getGlobalVar($user_id    , 'user_id');
+  getGlobalVar($email , 'email');
+  getGlobalVar($followup , 'followup');
+}
 
 //mark completed if it is an email
 if ($email) { $activity_status = 'c'; };
@@ -57,7 +79,7 @@ if (!$scheduled_at) {
 
 if ($followup) {
     //set the time for the new activity if it isn't already set
-    if ($default_followup_time) {
+    if (isset($default_followup_time) && $default_followup_time) {
         $scheduled_at = date('Y-m-d', strtotime($default_followup_time) ) ;
     } else {
         $scheduled_at = date('Y-m-d', strtotime('+1 week') );
@@ -147,19 +169,20 @@ if ($associate_activities = true ) {
 
 //save to database
 $rec = array();
-$rec['user_id'] = (strlen($user_id) > 0) ? $user_id : $session_user_id;
+
+$rec['user_id']          = (strlen($user_id) > 0) ? $user_id : $session_user_id;
 $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
-$rec['activity_status'] = (strlen($activity_status) > 0) ? $activity_status : "o";
-$rec['on_what_status'] = ($on_what_status > 0) ? $on_what_status : 0;
-$rec['activity_title'] = (strlen($activity_title) > 0) ? $activity_title : "[none]";
+$rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
+$rec['on_what_status']   = ($on_what_status > 0) ? $on_what_status : 0;
+$rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : "[none]";
 $rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
-$rec['on_what_table'] = (strlen($on_what_table) > 0) ? $on_what_table : '';
-$rec['on_what_id'] = ($on_what_id > 0) ? $on_what_id : 0;
-$rec['company_id'] = ($company_id > 0) ? $company_id : 0;
-$rec['contact_id'] = ($contact_id > 0) ? $contact_id : 0;
-$rec['entered_at'] = time();
-$rec['scheduled_at'] = strtotime($scheduled_at);
-$rec['ends_at'] = strtotime($ends_at);
+$rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
+$rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
+$rec['company_id']       = ($company_id > 0) ? $company_id : 0;
+$rec['contact_id']       = ($contact_id > 0) ? $contact_id : 0;
+$rec['entered_at']       = time();
+$rec['scheduled_at']     = strtotime($scheduled_at);
+$rec['ends_at']          = strtotime($ends_at);
 
 $tbl = 'activities';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -185,6 +208,12 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.22  2004/07/20 14:02:39  cpsource
+ *- Beagle bites sqirrel - got rid of getGlobalVars and
+ *    upgraded to arr_vars sub-system.
+ *  Fixed bug whereby companies/one.php couldn't create
+ *    activities.
+ *
  *Revision 1.21  2004/07/14 22:58:17  introspectshun
  *- Altered LEFT JOINs to use standard ON syntax rather than USING
  *
