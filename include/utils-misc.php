@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.76 2004/08/03 19:39:35 neildogg Exp $
+ * $Id: utils-misc.php,v 1.77 2004/08/03 20:21:02 neildogg Exp $
  */
 
 /**
@@ -933,10 +933,10 @@ function current_page() {
         }
     }
     if(count($parts)) {
-        return '/' . $page . '?' . $parts[1];
+        return $page . '?' . $parts[1];
     }
     else {
-        return '/' . $page;
+        return $page;
     }
 }
 
@@ -1209,6 +1209,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.77  2004/08/03 20:21:02  neildogg
+ * - No need for starting slashes
+ *
  * Revision 1.76  2004/08/03 19:39:35  neildogg
  * - Returns the return_url appropriate current page string
  *
