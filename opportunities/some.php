@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.34 2005/01/25 04:12:04 daturaarutad Exp $
+ * $Id: some.php,v 1.35 2005/01/31 01:10:35 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -235,8 +235,8 @@ $columns = array();
 $columns[] = array('name' => 'Opportunity', 'index' => 'Opportunity');
 $columns[] = array('name' => 'Company', 'index' => 'Company');
 $columns[] = array('name' => 'Owner', 'index' => 'Owner');
-$columns[] = array('name' => 'Opportunity Size', 'index' => 'Opportunity Size');
-$columns[] = array('name' => 'Weighted Size', 'index' => 'Weighted Size');
+$columns[] = array('name' => 'Opportunity Size', 'index' => 'Opportunity Size', 'subtotal' => true);
+$columns[] = array('name' => 'Weighted Size', 'index' => 'Weighted Size', 'subtotal' => true);
 $columns[] = array('name' => 'Status', 'index' => 'Status');
 $columns[] = array('name' => 'Close Date', 'index' => 'Close Date');
 
@@ -327,6 +327,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.35  2005/01/31 01:10:35  daturaarutad
+ * add subtotal for opportunity size and weighted size columns
+ *
  * Revision 1.34  2005/01/25 04:12:04  daturaarutad
  * updated to use new XRMS_Pager and Pager_Columns to implement selectable columns
  *
