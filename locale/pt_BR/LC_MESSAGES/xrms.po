@@ -2,17 +2,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-27 12:58-0200\n"
-"PO-Revision-Date: 2005-02-01 06:17-0300\n"
+"POT-Creation-Date: 2005-03-05 04:38-0300\n"
+"PO-Revision-Date: 2005-03-05 05:33-0300\n"
 "Last-Translator: Roberto Durrer <durrer@rdtech.com.br>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: opportunities/one.php:308
+msgid "$"
+msgstr "R$"
+
 #: activities/some.php:169
 #: activities/some.php:172
 #: activities/some.php:664
+#: activities/some.php:650
 msgid "%"
 msgstr "%"
 
@@ -53,12 +58,17 @@ msgstr "3 - e mostrar"
 msgid "4 - and searches"
 msgstr "4 - e busca"
 
+#: include/classes/QuickForm/ADOdb_QuickForm.php:319
+msgid "<h1>QuickForm Error: Form method GET will not work with File upload widget!</h1>"
+msgstr "<h1>QuickForm Error: Método GET não irá funcionar com 'File upload widget'!</h1>"
+
 #: admin/index.php:121
 msgid "ACL"
 msgstr "ACL"
 
 #: contacts/one.php:383
 #: plugins/phone/contacts_one.php:411
+#: contacts/one.php:381
 msgid "AOL IM"
 msgstr "AOL IM"
 
@@ -73,6 +83,9 @@ msgstr "Nome AOL"
 #: plugins/phone/companies_one.php:694
 #: plugins/phone/contacts_one.php:518
 #: private/home.php:483
+#: companies/one.php:738
+#: contacts/one.php:164
+#: contacts/one.php:498
 msgid "About"
 msgstr "Sobre"
 
@@ -87,6 +100,10 @@ msgstr "Sobre esta Atividade"
 #: opportunities/one.php:369
 #: plugins/phone/companies_one.php:506
 #: plugins/phone/contacts_one.php:431
+#: cases/one.php:340
+#: companies/one.php:517
+#: contacts/one.php:403
+#: opportunities/one.php:374
 msgid "Account Owner"
 msgstr "Responsável pelo Cliente"
 
@@ -101,6 +118,11 @@ msgstr "Responsável pelo Cliente"
 #: opportunities/one.php:377
 #: plugins/phone/companies_one.php:554
 #: plugins/phone/contacts_one.php:443
+#: cases/one.php:348
+#: companies/one.php:574
+#: companies/some.php:297
+#: contacts/one.php:411
+#: opportunities/one.php:382
 msgid "Account Status"
 msgstr "Status do Cliente"
 
@@ -128,6 +150,13 @@ msgstr "Ação"
 #: reports/completed-items.php:95
 #: reports/open-items.php:78
 #: reports/overdue-items.php:92
+#: cases/one.php:151
+#: cases/one.php:384
+#: contacts/one.php:183
+#: include/utils-interface.php:280
+#: opportunities/one.php:193
+#: opportunities/one.php:422
+#: reports/completed-items.php:94
 msgid "Activities"
 msgstr "Atividades"
 
@@ -141,6 +170,8 @@ msgstr "Comportamento Default de Atividades"
 #: reports/completed-items.php:202
 #: reports/open-items.php:189
 #: reports/overdue-items.php:204
+#: activities/one.php:352
+#: reports/completed-items.php:201
 msgid "Activity"
 msgstr "Atividade"
 
@@ -214,6 +245,9 @@ msgstr "Tipo de Atividades"
 #: companies/addresses.php:171
 #: plugins/phone/companies_one.php:706
 #: plugins/phone/contacts_one.php:529
+#: admin/case-statuses/some.php:182
+#: admin/users/some.php:121
+#: plugins/info/admin/some.php:97
 msgid "Add"
 msgstr "Adicionar"
 
@@ -235,6 +269,10 @@ msgstr "Adicionar Nome Anterior"
 #: admin/account-statuses/some.php:63
 msgid "Add New Account Status"
 msgstr "Adicionar Novo Status do Cliente"
+
+#: companies/one.php:731
+msgid "Add New Activity"
+msgstr "Adicionar Nova Atividade"
 
 #: admin/activity-types/some.php:71
 msgid "Add New Activity Type"
@@ -280,6 +318,10 @@ msgstr "Adicionar Novo Tipo de Empresa"
 msgid "Add New Industry"
 msgstr "Adicionar Nova Indústria"
 
+#: plugins/info/admin/some.php:76
+msgid "Add New Info Type"
+msgstr "Adidionar Novo Tipo de Informação"
+
 #: admin/opportunity-statuses/some.php:111
 msgid "Add New Opportunity Status"
 msgstr "Adicionar Novo Status de Oportunidades"
@@ -304,6 +346,8 @@ msgstr "Adicionar Novo Usuário"
 #: companies/relationships.php:126
 #: relationships/sidebar.php:389
 #: relationships/sidebar.php:395
+#: relationships/sidebar.php:290
+#: relationships/sidebar.php:296
 msgid "Add Relationship"
 msgstr "Adicionar Relacionamento"
 
@@ -311,6 +355,15 @@ msgstr "Adicionar Relacionamento"
 #: relationships/new-relationship.php:117
 msgid "Add Relationship for "
 msgstr "Adicionar Relacioamento para"
+
+#: plugins/apb/add_bookmark.php:191
+msgid "Add a Bookmark"
+msgstr "Adicionar um Bookmark"
+
+#: plugins/apb/index.php:110
+#: plugins/apb/quickadd.php:28
+msgid "Add to Bookmarks"
+msgstr "Adicionar ao Bookmark"
 
 #: activities/some.php:630
 msgid "Add to Everyone"
@@ -344,6 +397,18 @@ msgstr "Adicionado parâmetro de sistema RSS Feeds e Maximum RSS Feed Entries."
 msgid "Added RSS Feeds Enabled system parameters options."
 msgstr "Adicionado um parâmetro do sistema para RSS Feeds."
 
+#: admin/update.php:561
+msgid "Added Reports--Show No Items Found system parameters options."
+msgstr "Relatório Adicionado-Parâmetro de Sistema Nenhum Item Encontrado."
+
+#: admin/update.php:415
+msgid "Added Reports--Use Horizontal Rule and Reports--Show No Items Found system parameters."
+msgstr "Relatório Adicionado--Utilize a Régua Horizontal e Relatórios--Parâmetro de Sistema Nenhum Item Encontrado."
+
+#: admin/update.php:540
+msgid "Added Reports--Use Horizontal Rule system parameters options."
+msgstr "Relatório Adicionado--Utilize a Régua Horizontal para Opções de Parâmetros de Sistema"
+
 #: admin/update.php:331
 msgid "Added an Activities Default Behavior system parameter."
 msgstr "Adicionado um parâmetro do sistema para o Default do Comportamento das Atividades."
@@ -356,6 +421,10 @@ msgstr "Adicionado um Nível de Auditoria"
 msgid "Added an LDAP Version system parameter."
 msgstr "Adicionado um parâmetro do sistema para a Versão LDAP."
 
+#: plugins/apb/tools.php:17
+msgid "Additional Features"
+msgstr "Características Adicionais"
+
 #: companies/advanced-search.php:234
 #: companies/divisions.php:82
 #: companies/edit-division.php:77
@@ -367,6 +436,8 @@ msgstr "Adicionado um parâmetro do sistema para a Versão LDAP."
 #: plugins/phone/companies_one.php:536
 #: plugins/phone/contacts_one.php:449
 #: reports/companies-list.php:184
+#: companies/edit-division.php:80
+#: companies/one.php:551
 msgid "Address"
 msgstr "Endereço"
 
@@ -400,12 +471,14 @@ msgstr "Nome do Endereço"
 #: companies/addresses.php:108
 #: companies/one.php:695
 #: plugins/phone/companies_one.php:639
+#: companies/one.php:683
 msgid "Addresses"
 msgstr "Endereço"
 
 #: companies/admin.php:58
 #: companies/one.php:691
 #: plugins/phone/companies_one.php:634
+#: companies/one.php:680
 msgid "Admin"
 msgstr "Admin"
 
@@ -415,11 +488,13 @@ msgstr "Administrat Divisão"
 
 #: admin/index.php:37
 #: include/utils-interface.php:290
+#: include/utils-interface.php:293
 msgid "Administration"
 msgstr "Administração"
 
 #: activities/some.php:645
 #: companies/some.php:295
+#: companies/some.php:279
 msgid "Advanced Search"
 msgstr "Busca Avançada"
 
@@ -443,17 +518,22 @@ msgstr "Depois"
 #: reports/completed-items.php:88
 #: reports/open-items.php:71
 #: reports/overdue-items.php:85
+#: activities/some.php:530
+#: reports/completed-items.php:87
 msgid "All"
 msgstr "Todos"
 
 #: activities/some.php:526
 #: reports/audit-items.php:55
+#: activities/some.php:515
+#: reports/audit-items.php:57
 msgid "All Dates"
 msgstr "Todas as Datas"
 
 #: reports/completed-items.php:143
 #: reports/open-items.php:113
 #: reports/overdue-items.php:128
+#: reports/completed-items.php:142
 msgid "All Users"
 msgstr "Todos Usuários"
 
@@ -461,11 +541,16 @@ msgstr "Todos Usuários"
 msgid "Allow Access"
 msgstr "Permitir Acesso"
 
+#: login-2.php:32
+msgid "Also make sure the database is running and can accept a connection from this server."
+msgstr "Certifique-se também que o servidor da base de dados esteja rodando e que posa aceitar conexões a partir deste servidor."
+
 #: companies/advanced-search.php:182
 #: companies/edit.php:136
 #: companies/new.php:143
 #: companies/one.php:540
 #: plugins/phone/companies_one.php:518
+#: companies/one.php:529
 msgid "Alt. Phone"
 msgstr "Telefone Alt."
 
@@ -533,6 +618,7 @@ msgstr "Registro de Auditoria"
 
 #: plugins/info/one.php:347
 #: plugins/radtest/radtest.php:48
+#: plugins/info/one.php:175
 msgid "Back"
 msgstr "Voltar"
 
@@ -557,6 +643,34 @@ msgstr "Endereço para Cobrança"
 msgid "Billing Default"
 msgstr "Default para Cobrança"
 
+#: plugins/apb/add_bookmark.php:153
+msgid "Bookmark Deleted"
+msgstr "Bookmark Apagado."
+
+#: plugins/apb/tools.php:11
+msgid "Bookmark Setup"
+msgstr "Bookmark Setup"
+
+#: plugins/apb/add_bookmark.php:97
+#: plugins/apb/add_bookmark.php:129
+msgid "Bookmark saved!"
+msgstr "Bookmark Salvo!"
+
+#: plugins/apb/edit_group.php:19
+#: plugins/apb/index.php:16
+#: plugins/apb/search.php:106
+#: plugins/apb/view_group.php:12
+msgid "Bookmarks"
+msgstr "Bookmarks"
+
+#: plugins/apb/daily_browser.php:133
+msgid "Bookmarks Used by "
+msgstr "Bookmarks Usado por"
+
+#: plugins/apb/daily_browser.php:163
+msgid "Bookmarks Used by Others"
+msgstr "Bookmarks Usado por Outros"
+
 #: activities/some.php:638
 msgid "Browse"
 msgstr "Browse"
@@ -577,8 +691,14 @@ msgstr "Erros"
 #: email/index.php:60
 #: files/some.php:337
 #: opportunities/some.php:226
+#: cases/some.php:273
+#: opportunities/some.php:229
 msgid "Bulk E-Mail"
 msgstr "e-Mail em Massa"
+
+#: contacts/one.php:419
+msgid "Business Address"
+msgstr "Endereço Comercial"
 
 #: reports/completed-items.php:193
 msgid "COMPLETED ACTIVITIES for"
@@ -610,6 +730,11 @@ msgstr "OPORTUNIDADES COMPLETADAS para"
 #: plugins/phone/companies_one.php:500
 #: plugins/phone/contacts_one.php:437
 #: reports/companies-list.php:111
+#: cases/one.php:344
+#: companies/one.php:511
+#: companies/some.php:296
+#: contacts/one.php:407
+#: opportunities/one.php:378
 msgid "CRM Status"
 msgstr "Status do CRM"
 
@@ -639,6 +764,11 @@ msgstr "Ligar para"
 #: reports/completed-items.php:251
 #: reports/open-items.php:236
 #: reports/overdue-items.php:253
+#: campaigns/some.php:226
+#: campaigns/some.php:280
+#: files/some.php:322
+#: opportunities/one.php:303
+#: reports/completed-items.php:250
 msgid "Campaign"
 msgstr "Campanha"
 
@@ -690,8 +820,17 @@ msgstr "Tipo de Campanha"
 #: reports/completed-items.php:102
 #: reports/open-items.php:85
 #: reports/overdue-items.php:99
+#: activities/some.php:495
+#: campaigns/some.php:164
+#: files/some.php:286
+#: include/utils-interface.php:283
+#: reports/completed-items.php:101
 msgid "Campaigns"
 msgstr "Campanhas"
+
+#: plugins/apb/add_bookmark.php:163
+msgid "Can't delete, you don't have permission."
+msgstr "Não pode apagar, você não tem permissão."
 
 #: cases/some.php:64
 #: cases/some.php:295
@@ -699,6 +838,8 @@ msgstr "Campanhas"
 #: reports/index.php:79
 #: reports/open-items.php:330
 #: reports/overdue-items.php:347
+#: cases/some.php:297
+#: files/some.php:324
 msgid "Case"
 msgstr "Caso"
 
@@ -717,6 +858,7 @@ msgstr "Atendimento Apagado."
 #: cases/edit.php:198
 #: cases/new.php:124
 #: cases/one.php:220
+#: cases/one.php:265
 msgid "Case Details"
 msgstr "Detalhes do Atendimento"
 
@@ -743,12 +885,14 @@ msgstr "Detalhe do Status do Atendimento"
 
 #: admin/index.php:208
 #: admin/case-statuses/some.php:108
+#: admin/case-statuses/some.php:114
 msgid "Case Statuses"
 msgstr "Status dos Atendimentos"
 
 #: cases/edit.php:201
 #: cases/export.php:33
 #: cases/new.php:127
+#: cases/new.php:130
 msgid "Case Title"
 msgstr "Título do Atendimento"
 
@@ -767,6 +911,10 @@ msgstr "Tipos de Atendimento"
 #: reports/completed-items.php:116
 #: reports/open-items.php:99
 #: reports/overdue-items.php:113
+#: cases/some.php:230
+#: files/some.php:288
+#: include/utils-interface.php:285
+#: reports/completed-items.php:115
 msgid "Cases"
 msgstr "Atendimentos"
 
@@ -783,6 +931,7 @@ msgstr "Atendimentos por Status"
 #: plugins/phone/companies_one.php:723
 #: plugins/phone/contacts_one.php:545
 #: reports/companies-list.php:189
+#: plugins/apb/apb_common.php:200
 msgid "Categories"
 msgstr "Categorias"
 
@@ -793,6 +942,11 @@ msgstr "Categorias"
 #: contacts/some.php:261
 #: opportunities/some.php:217
 #: reports/companies-list.php:109
+#: campaigns/some.php:199
+#: cases/some.php:262
+#: companies/some.php:243
+#: contacts/some.php:235
+#: opportunities/some.php:220
 msgid "Category"
 msgstr "Categoria"
 
@@ -809,6 +963,7 @@ msgstr "Escopo da Categoria"
 #: contacts/one.php:356
 #: contacts/sidebar.php:171
 #: plugins/phone/contacts_one.php:378
+#: contacts/one.php:349
 msgid "Cell Phone"
 msgstr "Celular"
 
@@ -837,6 +992,7 @@ msgstr "Mudar Gráfico"
 #: admin/users/change-password.php:42
 #: admin/users/one.php:119
 #: admin/users/self.php:92
+#: admin/users/one.php:125
 msgid "Change Password"
 msgstr "Mudar Senha"
 
@@ -860,6 +1016,7 @@ msgstr "Química"
 #: reports/companies-list.php:186
 #: reports/company-contacts-printout.php:126
 #: reports/company-contacts-printout.php:136
+#: companies/some.php:249
 msgid "City"
 msgstr "Cidade"
 
@@ -871,6 +1028,13 @@ msgstr "Cidade"
 #: contacts/some.php:284
 #: files/some.php:336
 #: opportunities/some.php:226
+#: activities/some.php:628
+#: campaigns/some.php:216
+#: cases/some.php:273
+#: companies/some.php:278
+#: contacts/some.php:258
+#: files/some.php:305
+#: opportunities/some.php:229
 msgid "Clear Search"
 msgstr "Limpar Busca"
 
@@ -892,6 +1056,8 @@ msgstr "Limpar Busca"
 #: admin/relationship-types/one.php:99
 #: admin/roles/one.php:84
 #: admin/users/one.php:133
+#: admin/users/one.php:139
+#: plugins/info/admin/one.php:87
 msgid "Click the button below to permanently remove this item."
 msgstr "Clique no botão abaixo para remover permanentemente este ítem."
 
@@ -901,6 +1067,7 @@ msgstr "Clique no botão abaixo para remover essa Empresa ( bem como os contatos 
 
 #: companies/one.php:692
 #: plugins/phone/companies_one.php:635
+#: companies/one.php:681
 msgid "Clone"
 msgstr "Clone"
 
@@ -908,12 +1075,15 @@ msgstr "Clone"
 #: opportunities/new.php:134
 #: opportunities/some.php:58
 #: opportunities/some.php:287
+#: opportunities/some.php:252
+#: opportunities/some.php:298
 msgid "Close Date"
 msgstr "Data de Fechamento"
 
 #: admin/campaign-statuses/one.php:76
 #: admin/campaign-statuses/some.php:87
 #: locale/datastrings.php:22
+#: activities/activities-pager-functions.php:26
 msgid "Closed"
 msgstr "Fechado"
 
@@ -946,6 +1116,9 @@ msgstr "Fechados"
 #: contacts/some.php:259
 #: plugins/phone/companies_one.php:488
 #: reports/companies-list.php:182
+#: companies/one.php:499
+#: contacts/some.php:233
+#: contacts/some.php:278
 msgid "Code"
 msgstr "Código"
 
@@ -956,7 +1129,7 @@ msgstr "Comunicações"
 #: companies/advanced-search.php:130
 #: files/some.php:316
 #: include/strings.php:31
-#: include/utils-interface.php:278
+#: include/utils-interface.php:281
 msgid "Companies"
 msgstr "Empresas"
 
@@ -1033,6 +1206,24 @@ msgstr "Empresas por Fonte"
 #: reports/overdue-items.php:202
 #: reports/overdue-items.php:297
 #: reports/overdue-items.php:345
+#: activities/one.php:322
+#: activities/some.php:470
+#: activities/some.php:648
+#: cases/one.php:332
+#: cases/some.php:253
+#: cases/some.php:298
+#: companies/edit-division.php:72
+#: contacts/one.php:395
+#: contacts/some.php:215
+#: contacts/some.php:277
+#: contacts/some.php:325
+#: files/some.php:325
+#: opportunities/one.php:366
+#: opportunities/some.php:212
+#: opportunities/some.php:247
+#: opportunities/some.php:296
+#: reports/completed-items.php:199
+#: reports/completed-items.php:291
 msgid "Company"
 msgstr "Empresa"
 
@@ -1054,6 +1245,7 @@ msgstr "Cidade da Empresa"
 #: companies/some-advanced.php:135
 #: companies/some.php:49
 #: companies/some.php:307
+#: companies/some.php:293
 msgid "Company Code"
 msgstr "Código da Empresa"
 
@@ -1065,6 +1257,7 @@ msgstr "Empresa Apagada."
 #: companies/one.php:488
 #: plugins/phone/companies_one.php:441
 #: plugins/phone/companies_one.php:468
+#: companies/one.php:477
 msgid "Company Details"
 msgstr "Detalhes da Empresa"
 
@@ -1096,11 +1289,18 @@ msgstr "Lista das Empresas"
 #: reports/companies-list.php:183
 #: reports/company-contacts-printout.php:212
 #: reports/company-contacts-printout.php:245
+#: companies/one.php:487
+#: companies/some-advanced.php:420
+#: companies/some.php:237
+#: companies/some.php:292
+#: companies/some.php:349
 msgid "Company Name"
 msgstr "Nome da Empresa"
 
 #: companies/some-advanced.php:405
 #: companies/some.php:350
+#: companies/some-advanced.php:407
+#: companies/some.php:336
 msgid "Company Options"
 msgstr "Opções da Empresa"
 
@@ -1114,6 +1314,7 @@ msgstr "Relatórios da Empresa"
 #: companies/new.php:127
 #: companies/one.php:621
 #: plugins/phone/companies_one.php:584
+#: companies/one.php:610
 msgid "Company Source"
 msgstr "Fonte da Empresa"
 
@@ -1153,11 +1354,13 @@ msgstr "Concorrentes"
 
 #: activities/some.php:516
 #: activities/some.php:543
+#: activities/some.php:532
 msgid "Completed"
 msgstr "Completado"
 
 #: reports/completed-items.php:48
 #: reports/index.php:121
+#: reports/completed-items.php:44
 msgid "Completed Items"
 msgstr "Itens Completados"
 
@@ -1230,6 +1433,22 @@ msgstr "Consultoria"
 #: reports/overdue-items.php:203
 #: reports/overdue-items.php:298
 #: reports/overdue-items.php:346
+#: activities/one.php:328
+#: activities/some.php:469
+#: activities/some.php:644
+#: admin/users/one.php:89
+#: cases/new.php:138
+#: cases/one.php:133
+#: cases/one.php:316
+#: cases/one.php:390
+#: companies/one.php:737
+#: contacts/some.php:324
+#: files/some.php:321
+#: opportunities/one.php:174
+#: opportunities/one.php:348
+#: opportunities/one.php:428
+#: reports/completed-items.php:200
+#: reports/completed-items.php:292
 msgid "Contact"
 msgstr "Contato"
 
@@ -1249,6 +1468,8 @@ msgstr "Contato Apagado"
 #: contacts/one.php:306
 #: plugins/phone/contacts_one.php:287
 #: plugins/phone/contacts_one.php:314
+#: contacts/one.php:272
+#: contacts/one.php:299
 msgid "Contact Details"
 msgstr "Detalhes do Contato"
 
@@ -1272,6 +1493,10 @@ msgstr "Informações do Contato"
 #: include/utils-interface.php:279
 #: plugins/phone/companies_one.php:648
 #: reports/company-contacts-printout.php:246
+#: companies/some-advanced.php:308
+#: contacts/some.php:193
+#: files/some.php:283
+#: include/utils-interface.php:282
 msgid "Contacts"
 msgstr "Contatos"
 
@@ -1329,6 +1554,10 @@ msgstr "Criar Novo Endereço?"
 msgid "Create a New Address?"
 msgstr "Criar um Novo Endereço?"
 
+#: plugins/apb/tools.php:14
+msgid "Create a button in your browser that will automatically add bookmarks."
+msgstr "Criar uma tecla em seu browser que adicionará bookmarks automaticamente."
+
 #: campaigns/one.php:126
 #: cases/one.php:257
 #: companies/one.php:671
@@ -1336,12 +1565,17 @@ msgstr "Criar um Novo Endereço?"
 #: opportunities/one.php:329
 #: plugins/phone/companies_one.php:542
 #: plugins/phone/contacts_one.php:479
+#: cases/one.php:302
+#: companies/one.php:660
+#: contacts/one.php:459
+#: opportunities/one.php:334
 msgid "Created"
 msgstr "Criado"
 
 #: companies/admin.php:82
 #: companies/one.php:597
 #: plugins/phone/companies_one.php:566
+#: companies/one.php:586
 msgid "Credit Limit"
 msgstr "Limite de Crédito"
 
@@ -1373,6 +1607,10 @@ msgstr "Clientes"
 msgid "DO NOT RELOAD THIS PAGE! If you do, your message will be sent again."
 msgstr "NÃO ATUALIZE ESTA PÁGINA, pois a mensagem será enviada novamente."
 
+#: plugins/apb/tools.php:20
+msgid "Daily Browser"
+msgstr "Browse Diário"
+
 #: admin/index.php:56
 msgid "Data Cleanup"
 msgstr "Limpeza dos Dados"
@@ -1393,6 +1631,9 @@ msgstr "Atualização da Estrutura de Dados"
 #: files/some.php:368
 #: notes/sidebar.php:25
 #: private/home.php:264
+#: files/some.php:294
+#: files/some.php:327
+#: files/some.php:356
 msgid "Date"
 msgstr "Data"
 
@@ -1400,6 +1641,7 @@ msgstr "Data"
 #: contacts/new.php:156
 #: contacts/one.php:336
 #: plugins/phone/contacts_one.php:351
+#: contacts/one.php:329
 msgid "Date of Birth"
 msgstr "Data de Nascimento"
 
@@ -1441,6 +1683,10 @@ msgstr "Fuso Horário Default"
 #: notes/edit.php:41
 #: opportunities/edit.php:227
 #: plugins/info/one.php:343
+#: activities/some.php:434
+#: admin/users/one.php:141
+#: plugins/info/one.php:171
+#: plugins/info/admin/one.php:91
 msgid "Delete"
 msgstr "Apagar"
 
@@ -1571,6 +1817,14 @@ msgstr "Apagar Indústria"
 msgid "Delete Industry?"
 msgstr "Apagar Indústria?"
 
+#: plugins/info/admin/one.php:83
+msgid "Delete Info Type"
+msgstr "Apagar Tipo de Informação"
+
+#: plugins/info/admin/one.php:79
+msgid "Delete Info Type?"
+msgstr "Apagar Tipo de Informação?"
+
 #: admin/opportunity-statuses/one.php:214
 msgid "Delete Opportunity Status"
 msgstr "Apagar Status de Oportunidades"
@@ -1650,6 +1904,16 @@ msgstr "Apagado"
 #: opportunities/opportunity-view.php:49
 #: plugins/phone/contacts_one.php:345
 #: private/home.php:261
+#: admin/case-statuses/some.php:119
+#: admin/case-statuses/some.php:173
+#: cases/new.php:168
+#: companies/edit-division.php:84
+#: contacts/one.php:325
+#: contacts/some.php:234
+#: contacts/some.php:280
+#: files/some.php:319
+#: plugins/apb/add_bookmark.php:274
+#: plugins/apb/edit_group.php:89
 msgid "Description"
 msgstr "Descrição"
 
@@ -1711,8 +1975,15 @@ msgstr "Discussão"
 #: admin/ratings/some.php:79
 #: admin/roles/one.php:67
 #: admin/roles/some.php:78
+#: admin/case-statuses/some.php:165
 msgid "Display HTML"
 msgstr "Mostrar HTML"
+
+#: plugins/info/admin/one.php:66
+#: plugins/info/admin/some.php:62
+#: plugins/info/admin/some.php:89
+msgid "Display On"
+msgstr "Display Ligado"
 
 #: locale/datastrings.php:39
 msgid "Distribution"
@@ -1728,6 +1999,10 @@ msgstr "Distribuição"
 #: opportunities/new.php:91
 #: opportunities/one.php:365
 #: plugins/phone/contacts_one.php:425
+#: cases/new.php:134
+#: cases/one.php:336
+#: contacts/one.php:399
+#: opportunities/one.php:370
 msgid "Division"
 msgstr "Divisão"
 
@@ -1741,13 +2016,13 @@ msgstr "Descrição da Divisão"
 
 #: companies/divisions.php:78
 #: companies/edit-division.php:73
+#: companies/edit-division.php:76
 msgid "Division Name"
 msgstr "Nome da Divisão"
 
 #: companies/divisions.php:59
 #: companies/divisions.php:98
 #: companies/one.php:700
-#: plugins/phone/companies_one.php:640
 msgid "Divisions"
 msgstr "Divisões"
 
@@ -1764,6 +2039,14 @@ msgstr "Pronto"
 msgid "Dr."
 msgstr "Dr."
 
+#: plugins/apb/quickadd.php:26
+msgid "Drag the following link to your browser's toolbar, or add this link to your browser's favorites. You can then use this link to automatically add any site that you're viewing to APB."
+msgstr "Arraste a seguinte ligação à barra de ferramentas de seu browser toolbar, ou adicione este link aos favoritos do seu browser.  Você pode então usar este link para adicionar automaticamente qualquer site que voce esteja vendo ao APB."
+
+#: plugins/apb/index.php:108
+msgid "Drag the following link to your browser's toolbar, or add this link to your browser's favorites. You can then use this link to automatically add any site that you're viewing to these bookmarks."
+msgstr "Arraste a seguinte ligação à barra de ferramentas de seu browser ou adicione este link aos favoritos do seu browser.  Você pode então usar este link para adicionar automaticamente qualquer site que voce esteja vendo ao APB."
+
 #: activities/some.php:164
 #: activities/some.php:661
 #: cases/sidebar.php:29
@@ -1773,6 +2056,9 @@ msgstr "Dr."
 #: private/home.php:485
 #: reports/open-items.php:327
 #: reports/overdue-items.php:344
+#: activities/some.php:647
+#: cases/sidebar.php:32
+#: cases/some.php:300
 msgid "Due"
 msgstr "Prazo"
 
@@ -1810,6 +2096,12 @@ msgstr "Duração"
 #: locale/datastrings.php:40
 #: opportunities/one.php:351
 #: plugins/phone/contacts_one.php:357
+#: admin/users/one.php:108
+#: admin/users/some.php:67
+#: admin/users/some.php:105
+#: cases/one.php:324
+#: contacts/one.php:333
+#: opportunities/one.php:356
 msgid "E-Mail"
 msgstr "e-Mail"
 
@@ -1825,6 +2117,8 @@ msgstr "Gabaritos para e-Mails"
 #: plugins/phone/companies_one.php:633
 #: plugins/phone/contacts_one.php:498
 #: relationships/sidebar.php:243
+#: plugins/info/one.php:169
+#: relationships/sidebar.php:166
 msgid "Edit"
 msgstr "Editar"
 
@@ -1899,6 +2193,8 @@ msgstr "Editar Tipo de Informação de Empresas"
 
 #: companies/edit-division.php:53
 #: companies/edit-division.php:66
+#: companies/edit-division.php:56
+#: companies/edit-division.php:69
 msgid "Edit Division"
 msgstr "Editar Divisão"
 
@@ -1906,9 +2202,17 @@ msgstr "Editar Divisão"
 msgid "Edit Former Names"
 msgstr "Editar Nomes Anteriores"
 
+#: plugins/apb/edit_group.php:19
+msgid "Edit Group"
+msgstr "Editar Grupo"
+
 #: admin/industries/one.php:49
 msgid "Edit Industry Information"
 msgstr "Editar Informações de Indústrias"
+
+#: plugins/info/admin/one.php:59
+msgid "Edit Info Type Information"
+msgstr "Editar Tipo de Informação"
 
 #: email/email-2.php:45
 #: email/email-2.php:72
@@ -1972,8 +2276,15 @@ msgstr "e-Mail Este Para"
 #: companies/new.php:155
 #: companies/one.php:627
 #: plugins/phone/companies_one.php:590
+#: companies/one.php:616
 msgid "Employees"
 msgstr "Empregados"
+
+#: admin/users/one.php:120
+#: admin/users/some.php:65
+#: admin/users/some.php:117
+msgid "Enabled"
+msgstr "Habilitado"
 
 #: reports/activitytimes.php:53
 #: reports/activitytimes.php:74
@@ -1985,12 +2296,18 @@ msgstr "Empregados"
 #: reports/open-items.php:234
 #: reports/overdue-items.php:200
 #: reports/overdue-items.php:251
+#: reports/audit-items.php:45
+#: reports/completed-items.php:70
+#: reports/completed-items.php:197
+#: reports/completed-items.php:248
 msgid "End"
 msgstr "Fim"
 
 #: activities/one.php:423
 #: campaigns/one.php:118
 #: campaigns/some.php:68
+#: activities/one.php:419
+#: campaigns/some.php:231
 msgid "Ends"
 msgstr "Fim"
 
@@ -2038,6 +2355,7 @@ msgstr "Entre Telefone Comercial"
 #: reports/open-items.php:326
 #: reports/overdue-items.php:295
 #: reports/overdue-items.php:343
+#: reports/completed-items.php:289
 msgid "Entered"
 msgstr "Entrado"
 
@@ -2053,6 +2371,16 @@ msgstr "Erro. Sem Dados."
 msgid "Event"
 msgstr "Evento"
 
+#: include/classes/Pager/examples/GUP_Pager.doc.1.php:53
+#: include/classes/Pager/examples/GUP_Pager.doc.2.php:53
+#: include/classes/Pager/examples/GUP_Pager.doc.3.php:53
+#: include/classes/Pager/examples/GUP_Pager.doc.4.php:75
+#: include/classes/Pager/examples/GUP_Pager.doc.5.php:70
+#: include/classes/Pager/examples/GUP_Pager.doc.6.php:68
+#: include/classes/Pager/examples/GUP_Pager.doc.7.php:73
+msgid "Examples are viewable by Administrators only"
+msgstr "Os exemplos estão visíveis apenas aos Administradores"
+
 #: reports/opportunities-quantity-by-opportunity-status.php:103
 #: reports/opportunities-size-by-opportunity-status.php:114
 msgid "Exclude Closed Opportunities"
@@ -2062,10 +2390,22 @@ msgstr "Exluir Oportunidades Fechadas"
 msgid "Existing CRM Statuses"
 msgstr "Status de CRM xistentes"
 
+#: plugins/apb/add_bookmark.php:214
+msgid "Existing Group"
+msgstr "Grupos Existentes"
+
 #: activities/pager.php:49
 #: activities/some.php:681
 #: cases/pager.php:49
 #: companies/pager.php:49
+#: activities/some.php:667
+#: cases/one.php:148
+#: companies/some.php:313
+#: contacts/one.php:179
+#: contacts/some.php:298
+#: files/some.php:331
+#: opportunities/one.php:189
+#: opportunities/some.php:269
 msgid "Export"
 msgstr "Exportar"
 
@@ -2083,11 +2423,15 @@ msgstr "Exportar Empresas/Contatos como LDAP/LDIF"
 
 #: admin/users/edit-2.php:39
 #: admin/users/edit-2.php:41
+#: admin/users/edit-2.php:42
+#: admin/users/edit-2.php:44
 msgid "Failed to add user to group."
 msgstr "Falha ao adicionar usuário ao grupo."
 
 #: include/utils-misc.php:532
 #: include/utils-misc.php:539
+#: admin/system-parameters/one.php:49
+#: admin/system-parameters/one.php:55
 msgid "Failure to get system parameter "
 msgstr "Falha na obtenção de parâmetro de sistema"
 
@@ -2109,6 +2453,8 @@ msgstr "Rápido"
 #: contacts/one.php:360
 #: plugins/phone/companies_one.php:524
 #: plugins/phone/contacts_one.php:384
+#: companies/one.php:535
+#: contacts/one.php:353
 msgid "Fax"
 msgstr "FAX"
 
@@ -2124,6 +2470,7 @@ msgstr "Requisições de Melhorias"
 #: contacts/new.php:151
 #: contacts/one.php:93
 #: plugins/phone/contacts_one.php:90
+#: contacts/one.php:100
 msgid "Female"
 msgstr "Feminino"
 
@@ -2150,6 +2497,8 @@ msgstr "Formato do Arquivo"
 #: files/some.php:302
 #: files/some.php:369
 #: private/home.php:265
+#: files/some.php:271
+#: files/some.php:357
 msgid "File ID"
 msgstr "ID do Arquivo"
 
@@ -2167,6 +2516,8 @@ msgstr "Nome do Arquivo"
 #: files/sidebar.php:26
 #: files/some.php:281
 #: include/utils-interface.php:283
+#: files/some.php:256
+#: include/utils-interface.php:286
 msgid "Files"
 msgstr "Arquivos"
 
@@ -2190,6 +2541,9 @@ msgstr "Terminado"
 #: contacts/edit.php:146
 #: contacts/new.php:138
 #: contacts/some.php:239
+#: admin/users/one.php:100
+#: admin/users/some.php:93
+#: contacts/some.php:213
 msgid "First Names"
 msgstr "Primeiros Nomes"
 
@@ -2267,6 +2621,8 @@ msgstr "De Qual Tabela"
 #: admin/roles/one.php:59
 #: admin/roles/some.php:70
 #: admin/users/some.php:63
+#: admin/case-statuses/some.php:149
+#: admin/users/some.php:66
 msgid "Full Name"
 msgstr "Nome Completo"
 
@@ -2303,12 +2659,15 @@ msgstr "Plural Completo"
 #: admin/opportunity-statuses/some.php:122
 #: admin/ratings/some.php:75
 #: admin/roles/some.php:74
+#: admin/case-statuses/some.php:157
 msgid "Full Plural Name"
 msgstr "Plural do Nome Completo"
 
 #: admin/users/one.php:114
 #: admin/users/self.php:86
 #: admin/users/some.php:110
+#: admin/users/one.php:116
+#: admin/users/some.php:113
 msgid "GMT Offset"
 msgstr "GMT Offset"
 
@@ -2316,6 +2675,7 @@ msgstr "GMT Offset"
 #: contacts/new.php:146
 #: contacts/one.php:320
 #: plugins/phone/contacts_one.php:327
+#: contacts/one.php:313
 msgid "Gender"
 msgstr "Sexo"
 
@@ -2326,12 +2686,27 @@ msgstr "Sexo"
 #: reports/index.php:136
 #: reports/open-items.php:102
 #: reports/overdue-items.php:117
+#: reports/audit-items.php:61
+#: reports/completed-items.php:118
 msgid "Go"
 msgstr "Ir"
+
+#: plugins/apb/add_bookmark.php:101
+#: plugins/apb/edit_group.php:43
+msgid "Go Back to Editing"
+msgstr "Voltar para Editar"
 
 #: locale/datastrings.php:49
 msgid "Good"
 msgstr "Bom"
+
+#: plugins/weblinks/setup.php:29
+msgid "Google"
+msgstr "Google"
+
+#: plugins/weblinks/setup.php:31
+msgid "Google News"
+msgstr "Google News"
 
 #: locale/datastrings.php:50
 msgid "Government"
@@ -2340,6 +2715,19 @@ msgstr "Govêrno"
 #: reports/index.php:40
 msgid "Graphs"
 msgstr "Gráfico"
+
+#: plugins/apb/search.php:134
+msgid "Group Matches"
+msgstr "Group Coincidentes"
+
+#: plugins/apb/edit_group.php:40
+msgid "Group updated!"
+msgstr "Gupo atualizado!"
+
+#: plugins/apb/index.php:77
+#: plugins/apb/view_group.php:61
+msgid "Groups"
+msgstr "Grupos"
 
 #: activities/pager.php:12
 #: cases/pager.php:12
@@ -2350,8 +2738,13 @@ msgstr "Gráfico"
 #: include/utils-misc.php:16
 #: notes/sidebar.php:9
 #: relationships/sidebar.php:5
+#: relationships/relationship_functions.php:5
 msgid "Hacking attempt"
 msgstr "Tentativa de Invasão"
+
+#: login-2.php:31
+msgid "Have the administrator check the database parameters in vars.php to make sure they are correct."
+msgstr "Peça ao administrador verificar os parâmetros da base de dados em vars.php para certificar-se que estão corretos."
 
 #: locale/datastrings.php:51
 msgid "Healthcare"
@@ -2375,14 +2768,20 @@ msgstr "Aguardando"
 
 #: include/utils-interface.php:275
 #: private/home.php:465
+#: include/utils-interface.php:278
 msgid "Home"
 msgstr "Principal"
+
+#: contacts/one.php:423
+msgid "Home Address"
+msgstr "Endereço Residencial"
 
 #: contacts/edit.php:192
 #: contacts/new.php:184
 #: contacts/one.php:352
 #: contacts/sidebar.php:181
 #: plugins/phone/contacts_one.php:372
+#: contacts/one.php:345
 msgid "Home Phone"
 msgstr "Fone da Residência"
 
@@ -2467,12 +2866,23 @@ msgstr "Indústrias"
 #: companies/some.php:257
 #: companies/some.php:309
 #: plugins/phone/companies_one.php:494
+#: companies/one.php:505
+#: companies/some.php:246
+#: companies/some.php:295
 msgid "Industry"
 msgstr "Indústria"
 
 #: admin/industries/one.php:37
 msgid "Industry Details"
 msgstr "Indústria: Detalhes"
+
+#: plugins/info/admin/some.php:61
+msgid "Info Type"
+msgstr "Tipo de Informação"
+
+#: plugins/info/admin/one.php:47
+msgid "Infoy Type Details"
+msgstr "Detalhes do Tipo de Informação"
 
 #: activities/one.php:398
 msgid "Insert Log"
@@ -2486,6 +2896,7 @@ msgstr "Seguros"
 #: contacts/new.php:204
 #: contacts/one.php:364
 #: plugins/phone/contacts_one.php:390
+#: contacts/one.php:357
 msgid "Interests"
 msgstr "Interesses"
 
@@ -2496,6 +2907,8 @@ msgstr "Versão LDAP"
 #: admin/users/one.php:110
 #: admin/users/self.php:82
 #: admin/users/some.php:106
+#: admin/users/one.php:112
+#: admin/users/some.php:109
 msgid "Language"
 msgstr "Liguagem"
 
@@ -2506,6 +2919,10 @@ msgstr "Liguagem"
 #: opportunities/one.php:333
 #: plugins/phone/companies_one.php:548
 #: plugins/phone/contacts_one.php:485
+#: cases/one.php:306
+#: companies/one.php:664
+#: contacts/one.php:463
+#: opportunities/one.php:338
 msgid "Last Modified"
 msgstr "Última Modificação"
 
@@ -2516,6 +2933,9 @@ msgstr "Última Modificação"
 #: contacts/edit.php:150
 #: contacts/new.php:142
 #: contacts/some.php:238
+#: admin/users/one.php:96
+#: admin/users/some.php:89
+#: contacts/some.php:212
 msgid "Last Name"
 msgstr "Último nome"
 
@@ -2536,6 +2956,7 @@ msgstr "Nome Legal"
 #: companies/new.php:115
 #: companies/one.php:503
 #: plugins/phone/companies_one.php:480
+#: companies/one.php:492
 msgid "Legal Name"
 msgstr "Nome Legal"
 
@@ -2569,6 +2990,7 @@ msgstr "Associar Atividade ao Status de Oportunidade"
 
 #: relationships/sidebar.php:171
 #: relationships/sidebar.php:175
+#: relationships/sidebar.php:106
 msgid "Linked Relationships"
 msgstr "Relacionamentos Associados"
 
@@ -2612,6 +3034,11 @@ msgstr "Hora Local Entre"
 msgid "Logged in as"
 msgstr "Logado como"
 
+#: login.php:47
+#: login.php:58
+msgid "Login"
+msgstr "Login"
+
 #: include/utils-interface.php:268
 msgid "Logout"
 msgstr "Logout"
@@ -2635,6 +3062,7 @@ msgstr "MRTG"
 
 #: contacts/one.php:378
 #: plugins/phone/contacts_one.php:404
+#: contacts/one.php:374
 msgid "MSN IM"
 msgstr "MSN IM"
 
@@ -2658,6 +3086,16 @@ msgstr "Correio"
 #: companies/pager.php:50
 #: contacts/edit.php:238
 #: plugins/phone/companies_one.php:636
+#: activities/some.php:668
+#: campaigns/some.php:247
+#: cases/one.php:149
+#: companies/one.php:682
+#: companies/some.php:314
+#: contacts/one.php:180
+#: contacts/some.php:299
+#: files/some.php:332
+#: opportunities/one.php:190
+#: opportunities/some.php:270
 msgid "Mail Merge"
 msgstr "Inserir Correspondência"
 
@@ -2665,6 +3103,7 @@ msgstr "Inserir Correspondência"
 #: contacts/new.php:150
 #: contacts/one.php:96
 #: plugins/phone/contacts_one.php:93
+#: contacts/one.php:103
 msgid "Male"
 msgstr "Masculino"
 
@@ -2737,6 +3176,10 @@ msgstr "Gerenciar Tipo de Empresa"
 msgid "Manage Industries"
 msgstr "Gerenciar Indústrias"
 
+#: plugins/info/admin/some.php:51
+msgid "Manage Info Types"
+msgstr "Gerenciar Tipos de Informação"
+
 #: admin/opportunity-statuses/some.php:81
 msgid "Manage Opportunity Statuses"
 msgstr "Gerenciar Status de Oportunidades"
@@ -2804,6 +3247,7 @@ msgstr "Mais Informações"
 #: admin/activity-types/some.php:58
 #: admin/case-statuses/some.php:114
 #: admin/opportunity-statuses/some.php:97
+#: admin/case-statuses/some.php:120
 msgid "Move"
 msgstr "Mover"
 
@@ -2826,6 +3270,7 @@ msgstr "Multi Router Traffic Grapher"
 #: contacts/one.php:180
 #: locale/datastrings.php:71
 #: plugins/phone/contacts_one.php:160
+#: activities/activities-pager-functions.php:40
 msgid "N/A"
 msgstr "N/A"
 
@@ -2915,6 +3360,18 @@ msgstr "NENHUMA OPORTUNIDADE EXPIRADA para"
 #: private/home.php:328
 #: relationships/edit.php:52
 #: reports/audit-items.php:97
+#: admin/case-statuses/some.php:118
+#: cases/sidebar.php:29
+#: contacts/one.php:309
+#: contacts/some.php:276
+#: files/some.php:318
+#: files/some.php:354
+#: plugins/info/edit-definitions-2.php:77
+#: plugins/info/admin/add-2.php:57
+#: plugins/info/admin/one.php:62
+#: plugins/info/admin/some.php:81
+#: relationships/edit.php:59
+#: reports/audit-items.php:99
 msgid "Name"
 msgstr "Nome"
 
@@ -2932,8 +3389,14 @@ msgstr "Negociação"
 #: plugins/info/one.php:345
 #: plugins/info/sidebar.php:152
 #: plugins/phone/companies_one.php:658
+#: plugins/info/one.php:173
+#: plugins/info/sidebar.php:178
 msgid "New"
 msgstr "Novo"
+
+#: contacts/one.php:492
+msgid "New Activities"
+msgstr "Novas Atividades"
 
 #: companies/addresses.php:132
 msgid "New Address"
@@ -2977,6 +3440,10 @@ msgstr "Nova Relação"
 #: plugins/phone/companies_one.php:637
 msgid "News"
 msgstr "Notícias"
+
+#: plugins/apb/add_bookmark.php:280
+msgid "No"
+msgstr "Não"
 
 #: companies/one.php:442
 #: plugins/phone/companies_one.php:422
@@ -3028,6 +3495,11 @@ msgstr "Nenhum arquivo associado"
 msgid "No attached notes"
 msgstr "Nenhuma anotação associada"
 
+#: plugins/apb/daily_browser.php:156
+#: plugins/apb/daily_browser.php:187
+msgid "No bookmarks used"
+msgstr "Nenhum Bookmark utilizado"
+
 #: include/categories-sidebar.php:53
 #: plugins/phone/contacts_one.php:284
 msgid "No categories"
@@ -3078,6 +3550,8 @@ msgstr "Nenhum atendimento visto recentemente"
 
 #: companies/some-advanced.php:341
 #: companies/some.php:182
+#: companies/some-advanced.php:343
+#: companies/some.php:171
 msgid "No recently viewed companies"
 msgstr "Nenhuma empresa vista recentemente"
 
@@ -3092,6 +3566,10 @@ msgstr "Nenhum arquivo visto recentemente"
 #: opportunities/some.php:146
 msgid "No recently viewed opportunities"
 msgstr "Nenhuma oportunidade vista recentemente"
+
+#: plugins/apb/daily_browser.php:126
+msgid "No sites bookmarked"
+msgstr "Nenhum site adicionado ao Bookmark"
 
 #: admin/case-statuses/some.php:77
 msgid "No statuses defined for specified status type"
@@ -3149,6 +3627,8 @@ msgstr "Corpo da Anotação"
 #: admin/relationship-types/one.php:101
 #: admin/roles/one.php:85
 #: admin/users/one.php:134
+#: admin/users/one.php:140
+#: plugins/info/admin/one.php:89
 msgid "Note: This action CANNOT be undone!"
 msgstr "Nota: Esta ação NÃO PODERÁ ser desfeita!"
 
@@ -3189,11 +3669,22 @@ msgstr "ATENDIMENTOS EXPIRADOS para"
 msgid "OVERDUE OPPORTUNITIES for"
 msgstr "OPORTUNIDADES EXPIRADAS para"
 
+#: admin/acl/one_ControlledObjectRelationship.php:50
+msgid "Object/Child Object combination fails recursion check."
+msgstr "Falha na verificação da combinação Object/Child Object"
+
 #: activities/some.php:531
 #: cases/one.php:346
 #: contacts/one.php:488
 #: opportunities/one.php:424
 #: plugins/phone/contacts_one.php:519
+#: activities/some.php:520
+#: cases/one.php:134
+#: cases/one.php:391
+#: contacts/one.php:165
+#: contacts/one.php:499
+#: opportunities/one.php:175
+#: opportunities/one.php:429
 msgid "On"
 msgstr "Sobre"
 
@@ -3220,6 +3711,7 @@ msgstr "Apenas apresente as atividades completadas"
 #: admin/opportunity-statuses/one.php:153
 #: admin/opportunity-statuses/some.php:137
 #: locale/datastrings.php:75
+#: activities/activities-pager-functions.php:22
 msgid "Open"
 msgstr "Aberto"
 
@@ -3252,6 +3744,10 @@ msgstr "Status Aberto"
 #: reports/completed-items.php:109
 #: reports/open-items.php:92
 #: reports/overdue-items.php:106
+#: files/some.php:287
+#: include/utils-interface.php:284
+#: opportunities/some.php:189
+#: reports/completed-items.php:108
 msgid "Opportunities"
 msgstr "Oportunidades"
 
@@ -3286,6 +3782,10 @@ msgstr "Oportunidades por Status"
 #: reports/completed-items.php:294
 #: reports/index.php:58
 #: reports/overdue-items.php:299
+#: files/some.php:323
+#: opportunities/some.php:246
+#: opportunities/some.php:295
+#: reports/completed-items.php:293
 msgid "Opportunity"
 msgstr "Oportunidade"
 
@@ -3301,6 +3801,8 @@ msgstr "Oportunidade Apagada."
 #: opportunities/new.php:84
 #: opportunities/one.php:260
 #: opportunities/one.php:280
+#: opportunities/one.php:265
+#: opportunities/one.php:285
 msgid "Opportunity Details"
 msgstr "Detalhes da Oportunidade"
 
@@ -3354,6 +3856,8 @@ msgstr "Outro Contato"
 
 #: activities/some.php:157
 #: activities/some.php:656
+#: activities/activities-pager-functions.php:19
+#: activities/some.php:642
 msgid "Overdue"
 msgstr "Vencido"
 
@@ -3403,6 +3907,21 @@ msgstr "Gerenciamento de Arquivos OWL"
 #: opportunities/some.php:48
 #: opportunities/some.php:216
 #: reports/companies-list.php:108
+#: activities/some.php:502
+#: activities/some.php:649
+#: campaigns/some.php:187
+#: campaigns/some.php:229
+#: cases/new.php:157
+#: cases/one.php:283
+#: cases/sidebar.php:30
+#: cases/some.php:261
+#: companies/some.php:240
+#: contacts/some.php:236
+#: contacts/some.php:281
+#: files/some.php:295
+#: opportunities/one.php:299
+#: opportunities/some.php:219
+#: opportunities/some.php:248
 msgid "Owner"
 msgstr "Usuário"
 
@@ -3410,9 +3929,19 @@ msgstr "Usuário"
 msgid "PDF"
 msgstr "PDF"
 
+#: include/classes/Pager/GUP_Pager.php:126
+#, fuzzy
+msgid "Page"
+msgstr "Page"
+
 #: admin/system-parameters/some.php:49
 msgid "Parameter"
 msgstr "Parâmetro"
+
+#: plugins/apb/add_bookmark.php:227
+#: plugins/apb/edit_group.php:80
+msgid "Parent Group"
+msgstr "Grupo Anterior"
 
 #: locale/datastrings.php:77
 msgid "Partner"
@@ -3455,6 +3984,7 @@ msgstr "Personal Journal - INSTALAÇÃO"
 #: locale/datastrings.php:79
 #: plugins/phone/companies_one.php:512
 #: plugins/phone/companies_one.php:654
+#: companies/one.php:523
 msgid "Phone"
 msgstr "Fone"
 
@@ -3467,9 +3997,17 @@ msgstr "Formato do Número do Telefone"
 msgid "Please correct this error."
 msgstr "Por favor, corrija esse erro."
 
+#: admin/acl/one_ControlledObjectRelationship.php:45
+msgid "Please select a Parent/Child controlled object combination"
+msgstr "Por favor, selecione uma combinação de objetos controlados Parent/Child"
+
 #: admin/acl/index.php:57
 msgid "Please select a section to manage from the sidebar"
 msgstr "Por favor, selecione uma seção para gerenciar a partir da barra lateral"
+
+#: admin/acl/one_GroupUser.php:46
+msgid "Please select either a User/Group/Role combination or a Group/Child Group combination"
+msgstr "Por favor, selecione uma das combinações: User/Group/Role ou User/Group/Role"
 
 #: include/utils-interface.php:80
 msgid "Please try again."
@@ -3545,6 +4083,7 @@ msgstr "Sumário imprimível das informações de contato por empresas em resultados
 #: reports/completed-items.php:152
 #: reports/open-items.php:122
 #: reports/overdue-items.php:137
+#: reports/completed-items.php:151
 msgid "Printer Friendly"
 msgstr "Formato para Impressão"
 
@@ -3552,10 +4091,15 @@ msgstr "Formato para Impressão"
 #: cases/export.php:36
 #: cases/new.php:150
 #: cases/one.php:249
-#: cases/sidebar.php:28
-#: cases/some.php:65
+#: cases/one.php:294
+#: cases/sidebar.php:31
 msgid "Priority"
 msgstr "Prioridade"
+
+#: plugins/apb/add_bookmark.php:278
+#: plugins/apb/edit_group.php:93
+msgid "Private"
+msgstr "Privado"
 
 #: activities/one.php:363
 #: opportunities/new.php:116
@@ -3599,6 +4143,10 @@ msgstr "Quantidade por Indústria"
 msgid "Quantity by Status"
 msgstr "Quantidade por Status"
 
+#: plugins/apb/index.php:101
+msgid "QuickAdd"
+msgstr "QuickAdd"
+
 #: locale/datastrings.php:86
 msgid "RSS Feeds Enabled"
 msgstr "RSS Feeds Acionado."
@@ -3620,6 +4168,8 @@ msgstr "Radius Test"
 #: companies/some.php:54
 #: companies/some.php:312
 #: plugins/phone/companies_one.php:572
+#: companies/one.php:592
+#: companies/some.php:298
 msgid "Rating"
 msgstr "Avaliação"
 
@@ -3643,6 +4193,13 @@ msgstr "Imobiliário"
 #: contacts/some.php:344
 #: files/some.php:363
 #: opportunities/some.php:281
+#: campaigns/some.php:277
+#: cases/some.php:294
+#: companies/some-advanced.php:417
+#: companies/some.php:346
+#: contacts/some.php:321
+#: files/some.php:351
+#: opportunities/some.php:292
 msgid "Recently Viewed"
 msgstr "Visto Recentemente"
 
@@ -3671,6 +4228,10 @@ msgstr "Tipos de Relação"
 msgid "Relationships"
 msgstr "Relações"
 
+#: relationships/sidebar.php:77
+msgid "Relationships for "
+msgstr "Adicionar Relacionamento para"
+
 #: reports/opportunities-size-by-industry.php:94
 #: reports/opportunities-size-by-opportunity-status.php:104
 msgid "Remainder"
@@ -3692,6 +4253,7 @@ msgstr "Responder para"
 #: include/utils-interface.php:289
 #: reports/index.php:29
 #: reports/index.php:90
+#: include/utils-interface.php:292
 msgid "Reports"
 msgstr "Relatórios"
 
@@ -3716,12 +4278,16 @@ msgstr "Rev."
 #: companies/new.php:159
 #: companies/one.php:633
 #: plugins/phone/companies_one.php:596
+#: companies/one.php:622
 msgid "Revenue"
 msgstr "Faturamento"
 
 #: admin/users/one.php:80
 #: admin/users/some.php:65
 #: admin/users/some.php:82
+#: admin/users/one.php:82
+#: admin/users/some.php:68
+#: admin/users/some.php:85
 msgid "Role"
 msgstr "Grupo"
 
@@ -3780,6 +4346,9 @@ msgstr "Salvar"
 #: notes/new.php:50
 #: opportunities/edit.php:223
 #: opportunities/new.php:145
+#: admin/users/one.php:124
+#: cases/new.php:172
+#: plugins/info/admin/one.php:74
 msgid "Save Changes"
 msgstr "Salvar Mudanças"
 
@@ -3808,6 +4377,8 @@ msgstr "Buscas Salvas"
 #: activities/some.php:525
 #: activities/some.php:660
 #: private/home.php:484
+#: activities/some.php:514
+#: activities/some.php:646
 msgid "Scheduled"
 msgstr "Programado"
 
@@ -3835,6 +4406,18 @@ msgstr "Ajuste da Contagem"
 #: opportunities/some.php:226
 #: relationships/new-relationship.php:143
 #: reports/company-contacts-printout.php:228
+#: activities/some.php:626
+#: campaigns/some.php:215
+#: cases/sidebar.php:87
+#: cases/sidebar.php:95
+#: cases/some.php:273
+#: companies/some.php:277
+#: contacts/some.php:257
+#: files/some.php:304
+#: opportunities/some.php:229
+#: plugins/apb/index.php:69
+#: plugins/apb/search.php:124
+#: plugins/apb/view_group.php:40
 msgid "Search"
 msgstr "Busca"
 
@@ -3844,6 +4427,8 @@ msgstr "Busca por Data"
 
 #: companies/some-advanced.php:369
 #: companies/some.php:220
+#: companies/some-advanced.php:371
+#: companies/some.php:209
 msgid "Search Companies"
 msgstr "Buscar Empresas"
 
@@ -3855,6 +4440,13 @@ msgstr "Buscar Empresas"
 #: files/some.php:299
 #: opportunities/some.php:205
 #: reports/company-contacts-printout.php:209
+#: activities/some.php:465
+#: campaigns/some.php:182
+#: cases/some.php:248
+#: companies/some.php:232
+#: contacts/some.php:209
+#: files/some.php:268
+#: opportunities/some.php:208
 msgid "Search Criteria"
 msgstr "Critério de Busca"
 
@@ -3875,8 +4467,15 @@ msgstr "Sites de Busca"
 #: include/adodb/adodb-pager.inc.php:287
 #: opportunities/pager.php:35
 #: opportunities/some.php:265
+#: activities/some.php:673
+#: campaigns/some.php:252
+#: companies/some.php:319
+#: contacts/some.php:305
+#: files/some.php:334
+#: opportunities/some.php:276
+#: plugins/apb/search.php:106
 msgid "Search Results"
-msgstr "Resultados da Busca"
+msgstr "Resultados da Busca "
 
 #: activities/some.php:620
 msgid "Search Title"
@@ -3890,6 +4489,14 @@ msgstr "Buscar por Empresa"
 #: include/strings.php:18
 msgid "Search for Contact"
 msgstr "Busca por Contato"
+
+#: plugins/apb/tools.php:20
+msgid "See what kind of activity your Bookarks are getting."
+msgstr "Veja que tipo da atividade seu Bookarks está obtendo."
+
+#: include/classes/Pager/Pager_Columns.php:111
+msgid "Select Column Layouts"
+msgstr "Selecione as Colunas do Layout"
 
 #: admin/case-statuses/some.php:80
 msgid "Select a status type"
@@ -3906,12 +4513,18 @@ msgstr "Seminários"
 #: reports/completed-items.php:131
 #: reports/open-items.php:136
 #: reports/overdue-items.php:151
+#: reports/completed-items.php:130
 msgid "Send Email To"
 msgstr "Enviar e-Mail para"
 
 #: reports/audit-items.php:104
 msgid "Session Id"
 msgstr "Identificação da Sessão"
+
+#: plugins/apb/quickadd.php:16
+#: plugins/apb/tools.php:14
+msgid "Setup QuickAdd"
+msgstr "Setup QuickAdd"
 
 #: contacts/edit-address.php:100
 msgid "Shipping Address"
@@ -3951,13 +4564,28 @@ msgstr "Default para Remessa"
 #: admin/ratings/some.php:67
 #: admin/roles/one.php:55
 #: admin/roles/some.php:66
+#: admin/case-statuses/some.php:141
 msgid "Short Name"
 msgstr "Nome Curto"
+
+#: plugins/apb/apb_common.php:206
+msgid "Site Listings"
+msgstr "Lista dos Sites"
+
+#: plugins/apb/search.php:157
+msgid "Site Matches"
+msgstr "Site Conicidentes"
+
+#: plugins/apb/view_group.php:84
+msgid "Sites"
+msgstr "Sites"
 
 #: files/one.php:77
 #: files/sidebar.php:30
 #: files/some.php:367
 #: opportunities/one.php:302
+#: files/some.php:355
+#: opportunities/one.php:307
 msgid "Size"
 msgstr "Valor"
 
@@ -3996,6 +4624,10 @@ msgstr "Especial"
 #: reports/open-items.php:233
 #: reports/overdue-items.php:199
 #: reports/overdue-items.php:250
+#: reports/audit-items.php:44
+#: reports/completed-items.php:69
+#: reports/completed-items.php:196
+#: reports/completed-items.php:247
 msgid "Start"
 msgstr "Início"
 
@@ -4005,6 +4637,9 @@ msgstr "Início"
 #: companies/one.php:763
 #: plugins/info/one.php:370
 #: plugins/phone/companies_one.php:695
+#: activities/one.php:411
+#: campaigns/some.php:230
+#: companies/one.php:739
 msgid "Starts"
 msgstr "Início"
 
@@ -4019,6 +4654,7 @@ msgstr "Início Em"
 #: reports/companies-list.php:113
 #: reports/company-contacts-printout.php:128
 #: reports/company-contacts-printout.php:138
+#: companies/some.php:252
 msgid "State"
 msgstr "Estado"
 
@@ -4053,6 +4689,18 @@ msgstr "Estado"
 #: opportunities/some.php:218
 #: opportunities/some.php:286
 #: reports/overdue-items.php:296
+#: activities/one.php:345
+#: campaigns/some.php:201
+#: campaigns/some.php:228
+#: campaigns/some.php:282
+#: cases/new.php:146
+#: cases/one.php:287
+#: cases/some.php:264
+#: cases/some.php:299
+#: opportunities/one.php:319
+#: opportunities/some.php:221
+#: opportunities/some.php:251
+#: opportunities/some.php:297
 msgid "Status"
 msgstr "Status"
 
@@ -4062,6 +4710,9 @@ msgstr "Status"
 #: opportunities/edit.php:181
 #: opportunities/new.php:105
 #: opportunities/one.php:317
+#: cases/new.php:149
+#: cases/one.php:290
+#: opportunities/one.php:322
 msgid "Status Definitions"
 msgstr "Definições de Status"
 
@@ -4087,6 +4738,7 @@ msgstr "Enviar"
 #: contacts/new.php:160
 #: contacts/one.php:324
 #: plugins/phone/contacts_one.php:333
+#: contacts/one.php:317
 msgid "Summary"
 msgstr "Sumário"
 
@@ -4118,6 +4770,7 @@ msgstr "Tabelas"
 #: companies/admin.php:78
 #: companies/one.php:591
 #: plugins/phone/companies_one.php:560
+#: companies/one.php:580
 msgid "Tax ID"
 msgstr "Ident. da Taxa"
 
@@ -4149,12 +4802,25 @@ msgstr "Título dos Gabaritos"
 #: companies/admin.php:90
 #: companies/one.php:609
 #: plugins/phone/companies_one.php:578
+#: companies/one.php:598
 msgid "Terms"
 msgstr "Termos"
+
+#: login-2.php:34
+msgid "Test Results"
+msgstr "Resultados dos Testes"
 
 #: email/email-4.php:90
 msgid "The bulk e-mail sub-system has sent"
 msgstr "O e-Mail em massa foi enviado"
+
+#: login-2.php:29
+msgid "The system cannot connect to the database."
+msgstr "O sistema não consegue conectar-se ao bando de dados."
+
+#: plugins/apb/index.php:42
+msgid "There are no bookmarks."
+msgstr "Não há bookmarks."
 
 #: include/strings.php:24
 msgid "There is no company by that name"
@@ -4219,6 +4885,22 @@ msgstr "Apontamento de Tempo"
 #: plugins/phone/companies_one.php:690
 #: plugins/phone/contacts_one.php:339
 #: plugins/phone/contacts_one.php:515
+#: activities/one.php:374
+#: activities/some.php:468
+#: activities/some.php:645
+#: cases/one.php:130
+#: cases/one.php:275
+#: cases/one.php:387
+#: companies/one.php:734
+#: contacts/one.php:161
+#: contacts/one.php:321
+#: contacts/one.php:495
+#: contacts/some.php:214
+#: contacts/some.php:279
+#: opportunities/one.php:171
+#: opportunities/one.php:295
+#: opportunities/one.php:425
+#: plugins/apb/edit_group.php:84
 msgid "Title"
 msgstr "Título"
 
@@ -4235,6 +4917,10 @@ msgstr "Para o Próximo"
 #: admin/relationship-types/some.php:79
 msgid "To What Table"
 msgstr "Para Qual Tabela"
+
+#: plugins/apb/tools.php:5
+msgid "Tools"
+msgstr "Ferramentas"
 
 #: reports/companies-list.php:285
 msgid "Total records"
@@ -4295,6 +4981,28 @@ msgstr "Transferir para Outra Empresa"
 #: reports/overdue-items.php:71
 #: reports/overdue-items.php:201
 #: reports/overdue-items.php:252
+#: activities/one.php:352
+#: activities/some.php:504
+#: activities/some.php:643
+#: admin/case-statuses/some.php:117
+#: campaigns/some.php:186
+#: campaigns/some.php:227
+#: campaigns/some.php:281
+#: cases/new.php:142
+#: cases/one.php:132
+#: cases/one.php:279
+#: cases/one.php:389
+#: cases/some.php:263
+#: companies/one.php:736
+#: contacts/one.php:163
+#: contacts/one.php:497
+#: opportunities/one.php:173
+#: opportunities/one.php:427
+#: reports/audit-items.php:97
+#: reports/completed-items.php:72
+#: reports/completed-items.php:198
+#: reports/completed-items.php:249
+#: reports/completed-items.php:290
 msgid "Type"
 msgstr "Tipo"
 
@@ -4307,8 +5015,14 @@ msgstr "Tipos e Status"
 #: companies/new.php:151
 #: companies/one.php:552
 #: plugins/phone/companies_one.php:530
+#: companies/one.php:541
+#: plugins/apb/add_bookmark.php:270
 msgid "URL"
 msgstr "URL"
+
+#: plugins/weblinks/setup.php:36
+msgid "US Census Data"
+msgstr "Dados Censitário dos EEUU"
 
 #: admin/export/export-companies-ldap.php:149
 #: admin/export/export-companies.php:99
@@ -4347,12 +5061,18 @@ msgstr "Incapaz de abrir arquivo"
 msgid "Unassociate"
 msgstr "Desassociar"
 
+#: include/classes/Pager/GUP_Pager.php:252
+msgid "Ungroup"
+msgstr "Desagrupar"
+
 #: contacts/edit.php:157
 #: contacts/new.php:149
 #: contacts/one.php:99
 #: contacts/one.php:102
 #: plugins/phone/contacts_one.php:96
 #: plugins/phone/contacts_one.php:99
+#: contacts/one.php:106
+#: contacts/one.php:109
 msgid "Unknown"
 msgstr "Desconhecido"
 
@@ -4412,6 +5132,18 @@ msgstr "Utilizado por Contatos"
 #: reports/completed-items.php:72
 #: reports/open-items.php:57
 #: reports/overdue-items.php:70
+#: activities/one.php:380
+#: cases/one.php:131
+#: cases/one.php:388
+#: companies/one.php:735
+#: companies/some.php:294
+#: contacts/one.php:162
+#: contacts/one.php:496
+#: opportunities/one.php:172
+#: opportunities/one.php:426
+#: reports/audit-items.php:46
+#: reports/audit-items.php:96
+#: reports/completed-items.php:71
 msgid "User"
 msgstr "Usuário"
 
@@ -4431,6 +5163,10 @@ msgstr "Relatório do Usuário"
 #: admin/users/self.php:72
 #: admin/users/some.php:66
 #: admin/users/some.php:94
+#: login.php:50
+#: admin/users/one.php:104
+#: admin/users/some.php:69
+#: admin/users/some.php:97
 msgid "Username"
 msgstr "Usuário"
 
@@ -4483,9 +5219,17 @@ msgstr "ATENÇÃO"
 msgid "WARNING: No array of contacts!"
 msgstr "ATENÇÃO: Nenhuma matriz de Contatos!"
 
+#: include/classes/Pager/GUP_Pager.php:113
+msgid "Warning: GUP_Pager must be passed either an SQL query or a data array"
+msgstr "Atenção: GUP_Pager deve ter retornado ou uma query SQL ou um data array"
+
 #: include/utils-interface.php:80
 msgid "We could not authenticate you."
 msgstr "Não foi possível autenticá-lo."
+
+#: plugins/weblinks/setup.php:27
+msgid "Web Links"
+msgstr "Web Links"
 
 #: companies/sidebar.php:70
 #: locale/datastrings.php:104
@@ -4507,6 +5251,8 @@ msgstr "Ponderado"
 
 #: opportunities/one.php:310
 #: opportunities/some.php:56
+#: opportunities/one.php:315
+#: opportunities/some.php:250
 msgid "Weighted Size"
 msgstr "Valor Ponderado"
 
@@ -4526,6 +5272,10 @@ msgstr "Comunicação Verbal"
 #: contacts/some.php:349
 #: opportunities/one.php:347
 #: plugins/phone/contacts_one.php:366
+#: cases/one.php:320
+#: contacts/one.php:341
+#: contacts/some.php:326
+#: opportunities/one.php:352
 msgid "Work Phone"
 msgstr "Fone Comercial"
 
@@ -4544,12 +5294,35 @@ msgstr "Nome Yahoo"
 
 #: contacts/one.php:372
 #: plugins/phone/contacts_one.php:396
+#: contacts/one.php:366
 msgid "Yahoo! IM"
 msgstr "Yahoo! IM"
 
 #: activities/some.php:156
+#: plugins/info/edit-definitions.php:135
 msgid "Yes"
 msgstr "Sim"
+
+#: plugins/apb/add_bookmark.php:303
+msgid "You don't have permission to edit this bookmark"
+msgstr "Voce não tem permissão para editar este Bookmark"
+
+#: plugins/apb/add_bookmark.php:104
+msgid "You don't have permission to edit this bookmark."
+msgstr "Voce não tem permissão para editar este Bookmark"
+
+#: plugins/apb/edit_group.php:111
+msgid "You don't have permission to edit this group"
+msgstr "Voce não tem permissão para editar este Grupo."
+
+#: plugins/apb/quickadd.php:35
+msgid "You must be logged into access this feature."
+msgstr "Voce precisa estar logado para acessar esta funcionalidade"
+
+#: plugins/apb/index.php:110
+#: plugins/apb/quickadd.php:28
+msgid "You must drag this link to your browser\\'s toolbar or add it to your favorites."
+msgstr "Você deve arrastar esta ligação à barra de ferramentas de seu browser ou adicioná-la a seus favoritos."
 
 #: campaigns/edit.php:153
 #: campaigns/new.php:138
@@ -4612,6 +5385,8 @@ msgstr "Seu quadro das vendas - Quantos de seus clientes estão em cada estágio d
 #: activities/new-2.php:164
 #: activities/new-2.php:172
 #: companies/new-2.php:45
+#: activities/new-2.php:166
+#: activities/new-2.php:174
 msgid "[none]"
 msgstr "[nenhum]"
 
@@ -4673,11 +5448,13 @@ msgstr "crm_status_pretty_name"
 
 #: companies/one.php:610
 #: plugins/phone/companies_one.php:581
+#: companies/one.php:599
 msgid "days"
 msgstr "dias"
 
 #: admin/activity-types/some.php:35
 #: admin/case-statuses/some.php:69
+#: admin/case-statuses/some.php:75
 msgid "down"
 msgstr "abaixo"
 
@@ -4713,6 +5490,10 @@ msgstr "faxes de"
 msgid "faxes to"
 msgstr "faxes para"
 
+#: plugins/apb/search.php:103
+msgid "for"
+msgstr "para"
+
 #: admin/industries/some.php:27
 msgid "industry_pretty_name"
 msgstr "industry_pretty_name"
@@ -4737,6 +5518,14 @@ msgstr "pipe"
 msgid "process"
 msgstr "processo"
 
+#: plugins/apb/search.php:100
+msgid "result"
+msgstr "resultado"
+
+#: plugins/apb/search.php:101
+msgid "results"
+msgstr "resultados"
+
 #: reports/activitytimes.php:122
 msgid "seconds"
 msgstr "segundos"
@@ -4751,6 +5540,7 @@ msgstr "tab"
 
 #: admin/activity-types/some.php:31
 #: admin/case-statuses/some.php:64
+#: admin/case-statuses/some.php:70
 msgid "up"
 msgstr "acima"
 
