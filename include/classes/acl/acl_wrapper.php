@@ -132,7 +132,7 @@ function check_object_permission_bool($user_id, $object=false, $action='Read',$t
     else return true;
 }
 
-function get_list($user_id, $action='Read', $object=false, $table=false) {
+function acl_get_list($user_id, $action='Read', $object=false, $table=false) {
     global $acl_options;
 //    echo "Getting list<br>";
     if (!$user_id) return false;
@@ -143,9 +143,13 @@ function get_list($user_id, $action='Read', $object=false, $table=false) {
     if (!$object_id) return false;
 //    echo "Doing restriction<br>";
     $ret = $acl->get_restricted_object_list($object_id, $user_id, $action);
-    $list = $ret['controlled_objects'];
-//    print_r($list);
-    return $list;
+    if (!$ret) return false;
+    if ($ret['ALL']) return true;
+    else {
+        $list = $ret['controlled_objects'];
+        //    print_r($list);
+        return $list;
+    }
 }
 
 function get_role_name($acl=false, $role) {
