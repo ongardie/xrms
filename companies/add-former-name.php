@@ -2,7 +2,7 @@
 /**
  * Add Former Name
  *
- * $Id: add-former-name.php,v 1.5 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: add-former-name.php,v 1.6 2004/06/12 17:10:24 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -26,7 +26,7 @@ $rst = $con->execute($sql);
 
 $rec = array();
 $rec['company_id'] = $company_id;
-$rec['namechange_at'] = $con->DBTimestamp(mktime());
+$rec['namechange_at'] = time();
 $rec['former_name'] = $former_name;
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
@@ -40,6 +40,10 @@ header("Location: former-names.php?company_id=$company_id");
 
 /**
  * $Log: add-former-name.php,v $
+ * Revision 1.6  2004/06/12 17:10:24  gpowers
+ * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
+ *   GetUpdateSQL()
+ *
  * Revision 1.5  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

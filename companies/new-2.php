@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.13 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: new-2.php,v 1.14 2004/06/12 17:10:24 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -88,10 +88,10 @@ $rec['custom2'] = $custom2;
 $rec['custom3'] = $custom3;
 $rec['custom4'] = $custom4;
 $rec['profile'] = $profile;
-$rec['entered_at'] = $con->DBTimestamp(mktime());
+$rec['entered_at'] = time();
 $rec['entered_by'] = $session_user_id;
 $rec['last_modified_by'] = $session_user_id;
-$rec['last_modified_at'] = $$con->DBTimestamp(mktime());
+$rec['last_modified_at'] = time();
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
@@ -103,10 +103,10 @@ if (strlen($company_code) == 0) {
     $company_code = 'C' . $company_id;
     $sql = "SELECT * FROM companies WHERE company_id = $company_id";
     $rst = $con->execute($sql);
-    
+
     $rec = array();
     $rec['company_code'] = $company_code;
-    
+
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
 }
@@ -159,10 +159,10 @@ $rec['last_name'] = $last_name;
 $rec['email'] = $email;
 $rec['work_phone'] = $phone;
 $rec['fax'] = $fax;
-$rec['entered_at'] = $con->DBTimestamp(mktime());
+$rec['entered_at'] = time();
 $rec['entered_by'] = $session_user_id;
 $rec['last_modified_by'] = $session_user_id;
-$rec['last_modified_at'] = $$con->DBTimestamp(mktime());
+$rec['last_modified_at'] = time();
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
@@ -181,6 +181,10 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.14  2004/06/12 17:10:24  gpowers
+ * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
+ *   GetUpdateSQL()
+ *
  * Revision 1.13  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

@@ -26,7 +26,7 @@ $rec = array();
 $rec['on_what_table'] = $on_what_table;
 $rec['on_what_id'] = $on_what_id;
 $rec['note_description'] = $note_description;
-$rec['entered_at'] = $con->DBTimestamp(mktime());
+$rec['entered_at'] = time();
 $rec['entered_by'] = $session_user_id;
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());

@@ -47,10 +47,10 @@ if ($old_status != $case_status_id) {
         and company_id=$company_id
         and activity_status='o'
         and activity_record_status='a'";
-                                                                                                                             
+
     $rst = $con->execute($sql);
     $activity_id = $rst->fields['activity_id'];
-                                                                                                                             
+
     //if there is only one field, the result set is empty (no old activities)
     //  otherwise prompt the user
     if (count($rst->fields) > 1) {
@@ -58,7 +58,7 @@ if ($old_status != $case_status_id) {
         $no_update = true;
     }
     $rst->close();
-                                                                                                                             
+
     if (!$no_update) {
         require_once("../activities/workflow-activities.php");
     }
@@ -79,9 +79,9 @@ if (!$no_update) {
     $rec['case_title'] = $case_title;
     $rec['case_description'] = $case_description;
     $rec['due_at'] = $con->DBDate($due_at . ' 23:59:59');
-    $rec['last_modified_at'] = $con->DBTimestamp(mktime());
+    $rec['last_modified_at'] = time();
     $rec['last_modified_by'] = $session_user_id;
-    
+
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
 

@@ -2,7 +2,7 @@
 /**
  * Add Relationship
  *
- * $Id: add-relationship.php,v 1.4 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: add-relationship.php,v 1.5 2004/06/12 17:10:24 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -20,7 +20,7 @@ if (($relation + 2) % 2) {
   $relation2=$relation-1;
 } else {
   $relation2=$relation+1;
-} 
+}
 $company2_id = $_POST['company2_id'];
 
 $relation_array = array("Acquired", "Acquired by", "Consultant for", "Retains consultant", "Manufactures for", "Uses manufacturer", "Subsidiary of", "Parent company of", "Alternate address for", "Parent address for");
@@ -36,7 +36,7 @@ $rec = array();
 $rec['company_from_id'] = $company_id;
 $rec['relationship_type'] = $relation_array[$relation];
 $rec['company_to_id'] = $company2_id;
-$rec['established_at'] = $con->DBTimestamp(mktime());
+$rec['established_at'] = time();
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
@@ -64,6 +64,10 @@ header("Location: relationships.php?company_id=$company_id");
 
 /**
  * $Log: add-relationship.php,v $
+ * Revision 1.5  2004/06/12 17:10:24  gpowers
+ * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
+ *   GetUpdateSQL()
+ *
  * Revision 1.4  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

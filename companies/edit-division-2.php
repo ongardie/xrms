@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.2 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: edit-division-2.php,v 1.3 2004/06/12 17:10:24 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -34,7 +34,7 @@ $rec = array();
 $rec['division_id'] = $division_id;
 $rec['division_name'] = $division_name;
 $rec['description'] = $description;
-$rec['last_modified_at'] = $con->DBTimestamp(mktime());
+$rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
@@ -44,6 +44,10 @@ header("Location: divisions.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.3  2004/06/12 17:10:24  gpowers
+ * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
+ *   GetUpdateSQL()
+ *
  * Revision 1.2  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

@@ -36,7 +36,7 @@ $rec['campaign_description'] = $campaign_description;
 $rec['starts_at'] = $con->DBDate($starts_at . ' 00:00:00');
 $rec['ends_at'] = $con->DBDate($ends_at . ' 23:59:59');
 $rec['cost'] = $cost;
-$rec['last_modified_at'] = $con->DBTimestamp(mktime());
+$rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());

@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.13 2004/06/11 21:18:39 introspectshun Exp $
+ * $Id: new-2.php,v 1.14 2004/06/12 17:10:23 gpowers Exp $
  */
 
 //where do we include from
@@ -86,9 +86,9 @@ $rec['on_what_table'] = (strlen($on_what_table) > 0) ? $on_what_table : '';
 $rec['on_what_id'] = ($on_what_id > 0) ? $on_what_id : 0;
 $rec['company_id'] = ($company_id > 0) ? $company_id : 0;
 $rec['contact_id'] = ($contact_id > 0) ? $contact_id : 0;
-$rec['entered_at'] = $con->DBTimeStamp(mktime());
-$rec['scheduled_at'] = $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($scheduled_at)));
-$rec['ends_at'] = $con->DBTimeStamp(date ('Y-m-d H:i:s', strtotime($ends_at)));
+$rec['entered_at'] = time();
+$rec['scheduled_at'] = strtotime($scheduled_at);
+$rec['ends_at'] = strtotime($ends_at);
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
@@ -113,6 +113,10 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.14  2004/06/12 17:10:23  gpowers
+ *- removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
+ *  GetUpdateSQL()
+ *
  *Revision 1.13  2004/06/11 21:18:39  introspectshun
  *- Now use ADODB GetInsertSQL and GetUpdateSQL functions.
  *

@@ -36,10 +36,10 @@ $rec['company_id'] = $company_id;
 $rec['contact_id'] = $contact_id;
 $rec['case_title'] = $case_title;
 $rec['case_description'] = $case_description;
-$rec['due_at'] = $con->DBDate($due_at);
-$rec['entered_at'] = $con->DBTimestamp(mktime())
+$rec['due_at'] = strtotime($due_at);
+$rec['entered_at'] = time()
 $rec['entered_by'] = $session_user_id;
-$rec['last_modified_at'] = $con->DBTimestamp(mktime());
+$rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
 $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());

@@ -2,7 +2,7 @@
 /**
  * Delete a division by setting its status
  *
- * $Id: delete-division.php,v 1.2 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: delete-division.php,v 1.3 2004/06/12 17:10:24 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -26,7 +26,7 @@ $rst = $con->execute($sql);
 
 $rec = array();
 $rec['division_record_status'] = 'd';
-$rec['last_modified_at'] = $con->DBTimestamp(mktime());
+$rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
@@ -38,6 +38,10 @@ header("Location: divisions.php?msg=address_deleted&company_id=$company_id");
 
 /**
  * $Log: delete-division.php,v $
+ * Revision 1.3  2004/06/12 17:10:24  gpowers
+ * - removed DBTimeStamp() calls for compatibility with GetInsertSQL() and
+ *   GetUpdateSQL()
+ *
  * Revision 1.2  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.
