@@ -17,6 +17,9 @@ $last_name = $_POST['last_name'];
 $summary = $_POST['summary'];
 $title = $_POST['title'];
 $description = $_POST['description'];
+$date_of_birth = $_POST['date_of_birth'];
+$gender = $_POST['gender'];
+$salutation = $_POST['salutation'];
 $email = $_POST['email'];
 $work_phone = $_POST['work_phone'];
 $cell_phone = $_POST['cell_phone'];
@@ -50,6 +53,9 @@ aol_name = " . $con->qstr($aol_name, get_magic_quotes_gpc()) . ",
 yahoo_name = " . $con->qstr($yahoo_name, get_magic_quotes_gpc()) . ",
 msn_name = " . $con->qstr($msn_name, get_magic_quotes_gpc()) . ",
 interests = " . $con->qstr($interests, get_magic_quotes_gpc()) . ",
+salutation = " . $con->qstr($salutation, get_magic_quotes_gpc()) . ",
+gender = " . $con->qstr($gender, get_magic_quotes_gpc()) . ",
+date_of_birth = " . $con->qstr($date_of_birth, get_magic_quotes_gpc()) . ",
 profile = " . $con->qstr($profile, get_magic_quotes_gpc()) . ",
 custom1 = " . $con->qstr($custom1, get_magic_quotes_gpc()) . ",
 custom2 = " . $con->qstr($custom2, get_magic_quotes_gpc()) . ",
@@ -59,6 +65,7 @@ last_modified_at = " . $con->dbtimestamp(mktime()) . ",
 last_modified_by = $session_user_id
 where contact_id = $contact_id";
 
+// print $sql;
 
 $con->execute($sql);
 

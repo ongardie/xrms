@@ -26,6 +26,8 @@ if ($rst) {
 	$rst->close();
 }
 
+$salutation_menu = build_salutation_menu($salutation);
+
 $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
 $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, false);
@@ -52,6 +54,10 @@ start_page($page_title, true, $msg);
 				<td class=widget_label_right>Address</td>
 				<td class=widget_content_form_element><?php echo $address_menu ?></td>
 			</tr>
+            <tr>
+                <td class=widget_label_right>Salutation</td>
+                <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
+            </tr>
 			<tr>
 				<td class=widget_label_right>First Names</td>
 				<td class=widget_content_form_element><input type=text name=first_names size=30></td>
@@ -60,6 +66,19 @@ start_page($page_title, true, $msg);
 				<td class=widget_label_right>Last Name</td>
 				<td class=widget_content_form_element><input type=text name=last_name size=30></td>
 			</tr>
+            <tr>
+                <td class=widget_label_right>Gender</td>
+                <td class=widget_content_form_element>
+                <select name="gender">
+                    <option value="m" <?php if ($gender == "m") {print " selected ";} ?>>Male
+                    <option value="f" <?php if ($gender == "f") {print " selected ";} ?>>Female
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Date of Birth</td>
+                <td class=widget_content_form_element><input type=text name=date_of_birth size=10></td>
+            </tr>
 			<tr>
 				<td class=widget_label_right>Summary</td>
 				<td class=widget_content_form_element><input type=text name=summary size=35></td>
