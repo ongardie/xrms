@@ -17,7 +17,6 @@ CREATE TABLE `info` (
 #
 # Table structure for table `info_element_definitions`
 #
-
 CREATE TABLE `info_element_definitions` (
   `element_id` int(11) NOT NULL auto_increment,
   `element_label` varchar(50) NOT NULL default '',
@@ -42,7 +41,6 @@ INSERT INTO `info_element_definitions` VALUES (1, 'Name', 'text', '1', 0, '', ''
 #
 # Table structure for table `info_map`
 #
-
 CREATE TABLE `info_map` (
   `info_id` int(11) NOT NULL auto_increment,
   `company_id` int(11) NOT NULL default '0',
@@ -56,10 +54,9 @@ CREATE TABLE `info_map` (
 # --------------------------------------------------------
 
 #
-# Table structure for table `info_map`
+# Table structure for table `info_types`
 #
-
-REATE TABLE `info_types` (
+CREATE TABLE `info_types` (
   `info_type_id` int(10) unsigned NOT NULL auto_increment,
   `info_type_name` varchar(48) NOT NULL default '',
   `from_what_table` varchar(24) NOT NULL default '',
@@ -78,7 +75,6 @@ REATE TABLE `info_types` (
 #
 # Table structure for table `info_display_map`
 #
-
 CREATE TABLE `info_display_map` (
   `info_type_id` int(11) NOT NULL default '0',
   `display_on` varchar(100) NOT NULL default '',
