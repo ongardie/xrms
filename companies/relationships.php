@@ -2,7 +2,7 @@
 /**
  * Edit company relationships
  *
- * $Id: relationships.php,v 1.5 2004/05/27 15:04:34 gpowers Exp $
+ * $Id: relationships.php,v 1.6 2004/06/07 16:23:22 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -24,9 +24,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $company_name = fetch_company_name($con, $company_id);
 
 $sql = "select r.relationship_type, r.established_at, r.company_to_id, c.company_name, r.company_from_id
-from company_relationship r, companies c 
-where r.company_from_id = $company_id 
-and r.company_to_id=c.company_id 
+from company_relationship r, companies c
+where r.company_from_id = $company_id
+and r.company_to_id=c.company_id
 order by r.established_at desc";
 
 $rst = $con->execute($sql);
@@ -39,7 +39,7 @@ if ($rst) {
         $relationship_rows .= '<td class=widget_content_form_element><a href="one.php?company_id='
             . $rst->fields['company_to_id'] . '">' . $rst->fields['company_name'] . '</a></td>';
         $relationship_rows .= '<td class=widget_content_form_element>' . $established_at . '</td>';
-        $relationship_rows .= '<td class=widget_content_form_element>' 
+        $relationship_rows .= '<td class=widget_content_form_element>'
             . '<a href="delete-relationship.php?company_to_id=' . $rst->fields['company_to_id']
             . '&company_from_id=' . $rst->fields['company_from_id']
             . '&relationship_type=' . $rst->fields['relationship_type'] . '">(Delete)</a>'
@@ -98,7 +98,10 @@ start_page($page_title, true, $msg);
             	<td><?php echo $company_menu ?></td>
 			</tr>
             <tr>
-                <td class=widget_content_form_element colspan=4><input class=button type=submit value="Add Relationship"></td>
+                <td class=widget_content_form_element colspan=4>
+                    <input class=button type=submit value="Add Relationship">
+                    <input class=button type=button value="Back to <?php echo $company_name; ?>" onclick="javascript:location.href='one.php?company_id=<?php echo $company_id; ?>';">
+                </td>
             </tr>
         </table>
         </form>
@@ -119,6 +122,10 @@ end_page();
 
 /**
  * $Log: relationships.php,v $
+ * Revision 1.6  2004/06/07 16:23:22  gpowers
+ * - Added a "Back to $company_name" button. This is needed to get back
+ * to the company page after making edits.
+ *
  * Revision 1.5  2004/05/27 15:04:34  gpowers
  * Added a link to company page on company name.
  *
