@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.39 2004/07/21 15:20:04 introspectshun Exp $
+ * $Id: one.php,v 1.40 2004/07/21 21:05:35 neildogg Exp $
  */
 require_once('../include-locations.inc');
 
@@ -64,10 +64,10 @@ if ($rst) {
     $description = $rst->fields['description'];
     $profile = $rst->fields['profile'];
     $email = $rst->fields['email'];
-    $work_phone = $rst->fields['work_phone'];
-    $cell_phone = $rst->fields['cell_phone'];
-    $home_phone = $rst->fields['home_phone'];
-    $fax = $rst->fields['fax'];
+    $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
+    $cell_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']);
+    $home_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone']);
+    $fax = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['fax']);
     $aol_name = $rst->fields['aol_name'];
     $yahoo_name = $rst->fields['yahoo_name'];
     $msn_name = $rst->fields['msn_name'];
@@ -564,6 +564,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.40  2004/07/21 21:05:35  neildogg
+ * - Added get_formatted_phone
+ *
  * Revision 1.39  2004/07/21 15:20:04  introspectshun
  * - Localized strings for i18n/translation support
  * - Removed include of lang file

@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.15 2004/07/16 07:11:17 introspectshun Exp $
+ * $Id: one.php,v 1.16 2004/07/21 21:04:29 neildogg Exp $
  */
 
 //include required files
@@ -191,10 +191,12 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
-$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . ", contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a' ORDER BY last_name";
+$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . ", contact_id, address_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a' ORDER BY last_name";
 $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
+    $address_id = $rst->fields['address_id'];
+    $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $work_phone);
     $rst->close();
 }
 
@@ -370,6 +372,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.16  2004/07/21 21:04:29  neildogg
+ * - Added get_formatted_phone
+ *
  * Revision 1.15  2004/07/16 07:11:17  introspectshun
  * - Localized strings for i18n/translation support
  *

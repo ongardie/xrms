@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.8 2004/07/21 19:17:57 introspectshun Exp $
+ * $Id: sidebar.php,v 1.9 2004/07/21 21:00:41 neildogg Exp $
  */
 
 // add company information block on sidebar
@@ -49,12 +49,14 @@ if ($rst) {
 
     if ($rst->fields['phone']) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                       . _("Phone") . ": " . $rst->fields['phone'] . "&nbsp;" . $rst->fields['phone2'] . "</td>\n\t</tr>";
+                        . _("Phone") . ": " . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['phone'])
+                        . "&nbsp;" . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['phone2'])
+                        . "</td>\n\t</tr>";
     };
 
     if ($rst->fields['fax']) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-                       . _("Fax") . ": " . $rst->fields['fax'] . "</td>\n\t</tr>";
+                        . _("Fax") . ": " . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['fax']) . "</td>\n\t</tr>";
     }
 
     if ($rst->fields['url']) {
@@ -81,6 +83,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.9  2004/07/21 21:00:41  neildogg
+ * - Added get_formatted_phone
+ *
  * Revision 1.8  2004/07/21 19:17:57  introspectshun
  * - Localized strings for i18n/l10n support
  *

@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.58 2004/07/21 18:52:09 introspectshun Exp $
+ * $Id: one.php,v 1.59 2004/07/21 21:04:52 neildogg Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -60,9 +60,9 @@ if ($rst) {
     $industry_pretty_name = $rst->fields['industry_pretty_name'];
     $user_id = $rst->fields['user_id'];
     $owner_username = $rst->fields['owner_username'];
-    $phone = $rst->fields['phone'];
-    $phone2 = $rst->fields['phone2'];
-    $fax = $rst->fields['fax'];
+    $phone = get_formatted_phone($con, $address_id, $rst->fields['phone']);
+    $phone2 = get_formatted_phone($con, $address_id, $rst->fields['phone2']);
+    $fax = get_formatted_phone($con, $address_id, $rst->fields['fax']);
     $url = $rst->fields['url'];
     if ((substr($url, 0, 4)!=='http') and (strlen($url) >0)) {
         $url = 'http://'.$url;
@@ -193,7 +193,7 @@ if ($rst) {
         $contact_rows .= '<td class=widget_content>' . $rst->fields['summary'] . '</td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['title'] . '</td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['description'] . '</td>';
-        $contact_rows .= '<td class=widget_content>' . $rst->fields['work_phone'] . '</td>';
+        $contact_rows .= '<td class=widget_content>' . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) . '</td>';
         $contact_rows .= "\n\t<td class=widget_content><a href='mailto:"
                         . $rst->fields['email']
                         . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&contact_id=$contact_id&activity_title=email to "
@@ -713,6 +713,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.59  2004/07/21 21:04:52  neildogg
+ * - Added get_formatted_phone
+ *
  * Revision 1.58  2004/07/21 18:52:09  introspectshun
  * - Fixed broken </td>
  *

@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.20 2004/07/20 19:38:31 introspectshun Exp $
+ * $Id: one.php,v 1.21 2004/07/21 21:10:28 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,7 +27,7 @@ update_recent_items($con, $session_user_id, "opportunities", $opportunity_id);
 $sql = "select
 o.*,
 c.company_id, c.company_name, c.company_code,
-cont.first_names, cont.last_name, cont.work_phone, cont.email,
+cont.first_names, cont.last_name, cont.work_phone, cont.email, cont.address_id,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
 u3.username as opportunity_owner_username, u4.username as account_owner_username,
 as1.account_status_display_html, r.rating_display_html, crm_status_display_html, os.opportunity_status_display_html, cam.campaign_title
@@ -56,7 +56,7 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $first_names = $rst->fields['first_names'];
     $last_name = $rst->fields['last_name'];
-    $work_phone = $rst->fields['work_phone'];
+    $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
     $email = $rst->fields['email'];
     $crm_status_display_html = $rst->fields['crm_status_display_html'];
     $account_status_display_html = $rst->fields['account_status_display_html'];
@@ -434,6 +434,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.21  2004/07/21 21:10:28  neildogg
+ * - Added get_formatted_phone
+ *
  * Revision 1.20  2004/07/20 19:38:31  introspectshun
  * - Localized strings for i18n/translation support
  *

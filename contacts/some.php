@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.27 2004/07/21 15:20:04 introspectshun Exp $
+ * $Id: some.php,v 1.28 2004/07/21 21:06:08 neildogg Exp $
  */
 
 //include the standard files
@@ -155,7 +155,7 @@ if ($rst) {
         $recently_viewed_table_rows .= '<tr>';
         $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
-        $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['work_phone'] . '</td>';
+        $recently_viewed_table_rows .= '<td class=widget_content>' . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) . '</td>';
         $recently_viewed_table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -329,6 +329,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.28  2004/07/21 21:06:08  neildogg
+ * - Added get_formatted_phone
+ *
  * Revision 1.27  2004/07/21 15:20:04  introspectshun
  * - Localized strings for i18n/translation support
  * - Removed include of lang file

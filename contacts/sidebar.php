@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.10 2004/07/21 15:20:04 introspectshun Exp $
+ * $Id: sidebar.php,v 1.11 2004/07/21 21:00:33 neildogg Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -45,12 +45,14 @@ if ($rst && $rst->RecordCount()>=1) {
 
     if ($rst->fields['work_phone']) {
         $contact_block .= "<tr><td class=widget_content>" . _("Work Phone") . ": <strong>"
-                        . $rst->fields['work_phone'] . "</strong></td>\n\t</tr>";
+                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
+                        . "</strong></td>\n\t</tr>";
     }
 
     if ($rst->fields['cell_phone']) {
         $contact_block .= "<tr><td class=widget_content>" . _("Cell Phone") . ": <strong>"
-                        . $rst->fields['cell_phone'] . "</strong></td>\n\t</tr>";
+                        . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']) 
+                        . "</strong></td>\n\t</tr>";
     }
 
     if ($rst->fields['email']) {
@@ -70,6 +72,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.11  2004/07/21 21:00:33  neildogg
+ * - Added get_formatted_phone
+ *
  * Revision 1.10  2004/07/21 15:20:04  introspectshun
  * - Localized strings for i18n/translation support
  * - Removed include of lang file
