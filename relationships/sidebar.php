@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.13 2004/07/27 20:56:42 neildogg Exp $
+ * $Id: sidebar.php,v 1.14 2004/08/05 15:12:31 neildogg Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -55,8 +55,18 @@ $display_name          = ucfirst($what_table[$working_direction]);
 $display_name_singular = ucfirst($what_table_singular[$working_direction]);
 $opposite_name         = ucfirst($what_table[$opposite_direction]);
 
-if ( !isset( $relationship_link_rows ) || !$relationship_link_rows ) {
-    $relationship_link_rows = "";
+global $relationship_link_rows;
+if (!(isset($relationship_link_rows) && $relationship_link_rows)) {
+    //build the table heading
+    $relationship_link_rows = "        <div id='company_link_sidebar'>
+        <table class=widget cellspacing=1 width=\"100%\">
+            <tr>
+                <td colspan=2 class=widget_header colspan=4>"._("Relationships")."</td>
+            </tr>
+            <!-- Content Start -->";
+}
+else {
+    list($relationship_link_rows,) = split('<!-- Content End -->', $relationship_link_rows, 2);
 }
 
 $relationship_type_ids = array();
@@ -81,13 +91,6 @@ elseif($rst->rowcount()) {
     }
 }
 $rst->close();
-
-//build the table heading
-$relationship_link_rows .= "<div id='company_link_sidebar'>
-        <table class=widget cellspacing=1 width=\"100%\">
-            <tr>
-                <td colspan=2 class=widget_header colspan=4>"._("Associated ". $opposite_name)."</td>
-            </tr>\n";
             
 for($i = 0; $i <= $loop; $i++) {
     //build the relationships sql query
@@ -288,26 +291,73 @@ for($i = 0; $i <= $loop; $i++) {
 
 }
 
-if(!$found) {
-    $relationship_link_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached " . $what_table[$working_direction]) . " </td> </tr>\n";;
+// This is pretty ugly, meaninng that it's very pretty for how ugly it should be
+// Basically, it means that a sidebar can be included a whole heck
+// of a lot of times and it will still have only one bottom bar.
+// Since it makes $relationship_link_rows global, it can be included as a plugin.
+if(preg_match("|<!-- Form Start -->([^\e]*)<!-- Form End -->|", $relationship_link_rows, $matched)) {
+    $relationship_link_rows = str_replace($matched[0], '', $relationship_link_rows);
+    $old_rows = $matched[1];
+    preg_match_all("|(<input type=hidden[^\e]*>)|U", $old_rows, $matched);
+    $amount = count($matched[0]) / 4;
 }
+else {
+    $old_rows = '';
+}
+if(!(isset($amount) and $amount)) {
+    $amount = 1;
+}
+if(isset($old_rows) and $old_rows) {
+    preg_match("|<!-- Start Inputs -->([^\e]*)<!-- End Inputs -->|", $old_rows, $matched);
+    $old_inputs = $matched[1];
+}
+else {
+    $old_inputs = '';
+}
+$new_rows = "<!-- Start Inputs -->                    " . $old_inputs . "
+                    <input type=hidden name=relationship_name_" . $amount . " value='" . $relationship_name . "'>
+                    <input type=hidden name=on_what_id_" . $amount . " value='$overall_id'>
+                    <input type=hidden name=working_direction_" . $amount . " value='$orig_working_direction'>
+                    <input type=hidden name=return_url_" . $amount . " value='/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id=$overall_id'><!-- End Inputs -->";
+if(preg_match("|<!-- Start Options -->([^\e]*)<!-- End Options -->|", $old_rows, $matched)) {
+    $old_options = $matched[1];
+}
+else {
+    $old_options = '';
+}
+$new_options = "<!-- Start Options -->                    " . $old_options . "
+                    <option>" . $what_table[$opposite_direction] . "/" . $what_table[$working_direction] . "</option><!-- End Options -->";
 
 //put in the new button
-$relationship_link_rows .= "
+$relationship_link_rows .= "<!-- Form Start --></table>\n</div>
+        <div id='expanded_associated_by_sidebar'>
+        <table class=widget cellspacing=1 width=\"100%\">
+            <tr>
+                <td class=widget_header><a name=associated></a>Add Relationship</td>
+            </tr>
             <tr>
             <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
                 <td class=widget_content_form_element colspan=2>
-                    <input type=hidden name=relationship_name value='" . $relationship_name . "'>
-                    <input type=hidden name=on_what_id value='$overall_id'>
-                    <input type=hidden name=working_direction value='$orig_working_direction'>
-                    <input type=hidden name=return_url value='/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id=$overall_id'>
-                    <input type=submit class=button value='"._("New")."'>
+                    <input type=hidden name=relationship_name value=''>
+                    <input type=hidden name=on_what_id value=''>
+                    <input type=hidden name=working_direction value=''>
+                    <input type=hidden name=return_url value=''>
+                    " . $new_rows . "
+                    <select onchange=\"if(this.selectedIndex > 0) { 
+                                           this.form.relationship_name.value = eval('this.form.relationship_name_' + this.selectedIndex + '.value');
+                                           this.form.on_what_id.value = eval('this.form.on_what_id_' + this.selectedIndex + '.value');
+                                           this.form.working_direction.value = eval('this.form.working_direction_' + this.selectedIndex + '.value');
+                                           this.form.return_url.value = eval('this.form.return_url_' + this.selectedIndex + '.value'); }\">
+                    <option>Choose a relationship</option>
+                    " . $new_options . "
+                    </select>
+                    <input type=submit value=Next>
                 </td>
             </form>
-            </tr>";
-            
-//now close the table, we're done
-$relationship_link_rows .= "        </table>\n</div>";
+            </tr><!-- Form End -->";
+                    
+
+$relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
 
 // If the table is intended to be expanded, show all companies associated relationships (if they don't exist)
 if($expand_id) {
@@ -387,13 +437,16 @@ if($expand_id) {
         }
         $rst->movenext();
     }
+    $relationship_link_rows .= '        </table>
+        </div>';
 
-    //now close the table, we're done
-    $relationship_link_rows .= "        </table>\n</div>";
 }
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.14  2004/08/05 15:12:31  neildogg
+ * - Allows multiple relationships on one sidebar
+ *
  * Revision 1.13  2004/07/27 20:56:42  neildogg
  * - Removed categories if no records found
  *
