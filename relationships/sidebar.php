@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.23 2005/01/11 20:51:23 neildogg Exp $
+ * $Id: sidebar.php,v 1.24 2005/01/12 02:08:01 introspectshun Exp $
  */
 
 if(empty($relationships)) {
@@ -51,7 +51,7 @@ for($j = 0; $j <= $expand; $j++) {
             WHERE (from_what_table IN ('" . implode("', '", array_keys($relationships)) . "')
                 OR to_what_table IN ('" . implode("', '", array_keys($relationships)) . "'))
             AND relationship_status = 'a'
-            GROUP BY from_what_table, to_what_table
+            GROUP BY relationship_type_id, relationship_name, from_what_table, to_what_table
             ORDER BY relationship_type_id";
     $rst = $con->execute($sql);
     
@@ -60,11 +60,12 @@ for($j = 0; $j <= $expand; $j++) {
     }
     elseif(!$rst->EOF) {
         while(!$rst->EOF) {
-            $sql = "SELECT *
-                    FROM relationship_types
-                    WHERE from_what_table = '{$rst->fields['from_what_table']}'
-                    AND to_what_table = '{$rst->fields['to_what_table']}'
-                    AND relationship_status = 'a'";
+            $sql = "SELECT rt.relationship_type_id, rt.relationship_name, rt.from_what_table, rt.to_what_table, rt.from_what_text,
+                           rt.to_what_text, rt.relationship_status, rt.pre_formatting, rt.post_formatting
+                    FROM relationship_types rt
+                    WHERE rt.from_what_table = '{$rst->fields['from_what_table']}'
+                    AND rt.to_what_table = '{$rst->fields['to_what_table']}'
+                    AND rt.relationship_status = 'a'";
             $rst2 = $con->execute($sql);
             if(!$rst2) {
                 db_error_handler($con, $sql);
@@ -105,7 +106,10 @@ for($j = 0; $j <= $expand; $j++) {
                             
                     $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($what[$opposite_direction]['table'])));
         
-                    $sql = "SELECT rt.*, r.*, c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get . " as name
+                    $sql = "SELECT rt.relationship_type_id, rt.relationship_name, rt.from_what_table, rt.to_what_table, rt.from_what_text,
+                                rt.to_what_text, rt.relationship_status, rt.pre_formatting, rt.post_formatting,
+                                r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status,
+                                c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get . " as name
                             FROM relationship_types as rt, relationships as r, " . $what[$opposite_direction]['table'] . " as c
                             WHERE {$working_direction}_what_id = {$relationships[$what[$working_direction]['table']]}
                             AND r.relationship_type_id in (" . implode(',', $relationship_type_ids) . ")
@@ -114,7 +118,10 @@ for($j = 0; $j <= $expand; $j++) {
                             AND r.relationship_type_id = rt.relationship_type_id
                             AND r.{$opposite_direction}_what_id NOT IN (" . implode(', ', $current_ids) . ")
                             AND r.relationship_id NOT IN (" . implode(', ', $relationship_ids) . ")
-                            GROUP BY c." . $what[$opposite_direction]['singular'] . "_id";
+                            GROUP BY c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get
+                            . ", rt.relationship_type_id, rt.relationship_name, rt.from_what_table, rt.to_what_table, rt.from_what_text,
+                               rt.to_what_text, rt.relationship_status, rt.pre_formatting, rt.post_formatting,
+                               r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status";
 
                     $rst2 = $con->execute($sql);
                     if(!$rst2) {
@@ -288,7 +295,7 @@ for($j = 0; $j <= $expand; $j++) {
                                         $agent_count = 0;
                                         $address = '';
                                         if($what[$working_direction]['table'] == "companies") {
-                                            $sql = "SELECT COUNT(contact_id) as agent_count
+                                            $sql = "SELECT COUNT(contact_id) as agent_count, company_id
                                                     FROM contacts
                                                     WHERE company_id = $current_id2
                                                     GROUP BY company_id";
@@ -353,7 +360,10 @@ for($j = 0; $j <= $expand; $j++) {
                                         
                                         $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($what[$opposite_direction]['table'])));
                             
-                                        $sql = "SELECT rt.*, r.*, c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get . " as name
+                                        $sql = "SELECT rt.relationship_type_id, rt.relationship_name, rt.from_what_table, rt.to_what_table, rt.from_what_text,
+                                                    rt.to_what_text, rt.relationship_status, rt.pre_formatting, rt.post_formatting,
+                                                    r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status,
+                                                    c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get . " as name
                                                 FROM relationship_types as rt, relationships as r, " . $what[$opposite_direction]['table'] . " as c
                                                 WHERE {$working_direction}_what_id = {$current_id2}
                                                 AND {$opposite_direction}_what_id != {$current_id}
@@ -361,7 +371,10 @@ for($j = 0; $j <= $expand; $j++) {
                                                 AND r.relationship_status='a'
                                                 AND r." . $opposite_direction . "_what_id=" . $what[$opposite_direction]['singular'] . "_id
                                                 AND r.relationship_type_id = rt.relationship_type_id
-                                                GROUP BY c." . $what[$opposite_direction]['singular'] . "_id";
+                                                GROUP BY c." . $what[$opposite_direction]['singular'] . "_id, " . $name_to_get
+                                                . ", rt.relationship_type_id, rt.relationship_name, rt.from_what_table, rt.to_what_table, rt.from_what_text,
+                                                   rt.to_what_text, rt.relationship_status, rt.pre_formatting, rt.post_formatting,
+                                                   r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status";
     
                                         $rst4 = $con->execute($sql);
                                         if(!$rst4) {
@@ -431,7 +444,7 @@ $sql = "SELECT COUNT(DISTINCT relationship_name) AS multiple, relationship_name,
         WHERE (from_what_table IN ('" . implode("', '", array_keys($relationships)) . "')
             OR to_what_table IN ('" . implode("', '", array_keys($relationships)) . "'))
         AND relationship_status = 'a'
-        GROUP BY from_what_table, to_what_table
+        GROUP BY relationship_type_id, relationship_name, from_what_table, to_what_table
         ORDER BY relationship_type_id";
 $rst = $con->execute($sql);
 if(!$rst) {
@@ -452,7 +465,7 @@ else {
                   <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=both&relationship_type_id={$rst->fields['relationship_type_id']}\">$relationship_name</option>";            
         }
         else {
-            if($relationships[$rst->fields['from_what_table']]) {
+            if(isset($relationships[$rst->fields['from_what_table']])) {
                 $relationship_name = "({$rst->fields['from_what_table']} -&gt; {$rst->fields['to_what_table']})";
                 if($rst->fields['multiple'] == 1) {
                     $relationship_name = "{$rst->fields['relationship_name']} " . $relationship_name;
@@ -460,7 +473,7 @@ else {
                 $relationship_link_rows .= "
                   <option value=\"on_what_id={$relationships[$rst->fields['from_what_table']]}&working_direction=from&relationship_type_id={$rst->fields['relationship_type_id']}\">$relationship_name</option>";
             }
-            if($relationships[$rst->fields['to_what_table']]) {            
+            if(isset($relationships[$rst->fields['to_what_table']])) {            
                 $relationship_name = "({$rst->fields['to_what_table']} -&gt; {$rst->fields['from_what_table']})";
                 if($rst->fields['multiple'] == 1) {
                     $relationship_name = "{$rst->fields['relationship_name']} " . $relationship_name;
@@ -485,6 +498,10 @@ $relationship_link_rows .= "        <!-- Content End --></table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.24  2005/01/12 02:08:01  introspectshun
+ * - Extended GROUP BY clauses to include all fields for db compatibility
+ * - Added tests for undefined indexes
+ *
  * Revision 1.23  2005/01/11 20:51:23  neildogg
  * - Combined Relationships bars, fixed incorrect ID passed to create company address
  *
