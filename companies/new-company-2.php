@@ -25,7 +25,8 @@ $to_what_table = $_POST['to_what_table'];
 $from_what_id = $_POST['from_what_id'];
 $to_what_id = $_POST['to_what_id'];
 $return_url = $_POST['return_url'];
-$search_on = str_replace("'","\\'",$_POST['search_on']);
+$search_on = $_POST['search_on'];
+$search_on_last = $_POST['search_on_last'];
 
 $what_table['from'] = "contacts";
 $what_table_singular['from'] = "contact";
@@ -89,19 +90,29 @@ start_page($page_title, true, $msg);
     }
     echo "</select> &nbsp; \n";
 
+$search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
+if($search_on_last) {
+    $search_on_last = $con->qstr("%$search_on_last%", get_magic_quotes_gpc());
+}
+
 if(eregi("[a-zA-Z]", $search_on)) {
     if($working_direction == "from") {
       $sql = "select c.company_id, c.company_name, a.city, a.province
         from companies as c, addresses as a
-        where c.company_name like '%$search_on%'
+        where c.company_name like $search_on
         and c.default_primary_address=a.address_id
+        and c.company_record_status='a'
         order by c.company_name";
     }
     else {
       $sql = "select c.contact_id, c.first_names, c.last_name
         from contacts as c
-        where c.last_name like '%$search_on%' or c.first_names like '%$search_on%'
-        order by c.last_name";
+        where c.first_names like $search_on ";
+      if($search_on_last) {
+        $sql .= " and c.last_name like $search_on_last ";
+      }
+      $sql .= "and c.contact_record_status='a'
+        order by c.last_name, c.first_names";
     }
     $rst = $con->execute($sql);
     if($rst->rowcount() > 1) {
@@ -139,17 +150,43 @@ if(eregi("[a-zA-Z]", $search_on)) {
     }
 }
 else {
-    $sql = "select c.company_id, c.company_name, a.city, a.province
-        from companies as c, addresses as a
-        where c.company_id='$company_search'
-        and c.default_primary_address=a.address_id";
-    $rst = $con->execute($sql);
-    if($rst->rowcount() > 0) {
-        echo "<input type=hidden name=on_what_id value=$company_search>" . $rst->fields['company_name'] . " - "
-            . $rst->fields['city'] . ", " . $rst->fields['province'] . "\n";
+    if($working_direction == "from") {
+        $sql = "select 
+                    c.company_id, c.company_name, a.city, a.province
+                from 
+                    companies as c, addresses as a
+                where 
+                    c.company_id='$search_on'
+                and
+                    c.company_record_status='a'
+                and 
+                    c.default_primary_address=a.address_id";
+        $rst = $con->execute($sql);
+        if($rst->rowcount()) {
+            echo "<input type=hidden name=on_what_id value=$search_on>" . $rst->fields['company_name'] . " - "
+                . $rst->fields['city'] . ", " . $rst->fields['province'] . "\n";
+        }
+        else {
+            echo "There is no company by that ID";
+        }
     }
     else {
-        echo "There is no company by that ID";
+        $sql = "select
+                    contact_id, first_names, last_name
+                from
+                    contacts
+                where
+                    contact_id='$search_on'
+                and
+                    contact_record_status='a'";
+        $rst = $con->execute($sql);
+        if($rst->rowcount()) {
+            echo "<input type=hidden name=on_what_id value=$search_on>" . $rst->fields['first_names'] . " "
+                . $rst->fields['last_name'];
+        }
+        else {
+            echo "There is no contact by that ID";
+        }
     }
 }
 
@@ -178,6 +215,9 @@ end_page();
 
 /**
  * $Log: new-company-2.php,v $
+ * Revision 1.3  2004/07/07 21:20:21  neildogg
+ * - Added first/last name search\n- Implemented search by ID
+ *
  * Revision 1.2  2004/07/05 22:13:27  introspectshun
  * - Include adodb-params.php
  *
