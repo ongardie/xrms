@@ -32,6 +32,6 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: one.php?account_status_id=$account_status_id");
+header("Location: some.php");
 
 ?>
