@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-25 09:32-0500\n"
+"POT-Creation-Date: 2004-07-16 09:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,142 +16,1590 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: include/utils-interface.php:24
+#: private/home.php:465
+msgid " (PDF)"
+msgstr ""
+
+#: activities/one.php:288
+msgid "(%)"
+msgstr ""
+
+#: admin/case-statuses/one.php:154 admin/opportunity-statuses/one.php:177
+msgid "(defaults to days)"
+msgstr ""
+
+#: cases/one.php:207
+msgid ": "
+msgstr ""
+
+#: plugins/info/one.php:355 private/home.php:445
+msgid "About"
+msgstr ""
+
+#: activities/one.php:257
+msgid "About This Activity"
+msgstr ""
+
+#: admin/import/import-companies.php:135 cases/one.php:293
+msgid "Account Status"
+msgstr ""
+
+#: admin/index.php:173 admin/account-statuses/some.php:47
+msgid "Account Statuses"
+msgstr ""
+
+#: admin/import/import-companies.php:115 cases/one.php:285
+msgid "Acct. Owner"
+msgstr ""
+
+#: activities/associate-activities.php:33
+msgid "Action"
+msgstr ""
+
+#: cases/one.php:320 plugins/info/one.php:348
+msgid "Activities"
+msgstr ""
+
+#: activities/one.php:281 private/home.php:441
+msgid "Activity"
+msgstr ""
+
+#: activities/one.php:313
+msgid "Activity Notes"
+msgstr ""
+
+#: admin/activity-templates/edit.php:47
+msgid "Activity Template: "
+msgstr ""
+
+#: admin/index.php:223 admin/activity-templates/some.php:59
+msgid "Activity Templates"
+msgstr ""
+
+#: activities/browse-sidebar.php:22 admin/index.php:148
+#: admin/activity-types/some.php:54
+msgid "Activity Types"
+msgstr ""
+
+#: include/utils-interface.php:30
 msgid "Activity added."
+msgstr ""
+
+#: admin/account-statuses/some.php:82 admin/activity-types/some.php:93
+#: admin/campaign-statuses/some.php:92 admin/campaign-types/some.php:80
+#: admin/case-priorities/some.php:86 admin/case-statuses/one.php:163
+#: admin/case-statuses/some.php:104 admin/case-types/some.php:80
+#: admin/categories/some.php:81 admin/company-sources/some.php:88
+#: admin/company-types/some.php:79 admin/crm-statuses/some.php:85
+#: admin/industries/some.php:79 admin/opportunity-statuses/one.php:186
+#: admin/opportunity-statuses/some.php:141 admin/ratings/some.php:83
+#: admin/roles/some.php:82 admin/users/some.php:118 cases/one.php:334
+msgid "Add"
+msgstr ""
+
+#: admin/account-statuses/some.php:63
+msgid "Add New Account Status"
+msgstr ""
+
+#: admin/activity-types/some.php:70
+msgid "Add New Activity Type"
+msgstr ""
+
+#: admin/crm-statuses/some.php:66
+msgid "Add New CRM Status"
+msgstr ""
+
+#: campaigns/some.php:257
+msgid "Add New Campaign"
+msgstr ""
+
+#: admin/campaign-statuses/some.php:63
+msgid "Add New Campaign Status"
+msgstr ""
+
+#: admin/campaign-types/some.php:61
+msgid "Add New Campaign Type"
+msgstr ""
+
+#: admin/case-statuses/some.php:85
+msgid "Add New Case Status"
+msgstr ""
+
+#: admin/case-types/some.php:61
+msgid "Add New Case Type"
+msgstr ""
+
+#: admin/categories/some.php:62
+msgid "Add New Category"
+msgstr ""
+
+#: admin/company-sources/some.php:65
+msgid "Add New Company Source"
+msgstr ""
+
+#: admin/company-types/some.php:60
+msgid "Add New Company Type"
+msgstr ""
+
+#: admin/industries/some.php:60
+msgid "Add New Industry"
+msgstr ""
+
+#: admin/opportunity-statuses/some.php:108
+msgid "Add New Opportunity Status"
+msgstr ""
+
+#: admin/case-priorities/some.php:63
+msgid "Add New Priority Type"
+msgstr ""
+
+#: admin/ratings/some.php:64
+msgid "Add New Rating"
+msgstr ""
+
+#: admin/roles/some.php:63
+msgid "Add New Role"
+msgstr ""
+
+#: admin/users/some.php:79
+msgid "Add New User"
+msgstr ""
+
+#: admin/update.php:225
+msgid "Added an Audit Level."
+msgstr ""
+
+#: admin/country-address-format/index.php:47
+msgid "Address Format"
+msgstr ""
+
+#: admin/index.php:54
+msgid "Administration"
+msgstr ""
+
+#: activities/some.php:291
+msgid "After"
+msgstr ""
+
+#: activities/some.php:301
+msgid "All"
+msgstr ""
+
+#: admin/users/some.php:114
+msgid "Allow Access"
+msgstr ""
+
+#: activities/associate-activities.php:29
+msgid "Associate Activities"
+msgstr ""
+
+#: activities/associate-activities.php:148
+msgid "Associated"
+msgstr ""
+
+#: admin/categories/one.php:142 campaigns/categories.php:99
+#: cases/categories.php:99
+msgid "Associated With"
 msgstr ""
 
 #: notes/new.php:42
 msgid "Attach Note"
 msgstr ""
 
-#: notes/sidebar.php:17
+#: activities/one.php:270
+msgid "Attached"
+msgstr ""
+
+#: notes/sidebar.php:24
 msgid "Attached To"
 msgstr ""
 
-#: files/some.php:345
+#: activities/some.php:290
+msgid "Before"
+msgstr ""
+
+#: activities/browse-sidebar.php:19
+msgid "Browse"
+msgstr ""
+
+#: activities/some.php:310 campaigns/some.php:232 cases/some.php:250
+#: files/some.php:328
 msgid "Bulk E-Mail"
 msgstr ""
 
-#: include/utils-interface.php:21
-msgid "Changes saved."
+#: admin/import/import-companies.php:119 cases/one.php:289
+msgid "CRM Status"
 msgstr ""
 
-#: files/some.php:344
-msgid "Clear Search"
+#: admin/index.php:168
+msgid "CRM Statuses"
 msgstr ""
 
-#: include/utils-interface.php:30
-msgid "Company added."
+#: campaigns/some.php:64 campaigns/some.php:267 files/some.php:90
+#: private/home.php:293
+msgid "Campaign"
+msgstr ""
+
+#: campaigns/edit.php:74 campaigns/new.php:53 campaigns/one.php:134
+msgid "Campaign Details"
+msgstr ""
+
+#: campaigns/some.php:200
+msgid "Campaign Name<"
+msgstr ""
+
+#: admin/index.php:213 admin/campaign-statuses/some.php:47
+msgid "Campaign Statuses"
+msgstr ""
+
+#: campaigns/edit.php:77 campaigns/new.php:56
+msgid "Campaign Title"
+msgstr ""
+
+#: admin/index.php:208
+msgid "Campaign Types"
+msgstr ""
+
+#: campaigns/some.php:179
+msgid "Campaigns"
+msgstr ""
+
+#: cases/some.php:63 cases/some.php:274 files/some.php:102
+msgid "Case"
+msgstr ""
+
+#: cases/one.php:207
+msgid "Case #"
+msgstr ""
+
+#: cases/edit.php:171 cases/new.php:73 cases/one.php:217
+msgid "Case Details"
+msgstr ""
+
+#: cases/some.php:228
+msgid "Case Name"
+msgstr ""
+
+#: cases/some.php:229
+msgid "Case Number"
+msgstr ""
+
+#: admin/index.php:203 admin/case-priorities/some.php:47
+msgid "Case Priorities"
+msgstr ""
+
+#: admin/case-statuses/one.php:106
+msgid "Case Status : "
+msgstr ""
+
+#: admin/index.php:198 admin/case-statuses/some.php:68
+msgid "Case Statuses"
+msgstr ""
+
+#: cases/edit.php:174 cases/new.php:76
+msgid "Case Title"
+msgstr ""
+
+#: admin/index.php:193 admin/case-types/some.php:45
+msgid "Case Types"
+msgstr ""
+
+#: cases/some.php:207
+msgid "Cases"
+msgstr ""
+
+#: plugins/info/one.php:383
+msgid "Catagories"
+msgstr ""
+
+#: admin/index.php:143 admin/categories/some.php:46 campaigns/one.php:200
+#: cases/one.php:348
+msgid "Categories"
+msgstr ""
+
+#: admin/import/import-companies.php:127 campaigns/some.php:214
+#: cases/some.php:239
+msgid "Category"
+msgstr ""
+
+#: admin/categories/one.php:139
+msgid "Category Scopes"
+msgstr ""
+
+#: admin/country-address-format/edit.php:65
+msgid "Change"
+msgstr ""
+
+#: admin/users/change-password.php:22 admin/users/change-password.php:34
+#: admin/users/one.php:113 admin/users/self.php:83
+msgid "Change Password"
 msgstr ""
 
 #: include/utils-interface.php:27
+msgid "Changes saved."
+msgstr ""
+
+#: activities/some.php:309 campaigns/some.php:231 cases/some.php:250
+#: files/some.php:327
+msgid "Clear Search"
+msgstr ""
+
+#: admin/activity-templates/edit.php:100 admin/case-statuses/one.php:193
+#: admin/opportunity-statuses/one.php:216
+msgid "Click the button below to remove this"
+msgstr ""
+
+#: admin/industries/one.php:81
+msgid "Click the button below to remove this Industry from the system."
+msgstr ""
+
+#: admin/account-statuses/one.php:88 admin/campaign-statuses/one.php:95
+msgid "Click the button below to remove this account status from the system."
+msgstr ""
+
+#: admin/activity-types/one.php:90
+msgid "Click the button below to remove this activity type from the system."
+msgstr ""
+
+#: admin/campaign-types/one.php:82
+msgid "Click the button below to remove this campaign type from the system."
+msgstr ""
+
+#: admin/case-types/one.php:84
+msgid "Click the button below to remove this case type from the system."
+msgstr ""
+
+#: admin/categories/one.php:123
+msgid "Click the button below to remove this category from the system."
+msgstr ""
+
+#: admin/company-sources/one.php:91
+msgid "Click the button below to remove this company source from the system."
+msgstr ""
+
+#: admin/company-types/one.php:81
+msgid "Click the button below to remove this company type from the system."
+msgstr ""
+
+#: admin/case-priorities/one.php:89
+msgid "Click the button below to remove this priority type from the system."
+msgstr ""
+
+#: admin/ratings/one.php:81
+msgid "Click the button below to remove this rating from the system."
+msgstr ""
+
+#: admin/roles/one.php:84
+msgid "Click the button below to remove this role from the system."
+msgstr ""
+
+#: admin/crm-statuses/one.php:82
+msgid "Click the button below to remove this status from the system."
+msgstr ""
+
+#: admin/users/one.php:127
+msgid "Click the button below to remove this user from the system."
+msgstr ""
+
+#: admin/campaign-statuses/one.php:76 admin/campaign-statuses/some.php:87
+msgid "Closed"
+msgstr ""
+
+#: admin/opportunity-statuses/one.php:154
+#: admin/opportunity-statuses/some.php:136
+msgid "Closed/Lost"
+msgstr ""
+
+#: admin/opportunity-statuses/one.php:153
+#: admin/opportunity-statuses/some.php:135
+msgid "Closed/Won"
+msgstr ""
+
+#: activities/associate-activities.php:33 activities/one.php:260
+#: activities/some.php:92 activities/some.php:268 cases/edit.php:178
+#: cases/one.php:281 cases/some.php:64 cases/some.php:230 cases/some.php:275
+#: files/some.php:73 files/some.php:80 files/some.php:85 files/some.php:97
+#: files/some.php:104 private/home.php:240 private/home.php:274
+#: private/home.php:281 private/home.php:288 private/home.php:300
+#: private/home.php:307 private/home.php:443
+msgid "Company"
+msgstr ""
+
+#: admin/import/import-companies.php:123
+msgid "Company Source"
+msgstr ""
+
+#: admin/index.php:163 admin/company-sources/some.php:49
+msgid "Company Sources"
+msgstr ""
+
+#: admin/index.php:158 admin/company-types/some.php:44
+msgid "Company Types"
+msgstr ""
+
+#: include/utils-interface.php:36
+msgid "Company added."
+msgstr ""
+
+#: activities/some.php:282 activities/some.php:303
+msgid "Completed"
+msgstr ""
+
+#: activities/one.php:349
+msgid "Completed?"
+msgstr ""
+
+#: admin/plugin/plugin-admin.php:286
+msgid "Config file can't be opened. Please check vars.php."
+msgstr ""
+
+#: admin/plugin/plugin-admin.php:280
+msgid "Config written successfully."
+msgstr ""
+
+#: admin/users/change-password.php:41
+msgid "Confirm New Password"
+msgstr ""
+
+#: cases/new.php:80
+msgid "Contac"
+msgstr ""
+
+#: activities/one.php:266 activities/some.php:87 activities/some.php:267
+#: admin/users/one.php:81 cases/edit.php:182 cases/one.php:265
+#: cases/one.php:326 files/some.php:71 files/some.php:78
+#: plugins/info/one.php:354 private/home.php:444
+msgid "Contact"
+msgstr ""
+
+#: include/utils-interface.php:33
 msgid "Contact added."
 msgstr ""
 
-#: notes/sidebar.php:20 files/some.php:319 files/some.php:372
+#: campaigns/edit.php:107 campaigns/new.php:86 campaigns/one.php:156
+msgid "Cost"
+msgstr ""
+
+#: admin/country-address-format/index.php:45
+msgid "Country"
+msgstr ""
+
+#: admin/index.php:218 admin/country-address-format/index.php:34
+msgid "Country Localization Formats"
+msgstr ""
+
+#: admin/country-address-format/edit.php:45
+msgid "Country:"
+msgstr ""
+
+#: campaigns/one.php:164 cases/one.php:251
+msgid "Created"
+msgstr ""
+
+#: admin/index.php:73
+msgid "Data Cleanup"
+msgstr ""
+
+#: admin/data_clean.php:323
+msgid "Database Cleanup Complete"
+msgstr ""
+
+#: admin/index.php:70
+msgid "Database Structure Update"
+msgstr ""
+
+#: campaigns/one.php:239 files/some.php:112 files/some.php:316
+#: files/some.php:355 notes/sidebar.php:27 private/home.php:241
 msgid "Date"
 msgstr ""
 
+#: admin/categories/one.php:125 admin/country-address-format/edit.php:60
 #: notes/edit.php:42
 msgid "Delete"
+msgstr ""
+
+#: admin/account-statuses/one.php:83 admin/account-statuses/one.php:93
+msgid "Delete Account Status"
+msgstr ""
+
+#: admin/account-statuses/one.php:80
+msgid "Delete Account Status?"
+msgstr ""
+
+#: activities/one.php:357
+msgid "Delete Activity"
+msgstr ""
+
+#: admin/activity-templates/edit.php:96 admin/activity-templates/edit.php:106
+msgid "Delete Activity Template"
+msgstr ""
+
+#: admin/activity-templates/edit.php:90
+msgid "Delete Activity Template?"
+msgstr ""
+
+#: admin/activity-types/one.php:86 admin/activity-types/one.php:93
+msgid "Delete Activity Type"
+msgstr ""
+
+#: admin/activity-types/one.php:82
+msgid "Delete Activity Type?"
+msgstr ""
+
+#: activities/one.php:357
+msgid "Delete Activity?"
+msgstr ""
+
+#: admin/crm-statuses/one.php:78
+msgid "Delete CRM Status"
+msgstr ""
+
+#: admin/crm-statuses/one.php:74
+msgid "Delete CRM Status?"
+msgstr ""
+
+#: campaigns/edit.php:115
+msgid "Delete Campaign"
+msgstr ""
+
+#: admin/campaign-types/one.php:78 admin/campaign-types/one.php:84
+msgid "Delete Campaign Type"
+msgstr ""
+
+#: admin/campaign-types/one.php:74
+msgid "Delete Campaign Type?"
+msgstr ""
+
+#: campaigns/edit.php:115
+msgid "Delete Campaign?"
+msgstr ""
+
+#: cases/edit.php:216
+msgid "Delete Case"
+msgstr ""
+
+#: admin/case-statuses/one.php:189 admin/case-statuses/one.php:195
+msgid "Delete Case Status"
+msgstr ""
+
+#: admin/case-statuses/one.php:186
+msgid "Delete Case Status?"
+msgstr ""
+
+#: admin/case-types/one.php:80 admin/case-types/one.php:86
+msgid "Delete Case Type"
+msgstr ""
+
+#: admin/case-types/one.php:77
+msgid "Delete Case Type?"
+msgstr ""
+
+#: admin/categories/one.php:119
+msgid "Delete Category"
+msgstr ""
+
+#: admin/company-sources/one.php:87 admin/company-sources/one.php:93
+msgid "Delete Company Source"
+msgstr ""
+
+#: admin/company-sources/one.php:83
+msgid "Delete Company Source?"
+msgstr ""
+
+#: admin/company-types/one.php:77 admin/company-types/one.php:83
+msgid "Delete Company Type"
+msgstr ""
+
+#: admin/industries/one.php:77 admin/industries/one.php:83
+msgid "Delete Industry"
+msgstr ""
+
+#: admin/campaign-statuses/one.php:91 admin/campaign-statuses/one.php:97
+#: admin/opportunity-statuses/one.php:212
+#: admin/opportunity-statuses/one.php:218
+msgid "Delete Opportunity Status"
+msgstr ""
+
+#: admin/campaign-statuses/one.php:88 admin/opportunity-statuses/one.php:209
+msgid "Delete Opportunity Status?"
+msgstr ""
+
+#: admin/case-priorities/one.php:85 admin/case-priorities/one.php:91
+msgid "Delete Priority Type"
+msgstr ""
+
+#: admin/case-priorities/one.php:81
+msgid "Delete Priority Type?"
+msgstr ""
+
+#: admin/ratings/one.php:77 admin/ratings/one.php:83
+msgid "Delete Rating"
+msgstr ""
+
+#: admin/ratings/one.php:73
+msgid "Delete Rating?"
+msgstr ""
+
+#: admin/roles/one.php:80 admin/roles/one.php:86
+msgid "Delete Role"
+msgstr ""
+
+#: admin/roles/one.php:77
+msgid "Delete Role?"
+msgstr ""
+
+#: admin/crm-statuses/one.php:84
+msgid "Delete Status"
+msgstr ""
+
+#: admin/users/one.php:123 admin/users/one.php:129
+msgid "Delete User"
+msgstr ""
+
+#: admin/users/one.php:119
+msgid "Delete User?"
+msgstr ""
+
+#: admin/activity-templates/edit.php:75 admin/opportunity-statuses/some.php:93
+#: admin/opportunity-statuses/some.php:127 campaigns/edit.php:111
+#: campaigns/new.php:90 cases/edit.php:212 cases/new.php:107 files/some.php:66
+#: private/home.php:238
+msgid "Description"
+msgstr ""
+
+#: plugins/info/one.php:307
+msgid "Details"
+msgstr ""
+
+#: admin/index.php:67
+msgid "Digital Dashboard"
+msgstr ""
+
+#: admin/account-statuses/one.php:70 admin/account-statuses/some.php:78
+#: admin/activity-types/one.php:69 admin/activity-types/some.php:85
+#: admin/campaign-statuses/one.php:68 admin/campaign-statuses/some.php:78
+#: admin/campaign-types/one.php:65 admin/campaign-types/some.php:76
+#: admin/case-priorities/one.php:68 admin/case-priorities/some.php:78
+#: admin/case-statuses/one.php:133 admin/case-statuses/some.php:100
+#: admin/case-types/one.php:67 admin/case-types/some.php:76
+#: admin/categories/one.php:106 admin/categories/some.php:77
+#: admin/company-sources/one.php:70 admin/company-sources/some.php:80
+#: admin/company-types/one.php:64 admin/company-types/some.php:75
+#: admin/crm-statuses/one.php:65 admin/crm-statuses/some.php:81
+#: admin/industries/one.php:64 admin/industries/some.php:75
+#: admin/opportunity-statuses/one.php:141
+#: admin/opportunity-statuses/some.php:123 admin/ratings/one.php:64
+#: admin/ratings/some.php:79 admin/roles/one.php:67 admin/roles/some.php:78
+msgid "Display HTML"
+msgstr ""
+
+#: private/home.php:462
+msgid "Documentation"
+msgstr ""
+
+#: cases/one.php:334
+msgid "Done"
+msgstr ""
+
+#: activities/some.php:91 cases/sidebar.php:24 cases/some.php:65
+#: cases/some.php:277 private/home.php:447
+msgid "Due"
+msgstr ""
+
+#: cases/edit.php:205
+msgid "Due At"
+msgstr ""
+
+#: cases/edit.php:202 cases/new.php:100
+msgid "Due By"
+msgstr ""
+
+#: admin/activity-templates/edit.php:67 admin/case-statuses/one.php:154
+#: admin/opportunity-statuses/one.php:177
+msgid "Duration"
+msgstr ""
+
+#: admin/users/one.php:100 admin/users/self.php:68 admin/users/some.php:66
+#: admin/users/some.php:102 cases/one.php:273
+msgid "E-Mail"
+msgstr ""
+
+#: admin/country-address-format/index.php:65 campaigns/one.php:188
+#: cases/one.php:307
+msgid "Edit"
+msgstr ""
+
+#: admin/account-statuses/one.php:53
+msgid "Edit Account Status Information"
+msgstr ""
+
+#: admin/activity-templates/edit.php:60
+msgid "Edit Activity Template Information"
+msgstr ""
+
+#: admin/activity-types/one.php:54
+msgid "Edit Activity Type Information"
+msgstr ""
+
+#: admin/country-address-format/edit.php:32
+msgid "Edit Address Country Format"
+msgstr ""
+
+#: admin/campaign-statuses/one.php:53
+msgid "Edit Campaign Status Information"
+msgstr ""
+
+#: admin/campaign-types/one.php:50
+msgid "Edit Campaign Type Information"
+msgstr ""
+
+#: admin/case-statuses/one.php:118
+msgid "Edit Case Status Information"
+msgstr ""
+
+#: admin/case-types/one.php:52
+msgid "Edit Case Type Information"
+msgstr ""
+
+#: admin/categories/one.php:91
+msgid "Edit Category Information"
+msgstr ""
+
+#: admin/company-sources/one.php:55
+msgid "Edit Company Source Information"
+msgstr ""
+
+#: admin/company-types/one.php:49
+msgid "Edit Company Type Information"
+msgstr ""
+
+#: admin/industries/one.php:49
+msgid "Edit Industry Information"
 msgstr ""
 
 #: notes/edit.php:43
 msgid "Edit Note"
 msgstr ""
 
-#: files/some.php:316
+#: admin/opportunity-statuses/one.php:126
+msgid "Edit Opportunity Status Information"
+msgstr ""
+
+#: admin/case-priorities/one.php:53
+msgid "Edit Priority Type Information"
+msgstr ""
+
+#: admin/crm-statuses/one.php:50 admin/ratings/one.php:49
+msgid "Edit Rating Information"
+msgstr ""
+
+#: admin/roles/one.php:52
+msgid "Edit Role Information"
+msgstr ""
+
+#: admin/users/one.php:71 admin/users/self.php:53
+msgid "Edit User Information"
+msgstr ""
+
+#: activities/one.php:345
+msgid "Email This To"
+msgstr ""
+
+#: activities/some.php:280
+msgid "End/Due Date"
+msgstr ""
+
+#: activities/one.php:337 campaigns/some.php:66
+msgid "Ends"
+msgstr ""
+
+#: campaigns/edit.php:100 campaigns/new.php:79
+msgid "Ends On"
+msgstr ""
+
+#: admin/users/self.php:75 admin/users/some.php:107
+msgid "English"
+msgstr ""
+
+#: admin/country-address-format/edit.php:67
+msgid "Enter New format:"
+msgstr ""
+
+#: admin/country-address-format/edit.php:75
+msgid "Error. No Data."
+msgstr ""
+
+#: admin/crm-statuses/some.php:50
+msgid "Existing CRM Statuses"
+msgstr ""
+
+#: admin/index.php:116
+msgid "Export Companies/Contacts"
+msgstr ""
+
+#: admin/import/import-companies.php:91
+msgid "Field Delimiter"
+msgstr ""
+
+#: admin/import/import-companies.php:87
+msgid "File"
+msgstr ""
+
+#: files/some.php:295
 msgid "File Description"
 msgstr ""
 
-#: files/some.php:314 files/some.php:373
+#: admin/import/import-companies.php:99
+msgid "File Format"
+msgstr ""
+
+#: files/some.php:293 files/some.php:356 private/home.php:242
 msgid "File ID"
 msgstr ""
 
-#: files/some.php:315
+#: files/some.php:294
 msgid "File Name"
 msgstr ""
 
-#: files/some.php:293
+#: campaigns/one.php:233 files/some.php:272
 msgid "Files"
 msgstr ""
 
-#: include/utils-misc.php:561
+#: campaigns/categories.php:107 cases/categories.php:107
+msgid "Finished"
+msgstr ""
+
+#: admin/users/one.php:92 admin/users/self.php:60 admin/users/some.php:90
+msgid "First Names"
+msgstr ""
+
+#: admin/account-statuses/one.php:62 admin/account-statuses/some.php:70
+#: admin/activity-types/one.php:61 admin/activity-types/some.php:77
+#: admin/campaign-statuses/one.php:60 admin/campaign-statuses/some.php:70
+#: admin/campaign-types/one.php:57 admin/campaign-types/some.php:68
+#: admin/case-priorities/one.php:60 admin/case-priorities/some.php:70
+#: admin/case-statuses/one.php:125 admin/case-statuses/some.php:92
+#: admin/case-types/one.php:59 admin/case-types/some.php:68
+#: admin/categories/one.php:98 admin/categories/some.php:69
+#: admin/company-sources/one.php:62 admin/company-sources/some.php:72
+#: admin/company-types/one.php:56 admin/company-types/some.php:67
+#: admin/crm-statuses/one.php:57 admin/crm-statuses/some.php:73
+#: admin/industries/one.php:56 admin/industries/some.php:67
+#: admin/opportunity-statuses/one.php:133
+#: admin/opportunity-statuses/some.php:115 admin/ratings/one.php:56
+#: admin/ratings/some.php:71 admin/roles/one.php:59 admin/roles/some.php:70
+#: admin/users/some.php:65
+msgid "Full Name"
+msgstr ""
+
+#: admin/activity-types/one.php:65 admin/campaign-statuses/one.php:64
+#: admin/campaign-types/one.php:61 admin/case-priorities/one.php:64
+#: admin/case-statuses/one.php:129 admin/case-types/one.php:63
+#: admin/categories/one.php:102 admin/company-sources/one.php:66
+#: admin/company-types/one.php:60 admin/crm-statuses/one.php:61
+#: admin/industries/one.php:60 admin/opportunity-statuses/one.php:137
+#: admin/ratings/one.php:60 admin/roles/one.php:63
+msgid "Full Plural"
+msgstr ""
+
+#: admin/account-statuses/some.php:74 admin/activity-types/some.php:81
+#: admin/campaign-statuses/some.php:74 admin/campaign-types/some.php:72
+#: admin/case-priorities/some.php:74 admin/case-statuses/some.php:96
+#: admin/case-types/some.php:72 admin/categories/some.php:73
+#: admin/company-sources/some.php:76 admin/company-types/some.php:71
+#: admin/crm-statuses/some.php:77 admin/industries/some.php:71
+#: admin/opportunity-statuses/some.php:119 admin/ratings/some.php:75
+#: admin/roles/some.php:74
+msgid "Full Plural Name"
+msgstr ""
+
+#: admin/users/one.php:108 admin/users/self.php:78 admin/users/some.php:110
+msgid "GMT Offset"
+msgstr ""
+
+#: private/home.php:427
+msgid "Home"
+msgstr ""
+
+#: include/utils-misc.php:582
 msgid "I tried to execute:"
 msgstr ""
 
-#: files/some.php:370
+#: files/some.php:113
+msgid "ID"
+msgstr ""
+
+#: admin/import/import-companies.php:27 admin/import/import-companies.php:143
+msgid "Import"
+msgstr ""
+
+#: admin/import/import-companies.php:84
+msgid "Import Companies"
+msgstr ""
+
+#: admin/index.php:111
+msgid "Import Companies/Contacts"
+msgstr ""
+
+#: admin/index.php:107
+msgid "Import/Export"
+msgstr ""
+
+#: admin/index.php:153 admin/industries/some.php:44
+msgid "Industries"
+msgstr ""
+
+#: admin/import/import-companies.php:131
+msgid "Industry"
+msgstr ""
+
+#: activities/one.php:323
+msgid "Insert Log"
+msgstr ""
+
+#: admin/users/one.php:104 admin/users/self.php:74 admin/users/some.php:106
+msgid "Language"
+msgstr ""
+
+#: campaigns/one.php:168 cases/one.php:255
+msgid "Last Modified"
+msgstr ""
+
+#: admin/users/one.php:88 admin/users/self.php:56 admin/users/some.php:86
+msgid "Last Name"
+msgstr ""
+
+#: admin/case-statuses/one.php:150
+msgid "Link Activity To Case Status"
+msgstr ""
+
+#: admin/opportunity-statuses/one.php:173
+msgid "Link Activity To Opportunity Status"
+msgstr ""
+
+#: admin/activity-templates/some.php:64
+msgid "Linked Table"
+msgstr ""
+
+#: admin/opportunity-statuses/one.php:145
+msgid "Long Description"
+msgstr ""
+
+#: admin/index.php:124 campaigns/one.php:206 cases/one.php:354
+msgid "Manage"
+msgstr ""
+
+#: admin/account-statuses/some.php:37
+msgid "Manage Account Statuses"
+msgstr ""
+
+#: admin/activity-templates/some.php:49
+msgid "Manage Activity Templates"
+msgstr ""
+
+#: admin/crm-statuses/some.php:40
+msgid "Manage CRM Statuses"
+msgstr ""
+
+#: admin/campaign-statuses/some.php:37
+msgid "Manage Campaign Statuses"
+msgstr ""
+
+#: admin/campaign-types/some.php:35
+msgid "Manage Campaign Types"
+msgstr ""
+
+#: admin/case-priorities/some.php:37
+msgid "Manage Case Priorities"
+msgstr ""
+
+#: admin/case-statuses/some.php:58
+msgid "Manage Case Statuses"
+msgstr ""
+
+#: admin/case-types/some.php:35
+msgid "Manage Case Types"
+msgstr ""
+
+#: admin/categories/some.php:36 campaigns/categories.php:86
+#: campaigns/categories.php:96 cases/categories.php:86 cases/categories.php:96
+msgid "Manage Categories"
+msgstr ""
+
+#: admin/company-sources/some.php:39
+msgid "Manage Company Sources"
+msgstr ""
+
+#: admin/company-types/some.php:34
+msgid "Manage Company Types"
+msgstr ""
+
+#: admin/industries/some.php:34
+msgid "Manage Industries"
+msgstr ""
+
+#: admin/opportunity-statuses/some.php:78
+msgid "Manage Opportunity Statuses"
+msgstr ""
+
+#: admin/ratings/some.php:38
+msgid "Manage Ratings"
+msgstr ""
+
+#: admin/roles/some.php:37
+msgid "Manage Roles"
+msgstr ""
+
+#: admin/users/some.php:50
+msgid "Manage Users"
+msgstr ""
+
+#: campaigns/some.php:215
+msgid "Media"
+msgstr ""
+
+#: admin/activity-types/some.php:57 admin/case-statuses/some.php:72
+#: admin/opportunity-statuses/some.php:94
+msgid "Move"
+msgstr ""
+
+#: admin/account-statuses/some.php:50 admin/activity-templates/some.php:62
+#: admin/campaign-statuses/some.php:50 admin/case-priorities/some.php:50
+#: admin/case-statuses/some.php:71 admin/case-types/some.php:48
+#: admin/categories/some.php:49 admin/company-sources/some.php:52
+#: admin/company-types/some.php:47 admin/crm-statuses/some.php:53
+#: admin/industries/some.php:47 admin/opportunity-statuses/some.php:92
+#: admin/ratings/some.php:51 admin/roles/some.php:50 campaigns/one.php:236
+#: cases/sidebar.php:21 files/some.php:66 files/some.php:353
+#: private/home.php:237 private/home.php:272 private/home.php:279
+#: private/home.php:286 private/home.php:298 private/home.php:305
 msgid "Name"
 msgstr ""
 
-#: notes/sidebar.php:150
+#: admin/country-address-format/edit.php:71 campaigns/one.php:221
+#: campaigns/one.php:244 cases/sidebar.php:66 notes/sidebar.php:172
 msgid "New"
 msgstr ""
 
-#: notes/sidebar.php:137
+#: campaigns/new.php:39
+msgid "New Campaign"
+msgstr ""
+
+#: cases/new.php:59
+msgid "New Case"
+msgstr ""
+
+#: admin/users/change-password.php:37
+msgid "New Password"
+msgstr ""
+
+#: activities/browse-sidebar.php:43
+msgid "No Activities Types"
+msgstr ""
+
+#: notes/sidebar.php:159
 msgid "No attached notes"
+msgstr ""
+
+#: campaigns/one.php:117
+msgid "No categories"
+msgstr ""
+
+#: campaigns/one.php:121
+msgid "No files"
+msgstr ""
+
+#: admin/case-statuses/one.php:171 admin/opportunity-statuses/one.php:194
+msgid "No linked activities"
+msgstr ""
+
+#: campaigns/one.php:113
+msgid "No notes"
+msgstr ""
+
+#: private/home.php:424
+msgid "No open activities"
+msgstr ""
+
+#: cases/sidebar.php:55
+msgid "No open cases"
+msgstr ""
+
+#: private/home.php:417
+msgid "No open files"
+msgstr ""
+
+#: campaigns/some.php:146
+msgid "No recently viewed campaigns"
+msgstr ""
+
+#: cases/some.php:157
+msgid "No recently viewed cases"
+msgstr ""
+
+#: private/home.php:234
+msgid "Non Uploaded Files"
+msgstr ""
+
+#: activities/some.php:302
+msgid "Non-Completed"
+msgstr ""
+
+#: admin/categories/one.php:143 campaigns/categories.php:100
+#: cases/categories.php:100
+msgid "Not Associated With"
 msgstr ""
 
 #: notes/edit.php:44 notes/new.php:45
 msgid "Note Body"
 msgstr ""
 
-#: notes/sidebar.php:12
+#: admin/account-statuses/one.php:90 admin/activity-templates/edit.php:104
+#: admin/activity-types/one.php:92 admin/campaign-statuses/one.php:96
+#: admin/campaign-types/one.php:83 admin/case-priorities/one.php:90
+#: admin/case-statuses/one.php:194 admin/case-types/one.php:85
+#: admin/categories/one.php:124 admin/company-sources/one.php:92
+#: admin/company-types/one.php:82 admin/crm-statuses/one.php:83
+#: admin/industries/one.php:82 admin/opportunity-statuses/one.php:217
+#: admin/ratings/one.php:82 admin/roles/one.php:85 admin/users/one.php:128
+msgid "Note: This action CANNOT be undone!"
+msgstr ""
+
+#: campaigns/one.php:217 notes/sidebar.php:19
 msgid "Notes"
 msgstr ""
 
-#: files/some.php:317
+#: admin/country-address-format/edit.php:67
+msgid "OR "
+msgstr ""
+
+#: cases/one.php:327
+msgid "On"
+msgstr ""
+
+#: files/some.php:296 private/home.php:239
 msgid "On What"
 msgstr ""
 
-#: files/some.php:318
+#: files/some.php:315
 msgid "On what Name"
 msgstr ""
 
-#: notes/sidebar.php:23 files/some.php:320
+#: admin/account-statuses/one.php:40
+msgid "One Account Status:"
+msgstr ""
+
+#: admin/activity-types/one.php:42
+msgid "One Activity Type :"
+msgstr ""
+
+#: admin/crm-statuses/one.php:38
+msgid "One CRM Status : "
+msgstr ""
+
+#: campaigns/edit.php:60
+msgid "One Campaign :"
+msgstr ""
+
+#: campaigns/one.php:124
+msgid "One Campaign : "
+msgstr ""
+
+#: admin/campaign-statuses/one.php:41
+msgid "One Campaign Status : "
+msgstr ""
+
+#: admin/campaign-types/one.php:38
+msgid "One Campaign Type : "
+msgstr ""
+
+#: cases/edit.php:153
+msgid "One Case : "
+msgstr ""
+
+#: admin/case-types/one.php:40
+msgid "One Case Type : "
+msgstr ""
+
+#: admin/categories/one.php:79
+msgid "One Category :"
+msgstr ""
+
+#: admin/company-sources/one.php:43
+msgid "One Company Source : "
+msgstr ""
+
+#: admin/case-priorities/one.php:41
+msgid "One Priority Type : "
+msgstr ""
+
+#: admin/ratings/one.php:37
+msgid "One Rating : "
+msgstr ""
+
+#: admin/roles/one.php:40
+msgid "One Role :"
+msgstr ""
+
+#: admin/users/one.php:59 admin/users/self.php:41
+msgid "One User :"
+msgstr ""
+
+#: admin/campaign-statuses/one.php:75 admin/campaign-statuses/some.php:86
+#: admin/opportunity-statuses/one.php:152
+#: admin/opportunity-statuses/some.php:134
+msgid "Open"
+msgstr ""
+
+#: activities/some.php:243 private/home.php:438
+msgid "Open Activities"
+msgstr ""
+
+#: cases/sidebar.php:18
+msgid "Open Cases"
+msgstr ""
+
+#: admin/campaign-statuses/one.php:72 admin/campaign-statuses/some.php:83
+#: admin/opportunity-statuses/one.php:149
+#: admin/opportunity-statuses/some.php:131
+msgid "Open Status"
+msgstr ""
+
+#: files/some.php:95
+msgid "Opportunity"
+msgstr ""
+
+#: activities/one.php:320
+msgid "Opportunity Notes"
+msgstr ""
+
+#: admin/opportunity-statuses/one.php:114
+msgid "Opportunity Status : "
+msgstr ""
+
+#: admin/index.php:183 admin/opportunity-statuses/some.php:89
+msgid "Opportunity Statuses"
+msgstr ""
+
+#: campaigns/some.php:254
+msgid "Options"
+msgstr ""
+
+#: activities/some.php:93 activities/some.php:279 campaigns/edit.php:89
+#: campaigns/new.php:68 campaigns/one.php:238 campaigns/some.php:65
+#: campaigns/some.php:202 cases/edit.php:198 cases/new.php:96
+#: cases/one.php:235 cases/sidebar.php:22 cases/some.php:64 cases/some.php:238
+#: files/some.php:317 notes/sidebar.php:30
 msgid "Owner"
 msgstr ""
 
-#: include/utils-misc.php:557
+#: admin/users/some.php:98
+msgid "Password"
+msgstr ""
+
+#: admin/country-address-format/index.php:46
+msgid "Phone Format"
+msgstr ""
+
+#: include/utils-misc.php:578
 msgid "Please correct this error."
 msgstr ""
 
-#: include/utils-interface.php:18
+#: include/utils-interface.php:24
 msgid "Please try again."
 msgstr ""
 
-#: files/some.php:367
+#: admin/index.php:138 admin/plugin/plugin-admin.php:170
+msgid "Plugin Administration"
+msgstr ""
+
+#: admin/plugin/plugin-admin.php:246
+msgid "Plugin directory could not be found: "
+msgstr ""
+
+#: admin/plugin/plugin-admin.php:187
+msgid "Plugins"
+msgstr ""
+
+#: cases/edit.php:194 cases/new.php:92 cases/one.php:243 cases/sidebar.php:23
+#: cases/some.php:64
+msgid "Priority"
+msgstr ""
+
+#: activities/one.php:288
+msgid "Probability"
+msgstr ""
+
+#: admin/import/import-companies.php:139
+msgid "Rating"
+msgstr ""
+
+#: admin/index.php:178 admin/ratings/some.php:48
+msgid "Ratings"
+msgstr ""
+
+#: campaigns/some.php:264 cases/some.php:271 files/some.php:350
 msgid "Recently Viewed"
 msgstr ""
 
-#: notes/edit.php:41 notes/new.php:51
+#: admin/index.php:188
+msgid "Relationship Types"
+msgstr ""
+
+#: admin/users/one.php:74 admin/users/some.php:64 admin/users/some.php:82
+msgid "Role"
+msgstr ""
+
+#: admin/index.php:133 admin/roles/some.php:47
+msgid "Roles"
+msgstr ""
+
+#: activities/one.php:354 admin/account-statuses/one.php:74
+#: admin/activity-templates/edit.php:79 admin/activity-types/one.php:77
+#: admin/campaign-statuses/one.php:82 admin/campaign-types/one.php:69
+#: admin/case-priorities/one.php:76 admin/case-statuses/one.php:137
+#: admin/case-types/one.php:71 admin/categories/one.php:110
+#: admin/company-sources/one.php:78 admin/company-types/one.php:68
+#: admin/crm-statuses/one.php:69 admin/industries/one.php:68
+#: admin/opportunity-statuses/one.php:160 admin/ratings/one.php:68
+#: admin/roles/one.php:71 admin/users/change-password.php:45
+#: admin/users/one.php:112 admin/users/self.php:83 campaigns/edit.php:115
+#: campaigns/new.php:94 cases/edit.php:216 cases/new.php:111 notes/edit.php:41
+#: notes/new.php:51
 msgid "Save Changes"
 msgstr ""
 
-#: files/some.php:311
+#: activities/one.php:355
+msgid "Save and Next"
+msgstr ""
+
+#: activities/one.php:356
+msgid "Schedule Followup"
+msgstr ""
+
+#: activities/some.php:90 activities/some.php:156 private/home.php:446
+msgid "Scheduled"
+msgstr ""
+
+#: admin/activity-types/one.php:73 admin/activity-types/some.php:89
+#: admin/case-priorities/one.php:72 admin/case-priorities/some.php:82
+#: admin/company-sources/one.php:74 admin/company-sources/some.php:84
+msgid "Score Adjustment"
+msgstr ""
+
+#: activities/some.php:308 campaigns/some.php:230 cases/sidebar.php:67
+#: cases/sidebar.php:75 cases/some.php:250
+msgid "Search"
+msgstr ""
+
+#: activities/some.php:263 campaigns/some.php:197 cases/some.php:225
+#: files/some.php:290
 msgid "Search Criteria"
 msgstr ""
 
-#: files/some.php:371
+#: admin/account-statuses/one.php:56 admin/account-statuses/some.php:66
+#: admin/activity-types/one.php:57 admin/activity-types/some.php:73
+#: admin/campaign-statuses/one.php:56 admin/campaign-statuses/some.php:66
+#: admin/campaign-types/one.php:53 admin/campaign-types/some.php:64
+#: admin/case-priorities/one.php:56 admin/case-priorities/some.php:66
+#: admin/case-statuses/one.php:121 admin/case-statuses/some.php:88
+#: admin/case-types/one.php:55 admin/case-types/some.php:64
+#: admin/categories/one.php:94 admin/categories/some.php:65
+#: admin/company-sources/one.php:58 admin/company-sources/some.php:68
+#: admin/company-types/one.php:52 admin/company-types/some.php:63
+#: admin/crm-statuses/one.php:53 admin/crm-statuses/some.php:69
+#: admin/industries/one.php:52 admin/industries/some.php:63
+#: admin/opportunity-statuses/one.php:129
+#: admin/opportunity-statuses/some.php:111 admin/ratings/one.php:52
+#: admin/ratings/some.php:67 admin/roles/one.php:55 admin/roles/some.php:66
+msgid "Short Name"
+msgstr ""
+
+#: campaigns/one.php:237 files/some.php:354
 msgid "Size"
 msgstr ""
 
-#: include/utils-interface.php:33
+#: activities/one.php:329 campaigns/some.php:66 plugins/info/one.php:356
+msgid "Starts"
+msgstr ""
+
+#: campaigns/edit.php:93 campaigns/new.php:72
+msgid "Starts On"
+msgstr ""
+
+#: activities/one.php:274 admin/activity-templates/some.php:63
+#: campaigns/edit.php:85 campaigns/new.php:64 campaigns/one.php:152
+#: campaigns/some.php:65 campaigns/some.php:216 campaigns/some.php:269
+#: cases/edit.php:190 cases/new.php:88 cases/one.php:239 cases/some.php:65
+#: cases/some.php:241 cases/some.php:276
+msgid "Status"
+msgstr ""
+
+#: include/utils-interface.php:39
 msgid "Status not changed."
 msgstr ""
 
-#: include/utils-interface.php:33
+#: admin/plugin/plugin-admin.php:243
+msgid "Submit"
+msgstr ""
+
+#: admin/index.php:64
+msgid "System Administration"
+msgstr ""
+
+#: include/utils-interface.php:39
 msgid "This activity is still open."
 msgstr ""
 
-#: include/utils-misc.php:556
+#: activities/one.php:303 activities/some.php:89 activities/some.php:266
+#: admin/activity-templates/edit.php:63 admin/case-statuses/one.php:153
+#: admin/opportunity-statuses/one.php:176 campaigns/one.php:144
+#: cases/one.php:227 cases/one.php:323 plugins/info/one.php:351
+msgid "Title"
+msgstr ""
+
+#: activities/one.php:270
+msgid "To"
+msgstr ""
+
+#: activities/one.php:281 activities/some.php:86 activities/some.php:281
+#: admin/activity-templates/edit.php:71 campaigns/edit.php:81
+#: campaigns/new.php:60 campaigns/one.php:148 campaigns/some.php:65
+#: campaigns/some.php:201 campaigns/some.php:268 cases/edit.php:186
+#: cases/new.php:84 cases/one.php:231 cases/one.php:325 cases/some.php:64
+#: cases/some.php:240 plugins/info/one.php:353 private/home.php:442
+msgid "Type"
+msgstr ""
+
+#: admin/export/export-companies-ldap.php:149
+#: admin/export/export-companies.php:99
+msgid "Unable to Open file for writing."
+msgstr ""
+
+#: activities/associate-activities.php:155
+msgid ""
+"Unable to associate Activities because there are multiple Cases or "
+"Opportunities"
+msgstr ""
+
+#: activities/associate-activities.php:162
+msgid ""
+"Unable to associate Activities because there is no open Case or Opportunity"
+msgstr ""
+
+#: include/utils-misc.php:577
 msgid "Unable to execute your query."
 msgstr ""
 
-#: notes/sidebar.php:120
+#: admin/users/some.php:39
+msgid "Unable to get data from database"
+msgstr ""
+
+#: admin/country-address-format/index.php:62
+msgid "Update"
+msgstr ""
+
+#: admin/update.php:669
+msgid "Update Complete"
+msgstr ""
+
+#: activities/one.php:309 cases/one.php:324 plugins/info/one.php:352
+msgid "User"
+msgstr ""
+
+#: private/home.php:465
+msgid "User Manual"
+msgstr ""
+
+#: admin/users/one.php:96 admin/users/self.php:64 admin/users/some.php:63
+#: admin/users/some.php:94
+msgid "Username"
+msgstr ""
+
+#: admin/index.php:128 admin/users/some.php:60
+msgid "Users"
+msgstr ""
+
+#: notes/sidebar.php:142
 msgid "View/Edit"
 msgstr ""
 
-#: include/utils-interface.php:18
+#: include/utils-interface.php:24
 msgid "We could not authenticate you."
+msgstr ""
+
+#: cases/one.php:269
+msgid "Work Phone"
+msgstr ""
+
+#: campaigns/edit.php:143 campaigns/new.php:124
+msgid "You must enter a campaign title."
+msgstr ""
+
+#: cases/edit.php:245 cases/new.php:140
+msgid "You must enter a case title."
+msgstr ""
+
+#: admin/users/some.php:141
+msgid "You must enter a last name."
+msgstr ""
+
+#: admin/users/some.php:146
+msgid "You must enter a password."
+msgstr ""
+
+#: admin/users/some.php:136
+msgid "You must enter a username."
+msgstr ""
+
+#: admin/data_clean.php:330
+msgid "Your database has been cleaned."
+msgstr ""
+
+#: admin/update.php:676
+msgid "Your database has been updated."
+msgstr ""
+
+#: activities/associate-activities.php:148
+msgid "activities"
+msgstr ""
+
+#: admin/activity-templates/edit.php:102
+msgid "activity template from the system."
+msgstr ""
+
+#: admin/case-statuses/one.php:193
+msgid "case status from the system."
+msgstr ""
+
+#: admin/import/import-companies.php:93
+msgid "comma"
+msgstr ""
+
+#: admin/case-statuses/some.php:47
+msgid "down"
+msgstr ""
+
+#: activities/some.php:85 activities/some.php:148
+msgid "is_overdue"
+msgstr ""
+
+#: admin/opportunity-statuses/one.php:216
+msgid "opportunity status from the system."
+msgstr ""
+
+#: admin/import/import-companies.php:95
+msgid "pipe"
+msgstr ""
+
+#: admin/import/import-companies.php:96
+msgid "semi-colon"
+msgstr ""
+
+#: admin/import/import-companies.php:94
+msgid "tab"
+msgstr ""
+
+#: admin/case-statuses/some.php:42
+msgid "up"
 msgstr ""
