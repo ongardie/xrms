@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.25 2004/07/25 13:07:55 braverock Exp $
+ * $Id: utils-interface.php,v 1.26 2004/07/25 13:09:38 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -209,6 +209,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.26  2004/07/25 13:09:38  braverock
+ * - remove trailing whitespace
+ *
  * Revision 1.25  2004/07/25 13:07:55  braverock
  * - remove lang file require_once, as it is no longer used
  * - move salutation array into the build_salutation_menu fn
