@@ -11,22 +11,24 @@
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.1 2004/07/09 15:33:42 neildogg Exp $
+ * $Id: sidebar.php,v 1.2 2004/07/13 16:00:57 cpsource Exp $
  */
 
-$expand_id = $_GET['expand_id'];
+$expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
 
 $sql = "SELECT from_what_table, to_what_table
         FROM relationship_types
         WHERE relationship_name='$relationship_name'";
 $rst = $con->execute($sql);
 
-$what_table['from'] = $rst->fields['from_what_table'];
+$what_table['from']          = $rst->fields['from_what_table'];
 $what_table_singular['from'] = make_singular($what_table['from']);
-$what_table['to'] = $rst->fields['to_what_table'];
-$what_table_singular['to'] = make_singular($what_table['to']);
+$what_table['to']            = $rst->fields['to_what_table'];
+$what_table_singular['to']   = make_singular($what_table['to']);
 
 $rst->close();
+
+// TBD - BUG - $to_what_id and/or $from_what_id NEED to be defined here
 
 if($working_direction == "from") {
     $opposite_direction = "to";
@@ -36,9 +38,9 @@ else {
     $opposite_direction = "from";
     $overall_id = $to_what_id;
 }
-$display_name = ucfirst($what_table[$working_direction]);
+$display_name          = ucfirst($what_table[$working_direction]);
 $display_name_singular = ucfirst($what_table_singular[$working_direction]);
-$opposite_name = ucfirst($what_table[$opposite_direction]);
+$opposite_name         = ucfirst($what_table[$opposite_direction]);
 
 $relationship_type_ids = array();
 
@@ -227,6 +229,9 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.2  2004/07/13 16:00:57  cpsource
+ * - Get rid of some undefined variable usages.
+ *
  * Revision 1.1  2004/07/09 15:33:42  neildogg
  * New, generic programs that utilize the new relationships table
  *
