@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.12 2004/08/04 20:27:28 introspectshun Exp $
+ * $Id: sidebar.php,v 1.13 2005/03/10 18:26:51 ycreddy Exp $
  */
 
 // add company information block on sidebar
@@ -47,25 +47,25 @@ if ($rst) {
                    . get_formatted_address ($con, $rst->fields['default_primary_address'])
                    . "</td>\n\t</tr>";
 
-    if($rst->fields['phone'] or $rst->fields['fax']) {
+    if(trim($rst->fields['phone']) or trim($rst->fields['fax'])) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>";
     }
 
-    if ($rst->fields['phone']) {
+    if (trim($rst->fields['phone'])) {
         $company_block .= _("Phone") . ": " . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['phone'])
                         . "&nbsp;" . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['phone2'])
                         . "<br>";
     }
 
-    if ($rst->fields['fax']) {
+    if (trim($rst->fields['fax'])) {
         $company_block .= _("Fax") . ": " . get_formatted_phone($con, $rst->fields['default_primary_address'], $rst->fields['fax']);
     }
 
-    if($rst->fields['phone'] or $rst->fields['fax']) {
+    if(trim($rst->fields['phone']) or trim($rst->fields['fax'])) {
         $company_block .= "</td>\n\t</tr>";
     }
 
-    if ($rst->fields['url']) {
+    if (trim($rst->fields['url'])) {
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
 	                   . "<a href=\"" . $url . "\" target=\"_new\">" . _("Web Site") . "</a></td>\n\t</tr>";
     }
@@ -88,6 +88,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.13  2005/03/10 18:26:51  ycreddy
+ * Added trim before displaying Phone, Fax and url links in the company side bar
+ *
  * Revision 1.12  2004/08/04 20:27:28  introspectshun
  * - Converted "Web Site" str to GetText equivalent
  *
