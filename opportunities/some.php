@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.15 2004/06/16 20:44:07 gpowers Exp $
+ * $Id: some.php,v 1.16 2004/06/24 20:00:21 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -89,7 +89,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
 $sql = "SELECT " .
-  $con->Concat("'<a href=\"one.php?opportunity_id='", opportunity_id, "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
+  $con->Concat("'<a href=\"one.php?opportunity_id='", "CAST(opp.opportunity_id AS CHAR)", "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
   c.company_name AS 'Company', u.username AS 'Owner',
   CASE
     WHEN (opp.size > 0) THEN opp.size
@@ -324,6 +324,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.16  2004/06/24 20:00:21  introspectshun
+ * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
+ *
  * Revision 1.15  2004/06/16 20:44:07  gpowers
  * - removed $this from session_check()
  *   - it is incompatible with PHP5
