@@ -20,7 +20,7 @@
  *	-user clicks around and at some point is happy with their columns list and clicks 'update column view for this session' button which triggers a javascript function
  *	-javascript packs the column list into a variable along with the pager name, submits form
  *
- * $Id: Pager_Columns.php,v 1.2 2005/01/25 04:00:55 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.3 2005/02/07 19:12:34 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -34,8 +34,20 @@ class Pager_Columns {
 
 		getGlobalVar($new_columns_view, $pager_name . '_New_Columns_View');
 
+
 		$columns = array();
-		foreach($pager_columns as $pager_column) { $columns[$pager_column['index']] = $pager_column; }
+		// internally we always refer to the thing by the value
+		foreach($pager_columns as $pager_column) { 
+			if($pager_column['index_sql']) {
+				$columns[$pager_column['index_sql']] = $pager_column; 
+			} elseif($pager_column['index_calc']) {
+				$columns[$pager_column['index_calc']] = $pager_column; 
+			} elseif($pager_column['index_data']) {
+				$columns[$pager_column['index_data']]= $pager_column; 
+			} elseif($pager_column['index']) {
+				$columns[$pager_column['index']]= $pager_column; 
+			}
+		}
 		$pager_columns = $columns;
 
 		if($new_columns_view) {
@@ -96,22 +108,22 @@ class Pager_Columns {
 		// add currently displayed columns
 		foreach($user_columns as $user_column) {
 			if(isset($user_column)) {
-				$display_columns_options .= "<option value=\"{$this->pager_columns[$user_column]['index']}\">{$this->pager_columns[$user_column]['name']}</option>\n";
+				$display_columns_options .= "<option value=\"$user_column\">{$this->pager_columns[$user_column]['name']}</option>\n";
 			}
 		}
 
 		// add available columns
-  		foreach($this->pager_columns as $pager_column) {
+  		foreach($this->pager_columns as $pager_column_index => $pager_column) {
 
-			if(!in_array($pager_column['index'], $user_columns)) {
-				$avail_columns_options .= "<option value=\"{$pager_column['index']}\">{$pager_column['name']}</option>\n";
+			if(!in_array($pager_column_index, $user_columns)) {
+				$avail_columns_options .= "<option value=\"$pager_column_index\">{$pager_column['name']}</option>\n";
 			} 
 
 			// if in the default columns list, add to displayed, otherwise add to avail when reset button pressed
-			if(true === in_array($pager_column['index'], $this->default_columns)) {
-				$reset_columns_rows .= "\t\taddOption('{$this->pager_name}_displayColumns', '{$pager_column['name']}', '{$pager_column['index']}');\n";
+			if(true === in_array($pager_column_index, $this->default_columns)) {
+				$reset_columns_rows .= "\t\taddOption('{$this->pager_name}_displayColumns', '{$pager_column['name']}', '$pager_column_index');\n";
 			} else {
-				$reset_columns_rows .= "\t\taddOption('{$this->pager_name}_availColumns', '{$pager_column['name']}', '{$pager_column['index']}');\n";
+				$reset_columns_rows .= "\t\taddOption('{$this->pager_name}_availColumns', '{$pager_column['name']}', '$pager_column_index');\n";
 			}
 		}
 
@@ -221,6 +233,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.3  2005/02/07 19:12:34  daturaarutad
+ * updated to work with the GU_Pager
+ *
  * Revision 1.2  2005/01/25 04:00:55  daturaarutad
  * added anchor to jump up to selectable columns div when button is pressed to unhide it
  *
