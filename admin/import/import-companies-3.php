@@ -24,7 +24,7 @@
  * @todo modify CSVtoArray fn to do a trim, strtolower, and replace spaces with underscores in array element names
  * @todo could better accomodate microsoft Outlook by looking for outlook field names
  *
- * $Id: import-companies-3.php,v 1.7 2004/02/10 13:43:17 braverock Exp $
+ * $Id: import-companies-3.php,v 1.8 2004/02/10 16:38:13 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -230,7 +230,7 @@ foreach ($filearray as $row) {
     if (strlen($company_name) > 0) {
         // start putting together our query
         if (!$company_id) {
-            $sql_insert_company .= "
+            $sql_insert_company = "
             insert into companies set
                 user_id = $user_id,
                 crm_status_id = $crm_status_id,
@@ -242,7 +242,7 @@ foreach ($filearray as $row) {
                 entered_by = ' . $con->qstr($entered_by, get_magic_quotes_gpc()) . ',
                 company_name = '. $con->qstr($company_name, get_magic_quotes_gpc()) .',';
         } else {
-            $sql_insert_company .= '
+            $sql_insert_company = '
             update companies set ';
         }
 
@@ -370,7 +370,7 @@ foreach ($filearray as $row) {
                 $address_id = $rst->fields['address_id'];
                 //should probably echo here to indicate that we didn't import this address
             }
-            if (!$address_id) {
+            if (!$address_id and $company_id) {
                 //insert the new address
                 $sql_insert_address = "insert into addresses set
                                    company_id    = $company_id,
@@ -407,7 +407,7 @@ foreach ($filearray as $row) {
             $contact_id = $rst->fields['contact_id'];
             //should probably echo here to indicate that we didn't import this contact
         }
-        if (!$contact_id) {
+        if (!$contact_id and $company_id) {
             $sql_insert_contact = "insert into contacts set
                                        company_id  = $company_id,
                                        first_names = ". $con->qstr($contact_first_names, get_magic_quotes_gpc()) .',
@@ -537,6 +537,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.8  2004/02/10 16:38:13  braverock
+ * - fixed error in $sql_insert_company syntax
+ *
  * Revision 1.7  2004/02/10 13:43:17  braverock
  * - fixed error in division import
  *
