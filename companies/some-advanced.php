@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.2 2004/06/29 13:19:59 maulani Exp $
+ * $Id: some-advanced.php,v 1.3 2004/06/29 14:43:21 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -92,7 +92,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 $sql = "
-SELECT " . $con->Concat("'<a href=\"one.php?company_id='","CAST(c.company_id AS CHAR)","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
+SELECT distinct " . $con->Concat("'<a href=\"one.php?company_id='","CAST(c.company_id AS CHAR)","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
 c.company_code AS '$strCompaniesSomeCompanyCodeLabel',
 u.username AS '$strCompaniesSomeCompanyUserLabel',
 industry_pretty_name as '$strCompaniesSomeCompanyIndustrylabel',
@@ -163,27 +163,89 @@ if (strlen($phone) > 0) {
     $where .= " and c.phone like " . $con->qstr($phone, get_magic_quotes_gpc());
 }
 
-if (strlen($company_type_id) > 0) {
+if (strlen($phone2) > 0) {
     $criteria_count++;
-    $where .= " and c.company_id in (select company_id from company_company_type_map where company_type_id = $company_type_id)";
+    $where .= " and c.phone2 like " . $con->qstr($phone2, get_magic_quotes_gpc());
+}
+
+if (strlen($fax) > 0) {
+    $criteria_count++;
+    $where .= " and c.fax like " . $con->qstr($fax, get_magic_quotes_gpc());
+}
+
+if (strlen($url) > 0) {
+    $criteria_count++;
+    $where .= " and c.url like " . $con->qstr($url, get_magic_quotes_gpc());
+}
+
+if (strlen($employees) > 0) {
+    $criteria_count++;
+    $where .= " and c.employees like " . $con->qstr($employees, get_magic_quotes_gpc());
+}
+
+if (strlen($revenue) > 0) {
+    $criteria_count++;
+    $where .= " and c.revenue like " . $con->qstr($revenue, get_magic_quotes_gpc());
+}
+
+if (strlen($custom1) > 0) {
+    $criteria_count++;
+    $where .= " and c.custom1 like " . $con->qstr($custom1, get_magic_quotes_gpc());
+}
+
+if (strlen($custom2) > 0) {
+    $criteria_count++;
+    $where .= " and c.custom2 like " . $con->qstr($custom2, get_magic_quotes_gpc());
+}
+
+if (strlen($custom3) > 0) {
+    $criteria_count++;
+    $where .= " and c.custom3 like " . $con->qstr($custom3, get_magic_quotes_gpc());
+}
+
+if (strlen($custom4) > 0) {
+    $criteria_count++;
+    $where .= " and c.custom4 like " . $con->qstr($custom4, get_magic_quotes_gpc());
+}
+
+if (strlen($profile) > 0) {
+    $criteria_count++;
+    $where .= " and c.profile like " . $con->qstr($profile, get_magic_quotes_gpc());
+}
+
+if (strlen($address_name) > 0) {
+    $criteria_count++;
+    $where .= " and addr.address_name like " . $con->qstr($address_name, get_magic_quotes_gpc());
+}
+
+if (strlen($line1) > 0) {
+    $criteria_count++;
+    $where .= " and addr.line1 like " . $con->qstr($line1, get_magic_quotes_gpc());
+}
+
+if (strlen($line2) > 0) {
+    $criteria_count++;
+    $where .= " and addr.line2 like " . $con->qstr($line2, get_magic_quotes_gpc());
 }
 
 if (strlen($city) > 0) {
     $criteria_count++;
-    $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
-    if (!strlen($state) > 0) {
-        $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
-    }
-    $where .= " and addr.city LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc()) ;
+    $where .= " and addr.city like " . $con->qstr($city, get_magic_quotes_gpc());
 }
 
-if (strlen($state) > 0) {
+if (strlen($province) > 0) {
     $criteria_count++;
-    if (!strlen($city) > 0) {
-        $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
-    }
-    $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
-    $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
+    $where .= " and addr.province like " . $con->qstr($province, get_magic_quotes_gpc());
+}
+
+if (strlen($postal_code) > 0) {
+    $criteria_count++;
+    $where .= " and addr.postal_code like " . $con->qstr($postal_code, get_magic_quotes_gpc());
+}
+
+if (strlen($country_id) > 0) {
+    $criteria_count++;
+    $where .= " and addr.country_id = $country_id";
 }
 
 
@@ -334,6 +396,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.3  2004/06/29 14:43:21  maulani
+ * - Full implementation of advanced companies search
+ *
  * Revision 1.2  2004/06/29 13:19:59  maulani
  * - Additional fields for advanced search
  *

@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.18 2004/06/26 15:36:03 braverock Exp $
+ * $Id: some.php,v 1.19 2004/06/29 14:43:21 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -335,6 +335,7 @@ start_page($page_title, true, $msg);
           <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search">
             <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
             <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
+            <input type=button class=button onclick="javascript: location.href='advanced-search.php';" value="Advanced Search"> 
           </td>
         </tr>
       </table>
@@ -416,6 +417,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.19  2004/06/29 14:43:21  maulani
+ * - Full implementation of advanced companies search
+ *
  * Revision 1.18  2004/06/26 15:36:03  braverock
  * - change search layout to two rows to improve CSS positioning
  *   - applied modified version of SF patch #971474 submitted by s-t
