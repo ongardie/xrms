@@ -336,6 +336,14 @@ td.overdue_activity {
   color: #ffffee;
 }
 
+td.scheduled_activity {
+  padding: 5px;
+  background-color: #EEEEFF;
+  font-family: arial;
+  font-size:9pt;
+  color: #333333;
+}
+
 td.non_uploaded_file {
   padding: 5px;
   background-color: #ff7777;

@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.14 2004/04/19 03:43:34 braverock Exp $
+ * $Id: home.php,v 1.15 2004/05/27 18:10:47 gpowers Exp $
  */
 
 // include the common files
@@ -118,9 +118,11 @@ if ($rst) {
         if ($open_p == 'o') {
             if ($is_overdue) {
                 $classname = 'overdue_activity';
+            } else if (mktime() < $scheduled_at){
+                $classname = 'scheduled_activity';
             } else {
-                $classname = 'open_activity';
-            }
+            	$classname = 'open_activity';
+        	}
         } else {
             $classname = 'closed_activity';
         }
@@ -460,6 +462,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.15  2004/05/27 18:10:47  gpowers
+ * Applied Patch [ 957550 ] Scheduled activities with different colour
+ * submitted by miguel Gonçves - mig77
+ *
  * Revision 1.14  2004/04/19 03:43:34  braverock
  *  - Add Personal Notes
  *    - apply SF patch 934480 submitted by Glenn Powers
