@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.17 2004/02/06 22:47:37 maulani Exp $
+ * $Id: one.php,v 1.18 2004/02/10 20:56:47 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -191,6 +191,8 @@ if ($rst) {
     $rst->close();
 }
 
+// contacts
+
 $sql = "select * from contacts where company_id = $company_id and contact_record_status = 'a' order by first_names";
 
 $rst = $con->execute($sql);
@@ -205,6 +207,41 @@ if ($rst) {
         $contact_rows .= '<td class=widget_content>' . $rst->fields['work_phone'] . '</td>';
         $contact_rows .= "<td class=widget_content><a href='mailto:" . $rst->fields['email'] . " ' > " . htmlspecialchars($rst->fields['email']) . '</a></td>';
         $contact_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+// former names
+
+$sql = "select * from company_former_names where company_id = $company_id order by namechange_at desc";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $former_name_rows .= '<tr><td class=sublabel>Former Name</td>';
+        $former_name_rows .= '<td class=clear>' . $rst->fields['former_name'] . '</td>';
+        $former_name_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+// related companies
+
+$sql = "select r.relationship_type, r.established_at, r.company_to_id, c.company_name from company_relationship r, companies c where r.company_from_id = $company_id and r.company_to_id=c.company_id order by r.established_at desc";
+
+$rst = $con->execute($sql);
+
+$linecounter = 0;
+if ($rst) {
+    while (!$rst->EOF) {
+    	$linecounter +=1;
+    	$established_at = $con->userdate($rst->fields['established_at']);
+        $relationship_rows .= ($linecounter == '1') ? '<tr><td class=sublabel>Relationship</td>' : '<tr><td class=sublabel>&nbsp;</td>';
+        $relationship_rows .= '<td class=clear>' . $rst->fields['relationship_type'] . ' ' . $rst->fields['company_name'] . ' ' . $established_at . '</td>';
+        $relationship_rows .= '</tr>';
         $rst->movenext();
     }
     $rst->close();
@@ -341,6 +378,14 @@ if (strlen($contact_rows) == 0) {
     $contact_rows = "<tr><td class=widget_content colspan=6>$strCompaniesOneNoContactsMessage</td></tr>";
 }
 
+if (strlen($former_name_rows) == 0) {
+    $former_name_rows = "";
+}
+
+if (strlen($relationship_rows) == 0) {
+    $relationship_rows = "";
+}
+
 if (strlen($categories) == 0) {
     $categories = $strCompaniesOneNoCategoriesMessage;
 }
@@ -406,6 +451,8 @@ function openNewsWindow() {
                                     <td width=1% class=sublabel>Legal Name</td>
                                     <td class=clear><?php  echo $legal_name; ?></td>
                                 </tr>
+                                <?php  echo $former_name_rows; ?>
+                                <?php  echo $relationship_rows; ?>
                                 <tr>
                                     <td class=sublabel>Code</td>
                                     <td class=clear><?php  echo $company_code; ?></td>
@@ -542,6 +589,7 @@ function openNewsWindow() {
                 <input class=button type=button value="Clone" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
                 <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="News" onclick="javascript: openNewsWindow();">
+                <input class=button type=button value="Relationships" onclick="javascript: location.href='relationships.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="Addresses" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="Divisions" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
                 </td>
@@ -708,6 +756,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.18  2004/02/10 20:56:47  maulani
+ * Add company former name and relationship tracking
+ *
  * Revision 1.17  2004/02/06 22:47:37  maulani
  * Use ends_at to determine if activity is overdue
  *
