@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.14 2005/01/13 17:56:13 vanmer Exp $
+ * $Id: some.php,v 1.15 2005/01/13 19:46:54 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,7 +18,7 @@ $session_user_id = session_check( 'Admin' );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-$con->debug=1;
+//$con->debug=1;
 
 $sql = "select *, Role.Role_name from users, Role
 WHERE user_record_status = 'a' AND users.role_id=Role.Role_id order by last_name, first_names";
@@ -163,6 +163,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.15  2005/01/13 19:46:54  vanmer
+ * - Removed unneeded debug statement
+ *
  * Revision 1.14  2005/01/13 17:56:13  vanmer
  * - added new ACL code to user management section
  *
