@@ -2,7 +2,7 @@
 /**
  * Insert a new rating
  *
- * $Id: add-2.php,v 1.2 2004/02/14 15:41:12 braverock Exp $
+ * $Id: add-2.php,v 1.3 2004/06/14 22:38:46 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -25,8 +26,17 @@ if (!strlen(rating_display_html) > 0)  { $rating_display_html  = $rating_pretty_
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "insert into ratings (rating_short_name, rating_pretty_name, rating_pretty_plural, rating_display_html) values (" . $con->qstr($rating_short_name) . ", " . $con->qstr($rating_pretty_name) . ", " . $con->qstr($rating_pretty_plural) . ", " . $con->qstr($rating_display_html) . ")";
-$con->execute($sql);
+$sql = "SELECT * FROM ratings WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['rating_short_name'] = $rating_short_name;
+$rec['rating_pretty_name'] = $rating_pretty_name;
+$rec['rating_pretty_plural'] = $rating_pretty_plural;
+$rec['rating_display_html'] = $rating_display_html;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $con->close();
 
@@ -34,6 +44,10 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.3  2004/06/14 22:38:46  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.2  2004/02/14 15:41:12  braverock
  * - add phpdoc
  *

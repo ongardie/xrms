@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.6 2004/06/03 16:13:22 braverock Exp $
+ * $Id: one.php,v 1.7 2004/06/14 22:36:43 introspectshun Exp $
  */
 
 //uinclude required common files
@@ -13,6 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 //check to see if we are logged in
 $session_user_id = session_check();
@@ -232,6 +233,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/06/14 22:36:43  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.6  2004/06/03 16:13:22  braverock
  * - add functionality to support workflow and activity templates
  * - add functionality to support changing sort order

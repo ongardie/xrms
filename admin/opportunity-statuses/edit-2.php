@@ -2,7 +2,7 @@
 /**
  * save an updated an opportunity status  to database after editing it.
  *
- * $Id: edit-2.php,v 1.4 2004/03/15 16:49:55 braverock Exp $
+ * $Id: edit-2.php,v 1.5 2004/06/14 22:36:43 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -26,16 +27,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 //$con->debug=1;
 
-$sql = "update opportunity_statuses set
-        opportunity_status_short_name = " . $con->qstr($opportunity_status_short_name, get_magic_quotes_gpc()) . ",
-        opportunity_status_pretty_name = " . $con->qstr($opportunity_status_pretty_name, get_magic_quotes_gpc()) . ",
-        opportunity_status_pretty_plural = " . $con->qstr($opportunity_status_pretty_plural, get_magic_quotes_gpc()) . ",
-        opportunity_status_display_html = " . $con->qstr($opportunity_status_display_html, get_magic_quotes_gpc()) . ",
-        opportunity_status_long_desc = " . $con->qstr($opportunity_status_long_desc, get_magic_quotes_gpc()) . ",
-        status_open_indicator = " . $con->qstr($status_open_indicator , get_magic_quotes_gpc()) . "
-        WHERE opportunity_status_id = $opportunity_status_id";
+$sql = "SELECT * FROM opportunity_statuses WHERE opportunity_status_id = $opportunity_status_id";
+$rst = $con->execute($sql);
 
-$con->execute($sql);
+$rec = array();
+$rec['opportunity_status_short_name'] = $opportunity_status_short_name;
+$rec['opportunity_status_pretty_name'] = $opportunity_status_pretty_name;
+$rec['opportunity_status_pretty_plural'] = $opportunity_status_pretty_plural;
+$rec['opportunity_status_display_html'] = $opportunity_status_display_html;
+$rec['opportunity_status_long_desc'] = $opportunity_status_long_desc;
+$rec['status_open_indicator'] = $status_open_indicator;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 $con->close();
 
@@ -44,6 +48,10 @@ header("Location: some.php");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.5  2004/06/14 22:36:43  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.4  2004/03/15 16:49:55  braverock
  * - add sort_order and open status indicator to opportunity statuses
  *
