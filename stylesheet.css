@@ -52,6 +52,8 @@ td.open_activity {padding: 5px; background-color: #ffffff; font-family: arial; f
 td.closed_activity {padding: 5px; background-color: #dddddd; font-family: arial; font-size: 9pt; color: #333333;}
 td.overdue_activity {padding: 5px; background-color: #ff7777; font-family: arial; font-size: 9pt; color: #ffffee; font-weight: bold;}
 
+td.non_uploaded_file {padding: 5px; background-color: #ff7777; font-family: arial; font-size: 9pt; color: #ffffee; font-weight: bold;}
+
 td.order_status_large {height: 50px; padding: 5px; background-color: #ffffff; font: bold 14pt tahoma; color: #444444; text-align: center;}
 
 font.order_status_quote {color: #999999;}
