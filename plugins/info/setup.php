@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.8 2005/01/09 17:11:23 vanmer Exp $
+ * $Id: setup.php,v 1.9 2005/01/11 09:37:29 gpowers Exp $
  */
 
 
@@ -14,8 +14,6 @@ function xrms_plugin_init_info () {
       = 'company_accounting';
     $xrms_plugin_hooks['company_sidebar_bottom']['info']
       = 'company_sidebar_bottom';
-    $xrms_plugin_hooks['contact_sidebar_top']['info']
-      = 'contact_sidebar_top';
     $xrms_plugin_hooks['contact_sidebar_top']['info']
       = 'contact_sidebar_top';
     $xrms_plugin_hooks['private_sidebar_bottom']['info']
