@@ -2,7 +2,7 @@
 /**
  * Edit a campaign
  *
- * $Id: one.php,v 1.12 2004/07/25 15:26:31 johnfawcett Exp $
+ * $Id: one.php,v 1.13 2004/07/25 20:51:34 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -49,7 +49,7 @@ if ($rst) {
     $rst->close();
 }
 
-$categories_sql = "select category_pretty_name 
+$categories_sql = "select category_pretty_name
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
 where ecm.on_what_table = 'campaigns'
 and ecm.on_what_id = $campaign_id
@@ -176,7 +176,7 @@ start_page($page_title, true, $msg);
                             <td width=50% class=clear align=left valign=top>
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
-	                            </table>
+                                    </table>
 
                             </td>
                         </tr>
@@ -202,18 +202,18 @@ start_page($page_title, true, $msg);
                 <td class=widget_header><?php echo _("Categories"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><?php  echo $categories; ?></td>
+                <td class=widget_content><?php echo $categories; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?campaign_id=<?php  echo $campaign_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?campaign_id=<?php echo $campaign_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
             </tr>
         </table>
 
         <!-- notes //-->
         <form action="../notes/new.php" method="post">
         <input type="hidden" name="on_what_table" value="campaigns">
-        <input type="hidden" name="on_what_id" value="<?php echo $campaign_id ?>">
-        <input type="hidden" name="return_url" value="/campaigns/one.php?campaign_id=<?php echo $campaign_id ?>">
+        <input type="hidden" name="on_what_id" value="<?php echo $campaign_id; ?>">
+        <input type="hidden" name="return_url" value="/campaigns/one.php?campaign_id=<?php echo $campaign_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header><?php echo _("Notes"); ?></td>
@@ -228,8 +228,8 @@ start_page($page_title, true, $msg);
         <!-- files //-->
         <form action="<?php  echo $http_site_root; ?>/files/new.php" method="post">
         <input type=hidden name=on_what_table value="campaigns">
-        <input type=hidden name=on_what_id value="<?php  echo $campaign_id; ?>">
-        <input type=hidden name=return_url value="/campaigns/one.php?campaign_id=<?php  echo $campaign_id; ?>">
+        <input type=hidden name=on_what_id value="<?php echo $campaign_id; ?>">
+        <input type=hidden name=return_url value="/campaigns/one.php?campaign_id=<?php echo $campaign_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=5><?php echo _("Files"); ?></td>
@@ -257,6 +257,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2004/07/25 20:51:34  braverock
+ * - added semicolons to some echo statements that were missing them
+ *
  * Revision 1.12  2004/07/25 15:26:31  johnfawcett
  * - unified page title
  * - removed punctuation from gettext string
@@ -280,8 +283,5 @@ end_page();
  * Revision 1.6  2004/04/08 16:58:23  maulani
  * - Update javascript declaration
  * - Add phpdoc
- *
- *
  */
 ?>
-
