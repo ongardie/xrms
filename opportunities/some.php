@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.32 2004/12/30 19:12:28 braverock Exp $
+ * $Id: some.php,v 1.33 2005/01/13 18:55:43 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,6 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
+$on_what_table='opportunities';
 $session_user_id = session_check();
 
 // declare passed in variables
@@ -121,6 +122,13 @@ if (strlen($opportunity_status_id) > 0) {
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
+} else {
+    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    //print_r($list);
+    if ($list) {
+        $list=implode(",",$list);
+        $where .= " and opp.opportunity_id IN ($list) ";
+    } else { $where .= ' AND 1 = 2 '; }
 }
 
 if ($sort_column == 1) {
@@ -321,6 +329,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.33  2005/01/13 18:55:43  vanmer
+ * - ACL restriction on list when searching
+ *
  * Revision 1.32  2004/12/30 19:12:28  braverock
  * - localize strings
  * - patch provided by Ozgur Cayci
