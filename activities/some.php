@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.76 2004/12/26 13:31:43 braverock Exp $
+ * $Id: some.php,v 1.77 2004/12/26 15:58:19 braverock Exp $
  */
 
 // handle includes
@@ -287,7 +287,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 
 
 if ($sort_column == 1) {
-    $order_by = _("Overdue");
+    $order_by = $con->qstr(_("Overdue"),get_magic_quotes_gpc());
 } elseif ($sort_column == 2) {
     $order_by = "activity_type_pretty_name";
 } elseif ($sort_column == 3) {
@@ -673,6 +673,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.77  2004/12/26 15:58:19  braverock
+ * - fix string quoting to resolve problems with French translation
+ *
  * Revision 1.76  2004/12/26 13:31:43  braverock
  * - fix string quoting to resolve problems with French translation
  *
