@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.11 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: one.php,v 1.12 2004/07/20 10:46:46 cpsource Exp $
  */
 
 //include required files
@@ -56,7 +56,7 @@ if($my_company_id) {
 
 $con->close();
 
-$page_title = _("One User :").$first_names $last_name;
+$page_title = _('One User :') . $first_names . ' ' . $last_name;
 start_page($page_title);
 
 ?>
@@ -148,6 +148,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.12  2004/07/20 10:46:46  cpsource
+ * - Fixed syntax error at line 59
+ *
  * Revision 1.11  2004/07/16 23:51:38  cpsource
  * - require session_check ( 'Admin' )
  *
