@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.34 2004/08/16 20:02:22 johnfawcett Exp $
+ * $Id: utils-interface.php,v 1.35 2004/10/25 23:57:01 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -219,18 +219,26 @@ function jscalendar_includes() {
 
     global $http_site_root;
 
-    echo <<<EOQ
+		global $jscalendar_included;
+
+		if(!isset($jscalendar_included)) {
+    	echo <<<EOQ
     <!-- JSCALENDAR SCRIPT INCLUDES -->
     <script type="text/javascript" src="$http_site_root/js/jscalendar/calendar.js"></script>
     <script type="text/javascript" src="$http_site_root/js/jscalendar/lang/calendar-en.js"></script>
     <script type="text/javascript" src="$http_site_root/js/jscalendar/calendar-setup.js"></script>
     <!-- JSEND CALENDAR SCRIPT INCLUDES -->
 EOQ;
+			$jscalendar_included = true;
+		}
 
 } //end jscalendar_includes fn
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.35  2004/10/25 23:57:01  daturaarutad
+ * Added a check to jscalendar_includes() so that the files are only included once.
+ *
  * Revision 1.34  2004/08/16 20:02:22  johnfawcett
  * - moved set_up_language() call into global scope to pick up strings that
  *   were not being translated because the gettext calls were done before
