@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.35 2004/07/28 20:44:43 neildogg Exp $
+ * $Id: edit-2.php,v 1.36 2004/07/30 15:27:16 braverock Exp $
  */
 
 //include required files
@@ -22,35 +22,39 @@ $session_user_id = session_check();
 
 // POST'ed in data
 $arr_vars = array (
-		   // posted data
-		   'return_url' => arr_vars_POST ,
-		   'activity_id' => arr_vars_POST ,
-		   'activity_type_id' => arr_vars_POST ,
-		   'contact_id' => arr_vars_POST ,
-		   'activity_title' => arr_vars_POST ,
-		   'activity_description' => arr_vars_POST ,
-		   'scheduled_at' => arr_vars_POST ,
-		   'ends_at' => arr_vars_POST ,
-		   'activity_status' => arr_vars_POST ,
-		   'current_activity_status' => arr_vars_POST ,
-		   'user_id' => arr_vars_POST ,
-		   'on_what_table' => arr_vars_POST ,
-		   'on_what_id' => arr_vars_POST ,
-		   'company_id' => arr_vars_POST ,
-		   'email_to' => arr_vars_POST ,
-		   'table_name' => arr_vars_POST ,
-		   'table_status_id' => arr_vars_POST ,
+                   // posted data
+                   'return_url' => arr_vars_POST ,
+                   'activity_id' => arr_vars_POST ,
+                   'activity_type_id' => arr_vars_POST ,
+                   'contact_id' => arr_vars_POST ,
+                   'activity_title' => arr_vars_POST ,
+                   'activity_description' => arr_vars_POST ,
+                   'scheduled_at' => arr_vars_POST ,
+                   'ends_at' => arr_vars_POST ,
+                   'activity_status' => arr_vars_POST ,
+                   'current_activity_status' => arr_vars_POST ,
+                   'user_id' => arr_vars_POST ,
+                   'on_what_table' => arr_vars_POST ,
+                   'on_what_id' => arr_vars_POST ,
+                   'company_id' => arr_vars_POST ,
+                   'email_to' => arr_vars_POST ,
+                   'table_name' => arr_vars_POST ,
+                   'table_status_id' => arr_vars_POST ,
 
-		   // optionally posted data
-		   'opportunity_description' => arr_vars_POST_UNDEF ,
-		   'probability' => arr_vars_POST_UNDEF ,
-		   'followup' => arr_vars_POST_UNDEF ,
-		   'saveandnext' => arr_vars_POST_UNDEF ,
-		   'switch_opportunity' => arr_vars_POST_UNDEF ,
-		   );
+                   // optionally posted data
+                   'opportunity_description' => arr_vars_POST_UNDEF ,
+                   'probability' => arr_vars_POST_UNDEF ,
+                   'followup' => arr_vars_POST_UNDEF ,
+                   'saveandnext' => arr_vars_POST_UNDEF ,
+                   'switch_opportunity' => arr_vars_POST_UNDEF ,
+                   );
 
 // get posted data
 arr_vars_post_with_cmd ( $arr_vars );
+
+// set the correct activity status flag
+//previous syntax incorrectly cleared already closed activities.
+if ($activity_status == 'on') { $activity_status = 'c'; }
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -72,9 +76,6 @@ if ($scheduled_at > $ends_at) {
    //set $ends_at to = $scheduled_at
    $ends_at = $scheduled_at;
 }
-
-// set the correct activity status flag
-$activity_status = ($activity_status == 'on') ? 'c' : 'o';
 
 $contact_id = ($contact_id > 0) ? $contact_id : 'NULL';
 
@@ -193,10 +194,10 @@ if (strlen($upd)>0) {
 if($switch_opportunity == "on") {
     $sql = "SELECT * FROM opportunities WHERE opportunity_id = " . $on_what_id;
     $rst = $con->execute($sql);
-    
+
     $rec = array();
     $rec['contact_id'] = $contact_id;
-    
+
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     if(strlen($upd)) {
         $rst = $con->execute($upd);
@@ -417,6 +418,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.36  2004/07/30 15:27:16  braverock
+ * - move undefined variable check for activity status above followup check
+ *   - resolves SF bug 999663 reported by John Fawcett
+ *
  * Revision 1.35  2004/07/28 20:44:43  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
