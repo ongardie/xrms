@@ -2,7 +2,7 @@
 /**
  * Commit the new Info Type to the database
  *
- * $Id: add-2.php,v 1.4 2005/03/18 20:54:37 gpowers Exp $
+ * $Id: add-2.php,v 1.5 2005/03/18 21:11:37 gpowers Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -20,12 +20,6 @@ $display_on = $_POST['display_on'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-// info
-// info_display_map
-// info_element_definitions
-// info_map
-// info_types
 
 //save to database
 $rec = array();
@@ -81,6 +75,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.5  2005/03/18 21:11:37  gpowers
+ * - removed (commented) notes
+ *
  * Revision 1.4  2005/03/18 20:54:37  gpowers
  * - added support for inline (custom fields) info
  *
