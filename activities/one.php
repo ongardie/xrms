@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.10 2004/04/26 01:54:45 braverock Exp $
+ * $Id: one.php,v 1.11 2004/04/27 16:28:39 gpowers Exp $
  */
 
 //include required files
@@ -41,8 +41,10 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $on_what_table = $rst->fields['on_what_table'];
     $on_what_id = $rst->fields['on_what_id'];
-    $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
-    $ends_at = $con->userdate($rst->fields['ends_at']);
+//    $scheduled_at = $con->usertimestamp($rst->fields['scheduled_at'], "Y-m-d h:i A");
+//    $ends_at = $con->usertimestamp($rst->fields['ends_at'], "Y-m-d h:i A");
+    $scheduled_at = $rst->fields['scheduled_at'];
+    $ends_at = $rst->fields['ends_at'];
     $activity_status = $rst->fields['activity_status'];
     $rst->close();
 }
@@ -150,6 +152,10 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right>Ends</td>
                 <td class=widget_content_form_element><input type=text name=ends_at value="<?php  echo $ends_at; ?>"> <a href="javascript:cal2.popup();"><img class=date_picker border=0 src="../img/cal.gif"></a></td>
+           </tr>
+            <tr>
+                <td class=widget_label_right>Email This To</td>
+                <td class=widget_content_form_element><input type=text name=email_to></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Completed?</td>
@@ -200,6 +206,12 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2004/04/27 16:28:39  gpowers
+ * added support for activity times.
+ * NOTE: usertimestamp doesn't appear to work. I don't know why.
+ * (The unformatted time works fine with MySQL, but may not with other DBs.)
+ * added support for activity emails.
+ *
  * Revision 1.10  2004/04/26 01:54:45  braverock
  * add ability to schedule a followup activity based on the current activity
  *
