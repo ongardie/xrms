@@ -1,0 +1,4117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-18 11:01-0600\n"
+"PO-Revision-Date: 2005-03-15 11:16+0200\n"
+"Last-Translator: Timo Laine <timo.laine@fennomedia.fi>\n"
+"Language-Team: Finnish <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: reports/companies-by-company-source.php:160
+#: reports/companies-by-crm-status.php:155
+#: reports/companies-by-industry.php:160
+#: reports/opportunities-quantity-by-opportunity-status.php:166
+#: reports/opportunities-size-by-opportunity-status.php:178
+msgid " - "
+msgstr ""
+
+#: opportunities/one.php:314
+msgid "$"
+msgstr ""
+
+#: email/email-4.php:79
+msgid "'Messages Sent"
+msgstr "Viestit lähetetty"
+
+#: activities/one.php:363
+msgid "(%)"
+msgstr "(%)"
+
+#: admin/case-statuses/one.php:177 admin/opportunity-statuses/one.php:178
+msgid "(defaults to days)"
+msgstr "(oletuksena päivää)"
+
+#: admin/system-parameters/one.php:55 include/utils-misc.php:545
+msgid ".  Make sure you have run the administration update."
+msgstr ". Varmista, että olet ajanut hallinnollisen päivityksen."
+
+#: admin/system-parameters/one.php:49 include/utils-misc.php:538
+msgid ".  The data entry appears to be corrupted."
+msgstr ". Tietosisältö vaikuttaa turmeltuneen."
+
+#: locale/datastrings.php:124
+msgid "1 - inserts & updates"
+msgstr ""
+
+#: locale/datastrings.php:125
+msgid "2 - and login/logout"
+msgstr ""
+
+#: locale/datastrings.php:126
+msgid "3 - and views"
+msgstr ""
+
+#: locale/datastrings.php:127
+#, fuzzy
+msgid "4 - and searches"
+msgstr "Tallennetut haut"
+
+#: admin/index.php:121
+msgid "ACL"
+msgstr ""
+
+#: contacts/one.php:389 plugins/phone/contacts_one.php:411
+msgid "AOL IM"
+msgstr "AOL pikaviesti"
+
+#: contacts/edit.php:200 contacts/new.php:192
+msgid "AOL Name"
+msgstr "AOL nimi"
+
+#: companies/one.php:251 companies/one.php:742 contacts/one.php:169
+#: contacts/one.php:509 plugins/phone/companies_one.php:694
+#: plugins/phone/contacts_one.php:518 private/home.php:483
+msgid "About"
+msgstr "Tietoja"
+
+#: activities/one.php:323
+msgid "About This Activity"
+msgstr "Tietoja tästä toimenpiteestä"
+
+#: admin/import/import-companies.php:118 cases/one.php:346
+#: companies/one.php:522 contacts/one.php:413 opportunities/one.php:380
+#: plugins/phone/companies_one.php:506 plugins/phone/contacts_one.php:431
+msgid "Account Owner"
+msgstr "Tilin omistaja"
+
+#: admin/import/import-companies.php:138 cases/one.php:354
+#: companies/admin.php:74 companies/one.php:579
+#: companies/some-advanced.php:139 companies/some.php:303 contacts/one.php:421
+#: opportunities/one.php:388 plugins/phone/companies_one.php:554
+#: plugins/phone/contacts_one.php:443
+msgid "Account Status"
+msgstr "Tilin tila"
+
+#: admin/account-statuses/one.php:40
+msgid "Account Status Details"
+msgstr "Tilin tila yksityiskohtaisesti"
+
+#: admin/index.php:183 admin/account-statuses/some.php:47
+msgid "Account Statuses"
+msgstr "Tilien tilat"
+
+#: activities/associate-activities.php:33
+msgid "Action"
+msgstr "Toimenpide"
+
+#: cases/one.php:157 cases/one.php:390 companies/one.php:272
+#: contacts/one.php:190 include/utils-interface.php:280
+#: opportunities/one.php:199 opportunities/one.php:428
+#: plugins/phone/companies_one.php:687 plugins/phone/contacts_one.php:512
+#: reports/completed-items.php:94 reports/open-items.php:78
+#: reports/overdue-items.php:92
+msgid "Activities"
+msgstr "Toiminnot"
+
+#: locale/datastrings.php:12
+msgid "Activities Default Behavior"
+msgstr "Toimenpiteiden oletuskäytännöt"
+
+#: activities/one.php:356 private/home.php:479 reports/activitytimes.php:79
+#: reports/completed-items.php:201 reports/open-items.php:189
+#: reports/overdue-items.php:204
+msgid "Activity"
+msgstr "Toimenpide"
+
+#: include/utils-interface.php:65
+msgid "Activity Added."
+msgstr "Toimenpide lisätty"
+
+#: include/utils-interface.php:67
+msgid "Activity Deleted."
+msgstr "Toimenpide poistettu"
+
+#: activities/one.php:276
+msgid "Activity Details"
+msgstr "Toimenpiteen yksityiskohdat"
+
+#: activities/one.php:388
+msgid "Activity Notes"
+msgstr "Toimenpiteen huomautuksia"
+
+#: reports/index.php:135
+msgid "Activity Report for"
+msgstr "Toimintoraportti:"
+
+#: reports/user-activity.php:68 reports/user-activity.php:80
+#: reports/user-activity.php:83
+msgid "Activity Summary"
+msgstr "Toimenpideyhteenveto"
+
+#: admin/activity-templates/edit.php:48
+msgid "Activity Template Details"
+msgstr "Toimenpidepohjain yksityskohdat"
+
+#: admin/index.php:136 admin/activity-templates/some.php:59
+msgid "Activity Templates"
+msgstr "Toimenpidepohjat"
+
+#: reports/index.php:107
+msgid "Activity Time Sheets"
+msgstr "Toimenpiteiden aikataulut"
+
+#: admin/activity-types/one.php:42
+msgid "Activity Type Details"
+msgstr "Toimenpidetyypin yksityiskohdat"
+
+#: admin/index.php:158 admin/activity-types/some.php:54
+msgid "Activity Types"
+msgstr "Toimenpidetyypit"
+
+#: admin/account-statuses/some.php:82 admin/activity-types/some.php:94
+#: admin/campaign-statuses/some.php:92 admin/campaign-types/some.php:80
+#: admin/case-priorities/some.php:86 admin/case-statuses/one.php:187
+#: admin/case-statuses/some.php:182 admin/case-types/some.php:80
+#: admin/categories/some.php:81 admin/company-sources/some.php:88
+#: admin/company-types/some.php:79 admin/crm-statuses/some.php:85
+#: admin/industries/some.php:79 admin/opportunity-statuses/one.php:188
+#: admin/opportunity-statuses/some.php:144 admin/ratings/some.php:83
+#: admin/relationship-types/some.php:99 admin/roles/some.php:82
+#: admin/users/some.php:121 companies/addresses.php:171
+#: plugins/phone/companies_one.php:706 plugins/phone/contacts_one.php:529
+msgid "Add"
+msgstr "Lisää"
+
+#: include/strings.php:17 include/strings.php:22
+msgid "Add Company"
+msgstr "Lisää yritys"
+
+#: contacts/new.php:232 include/strings.php:16 include/strings.php:21
+msgid "Add Contact"
+msgstr "Lisää kontaktit"
+
+#: companies/former-names.php:93
+msgid "Add Former Name"
+msgstr "Lisää entinen nimi"
+
+#: admin/account-statuses/some.php:63
+msgid "Add New Account Status"
+msgstr "Lisää uusi tilin tila"
+
+#: companies/one.php:735
+#, fuzzy
+msgid "Add New Activity"
+msgstr "Lisää uusi toimenpiteen tyyppi"
+
+#: admin/activity-types/some.php:71
+msgid "Add New Activity Type"
+msgstr "Lisää uusi toimenpiteen tyyppi"
+
+#: admin/crm-statuses/some.php:66
+msgid "Add New CRM Status"
+msgstr "Lisää uusi CRM-arvo"
+
+#: campaigns/some.php:272
+msgid "Add New Campaign"
+msgstr "Lisää uusi kampanja"
+
+#: admin/campaign-statuses/some.php:63
+msgid "Add New Campaign Status"
+msgstr "Lisää uusi kampanjan tila"
+
+#: admin/campaign-types/some.php:61
+msgid "Add New Campaign Type"
+msgstr "Lisää uusi kampanjan tyyppi"
+
+#: admin/case-statuses/some.php:136
+msgid "Add New Case Status"
+msgstr "Lisää uusi tehtävän tila"
+
+#: admin/case-types/some.php:61
+msgid "Add New Case Type"
+msgstr "Lisää uusi tehtävän tyyppi"
+
+#: admin/categories/some.php:62
+msgid "Add New Category"
+msgstr "Lisää uusi kategoria"
+
+#: admin/company-sources/some.php:65
+msgid "Add New Company Source"
+msgstr "Lisää uusi yritystietojen lähde"
+
+#: admin/company-types/some.php:60
+msgid "Add New Company Type"
+msgstr "Lisää uusi yrityksen tyyppi"
+
+#: admin/industries/some.php:60
+msgid "Add New Industry"
+msgstr "Lisää uusi toimiala"
+
+#: admin/opportunity-statuses/some.php:111
+msgid "Add New Opportunity Status"
+msgstr "Lisää uusi mahdollisuuden tila"
+
+#: admin/case-priorities/some.php:63
+msgid "Add New Priority Type"
+msgstr "Lisää uusi tärkeystyyppi"
+
+#: admin/ratings/some.php:64
+msgid "Add New Rating"
+msgstr "Lisää uusi luokitus"
+
+#: admin/relationship-types/some.php:68 admin/roles/some.php:63
+msgid "Add New Role"
+msgstr "Lisää uusi rooli"
+
+#: admin/users/some.php:82
+msgid "Add New User"
+msgstr "Lisää uusi käyttäjä"
+
+#: companies/relationships.php:126 relationships/sidebar.php:290
+#: relationships/sidebar.php:296
+msgid "Add Relationship"
+msgstr "Lisää keskinäinen suhde"
+
+#: relationships/new-relationship-2.php:87
+#: relationships/new-relationship.php:117
+msgid "Add Relationship for "
+msgstr "Lisää keskinäinen suhde seuraaville: "
+
+#: activities/some.php:609
+msgid "Add to Everyone"
+msgstr "Lisää kaikille"
+
+#: companies/divisions.php:83
+#, fuzzy
+msgid "Add/Edit Addresses"
+msgstr "Muokkaa osoitetta"
+
+#: include/utils-interface.php:74
+msgid "Added"
+msgstr "Lisätty"
+
+#: admin/update.php:477
+#, fuzzy
+msgid "Added Activities Default Behavior system parameters options."
+msgstr "Lisätty 'toimenpiteiden oletuskäytös' -järjestelmäparametri."
+
+#: admin/update.php:441
+#, fuzzy
+msgid "Added Audit Level system parameters options."
+msgstr "Lisätty 'toimenpiteiden oletuskäytös' -järjestelmäparametri."
+
+#: admin/update.php:498
+msgid "Added LDAP Version system parameters options."
+msgstr ""
+
+#: admin/update.php:389
+msgid "Added RSS Feeds Enabled and Maximum RSS Feed Entries system parameters."
+msgstr ""
+
+#: admin/update.php:519
+msgid "Added RSS Feeds Enabled system parameters options."
+msgstr ""
+
+#: admin/update.php:561
+msgid "Added Reports--Show No Items Found system parameters options."
+msgstr ""
+
+#: admin/update.php:415
+msgid ""
+"Added Reports--Use Horizontal Rule and Reports--Show No Items Found system "
+"parameters."
+msgstr ""
+
+#: admin/update.php:540
+msgid "Added Reports--Use Horizontal Rule system parameters options."
+msgstr ""
+
+#: admin/update.php:351
+msgid "Added an Activities Default Behavior system parameter."
+msgstr "Lisätty 'toimenpiteiden oletuskäytös' -järjestelmäparametri."
+
+#: admin/update.php:333
+msgid "Added an Audit Level."
+msgstr "Lisätty tarkastustaso."
+
+#: admin/update.php:372
+#, fuzzy
+msgid "Added an LDAP Version system parameter."
+msgstr "Lisätty 'toimenpiteiden oletuskäytös' -järjestelmäparametri."
+
+#: companies/advanced-search.php:234 companies/divisions.php:82
+#: companies/edit-division.php:80 companies/new.php:198 companies/one.php:556
+#: contacts/edit.php:138 contacts/new.php:130
+#: plugins/phone/companies_one.php:536 plugins/phone/contacts_one.php:449
+#: reports/companies-list.php:184
+msgid "Address"
+msgstr "Osoite"
+
+#: include/utils-interface.php:52
+msgid "Address Added."
+msgstr "Osoite lisätty."
+
+#: companies/edit-address.php:101 contacts/edit-address.php:218
+msgid "Address Body"
+msgstr "Katuosoite"
+
+#: include/utils-interface.php:54
+msgid "Address Deleted."
+msgstr "Osoite poistettu."
+
+#: admin/country-address-format/index.php:45
+msgid "Address Format"
+msgstr "Osoitteen muoto"
+
+#: companies/addresses.php:111 companies/addresses.php:139
+#: companies/advanced-search.php:237 companies/edit-address.php:73
+#: companies/new.php:201 contacts/edit-address.php:190
+msgid "Address Name"
+msgstr "Osoitteen nimi"
+
+#: companies/addresses.php:95 companies/addresses.php:108
+#: companies/one.php:687 plugins/phone/companies_one.php:639
+msgid "Addresses"
+msgstr "Osoitteet"
+
+#: companies/admin.php:58 companies/one.php:685
+#: plugins/phone/companies_one.php:634
+msgid "Admin"
+msgstr "Valvoja"
+
+#: companies/one.php:207
+#, fuzzy
+msgid "Administer Division"
+msgstr "Muokkaa jaosta"
+
+#: admin/index.php:37 include/utils-interface.php:293
+msgid "Administration"
+msgstr "Hallinta"
+
+#: activities/some.php:621 companies/some.php:285
+msgid "Advanced Search"
+msgstr "Tarkka haku"
+
+#: locale/datastrings.php:13
+msgid "Advertisement"
+msgstr "Ilmoitus"
+
+#: locale/datastrings.php:14
+msgid "Advertisements"
+msgstr "Ilmoitukset"
+
+#: locale/datastrings.php:15
+msgid "Advertising"
+msgstr "Mainonta"
+
+#: activities/some.php:509
+msgid "After"
+msgstr "Jälkeen"
+
+#: activities/some.php:520 reports/completed-items.php:87
+#: reports/open-items.php:71 reports/overdue-items.php:85
+msgid "All"
+msgstr "Kaikki"
+
+#: activities/some.php:505 reports/audit-items.php:57
+msgid "All Dates"
+msgstr "Kaikki päivämäärät"
+
+#: reports/companies-by-company-source.php:86
+#: reports/companies-by-company-source.php:182
+#: reports/companies-by-crm-status.php:82
+#: reports/companies-by-crm-status.php:177
+#: reports/companies-by-industry.php:89 reports/companies-by-industry.php:182
+#: reports/completed-items.php:142 reports/open-items.php:113
+#: reports/opportunities-quantity-by-opportunity-status.php:86
+#: reports/opportunities-quantity-by-opportunity-status.php:188
+#: reports/opportunities-size-by-opportunity-status.php:86
+#: reports/opportunities-size-by-opportunity-status.php:199
+#: reports/overdue-items.php:128
+msgid "All Users"
+msgstr "Kaikki käyttäjät"
+
+#: companies/advanced-search.php:182 companies/edit.php:136
+#: companies/new.php:143 companies/one.php:534
+#: plugins/phone/companies_one.php:518
+msgid "Alt. Phone"
+msgstr "Vaihtoehtoinen puhelin"
+
+#: locale/datastrings.php:16
+msgid "Approved"
+msgstr "Hyväksytty"
+
+#: locale/datastrings.php:17
+msgid "Architecture"
+msgstr "Arkkitehtuuri"
+
+#: activities/associate-activities.php:29
+msgid "Associate Activities"
+msgstr "Liitä toiminnot"
+
+#: activities/associate-activities.php:148
+msgid "Associated"
+msgstr "Liitetyt"
+
+#: include/strings.php:27
+msgid "Associated Companies"
+msgstr "Liitetyt yritykset"
+
+#: include/strings.php:26
+msgid "Associated Contacts"
+msgstr "Liitetyt kontaktit"
+
+#: admin/categories/one.php:142 campaigns/categories.php:99
+#: cases/categories.php:99 companies/categories.php:103
+#: contacts/categories.php:105 opportunities/categories.php:99
+msgid "Associated With"
+msgstr "Liitetty seuraavaan:"
+
+#: files/new.php:52
+msgid "Attach File"
+msgstr "Liitä tiedosto"
+
+#: notes/new.php:41
+msgid "Attach Note"
+msgstr "Liitä muistiinpano"
+
+#: activities/one.php:345
+msgid "Attached"
+msgstr "Liitetty"
+
+#: files/new.php:74 notes/sidebar.php:22
+msgid "Attached To"
+msgstr "Liitetty:"
+
+#: reports/index.php:125
+msgid "Audit Items"
+msgstr "Tarkasta nimikkeet"
+
+#: locale/datastrings.php:18
+msgid "Audit Level"
+msgstr "Tarkastustaso"
+
+#: reports/audit-items.php:29
+msgid "Audit Log"
+msgstr "Tarkastusloki"
+
+#: plugins/info/one.php:175 plugins/radtest/radtest.php:48
+msgid "Back"
+msgstr "Takaisin"
+
+#: companies/relationships.php:127
+msgid "Back to"
+msgstr "Takaisin:"
+
+#: email/email-2.php:83 email/one-template.php:82
+msgid "Bcc"
+msgstr "Piilokopio"
+
+#: activities/some.php:508
+msgid "Before"
+msgstr "Ennen"
+
+#: contacts/edit-address.php:95
+msgid "Billing Address"
+msgstr "Laskutusosoite"
+
+#: companies/addresses.php:115
+msgid "Billing Default"
+msgstr "Laskutusoletus"
+
+#: activities/some.php:617
+msgid "Browse"
+msgstr "Selaa"
+
+#: locale/datastrings.php:19
+msgid "Bug"
+msgstr "Virhe"
+
+#: locale/datastrings.php:20
+msgid "Bugs"
+msgstr "Virheitä"
+
+#: cases/some.php:273 email/email.php:113 email/index.php:60
+msgid "Bulk E-Mail"
+msgstr "Massasähköposti"
+
+#: contacts/one.php:429
+#, fuzzy
+msgid "Business Address"
+msgstr "Laskutusosoite"
+
+#: reports/completed-items.php:192
+msgid "COMPLETED ACTIVITIES for"
+msgstr "VALMIIT TOIMINNOT:"
+
+#: reports/completed-items.php:243
+msgid "COMPLETED CAMPAIGNS for"
+msgstr "VALMIIT KAMPANJAT:"
+
+#: reports/completed-items.php:334
+msgid "COMPLETED CASES for"
+msgstr "VALMIIT TEHTÄVÄT:"
+
+#: reports/completed-items.php:285
+msgid "COMPLETED OPPORTUNITIES for"
+msgstr "VALMIIT MAHDOLLISUUDET:"
+
+#: admin/import/import-companies.php:122 cases/one.php:350
+#: companies/advanced-search.php:162 companies/edit.php:116
+#: companies/new.php:123 companies/one.php:516 companies/some-advanced.php:138
+#: companies/some.php:302 contacts/one.php:417 opportunities/one.php:384
+#: plugins/phone/companies_one.php:500 plugins/phone/contacts_one.php:437
+#: reports/companies-list.php:111
+msgid "CRM Status"
+msgstr "CRM-arvo"
+
+#: admin/crm-statuses/one.php:38
+msgid "CRM Status Details"
+msgstr "CRM-arvo yksityiskohtaisesti"
+
+#: admin/index.php:178
+msgid "CRM Statuses"
+msgstr "CRM-arvot"
+
+#: plugins/webcalendar/setup.php:22
+msgid "Calendar"
+msgstr "Kalenteri"
+
+#: plugins/cti/asteriskdial.php:141
+msgid "Call%20To%20"
+msgstr ""
+
+#: campaigns/some.php:226 campaigns/some.php:282 files/some.php:322
+#: opportunities/edit.php:174 opportunities/new.php:99
+#: opportunities/one.php:309 private/home.php:316
+#: reports/completed-items.php:250 reports/open-items.php:236
+#: reports/overdue-items.php:253
+msgid "Campaign"
+msgstr "Kampanja"
+
+#: include/utils-interface.php:57
+msgid "Campaign Added."
+msgstr "Kampanja lisätty"
+
+#: include/utils-interface.php:59
+msgid "Campaign Deleted."
+msgstr "Kampanja poistettu"
+
+#: campaigns/edit.php:75 campaigns/new.php:67 campaigns/one.php:78
+#: campaigns/one.php:88
+msgid "Campaign Details"
+msgstr "Kampanjan yksityiskohdat"
+
+#: campaigns/some.php:185
+msgid "Campaign Name"
+msgstr "Kampanjan nimi"
+
+#: admin/campaign-statuses/one.php:41
+msgid "Campaign Status Details"
+msgstr "Kampanjan yksityiskohtainen tila"
+
+#: admin/index.php:223 admin/campaign-statuses/some.php:47
+msgid "Campaign Statuses"
+msgstr "Kampanjoiden tilat"
+
+#: campaigns/edit.php:78 campaigns/new.php:70
+msgid "Campaign Title"
+msgstr "Kampanjan otsikko"
+
+#: admin/campaign-types/one.php:38
+msgid "Campaign Type Details"
+msgstr "Kampanjan tyyppi, yksityiskohtainen"
+
+#: admin/index.php:218
+msgid "Campaign Types"
+msgstr "Kampanjatyypit"
+
+#: activities/some.php:485 campaigns/some.php:164 files/some.php:286
+#: include/utils-interface.php:283 reports/completed-items.php:101
+#: reports/open-items.php:85 reports/overdue-items.php:99
+msgid "Campaigns"
+msgstr "Kampanjat"
+
+#: cases/some.php:64 cases/some.php:297 files/some.php:324
+#: reports/index.php:79 reports/open-items.php:330
+#: reports/overdue-items.php:347
+msgid "Case"
+msgstr "Tehtävä"
+
+#: cases/one.php:261
+msgid "Case #"
+msgstr "Tehtävä numero"
+
+#: include/utils-interface.php:69
+msgid "Case Added."
+msgstr "Tehtävä lisätty."
+
+#: include/utils-interface.php:71
+msgid "Case Deleted."
+msgstr "Tehtävä poistettu."
+
+#: cases/edit.php:198 cases/new.php:127 cases/one.php:271
+msgid "Case Details"
+msgstr "Tehtävän yksityiskohdat"
+
+#: cases/some.php:251
+msgid "Case Name"
+msgstr "Tehtävän nimi"
+
+#: cases/some.php:252
+msgid "Case Number"
+msgstr "Tehtävän numero"
+
+#: admin/index.php:213 admin/case-priorities/some.php:47
+msgid "Case Priorities"
+msgstr "Tehtävien tärkeydet"
+
+#: admin/case-priorities/one.php:41
+msgid "Case Priority Details"
+msgstr "Tehtävien tärkeydet yksityiskohtaisesti"
+
+#: admin/case-statuses/one.php:114
+msgid "Case Status Details"
+msgstr "Tehtävien tilat yksityiskohtaisesti"
+
+#: admin/index.php:208 admin/case-statuses/some.php:114
+msgid "Case Statuses"
+msgstr "Tehtävien tilat"
+
+#: cases/edit.php:201 cases/export.php:33 cases/new.php:130
+msgid "Case Title"
+msgstr "Tehtävän otsake"
+
+#: admin/case-types/one.php:40
+msgid "Case Type Details"
+msgstr "Tehtävän tyypit yksityiskohtaisesti"
+
+#: admin/index.php:203 admin/case-types/some.php:45
+msgid "Case Types"
+msgstr "Tehtävätyypit"
+
+#: cases/some.php:230 files/some.php:288 include/utils-interface.php:285
+#: reports/completed-items.php:115 reports/open-items.php:99
+#: reports/overdue-items.php:113
+msgid "Cases"
+msgstr "Tehtävät"
+
+#: reports/cases-by-case-status.php:22 reports/cases-by-case-status.php:43
+#: reports/index.php:82
+msgid "Cases by Status"
+msgstr "Tehtävät tilan mukaan"
+
+#: admin/index.php:153 admin/categories/some.php:46
+#: include/categories-sidebar.php:18 plugins/phone/companies_one.php:723
+#: plugins/phone/contacts_one.php:545 reports/companies-list.php:189
+msgid "Categories"
+msgstr "Luokat"
+
+#: admin/import/import-companies.php:130 campaigns/some.php:199
+#: cases/some.php:262 companies/some.php:249 contacts/some.php:235
+#: opportunities/some.php:225 reports/companies-list.php:109
+msgid "Category"
+msgstr "Luokka"
+
+#: admin/categories/one.php:79
+msgid "Category Details"
+msgstr "Luokan yksityiskohdat"
+
+#: admin/categories/one.php:139
+msgid "Category Scopes"
+msgstr "Luokan näkymät"
+
+#: contacts/edit.php:188 contacts/new.php:180 contacts/one.php:357
+#: contacts/sidebar.php:171 plugins/phone/contacts_one.php:378
+msgid "Cell Phone"
+msgstr "Matkapuhelin"
+
+#: admin/country-address-format/edit.php:63
+msgid "Change"
+msgstr "Muuta"
+
+#: files/one.php:85
+msgid "Change Date"
+msgstr "Muuta päiväys"
+
+#: files/one.php:92
+msgid "Change File"
+msgstr "Muuta tiedosto"
+
+#: reports/companies-by-company-source.php:73
+#: reports/companies-by-crm-status.php:71 reports/companies-by-industry.php:76
+#: reports/opportunities-quantity-by-opportunity-status.php:75
+#: reports/opportunities-size-by-opportunity-status.php:75
+msgid "Change Graph"
+msgstr "Muuta kaavio"
+
+#: admin/users/change-password.php:30 admin/users/change-password.php:42
+#: admin/users/one.php:125 admin/users/self.php:92
+msgid "Change Password"
+msgstr "Vaihda salasana"
+
+#: include/utils-interface.php:82
+msgid "Changes saved."
+msgstr "Muutokset talletettu."
+
+#: locale/datastrings.php:21
+msgid "Chemicals"
+msgstr "Teknokemia"
+
+#: companies/addresses.php:151 companies/advanced-search.php:249
+#: companies/edit-address.php:85 companies/new.php:213 companies/some.php:103
+#: companies/some.php:113 companies/some.php:255 contacts/edit-address.php:202
+#: reports/companies-list.php:112 reports/companies-list.php:186
+#: reports/company-contacts-printout.php:126
+#: reports/company-contacts-printout.php:136
+msgid "City"
+msgstr "Kaupunki"
+
+#: activities/some.php:618 campaigns/some.php:216 cases/some.php:273
+#: companies/advanced-search.php:271 companies/some.php:284
+#: contacts/some.php:258 files/some.php:305 opportunities/some.php:234
+msgid "Clear Search"
+msgstr "Tyhjennä haku"
+
+#: admin/account-statuses/one.php:88 admin/activity-templates/edit.php:109
+#: admin/activity-types/one.php:90 admin/campaign-statuses/one.php:95
+#: admin/campaign-types/one.php:82 admin/case-priorities/one.php:89
+#: admin/case-statuses/one.php:217 admin/case-types/one.php:84
+#: admin/categories/one.php:123 admin/company-sources/one.php:91
+#: admin/company-types/one.php:81 admin/crm-statuses/one.php:82
+#: admin/industries/one.php:81 admin/opportunity-statuses/one.php:218
+#: admin/ratings/one.php:81 admin/relationship-types/one.php:99
+#: admin/roles/one.php:84 admin/users/one.php:139
+msgid "Click the button below to permanently remove this item."
+msgstr "Paina nappia alla poistaaksesi tämän kohdan pysyvästi."
+
+#: companies/admin.php:115
+msgid ""
+"Click the button below to remove this company (and all associated contacts, "
+"activities, opportunities, cases, etc.) from the system."
+msgstr ""
+"Paina nappia alla poistaaksesi tämän yrityksen (kaikkine liitettyine \n"
+"kontakteineen, toimenpiteineen, mahdollisuuksineen, tehtävineen, \n"
+"jne.) järjestelmästä."
+
+#: companies/one.php:686 plugins/phone/companies_one.php:635
+msgid "Clone"
+msgstr "Kopioi"
+
+#: opportunities/edit.php:210 opportunities/new.php:134
+#: opportunities/some.php:257 opportunities/some.php:305
+msgid "Close Date"
+msgstr "Päättymispäivä"
+
+#: activities/activities-pager-functions.php:26
+#: admin/campaign-statuses/one.php:76 admin/campaign-statuses/some.php:87
+#: locale/datastrings.php:22
+msgid "Closed"
+msgstr "Lopetettu"
+
+#: admin/opportunity-statuses/one.php:155
+#: admin/opportunity-statuses/some.php:139 locale/datastrings.php:23
+msgid "Closed/Lost"
+msgstr "Lopetettu/häviö"
+
+#: admin/case-statuses/one.php:154
+#, fuzzy
+msgid "Closed/Resolved"
+msgstr "Lopetettu/voitto"
+
+#: admin/case-statuses/one.php:155
+msgid "Closed/Unresolved"
+msgstr ""
+
+#: admin/opportunity-statuses/one.php:154
+#: admin/opportunity-statuses/some.php:138 locale/datastrings.php:24
+msgid "Closed/Won"
+msgstr "Lopetettu/voitto"
+
+#: opportunities/one.php:332
+msgid "Closes"
+msgstr "Lopetetut"
+
+#: companies/one.php:504 contacts/some.php:233 contacts/some.php:279
+#: plugins/phone/companies_one.php:488 reports/companies-list.php:182
+msgid "Code"
+msgstr "Koodi"
+
+#: locale/datastrings.php:25
+msgid "Communications"
+msgstr "Tietoliikenne"
+
+#: companies/advanced-search.php:130 files/some.php:285 include/strings.php:31
+#: include/utils-interface.php:281
+msgid "Companies"
+msgstr "Yritykset"
+
+#: reports/companies-by-company-source.php:159
+#: reports/companies-by-crm-status.php:154
+#: reports/companies-by-industry.php:159
+#, fuzzy
+msgid "Companies "
+msgstr "Yritykset"
+
+#: reports/companies-list.php:67
+msgid "Companies List"
+msgstr "Yrityslista"
+
+#: reports/companies-by-crm-status.php:30
+#: reports/companies-by-crm-status.php:54 reports/index.php:46
+msgid "Companies by CRM Status"
+msgstr "Yritykset CRM-arvon mukaan"
+
+#: reports/companies-by-industry.php:30 reports/companies-by-industry.php:55
+#: reports/index.php:50
+msgid "Companies by Industry"
+msgstr "Yritykset toimialan mukaan"
+
+#: reports/companies-by-company-source.php:41
+#: reports/companies-by-company-source.php:52 reports/index.php:54
+msgid "Companies by Source"
+msgstr "Yritykset tietolähteittäin"
+
+#: activities/associate-activities.php:33 activities/one.php:326
+#: activities/some.php:460 activities/some.php:638 cases/edit.php:205
+#: cases/export.php:34 cases/one.php:338 cases/some.php:65 cases/some.php:253
+#: cases/some.php:298 companies/addresses.php:135 companies/divisions.php:74
+#: companies/edit-address.php:69 companies/edit-division.php:72
+#: companies/former-names.php:81 companies/relationships.php:115
+#: contacts/edit.php:130 contacts/one.php:405 contacts/some.php:215
+#: contacts/some.php:278 contacts/some.php:328 email/email-3.php:85
+#: files/some.php:325 opportunities/edit.php:162 opportunities/one.php:372
+#: opportunities/some.php:217 opportunities/some.php:252
+#: opportunities/some.php:303 plugins/phone/contacts_one.php:419
+#: private/home.php:263 private/home.php:297 private/home.php:304
+#: private/home.php:311 private/home.php:323 private/home.php:330
+#: private/home.php:481 reports/activitytimes.php:77
+#: reports/company-contacts-printout.php:94
+#: reports/company-contacts-printout.php:288 reports/completed-items.php:199
+#: reports/completed-items.php:291 reports/index.php:43
+#: reports/open-items.php:187 reports/open-items.php:328
+#: reports/overdue-items.php:202 reports/overdue-items.php:297
+#: reports/overdue-items.php:345
+msgid "Company"
+msgstr "Yritys"
+
+#: include/utils-interface.php:44
+msgid "Company Added."
+msgstr "Yritys lisätty."
+
+#: reports/company-contacts-printout.php:214
+msgid "Company Category"
+msgstr "Yrityksen luokka"
+
+#: reports/company-contacts-printout.php:215
+msgid "Company City"
+msgstr "Yrityksen kaupunki"
+
+#: companies/advanced-search.php:158 companies/edit.php:112
+#: companies/new.php:119 companies/some-advanced.php:135
+#: companies/some.php:299
+msgid "Company Code"
+msgstr "Yrityksen koodi"
+
+#: include/utils-interface.php:46
+msgid "Company Deleted."
+msgstr "Yritys poistettu."
+
+#: companies/one.php:459 companies/one.php:482
+#: plugins/phone/companies_one.php:441 plugins/phone/companies_one.php:468
+msgid "Company Details"
+msgstr "Yritys yksityiskohtaisesti"
+
+#: activities/some.php:474
+msgid "Company ID"
+msgstr "Yrityksen tunnus"
+
+#: companies/advanced-search.php:147 companies/new.php:108
+msgid "Company Information"
+msgstr "Yrityksen tiedot"
+
+# addr:80.186.188.174
+#: reports/index.php:96
+msgid "Company List"
+msgstr "Yrityslista"
+
+#: companies/advanced-search.php:150 companies/edit.php:104
+#: companies/new.php:111 companies/one.php:492 companies/some-advanced.php:134
+#: companies/some-advanced.php:420 companies/some.php:243
+#: companies/some.php:298 companies/some.php:357
+#: plugins/phone/companies_one.php:474 reports/companies-list.php:107
+#: reports/companies-list.php:183 reports/company-contacts-printout.php:212
+#: reports/company-contacts-printout.php:245
+msgid "Company Name"
+msgstr "Yrityksen nimi"
+
+#: companies/some-advanced.php:407 companies/some.php:344
+msgid "Company Options"
+msgstr "Yrityksen asetukset"
+
+#: reports/index.php:93
+msgid "Company Reports"
+msgstr "Yrityksen raportit"
+
+#: admin/import/import-companies.php:126 companies/advanced-search.php:166
+#: companies/edit.php:124 companies/new.php:127 companies/one.php:615
+#: plugins/phone/companies_one.php:584
+msgid "Company Source"
+msgstr "Yrityksen tietojen lähde"
+
+#: admin/company-sources/one.php:43
+msgid "Company Source Details"
+msgstr "Yrityksen tietojen lähde yksityiskohtaisesti"
+
+#: admin/index.php:173 admin/company-sources/some.php:49
+msgid "Company Sources"
+msgstr "Yritysten tietojen lähteet"
+
+#: reports/company-contacts-printout.php:216
+msgid "Company State"
+msgstr "Yrityksen tila"
+
+#: admin/company-types/one.php:37
+msgid "Company Type Details"
+msgstr "Yrityksen tyyppi yksityiskohtaisesti"
+
+#: admin/index.php:168 admin/company-types/some.php:44
+msgid "Company Types"
+msgstr "Yritystyypit"
+
+#: reports/company-contacts-printout.php:213
+msgid "Company User"
+msgstr "Yrityksen käyttäjä"
+
+#: locale/datastrings.php:26
+msgid "Competitor"
+msgstr "Kilpailija"
+
+#: locale/datastrings.php:27
+msgid "Competitors"
+msgstr "Kilpailijat"
+
+#: activities/some.php:495 activities/some.php:522
+msgid "Completed"
+msgstr "Valmis"
+
+#: reports/completed-items.php:44 reports/index.php:121
+msgid "Completed Items"
+msgstr "Valmiit asiat"
+
+#: activities/one.php:434
+msgid "Completed?"
+msgstr "Valmis?"
+
+#: locale/datastrings.php:28
+msgid "Computers"
+msgstr "Tietokoneet"
+
+#: admin/plugin/plugin-admin.php:292
+msgid "Config file can't be opened. Please check vars.php."
+msgstr "Asetustiedostoa ei voi avata. Tarkista vars.php."
+
+#: admin/plugin/plugin-admin.php:286
+msgid "Config written successfully."
+msgstr "Asetusten tallentaminen onnistui."
+
+#: admin/users/change-password.php:49
+msgid "Confirm New Password"
+msgstr "Varmista uusi salasana"
+
+#: email/email-3.php:70 email/email-3.php:81
+msgid "Confirm Recipients"
+msgstr "Varmista vastaanottajat"
+
+#: reports/audit-items.php:59
+msgid "Connection Details"
+msgstr "Yhteyden yksityiskohdat"
+
+#: locale/datastrings.php:29
+msgid "Construction"
+msgstr "Rakennus"
+
+#: locale/datastrings.php:30
+msgid "Consulting"
+msgstr "Konsultointi"
+
+#: activities/one.php:332 activities/some.php:459 activities/some.php:634
+#: admin/users/one.php:89 cases/edit.php:213 cases/new.php:138
+#: cases/one.php:138 cases/one.php:322 cases/one.php:396 companies/one.php:250
+#: companies/one.php:741 contacts/edit-address.php:186 contacts/some.php:327
+#: email/email-3.php:87 files/some.php:321 opportunities/edit.php:170
+#: opportunities/new.php:95 opportunities/one.php:178
+#: opportunities/one.php:354 opportunities/one.php:434
+#: plugins/phone/companies_one.php:648 plugins/phone/companies_one.php:693
+#: private/home.php:482 reports/activitytimes.php:78
+#: reports/completed-items.php:200 reports/completed-items.php:292
+#: reports/open-items.php:188 reports/open-items.php:329
+#: reports/overdue-items.php:203 reports/overdue-items.php:298
+#: reports/overdue-items.php:346
+msgid "Contact"
+msgstr "Yhteystieto"
+
+#: include/utils-interface.php:48
+msgid "Contact Added."
+msgstr "Yhteystieto lisätty"
+
+#: reports/company-contacts-printout.php:182
+msgid "Contact Call List"
+msgstr "Yhteyshenkilön soittolista"
+
+#: include/utils-interface.php:50
+msgid "Contact Deleted."
+msgstr "Yhteystieto poistettu."
+
+#: contacts/one.php:279 contacts/one.php:306
+#: plugins/phone/contacts_one.php:287 plugins/phone/contacts_one.php:314
+msgid "Contact Details"
+msgstr "Yhteystieto yksityiskohtaisesti"
+
+#: activities/some.php:473
+msgid "Contact ID"
+msgstr "Yhteystiedon tunnus"
+
+#: companies/new.php:239 contacts/edit.php:127 contacts/new.php:123
+#: contacts/sidebar.php:101
+msgid "Contact Information"
+msgstr "Yhteyshenkilön tiedot"
+
+#: companies/one.php:337 companies/some-advanced.php:141
+#: companies/some-advanced.php:308 contacts/some.php:193 files/some.php:283
+#: include/strings.php:30 include/utils-interface.php:282
+#: plugins/phone/companies_one.php:648
+#: reports/company-contacts-printout.php:246
+msgid "Contacts"
+msgstr "Kontaktit"
+
+#: reports/index.php:100
+msgid "Contacts at Companies"
+msgstr "Kontaktit yrityksissä"
+
+#: reports/company-contacts-printout.php:242
+msgid "Contacts for Companies"
+msgstr "Kontaktit yrityksille"
+
+#: files/some.php:284
+msgid "Contacts of Companies"
+msgstr "Yritysten kontaktit"
+
+#: email/email-2.php:96 email/email-3.php:92 email/email.php:132
+#: email/index.php:79
+msgid "Continue"
+msgstr "Jatka"
+
+#: campaigns/edit.php:108 campaigns/new.php:100 campaigns/one.php:110
+msgid "Cost"
+msgstr "Hinta"
+
+#: admin/country-address-format/edit.php:43
+#: admin/country-address-format/index.php:43 companies/addresses.php:163
+#: companies/advanced-search.php:261 companies/edit-address.php:97
+#: companies/new.php:225 contacts/edit-address.php:214
+#: reports/companies-list.php:114 reports/companies-list.php:187
+msgid "Country"
+msgstr "Maa"
+
+#: admin/index.php:131 admin/country-address-format/index.php:32
+msgid "Country Localization Formats"
+msgstr "Maakohtaiset muodot"
+
+#: contacts/some.php:268
+msgid "Create Contact for 'Self'"
+msgstr "Luo kontakti itsellesi"
+
+#: contacts/edit-address.php:170
+msgid "Create New Address?"
+msgstr "Luo uusi osoite?"
+
+#: contacts/edit-address.php:177
+msgid "Create a New Address?"
+msgstr "Luo uusi osoite?"
+
+#: campaigns/one.php:126 cases/one.php:308 companies/one.php:665
+#: contacts/one.php:469 opportunities/one.php:340
+#: plugins/phone/companies_one.php:542 plugins/phone/contacts_one.php:479
+msgid "Created"
+msgstr "Luotu"
+
+#: companies/admin.php:82 companies/one.php:591
+#: plugins/phone/companies_one.php:566
+msgid "Credit Limit"
+msgstr "Luottoraja"
+
+#: locale/datastrings.php:31
+msgid "Critical"
+msgstr "Kriittinen"
+
+#: activities/some.php:334
+msgid "Current User"
+msgstr "Tämänhetkinen käyttäjä"
+
+#: reports/index.php:141
+msgid "Custom Reports"
+msgstr "Mukautetut raportit"
+
+#: locale/datastrings.php:32
+msgid "Customer"
+msgstr "Asiakas"
+
+#: companies/admin.php:94
+msgid "Customer Key"
+msgstr "Asiakasavain"
+
+#: locale/datastrings.php:33
+msgid "Customers"
+msgstr "Asiakkaat"
+
+#: email/email-4.php:100
+msgid "DO NOT RELOAD THIS PAGE! If you do, your message will be sent again."
+msgstr "ÄLÄ PÄIVITÄ TÄTÄ SIVUA! Päivittämällä viestisi lähetetään uudelleen."
+
+#: admin/index.php:56
+msgid "Data Cleanup"
+msgstr "Tietojen siistiminen"
+
+#: admin/data_clean.php:353
+msgid "Database Cleanup Complete"
+msgstr "Tietokannan siivous valmis"
+
+#: admin/index.php:53
+msgid "Database Structure Update"
+msgstr "Tietokannan rakenteen päivitys"
+
+#: companies/relationships.php:116 files/new.php:86 files/sidebar.php:32
+#: files/some.php:294 files/some.php:327 files/some.php:356
+#: notes/sidebar.php:25 private/home.php:264
+msgid "Date"
+msgstr "Päivämäärä"
+
+#: contacts/edit.php:164 contacts/new.php:156 contacts/one.php:337
+#: plugins/phone/contacts_one.php:351
+msgid "Date of Birth"
+msgstr "Syntymäaika"
+
+#: locale/datastrings.php:34
+msgid "Default GST Offset"
+msgstr "Oletusarvoinen GST-siirros"
+
+#: admin/activity-templates/edit.php:80
+msgid "Default Text"
+msgstr "Oletusteksti"
+
+#: locale/datastrings.php:35
+#, fuzzy
+msgid "Default timezone offset"
+msgstr "Oletusarvoinen GST-siirros"
+
+#: activities/some.php:424 admin/account-statuses/one.php:94
+#: admin/activity-templates/edit.php:114 admin/activity-types/one.php:94
+#: admin/campaign-statuses/one.php:97 admin/campaign-types/one.php:84
+#: admin/case-priorities/one.php:91 admin/case-statuses/one.php:219
+#: admin/case-types/one.php:86 admin/categories/one.php:125
+#: admin/company-sources/one.php:93 admin/company-types/one.php:83
+#: admin/country-address-format/edit.php:58 admin/crm-statuses/one.php:84
+#: admin/industries/one.php:83 admin/opportunity-statuses/one.php:220
+#: admin/ratings/one.php:83 admin/relationship-types/one.php:102
+#: admin/roles/one.php:86 admin/users/one.php:141 cases/edit.php:253
+#: contacts/edit.php:242 notes/edit.php:41 opportunities/edit.php:227
+#: plugins/info/one.php:171
+msgid "Delete"
+msgstr "Poista"
+
+#: admin/account-statuses/one.php:83
+msgid "Delete Account Status"
+msgstr "Poista tilin tila"
+
+#: admin/account-statuses/one.php:80
+msgid "Delete Account Status?"
+msgstr "Poista tilin tila?"
+
+#: admin/activity-templates/edit.php:105
+msgid "Delete Activity Template"
+msgstr "Poista toimenpidepohja"
+
+#: admin/activity-templates/edit.php:99
+msgid "Delete Activity Template?"
+msgstr "Poista toimenpidepohja?"
+
+#: admin/activity-types/one.php:86
+msgid "Delete Activity Type"
+msgstr "Poista toimenpidetyyppi"
+
+#: admin/activity-types/one.php:82
+msgid "Delete Activity Type?"
+msgstr "Poista toimenpidetyyppi?"
+
+#: companies/edit-address.php:110 contacts/edit-address.php:226
+msgid "Delete Address"
+msgstr "Poista osoite"
+
+#: companies/edit-address.php:109 contacts/edit-address.php:225
+msgid "Delete Address?"
+msgstr "Poista osoite?"
+
+#: admin/crm-statuses/one.php:78
+msgid "Delete CRM Status"
+msgstr "Poista CRM-arvo"
+
+#: admin/crm-statuses/one.php:74
+msgid "Delete CRM Status?"
+msgstr "Poista CRM-arvo?"
+
+#: admin/campaign-statuses/one.php:91
+msgid "Delete Campaign Status"
+msgstr "Poista kampanjan tila"
+
+#: admin/campaign-statuses/one.php:87
+msgid "Delete Campaign Status?"
+msgstr "Poista kampanjan tila?"
+
+#: admin/campaign-types/one.php:78
+msgid "Delete Campaign Type"
+msgstr "Poista kampanjan tyyppi"
+
+#: admin/campaign-types/one.php:74
+msgid "Delete Campaign Type?"
+msgstr "Poista kampanjan tyyppi?"
+
+#: campaigns/edit.php:118
+msgid "Delete Campaign?"
+msgstr "Poista kampanja?"
+
+#: admin/case-statuses/one.php:213
+msgid "Delete Case Status"
+msgstr "Poista tehtävän tila"
+
+#: admin/case-statuses/one.php:209
+msgid "Delete Case Status?"
+msgstr "Poista tehtävän tila?"
+
+#: admin/case-types/one.php:80
+msgid "Delete Case Type"
+msgstr "Poista tehtävän tyyppi"
+
+#: admin/case-types/one.php:76
+msgid "Delete Case Type?"
+msgstr "Poista tehtävän tyyppi?"
+
+#: cases/edit.php:252
+msgid "Delete Case?"
+msgstr "Poista tehtävä?"
+
+#: admin/categories/one.php:119
+msgid "Delete Category"
+msgstr "Poista luokka"
+
+#: admin/categories/one.php:115
+msgid "Delete Category?"
+msgstr "Poista luokka?"
+
+#: companies/admin.php:111 companies/admin.php:116
+msgid "Delete Company"
+msgstr "Poista yritys"
+
+#: admin/company-sources/one.php:87
+msgid "Delete Company Source"
+msgstr "Poista yritystietolähde"
+
+#: admin/company-sources/one.php:83
+msgid "Delete Company Source?"
+msgstr "Poista yritystietolähde?"
+
+#: admin/company-types/one.php:77
+msgid "Delete Company Type"
+msgstr "Poista yritystyyppi"
+
+#: admin/company-types/one.php:73
+msgid "Delete Company Type?"
+msgstr "Poista yritystyyppi?"
+
+#: companies/admin.php:107
+msgid "Delete Company?"
+msgstr "Poista yritys?"
+
+#: contacts/edit.php:241
+msgid "Delete Contact?"
+msgstr "Poista kontakti?"
+
+#: admin/industries/one.php:77
+msgid "Delete Industry"
+msgstr "Poista toimiala"
+
+#: admin/industries/one.php:73
+msgid "Delete Industry?"
+msgstr "Poista toimiala?"
+
+#: admin/opportunity-statuses/one.php:214
+msgid "Delete Opportunity Status"
+msgstr "Poista mahdollisuuden tila"
+
+#: admin/opportunity-statuses/one.php:210
+msgid "Delete Opportunity Status?"
+msgstr "Poista mahdollisuuden tila?"
+
+#: opportunities/edit.php:226
+msgid "Delete Opportunity?"
+msgstr "Poista mahdollisuus?"
+
+#: admin/case-priorities/one.php:85
+msgid "Delete Priority Type"
+msgstr "Poista tärkeystyyppi"
+
+#: admin/case-priorities/one.php:81
+msgid "Delete Priority Type?"
+msgstr "Poista tärkeystyyppi?"
+
+#: admin/ratings/one.php:77
+msgid "Delete Rating"
+msgstr "Poista luokitus"
+
+#: admin/ratings/one.php:73
+msgid "Delete Rating?"
+msgstr "Poista luokitus?"
+
+#: admin/relationship-types/one.php:91
+msgid "Delete Relationship Type?"
+msgstr "Poista keskinäisen suhteen tyyppi?"
+
+#: admin/relationship-types/one.php:95 admin/roles/one.php:80
+msgid "Delete Role"
+msgstr "Poista rooli"
+
+#: admin/roles/one.php:76
+msgid "Delete Role?"
+msgstr "Poista rooli?"
+
+#: admin/users/one.php:135
+msgid "Delete User"
+msgstr "Poista käyttäjä"
+
+#: admin/users/one.php:131
+msgid "Delete User?"
+msgstr "Poista käyttäjä?"
+
+#: include/utils-interface.php:76
+msgid "Deleted"
+msgstr "Poistettu"
+
+#: admin/activity-templates/edit.php:76 admin/case-statuses/some.php:119
+#: admin/case-statuses/some.php:173 admin/opportunity-statuses/some.php:96
+#: admin/opportunity-statuses/some.php:130 campaigns/edit.php:112
+#: campaigns/new.php:104 cases/case-status-view.php:49 cases/edit.php:246
+#: cases/new.php:168 companies/divisions.php:102
+#: companies/edit-division.php:84 companies/one.php:296 contacts/edit.php:176
+#: contacts/new.php:168 contacts/one.php:333 contacts/some.php:234
+#: contacts/some.php:281 files/new.php:82 files/one.php:81 files/some.php:319
+#: opportunities/edit.php:218 opportunities/new.php:141
+#: opportunities/opportunity-view.php:49 plugins/phone/contacts_one.php:345
+#: private/home.php:261
+msgid "Description"
+msgstr "Kuvaus"
+
+#: plugins/info/one.php:148
+msgid "Details"
+msgstr "Yksityiskohdat"
+
+#: locale/datastrings.php:36
+msgid "Developed"
+msgstr "Kehitetty"
+
+#: plugins/cti/setup.php:30
+msgid "Dial"
+msgstr ""
+
+#: plugins/cti/asteriskdial.php:77
+msgid "Dialing Phone Number: "
+msgstr ""
+
+#: admin/index.php:50
+msgid "Digital Dashboard"
+msgstr "Digitaalinen kojelauta"
+
+#: locale/datastrings.php:37
+msgid "Direct Mail"
+msgstr "Suora posti"
+
+#: locale/datastrings.php:38
+msgid "Discussion"
+msgstr "Keskustelu"
+
+#: admin/account-statuses/one.php:70 admin/account-statuses/some.php:78
+#: admin/activity-types/one.php:69 admin/activity-types/some.php:86
+#: admin/campaign-statuses/one.php:68 admin/campaign-statuses/some.php:78
+#: admin/campaign-types/one.php:65 admin/campaign-types/some.php:76
+#: admin/case-priorities/one.php:68 admin/case-priorities/some.php:78
+#: admin/case-statuses/one.php:142 admin/case-statuses/some.php:165
+#: admin/case-types/one.php:67 admin/case-types/some.php:76
+#: admin/categories/one.php:106 admin/categories/some.php:77
+#: admin/company-sources/one.php:70 admin/company-sources/some.php:80
+#: admin/company-types/one.php:64 admin/company-types/some.php:75
+#: admin/crm-statuses/one.php:65 admin/crm-statuses/some.php:81
+#: admin/industries/one.php:64 admin/industries/some.php:75
+#: admin/opportunity-statuses/one.php:142
+#: admin/opportunity-statuses/some.php:126 admin/ratings/one.php:64
+#: admin/ratings/some.php:79 admin/roles/one.php:67 admin/roles/some.php:78
+msgid "Display HTML"
+msgstr "Näytä HTML"
+
+#: locale/datastrings.php:39
+msgid "Distribution"
+msgstr "Tukkukauppa"
+
+#: cases/edit.php:209 cases/new.php:134 cases/one.php:342
+#: contacts/edit.php:134 contacts/new.php:126 contacts/one.php:409
+#: opportunities/edit.php:166 opportunities/new.php:91
+#: opportunities/one.php:376 plugins/phone/contacts_one.php:425
+msgid "Division"
+msgstr "Jaos"
+
+#: include/utils-interface.php:86
+#, fuzzy
+msgid "Division Added."
+msgstr "Jaoksen nimi"
+
+#: companies/divisions.php:86
+msgid "Division Description"
+msgstr "Jaoksen kuvaus"
+
+#: companies/divisions.php:78 companies/edit-division.php:76
+msgid "Division Name"
+msgstr "Jaoksen nimi"
+
+#: companies/divisions.php:59 companies/divisions.php:98 companies/one.php:692
+#: plugins/phone/companies_one.php:640
+msgid "Divisions"
+msgstr "Jaokset"
+
+#: private/home.php:500
+msgid "Documentation"
+msgstr "Dokumentaatio"
+
+#: plugins/phone/companies_one.php:707 plugins/phone/contacts_one.php:530
+msgid "Done"
+msgstr "Tehty"
+
+#: include/utils-interface.php:336
+msgid "Dr."
+msgstr "Tri."
+
+#: activities/some.php:637 cases/sidebar.php:32 cases/some.php:66
+#: cases/some.php:300 opportunities/sidebar.php:30 private/home.php:485
+#: reports/open-items.php:327 reports/overdue-items.php:344
+msgid "Due"
+msgstr "Päivä"
+
+#: cases/edit.php:239
+msgid "Due At"
+msgstr "Oltava valmis:"
+
+#: cases/edit.php:236 cases/new.php:161
+msgid "Due By"
+msgstr "Tehtävä mennessä:"
+
+#: cases/export.php:39
+#, fuzzy
+msgid "Due Date"
+msgstr "Oltava valmis:"
+
+#: admin/activity-templates/edit.php:68 admin/case-statuses/one.php:177
+#: admin/opportunity-statuses/one.php:178 reports/activitytimes.php:75
+msgid "Duration"
+msgstr "Kesto"
+
+#: admin/users/one.php:108 admin/users/self.php:76 admin/users/some.php:67
+#: admin/users/some.php:105 cases/one.php:330 companies/new.php:250
+#: companies/one.php:298 contacts/edit.php:180 contacts/new.php:172
+#: contacts/one.php:341 email/email-3.php:88 locale/datastrings.php:40
+#: opportunities/one.php:362 plugins/phone/contacts_one.php:357
+msgid "E-Mail"
+msgstr "Sähköposti"
+
+#: email/email.php:124 email/index.php:71 email/templates.php:53
+#: email/templates.php:63
+msgid "E-Mail Templates"
+msgstr "Sähköpostipohjat"
+
+#: admin/country-address-format/index.php:63 plugins/info/one.php:169
+#: plugins/phone/companies_one.php:633 plugins/phone/contacts_one.php:498
+#: relationships/sidebar.php:166
+msgid "Edit"
+msgstr "Muokkaa"
+
+#: companies/admin.php:71
+msgid "Edit Account Information"
+msgstr "Muokkaa tilin tietoja"
+
+#: admin/account-statuses/one.php:53
+msgid "Edit Account Status Information"
+msgstr "Muokkaa tilin tilatietoja"
+
+#: admin/activity-templates/edit.php:61
+msgid "Edit Activity Template Information"
+msgstr "Muokkaa tehtäväpohjan tietoja"
+
+#: admin/activity-types/one.php:54
+msgid "Edit Activity Type Information"
+msgstr "Muokkaa tehtävätyypin tietoja"
+
+#: companies/edit-address.php:50 companies/edit-address.php:66
+#: contacts/edit-address.php:145 contacts/edit-address.php:183
+#: contacts/edit.php:248 contacts/new.php:228
+msgid "Edit Address"
+msgstr "Muokkaa osoitetta"
+
+#: admin/country-address-format/edit.php:30
+msgid "Edit Address Country Format"
+msgstr "Muokkaa maanmukaista osoitteen muotoa"
+
+#: relationships/edit.php:33
+msgid "Edit Association"
+msgstr "Muokkaa yhteyttä"
+
+#: campaigns/edit.php:61
+msgid "Edit Campaign"
+msgstr "Muokkaa kampanjaa"
+
+#: admin/campaign-statuses/one.php:53
+msgid "Edit Campaign Status Information"
+msgstr "Muokkaa kampanjan tilan tietoja"
+
+#: admin/campaign-types/one.php:50
+msgid "Edit Campaign Type Information"
+msgstr "Muokkaa kampanjan tyypin tietoja"
+
+#: cases/edit.php:168
+msgid "Edit Case #"
+msgstr "Muokkaa tehtävä numero"
+
+#: admin/case-statuses/one.php:127
+msgid "Edit Case Status Information"
+msgstr "Muokkaa tehtävän tilan tietoja"
+
+#: admin/case-types/one.php:52
+msgid "Edit Case Type Information"
+msgstr "Muokkaa tehtävän tyypin tietoja"
+
+#: admin/categories/one.php:91
+msgid "Edit Category Information"
+msgstr "Muokkaa luokan tietoja"
+
+#: admin/company-sources/one.php:55
+msgid "Edit Company Source Information"
+msgstr "Muokkaa yritystietolähteen tietoja"
+
+#: admin/company-types/one.php:49
+msgid "Edit Company Type Information"
+msgstr "Muokkaa yritystyypin tietoja"
+
+#: companies/edit-division.php:56 companies/edit-division.php:69
+msgid "Edit Division"
+msgstr "Muokkaa jaosta"
+
+#: companies/edit.php:181
+msgid "Edit Former Names"
+msgstr "Muokkaa entisiä nimiä"
+
+#: admin/industries/one.php:49
+msgid "Edit Industry Information"
+msgstr "Muokkaa toimialatietoa"
+
+#: email/email-2.php:45 email/email-2.php:72 email/one-template.php:44
+#: email/one-template.php:71
+msgid "Edit Message"
+msgstr "Muokkaa viestiä"
+
+#: notes/edit.php:36 notes/edit.php:42
+msgid "Edit Note"
+msgstr "Muokkaa muistiinpanoa"
+
+#: admin/opportunity-statuses/one.php:127
+msgid "Edit Opportunity Status Information"
+msgstr "Muokkaa tilaisuuden tilan tietoja"
+
+#: admin/case-priorities/one.php:53
+msgid "Edit Priority Type Information"
+msgstr "Muokkaa tärkeystyypin tietoja"
+
+#: companies/edit.php:89 companies/edit.php:101
+msgid "Edit Profile"
+msgstr "Muokkaa profiilia"
+
+#: admin/crm-statuses/one.php:50 admin/ratings/one.php:49
+msgid "Edit Rating Information"
+msgstr "Muokkaa luokitustietoa"
+
+#: admin/relationship-types/one.php:55 admin/roles/one.php:52
+msgid "Edit Role Information"
+msgstr "Muokkaa roolitietoa"
+
+#: admin/users/one.php:79 admin/users/self.php:61
+msgid "Edit User Information"
+msgstr "Muokkaa käyttäjätietoja"
+
+#: contacts/edit-address.php:175
+msgid ""
+"Editing/Deleting this record will change the address for all companies and "
+"contacts listed above."
+msgstr ""
+"Tämän tiedon muuttaminen muuttaa osoitteet kaikille\n"
+"yllälistatuille yrityksille ja kontakteille."
+
+#: locale/datastrings.php:41
+msgid "Education"
+msgstr "Koulutus"
+
+#: contacts/some.php:232
+msgid "Email"
+msgstr "Sähköposti"
+
+#: activities/one.php:430
+msgid "Email This To"
+msgstr "Lähetä tämä sähköpostina:"
+
+#: companies/advanced-search.php:194 companies/edit.php:148
+#: companies/new.php:155 companies/one.php:621
+#: plugins/phone/companies_one.php:590
+msgid "Employees"
+msgstr "Työntekijät"
+
+#: admin/users/one.php:120 admin/users/some.php:65 admin/users/some.php:117
+#, fuzzy
+msgid "Enabled"
+msgstr "Taulukko"
+
+#: reports/activitytimes.php:53 reports/activitytimes.php:74
+#: reports/audit-items.php:45 reports/completed-items.php:70
+#: reports/completed-items.php:197 reports/completed-items.php:248
+#: reports/open-items.php:185 reports/open-items.php:234
+#: reports/overdue-items.php:200 reports/overdue-items.php:251
+msgid "End"
+msgstr "Loppu"
+
+#: activities/one.php:423 campaigns/one.php:118 campaigns/some.php:231
+msgid "Ends"
+msgstr "Päättyy"
+
+#: campaigns/edit.php:101 campaigns/new.php:93
+msgid "Ends On"
+msgstr "Päättyy"
+
+#: activities/some.php:503
+msgid "Ends/Due"
+msgstr "Päättyy/valmis"
+
+#: admin/users/self.php:83 admin/users/some.php:110
+msgid "English"
+msgstr "Suomi"
+
+#: contacts/sidebar.php:177
+msgid "Enter Cell"
+msgstr ""
+
+#: contacts/sidebar.php:176
+msgid "Enter Cell Phone"
+msgstr "Anna matkapuhelinnumero"
+
+#: contacts/sidebar.php:155
+msgid "Enter Email Address"
+msgstr "Anna sähköpostiosoite"
+
+#: contacts/sidebar.php:186 contacts/sidebar.php:187
+msgid "Enter Home Phone"
+msgstr "Anna kotipuhelinnumero"
+
+#: admin/country-address-format/edit.php:65
+msgid "Enter New format"
+msgstr "Anna uusi muoto"
+
+#: contacts/sidebar.php:166 contacts/sidebar.php:167
+msgid "Enter Work Phone"
+msgstr "Anna työpuhelinnumero"
+
+#: reports/completed-items.php:289 reports/open-items.php:326
+#: reports/overdue-items.php:295 reports/overdue-items.php:343
+msgid "Entered"
+msgstr "Annettu"
+
+#: activities/one.php:119
+#, fuzzy
+msgid "Entered by"
+msgstr "Annettu"
+
+#: admin/country-address-format/edit.php:73
+msgid "Error. No Data."
+msgstr "Virhe. Tieto puuttuu."
+
+#: locale/datastrings.php:42
+msgid "Event"
+msgstr "Tapahtuma"
+
+#: reports/opportunities-quantity-by-opportunity-status.php:91
+#: reports/opportunities-size-by-opportunity-status.php:91
+msgid "Exclude Closed Opportunities"
+msgstr "Jätä pois suljetut mahdollisuudet"
+
+#: admin/crm-statuses/some.php:50
+msgid "Existing CRM Statuses"
+msgstr "Olemassaolevat CRM-arvot"
+
+#: activities/pager.php:49 activities/some.php:657 cases/one.php:154
+#: cases/pager.php:49 companies/pager.php:49 companies/some.php:321
+#: contacts/one.php:186 contacts/some.php:301 files/some.php:331
+#: opportunities/one.php:195 opportunities/some.php:276
+msgid "Export"
+msgstr "Vie"
+
+#: admin/index.php:109
+msgid "Export Companies with address and phone info"
+msgstr "Vie yritykset osoite- ja puhelintietoineen"
+
+#: admin/index.php:99
+msgid "Export Companies/Contacts"
+msgstr "Vie yritykset/kontaktit"
+
+#: admin/index.php:104
+msgid "Export Companies/Contacts as LDAP/LDIF"
+msgstr "Vie yritykset/kontaktit LDAP/LDIF-muodossa"
+
+#: admin/users/edit-2.php:42 admin/users/edit-2.php:44
+msgid "Failed to add user to group."
+msgstr ""
+
+#: admin/system-parameters/one.php:49 admin/system-parameters/one.php:55
+#: include/utils-misc.php:538 include/utils-misc.php:545
+msgid "Failure to get system parameter "
+msgstr "Järjestelmäparametrin nouto epäonnistui"
+
+#: locale/datastrings.php:43
+msgid "Fair"
+msgstr "Kohtalainen"
+
+#: locale/datastrings.php:44
+msgid "Fast"
+msgstr "Nopea"
+
+#: companies/advanced-search.php:186 companies/edit.php:140
+#: companies/new.php:147 companies/one.php:540 companies/sidebar.php:61
+#: contacts/edit.php:196 contacts/new.php:188 contacts/one.php:361
+#: plugins/phone/companies_one.php:524 plugins/phone/contacts_one.php:384
+msgid "Fax"
+msgstr "Faksi"
+
+#: locale/datastrings.php:45
+msgid "Feature Request"
+msgstr "Ominaisuustoivomus"
+
+#: locale/datastrings.php:46
+msgid "Feature Requests"
+msgstr "Ominaisuustoivomukset"
+
+#: contacts/edit.php:159 contacts/new.php:151 contacts/one.php:100
+#: plugins/phone/contacts_one.php:90
+msgid "Female"
+msgstr "Nainen"
+
+#: admin/import/import-companies.php:93
+msgid "Field Delimiter"
+msgstr "Kentänerotin"
+
+#: admin/import/import-companies.php:89
+msgid "File"
+msgstr "Tiedosto"
+
+#: files/some.php:273
+msgid "File Description"
+msgstr "Tiedoston kuvaus"
+
+#: files/one.php:51
+msgid "File Details"
+msgstr "Tiedoston yksityiskohdat"
+
+#: admin/import/import-companies.php:101
+msgid "File Format"
+msgstr "Tiedostomuoto"
+
+#: files/some.php:271 files/some.php:357 private/home.php:265
+msgid "File ID"
+msgstr "Tiedoston tunnus"
+
+#: files/new.php:71 files/one.php:66
+msgid "File Information"
+msgstr "Tiedoston tiedot"
+
+#: files/new.php:78 files/one.php:69 files/some.php:272
+msgid "File Name"
+msgstr "Tiedoston nimi"
+
+#: files/sidebar.php:26 files/some.php:256 include/utils-interface.php:286
+msgid "Files"
+msgstr "Tiedostot"
+
+#: locale/datastrings.php:47
+msgid "Finance"
+msgstr "Rahoitus"
+
+#: campaigns/categories.php:107 cases/categories.php:107
+#: companies/categories.php:111 contacts/categories.php:113
+#: locale/datastrings.php:48 opportunities/categories.php:107
+msgid "Finished"
+msgstr "Valmis"
+
+#: admin/users/one.php:100 admin/users/self.php:68 admin/users/some.php:93
+#: companies/new.php:242 contacts/edit.php:146 contacts/new.php:138
+#: contacts/some.php:213
+msgid "First Names"
+msgstr "Etunimet"
+
+#: activities/edit-2.php:472
+#, fuzzy
+msgid "Follow-up"
+msgstr "Aikataulun seuranta"
+
+#: reports/company-contacts-printout.php:231
+msgid "Format for Printer"
+msgstr "Muotoile tulostimelle"
+
+#: companies/addresses.php:113
+msgid "Formatted Address"
+msgstr "Muotoiltu osoite"
+
+#: admin/relationship-types/some.php:55
+msgid "Formatting"
+msgstr "Muotoilu"
+
+#: companies/former-names.php:89 companies/one.php:353
+#: plugins/phone/companies_one.php:267
+msgid "Former Name"
+msgstr "Entinen nimi"
+
+#: companies/former-names.php:65 companies/former-names.php:78
+#: companies/former-names.php:85
+msgid "Former Names"
+msgstr "Entiset nimet"
+
+#: email/email-2.php:75 email/one-template.php:74
+msgid "From"
+msgstr "Keneltä"
+
+#: admin/relationship-types/one.php:70 admin/relationship-types/some.php:83
+msgid "From Text"
+msgstr "Tekstistä"
+
+#: admin/relationship-types/one.php:62 admin/relationship-types/some.php:75
+msgid "From What Table"
+msgstr "Mistä taulukosta"
+
+#: admin/account-statuses/one.php:62 admin/account-statuses/some.php:70
+#: admin/activity-types/one.php:61 admin/activity-types/some.php:78
+#: admin/campaign-statuses/one.php:60 admin/campaign-statuses/some.php:70
+#: admin/campaign-types/one.php:57 admin/campaign-types/some.php:68
+#: admin/case-priorities/one.php:60 admin/case-priorities/some.php:70
+#: admin/case-statuses/one.php:134 admin/case-statuses/some.php:149
+#: admin/case-types/one.php:59 admin/case-types/some.php:68
+#: admin/categories/one.php:98 admin/categories/some.php:69
+#: admin/company-sources/one.php:62 admin/company-sources/some.php:72
+#: admin/company-types/one.php:56 admin/company-types/some.php:67
+#: admin/crm-statuses/one.php:57 admin/crm-statuses/some.php:73
+#: admin/industries/one.php:56 admin/industries/some.php:67
+#: admin/opportunity-statuses/one.php:134
+#: admin/opportunity-statuses/some.php:118 admin/ratings/one.php:56
+#: admin/ratings/some.php:71 admin/roles/one.php:59 admin/roles/some.php:70
+#: admin/users/some.php:66
+msgid "Full Name"
+msgstr "Koko nimi"
+
+#: admin/account-statuses/one.php:66 admin/activity-types/one.php:65
+#: admin/campaign-statuses/one.php:64 admin/campaign-types/one.php:61
+#: admin/case-priorities/one.php:64 admin/case-statuses/one.php:138
+#: admin/case-types/one.php:63 admin/categories/one.php:102
+#: admin/company-sources/one.php:66 admin/company-types/one.php:60
+#: admin/crm-statuses/one.php:61 admin/industries/one.php:60
+#: admin/opportunity-statuses/one.php:138 admin/ratings/one.php:60
+#: admin/roles/one.php:63
+msgid "Full Plural"
+msgstr "Koko nimi monikossa"
+
+#: admin/account-statuses/some.php:74 admin/activity-types/some.php:82
+#: admin/campaign-statuses/some.php:74 admin/campaign-types/some.php:72
+#: admin/case-priorities/some.php:74 admin/case-statuses/some.php:157
+#: admin/case-types/some.php:72 admin/categories/some.php:73
+#: admin/company-sources/some.php:76 admin/company-types/some.php:71
+#: admin/crm-statuses/some.php:77 admin/industries/some.php:71
+#: admin/opportunity-statuses/some.php:122 admin/ratings/some.php:75
+#: admin/roles/some.php:74
+msgid "Full Plural Name"
+msgstr "Koko nimi monikossa"
+
+#: admin/users/one.php:116 admin/users/self.php:86 admin/users/some.php:113
+msgid "GMT Offset"
+msgstr "Aikaero GMT:stä"
+
+#: contacts/edit.php:154 contacts/new.php:146 contacts/one.php:321
+#: plugins/phone/contacts_one.php:327
+msgid "Gender"
+msgstr "Sukupuoli"
+
+#: reports/activitytimes.php:62 reports/audit-items.php:61
+#: reports/companies-list.php:128 reports/completed-items.php:118
+#: reports/index.php:136 reports/open-items.php:102
+#: reports/overdue-items.php:117
+msgid "Go"
+msgstr "Mene"
+
+#: locale/datastrings.php:49
+msgid "Good"
+msgstr "Hyvä"
+
+#: locale/datastrings.php:50
+msgid "Government"
+msgstr "Hallinto"
+
+#: reports/index.php:40
+msgid "Graphs"
+msgstr "Kaaviot"
+
+#: activities/pager.php:12 cases/pager.php:12 companies/pager.php:12
+#: contacts/sidebar.php:71 files/sidebar.php:10
+#: include/categories-sidebar.php:10 include/utils-misc.php:16
+#: notes/sidebar.php:9 relationships/relationship_functions.php:5
+#: relationships/sidebar.php:5
+msgid "Hacking attempt"
+msgstr ""
+
+#: locale/datastrings.php:51
+msgid "Healthcare"
+msgstr "Terveydenhoito"
+
+#: locale/datastrings.php:52
+msgid "Help Item"
+msgstr "Ohjenimike"
+
+#: locale/datastrings.php:53
+msgid "Help Items"
+msgstr "Ohjenimikkeet"
+
+#: locale/datastrings.php:54
+msgid "High"
+msgstr "Korkea"
+
+#: locale/datastrings.php:55
+msgid "Hold"
+msgstr "Pidossa"
+
+#: include/utils-interface.php:278 private/home.php:465
+msgid "Home"
+msgstr "Koti"
+
+#: contacts/one.php:433
+#, fuzzy
+msgid "Home Address"
+msgstr "Lisää osoite"
+
+#: contacts/edit.php:192 contacts/new.php:184 contacts/one.php:353
+#: contacts/sidebar.php:181 plugins/phone/contacts_one.php:372
+msgid "Home Phone"
+msgstr "Kotipuhelin"
+
+#: reports/index.php:83
+msgid "How many cases are in each stage of the case resolution process?"
+msgstr "Montako tehtävää on kussakin tehtävienselvittelyprosessin vaiheessa?"
+
+#: reports/index.php:51
+msgid "How many companies are in each industry?"
+msgstr "Montako yritystä kullakin toimialalla?"
+
+#: reports/index.php:55
+msgid "How many of your accounts come from each source?"
+msgstr "Moniko tileistäsi tuli mistäkin lähteestä?"
+
+#: reports/index.php:64
+msgid "How many opportunities are in each stage of the sales closing process?"
+msgstr "Moniko mahdollisuuksista on kussakin myynninpäätösprosessin vaiheessa?"
+
+#: reports/index.php:72
+msgid "How many opportunities are tied to companies in each industry?"
+msgstr "Montako mahdollisuutta on sidottu yrityksiin kullakin toimialalla?"
+
+#: reports/index.php:68
+msgid ""
+"How much potential revenue is in each stage of the sales closing process?"
+msgstr ""
+"Paljonko mahdollista tuottoa on kussakin myynninpäätösprosessin vaiheessa?"
+
+#: reports/index.php:76
+msgid "How much potential revenue is tied to companies in each industry?"
+msgstr ""
+"Paljonko mahdollista tuottoa on sidottu yrityksiin kullakin toimialalla?"
+
+#: locale/datastrings.php:56
+msgid ""
+"How will activities behave.  Options are Fast or Long.  Fast will keep user "
+"within current screen while Long will move to the activites/one screen for "
+"detailed description entry."
+msgstr ""
+
+#: include/utils-misc.php:647
+msgid "I tried to execute:"
+msgstr "Yritin ajaa:"
+
+#: files/some.php:328
+msgid "ID"
+msgstr "Tunnus"
+
+#: plugins/idphoto/setup.php:28 plugins/idphoto/setup.php:33
+msgid "ID Photo"
+msgstr ""
+
+#: admin/import/import-companies.php:28 admin/import/import-companies.php:146
+msgid "Import"
+msgstr "Tuo"
+
+#: admin/import/import-companies.php:86
+msgid "Import Companies"
+msgstr "Tuo yritykset"
+
+#: admin/index.php:94
+msgid "Import Companies/Contacts"
+msgstr "Tuo yritykset/kontaktit"
+
+#: admin/index.php:90
+msgid "Import/Export"
+msgstr "Tuo / vie"
+
+#: locale/datastrings.php:57
+msgid "In Progress"
+msgstr "Käynnissä"
+
+#: admin/index.php:163 admin/industries/some.php:44
+msgid "Industries"
+msgstr "Toimialat"
+
+#: admin/import/import-companies.php:134 companies/advanced-search.php:170
+#: companies/edit.php:128 companies/new.php:131 companies/one.php:510
+#: companies/some-advanced.php:137 companies/some.php:252
+#: companies/some.php:301 plugins/phone/companies_one.php:494
+msgid "Industry"
+msgstr "Toimiala"
+
+#: admin/industries/one.php:37
+msgid "Industry Details"
+msgstr "Toimiala yksityiskohtaisesti"
+
+#: activities/one.php:398
+msgid "Insert Log"
+msgstr "Lisää loki"
+
+#: locale/datastrings.php:58
+msgid "Insurance"
+msgstr "Vakuutus"
+
+#: contacts/edit.php:212 contacts/new.php:204 contacts/one.php:365
+#: plugins/phone/contacts_one.php:390
+msgid "Interests"
+msgstr "Korot"
+
+#: locale/datastrings.php:59
+msgid "LDAP Version"
+msgstr ""
+
+#: admin/users/one.php:112 admin/users/self.php:82 admin/users/some.php:109
+msgid "Language"
+msgstr "Kieli"
+
+#: campaigns/one.php:130 cases/one.php:312 companies/one.php:669
+#: contacts/one.php:473 opportunities/one.php:344
+#: plugins/phone/companies_one.php:548 plugins/phone/contacts_one.php:485
+msgid "Last Modified"
+msgstr "Viimeksi muokattu"
+
+#: admin/users/one.php:96 admin/users/self.php:64 admin/users/some.php:89
+#: companies/new.php:246 contacts/edit.php:150 contacts/new.php:142
+#: contacts/some.php:212
+msgid "Last Name"
+msgstr "Sukunimi"
+
+#: locale/datastrings.php:60
+msgid "Lead"
+msgstr "Johto"
+
+#: locale/datastrings.php:61
+msgid "Leads"
+msgstr "Johtaa"
+
+#: locale/datastrings.php:62
+msgid "Legal"
+msgstr "Lakiasiat"
+
+#: companies/advanced-search.php:154 companies/edit.php:108
+#: companies/new.php:115 companies/one.php:497
+#: plugins/phone/companies_one.php:480
+msgid "Legal Name"
+msgstr "Virallinen nimi"
+
+#: reports/audit-items.php:94
+msgid "Line"
+msgstr "Rivi"
+
+#: companies/addresses.php:143 companies/advanced-search.php:241
+#: companies/edit-address.php:77 companies/new.php:205
+#: contacts/edit-address.php:194
+msgid "Line 1"
+msgstr "Rivi 1"
+
+#: companies/addresses.php:147 companies/advanced-search.php:245
+#: companies/edit-address.php:81 companies/new.php:209
+#: contacts/edit-address.php:198
+msgid "Line 2"
+msgstr "Rivi 2"
+
+#: admin/case-statuses/one.php:173
+msgid "Link Activity To Case Status"
+msgstr "Linkitä toimenpide tehtävän tilaan"
+
+#: admin/opportunity-statuses/one.php:174
+msgid "Link Activity To Opportunity Status"
+msgstr "Linkitä toimenpide mahdollisuuden tilaan"
+
+#: relationships/sidebar.php:106
+#, fuzzy
+msgid "Linked Relationships"
+msgstr "Keskinäiset suhteet"
+
+#: admin/activity-templates/some.php:64
+msgid "Linked Table"
+msgstr "Linkitetty taulukko"
+
+#: reports/index.php:109
+msgid ""
+"List Activiites by Start, End, and User (also shows Duration, Company and "
+"Contact)"
+msgstr ""
+"Listaa toiminnot alun, lopun ja käyttäjän mukaan.\n"
+"(Näyttää myös keston, yrityksen ja kontaktin.)"
+
+#: reports/index.php:126
+msgid "List Audit Items by Date and User"
+msgstr "Listaa tarkastettavat nimikkeet päivämäärän ja käyttäjän mukaan."
+
+#: reports/index.php:122
+msgid "List Completed Items by Date Range, User and Type"
+msgstr "Listaa valmiit asiat päiväyksen, käyttäjän ja tyypin mukaan"
+
+#: reports/index.php:118
+msgid "List Open Items by User and Type"
+msgstr "Listaa avoimet asiat käyttäjän ja tyypin mukaan"
+
+#: reports/index.php:114
+msgid "List Overdue Items by User and Type"
+msgstr "Listaa myöhästyneet asiat käyttäjän ja tyypin mukaan"
+
+#: reports/index.php:97
+msgid "List of companies, addresses and phone numbers"
+msgstr "Listaa yritykset, osoitteet ja puhelinnumerot"
+
+#: activities/one.php:405
+msgid "Local Time"
+msgstr "Paikallista aikaa"
+
+#: activities/some.php:528
+msgid "Local Time Between"
+msgstr "Paikallista aikaa välillä"
+
+#: include/utils-interface.php:270
+msgid "Logged in as"
+msgstr "Kirjautunut tunnuksella"
+
+#: include/utils-interface.php:271
+msgid "Logout"
+msgstr "Kirjaudu ulos"
+
+#: locale/datastrings.php:63
+#, fuzzy
+msgid "Long"
+msgstr "Kirjaudu ulos"
+
+#: admin/case-statuses/one.php:146 admin/opportunity-statuses/one.php:146
+msgid "Long Description"
+msgstr "Laaja kuvaus"
+
+#: locale/datastrings.php:64
+msgid "Low"
+msgstr "Matala"
+
+#: plugins/mrtg/setup.php:36
+msgid "MRTG"
+msgstr "MRTG"
+
+#: contacts/one.php:382 plugins/phone/contacts_one.php:404
+msgid "MSN IM"
+msgstr "MSN pikaviesti"
+
+#: contacts/edit.php:208 contacts/new.php:200
+msgid "MSN Name"
+msgstr "MSN nimi"
+
+#: locale/datastrings.php:65
+msgid "Magazine"
+msgstr "Aikakauslehti"
+
+#: locale/datastrings.php:66
+msgid "Mail"
+msgstr "Posti"
+
+#: activities/pager.php:50 activities/some.php:658 campaigns/some.php:249
+#: cases/one.php:155 cases/pager.php:50 companies/one.php:270
+#: companies/one.php:317 companies/pager.php:50 companies/some.php:322
+#: contacts/edit.php:238 contacts/one.php:187 contacts/some.php:302
+#: files/some.php:332 opportunities/one.php:196 opportunities/some.php:277
+#: plugins/phone/companies_one.php:636
+msgid "Mail Merge"
+msgstr ""
+
+#: contacts/edit.php:158 contacts/new.php:150 contacts/one.php:103
+#: plugins/phone/contacts_one.php:93
+msgid "Male"
+msgstr "Mies"
+
+#: admin/index.php:117 include/categories-sidebar.php:61
+#: plugins/phone/companies_one.php:729 plugins/phone/contacts_one.php:551
+msgid "Manage"
+msgstr "Järjestä"
+
+#: admin/account-statuses/some.php:37
+msgid "Manage Account Statuses"
+msgstr "Järjestä tilien tilat"
+
+#: admin/activity-templates/some.php:49
+msgid "Manage Activity Templates"
+msgstr "Järjestä toimenpidepohjat"
+
+#: admin/activity-types/some.php:44
+msgid "Manage Activity Types"
+msgstr "Järjestä toimenpidetyypit"
+
+#: admin/crm-statuses/some.php:40
+msgid "Manage CRM Statuses"
+msgstr "Järjestä CRM-arvot"
+
+#: admin/campaign-statuses/some.php:37
+msgid "Manage Campaign Statuses"
+msgstr "Järjestä kampanjan tilat"
+
+#: admin/campaign-types/some.php:35
+msgid "Manage Campaign Types"
+msgstr "Järjestä kampanjatyypit"
+
+#: admin/case-priorities/some.php:37
+msgid "Manage Case Priorities"
+msgstr "Järjestä tehtävän tärkeydet"
+
+#: admin/case-statuses/some.php:89
+msgid "Manage Case Statuses"
+msgstr "Järjestä tehtävän tilat"
+
+#: admin/case-types/some.php:35
+msgid "Manage Case Types"
+msgstr "Järjestä tehtävän tyypit"
+
+#: admin/categories/some.php:36 campaigns/categories.php:86
+#: campaigns/categories.php:96 cases/categories.php:86 cases/categories.php:96
+#: companies/categories.php:90 companies/categories.php:100
+#: contacts/categories.php:92 contacts/categories.php:102
+#: opportunities/categories.php:86 opportunities/categories.php:96
+msgid "Manage Categories"
+msgstr "Järjestä luokat"
+
+#: admin/company-sources/some.php:39
+msgid "Manage Company Sources"
+msgstr "Järjestä yritystietolähteet"
+
+#: admin/company-types/some.php:34
+msgid "Manage Company Types"
+msgstr "Järjestä yritystyypit"
+
+#: admin/industries/some.php:34
+msgid "Manage Industries"
+msgstr "Järjestä toimialat"
+
+#: admin/opportunity-statuses/some.php:81
+msgid "Manage Opportunity Statuses"
+msgstr "Järjestä tilaisuuksien tilat"
+
+#: admin/ratings/some.php:38
+msgid "Manage Ratings"
+msgstr "Järjestä luokitukset"
+
+#: admin/relationship-types/some.php:39
+msgid "Manage Relationship Types"
+msgstr "Järjestä keskinäisten suhteiden tyypit"
+
+#: admin/roles/some.php:37
+msgid "Manage Roles"
+msgstr "Järjestä roolit"
+
+#: admin/system-parameters/some.php:36
+msgid "Manage System Parameters"
+msgstr "Järjestä järjestelmän parametrit"
+
+#: admin/users/some.php:52
+msgid "Manage Users"
+msgstr "Järjestä käyttäjät"
+
+#: locale/datastrings.php:67
+msgid "Manufacturing"
+msgstr "Tuotanto "
+
+#: locale/datastrings.php:68
+msgid "Maximum RSS Feed Entries"
+msgstr ""
+
+#: locale/datastrings.php:69
+msgid "Maximum number of entries to include in any RSS feed."
+msgstr ""
+
+#: reports/index.php:130
+msgid "Measure performance of users over a selectable timeframe"
+msgstr "Mittaa käyttäjien tuottavuus (valinnaisella) ajanjaksolla."
+
+#: campaigns/some.php:200
+msgid "Media"
+msgstr "Media"
+
+#: locale/datastrings.php:70
+msgid "Medium"
+msgstr ""
+
+#: email/email-4.php:89
+msgid "Messages Sent"
+msgstr "Viestejä lähetetty"
+
+#: include/utils-interface.php:336
+msgid "Miss"
+msgstr "Neiti"
+
+#: plugins/dunfinder/dunfinder.php:61
+msgid "Monitor"
+msgstr ""
+
+#: relationships/new-relationship-2.php:160
+msgid "More Info"
+msgstr "Lisätietoja"
+
+#: admin/activity-types/some.php:58 admin/case-statuses/some.php:120
+#: admin/opportunity-statuses/some.php:97
+msgid "Move"
+msgstr "Siirrä"
+
+#: include/utils-interface.php:336
+msgid "Mr."
+msgstr "Herra"
+
+#: include/utils-interface.php:336
+msgid "Mrs."
+msgstr "Rouva"
+
+#: include/utils-interface.php:336
+msgid "Ms."
+msgstr "Neiti"
+
+#: plugins/mrtg/mrtg.php:19
+msgid "Multi Router Traffic Grapher"
+msgstr "Multi Router Traffic Grapher"
+
+#: activities/activities-pager-functions.php:40 locale/datastrings.php:71
+#: plugins/phone/contacts_one.php:160
+msgid "N/A"
+msgstr "Ei saatavilla"
+
+#: reports/completed-items.php:228
+msgid "NO COMPLETED ACTIVITIES for"
+msgstr "EI VALMIITA TOIMENPITEITÄ:"
+
+#: reports/completed-items.php:270
+msgid "NO COMPLETED CAMPAIGNS for"
+msgstr "EI VALMIITA KAMPANJOITA:"
+
+#: reports/completed-items.php:365
+msgid "NO COMPLETED CASES for"
+msgstr "EI VALMIITA TEHTÄVIÄ:"
+
+#: reports/completed-items.php:319
+msgid "NO COMPLETED OPPORTUNITIES for"
+msgstr "EI VALMIITA MAHDOLLISUUKSIA:"
+
+#: reports/open-items.php:216
+msgid "NO OPEN ACTIVITIES for"
+msgstr "EI VALMIITA TOIMENPITEITÄ:"
+
+#: reports/open-items.php:258
+msgid "NO OPEN CAMPAIGNS for"
+msgstr "EI AVOIMIA KAMPANJOITA:"
+
+#: reports/open-items.php:355
+msgid "NO OPEN CASES for"
+msgstr "EI AVOIMIA TEHTÄVIÄ:"
+
+#: reports/open-items.php:307
+msgid "NO OPEN OPPORTUNITIES for"
+msgstr "EI AVOIMIA MAHDOLLISUUKSIA:"
+
+#: reports/overdue-items.php:232
+msgid "NO OVERDUE ACTIVITIES for"
+msgstr "EI VANHENTUNEITA TOIMENPITEITÄ:"
+
+#: reports/overdue-items.php:274
+msgid "NO OVERDUE CAMPAIGNS for"
+msgstr "EI VANHENTUNEITA KAMPANJOITA:"
+
+#: reports/overdue-items.php:371
+msgid "NO OVERDUE CASES for"
+msgstr "EI VANHENTUNEITA TEHTÄVIÄ:"
+
+#: reports/overdue-items.php:323
+msgid "NO OVERDUE OPPORTUNITIES for"
+msgstr "EI VANHENTUNEITA MAHDOLLISUUKSIA:"
+
+#: admin/account-statuses/some.php:50 admin/activity-templates/some.php:62
+#: admin/activity-types/some.php:57 admin/campaign-statuses/some.php:50
+#: admin/case-priorities/some.php:50 admin/case-statuses/some.php:118
+#: admin/case-types/some.php:48 admin/categories/some.php:49
+#: admin/company-sources/some.php:52 admin/company-types/some.php:47
+#: admin/crm-statuses/some.php:53 admin/industries/some.php:47
+#: admin/opportunity-statuses/some.php:95 admin/ratings/some.php:51
+#: admin/relationship-types/some.php:52 admin/roles/some.php:50
+#: cases/case-status-view.php:48 cases/sidebar.php:29
+#: companies/divisions.php:101 companies/one.php:293 contacts/one.php:317
+#: contacts/some.php:277 email/templates.php:66 files/sidebar.php:29
+#: files/some.php:318 files/some.php:354 opportunities/opportunity-view.php:48
+#: opportunities/sidebar.php:27 plugins/info/edit-definitions-2.php:77
+#: plugins/phone/companies_one.php:651 plugins/phone/contacts_one.php:321
+#: private/home.php:260 private/home.php:295 private/home.php:302
+#: private/home.php:309 private/home.php:321 private/home.php:328
+#: relationships/edit.php:59 reports/audit-items.php:99
+msgid "Name"
+msgstr "Nimi"
+
+#: contacts/transfer.php:49
+msgid "Name or ID"
+msgstr "Nimi tai tunnus"
+
+#: locale/datastrings.php:72
+msgid "Negotiation"
+msgstr "Neuvottelu"
+
+#: admin/country-address-format/edit.php:69 locale/datastrings.php:73
+#: notes/sidebar.php:200 plugins/info/one.php:173 plugins/info/sidebar.php:178
+#: plugins/phone/companies_one.php:658
+msgid "New"
+msgstr "Lisää"
+
+#: contacts/one.php:503
+#, fuzzy
+msgid "New Activities"
+msgstr "Ei toimenpiteitä"
+
+#: companies/addresses.php:132
+msgid "New Address"
+msgstr "Lisää osoite"
+
+#: campaigns/new.php:49
+msgid "New Campaign"
+msgstr "Lisää kampanja"
+
+#: cases/new.php:100
+msgid "New Case"
+msgstr "Lisää tehtävä"
+
+#: companies/new.php:95 companies/some-advanced.php:410 companies/some.php:347
+msgid "New Company"
+msgstr "Lisää yritys"
+
+#: contacts/new.php:111
+msgid "New Contact for"
+msgstr "Lisää kontaktit yritykselle:"
+
+#: companies/divisions.php:71
+msgid "New Division"
+msgstr "Lisää jaos"
+
+#: opportunities/new.php:70
+msgid "New Opportunity"
+msgstr "Lisää tilaisuus"
+
+#: admin/users/change-password.php:45
+msgid "New Password"
+msgstr "Uusi salasana"
+
+#: relationships/sidebar.php:307
+#, fuzzy
+msgid "New Relationship"
+msgstr "Keskinäinen suhde"
+
+#: plugins/phone/companies_one.php:637
+msgid "News"
+msgstr "Uutisia"
+
+#: plugins/phone/companies_one.php:422
+msgid "No Activities"
+msgstr "Ei toimenpiteitä"
+
+#: reports/audit-items.php:172
+msgid "No Activity."
+msgstr "Ei aktiivisuutta"
+
+#: include/utils-interface.php:41
+msgid "No Case To Delete."
+msgstr "Ei poistettavaa tehtävää."
+
+#: contacts/sidebar.php:198
+msgid "No Contact Selected."
+msgstr "Yhteystietoa ei valittu."
+
+#: plugins/phone/companies_one.php:426
+msgid "No Contacts"
+msgstr "Ei kontakteja"
+
+#: activities/some.php:603
+msgid "No Saved Searches"
+msgstr "Ei tallennettuja hakuja"
+
+#: opportunities/one.php:268
+msgid "No activities"
+msgstr "Ei toimenpiteitä"
+
+#: plugins/phone/companies_one.php:438
+#, fuzzy
+msgid "No associated categories"
+msgstr "Ei luokkia"
+
+#: include/strings.php:33
+msgid "No attached companies"
+msgstr "Ei liitettyjä yrityksiä"
+
+#: include/strings.php:32
+msgid "No attached contacts"
+msgstr "Ei liitettyjä kontakteja"
+
+#: files/sidebar.php:92
+msgid "No attached files"
+msgstr "Ei liitettyjä tiedostoja"
+
+#: notes/sidebar.php:170
+msgid "No attached notes"
+msgstr "Ei liitettyjä muistiinpanoja"
+
+#: include/categories-sidebar.php:53 plugins/phone/contacts_one.php:284
+msgid "No categories"
+msgstr "Ei luokkia"
+
+#: contacts/transfer-2.php:66
+msgid "No companies found"
+msgstr "Yrityksiä ei löytynyt"
+
+#: email/email.php:107 email/index.php:56 email/templates.php:50
+msgid "No e-mail templates"
+msgstr "Ei sähköpostipohjia"
+
+#: admin/case-statuses/one.php:195 admin/opportunity-statuses/one.php:196
+msgid "No linked activities"
+msgstr "Ei linkitettyjä toimenpiteitä"
+
+#: include/adodb/tohtml.inc.php:150
+msgid "No matches"
+msgstr "Ei osumia"
+
+#: private/home.php:462
+msgid "No open activities"
+msgstr "Ei avoimia toimenpiteitä"
+
+#: cases/sidebar.php:64
+msgid "No open cases"
+msgstr "Ei avoimia tehtäviä"
+
+#: private/home.php:453
+msgid "No open files"
+msgstr "Ei avoimia tiedostoja"
+
+#: opportunities/sidebar.php:60
+msgid "No open opportunities"
+msgstr "Ei avoimia mahdollisuuksia"
+
+#: campaigns/some.php:131
+msgid "No recently viewed campaigns"
+msgstr "Ei äskettäin katsottuja kampanjoita"
+
+#: cases/some.php:174
+msgid "No recently viewed cases"
+msgstr "Ei äskettäin katsottuja tehtäviä"
+
+#: companies/some-advanced.php:343 companies/some.php:177
+msgid "No recently viewed companies"
+msgstr "Ei äskettäin katsottuja yrityksiä"
+
+#: contacts/some.php:170
+msgid "No recently viewed contacts"
+msgstr "Ei äskettäin katsottuja kontakteja"
+
+#: files/some.php:244
+msgid "No recently viewed file"
+msgstr "Ei äskettäin katsottuja tiedostoja"
+
+#: opportunities/some.php:154
+msgid "No recently viewed opportunities"
+msgstr "Ei äskettäin katsottuja mahdollisuuksia"
+
+#: admin/case-statuses/some.php:83
+msgid "No statuses defined for specified status type"
+msgstr ""
+
+#: private/home.php:257
+msgid "Non Uploaded Files"
+msgstr "Lataamattomia (lähettämättömiä) tiedostoja"
+
+#: activities/some.php:521
+msgid "Non-Completed"
+msgstr "Kesken"
+
+#: locale/datastrings.php:74
+msgid "Non-Profit"
+msgstr "Voittoa tavoittelematon"
+
+#: admin/categories/one.php:143 campaigns/categories.php:100
+#: cases/categories.php:100 companies/categories.php:104
+#: contacts/categories.php:106 opportunities/categories.php:100
+msgid "Not Associated With"
+msgstr "Ei liity"
+
+#: companies/pager.php:49
+msgid "Not Coded Yet"
+msgstr "Ei vielä koodattu"
+
+#: activities/some.php:336
+msgid "Not Set"
+msgstr "Ei asetettu"
+
+#: notes/edit.php:43 notes/new.php:44
+msgid "Note Body"
+msgstr "Muistiinpanon runko"
+
+#: admin/account-statuses/one.php:90 admin/activity-templates/edit.php:111
+#: admin/activity-types/one.php:92 admin/campaign-statuses/one.php:96
+#: admin/campaign-types/one.php:83 admin/case-priorities/one.php:90
+#: admin/case-statuses/one.php:218 admin/case-types/one.php:85
+#: admin/categories/one.php:124 admin/company-sources/one.php:92
+#: admin/company-types/one.php:82 admin/crm-statuses/one.php:83
+#: admin/industries/one.php:82 admin/opportunity-statuses/one.php:219
+#: admin/ratings/one.php:82 admin/relationship-types/one.php:101
+#: admin/roles/one.php:85 admin/users/one.php:140
+msgid "Note: This action CANNOT be undone!"
+msgstr "HUOM!: Tätä toimintoa EI VOI peruuttaa!"
+
+#: notes/sidebar.php:17 reports/companies-list.php:191
+msgid "Notes"
+msgstr "Muistiinpanot"
+
+#: reports/open-items.php:180
+msgid "OPEN ACTIVITIES"
+msgstr "AVOIMIA TOIMENPITEITÄ"
+
+#: reports/open-items.php:229
+msgid "OPEN CAMPAIGNS for"
+msgstr "AVOIMIA KAMPANJOITA:"
+
+#: reports/open-items.php:322
+msgid "OPEN CASES for"
+msgstr "AVOIMIA TEHTÄVIÄ:"
+
+#: admin/country-address-format/edit.php:65
+msgid "OR"
+msgstr "TAI"
+
+#: reports/overdue-items.php:195
+msgid "OVERDUE ACTIVITIES for"
+msgstr "VANHENTUNEITA TOIMENPITEITÄ:"
+
+#: reports/overdue-items.php:246
+msgid "OVERDUE CAMPAIGNS for"
+msgstr "VANHENTUNEITA KAMPANJOITA:"
+
+#: reports/overdue-items.php:339
+msgid "OVERDUE CASES for"
+msgstr "VANHENTUNEITA TEHTÄVIÄ:"
+
+#: reports/overdue-items.php:291
+msgid "OVERDUE OPPORTUNITIES for"
+msgstr "VANHENTUNEITA MAHDOLLISUUKSIA:"
+
+#: admin/acl/one_ControlledObjectRelationship.php:50
+msgid "Object/Child Object combination fails recursion check."
+msgstr ""
+
+#: activities/some.php:510 cases/one.php:139 cases/one.php:397
+#: contacts/one.php:170 contacts/one.php:510 opportunities/one.php:179
+#: opportunities/one.php:435 plugins/phone/contacts_one.php:519
+msgid "On"
+msgstr "Tasan"
+
+#: files/some.php:274 private/home.php:262
+msgid "On What"
+msgstr "Millä"
+
+#: files/some.php:293
+msgid "On what Name"
+msgstr "Millä nimellä"
+
+#: admin/users/self.php:44
+msgid "One User"
+msgstr "Yksi käyttäjä"
+
+#: reports/activitytimes.php:61
+msgid "Only show completed activities"
+msgstr "Näytä vain valmiit toiminnot"
+
+#: activities/activities-pager-functions.php:22
+#: admin/campaign-statuses/one.php:75 admin/campaign-statuses/some.php:86
+#: admin/case-statuses/one.php:153 admin/opportunity-statuses/one.php:153
+#: admin/opportunity-statuses/some.php:137 locale/datastrings.php:75
+msgid "Open"
+msgstr "Avoin"
+
+#: activities/some.php:434 private/home.php:476
+msgid "Open Activities"
+msgstr "Avoimet toiminnot"
+
+#: cases/sidebar.php:26
+msgid "Open Cases"
+msgstr "Avoimet tehtävät"
+
+#: reports/index.php:117 reports/open-items.php:32
+msgid "Open Items"
+msgstr "Avoimet asiat"
+
+#: admin/campaign-statuses/one.php:72 admin/campaign-statuses/some.php:83
+#: admin/case-statuses/one.php:150 admin/opportunity-statuses/one.php:150
+#: admin/opportunity-statuses/some.php:134
+msgid "Open Status"
+msgstr "Avoin tila"
+
+#: files/some.php:287 include/utils-interface.php:284
+#: opportunities/sidebar.php:24 opportunities/some.php:194
+#: reports/completed-items.php:108 reports/open-items.php:92
+#: reports/opportunities-quantity-by-opportunity-status.php:165
+#: reports/opportunities-size-by-opportunity-status.php:177
+#: reports/overdue-items.php:106
+msgid "Opportunities"
+msgstr "Mahdollisuudet"
+
+#: reports/opportunities-size-by-industry.php:26
+#: reports/opportunities-size-by-industry.php:41
+msgid "Opportunities (Size) by Industry"
+msgstr "Mahdolllisuudet (koko) toimialoittain"
+
+#: reports/opportunities-size-by-opportunity-status.php:46
+msgid "Opportunities (Size) by Status"
+msgstr "Mahdolllisuudet (koko) tiloittain"
+
+#: reports/opportunities-by-industry.php:60
+#: reports/opportunities-by-industry.php:72
+#: reports/opportunities-quantity-by-industry.php:25
+#: reports/opportunities-quantity-by-industry.php:38
+msgid "Opportunities by Industry"
+msgstr "Mahdolllisuudet toimialoittain"
+
+#: reports/opportunities-by-opportunity-status.php:59
+#: reports/opportunities-by-opportunity-status.php:71
+#: reports/opportunities-quantity-by-opportunity-status.php:46
+#: reports/opportunities-quantity-by-opportunity-status.php:58
+#: reports/opportunities-size-by-opportunity-status.php:58
+msgid "Opportunities by Status"
+msgstr "Mahdolllisuudet tiloittain"
+
+#: files/some.php:323 opportunities/edit.php:135 opportunities/some.php:251
+#: opportunities/some.php:302 reports/completed-items.php:293
+#: reports/index.php:58 reports/overdue-items.php:299
+msgid "Opportunity"
+msgstr "Mahdollisuus"
+
+#: include/utils-interface.php:61
+msgid "Opportunity Added."
+msgstr "Mahdollisuus lisätty"
+
+#: include/utils-interface.php:63
+msgid "Opportunity Deleted."
+msgstr "Mahdollisuus poistettu"
+
+#: opportunities/edit.php:155 opportunities/new.php:84
+#: opportunities/one.php:271 opportunities/one.php:291
+msgid "Opportunity Details"
+msgstr "Mahdollisuuden yksityiskohdat"
+
+#: opportunities/some.php:216
+msgid "Opportunity Name"
+msgstr "Mahdollisuuden nimi"
+
+#: activities/one.php:395
+msgid "Opportunity Notes"
+msgstr "Mahdollisuuden huomiot"
+
+#: opportunities/some.php:254
+msgid "Opportunity Size"
+msgstr "Mahdollisuuden koko"
+
+#: activities/some.php:529
+msgid "Opportunity Status"
+msgstr "Mahdollisuuden tila"
+
+#: admin/opportunity-statuses/one.php:115
+msgid "Opportunity Status Details"
+msgstr "Mahdollisuuden tila yksityiskohtaisesti"
+
+#: admin/index.php:193 admin/opportunity-statuses/some.php:92
+#: cases/case-status-view.php:45 opportunities/opportunity-view.php:45
+msgid "Opportunity Statuses"
+msgstr "Mahdollisuuksien tilat"
+
+#: opportunities/edit.php:158 opportunities/new.php:87
+msgid "Opportunity Title"
+msgstr "Mahdollisuuden otsake"
+
+#: campaigns/some.php:269
+msgid "Options"
+msgstr "Asetukset"
+
+#: locale/datastrings.php:76
+msgid "Other"
+msgstr "Muut"
+
+#: include/strings.php:29
+msgid "Other Companies"
+msgstr "Muut yritykset"
+
+#: include/strings.php:28
+msgid "Other Contacts"
+msgstr "Muut kontaktit"
+
+#: activities/activities-pager-functions.php:19 activities/some.php:632
+msgid "Overdue"
+msgstr "Myöhässä"
+
+#: reports/index.php:113 reports/overdue-items.php:52
+msgid "Overdue Items"
+msgstr "Myöhässä olevat nimikkeet"
+
+#: companies/addresses.php:167 companies/advanced-search.php:265
+#: companies/new.php:229
+msgid "Override Address"
+msgstr "Asettele osoite käsin"
+
+#: files/some.php:313
+msgid "Owl File Management"
+msgstr "Owl tiedostonhallinta"
+
+#: activities/some.php:492 activities/some.php:639 campaigns/edit.php:90
+#: campaigns/new.php:82 campaigns/some.php:187 campaigns/some.php:229
+#: cases/edit.php:232 cases/export.php:35 cases/new.php:157 cases/one.php:289
+#: cases/sidebar.php:30 cases/some.php:65 cases/some.php:261
+#: companies/advanced-search.php:174 companies/edit.php:120
+#: companies/new.php:135 companies/some.php:246 contacts/some.php:236
+#: contacts/some.php:282 email/email-3.php:86 files/sidebar.php:31
+#: files/some.php:295 notes/sidebar.php:28 opportunities/edit.php:184
+#: opportunities/new.php:108 opportunities/one.php:305
+#: opportunities/sidebar.php:28 opportunities/some.php:224
+#: opportunities/some.php:253 reports/companies-list.php:108
+msgid "Owner"
+msgstr "Omistaja"
+
+#: reports/companies-list.php:130
+msgid "PDF"
+msgstr "PDF"
+
+#: admin/system-parameters/some.php:49
+msgid "Parameter"
+msgstr "Parametri"
+
+#: locale/datastrings.php:77
+msgid "Partner"
+msgstr "Kumppani"
+
+#: locale/datastrings.php:78
+msgid "Partners"
+msgstr "Kumppanit"
+
+#: admin/users/some.php:101
+msgid "Password"
+msgstr "Salasana"
+
+#: include/utils-interface.php:78
+msgid "Password Does Not Match."
+msgstr "Salasana ei kelpaa."
+
+#: contacts/edit-address.php:105
+msgid "Payment Address"
+msgstr "Maksuosoite"
+
+#: companies/addresses.php:117
+msgid "Payment Default"
+msgstr "Oletusmaksuosoite"
+
+#: companies/advanced-search.php:178 companies/edit.php:132
+#: companies/new.php:139 companies/one.php:297 companies/one.php:528
+#: companies/sidebar.php:55 locale/datastrings.php:79
+#: plugins/phone/companies_one.php:512 plugins/phone/companies_one.php:654
+msgid "Phone"
+msgstr "Puhelin"
+
+#: admin/country-address-format/index.php:44
+msgid "Phone Format"
+msgstr "Puhelinnumeron muoto"
+
+#: include/utils-misc.php:253 include/utils-misc.php:643
+msgid "Please correct this error."
+msgstr "Korjaa tämä virhe"
+
+#: admin/acl/one_ControlledObjectRelationship.php:45
+msgid "Please select a Parent/Child controlled object combination"
+msgstr ""
+
+#: admin/acl/index.php:57
+msgid "Please select a section to manage from the sidebar"
+msgstr ""
+
+#: admin/acl/one_GroupUser.php:46
+msgid ""
+"Please select either a User/Group/Role combination or a Group/Child Group "
+"combination"
+msgstr ""
+
+#: include/utils-interface.php:80
+msgid "Please try again."
+msgstr "Ole hyvä ja yritä uudelleen."
+
+#: admin/index.php:235
+msgid "Plugin Activation"
+msgstr "Lisätoiminnon aktivointi"
+
+#: admin/plugin/plugin-admin.php:170
+msgid "Plugin Administration"
+msgstr "Lisätoimintojen hallinta"
+
+#: admin/plugin/plugin-admin.php:246
+msgid "Plugin directory could not be found: "
+msgstr "Lisätoimintojen hakemistoa ei löydy: "
+
+#: admin/index.php:231 admin/plugin/plugin-admin.php:187
+msgid "Plugins"
+msgstr "Lisätoiminnot"
+
+#: locale/datastrings.php:80
+msgid "Poor"
+msgstr "Heikko"
+
+#: admin/relationship-types/one.php:82
+msgid "Post Formatting"
+msgstr "Jälkimuotoilu"
+
+#: admin/relationship-types/some.php:95
+msgid "Post-Text Formatting"
+msgstr "Tekstin jälkeen -muotoilu"
+
+#: companies/addresses.php:159 companies/advanced-search.php:257
+#: companies/edit-address.php:93 companies/new.php:221
+#: contacts/edit-address.php:210 reports/companies-list.php:185
+msgid "Postal Code"
+msgstr "Postinumero"
+
+#: admin/relationship-types/one.php:78
+msgid "Pre Formatting"
+msgstr "Esimuotoilu"
+
+#: admin/relationship-types/some.php:91
+msgid "Pre-Text Formatting"
+msgstr "Ennen teksitiä -muotoilu"
+
+#: include/utils-interface.php:294
+msgid "Preferences"
+msgstr ""
+
+#: locale/datastrings.php:81
+msgid "Preliminaries"
+msgstr "Alustavat"
+
+#: contacts/edit-address.php:90 reports/company-contacts-printout.php:247
+msgid "Primary Address"
+msgstr "Ensisijainen osoite"
+
+#: companies/addresses.php:114
+msgid "Primary Default"
+msgstr "Oletusensisijainen"
+
+#: reports/index.php:101
+msgid "Printable contact summary information for Companies in search Results."
+msgstr "Tulostettava kontaktiyhteenveto hakutuloksen yrityksistä."
+
+#: reports/completed-items.php:151 reports/open-items.php:122
+#: reports/overdue-items.php:137
+msgid "Printer Friendly"
+msgstr "Tulostinystävällinen"
+
+#: cases/edit.php:228 cases/export.php:36 cases/new.php:153 cases/one.php:300
+#: cases/sidebar.php:31 cases/some.php:65
+msgid "Priority"
+msgstr "Tärkeys"
+
+#: activities/one.php:363 opportunities/new.php:116 opportunities/one.php:317
+msgid "Probability"
+msgstr "Todennäköisyys"
+
+#: opportunities/edit.php:192
+msgid "Probability (%)"
+msgstr "Todennäköisyys (%)"
+
+#: companies/advanced-search.php:218 companies/edit.php:176
+#: companies/new.php:179 contacts/edit.php:232 contacts/new.php:224
+msgid "Profile"
+msgstr "Profiili"
+
+#: locale/datastrings.php:82
+msgid "Prospect"
+msgstr "Näkymä"
+
+#: locale/datastrings.php:83
+msgid "Prospects"
+msgstr "Näkymät"
+
+#: locale/datastrings.php:84
+msgid "Provide RSS Feeds.  y or n."
+msgstr ""
+
+#: locale/datastrings.php:85
+msgid "Qualified"
+msgstr "Hyväksytty"
+
+#: reports/index.php:71
+msgid "Quantity by Industry"
+msgstr "Määrä toimialoittain"
+
+#: reports/index.php:62
+msgid "Quantity by Status"
+msgstr "Määrä tiloittain"
+
+#: locale/datastrings.php:86
+msgid "RSS Feeds Enabled"
+msgstr ""
+
+#: locale/datastrings.php:87
+msgid "Radio"
+msgstr "Radio"
+
+#: plugins/radtest/radtest.php:38 plugins/radtest/setup.php:26
+msgid "Radius Test"
+msgstr "Toimintasädetesti"
+
+#: admin/import/import-companies.php:142 companies/admin.php:86
+#: companies/edit.php:156 companies/one.php:597
+#: companies/some-advanced.php:140 companies/some.php:304
+#: plugins/phone/companies_one.php:572
+msgid "Rating"
+msgstr "Luokitus"
+
+#: admin/ratings/one.php:37
+msgid "Rating Details"
+msgstr "Luokitteluyksityiskohdat"
+
+#: admin/index.php:188 admin/ratings/some.php:48
+msgid "Ratings"
+msgstr "Luokittelut"
+
+#: locale/datastrings.php:88
+msgid "Real Estate"
+msgstr "Kiinteistö"
+
+#: campaigns/some.php:279 cases/some.php:294 companies/some-advanced.php:417
+#: companies/some.php:354 contacts/some.php:324 files/some.php:351
+#: opportunities/some.php:299
+msgid "Recently Viewed"
+msgstr "Äskettäin katsotut"
+
+#: admin/relationship-types/some.php:54 companies/relationships.php:114
+msgid "Relationship"
+msgstr "Keskinäinen suhde"
+
+#: admin/relationship-types/one.php:58 admin/relationship-types/some.php:71
+msgid "Relationship Name"
+msgstr "Keskinäisen suhteen nimi"
+
+#: admin/relationship-types/one.php:43
+msgid "Relationship Type Details"
+msgstr "Keskinäisen suhteen tyyppi yksityiskohtaisesti"
+
+#: admin/index.php:198 admin/relationship-types/some.php:49
+msgid "Relationship Types"
+msgstr "Keskinäisen suhteen tyypit"
+
+#: companies/relationships.php:100 companies/relationships.php:111
+#: plugins/phone/companies_one.php:638
+msgid "Relationships"
+msgstr "Keskinäiset suhteet"
+
+#: relationships/sidebar.php:77
+#, fuzzy
+msgid "Relationships for "
+msgstr "Lisää keskinäinen suhde seuraaville: "
+
+#: reports/audit-items.php:104
+msgid "Remote Addr"
+msgstr "Etäosoite"
+
+#: reports/audit-items.php:105
+msgid "Remote Port"
+msgstr "Etäportti"
+
+#: email/email-2.php:79 email/one-template.php:78
+msgid "Reply to"
+msgstr "Vastaa"
+
+#: include/utils-interface.php:292 reports/index.php:29 reports/index.php:90
+msgid "Reports"
+msgstr "Raportit"
+
+#: locale/datastrings.php:89
+msgid "Restaurant"
+msgstr "Ravintola"
+
+#: companies/one.php:566
+#, fuzzy
+msgid "Restrict by Division"
+msgstr "Muokkaa jaosta"
+
+#: locale/datastrings.php:90
+msgid "Retail"
+msgstr "Jälleenmyynti"
+
+#: include/utils-interface.php:336
+msgid "Rev."
+msgstr "Tuotto"
+
+#: companies/advanced-search.php:198 companies/edit.php:152
+#: companies/new.php:159 companies/one.php:627
+#: plugins/phone/companies_one.php:596
+msgid "Revenue"
+msgstr "Tuotto"
+
+#: admin/users/one.php:82 admin/users/some.php:68 admin/users/some.php:85
+msgid "Role"
+msgstr "Rooli"
+
+#: admin/roles/one.php:40
+msgid "Role Details"
+msgstr "Rooli ksityiskohtaisesti"
+
+#: admin/roles/some.php:47
+msgid "Roles"
+msgstr "Roolit"
+
+#: reports/index.php:129
+msgid "Sales Force Automation"
+msgstr "Myynnin automatisointi"
+
+#: contacts/edit.php:142 contacts/new.php:134
+msgid "Salutation"
+msgstr "Tervehdys"
+
+#: contacts/edit.php:237 contacts/transfer-2.php:71
+msgid "Save"
+msgstr "Tallenna"
+
+#: admin/account-statuses/one.php:74 admin/activity-templates/edit.php:88
+#: admin/activity-types/one.php:77 admin/campaign-statuses/one.php:82
+#: admin/campaign-types/one.php:69 admin/case-priorities/one.php:76
+#: admin/case-statuses/one.php:160 admin/case-types/one.php:71
+#: admin/categories/one.php:110 admin/company-sources/one.php:78
+#: admin/company-types/one.php:68 admin/crm-statuses/one.php:69
+#: admin/industries/one.php:68 admin/opportunity-statuses/one.php:161
+#: admin/ratings/one.php:68 admin/relationship-types/one.php:86
+#: admin/roles/one.php:71 admin/users/change-password.php:53
+#: admin/users/one.php:124 admin/users/self.php:91 campaigns/edit.php:116
+#: campaigns/new.php:108 cases/edit.php:250 cases/new.php:172
+#: companies/admin.php:102 companies/edit-address.php:107
+#: companies/edit.php:180 companies/new.php:183 contacts/edit-address.php:223
+#: notes/edit.php:40 notes/new.php:50 opportunities/edit.php:223
+#: opportunities/new.php:145
+msgid "Save Changes"
+msgstr "Tallenna muutokset"
+
+#: companies/addresses.php:122
+msgid "Save Defaults"
+msgstr "Tallenna oletukset"
+
+#: activities/one.php:444
+msgid "Save and Next"
+msgstr "Tallenna ja seuraava"
+
+#: contacts/transfer-2.php:72
+msgid "Save and Update All Records"
+msgstr "Tallenna ja päivitä kaikki"
+
+#: email/email-2.php:96 email/one-template.php:95
+msgid "Save as New Template"
+msgstr "Tallenna uutena pohjana"
+
+#: activities/some.php:598
+msgid "Saved Searches"
+msgstr "Tallennetut haut"
+
+#: activities/some.php:504 activities/some.php:636 companies/one.php:252
+#: private/home.php:484
+msgid "Scheduled"
+msgstr "Aikataulutettu"
+
+#: admin/activity-types/one.php:73 admin/activity-types/some.php:90
+#: admin/case-priorities/one.php:72 admin/case-priorities/some.php:82
+#: admin/company-sources/one.php:74 admin/company-sources/some.php:84
+msgid "Score Adjustment"
+msgstr "Tuloksen säätö"
+
+#: activities/some.php:616 campaigns/some.php:215 cases/sidebar.php:87
+#: cases/sidebar.php:95 cases/some.php:273 companies/advanced-search.php:270
+#: companies/some.php:283 contacts/some.php:257 contacts/transfer.php:56
+#: files/some.php:304 opportunities/sidebar.php:74
+#: opportunities/sidebar.php:82 opportunities/some.php:234
+#: relationships/new-relationship.php:143
+#: reports/company-contacts-printout.php:228
+msgid "Search"
+msgstr "Etsi"
+
+#: activities/some.php:493
+msgid "Search By Date"
+msgstr "Etsi päivämäärän perusteella"
+
+#: companies/some-advanced.php:371 companies/some.php:215
+msgid "Search Companies"
+msgstr "Etsi yrityksiä"
+
+#: activities/some.php:455 campaigns/some.php:182 cases/some.php:248
+#: companies/some.php:238 contacts/some.php:209 files/some.php:268
+#: opportunities/some.php:213 reports/company-contacts-printout.php:209
+msgid "Search Criteria"
+msgstr "Hakuehdot"
+
+#: locale/datastrings.php:91
+msgid "Search Engine"
+msgstr "Hakukone"
+
+#: locale/datastrings.php:92
+msgid "Search Engines"
+msgstr "Hakukoneet"
+
+#: activities/pager.php:35 activities/some.php:663 campaigns/some.php:254
+#: cases/pager.php:35 companies/pager.php:35 companies/some.php:327
+#: contacts/some.php:308 files/some.php:334
+#: include/adodb/adodb-pager.inc.php:287 opportunities/pager.php:35
+#: opportunities/some.php:283
+msgid "Search Results"
+msgstr "Hakutulokset"
+
+#: activities/some.php:599
+msgid "Search Title"
+msgstr "Hakuotsake"
+
+#: contacts/transfer.php:46 include/strings.php:19
+msgid "Search for Company"
+msgstr "Etsi yritys"
+
+#: include/strings.php:18
+msgid "Search for Contact"
+msgstr "Etsi kontaktit"
+
+#: admin/case-statuses/some.php:86
+#, fuzzy
+msgid "Select a status type"
+msgstr "Poista tehtävän tila"
+
+#: locale/datastrings.php:93
+msgid "Seminar"
+msgstr "Seminaari"
+
+#: locale/datastrings.php:94
+msgid "Seminars"
+msgstr "Seminaarit"
+
+#: reports/completed-items.php:130 reports/open-items.php:136
+#: reports/overdue-items.php:151
+msgid "Send Email To"
+msgstr "Lähetä sähköpostia"
+
+#: reports/audit-items.php:106
+msgid "Session Id"
+msgstr "Istunnon tunnus"
+
+#: contacts/edit-address.php:100
+msgid "Shipping Address"
+msgstr "Toimitusosoite"
+
+#: companies/addresses.php:116
+msgid "Shipping Default"
+msgstr "Oletustoimitusosoite"
+
+#: admin/account-statuses/one.php:56 admin/account-statuses/some.php:66
+#: admin/activity-types/one.php:57 admin/activity-types/some.php:74
+#: admin/campaign-statuses/one.php:56 admin/campaign-statuses/some.php:66
+#: admin/campaign-types/one.php:53 admin/campaign-types/some.php:64
+#: admin/case-priorities/one.php:56 admin/case-priorities/some.php:66
+#: admin/case-statuses/one.php:130 admin/case-statuses/some.php:141
+#: admin/case-types/one.php:55 admin/case-types/some.php:64
+#: admin/categories/one.php:94 admin/categories/some.php:65
+#: admin/company-sources/one.php:58 admin/company-sources/some.php:68
+#: admin/company-types/one.php:52 admin/company-types/some.php:63
+#: admin/crm-statuses/one.php:53 admin/crm-statuses/some.php:69
+#: admin/industries/one.php:52 admin/industries/some.php:63
+#: admin/opportunity-statuses/one.php:130
+#: admin/opportunity-statuses/some.php:114 admin/ratings/one.php:52
+#: admin/ratings/some.php:67 admin/roles/one.php:55 admin/roles/some.php:66
+msgid "Short Name"
+msgstr "Lyhyt nimi"
+
+#: files/one.php:77 files/sidebar.php:30 files/some.php:355
+#: opportunities/one.php:313
+msgid "Size"
+msgstr "Koko"
+
+#: opportunities/edit.php:188 opportunities/new.php:112
+msgid "Size (in dollars)"
+msgstr "Koko (euroina)"
+
+#: reports/index.php:75
+msgid "Size by Industry"
+msgstr "Koko toimialoittain"
+
+#: reports/index.php:67
+msgid "Size by Status"
+msgstr "Koko tiloittain"
+
+#: admin/activity-templates/edit.php:84
+#, fuzzy
+msgid "Sort Order"
+msgstr "Lyhyt nimi"
+
+#: reports/companies-list.php:110
+#, fuzzy
+msgid "Source"
+msgstr "Yrityksen tietojen lähde"
+
+#: locale/datastrings.php:95
+msgid "Special"
+msgstr "Erityinen"
+
+#: reports/activitytimes.php:52 reports/activitytimes.php:73
+#: reports/audit-items.php:44 reports/completed-items.php:69
+#: reports/completed-items.php:196 reports/completed-items.php:247
+#: reports/open-items.php:184 reports/open-items.php:233
+#: reports/overdue-items.php:199 reports/overdue-items.php:250
+msgid "Start"
+msgstr "Alku"
+
+#: activities/one.php:415 campaigns/one.php:114 campaigns/some.php:230
+#: companies/one.php:743 plugins/phone/companies_one.php:695
+msgid "Starts"
+msgstr "Alkaa"
+
+#: campaigns/edit.php:94 campaigns/new.php:86
+msgid "Starts On"
+msgstr "Alkaa"
+
+#: companies/some.php:105 companies/some.php:115 companies/some.php:258
+#: reports/companies-list.php:113 reports/company-contacts-printout.php:128
+#: reports/company-contacts-printout.php:138
+msgid "State"
+msgstr "Valtio"
+
+#: companies/addresses.php:155 companies/advanced-search.php:253
+#: companies/edit-address.php:89 companies/new.php:217
+#: contacts/edit-address.php:206
+msgid "State/Province"
+msgstr "Osavaltio/provinssi"
+
+#: activities/one.php:349 admin/activity-templates/some.php:63
+#: campaigns/edit.php:86 campaigns/new.php:78 campaigns/one.php:106
+#: campaigns/some.php:201 campaigns/some.php:228 campaigns/some.php:284
+#: cases/edit.php:221 cases/export.php:38 cases/new.php:146 cases/one.php:293
+#: cases/some.php:66 cases/some.php:264 cases/some.php:299
+#: opportunities/edit.php:178 opportunities/new.php:103
+#: opportunities/one.php:325 opportunities/sidebar.php:29
+#: opportunities/some.php:226 opportunities/some.php:256
+#: opportunities/some.php:304 reports/overdue-items.php:296
+msgid "Status"
+msgstr "Tila"
+
+#: cases/edit.php:224 cases/new.php:149 cases/one.php:296
+#: opportunities/edit.php:181 opportunities/new.php:105
+#: opportunities/one.php:328
+msgid "Status Definitions"
+msgstr "Tilamääreet"
+
+#: admin/case-statuses/some.php:106
+#, fuzzy
+msgid "Status Type"
+msgstr "Tila"
+
+#: include/utils-interface.php:84
+msgid "Status not changed."
+msgstr "Tila ei muuttunut"
+
+#: email/email-2.php:89 email/one-template.php:88
+msgid "Subject"
+msgstr "Aihe"
+
+#: admin/plugin/plugin-admin.php:243
+msgid "Submit"
+msgstr "Lähetä"
+
+#: companies/one.php:294 contacts/edit.php:168 contacts/new.php:160
+#: contacts/one.php:325 plugins/phone/contacts_one.php:333
+msgid "Summary"
+msgstr "Yhteenveto"
+
+#: activities/one.php:338
+msgid "Switch Opportunity"
+msgstr "Vaihda mahdollisuus"
+
+#: admin/index.php:47
+msgid "System Administration"
+msgstr "Järjestelmän hallinta"
+
+#: admin/index.php:141 admin/system-parameters/some.php:46
+msgid "System Parameters"
+msgstr "Järjestelmän parametrit"
+
+#: reports/activitytimes.php:122
+msgid "TOTAL"
+msgstr "YHTEENSÄ"
+
+#: reports/audit-items.php:98
+msgid "Table"
+msgstr "Taulukko"
+
+#: admin/relationship-types/some.php:53
+msgid "Tables"
+msgstr "Taulukot"
+
+#: companies/admin.php:78 companies/one.php:585
+#: plugins/phone/companies_one.php:560
+msgid "Tax ID"
+msgstr "Verotunnus"
+
+#: reports/companies-list.php:188
+msgid "Tel"
+msgstr "Puh"
+
+#: locale/datastrings.php:96
+msgid "Telemarketing"
+msgstr "Puhelinmarkkinointi"
+
+#: locale/datastrings.php:97
+msgid "Telemarketings"
+msgstr "Puhelinmarkkinoinnit"
+
+#: locale/datastrings.php:98
+msgid "Television"
+msgstr "Televisio"
+
+#: email/email.php:128 email/index.php:75
+msgid "Template"
+msgstr "Pohja"
+
+#: activities/some.php:472
+msgid "Template Titles"
+msgstr "Pohjain otsakkeet"
+
+#: companies/admin.php:90 companies/one.php:603
+#: plugins/phone/companies_one.php:578
+msgid "Terms"
+msgstr "Ehdot"
+
+#: email/email-4.php:92
+msgid "The bulk e-mail sub-system has sent"
+msgstr "Massasähköpostijärjestelmä on lähettänyt"
+
+#: include/strings.php:24
+msgid "There is no company by that name"
+msgstr "Ei ole sen nimistä yritystä"
+
+#: include/strings.php:23
+msgid "There is no contact by that name"
+msgstr "Ei ole sen nimistä kontaktia"
+
+#: activities/export.php:109 cases/export.php:90 contacts/export.php:121
+#: opportunities/export.php:93
+msgid "There was a problem with your export"
+msgstr "Vientisi kanssa oli ongelma"
+
+#: contacts/edit-address.php:162
+msgid "This Address Is Also Used By"
+msgstr "Tätä osoitetta käyttää myös"
+
+#: include/utils-interface.php:84
+msgid "This activity is still open."
+msgstr "Tämä toiminto on yhä avoin."
+
+#: admin/acl/index.php:57
+msgid "This is the Access Control List system for XRMS"
+msgstr ""
+
+#: reports/audit-items.php:95
+msgid "Time"
+msgstr "Aika"
+
+#: reports/overdue-items.php:72
+msgid "Time Window"
+msgstr "Aikaväli"
+
+#: reports/activitytimes.php:36
+msgid "Timesheets"
+msgstr "Aikataulut"
+
+#: activities/one.php:378 activities/some.php:458 activities/some.php:635
+#: admin/activity-templates/edit.php:64 admin/case-statuses/one.php:176
+#: admin/opportunity-statuses/one.php:177 campaigns/one.php:98
+#: cases/one.php:135 cases/one.php:281 cases/one.php:393 companies/one.php:247
+#: companies/one.php:295 companies/one.php:738 contacts/edit.php:172
+#: contacts/new.php:164 contacts/one.php:166 contacts/one.php:329
+#: contacts/one.php:506 contacts/some.php:214 contacts/some.php:280
+#: opportunities/one.php:175 opportunities/one.php:301
+#: opportunities/one.php:431 plugins/phone/companies_one.php:690
+#: plugins/phone/contacts_one.php:339 plugins/phone/contacts_one.php:515
+msgid "Title"
+msgstr "Otsake"
+
+#: activities/one.php:345
+msgid "To"
+msgstr "Kenelle"
+
+#: admin/relationship-types/one.php:74 admin/relationship-types/some.php:87
+msgid "To Text"
+msgstr "Tekstiin"
+
+#: admin/relationship-types/one.php:66 admin/relationship-types/some.php:79
+msgid "To What Table"
+msgstr "Mihin taulukkoon"
+
+#: reports/companies-list.php:285
+msgid "Total records"
+msgstr "Tallenteita yhteensä"
+
+#: locale/datastrings.php:99
+msgid "Trade Show"
+msgstr "Messut"
+
+#: locale/datastrings.php:100
+msgid "Trade Shows"
+msgstr "Messut"
+
+#: contacts/edit.php:247
+msgid "Transfer"
+msgstr "Siirrä"
+
+#: contacts/transfer-2.php:48 contacts/transfer-2.php:63
+#: contacts/transfer.php:33
+msgid "Transfer to Another Company"
+msgstr "Siirrä toiseen yritykseen"
+
+#: activities/one.php:356 activities/some.php:494 activities/some.php:633
+#: admin/activity-templates/edit.php:72 admin/case-statuses/some.php:117
+#: campaigns/edit.php:82 campaigns/new.php:74 campaigns/one.php:102
+#: campaigns/some.php:186 campaigns/some.php:227 campaigns/some.php:283
+#: cases/edit.php:217 cases/export.php:37 cases/new.php:142 cases/one.php:137
+#: cases/one.php:285 cases/one.php:395 cases/some.php:65 cases/some.php:263
+#: companies/one.php:249 companies/one.php:740 contacts/one.php:168
+#: contacts/one.php:508 opportunities/one.php:177 opportunities/one.php:433
+#: plugins/phone/companies_one.php:692 plugins/phone/contacts_one.php:517
+#: private/home.php:480 reports/audit-items.php:97
+#: reports/completed-items.php:72 reports/completed-items.php:198
+#: reports/completed-items.php:249 reports/completed-items.php:290
+#: reports/open-items.php:58 reports/open-items.php:186
+#: reports/open-items.php:235 reports/overdue-items.php:71
+#: reports/overdue-items.php:201 reports/overdue-items.php:252
+msgid "Type"
+msgstr "Tyyppi"
+
+#: admin/index.php:149
+msgid "Types and Statuses"
+msgstr "Tyypit ja tilat"
+
+#: companies/advanced-search.php:190 companies/edit.php:144
+#: companies/new.php:151 companies/one.php:546
+#: plugins/phone/companies_one.php:530
+msgid "URL"
+msgstr "URL"
+
+#: admin/export/export-companies-ldap.php:149
+#: admin/export/export-companies.php:99
+#: admin/export/export-company-address.php:52
+msgid "Unable to Open file for writing."
+msgstr "Tiedostoon ei voi kirjoittaa."
+
+#: activities/associate-activities.php:155
+msgid ""
+"Unable to associate Activities because there are multiple Cases or "
+"Opportunities"
+msgstr "En voi liittää toimenpiteitä useisiin tehtäviin tai mahdollisuuksiin"
+
+#: activities/associate-activities.php:162
+msgid ""
+"Unable to associate Activities because there is no open Case or Opportunity"
+msgstr "En voi liittää toimenpiteitä ilman avointa tehtävää tai mahdollisuutta"
+
+#: activities/export.php:111 cases/export.php:92 contacts/export.php:123
+#: opportunities/export.php:95
+#, fuzzy
+msgid "Unable to create file"
+msgstr "En saa avattua tiedostoa"
+
+#: include/utils-misc.php:642
+msgid "Unable to execute your query."
+msgstr "En voi toteuttaa hakuasi."
+
+#: admin/users/some.php:43
+msgid "Unable to get data from database"
+msgstr "En saa haettua tietokannasta"
+
+#: include/utils-misc.php:252
+msgid "Unable to open file"
+msgstr "En saa avattua tiedostoa"
+
+#: relationships/edit.php:67
+msgid "Unassociate"
+msgstr "Irroita"
+
+#: contacts/edit.php:157 contacts/new.php:149 contacts/one.php:106
+#: contacts/one.php:109 plugins/phone/contacts_one.php:96
+#: plugins/phone/contacts_one.php:99
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: admin/country-address-format/index.php:60
+msgid "Update"
+msgstr "Päivitä"
+
+#: admin/update.php:4203
+msgid "Update Complete"
+msgstr "Päivitys valmis"
+
+#: email/email-2.php:96 email/one-template.php:95
+msgid "Update Template"
+msgstr "Päivitä pohja"
+
+#: files/new.php:93 files/new.php:97
+msgid "Upload"
+msgstr "Lataa/lähetä"
+
+#: files/one.php:73
+msgid "Uploaded"
+msgstr "Ladattu/lähetetty"
+
+#: companies/addresses.php:168 companies/edit-address.php:103
+#: companies/new.php:231 contacts/edit-address.php:219
+msgid "Use"
+msgstr "Käytä"
+
+#: contacts/edit-address.php:166
+msgid "Use Alternate Address"
+msgstr "Käytä vaihtoehtoista osoitetta"
+
+#: companies/addresses.php:112
+msgid "Used by Contacts"
+msgstr "Yhteystiedot käyttävät"
+
+#: activities/one.php:384 cases/one.php:136 cases/one.php:394
+#: companies/one.php:248 companies/one.php:739 companies/some-advanced.php:136
+#: companies/some.php:300 contacts/one.php:167 contacts/one.php:507
+#: opportunities/one.php:176 opportunities/one.php:432
+#: plugins/phone/companies_one.php:691 plugins/phone/contacts_one.php:516
+#: reports/activitytimes.php:54 reports/activitytimes.php:76
+#: reports/audit-items.php:46 reports/audit-items.php:96
+#: reports/companies-by-company-source.php:65
+#: reports/companies-by-crm-status.php:65 reports/companies-by-industry.php:68
+#: reports/companies-list.php:190 reports/completed-items.php:71
+#: reports/open-items.php:57
+#: reports/opportunities-quantity-by-opportunity-status.php:69
+#: reports/opportunities-size-by-opportunity-status.php:69
+#: reports/overdue-items.php:70
+msgid "User"
+msgstr "Käyttäjä"
+
+#: admin/users/one.php:63
+msgid "User Details"
+msgstr "Käyttäjä yksityiskohtaisesti"
+
+#: private/home.php:503
+msgid "User Manual"
+msgstr "Käyttöohje"
+
+#: reports/index.php:104
+msgid "User Reports"
+msgstr "Käyttäjäraportit"
+
+#: admin/users/one.php:104 admin/users/self.php:72 admin/users/some.php:69
+#: admin/users/some.php:97
+msgid "Username"
+msgstr "Käyttäjänimi"
+
+#: admin/index.php:126 admin/users/some.php:62
+msgid "Users"
+msgstr "Käyttäjät"
+
+#: plugins/vcard/setup.php:18
+msgid "Vcard"
+msgstr ""
+
+#: locale/datastrings.php:101
+msgid "Vendor"
+msgstr "Toimittaja"
+
+#: companies/admin.php:98
+msgid "Vendor Key"
+msgstr "Toimittaja-avain"
+
+#: locale/datastrings.php:102
+msgid "Vendors"
+msgstr "Toimittajat"
+
+#: locale/datastrings.php:103
+msgid "Version of the LDAP server.  Will usually be 2 or 3."
+msgstr ""
+
+#: cases/case-status-view.php:35
+#, fuzzy
+msgid "View Case Statuses"
+msgstr "Tehtävien tilat"
+
+#: opportunities/opportunity-view.php:35
+msgid "View Opportunity Statuses"
+msgstr "Katso tilaisuuksien tilat"
+
+#: notes/sidebar.php:147
+msgid "View/Edit"
+msgstr "Katso/muokkaa"
+
+#: plugins/cti/setup.php:35
+#, fuzzy
+msgid "Voice Mail"
+msgstr "Suora posti"
+
+#: email/email-4.php:97
+msgid "WARNING"
+msgstr "VAROITUS"
+
+#: email/email-3.php:37
+msgid "WARNING: No array of contacts!"
+msgstr "VAROITUS: Ei kontaktia!"
+
+#: include/utils-interface.php:80
+msgid "We could not authenticate you."
+msgstr "Väärä käyttäjätunnus tai salasana."
+
+#: companies/sidebar.php:70 locale/datastrings.php:104
+msgid "Web Site"
+msgstr "Verkko-osoite"
+
+#: locale/datastrings.php:105
+msgid "Web Sites"
+msgstr "Verkko-osoitteet"
+
+#: plugins/webcalendar/setup.php:28
+msgid "WebCalendar SysAdmin Manual"
+msgstr "WebKalenteri SysAdmin Käyttöohje"
+
+#: opportunities/one.php:321 opportunities/some.php:255
+msgid "Weighted Size"
+msgstr "Painoarvo"
+
+#: locale/datastrings.php:106
+msgid "What level of audit logging should be performed.  0 - no logging"
+msgstr ""
+
+#: locale/datastrings.php:107
+msgid "Word of Mouth"
+msgstr "Suusanallinen"
+
+#: cases/one.php:326 contacts/edit.php:184 contacts/new.php:176
+#: contacts/one.php:349 contacts/sidebar.php:161 contacts/some.php:329
+#: opportunities/one.php:358 plugins/phone/contacts_one.php:366
+msgid "Work Phone"
+msgstr "Työpuhelin"
+
+#: reports/open-items.php:370
+msgid "XRMS: Open Items"
+msgstr "CRM: Avoimet asiat"
+
+#: reports/overdue-items.php:387
+msgid "XRMS: Overdue Items"
+msgstr "CRM: Vanhentuneet asiat"
+
+#: contacts/edit.php:204 contacts/new.php:196
+msgid "Yahoo Name"
+msgstr "Yahoo-nimi"
+
+#: contacts/one.php:374 plugins/phone/contacts_one.php:396
+msgid "Yahoo! IM"
+msgstr "Yahoo! pikaviesti"
+
+#: activities/some.php:141 plugins/info/edit-definitions.php:135
+msgid "Yes"
+msgstr "Kyllä"
+
+#: campaigns/edit.php:149 campaigns/new.php:138
+msgid "You must enter a campaign title."
+msgstr "Sinun täytyy antaa kampanjaotsake."
+
+#: cases/edit.php:286 cases/new.php:201
+msgid "You must enter a case title."
+msgstr "Sinun täytyy antaa tehtäväotsake."
+
+#: companies/edit.php:206 companies/new.php:274
+msgid "You must enter a company name."
+msgstr "Sinun täytyy antaa yrityksen nimi."
+
+#: admin/users/some.php:144
+msgid "You must enter a last name."
+msgstr "Sinun täytyy antaa sukunimi."
+
+#: email/email-2.php:137 email/one-template.php:136
+msgid "You must enter a name to let the recipient know who the email is from."
+msgstr ""
+"Sinun täytyy antaa nimi jotta vastaanottaja tietää sähköpostin lähettäjän."
+
+#: admin/users/some.php:149
+msgid "You must enter a password."
+msgstr "Sinun täytyy antaa salasana."
+
+#: admin/users/some.php:139
+msgid "You must enter a username."
+msgstr "Sinun täytyy antaa käyttäjätunnus."
+
+#: opportunities/edit.php:260 opportunities/new.php:174
+msgid "You must enter an opportunity title."
+msgstr "Sinun tulee antaa mahdollisuudelle otsake."
+
+#: email/email-2.php:142 email/one-template.php:141
+msgid ""
+"You must enter an reply address so the recipient can reply to the message."
+msgstr "Sinun tulee antaa vastausosoite, jotta vastanottaja voi vastata tähän."
+
+#: admin/relationship-types/one.php:100
+msgid ""
+"You should NOT delete the last element of a relationship type, or a used "
+"relationship type."
+msgstr ""
+
+#: admin/data_clean.php:360
+msgid "Your database has been cleaned."
+msgstr "Tietokanta siivottu."
+
+#: admin/update.php:4210
+msgid "Your database has been updated."
+msgstr "Tietokanta päivitetty."
+
+#: reports/index.php:47
+msgid ""
+"Your sales funnel - how many of your accounts are in each stage of the "
+"customer development process?"
+msgstr "Moniko asiakkaistasi on missäkin vaiheessa?"
+
+#: activities/new-2.php:166 activities/new-2.php:174 companies/new-2.php:45
+#, fuzzy
+msgid "[none]"
+msgstr "Tehty"
+
+#: admin/account-statuses/some.php:28
+msgid "account_status_pretty_name"
+msgstr ""
+
+#: activities/associate-activities.php:148
+msgid "activities"
+msgstr "toiminnot"
+
+#: activities/some.php:562
+#, fuzzy
+msgid "and"
+msgstr "Loppu"
+
+#: locale/datastrings.php:108
+msgid "call from"
+msgstr "soitto keneltä"
+
+#: locale/datastrings.php:109
+msgid "call to"
+msgstr "soitto kenelle"
+
+#: locale/datastrings.php:110
+msgid "calls from"
+msgstr "soitot keiltä"
+
+#: locale/datastrings.php:111
+msgid "calls to"
+msgstr "soitot keille"
+
+#: cases/sidebar.php:57
+msgid "case_priority_pretty_name"
+msgstr ""
+
+#: admin/import/import-companies.php:95
+msgid "comma"
+msgstr "pilkku"
+
+#: include/strings.php:34
+msgid "companies/contacts"
+msgstr "yritykset/kontaktit"
+
+#: admin/company-sources/some.php:30
+msgid "company_source_pretty_name"
+msgstr ""
+
+#: admin/company-types/some.php:27
+msgid "company_type_pretty_name"
+msgstr ""
+
+#: admin/crm-statuses/some.php:26
+msgid "crm_status_display_html"
+msgstr ""
+
+#: admin/crm-statuses/some.php:28
+msgid "crm_status_pretty_name"
+msgstr ""
+
+#: companies/one.php:604 plugins/phone/companies_one.php:581
+msgid "days"
+msgstr "päiviä"
+
+#: admin/activity-types/some.php:35 admin/case-statuses/some.php:75
+msgid "down"
+msgstr "alas"
+
+#: locale/datastrings.php:112
+msgid "e-mail from"
+msgstr "sähköposti keneltä"
+
+#: locale/datastrings.php:113
+msgid "e-mail to"
+msgstr "sähköposti kenelle"
+
+#: locale/datastrings.php:114
+msgid "e-mails from"
+msgstr "sähköpostit keiltä"
+
+#: locale/datastrings.php:115
+msgid "e-mails to"
+msgstr "sähköpostit keille"
+
+#: locale/datastrings.php:116
+msgid "fax from"
+msgstr "faksi keneltä"
+
+#: locale/datastrings.php:117
+msgid "fax to"
+msgstr "faksaa kenelle"
+
+#: locale/datastrings.php:118
+msgid "faxes from"
+msgstr "faksit keiltä"
+
+#: locale/datastrings.php:119
+msgid "faxes to"
+msgstr "fakseja keille"
+
+#: admin/industries/some.php:27
+msgid "industry_pretty_name"
+msgstr ""
+
+#: locale/datastrings.php:120
+msgid "internal"
+msgstr "sisäinen"
+
+#: locale/datastrings.php:121
+msgid "letter from"
+msgstr "kirje keneltä"
+
+#: locale/datastrings.php:122
+msgid "letter to"
+msgstr "kirje kenelle"
+
+#: admin/import/import-companies.php:97
+msgid "pipe"
+msgstr "putki"
+
+#: locale/datastrings.php:123
+msgid "process"
+msgstr "prosessi"
+
+#: reports/activitytimes.php:122
+msgid "seconds"
+msgstr ""
+
+#: admin/import/import-companies.php:98
+msgid "semi-colon"
+msgstr "kaksoispiste"
+
+#: admin/import/import-companies.php:96
+msgid "tab"
+msgstr "tabulaattori"
+
+#: admin/activity-types/some.php:31 admin/case-statuses/some.php:70
+msgid "up"
+msgstr "ylös"
+
+#~ msgid " by that ID"
+#~ msgstr " tällä tunnuksella"
+
+#~ msgid " by that name"
+#~ msgstr " tällä nimellä"
+
+#~ msgid "%"
+#~ msgstr "%"
+
+#~ msgid "/"
+#~ msgstr "/"
+
+#~ msgid "Allow Access"
+#~ msgstr "Salli pääsy"
+
+#~ msgid "Delete Activity?"
+#~ msgstr "Poista toimenpide?"
+
+#~ msgid "Delete Division"
+#~ msgstr "Poista jaos"
+
+#~ msgid "Download"
+#~ msgstr "Lataa/vastaanota"
+
+#~ msgid "No results returned from database by query"
+#~ msgstr "Tietokantahaulla ei tullut tuloksia"
+
+#~ msgid "Other "
+#~ msgstr "Muut "
+
+#~ msgid "Remainder"
+#~ msgstr "Jäämä"
+
+#~ msgid "Server Status"
+#~ msgstr "Palvelimen tila"
+
+#~ msgid "There is no "
+#~ msgstr "Ei ole "
+
+#~ msgid "View Statuses"
+#~ msgstr "Katso tilat"
+
+#~ msgid "Weighted"
+#~ msgstr "Painotettu"
