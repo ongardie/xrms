@@ -23,6 +23,10 @@ $url = $_POST['url'];
 $employees = $_POST['employees'];
 $revenue = $_POST['revenue'];
 $profile = $_POST['profile'];
+$custom1 = $_POST['custom1'];
+$custom2 = $_POST['custom2'];
+$custom3 = $_POST['custom3'];
+$custom4 = $_POST['custom4'];
 $account_status_id = 1;
 $rating_id = 1;
 
@@ -30,9 +34,9 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "insert into companies (crm_status_id, company_source_id, industry_id, user_id, account_status_id, rating_id, company_name, company_code, phone, phone2, fax, url, employees, revenue, profile, entered_at, entered_by, last_modified_at, last_modified_by)
-        values ($crm_status_id, $company_source_id, $industry_id, $user_id, $account_status_id, $rating_id, " . $con->qstr($company_name, get_magic_quotes_gpc()) . ", " . $con->qstr($company_code, get_magic_quotes_gpc()) . ", " . $con->qstr($phone, get_magic_quotes_gpc()) . ", " . $con->qstr($phone2, get_magic_quotes_gpc()) . ", " . $con->qstr($fax, get_magic_quotes_gpc()) . ", " . $con->qstr($url, get_magic_quotes_gpc()) . ", " . $con->qstr($employees, get_magic_quotes_gpc()) . ", " . $con->qstr($revenue, get_magic_quotes_gpc()) . ", " . $con->qstr($profile, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
-
+$sql = "insert into companies (crm_status_id, company_source_id, industry_id, user_id, account_status_id, rating_id, company_name, company_code, phone, phone2, fax, url, employees, revenue, custom1, custom2, custom3, custom4, profile, entered_at, entered_by, last_modified_at, last_modified_by)
+        values ($crm_status_id, $company_source_id, $industry_id, $user_id, $account_status_id, $rating_id, " . $con->qstr($company_name, get_magic_quotes_gpc()) . ", " . $con->qstr($company_code, get_magic_quotes_gpc()) . ", " . $con->qstr($phone, get_magic_quotes_gpc()) . ", " . $con->qstr($phone2, get_magic_quotes_gpc()) . ", " . $con->qstr($fax, get_magic_quotes_gpc()) . ", " . $con->qstr($url, get_magic_quotes_gpc()) . ", " . $con->qstr($employees, get_magic_quotes_gpc()) . ", " . $con->qstr($revenue, get_magic_quotes_gpc()) . ", " . $con->qstr($custom1, get_magic_quotes_gpc()) . ", " . $con->qstr($custom2, get_magic_quotes_gpc()) . ", " . $con->qstr($custom3, get_magic_quotes_gpc()) . ", " .$con->qstr($custom4, get_magic_quotes_gpc()) . ", " . $con->qstr($profile, get_magic_quotes_gpc()) . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
+ custom1 = " . $con->qstr($custom1, get_magic_quotes_gpc()) . ", custom2 = " . $con->qstr($custom2, get_magic_quotes_gpc()) . ", custom3 = " . $con->qstr($custom3, get_magic_quotes_gpc()) . ", custom4 = " . $con->qstr($custom4, get_magic_quotes_gpc()) . ",
 $con->execute($sql);
 $company_id = $con->insert_id();
 
