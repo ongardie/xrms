@@ -1,6 +1,6 @@
 XRMS - README
 
-/** $Id: README,v 1.5 2004/04/20 14:26:27 braverock Exp $ **/
+/** $Id: README,v 1.6 2004/05/04 15:18:38 gpowers Exp $ **/
 ---
 
 SUMMARY
@@ -192,9 +192,29 @@ If you get errors like "Warning: Cannot modify header
 information -.. " the set the following option in your php.ini:
 output_buffering = On
 
+HINTS, daily reports
+==============================
+To have daily reports emailed, put one or more of the following lines into
+the crontab of your web server (adjust paths as nessecary):
+
+To have a daily report of ALL users open items emailed:
+0 6 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./open-items.php "&send_email=y&type=all&send_email_to=USER@DOMAIN.COMt&all_users=y" >> /dev/null)
+
+To have a daily report of A user's open items emailed:
+0 6 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./open-items.php "&send_email=y&type=all&user_id=1" >> /dev/null)
+
+To have a daily report of ALL users completed items report emailed:
+0 23 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./completed-items.php "&send_email=y&type=all&send_email_to=USER@DOMAIN.COM&all_users=y" >> /dev/null)
+
+To have a daily report of A user's completed items report emailed:
+0 23 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./completed-items.php "&send_email=y&type=all&user_id=1" >> /dev/null)
+
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.6  2004/05/04 15:18:38  gpowers
+ * added daily report HINTS
+ *
  * Revision 1.5  2004/04/20 14:26:27  braverock
  * - update to include more complete information about importing CSV files
  * - change version information
