@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.12 2004/07/25 15:48:36 johnfawcett Exp $
+ * $Id: one.php,v 1.13 2004/07/25 18:02:28 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -112,7 +112,7 @@ start_page($page_title);
                 </table>
                 </form>
 
-                <form action=delete.php method=post>
+                <form action=delete.php method=post onsubmit="javascript: return confirm('<?php echo _("Delete Category?"); ?>');">
                 <input type=hidden name=category_id value="<?php  echo $category_id; ?>">
                 <table class=widget cellspacing=1>
                         <tr>
@@ -120,9 +120,9 @@ start_page($page_title);
                         </tr>
                         <tr>
                                 <td class=widget_content>
-                                <?php echo _("Click the button below to remove this category from the system."); ?>
-                                <p><?php echo _("Note: This action CANNOT be undone!"); ?>
-                                <p><input class=button type=submit value="<?php echo _("Delete"); ?>">
+                                <?php echo _("Click the button below to permanently remove this item."); ?>
+                                <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                                <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
                                 </td>
                         </tr>
                 </table>
@@ -158,6 +158,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2004/07/25 18:02:28  johnfawcett
+ * - reinserted ? into gettext string - needed for some languages
+ * - standardized delete text
+ * - added javascript call for confirm delete
+ *
  * Revision 1.12  2004/07/25 15:48:36  johnfawcett
  * - unified page title
  *
