@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.59 2004/07/21 21:04:52 neildogg Exp $
+ * $Id: one.php,v 1.60 2004/07/22 14:50:38 cpsource Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -49,6 +49,9 @@ $sql = "select cs.*, c.*, account_status_display_html, rating_display_html, comp
 $rst = $con->execute($sql);
 
 if ($rst) {
+  if ( !$rst->EOF ) {
+
+    // record found
     $company_name = $rst->fields['company_name'];
     $legal_name = $rst->fields['legal_name'];
     $address_id = $rst->fields['default_primary_address'];
@@ -85,7 +88,49 @@ if ($rst) {
     $custom4 = $rst->fields['custom4'];
     $extref1 = $rst->fields['extref1'];
     $extref2 = $rst->fields['extref2'];
-    //$rst->close();
+
+  } else {
+    // record not found
+
+    $company_name = '';
+    $legal_name = '';
+    $address_id = '';
+    $tax_id = '';
+    $company_code = '';
+    $industry_pretty_name = '';
+    $crm_status_pretty_name = '';
+    $company_source = '';
+    $industry_pretty_name = '';
+    $user_id = '';
+    $owner_username = '';
+    $phone = '';
+    $phone2 = '';
+    $fax = '';
+    $url = '';
+    $employees = '';
+    $revenue = '';
+    $account_status = '';
+    $credit_limit = '';
+    $rating = '';
+    $terms = '';
+    $profile = '';
+    $profile = '';
+    $entered_by = '';
+    $entered_at = '';
+    $last_modified_by = '';
+    $last_modified_at = '';
+    $custom1 = '';
+    $custom2 = '';
+    $custom3 = '';
+    $custom4 = '';
+    $extref1 = '';
+    $extref2 = '';
+
+  }
+
+  // close the result set
+  $rst->close();
+
 } else {
     db_error_handler ($con, $sql);
 }
@@ -713,6 +758,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.60  2004/07/22 14:50:38  cpsource
+ * - Allow for possibility that company won't be found.
+ *
  * Revision 1.59  2004/07/21 21:04:52  neildogg
  * - Added get_formatted_phone
  *
