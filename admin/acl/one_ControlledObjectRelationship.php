@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_ControlledObjectRelationship.php,v 1.3 2005/03/05 00:52:34 daturaarutad Exp $
+ * $Id: one_ControlledObjectRelationship.php,v 1.4 2005/03/24 22:25:23 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -46,7 +46,7 @@ global $symbol_precendence;
             }
             
             if (($ParentControlledObject_id!='NULL') AND $ChildControlledObject_id) {
-                if (!check_acl_object_recursion($ParentControlledObject_id, $ChildControlledObject_id)) {
+                if (!check_acl_object_recursion($con, $ParentControlledObject_id, $ChildControlledObject_id)) {
                     $mymsg=_("Object/Child Object combination fails recursion check.");
                 }
             }
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: one_ControlledObjectRelationship.php,v $
+ * Revision 1.4  2005/03/24 22:25:23  vanmer
+ * - altered to reflect new acl wrapper recursion function db connection parameter
+ *
  * Revision 1.3  2005/03/05 00:52:34  daturaarutad
  * manually setting primary keys until mssql driver supports metacolumns fully
  *
