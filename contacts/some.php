@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.41 2005/01/06 17:14:43 braverock Exp $
+ * $Id: some.php,v 1.42 2005/01/13 18:46:38 vanmer Exp $
  */
 
 //include the standard files
@@ -17,6 +17,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
+$on_what_table='contacts';
 $session_user_id = session_check();
 
 // declare passed in variables
@@ -139,6 +140,13 @@ if (strlen($user_id) > 0) {
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
+} else {
+    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    //print_r($list);
+    if ($list) {
+        $list=implode(",",$list);
+        $where .= " and cont.contact_id IN ($list) ";
+    } else { $where .= ' AND 1 = 2 '; }
 }
 
 //gorup by shouldn't be needed, contact_id is already unique
@@ -392,6 +400,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.42  2005/01/13 18:46:38  vanmer
+ * - ACL restriction on search
+ *
  * Revision 1.41  2005/01/06 17:14:43  braverock
  * - remove group by clause, as contact_id is already unique
  *   improves MS SQL Server compatibility
