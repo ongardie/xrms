@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.19 2004/07/09 18:43:33 introspectshun Exp $
+ * $Id: some.php,v 1.20 2004/07/10 13:02:52 braverock Exp $
  */
 
 //include the standard files
@@ -18,11 +18,37 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
-$offset = $_POST['offset'];
-$clear = ($_GET['clear'] == 1) ? 1 : 0;
-$use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-$resort = $_POST['resort'];
+
+// get call arguments
+if ( isset($_GET['msg']) ) {
+    $msg = $_GET['msg'];
+} else {
+    $msg = '';
+}
+
+if ( isset($_POST['offset']) ) {
+    $offset = $_POST['offset'];
+} else {
+    $offset = '';
+}
+
+if ( isset($_GET['clear']) ) {
+    $clear = ($_GET['clear'] == 1) ? 1 : 0;
+} else {
+    $clear = 0;
+}
+
+if ( isset($_POST['use_post_vars']) ) {
+    $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
+} else {
+    $use_post_vars = 0;
+}
+
+if ( isset($_POST['resort']) ) {
+    $resort = $_POST['resort'];
+} else {
+    $resort = '';
+}
 
 if ($clear) {
     $sort_column = '';
@@ -359,6 +385,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.20  2004/07/10 13:02:52  braverock
+ * - applied undefined variables patch
+ *   - applies SF patch 976204 submitted by cpsource
+ *
  * Revision 1.19  2004/07/09 18:43:33  introspectshun
  * - Removed CAST(x AS CHAR) for wider database compatibility
  * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
