@@ -110,8 +110,8 @@ else
         $sql = "select " . $name_concat . " as name, " . $what_table_singular . "_id
                 from " . $what_table . "
                 where " . $what_table_singular . "_record_status='a'
-                group by " . $name_concat . ", " . $what_table_singular . "_id, " . $name_order . "
-                having " . $name_concat . " like " . $search_on . "
+                group by name, " . $what_table_singular . "_id, " . $name_order . "
+                having name like " . $search_on . "
                 order by " . $name_order;
         $rst = $con->execute($sql);
         if ($rst) {
@@ -175,6 +175,10 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.16  2004/09/29 21:25:40  braverock
+ * - removed second two concats to replace with
+ *    'group by name' and 'having name' clauses
+ *
  * Revision 1.15  2004/09/29 17:33:36  braverock
  * - roll back rev 1.14, I mucked up the code for Contact searches
  * - still a bug in this version where having clause claims no column company_name
