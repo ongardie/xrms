@@ -2,10 +2,10 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.17 2004/07/10 12:52:47 braverock Exp $
+ * $Id: utils-interface.php,v 1.18 2004/07/10 13:07:58 braverock Exp $
  */
 
-require_once ($include_locations.'plugin.php');
+require_once ($include_directory.'plugin.php');
 
 /**
  * function status_msg
@@ -180,6 +180,10 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.18  2004/07/10 13:07:58  braverock
+ * - change $include_locations to $include_direcectory
+ *   - applies SF patch 976192 submitted by cpsource
+ *
  * Revision 1.17  2004/07/10 12:52:47  braverock
  * - added global $include_directory
  *   - applies SF patch 976707 submitted by cpsource
