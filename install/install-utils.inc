@@ -6,7 +6,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: install-utils.inc,v 1.5 2004/07/28 17:27:03 braverock Exp $
+ * $Id: install-utils.inc,v 1.6 2004/07/31 03:17:42 maulani Exp $
  */
 
 /**
@@ -39,8 +39,35 @@ EOQ;
 } // end install_fatal_error fn
 
 
+// Check to make sure that include files do not have whitespace characters
+// added to the end.  In some cases, the whitespace causes php to send 
+// headers before it should.
+function check_extra_whitespace($path, $filename) {
+    $filepath = $path . $filename;
+    $fp = fopen($filepath, "r");
+    $contents = fread($fp, filesize($filepath));
+    fclose($fp);
+    $endchars = substr($contents, -2);
+    if($endchars != "?>") {
+        $failuremsg = _("The file ");
+        $failuremsg .= " ";
+        $failuremsg .= $filename;
+        $failuremsg .= " ";
+        $failuremsg .= _("does not end with the characters ?>.");
+        $failuremsg .= " ";
+        $failuremsg .= _("You probably have added extra whitespace to the end.");
+        $failuremsg .= " ";
+        $failuremsg .= _("Please remove the extra characters and run install again.");
+        install_fatal_error($failuremsg);
+    }
+} // end check_extra_whitespace fn
+
+
 /**
  * $Log: install-utils.inc,v $
+ * Revision 1.6  2004/07/31 03:17:42  maulani
+ * - Add a function to check include files for trailing whitespace
+ *
  * Revision 1.5  2004/07/28 17:27:03  braverock
  * - add phpdoc params to install_fatal_error fn
  *
