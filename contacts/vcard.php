@@ -4,7 +4,7 @@
  *
  * This page allows for export vcard for a single contact.
  *
- * $Id: vcard.php,v 1.7 2004/07/25 12:50:53 braverock Exp $
+ * $Id: vcard.php,v 1.8 2004/12/24 16:16:15 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -63,7 +63,9 @@ if ($rst) {
     $rst->close();
 }
 
-$rst = "BEGIN:VCARD
+$con->close();
+
+$vcard = "BEGIN:VCARD
 VERSION:2.1
 N:".$last_name.";".$first_names."
 FN:".$first_names." ".$last_name."
@@ -77,18 +79,25 @@ TEL;CELL:".$cell_phone."
 REV:20031119T213210Z
 END:VCARD";
 
-$filename =  'contact_' . $session_user_id . '.vcf';
+$filesize = strlen($vcard);
 
-$fp = fopen($tmp_export_directory . $filename, 'w');
+$filename =  'contact_' . $contact_id . '.vcf';
 
-fwrite($fp,$rst);
+//$fp = fopen($tmp_export_directory . $filename, 'w');
 
-$con->close();
+//fwrite($fp,$rst);
 
-header("Location: {$http_site_root}/export/{$filename}");
+
+//header("Location: {$http_site_root}/export/{$filename}");
+SendDownloadHeaders("text", "x-vcard", $filename, false, $filesize);
+echo $vcard;
+exit;
 
 /**
  * $Log: vcard.php,v $
+ * Revision 1.8  2004/12/24 16:16:15  braverock
+ * - modified to use SendDownloadHeaders
+ *
  * Revision 1.7  2004/07/25 12:50:53  braverock
  * - remove lang file require_once, as it is no longer used
  * - remove CVS conflict copies of code that made
