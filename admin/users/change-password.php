@@ -1,4 +1,11 @@
 <?php
+/**
+ * admin/users/change-password.php - Save new password
+ *
+ * Form to enter a new password for a user
+ *
+ * $Id: change-password.php,v 1.2 2004/03/12 15:37:07 maulani Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -35,6 +42,10 @@ start_page($page_title);
 				<td class=widget_content_form_element><input type=password size=30 name=password></td>
 			</tr>
 			<tr>
+				<td class=widget_label_right>Confirm New Password</td>
+				<td class=widget_content_form_element><input type=password size=30 name=confirm_password></td>
+			</tr>
+			<tr>
 				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
 			</tr>
 		</table>
@@ -56,4 +67,16 @@ start_page($page_title);
 	</tr>
 </table>
 
-<?php end_page();; ?>
+<?php 
+
+end_page();
+
+/**
+ *$Log: change-password.php,v $
+ *Revision 1.2  2004/03/12 15:37:07  maulani
+ *- Require new passwords be entered twice for validation
+ *- Add phpdoc
+ *
+ *
+ */
+?>
