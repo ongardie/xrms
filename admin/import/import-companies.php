@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.9 2004/07/25 13:32:33 johnfawcett Exp $
+ * $Id: import-companies.php,v 1.10 2004/07/25 13:50:29 johnfawcett Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -112,7 +112,7 @@ if ($handle = opendir('.')) {
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Accout Owner"); ?></td>
+                <td class=widget_label_right><?php echo _("Account Owner"); ?></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
@@ -160,6 +160,9 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.10  2004/07/25 13:50:29  johnfawcett
+ * - correct my spelling mistake of previous change
+ *
  * Revision 1.9  2004/07/25 13:32:33  johnfawcett
  * - modified string Acct. to Account to unify across application
  *
