@@ -4,7 +4,7 @@
  *
  * Displays Audit entries and new activity counts.  Needs work.
  *
- * $Id: dashboard.php,v 1.7 2004/05/27 12:03:03 braverock Exp $
+ * $Id: dashboard.php,v 1.8 2004/07/14 02:07:38 s-t Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -179,68 +179,9 @@ $page_title = "Digital Dashboard";
 start_page($page_title);
 
 ?>
-     <script language="javascript" src="<?php  echo $http_site_root; ?>/js/calendar1.js"></script>
-
-<div id="Main">
-    <div id="Content">
-
-            <!-- new today //-->
-      <form action="reports.php" method=post name="frmReport">
-        <table class=widget cellspacing=1 width=100%>
-          <tr>
-            <td colspan=5 class=widget_header>Reporting </td>
-          </tr>
-          <tr>
-            <td class=widget_label> Reporting Period</td>
-            <td class=widget_label>User</td>
-            <td class=widget_label>Opportunity </td>
-            <td class=widget_label>Activity</td>
-            <td class=widget_label>Case</td>
-          </tr>
-          <tr>
-            <td width="31%" class="widget_content_form_element">From
-              <input name="period_from" type=text value="<?php echo date('Y-m-d'); ?>" size=10>
-              <a href="javascript:cal1.popup();"><img class=date_picker border=0 src="../../img/cal.gif"></a>
-              To
-              <input name="period_to" type=text value="<?php echo date('Y-m-d'); ?>" size=10>
-              <a href="javascript:cal2.popup();"><img class=date_picker border=0 src="../../img/cal.gif"></a>
-            </td>
-            <td width="14%" class="widget_content"> <?php echo $user_menu; ?></td>
-            <td width="19%" valign="middle" bgcolor="#ffffff"><input name="opp_name" type=text disabled="disabled" size=10>
-              <input name="opt_opp" type="checkbox" onClick="oppChange(this.form);" value="1"></td>
-            <td width="18%" valign="middle" bgcolor="#ffffff"><input name="act_name" type=text disabled="disabled" size=10>
-              <input name="opt_act" type="checkbox" onClick="actChange(this.form);" value="1"></td>
-            <td width="18%" valign="middle" bgcolor="#ffffff"><input name="cases_name" type=text disabled="disabled" size=10>
-              <input name="opt_case" type="checkbox" onClick="caseChange(this.form);" value="1"></td>
-          </tr>
-          <tr>
-            <td colspan=5 class=widget_content_form_element> <input name="submit" type=submit class=button value="Search">
-              <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search"></td>
-          </tr>
-          <tr>
-            <td colspan=5 class=widget_content>&nbsp;</td>
-          </tr>
-          <tr>
-            <td colspan=5 class=widget_content>Note:</td>
-          </tr>
-          <tr>
-            <td colspan=5 class=widget_content>1) If checkboxes checked, than
-              conditions will be included and results related to condition shall
-              be shown if Database has these records. </td>
-          </tr>
-          <tr>
-            <td colspan=5 class=widget_content>2) The three search boxes for Opportunity,
-              Activity and Case are enabled <br>
-              when respective checkbox is checked. They are used to narrow down
-              the <br>
-              search results.</td>
-          </tr>
-        </table>
-      </form>
-    </div>
-
-        <!-- right column //-->
-    <div id="Sidebar">
+<div id="Main"> 
+  <!-- right column //-->
+  <div id="Sidebar">
 
             <!-- new today //-->
             <table class=widget cellspacing=1 width="100%">
@@ -308,8 +249,8 @@ end_page();
 
 /**
  * $Log: dashboard.php,v $
- * Revision 1.7  2004/05/27 12:03:03  braverock
- * - added additional database error handling
+ * Revision 1.8  2004/07/14 02:07:38  s-t
+ * cvs commit dashboard.php
  *
  * Revision 1.6  2004/04/20 20:03:07  braverock
  * - add additional activity reporting to the admin interface
