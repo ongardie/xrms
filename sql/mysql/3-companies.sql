@@ -239,7 +239,7 @@ create table contacts (
 	last_name                       varchar(100) not null default '',
 	first_names                     varchar(100) not null default '',
     gender                          char(1) not null default 'm',
-    date_of_birth                   date,
+    date_of_birth                   varchar(100) not null default '',
 	summary                         varchar(100) not null default '',
 	title                           varchar(100) not null default '',
 	description                     varchar(100) not null default '',
