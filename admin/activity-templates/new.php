@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.3 2004/06/24 20:13:46 braverock Exp $
+ * $Id: new.php,v 1.4 2004/07/15 20:36:36 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,9 +44,7 @@ $rst = $con->execute($sql);
 $sort_order = $rst->rowcount() + 1;
 $rst->close();
 
-$sql = "SELECT * FROM activity_templates WHERE 1 = 2"; //select empty record as placeholder
-$rst = $con->execute($sql);
-
+//save to database
 $rec = array();
 $rec['activity_title'] = $activity_title;
 $rec['on_what_id'] = $on_what_id;
@@ -55,7 +53,8 @@ $rec['activity_type_id'] = $activity_type_id;
 $rec['duration'] = $duration;
 $rec['sort_order'] = $sort_order;
 
-$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$tbl = "activity_templates";
+$ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $con->close();
@@ -68,6 +67,9 @@ header("Location: ".$http_site_root.'/admin/'.$on_what_table.'/one.php?'.$table_
 
 /**
  * $Log: new.php,v $
+ * Revision 1.4  2004/07/15 20:36:36  introspectshun
+ * - Now passes a table name instead of a recordset into GetInsertSQL
+ *
  * Revision 1.3  2004/06/24 20:13:46  braverock
  * - update to Header for synthetic url
  *   - patch provided by Neil Roberts
