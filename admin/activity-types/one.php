@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.6 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: one.php,v 1.7 2004/07/19 21:30:16 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -39,7 +39,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("One Activity Type :").$activity_type_pretty_name;
+$page_title = _("One Activity Type : ").$activity_type_pretty_name;
 start_page($page_title);
 
 ?>
@@ -112,6 +112,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/19 21:30:16  introspectshun
+ * - Added space to correct display of page title
+ *
  * Revision 1.6  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *
