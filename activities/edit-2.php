@@ -2,7 +2,7 @@
 /**
  * Save the updated activity information to the database
  *
- * $Id: edit-2.php,v 1.4 2004/03/15 14:51:27 braverock Exp $
+ * $Id: edit-2.php,v 1.5 2004/03/17 21:36:48 braverock Exp $
  */
 
 //include required files
@@ -26,12 +26,12 @@ $current_activity_status = $_POST['current_activity_status'];
 $user_id    = $_POST['user_id'];
 
 //set scheduled_at to today if it is empty
-if (strlen($scheduled_at) = 0) {
+if (!$scheduled_at) {
     $scheduled_at = date ("y-m-d");
 }
 
 // set ends_at to scheduled_at if it is empty
-if (strlen($ends_at) = 0) {
+if (!$ends_at) {
     $ends_at = $scheduled_at;
 }
 
@@ -64,6 +64,9 @@ header("Location: " . $http_site_root . $return_url);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.5  2004/03/17 21:36:48  braverock
+ * -fixed strlen bug
+ *
  * Revision 1.4  2004/03/15 14:51:27  braverock
  * - fix ends-at display bug
  * - make sure both scheduled_at and ends_at have legal values
