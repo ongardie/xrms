@@ -5,14 +5,13 @@
 # **  $Id/*.php xgetpo.sh,v 1.1 2004/06/25 14/*.php35/*.php39 braverock Exp $
 # **
 # ** Modified from Squirrelmail for XRMS by Brian Peterson
- 
+
 XGETTEXT_OPTIONS="--keyword=_ --default-domain=xrms --add-location --output=locale/xrms.pot --language=PHP -s "
 
 cp xrms.pot xrms.pot.bak
 
-
 cd ../
-xgettext ${XGETTEXT_OPTIONS}    activities/*.php
+xgettext ${XGETTEXT_OPTIONS} activities/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/account-statuses/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/activity-templates/*.php

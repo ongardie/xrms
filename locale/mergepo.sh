@@ -14,7 +14,7 @@ POTNAME=xrms.pot
 # ** Philipe Mingo <mingo@rotedic.com>
 # ** Konstantin Riabitsev <icon@duke.edu>
 # **
-# **  $Id: mergepo.sh,v 1.1 2004/06/25 14:35:39 braverock Exp $
+# **  $Id: mergepo.sh,v 1.2 2004/08/20 15:29:41 braverock Exp $
 
 if [ -z "$1" ]; then
  echo "USAGE: mergepo [localename]"
@@ -22,7 +22,7 @@ if [ -z "$1" ]; then
 fi
 
 WORKDIR=../locale
-LOCALEDIR=$WORKDIR/$1
+LOCALEDIR=$WORKDIR/$1/LC_MESSAGES
 
 if [ ! -d $LOCALEDIR ]; then
  # lessee if it's been renamed.

@@ -12,7 +12,7 @@ MONAME=xrms.mo
 # ** Philipe Mingo <mingo@rotedic.com>
 # ** Konstantin Riabitsev <icon@duke.edu>
 # **
-# **  $Id: compilepo.sh,v 1.1 2004/06/25 14:35:39 braverock Exp $
+# **  $Id: compilepo.sh,v 1.2 2004/08/20 15:29:41 braverock Exp $
 
 if [ -z "$1" ]; then
  echo "USAGE: compilepo [localename]"
@@ -20,7 +20,7 @@ if [ -z "$1" ]; then
 fi
 
 WORKDIR=../locale
-LOCALEDIR=$WORKDIR/$1
+LOCALEDIR=$WORKDIR/LC_MESSAGES/$1
 
 if [ ! -d $LOCALEDIR ]; then
  # lessee if it's been renamed.
@@ -42,4 +42,4 @@ MOFILE=$LOCALEDIR/$MONAME
 
 echo "Compiling $POFILE"
 msgfmt -vvv -o $MOFILE $POFILE
-	
+
