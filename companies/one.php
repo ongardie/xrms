@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.61 2004/07/25 12:43:25 braverock Exp $
+ * $Id: one.php,v 1.62 2004/07/26 03:59:23 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -383,7 +383,12 @@ $sidebar_rows = do_hook_function('company_sidebar_bottom', $sidebar_rows);
 /** End of the sidebar includes **/
 /*********************************/
 
-$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a'";
+$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id
+        FROM contacts
+        WHERE company_id = $company_id
+        AND contact_record_status = 'a'
+        ORDER BY last_name";
+
 $rst = $con->execute($sql);
 if ($rst) {
     $contact_menu = $rst->getmenu2('contact_id', '', true);
@@ -757,6 +762,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.62  2004/07/26 03:59:23  braverock
+ * - sort contact list in Activities menu by last name
+ *   - implements SF feature request 925618 submitted by gpowers
+ *
  * Revision 1.61  2004/07/25 12:43:25  braverock
  * - remove lang file require_once, as it is no longer used
  *
