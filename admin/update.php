@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.42 2004/12/07 21:27:13 vanmer Exp $
+ * $Id: update.php,v 1.43 2004/12/07 22:24:02 vanmer Exp $
  */
 
 // where do we include from
@@ -350,7 +350,11 @@ $sql ="CREATE TABLE relationship_types (
         $rst = $con->execute($sql);
 
 //relationship status does not exist in old tables, add it
-$sql ="ALTER TABLE relationship_type ADD relationship_status char(1) NOT NULL default 'a'";
+$sql ="ALTER TABLE relationship_types 
+	ADD relationship_status char(1) NOT NULL default 'a',
+	ADD pre_formatting varchar(25) default NULL,
+	ADD post_formatting varchar(25) default NULL
+	";
 	$rst = $con->execute($sql);
 
 // create the saved_actions table if we need it
@@ -3844,6 +3848,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.43  2004/12/07 22:24:02  vanmer
+ * - added missing fields to relationship_types
+ *
  * Revision 1.42  2004/12/07 21:27:13  vanmer
  * - added field relationship_status to relationship_type table, since it is missing on older installs
  * - added currency_code field to keep track of currencies for a country
