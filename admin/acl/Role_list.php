@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: Role_list.php,v 1.3 2005/02/14 23:10:19 vanmer Exp $
+ * $Id: Role_list.php,v 1.4 2005/02/14 23:24:52 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,7 +62,7 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat("'<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href=\'one_Role.php?form_action=edit&return_url=Role_list.php&Role_id='", 'Role_id', "'\'\">'") . "AS LINK, Role.* FROM Role order by $order_by";
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_Role.php?form_action=edit&return_url=Role_list.php&Role_id="), 'Role_id', $con->qstr("'\">")) . "AS LINK, Role.* FROM Role order by $order_by";
 
 $css_theme='basic-left';
 start_page($page_title);
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: Role_list.php,v $
+ * Revision 1.4  2005/02/14 23:24:52  vanmer
+ * - altered to use adodb qstr for created input button
+ *
  * Revision 1.3  2005/02/14 23:10:19  vanmer
  * - added missing single quote
  *
