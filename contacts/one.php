@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.63 2005/02/11 12:26:16 braverock Exp $
+ * $Id: one.php,v 1.64 2005/02/14 21:44:11 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -142,11 +142,13 @@ WHERE a.contact_id = $contact_id
   AND a.contact_id = cont.contact_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'";
-    $list=get_list($session_user_id, 'Read', false, 'activities');
+    $list=acl_get_list($session_user_id, 'Read', false, 'activities');
     //print_r($list);
     if ($list) {
-        $list=implode(",",$list);
-        $sql_activities .= " and a.activity_id IN ($list) ";
+        if ($list!==true) {
+            $list=implode(",",$list);
+            $sql_activities .= " and a.activity_id IN ($list) ";
+        }
     } else { $sql_activities .= ' AND 1 = 2 '; }
 $sql_activities.=" 
 ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
@@ -601,6 +603,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.64  2005/02/14 21:44:11  vanmer
+ * - updated to reflect speed changes in ACL operation
+ *
  * Revision 1.63  2005/02/11 12:26:16  braverock
  * - define contact_sidebar_bottom hook
  *

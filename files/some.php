@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.27 2005/02/10 02:31:40 braverock Exp $
+ * $Id: some.php,v 1.28 2005/02/14 21:46:59 vanmer Exp $
  */
 
 //include required files
@@ -203,11 +203,13 @@ if (strlen($user_id) > 0) {
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 } else {
-    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    $list=acl_get_list($session_user_id, 'Read', false, $on_what_table);
     //print_r($list);
     if ($list) {
-        $list=implode(",",$list);
-        $where .= " and f.file_id IN ($list) ";
+        if ($list!==true) {
+            $list=implode(",",$list);
+            $where .= " and f.file_id IN ($list) ";
+        }
     } else { $where .= ' AND 1 = 2 '; }
 }
 
@@ -418,6 +420,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.28  2005/02/14 21:46:59  vanmer
+ * - updated to reflect speed changes in ACL operation
+ *
  * Revision 1.27  2005/02/10 02:31:40  braverock
  * - add is_numeric check for file_id search
  *   - this should be an advanced search field

@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.52 2005/02/09 23:58:14 braverock Exp $
+ * $Id: some.php,v 1.53 2005/02/14 21:43:45 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -128,10 +128,12 @@ if (strlen($industry_id) > 0) {
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 } else {
-    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    $list=acl_get_list($session_user_id, 'Read', false, $on_what_table);
     if ($list) {
-        $list=implode(",",$list);
-        $where .= " and c.company_id IN ($list) ";
+        if ($list!==true) {
+            $list=implode(",",$list);
+            $where .= " and c.company_id IN ($list) ";
+        }
     } else { $where .= ' AND 1 = 2 '; }
 }
 
@@ -410,6 +412,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.53  2005/02/14 21:43:45  vanmer
+ * - updated to reflect speed changes in ACL operation
+ *
  * Revision 1.52  2005/02/09 23:58:14  braverock
  * - quote the Mail MErge button so both words show
  *

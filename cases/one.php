@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.31 2005/02/10 03:24:59 braverock Exp $
+ * $Id: one.php,v 1.32 2005/02/14 21:43:14 vanmer Exp $
  */
 
 //include required files
@@ -107,11 +107,13 @@ and a.user_id = u.user_id
 and a.activity_type_id = at.activity_type_id
 and a.activity_record_status = 'a'";
     
-    $list=get_list($session_user_id, 'Read', false, 'activities');
+    $list=acl_get_list($session_user_id, 'Read', false, 'activities');
     //print_r($list);
     if ($list) {
-        $list=implode(",",$list);
-        $sql_activities .= " and a.activity_id IN ($list) ";
+        if ($list!==true) {
+            $list=implode(",",$list);
+            $sql_activities .= " and a.activity_id IN ($list) ";
+        }
     } else { $sql_activities .= ' AND 1 = 2 '; }
 
 $sql_activities.=" 
@@ -384,6 +386,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.32  2005/02/14 21:43:14  vanmer
+ * - updated to reflect speed changes in ACL operation
+ *
  * Revision 1.31  2005/02/10 03:24:59  braverock
  * - change order of LEFT OUTER JOIN query for MS SQL server portability
  *

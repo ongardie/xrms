@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.37 2005/02/10 01:49:27 braverock Exp $
+ * $Id: one.php,v 1.38 2005/02/14 21:48:17 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -147,11 +147,13 @@ WHERE a.on_what_table = 'opportunities'
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'";
     
-    $list=get_list($session_user_id, 'Read', false, 'activities');
+    $list=acl_get_list($session_user_id, 'Read', false, 'activities');
     //print_r($list);
     if ($list) {
-        $list=implode(",",$list);
-        $sql_activities .= " and a.activity_id IN ($list) ";
+        if ($list!==true) {
+            $list=implode(",",$list);
+            $sql_activities .= " and a.activity_id IN ($list) ";
+        }
     } else { $sql_activities .= ' AND 1 = 2 '; }
 
 
@@ -464,6 +466,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.38  2005/02/14 21:48:17  vanmer
+ * - updated to reflect speed changes in ACL operation
+ *
  * Revision 1.37  2005/02/10 01:49:27  braverock
  * - improve SQL standardization for portability
  *

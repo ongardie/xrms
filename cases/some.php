@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.26 2005/02/10 02:28:16 braverock Exp $
+ * $Id: some.php,v 1.27 2005/02/14 21:43:14 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -124,11 +124,13 @@ if (strlen($case_type_id) > 0) {
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 } else {
-    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    $list=acl_get_list($session_user_id, 'Read', false, $on_what_table);
     //print_r($list);
     if ($list) {
-        $list=implode(",",$list);
-        $where .= " and ca.case_id IN ($list) ";
+        if ($list!==true) {
+            $list=implode(",",$list);
+            $where .= " and ca.case_id IN ($list) ";
+        }
     } else { $where .= ' AND 1 = 2 '; }
 }
 
@@ -355,6 +357,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.27  2005/02/14 21:43:14  vanmer
+ * - updated to reflect speed changes in ACL operation
+ *
  * Revision 1.26  2005/02/10 02:28:16  braverock
  * - add is_numeric check for case_id search
  *   - this should be an advanced search field

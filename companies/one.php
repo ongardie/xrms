@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.91 2005/02/10 21:16:45 maulani Exp $
+ * $Id: one.php,v 1.92 2005/02/14 21:43:45 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -215,11 +215,13 @@ WHERE a.company_id = $company_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'";
     
-    $list=get_list($session_user_id, 'Read', false, 'activities');
+    $list=acl_get_list($session_user_id, 'Read', false, 'activities');
     
     if ($list) {
-        $list=implode(",",$list);
-        $sql_activities .= " and a.activity_id IN ($list) ";
+        if ($list!==true) {
+            $list=implode(",",$list);
+            $sql_activities .= " and a.activity_id IN ($list) ";
+        }
     } else { $sql_activities .= ' AND 1 = 2 '; }
 
 if ($division_id) {
@@ -824,6 +826,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.92  2005/02/14 21:43:45  vanmer
+ * - updated to reflect speed changes in ACL operation
+ *
  * Revision 1.91  2005/02/10 21:16:45  maulani
  * - Add audit trail entries
  *

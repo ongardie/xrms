@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.39 2005/02/11 21:31:49 daturaarutad Exp $
+ * $Id: some.php,v 1.40 2005/02/14 21:48:17 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -104,11 +104,13 @@ if (strlen($opportunity_status_id) > 0) {
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 } else {
-    $acl_id_list=get_list($session_user_id, 'Read', false, $on_what_table);
+    $acl_id_list=acl_get_list($session_user_id, 'Read', false, $on_what_table);
     //print_r($acl_id_list);
     if ($acl_id_list) {
-        $acl_id_list=implode(",",$acl_id_list);
-        $where .= " and opp.opportunity_id IN ($acl_id_list) ";
+        if ($list!==true) {
+            $acl_id_list=implode(",",$acl_id_list);
+            $where .= " and opp.opportunity_id IN ($acl_id_list) ";
+        }
     } else { $where .= ' AND 1 = 2 '; }
 }
 
@@ -342,6 +344,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.40  2005/02/14 21:48:17  vanmer
+ * - updated to reflect speed changes in ACL operation
+ *
  * Revision 1.39  2005/02/11 21:31:49  daturaarutad
  * removed (hopefully) the last of the localization in the sql queries
  *
