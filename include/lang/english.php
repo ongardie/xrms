@@ -1,5 +1,9 @@
 <?php
 
+//  general
+
+$salutation_array = array("Mr.", "Mrs.", "Miss", "Dr.");
+
 $strYes = "Yes";
 $strNo = "No";
 $strNever = "Never";

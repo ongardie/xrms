@@ -43,6 +43,27 @@ function translate_msg($msg) {
     }
 }
 
+function build_salutation_menu($salutation) {
+    
+    require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
+    
+    // global $salutation_array;
+    
+    $salutation_menu = "<select name=salutation>";
+    
+    for ($i = 0; $i < sizeof($salutation_array); $i++) {
+        $salutation_menu .= "\n<option value='" . $salutation_array[$i] . "'";
+        if ($salutation == $salutation_array[$i]) {
+            $salutation_menu .= " selected";
+        }
+        $salutation_menu .= ">" . $salutation_array[$i];
+    }
+    
+    $salutation_menu .= "\n</select>";
+    
+    return $salutation_menu;
+}
+
 function update_recent_items($con, $user_id, $on_what_table, $on_what_id) {
     $sql1 = "delete from recent_items where user_id = $user_id and on_what_table = '" . $on_what_table . "' and on_what_id = $on_what_id";
     $sql2 = "insert into recent_items (user_id, on_what_table, on_what_id, recent_item_timestamp) values ($user_id, '" . $on_what_table . "', $on_what_id, " . $con->dbtimestamp(time()) . ")";
