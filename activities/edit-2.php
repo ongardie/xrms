@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.36 2004/07/30 15:27:16 braverock Exp $
+ * $Id: edit-2.php,v 1.37 2004/08/11 18:44:18 braverock Exp $
  */
 
 //include required files
@@ -53,8 +53,12 @@ $arr_vars = array (
 arr_vars_post_with_cmd ( $arr_vars );
 
 // set the correct activity status flag
-//previous syntax incorrectly cleared already closed activities.
-if ($activity_status == 'on') { $activity_status = 'c'; }
+if ($activity_status == 'on') {
+    $activity_status = 'c';
+} else {
+    //force a value for open activity, so the GetUpdateSQL will work
+    $activity_status = 'o';
+}
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -418,6 +422,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.37  2004/08/11 18:44:18  braverock
+ * - allow clearing a previously set activity completion
+ *
  * Revision 1.36  2004/07/30 15:27:16  braverock
  * - move undefined variable check for activity status above followup check
  *   - resolves SF bug 999663 reported by John Fawcett
