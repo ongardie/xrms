@@ -7,6 +7,7 @@ Authors:    L. Brandon Stone (lbstone.com)
             Nathanial P. Hendler (retards.org)
             Glenn Powers <glenn@net127.com>
 
+2004-10-10  Removed "REQUIREMENTS" Section [GP]
 2004-08-04  Added "THE BEGINNING OF THE APB XRMS PLUGIN" [GP]
 2004-08-04  Added "THE END OF APB?" [GP]
 2003-03-31  Changes made for 1.1.02. [LBS]
@@ -18,7 +19,6 @@ Authors:    L. Brandon Stone (lbstone.com)
  1. WHAT IS APB?
  1a. THE END OF APB?
  1b. THE BEGINNING OF THE APB XRMS PLUGIN
- 2. REQUIREMENTS
  3. QUICK INSTALL
  4. MORE INSTALL INSTRUCTIONS
  5. UPGRADING
@@ -94,19 +94,6 @@ cheers,
 glenn <glenn@net127.com>
 
 
-2. REQUIREMENTS
----------------
-
-APB requires PHP, MySQL, and a webserver.  It is known to work with MySQL
-3.23.41 and PHP 4.0.6, but may work with older versions as well.
-
-This version of APB assumes that:
--   PHP's "magic_quotes" option is on.
--   PHP's "register_globals" option is on.
-
-Newer versions of APB are expected to allow for greater flexibility with these
-settings.
-
 
 3. QUICK INSTALL
 ----------------
@@ -121,9 +108,7 @@ settings.
 
     bash$ mysql -u username -p database_name < database_schema.sql
 
-4)  Edit apb.php and put in your database username, password, and database name.
-
-5)  Go to http://yoursite.com/bookmarks/ and follow the instructions.
+4)  Go to http://yoursite.com/bookmarks/ and follow the instructions.
 
 
 4. MORE INSTALL INSTRUCTIONS
