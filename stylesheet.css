@@ -239,6 +239,7 @@ td.widget_content_market1 {
   color: #333333;
   white-space: nowrap;
 }
+
 td.widget_content_alt, widget_content_market2 {
   padding: 5px;
   background-color: #ffffee;
@@ -254,8 +255,8 @@ td.widget_content_form_element {
   font-family: arial;
   font-size: 9pt;
   color: #333333;
-  white-space: nowrap;
 }
+
 td.widget_content_form_element_center {
   padding: 4px;
   vertical-align: middle;
