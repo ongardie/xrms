@@ -3,7 +3,7 @@
  * Common user interface functions file.
  *
  *
- * $Id: utils-interface.php,v 1.7 2004/03/20 20:03:24 braverock Exp $
+ * $Id: utils-interface.php,v 1.8 2004/03/22 15:56:42 maulani Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -65,7 +65,8 @@ EOQ;
 
 
 
-    if ($show_navbar) echo <<<EOQ
+    if ($show_navbar) {
+        echo <<<EOQ
 
         <tr>
             <td>
@@ -97,7 +98,8 @@ EOQ;
             </td>
         </tr>
 EOQ;
-
+    }
+    
     echo <<<EOQ
     </table>
 
@@ -165,6 +167,10 @@ function build_salutation_menu($salutation) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.8  2004/03/22 15:56:42  maulani
+ * - Fix bug 921105 reported by maulani--partial display of menubar on
+ *   screens that should not have a menubar
+ *
  * Revision 1.7  2004/03/20 20:03:24  braverock
  * - add code to enable plugins
  * - add menuline and end_page hooks to start
