@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.25 2005/01/06 20:45:11 vanmer Exp $
+ * $Id: database.php,v 1.26 2005/01/06 21:51:25 vanmer Exp $
  */
 
 /**
@@ -488,6 +488,7 @@ function company_db_tables($con, $table_list) {
         $sql ="create table company_division (
                division_id                      int not null primary key auto_increment,
                company_id                       int not null,
+               address_id                         int,
                user_id                          int not null default 0,
                company_source_id                int not null default 0,
                industry_id                      int not null default 0,
@@ -1046,6 +1047,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.26  2005/01/06 21:51:25  vanmer
+ * - added address_id to company_division table, for use in specifying addresses for divisions
+ *
  * Revision 1.25  2005/01/06 20:45:11  vanmer
  * - added optional division_id to cases and opportunities
  *

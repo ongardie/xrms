@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.45 2005/01/06 20:44:24 vanmer Exp $
+ * $Id: update.php,v 1.46 2005/01/06 21:48:19 vanmer Exp $
  */
 
 // where do we include from
@@ -3844,6 +3844,10 @@ $con->execute($sql);
 $sql="ALTER TABLE `cases` ADD `division_id` INT UNSIGNED AFTER `company_id`";
 $con->execute($sql);
 
+//add address_id to the company_division table (for use in assigning addresses to a division)
+$sql="ALTER TABLE `company_division` ADD `address_id` INT UNSIGNED AFTER `company_id`";
+$con->execute($sql);
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -3865,6 +3869,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.46  2005/01/06 21:48:19  vanmer
+ * - added address_id to company_division table, for use in specifying addresses for divisions
+ *
  * Revision 1.45  2005/01/06 20:44:24  vanmer
  * - added optional division_id to cases and opportunities
  *
