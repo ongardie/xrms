@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.50 2005/01/10 21:45:07 vanmer Exp $
+ * $Id: edit-2.php,v 1.51 2005/01/12 21:00:02 vanmer Exp $
  */
 
 //include required files
@@ -343,7 +343,7 @@ if ($table_name !== "attached to") {
     } else {
         db_error_handler ($con, $sql);
     }
-
+    
     //check if there are open activities from this status
     // if no more activities are open, advance status
     $no_update = true;
@@ -378,11 +378,16 @@ if ($table_name !== "attached to") {
     }
 
     // check for status change
-    if ($old_status != $table_status_id){
+    if ($old_status !== $table_status_id){
         //if there is only one field, the result set is empty (no old activities)
         //  otherwise prompt the user
         if ($no_update) {
-            $return_url = "/activities/one.php?msg=no_change&activity_id=$activity_return_id";
+            if ($activity_return_id)
+                $return_url = "/activities/one.php?msg=no_change&activity_id=$activity_return_id";
+            elseif ($return_url)
+                $return_url.='?msg=no_change';
+             else 
+                $return_url="/private/home.php?msg=no_change";
         }
 
         //update if there are no open activities
@@ -468,6 +473,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.51  2005/01/12 21:00:02  vanmer
+ * - altered to redirect to different URLS when next activity id is not available
+ * - altered to use type comparison for different statuses
+ *
  * Revision 1.50  2005/01/10 21:45:07  vanmer
  * - updates to allow workflow hooks to properly find the next possible status, and activities to populate
  *
