@@ -2,7 +2,7 @@
 /**
  * activites/new-2.php - This page inserts a new activity into the database
  *
- * Thisd may happen form many places in the XRMS interface, becasue the activities
+ * This may be called from many places in the XRMS interface, because the activities
  * may be linked from contacts, companies, cases, opportunities, or mailto links.
  *
  * This page needs to first grab submitted parameters for the activity, or set default
@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.8 2004/04/27 15:17:08 gpowers Exp $
+ * $Id: new-2.php,v 1.9 2004/05/04 15:13:21 maulani Exp $
  */
 
 //where do we include from
@@ -54,6 +54,11 @@ $on_what_id = ($on_what_id > 0) ? $on_what_id : 0;
 $company_id = ($company_id > 0) ? $company_id : 0;
 $contact_id = ($contact_id > 0) ? $contact_id : 0;
 
+//make our database connection
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+//$con->debug = 1;
+
 if (!$scheduled_at) {
     $scheduled_at = $con->dbtimestamp(mktime());
 }
@@ -61,11 +66,6 @@ if (!$scheduled_at) {
 if (!$ends_at) {
     $ends_at = $scheduled_at;
 }
-
-//make our database connection
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-//$con->debug = 1;
 
 // define our query
 $sql = "insert into activities
@@ -107,6 +107,10 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.9  2004/05/04 15:13:21  maulani
+ *- Database connection object was called before being created.  Reorganized
+ *  code to prevent fatal crash.
+ *
  *Revision 1.8  2004/04/27 15:17:08  gpowers
  *added support for activity times
  *added support passing ends_at (defaults to scheduled_at)
