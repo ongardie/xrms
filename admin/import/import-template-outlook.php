@@ -101,24 +101,30 @@
     if ($row['assistant_s_phone']) {
         $contact_profile            .= "Assistant's Phone: " . $row['assistant_s_phone'] . "\n";
     }
-    $company_fax         = $row['business_fax'];
-    $company_phone       = $row['business_phone'];
-    $company_phone2      = $row['business_phone_2'];
-    if ($row['callback']) {
-        $contact_profile            .= "Callback: " . $row['callback'] . "\n";
+    $company_fax             = $row['business_fax'];
+    $company_phone           = $row['company_main_phone'];
+    if(!strlen($company_phone)){
+        $company_phone       = $row['business_phone'];
     }
-    $contact_cell_phone        = $row['car_phone'];
-    $contact_work_phone  = $row['company_main_phone'];
-    $contact_fax         = $row['home_fax'];
-    $contact_home_phone  = $row['home_phone'];
+    $company_phone2          = $row['business_phone_2'];
+    if ($row['callback']) {
+        $contact_profile    .= "Callback: " . $row['callback'] . "\n";
+    }
+    $contact_cell_phone      = $row['mobile_phone'];
+    if (!strlen($contact_cell_phone)) {
+        $contact_cell_phone  = $row['car_phone'];
+    }
+    $contact_work_phone      = $row['business_phone'];
+    if (!strlen($contact_work_phone)){
+        $contact_work_phone  = $row['company_main_phone'];
+    }
+    $contact_fax             = $row['home_fax'];
+    $contact_home_phone      = $row['home_phone'];
     if ($row['home_phone_2']) {
         $contact_profile            .= "Home Phone 2: " . $row['home_phone_2'] . "\n";
     }
     if ($row['isdn']) {
         $contact_profile            .= "ISDN: " . $row['isdn'] . "\n";
-    }
-    if (!$contact_cell_phone) {
-        $contact_cell_phone    .= "" . $row['mobile_phone'] . "\n";
     }
     if ($row['other_fax']) {
         $contact_profile            .= "Other FAX: " . $row['other_fax'] . "\n";
@@ -256,6 +262,10 @@
 
 /**
  * $Log: import-template-outlook.php,v $
+ * Revision 1.4  2004/07/10 11:51:06  braverock
+ * - cleaned up assignments for outlook phone import
+ *   - resolves SF bug 951241 based on contributor suggestions
+ *
  * Revision 1.3  2004/07/07 22:18:33  braverock
  * - minor improvements to import process
  *
