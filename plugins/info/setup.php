@@ -4,14 +4,24 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.13 2005/03/07 18:36:00 vanmer Exp $
+ * $Id: setup.php,v 1.14 2005/03/18 20:54:37 gpowers Exp $
  */
 
 
 function xrms_plugin_init_info () {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['company_accounting']['info']
-      = 'company_accounting';
+    $xrms_plugin_hooks['company_accounting_inline_display']['info']
+      = 'company_accounting_inline_display';
+    $xrms_plugin_hooks['company_accounting_inline_edit']['info']
+      = 'company_accounting_inline_edit';
+    $xrms_plugin_hooks['company_accounting_inline_edit_2']['info']
+      = 'company_accounting_inline_edit_2';
+    $xrms_plugin_hooks['contact_accounting_inline_display']['info']
+      = 'contact_accounting_inline_display';
+    $xrms_plugin_hooks['contact_accounting_inline_edit']['info']
+      = 'contact_accounting_inline_edit';
+    $xrms_plugin_hooks['contact_accounting_inline_edit_2']['info']
+      = 'contact_accounting_inline_edit_2';
     $xrms_plugin_hooks['company_sidebar_bottom']['info']
       = 'company_sidebar_bottom';
     $xrms_plugin_hooks['contact_sidebar_top']['info']
@@ -47,6 +57,9 @@ function display_on_menu () {
     $menu .= "<option ";
     if ($display_on == "company_accounting") $menu .= "SELECTED ";
     $menu .= "value=\"company_accounting\">Company Accounting</option>";
+    $menu .= "<option ";
+    if ($display_on == "contact_accounting") $menu .= "SELECTED ";
+    $menu .= "value=\"contact_accounting\">Contact Accounting</option>";
     $menu .= "<option ";
     if ($display_on == "company_content_bottom") $menu .= "SELECTED ";
     $menu .= "value=\"company_content_bottom\">Company Content Bottom</option>";
@@ -157,6 +170,72 @@ function info_sidebar_bottom () {
     $display_on = "all";
     include("$xrms_file_root/plugins/info/sidebar.php");
     $sidebar_string = ob_get_contents();
+    ob_end_clean();
+    return $sidebar_string;
+}
+
+function company_accounting_inline_display () {
+    global $xrms_file_root, $http_site_root, $con, $company_id, $info_list, $display_on;
+    include("info.inc");
+    ob_start();
+    $display_on = "company_accounting";
+    include("$xrms_file_root/plugins/info/inline-display.php");
+    $sidebar_string .= ob_get_contents();
+    ob_end_clean();
+    return $sidebar_string;
+}
+
+function company_accounting_inline_edit () {
+    global $xrms_file_root, $http_site_root, $con, $company_id, $info_list, $display_on;
+    include("info.inc");
+    ob_start();
+    $display_on = "company_accounting";
+    include("$xrms_file_root/plugins/info/inline-edit.php");
+    $sidebar_string .= ob_get_contents();
+    ob_end_clean();
+    return $sidebar_string;
+}
+
+function company_accounting_inline_edit_2 () {
+    global $xrms_file_root, $http_site_root, $con, $company_id, $info_list, $display_on;
+    include("info.inc");
+    ob_start();
+    $display_on = "company_accounting";
+    include("$xrms_file_root/plugins/info/inline-edit-2.php");
+    $sidebar_string .= ob_get_contents();
+    ob_end_clean();
+    return $sidebar_string;
+}
+
+function contact_accounting_inline_display () {
+    global $xrms_file_root, $http_site_root, $con, $company_id, $info_list, $display_on;
+    include("info.inc");
+    ob_start();
+    $display_on = "contact_accounting";
+    include("$xrms_file_root/plugins/info/inline-display.php");
+    $sidebar_string .= ob_get_contents();
+    ob_end_clean();
+    return $sidebar_string;
+}
+
+function contact_accounting_inline_edit () {
+    global $xrms_file_root, $http_site_root, $con, $company_id, $info_list, $display_on;
+    include("info.inc");
+    ob_start();
+    $display_on = "contact_accounting";
+    include("$xrms_file_root/plugins/info/inline-edit.php");
+    $sidebar_string .= ob_get_contents();
+    ob_end_clean();
+    return $sidebar_string;
+}
+
+function contact_accounting_inline_edit_2 () {
+    global $xrms_file_root, $http_site_root, $con, $company_id, $info_list, $display_on;
+    include("info.inc");
+    ob_start();
+    $display_on = "contact_accounting";
+    include("$xrms_file_root/plugins/info/inline-edit-2.php");
+    $sidebar_string .= ob_get_contents();
     ob_end_clean();
     return $sidebar_string;
 }

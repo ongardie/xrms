@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.16 2005/02/15 21:56:20 vanmer Exp $
+ * $Id: sidebar.php,v 1.17 2005/03/18 20:54:37 gpowers Exp $
  */
 
 //$con->debug = 1;
@@ -47,28 +47,10 @@ while (!$toprst->EOF) {
                     <td class=widget_header colspan=2>$info_type_name</td>
                 </tr>\n";
     };
-
-    // Find which element_id contains the "Name"
-    $sql = "SELECT element_id ";
-    $sql .= "FROM info_element_definitions ";
-    $sql .= "WHERE element_type = 'name' ";
-    $sql .= "AND info_type_id = $info_type_id ";
-    //$sql .= "LIMIT 1 ";
-    $rst = $con->SelectLimit($sql,1);
-
-    # Every info type MUST have a a 'name' element
-    if ($rst) {
-        $name_element_id = $rst->fields['element_id'];
-        assert (!empty($name_element_id));
-    }
-    else {
-      db_error_handler ($con, $sql);
-      exit;
-    }
-
+    
     // Find the elements to display in sidebar under name
     // (there may be none)
-    $sql = "SELECT element_id,  element_label ";
+    $sql = "SELECT element_id,  element_label, element_type ";
     $sql .= "FROM info_element_definitions ";
     $sql .= "WHERE element_display_in_sidebar = 1 ";
     $sql .= "AND info_type_id = $info_type_id ";
@@ -80,15 +62,17 @@ while (!$toprst->EOF) {
         while (!$rst->EOF) {
             $element[$rst->fields['element_label']]
                 = $rst->fields['element_id'];
+	    $element_types[$rst->fields['element_id']]
+                = $rst->fields['element_type'];
             $rst->movenext();
         }
     }
 
     // Generate list of instances of this info type
-    $sql = "SELECT info.value, info.info_id FROM info, info_map ";
+    $sql = "SELECT distinct info.info_id FROM info, info_map ";
     $sql .= "WHERE info.info_id=info_map.info_id ";
     $sql .= "AND info_map.info_type_id = $info_type_id ";
-    $sql .= "AND info.element_id = $name_element_id ";
+    //$sql .= "AND info.element_id = $name_element_id ";
     
     if ($company_id) {
         $sql .= "AND info_map.company_id = $company_id ";
@@ -118,9 +102,16 @@ while (!$toprst->EOF) {
         exit;
     }
 
+    $empty = 1;
+    $info_id=0;
     # Loop through each instance type and get info to display
     while (!$rst->EOF) {
-      $not_empty = 1;
+
+      // Save the info_id
+      $info_id = $rst->fields['info_id'];
+      $empty = 0;
+
+      /*
       $info_link = "<tr><td colspan=2 class=widget_content><a href='$http_site_root/plugins/info/one.php";
       $info_link .= "?info_id=" . $rst->fields['info_id'];
       $info_link .= "&company_id=$company_id";
@@ -133,6 +124,7 @@ while (!$toprst->EOF) {
       $info_link .= "'>".$rst->fields['value'] . "</a></td></tr>";
 
       $info_rows .= $info_link;
+      */
 
       # If we should show fields under link, generate them now
       #echo "count=".count($el
@@ -154,8 +146,14 @@ while (!$toprst->EOF) {
 
               if ($rst2) {
                 while (!$rst2->EOF) {
-                  $info_rows .= "<tr><td class=sublabel>" . $field . "</td><td class=widget_content>"
-                      . $rst2->fields['value'] . "</td></tr>";
+		  if (Trim($rst2->fields['value']) ) {
+                  	$info_rows .= "<tr><td class=sublabel>" . $field . "</td><td class=widget_content>";
+		  	if ($element_types[$value] == 'checkbox' && $rst2->fields['value'] == '1' ) {
+		  		$info_rows = $info_rows . "yes</td></tr>";
+			} else {
+                        	$info_rows = $info_rows . $rst2->fields['value'] . "</td></tr>";
+		  	}
+		  }
 		  $rst2->movenext();
                 }
               }
@@ -166,33 +164,38 @@ while (!$toprst->EOF) {
 
     // Add New button
     if (!$company_accounting) {
-        $info_rows .= "<tr>
-            <td class=widget_content_form_element colspan=2>";
-    };
+        $info_rows .= "<tr> <td class=widget_content_form_element colspan=2>";
+    }
 
-    if (((!$not_empty) && ($company_accounting)) || (!$company_accounting)) {
+
+    if (((!$empty) && ($company_accounting)) || (!$company_accounting)) {
         if ($company_accounting) {
              $info_rows .= "<tr><td colspan=2>";
-        };
-        $info_rows .= "<br />
-            <input class=button type=button value=\"" . _("New");
+        }
+	if ($empty) {
+        	$info_rows .= "<br /> <input class=button type=button value=\"" . _("New");
+         	$info_rows .= "\" onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=$info_id&new_info=true&company_id=$company_id&contact_id=$contact_id&division_id=$division_id&info_type_id=$info_type_id&return_url=$return_url';\">";
+	}
+	else {
+        	$info_rows .= "<br /> <input class=button type=button value=\"" . _("View");
+         	$info_rows .= "\" onclick=\"javascript: location.href='$http_site_root/plugins/info/one.php?info_id=$info_id&company_id=$company_id&contact_id=$contact_id&division_id=$division_id&info_type_id=$info_type_id&return_url=$return_url';\">";
+	};
+
 
         if ($company_accounting) {
             $info_rows .= " " . $info_type_name . " Info";
         }
 
-         $info_rows .= "\" onclick=\"javascript: location.href='$http_site_root/plugins/info/edit.php?info_id=0&company_id=$company_id&contact_id=$contact_id&division_id=$division_id&info_type_id=$info_type_id&return_url=$return_url';\">";
-    };
+    }
 
     if (!$company_accounting) {
-        $info_rows .= "</td>
-            </tr>\n";
+        $info_rows .= "</td> </tr>\n";
 
         $info_rows .= "</table>\n</div>";
-    };
+    }
 
    $toprst->movenext();
-}
+};
 
 echo $info_rows;
 

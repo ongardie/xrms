@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.11 2005/02/18 14:15:50 braverock Exp $
+ * $Id: edit.php,v 1.12 2005/03/18 20:54:37 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -89,6 +89,10 @@ $division_id  = $_GET['division_id'];
 $contact_id   = $_GET['contact_id'];
 $return_url   = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
+if (!$info_type_id) {
+	$info_type_id = 0;
+}
+$new_info = $_GET['new_info'];
 
 if (!$return_url) {
     $return_url = "/companies/one.php?company_id=$company_id&division_id=$division_id";
@@ -98,21 +102,24 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-$new_info = (0 == $info_id);
+//$new_info = (0 == $info_id);
 
-$sql = "SELECT info_type_id FROM info_map WHERE info_id = $info_id";
-$rst = $con->execute($sql);
-if ($rst) {
-    if (!$rst->EOF) {
-        $info_type_id = $rst->fields['info_type_id'];
-    }
+if (!$new_info) {
+
+	$sql = "SELECT info_type_id FROM info_map WHERE info_id = $info_id";
+	$rst = $con->execute($sql);
+	if ($rst) {
+	    if (!$rst->EOF) {
+        	$info_type_id = $rst->fields['info_type_id'];
+	    }
+	}
 }
 
 $sql = "SELECT display_on FROM info_display_map WHERE info_type_id = $info_type_id";
 $rst = $con->execute($sql);
 if ($rst) {
     if (!$rst->EOF) {
-        $display_on = $rst->fields['display_on'];
+       	$display_on = $rst->fields['display_on'];
     }
 }
 
@@ -120,6 +127,7 @@ if ($rst) {
 $sql  = "SELECT info_element_definitions.* FROM info_element_definitions ";
 $sql .= "WHERE element_enabled=1 ";
 $sql .= "AND info_element_definitions.info_type_id=$info_type_id ";
+$sql .= "AND element_type!= 'name' ";
 $sql .= "ORDER BY element_column, element_order";
 $all_elements = $con->execute($sql);
 
@@ -127,7 +135,7 @@ $all_elements = $con->execute($sql);
 # If this is a new server, every element will be added
 # with a default value later
 $this_info = array();
-if ($info_id) {
+if (!$new_info) {
   $sql = "SELECT value, element_id FROM info WHERE info_id='$info_id'";
   $rst = $con->execute($sql);
 
@@ -183,6 +191,7 @@ $con->close();
   <div id="Content">
     <form action=edit-2.php method=post>
       <input type=hidden name=info_id value=<?php  echo $info_id; ?>>
+      <input type=hidden name=new_info value=<?php  echo $new_info; ?>>
       <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
       <input type=hidden name=division_id value=<?php  echo $division_id; ?>>
       <input type=hidden name=contact_id value=<?php  echo $contact_id; ?>>
@@ -196,16 +205,12 @@ $con->close();
         </tr>
         <?php
             foreach ($element_value as $element_id=>$value) {
-                if ((($element_label[$element_id] != "Name")
-                    && ($display_on == "company_accounting"))
-                    || ($display_on != "company_accounting")) {
+                if ( $element_label[$element_id] != "Name") {
                         echo "<tr> <td class=widget_label_right> "
                             . $element_label[$element_id]
                             . "</td>"
                             . show_element($element_id, $element_value[$element_id],$element_possvals[$element_id])
                             . "</tr>";
-                } else {
-                    echo "<input type=hidden name='element_$element_id' value='Formation'>";
                 } //end if 
             } //end foreach
         ?>
@@ -218,10 +223,12 @@ $con->close();
               location.href='<?php echo
               "edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&division_id=$division_id&return_url=$return_url"; ?>';">&nbsp;
 <?php } ?>
+	    <?php if (!$new_info) { ?>
             <input class=button type=button
               value="Delete" onclick="javascript:
               location.href='<?php echo
-              "delete-2.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&division_id=$division_id&return_url=$delete_return_url"; ?>';">&nbsp;
+              "delete-2.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&division_id=$division_id&return_url=$return_url"; ?>';">&nbsp;
+<?php } ?>
           </td>
         </tr>
       </table>
@@ -243,6 +250,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.12  2005/03/18 20:54:37  gpowers
+ * - added support for inline (custom fields) info
+ *
  * Revision 1.11  2005/02/18 14:15:50  braverock
  * - fix fallback default return_url to be correct when contatenated w/ http_site_root
  *   - patch supplied by Keith Edmunds

@@ -2,7 +2,7 @@
 /**
  * Edit info element definitions
  *
- * $Id: edit-definitions-2.php,v 1.5 2005/02/10 13:42:18 braverock Exp $
+ * $Id: edit-definitions-2.php,v 1.6 2005/03/18 20:54:37 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,9 +24,13 @@ $post_info_type_id = $_POST['post_info_type_id'];
 $company_id = $_POST['company_id'];
 $return_url = urldecode($_POST['return_url']);
 
+if (!$info_type_id) {
+	$info_type_id = "0";
+}
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-//$con->debug = 1;
+// $con->debug = 1;
 
 $con_write = &adonewconnection($xrms_db_dbtype);
 $con_write->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -126,6 +130,8 @@ if ($new_element) {
             }
         }
     }
+
+
     $tbl = 'info_element_definitions';
     if (!$con->AutoExecute($tbl, $rec, 'INSERT')) {
         db_error_handler ($con, $ins);

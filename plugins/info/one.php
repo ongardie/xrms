@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.13 2005/02/15 15:10:13 ycreddy Exp $
+ * $Id: one.php,v 1.14 2005/03/18 20:54:37 gpowers Exp $
  *
  */
 
@@ -98,10 +98,14 @@ while (!$all_elements->EOF) {
   else {
     $print_value = $value;
   }
-  $data[$column] .= "<tr>\n";
-  $data[$column] .= "\t<td class=sublabel>".$all_elements->fields['element_label']."</td>\n";
-  $data[$column] .= "\t<td class=clear>".$print_value."</td>\n";
-  $data[$column] .= "</tr>\n";
+  // Don't show the Name element 
+  if ( $all_elements->fields['element_label'] != 'Name' ) {
+  	$data[$column] .= "<tr>\n";
+  	$data[$column] .= "\t<td class=sublabel>".$all_elements->fields['element_label']."</td>\n";
+  	$data[$column] .= "\t<td class=clear>".$print_value."</td>\n";
+  	$data[$column] .= "</tr>\n";
+  }
+
   if ($all_elements->fields['element_label'] == 'Name') {
     $item_name = $print_value;
   }
@@ -171,7 +175,7 @@ start_page($page_title, true, $msg);
           <input class=button type=button value="<?php echo _("Delete"); ?>"
             onclick="javascript: location.href='<?php echo "delete-2.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&return_url=$return_url"; ?>';">
           <input class=button type=button value="<?php echo _("New"); ?>"
-            onclick="javascript: location.href='<?php echo "edit.php?info_id=0&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&return_url=$return_url"; ?>';">
+            onclick="javascript: location.href='<?php echo "edit.php?info_id=$info_id&info_type_id=$info_type_id&new_info=true&contact_id=$contact_id&company_id=$company_id&return_url=$return_url"; ?>';">
           <input class=button type=button value="<?php echo _("Back"); ?>"
             onclick="javascript: location.href='<?php echo $http_site_root.$return_url; ?>';">
         </td>
@@ -192,6 +196,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.14  2005/03/18 20:54:37  gpowers
+ * - added support for inline (custom fields) info
+ *
  * Revision 1.13  2005/02/15 15:10:13  ycreddy
  * Included adodb-params.php so that Column name based lookup on a Result Set works properly on SQL Server
  *

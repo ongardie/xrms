@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit-definitions.php,v 1.6 2005/02/11 19:05:08 vanmer Exp $
+ * $Id: edit-definitions.php,v 1.7 2005/03/18 20:54:37 gpowers Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -75,7 +75,7 @@ function possible_element_types ($type, $element_id) {
 
   default:
     assert(true);
-    echo "Unreconised element type ($type)";
+    echo _("Error: Unreconised Element Type") .  "(" . $type . ")";
     exit;
   }
   return $html;
@@ -84,6 +84,10 @@ function possible_element_types ($type, $element_id) {
 function show_row ($fields) {
 
   global $text, $textarea, $radio,$checkbox, $select, $info_type_id;
+
+  if (!$info_type_id) {
+	$info_type_id = 0;
+}
 
   foreach ($fields as $key=>$value) {
     $$key = $value;
@@ -172,6 +176,9 @@ $contact_id = $_GET['contact_id'];
 $division_id = $_GET['division_id'];
 //$return_url = $_GET['return_url'];
 $info_type_id = $_GET['info_type_id'];
+if (!$info_type_id) {
+	$info_type_id = 0;
+}
 //if (!$return_url) {
     $return_url = urlencode("/plugins/info/edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&company_id=$company_id");
 //} else {
@@ -202,6 +209,7 @@ $rst = $con->execute($sql);
 
 # Get a list of supported element types into $options
 $element_type = $rst->fields['element_type'];
+/*
 $sql = 'SHOW COLUMNS FROM info_element_definitions LIKE \'element_type\'';
 $rst2 = $con->execute($sql);
 if (!$rst2) {
@@ -209,6 +217,8 @@ if (!$rst2) {
   exit;
 }
 $options = explode("','",preg_replace("/(enum|set)\('(.+?)'\)/","\\2",$rst2->fields['Type']));
+*/
+$options = array('text','select','radio','checkbox','textarea');
 
 # Define prototype of new element
 $new_element = array(
@@ -225,7 +235,7 @@ $new_element = array(
   "element_info_type_id" => 0,
 );
 
-$page_title = "Edit element definitions";
+$page_title = _("Edit Element Definitions");
 start_page($page_title, true);
 
 ?>
@@ -239,10 +249,17 @@ start_page($page_title, true);
     <input type=hidden name=return_url value="<?php echo $return_url ?>">
       <table class=widget cellspacing=1>
         <tr>
-          <td class=widget_header colspan=7>Edit Server Info</td>
+          <td class=widget_header colspan=7><?php echo _("Element Definitions"); ?></td>
         </tr>
         <tr>
-          <th>Label</th><th>Type</th><th>Column</th><th>Order</th><th>Default Value</th><th>Possible Values</th><th>Display in Sidebar</th><th>Enabled</th>
+          <th><?php echo _("Label"); ?></th>
+          <th><?php echo _("Type"); ?></th>
+          <th><?php echo _("Column"); ?></th>
+          <th><?php echo _("Order"); ?></th>
+          <th><?php echo _("Default Value"); ?></th>
+          <th><?php echo _("Possible Values"); ?></th>
+          <th><?php echo _("Display in Sidebar"); ?></th>
+          <th><?php echo _("Enabled<"); ?>/th>
         </tr>
         <?php
           if ($rst) {
@@ -270,11 +287,7 @@ start_page($page_title, true);
         </tr>
       </table>
     </form>
-Back to <a href="<?php echo $back_url; ?>">Item</a><br />
-  </div>
-  <!-- right column //-->
-  <div id="Sidebar">
-    &nbsp;
+<?php // echo _("Back to") .  "<a href=\"" . $back_url . "\">" .  _("Item") . "</a><br />"; ?>
   </div>
 </div>
 

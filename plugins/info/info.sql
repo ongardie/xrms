@@ -91,3 +91,15 @@ CREATE TABLE `info_types` (
   `info_type_order` int(11) NOT NULL default '0',
   PRIMARY KEY  (`info_type_id`)
 ) TYPE=MyISAM;
+
+ALTER TABLE `info_element_definitions` CHANGE `element_id` `element_id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+CHANGE `element_label` `element_label` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci,
+CHANGE `element_type` `element_type` ENUM( 'text', 'select', 'radio', 'checkbox', 'textarea', 'name' ) DEFAULT 'text',
+CHANGE `element_column` `element_column` VARCHAR( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT '1',
+CHANGE `element_order` `element_order` SMALLINT( 6 ) DEFAULT '0',
+CHANGE `element_default_value` `element_default_value` VARCHAR( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci,
+CHANGE `element_possible_values` `element_possible_values` VARCHAR( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci,
+CHANGE `element_enabled` `element_enabled` SMALLINT( 6 ) DEFAULT '1',
+CHANGE `info_type_id` `info_type_id` INT( 11 ) DEFAULT '0',
+CHANGE `element_display_in_sidebar` `element_display_in_sidebar` SMALLINT( 6 ) DEFAULT '0'
+;
