@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Insert a new Case into the Database
+ *
+ * $Id: new-2.php,v 1.8 2005/01/10 23:32:32 braverock Exp $
+ */
+ 
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -59,4 +64,10 @@ $con->close();
 
 header("Location: one.php?msg=case_added&case_id=$case_id");
 
+/**
+ * $Log: new-2.php,v $
+ * Revision 1.8  2005/01/10 23:32:32  braverock
+ * - add phpdoc
+ *
+ */
 ?>
