@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.9 2004/05/21 13:06:09 maulani Exp $
+ * $Id: addresses.php,v 1.10 2004/06/04 15:47:15 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -86,6 +86,29 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
+        <!-- existing addresses //-->
+        <form action=set-address-defaults.php method=post>
+        <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=6>Addresses</td>
+            </tr>
+            <tr>
+                <td class=widget_label>Name</td>
+                <td class=widget_label>Body</td>
+                <td class=widget_label>Primary Default</td>
+                <td class=widget_label>Billing Default</td>
+                <td class=widget_label>Shipping Default</td>
+                <td class=widget_label>Payment Default</td>
+            </tr>
+            <?php  echo $addresses; ?>
+            </tr>
+            </tr>
+                <td class=widget_content_form_element colspan=6><input class=button type=submit value="Save Defaults"></td>
+            </tr>
+        </table>
+        </form>
+
         <!-- new address //-->
         <form action=add-address.php method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
@@ -135,28 +158,6 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
-        <form action=set-address-defaults.php method=post>
-        <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=6>Addresses</td>
-            </tr>
-            <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Body</td>
-                <td class=widget_label>Primary Default</td>
-                <td class=widget_label>Billing Default</td>
-                <td class=widget_label>Shipping Default</td>
-                <td class=widget_label>Payment Default</td>
-            </tr>
-            <?php  echo $addresses; ?>
-            </tr>
-            </tr>
-                <td class=widget_content_form_element colspan=6><input class=button type=submit value="Save Defaults"></td>
-            </tr>
-        </table>
-        </form>
-
     </div>
 
         <!-- right column //-->
@@ -173,6 +174,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.10  2004/06/04 15:47:15  braverock
+ * - move current addresses to top of screen, because this is the most used functionality
+ *
  * Revision 1.9  2004/05/21 13:06:09  maulani
  * - Create get_formatted_address function which centralizes the address
  *   formatting code into one routine in utils-misc.
