@@ -2,7 +2,7 @@
 /**
  * Manage Activity Types
  *
- * $Id: some.php,v 1.4 2004/06/13 09:13:57 braverock Exp $
+ * $Id: some.php,v 1.5 2004/06/14 21:06:33 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -104,6 +105,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.5  2004/06/14 21:06:33  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.4  2004/06/13 09:13:57  braverock
  * - add sort_order to activity_types
  *

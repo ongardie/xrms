@@ -14,6 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -76,19 +77,34 @@ $source_sort_order = $rst->fields['sort_order'];
 $rst->close();
 
 //swap sort_order and insert into the table
-$sql = "update " . $table_name_plural . " set sort_order=$source_sort_order "
-        . "where " . $table_name . "_id=$source_id";
-$con->execute($sql);
+$sql = "SELECT * FROM " . $table_name_plural . " WHERE " . $table_name . "_id = $source_id";
+$rst = $con->execute($sql);
 
-$sql = "update " . $table_name_plural . " set sort_order=$dest_sort_order "
-        . "where " . $table_name . "_id=$dest_id";
-$con->execute($sql);
+$rec = array();
+$rec['sort_order'] = $source_sort_order;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
+$con->execute($upd);
+
+
+$sql = "SELECT * FROM " . $table_name_plural . " WHERE " . $table_name . "_id = $dest_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['sort_order'] = $dest_sort_order;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
+$con->execute($upd);
 
 //reload the page to see the new order
 header ('Location: ' . $http_site_root . $return_url);
 
 /**
  * $Log: sort.php,v $
+ * Revision 1.2  2004/06/14 21:06:33  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.1  2004/06/13 09:13:57  braverock
  * - add sort_order to activity_types
  *
