@@ -4,7 +4,7 @@
  *
  * @todo create more examples here.
  *
- * $Id: demo.php,v 1.1 2004/03/20 20:09:35 braverock Exp $
+ * $Id: demo.php,v 1.2 2004/03/29 13:26:57 maulani Exp $
  */
 
 // include the common files
@@ -62,9 +62,7 @@ start_page($page_title);
 <table border=0 cellpadding=0 cellspacing=0 width="100%">
     <tr>
         <td class=lcol width="75%" valign=top>
-            <tr>
                 Demo Plugin.  You would place your main page content here.
-            </tr>
         </td>
 
         <!-- gutter //-->
@@ -97,6 +95,10 @@ end_page();
 
 /**
  * $Log: demo.php,v $
+ * Revision 1.2  2004/03/29 13:26:57  maulani
+ * - patch #922717 submitted by Glenn Powers (gpowers)
+ * - fix table formatting
+ *
  * Revision 1.1  2004/03/20 20:09:35  braverock
  * Initial Revision of Demo plugin to demonstrate using hooks
  *
