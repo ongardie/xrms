@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Display login screen
+ *
+ * $Id: login.php,v 1.5 2004/04/06 21:59:12 maulani Exp $
+ */
 require_once('include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -31,47 +35,29 @@ start_page($page_title, false, $msg);
 
 ?>
 
-<table border=0 cellpadding=0 cellspacing=0 width="100%" height="80%">
-    <tr>
-        <td width="33%" valign=top>
-
-        &nbsp;
-
-        </td>
-
-        <!-- gutter //-->
-        <td align=center valign=middle>
-
-        <form action=login-2.php method=post>
-        <input type=hidden name=target value="<?php echo $target; ?>" >
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=2>Login</td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>Username</td>
-                <td class=widget_content_form_element><input type=text name=username></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right>Password</td>
-                <td class=widget_content_form_element><input type=password name=password></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element_center colspan=2><input class=button type=submit value="Login"></td>
-            </tr>
-        </table>
-        </form>
-
-        </td>
-
-        <!-- right column //-->
-        <td width="33%" valign=top>
-
-        &nbsp;
-
-        </td>
-    </tr>
+<div style="position: absolute; width: 240px; height: 140px; left: 50%; top: 50%; margin-left: -120px; margin-top: -70px;">
+<p>
+<form action=login-2.php method=post>
+<input type=hidden name=target value="<?php echo $target; ?>" >
+<table class=widget cellspacing=1>
+	<tr>
+		<td class=widget_header colspan=2>Login</td>
+	</tr>
+	<tr>
+		<td class=widget_label_right>Username</td>
+		<td class=widget_content_form_element><input type=text name=username></td>
+	</tr>
+	<tr>
+		<td class=widget_label_right>Password</td>
+		<td class=widget_content_form_element><input type=password name=password></td>
+	</tr>
+	<tr>
+		<td class=widget_content_form_element_center colspan=2><input class=button type=submit value="Login"></td>
+	</tr>
 </table>
+</form>
+</p>
+</div>
 
 <script type="text/javascript">
 <!--
@@ -85,4 +71,17 @@ initialize();
 </script>
 
 
-<?php end_page(); ?>
+<?php 
+
+end_page(); 
+
+/**
+ * $Log: login.php,v $
+ * Revision 1.5  2004/04/06 21:59:12  maulani
+ * - Begin conversion of positioning tables to CSS
+ *   - Remove tables from all page headers
+ *   - Position login with CSS
+ *
+ *
+ */
+?>

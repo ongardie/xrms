@@ -2,8 +2,7 @@
 /**
  * Common user interface functions file.
  *
- *
- * $Id: utils-interface.php,v 1.8 2004/03/22 15:56:42 maulani Exp $
+ * $Id: utils-interface.php,v 1.9 2004/04/06 21:59:16 maulani Exp $
  */
 
 require_once ($include_locations.'plugin.php');
@@ -48,8 +47,13 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
     $stylesheet = "'$http_site_root/stylesheet.css'";
 
+
+
+
     echo <<<EOQ
-    <!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+    <!DOCTYPE HTML PUBLIC 
+    "-//W3C//DTD HTML 4.01 Transitional//EN" 
+    "http://www.w3.org/TR/html4/loose.dtd" >
     <html>
     <head>
     <title>$page_title</title>
@@ -57,56 +61,39 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     </head>
     <body>
-    <table class=page_header cellspacing=1 width='100%'>
-        <tr>
-            <td class=page_title height=$page_title_height valign=bottom colspan=3>$page_title</td>
-        </tr>
+    <div id="page_header">$page_title</div>
 EOQ;
-
-
 
     if ($show_navbar) {
         echo <<<EOQ
-
-        <tr>
-            <td>
-            <table class=navbar cellspacing=0 width='100%'>
-            <tr>
-            <td class=navbar width='80%'>
-                <a href="$http_site_root/private/home.php">Home</a> &bull;
-                <a href="$http_site_root/companies/some.php">Companies</a> &bull;
-                <a href="$http_site_root/contacts/some.php">Contacts</a> &bull;
-                <a href="$http_site_root/campaigns/some.php">Campaigns</a> &bull;
-                <a href="$http_site_root/opportunities/some.php">Opportunities</a> &bull;
-                <a href="$http_site_root/cases/some.php">Cases</a> &bull;
-                <a href="$http_site_root/files/some.php">Files</a> &bull;
+    <div id="navline">
+        <span id="navbar">
+		<a href="$http_site_root/private/home.php">Home</a> &bull;
+		<a href="$http_site_root/companies/some.php">Companies</a> &bull;
+		<a href="$http_site_root/contacts/some.php">Contacts</a> &bull;
+		<a href="$http_site_root/campaigns/some.php">Campaigns</a> &bull;
+		<a href="$http_site_root/opportunities/some.php">Opportunities</a> &bull;
+		<a href="$http_site_root/cases/some.php">Cases</a> &bull;
+		<a href="$http_site_root/files/some.php">Files</a> &bull;
 EOQ;
-            //place the munu_line hook before Reports and Adminstration link
-            do_hook ('menuline');
 
-            echo <<<EOQ
+	//place the menu_line hook before Reports and Adminstration link
+	do_hook ('menuline');
 
-                <a href="$http_site_root/reports/">Reports</a> &bull;
-                <a href="$http_site_root/admin/routing.php">Administration</a>
-            </td>
-            <td class=navbar align=center>&nbsp;</td>
-            <td class=navbar align=right>
-                Logged in as: $session_username &bull; <a href="$http_site_root/logout.php">Logout</a>
-            </td>
-            </tr>
-            </table>
-            </td>
-        </tr>
+	echo <<<EOQ
+
+		<a href="$http_site_root/reports/">Reports</a> &bull;
+		<a href="$http_site_root/admin/routing.php">Administration</a>
+        </span>
+        <div id="loginbar">Logged in as: $session_username &bull; <a href="$http_site_root/logout.php">Logout</a></div>
+    </div>
 EOQ;
     }
-    
-    echo <<<EOQ
-    </table>
-
-EOQ;
 
     if (strlen($msg) > 0) echo <<<EOQ
-        <center><table class=msg border=0 width='80%'><tr><td class=msg>{$msg}</td></tr></table></center>
+		<div id="msg">
+			{$msg}
+		</div>
 EOQ;
 } // end start_page fn
 
@@ -167,6 +154,11 @@ function build_salutation_menu($salutation) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.9  2004/04/06 21:59:16  maulani
+ * - Begin conversion of positioning tables to CSS
+ *   - Remove tables from all page headers
+ *   - Position login with CSS
+ *
  * Revision 1.8  2004/03/22 15:56:42  maulani
  * - Fix bug 921105 reported by maulani--partial display of menubar on
  *   screens that should not have a menubar
