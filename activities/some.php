@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.49 2004/07/27 10:21:50 cpsource Exp $
+ * $Id: some.php,v 1.50 2004/07/27 19:50:41 neildogg Exp $
  */
 
 // handle includes
@@ -30,6 +30,7 @@ $arr_vars = array ( // local var name       // session variable name
            'saved_title'        => arr_vars_POST_UNDEF,
            'group_item'         => arr_vars_POST_UNDEF,
            'delete_saved'       => arr_vars_POST_UNDEF,
+           'browse'             => arr_vars_POST_UNDEF,
            );
 
 // get all passed in variables
@@ -66,6 +67,9 @@ if($saved_id) {
             $_POST = unserialize($rst->fields['saved_data']);
         }
     }
+    if($browse) {
+        header("Location: " . $http_site_root . "/activities/browse-next.php?saved_id=" . $saved_id);
+    }
 }
 
 // declare passed in variables
@@ -100,7 +104,7 @@ if ( !$search_date ) {
 $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
 
 $curdate = $con->DBTimeStamp(time());
-$offset = $con->OffsetDate($day_diff, $curdate);
+$offset = $con->OffsetDate($day_diff, 'curdate()');
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -129,15 +133,12 @@ arr_vars_session_set ( $arr_vars );
 
 /*********************************
 //*** Include the sidebar boxes ***/
-//include the browse sidebar
-
-require_once("browse-sidebar.php");
 
 /** End of the sidebar includes **
 //*********************************/
 
 $sql = "SELECT
-  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS '" . _("is_overdue") . "',"
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS '" . _("Overdue") . "',"
   ." at.activity_type_pretty_name AS '" . _("Type") . "',"
   . $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS '" . _("Contact") . "',"
   . $con->Concat("'<a href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
@@ -200,7 +201,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 
 
 if ($sort_column == 1) {
-    $order_by = _("is_overdue");
+    $order_by = _("Overdue");
 } elseif ($sort_column == 2) {
     $order_by = "activity_type_pretty_name";
 } elseif ($sort_column == 3) {
@@ -251,7 +252,11 @@ $rec['saved_action'] = "search";
 $rec['user_id'] = $session_user_id;
 $rec['saved_data'] = str_replace("'", "\\'", serialize($saved_data));
 
-if($saved_title) {
+if($saved_title or $browse) {
+    if(!$saved_title) {
+        $saved_title = "Current";
+        $group_itme = 0;
+    }
     $sql_saved = "SELECT *
             FROM saved_actions
             WHERE (user_id=" . $session_user_id . "
@@ -265,11 +270,16 @@ if($saved_title) {
     elseif($rst->rowcount()) {
         $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
         $con->execute($upd);
+        $saved_id = $rst->fields['saved_id'];
     }
     else {
         $tbl = "saved_actions";
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
+        $saved_id = $con->Insert_ID();
+    }
+    if($browse) {
+        header("Location: " . $http_site_root . "/activities/browse-next.php?saved_id=" . $saved_id);
     }
 }
 
@@ -280,7 +290,8 @@ $sql_saved = "SELECT saved_title, saved_id
         OR group_item=1)
         AND on_what_table='activities'
         AND saved_action='search'
-        AND saved_status='a'";
+        AND saved_status='a'
+        AND saved_title!='Current'";
 $rst = $con->execute($sql_saved);
 if ( !$rst ) {
   db_error_handler($con, $sql_saved);
@@ -384,10 +395,10 @@ start_page($page_title, true, $msg);
                     <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
                 </td>
                 <td class=widget_content_form_element colspan="2">
-                    <input type=text name="saved_title" size=24>
+                    <input type=text name="saved_title" size=24> 
                     <?php
                         if($_SESSION['role_short_name'] === 'Admin') {
-                            echo _("Add to Everyone").'<input type=checkbox name="group_item" value=1>';
+                            echo _("Add to Everyone").' <input type=checkbox name="group_item" value=1>';
                         }
                     ?>
                 </td>
@@ -395,6 +406,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content_form_element colspan=4>
                     <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
+                    <input name="browse" type=submit class=button value="<?php echo _("Browse"); ?>">
                     <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php
                         if ($company_count > 0) {
@@ -408,7 +420,7 @@ start_page($page_title, true, $msg);
 
 <?php
 
-$pager = new ADODB_Pager($con,$sql, 'activities', false, $sort_column-1, $pretty_sort_order);
+$pager = new ADODB_Pager($con, $sql, 'activities', false, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
 
@@ -418,9 +430,6 @@ $con->close();
 
         <!-- right column //-->
     <div id="Sidebar">
-
-        <!-- browse //-->
-        <?php echo $browse_block; ?>
 
     </div>
 </div>
@@ -479,6 +488,13 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.50  2004/07/27 19:50:41  neildogg
+ * - Major changes to browse functionality
+ *  - Removal of sidebar for "browse" button
+ *  - Removal of activity_type browse
+ *  - Aesthetic modifications
+ *  - Date in some.php is now mySQL curdate()
+ *
  * Revision 1.49  2004/07/27 10:21:50  cpsource
  * - Fix some undefs
  *

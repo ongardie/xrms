@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.50 2004/07/26 12:10:26 cpsource Exp $
+ * $Id: one.php,v 1.51 2004/07/27 19:50:41 neildogg Exp $
  */
 
 //include required files
@@ -19,6 +19,7 @@ $session_user_id = session_check();
 $msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
 $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
 $return_url  = isset($_GET['return_url']) ? $_GET['return_url'] : '';
+$save_and_next = isset($_GET['save_and_next']) ? true : false;
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -267,7 +268,7 @@ function logTime() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?></td>
+                <td class=widget_header colspan=2><?php echo _("About This Activity"); ?> <?php echo ($save_and_next) ? $_SESSION['pos'] . "/" . count($_SESSION['next_to_check']) : ""; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
@@ -336,7 +337,7 @@ function logTime() {
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=90 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
                     <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="document.forms[0].opportunity_description.value =
-                        logTime() + ' by ' + document.forms[0].user_id.options[form.user_id.selectedIndex].text + ': \n\n' + document.forms[0].opportunity_description.value">
+                        logTime() + ' by <?php echo $_SESSION['username']; ?>: \n' + document.forms[0].opportunity_description.value">
                 </td>
             </tr>
             <?php } ?>
@@ -366,7 +367,9 @@ function logTime() {
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <input class=button type=submit name="save" value="<?php echo _("Save Changes"); ?>">
+                    <?php if($save_and_next) { ?>
                     <input class=button type=submit name="saveandnext" value="<?php echo _("Save and Next"); ?>">
+                    <?php } ?>
                     <input class=button type=submit name="followup" value="<?php echo _("Schedule Followup"); ?>">
 
 <?php
@@ -423,6 +426,13 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.51  2004/07/27 19:50:41  neildogg
+ * - Major changes to browse functionality
+ *  - Removal of sidebar for "browse" button
+ *  - Removal of activity_type browse
+ *  - Aesthetic modifications
+ *  - Date in some.php is now mySQL curdate()
+ *
  * Revision 1.50  2004/07/26 12:10:26  cpsource
  * - Fix bug whereby javascript is used to confirm the
  *   delete of an activity.
