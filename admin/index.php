@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.25 2004/12/30 18:51:09 braverock Exp $
+ * $Id: index.php,v 1.26 2005/01/13 17:17:15 vanmer Exp $
  */
 
 //include required stuff
@@ -118,12 +118,12 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
-                    <a href="users/some.php"><?php echo _("Users"); ?></a>
+                    <a href="acl/index.php"><?php echo _("ACL"); ?></a>
                 </td>
-            </tr>
+            </tr>            
             <tr>
                 <td class=widget_content>
-                    <a href="roles/some.php"><?php echo _("Roles"); ?></a>
+                    <a href="users/some.php"><?php echo _("Users"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -248,6 +248,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.26  2005/01/13 17:17:15  vanmer
+ * - Added ACL Administration links, removed deprecated roles system
+ *
  * Revision 1.25  2004/12/30 18:51:09  braverock
  * - localize strings
  * - patch provided by Ozgur Cayci
