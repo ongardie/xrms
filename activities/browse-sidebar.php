@@ -1,13 +1,16 @@
 <?php
 /**
- * Contact Information Sidebar
+ * Browse Activity Types Sidebar
  * /activities/browse-sidebar.php
  *
- * Include this file anywhere you want to show a summary of the company information
+ * Include this sidebar anywhere that you would like to show a list of activity types. 
+ * It will allow a user to work on a single type of activity, clicking save and next to stay within that type.
+ * Once the type has been fully traversed, it drops to the activity type of next lowest priority.
+ * If there are no more activities left, it returns to this screen.
  *
  * @author Neil Roberts
  *
- * $Id: browse-sidebar.php,v 1.3 2004/07/02 14:56:52 maulani Exp $
+ * $Id: browse-sidebar.php,v 1.4 2004/07/02 17:57:57 neildogg Exp $
  */
 
 //add contact information block on sidebar
@@ -16,12 +19,12 @@ $browse_block = '<table class=widget cellspacing=1 width="100%">
         <td class=widget_header colspan=5>Browse</td>
     </tr>
     <tr>
-        <td class=widget_label>Opportunity Activities</td>
+        <td class=widget_label>Activity Types</td>
     </tr>';
 
 $sql = "select activity_type_id, activity_type_display_html
         from activity_types
-        order by $sort_column desc";
+        order by sort_order asc";
 
 $rst = $con->execute($sql);
 
@@ -31,33 +34,7 @@ if(!$rst) {
 elseif($rst->rowcount() > 0) {
     while(!$rst->EOF) {
         $browse_block .= "\n<tr><td class=widget_content>"
-            . "<a href='browse-next.php?current_on_what_table=opportunities&amp;current_activity_type_id=" . $rst->fields['activity_type_id'] . "'>"
-            . $rst->fields['activity_type_display_html'] . "</a></td></tr>";
-        $rst->movenext();
-    }
-} else {
-    $browse_block .= "<tr><td class=widget_content>"
-        . "No Activities Types"
-        . "</td>\n\t</tr>";
-}
-
-$browse_block .= '<tr>
-        <td class=widget_label>Case Activities
-    </tr>';
-
-$sql = "select activity_type_id, activity_type_display_html
-        from activity_types
-        order by $sort_column desc";
-
-$rst = $con->execute($sql);
-
-if(!$rst) {
-     db_error_handler($con, $sql);
-}
-elseif($rst->rowcount() > 0) {
-    while(!$rst->EOF) {
-        $browse_block .= "\n<tr><td class=widget_content>"
-            . "<a href='browse-next.php?current_on_what_table=cases&amp;current_activity_type_id=" . $rst->fields['activity_type_id'] . "'>"
+            . "<a href='browse-next.php?activity_type_id=" . $rst->fields['activity_type_id'] . "'>"
             . $rst->fields['activity_type_display_html'] . "</a></td></tr>";
         $rst->movenext();
     }
@@ -72,6 +49,9 @@ $rst->close();
 
 /**
  * $Log: browse-sidebar.php,v $
+ * Revision 1.4  2004/07/02 17:57:57  neildogg
+ * Now works for all activity types. Sort by reimplemented in SQL call.
+ *
  * Revision 1.3  2004/07/02 14:56:52  maulani
  * - Repair HTML so page will validate
  *
