@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.11 2004/07/25 14:39:52 johnfawcett Exp $
+ * $Id: new.php,v 1.12 2004/07/30 12:31:54 cpsource Exp $
  */
 
 /* Include required files */
@@ -227,7 +227,9 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right_91px><?php echo _("Override Address"); ?></td>
-                <td class=widget_content_form_element><textarea rows=5 cols=40 name=address_body></textarea><br><input type="checkbox" name="use_pretty_address"> <?php echo _("Use"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=40 name=address_body></textarea><br>
+                  <input type="checkbox" name="use_pretty_address"> <?php echo _('Use'); ?>
+                </td>
             </tr>
         </table>
 
@@ -291,6 +293,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.12  2004/07/30 12:31:54  cpsource
+ * - Make use_pretty_address input easier to read.
+ *
  * Revision 1.11  2004/07/25 14:39:52  johnfawcett
  * - corrected gettext call
  *
