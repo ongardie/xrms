@@ -88,6 +88,8 @@ for ($i=0; $i < $how_many_rows_to_import_per_page; $i++) {
 
     }
 
+    $address_body = $company_address . "\n" . $company_city . " , " . $company_state . " " . $company_postal_code;
+
     if ((strlen($contact_first_names) == 0) && (strlen($contact_last_name) == 0)) {
         $contact_last_name = 'Contact';
         $contact_first_names = 'Default';
@@ -101,7 +103,7 @@ for ($i=0; $i < $how_many_rows_to_import_per_page; $i++) {
         $company_id = $con->insert_id();
         $sql_update_company_code = "update companies set company_code = " . $con->qstr('C' . $company_id, get_magic_quotes_gpc()) . " where company_id = $company_id";
         $con->execute($sql_update_company_code);
-        $sql_insert_address = "insert into addresses (company_id, address_name, address_body) values ($company_id, 'address', " . $con->qstr($company_address, get_magic_quotes_gpc()) . ")";
+        $sql_insert_address = "insert into addresses (company_id, address_name, address_body, line1, city, province, postal_code) values ($company_id," . $con->qstr($company_city, get_magic_quotes_gpc()) . ", " .$con->qstr($address_body, get_magic_quotes_gpc()) . "," .$con->qstr($company_address, get_magic_quotes_gpc()) . ", " .$con->qstr($company_city, get_magic_quotes_gpc()) . ", " .$con->qstr($company_state, get_magic_quotes_gpc()) . ", " .$con->qstr($company_postal_code, get_magic_quotes_gpc()) . ");";
         $con->execute($sql_insert_address);
         $address_id = $con->insert_id();
         $sql_update_company_to_set_new_address_defaults = "update companies set default_billing_address = $address_id, default_shipping_address = $address_id, default_payment_address = $address_id where company_id = $company_id";
