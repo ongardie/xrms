@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.2 2004/06/14 20:50:11 introspectshun Exp $
+ * $Id: new.php,v 1.3 2004/06/24 20:13:46 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -64,11 +64,14 @@ $on_what_table = str_replace("_", "-", $on_what_table);
 $table_name = substr($on_what_table, 0, strpos($on_what_table, "-"));
 
 //go back to the status edit page after updating
-header("Location: ".$http_site_root.'/'.$on_what_table.'/one.php?'.$table_name.'_status_id='.$on_what_id);
-
+header("Location: ".$http_site_root.'/admin/'.$on_what_table.'/one.php?'.$table_name.'_status_id='.$on_what_id);
 
 /**
  * $Log: new.php,v $
+ * Revision 1.3  2004/06/24 20:13:46  braverock
+ * - update to Header for synthetic url
+ *   - patch provided by Neil Roberts
+ *
  * Revision 1.2  2004/06/14 20:50:11  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
