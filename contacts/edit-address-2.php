@@ -1,4 +1,10 @@
 <?php
+/**
+ * Database updates for Edit address for a contact
+ *
+ * $Id: edit-address-2.php,v 1.2 2004/06/09 17:36:09 gpowers Exp $
+ */
+
 
 require_once('../include-locations.inc');
 
@@ -51,5 +57,17 @@ $con->close();
 
 
 header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
+
+
+/**
+ * $Log: edit-address-2.php,v $
+ * Revision 1.2  2004/06/09 17:36:09  gpowers
+ * - added $Id: and $Log: tags.
+ *
+ * Revision 1.1  2004/06/09 16:52:14  gpowers
+ * - Contact Address Editing
+ * - adapted from companies/edit-address.php
+ *
+ */
 
 ?>
