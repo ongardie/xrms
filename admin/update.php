@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.61 2005/02/10 20:07:28 braverock Exp $
+ * $Id: update.php,v 1.62 2005/03/07 18:34:38 vanmer Exp $
  */
 
 // where do we include from
@@ -4195,9 +4195,10 @@ $sql="UPDATE activities set last_modified_by=entered_by WHERE last_modified_by=0
 $con->execute($sql);
 
 //close the database connection, because we don't need it anymore
-$con->close();
 
-do_hook('update_xrms');
+do_hook_function('xrms_update', $con);
+
+$con->close();
 
 $page_title = _("Update Complete");
 start_page($page_title, true, $msg);
@@ -4217,6 +4218,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.62  2005/03/07 18:34:38  vanmer
+ * - moved connection close to after hook function for upgrade script
+ * - changed upgrade hook to reflect standard naming 'xrms_update' and 'xrms_install'
+ *
  * Revision 1.61  2005/02/10 20:07:28  braverock
  * - add home_address_id to contacts table
  *
