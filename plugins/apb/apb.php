@@ -37,7 +37,6 @@ $user_id = $session_user_id;
 // Database configuration.
 //////////////////////////////////////////////////////////////////////
 
-// Change these vars so that you can connect to your database.
 global $xrms_db_dbtype;
 global $xrms_db_server;
 global $xrms_db_username;
@@ -49,27 +48,16 @@ $APB_SETTINGS['apb_database'] = $xrms_db_dbname;
 $APB_SETTINGS['apb_username'] = $xrms_db_username;
 $APB_SETTINGS['apb_password'] = $xrms_db_password;
 
-// If you would like to set your database variables from an external
-// file, link to that from here.
-//include("/var/www/apb_db_config.php");
-
 //////////////////////////////////////////////////////////////////////
 // Paths and URLs.
 //////////////////////////////////////////////////////////////////////
 
-// Change the apb_dir_name, if you want the program to run somewhere other
-// than the "bookmarks", directory.  By default this value is 'bookmarks/'.
-// If you want to run APB from 'http://www.yoursite.com/bm/', just change
-// this value to 'bm/'.
-$APB_SETTINGS['apb_dir_name'] = 'xrms/plugins/apb/';
-$DOCUMENT_ROOT = '/var/www/html';
-
-// There is usually no reason to change these.
 global $http_site_root;
-//$APB_SETTINGS['apb_url']   = $http_site_root . $APB_SETTINGS['apb_dir_name'];
+global $xrms_file_root;
+
 $APB_SETTINGS['apb_url']   = $http_site_root . "/plugins/apb/";
 $APB_SETTINGS['home_url']  = $APB_SETTINGS['apb_url'];
-$APB_SETTINGS['apb_path']  = $DOCUMENT_ROOT . '/' . $APB_SETTINGS['apb_dir_name'];
+$APB_SETTINGS['apb_path']  = $xrms_file_root . '/plugins/apb/';
 $APB_SETTINGS['log_path']  = $APB_SETTINGS['apb_path'] . 'apb.log';
 $APB_SETTINGS['view_group_path'] = $APB_SETTINGS['apb_url'] . "view_group.php";
 $APB_SETTINGS['daily_browsing_public'] = 0;
