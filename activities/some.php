@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.75 2004/12/24 15:57:49 braverock Exp $
+ * $Id: some.php,v 1.76 2004/12/26 13:31:43 braverock Exp $
  */
 
 // handle includes
@@ -160,20 +160,23 @@ if(strlen($time_zone_between) and strlen($time_zone_between2)) {
 }
 
 $sql = "SELECT
-  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 'Yes' ELSE '-' END) AS '" . _("Overdue") . "',"
-  ." at.activity_type_pretty_name AS '" . _("Type") . "',"
-  . $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . "AS '" . _("Contact") . "',"
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS "
+  . $con->qstr(_("Overdue"),get_magic_quotes_gpc()) . ", "
+  ." at.activity_type_pretty_name AS " . $con->qstr(_("Type"),get_magic_quotes_gpc()) . ","
+  . $con->Concat("'<a href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'")
+  . " AS " . $con->qstr(_("Contact"),get_magic_quotes_gpc()) . ","
   . $con->Concat("'<a href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'")
-  . " AS '" . _("Title") . "', "
-  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS '" . _("Scheduled") . "', "
-  . $con->SQLDate('Y-m-d','a.ends_at') . " AS '" . _("Due") . "', "
-  . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS '" . _("Company") . "',
-  u.username AS '" . _("Owner") . "', ";
+  . " AS " . $con->qstr(_("Title"),get_magic_quotes_gpc()) . ", "
+  . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS " . $con->qstr(_("Scheduled"),get_magic_quotes_gpc()) . ", "
+  . $con->SQLDate('Y-m-d','a.ends_at') . " AS " . $con->qstr(_("Due"),get_magic_quotes_gpc()) . ", "
+  . $con->Concat("'<a href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
+  . " AS " . $con->qstr(_("Company"),get_magic_quotes_gpc()) . ",
+  u.username AS " . $con->qstr(_("Owner"),get_magic_quotes_gpc()) . ", ";
 if($sort_column == 9) {
-    $sql .= " o.probability AS '" . _("%") . "' ";
+    $sql .= " o.probability AS " . $con->qstr(_("%"),get_magic_quotes_gpc());
 }
 else {
-    $sql .= " 'n/a' AS '" . _("%") . "' ";
+    $sql .= " 'n/a' AS " . $con->qstr(_("%"),get_magic_quotes_gpc()) . " ";
 }
 $sql .= "FROM companies c, activity_types at, addresses addr, activities a";
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
@@ -670,6 +673,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.76  2004/12/26 13:31:43  braverock
+ * - fix string quoting to resolve problems with French translation
+ *
  * Revision 1.75  2004/12/24 15:57:49  braverock
  * - expand to use ContentFullWidth with new CSS
  *
