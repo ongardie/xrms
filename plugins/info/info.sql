@@ -1,8 +1,20 @@
-# --------------------------------------------------------
+-- phpMyAdmin SQL Dump
+-- version 2.6.1-rc1
+-- http://www.phpmyadmin.net
+-- 
+-- Host: localhost
+-- Generation Time: Jan 23, 2005 at 11:06 AM
+-- Server version: 4.0.23
+-- PHP Version: 4.3.10-2
+-- 
+-- Database: `xrmstest`
+-- 
 
-#
-# Table structure for table `info`
-#
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `info`
+-- 
 
 CREATE TABLE `info` (
   `info_id` int(11) NOT NULL default '0',
@@ -12,11 +24,25 @@ CREATE TABLE `info` (
   KEY `server_id` (`info_id`)
 ) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Table structure for table `info_element_definitions`
-#
+-- 
+-- Table structure for table `info_display_map`
+-- 
+
+CREATE TABLE `info_display_map` (
+  `info_type_id` int(11) NOT NULL default '0',
+  `display_on` varchar(100) NOT NULL default '',
+  `record_status` char(1) NOT NULL default 'a',
+  KEY `info_type_id` (`info_type_id`,`display_on`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `info_element_definitions`
+-- 
+
 CREATE TABLE `info_element_definitions` (
   `element_id` int(11) NOT NULL auto_increment,
   `element_label` varchar(50) NOT NULL default '',
@@ -29,19 +55,14 @@ CREATE TABLE `info_element_definitions` (
   `info_type_id` int(11) NOT NULL default '0',
   `element_display_in_sidebar` smallint(6) NOT NULL default '0',
   PRIMARY KEY  (`element_id`)
-) TYPE=MyISAM AUTO_INCREMENT=2 ;
+) TYPE=MyISAM;
 
-#
-# Table structure for table `info_element_definitions`
-#
+-- --------------------------------------------------------
 
-INSERT INTO `info_element_definitions` VALUES (1, 'Name', 'text', '1', 0, '', '', 1, 0, 1);
+-- 
+-- Table structure for table `info_map`
+-- 
 
-# --------------------------------------------------------
-
-#
-# Table structure for table `info_map`
-#
 CREATE TABLE `info_map` (
   `info_id` int(11) NOT NULL auto_increment,
   `company_id` int(11) NOT NULL default '0',
@@ -49,14 +70,16 @@ CREATE TABLE `info_map` (
   `on_what_table` varchar(100) NOT NULL default '',
   `on_what_id` int(11) NOT NULL default '0',
   `info_type_id` int(11) NOT NULL default '0',
+  `division_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`info_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) TYPE=MyISAM;
 
-# --------------------------------------------------------
+-- --------------------------------------------------------
 
-#
-# Table structure for table `info_types`
-#
+-- 
+-- Table structure for table `info_types`
+-- 
+
 CREATE TABLE `info_types` (
   `info_type_id` int(10) unsigned NOT NULL auto_increment,
   `info_type_name` varchar(48) NOT NULL default '',
@@ -69,17 +92,4 @@ CREATE TABLE `info_types` (
   `post_formatting` varchar(25) default NULL,
   `info_type_order` int(11) NOT NULL default '0',
   PRIMARY KEY  (`info_type_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
-
-# --------------------------------------------------------
-
-#
-# Table structure for table `info_display_map`
-#
-CREATE TABLE `info_display_map` (
-  `info_type_id` int(11) NOT NULL default '0',
-  `display_on` varchar(100) NOT NULL default '',
-  `record_status` char(1) NOT NULL default 'a',
-  KEY `info_type_id` (`info_type_id`,`display_on`)
 ) TYPE=MyISAM;
-
