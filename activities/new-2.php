@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.6 2004/02/10 16:19:34 maulani Exp $
+ * $Id: new-2.php,v 1.7 2004/04/26 01:54:45 braverock Exp $
  */
 
 //where do we include from
@@ -27,7 +27,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 $session_user_id = session_check();
 
 
-//now pul all the required variables from $_GET or $_POST
+//now pull all the required variables from $_GET or $_POST
 getGlobalVar($return_url , 'return_url');
 //need check in here for missing return_url, set to calling page
 
@@ -44,6 +44,7 @@ getGlobalVar($user_id    , 'user_id');
 getGlobalVar($email , 'email');
 
 //set defaults if we didn't get values
+$user_id = (strlen($user_id) > 0) ? $user_id : $session_user_id;
 $activity_status = (strlen($activity_status) > 0) ? $activity_status : "o";
 $activity_title = (strlen($activity_title) > 0) ? $activity_title : "[none]";
 $activity_description = (strlen($activity_description) > 0) ? $activity_description : "[none]";
@@ -56,9 +57,10 @@ $contact_id = ($contact_id > 0) ? $contact_id : 0;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-    //munge the scheduled time into a time that we can use
-    $scheduled_at = (strlen($scheduled_at) > 0) ? $con->dbtimestamp($scheduled_at . ' 23:59:59') : $con->dbtimestamp(mktime());
-    $ends_at = $scheduled_at;
+//munge the scheduled time into a time that we can use
+$scheduled_at = (strlen($scheduled_at) > 0) ? $con->dbtimestamp($scheduled_at . ' 23:59:59') : $con->dbtimestamp(mktime());
+$ends_at = $scheduled_at;
+
 //$con->debug = 1;
 
 // define our query
@@ -100,6 +102,9 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.7  2004/04/26 01:54:45  braverock
+ *add ability to schedule a followup activity based on the current activity
+ *
  *Revision 1.6  2004/02/10 16:19:34  maulani
  *Make default activity creation behavior configurable
  *

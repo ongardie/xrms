@@ -2,7 +2,11 @@
 /**
  * Save the updated activity information to the database
  *
- * $Id: edit-2.php,v 1.5 2004/03/17 21:36:48 braverock Exp $
+ * @todo: potential security risk in pulling some of these variables from the submit
+ *        should eventually do a select to get the variables if we are going
+ *        to post a followup
+ *
+ * $Id: edit-2.php,v 1.6 2004/04/26 01:54:45 braverock Exp $
  */
 
 //include required files
@@ -24,6 +28,13 @@ $ends_at = $_POST['ends_at'];
 $activity_status = $_POST['activity_status'];
 $current_activity_status = $_POST['current_activity_status'];
 $user_id    = $_POST['user_id'];
+$followup   = $_POST['followup'];
+$on_what_table = $_POST['on_what_table'];
+$on_what_id = $_POST['on_what_id'];
+$company_id = $_POST['company_id'];
+
+//mark this activity as completed if follow up is to be scheduled
+if ($followup) { $activity_status = 'c'; }
 
 //set scheduled_at to today if it is empty
 if (!$scheduled_at) {
@@ -35,8 +46,11 @@ if (!$ends_at) {
     $ends_at = $scheduled_at;
 }
 
-// if it's closed but wasn't before, update the closed_at timestamp
+// set the correct activity status flag
 $activity_status = ($activity_status == 'on') ? 'c' : 'o';
+//mark this activity as completed if follow up is to be scheduled
+if ($followup) { $activity_status = 'c'; }
+// if it's closed but wasn't before, update the closed_at timestamp
 $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? date('Y-m-d h:i:s') : 'NULL';
 
 $contact_id = ($contact_id > 0) ? $contact_id : 'NULL';
@@ -60,10 +74,17 @@ $sql = "update activities set
 $con->execute($sql);
 $con->close();
 
-header("Location: " . $http_site_root . $return_url);
+if ($followup) {
+    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars('Follow-up '.$activity_title)."&company_id=$company_id&activity_status=o&return_url=$return_url" );
+} else {
+    header("Location: " . $http_site_root . $return_url);
+}
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.6  2004/04/26 01:54:45  braverock
+ * add ability to schedule a followup activity based on the current activity
+ *
  * Revision 1.5  2004/03/17 21:36:48  braverock
  * -fixed strlen bug
  *
