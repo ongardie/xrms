@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.63 2004/11/12 15:30:12 braverock Exp $
+ * $Id: some.php,v 1.64 2004/11/26 15:10:35 braverock Exp $
  */
 
 // handle includes
@@ -320,7 +320,7 @@ $sql_type = "select activity_type_pretty_name, activity_type_id
 from activity_types at
 order by activity_type_pretty_name";
 $rst = $con->execute($sql_type);
-$type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, true);
+$type_menu = translate_menu($rst->getmenu2('activity_type_id', $activity_type_id, true));
 $rst->close();
 
 // save search
@@ -619,6 +619,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.64  2004/11/26 15:10:35  braverock
+ * - add translate_menu call to activity types menu for i18n
+ *
  * Revision 1.63  2004/11/12 15:30:12  braverock
  * - added closing } to resolve parse error
  *
