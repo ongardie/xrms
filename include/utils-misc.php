@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.48 2004/07/15 13:49:54 cpsource Exp $
+ * $Id: utils-misc.php,v 1.49 2004/07/15 22:35:30 introspectshun Exp $
  */
 
 /**
@@ -531,11 +531,17 @@ function set_system_parameter(&$con, $param, $new_val) {
         //there was a problem, notify the user
         db_error_handler ($con, $sql);
     }
-    $sql ="update system_parameters set $my_field=$set_val where param_id='$param'";
-    $sysst = $con->execute($sql);
+    $sql ="SELECT * FROM system_parameters WHERE param_id='$param'";
+    $rst = $con->execute($sql);
+    
+    $rec = array();
+    $rec[$my_field] = $set_val;
+    
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $sysst = $con->execute($upd);
     if (!$sysst){
         //there was a problem, notify the user
-        db_error_handler ($con, $sql);
+        db_error_handler ($con, $upd);
     }
 } //end fn set_system_parameter
 
@@ -836,6 +842,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.49  2004/07/15 22:35:30  introspectshun
+ * - set_system_parameter() now uses GetUpdateSQL
+ *
  * Revision 1.48  2004/07/15 13:49:54  cpsource
  * - Added arr_vars sub-system.
  *
