@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.11 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: edit.php,v 1.12 2004/07/21 19:17:57 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -83,7 +83,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = $company_name . " - Edit Profile";
+$page_title = $company_name . " - " . _("Edit Profile");
 start_page($page_title, true, $msg);
 
 ?>
@@ -95,62 +95,62 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Edit Profile</td>
+                <td class=widget_header colspan=2><?php echo _("Edit Profile"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company&nbsp;Name</td>
+                <td class=widget_label_right><?php echo _("Company Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=company_name value="<?php echo $company_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Legal&nbsp;Name</td>
+                <td class=widget_label_right><?php echo _("Legal Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=legal_name value="<?php echo $legal_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company&nbsp;Code</td>
+                <td class=widget_label_right><?php echo _("Company Code"); ?></td>
                 <td class=widget_content_form_element><input type=text size=10 name=company_code value="<?php echo $company_code; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>CRM&nbsp;Status</td>
+                <td class=widget_label_right><?php echo _("CRM Status"); ?></td>
                 <td class=widget_content_form_element><?php echo $crm_status_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Owner</td>
+                <td class=widget_label_right><?php echo _("Owner"); ?></td>
                 <td class=widget_content_form_element><?php echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company Source</td>
+                <td class=widget_label_right><?php echo _("Company Source"); ?></td>
                 <td class=widget_content_form_element><?php echo $company_source_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Industry</td>
+                <td class=widget_label_right><?php echo _("Industry"); ?></td>
                 <td class=widget_content_form_element><?php echo $industry_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Phone</td>
+                <td class=widget_label_right><?php echo _("Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=phone value="<?php echo $phone; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Alt.&nbsp;Phone</td>
+                <td class=widget_label_right><?php echo _("Alt. Phone"); ?></td>
                 <td class=widget_content_form_element><input type=text name=phone2 value="<?php echo $phone2; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Fax</td>
+                <td class=widget_label_right><?php echo _("Fax"); ?></td>
                 <td class=widget_content_form_element><input type=text name=fax value="<?php echo $fax; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>URL</td>
+                <td class=widget_label_right><?php echo _("URL"); ?></td>
                 <td class=widget_content_form_element><input type=text name=url size=40 value="<?php echo $url; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Employees</td>
+                <td class=widget_label_right><?php echo _("Employees"); ?></td>
                 <td class=widget_content_form_element><input type=text name=employees size=10 value="<?php echo $employees; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Revenue</td>
+                <td class=widget_label_right><?php echo _("Revenue"); ?></td>
                 <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php echo $revenue; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Rating</td>
+                <td class=widget_label_right><?php echo _("Rating"); ?></td>
                 <td class=widget_content_form_element><?php echo $rating_menu; ?></td>
             </tr>
             <tr>
@@ -170,12 +170,12 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=custom4 size=30 value="<?php echo $custom4; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Profile</td>
+                <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=submit value="Save Changes"></td>
-                <td class=widget_content_form_element><input class=button type=button value="Edit Former Names" onclick="javascript: location.href='former-names.php?company_id=<?php echo $company_id; ?>';"></td>
+                <td class=widget_content_form_element><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
+                <td class=widget_content_form_element><input class=button type=button value="<?php echo _("Edit Former Names"); ?>" onclick="javascript: location.href='former-names.php?company_id=<?php echo $company_id; ?>';"></td>
             </tr>
         </table>
         </form>
@@ -200,7 +200,7 @@ function validate() {
 
     if (document.forms[0].company_name.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter a company name.';
+        msgToDisplay += '\n<?php echo _("You must enter a company name."); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -222,6 +222,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.12  2004/07/21 19:17:57  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.11  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

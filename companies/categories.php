@@ -2,7 +2,7 @@
 /**
  * set categories for a company
  *
- * $Id: categories.php,v 1.5 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: categories.php,v 1.6 2004/07/21 19:17:56 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -87,7 +87,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = $company_name . " - Manage Categories";
+$page_title = $company_name . " - " . _("Manage Categories");
 start_page($page_title, true, $msg);
 
 ?>
@@ -97,18 +97,18 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Manage Categories</td>
+                <td class=widget_header colspan=2><?php echo _("Manage Categories"); ?></td>
             </tr>
             <tr>
-                <td width=50% class=widget_label>Associated With</td>
-                <td class=widget_label>Not Associated With</td>
+                <td width=50% class=widget_label><?php echo _("Associated With"); ?></td>
+                <td class=widget_label><?php echo _("Not Associated With"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content valign=top><?php  echo $associated_with; ?></td>
                 <td class=widget_content valign=top><?php  echo $not_associated_with; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input type=button class=button onclick="javascript: location.href='one.php?company_id=<?php  echo $company_id; ?>';" value="Finished"></td>
+                <td class=widget_content_form_element colspan=2><input type=button class=button onclick="javascript: location.href='one.php?company_id=<?php  echo $company_id; ?>';" value="<?php echo _("Finished"); ?>"></td>
             </tr>
         </table>
 
@@ -128,6 +128,9 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.6  2004/07/21 19:17:56  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.5  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

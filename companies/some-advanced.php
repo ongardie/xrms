@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.5 2004/07/09 18:41:10 introspectshun Exp $
+ * $Id: some-advanced.php,v 1.6 2004/07/21 19:17:57 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,12 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-//set the language
-$_SESSION['language'] = 'english';
-
 $session_user_id = session_check();
-
-require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
 $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
 $resort = $_POST['resort'];
@@ -92,13 +87,13 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 $sql = "
-SELECT distinct " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '$strCompaniesSomeCompanyNameLabel',
-c.company_code AS '$strCompaniesSomeCompanyCodeLabel',
-u.username AS '$strCompaniesSomeCompanyUserLabel',
-industry_pretty_name as '$strCompaniesSomeCompanyIndustrylabel',
-crm_status_pretty_name AS '$strCompaniesSomeCompanyCRMStatusLabel',
-as1.account_status_display_html AS '$strCompaniesSomeCompanyAccountStatusLabel',
-r.rating_display_html AS '$strCompaniesSomeCompanyRatingLabel'
+SELECT distinct " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '"._("Company Name")."',
+c.company_code AS '"._("Company Code")."',
+u.username AS '"._("User")."',
+industry_pretty_name as '"._("Industry")."',
+crm_status_pretty_name AS '"._("CRM Status")."',
+as1.account_status_display_html AS '"._("Account Status")."',
+r.rating_display_html AS '"._("Rating")."'
 ";
 
 $criteria_count = 0;
@@ -284,7 +279,7 @@ if ($rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = "<tr><td class=widget_content colspan=3>$strCompaniesSomeNoRecentlyViewedMessage</td></tr>";
+    $recently_viewed_table_rows = "<tr><td class=widget_content colspan=3>" . _("No recently viewed companies") . "</td></tr>";
 }
 
 $sql2 = "select username, user_id from users where user_record_status = 'a' order by username";
@@ -322,7 +317,7 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
 }
 
-$page_title = $strCompaniesSomePageTitle;
+$page_title = _("Search Companies");
 start_page($page_title, true, $msg);
 
 ?>
@@ -346,20 +341,20 @@ $con->close();
         <!-- new company //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=2>Company Options</td>
+                <td class=widget_header colspan=2><?php echo _("Company Options"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="new.php">New Company</a></td>
+                <td class=widget_content><a href="new.php"><?php echo _("New Company"); ?></a></td>
             </tr>
         </table>
 
         <!-- recently viewed companies //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header>Recently Viewed</td>
+                <td class=widget_header><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php  echo $strCompaniesSomeCompanyNameLabel; ?></td>
+                <td class=widget_label><?php  echo _("Company Name"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
@@ -396,6 +391,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.6  2004/07/21 19:17:57  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.5  2004/07/09 18:41:10  introspectshun
  * - Removed CAST(x AS CHAR) for wider database compatibility
  * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings

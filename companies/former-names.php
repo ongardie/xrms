@@ -2,7 +2,7 @@
 /**
  * Edit company relationships
  *
- * $Id: former-names.php,v 1.2 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: former-names.php,v 1.3 2004/07/21 19:17:57 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -62,7 +62,7 @@ for ($i = 0; $i < sizeof($relation_array); $i++) {
 $relation_menu .= "\n</select>";
 
 
-$page_title = $company_name . " - Former Names";
+$page_title = $company_name . " - " . _("Former Names");
 start_page($page_title, true, $msg);
 
 ?>
@@ -75,22 +75,22 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Former Names</td>
+                <td class=widget_header colspan=2><?php echo _("Former Names"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company</td>
+                <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Former Names</td>
+                <td class=widget_label_right><?php echo _("Former Names"); ?></td>
                 <td class=widget_content_form_element><?php  echo $former_name_rows; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Former Name</td>
+                <td class=widget_label_right><?php echo _("Former Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=former_name size=30></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add Former Name"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add Former Name"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -111,6 +111,9 @@ end_page();
 
 /**
  * $Log: former-names.php,v $
+ * Revision 1.3  2004/07/21 19:17:57  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.2  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

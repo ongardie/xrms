@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.15 2004/07/19 12:52:01 cpsource Exp $
+ * $Id: addresses.php,v 1.16 2004/07/21 19:17:56 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -92,7 +92,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = $company_name . " - Addresses";
+$page_title = $company_name . " - " . _("Addresses");
 start_page($page_title, true, $msg);
 
 ?>
@@ -105,21 +105,21 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=7>Addresses</td>
+                <td class=widget_header colspan=7><?php echo _("Addresses"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Address Name</td>
-                <td class=widget_label>Used by Contacts</td>
-                <td class=widget_label>Formatted Address</td>
-                <td class=widget_label>Primary Default</td>
-                <td class=widget_label>Billing Default</td>
-                <td class=widget_label>Shipping Default</td>
-                <td class=widget_label>Payment Default</td>
+                <td class=widget_label><?php echo _("Address Name"); ?></td>
+                <td class=widget_label><?php echo _("Used by Contacts"); ?></td>
+                <td class=widget_label><?php echo _("Formatted Address"); ?></td>
+                <td class=widget_label><?php echo _("Primary Default"); ?></td>
+                <td class=widget_label><?php echo _("Billing Default"); ?></td>
+                <td class=widget_label><?php echo _("Shipping Default"); ?></td>
+                <td class=widget_label><?php echo _("Payment Default"); ?></td>
             </tr>
             <?php  echo $addresses; ?>
             </tr>
             </tr>
-                <td class=widget_content_form_element colspan=7><input class=button type=submit value="Save Defaults"></td>
+                <td class=widget_content_form_element colspan=7><input class=button type=submit value="<?php echo _("Save Defaults"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -129,46 +129,46 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>New Address</td>
+                <td class=widget_header colspan=2><?php echo _("New Address"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company</td>
+                <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Address Name</td>
+                <td class=widget_label_right><?php echo _("Address Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=address_name size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Line 1</td>
+                <td class=widget_label_right><?php echo _("Line 1"); ?></td>
                 <td class=widget_content_form_element><input type=text name=line1 size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Line 2</td>
+                <td class=widget_label_right><?php echo _("Line 2"); ?></td>
                 <td class=widget_content_form_element><input type=text name=line2 size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>City</td>
+                <td class=widget_label_right><?php echo _("City"); ?></td>
                 <td class=widget_content_form_element><input type=text name=city size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right>State/Province</td>
+                <td class=widget_label_right><?php echo _("State/Province"); ?></td>
                 <td class=widget_content_form_element><input type=text name=province size=20></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Postal Code</td>
+                <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
                 <td class=widget_content_form_element><input type=text name=postal_code size=10></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Country</td>
+                <td class=widget_label_right><?php echo _("Country"); ?></td>
                 <td class=widget_content_form_element><?php echo $country_menu ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_91px>Override Address</td>
-                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body></textarea> <input type="checkbox" name="use_pretty_address"> Use</td>
+                <td class=widget_label_right_91px><?php echo _("Override Address"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body></textarea> <input type="checkbox" name="use_pretty_address"> <?php echo _("Use"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -189,6 +189,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.16  2004/07/21 19:17:56  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.15  2004/07/19 12:52:01  cpsource
  * - Fix undefined variable usages.
  *

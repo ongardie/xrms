@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.3 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: edit-division.php,v 1.4 2004/07/21 19:17:56 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -35,7 +35,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = $company_name . ' - ' . $division_name . ' - Edit Division';
+$page_title = $company_name . ' - ' . $division_name . ' - ' . _("Edit Division");
 start_page($page_title, true, $msg);
 
 ?>
@@ -48,22 +48,22 @@ start_page($page_title, true, $msg);
         <input type=hidden name=division_id value=<?php echo $division_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Edit Division</td>
+                <td class=widget_header colspan=2><?php echo _("Edit Division"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company</td>
+                <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Division Name</td>
+                <td class=widget_label_right><?php echo _("Division Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=division_name value="<?php echo $division_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Description</td>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=description><?php echo $description; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input class=button type=button value="Delete Division" onclick="javascript: location.href='delete-division.php?company_id=<?php echo $company_id ?>&division_id=<?php echo $division_id ?>';"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input class=button type=button value="<?php echo _("Delete Division"); ?>" onclick="javascript: location.href='delete-division.php?company_id=<?php echo $company_id ?>&division_id=<?php echo $division_id ?>';"></td>
             </tr>
         </table>
         </form>
@@ -84,6 +84,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.4  2004/07/21 19:17:56  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.3  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: edit-address.php,v 1.6 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: edit-address.php,v 1.7 2004/07/21 19:17:56 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -46,7 +46,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = $company_name . " - Edit Address";
+$page_title = $company_name . " - " . _("Edit Address");
 start_page($page_title, true, $msg);
 
 ?>
@@ -59,46 +59,46 @@ start_page($page_title, true, $msg);
         <input type=hidden name=address_id value=<?php echo $address_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Edit Address</td>
+                <td class=widget_header colspan=2><?php echo _("Edit Address"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Company</td>
+                <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Address Name</td>
+                <td class=widget_label_right><?php echo _("Address Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Line 1</td>
+                <td class=widget_label_right><?php echo _("Line 1"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=line1 value="<?php echo $line1; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Line 2</td>
+                <td class=widget_label_right><?php echo _("Line 2"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=line2 value="<?php echo $line2; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>City</td>
+                <td class=widget_label_right><?php echo _("City"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=city value="<?php echo $city; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>State/Province</td>
+                <td class=widget_label_right><?php echo _("State/Province"); ?></td>
                 <td class=widget_content_form_element><input type=text size=20 name=province value="<?php echo $province; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Postal Code</td>
+                <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
                 <td class=widget_content_form_element><input type=text size=10 name=postal_code value="<?php echo $postal_code; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Country</td>
+                <td class=widget_label_right><?php echo _("Country"); ?></td>
                 <td class=widget_content_form_element><?php echo $country_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_91px>Address Body</td>
-                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> Use</td>
+                <td class=widget_label_right_91px><?php echo _("Address Body"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> <?php echo _("Use"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input class=button type=button value="Delete Address" onclick="javascript: location.href='delete-address.php?company_id=<?php echo $company_id ?>&address_id=<?php echo $address_id ?>';"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"> <input class=button type=button value="<?php echo _("Delete Address"); ?>" onclick="javascript: location.href='delete-address.php?company_id=<?php echo $company_id ?>&address_id=<?php echo $address_id ?>';"></td>
             </tr>
         </table>
         </form>
@@ -119,6 +119,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.7  2004/07/21 19:17:56  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.6  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.

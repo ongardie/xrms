@@ -2,7 +2,7 @@
 /**
  * Set admin items for a company
  *
- * $Id: admin.php,v 1.6 2004/07/19 20:59:31 cpsource Exp $
+ * $Id: admin.php,v 1.7 2004/07/21 19:17:56 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -55,7 +55,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = $company_name . " - Admin";
+$page_title = $company_name . " - " . _("Admin");
 
 start_page($page_title, true, $msg);
 
@@ -68,52 +68,52 @@ start_page($page_title, true, $msg);
 		<input type=hidden name=company_id value=<?php echo $company_id; ?>>
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=2>Edit Account Information</td>
+				<td class=widget_header colspan=2><?php echo _("Edit Account Information"); ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Account&nbsp;Status</td>
+				<td class=widget_label_right><?php echo _("Account Status"); ?></td>
 				<td class=widget_content_form_element><?php echo $account_status_menu; ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Tax&nbsp;ID</td>
+				<td class=widget_label_right><?php echo _("Tax ID"); ?></td>
 				<td class=widget_content_form_element><input type=text size=10 name=tax_id value="<?php echo $tax_id; ?>"></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Credit&nbsp;Limit</td>
+				<td class=widget_label_right><?php echo _("Credit Limit"); ?></td>
 				<td class=widget_content_form_element><input type=text size=10 name=credit_limit value="<?php echo $credit_limit; ?>"></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Rating</td>
+				<td class=widget_label_right><?php echo _("Rating"); ?></td>
 				<td class=widget_content_form_element><?php echo $rating_menu; ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Terms</td>
+				<td class=widget_label_right><?php echo _("Terms"); ?></td>
 				<td class=widget_content_form_element>Net &nbsp;<input type=text size=3 name=terms value="<?php echo $terms; ?>"> Days</td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Customer Key</td>
+				<td class=widget_label_right><?php echo _("Customer Key"); ?></td>
 				<td class=widget_content_form_element><input type=text size=10 name=extref1 value="<?php echo $extref1; ?>"></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Vendor Key</td>
+				<td class=widget_label_right><?php echo _("Vendor Key"); ?></td>
 				<td class=widget_content_form_element><input type=text size=10 name=extref2 value="<?php echo $extref2; ?>"></td>
 			</tr>
 			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+				<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
 			</tr>
 		</table>
 		</form>
 
-		<form action="delete.php" method=post onsubmit="javascript: return confirm('Delete Company?');">
+		<form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Company?"); ?>');">
 		<input type=hidden name=company_id value="<?php echo $company_id; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=4>Delete Company</td>
+				<td class=widget_header colspan=4><?php echo _("Delete Company"); ?></td>
 			</tr>
 			<tr>
 				<td class=widget_content>
-				<p>Click the button below to remove this company (and all associated contacts, activities, opportunities, cases, etc.) from the system.
-				<p><input class=button type=submit value="Delete Company">
+				<p><?php echo _("Click the button below to remove this company (and all associated contacts, activities, opportunities, cases, etc.) from the system."); ?>
+				<p><input class=button type=submit value="<?php echo _("Delete Company"); ?>">
 				</td>
 			</tr>
 		</table>
@@ -135,6 +135,9 @@ end_page();
 
 /**
  * $Log: admin.php,v $
+ * Revision 1.7  2004/07/21 19:17:56  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.6  2004/07/19 20:59:31  cpsource
  * - Fix undefined $msg
  *

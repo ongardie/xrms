@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.7 2004/07/21 11:55:06 cpsource Exp $
+ * $Id: sidebar.php,v 1.8 2004/07/21 19:17:57 introspectshun Exp $
  */
 
 // add company information block on sidebar
@@ -41,31 +41,31 @@ if ($rst) {
     $url = $rst->fields['url'];
 
     $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-      . '<a href="../companies/one.php?company_id=' . $company_id . '">'
-      . $rst->fields['company_name'] . "</a></td>\n\t</tr>"
-      . "\n\t<tr>\n\t\t<td class=widget_content>"
-      . get_formatted_address ($con, $rst->fields['default_primary_address'])
-      . "</td>\n\t</tr>";
+                   . '<a href="../companies/one.php?company_id=' . $company_id . '">'
+                   . $rst->fields['company_name'] . "</a></td>\n\t</tr>"
+                   . "\n\t<tr>\n\t\t<td class=widget_content>"
+                   . get_formatted_address ($con, $rst->fields['default_primary_address'])
+                   . "</td>\n\t</tr>";
 
     if ($rst->fields['phone']) {
-      $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-	. "Phone: " . $rst->fields['phone'] . "&nbsp;" . $rst->fields['phone2'] . "</td>\n\t</tr>";
+        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+                       . _("Phone") . ": " . $rst->fields['phone'] . "&nbsp;" . $rst->fields['phone2'] . "</td>\n\t</tr>";
     };
 
     if ($rst->fields['fax']) {
-      $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-	. "Fax: " . $rst->fields['fax'] . "</td>\n\t</tr>";
+        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+                       . _("Fax") . ": " . $rst->fields['fax'] . "</td>\n\t</tr>";
     }
 
     if ($rst->fields['url']) {
-      $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
-	. "<a href=\"" . $url . "\" target=\"_new\">"
-	. $url . "</a></td>\n\t</tr>";
+        $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
+	                   . "<a href=\"" . $url . "\" target=\"_new\">"
+                       . $url . "</a></td>\n\t</tr>";
     }
 
   } // if ( !$rst->EOF ) ...
 
-  $rst->close();
+    $rst->close();
 
 } else {
 
@@ -81,6 +81,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.8  2004/07/21 19:17:57  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.7  2004/07/21 11:55:06  cpsource
  * - Define $url
  *   Fix get of database to check for any records found.

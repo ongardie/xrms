@@ -4,7 +4,7 @@
  *
  * @todo put back in established at date picker in form
  *
- * $Id: relationships.php,v 1.9 2004/07/02 18:04:57 neildogg Exp $
+ * $Id: relationships.php,v 1.10 2004/07/21 19:17:57 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -97,7 +97,7 @@ $relation_menu .= "\n</select>";
 
 $con->close();
 
-$page_title = $company_name . " - Relationships";
+$page_title = $company_name . " - " . _("Relationships");
 start_page($page_title, true, $msg);
 
 ?>
@@ -108,12 +108,12 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Relationships</td>
+                <td class=widget_header colspan=4><?php echo _("Relationships"); ?></td>
             </tr>
                         <tr>
-                                <td class=widget_label>Relationship</td>
-                                <td class=widget_label>Company</td>
-                                <td class=widget_label>Date</td>
+				<td class=widget_label><?php echo _("Relationship"); ?></td>
+				<td class=widget_label><?php echo _("Company"); ?></td>
+				<td class=widget_label><?php echo _("Date"); ?></td>
                                 <td class=widget_label></td>
                         </tr>
             <?php  echo $relationship_rows; ?>
@@ -123,8 +123,8 @@ start_page($page_title, true, $msg);
                         </tr>
             <tr>
                 <td class=widget_content_form_element colspan=4>
-                    <input class=button type=submit value="Add Relationship">
-                    <input class=button type=button value="Back to <?php echo $company_name; ?>" onclick="javascript:location.href='one.php?company_id=<?php echo $company_id; ?>';">
+                    <input class=button type=submit value="<?php echo _("Add Relationship"); ?>">
+                    <input class=button type=button value="<?php echo _("Back to"); ?> <?php echo $company_name; ?>" onclick="javascript:location.href='one.php?company_id=<?php echo $company_id; ?>';">
                 </td>
             </tr>
         </table>
@@ -146,6 +146,9 @@ end_page();
 
 /**
  * $Log: relationships.php,v $
+ * Revision 1.10  2004/07/21 19:17:57  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.9  2004/07/02 18:04:57  neildogg
  * - Changed ? to & in URL to transfer variable properly.
  *

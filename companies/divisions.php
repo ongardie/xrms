@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.4 2004/07/07 21:53:13 introspectshun Exp $
+ * $Id: divisions.php,v 1.5 2004/07/21 19:17:56 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -48,7 +48,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = $company_name . " - Divisions";
+$page_title = $company_name . " - " . _("Divisions");
 start_page($page_title, true, $msg);
 
 ?>
@@ -60,33 +60,33 @@ start_page($page_title, true, $msg);
 	<input type=hidden name=company_id value=<?php  echo $company_id; ?>>
 	<table class=widget cellspacing=1>
 		<tr>
-			<td class=widget_header colspan=2>New Division</td>
+			<td class=widget_header colspan=2><?php echo _("New Division"); ?></td>
 		</tr>
 		<tr>
-			<td class=widget_label>Company</td>
+			<td class=widget_label><?php echo _("Company"); ?></td>
 			<td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
 		</tr>
 		<tr>
-			<td class=widget_label>Division Name</td>
+			<td class=widget_label><?php echo _("Division Name"); ?></td>
 			<td class=widget_content_form_element><input type=text name=division_name size=30></td>
 		</tr>
 		<tr>
-			<td class=widget_label>Division Description</td>
+			<td class=widget_label><?php echo _("Division Description"); ?></td>
 			<td class=widget_content_form_element><textarea rows=8 cols=80 name=description></textarea></td>
 		</tr>
 		<tr>
-			<td class=widget_content_form_element colspan=2><input class=button type=submit value="Add"></td>
+			<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
 		</tr>
 	</table>
 	</form>
 	
 	<table class=widget cellspacing=1>
 		<tr>
-			<td class=widget_header colspan=2>Divisions</td>
+			<td class=widget_header colspan=2><?php echo _("Divisions"); ?></td>
 		</tr>
 		<tr>
-			<td class=widget_label>Name</td>
-			<td class=widget_label>Description</td>
+			<td class=widget_label><?php echo _("Name"); ?></td>
+			<td class=widget_label><?php echo _("Description"); ?></td>
 		</tr>
 		<?php  echo $division_html; ?>
 	</table>
@@ -99,6 +99,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.5  2004/07/21 19:17:56  introspectshun
+ * - Localized strings for i18n/l10n support
+ *
  * Revision 1.4  2004/07/07 21:53:13  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
