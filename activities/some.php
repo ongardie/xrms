@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.44 2004/07/22 23:48:25 braverock Exp $
+ * $Id: some.php,v 1.45 2004/07/22 23:58:35 braverock Exp $
  */
 
 // handle includes
@@ -55,7 +55,7 @@ if($saved_id) {
         if($delete_saved) {
             $rec = array();
             $rec['saved_status'] = 'd';
-            
+
             $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
             $con->execute($upd);
         }
@@ -67,24 +67,25 @@ if($saved_id) {
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-		   'sort_column'         => array ( 'activities_sort_column', arr_vars_SESSION ) ,
-		   'current_sort_column' => array ( 'activities_current_sort_column', arr_vars_SESSION ) ,
-		   'sort_order'          => array ( 'activities_sort_order', arr_vars_SESSION ) ,
-		   'current_sort_order'  => array ( 'activities_current_sort_order', arr_vars_SESSION ) ,
-		   'title'               => array ( 'activities_title', arr_vars_SESSION ) ,
-		   'contact'             => array ( 'activities_contact', arr_vars_SESSION ) ,
-		   'company'             => array ( 'activities_company', arr_vars_SESSION ) ,
-		   'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
-		   'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
-		   'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
-		   'completed'           => array ( 'activities_completed', arr_vars_SESSION ) ,
-		   'user_id'             => array ( 'activities_user_id', arr_vars_SESSION ) ,
-		   'date'                => array ( 'date', arr_vars_SESSION ) ,
-		   'search_date'         => array ( 'activities_date', arr_vars_SESSION ) ,
-		   );
+                   'sort_column'         => array ( 'activities_sort_column', arr_vars_SESSION ) ,
+                   'current_sort_column' => array ( 'activities_current_sort_column', arr_vars_SESSION ) ,
+                   'sort_order'          => array ( 'activities_sort_order', arr_vars_SESSION ) ,
+                   'current_sort_order'  => array ( 'activities_current_sort_order', arr_vars_SESSION ) ,
+                   'title'               => array ( 'activities_title', arr_vars_SESSION ) ,
+                   'contact'             => array ( 'activities_contact', arr_vars_SESSION ) ,
+                   'company'             => array ( 'activities_company', arr_vars_SESSION ) ,
+                   'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
+                   'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
+                   'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
+                   'completed'           => array ( 'activities_completed', arr_vars_SESSION ) ,
+                   'user_id'             => array ( 'activities_user_id', arr_vars_SESSION ) ,
+                   'date'                => array ( 'date', arr_vars_SESSION ) ,
+                   'search_date'         => array ( 'activities_date', arr_vars_SESSION ) ,
+                   );
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
+
 
 // (introspectshun) Updated to use portable database code; removed MySQL-centric date functions
 // This will work for positive and negative intervals automatically, so no need for conditional assignment of offset
@@ -368,16 +369,26 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan="2">
-                    <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?> 
+                    <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
                 </td>
-                <td class=widget_content_form_element colspan="2"> 
-                    <input type=text name="saved_title" size=24> 
-                    <?php if($_SESSION['role_short_name'] === 'Admin') { echo _("Add to Everyone"); ?> <input type=checkbox name="group_item" value=1><?php } ?>
+                <td class=widget_content_form_element colspan="2">
+                    <input type=text name="saved_title" size=24>
+                    <?php
+                        if($_SESSION['role_short_name'] === 'Admin') {
+                            echo _("Add to Everyone").'<input type=checkbox name="group_item" value=1>';
+                        }
+                    ?>
+                </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
+                <td class=widget_content_form_element colspan=4>
+                    <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
                     <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
-                    <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";}; ?>
+                    <?php
+                        if ($company_count > 0) {
+                            echo "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";
+                        };
+                    ?>
                 </td>
             </tr>
     </table>
@@ -456,6 +467,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.45  2004/07/22 23:58:35  braverock
+ * - further cleanup in formatting to minimize possibility of parse errors
+ *
  * Revision 1.44  2004/07/22 23:48:25  braverock
  * - fixed a short php tag that was causing a parse error
  * - removed a bunch of stubbed out useless code
