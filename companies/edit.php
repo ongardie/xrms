@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.9 2004/04/16 22:19:38 maulani Exp $
+ * $Id: edit.php,v 1.10 2004/05/06 13:32:23 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -173,7 +173,8 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element><input class=button type=button value="Edit Former Names" onclick="javascript: location.href='former-names.php?company_id=<?php echo $company_id; ?>';"></td>
             </tr>
         </table>
         </form>
@@ -220,6 +221,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.10  2004/05/06 13:32:23  gpowers
+ * added support for "Edit Former Name"
+ *
  * Revision 1.9  2004/04/16 22:19:38  maulani
  * - Add CSS2 positioning
  *
