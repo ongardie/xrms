@@ -3,7 +3,7 @@
  * Save the updated activity information to the database
  *
  *
- * $Id: browse-next.php,v 1.1 2004/06/13 09:15:07 braverock Exp $
+ * $Id: browse-next.php,v 1.2 2004/06/15 18:08:49 introspectshun Exp $
  */
 
 //include required files
@@ -13,6 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
