@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.7 2004/08/04 21:46:42 introspectshun Exp $
+* $Id: email-4.php,v 1.8 2004/12/02 18:21:37 niclowe Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -27,9 +27,9 @@ $email_template_body = unserialize($_SESSION['email_template_body']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 
-// loop through the contacts and send each one a copy of the message with a personalised "Dear contact" 
+// loop through the contacts and send each one a copy of the message with a personalised "Dear contact"
 
 $sql = "select * from contacts where contact_id in (" . implode(',', $array_of_contacts) . ")";
 $rst = $con->execute($sql);
@@ -43,12 +43,28 @@ if ($rst) {
 	$headers .= "Bcc: $bcc_address\r\n";
 	while (!$rst->EOF) {
 		$contactName = $rst->fields['first_names'];
-		$output = "Dear $contactName \r\n\r\n $msg_body";
+		$output = "Dear $contactName \r\n\r\n$msg_body";
 		if (!mail($rst->fields['email'], $title, $output, $headers)) {
-			echo "There was an error sending email";
-			exit();
-		}
+			echo "<font color=red>There was an error sending email</font>";
+            $feedback .= "<font color=red><li>" . $rst->fields['email'] ." FAILED</li></font>";
+						//exit();
+		} else{
 		$feedback .= "<li>" . $rst->fields['email'] ."</li>";
+        //add activity
+        $sql_insert_activity = "insert into activities set
+                        activity_type_id = 3,
+                        user_id = $session_user_id,
+                        company_id = ".$rst->fields['company_id'].",
+                        contact_id = ".$rst->fields['contact_id'].",
+                        activity_title = '".addslashes($title)."',
+                        activity_description = '".addslashes($output)."',
+                        entered_at = ".$con->dbtimestamp(mktime()).",
+                        scheduled_at=".$con->dbtimestamp(mktime()).",
+                        ends_at=".$con->dbtimestamp(mktime()).",
+												activity_status ='c',
+                        entered_by = $session_user_id;";
+                        $con->execute($sql_insert_activity);
+        }
 		$rst->movenext();
 	}
 	$feedback .= "<br><br>".nl2br(htmlspecialchars($headers))."<br><br>Dear XXXXXX<br>";
@@ -94,6 +110,9 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.8  2004/12/02 18:21:37  niclowe
+* added default email origination from user table, added completed activity when a bulk email is sent
+*
 * Revision 1.7  2004/08/04 21:46:42  introspectshun
 * - Localized strings for i18n/l10n support
 * - All paths now relative to include-locations-location.inc

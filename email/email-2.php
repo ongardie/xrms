@@ -3,7 +3,7 @@
 * 
 * Email 2. 
 * 
-* $Id: email-2.php,v 1.9 2004/10/19 17:52:07 niclowe Exp $ 
+* $Id: email-2.php,v 1.10 2004/12/02 18:21:37 niclowe Exp $ 
 */ 
  
 require_once('include-locations-location.inc'); 
@@ -24,7 +24,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug=true; 
 $sql = "SELECT * FROM users WHERE user_id = '".$session_user_id."'"; 
 $rst = $con->execute($sql); 
- 
+$default_user=$rst->fields['email'];
+
 $rec = array(); 
 $rec['last_hit'] = Time(); 
  
@@ -72,11 +73,11 @@ document.forms[2].submit();
 </tr> 
 <tr> 
 <td class=widget_label_right width="1%" nowrap><?php echo _("From"); ?>:</td> 
-<td class=widget_content_form_element><input type=text name="sender_name" size=50 value=""><?php echo $required_indicator; ?></td> 
+<td class=widget_content_form_element><input type=text name="sender_name" size=50 value="<? echo $default_user ?>"><?php echo $required_indicator; ?></td> 
 </tr> 
 <tr> 
 <td class=widget_label_right width="1%" nowrap><?php echo _("Reply to"); ?>:</td> 
-<td class=widget_content_form_element><input type=text name="sender_address" size=50 value=""><?php echo $required_indicator; ?></td> 
+<td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<? echo $default_user ?>"><?php echo $required_indicator; ?></td> 
 </tr> 
 <tr> 
 <td class=widget_label_right width="1%" nowrap><?php echo _("Bcc"); ?>:</td> 
@@ -160,6 +161,9 @@ end_page();
  
 /** 
 * $Log: email-2.php,v $
+* Revision 1.10  2004/12/02 18:21:37  niclowe
+* added default email origination from user table, added completed activity when a bulk email is sent
+*
 * Revision 1.9  2004/10/19 17:52:07  niclowe
 * fixed script error contributed by konig here
 * http://sourceforge.net/forum/forum.php?thread_id=1140799&forum_id=305409
