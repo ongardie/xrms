@@ -18,7 +18,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * @author Neil Roberts
  *
- * $Id: sidebar.php,v 1.4 2004/07/14 14:49:28 cpsource Exp $
+ * $Id: sidebar.php,v 1.5 2004/07/14 19:38:00 neildogg Exp $
  */
 
 $expand_id = isset($_GET['expand_id']) ? $_GET['expand_id'] : '';
@@ -105,21 +105,65 @@ elseif($rst->rowcount()) {
         // $current_ids used later to make sure there aren't duplicate names
         $current_ids[] = $current_id;
 
+        $agent_count = 0;
+        $address = "";
+        if($what_table[$opposite_direction] == "companies") {
+            $sql = "SELECT count(contact_id) as agent_count
+                    FROM contacts
+                    WHERE company_id = " . $current_id . "
+                    GROUP BY company_id";
+            $extra_rst = $con->execute($sql);
+            $agent_count = $extra_rst->fields['agent_count'];
+            $extra_rst->close();
+            $sql = "SELECT line1, city, province
+                    FROM addresses
+                    WHERE company_id = " . $current_id;
+            $extra_rst = $con->execute($sql);
+            $address = explode(" ", $extra_rst->fields['line1']);
+            while(count($address) > 3) {
+                array_pop($address);
+            }
+            $address = implode(" ", $address) . ", " 
+                . $extra_rst->fields['city'] . ", " 
+                . $extra_rst->fields['province'];
+            $extra_rst->close();
+        }
+        $opportunity_id = 0;
+        if(($what_table[$opposite_direction] == "companies") or ($what_table[$opposite_direction] == "contacts")) {
+            $sql = "SELECT opportunity_id
+                    FROM opportunities
+                    WHERE " . $what_table_singular[$opposite_direction] . "_id = " . $current_id;
+            $opportunity_rst = $con->execute($sql);
+            $opportunity_id = $opportunity_rst->fields['opportunity_id'];
+            $opportunity_rst->close();
+        }
+        
         // Create the Initial entry
         $relationship_link_rows .= "<tr><td class=widget_content colspan=2 align=left>\n"
             . $relationship_arr[$rst->fields['relationship_type_id']][$working_direction . '_what_text'].":<br>"
-            . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting']
-            . "<a href='$http_site_root/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id="
-            . $current_id . "'>" . $rst->fields['name'] . "</a> "
-            . $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "\n"
+            . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting'];
+        if($opportunity_id) {
+            $relationship_link_rows .= "*";
+        }
+        $relationship_link_rows .= "<a href='$http_site_root/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id="
+            . $current_id . "'>" 
+            . $rst->fields['name']
+            . "</a> ";
+        if($agent_count) {
+            $relationship_link_rows .= " (" . $agent_count . ") ";
+        }
+        $relationship_link_rows .= $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "\n"
             . " &bull;"
             . " <a href='$http_site_root/relationships/edit.php?working_direction=$opposite_direction"
             . "&on_what_table=" . $what_table[$opposite_direction]
             . "&relationship_id=" . $rst->fields['relationship_id']
             . "&return_url=" . $what_table[$working_direction]
             . "/one.php?$what_table_singular[$working_direction]_id=$overall_id"
-            . "'>Edit</a>"
-            . "</td></tr>\n";
+            . "'>Edit</a>";
+        if($address) {
+            $relationship_link_rows .= "<br>" . $address;
+        }
+        $relationship_link_rows .= "</td></tr>\n";
 
         $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($what_table[$working_direction])));
         // Create the shared association entries
@@ -148,12 +192,53 @@ elseif($rst->rowcount()) {
                 $count = $rst3->rowcount();
                 $rst3->close();
 
+                $agent_count = 0;
+                $address = "";
+                if($what_table[$working_direction] == "companies") {
+                    $sql = "SELECT count(contact_id) as agent_count
+                        FROM contacts
+                        WHERE company_id = " . $current_id2 . "
+                        GROUP BY company_id";
+                    $extra_rst = $con->execute($sql);
+                    $agent_count = $extra_rst->fields['agent_count'];
+                    $extra_rst->close();
+                    $sql = "SELECT line1, city, province
+                            FROM addresses
+                            WHERE company_id = " . $current_id2;
+                    $extra_rst = $con->execute($sql);
+                    $address = explode(" ", $extra_rst->fields['line1']);
+                    while(count($address) > 3) {
+                        array_pop($address);
+                    }
+                    $address = implode(" ", $address) . ", " 
+                        . $extra_rst->fields['city'] . ", " 
+                        . $extra_rst->fields['province'];
+                    $extra_rst->close();
+                }
+                $opportunity_id = 0;
+                if(($what_table[$working_direction] == "companies") or ($what_table[$working_direction] == "contacts")) {
+                    $sql = "SELECT opportunity_id
+                            FROM opportunities
+                            WHERE " . $what_table_singular[$working_direction] . "_id = " . $current_id2;
+                    $opportunity_rst = $con->execute($sql);
+                    $opportunity_id = $opportunity_rst->fields['opportunity_id'];
+                    $opportunity_rst->close();
+                }   
+
                 $relationship_link_rows .= "<tr><td class=widget_content colspan=2 align=right>\n"
                     . $relationship_arr[$rst2->fields['relationship_type_id']][$opposite_direction . '_what_text'].":<br>"
-                    . $relationship_arr[$rst2->fields['relationship_type_id']]['pre_formatting']
-                    . "<a href='$http_site_root/$what_table[$working_direction]/one.php?$what_table_singular[$working_direction]_id="
-                    . $current_id2 . "'>" . $rst2->fields['name'] . "</a>"
-                    . $relationship_arr[$rst2->fields['relationship_type_id']]['post_formatting'] . "\n";
+                    . $relationship_arr[$rst2->fields['relationship_type_id']]['pre_formatting'];
+                if($opportunity_id) {
+                    $relationship_link_rows .= "*";
+                }
+                $relationship_link_rows .= "<a href='$http_site_root/$what_table[$working_direction]/one.php?$what_table_singular[$working_direction]_id="
+                    . $current_id2 . "'>" 
+                    . $rst2->fields['name'] 
+                    . "</a>";
+                    if($agent_count) {
+                        $relationship_link_rows .= " (" . $agent_count . ") ";
+                    }
+                $relationship_link_rows .= $relationship_arr[$rst2->fields['relationship_type_id']]['post_formatting'] . "\n";
                 if($count > 0) {
                     $relationship_link_rows .= " &bull;"
                         . " <a href='one.php?$what_table_singular[$working_direction]_id=$overall_id&expand_id=" . $rst2->fields[$what_table_singular[$working_direction] . '_id'] . "#associated'>"
@@ -161,6 +246,10 @@ elseif($rst->rowcount()) {
                     if($count > 1) {
                         $relationship_link_rows .= "s";
                     }
+                }
+                $relationship_link_rows .= "</a>";
+                if($address) {
+                    $relationship_link_rows .= "<br>" . $address;
                 }
                 $relationship_link_rows .= "</td></tr>\n";
                 $rst2->movenext();
@@ -217,14 +306,56 @@ if($expand_id) {
 
     while(!$rst->EOF) {
         if(!in_array($rst->fields[$what_table_singular[$opposite_direction] . '_id'], $current_ids)) {
-             $relationship_link_rows .= "<tr><td class=widget_content>"
-                 . $relationship_arr[$rst->fields['relationship_type_id']][$working_direction . '_what_text'].":<br>"
-                 . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting']
-                 . "<a href='$http_site_root/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id="
-                 . $rst->fields[$what_table_singular[$opposite_direction] . '_id'] . "'>"
-                 . $rst->fields['name'] . "</a>"
-                 . $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "<br>\n"
-                 . "</td></tr>\n";
+        
+            $agent_count = 0;
+            $address = "";
+            if($what_table[$opposite_direction] == "companies") {
+                $sql = "SELECT count(contact_id) as agent_count
+                    FROM contacts
+                    WHERE company_id = " . $rst->fields['company_id'] . "
+                    GROUP BY company_id";
+                $extra_rst = $con->execute($sql);
+                $agent_count = $extra_rst->fields['agent_count'];
+                $extra_rst->close();
+                $sql = "SELECT line1, city, province
+                        FROM addresses
+                        WHERE company_id = " . $rst->fields['company_id'];
+                $extra_rst = $con->execute($sql);
+                $address = explode(" ", $extra_rst->fields['line1']);
+                while(count($address) > 3) {
+                    array_pop($address);
+                }
+                $address = implode(" ", $address) . ", " 
+                    . $extra_rst->fields['city'] . ", " 
+                    . $extra_rst->fields['province'];
+                $extra_rst->close();
+            }
+            $opportunity_id = 0;
+            if(($what_table[$opposite_direction] == "companies") or ($what_table[$opposite_direction] == "contacts")) {
+                $sql = "SELECT opportunity_id
+                        FROM opportunities
+                        WHERE " . $what_table_singular[$opposite_direction] . "_id = " . $rst->fields[$what_table_singular[$opposite_direction] . '_id'];
+                $opportunity_rst = $con->execute($sql);
+                $opportunity_id = $opportunity_rst->fields['opportunity_id'];
+            }
+        
+            $relationship_link_rows .= "<tr><td class=widget_content>"
+                . $relationship_arr[$rst->fields['relationship_type_id']][$working_direction . '_what_text'].":<br>"
+                . $relationship_arr[$rst->fields['relationship_type_id']]['pre_formatting'];
+            if($opportunity_id) {
+                $relationship_link_rows .= "*";
+            }
+            $relationship_link_rows .= "<a href='$http_site_root/$what_table[$opposite_direction]/one.php?$what_table_singular[$opposite_direction]_id="
+                . $rst->fields[$what_table_singular[$opposite_direction] . '_id'] . "'>"
+                . $rst->fields['name'] . "</a>";
+            if($agent_count) {
+                $relationship_link_rows .= " (" . $agent_count . ") ";
+            }
+            $relationship_link_rows .= $relationship_arr[$rst->fields['relationship_type_id']]['post_formatting'] . "\n";
+            if($address) {
+                $relationship_link_rows .= "<br>" . $address;
+            }
+            $relationship_link_rows .= "</td></tr>\n";
         }
         $rst->movenext();
     }
@@ -235,6 +366,11 @@ if($expand_id) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.5  2004/07/14 19:38:00  neildogg
+ * - Added address/agent count/is opportunity depending on table
+ *  - Should give example for people that want to extend functionality
+ *  - If another generic method could be used, let me know
+ *
  * Revision 1.4  2004/07/14 14:49:28  cpsource
  * - All sidebar.php's now support IN_XRMS security feature.
  *
