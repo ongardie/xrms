@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.22 2004/07/13 18:05:59 cpsource Exp $
+ * $Id: some.php,v 1.23 2004/07/13 21:09:29 braverock Exp $
  */
 
 //include the standard files
@@ -309,12 +309,10 @@ start_page($page_title, true, $msg);
            <input name="submitted" type=submit class=button value="Search">
            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search">
 <?php
-	  if ( $use_self_contacts ) {
-	    echo '<input class=button type=button onclick="javascript: createContact();" value="Create Contact for \'Self\'">';
-	  }
-          // TBD - BUG - $company_count is never defined
+          if ( $use_self_contacts ) {
+            echo '<input class=button type=button onclick="javascript: createContact();" value="Create Contact for \'Self\'">';
+          }
 ?>
-            <?php if (isset($company_count) && $company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
           </td>
         </tr>
         </table>
@@ -398,6 +396,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.23  2004/07/13 21:09:29  braverock
+ * -removed obsolete Bulk Email code. this code was moved to the adodb pager file long ago
+ *
  * Revision 1.22  2004/07/13 18:05:59  cpsource
  * - Add feature use_self_contacts
  *   fix misc unitialized variables
