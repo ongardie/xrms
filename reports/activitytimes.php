@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.6 2005/01/03 06:37:19 ebullient Exp $
+ * $Id: activitytimes.php,v 1.7 2005/01/08 06:47:18 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -119,7 +119,7 @@ if ($user_id) {
     }
     $con->close();
 
-    echo "<tr><td></td><td align=right><strong>" . _("TOTAL") . "</strong><td><strong>" . formatSeconds($total_time) . "</strong> ($total_time sec)</td><td></td><td></td><td></td></tr>\n";
+    echo "<tr><td></td><td align=right><strong>" . _("TOTAL") . "</strong><td><strong>" . formatSeconds($total_time) . "</strong></td><td colspan=2>($total_time " . _("seconds") . ")</td><td></td><td></td></tr>\n";
     echo "</table>";
 }
 echo "</div>\n";
@@ -181,6 +181,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.7  2005/01/08 06:47:18  gpowers
+ * - fixed formatting
+ *
  * Revision 1.6  2005/01/03 06:37:19  ebullient
  * update reports - graphs centered on page, reports surrounded by divs
  *
