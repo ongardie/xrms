@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.6 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: add-address.php,v 1.7 2004/06/16 19:22:36 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,7 +27,7 @@ $address_body = $_POST['address_body'];
 $use_pretty_address = $_POST['use_pretty_address'];
 
 $address_name = (strlen($address_name) > 0) ? $address_name : '[address]';
-$use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
+$use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -62,6 +62,10 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.7  2004/06/16 19:22:36  gpowers
+ * - removed double quoting from t/f
+ *   - did not work with MySQL
+ *
  * Revision 1.6  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.
