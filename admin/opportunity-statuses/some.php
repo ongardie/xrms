@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.5 2004/04/16 22:18:26 maulani Exp $
+ * $Id: some.php,v 1.6 2004/06/03 16:13:22 braverock Exp $
  */
 
 //include required XRMS common files
@@ -22,13 +22,19 @@ $session_user_id = session_check();
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "select * from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order, opportunity_status_id";
+$sql = "select * from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql);
 
+//get first row count and last row count
+$cnt = 1;
+$maxcnt = $rst->rowcount();
+
+//get rows, place them in table form 
 if ($rst) {
     while (!$rst->EOF) {
-        $table_rows .= "\n<tr>";
-            $table_rows .= '<td class=widget_content>'
+	$sort_order = $rst->fields['sort_order'];
+        $table_rows .= "\n<tr cellspacing=0>";
+	    $table_rows .= '<td class=widget_content>'
                          . '<a href=one.php?opportunity_status_id='
                          . $rst->fields['opportunity_status_id']
                          . '>';
@@ -42,7 +48,22 @@ if ($rst) {
             $table_rows .= '</a></td>'
                          . '<td class=widget_content>'
                          . htmlspecialchars($rst->fields['opportunity_status_long_desc'])
-                         . '</td>';
+                         . '</td>'
+                         . '<td class=widget_content>';
+	    //sets up ordering links in the table
+            if ($sort_order != $cnt) {
+                $table_rows .= '<a href="' . $http_site_root
+                    . '/admin/sort.php?direction=up&sort_order='
+                    . $sort_order . '&table_name=opportunity_status'
+                    . '&return_url=/admin/opportunity-statuses/some.php">up</a> &nbsp; ';
+            }
+	    if ($sort_order != $maxcnt) {
+		$table_rows .= '<a href="' . $http_site_root 
+		    . '/admin/sort.php?direction=down&sort_order=' 
+		    . $sort_order . '&table_name=opportunity_status' 
+		    . '&return_url=/admin/opportunity-statuses/some.php">down</a>';
+	    } 
+	    $table_rows .= '</td>';
 
         $table_rows .= '</tr>';
         $rst->movenext();
@@ -61,16 +82,19 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
 
+	<form action=../sort.php method=post>
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Opportunity Statuses</td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Description</td>
+		<td class=widget_label>Name</td>
+		<td class=widget_label width=50%>Description</td>
+                <td class=widget_label width=15%>Move</td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
+	</form>
 
     </div>
 
@@ -79,7 +103,7 @@ start_page($page_title);
 
         <form action=new-2.php method=post>
         <table class=widget cellspacing=1>
-            <tr>
+	    <tr>
                 <td class=widget_header colspan=2>Add New Opportunity Status</td>
             </tr>
             <tr>
@@ -97,10 +121,10 @@ start_page($page_title);
             <tr>
                 <td class=widget_label_right>Display HTML</td>
                 <td class=widget_content_form_element><input type=text name=opportunity_status_display_html size=30></td>
-            </tr>
+            </tr>            
             <tr>
-                <td class=widget_label_right>Long Description</td>
-                <td class=widget_content_form_element><input type=text size=60 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
+                <td class=widget_label_right>Description</td>
+                <td class=widget_content_form_element><input type=text size=30 name=opportunity_status_long_desc value="<?php  echo $opportunity_status_long_desc; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Open Status</td>
@@ -127,6 +151,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.6  2004/06/03 16:13:22  braverock
+ * - add functionality to support workflow and activity templates
+ * - add functionality to support changing sort order
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.5  2004/04/16 22:18:26  maulani
  * - Add CSS2 Positioning
  *
