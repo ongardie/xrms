@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.14 2004/07/15 15:12:52 maulani Exp $
+ * $Id: database.php,v 1.15 2004/07/17 11:54:01 braverock Exp $
  */
 
 /**
@@ -29,6 +29,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // recent_items
@@ -42,6 +45,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // audit_items
@@ -57,6 +63,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // files
@@ -76,6 +85,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // notes
@@ -91,6 +103,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // categories
@@ -105,6 +120,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // category_scopes
@@ -120,6 +138,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // category_category_scope_map
@@ -130,6 +151,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // entity_category_map
@@ -141,6 +165,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // countries
@@ -159,6 +186,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // address_format_strings
@@ -170,6 +200,9 @@ function misc_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
 } // end misc_db_tables fn
@@ -193,6 +226,9 @@ function user_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // users
@@ -213,6 +249,9 @@ function user_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
 } // end user_db_tables fn
@@ -242,6 +281,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // industries
@@ -259,6 +301,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // ratings
@@ -275,6 +320,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // account_statuses
@@ -291,6 +339,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // company_types
@@ -308,6 +359,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // company_company_type_map
@@ -319,6 +373,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // crm_statuses
@@ -336,6 +393,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // companies
@@ -384,6 +444,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // addresses
@@ -409,6 +472,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // company_division
@@ -434,6 +500,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // contacts
@@ -480,6 +549,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // email_templates
@@ -494,6 +566,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // activity_templates
@@ -515,6 +590,9 @@ function company_db_tables($con, $table_list) {
                 )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // company_former_names
@@ -529,6 +607,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // company_relationship
@@ -543,6 +624,9 @@ function company_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     if (!in_array('relationship_types',$table_list)) {
@@ -560,6 +644,9 @@ function company_db_tables($con, $table_list) {
                 )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     if (!in_array('relationships',$table_list)) {
@@ -578,6 +665,9 @@ function company_db_tables($con, $table_list) {
                 )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
 } // end company_db_tables fn
@@ -614,6 +704,9 @@ function opportunity_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // opportunity_statuses
@@ -631,6 +724,9 @@ function opportunity_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
 } // end opportunity_db_tables fn
@@ -667,6 +763,9 @@ function case_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // case_types
@@ -681,6 +780,9 @@ function case_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // case_statuses
@@ -697,6 +799,9 @@ function case_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // case_priorities
@@ -712,6 +817,9 @@ function case_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
 } // end case_db_tables fn
@@ -734,6 +842,9 @@ function campaign_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // campaign_statuses
@@ -748,6 +859,9 @@ function campaign_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // campaigns
@@ -770,6 +884,9 @@ function campaign_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
 } // end campaign_db_tables fn
@@ -800,6 +917,9 @@ function activity_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
     // activities
@@ -828,6 +948,9 @@ function activity_db_tables($con, $table_list) {
                )";
         //execute
         $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
     }
 
 } // end activity_db_tables fn
@@ -852,6 +975,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.15  2004/07/17 11:54:01  braverock
+ * - add db_error_handler to each table creation for error reporting
+ *
  * Revision 1.14  2004/07/15 15:12:52  maulani
  * - Fix activity_types creation error reported by jalperin with patch submitted
  *     by kerkness
