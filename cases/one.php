@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.30 2005/01/22 15:07:26 braverock Exp $
+ * $Id: one.php,v 1.31 2005/02/10 03:24:59 braverock Exp $
  */
 
 //include required files
@@ -26,29 +26,31 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 update_recent_items($con, $session_user_id, "cases", $case_id);
 
 //get case details
-$sql = "select ca.*, c.company_id, c.company_name, c.company_code,
-d.division_name,
-cont.first_names, cont.last_name, cont.work_phone, cont.email,
-cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_display_html,
-u1.username as entered_by_username, u2.username as last_modified_by_username,
-u3.username as case_owner_username, u4.username as account_owner_username,
-as1.account_status_display_html, r.rating_display_html, crm_status_display_html
-from cases ca, case_statuses cas, case_priorities cap, case_types cat, companies c, contacts cont,
-users u1, users u2, users u3, users u4, account_statuses as1, ratings r, crm_statuses crm
-left outer join company_division d on ca.division_id=d.division_id
-where ca.company_id = c.company_id
-and ca.case_status_id = cas.case_status_id
-and ca.case_priority_id = cap.case_priority_id
-and ca.case_type_id = cat.case_type_id
-and ca.contact_id = cont.contact_id
-and ca.entered_by = u1.user_id
-and ca.last_modified_by = u2.user_id
-and ca.user_id = u3.user_id
-and c.user_id = u4.user_id
-and c.account_status_id = as1.account_status_id
-and c.rating_id = r.rating_id
-and c.crm_status_id = crm.crm_status_id
-and case_id = $case_id";
+$sql = "SELECT
+        ca.*, c.company_id, c.company_name, c.company_code,
+        d.division_name, cont.first_names, cont.last_name, cont.work_phone, cont.email,
+        cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_display_html,
+        u1.username as entered_by_username, u2.username as last_modified_by_username,
+        u3.username as case_owner_username, u4.username as account_owner_username,
+        as1.account_status_display_html, r.rating_display_html, crm_status_display_html
+        FROM
+        case_statuses cas, case_priorities cap, case_types cat, companies c, contacts cont,
+        users u1, users u2, users u3, users u4, account_statuses as1, ratings r, crm_statuses crm,
+        cases ca LEFT OUTER JOIN company_division d on ca.division_id=d.division_id
+        WHERE 
+        ca.company_id = c.company_id
+        and ca.case_status_id = cas.case_status_id
+        and ca.case_priority_id = cap.case_priority_id
+        and ca.case_type_id = cat.case_type_id
+        and ca.contact_id = cont.contact_id
+        and ca.entered_by = u1.user_id
+        and ca.last_modified_by = u2.user_id
+        and ca.user_id = u3.user_id
+        and c.user_id = u4.user_id
+        and c.account_status_id = as1.account_status_id
+        and c.rating_id = r.rating_id
+        and c.crm_status_id = crm.crm_status_id
+        and case_id = $case_id";
 
 $rst = $con->execute($sql);
 
@@ -382,6 +384,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.31  2005/02/10 03:24:59  braverock
+ * - change order of LEFT OUTER JOIN query for MS SQL server portability
+ *
  * Revision 1.30  2005/01/22 15:07:26  braverock
  * - add sort order to activity_types menu
  *
