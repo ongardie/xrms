@@ -1,0 +1,178 @@
+$Id: README,v 1.1 2004/07/14 16:50:16 gpowers Exp $
+
+
+
+*** WARNING WARNING WARNING ***
+
+This plugin is under *ACTIVE* development.
+Things will change. Often.  If this plugin
+interests you, PLEASE HELP DEVELOP IT!  Contact
+keith@midnighthax.com AND gpowers@users.sourceforge.net
+to keep up with the changes and make suggests!
+
+*** WARNING WARNING WARNING ***
+
+
+
+Contents
+========
+
+1. What this is and what it does
+2. Installation
+3. Initial configuration and use
+4. Customisation
+5. Feedback, bugs, the future
+
+1. What this and what it does
+=============================
+
+This is the info plugin for XRMS. As for what it does, perhaps it
+is easier to explain the motivation for writing it. My company supplies
+and maintains Linux-based Office Servers to small to medium sized
+businesses; these servers handle email, store files, etc.  We needed a
+way to track the details of these servers for support purposes - for
+example, what IP address they are on, what services are enabled, what
+domains they handle mail for, and so on. Thus was born the info
+plugin, which allows us to associate one or more servers with a company,
+and record details for each server.
+
+This plugin was modified to allow many "groups", ie "servers",
+"workstations", "cars", etc. This is under development.
+
+2. Installation
+===============
+
+Untar the tarfile in the XRMS root directory, which will place all
+extracted files in plugins/info:
+
+$ cd YOUR-XRMS-INSTALLATION-DIRECTORY
+$ tar zxf info-plugin-1.0.0.tgz
+
+Installation requires the creation of three additional tables in the
+XRMS database. To create them you will need to know your XRMS database
+name, the username used to access the database, and the password used.
+This information will be already defined in your includes/vars.php
+file; in a future release of the info plugin this process could
+be automated. Issue the following command, substituting the appropriate
+values for the uppercase words:
+
+$ cd plugins/info
+$ mysql -u XRMS-USERNAME -p XRMS-DATABASE < info.sql
+
+Enter the XRMS database user password when prompted.
+
+Start XRMS and navigate to the Administration page, and then click on
+"Plugin Administration". Tick in the checkbox next to "info" and
+click Submit. If you get the message "plugin-cfg.php Config file can't
+be opened. Please check vars.php." then ensure that
+xrms-root/include/plugin-cfg.php is writable by your web server. Click
+on the "Home" link and ensure that "Server information" appears in the
+menu bar across the top of the screen.
+
+3. Initial configuration and use
+================================
+
+By way of example, this section consists of a step-by-step guide to
+defining the fields used to store server information, and the adding of
+one server to a company. For each server we will store the server name,
+its IP address, whether it is in a tower or rack case, whether it Dell,
+HP or IBM system, whether it has 24hr support or not, and add a space
+for notes. These items have been chosen to best show the features of
+the info plugin.
+
+1. Display the company details for any company, and note that at the
+bottom of the right-hand sidebar there is a new section, "Server List",
+containing only a "New" button. Click on the New button.
+
+2. You will be prompted to enter the name of the server. For every
+server, there is one required field which is used to identify the server
+to the XRMS user. Before filling this field in, click on the "Edit
+element definitions" button.
+
+3. You will see that there is currently only one element defined, which
+has a label of "Name". We will create a new element to store the
+servers's IP address. Click on the "Add new element" button, which will
+display a new line for us to define the "IP address" element.
+
+4. Fill in the new line as follows:
+
+ Label: IP address
+
+ Leave the rest of the row as it is, and click "Save changes".
+
+ The list of elements will now include one labelled "IP address"
+
+5. Repeat the "Edit element definitions" and "Add new element", and
+define the "Case" element as follows:
+
+ Label: Case
+ Type: radio
+ Default value: rack
+ Possible values: tower,rack
+
+ ...and save changes. Add the remaining elements in the same way with
+ the following values:
+
+ Label: Supplier
+ Type: combo
+ Possible values: Dell,HP,IBM
+
+ Label: 24hr support?
+ Type: checkbox
+
+ Label: Notes
+ Type: textarea
+
+6. You should now have a form with elements for Name, IP address, Case,
+Supplier, 24hr support and Notes. Fill in some values and click "Save
+Changes". You'll be returned to the Company Information page, but at the
+foot of the right-hand sidebar you will see the name of the server you
+have just defined. Clicking on the name will display the server details.
+
+7. This is all very well, but it would be nice to have the "Notes"
+details displayed beside, rather than beneath, the other details, and we
+might like to have the "24hr support" field immediately under the server
+name. Click on "Edit" then "Edit element definitions", and make the
+follwoing changes:
+
+ For the Notes element, change the "column" entry from 1 to 2
+ In the "order" column, leave "Name" as 0, change "24hr support" to 1,
+ and change all other values to "2". Click on Save Changes, and then
+ Save Changes (again) from the next page. You'll see that the display
+ has been changed.
+
+8. You can define as many columns as you like, and they can be given any
+name you like. Columns will be displayed in alphabetical order, so "8"
+comes before "9", "10" comes before "2", and "middle" comes after
+"first" and also after "last". Within in any one column the elements are
+displayed in "order" order following the same rules as for columns.
+
+9. Clicking on the "Server Information" link on the main menu will list
+all servers for all companies.
+
+4. Customisation
+================
+
+The file /plugins/info/info.inc facilitates some limited
+customisation. The textural strings used to describe each type of
+element ("text", "radio", "checkbox", etc) can be changed; the
+representation of a cleared and checked checkbox can be changed, various
+page headings can be changed, and finally the "Server Information" page
+which lists all servers can be sorted by company name or server name.
+
+
+5. Feedback, bugs, the future
+=============================
+
+I welcome all feedback on this plugin (like it? Tell me. Don't like it?
+Tell me why), including suggestions, bug reports, patches, feature
+requests, etc. Releases will be co-ordinated through the XRMS project.
+
+Keith Edmunds,
+Reading, UK
+keith@midnighthax.com
+
+----------------------------------------------------------------------
+  Small business computer support: http://www.tiger-computing.co.uk
+       Linux consultancy: http://www.TheLinuxConsultancy.co.uk
+----------------------------------------------------------------------
