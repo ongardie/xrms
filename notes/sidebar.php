@@ -1,16 +1,14 @@
 <?php
-
+/**
+ * Sidebar box for notes
+ *
+ * $Id: sidebar.php,v 1.18 2005/01/11 13:22:03 braverock Exp $
+ */
 if ( !defined('IN_XRMS') )
 {
   die(_('Hacking attempt'));
   exit;
 }
-
-/**
- * Sidebar box for notes
- *
- * $Id: sidebar.php,v 1.17 2004/10/01 20:04:46 introspectshun Exp $
- */
 
 $note_rows = '<div id="note_sidebar">
         <table class=widget cellspacing=1 width="100%">
@@ -74,49 +72,47 @@ if (strlen($rst->fields['username']) > 0) {
   while (!$rst->EOF) {
     $attached_to_link ='';
     $on_what_name     ='';
-    $on_what_string   ='';
     $note_company_id  ='';
     $note_contact_id  ='';
 
     if (strlen($rst->fields['on_what_table']) > 0) {
       switch ($rst->fields['on_what_table']) {
+        case 'activities':
+          $on_what_name = 'activity_title AS on_what_name ';
+          break;
         case 'companies':
-          $on_what_string = 'company';
-	      $note_company_id    = $rst->fields['on_what_id'];
+          $note_company_id    = $rst->fields['on_what_id'];
           break;
         case 'contacts':
-          $on_what_string = 'contact';
           $on_what_name = $con->Concat("last_name","', '","first_names") . " AS on_what_name ";
           $note_contact_id   = $rst->fields['on_what_id'];
           break;
         case 'opportunities':
-          $on_what_string = 'opportunity';
           $on_what_name = 'opportunity_title AS on_what_name ';
           break;
         case 'cases':
-          $on_what_string = 'case';
           $on_what_name = 'case_title AS on_what_name ';
           break;
         case 'campaigns':
-          $on_what_string = 'campaign';
           $on_what_name = 'campaign_title AS on_what_name ';
           break;
         case 'users':
-          $on_what_string = 'user';
           $on_what_name = 'username AS on_what_name ';
           break;
       }
-      if (!$on_what_name) { $on_what_name = $on_what_string.'_name as on_what_name '; }
+      if (!$on_what_name) {
+         $on_what_name = make_singular($rst->fields['on_what_table']).'_name as on_what_name ';
+      }
       $attached_sql = 'select '
                       . $on_what_name.', '
-                      . $on_what_string.'_id '
+                      . make_singular($rst->fields['on_what_table']).'_id '
                       . ' from '.$rst->fields['on_what_table']
                       . ' where '
-                      . $on_what_string.'_id = '. $rst->fields['on_what_id'];
+                      . make_singular($rst->fields['on_what_table']).'_id = '. $rst->fields['on_what_id'];
       $attached_rst = $con->SelectLimit($attached_sql, 1, 0);
       if ($attached_rst) {
         $attached_to_link = "<a href=\"$http_site_root/". $rst->fields['on_what_table']
-                            .'/one.php?'. $on_what_string.'_id='
+                            .'/one.php?'. make_singular($rst->fields['on_what_table']).'_id='
                             . $rst->fields['on_what_id']
                             .'">'.$attached_rst->fields['on_what_name'].'</a>';
       }
@@ -182,32 +178,7 @@ if ( strlen( $on_what_table ) > 0 ) {
   if ( !isset($on_what_id) ) {
     $on_what_id = '';
   }
-  if ( !isset($on_what_string) or ($on_what_string === '') ) {
-    // hate to repeat this functionality, but we have to have a value for on_what_string below
-    switch ($on_what_table) {
-      case 'companies':
-        $on_what_string = 'company';
-        break;
-      case 'contacts':
-        $on_what_string = 'contact';
-        break;
-      case 'opportunities':
-        $on_what_string = 'opportunity';
-        break;
-      case 'cases':
-        $on_what_string = 'case';
-        break;
-      case 'campaigns':
-        $on_what_string = 'campaign';
-        break;
-      case 'users':
-        $on_what_string = 'user';
-        break;
-      default:
-        $on_what_string = '';
-        break;
-    }
-  }
+
   // $notes_ vars will be set if calling page needs to override form values (see private/home.php)
   if ( isset($notes_on_what_id) ) {
     $on_what_id = $notes_on_what_id;
@@ -215,7 +186,7 @@ if ( strlen( $on_what_table ) > 0 ) {
   if ( isset($notes_return_url) ) {
     $return_url = $notes_return_url;
   } else {
-    $return_url = '/'.$on_what_table.'/one.php?'.$on_what_string.'_id='.$on_what_id;
+    $return_url = '/'.$on_what_table.'/one.php?'.make_singular($on_what_table).'_id='.$on_what_id;
   }
 
   // use single quote as string delimiter so that variables stand out with color editor
@@ -237,6 +208,9 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.18  2005/01/11 13:22:03  braverock
+ * - removed on_what_string hack, changed to use standard make_singular fn
+ *
  * Revision 1.17  2004/10/01 20:04:46  introspectshun
  * - Calling page can now override on_what_id, return_url
  *   - Allows for plugins to use notes table easily
