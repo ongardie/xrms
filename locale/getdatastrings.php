@@ -24,6 +24,7 @@ $tables_to_extract = array("account_statuses",
                            "company_sources",
                            "opportunity_statuses",
                            "industries",
+                           "ratings",
                            "relationship_types",
                            "system_parameters",
                            );
@@ -32,26 +33,29 @@ $file = file_get_contents($data_filename);
 $strings = array();
 foreach ($tables_to_extract as $t)
 {
-    if (preg_match_all("/insert\s+into\s+$t.*values\s+\([^,]*,([^,]*),([^,]*),(.*)\)/i",$file,$matches))
+// extract values from the insert into statements 
+    if (preg_match_all("/insert\s+into\s+$t.*values\s+\((.*)\)\s*(?:\"|\')\s*;/Ui",$file,$matches))
     {
         foreach ($matches[1] as $m)
         {
-            $strings[]= $m;
-        }
-        foreach ($matches[2] as $m)
-        {
-            $strings[]= $m;
-        }
-        foreach ($matches[3] as $m)
-        {
-            $strings[]= $m;
+// get the single values
+			$matched_val = split(',',$m);
+			foreach ($matched_val as $mv)
+			{
+				$mv = trim($mv);
+// if the strings is not numeric, it is longer than 1 (3 including the quotes) or it isn't a short
+// code which at the moment I have assumed to be uppercase strings of length <=5 (<=7 including quotes)
+				if (!is_numeric($mv) && strlen($mv) > 3 && !(strtoupper($mv)==$mv && strlen($mv) <= 7))
+				{
+					$strings[]= tag_remove($mv);
+				}
+			}
+			
         }
     }
 }
 $output_strings=array_unique($strings);
-
-//we should really sort the array beofre output, to make the file easier to read
-
+sort($output_strings);
 $fp = fopen($output_filename,'w') or die("Unable to open output file $output_filename\n");
 fwrite($fp, "<?php\n");
 fwrite($fp, '/**
@@ -62,7 +66,7 @@ fwrite($fp, '/**
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: getdatastrings.php,v 1.2 2004/08/19 15:04:23 braverock Exp $
+ * $Id: getdatastrings.php,v 1.3 2004/08/19 19:55:46 johnfawcett Exp $
  */'."\n");
 foreach ($output_strings as $s)
 {
@@ -71,5 +75,13 @@ foreach ($output_strings as $s)
 }
 fwrite($fp, "?>\n");
 fclose($fp);
+
+/* removes the html <x> tags from strings $s */
+
+function tag_remove($s)
+{
+	return preg_replace('/<[^>]*>/U',"",$s);
+}
+
 ?>
 
