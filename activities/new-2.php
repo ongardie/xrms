@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.20 2004/07/14 18:34:15 braverock Exp $
+ * $Id: new-2.php,v 1.21 2004/07/14 22:58:17 introspectshun Exp $
  */
 
 //where do we include from
@@ -87,12 +87,12 @@ if ($associate_activities = true ) {
         $arr_count = 0;
 
         //get active case ids for this company
-        $case_sql = "select case_id from cases
-                     left join case_statuses using (case_status_id)
-                     where
-                     company_id = $company_id
-                     and status_open_indicator = 'o'
-                     and case_record_status='a'";
+        $case_sql = "SELECT c.case_id
+                     FROM cases c
+                     LEFT JOIN case_statuses cs ON (c.case_status_id = cs.case_status_id)
+                     WHERE c.company_id = $company_id
+                       AND cs.status_open_indicator = 'o'
+                       AND c.case_record_status='a'";
         $case_rst = $con->execute($case_sql);
         if ($case_rst) {
             if ($case_rst->RecordCount()>=1){
@@ -108,12 +108,12 @@ if ($associate_activities = true ) {
         }
 
         //get active opportunity ids for this company
-        $opp_sql = "select opportunity_id from opportunities
-                    left join opportunity_statuses using (opportunity_status_id)
-                    where
-                    company_id = $company_id
-                    and status_open_indicator = 'o'
-                    and opportunity_record_status='a'";
+        $opp_sql = "SELECT o.opportunity_id
+                    FROM opportunities o
+                    LEFT JOIN opportunity_statuses os ON (o.opportunity_status_id = os.opportunity_status_id)
+                    WHERE o.company_id = $company_id
+                      AND os.status_open_indicator = 'o'
+                      AND o.opportunity_record_status='a'";
         $opp_rst = $con->execute($opp_sql);
         if ($opp_rst) {
             if ($opp_rst->RecordCount()>=1){
@@ -185,6 +185,9 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.21  2004/07/14 22:58:17  introspectshun
+ *- Altered LEFT JOINs to use standard ON syntax rather than USING
+ *
  *Revision 1.20  2004/07/14 18:34:15  braverock
  *- fixed logic error that could result in assignment rather than comparison
  *
