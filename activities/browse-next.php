@@ -14,7 +14,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.9 2004/07/21 22:54:06 neildogg Exp $
+ * $Id: browse-next.php,v 1.10 2004/07/21 23:27:39 neildogg Exp $
  */
 
 //include required files
@@ -98,6 +98,9 @@ else {
         $activity_type_id = $rst->fields['activity_type_id'];
         $rst->close();
     }
+    else {
+        $pos = 0;
+    }
     // If there is not yet an array of IDs (either coming from the browse, or from the first save & next), create one 
     if(!count($activity_type_ids)) {
         $sql = "select activity_type_id
@@ -107,7 +110,7 @@ else {
         if(!$rst) {
             db_error_handler($con, $sql);
         }
-        elseif($rst->rowcount() > 0) {
+        elseif($rst->rowcount()){
             while(!$rst->EOF) {
                 $activity_type_ids[] = $rst->fields['activity_type_id'];
                 $rst->movenext();
@@ -140,8 +143,7 @@ else {
                 where activity_status = 'o'
                 and activity_record_status='a'
                 and ends_at < " . $con->DBTimestamp(time()) . "
-                and user_id = $session_user_id 
-                and on_what_table='opportunities'
+                and user_id = $session_user_id
                 and activity_type_id=$activity_type_id
                 order by ends_at desc"; 
             $rst = $con->execute($sql);
@@ -220,7 +222,7 @@ else {
             // If the loop was broken, go to the "first" element in the array
             if(!$more_to_check) {
                 // If we're doing save and next from a random page, we don't want the starting activity ID in the list
-                if(!$pos) {
+                if(!$pos and $activity_id) {
                     array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
                 }    
                 if($next_to_check[0]) {
@@ -248,6 +250,10 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.10  2004/07/21 23:27:39  neildogg
+ * - General bug fixes (if only 1 element in search)
+ *  - No need for opportunities table in first search
+ *
  * Revision 1.9  2004/07/21 22:54:06  neildogg
  * - Go back if there are none
  *
