@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.9 2005/02/11 19:03:12 vanmer Exp $
+ * $Id: edit.php,v 1.10 2005/02/15 15:08:30 ycreddy Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 require_once('info.inc');
@@ -242,6 +243,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.10  2005/02/15 15:08:30  ycreddy
+ * Included adodb-params.php for Result Set lookup based on column name
+ *
  * Revision 1.9  2005/02/11 19:03:12  vanmer
  * - added check for role access before allowing user to edit item definitions
  *
