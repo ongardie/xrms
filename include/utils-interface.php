@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.30 2004/08/02 12:04:46 cpsource Exp $
+ * $Id: utils-interface.php,v 1.31 2004/08/06 14:47:07 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -82,6 +82,10 @@ function status_msg($msg) {
  * function start_page
  *
  * This function is called to set up the page structure for all XRMS pages
+ *
+ * @param string  $page_title  Title for the page
+ * @param boolean $show_navbar true/false whether to show the menu bar
+ * @param string  $msg         error or other notification message
  */
 function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
@@ -93,6 +97,9 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
     $stylesheet = "$http_site_root/stylesheet.css";
 
+    //set up internationalization
+    set_up_language($xrms_default_language, true, true);
+
     echo <<<EOQ
     <!DOCTYPE HTML PUBLIC
     "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -102,7 +109,6 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     <title>$app_title : $page_title</title>
     <link rel=stylesheet href="$stylesheet">
     <link rel=stylesheet  type="text/css" href="$http_site_root/js/jscalendar/calendar-blue.css">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
     <div id="page_header">$page_title</div>\n
@@ -213,6 +219,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.31  2004/08/06 14:47:07  braverock
+ * - push in changes to turn on i18n gettext
+ *
  * Revision 1.30  2004/08/02 12:04:46  cpsource
  * - Per bug 997663, add confirm for delete of cases.
  *

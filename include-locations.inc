@@ -18,7 +18,7 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.12 2004/07/19 21:05:01 maulani Exp $
+ * $Id: include-locations.inc,v 1.13 2004/08/06 14:47:08 braverock Exp $
  */
 
 //
@@ -30,11 +30,11 @@ if (!defined('IN_XRMS')) {
 }
 
 // include trailing slash in path
-$include_directory = "/full/path/to/xrms/include/";
+$include_directory = "/var/www/html/xrms/include/";
 
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
-error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_ALL ^E_NOTICE);
 
 //uncomment the next line to turn notices on
 //error_reporting(E_ALL);
@@ -42,6 +42,9 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.13  2004/08/06 14:47:08  braverock
+ * - push in changes to turn on i18n gettext
+ *
  * Revision 1.12  2004/07/19 21:05:01  maulani
  * - Add check to make sure that IN_XRMS is defined only once
  *

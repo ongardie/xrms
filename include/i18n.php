@@ -1,11 +1,4 @@
 <?php
-
-if ( !defined('IN_XRMS') )
-{
-  die('Hacking attempt');
-  exit;
-}
-
 /**
  * functions/i18n.php
  *
@@ -19,10 +12,16 @@ if ( !defined('IN_XRMS') )
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.3 2004/07/14 11:50:50 cpsource Exp $
+ * @version $Id: i18n.php,v 1.4 2004/08/06 14:47:07 braverock Exp $
  * @package xrms
  * @subpackage i18n
  */
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
 
 /**
  * Converts string from given charset to charset that can be displayed by user translation.
@@ -167,7 +166,7 @@ function set_up_language($xrms_language, $do_search = false, $default = false) {
     }
 
     $SetupAlready = TRUE;
-    sqgetGlobalVar('HTTP_ACCEPT_LANGUAGE',  $accept_lang, SQ_SERVER);
+    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) { $accept_lang= $_SERVER['HTTP_ACCEPT_LANGUAGE']; };
 
     if ($do_search && ! $xrms_language && isset($accept_lang)) {
         $xrms_language = substr($accept_lang, 0, 2);
@@ -943,6 +942,9 @@ function is_conversion_safe($input_charset) {
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.4  2004/08/06 14:47:07  braverock
+ * - push in changes to turn on i18n gettext
+ *
  * Revision 1.3  2004/07/14 11:50:50  cpsource
  * - Added security feature IN_XRMS
  *

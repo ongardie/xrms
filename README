@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.12 2004/07/25 12:25:19 johnfawcett Exp $ **/
+/** $Id: README,v 1.13 2004/08/06 14:47:08 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -275,7 +275,7 @@ Change as required for your installation.
 Update your installation from CVS using the following command from the
 directory above your working directory:
 
-cvs -q -z3 -d :pserver:anonymous@cvs.sf.net:/cvsroot/xrms update xrms
+cvs -q -z3 -d :pserver:anonymous@cvs.sf.net:/cvsroot/xrms update -d xrms
 
 You will see cvs 'P' - Patch, 'U' Update, and 'M' Merge your files
 (vars.php, plugin-cfg.php, and include-locations.inc will most likely 'M' merge)
@@ -386,6 +386,9 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.13  2004/08/06 14:47:08  braverock
+ * - push in changes to turn on i18n gettext
+ *
  * Revision 1.12  2004/07/25 12:25:19  johnfawcett
  * Added John Fawcett, SF id johnfawcett as Developer.
  *

@@ -1,11 +1,4 @@
 <?php
-
-if ( !defined('IN_XRMS') )
-{
-  die('Hacking attempt');
-  exit;
-}
-
 /**
  * XRMS internal gettext functions
  *
@@ -19,10 +12,17 @@ if ( !defined('IN_XRMS') )
  * Possible use in other PHP scripts?
  *
  * @link http://www.php.net/gettext Original php gettext manual
- * @version $Id: gettext.php,v 1.3 2004/07/14 11:50:50 cpsource Exp $
+ * @version $Id: gettext.php,v 1.4 2004/08/06 14:47:07 braverock Exp $
  * @package xrms
  * @subpackage i18n
  */
+
+
+if ( !defined('IN_XRMS') )
+{
+  die('Hacking attempt');
+  exit;
+}
 
 
 global $gettext_php_domain, $gettext_php_dir, $gettext_php_loaded,
@@ -256,6 +256,9 @@ function textdomain($name = false) {
 
 /**
  * $Log: gettext.php,v $
+ * Revision 1.4  2004/08/06 14:47:07  braverock
+ * - push in changes to turn on i18n gettext
+ *
  * Revision 1.3  2004/07/14 11:50:50  cpsource
  * - Added security feature IN_XRMS
  *

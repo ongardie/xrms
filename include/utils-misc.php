@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.80 2004/08/05 19:54:39 introspectshun Exp $
+ * $Id: utils-misc.php,v 1.81 2004/08/06 14:47:07 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -903,11 +903,11 @@ function update_daylight_savings($con) {
 
             $dst_sql = "SELECT * FROM time_daylight_savings WHERE daylight_savings_id = " . $daylight_savings_id;
             $dst_rst = $con->execute($dst_sql);
-            
+
             $rec = array();
             $rec['current_hour_shift'] = $current_hour_shift;
             $rec['last_update'] = $con->DBTimeStamp(time());
-            
+
             $upd = $con->GetUpdateSQL($dst_rst, $rec, false, get_magic_quotes_gpc());
             if (strlen($upd) > 0) {
                 $upd_rst = $con->execute($upd);
@@ -1234,13 +1234,19 @@ function arr_vars_show_ses_vars ( $ary )
  *       the XRMS code base.
  */
 require_once($include_directory . 'i18n.php');
-
+// check to see if we need the php gettext functions
+if ($use_php_recode) {
+    require_once($include_directory . 'gettext.php');
+}
 /** Include the database utilities file */
 require_once($include_directory . 'utils-database.php');
 
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.81  2004/08/06 14:47:07  braverock
+ * - push in changes to turn on i18n gettext
+ *
  * Revision 1.80  2004/08/05 19:54:39  introspectshun
  * - Localized error msgs
  * - time_zone_offset and update_daylight_savings funcs updated for db compatibility
