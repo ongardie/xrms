@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.23 2004/07/02 17:38:18 maulani Exp $
+ * $Id: some.php,v 1.24 2004/07/05 21:30:54 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -118,9 +118,9 @@ $criteria_count = 0;
 
 if ($company_category_id > 0) {
     $criteria_count++;
-    $from = "from companies c, industries i, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
+    $from = "from industries i, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm, companies c ";
 } else {
-    $from = "from companies c, industries i, crm_statuses crm, ratings r, account_statuses as1, users u ";
+    $from = "from industries i, crm_statuses crm, ratings r, account_statuses as1, users u, companies c ";
 }
 
 $from  .= "LEFT JOIN addresses as addr on addr.address_id = c.default_primary_address ";
@@ -412,6 +412,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.24  2004/07/05 21:30:54  introspectshun
+ * - Moved 'companies c' to the end of 'from' clause.
+ * - Query fails on MSSQL otherwise (column 'c' not recognized during 'LEFT JOIN' operation)
+ *
  * Revision 1.23  2004/07/02 17:38:18  maulani
  * - Fix addresses reference in sql in patch submitted by Nic Lowe (niclowe)
  * - Patch # 981927
