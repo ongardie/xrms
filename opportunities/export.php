@@ -45,6 +45,8 @@ WHERE opp.company_id = c.company_id
   AND opp.opportunity_record_status = 'a'
 ";
 
+$where = '';
+
 if ($opportunity_category_id > 0) {
     $where .= " and ecm.on_what_table = 'opportunities'
                 and ecm.on_what_id = opp.opportunity_id
