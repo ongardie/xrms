@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.8 2005/01/13 18:23:15 vanmer Exp $
+ * $Id: add-division.php,v 1.9 2005/01/25 23:29:20 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -42,6 +42,9 @@ $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $division_id = $con->insert_id();
+$rec['division_id']=$division_id;
+
+do_hook_function('new_division_process', $rec);
 
 add_audit_item($con, $session_user_id, 'created', 'company_division', $division_id, 1);
 
@@ -51,6 +54,9 @@ header("Location: divisions.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.9  2005/01/25 23:29:20  vanmer
+ * - added hook for plugin processing after new division creation
+ *
  * Revision 1.8  2005/01/13 18:23:15  vanmer
  * - Basic ACL changes to allow create/delete functionality to be restricted
  *
