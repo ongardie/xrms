@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.23 2004/07/17 11:56:36 cpsource Exp $
+ * $Id: some.php,v 1.24 2004/07/20 19:38:31 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -193,7 +193,7 @@ if ( $rst ) {
   $rst->close();
 }
 
-$page_title = 'Opportunities';
+$page_title = _("Opportunities");
 start_page($page_title, true, $msg);
 
 ?>
@@ -212,20 +212,20 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=3>Search Criteria</td>
+                <td class=widget_header colspan=3><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Opportunity Name</td>
-                <td colspan=2 class=widget_label>Company</td>
+                <td class=widget_label><?php echo _("Opportunity Name"); ?></td>
+                <td colspan=2 class=widget_label><?php echo _("Company"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
                 <td colspan=2 class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Category</td>
-                <td class=widget_label>Status</td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
+                <td class=widget_label><?php echo _("Category"); ?></td>
+                <td class=widget_label><?php echo _("Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
@@ -233,7 +233,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=6><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
+                <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";}; ?> </td>
             </tr>
         </table>
         </form>
@@ -253,13 +253,13 @@ $con->close();
         <!-- recently viewed companies //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4>Recently Viewed</td>
+                <td class=widget_header colspan=4><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Opportunity</td>
-                <td class=widget_label>Company</td>
-                <td class=widget_label>Status</td>
-                <td class=widget_label>Close Date</td>
+                <td class=widget_label><?php echo _("Opportunity"); ?></td>
+                <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Status"); ?></td>
+                <td class=widget_label><?php echo _("Close Date"); ?></td>
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
@@ -314,6 +314,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.24  2004/07/20 19:38:31  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.23  2004/07/17 11:56:36  cpsource
  * - Null out call arguments to session_check()
  *

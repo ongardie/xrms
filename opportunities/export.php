@@ -78,12 +78,12 @@ if (($fp) && ($rst)) {
     $rst->close();
     fclose($fp);
 } else {
-    echo "<p>There was a problem with your export:\n";
+    echo "<p>" . _("There was a problem with your export") . ":\n";
     if (!$fp) {
-        echo "<br>Unable to open file: $tmp_export_directory . $filename \n";
+        echo "<br>" . _("Unable to open file") . ": $tmp_export_directory . $filename \n";
     }
     if (!$rst) {
-        echo "<br> No results returned from database by query: \n";
+        echo "<br>" . _("No results returned from database by query") . ": \n";
         echo "<br> $sql \n";
     }
 }

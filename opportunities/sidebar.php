@@ -9,19 +9,19 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.8 2004/07/14 14:49:27 cpsource Exp $
+ * $Id: sidebar.php,v 1.9 2004/07/20 19:38:31 introspectshun Exp $
  */
 
 $opportunity_rows = "<div id='opportunity_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
-                <td class=widget_header colspan=4>Opportunities</td>
+                <td class=widget_header colspan=4>" . _("Opportunities") . "</td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Owner</td>
-                <td class=widget_label>Status</td>
-                <td class=widget_label>Due</td>
+                <td class=widget_label>" . _("Name") . "</td>
+                <td class=widget_label>" . _("Owner") . "</td>
+                <td class=widget_label>" . _("Status") . "</td>
+                <td class=widget_label>" . _("Due") . "</td>
             </tr>\n";
 
 //build the cases sql query
@@ -51,7 +51,7 @@ if (strlen($rst->fields['username'])>0) {
     }
     $rst->close();
 } else {
-    $opportunity_rows .= '<tr> <td class=widget_content colspan=4> No open opportunities </td> </tr>';
+    $opportunity_rows .= "<tr> <td class=widget_content colspan=4>" . _("No open opportunities") . "</td> </tr>";
 }
 
 //put in the new and search buttons
@@ -62,8 +62,8 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
                 <input type='hidden' name='company_id' value='$company_id'>
                 <input type='hidden' name='contact_id' value='$contact_id'>
                 <td class=widget_content_form_element colspan=4>
-                    <input type=submit class=button value='New'>
-                    <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='Search'>
+                    <input type=submit class=button value='" . _("New") . "'>
+                    <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
                 </form>
             </tr>\n";
@@ -71,7 +71,7 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
     $opportunity_rows .="
             <tr>
                 <td class=widget_content_form_element colspan=4>
-                    <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='Search'>
+                    <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
             </tr>\n";
 }
@@ -81,6 +81,9 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.9  2004/07/20 19:38:31  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.8  2004/07/14 14:49:27  cpsource
  * - All sidebar.php's now support IN_XRMS security feature.
  *

@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.19 2004/07/14 22:24:25 braverock Exp $
+ * $Id: one.php,v 1.20 2004/07/20 19:38:31 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -196,8 +196,8 @@ require_once("../notes/sidebar.php");
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
 if ($rst) {
-$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
-$rst->close();
+    $user_menu = $rst->getmenu2('user_id', $session_user_id, false);
+    $rst->close();
 } else {
     db_error_handler ($con, $sql);
 }
@@ -233,7 +233,7 @@ if (strlen($activity_rows) == 0) {
     $activity_rows = "<tr><td class=widget_content colspan=6>No activities</td></tr>";
 }
 
-$page_title = "One Opportunity : $opportunity_title";
+$page_title = _("One Opportunity") . " : " . $opportunity_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -253,7 +253,7 @@ function markComplete() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Opportunity Details</td>
+                <td class=widget_header><?php echo _("Opportunity Details"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
@@ -263,35 +263,35 @@ function markComplete() {
                             <td width=50% class=clear align=left valign=top>
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel>Title</td>
+                                    <td width=1% class=sublabel><?php echo _("Title"); ?></td>
                                     <td class=clear><?php  echo $opportunity_title; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Owner</td>
+                                    <td class=sublabel><?php echo _("Owner"); ?></td>
                                     <td class=clear><?php  echo $opportunity_owner_username; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Campaign</td>
+                                    <td class=sublabel><?php echo _("Campaign"); ?></td>
                                     <td class=clear><a href="../campaigns/one.php?campaign_id=<?php  echo $campaign_id; ?>"><?php  echo $campaign_title; ?></a></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Size</td>
+                                    <td class=sublabel><?php echo _("Size"); ?></td>
                                     <td class=clear>$<?php  echo number_format($size, 2); ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Probability</td>
+                                    <td class=sublabel><?php echo _("Probability"); ?></td>
                                     <td class=clear><?php  echo $probability; ?>%</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Weighted&nbsp;Size</td>
+                                    <td class=sublabel><?php echo _("Weighted Size"); ?></td>
                                     <td class=clear>$<?php  echo number_format($size * $probability/100, 2); ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Status</td>
+                                    <td class=sublabel><?php echo _("Status"); ?></td>
                                     <td class=clear><?php  echo $opportunity_status_display_html; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Closes</td>
+                                    <td class=sublabel><?php echo _("Closes"); ?></td>
                                     <td class=clear><?php  echo $close_at; ?></td>
                                 </tr>
                                 <tr>
@@ -299,11 +299,11 @@ function markComplete() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Created</td>
+                                    <td class=sublabel><?php echo _("Created"); ?></td>
                                     <td class=clear><?php  echo $entered_at; ?> (<?php  echo $entered_by; ?>)</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Last Modified</td>
+                                    <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
                                 </tr>
                                 </table>
@@ -313,15 +313,15 @@ function markComplete() {
 
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
-                                    <td width=1% class=sublabel>Contact</td>
+                                    <td width=1% class=sublabel><?php echo _("Contact"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/contacts/one.php?contact_id=<?php  echo $contact_id; ?>"><?php  echo $first_names; ?> <?php  echo $last_name; ?></a></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Work Phone</td>
+                                    <td class=sublabel><?php echo _("Work Phone"); ?></td>
                                     <td class=clear><?php  echo $work_phone; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>E-Mail</td>
+                                    <td class=sublabel><?php echo _("E-Mail"); ?></td>
                                     <td class=clear>
                                         <a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$opportunity_id&contact_id=$contact_id&on_what_table=opportunities&activity_title=email RE: $opportunity_title&company_id=$company_id&email=true&return_url=/opportunities/one.php?opportunity_id=$opportunity_id'\" >" . htmlspecialchars($email); ?></a>
                                     </td>
@@ -331,19 +331,19 @@ function markComplete() {
                                     <td class=clear>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Company</td>
+                                    <td class=sublabel><?php echo _("Company"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a> (<?php  echo $company_code; ?>)</td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Acct. Owner</td>
+                                    <td class=sublabel><?php echo _("Acct. Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner_username; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>CRM Status</td>
+                                    <td class=sublabel><?php echo _("CRM Status"); ?></td>
                                     <td class=clear><?php  echo $crm_status_display_html; ?></td>
                                 </tr>
                                 <tr>
-                                    <td class=sublabel>Account Status</td>
+                                    <td class=sublabel><?php echo _("Account Status"); ?></td>
                                     <td class=clear><?php  echo $account_status_display_html; ?></td>
                                 </tr>
                             </table>
@@ -363,7 +363,7 @@ function markComplete() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?opportunity_id=<?php  echo $opportunity_id; ?>';"></td>
+                <td class=widget_content_form_element><input class=button type=button value="<?php echo _("Edit"); ?>" onclick="javascript: location.href='edit.php?opportunity_id=<?php  echo $opportunity_id; ?>';"></td>
             </tr>
         </table>
 
@@ -381,21 +381,21 @@ function markComplete() {
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6>Activities</td>
+                <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Title</td>
-                <td class=widget_label>User</td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Contact</td>
-                <td colspan=2 class=widget_label>On</td>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("User"); ?></td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Contact"); ?></td>
+                <td colspan=2 class=widget_label><?php echo _("On"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="<?php echo _("Add"); ?>"> <input class=button type=button onclick="javascript: markComplete();" value="<?php echo _("Done"); ?>"></td>
             </tr>
             <?php  echo $activity_rows; ?>
         </table>
@@ -409,13 +409,13 @@ function markComplete() {
         <!-- categories //-->
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Categories</td>
+                <td class=widget_header><?php echo _("Categories"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content><?php  echo $categories; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value="Manage"></td>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
             </tr>
         </table>
 
@@ -434,6 +434,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.20  2004/07/20 19:38:31  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.19  2004/07/14 22:24:25  braverock
  * - cleaned up some of the SQL syntax
  * - added db_error_handler and rst checks around all queries

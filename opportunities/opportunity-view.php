@@ -2,7 +2,7 @@
 /**
  * View an opportunity
  *
- * $Id: opportunity-view.php,v 1.5 2004/06/14 17:41:36 introspectshun Exp $
+ * $Id: opportunity-view.php,v 1.6 2004/07/20 19:38:31 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -32,7 +32,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "View Opportunity Statuses";
+$page_title = _("View Opportunity Statuses");
 start_page($page_title);
 
 ?>
@@ -42,11 +42,11 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4>Opportunity Statuses</td>
+                <td class=widget_header colspan=4><?php echo _("Opportunity Statuses"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Name</td>
-                <td class=widget_label>Description</td>
+                <td class=widget_label><?php echo _("Name"); ?></td>
+                <td class=widget_label><?php echo _("Description"); ?></td>
             </tr>
             <?php  echo $table_rows; ?>
         </table>
@@ -68,6 +68,9 @@ end_page();
 
 /**
  * $Log: opportunity-view.php,v $
+ * Revision 1.6  2004/07/20 19:38:31  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.5  2004/06/14 17:41:36  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

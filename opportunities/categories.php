@@ -2,7 +2,7 @@
 /**
  * Set categories for an opportunity
  *
- * $Id: categories.php,v 1.4 2004/06/14 17:41:36 introspectshun Exp $
+ * $Id: categories.php,v 1.5 2004/07/20 19:38:31 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -83,7 +83,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Manage Categories";
+$page_title = _("Manage Categories");
 start_page($page_title, true, $msg);
 
 ?>
@@ -93,18 +93,18 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Manage Categories</td>
+                <td class=widget_header colspan=2><?php echo _("Manage Categories"); ?></td>
             </tr>
             <tr>
-                <td width=50% class=widget_label>Associated With</td>
-                <td class=widget_label>Not Associated With</td>
+                <td width=50% class=widget_label><?php echo _("Associated With"); ?></td>
+                <td class=widget_label><?php echo _("Not Associated With"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content valign=top><?php  echo $associated_with; ?></td>
                 <td class=widget_content valign=top><?php  echo $not_associated_with; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input type=button class=button onclick="javascript: location.href='one.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value="Finished"></td>
+                <td class=widget_content_form_element colspan=2><input type=button class=button onclick="javascript: location.href='one.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value="<?php echo _("Finished"); ?>"></td>
             </tr>
         </table>
 
@@ -124,6 +124,9 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.5  2004/07/20 19:38:31  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.4  2004/06/14 17:41:36  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.8 2004/06/14 17:41:36 introspectshun Exp $
+ * $Id: new.php,v 1.9 2004/07/20 19:38:31 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -50,7 +50,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = "New Opportunity";
+$page_title = _("New Opportunity");
 start_page($page_title, true, $msg);
 
 ?>
@@ -64,35 +64,35 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Opportunity Details</td>
+                <td class=widget_header colspan=2><?php echo _("Opportunity Details"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Opportunity Title</td>
+                <td class=widget_label_right><?php echo _("Opportunity Title"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=opportunity_title> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Contact</td>
+                <td class=widget_label_right><?php echo _("Contact"); ?></td>
                 <td class=widget_content_form_element><?php echo $contact_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Campaign</td>
+                <td class=widget_label_right><?php echo _("Campaign"); ?></td>
                 <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Status</td>
+                <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element><?php echo $opportunity_status_menu; ?>
-                <a href="javascript:window.open('opportunity-view.php');">Status Definitions</a></td>
+                <a href="javascript:window.open('opportunity-view.php');"><?php echo _("Status Definitions"); ?></a></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Owner</td>
+                <td class=widget_label_right><?php echo _("Owner"); ?></td>
                 <td class=widget_content_form_element><?php echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Size (in dollars)</td>
+                <td class=widget_label_right><?php echo _("Size (in dollars)"); ?></td>
                 <td class=widget_content_form_element><input type=text size=10 name=size value = '0'></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Probability</td>
+                <td class=widget_label_right><?php echo _("Probability"); ?></td>
                 <td class=widget_content_form_element>
                 <select name=probability>
                     <option value="0">0%
@@ -110,18 +110,18 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Close Date</td>
+                <td class=widget_label_right><?php echo _("Close Date"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=close_at value="<?php  echo date('Y-m-d'); ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Description</td>
+                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=opportunity_description></textarea></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -150,7 +150,7 @@ function validate() {
 
     if (document.forms[0].opportunity_title.value == '') {
         numberOfErrors ++;
-        msgToDisplay += '\nYou must enter an opportunity title.';
+        msgToDisplay += '\n<?php echo _("You must enter an opportunity title."); ?>';
     }
 
     if (numberOfErrors > 0) {
@@ -182,6 +182,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.9  2004/07/20 19:38:31  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.8  2004/06/14 17:41:36  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
