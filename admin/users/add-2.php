@@ -1,4 +1,9 @@
 <?php
+/**
+ * commit a new user to the Database
+ *
+ * $Id: add-2.php,v 1.3 2004/05/13 16:36:39 braverock Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -29,4 +34,13 @@ $con->close();
 
 header("Location: some.php");
 
+/**
+ * $Log: add-2.php,v $
+ * Revision 1.3  2004/05/13 16:36:39  braverock
+ * - modified to work safely even when register_globals=on
+ *   (!?! == dumb administrators ?!?)
+ * - changed $user_id to $edit_user_id to avoid security collisions
+ *   - fixes multiple reports of user role switching on user edits.
+ *
+ */
 ?>

@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.3 2004/05/10 20:54:31 maulani Exp $
+ * $Id: self.php,v 1.4 2004/05/13 16:36:46 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,16 +24,16 @@ $sql = "select * from users where user_id = $session_user_id";
 $rst = $con->execute($sql);
 
 if ($rst) {
-	
+
     $user_type_id = $rst->fields['user_type_id'];
-	$username = $rst->fields['username'];
-	$first_names = $rst->fields['first_names'];
-	$last_name = $rst->fields['last_name'];
-	$email = $rst->fields['email'];
-	$gmt_offset = $rst->fields['gmt_offset'];
-	$language = $rst->fields['language'];
-	
-	$rst->close();
+    $username = $rst->fields['username'];
+    $first_names = $rst->fields['first_names'];
+    $last_name = $rst->fields['last_name'];
+    $email = $rst->fields['email'];
+    $gmt_offset = $rst->fields['gmt_offset'];
+    $language = $rst->fields['language'];
+
+    $rst->close();
 }
 //show_test_values($username, $last_name, $first_names, $session_user_id, $user_id);
 
@@ -45,50 +45,53 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
 
-		<form action=self-2.php method=post>
-		<input type=hidden name=user_id value="<?php  echo $session_user_id; ?>">
-		<table class=widget cellspacing=1>
-			<tr>
-				<td class=widget_header colspan=4>Edit User Information</td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Last Name</td>
-				<td class=widget_content_form_element><input type=text size=30 name=last_name value="<?php  echo $last_name; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>First Names</td>
-				<td class=widget_content_form_element><input type=text size=30 name=first_names value="<?php  echo $first_names; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Username</td>
-				<td class=widget_content_form_element><?php  echo $username; ?></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>E-Mail</td>
-				<td class=widget_content_form_element><input type=text size=40 name=email value="<?php  echo $email; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Language</td>
-				<td class=widget_content_form_element>English</td></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>GMT Offset</td>
-				<td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input class=button type=button onclick="javascript: location.href='change-password.php?user_id=<?php echo $session_user_id ?>';" value="Change Password"></td>
-			</tr>
-		</table>
-		</form>
+        <form action=edit-2.php method=post>
+        <input type=hidden name=edit_user_id value="<?php  echo $session_user_id; ?>">
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=4>Edit User Information</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Last Name</td>
+                <td class=widget_content_form_element><input type=text size=30 name=last_name value="<?php  echo $last_name; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>First Names</td>
+                <td class=widget_content_form_element><input type=text size=30 name=first_names value="<?php  echo $first_names; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Username</td>
+                <td class=widget_content_form_element><?php  echo $username; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>E-Mail</td>
+                <td class=widget_content_form_element>
+                    <input type=text size=40 name=email value="<?php  echo $email; ?>">
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Language</td>
+                <td class=widget_content_form_element>English</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>GMT Offset</td>
+                <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=2>
+                    <input class=button type=submit value="Save Changes"> <input class=button type=button onclick="javascript: location.href='change-password.php?edit_user_id=<?php echo $session_user_id ?>';" value="Change Password">
+                </td>
+            </tr>
+        </table>
+        </form>
 
     </div>
 
-        <!-- right column //-->
+    <!-- right column //-->
     <div id="Sidebar">
-
-		&nbsp;
-
+        &nbsp;
     </div>
+
 </div>
 
 <?php
@@ -97,6 +100,12 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.4  2004/05/13 16:36:46  braverock
+ *- modified to work safely even when register_globals=on
+ *  (!?! == dumb administrators ?!?)
+ *- changed $user_id to $edit_user_id to avoid security collisions
+ *  - fixes multiple reports of user role switching on user edits.
+ *
  *Revision 1.3  2004/05/10 20:54:31  maulani
  *- Fix bug 951490.  Unprivileged users will now return to the home screen
  *  after modifying their user records.
@@ -109,7 +118,5 @@ end_page();
  *- Block non-admin users from the administration screen
  *- Allow all users to modify their own user record and password
  *- Add phpdoc
- *
- *
  */
 ?>

@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.3 2004/04/16 22:18:26 maulani Exp $
+ * $Id: change-password.php,v 1.4 2004/05/13 16:36:46 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,7 +16,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 
-$user_id = $_GET['user_id'];
+$edit_user_id = $_GET['edit_user_id'];
 
 $page_title = "Change Password";
 start_page($page_title);
@@ -26,32 +26,32 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
 
-		<form action="change-password-2.php" method="post">
-		<input type=hidden name=user_id value="<?php echo $user_id; ?>">
-		<table class=widget cellspacing=1>
-			<tr>
-				<td class=widget_header colspan=4>Change Password</td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>New Password</td>
-				<td class=widget_content_form_element><input type=password size=30 name=password></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Confirm New Password</td>
-				<td class=widget_content_form_element><input type=password size=30 name=confirm_password></td>
-			</tr>
-			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
-			</tr>
-		</table>
-		</form>
+                <form action="change-password-2.php" method="post">
+                <input type=hidden name=edit_user_id value="<?php echo $edit_user_id; ?>">
+                <table class=widget cellspacing=1>
+                        <tr>
+                                <td class=widget_header colspan=4>Change Password</td>
+                        </tr>
+                        <tr>
+                                <td class=widget_label_right>New Password</td>
+                                <td class=widget_content_form_element><input type=password size=30 name=password></td>
+                        </tr>
+                        <tr>
+                                <td class=widget_label_right>Confirm New Password</td>
+                                <td class=widget_content_form_element><input type=password size=30 name=confirm_password></td>
+                        </tr>
+                        <tr>
+                                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                        </tr>
+                </table>
+                </form>
 
     </div>
 
         <!-- right column //-->
     <div id="Sidebar">
 
-		&nbsp;
+                &nbsp;
 
     </div>
 </div>
@@ -62,6 +62,12 @@ end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.4  2004/05/13 16:36:46  braverock
+ *- modified to work safely even when register_globals=on
+ *  (!?! == dumb administrators ?!?)
+ *- changed $user_id to $edit_user_id to avoid security collisions
+ *  - fixes multiple reports of user role switching on user edits.
+ *
  *Revision 1.3  2004/04/16 22:18:26  maulani
  *- Add CSS2 Positioning
  *

@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.4 2004/04/16 22:18:27 maulani Exp $
+ * $Id: one.php,v 1.5 2004/05/13 16:36:46 braverock Exp $
  */
 
 //include required files
@@ -14,12 +14,12 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 
-$user_id = $_GET['user_id'];
+$edit_user_id = $_GET['edit_user_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "select * from users where user_id = $user_id";
+$sql = "select * from users where user_id = $edit_user_id";
 
 $rst = $con->execute($sql);
 
@@ -53,7 +53,7 @@ start_page($page_title);
     <div id="Content">
 
         <form action=edit-2.php method=post>
-        <input type=hidden name=user_id value="<?php  echo $user_id; ?>">
+        <input type=hidden name=edit_user_id value="<?php  echo $edit_user_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Edit User Information</td>
@@ -87,13 +87,15 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input class=button type=button onclick="javascript: location.href='change-password.php?user_id=<?php echo $user_id ?>';" value="Change Password"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes">
+                    <input class=button type=button onclick="javascript: location.href='change-password.php?edit_user_id=<?php echo $edit_user_id ?>';" value="Change Password">
+                </td>
             </tr>
         </table>
         </form>
 
         <form action=delete.php method=post onsubmit="javascript: return confirm('Delete User?');">
-        <input type=hidden name=user_id value="<?php  echo $user_id; ?>">
+        <input type=hidden name=edit_user_id value="<?php  echo $edit_user_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4>Delete User</td>
@@ -124,6 +126,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.5  2004/05/13 16:36:46  braverock
+ * - modified to work safely even when register_globals=on
+ *   (!?! == dumb administrators ?!?)
+ * - changed $user_id to $edit_user_id to avoid security collisions
+ *   - fixes multiple reports of user role switching on user edits.
+ *
  * Revision 1.4  2004/04/16 22:18:27  maulani
  * - Add CSS2 Positioning
  *
@@ -131,6 +139,5 @@ end_page();
  * - properly set role_id in user edit page
  *  - fixes SF bug 876781
  * - add phpdoc
- *
  */
 ?>
