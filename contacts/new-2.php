@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.12 2004/07/08 19:47:50 neildogg Exp $
+ * $Id: new-2.php,v 1.13 2004/07/19 20:56:20 cpsource Exp $
  */
 require_once('../include-locations.inc');
 
@@ -14,32 +14,38 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$company_id = $_POST['company_id'];
-$address_id = $_POST['address_id'];
-$division_id = $_POST['division_id'];
-$salutation = $_POST['salutation'];
-$last_name = $_POST['last_name'];
-$first_names = $_POST['first_names'];
-$gender = $_POST['gender'];
-$date_of_birth = $_POST['date_of_birth'];
-$summary = $_POST['summary'];
-$title = $_POST['title'];
-$description = $_POST['description'];
-$email = $_POST['email'];
-$email2 = $_POST['email2'];
-$work_phone = $_POST['work_phone'];
-$cell_phone = $_POST['cell_phone'];
-$home_phone = $_POST['home_phone'];
-$fax = $_POST['fax'];
-$aol_name = $_POST['aol_name'];
-$yahoo_name = $_POST['yahoo_name'];
-$msn_name = $_POST['msn_name'];
-$interests = $_POST['interests'];
-$profile = $_POST['profile'];
-$custom1 = $_POST['custom1'];
-$custom2 = $_POST['custom2'];
-$custom3 = $_POST['custom3'];
-$custom4 = $_POST['custom4'];
+// declare passed in variables
+$arr_vars = array ( // local var name             // session variable name, flag
+		   'company_id' => array ( 'company_id' , arr_vars_SESSION ),
+		   'address_id' => array ( 'address_id' , arr_vars_SESSION ),
+		   'division_id' => array ( 'division_id' , arr_vars_SESSION ),
+		   'salutation' => array ( 'salutation' , arr_vars_SESSION ),
+		   'last_name' => array ( 'last_name' , arr_vars_SESSION ),
+		   'first_names' => array ( 'first_names' , arr_vars_SESSION ),
+		   'gender' => array ( 'gender' , arr_vars_SESSION ),
+		   'date_of_birth' => array ( 'date_of_birth' , arr_vars_SESSION ),
+		   'summary' => array ( 'summary' , arr_vars_SESSION ),
+		   'title' => array ( 'title' , arr_vars_SESSION ),
+		   'description' => array ( 'description' , arr_vars_SESSION ),
+		   'email' => array ( 'email' , arr_vars_SESSION ),
+		   'email2' => array ( 'email2' , arr_vars_SESSION ),
+		   'work_phone' => array ( 'work_phone' , arr_vars_SESSION ),
+		   'cell_phone' => array ( 'cell_phone' , arr_vars_SESSION ),
+		   'home_phone' => array ( 'home_phone' , arr_vars_SESSION ),
+		   'fax' => array ( 'fax' , arr_vars_SESSION ),
+		   'aol_name' => array ( 'aol_name' , arr_vars_SESSION ),
+		   'yahoo_name' => array ( 'yahoo_name' , arr_vars_SESSION ),
+		   'msn_name' => array ( 'msn_name' , arr_vars_SESSION ),
+		   'interests' => array ( 'interests' , arr_vars_SESSION ),
+		   'profile' => array ( 'profile' , arr_vars_SESSION ),
+		   'custom1' => array ( 'custom1' , arr_vars_SESSION ),
+		   'custom2' => array ( 'custom2' , arr_vars_SESSION ),
+		   'custom3' => array ( 'custom3' , arr_vars_SESSION ),
+		   'custom4' => array ( 'custom4' , arr_vars_SESSION ),
+		   );
+
+// get all posted in variables
+arr_vars_get_all ( $arr_vars , true);
 
 $last_name = (strlen($last_name) > 0) ? $last_name : "[last name]";
 $first_names = (strlen($first_names) > 0) ? $first_names : "[first names]";
@@ -93,6 +99,9 @@ header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id"
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.13  2004/07/19 20:56:20  cpsource
+ * - Use arr_vars for POSTED arguments
+ *
  * Revision 1.12  2004/07/08 19:47:50  neildogg
  * - Salutation was inserting 0 on a null salutation choice
  *
