@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.9 2005/01/08 06:25:14 gpowers Exp $
+ * $Id: one.php,v 1.10 2005/01/11 19:43:47 gpowers Exp $
  *
  */
 
@@ -232,10 +232,9 @@ $categories = implode($categories, ", ");
 //set up our substitution variables for use in the siddebars
 $on_what_table = 'info';
 $on_what_id = $company_id;
-$on_what_string = 'company';
 
 //include the Cases sidebar
-$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
+$case_limit_sql = "and cases." . make_singular($on_what_table) . "_id = $on_what_id";
 require_once("$xrms_file_root/cases/sidebar.php");
 
 //include the files sidebar
