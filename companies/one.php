@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.69 2004/11/09 00:06:53 gpowers Exp $
+ * $Id: one.php,v 1.70 2004/12/30 20:09:40 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -19,7 +19,9 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
-
+$company_id = $_GET['company_id'];
+global $on_what_id;
+$on_what_id=$company_id;
 $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -266,49 +268,6 @@ if ($rst) {
         $former_name_rows .= '<tr><td class=sublabel>'._("Former Name").'</td>';
         $former_name_rows .= '<td class=clear>' . $rst->fields['former_name'] . '</td>';
         $former_name_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
-}
-
-// related companies
-
-$sql = "select rt.from_what_text, rt.to_what_text, r.established_at,
-    r.to_what_id, r.from_what_id,
-    c1.company_name as to_company_name, c1.company_id as to_company_id,
-    c2.company_name as from_company_name, c2.company_id as from_company_id
-    from relationships as r, companies as c1, companies as c2, relationship_types as rt
-    where (r.from_what_id = $company_id or r.to_what_id = $company_id)
-    and rt.from_what_table = 'companies'
-    and rt.to_what_table = 'companies'
-    and r.relationship_type_id=rt.relationship_type_id
-    and r.to_what_id=c2.company_id
-    and r.from_what_id=c1.company_id
-    and r.relationship_status = 'a'
-    order by r.established_at desc";
-
-$rst = $con->execute($sql);
-
-$relationship_rows = '';
-$linecounter = 0;
-if ($rst) {
-    while (!$rst->EOF) {
-        $linecounter +=1;
-        if($rst->fields['from_what_id'] == $company_id) {
-            $from_or_to = "from";
-        }
-        else {
-            $from_or_to = "to";
-        }
-        $established_at = $con->userdate($rst->fields['established_at']);
-        $relationship_rows .= ($linecounter == '1') ? '<tr><td class=sublabel>Relationship</td>' : '<tr><td class=sublabel>&nbsp;</td>';
-        $relationship_rows .= '<td class=clear>' . $rst->fields[$from_or_to . '_what_text'] . ' '
-            . '<a href="one.php?company_id=' . $rst->fields[$from_or_to . '_company_id']
-            . '">' . $rst->fields[$from_or_to . '_company_name'] . '</a> '
-            . $established_at . '</td>';
-        $relationship_rows .= '</tr>';
         $rst->movenext();
     }
     $rst->close();
@@ -590,7 +549,6 @@ function openNewsWindow() {
                 <input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $company_id ?>';">
                 <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("News"); ?>" onclick="javascript: openNewsWindow();">
-                <input class=button type=button value="<?php echo _("Relationships"); ?>" onclick="javascript: location.href='relationships.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Addresses"); ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("Divisions"); ?>" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
                 <?php do_hook('company_buttons'); ?>
@@ -718,6 +676,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.70  2004/12/30 20:09:40  vanmer
+ * - moved company_id above session_check (prelude to ACL)
+ * - removed relationship information from main company section (now all included in sidebar)
+ *
  * Revision 1.69  2004/11/09 00:06:53  gpowers
  * - Corrected display of newlines in profile
  *
