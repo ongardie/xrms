@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.15 2005/01/13 19:46:54 vanmer Exp $
+ * $Id: some.php,v 1.16 2005/02/10 23:47:51 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,17 +21,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug=1;
 
 $sql = "select *, Role.Role_name from users, Role
-WHERE user_record_status = 'a' AND users.role_id=Role.Role_id order by last_name, first_names";
+WHERE users.role_id=Role.Role_id order by last_name, first_names";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
+        $enabled = ($rst->fields['user_record_status']=='a') ? 'X' : '';
         $table_rows .= '<tr>';
+        $table_rows .= '<td class=widget_content>' . $enabled . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['Role_name'] . '</td>';
-        $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';        
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -57,9 +59,10 @@ start_page($page_title);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Users"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Users"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label><?php echo _("Enabled"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("E-Mail"); ?></td>
                 <td class=widget_label><?php echo _("Role"); ?></td>
@@ -111,7 +114,7 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value=<?php  echo $default_gst; ?>></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Allow Access"); ?></td>
+                <td class=widget_label_right><?php echo _("Enabled"); ?></td>
                 <td class=widget_content_form_element><input type=checkbox name=allowed_p checked></td>
             </tr>
             <tr>
@@ -163,6 +166,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.16  2005/02/10 23:47:51  vanmer
+ * - added enabled view on users
+ * - altered to show all users accounts in the system
+ *
  * Revision 1.15  2005/01/13 19:46:54  vanmer
  * - Removed unneeded debug statement
  *
