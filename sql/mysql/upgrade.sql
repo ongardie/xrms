@@ -1,28 +1,9 @@
-alter table companies add default_primary_address int not null;
+# source the alter table commands
+# these can be used by people with newer versions of the database, 
+# but maybe not everything, without doing any damage.
+source xrms-altertables.sql
 
-alter table companies add custom1 varchar(255) not null;
-alter table companies add custom2 varchar(255) not null;
-alter table companies add custom3 varchar(255) not null;
-alter table companies add custom4 varchar(255) not null;
-
-alter table companies drop city;
-alter table companies drop state;
-alter table companies drop country;
-
-alter table activities add company_id int not null;
-alter table activities add contact_id int not null;
-
-alter table contacts add address_id int not null;
-
-alter table addresses add country_id int not null;
-alter table addresses alter column country_id set default 1;
-alter table addresses add line1 varchar(255) not null;
-alter table addresses add line2 varchar(255) not null;
-alter table addresses add city varchar(255) not null;
-alter table addresses add province varchar(255) not null;
-alter table addresses add postal_code varchar(255) not null;
-alter table addresses add use_pretty_address char(1) not null;
-alter table addresses alter column use_pretty_address set default 'f';
+# now run the potentially more destructive commands
 
 update companies set default_primary_address = default_billing_address;
 update addresses set country_id = 1;
@@ -277,5 +258,3 @@ insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_co
 insert into countries (country_name, un_code, iso_code2, iso_code3, telephone_code) values ('Zimbabwe', '716', 'ZW', 'ZWE', '263');
 
 insert into address_format_strings (address_format_string) values ('$lines<br>$city, $province $postal_code<br>$country');
-
-alter table `company_sources` add `company_source_score_adjustment` int not null ;
