@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.9 2004/07/12 12:56:21 braverock Exp $
+ * $Id: data.php,v 1.10 2004/07/13 18:15:59 neildogg Exp $
  */
 
 /**
@@ -595,7 +595,7 @@ function user_db_data($con) {
 
     // users
     if (confirm_no_records($con, 'users')) {
-        $sql ="insert into users (role_id, username, password, last_name, first_names, email, language) values (2, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english')";
+        $sql ="insert into users (user_contact_id, role_id, username, password, last_name, first_names, email, language) values (0, 2, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english')";
         $rst = $con->execute($sql);
     }
 
@@ -943,6 +943,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.10  2004/07/13 18:15:59  neildogg
+ * - Add database entries to allow a contact to be tied to the user
+ *
  * Revision 1.9  2004/07/12 12:56:21  braverock
  * - add sort_order to activity_types table on install
  *   - resolves SF bug 987492 reported by kennyg1

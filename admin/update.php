@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.19 2004/07/07 20:48:16 neildogg Exp $
+ * $Id: update.php,v 1.20 2004/07/13 18:15:44 neildogg Exp $
  */
 
 // where do we include from
@@ -127,6 +127,10 @@ $rst = $con->execute($sql);
 
 //add phone format to countries
 $sql = "ALTER TABLE countries ADD phone_format VARCHAR(25) NOT NULL DEFAULT '' AFTER country_record_status";
+$rst = $con->execute($sql);
+
+//add user contact id to users
+$sql = "ALTER TABLE users ADD user_contact_id int(11) NOT NULL DEFAULT 0 AFTER user_id";
 $rst = $con->execute($sql);
 
 //make sure that there is connection detail columns in the audit_items table
@@ -663,6 +667,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.20  2004/07/13 18:15:44  neildogg
+ * - Add database entries to allow a contact to be tied to the user
+ *
  * Revision 1.19  2004/07/07 20:48:16  neildogg
  * - Added database structure changes
  *

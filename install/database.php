@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.12 2004/07/12 12:56:21 braverock Exp $
+ * $Id: database.php,v 1.13 2004/07/13 18:15:59 neildogg Exp $
  */
 
 /**
@@ -199,6 +199,7 @@ function user_db_tables($con, $table_list) {
     if (!in_array('users',$table_list)) {
         $sql ="create table users (
                user_id             int not null primary key auto_increment,
+               user_contact_id     int not null default 0,
                role_id             int not null default 0,
                username            varchar(100) not null default '' unique,
                password            varchar(100) not null default '',
@@ -851,6 +852,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.13  2004/07/13 18:15:59  neildogg
+ * - Add database entries to allow a contact to be tied to the user
+ *
  * Revision 1.12  2004/07/12 12:56:21  braverock
  * - add sort_order to activity_types table on install
  *   - resolves SF bug 987492 reported by kennyg1
