@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.9 2005/01/11 09:37:29 gpowers Exp $
+ * $Id: setup.php,v 1.10 2005/01/25 05:57:53 vanmer Exp $
  */
 
 
@@ -23,6 +23,7 @@ function xrms_plugin_init_info () {
     $xrms_plugin_hooks['company_content_bottom']['info']
       = 'company_content_bottom';
     $xrms_plugin_hooks['plugin_admin']['info'] = 'info_setup';
+    $xrms_plugin_hooks['xrms_install']['info'] = 'info_install';
 }
 
 function display_on_menu () {
@@ -50,6 +51,14 @@ function display_on_menu () {
 function info_setup() {
     global $http_site_root;
     echo "<tr><td class=widget_content>\n<a href='$http_site_root/plugins/info/admin/some.php'>Manage Info Types</a>\n</td>\n</tr>\n";
+}
+
+function info_install($con) {
+    global $xrms_file_root;
+    $tables=$con->MetaTables('TABLES');
+    if (!in_array('info',$tables)) {
+        execute_batch_sql_file($con, $xrms_file_root.'/plugins/info/info.sql');
+    }
 }
 
 function company_content_bottom ($_sidebar) {
