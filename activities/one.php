@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.21 2004/06/04 15:57:24 gpowers Exp $
+ * $Id: one.php,v 1.22 2004/06/10 20:30:07 braverock Exp $
  */
 
 //include required files
@@ -47,6 +47,19 @@ if ($rst) {
     $ends_at = date('Y-m-d H:i:s', strtotime($rst->fields['ends_at']));
     $activity_status = $rst->fields['activity_status'];
     $rst->close();
+}
+
+if($on_what_table == 'opportunities') {
+    $sql = "select o.probability
+        from opportunities as o, activities as a
+        where activity_id = $activity_id
+        and a.on_what_id=o.opportunity_id";
+
+    $rst = $con->execute($sql);
+
+    if($rst) {
+        $probability = $rst->fields['probability'];
+    }
 }
 
 // since the activity can be attached to many things -- a company, contact, opportunity, or case -- we need to figure
@@ -209,6 +222,30 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right>Activity&nbsp;Type</td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
             </tr>
+           <?php
+           if($on_what_table == 'opportunities') {
+           ?>
+           <tr>
+                <td class=widget_label_right>Probability&nbsp;(%)</td>
+                <td class=widget_content_form_element>
+                <select name=probability>
+                    <option value="0"<?php if ($probability == '0') {echo ' selected';}; ?>>0%
+                    <option value="10"<?php if ($probability == '10') {echo ' selected';}; ?>>10%
+                    <option value="20"<?php if ($probability == '20') {echo ' selected';}; ?>>20%
+                    <option value="30"<?php if ($probability == '30') {echo ' selected';}; ?>>30%
+                    <option value="40"<?php if ($probability == '40') {echo ' selected';}; ?>>40%
+                    <option value="50"<?php if ($probability == '50') {echo ' selected';}; ?>>50%
+                    <option value="60"<?php if ($probability == '60') {echo ' selected';}; ?>>60%
+                    <option value="70"<?php if ($probability == '70') {echo ' selected';}; ?>>70%
+                    <option value="80"<?php if ($probability == '80') {echo ' selected';}; ?>>80%
+                    <option value="90"<?php if ($probability == '90') {echo ' selected';}; ?>>90%
+                    <option value="100"<?php if ($probability == '100') {echo ' selected';}; ?>>100%
+                </select>
+                </td>
+            </tr>
+            <?php
+            }
+            ?>
             <tr>
                 <td class=widget_label_right>Title</td>
                 <td class=widget_content_form_element>
@@ -300,6 +337,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.22  2004/06/10 20:30:07  braverock
+ * - added ability to edit probability on linked opportunity
+ *   - code contributed by Neil Roberts
+ *
  * Revision 1.21  2004/06/04 15:57:24  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags

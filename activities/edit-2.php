@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.12 2004/06/03 16:11:00 braverock Exp $
+ * $Id: edit-2.php,v 1.13 2004/06/10 20:30:07 braverock Exp $
  */
 
 //include required files
@@ -37,6 +37,7 @@ $company_id = $_POST['company_id'];
 $email_to = $_POST['email_to'];
 $table_name = $_POST['table_name'];
 $table_status_id = $_POST['table_status_id'];
+$probability = $_POST['probability'];
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -77,6 +78,15 @@ $sql = "update activities set
         where activity_id = $activity_id";
 
 $con->execute($sql);
+
+if($on_what_table == 'opportunities' and strlen ($probability)) {
+    $sql = "update opportunities set
+        probability = $probability
+        where opportunity_id = $on_what_id";
+
+    $prob_rst= $con->execute($sql);
+    if (!$prob_rst) { db_error_handler ($con, $sql); }
+}
 
 add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
 
@@ -231,6 +241,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.13  2004/06/10 20:30:07  braverock
+ * - added ability to edit probability on linked opportunity
+ *   - code contributed by Neil Roberts
+ *
  * Revision 1.12  2004/06/03 16:11:00  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
