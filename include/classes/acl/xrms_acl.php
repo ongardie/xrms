@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.12 2005/03/15 23:13:49 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.13 2005/03/21 20:46:11 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -281,18 +281,18 @@ class xrms_acl {
             
             $ret=array();
             $ret['acl_on_what_field']=$on_what_field;
-            if (trim($on_what_id)) {
+            if (trim($on_what_id)!==false) {
                 $restrictionFields[$on_what_field]=$on_what_id;
             }
             
             $where=array();
             if ($restrictionFields AND count($restrictionFields)>0) {
                 foreach ($restrictionFields as $key=>$value) {
-                    if (is_array($value)) {
+                    if (is_array($value) AND (count($value)>0)) {
                         //array of values, seach for all of them
                         $where[]="($key IN (" . implode(",",$value)."))";
                     } else {
-                        if ($value) {
+                        if ($value!==false) {
                             $where[]="($key=$value)";
                         }
                     }                       
@@ -2063,6 +2063,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.13  2005/03/21 20:46:11  vanmer
+ * - added checks to ensure that a zero value will still create select criteria
+ *
  * Revision 1.12  2005/03/15 23:13:49  vanmer
  * - changed logic of restricted object search to better reflect new walk of parent object tree
  * - removed no longer needed codeblocks
