@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.22 2004/07/07 18:06:18 neildogg Exp $
+ * $Id: edit-2.php,v 1.23 2004/07/10 13:51:18 braverock Exp $
  */
 
 //include required files
@@ -45,14 +45,22 @@ $probability = $_POST['probability'];
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
 
+$scheduled_at = strtotime($scheduled_at);
 //set scheduled_at to today if it is empty
 if (!$scheduled_at) {
-    $scheduled_at = date('Y-m-d');
+    $scheduled_at = strtotime(date('Y-m-d'));
 }
 
 // set ends_at to scheduled_at if it is empty
+$ends_at = strtotime($ends_at);
 if (!$ends_at) {
     $ends_at = $scheduled_at;
+}
+
+// make sure ends_at is later than scheduled at
+if ($scheduled_at > $ends_at) {
+   //set $ends_at to = $scheduled_at
+   $ends_at = $scheduled_at;
 }
 
 // set the correct activity status flag
@@ -80,8 +88,8 @@ $rec['contact_id'] = $contact_id;
 $rec['activity_title'] = $activity_title;
 $rec['activity_description'] = $activity_description;
 $rec['user_id'] = $user_id;
-$rec['scheduled_at'] = strtotime($scheduled_at);
-$rec['ends_at'] = strtotime($ends_at);
+$rec['scheduled_at'] = $scheduled_at;
+$rec['ends_at'] = $ends_at;
 $rec['completed_at'] = $completed_at;
 $rec['activity_status'] = $activity_status;
 
@@ -99,7 +107,7 @@ if($on_what_table == 'opportunities') {
     $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq);
     $rst = $con->execute($upd);
 }
-  
+
 if($on_what_table == 'opportunities' and strlen ($probability)) {
     //Need old probability to see if pos should actually move
     $sql = "select probability
@@ -286,6 +294,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.23  2004/07/10 13:51:18  braverock
+ * - improved date handling error checking
+ *
  * Revision 1.22  2004/07/07 18:06:18  neildogg
  * - Added sticky opportunity description
  *

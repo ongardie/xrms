@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.16 2004/07/07 21:27:37 introspectshun Exp $
+ * $Id: new-2.php,v 1.17 2004/07/10 13:51:18 braverock Exp $
  */
 
 //where do we include from
@@ -66,6 +66,12 @@ if (!$ends_at) {
     $ends_at = $scheduled_at;
 }
 
+// make sure ends_at is later than scheduled at
+if ($scheduled_at > $ends_at) {
+   //set $ends_at to = $scheduled_at
+   $ends_at = $scheduled_at;
+}
+
 //make our database connection
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -110,6 +116,9 @@ if ($activities_default_behavior == "Fast") {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.17  2004/07/10 13:51:18  braverock
+ *- improved date handling error checking
+ *
  *Revision 1.16  2004/07/07 21:27:37  introspectshun
  *- Now passes a table name instead of a recordset into GetInsertSQL
  *
