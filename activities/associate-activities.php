@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: associate-activities.php,v 1.1 2004/07/13 19:51:29 braverock Exp $
+ * $Id: associate-activities.php,v 1.2 2004/07/13 19:58:56 braverock Exp $
  */
 
 
@@ -76,7 +76,7 @@ if ($company_rst) {
                      company_id = $company_id
                      and status_open_indicator = 'o'
                      and case_record_status='a'";
-        $case_rst = $con->execute($opp_sql);
+        $case_rst = $con->execute($case_sql);
         if ($case_rst) {
             if ($case_rst->RecordCount()>=1){
                 while (!$case_rst->EOF) {
@@ -88,7 +88,7 @@ if ($company_rst) {
             }
             $case_rst->close();
         } else {
-            db_error_handler ($con,$opp_sql);
+            db_error_handler ($con,$case_sql);
         }
 
         //echo '<br>Array Count = '.$arr_count.'<br>';
@@ -177,6 +177,9 @@ end_page();
 
 /**
  * $Log: associate-activities.php,v $
+ * Revision 1.2  2004/07/13 19:58:56  braverock
+ * - fixed cut and paste error in case checking
+ *
  * Revision 1.1  2004/07/13 19:51:29  braverock
  * - Initial Revision
  * - Administrative script to Accociate Activities with open Opportunities/Cases
