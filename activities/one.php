@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.5 2004/03/15 14:51:28 braverock Exp $
+ * $Id: one.php,v 1.6 2004/03/22 22:44:29 braverock Exp $
  */
 
 //include required files
@@ -125,7 +125,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Title</td>
-                <td class=widget_content_form_element><input type=text size=50 name=activity_title value="<?php  echo $activity_title; ?>"></td>
+                <td class=widget_content_form_element><input type=text size=50 name=activity_title value="<?php  echo htmlspecialchars($activity_title); ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right>User</td>
@@ -133,7 +133,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right_166px>Description</td>
-                <td class=widget_content_form_element><textarea rows=10 cols=100 name=activity_description><?php  echo $activity_description; ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=100 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Starts</td>
@@ -193,6 +193,10 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: one.php,v $
+ * Revision 1.6  2004/03/22 22:44:29  braverock
+ * - add htmlspecialchars around activity_title and activity_description
+ *   - fixes SF bug 921295
+ *
  * Revision 1.5  2004/03/15 14:51:28  braverock
  * - fix ends-at display bug
  * - make sure both scheduled_at and ends_at have legal values
