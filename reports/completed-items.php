@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.3 2004/04/22 22:34:17 gpowers Exp $
+ * $Id: completed-items.php,v 1.4 2004/04/23 15:24:10 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -136,8 +136,9 @@ if ($user_id) {
 
     } // End Activity Type
     if (($type == "campaigns") || ($type == "all")) {
-        $sql = "SELECT * from campaigns
-                where campaign_status_id IN ('4')
+         $sql = "SELECT * from campaign_statuses, campaigns where
+                campaign_statuses.campaign_status_id = campaigns.campaign_status_id
+                and campaign_statuses.status_open_indicator = 'o'
                 and campaign_record_status = 'a'
                 and user_id = $user_id and entered_at between "
                 . $con->qstr($starting, get_magic_quotes_gpc()) . "
@@ -277,6 +278,9 @@ end_page();
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.4  2004/04/23 15:24:10  gpowers
+ * Fixes Bug #938620, requires campaign_statuses.status_open_indicator
+ *
  * Revision 1.3  2004/04/22 22:34:17  gpowers
  * fixed duplicate lines in report
  *
