@@ -1,15 +1,18 @@
 <?php
+/**
+ * XRMS system configuration file
+ *
+ * You will need to review the variables in this file and make changes as necessary for your environment.
+ *
+ * $Id: vars.php,v 1.11 2004/03/07 17:27:57 braverock Exp $
+ */
 
-//
-// system configuration file
-//
-
-
-// database connection info for XRMS system
-// eventually there will be a nice, pretty web-based way to install XRMS, but for now you've got to create the db
-// yourself and run the xrms-initialization scripts (*.sql) found in the [xrms_root]/sql/mysql directory to create the
-// appropriate tables and insert some sample/default data
-
+/**
+ *  database connection info for XRMS system
+ *  eventually there will be a nice, pretty web-based way to install XRMS, but for now you've got to create the db
+ *  yourself and run the xrms-initialization scripts (*.sql) found in the [xrms_root]/sql/mysql directory to create the
+ *  appropriate tables and insert some sample/default data
+ */
 $xrms_db_dbtype = 'mysql';
 $xrms_db_server = 'localhost';
 $xrms_db_username = 'your_mysql_username';
@@ -23,9 +26,12 @@ $http_site_root = "http://www.yoursitename.com/xrms";
 $xrms_file_root = "/full/path/to/xrms";
 
 // directory where uploaded files should go
+//make sure these directories are writable by the apache user
 $max_file_size = 200000;
 $tmp_upload_directory = "/full/path/to/xrms/tmp/";
 $file_storage_directory = "/full/path/to/xrms/files/storage/";
+//uncomment this if you are having trouble with file uploads
+//ini_set ('upload_tmp_dir', $tmp_upload_directory);
 
 // directory for exports
 // directory must be writable by apache, and should not be world readable (0700)
@@ -55,6 +61,7 @@ $system_rows_per_page = 15;
 $recent_items_limit = 15;
 $display_how_many_activities_on_company_page = 20;
 $display_how_many_activities_on_contact_page = 30;
+$display_how_many_activities_on_home_page = 30;
 $display_how_many_audit_items_on_dashboard = 20;
 $how_many_rows_to_import_per_page = 10;
 
@@ -91,6 +98,7 @@ $company_custom4_label = "(Custom 4)";
 //  Options are "Fast" or "Long"
 
 $activities_default_behavior = "Fast";
+
 
 /** Optional LDAP configuration parameters **/
 /**
