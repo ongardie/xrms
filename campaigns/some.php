@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.17 2004/07/16 05:28:14 introspectshun Exp $
+ * $Id: some.php,v 1.18 2004/07/19 17:19:33 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,6 +29,7 @@ $arr_vars = array ( // local var name       // session variable name
 		   'campaign_type_id'     => array ( 'campaigns_campaign_type_id', arr_vars_SESSION), 
 		   'campaign_status_id'   => array ( 'campaigns_campaign_status_id', arr_vars_SESSION), 
 		   'campaign_category_id' => array ( 'campaigns_campaign_category_id', arr_vars_SESSION), 
+		   'media'                => array ( 'campaigns_media', arr_vars_SESSION), 
 		   );
 
 // get all passed in variables
@@ -176,6 +177,18 @@ if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'campaigns', '', 4);
 }
 
+// get company_count
+$rst = $con->execute($sql);
+$company_count = 0;
+if ( $rst ) {
+  while (!$rst->EOF) {
+    $company_count += 1;
+    break;                // we only care if we have more than 0, so stop here
+    $rst->movenext();
+  }
+  $rst->close();
+}
+
 $page_title = _("Campaigns");
 start_page($page_title, true, $msg);
 
@@ -313,6 +326,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.18  2004/07/19 17:19:33  cpsource
+ * - 'media' is used undefined. It's now zeroed out, but
+ *    should be either implemented or removed.
+ *    Resolved two other undefs.
+ *
  * Revision 1.17  2004/07/16 05:28:14  introspectshun
  * - Localized strings for i18n/translation support
  *
