@@ -1,0 +1,341 @@
+// ===============================================================
+// CVS Id Info
+// $Id: class_outline.txt,v 1.1 2005/03/17 20:40:57 jswalter Exp $
+// ===============================================================
+
+
+Class SMTPs
+
+Class to construct and send SMTP compliant email, even to a secure SMTP server, regardless of platform.
+
+This Class is based off of 'SMTP PHP MAIL' by Dirk Paehl, http://www.paehl.de
+
+Goals:
+ - mime compliant
+ - multiple recipients
+   - TO
+   - CC
+   - BCC
+ - multi-part message
+   - plain text
+   - HTML
+   - USer Defined
+ - attachements
+ - GPG
+   - signed
+   - encrypted
+
+
+// sample vars
+$smtps_host  = 'mail.myDomain.com';    // IP or host name
+$smtps_port  = '25';                   // optional port definition
+$smtps_id    = 'myId';                 // SMTP Server ID
+$smtps_pw    = 'myPass';
+
+// instantiate object
+// Parameters are optional, but must be defined before $objSMTPs->sendMsg()
+// call is made
+object SMTPs ( [string host name/ip[, string user id[, string password[, string smtp port]]]] )
+
+$objSMTPs = new SMTPs ($smtps_host, $smtps_id, $smtps_pw, $smtps_port);
+
+
+// Or server info can be defined this way
+void setHost ( string host name ip )
+void setPort ( string smtp port )   // optional, default value is 25
+void setID ( string user id )       // optional, only if login is required
+void setPW ( string user password ) // optional, only if login is required
+
+$objSMTPs = new SMTPs ();             // instantiate object
+$objSMTPs->setHost ( $smtps_host );   // what server to send to - required
+$objSMTPs->setPort ( $smtps_port );   // defaulted to 25, but it can be changed
+$objSMTPs->setID ( $smtps_id );       // used only for secure access
+$objSMTPs->setPW ( $smtps_pw );       // used only for secure access
+
+
+// eMail Address, TO, FROM, CC and BCC
+//   Addresses - i.e.:  "name" <left@right.tld>
+//   angle brackets are only accepted if prefaced with double quoted string
+//   multiple addresses can be an array or a 'R/LF' or COMMA' delimited string
+//   This will perform validation on address[es]
+//   - just not sure what to do with "bad" (formatted) addresses
+boolean setFrom ( mixed email address )
+boolean setTo ( mixed email address[es] )
+boolean setCC ( mixed email address[es] )
+boolean setBCC ( mixed email address[es] )
+
+$objSMTPs->setFrom ( $strFrom );   // required
+$objSMTPs->setTo ( $strToList );   // required
+$objSMTPs->setCC ( $strToList );
+$objSMTPs->setBCC ( $strToList );
+
+
+// Set some X-Header data
+//   multiple X-Header blocks can be an array, associative array
+//   or a R/LF delimited string
+// If a string or an array, use the ':' seperator for label and value
+// This will validate only for ':' seperator
+// If an associative array, ':' is not required
+// This method is "additive", meaning each time this method is called,
+// the new X-Header data is "added" to any existing X-Header data.
+// Also, if a X-Header is defined twice, the second defintion will
+// be the one used. Can't have 2 X-Headers with the same label.
+// NOTE: This method will overwrite any X-Headers defined with the
+//       setFullHeader() method.
+boolean setXheader ( mixed X-Header[s] )
+
+$objSMTPs->setXheader ( $strXdata );
+
+
+// The message X-Headers can be retrieved as well
+// This will return either a R/LF delimited string or an
+// associative array.
+//   F = string - default
+//   T = array
+mixed getXheader ( [boolean] )
+
+$xHeaderData = $objSMTPs->getXheader();
+
+
+// [X-Mailer] can only be changed here
+// It will stripped from setXheader()
+//    Default: 'X-Mailer: PHP/SMTPs Class Mailer'
+//    NOTE: 'X-Mailer:' is not needed, just define the value to use
+boolean setXmailer ( string )
+
+$objSMTPs->setXmailer ( $strXmailer );
+
+
+// The entire Header can be created and retrieved
+// Addresses - i.e.:  "name" <left@right.tld>
+//   angle brackets are only accepted if prefaced with double quoted string
+//   This will perform validation on address[es]
+//   multiple addresses can be an array or a R/LF delimited string
+//   multiple X-Header blocks can be an array, associative array
+//   or a R/LF delimited string
+//   Address validation is not performed
+// X-Header - i.e.: X-Mailer: PHP/SMTPs Class Mailer
+//   If a string or an array, use the ':' seperator for label and value
+//   This will validate only for ':' seperator
+//   If an associative array, ':' is not required
+//   X-Header validation is not performed
+// NOTE: This method will destroy all Headers defined via other methods.
+void setFullHeader( mixed );
+
+
+$objSMTPs->setFullHeader ( $myHeader );
+
+// Retrieve entire Header Block
+// This will return either a R/LF delimited string or an
+// associative array.
+//   F = string - default
+//   T = array
+mixed getFullHeader( [boolean] );
+
+$msgHeader = $objSMTPs->getFullHeader();
+
+
+// Content type can be set 1 of 2 ways; either directly
+// This will validate to currently defined types
+//   'text'plain' is not needed, this is the default value
+$objSMTPs->setContentType ( 'text/html' );
+
+// Retrive Content Type
+$cntType = $objSMTPs->setContentType();
+
+
+// or by defining what type message is being sent
+// Using this 2 step method, a multi-part message will be created
+// This the body of the message only, anything placed here will simply
+// be passed through. Beginning and ending blank lines are not neccessary.
+$objSMTPs->setBodyContent ( $strMsg );      // this is 'text/plain'
+$objSMTPs->setBodyHTMLContent ( $strMsg );  // this is 'text/html'
+
+// You can also define your own body text content type
+void setBodyContent ( string[, string content type] )
+
+$objSMTPs->setBodyContent ( $strMsg,'text/pdf' ); // this is 'text/pdf'
+
+
+// Character set is defaulted to 'iso-8859-1';
+// This can be changed for other character sets
+// This will validate to currently defined character sets
+void setCharSet ( string )
+
+$objSMTPs->setCharSet ( 'gb2312' );   // Chinese Simplified
+
+
+// Content-Transfer-Encoding is defaulted to '7bit';
+// This can be changed for 2byte characers
+// This will validate to currently defined types
+void setTransEncode ( string );
+
+$objSMTPs->setTransEncode ( $strEncodeType );
+
+// Content-type and Content-Transfer-Encoding is default defined
+// by use of the 'locale' ENV VAR.
+// A series of .lo files define these values by 'locale'
+// If yours is not there, please send us one to add
+// See locale.txt for more information on this feature and its requirements
+
+
+// File attachements
+// Not sure on this as of yet.
+// Will explore this at a later date
+boolean setAttachement ( path );
+
+
+// Last but not leaset: SEND IT!
+// Once everything has been defined, we can send the message
+// Very straight forward
+// This will retrun a boolean indicating success or failure
+// Check error codes if this failed
+boolean = $objSMTPs->sendMsg();
+
+// **********************************************************
+// And as a bonus! GPG!
+// OK, I have no idea on this
+// This will be dead last
+
+// Define GPG key, either the key as a string or a path to a key
+$objSMTPs->setGpgKey ( $strGPGkey );
+$objSMTPs->setGpgKey ( $pathGPGkey );
+
+// "Sign" this message, default is false
+// If GPG Key is defined, this is set to true
+$objSMTPs->signMsg ( boolean );
+
+
+
+
+http://www.cse.ohio-state.edu/cgi-bin/rfc/rfc2045.html
+
+http://www.wilsonweb.com/wmt5/html-email-multi.htm
+
+http://www.sitepoint.com/article/advanced-email-php/4
+
+http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cdosys/html/_cdosys_sample_mime_message.asp
+
+http://www.uic.edu/depts/accc/newsletter/adn13/mime.html
+
+=====================================================
+
+Priority: Low|Normal|High - default Normal
+X-Priority: 1 (Highest)|2 (High)|3 (Normal)|4 (Low)|5 (Lowest) - default 3 (Normal)
+
+X-Priority: 1 (Highest)
+Importance: High
+
+X-Priority: 3 (Normal)
+Importance: Normal
+
+X-Priority: 5 (Lowest)
+Importance: Low
+
+Precedence: bulk|first-class
+
+
+
+Return-Receipt-To:
+X-Confirm-Reading-To
+
+
+X-Complaints-To
+
+Sensitivity: Personal|Private|Confidential
+
+
+
+
+Apparently-to:
+  Sometimes you will see this in a message with lots of recipients. It is an attempt to show who the primary recipient is. Most modem email list software shows the recipient as a list name and not a huge list of email addresses.
+
+Bcc:
+  Blind carbon copy. Indicates someone was copied but "blindly" meaning others are not supposed to know. This generally does not show up in legitimate email headers, as if it showed up it wouldn't be blind. Spammers seem to use this field on occasion just to confuse people.
+
+Cc:
+  Carbon copy. Name of people to whom the message was also sent.
+
+Comments:
+  Added by some email programs and used by many spammers to add confusion.
+
+Content-Transfer-Encoding:
+  Used by MIME to determine how to interpret the contents of the message.
+
+Content-type:
+  Tells MIME compliant clients how to handle the message contents.
+
+Date:
+  The date and time of the message.
+
+From:
+  Who sent the message.
+
+In-reply-to:
+  The message id of the message to which this message applies to. Only appears on replies (of course).
+
+Message-id:
+  A string of text which identifies the message. This is generally assigned by the first server to receive the message. Spammers tend to put trash in this field.
+
+MIME-version:
+  The version of MIME being used.
+
+Priority:
+  String of text used to indicate priority. This is not used by the servers handling the message (it doesn't make the message get t you faster or slower). Rather, the intent is to display something to the receiver showing the importance. Often used by spammers to indicate high message priority.
+
+Received:
+  Indicates an email server that the message went through to get to the receiver. There is lots of information here including the server identification, date and time the message arrived and so on.
+
+References:
+  A header primarily intended for Usenet postings. Shows message ids of other messages that this message refers to.
+
+Return-path:
+  The email address of the sender of the message.
+
+Sender:
+  More precisely identifies who sent a message. Obviously a spammer would put false information here.
+
+
+Status:
+
+
+Subject:
+  The text subject of the message.
+
+To:
+  Email address to which the message is addressed.
+
+X-Complaints-To:
+  Email address to which complaints should be routed. Obviously a smart spammer would take this out or put garbage here.
+
+X-Confirm-Reading-To:
+  Requests automated response. Ignored by most email software, although it tends to be used by Outlook and Outlook Express.
+
+X-Mailer:
+  Free form field without much use.
+
+X-Sender:
+  Identifies the sender with more reliability than the From field.
+
+
+==================================================================
+
+    function getData()
+    {
+        switch($this->getHeader('Content-Transfer-Encoding')) {
+            case '7bit':
+            case 'quoted-printable':
+                return $this->data;
+                break;
+            case 'base64':
+                return chunk_split(base64_encode($this->data));
+            case FALSE:
+                return $this->data;
+                break;
+            default:
+                return $this->data;
+                break;
+        };
+    }
+
+
