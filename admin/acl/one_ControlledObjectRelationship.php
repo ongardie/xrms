@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_ControlledObjectRelationship.php,v 1.1 2005/01/13 17:16:15 vanmer Exp $
+ * $Id: one_ControlledObjectRelationship.php,v 1.2 2005/02/28 21:44:36 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -19,6 +19,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
+  require_once($include_directory ."classes/QuickForm/ADOdb_QuickForm.php");
 
 
 global $symbol_precendence;
@@ -33,14 +34,35 @@ global $symbol_precendence;
 
 
 	getGlobalVar($return_url, 'return_url');
+        getGlobalVar($msg, 'msg');
+        getGlobalVar($form_action,'form_action');
+        
+        if ($form_action=='create' OR $form_action=='update') {
+            getGlobalVar($ParentControlledObject_id, 'ParentControlledObject_id');
+            getGlobalVar($ChildControlledObject_id, 'ChildControlledObject_id');
+            
+            if (!$ParentControlledObject_id AND !$ChildControlledObject_id) {
+                $mymsg=_("Please select a Parent/Child controlled object combination");
+            }
+            
+            if (($ParentControlledObject_id!='NULL') AND $ChildControlledObject_id) {
+                if (!check_acl_object_recursion($ParentControlledObject_id, $ChildControlledObject_id)) {
+                    $mymsg=_("Object/Child Object combination fails recursion check.");
+                }
+            }
+            if ($mymsg) {
+                $msg=$mymsg;
+                if (count($_POST)>0) {
+                    $_POST['form_action']='new';
+                } else { $_GET['form_action']='new';}
+            }
+        }
 
 
 	$page_title = 'Manage Controlled Objects';
 
         $css_theme='basic-left';
-	start_page($page_title);
-
-  require_once($include_directory ."classes/QuickForm/ADOdb_QuickForm.php");
+	start_page($page_title, true, $msg);
 
 
   $model = new ADOdb_QuickForm_Model();
@@ -78,6 +100,9 @@ end_page();
 
 /**
  * $Log: one_ControlledObjectRelationship.php,v $
+ * Revision 1.2  2005/02/28 21:44:36  vanmer
+ * - added cases to check for simple and not-so-simple errors when creating controlled object relationship
+ *
  * Revision 1.1  2005/01/13 17:16:15  vanmer
  * - Initial Commit for ACL Administration interface
  *
