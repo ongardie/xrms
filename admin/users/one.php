@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.13 2004/07/20 11:40:06 cpsource Exp $
+ * $Id: one.php,v 1.14 2004/07/20 12:48:50 cpsource Exp $
  */
 
 //include required files
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check( 'Admin' );
 
 $edit_user_id = $_GET['edit_user_id'];
 
@@ -152,6 +152,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.14  2004/07/20 12:48:50  cpsource
+ * - Require 'Admin' to run.
+ *
  * Revision 1.13  2004/07/20 11:40:06  cpsource
  * - Fixed multiple errors
  *    misc undefined variables being used, g....
