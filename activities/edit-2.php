@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.20 2004/06/24 19:58:47 braverock Exp $
+ * $Id: edit-2.php,v 1.21 2004/07/02 17:59:45 neildogg Exp $
  */
 
 //include required files
@@ -266,13 +266,16 @@ if ($email_to) {
 if ($followup) {
     header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( 'Follow-up ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&return_url=$return_url&followup=true" );
 } elseif($saveandnext) {
-    header("Location: browse-next.php");
+    header("Location: browse-next.php?activity_id=$activity_id");
 } else {
     header("Location: " . $http_site_root . $return_url);
 }
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.21  2004/07/02 17:59:45  neildogg
+ * - Variable passed properly to browse-next.php
+ *
  * Revision 1.20  2004/06/24 19:58:47  braverock
  * - committing enhancements to Save&Next functionality
  *   - patches submitted by Neil Roberts
