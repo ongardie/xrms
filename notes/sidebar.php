@@ -9,7 +9,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for notes
  *
- * $Id: sidebar.php,v 1.13 2004/07/21 13:12:50 cpsource Exp $
+ * $Id: sidebar.php,v 1.14 2004/07/21 18:19:25 neildogg Exp $
  */
 
 $note_rows = '<div id="note_sidebar">
@@ -56,9 +56,9 @@ if (strlen($on_what_table)>0){
 //
 // Note:
 //
-// 1) derive $company_id from if notes.on_what_table = 'companies'
+// 1) derive $note_company_id from if notes.on_what_table = 'companies'
 //      from notes.on_what_id
-// 2) derive $contact_id from if notes.on_what_table = 'contacts'
+// 2) derive $note_contact_id from if notes.on_what_table = 'contacts'
 //      from notes.on_what_id
 //
 
@@ -69,19 +69,19 @@ if (strlen($rst->fields['username']) > 0) {
     $attached_to_link ='';
     $on_what_name     ='';
     $on_what_table    ='';
-    $company_id       ='';
-    $contact_id       ='';
+    $note_company_id       ='';
+    $note_contact_id       ='';
 
     if (strlen($rst->fields['on_what_table']) > 0) {
       switch ($rst->fields['on_what_table']) {
       case 'companies':
 	$on_what_table = 'company';
-	$company_id    = $rst->fields['on_what_id'];
+	$note_company_id    = $rst->fields['on_what_id'];
 	break;
       case 'contacts':
 	$on_what_table = 'contact';
 	$on_what_name = " " . $con->Concat("last_name","', '","first_names") . " AS on_what_name ";
-	$contact_id   = $rst->fields['on_what_id'];
+	$note_contact_id   = $rst->fields['on_what_id'];
 	break;
       case 'opportunities':
 	$on_what_table = 'opportunity';
@@ -116,10 +116,10 @@ if (strlen($rst->fields['username']) > 0) {
       }
     } // if (strlen($rst->fields['on_what_table']) > 0) ...
 
-    if ($contact_id) {
-      $return_url = "&return_url=/contacts/one.php?contact_id=" . $contact_id;
-    } elseif ($company_id) {
-      $return_url = "&return_url=/companies/one.php?company_id=" . $company_id;
+    if ($note_contact_id) {
+      $return_url = "&return_url=/contacts/one.php?contact_id=" . $note_contact_id;
+    } elseif ($note_company_id) {
+      $return_url = "&return_url=/companies/one.php?company_id=" . $note_company_id;
     } else {
       $return_url = "&return_url=/private/home.php";
     }
@@ -209,6 +209,9 @@ $note_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.14  2004/07/21 18:19:25  neildogg
+ * - Stopped over-writing of variables if note was present
+ *
  * Revision 1.13  2004/07/21 13:12:50  cpsource
  * - Allow 'new'
  *
