@@ -2,7 +2,7 @@
 /**
  * Display login screen
  *
- * $Id: login.php,v 1.10 2004/07/14 12:12:50 cpsource Exp $
+ * $Id: login.php,v 1.11 2004/12/30 18:49:52 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -44,18 +44,18 @@ start_page($page_title, false, $msg);
 <input type=hidden name=target value="<?php echo $target; ?>" >
 <table class=widget cellspacing=1>
         <tr>
-                <td class=widget_header colspan=2>Login</td>
+                <td class=widget_header colspan=2><?php echo _("Login"); ?></td>
         </tr>
         <tr>
-                <td class=widget_label_right>Username</td>
+                <td class=widget_label_right><?php echo _("Username"); ?></td>
                 <td class=widget_content_form_element><input type=text name=username></td>
         </tr>
         <tr>
-                <td class=widget_label_right>Password</td>
+                <td class=widget_label_right><?php echo _("Password"); ?></td>
                 <td class=widget_content_form_element><input type=password name=password></td>
         </tr>
         <tr>
-                <td class=widget_content_form_element_center colspan=2><input class=button type=submit value="Login"></td>
+                <td class=widget_content_form_element_center colspan=2><input class=button type=submit value="<?php echo _("Login"); ?>"></td>
         </tr>
 </table>
 </form>
@@ -79,6 +79,10 @@ end_page();
 
 /**
  * $Log: login.php,v $
+ * Revision 1.11  2004/12/30 18:49:52  braverock
+ * - localize strings
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.10  2004/07/14 12:12:50  cpsource
  * - Fix uninitialized variables $msg and $target
  *

@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.24 2004/08/17 17:31:45 gpowers Exp $
+ * $Id: index.php,v 1.25 2004/12/30 18:51:09 braverock Exp $
  */
 
 //include required stuff
@@ -138,7 +138,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
-                    <a href="system-parameters/some.php"><?php echo ("System Parameters"); ?></a>
+                    <a href="system-parameters/some.php"><?php echo _("System Parameters"); ?></a>
                 </td>
             </tr>
         </table>
@@ -248,6 +248,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.25  2004/12/30 18:51:09  braverock
+ * - localize strings
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.24  2004/08/17 17:31:45  gpowers
  * - added sidebar section headings: Manage, Types and Statuses, Plugins
  * - changed "Plugin Administration" to "Plugin Activation"
