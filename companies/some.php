@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.30 2004/07/15 13:49:53 cpsource Exp $
+ * $Id: some.php,v 1.31 2004/07/16 11:31:42 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,9 +15,6 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
-
-//set the language
-$_SESSION['language'] = 'english';
 
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
@@ -324,8 +321,9 @@ start_page($page_title, true, $msg);
                     if ($company_count > 0) {
                         print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";
                     };
+//stub for now, as advanced search has problems
+//print '&nbsp;<input type=button class=button onclick="javascript: location.href=\'advanced-search.php\';" value="Advanced Search">';
                 ?>
-                <input type=button class=button onclick="javascript: location.href='advanced-search.php';" value="Advanced Search">
             </td>
         </tr>
       </table>
@@ -407,6 +405,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.31  2004/07/16 11:31:42  cpsource
+ * - Removed hard-coded english language construct
+ *   Removed advanced-search.php button as advanced-search had problems
+ *
  * Revision 1.30  2004/07/15 13:49:53  cpsource
  * - Added arr_vars sub-system.
  *
