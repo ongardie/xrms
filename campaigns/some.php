@@ -24,6 +24,7 @@ if ($clear) {
     $company_code = '';
     $company_type_id = '';
     $user_id = '';
+    $campaign_type_id = '';
     $campaign_status_id = '';
     $campaign_category_id = '';
 } elseif ($use_post_vars) {
@@ -35,6 +36,7 @@ if ($clear) {
     $company_code = $_POST['company_code'];
     $company_type_id = $_POST['company_type_id'];
     $user_id = $_POST['user_id'];
+    $campaign_type_id = $_POST['campaign_type_id'];
     $campaign_status_id = $_POST['campaign_status_id'];
     $campaign_category_id = $_POST['campaign_category_id'];
 } else {
@@ -46,6 +48,7 @@ if ($clear) {
     $company_code = (strlen($_GET['company_code']) > 0) ? $_GET['company_code'] : $_SESSION['campaigns_company_code'];
     $company_type_id = $_SESSION['campaigns_company_type_id'];
     $user_id = $_SESSION['campaigns_user_id'];
+    $campaign_type_id = $_SESSION['campaigns_campaign_type_id'];
     $campaign_status_id = $_SESSION['campaigns_campaign_status_id'];
     $campaign_category_id = $_SESSION['campaigns_campaign_category_id'];
 }
@@ -73,6 +76,8 @@ $_SESSION['campaigns_sort_order'] = $sort_order;
 $_SESSION['campaigns_current_sort_order'] = $sort_order;
 $_SESSION['campaigns_campaign_title'] = $campaign_title;
 $_SESSION['campaigns_company_code'] = $company_code;
+$_SESSION['campaigns_campaign_type_id'] = $campaign_type_id;
+$_SESSION['campaigns_campaign_status_id'] = $campaign_status_id;
 $_SESSION['campaigns_campaign_category_id'] = $campaign_category_id;
 $_SESSION['campaigns_user_id'] = $user_id;
 
@@ -116,6 +121,11 @@ if (strlen($user_id) > 0) {
 if (strlen($campaign_status_id) > 0) {
     $criteria_count++;
     $where .= " and cam.campaign_status_id = $campaign_status_id";
+}
+
+if (strlen($campaign_type_id) > 0) {
+    $criteria_count++;
+    $where .= " and cam.campaign_type_id = $campaign_type_id";
 }
 
 if (!$criteria_count > 0) {
