@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.43 2004/08/20 17:14:40 braverock Exp $
+ * $Id: some.php,v 1.44 2004/08/26 22:35:28 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -324,7 +324,12 @@ start_page($page_title, true, $msg);
   </form>
 
 <?php
-$_SESSION["search_sql"]=$sql;
+//Nic - I did this different than the other some.phps because it is a more complex sql you have to write to retrieve company email records
+$_SESSION["search_sql"]["from"]=$from;
+$_SESSION["search_sql"]["where"]=$where;
+$_SESSION["search_sql"]["order"]=" order by $order_by";
+//$_SESSION["search_sql"]["sql"]=$sql;
+
 $pager = new Companies_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
 $con->close();
@@ -383,9 +388,9 @@ function exportIt() {
 }
 
 function bulkEmail() {
-//    document.forms[0].action = "../email/email.php";
-//    document.forms[0].submit();
-                alert('Mail Merge functionality hasnt been implemented yet for multiple companies')
+    document.forms[0].action = "../email/email.php?scope=companies";
+    document.forms[0].submit();
+    //alert('Mail Merge functionality hasnt been implemented yet for multiple companies')
 }
 
 function clearSearchCriteria() {
@@ -408,6 +413,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.44  2004/08/26 22:35:28  niclowe
+ * Enabled mail merge functionality for companies
+ *
  * Revision 1.43  2004/08/20 17:14:40  braverock
  * - add translate_menu for additional menus in search
  *
