@@ -114,7 +114,7 @@ start_page($page_title);
 
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
-        <td class=lcol width=65% valign=top>
+        <td class=lcol width=75% valign=top>
 
         <table class=widget cellspacing=1 width=100%>
             <tr>
@@ -133,11 +133,11 @@ start_page($page_title);
 
         </td>
         <!-- gutter //-->
-        <td class=gutter width=2%>
+        <td class=gutter width=1%>
         &nbsp;
         </td>
         <!-- right column //-->
-        <td class=rcol width=33% valign=top>
+        <td class=rcol width=24% valign=top>
 
         </td>
     </tr>
