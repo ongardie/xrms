@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.26 2004/06/04 13:24:19 braverock Exp $
+ * $Id: one.php,v 1.27 2004/06/04 13:50:24 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -331,7 +331,7 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel>E-Mail</td>
-                                    <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&return_url=/contacts/one.php?contact_id=$contact_id'\" >" . htmlspecialchars($email); ?></a></td>
+                                    <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&activity_title=email to $first_names $last_name&return_url=$http_site_root/contacts/one.php?contact_id=$contact_id'\" >" . htmlspecialchars($email); ?></a></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Work Phone</td>
@@ -540,6 +540,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.27  2004/06/04 13:50:24  braverock
+ * - update email link to improve activity tracking
+ *
  * Revision 1.26  2004/06/04 13:24:19  braverock
  * - add default activity title to email link
  *

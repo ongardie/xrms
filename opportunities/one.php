@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.16 2004/06/03 16:16:18 braverock Exp $
+ * $Id: one.php,v 1.17 2004/06/04 13:49:33 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -302,7 +302,7 @@ function markComplete() {
                                 <tr>
                                     <td class=sublabel>E-Mail</td>
                                     <td class=clear>
-                                        <a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$opportunity_id&contact_id=$contact_id&on_what_table=opportunities&activity_title=email RE: $opportunity_title&company_id=$company_id&email=$email&activity_status=c&return_url=/opportunities/one.php?opportunity_id=$opportunity_id'\" >" . htmlspecialchars($email); ?></a>
+                                        <a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$opportunity_id&contact_id=$contact_id&on_what_table=opportunities&activity_title=email RE: $opportunity_title&company_id=$company_id&email=true&return_url=/opportunities/one.php?opportunity_id=$opportunity_id'\" >" . htmlspecialchars($email); ?></a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -413,6 +413,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.17  2004/06/04 13:49:33  braverock
+ * - update email link to improve activity tracking
+ *
  * Revision 1.16  2004/06/03 16:16:18  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
