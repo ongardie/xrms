@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.21 2004/05/06 19:24:56 braverock Exp $
+ * $Id: import-companies-3.php,v 1.22 2004/05/21 12:24:27 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -500,6 +500,7 @@ foreach ($filearray as $row) {
                         where company_id = $company_id";
                 debugSql($sql_update_company_set_address_defaults);
                 $con->execute($sql_update_company_set_address_defaults);
+                $default_address_id = $address_id;
             }
         } // end address insert
 
@@ -527,7 +528,11 @@ foreach ($filearray as $row) {
             if ($address_id) {
                 $sql_insert_contact .= ',
                                        address_id  = '. $con->qstr($address_id,  get_magic_quotes_gpc()) ;
+            } else {
+                $sql_insert_contact .= ',
+                                       address_id  = '. $con->qstr($default_address_id,  get_magic_quotes_gpc()) ;
             }
+
             if ($division_id){
                 $sql_insert_contact .= ',
                                        division_id = '. $con->qstr($division_id,  get_magic_quotes_gpc());
@@ -735,6 +740,9 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.22  2004/05/21 12:24:27  braverock
+ * - assign contact address_id to the company default address if no address is imported with the contact
+ *
  * Revision 1.21  2004/05/06 19:24:56  braverock
  * - fixed $country_sql patch
  * - fixed code fomatting
