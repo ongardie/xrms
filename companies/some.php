@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.44 2004/08/26 22:35:28 niclowe Exp $
+ * $Id: some.php,v 1.45 2004/08/26 23:16:28 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -328,7 +328,6 @@ start_page($page_title, true, $msg);
 $_SESSION["search_sql"]["from"]=$from;
 $_SESSION["search_sql"]["where"]=$where;
 $_SESSION["search_sql"]["order"]=" order by $order_by";
-//$_SESSION["search_sql"]["sql"]=$sql;
 
 $pager = new Companies_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
 $pager->render($rows_per_page=$system_rows_per_page);
@@ -413,6 +412,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.45  2004/08/26 23:16:28  niclowe
+ * Enabled mail merge functionality for companies/some.php
+ * Sorted pre-sending email checkbox page by company then contact lastname
+ * Enabled mail merge for advanced-search companies
+ *
  * Revision 1.44  2004/08/26 22:35:28  niclowe
  * Enabled mail merge functionality for companies
  *
