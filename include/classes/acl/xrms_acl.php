@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.9 2005/03/02 20:38:39 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.10 2005/03/04 23:39:47 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -82,7 +82,6 @@ class xrms_acl {
         $con = $this->DBConnection;
         $table = "GroupMember";
         $objectList=array();
-        
         $where=array();
         if ($Group_id) {
             $where[]="Group_id=$Group_id";
@@ -138,12 +137,12 @@ class xrms_acl {
                                     $on_what_child_field='on_what_id';
                                     $fieldRestriction['on_what_table']=$con->qstr($Relationship['parent_table']);
                             } else {
-                                if (!$Relationship['on_what_child_field']) {
+                                if (!trim($Relationship['on_what_child_field'])) {
                                     $on_what_child_field=$Relationship['parent_field'];
                                 } else {
                                     $on_what_child_field=$Relationship['on_what_child_field'];
                                 }
-                                if ($Relationship['cross_table']) {
+                                if (trim($Relationship['cross_table'])) {
                                     $on_what_table=$Relationship['cross_table'];
                                     $find_field=$on_what_child_field;
                                     $on_what_child_field=$Relationship['on_what_parent_field'];
@@ -192,24 +191,23 @@ class xrms_acl {
         $con = $this->DBConnection;
         $table = "ControlledObjectRelationship";
         $objectList=array();
-        
         $sql = "SELECT CORelationship_id, ParentControlledObject_id, on_what_field, on_what_table, on_what_child_field, on_what_parent_field, cross_table, singular FROM $table JOIN ControlledObject ON ControlledObject_id=ParentControlledObject_id WHERE ChildControlledObject_id=$ControlledObject_id";
         if ($CORelationship_id) { $sql .=" AND CORelationship_id=$CORelationship_id"; }
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
         if ($rs->numRows()>0) {
             while (!$rs->EOF) {
-                if (!$rs->fields['on_what_child_field']) {
+                if (!trim($rs->fields['on_what_child_field'])) {
                     $on_what_child_field=$rs->fields['on_what_field'];
                 } else { $on_what_child_field = $rs->fields['on_what_child_field']; }
-                if ($rs->fields['cross_table']) {
+                if (trim($rs->fields['cross_table'])) {
                     $on_what_parent_field=$rs->fields['on_what_parent_field'];
                     $objectData=$this->get_controlled_object_data($ControlledObject_id, $on_what_id, false, false, false, false, $rs->fields['cross_table'] );                    
                     if (!$objectData) { $rs->movenext(); continue; }
                     if (!is_array(current($objectData))) $objectData=array($objectData);
                     $ret=array();
                     foreach ($objectData as $object) {
-                        if ($object[$on_what_parent_field]) {
+                        if (trim($object[$on_what_parent_field])) {
                             $ret[]=array('ControlledObject_id'=>$rs->fields['ParentControlledObject_id'],'on_what_id'=>$object[$on_what_parent_field]);
                         }
                     }
@@ -249,7 +247,7 @@ class xrms_acl {
     function get_object_adodbconnection($data_source_name='default') {
        $xcon = &adonewconnection($this->DBOptions[$data_source_name]['db_dbtype']);
        $xcon->nconnect($this->DBOptions[$data_source_name]['db_server'], $this->DBOptions[$data_source_name]['db_username'], $this->DBOptions[$data_source_name]['db_password'], $this->DBOptions[$data_source_name]['db_dbname']);
-//       $xcon->debug=1;
+       //$xcon->debug=1;
        return $xcon;
     }
     /*****************************************************************************/
@@ -268,13 +266,12 @@ class xrms_acl {
      **/        
     function get_controlled_object_data($ControlledObject_id, $on_what_id=false, $restrictionFields=false, $operator="AND", $returncomponents=false, $limit=false, $_on_what_table=false) {
         $con = $this->DBConnection;
-        
         $sql = "SELECT *, data_source.* FROM ControlledObject LEFT OUTER JOIN data_source on ControlledObject.data_source_id=data_source.data_source_id WHERE ControlledObject_id=$ControlledObject_id";
         
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
         if ($rs->numRows()>0) {
-            if (!$_on_what_table) {
+            if (!trim($_on_what_table)) {
                 $on_what_table = $rs->fields['on_what_table'];
             } else { $on_what_table=$_on_what_table; }
             $on_what_field = $rs->fields['on_what_field'];
@@ -284,7 +281,7 @@ class xrms_acl {
             
             $ret=array();
             $ret['acl_on_what_field']=$on_what_field;
-            if ($on_what_id) {
+            if (trim($on_what_id)) {
                 $restrictionFields[$on_what_field]=$on_what_id;
             }
             
@@ -345,7 +342,6 @@ class xrms_acl {
         $con = $this->DBConnection;
         $table = "GroupMember";
         $groupList=array();
-        
         $sql = "SELECT * FROM $table WHERE ControlledObject_id=$ControlledObject_id AND on_what_id=$on_what_id";
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
@@ -410,7 +406,7 @@ class xrms_acl {
      **/
     function get_object_groups_recursive($ControlledObject_id,$on_what_id,$_CORelationship_id=false) {
 //    	echo "$ControlledObject_id,$on_what_id,$_CORelationship_id=false";
-    	if (!$on_what_id) return false;
+    	if (!trim($on_what_id)) return false;
         //get the group list for this level
         $groupList = $this->get_object_groups($ControlledObject_id, $on_what_id);
         if (!$groupList) { $groupList = array(); }
@@ -1419,7 +1415,7 @@ class xrms_acl {
 //        echo "<pre>"; print_r($list); echo "</pre>";
         $on_what_field = $list['acl_on_what_field'];
         next($list);
-        if ($_on_what_field) $on_what_field=$_on_what_field;
+        if (trim($_on_what_field)) $on_what_field=$_on_what_field;
         
         if (!is_array(current($list))) { $list = array( $list); }
         $ret=array();
@@ -1638,12 +1634,12 @@ class xrms_acl {
                         $fieldRestrict['on_what_table']=$con->qstr($Relationship['parent_table']);
                     } else {
                         if ($ParentObject AND ($ParentObject>0)) {
-                            if (!$Relationship['on_what_child_field']) {
+                            if (!trim($Relationship['on_what_child_field'])) {
                                 $on_what_child_field=$Relationship['parent_field'];
                             } else {
                                 $on_what_child_field=$Relationship['on_what_child_field'];
                             }
-                            if ($Relationship['cross_table']) {
+                            if (trim($Relationship['cross_table'])) {
                                 $on_what_table=$Relationship['cross_table'];
                                 $find_field=$on_what_child_field;
                                 $on_what_child_field=$Relationship['on_what_parent_field'];
@@ -1892,7 +1888,7 @@ class xrms_acl {
                                         $FirstRelationship=current($ControlledObjectRelationships);
 
                                         $user_field=$FirstRelationship['user_field'];
-                                        if (!$user_field) $user_field='user_id';
+                                        if (!trim($user_field)) $user_field='user_id';
                                         $objectData=$this->get_controlled_object_data($ControlledObject_id, $on_what_id);
                                         if ($objectData[$user_field]!=$User_id) {
                                             $SearchUser=false;
@@ -1950,7 +1946,6 @@ class xrms_acl {
         
         //Get parent objects for this particular controlled object
         $objectParents = $this->get_object_relationship_parent($ControlledObject_id, $on_what_id, $_CORelationship_id, $objectData);
-
         //If there are any parents, loops through them and get permissions on them
         if ($objectParents AND is_array($objectParents)) {
             foreach ($objectParents as $CORelationship_id=>$aparent) {
@@ -2094,6 +2089,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.10  2005/03/04 23:39:47  vanmer
+ * - added trim to checks on data coming from the database, to deal with MSSQL returning a space instead of NULL for empty
+ * fields
+ *
  * Revision 1.9  2005/03/02 20:38:39  vanmer
  * - fixed singular relationship checking to reflect new restrict object list
  *
