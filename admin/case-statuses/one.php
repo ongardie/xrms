@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.10 2005/01/10 21:39:45 vanmer Exp $
+ * $Id: one.php,v 1.11 2005/01/10 23:34:21 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -31,6 +31,7 @@ if ($rst) {
         $case_status_pretty_plural = $rst->fields['case_status_pretty_plural'];
         $case_status_long_desc = $rst->fields['case_status_long_desc'];
         $case_status_display_html = $rst->fields['case_status_display_html'];
+        $status_open_indicator = $rst->fields['status_open_indicator'];
         $case_type_id = $rst->fields['case_type_id'];
 
         $rst->close();
@@ -143,6 +144,16 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text size=80 name=case_status_long_desc value="<?php echo $case_status_long_desc; ?>"></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Open Status"); ?></td>
+                <td class=widget_content_form_element>
+                <select name="status_open_indicator">
+                    <option value="o" <?php if (($status_open_indicator == "o") or ($status_open_indicator == '')) {print " selected ";} ?>><?php echo _("Open"); ?>
+                    <option value="r" <?php if ($status_open_indicator == "r") {print " selected ";} ?>><?php echo _("Closed/Resolved"); ?>
+                    <option value="u" <?php if ($status_open_indicator == "u") {print " selected ";} ?>><?php echo _("Closed/Unresolved"); ?>
+                </select>
+                </td>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
         </table>
@@ -217,6 +228,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2005/01/10 23:34:21  vanmer
+ * - added widget for status indicator
+ *
  * Revision 1.10  2005/01/10 21:39:45  vanmer
  * - added case_type, needed for distinguishing between statuses
  *
