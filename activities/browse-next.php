@@ -8,7 +8,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.15 2004/08/19 20:45:05 neildogg Exp $
+ * $Id: browse-next.php,v 1.16 2004/08/23 13:39:39 neildogg Exp $
  */
 
 //include required files
@@ -32,7 +32,7 @@ $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
 // The saved ID used if using "Saved Search Browse"
 $saved_id = isset($_GET['saved_id']) ? $_GET['saved_id'] : '';
 // The last position in the activity IDs
-$pos = isset($_GET['session']) ? $_SESSION['pos']: '';
+$pos = isset($_SESSION['pos']) ? $_SESSION['pos']: '';
 $pos = isset($_GET['pos']) ? $_GET['pos'] - 1: $pos;
 if(isset($_GET['pos']) and !$pos) {
     $pos = 1;
@@ -142,6 +142,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.16  2004/08/23 13:39:39  neildogg
+ * - Errand variable name
+ *
  * Revision 1.15  2004/08/19 20:45:05  neildogg
  * - Added jump to position in save and next
  *  - Has bug that doesn't let you jump to position 1
