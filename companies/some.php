@@ -1,4 +1,11 @@
 <?php
+/**
+ * Search and view summary information on multiple companies
+ *
+ * This is the main way of locating companies in XRMS
+ *
+ * $Id: some.php,v 1.7 2004/03/09 13:39:39 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -42,6 +49,7 @@ if ($clear) {
     $company_type_id = $_POST['company_type_id'];
     $company_category_id = $_POST['company_category_id'];
     $company_code = $_POST['company_code'];
+    $city = $_POST ['city'];
     $state = $_POST ['state'];
     $user_id = $_POST['user_id'];
     $crm_status_id = $_POST['crm_status_id'];
@@ -87,14 +95,16 @@ $_SESSION['companies_crm_status_id'] = $crm_status_id;
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+
+//uncomment this line if you suspect a problem with the SQL query
+//$con->debug = 1;
 
 $sql = "select concat('<a href=one.php?company_id=', c.company_id, '>', c.company_name, '</a>') as '$strCompaniesSomeCompanyNameLabel',
 c.company_code as '$strCompaniesSomeCompanyCodeLabel',
 u.username as '$strCompaniesSomeCompanyUserLabel',
 crm_status_pretty_name as '$strCompaniesSomeCompanyCRMStatusLabel',
 as1.account_status_display_html as '$strCompaniesSomeCompanyAccountStatusLabel',
-r.rating_display_html as '$strCompaniesSomeCompanyRatingLabel' ";
+r.rating_display_html as '$strCompaniesSomeCompanyRatingLabel' \n";
 
 $criteria_count = 0;
 
@@ -138,13 +148,15 @@ if (strlen($company_code) > 0) {
 
 if (strlen($city) > 0) {
     $criteria_count++;
-    $sql   .= "addr.city as '$strCompaniesSomeCompanyCityLabel', \n";
+    $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
+    $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
     $where .= " and addr.city LIKE " . $con->qstr($city, get_magic_quotes_gpc());
 }
 
 if (strlen($state) > 0) {
     $criteria_count++;
-    $sql   .= " addr.province as '$strCompaniesSomeCompanyStateLabel', \n";
+    $sql   .= ", addr.city as '$strCompaniesSomeCompanyCityLabel' \n";
+    $sql   .= ", addr.province as '$strCompaniesSomeCompanyStateLabel' \n";
     $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
 }
 
@@ -342,4 +354,15 @@ function resort(sortColumn) {
 //-->
 </script>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.7  2004/03/09 13:39:39  braverock
+ * - fixed broken city and state search
+ * - add phpdoc
+ *
+ */
+?>
