@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.27 2005/01/10 21:49:02 vanmer Exp $
+ * $Id: one.php,v 1.28 2005/01/11 13:30:40 braverock Exp $
  */
 
 //include required files
@@ -161,18 +161,9 @@ if ($rst) {
 //set up our substitution variables for use in the siddebars
 $on_what_table = 'cases';
 $on_what_id = $case_id;
-$on_what_string = 'case';
 
 //include the categories sidebar
 require_once($include_directory . 'categories-sidebar.php');
-
-//include the Cases sidebar
-//$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
-//require_once("../cases/sidebar.php");
-
-//include the opportunities sidebar
-//$opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id";
-//require_once("../opportunities/sidebar.php");
 
 //include the files sidebar
 require_once("../files/sidebar.php");
@@ -389,6 +380,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.28  2005/01/11 13:30:40  braverock
+ * - removed on_what_string hack, changed to use standard make_singular function
+ *
  * Revision 1.27  2005/01/10 21:49:02  vanmer
  * - fixed javascript popup for status definitions to no longer redirect page
  * - fixed return_url to cases to allow activities to be completed and returned to the case, not the contact

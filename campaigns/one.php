@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.15 2004/10/22 20:48:43 introspectshun Exp $
+ * $Id: one.php,v 1.16 2005/01/11 13:25:46 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -61,7 +61,6 @@ if ($rst) {
 //set up our substitution variables for use in the siddebars
 $on_what_table = 'campaigns';
 $on_what_id = $campaign_id;
-$on_what_string = 'campaign';
 
 // include the categories sidebar
 require_once($include_directory . 'categories-sidebar.php');
@@ -176,6 +175,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.16  2005/01/11 13:25:46  braverock
+ * - removed on_what_string hack, changed to use standard make_singular function
+ *
  * Revision 1.15  2004/10/22 20:48:43  introspectshun
  * - Added include-locations-location
  * - Now uses sidebars, including new category sidebar
