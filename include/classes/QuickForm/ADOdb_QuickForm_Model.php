@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.1 2005/01/10 14:34:14 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.2 2005/01/31 16:50:12 daturaarutad Exp $
 */
 
 
@@ -102,7 +102,7 @@ class ADOdb_QuickForm_Model {
 	*/
 	function AddField($name, $type, $displayOrder, $displayName = null, $attributes = null) {
 
-		$i = count($this->DBStructure['fields']) + 1;
+		$i = count($this->DBStructure['fields']);
 
 		$this->DBStructure['fields'][$i]['name'] = $name;
 		$this->DBStructure['fields'][$i]['type'] = $type;
