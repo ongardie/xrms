@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.31 2004/08/04 13:12:32 cpsource Exp $
+ * $Id: vars.php,v 1.32 2004/09/30 20:24:36 dmazand Exp $
  */
 
 /**
@@ -323,5 +323,11 @@ $NEWLINE = "\n\r";
  * from the 'files' menu (xrms/files/some.php) in xrms to OWL.
  */
 $use_owl = false;
+
+/**
+ * xrms_sql_limit - Defines the number of records to return while
+ * using SelectLimit statements.
+ */
+$xrms_sql_limit = 1;
 
 ?>
