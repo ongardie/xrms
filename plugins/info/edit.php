@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.7 2005/02/11 00:49:11 braverock Exp $
+ * $Id: edit.php,v 1.8 2005/02/11 13:49:02 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -97,7 +97,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-$new_server = (0 == $info_id);
+$new_info = (0 == $info_id);
 
 $sql = "SELECT info_type_id FROM info_map WHERE info_id = $info_id";
 $rst = $con->execute($sql);
@@ -122,10 +122,10 @@ $sql .= "AND info_element_definitions.info_type_id=$info_type_id ";
 $sql .= "ORDER BY element_column, element_order";
 $all_elements = $con->execute($sql);
 
-# Populate $this_server array with existing elements
+# Populate $this_info array with existing elements
 # If this is a new server, every element will be added
 # with a default value later
-$this_server = array();
+$this_info = array();
 if ($info_id) {
   $sql = "SELECT value, element_id FROM info WHERE info_id='$info_id'";
   $rst = $con->execute($sql);
@@ -133,10 +133,10 @@ if ($info_id) {
   # Build an array indexed by element_id
   if ($rst) {
       while (!$rst->EOF) {
-        $this_server[$rst->fields['element_id']] = $rst->fields['value'];
+        $this_info[$rst->fields['element_id']] = $rst->fields['value'];
         # Capture name for later
         if (1 == $rst->fields['element_id']) {
-          $server_name = $rst->fields['value'];
+          $info_name = $rst->fields['value'];
         }
         $rst->movenext();
       }
@@ -155,8 +155,8 @@ if ($all_elements) {
         $column = $all_elements->fields['element_column'];
 
         # If this server doesn't have this element defined, use default value
-        $value = (array_key_exists($element_id, $this_server)) ?
-        $this_server[$element_id] : $all_elements->fields['element_default_value'];
+        $value = (array_key_exists($element_id, $this_info)) ?
+        $this_info[$element_id] : $all_elements->fields['element_default_value'];
 
         # Populate arrays for later display
         $element_value[$element_id] = $value;
@@ -167,11 +167,11 @@ if ($all_elements) {
     }
 }
 
-if ($new_server) {
-  $page_title = "$new_server_details";
+if ($new_info) {
+  $page_title = "$new_info_details";
 }
 else {
-  $page_title = $edit_server_details;
+  $page_title = $edit_info_details;
 }
 start_page($page_title, true, $msg);
 $con->close();
@@ -190,22 +190,24 @@ $con->close();
       <table class=widget cellspacing=1>
         <tr>
           <td class=widget_header colspan=2>
-            <?php echo $edit_server_details; ?>
+            <?php echo $edit_info_details; ?>
           </td>
         </tr>
-        <?php foreach ($element_value as $element_id=>$value) {
-if ((($element_label[$element_id] != "Name")
-  && ($display_on == "company_accounting"))
-  || ($display_on != "company_accounting")) {
-    echo "<tr> <td class=widget_label_right> "
-        . $element_label[$element_id]
-        . "</td>"
-        . show_element($element_id, $element_value[$element_id],$element_possvals[$element_id])
-        . "</tr>";
-} else {
-    echo "<input type=hidden name='element_$element_id' value='Formation'>";
-} 
-} ?>
+        <?php
+            foreach ($element_value as $element_id=>$value) {
+                if ((($element_label[$element_id] != "Name")
+                    && ($display_on == "company_accounting"))
+                    || ($display_on != "company_accounting")) {
+                        echo "<tr> <td class=widget_label_right> "
+                            . $element_label[$element_id]
+                            . "</td>"
+                            . show_element($element_id, $element_value[$element_id],$element_possvals[$element_id])
+                            . "</tr>";
+                } else {
+                    echo "<input type=hidden name='element_$element_id' value='Formation'>";
+                } //end if 
+            } //end foreach
+        ?>
         <tr>
           <td class=widget_content_form_element colspan=2>
             <input class=button type=submit value="Save Changes">&nbsp;
@@ -216,7 +218,7 @@ if ((($element_label[$element_id] != "Name")
             <input class=button type=button
               value="Delete" onclick="javascript:
               location.href='<?php echo
-              "delete-item-2.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&division_id=$division_id&return_url=$delete_return_url"; ?>';">&nbsp;
+              "delete-2.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&division_id=$division_id&return_url=$delete_return_url"; ?>';">&nbsp;
           </td>
         </tr>
       </table>
@@ -238,6 +240,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.8  2005/02/11 13:49:02  braverock
+ * - fix handling of return_url
+ * - remove references to server_info and replace with just info
+ *
  * Revision 1.7  2005/02/11 00:49:11  braverock
  * - modified to correctly pass contact_id and return_url
  *
