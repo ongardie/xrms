@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.33 2004/07/27 10:02:14 cpsource Exp $
+ * $Id: edit-2.php,v 1.34 2004/07/27 14:44:04 neildogg Exp $
  */
 
 //include required files
@@ -199,7 +199,7 @@ if($on_what_table == 'opportunities' and (strlen($opportunity_description)>0)) {
     $rec = array();
     $rec['opportunity_description'] = $opportunity_description;
 
-    $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq);
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     if (strlen($upd)>0) {
         $desc_rst = $con->execute($upd);
         if (!$desc_rst) {
@@ -209,20 +209,8 @@ if($on_what_table == 'opportunities' and (strlen($opportunity_description)>0)) {
 }
 
 if($on_what_table == 'opportunities' and (strlen($probability)>0)) {
-    //Need old probability to see if pos should actually move
-    $prob_sql = "select probability
-        from opportunities
-        where opportunity_id = $on_what_id";
-    $prob_rst = $con->execute($sql);
-    if ($prob_rst) {
-        $old_probability = $prob_rst->fields['probability'];
-        $prob_rst->close();
-    } else {
-        db_error_handler ($con, $prob_sql);
-    }
-
     $opp_sql = "SELECT * FROM opportunities WHERE opportunity_id = $on_what_id";
-    $rst = $con->execute($sql);
+    $rst = $con->execute($opp_sql);
 
     $rec = array();
     $rec['probability'] = $probability;
@@ -414,6 +402,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.34  2004/07/27 14:44:04  neildogg
+ * - Removed unnecessary code
+ *  - Changed $sql variable to proper variable
+ *  - Changed variable to function call
+ *
  * Revision 1.33  2004/07/27 10:02:14  cpsource
  * - Add routine arr_vars_post_with_cmd and test.
  *
