@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.73 2004/08/02 11:33:48 maulani Exp $
+ * $Id: utils-misc.php,v 1.74 2004/08/02 11:40:53 maulani Exp $
  */
 
 /**
@@ -536,6 +536,7 @@ function get_system_parameter(&$con, $param) {
     } else {
         //there was a problem, notify the user
         db_error_handler ($con, $sql);
+        exit;
     }
 
     return $my_val;
@@ -1028,6 +1029,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.74  2004/08/02 11:40:53  maulani
+ * - Force exit since db_error_handler only presents the error and does not exit
+ *
  * Revision 1.73  2004/08/02 11:33:48  maulani
  * - Fix logical check bug and expand error messages
  *
