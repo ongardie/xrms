@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.12 2005/01/13 18:00:10 vanmer Exp $
+ * $Id: edit.php,v 1.13 2005/03/15 22:17:24 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,9 +61,6 @@ $con->close();
 $page_title = _("Edit Campaign") .': '. $campaign_title;
 start_page($page_title, true, $msg);
 
-// setup confGoTo
-confGoTo_includes();
-
 ?>
 
 <?php jscalendar_includes(); ?>
@@ -118,10 +115,9 @@ confGoTo_includes();
             <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
 <?php
-		$quest = _('Delete Campaign?');
-                $button = _('Delete');
+		$quest = _("Delete Campaign?");
                 $to_url = 'delete.php?campaign_id='.$campaign_id;
-                confGoTo( $quest, $button, $to_url );
+                echo render_delete_button($quest,'button',"javascript:location.href='$to_url'", false, false, 'campaigns',$campaign_id);
 ?>
             </tr>
         </table>
@@ -193,6 +189,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.13  2005/03/15 22:17:24  vanmer
+ * - changed to use render_delete_button infrastructure for showing/hiding buttons based on ACL
+ *
  * Revision 1.12  2005/01/13 18:00:10  vanmer
  * - Basic ACL changes to allow edit functionality to be restricted
  *
