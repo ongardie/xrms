@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.89 2005/02/09 22:24:03 braverock Exp $
+ * $Id: some.php,v 1.90 2005/02/10 01:08:51 braverock Exp $
  */
 
 // handle includes
@@ -171,17 +171,19 @@ if($sort_column == 9) {
 else {
     $sql .= " 'n/a' AS " . $con->qstr("%",get_magic_quotes_gpc()) . " ";
 }
-$sql .= "FROM companies c, activity_types at, addresses addr";
+$sql .= "FROM companies c, activity_types at, addresses addr, activities a ";
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     $sql .= ", time_daylight_savings tds";
 }
 if($opportunity_status_id || $sort_column == 9 || $campaign_id) {
     $sql .= ", opportunities o";
 }
-$sql .= ", activities a ";
-$sql .= " LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
-  LEFT OUTER JOIN users u ON a.user_id = u.user_id
-  WHERE a.company_id = c.company_id";
+$sql .= "
+LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
+LEFT OUTER JOIN users u ON a.user_id = u.user_id";
+  
+$sql .= " WHERE a.company_id = c.company_id";
+
 if($sort_column == 9 || $campaign_id) {
     $sql .= " AND a.on_what_table='opportunities'
   AND a.on_what_id=o.opportunity_id ";
@@ -762,6 +764,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.90  2005/02/10 01:08:51  braverock
+ * - change order of LEFT OUTER JOIN query for MS SQL server portability
+ *
  * Revision 1.89  2005/02/09 22:24:03  braverock
  * - localized pager column headers
  * - de-localized AS clauses in SQL
