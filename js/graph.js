@@ -144,7 +144,7 @@ if(g.title) {
 str += "<TR>\n";
 if(g.scale) str += "<TD COLSPAN=3></TD>\n";
 if(g.yLabel) str += "<TD></TD>\n";
-str += "<TH VALIGN=TOP HEIGHT=30 COLSPAN="+(g.c)+">\n";
+str += "<TH style=\"vertical-align: top\" HEIGHT=30 COLSPAN="+(g.c)+">\n";
 str += "<FONT FACE='Arial,Helvetica' SIZE=-1>";
 str += g.title;
 str += "</FONT></TH></TR>\n";
@@ -154,13 +154,13 @@ g.yLabel = g.yLabel.split("");
 g.yLabel = g.yLabel.join("<BR>\n");
 str += "<TR>\n";
 var r = 2; if(g.negMax && g.posMax) r++;
-str += "<TH ROWSPAN="+r+" ALIGN=LEFT WIDTH=20 NOWRAP>\n";
+str += "<TH ROWSPAN="+r+" style=\"text-align: left\" WIDTH=20 NOWRAP>\n";
 str += "<FONT FACE='Arial,Helvetica' SIZE=-1>"+g.yLabel+"</FONT></TD>\n";
 }
 if(g.posMax > 0) {
 if(!g.yLabel) str += "<TR>\n";
 if(g.scale) str += _writeScaleGraph(g, 0, g.posMax);
-str += "<TD VALIGN=BOTTOM";
+str += "<TD style=\"vertical-align: bottom\"";
 if(g.bgColor) str += " BGCOLOR=\""+g.bgColor+"\"";
 str += ">";
 for(var j = 0; j < g.rows[0].length; j++) {
@@ -177,7 +177,7 @@ str += "HEIGHT="+parseInt(g.vscale*g.rows[i][j])+" ";
 str += ">";
 } else
 str += "<IMG SRC=\"clear.gif\" WIDTH="+parseInt(g.hscale)+" HEIGHT=5>";
-str += "</TD>\n<TD VALIGN=BOTTOM";
+str += "</TD>\n<TD style=\"vertical-align: bottom\"";
 if(g.bgColor) str += " BGCOLOR=\""+g.bgColor+"\"";
 str += ">";
 }
@@ -204,13 +204,13 @@ if(g.negMax < 0) {
 if(g.posMax != 0 && !g.scale) str += "</TR>";
 str += "<TR>\n";
 if(g.scale) str += _writeNegScaleGraph(g, g.negMax, 0);
-str += "<TD VALIGN=TOP";
+str += "<TD style=\"vertical-align: top\"";
 if(g.bgColor) str += " BGCOLOR=\""+g.bgColor+"\"";
 str += ">";
 for(var j = 0; j < g.rows[0].length; j++) {
 for(var i = 0; i < g.rows.length; i++) {
 if(parseInt(g.vscale*g.rows[i][j]) < 0) {
-str += "<IMG VSPACE=0 HSPACE=0 BORDER=0 ALIGN=TOP SRC="+i+".gif WIDTH="+
+str += "<IMG VSPACE=0 HSPACE=0 BORDER=0 style=\"vertical-align: top\" SRC="+i+".gif WIDTH="+
 parseInt(g.hscale)+" HEIGHT="+
 parseInt(-1*g.vscale*g.rows[i][j]);
 str += " ALT=\"";
@@ -219,13 +219,13 @@ str += (g.rows[i][j]+g.offset);
 if(g.dates) str += ", "+g.dates[j];
 str += "\" >";
 } else
-str += "<IMG SRC=\"clear.gif\" ALIGN=TOP BORDER=0 WIDTH="+parseInt(g.hscale)+
+str += "<IMG SRC=\"clear.gif\" style=\"vertical-align: top\" BORDER=0 WIDTH="+parseInt(g.hscale)+
 " HEIGHT=5>";
-str += "</TD>\n<TD VALIGN=TOP";
+str += "</TD>\n<TD style=\"vertical-align: top\"";
 if(g.bgColor) str += " BGCOLOR=\""+g.bgColor+"\"";
 str += ">";
 }
-str += "<IMG SRC=\"clear.gif\" ALIGN=TOP WIDTH=1 BORDER=0 HEIGHT=5>";
+str += "<IMG SRC=\"clear.gif\" style=\"vertical-align: top\" WIDTH=1 BORDER=0 HEIGHT=5>";
 }
 str += "</TD>\n";
 if(g.legends && g.posMax == 0) {
@@ -239,11 +239,12 @@ if(g.xLabel) {
 str += "<TR>\n";
 if(g.scale) str += "<TD COLSPAN=3></TD>\n";
 if(g.yLabel) str += "<TD></TD>\n";
-str += "<TH COLSPAN="+g.c+" HEIGHT=25 VALIGN=BOTTOM><FONT FACE='Arial,Helvetica' SIZE=-1>";
+str += "<TH COLSPAN="+g.c+" HEIGHT=25 style=\"vertical-align: bottom\"><FONT FACE='Arial,Helvetica' SIZE=-1>";
 str += g.xLabel;
 str += "</FONT></TH></TR>\n";
 }
 str += "</TABLE>\n";
+
 doc.write(str); 
 }
 
@@ -348,7 +349,7 @@ if(!g.c) g.c = g.rows[0].length*2-1;
 st += "<TR>\n";
 if(g.scale) st += "<TD COLSPAN=2></TD>\n";
 if(g.yLabel) st += "<TD></TD>\n";
-st += "<TD VALIGN=TOP COLSPAN="+(g.c+1)+">";
+st += "<TD style=\"vertical-align: top\" COLSPAN="+(g.c+1)+">";
 st += "<IMG SRC=black.gif HEIGHT=10 WIDTH=1>";
 st += "<IMG SRC=clear.gif HEIGHT=1 WIDTH=1>";
 var n = g.rows[0].length;
@@ -370,7 +371,7 @@ cspan *= g.skip;
 if(g.sDate || g.sTime) _setDatesArrayGraph(g);
 var t = 0;
 for(var i = 0; i < Math.floor(g.rows[0].length/g.skip); i++) {
-st += "<TD VALIGN=TOP";
+st += "<TD style=\"vertical-align: top\"";
 st += " COLSPAN="+cspan; t += cspan;
 st += "><FONT FACE='Arial,Helvetica' SIZE=-3><I>";
 st += g.dates[i*g.skip] || "";
@@ -379,7 +380,7 @@ st += "</I></FONT></TD>\n";
 var len = g.rows[0].length;
 if(!g.stacked) len *= g.rows.length;
 if(i < Math.ceil(g.rows[0].length/g.skip)) {
-st += "<TD VALIGN=TOP";
+st += "<TD style=\"vertical-align: top\"";
 st += " COLSPAN="+(len-t);
 st += "><FONT FACE='Arial,Helvetica' SIZE=-3><I>";
 st += g.dates[i*g.skip];
@@ -399,20 +400,20 @@ alert("Warning! Scale is too small! Please make\nthe scale larger or make the gr
 st += "<TD></TD><TD></TD><TD></TD>\n"
 return st;
 }
-st += "<TD VALIGN=TOP ALIGN=RIGHT>";
+st += "<TD style=\"vertical-align: top; text-align: right\" >";
 var H = h - 3;
 for(var i = 0; i < n; i++) {
 st += "<FONT FACE=Arial,Helvetica SIZE=-3><I>"+(g.scale*-1*(i+1)+g.offset)+"</I></FONT>";
 st += "<IMG SRC=clear.gif WIDTH=1 HEIGHT="+H+"><BR>\n";
 }
 st += "</TD>\n";
-st += "<TD VALIGN=TOP>";
+st += "<TD style=\"vertical-align: top\">";
 for(var i = 0; i < n; i++) {
 st += "<IMG SRC=clear.gif WIDTH=1 HEIGHT="+(h-1)+"><BR>\n";
 st += "<IMG SRC=black.gif WIDTH=6 HEIGHT=1><BR>\n";
 }
 st += "</TD>\n";
-st += "<TD VALIGN=TOP>";
+st += "<TD style=\"vertical-align: top\">";
 st += "<IMG SRC=black.gif WIDTH=1 HEIGHT="+(g.height*p)+">";
 st += "<IMG SRC=clear.gif WIDTH=1 HEIGHT="+(g.height*p)+">";
 st += "</TD>\n"
@@ -429,7 +430,7 @@ alert("Warning! Scale is too small! Please make\nthe scale larger or make the gr
 st += "<TD ROWSPAN=2></TD><TD ROWSPAN=2></TD><TD></TD>\n"
 return st;
 }
-st += "<TD VALIGN=BOTTOM ROWSPAN=2 ALIGN=RIGHT>";
+st += "<TD style=\"vertical-align: bottom; text-align=right\" ROWSPAN=2 NOWRAP>";
 var H = h - 3;
 for(var i = 0; i < n; i++) {
 // I changed this to round these amounts!
@@ -443,14 +444,14 @@ st += "</I></FONT>";
 st += "<IMG SRC=clear.gif WIDTH=1 HEIGHT="+H+"><BR>\n";
 }
 st += "</TD>\n";
-st += "<TD VALIGN=BOTTOM ROWSPAN=2>";
+st += "<TD style=\"vertical-align: bottom\" ROWSPAN=2>";
 for(var i = 0; i < n; i++) {
 st += "<IMG SRC=black.gif WIDTH=6 HEIGHT=1><BR>\n";
 st += "<IMG SRC=clear.gif WIDTH=1 HEIGHT="+(h-1)+"><BR>\n";
 }
 st += "<IMG SRC=black.gif WIDTH=6 HEIGHT=1><BR>\n";
 st += "</TD>\n";
-st += "<TD VALIGN=BOTTOM>";
+st += "<TD style=\"vertical-align: bottom\">";
 st += "<IMG SRC=black.gif WIDTH=1 HEIGHT="+(g.height*p)+">";
 st += "<IMG SRC=clear.gif WIDTH=1 HEIGHT="+(g.height*p)+">";
 st += "</TD>\n"
@@ -464,7 +465,7 @@ if(g.title) {
 str += "<TR>\n";
 if(g.scale) str += "<TD COLSPAN=3></TD>\n";
 if(g.yLabel) str += "<TD></TD>\n";
-str += "<TH VALIGN=TOP HEIGHT=30 COLSPAN="+(g.c)+">";
+str += "<TH style=\"vertical-align: top\" HEIGHT=30 COLSPAN="+(g.c)+">";
 str += "<FONT FACE='Arial,Helvetica' SIZE=-1>";
 str += g.title;
 str += "</FONT></TH></TR>\n";
@@ -474,14 +475,14 @@ g.yLabel = g.yLabel.split("");
 g.yLabel = g.yLabel.join("<BR>\n");
 str += "<TR>\n";
 var rspan = 2; if(g.negMax && g.posMax) rspan++;
-str += "<TH ROWSPAN="+rspan+" ALIGN=LEFT NOWRAP WIDTH=20>";
+str += "<TH ROWSPAN="+rspan+" style=\"text-align: left\" NOWRAP WIDTH=20>";
 str += "<FONT FACE='Arial,Helvetica' SIZE=-1>"+g.yLabel+"</FONT></TH>\n";
 }
 if(g.posMax > 0) {
 if(!g.yLabel) str += "<TR>\n";
 if(g.scale) str += _writeScaleGraph(g, 0, g.posMax);
 for(var j = 0; j < g.rows[0].length; j++) {
-str += "<TD VALIGN=BOTTOM";
+str += "<TD style=\"vertical-align: bottom\"";
 if(g.bgColor) str += " BGCOLOR=\""+g.bgColor+"\"";
 str += ">";
 var k = 0, y = 0, drawn = false;
@@ -536,13 +537,13 @@ if(g.posMax != 0) str += "</TR>\n";
 str += "<TR>\n";
 if(g.scale) str += _writeNegScaleGraph(g, g.negMax, 0);
 for(var j = 0; j < g.rows[0].length; j++) {
-str += "<TD VALIGN=TOP";
+str += "<TD style=\"vertical-align: top\"";
 if(g.bgColor) str += " BGCOLOR=\""+g.bgColor+"\"";
 str += ">";
 var drawn = false;
 for(var i = 0; i < g.rows.length; i++) {
 if(parseInt(g.vscale*g.rows[i][j]) < 0) {
-str += "<IMG VSPACE=0 HSPACE=0 BORDER=0 ALIGN=TOP SRC="+i+".gif WIDTH="+
+str += "<IMG VSPACE=0 HSPACE=0 BORDER=0 style=\"vertical-align: top\" SRC="+i+".gif WIDTH="+
 parseInt(g.hscale)+" HEIGHT="+
 parseInt(-1*g.vscale*g.rows[i][j])+" ";
 str += "ALT=\"";
@@ -571,7 +572,7 @@ if(g.xLabel) {
 str += "<TR>\n";
 if(g.scale) str += "<TD COLSPAN=3></TD>\n";
 if(g.yLabel) str += "<TD></TD>\n";
-str += "<TH COLSPAN="+g.c+" HEIGHT=25 VALIGN=BOTTOM><FONT FACE='Arial,Helvetica' SIZE=-1>";
+str += "<TH COLSPAN="+g.c+" HEIGHT=25 style=\"vertical-align: bottom\"><FONT FACE='Arial,Helvetica' SIZE=-1>";
 str += g.xLabel;
 str += "</FONT></TH></TR>\n";
 }
