@@ -12,7 +12,7 @@
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.6 2004/08/12 13:54:31 braverock Exp $
+ * $Id: plugin.php,v 1.7 2005/01/09 00:25:38 vanmer Exp $
  * @package xrms
  */
 
@@ -90,11 +90,8 @@ function do_hook ($name) {
  * @param mixed param the parameters to pass to the hook function
  * @return mixed the return value of the hook function
  */
-function do_hook_function($name) {
+function do_hook_function($name, $parm=NULL) {
     global $xrms_plugin_hooks;
-    $parm = func_get_args();
-    array_shift($parm);
-    $parm = '"' . join('", "', $parm) . '"';
     $ret = '';
 
     if (isset($xrms_plugin_hooks[$name])
@@ -102,7 +99,7 @@ function do_hook_function($name) {
         foreach ($xrms_plugin_hooks[$name] as $function) {
             /* Add something to set correct gettext domain for plugin. */
             if (function_exists($function)) {
-                eval("\$ret = $function($parm);");
+                $ret = $function($parm);
             }
         }
     }
@@ -216,6 +213,9 @@ if (isset($plugins) && is_array($plugins)) {
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.7  2005/01/09 00:25:38  vanmer
+ * - altered do_hook_function to original behavior to allow variables to be passed by reference, and not be interpreted using eval()
+ *
  * Revision 1.6  2004/08/12 13:54:31  braverock
  * - remove SoupNazi fn, as it isn't used in XRMS
  *
