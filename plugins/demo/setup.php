@@ -18,29 +18,29 @@
  * in another file.  It will improve the performance of the entire
  * system.
  *
- * $Id: setup.php,v 1.5 2004/05/06 14:10:18 gpowers Exp $
+ * $Id: setup.php,v 1.6 2004/05/06 15:12:01 gpowers Exp $
  */
 
 
-function xrms_plugin_init_mrtg() {
+function xrms_plugin_init_demo() {
     global $xrms_plugin_hooks;
-    $xrms_plugin_hooks['menuline']['mrtg'] = 'mrtg';
+    $xrms_plugin_hooks['menuline']['demo'] = 'demo';
     //$xrms_plugin_hooks['opportunity_detail']['demo'] = 'need_function';
 }
 
 
-function mrtg() {
+function demo() {
 
     global $http_site_root;
 
     //Add Demo link to upper menu
-    echo "&nbsp;<a href='$http_site_root/plugins/mrtg/mrtg.php'>MRTG</a>&nbsp;&bull;\n";
+    echo "&nbsp;<a href='$http_site_root/plugins/demo/demo.php'>Demo</a>&nbsp;&bull;\n";
 }
 
 /**
  * $Log: setup.php,v $
- * Revision 1.5  2004/05/06 14:10:18  gpowers
- * Oops. Was the wrong file. Corrected.
+ * Revision 1.6  2004/05/06 15:12:01  gpowers
+ * Note to self: do not copies CVS/ directories!
  *
  * Revision 1.4  2004/03/29 21:14:40  maulani
  * - Add opportunity_detail hook as a commented-out example
