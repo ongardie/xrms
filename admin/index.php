@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.26 2005/01/13 17:17:15 vanmer Exp $
+ * $Id: index.php,v 1.27 2005/02/10 02:00:54 braverock Exp $
  */
 
 //include required stuff
@@ -46,9 +46,9 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_header><?php echo _("System Administration"); ?></td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td class=widget_content><a href="reports/dashboard.php"><?php echo _("Digital Dashboard"); ?></a></td>
-            </tr>
+            </tr> -->
             <tr>
                 <td class=widget_content><a href="update.php"><?php echo _("Database Structure Update"); ?></a></td>
             </tr>
@@ -248,6 +248,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.27  2005/02/10 02:00:54  braverock
+ * - disable digital dashboard link until we can fix the problems with this page
+ *
  * Revision 1.26  2005/01/13 17:17:15  vanmer
  * - Added ACL Administration links, removed deprecated roles system
  *
