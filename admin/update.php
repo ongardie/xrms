@@ -7,20 +7,20 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.48 2005/01/11 17:08:39 maulani Exp $
+ * $Id: update.php,v 1.49 2005/01/13 17:26:18 vanmer Exp $
  */
 
 // where do we include from
 require_once('../include-locations.inc');
 
 // get required common files
+// vars.php sets all of the installation-specific variables
+require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-// vars.php sets all of the installation-specific variables
-require_once($include_directory . 'vars.php');
 
 $session_user_id = session_check( 'Admin' );
 
@@ -3868,6 +3868,8 @@ $con->execute($sql);
 $sql="ALTER TABLE `company_division` ADD `address_id` INT UNSIGNED AFTER `company_id`";
 $con->execute($sql);
 
+install_upgrade_acl($con);
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -3889,6 +3891,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.49  2005/01/13 17:26:18  vanmer
+ * - added ACL install to update script
+ *
  * Revision 1.48  2005/01/11 17:08:39  maulani
  * - Added parameter for LDAP Version.  Some LDAP Version 3 installations
  *   require this option to be set.  Initial parameter setting is version 2
