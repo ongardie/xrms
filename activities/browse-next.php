@@ -8,7 +8,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.12 2004/07/27 19:50:41 neildogg Exp $
+ * $Id: browse-next.php,v 1.13 2004/07/27 22:02:45 cpsource Exp $
  */
 
 //include required files
@@ -26,13 +26,13 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug=1;
 
 // An array of activity IDs within activity type. Allows changes to be made without activities repeating.
-$next_to_check = $_SESSION['next_to_check'];
+$next_to_check = isset($_SESSION['next_to_check']) ? $_SESSION['next_to_check'] : '';
 // The current activity ID that was being viewed through activities/one.php.
-$activity_id = $_GET['activity_id'];
+$activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
 // The saved ID used if using "Saved Search Browse"
-$saved_id = $_GET['saved_id'];
+$saved_id = isset($_GET['saved_id']) ? $_GET['saved_id'] : '';
 // The last position in the activity IDs
-$pos = $_SESSION['pos'];
+$pos = isset($_SESSION['pos']) ? $_SESSION['pos'] : '';
 
 if($saved_id) {
     $pos = 0;
@@ -92,6 +92,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.13  2004/07/27 22:02:45  cpsource
+ * - Remove undefines
+ *
  * Revision 1.12  2004/07/27 19:50:41  neildogg
  * - Major changes to browse functionality
  *  - Removal of sidebar for "browse" button
