@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.7 2004/02/21 00:17:33 maulani Exp $
+ * $Id: edit-2.php,v 1.8 2004/02/24 19:59:39 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -68,11 +68,15 @@ $sql = "update contacts set
         custom3 = ' . $con->qstr($custom3, get_magic_quotes_gpc()) . ',
         custom4 = ' . $con->qstr($custom4, get_magic_quotes_gpc()) . ',
         last_modified_at = ' . $con->dbtimestamp(mktime()) . ",
-        last_modified_by = $session_user_id"
+        last_modified_by = $session_user_id";
+
 if ($salutation != '0') {
-        $sql = $sql . ', salutation = ' . $con->qstr($salutation, get_magic_quotes_gpc())
+        $sql .= ', salutation = ' . $con->qstr($salutation, get_magic_quotes_gpc());
+} else {
+        $sql .= ", salutation = ''";
 }
-$sql = $sql . " where contact_id = $contact_id";
+
+$sql .=  " where contact_id = $contact_id";
 
 // $con->debug=1;
 
@@ -82,6 +86,9 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.8  2004/02/24 19:59:39  braverock
+ * - fixed salutation sql to not insert zero
+ *
  * Revision 1.7  2004/02/21 00:17:33  maulani
  * If no salutation chosen, leave field blank
  *
