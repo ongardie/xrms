@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.42 2005/01/13 18:46:38 vanmer Exp $
+ * $Id: some.php,v 1.43 2005/01/25 17:25:40 daturaarutad Exp $
  */
 
 //include the standard files
@@ -83,7 +83,7 @@ if (strlen($description) > 0) {
 
 $sql .= "\n ,u.username AS " . $con->qstr(_("Owner"),get_magic_quotes_gpc());
 
-$from = "from contacts cont, companies c, users u ";
+$from = " from contacts cont, companies c, users u ";
 
 $where  = "where c.company_id = cont.company_id ";
 $where .= "and c.user_id = u.user_id ";
@@ -400,6 +400,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.43  2005/01/25 17:25:40  daturaarutad
+ * fixed broken query (needed a whitespace)
+ *
  * Revision 1.42  2005/01/13 18:46:38  vanmer
  * - ACL restriction on search
  *
