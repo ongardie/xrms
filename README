@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.13 2004/08/06 14:47:08 braverock Exp $ **/
+/** $Id: README,v 1.14 2004/09/09 12:26:09 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -222,26 +222,22 @@ http://developer.netscape.com/docs/technote/javascript/graph/index.html
 ========================
 NOTES
 
-1. For now, it's all in English, but translation capabilities are in progress.
-   If you can translate English business terms (like "customer" and "opportunity")
-   into other languages, please let us know.
-
-2. We are still adding validation on form submits, and have a long way to go here,
+1. We are still adding validation on form submits, and have a long way to go here,
    so don't try anything funny.
 
-3. We never finished some mail-merge stuff, but the mail-merge functionality is now
+2. We never finished some mail-merge stuff, but the mail-merge functionality is now
    available for preliminary testing and bug-fixing.
 
-4. We're still trying to figure out how best to include a flexible security layer
+3. We're still trying to figure out how best to include a flexible security layer
    (roles, permissions, etc.) into XRMS, so for now, there's only limited ability
    to limit what a logged-in user may do.  We've got some ideas for this, but it
    really is difficult to make this both flexible and convenient.
 
-5. Documentation is still improving  We are happily accepting contributions of user
+4. Documentation is still improving  We are happily accepting contributions of user
    documentation. Until further notice, just use the forums at SourceForge
    for support.  We'll be around to answer questions.
 
-6. If you've got suggestions, please pass them along!
+5. If you've got suggestions, please pass them along!
 
 ========================
 CONTRIBUTING to XRMS
@@ -366,17 +362,24 @@ Brian Peterson    braverock      Acting Project Coordinator
 
 Andrew            s-t            Developer
 Olivier Colonna   obac           Developer
+John Fawcett      johnfawcett    Developer
 Ken Gregoire      kennyg1        Documentation
 Nic Lowe          niclowe        Developer
 Beth Macknik      maulani        Developer
+Cal Page          cpsource       Developer
 Glenn Powers      gpowers        Developer
 Neil Roberts      neildogg       Developer
 David Rogers      introspectshun Developer
 David Uhlman      d2uhlman       Developer
-Neil Williams     metamedia      Developer
 Aaron van Meerten vanmer         Developer
-Cal Page          cpsource       Developer
-John Fawcett      johnfawcett    Developer
+Neil Williams     metamedia      Developer
+
+Brunno Barrera                   Translator - Spanish
+Sebastian Becker                 Translator - German
+John Fawcett                     Translator - Italian
+Piotr Kabath                     Translator - Polish
+Bert-Jan van Rein                Translator - Dutch
+Junbao Wu                        Translator - Chinese, Simplified
 
 XRMS also contains code contributed by many, many users.
 The XRMS Development Team is grateful for all of the code,
@@ -386,6 +389,9 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.14  2004/09/09 12:26:09  braverock
+ * - updates in advance of new release
+ *
  * Revision 1.13  2004/08/06 14:47:08  braverock
  * - push in changes to turn on i18n gettext
  *
