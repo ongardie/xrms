@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.59 2004/08/25 15:49:39 introspectshun Exp $
+ * $Id: some.php,v 1.60 2004/09/21 18:21:28 introspectshun Exp $
  */
 
 // handle includes
@@ -173,7 +173,7 @@ if($sort_column == 9) {
 else {
     $sql .= " 'n/a' AS '" . _("%") . "' ";
 }
-$sql .= "FROM companies c, users u, activity_types at, activities a, addresses addr";
+$sql .= "FROM companies c, users u, activity_types at, addresses addr, activities a";
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     $sql .= ", time_daylight_savings tds";
 }
@@ -616,6 +616,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.60  2004/09/21 18:21:28  introspectshun
+ * - Changed table order in main query FROM clause
+ *   - Join fails on MSSQL otherwise
+ *
  * Revision 1.59  2004/08/25 15:49:39  introspectshun
  * - Fixed errant variable name
  *
