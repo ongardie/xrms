@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.41 2004/06/04 16:54:38 gpowers Exp $
+ * $Id: one.php,v 1.42 2004/06/10 13:23:22 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -292,6 +292,9 @@ require_once("../files/sidebar.php");
 
 //include the notes sidebar
 require_once("../notes/sidebar.php");
+
+//call the sidebar hook
+$sidebar_rows = do_hook_function['company_sidebar_bottom'];
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -614,6 +617,9 @@ function openNewsWindow() {
         <!-- files //-->
         <?php echo $file_rows; ?>
 
+        <!-- sidebar plugins //-->
+        <?php echo $sidebar_rows; ?>
+
     </div>
 
 </div>
@@ -636,6 +642,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.42  2004/06/10 13:23:22  braverock
+ * - added company_sidebar_bottom hook
+ *
  * Revision 1.41  2004/06/04 16:54:38  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags
