@@ -2,7 +2,7 @@
 /**
  * The main page for the MRTG plugin
  *
- * $Id: index.php,v 1.1 2004/11/09 03:41:19 gpowers Exp $
+ * $Id: index.php,v 1.2 2005/01/26 16:41:27 gpowers Exp $
  */
 
 // include the common files
@@ -11,6 +11,8 @@ require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require "weblog.inc";
 
 $mode=$_GET['wl_mode'];
@@ -45,6 +47,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.2  2005/01/26 16:41:27  gpowers
+ * - added required ADOdb include files
+ *
  * Revision 1.1  2004/11/09 03:41:19  gpowers
  * - Journal Plugin v0.1
  *
