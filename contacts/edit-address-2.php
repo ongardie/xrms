@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.3 2004/06/10 18:07:28 gpowers Exp $
+ * $Id: edit-address-2.php,v 1.4 2004/06/15 17:26:21 introspectshun Exp $
  */
 
 
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -37,25 +38,67 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 
 if ($alt_address) {
-    $sql = "update contacts set address_id = '" . $alt_address . "' where contact_id = " . $contact_id;
-    $con->execute($sql);
+    $sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_id'] = $alt_address;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+    
     add_audit_item($con, $session_user_id, 'changed address', 'contacts', $contact_id, 1);
 } elseif ($address_id && !$new) {
-    $sql = "update addresses set country_id = $country_id, line1 = " . $con->qstr($line1, get_magic_quotes_gpc()) . ", line2 = " . $con->qstr($line2, get_magic_quotes_gpc()) . ", city = " . $con->qstr($city, get_magic_quotes_gpc()) . ", province = " . $con->qstr($province, get_magic_quotes_gpc()) . ", postal_code = " . $con->qstr($postal_code, get_magic_quotes_gpc()) . ", address_name = " . $con->qstr($address_name, get_magic_quotes_gpc()) . ", address_body = " . $con->qstr($address_body, get_magic_quotes_gpc()) . ", use_pretty_address = $use_pretty_address where address_id = $address_id";
-    $con->execute($sql);
+    $sql = "SELECT * FROM addresses WHERE address_id = $address_id";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['country_id'] = $country_id;
+    $rec['line1'] = $line1;
+    $rec['line2'] = $line2;
+    $rec['city'] = $city;
+    $rec['province'] = $province;
+    $rec['postal_code'] = $postal_code;
+    $rec['address_name'] = $address_name;
+    $rec['address_body'] = $address_body;
+    $rec['use_pretty_address'] = $use_pretty_address;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
 
     add_audit_item($con, $session_user_id, 'updated', 'addresses', $address_id, 1);
 
 } else {
 
-    $sql = "insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body, use_pretty_address) values ($company_id, $country_id, " . $con->qstr($address_name, get_magic_quotes_gpc()) . ", " . $con->qstr($line1, get_magic_quotes_gpc()) . ", " . $con->qstr($line2, get_magic_quotes_gpc()) . ", " . $con->qstr($city, get_magic_quotes_gpc()) . ", " . $con->qstr($province, get_magic_quotes_gpc()) . ", " . $con->qstr($postal_code, get_magic_quotes_gpc()) . ", " . $con->qstr($address_body, get_magic_quotes_gpc()) . ", $use_pretty_address)";
-    $con->execute($sql);
+    $sql = "SELECT * FROM addresses WHERE 1 = 2"; //select empty record as placeholder
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['company_id'] = $company_id;
+    $rec['country_id'] = $country_id;
+    $rec['address_name'] = $address_name;
+    $rec['line1'] = $line1;
+    $rec['line2'] = $line2;
+    $rec['city'] = $city;
+    $rec['province'] = $province;
+    $rec['postal_code'] = $postal_code;
+    $rec['address_body'] = $address_body;
+    $rec['use_pretty_address'] = $use_pretty_address;
+
+    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
 
     $address_id = $con->insert_id();
     add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
 
-    $sql = "update contacts set address_id = '" . $address_id . "' where contact_id = " . $contact_id;
-    $con->execute($sql);
+    $sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['address_id'] = $address_id;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
 
     add_audit_item($con, $session_user_id, 'changed address', 'contacts', $contact_id, 1);
 }
@@ -68,11 +111,16 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.4  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.3  2004/06/10 18:07:28  gpowers
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.3 2004/06/10 18:07:28 gpowers Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.4 2004/06/15 17:26:21 introspectshun Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing

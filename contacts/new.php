@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.10 2004/04/17 16:03:45 maulani Exp $
+ * $Id: new.php,v 1.11 2004/06/15 17:26:21 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -72,11 +73,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Division</td>
-                <td class=widget_content_form_element><?php echo $division_menu ?></td>
+                <td class=widget_content_form_element><?php echo $division_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Address</td>
-                <td class=widget_content_form_element><?php echo $address_menu ?></td>
+                <td class=widget_content_form_element><?php echo $address_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Salutation</td>
@@ -205,6 +206,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.11  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.10  2004/04/17 16:03:45  maulani
  * - Add CSS2 positioning
  *

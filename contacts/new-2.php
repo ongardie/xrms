@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.9 2004/06/15 14:29:00 gpowers Exp $
+ * $Id: new-2.php,v 1.10 2004/06/15 17:26:21 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -10,15 +10,13 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
 $company_id = $_POST['company_id'];
 $address_id = $_POST['address_id'];
 $division_id = $_POST['division_id'];
-if ($division_id != '') {
-    $division_str = "division_id = $division_id ,\n";
-}
 $salutation = $_POST['salutation'];
 $last_name = $_POST['last_name'];
 $first_names = $_POST['first_names'];
@@ -49,47 +47,54 @@ $first_names = (strlen($first_names) > 0) ? $first_names : "[first names]";
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "insert into contacts set
-        company_id = $company_id,
-        address_id = $address_id,
-        $division_str
-        last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ",
-        first_names = " . $con->qstr($first_names, get_magic_quotes_gpc()) . ",
-        summary = " . $con->qstr($summary, get_magic_quotes_gpc()) . ",
-        title = " . $con->qstr($title, get_magic_quotes_gpc()) . ",
-        description = " . $con->qstr($description, get_magic_quotes_gpc()) . ",
-        email = " . $con->qstr($email, get_magic_quotes_gpc()) . ",
-        work_phone = " . $con->qstr($work_phone, get_magic_quotes_gpc()) . ",
-        cell_phone = " . $con->qstr($cell_phone, get_magic_quotes_gpc()) . ",
-        home_phone = " . $con->qstr($home_phone, get_magic_quotes_gpc()) . ",
-        fax = " . $con->qstr($fax, get_magic_quotes_gpc()) . ",
-        aol_name = " . $con->qstr($aol_name, get_magic_quotes_gpc()) . ",
-        yahoo_name = " . $con->qstr($yahoo_name, get_magic_quotes_gpc()) . ",
-        msn_name = " . $con->qstr($msn_name, get_magic_quotes_gpc()) . ",
-        interests = " . $con->qstr($interests, get_magic_quotes_gpc()) . ",
-        salutation = " . $con->qstr($salutation, get_magic_quotes_gpc()) . ",
-        gender = " . $con->qstr($gender, get_magic_quotes_gpc()) . ",
-        date_of_birth = " . $con->qstr($date_of_birth, get_magic_quotes_gpc()) . ",
-        profile = " . $con->qstr($profile, get_magic_quotes_gpc()) . ",
-        custom1 = " . $con->qstr($custom1, get_magic_quotes_gpc()) . ",
-        custom2 = " . $con->qstr($custom2, get_magic_quotes_gpc()) . ",
-        custom3 = " . $con->qstr($custom3, get_magic_quotes_gpc()) . ",
-        custom4 = " . $con->qstr($custom4, get_magic_quotes_gpc()) . ",
-        entered_by = $session_user_id,
-        entered_at = " . time() . ",
-        last_modified_at = " . time() . ",
-        last_modified_by = $session_user_id"
-        ;
+$sql = "SELECT * FROM contacts WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
 
-// $con->debug=1;
+$rec = array();
+$rec['company_id'] = $company_id;
+$rec['address_id'] = $address_id;
+$rec['division_id'] = $division_id;
+$rec['last_name'] = $last_name;
+$rec['first_names'] = $first_names;
+$rec['summary'] = $summary;
+$rec['title'] = $title;
+$rec['description'] = $description;
+$rec['email'] = $email;
+$rec['work_phone'] = $work_phone;
+$rec['cell_phone'] = $cell_phone;
+$rec['home_phone'] = $home_phone;
+$rec['fax'] = $fax;
+$rec['aol_name'] = $aol_name;
+$rec['yahoo_name'] = $yahoo_name;
+$rec['msn_name'] = $msn_name;
+$rec['interests'] = $interests;
+$rec['salutation'] = $salutation;
+$rec['gender'] = $gender;
+$rec['date_of_birth'] = $date_of_birth;
+$rec['profile'] = $profile;
+$rec['custom1'] = $custom1;
+$rec['custom2'] = $custom2;
+$rec['custom3'] = $custom3;
+$rec['custom4'] = $custom4;
+$rec['entered_by'] = $session_user_id;
+$rec['entered_at'] = time();
+$rec['last_modified_at'] = time();
+$rec['last_modified_by'] = $session_user_id;
 
-$con->execute($sql);
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
+
 $con->close();
 
 header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.10  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.9  2004/06/15 14:29:00  gpowers
  * - correct time formats
  *

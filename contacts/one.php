@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.31 2004/06/10 15:26:14 gpowers Exp $
+ * $Id: one.php,v 1.32 2004/06/15 17:26:21 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -15,6 +15,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
@@ -39,6 +40,28 @@ and c.user_id = u3.user_id
 and c.account_status_id = as1.account_status_id
 and c.crm_status_id = crm.crm_status_id
 and contact_id = $contact_id";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 $rst = $con->execute($sql);
 
@@ -99,25 +122,24 @@ switch ($gender) {
 if ($address_id) { $address_to_display = get_formatted_address($con, $address_id); }
 
 // most recent activities
-$sql_activities = "select activity_id,
-                activity_title,
-                scheduled_at,
-                a.entered_at,
-                a.on_what_table,
-                a.on_what_id,
-                activity_status,
-                at.activity_type_pretty_name,
-                cont.first_names as contact_first_names,
-                cont.last_name as contact_last_name,
-                u.username,
-                if(activity_status = 'o' and ends_at < now(), 1, 0) as is_overdue
-                from activity_types at, users u, activities a, contacts cont
-                where a.contact_id = $contact_id
-                and a.contact_id = cont.contact_id
-                and a.user_id = u.user_id
-                and a.activity_type_id = at.activity_type_id
-                and a.activity_record_status = 'a'
-                order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
+$sql_activities = "
+SELECT
+  a.activity_id, a.activity_title, a.scheduled_at, a.entered_at, a.on_what_table, a.on_what_id,
+  a.activity_status, at.activity_type_pretty_name,
+  cont.contact_id, cont.first_names AS contact_first_names,
+  cont.last_name AS contact_last_name, u.username,
+CASE
+  WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
+  ELSE 0
+END AS is_overdue
+FROM activity_types at, users u, activities a, contacts cont
+WHERE a.contact_id = $contact_id
+  AND a.contact_id = cont.contact_id
+  AND a.user_id = u.user_id
+  AND a.activity_type_id = at.activity_type_id
+  AND a.activity_record_status = 'a'
+ORDER BY is_overdue DESC, a.scheduled_at DESC, a.entered_at DESC
+";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
 
@@ -212,7 +234,7 @@ if ($rst) {
     $rst->close();
 }
 
-$categories = implode($categories, ", ");
+$categories = implode(', ', $categories);
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -546,6 +568,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.32  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.31  2004/06/10 15:26:14  gpowers
  * - removed "Transer" and "Edit Address" buttons. (moved to "Edit" page)
  *

@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.9 2004/06/15 14:30:20 gpowers Exp $
+ * $Id: edit-2.php,v 1.10 2004/06/15 17:26:21 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -40,52 +41,62 @@ $custom2 = $_POST['custom2'];
 $custom3 = $_POST['custom3'];
 $custom4 = $_POST['custom4'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-$sql = "update contacts set
-        address_id = $address_id,
-        division_id = " . $con->qstr($division_id, get_magic_quotes_gpc()) . ',
-        last_name = ' . $con->qstr($last_name, get_magic_quotes_gpc()) . ',
-        first_names = ' . $con->qstr($first_names, get_magic_quotes_gpc()) . ',
-        summary = ' . $con->qstr($summary, get_magic_quotes_gpc()) . ',
-        title = ' . $con->qstr($title, get_magic_quotes_gpc()) . ',
-        description = ' . $con->qstr($description, get_magic_quotes_gpc()) . ',
-        email = ' . $con->qstr($email, get_magic_quotes_gpc()) . ',
-        work_phone = ' . $con->qstr($work_phone, get_magic_quotes_gpc()) . ',
-        cell_phone = ' . $con->qstr($cell_phone, get_magic_quotes_gpc()) . ',
-        home_phone = ' . $con->qstr($home_phone, get_magic_quotes_gpc()) . ',
-        fax = ' . $con->qstr($fax, get_magic_quotes_gpc()) . ',
-        aol_name = ' . $con->qstr($aol_name, get_magic_quotes_gpc()) . ',
-        yahoo_name = ' . $con->qstr($yahoo_name, get_magic_quotes_gpc()) . ',
-        msn_name = ' . $con->qstr($msn_name, get_magic_quotes_gpc()) . ',
-        interests = ' . $con->qstr($interests, get_magic_quotes_gpc()) . ',
-        gender = ' . $con->qstr($gender, get_magic_quotes_gpc()) . ',
-        date_of_birth = ' . $con->qstr($date_of_birth, get_magic_quotes_gpc()) . ',
-        profile = ' . $con->qstr($profile, get_magic_quotes_gpc()) . ',
-        custom1 = ' . $con->qstr($custom1, get_magic_quotes_gpc()) . ',
-        custom2 = ' . $con->qstr($custom2, get_magic_quotes_gpc()) . ',
-        custom3 = ' . $con->qstr($custom3, get_magic_quotes_gpc()) . ',
-        custom4 = ' . $con->qstr($custom4, get_magic_quotes_gpc()) . ',
-        last_modified_at = ' . time() . ",
-        last_modified_by = $session_user_id";
-
-if ($salutation != '0') {
-        $sql .= ', salutation = ' . $con->qstr($salutation, get_magic_quotes_gpc());
-} else {
-        $sql .= ", salutation = ''";
+if ($salutation == '0') {
+    $salutation = '';
 }
 
-$sql .=  " where contact_id = $contact_id";
-
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug=1;
 
-$con->execute($sql);
+$sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['address_id'] = $address_id;
+$rec['division_id'] = $division_id;
+$rec['last_name'] = $last_name;
+$rec['first_names'] = $first_names;
+$rec['summary'] = $summary;
+$rec['title'] = $title;
+$rec['description'] = $description;
+$rec['email'] = $email;
+$rec['work_phone'] = $work_phone;
+$rec['cell_phone'] = $cell_phone;
+$rec['home_phone'] = $home_phone;
+$rec['fax'] = $fax;
+$rec['aol_name'] = $aol_name;
+$rec['yahoo_name'] = $yahoo_name;
+$rec['msn_name'] = $msn_name;
+$rec['interests'] = $interests;
+$rec['gender'] = $gender;
+$rec['date_of_birth'] = $date_of_birth;
+$rec['profile'] = $profile;
+$rec['custom1'] = $custom1;
+$rec['custom2'] = $custom2;
+$rec['custom3'] = $custom3;
+$rec['custom4'] = $custom4;
+$rec['last_modified_at'] = time();
+$rec['last_modified_by'] = $session_user_id;
+
+if ($salutation != '0') {
+    $rec['salutation'] = $salutation;
+} else {
+    $rec['salutation'] = '';
+}
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.10  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.9  2004/06/15 14:30:20  gpowers
  * - correct time formats
  *

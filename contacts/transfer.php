@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer.php,v 1.1 2004/06/09 19:24:00 gpowers Exp $
+ * $Id: transfer.php,v 1.2 2004/06/15 17:26:21 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -79,6 +80,11 @@ end_page();
 
 /**
  * $Log: transfer.php,v $
+ * Revision 1.2  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.1  2004/06/09 19:24:00  gpowers
  * - enables transfer of contact to new company
  *

@@ -2,7 +2,7 @@
 /**
  * Set categories for a contact
  *
- * $Id: categories.php,v 1.4 2004/04/16 22:20:55 maulani Exp $
+ * $Id: categories.php,v 1.5 2004/06/15 17:26:21 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 
 $session_user_id = session_check();
@@ -66,7 +67,7 @@ from categories c, category_scopes cs, category_category_scope_map ccsm
 where cs.category_scope_id = ccsm.category_scope_id
 and c.category_id = ccsm.category_id
 and cs.on_what_table = 'contacts'
-and c.category_id not in (" . implode($array_of_categories, ',') . ")
+and c.category_id not in (" . implode(',', $array_of_categories) . ")
 and category_record_status = 'a'
 order by category_display_html";
 
@@ -123,6 +124,11 @@ end_page();
 
 /**
  * $Log: categories.php,v $
+ * Revision 1.5  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.4  2004/04/16 22:20:55  maulani
  * - Add CSS2 positioning
  *

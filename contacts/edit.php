@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.14 2004/06/15 14:31:33 gpowers Exp $
+ * $Id: edit.php,v 1.15 2004/06/15 17:26:21 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,6 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 // require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
@@ -23,7 +24,14 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$con->execute("update users set last_hit = " . time() . " where user_id = $session_user_id");
+$sql = "SELECT * FROM users WHERE user_id = $session_user_id";
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['last_hit'] = time();
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
@@ -245,6 +253,11 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.15  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.14  2004/06/15 14:31:33  gpowers
  * - corrected time formats
  *

@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.15 2004/05/13 12:07:40 braverock Exp $
+ * $Id: some.php,v 1.16 2004/06/15 17:26:21 introspectshun Exp $
  */
 
 //include the standard files
@@ -15,6 +15,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -103,12 +104,12 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "select concat('<a href=\"one.php?contact_id=', cont.contact_id, '\">', cont.last_name, ', ', cont.first_names, '</a>') as 'Name',
-               concat('<a href=\"../companies/one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as 'Company',
-               company_code as 'Code',
-               title as 'Title',
-               description as 'Description',
-               u.username as 'Owner' ";
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?contact_id='", "CAST(cont.contact_id AS VARCHAR(10))", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS 'Name', "
+       . $con->Concat("'<a href=\"../companies/one.php?company_id='", "CAST(c.company_id AS VARCHAR(10))", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
+       company_code AS 'Code',
+       title AS 'Title',
+       description AS 'Description',
+       u.username AS 'Owner' ";
 
 $from = "from contacts cont, companies c, users u ";
 
@@ -344,6 +345,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.16  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.15  2004/05/13 12:07:40  braverock
  * - fix a category_id bug
  *   - fixes SF bug 952536

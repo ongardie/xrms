@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.3 2004/06/10 18:05:51 gpowers Exp $
+ * $Id: edit-address.php,v 1.4 2004/06/15 17:26:21 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -233,6 +234,11 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.4  2004/06/15 17:26:21  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL and Concat functions.
+ *
  * Revision 1.3  2004/06/10 18:05:51  gpowers
  * - added "Use Alternate Address" section
  *

@@ -6,6 +6,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -23,8 +24,16 @@ and on_what_table = 'contacts'
 and on_what_id = $contact_id";
 $con->execute($sql);
 
-$sql = "insert into entity_category_map (category_id, on_what_table, on_what_id) values ($category_id, 'contacts', $contact_id)";
-$con->execute($sql);
+$sql = "SELECT * FROM entity_category_map WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['category_id'] = $category_id;
+$rec['on_what_table'] = 'contacts';
+$rec['on_what_id'] = $contact_id;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $con->close();
 
