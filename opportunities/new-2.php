@@ -1,5 +1,11 @@
 <?php
+/**
+ * Insert a new opportunity into the database
+ *
+ * $Id: new-2.php,v 1.2 2004/01/26 19:34:48 braverock Exp $
+ */
 
+//include common files
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -7,6 +13,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
+//check security
 $session_user_id = session_check();
 
 $opportunity_status_id = $_POST['opportunity_status_id'];
@@ -26,7 +33,22 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug = 1;
 
-$sql = "insert into opportunities (opportunity_status_id, user_id, company_id, contact_id, campaign_id, opportunity_title, opportunity_description, size, probability, close_at, entered_at, entered_by, last_modified_at, last_modified_by) values ($opportunity_status_id, $user_id, $company_id, $contact_id, $campaign_id, " . $con->qstr($opportunity_title, get_magic_quotes_gpc()) . ", " . $con->qstr($opportunity_description, get_magic_quotes_gpc()) . ", $size, $probability, " . $con->dbdate($close_at . ' 23:59:59') . ", " . $con->dbtimestamp(mktime()) . ", $session_user_id, " . $con->dbtimestamp(mktime()) . ", $session_user_id)";
+$sql = "insert into opportunities set
+        opportunity_status_id = $opportunity_status_id,
+        user_id = $user_id,
+        company_id =  $company_id,
+        contact_id = $contact_id,
+        campaign_id = $campaign_id,
+        opportunity_title = " . $con->qstr($opportunity_title, get_magic_quotes_gpc()) . ",
+        opportunity_description = " . $con->qstr($opportunity_description, get_magic_quotes_gpc()) . ",
+        size = $size,
+        probability = $probability,
+        close_at = " . $con->dbdate($close_at . ' 23:59:59') . ",
+        entered_at = " . $con->dbtimestamp(mktime()) . ",
+        entered_by = $session_user_id,
+        last_modified_at = " . $con->dbtimestamp(mktime()) . ",
+        last_modified_by = $session_user_id;"
+        ;
 
 $con->execute($sql);
 
@@ -36,4 +58,11 @@ $con->close();
 
 header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id");
 
+/**
+ * $Log: new-2.php,v $
+ * Revision 1.2  2004/01/26 19:34:48  braverock
+ * - cleaned up sql
+ * - added phpdoc
+ *
+ */
 ?>
