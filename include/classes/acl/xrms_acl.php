@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.13 2005/03/21 20:46:11 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.14 2005/03/24 20:27:06 ycreddy Exp $
  */
 
 /*****************************************************************************/
@@ -1009,6 +1009,8 @@ class xrms_acl {
        *
        */
      function add_role_permission ($Role_id, $CORelationship_id, $Scope, $Permission_id) {
+
+	global $xrms_db_dbtype;
         if (!$Role_id or !$CORelationship_id or !$Scope or !$Permission_id) { return false; }
         
         $tblName="RolePermission";
@@ -1019,7 +1021,12 @@ class xrms_acl {
         
         $RolePermissionRow['Role_id']=$Role_id;
         $RolePermissionRow['CORelationship_id']=$CORelationship_id;
-	$RolePermissionRow['Scope']=$con->qstr($Scope, get_magic_quotes_gpc());
+	if ($xrms_db_dbtype=='mssql') {
+	    $RolePermissionRow['Scope']=$Scope;
+	}
+	else {
+	    $RolePermissionRow['Scope']=$con->qstr($Scope, get_magic_quotes_gpc());
+	}
         $RolePermissionRow['Permission_id']=$Permission_id;        
         
         //Create insert statement
@@ -2063,6 +2070,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.14  2005/03/24 20:27:06  ycreddy
+ * Assignment of enum type made conditional to xrms_db_dbtype
+ *
  * Revision 1.13  2005/03/21 20:46:11  vanmer
  * - added checks to ensure that a zero value will still create select criteria
  *
