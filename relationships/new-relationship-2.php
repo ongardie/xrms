@@ -111,7 +111,7 @@ else
                 from " . $what_table . "
                 where " . $what_table_singular . "_record_status='a'
                 group by " . $name_concat . ", " . $what_table_singular . "_id, " . $name_order . "
-                having " . $name_concat . " like " . $search_on . "
+                having " . $what_table_singular . "_name like " . $search_on . "
                 order by " . $name_order;
         $rst = $con->execute($sql);
         if ($rst) {
@@ -175,6 +175,9 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.13  2004/09/29 14:55:17  braverock
+ * - fix incorrect use of concat when it should have been $what_table_singular.'_name'
+ *
  * Revision 1.12  2004/09/29 14:27:06  braverock
  * - add additional db_error_handler clauses to aid debugging
  *
