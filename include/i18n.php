@@ -19,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.5 2004/08/12 11:02:55 braverock Exp $
+ * @version $Id: i18n.php,v 1.6 2004/08/12 21:17:55 johnfawcett Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -166,7 +166,7 @@ function set_up_language($xrms_language, $do_search = false, $default = false) {
     static $SetupAlready = 0;
     global $use_gettext, $languages,
            $xrms_language, $xrms_default_language,
-           $xrms_notAlias, $userid, $data_dir;
+           $xrms_notAlias, $userid, $data_dir, $xrms_file_root;
 
     if ($SetupAlready) {
         return;
@@ -208,7 +208,7 @@ function set_up_language($xrms_language, $do_search = false, $default = false) {
          $xrms_language != '' &&
          isset($languages[$xrms_notAlias]['CHARSET']) )
     {
-        bindtextdomain( 'xrms', $xrms_file_root.'locale/' );
+        bindtextdomain( 'xrms', $xrms_file_root.'/locale/' );
         textdomain( 'xrms' );
         if (function_exists('bind_textdomain_codeset')) {
             if ($xrms_notAlias == 'ja_JP') {
@@ -449,7 +449,7 @@ $languages['is']['ALIAS'] = 'is_IS';
 
 $languages['it_IT']['NAME']    = 'Italian';
 $languages['it_IT']['CHARSET'] = 'iso-8859-1';
-$languages['it_IT']['LOCALE']  = 'it_IT.ISO8859-1';
+#$languages['it_IT']['LOCALE']  = 'it_IT.ISO8859-1';
 $languages['it']['ALIAS'] = 'it_IT';
 
 $languages['ja_JP']['NAME']    = 'Japanese';
@@ -954,6 +954,12 @@ function is_conversion_safe($input_charset) {
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.6  2004/08/12 21:17:55  johnfawcett
+ * - updated set_up_language function to add $xrms_file_root as global, add
+ *   slash to end of it when it is used
+ * - commented out $language['it_IT']['LOCALE'] so that the code will use
+ *   the default value
+ *
  * Revision 1.5  2004/08/12 11:02:55  braverock
  * - add comments and some more debug code
  *
