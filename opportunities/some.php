@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.21 2004/07/15 13:49:54 cpsource Exp $
+ * $Id: some.php,v 1.22 2004/07/15 17:15:51 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 //set target and see if we are logged in
 $tmp = $_SERVER['REQUEST_URI'];
@@ -61,13 +62,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
-$sql = "select concat('<a href=\"one.php?opportunity_id=', opp.opportunity_id, '\">', opp.opportunity_title, '</a>') as 'Opportunity',
-               c.company_name as 'Company',
-               u.username as 'Owner',
-               if (size > 0, size, 0) as 'Opportunity Size',
-               if (size > 0, size*probability/100, 0) as 'Weighted Size',
-               os.opportunity_status_pretty_name as 'Status',
-               $close_at as 'Close Date' ";
+$sql = "SELECT " .
+  $con->Concat("'<a href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'") . " AS 'Opportunity',
+  c.company_name AS 'Company', u.username AS 'Owner',
+  CASE
+    WHEN (opp.size > 0) THEN opp.size
+    ELSE 0
+  END AS 'Opportunity Size',
+  CASE
+    WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100)
+    ELSE 0
+  END AS 'Weighted Size',
+  os.opportunity_status_pretty_name AS 'Status', $close_at AS 'Close Date'
+";
 
 if ($opportunity_category_id > 0) {
     $from = "from companies c, opportunities opp, opportunity_statuses os, users u, entity_category_map ecm ";
@@ -194,7 +201,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-         <form action=some.php method=post>
+        <form action=some.php method=post>
         <input type=hidden name=scope value="opportunities">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=opportunities_next_page value="<?php  echo $opportunities_next_page; ?>">
@@ -203,60 +210,32 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-        
-      <table class=widget cellspacing=1 width="100%">
-        <tr> 
-          <td class=widget_header colspan=4>Search Criteria
-          </td>
-        </tr>
-        <tr> 
-          <td class=widget_label>Opportunity Name 
-          </td>
-          <td class=widget_label>Company 
-          </td>
-          <td class=widget_label>&nbsp; 
-          </td>
-          <td class=widget_label> 
-          </td>
-        </tr>
-        <tr> 
-          <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
-          <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
-          <td class=widget_content_form_element>&nbsp; 
-          </td>
-          <td class=widget_content_form_element> 
-          </td>
-        </tr>
-        <tr> 
-          <td class=widget_content_form_element>Owner 
-          </td>
-          <td class=widget_content_form_element>Category 
-          </td>
-          <td class=widget_content_form_element>Status 
-          </td>
-          <td class=widget_content_form_element> 
-          </td>
-        </tr>
-        <tr> 
-          <td width="25%" class=widget_content_form_element> 
-            <?php  echo $user_menu; ?>
-          </td>
-          <td width="25%" class=widget_content_form_element> 
-            <?php  echo $opportunity_category_menu; ?>
-          </td>
-          <td width="25%" class=widget_content_form_element>
-                              <?php  echo $opportunity_status_menu; ?>
-                </td>
-          <td width="25%" class=widget_content_form_element>
-                </td>
-        </tr>
-        <tr> 
-          <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search"> 
-            <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="Clear Search"> 
-            <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?>
-          </td>
-        </tr>
-      </table>
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header colspan=3>Search Criteria</td>
+            </tr>
+            <tr>
+                <td class=widget_label>Opportunity Name</td>
+                <td colspan=2 class=widget_label>Company</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
+                <td colspan=2 class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label>Owner</td>
+                <td class=widget_label>Category</td>
+                <td class=widget_label>Status</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_category_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=6><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
+            </tr>
+        </table>
         </form>
 <?php
 
@@ -277,14 +256,15 @@ $con->close();
                 <td class=widget_header colspan=4>Recently Viewed</td>
             </tr>
             <tr>
-                <td class=widget_label1>Opportunity</td>
-                <td class=widget_label1>Company</td>
-                <td class=widget_label1>Status</td>
-                <td class=widget_label1>Close Date</td>
-            <?php  echo $recently_viewed_table_rows; ?>
+                <td class=widget_label>Opportunity</td>
+                <td class=widget_label>Company</td>
+                <td class=widget_label>Status</td>
+                <td class=widget_label>Close Date</td>
             </tr>
+            <?php  echo $recently_viewed_table_rows; ?>
         </table>
-</div>
+
+    </div>
 </div>
 
 <script language="JavaScript" type="text/javascript">
@@ -334,6 +314,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.22  2004/07/15 17:15:51  introspectshun
+ * - Fixed errant CVS Commit. Updated s-t's code to reflect recent HTML tweaks and removed empty column in search table.
+ *
  * Revision 1.21  2004/07/15 13:49:54  cpsource
  * - Added arr_vars sub-system.
  *
@@ -348,8 +331,25 @@ end_page();
  * Revision 1.18  2004/07/14 02:06:30  s-t
  * cvs commit opportunities.php
  *
- * Revision 1.13 2004/07/13 Cartika
- *- add split screen to opportunity search criteria box
+ * Revision 1.17  2004/07/09 18:46:17  introspectshun
+ * - Removed CAST(x AS CHAR) for wider database compatibility
+ * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
+ *
+ * Revision 1.16  2004/06/24 20:00:21  introspectshun
+ * - Now use CAST AS CHAR to convert integers to strings in Concat function calls.
+ *
+ * Revision 1.15  2004/06/16 20:44:07  gpowers
+ * - removed $this from session_check()
+ *   - it is incompatible with PHP5
+ *
+ * Revision 1.14  2004/06/14 20:56:04  gpowers
+ * - removed CAST from SELECT statement
+ *   - it is not compatible across databases
+ *
+ * Revision 1.13  2004/06/14 17:41:36  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Corrected order of arguments to implode() function.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, Concat and Date functions.
  *
  * Revision 1.12  2004/05/10 13:08:36  maulani
  * - Add level to audit trail
