@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer.php,v 1.4 2004/07/19 22:18:09 neildogg Exp $
+ * $Id: transfer.php,v 1.5 2004/07/20 15:38:37 neildogg Exp $
  */
 
 require_once('../include-locations.inc');
@@ -49,7 +49,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label>Name or ID</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="company_name"> <img height=12 width=12 alt=required src=https://68.162.84.101/xrms/img/required.gif></td>
+                <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="company_name"> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
@@ -76,6 +76,9 @@ end_page();
 
 /**
  * $Log: transfer.php,v $
+ * Revision 1.5  2004/07/20 15:38:37  neildogg
+ * - Fixed copy and paste problem with required indicator
+ *
  * Revision 1.4  2004/07/19 22:18:09  neildogg
  * - Added company search box
  *  - Added move all records with contact
