@@ -4,7 +4,7 @@
 // Description:	PHP4 Graph Plotting library. Base module.
 // Created: 	2001-01-08
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph.php,v 1.1 2005/03/09 23:15:43 daturaarutad Exp $
+// Ver:		$Id: jpgraph.php,v 1.2 2005/03/30 18:53:13 daturaarutad Exp $
 //
 // License:	This code is released under QPL 1.0
 // Copyright (C) 2001,2002,2003,2004 Johan Persson Aditus Consulting
@@ -1282,6 +1282,11 @@ class Graph {
 	$csim .= $this->subsubtitle->GetCSIMAreas();
 	$csim .= $this->legend->GetCSIMAreas();
 
+	// xrms csim patch begin
+	$csim .= $this->yaxis->GetCSIMAreas();
+	$csim .= $this->xaxis->GetCSIMAreas(); 
+	// xrms csim patch begin
+
 	if( $this->y2axis != NULL ) {
 	    $csim .= $this->y2axis->title->GetCSIMAreas();
 	}
@@ -1648,8 +1653,8 @@ class Graph {
 	// scaling you also have to supply the tick steps as well.
 	if( (!$this->yscale->IsSpecified() && count($this->plots)==0) ||
 	    ($this->y2scale!=null && !$this->y2scale->IsSpecified() && count($this->y2plots)==0) ) {
-	    //$e = "n=".count($this->y2plots)."\n";
-	    $e = "Can't draw unspecified Y-scale.<br>\nYou have either:<br>\n";
+	    $e = count($this->y2plots)." plots found.<br> \n";
+	    $e .= "Can't draw unspecified Y-scale.<br>\nYou have either:<br>\n";
 	    $e .= "1. Specified an Y axis for autoscaling but have not supplied any plots<br>\n";
 	    $e .= "2. Specified a scale manually but have forgot to specify the tick steps";
 	    JpGraphError::Raise($e);
@@ -3506,6 +3511,11 @@ class Axis {
     var $label_halign = '',$label_valign = '', $label_para_align='left';
     var $hide_line=false,$hide_labels=false;
     //var $hide_zero_label=false;
+	// xrms csim patch begin
+	var $csimtargets=array();   // Array of targets for CSIM
+	var $csimareas="";                  // Resultant CSIM area tags
+	var $csimalts=null;                 // ALT:s for corresponding target
+	// xrms csim patch end
 
 //---------------
 // CONSTRUCTOR
@@ -3535,6 +3545,18 @@ class Axis {
 //---------------
 // PUBLIC METHODS	
 	
+	// xrms csim patch begin
+	// Set href targets for CSIM
+	function SetCSIMTargets($aTargets,$aAlts=null) {
+	    $this->csimtargets=$aTargets;
+	    $this->csimalts=$aAlts;
+	}
+	// Get all created areas
+	function GetCSIMareas() {
+	    return $this->csimareas;
+	} 
+	// xrms csim patch end
+
     function SetLabelFormat($aFormStr) {
 	$this->scale->ticks->SetLabelFormat($aFormStr);
     }
@@ -3865,8 +3887,10 @@ class Axis {
 			    else
 				$this->img->SetTextAlign($this->label_halign,$this->label_valign);
 			}
-
-			$this->img->StrokeText($tpos,$aPos+$this->tick_label_margin,$label,
+			// xrms csim patch begin
+			$bbox = $this->img->StrokeText($tpos,$aPos+$this->tick_label_margin,$label, 
+			//      $this->img->StrokeText($tpos,$aPos+$this->tick_label_margin,$label,
+			// xrms csim patch end
 					       $this->label_angle,$this->label_para_align);
 		    }
 		    else {
@@ -3882,7 +3906,10 @@ class Axis {
 			    else
 			    	$this->img->SetTextAlign($this->label_halign,$this->label_valign);
 			}
-			$this->img->StrokeText($tpos,$aPos-$this->tick_label_margin,$label,
+			// xrms csim patch begin
+			//      $this->img->StrokeText($tpos,$aPos-$this->tick_label_margin,$label,
+			$bbox = $this->img->StrokeText($tpos,$aPos-$this->tick_label_margin,$label, 
+			// xrms csim patch end
 					       $this->label_angle,$this->label_para_align);
 		    }
 		}
@@ -3895,16 +3922,35 @@ class Axis {
 			    $this->img->SetTextAlign("right","center");
 			else
 			    $this->img->SetTextAlign($this->label_halign,$this->label_valign);
-			$this->img->StrokeText($aPos-$this->tick_label_margin,$tpos,$label,$this->label_angle,$this->label_para_align);	
+			// xrms csim patch begin
+			$bbox = $this->img->StrokeText($aPos-$this->tick_label_margin,$tpos,$label,$this->label_angle,$this->label_para_align); 
+			//      $this->img->StrokeText($aPos-$this->tick_label_margin,$tpos,$label,$this->label_angle,$this->label_para_align);	
+			// xrms csim patch end
 		    }
 		    else { // To the right of the y-axis
 			if( $this->label_halign=='' && $this->label_valign=='')	
 			    $this->img->SetTextAlign("left","center");
 			else
 			    $this->img->SetTextAlign($this->label_halign,$this->label_valign);
-			$this->img->StrokeText($aPos+$this->tick_label_margin,$tpos,$label,$this->label_angle,$this->label_para_align);	
+			// xrms csim patch begin
+			//      $this->img->StrokeText($aPos+$this->tick_label_margin,$tpos,$label,$this->label_angle,$this->label_para_align);	
+			$bbox = $this->img->StrokeText($aPos+$this->tick_label_margin,$tpos,$label,$this->label_angle,$this->label_para_align); 
+			// xrms csim patch end
 		    }
 		}
+
+		// xrms csim patch begin
+
+		// NOTE: Not sure about the placement of this one!!!
+        // Create CSIM targets
+        if(isset($this->csimtargets[$i])) {
+          $coords = $bbox[0].','.$bbox[1].','.$bbox[2].','.$bbox[3].','.$bbox[4].','.$bbox[5].','.$bbox[6].','.$bbox[7];
+          $this->csimareas .= "<area shape=\"poly\" coords=\"$coords\" href=\"".$this->csimtargets[$i]."\"";
+          $this->csimareas .= " alt=\"".$this->csimalts[$i]."\" title=\"".$this->csimalts[$i]."\" >\n";
+        } 
+
+
+		// xrms csim patch end
 	    }
 	    ++$i;	
 	}								
