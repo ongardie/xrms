@@ -3,7 +3,7 @@
  *
  * Opportunities by opportunity status report.
  *
- * $Id: opportunities-by-opportunity-status.php,v 1.5 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: opportunities-by-opportunity-status.php,v 1.6 2004/07/20 18:36:58 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -56,7 +56,7 @@ $graph_rows .= "g.addRow(" . implode(',', $array_of_opportunity_count_values) . 
 $rst1->close();
 $con->close();
 
-$page_title = "Opportunities by Status";
+$page_title = _("Opportunities by Status");
 start_page($page_title, true, $msg);
 
 ?>
@@ -68,10 +68,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Opportunities by Status</td>
+                <td class=widget_header><?php echo _("Opportunities by Status"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_center>Opportunities by Status</td>
+                <td class=widget_label_center><?php echo _("Opportunities by Status"); ?></td>
             </tr>
             <tr>
 
@@ -107,6 +107,9 @@ end_page();
 
 /**
  * $Log: opportunities-by-opportunity-status.php,v $
+ * Revision 1.6  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.5  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.9 2004/07/20 17:28:50 gpowers Exp $
+ * $Id: completed-items.php,v 1.10 2004/07/20 18:36:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -44,7 +44,7 @@ if ($friendly) {
     $display = "";
     }
 
-$page_title = "Completed Items";
+$page_title = _("Completed Items");
 if (($display) || (!$friendly)) {
     start_page($page_title, true, $msg);
 }
@@ -67,10 +67,10 @@ if (($display) || (!$friendly)) {
     <form action=completed-items.php method=get>
     <input type=hidden name=display value=y>
     <tr>
-        <th align=left>Start</th>
-        <th align=left>End</th>
-        <th align=left>User</th>
-        <th align=left>Type</th>
+        <th align=left>" . _("Start") . "</th>
+        <th align=left>" . _("End") . "</th>
+        <th align=left>" . _("User") . "</th>
+        <th align=left>" . _("Type") . "</th>
         <th align=left></th>
     </tr>
         <tr>
@@ -85,38 +85,38 @@ if (($display) || (!$friendly)) {
         echo " selected ";
     }
 
-    echo ">All</option>
+    echo ">" . _("All") . "</option>
                     <option value=activities";
 
     if ($type == "activities") {
         echo " selected ";
     }
 
-    echo ">Activities</option>
+    echo ">" . _("Activities") . "</option>
                     <option value=campaigns";
 
     if ($type == "campaigns") {
         echo " selected ";
     }
 
-    echo ">Campaigns</option>
+    echo ">" . _("Campaigns") . "</option>
                     <option value=opportunities";
 
     if ($type == "opportunities") {
         echo " selected ";
     }
 
-    echo ">Opportunities</option>
+    echo ">" . _("Opportunities") . "</option>
                     <option value=cases";
 
     if ($type == "cases") {
         echo " selected ";
     }
 
-    echo ">Cases</option>
+    echo ">" . _("Cases") . "</option>
                 </select></td>
             <td>
-                <input class=button type=submit value=Go>
+                <input class=button type=submit value=" . _("Go") . ">
             </td>
         </tr>
         <tr>
@@ -128,7 +128,7 @@ if (($display) || (!$friendly)) {
         echo "checked";
     }
 
-    echo ">Send Email To:
+    echo ">" . _("Send Email To") . ": 
             </td>
             <td>
                 <input name=send_email_to type=text value=" . $send_email_to . ">
@@ -140,7 +140,7 @@ if (($display) || (!$friendly)) {
         echo "checked";
     }
 
-    echo ">All Users
+    echo ">" . _("All Users") . "
             </td>
             <td>
                 <input name=friendly type=checkbox ";
@@ -149,7 +149,7 @@ if (($display) || (!$friendly)) {
         echo "checked";
     }
 
-    echo ">Printer Friendly
+    echo ">" . _("Printer Friendly") . "
             </td>
             </td>
             <td>
@@ -190,16 +190,16 @@ foreach ($userArray as $key => $user_id) {
         $rst = $con->execute($sql);
 
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>COMPLETED ACTIVITIES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("COMPLETED ACTIVITIES for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Start</th>";
-            $output .= "        <th align=left>End</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Company</th>";
-            $output .= "        <th align=left>Contact</th>";
-            $output .= "        <th align=left>Activity</th>";
+            $output .= "        <th align=left>" . _("Start") . "</th>";
+            $output .= "        <th align=left>" . _("End") . "</th>";
+            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Company") . "</th>";
+            $output .= "        <th align=left>" . _("Contact") . "</th>";
+            $output .= "        <th align=left>" . _("Activity") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -226,7 +226,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO COMPLETED ACTIVITIES for $name<b><br></p>\n";
+            $output .= "<p><b>" _("NO COMPLETED ACTIVITIES for") . " $name</b><br></p>\n";
         }
     }
     } // End Activities
@@ -241,14 +241,14 @@ foreach ($userArray as $key => $user_id) {
                 order by entered_at ";
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>COMPLETED CAMPAIGNS for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("COMPLETED CAMPAIGNS for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Start</th>";
-            $output .= "        <th align=left>End</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Campaign</th>";
+            $output .= "        <th align=left>" . _("Start") . "</th>";
+            $output .= "        <th align=left>" . _("End") . "</th>";
+            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Campaign") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -268,7 +268,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO COMPLETED CAMPAIGNS for $name<b><br></p>\n";
+            $output .= "<p><b>" . _("NO COMPLETED CAMPAIGNS for") . " $name</b><br></p>\n";
         }
     }
     } // End Campaigns
@@ -283,15 +283,15 @@ foreach ($userArray as $key => $user_id) {
                 order by entered_at";
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>COMPLETED OPPORTUNITIES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("COMPLETED OPPORTUNITIES for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Entered</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Company</th>";
-            $output .= "        <th align=left>Contact</th>";
-            $output .= "        <th align=left>Opportunity</th>";
+            $output .= "        <th align=left>" . _("Entered") . "</th>";
+            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Company") . "</th>";
+            $output .= "        <th align=left>" . _("Contact") . "</th>";
+            $output .= "        <th align=left>" . _("Opportunity") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -317,7 +317,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO COMPLETED OPPORTUNITIES for $name<b><br></p>\n";
+            $output .= "<p><b>" . _("NO COMPLETED OPPORTUNITIES for") . " $name</b><br></p>\n";
         }
     }
     } // End Opportunities
@@ -332,7 +332,7 @@ foreach ($userArray as $key => $user_id) {
               order by entered_at";
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>COMPLETED CASES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("COMPLETED CASES for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
             $output .= "    <tr>";
@@ -363,7 +363,7 @@ foreach ($userArray as $key => $user_id) {
         }
         else {
             if ($say_no_when_none) {
-                $output .= "<p><b>NO COMPLETED CASES for $name<b><br></p>\n";
+                $output .= "<p><b>" . _("NO COMPLETED CASES for") . " $name</b><br></p>\n";
             }
         }
     } // End Cases Type
@@ -388,6 +388,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.10  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.9  2004/07/20 17:28:50  gpowers
  * - fixed links in report
  *   - relative links didn't work in email report

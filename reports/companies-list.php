@@ -61,7 +61,7 @@ if ($pdf)
 
 // if we are here then its for an html page
 
-$page_title = "Companies list";
+$page_title = _("Companies List");
 start_page($page_title, true, $msg);
 
 // $con->debug = 1;
@@ -94,13 +94,13 @@ $rst->close();
 
 <table>
 	<tr>
-		<th>Company Name</th>
-		<th>Owner</th>
-		<th>Category</th>
-		<th>CRM Status</th>
-		<th>City</th>
-		<th>State</th>
-		<th>Country</th>
+		<th><?php echo _("Company Name"); ?></th>
+		<th><?php echo _("Owner"); ?></th>
+		<th><?php echo _("Category"); ?></th>
+		<th><?php echo _("CRM Status"); ?></th>
+		<th><?php echo _("City"); ?></th>
+		<th><?php echo _("State"); ?></th>
+		<th><?php echo _("Country"); ?></th>
 		<th>&nbsp;</th>
 		<th>&nbsp;</th>
 	</tr>
@@ -113,8 +113,8 @@ $rst->close();
 			<td><input type=text name=city value="<?php echo $city; ?>"></td>
 			<td><input type=text name=state value="<?php echo $state; ?>"></td>
 			<td><input type=text name=country value="<?php echo $country; ?>"></td>
-			<td><input class=button type=submit name="go" value="Go"></td>
-			<td><input class=button type=submit name="pdf" value="PDF"></td>
+			<td><input class=button type=submit name="go" value="<?php echo ("Go"); ?>"></td>
+			<td><input class=button type=submit name="pdf" value="<?php echo ("PDF"); ?>"></td>
 		</form>
 	</tr>
 </table>
@@ -145,16 +145,16 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
 	}
 	$output = "<table border=0>";
 	$output .= "<tr>";
-	$output .= "<th$w1>Code</th>";
-	$output .= "<th$w2>Company name</th>";
-	$output .= "<th$w3>Address</th>";
-	$output .= "<th$w4>Postal Code</th>";
-	$output .= "<th$w5>City</th>";
-	$output .= "<th$w6>Country</th>";
-	$output .= "<th$w7>Tel</th>";
-	$output .= "<th$w8>Categories</th>";
-	$output .= "<th$w9>User</th>";
-	$output .= "<th$w10>Notes</th>";
+	$output .= "<th$w1>" . _("Code") . "</th>";
+	$output .= "<th$w2>" . _("Company Name") . "</th>";
+	$output .= "<th$w3>" . _("Address") . "</th>";
+	$output .= "<th$w4>" . _("Postal Code") . "</th>";
+	$output .= "<th$w5>" . _("City") . "</th>";
+	$output .= "<th$w6>" . _("Country") . "</th>";
+	$output .= "<th$w7>" . _("Tel") . "</th>";
+	$output .= "<th$w8>" . _("Categories") . "</th>";
+	$output .= "<th$w9>" . _("User") . "</th>";
+	$output .= "<th$w10>" . _("Notes") . "</th>";
 	$output .= "</tr>\n";
 	$sql2 = "SELECT c.company_name, c.company_id, c.company_code, a.line1, a.line2, a.postal_code, a.city, ";
 	$sql2 .= "a.province, c.phone, co.country_name, u.username from ";
@@ -244,7 +244,7 @@ function companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_
 	}
 	$con->close();
 	$output .= "</table>";
-	$output .= "<p>Total records: $numrows </p>";
+	$output .= "<p>" . _("Total records") . ": $numrows </p>";
 	return $output;
 }
 

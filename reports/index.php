@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.16 2004/07/17 17:52:45 braverock Exp $
+ * $Id: index.php,v 1.17 2004/07/20 18:36:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -24,7 +24,7 @@ $rst->close();
 
 $con->close();
 
-$page_title = 'Reports';
+$page_title = _("Reports");
 start_page($page_title, true, $msg);
 
 ?>
@@ -34,107 +34,107 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td colspan=2 class=widget_header>Graphs</td>
+                <td colspan=2 class=widget_header><?php echo _("Graphs"); ?></td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Company</td>
+                <td colspan=2 class=widget_label_center><?php echo _("Company"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="companies-by-crm-status.php">Companies by CRM Status</a></td>
-                <td class=widget_content> Your sales funnel - how many of your accounts are in each stage of the customer development process?</td>
+                <td class=widget_content><a href="companies-by-crm-status.php"><?php echo _("Companies by CRM Status"); ?></a></td>
+                <td class=widget_content><?php echo _("Your sales funnel - how many of your accounts are in each stage of the customer development process?"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="companies-by-industry.php">Companies by Industry</a></td>
-                <td class=widget_content>How many companies are in each industry?</td>
+                <td class=widget_content><a href="companies-by-industry.php"><?php echo _("Companies by Industry"); ?></a></td>
+                <td class=widget_content><?php echo _("How many companies are in each industry?"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="companies-by-company-source.php">Companies by Source</a></td>
-                <td class=widget_content>How many of your accounts come from each source?</td>
+                <td class=widget_content><a href="companies-by-company-source.php"><?php echo _("Companies by Source"); ?></a></td>
+                <td class=widget_content><?php echo _("How many of your accounts come from each source?"); ?></td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Opportunity</td>
+                <td colspan=2 class=widget_label_center><?php echo _("Opportunity"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content>
-                    <a href="opportunities-quantity-by-opportunity-status.php">Quantity by Status</a>
+                    <a href="opportunities-quantity-by-opportunity-status.php"><?php echo _("Quantity by Status"); ?></a>
                 </td>
-                <td class=widget_content>How many opportunities are in each stage of the sales closing process?</td>
+                <td class=widget_content><?php echo _("How many opportunities are in each stage of the sales closing process?"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="opportunities-size-by-opportunity-status.php">Size by Status</a></td>
-                <td class=widget_content>How much potential revenue is in each stage of the sales closing process?</td>
+                <td class=widget_content><a href="opportunities-size-by-opportunity-status.php"><?php echo _("Size by Status"); ?></a></td>
+                <td class=widget_content><?php echo _("How much potential revenue is in each stage of the sales closing process?"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="opportunities-quantity-by-industry.php">Quantity by Industry</a></td>
-                <td class=widget_content>How many opportunities are tied to companies in each industry?</td>
+                <td class=widget_content><a href="opportunities-quantity-by-industry.php"><?php echo _("Quantity by Industry<"); ?>/a></td>
+                <td class=widget_content><?php echo _("How many opportunities are tied to companies in each industry?"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="opportunities-size-by-industry.php">Size by Industry</a></td>
-                <td class=widget_content>How much potential revenue is tied to companies in each industry?</td>
+                <td class=widget_content><a href="opportunities-size-by-industry.php"><?php echo _("Size by Industry"); ?></a></td>
+                <td class=widget_content><?php echo _("How much potential revenue is tied to companies in each industry?"); ?></td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Case</td>
+                <td colspan=2 class=widget_label_center><?php echo _("Case"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="cases-by-case-status.php">Cases by Status</a></td>
-                <td class=widget_content>How many cases are in each stage of the case resolution process?</td>
+                <td class=widget_content><a href="cases-by-case-status.php"><?php echo _("Cases by Status"); ?></a></td>
+                <td class=widget_content><?php echo _("How many cases are in each stage of the case resolution process?"); ?></td>
             </tr>
         </table>
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td colspan=2 class=widget_header>Reports</td>
+                <td colspan=2 class=widget_header><?php echo _("Reports"); ?></td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Company Reports</td>
+                <td colspan=2 class=widget_label_center><?php echo _("Company Reports"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="companies-list.php">Company List</a></td>
-                <td class=widget_content>List of companies, addresses and phone numbers</td>
+                <td class=widget_content><a href="companies-list.php"><?php echo _("Company List"); ?></a></td>
+                <td class=widget_content><?php echo _("List of companies, addresses and phone numbers"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="company-contacts-printout.php">Contacts at Companies</a></td>
-                <td class=widget_content>Printable contact summary information for Companies in search Results.</td>
+                <td class=widget_content><a href="company-contacts-printout.php"><?php echo _("Contacts at Companies"); ?></a></td>
+                <td class=widget_content><?php echo _("Printable contact summary information for Companies in search Results."); ?></td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>User Reports</td>
+                <td colspan=2 class=widget_label_center><?php echo _("User Reports"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="activitytimes.php">Activity Time Sheets</a></td>
+                <td class=widget_content><a href="activitytimes.php"><?php echo _("Activity Time Sheets"); ?></a></td>
                 <td class=widget_content>
-                    List Activiites by Start, End, and User (also shows Duration, Company and Contact)
+                    <?php echo _("List Activiites by Start, End, and User (also shows Duration, Company and Contact)"); ?>
                 </td>
             </tr>
             <tr>
-                <td class=widget_content><a href="overdue-items.php">Overdue Items</a></td>
-                <td class=widget_content>List Overdue Items by User and Type</td>
+                <td class=widget_content><a href="overdue-items.php"><?php echo _("Overdue Items"); ?></a></td>
+                <td class=widget_content><?php echo _("List Overdue Items by User and Type"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="open-items.php">Open Items</a></td>
-                <td class=widget_content>List Open Items by User and Type</td>
+                <td class=widget_content><a href="open-items.php"><?php echo _("Open Items"); ?></a></td>
+                <td class=widget_content><?php echo _("List Open Items by User and Type"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="completed-items.php">Completed Items</a></td>
-                <td class=widget_content>List Completed Items by Date Range, User and Type</td>
+                <td class=widget_content><a href="completed-items.php"><?php echo _("Completed Items"); ?></a></td>
+                <td class=widget_content><?php echo _("List Completed Items by Date Range, User and Type"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="audit-items.php">Audit Items</a></td>
-                <td class=widget_content>List Audit Items by Date and User</td>
+                <td class=widget_content><a href="audit-items.php"><?php echo _("Audit Items"); ?></a></td>
+                <td class=widget_content><?php echo _("List Audit Items by Date and User"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="sales-automation.php">Sales Force Automation</a></td>
-                <td class=widget_content>Measure performance of users over a selectable timeframe</td>
+                <td class=widget_content><a href="sales-automation.php"><?php echo _("Sales Force Automation"); ?></a></td>
+                <td class=widget_content><?php echo _("Measure performance of users over a selectable timeframe"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content colspan="2">
                     <form action="user-activity.php" method=post>
-                        Activity Report for <?php echo $user_menu; ?>
-                        <input class=button type=submit value="Go">
+                        <?php echo _("Activity Report for"); ?> <?php echo $user_menu; ?>
+                        <input class=button type=submit value="<?php echo _("Go"); ?>">
                     </form>
                 </td>
             </tr>
             <tr>
-                <td colspan=2 class=widget_label_center>Custom Reports</td>
+                <td colspan=2 class=widget_label_center><?php echo _("Custom Reports"); ?></td>
             </tr>
             <?php
                 // allow plugins to insert thier own reports on the main reports page
@@ -159,6 +159,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.17  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.16  2004/07/17 17:52:45  braverock
  * - Add Companies List report contributed by John Fawcett
  *

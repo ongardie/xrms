@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.6 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: audit-items.php,v 1.7 2004/07/20 18:36:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -24,7 +24,7 @@ $connection_details = $_GET['connection_details'];
 $all_dates = $_GET['all_dates'];
 $all_users = $_GET['all_users'];
 
-$page_title = "Audit Log";
+$page_title = _("Audit Log");
 start_page($page_title, true, $msg);
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -40,9 +40,9 @@ $rst->close();
 <form action="audit-items.php" method=get>
 <table>
     <tr>
-        <th>Start</th>
-        <th>End</th>
-        <th>User</th>
+        <th><?php echo _("Start"); ?></th>
+        <th><?php echo _("End"); ?></th>
+        <th><?php echo _("User"); ?></th>
         <th></th>
     </tr>
         <tr>
@@ -53,11 +53,11 @@ $rst->close();
         </tr>
         <tr>
             <td><input type=checkbox name=all_dates
-                <?php if ($all_dates) { echo "checked"; } ?>>All Dates</td>
+                <?php if ($all_dates) { echo "checked"; } ?>><?php echo _("All Dates"); ?></td>
             <td><input type=checkbox name=connection_details
-                <?php if ($connection_details) { echo "checked"; } ?>>Connection Details</td>
+                <?php if ($connection_details) { echo "checked"; } ?>><?php echo _("Connection Details"); ?></td>
             <td><!-- <input type=checkbox name=all_users>All Users --></td>
-            <td><input class=button type=submit value="Go"></td>
+            <td><input class=button type=submit value="<?php echo _("Go"); ?>"></td>
         </tr>
 </table>
 </form>
@@ -89,19 +89,19 @@ if ($user_id) {
     if ($rst) {
         echo "<table>";
         echo "    <tr>";
-        echo "        <th align=left>Line</th>";
-        echo "        <th align=left>Time</th>";
-        echo "        <th align=left>User</th>";
-        echo "        <th align=left>Type</th>";
-        echo "        <th align=left>Table</th>";
-        echo "        <th align=left>Name</th>";
+        echo "        <th align=left>" . _("Line") . "</th>";
+        echo "        <th align=left>" . _("Time") . "</th>";
+        echo "        <th align=left>" . _("User") . "</th>";
+        echo "        <th align=left>" . _("Type") . "</th>";
+        echo "        <th align=left>" . _("Table") . "</th>";
+        echo "        <th align=left>" . _("Name") . "</th>";
         echo "    </tr>";
         if ($connection_details) {
             echo "    <tr>";
             echo "        <th align=left></th>";
-            echo "        <th align=left>Remote Addr</th>";
-            echo "        <th align=left>Remote Port</th>";
-            echo "        <th align=left colspan=3>Session Id</th>";
+            echo "        <th align=left>" . _("Remote Addr") . "</th>";
+            echo "        <th align=left>" . _("Remote Port") . "</th>";
+            echo "        <th align=left colspan=3>" . _("Session Id") . "</th>";
             echo "    </tr>";
             echo "    <tr><td colspan=6><hr></td></tr>";
         }
@@ -167,7 +167,7 @@ if ($user_id) {
         echo "</table>";
     }
     else {
-        echo "No Activity.";
+        echo _("No Activity.");
     }
     add_audit_item($con, $session_user_id, 'read', 'audit_items', '', 1);
     $con->close();
@@ -177,6 +177,9 @@ end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.7  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.6  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

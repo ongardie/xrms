@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: overdue-items.php,v 1.1 2004/06/21 15:40:42 gpowers Exp $
+ * $Id: overdue-items.php,v 1.2 2004/07/20 18:36:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -49,7 +49,7 @@ if ($friendly) {
 $time_now =  date("Y-m-d H:i:s",strtotime ($ending));
 $time_window =  date("Y-m-d H:i:s",strtotime ($starting));
 
-$page_title = "Overdue Items";
+$page_title = _("Overdue Items");
 if (($display) || (!$friendly)) {
     start_page($page_title, true, $msg);
 }
@@ -67,9 +67,9 @@ if (($display) || (!$friendly)) {
     <form action=overdue-items.php method=get>
     <input type=hidden name=display value=y>
     <tr>
-        <th>User</th>
-        <th>Type</th>
-        <th>Time Window</th>
+        <th>" . _("User") . "</th>
+        <th>" . _("Type") . "</th>
+        <th>" . _("Time Window") . "</th>
         <th></th>
     </tr>
         <tr>
@@ -82,39 +82,39 @@ if ($type == "all") {
     echo " selected ";
 }
 
-echo ">All</option>
+echo ">" . _("All") . "</option>
                     <option value=activities";
 
 if ($type == "activities") {
     echo " selected ";
 }
 
-echo ">Activities</option>
+echo ">" . _("Activities") . "</option>
                     <option value=campaigns";
 
 if ($type == "campaigns") {
     echo " selected ";
 }
 
-echo ">Campaigns</option>
+echo ">" . _("Campaigns") . "</option>
                     <option value=opportunities";
 
 if ($type == "opportunities") {
     echo " selected ";
 }
 
-echo ">Opportunities</option>
+echo ">" . _("Opportunities") . "</option>
                     <option value=cases";
 
 if ($type == "cases") {
     echo " selected ";
 }
 
-echo ">Cases</option>
+echo ">" . _("Cases") . "</option>
                 </select></td>
             <td><input type=text name=starting value=\"" . $starting . "\"></td>
             <td>
-                <input class=button type=submit value=Go>
+                <input class=button type=submit value=" . _("Go") . ">
             </td>
         </tr>
         <tr>
@@ -125,7 +125,7 @@ echo ">Cases</option>
         echo "checked";
     }
 
-    echo ">All Users
+    echo ">" . _("All Users") . "
             </td>
             <td>
                 <input name=friendly type=checkbox ";
@@ -134,7 +134,7 @@ echo ">Cases</option>
         echo "checked";
     }
 
-    echo ">Printer Friendly
+    echo ">" . _("Printer Friendly") . "
             </td>
             </td>
             <td>
@@ -148,7 +148,7 @@ echo ">Cases</option>
         echo "checked";
     }
 
-    echo ">Send Email To:
+    echo ">" . _("Send Email To") . ":
             </td>
             <td>
                 <input name=send_email_to type=text value=" . $send_email_to . ">
@@ -192,16 +192,16 @@ foreach ($userArray as $key => $user_id) {
         $rst = $con->execute($sql);
 
         if (($rst) && (!$rst->EOF)) {
-            $output .= "<p><font size=+2><b>OVERDUE ACTIVITIES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("OVERDUE ACTIVITIES for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Start</th>";
-            $output .= "        <th align=left>End</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Company</th>";
-            $output .= "        <th align=left>Contact</th>";
-            $output .= "        <th align=left>Activity</th>";
+            $output .= "        <th align=left>" . _("Start") . "</th>";
+            $output .= "        <th align=left>" . _("End") . "</th>";
+            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Company") . "</th>";
+            $output .= "        <th align=left>" . _("Contact") . "</th>";
+            $output .= "        <th align=left>" . _("Activity") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -229,7 +229,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO OVERDUE ACTIVITIES for $name<b><br></p>\n";
+            $output .= "<p><b>" . _("NO OVERDUE ACTIVITIES for") . " $name</b><br></p>\n";
         }
     }
 
@@ -243,14 +243,14 @@ foreach ($userArray as $key => $user_id) {
                  and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
         if (($rst) && (!$rst->EOF)) {
-            $output .= "<p><font size=+2><b>OVERDUE CAMPAIGNS for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("OVERDUE CAMPAIGNS for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Start</th>";
-            $output .= "        <th align=left>End</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Campaign</th>";
+            $output .= "        <th align=left>" . _("Start") . "</th>";
+            $output .= "        <th align=left>" . _("End") . "</th>";
+            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Campaign") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -271,7 +271,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO OVERDUE CAMPAIGNS for $name<b><br></p>\n";
+            $output .= "<p><b>" . _("NO OVERDUE CAMPAIGNS for") . " $name</b><br></p>\n";
         }
     }
     } // End Campaigns Type
@@ -286,15 +286,15 @@ foreach ($userArray as $key => $user_id) {
 
         $rst = $con->execute($sql);
         if (($rst) && (!$rst->EOF)) {
-            $output .= "<p><font size=+2><b>OVERDUE OPPORTUNITIES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("OVERDUE OPPORTUNITIES for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Entered</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Company</th>";
-            $output .= "        <th align=left>Contact</th>";
-            $output .= "        <th align=left>Opportunity</th>";
+            $output .= "        <th align=left>" . _("Entered") . "</th>";
+            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Company") . "</th>";
+            $output .= "        <th align=left>" . _("Contact") . "</th>";
+            $output .= "        <th align=left>" . _("Opportunity") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -321,7 +321,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO OVERDUE OPPORTUNITIES for $name<b><br></p>\n";
+            $output .= "<p><b>" . _("NO OVERDUE OPPORTUNITIES for") . " $name</b><br></p>\n";
         }
     }
     } // End Opportunities Type
@@ -336,15 +336,15 @@ foreach ($userArray as $key => $user_id) {
 
         $rst = $con->execute($sql);
         if (($rst) && (!$rst->EOF)) {
-            $output .= "<p><font size=+2><b>OVERDUE CASES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("OVERDUE CASES for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Entered</th>";
-            $output .= "        <th align=left>Due</th>";
-            $output .= "        <th align=left>Company</th>";
-            $output .= "        <th align=left>Contact</th>";
-            $output .= "        <th align=left>Case</th>";
+            $output .= "        <th align=left>" . _("Entered") . "</th>";
+            $output .= "        <th align=left>" . _("Due") . "</th>";
+            $output .= "        <th align=left>" . _("Company") . "</th>";
+            $output .= "        <th align=left>" . _("Contact") . "</th>";
+            $output .= "        <th align=left>" . _("Case") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -368,7 +368,7 @@ foreach ($userArray as $key => $user_id) {
         }
         else {
             if ($say_no_when_none) {
-                $output .= "<p><b>NO OVERDUE CASES for $name<b><br></p>\n";
+                $output .= "<p><b>" . _("NO OVERDUE CASES for") . " $name</b><br></p>\n";
             }
         }
     } // End Cases Type
@@ -383,7 +383,7 @@ if ($send_email) {
     }
     $headers  = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
-    mail($email, "XRMS: Overdue Items", $output, $headers);
+    mail($email, _("XRMS: Overdue Items"), $output, $headers);
     if (($display) || ($friendly)) {
         echo $output;
     }
@@ -399,6 +399,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: overdue-items.php,v $
+ * Revision 1.2  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.1  2004/06/21 15:40:42  gpowers
  * - based on open-items.php
  *

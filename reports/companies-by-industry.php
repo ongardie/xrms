@@ -3,7 +3,7 @@
  *
  * Companies by industry report.
  *
- * $Id: companies-by-industry.php,v 1.5 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: companies-by-industry.php,v 1.6 2004/07/20 18:36:58 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -54,7 +54,7 @@ $graph_rows .= "g.addRow(" . implode(',', $array_of_company_count_values) . ");\
 $rst1->close();
 $con->close();
 
-$page_title = "Companies by Industry";
+$page_title = _("Companies by Industry");
 start_page($page_title, true, $msg);
 
 ?>
@@ -66,10 +66,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Companies by Industry</td>
+                <td class=widget_header><?php echo _("Companies by Industry"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_center>Companies by Industry</td>
+                <td class=widget_label_center><?php echo _("Companies by Industry"); ?></td>
             </tr>
             <tr>
 
@@ -105,6 +105,9 @@ end_page();
 
 /**
  * $Log: companies-by-industry.php,v $
+ * Revision 1.6  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.5  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

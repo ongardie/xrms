@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.4 2004/07/04 09:56:07 metamedia Exp $
+ * $Id: activitytimes.php,v 1.5 2004/07/20 18:36:57 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -22,7 +22,7 @@ $ending = $_POST['ending'];
 $user_id = $_POST['user_id'];
 $only_show_completed = $_POST['only_show_completed'];
 
-echo ">>$only_show_completed";
+//echo ">>$only_show_completed";
 
 if (strlen($only_show_completed) > 0) {
 	$checked_only_show_completed = "checked";
@@ -33,7 +33,7 @@ else $only_show_completed = false;
 if (!strlen($starting) > 0) $starting = date("Y-m-d");
 if (!strlen($ending) > 0) $ending = date("Y-m-d");
 
-$page_title = "Timesheets";
+$page_title = _("Timesheets");
 start_page($page_title, true, $msg);
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -48,9 +48,9 @@ $rst->close();
 
 <table>
     <tr>
-        <th>Start</th>
-        <th>End</th>
-        <th>User</th>
+        <th><?php echo _("Start"); ?></th>
+        <th><?php echo _("End"); ?></th>
+        <th><?php echo _("User"); ?></th>
         <th></th>
     </tr>
         <tr>
@@ -58,8 +58,8 @@ $rst->close();
                 <td><input type=text name=starting value="<?php  echo $starting; ?>"></td>
                 <td><input type=text name=ending value="<?php  echo $ending; ?>"></td>
                 <td><?php echo $user_menu; ?></td>
-		<td><input type=checkbox name=only_show_completed value="true" <?php  echo $checked_only_show_completed; ?>>Only show completed activities</input></td>
-                <td><input class=button type=submit value="Go"></td>
+            <td><input type=checkbox name=only_show_completed value="true" <?php  echo $checked_only_show_completed; ?>><?php echo _("Only show completed activities"); ?></input></td>
+            <td><input class=button type=submit value="<?php echo _("Go"); ?>"></td>
             </form>
         </tr>
 </table>
@@ -69,13 +69,13 @@ $rst->close();
 if ($user_id) {
     echo "<table>";
     echo "    <tr>";
-    echo "        <th>Start</th>";
-    echo "        <th>End</th>";
-    echo "        <th>Duration</th>";
-    echo "        <th>User</th>";
-    echo "        <th>Company</th>";
-    echo "        <th>Contact</th>";
-    echo "        <th>Activity</th>";
+    echo "        <th>" . _("Start") . "</th>";
+    echo "        <th>" . _("End") . "</th>";
+    echo "        <th>" . _("Duration") . "</th>";
+    echo "        <th>" . _("User") . "</th>";
+    echo "        <th>" . _("Company") . "</th>";
+    echo "        <th>" . _("Contact") . "</th>";
+    echo "        <th>" . _("Activity") . "</th>";
     echo "    </tr>";
 
     $sql = "select username from users where user_id = $user_id";
@@ -118,7 +118,7 @@ if ($user_id) {
     }
     $con->close();
 
-    echo "<tr><td></td><td align=right><strong>TOTAL</srtong><td><strong>" . formatSeconds($total_time) . "</strong> ($total_time sec)</td><td></td><td></td><td></td></tr>\n";
+    echo "<tr><td></td><td align=right><strong>" . _("TOTAL") . "</strong><td><strong>" . formatSeconds($total_time) . "</strong> ($total_time sec)</td><td></td><td></td><td></td></tr>\n";
     echo "</table>";
 }
 
@@ -180,6 +180,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.5  2004/07/20 18:36:57  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.4  2004/07/04 09:56:07  metamedia
  * Added option to include only completed activities in the report. Also modified form so that the form elements are rendered with values that match the last query.
  *

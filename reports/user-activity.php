@@ -2,7 +2,7 @@
 /**
  * Create a graph of activity for the requested user.
  *
- * $Id: user-activity.php,v 1.5 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: user-activity.php,v 1.6 2004/07/20 18:36:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -65,7 +65,7 @@ $con->close();
 
 $graph_legend = implode(',', $graph_legend_array);
 
-$page_title = "Activity Summary : $username";
+$page_title = _("Activity Summary") . ": " . $username;
 start_page($page_title, true, $msg);
 
 ?>
@@ -77,10 +77,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Activity Summary</td>
+                <td class=widget_header><?php echo _("Activity Summary"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_center>Activity Summary</td>
+                <td class=widget_label_center><?php echo _("Activity Summary"); ?></td>
             </tr>
             <tr>
 
@@ -117,6 +117,9 @@ end_page();
 
 /**
  * $Log: user-activity.php,v $
+ * Revision 1.6  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.5  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

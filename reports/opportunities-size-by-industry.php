@@ -3,7 +3,7 @@
  *
  * Opportunities size by industry report.
  *
- * $Id: opportunities-size-by-industry.php,v 1.4 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: opportunities-size-by-industry.php,v 1.5 2004/07/20 18:36:58 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -68,7 +68,7 @@ $graph_rows .= "g.addRow(" . implode(',', $array_of_total_values) . ");\n";
 $rst1->close();
 $con->close();
 
-$page_title = "Opportunities (Size) by Industry";
+$page_title = _("Opportunities (Size) by Industry");
 start_page($page_title, true, $msg);
 
 ?>
@@ -80,10 +80,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Opportunities (Size) by Industry</td>
+                <td class=widget_header><?php echo _("Opportunities (Size) by Industry"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_center>Opportunities (Size) by Industry</td>
+                <td class=widget_label_center><?php echo _("Opportunities (Size) by Industry"); ?></td>
             </tr>
             <tr>
 
@@ -94,7 +94,7 @@ start_page($page_title, true, $msg);
                 g.scale = <?php echo round(array_sum($array_of_total_values) / sizeof($array_of_total_values)) ?>;
                 g.stacked = true;
                 g.setXScaleValues(<?php  echo implode(',', $graph_legend_array); ?>);
-				g.setLegend('Remainder', 'Weighted');
+				g.setLegend('<?php echo _("Remainder"); ?>', '<?php echo _("Weighted"); ?>');
                 g.build();
                 </SCRIPT>
                 </td>
@@ -120,6 +120,9 @@ end_page();
 
 /**
  * $Log: opportunities-size-by-industry.php,v $
+ * Revision 1.5  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.4  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

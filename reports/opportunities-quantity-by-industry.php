@@ -3,7 +3,7 @@
  *
  * Opportunities by quanity by industry report.
  *
- * $Id: opportunities-quantity-by-industry.php,v 1.4 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: opportunities-quantity-by-industry.php,v 1.5 2004/07/20 18:36:58 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -57,7 +57,7 @@ $graph_rows .= "g.addRow(" . implode(',', $array_of_opportunity_count_values) . 
 $rst1->close();
 $con->close();
 
-$page_title = "Opportunities by Industry";
+$page_title = _("Opportunities by Industry");
 start_page($page_title, true, $msg);
 
 ?>
@@ -69,10 +69,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Opportunities by Industry</td>
+                <td class=widget_header><?php echo _("Opportunities by Industry"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_center>Opportunities by Industry</td>
+                <td class=widget_label_center><?php echo _("Opportunities by Industry"); ?></td>
             </tr>
             <tr>
 
@@ -108,6 +108,9 @@ end_page();
 
 /**
  * $Log: opportunities-quantity-by-industry.php,v $
+ * Revision 1.5  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.4  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.

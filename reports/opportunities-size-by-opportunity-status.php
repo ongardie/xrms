@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.5 2004/07/04 09:10:56 metamedia Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.6 2004/07/20 18:36:58 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -79,7 +79,7 @@ $graph_rows .= "g.addRow(" . implode(',', $array_of_total_values) . ");\n";
 $rst1->close();
 $con->close();
 
-$page_title = "Opportunities (Size) by Status";
+$page_title = _("Opportunities (Size) by Status");
 start_page($page_title, true, $msg);
 
 ?>
@@ -91,10 +91,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Opportunities (Size) by Status</td>
+                <td class=widget_header><?php echo _("Opportunities (Size) by Status"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_center>Opportunities (Size) by Status</td>
+                <td class=widget_label_center><?php echo _("Opportunities (Size) by Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_graph>
@@ -104,7 +104,7 @@ start_page($page_title, true, $msg);
                 g.scale = <?php echo round(array_sum($array_of_total_values) / sizeof($array_of_total_values)) ?>;
                 g.stacked = true;
                 g.setXScaleValues(<?php  echo implode(',', $graph_legend_array); ?>);
-				g.setLegend('Remainder', 'Weighted');
+				g.setLegend('<?php echo _("Remainder"); ?>', '<?php echo _("Weighted"); ?>');
                 g.build();
                 </SCRIPT>
                 </td>
@@ -114,8 +114,8 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element>
 		<form method=get>
 		<input type=checkbox name=exclude_closed_opps value="true" <?php echo $checked_exclude_closed_opps; ?>>
-		Exclude Closed Opportunities</input>
-		<input type=submit class=button value="Change Graph">
+		<?php echo ("Exclude Closed Opportunities"); ?>
+		<input type=submit class=button value="<?php echo ("Change Graph"); ?>">
 		</form>
 		</td>
             </tr>
@@ -138,6 +138,9 @@ end_page();
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.6  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.5  2004/07/04 09:10:56  metamedia
  * Added option to exclude closed opportunities from the graph.
  *

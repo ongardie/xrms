@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.9 2004/07/20 17:26:48 gpowers Exp $
+ * $Id: open-items.php,v 1.10 2004/07/20 18:36:58 introspectshun Exp $
  */
 require_once('../include-locations.inc');
 
@@ -32,7 +32,7 @@ if ($friendly) {
     $display = "";
     }
 
-$page_title = "Open Items";
+$page_title = _("Open Items");
 if (($display) || (!$friendly)) {
     start_page($page_title, true, $msg);
 }
@@ -54,8 +54,8 @@ if (($display) || (!$friendly)) {
     <form action=open-items.php method=get>
     <input type=hidden name=display value=y>
     <tr>
-        <th>User</th>
-        <th>Type</th>
+        <th>" . _("User") . "</th>
+        <th>" . _("Type") . "</th>
         <th></th>
     </tr>
         <tr>
@@ -68,38 +68,38 @@ if ($type == "all") {
     echo " selected ";
 }
 
-echo ">All</option>
+echo ">" . _("All") . "</option>
                     <option value=activities";
 
 if ($type == "activities") {
     echo " selected ";
 }
 
-echo ">Activities</option>
+echo ">" . _("Activities") . "</option>
                     <option value=campaigns";
 
 if ($type == "campaigns") {
     echo " selected ";
 }
 
-echo ">Campaigns</option>
+echo ">" . _("Campaigns") . "</option>
                     <option value=opportunities";
 
 if ($type == "opportunities") {
     echo " selected ";
 }
 
-echo ">Opportunities</option>
+echo ">" . _("Opportunities") . "</option>
                     <option value=cases";
 
 if ($type == "cases") {
     echo " selected ";
 }
 
-echo ">Cases</option>
+echo ">" . _("Cases") . "</option>
                 </select></td>
             <td>
-                <input class=button type=submit value=Go>
+                <input class=button type=submit value=" . _("Go") . ">
             </td>
         </tr>
         <tr>
@@ -110,7 +110,7 @@ echo ">Cases</option>
         echo "checked";
     }
 
-    echo ">All Users
+    echo ">" . _("All Users") . "
             </td>
             <td>
                 <input name=friendly type=checkbox ";
@@ -119,7 +119,7 @@ echo ">Cases</option>
         echo "checked";
     }
 
-    echo ">Printer Friendly
+    echo ">" . _("Printer Friendly") . "
             </td>
             </td>
             <td>
@@ -133,7 +133,7 @@ echo ">Cases</option>
         echo "checked";
     }
 
-    echo ">Send Email To:
+    echo ">" . _("Send Email To") . ":
             </td>
             <td>
                 <input name=send_email_to type=text value=" . $send_email_to . ">
@@ -177,16 +177,16 @@ foreach ($userArray as $key => $user_id) {
         $rst = $con->execute($sql);
 
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>OPEN ACTIVITIES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("OPEN ACTIVITIES") . " for $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Start</th>";
-            $output .= "        <th align=left>End</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Company</th>";
-            $output .= "        <th align=left>Contact</th>";
-            $output .= "        <th align=left>Activity</th>";
+            $output .= "        <th align=left>" . _("Start</th>";
+            $output .= "        <th align=left>" . _("End</th>";
+            $output .= "        <th align=left>" . _("Type</th>";
+            $output .= "        <th align=left>" . _("Company</th>";
+            $output .= "        <th align=left>" . _("Contact</th>";
+            $output .= "        <th align=left>" . _("Activity</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=6><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -213,7 +213,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO OPEN ACTIVITIES for $name<b><br></p>\n";
+            $output .= "<p><b>" . _("NO OPEN ACTIVITIES for") . " $name</b><br></p>\n";
         }
     }
 
@@ -226,14 +226,14 @@ foreach ($userArray as $key => $user_id) {
                  and user_id = $user_id order by entered_at ";
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>OPEN CAMPAIGNS for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("OPEN CAMPAIGNS for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Start</th>";
-            $output .= "        <th align=left>End</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Campaign</th>";
+            $output .= "        <th align=left>" . _("Start") . "</th>";
+            $output .= "        <th align=left>" . _("End") . "</th>";
+            $output .= "        <th align=left>" . _("Type") . "</th>";
+            $output .= "        <th align=left>" . _("Campaign") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -253,7 +253,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO OPEN CAMPAIGNS for $name<b><br></p>\n";
+            $output .= "<p><b>" . _("NO OPEN CAMPAIGNS for") . " $name</b><br></p>\n";
         }
     }
     } // End Campaigns Type
@@ -267,15 +267,15 @@ foreach ($userArray as $key => $user_id) {
 
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>OPEN OPPORTUNITIES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . ("OPEN OPPORTUNITIES for") . " $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Entered</th>";
-            $output .= "        <th align=left>Type</th>";
-            $output .= "        <th align=left>Company</th>";
-            $output .= "        <th align=left>Contact</th>";
-            $output .= "        <th align=left>Opportunity</th>";
+            $output .= "        <th align=left>" . ("Entered") . "</th>";
+            $output .= "        <th align=left>" . ("Type") . "</th>";
+            $output .= "        <th align=left>" . ("Company") . "</th>";
+            $output .= "        <th align=left>" . ("Contact") . "</th>";
+            $output .= "        <th align=left>" . ("Opportunity") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=4><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -301,7 +301,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>NO OPEN OPPORTUNITIES for $name<b><br></p>\n";
+            $output .= "<p><b>" . _("NO OPEN OPPORTUNITIES for") . " $name</b><br></p>\n";
         }
     }
     } // End Opportunities Type
@@ -315,15 +315,15 @@ foreach ($userArray as $key => $user_id) {
 
         $rst = $con->execute($sql);
         if (!$rst->EOF) {
-            $output .= "<p><font size=+2><b>OPEN CASES for $name<b></font><br></p>\n";
+            $output .= "<p><font size=+2><b>" . _("OPEN CASES for $name</b></font><br></p>\n";
             $output .= "<table>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
             $output .= "    <tr>";
-            $output .= "        <th align=left>Entered</th>";
-            $output .= "        <th align=left>Due</th>";
-            $output .= "        <th align=left>Company</th>";
-            $output .= "        <th align=left>Contact</th>";
-            $output .= "        <th align=left>Case</th>";
+            $output .= "        <th align=left>" . _("Entered") . "</th>";
+            $output .= "        <th align=left>" . _("Due") . "</th>";
+            $output .= "        <th align=left>" . _("Company") . "</th>";
+            $output .= "        <th align=left>" . _("Contact") . "</th>";
+            $output .= "        <th align=left>" . _("Case") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
             while (!$rst->EOF) {
@@ -346,7 +346,7 @@ foreach ($userArray as $key => $user_id) {
         }
         else {
             if ($say_no_when_none) {
-                $output .= "<p><b>NO OPEN CASES for $name<b><br></p>\n";
+                $output .= "<p><b>" . _("NO OPEN CASES for") . " $name</b><br></p>\n";
             }
         }
     } // End Cases Type
@@ -360,7 +360,7 @@ if ($send_email) {
     }
     $headers  = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
-    mail($email, "XRMS: Open Items", $output, $headers);
+    mail($email, _("XRMS: Open Items"), $output, $headers);
     if (($display) || ($friendly)) {
         echo $output;
     }
@@ -375,6 +375,9 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.10  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.9  2004/07/20 17:26:48  gpowers
  * - fixed links in report
  *   - relative links didn't work in email report

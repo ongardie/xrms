@@ -3,7 +3,7 @@
  *
  * Opportunities quanity by opportunity status report.
  *
- * $Id: opportunities-quantity-by-opportunity-status.php,v 1.5 2004/07/04 09:10:56 metamedia Exp $
+ * $Id: opportunities-quantity-by-opportunity-status.php,v 1.6 2004/07/20 18:36:58 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -68,7 +68,7 @@ $graph_rows .= "g.addRow(" . implode(',', $array_of_opportunity_count_values) . 
 $rst1->close();
 $con->close();
 
-$page_title = "Opportunities by Status";
+$page_title = _("Opportunities by Status");
 start_page($page_title, true, $msg);
 
 ?>
@@ -80,10 +80,10 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header>Opportunities by Status</td>
+                <td class=widget_header><?php echo _("Opportunities by Status"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_center>Opportunities by Status</td>
+                <td class=widget_label_center><?php echo _("Opportunities by Status"); ?></td>
             </tr>
             <tr>
 
@@ -103,8 +103,8 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element>
 		<form method=get>
 		<input type=checkbox name=hide_closed_opps value="true" <?php echo $checked_hide_closed_opps; ?>>
-		Exclude Closed Opportunities</input>
-		<input type=submit class=button value="Change Graph">
+		<?php echo _("Exclude Closed Opportunities"); ?>
+		<input type=submit class=button value="<?php echo _("Change Graph"); ?>">
 		</form>
 		</td>
             </tr>
@@ -126,6 +126,9 @@ end_page();
 
 /**
  * $Log: opportunities-quantity-by-opportunity-status.php,v $
+ * Revision 1.6  2004/07/20 18:36:58  introspectshun
+ * - Localized strings for i18n/translation support
+ *
  * Revision 1.5  2004/07/04 09:10:56  metamedia
  * Added option to exclude closed opportunities from the graph.
  *
