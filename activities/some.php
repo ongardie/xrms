@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.15 2004/06/04 16:28:44 gpowers Exp $
+ * $Id: some.php,v 1.16 2004/06/04 16:43:17 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -246,7 +246,7 @@ start_page($page_title, true, $msg);
 <?php jscalendar_includes(); ?>
 
 <div id="Main">
-    <div id="Content">
+    <div >
 
         <form action=some.php method=post>
         <input type=hidden name=use_post_vars value=1>
@@ -270,16 +270,16 @@ start_page($page_title, true, $msg);
                 <td class=widget_label>Completed</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name="title" size=12 value="<?php  echo $title; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="contact" size=12 value="<?php  echo $contact; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company" size=15 value="<?php  echo $company; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="title" size="10%" value="<?php  echo $title; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="contact" size="15%" value="<?php  echo $contact; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company" size="20%" value="<?php  echo $company; ?>"></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element>
                     <select name="before_after">
                         <option value=""<?php if (!$before_after) { print " selected"; } ?>>Before</option>
                         <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>>After</option>
                     </select>
-                    <input type=text ID="f_date_d" name=date value="<?php  echo date('Y-m-d'); ?>">
+                    <input type=text ID="f_date_d" name=date size=12 value="<?php  echo date('Y-m-d'); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
                 <td class=widget_content_form_element><?php  echo $type_menu; ?></td>
@@ -368,6 +368,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.16  2004/06/04 16:43:17  braverock
+ * - adjusted size of input boxes on search
+ * - removed unecessary sidebar whitespace on this page, since it is not used
+ *
  * Revision 1.15  2004/06/04 16:28:44  gpowers
  * Removed time selection from calendar applet settings
  *
