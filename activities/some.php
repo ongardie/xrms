@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.83 2005/01/11 01:06:51 braverock Exp $
+ * $Id: some.php,v 1.84 2005/01/13 17:54:45 vanmer Exp $
  */
 
 // handle includes
@@ -18,6 +18,7 @@ require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
 
 // create session
+$on_what_table='activities';
 $session_user_id = session_check();
 
 // Start connection
@@ -288,8 +289,14 @@ if($campaign_id) {
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $sql .= " and 1 = 2";
+} else {
+    $list=get_list($session_user_id, 'Read', false, $on_what_table);
+    //print_r($list);
+    if ($list) {
+        $list=implode(",",$list);
+        $sql .= " and a.activity_id IN ($list) ";
+    } else { $sql .= ' AND 1 = 2 '; }
 }
-
 
 if ($sort_column == 1) {
     $order_by = $con->qstr(_("Overdue"),get_magic_quotes_gpc());
@@ -318,7 +325,7 @@ $order_by .= " $sort_order";
 
 $sql .= " order by $order_by"; // is_overdue desc, a.scheduled_at, a.entered_at desc";
 //activities Pager table is rendered below by ADOdb pager
-
+//echo htmlspecialchars($sql);
 if($advanced_search) {
     //get activities from templates
     $sql2 = "SELECT activity_title, activity_title as activity_title2
@@ -360,7 +367,7 @@ $sql2 = "(SELECT " . $con->qstr(_("Current User"),get_magic_quotes_gpc()) . ", '
        . " UNION (SELECT " . $con->qstr(_("Not Set"),get_magic_quotes_gpc()) . ", '-2')";
 $rst = $con->execute($sql2);
 if (!$rst) {
-    db_error_handler($con, $sql);
+    db_error_handler($con, $sql2);
 } elseif ($rst->rowcount()) {
     $user_menu = $rst->getmenu2('user_id', $user_id, true);
     $rst->close();
@@ -413,7 +420,7 @@ if($saved_title or $browse) {
             AND saved_status='a'";
     $rst = $con->execute($sql_saved);
     if(!$rst) {
-        db_error_handler($con, $sql);
+        db_error_handler($con, $sql_saved);
     }
     elseif($rst->rowcount()) {
         $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
@@ -743,6 +750,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.84  2005/01/13 17:54:45  vanmer
+ * - ACL restriction on activity list when searching
+ *
  * Revision 1.83  2005/01/11 01:06:51  braverock
  * - remove lpad database query and replace with hard-coded select statements
  * - lpad isn't portable SQL, and we didn't need two extra queries there to make a list
