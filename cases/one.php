@@ -1,0 +1,412 @@
+<?php
+
+require_once('../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+
+$session_user_id = session_check();
+$msg = $_GET['msg'];
+
+$case_id = $_GET['case_id'];
+
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+// $con->debug = 1;
+
+update_recent_items($con, $session_user_id, "cases", $case_id);
+
+$sql = "select ca.*, c.company_id, c.company_name, c.company_code,
+cont.first_names, cont.last_name, cont.work_phone, cont.email,
+cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_display_html,
+u1.username as entered_by_username, u2.username as last_modified_by_username,
+u3.username as case_owner_username, u4.username as account_owner_username,
+as1.account_status_display_html, r.rating_display_html, crm_status_display_html
+from cases ca, case_statuses cas, case_priorities cap, case_types cat, companies c, contacts cont,
+users u1, users u2, users u3, users u4, account_statuses as1, ratings r, crm_statuses crm
+where ca.company_id = c.company_id
+and ca.case_status_id = cas.case_status_id
+and ca.case_priority_id = cap.case_priority_id
+and ca.case_type_id = cat.case_type_id
+and ca.contact_id = cont.contact_id
+and ca.entered_by = u1.user_id
+and ca.last_modified_by = u2.user_id
+and ca.user_id = u3.user_id
+and c.user_id = u4.user_id
+and c.account_status_id = as1.account_status_id
+and c.rating_id = r.rating_id
+and c.crm_status_id = crm.crm_status_id
+and case_id = $case_id";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    $company_id = $rst->fields['company_id'];
+    $company_name = $rst->fields['company_name'];
+    $company_code = $rst->fields['company_code'];
+    $contact_id = $rst->fields['contact_id'];
+    $first_names = $rst->fields['first_names'];
+    $last_name = $rst->fields['last_name'];
+    $work_phone = $rst->fields['work_phone'];
+    $email = $rst->fields['email'];
+    $crm_status_display_html = $rst->fields['crm_status_display_html'];
+    $account_status_display_html = $rst->fields['account_status_display_html'];
+    $rating_display_html = $rst->fields['rating_display_html'];
+    $contact_id = $rst->fields['contact_id'];
+    $case_status_display_html = $rst->fields['case_status_display_html'];
+    $case_priority_display_html = $rst->fields['case_priority_display_html'];
+    $case_type_display_html = $rst->fields['case_type_display_html'];
+    $account_owner_username = $rst->fields['account_owner_username'];
+    $case_title = $rst->fields['case_title'];
+    $case_description = $rst->fields['case_description'];
+    $case_owner_username = $rst->fields['case_owner_username'];
+    $entered_at = $con->userdate($rst->fields['entered_at']);
+    $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
+    $entered_by = $rst->fields['entered_by_username'];
+    $last_modified_by = $rst->fields['last_modified_by_username'];
+    $rst->close();
+}
+
+$sql_activities = "select activity_id, activity_title, scheduled_at, a.entered_at, activity_status,
+at.activity_type_pretty_name, u.username, if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+from activity_types at, users u, activities a
+where a.on_what_table = 'cases' and on_what_id = $case_id
+and a.user_id = u.user_id
+and a.activity_type_id = at.activity_type_id
+and a.activity_record_status = 'a'
+order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
+
+$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
+
+if ($rst) {
+    while (!$rst->EOF) {
+
+        $open_p = $rst->fields['activity_status'];
+        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
+        $is_overdue = $rst->fields['is_overdue'];
+
+        if ($open_p == 'o') {
+            if ($is_overdue) {
+                $classname = 'overdue_activity';
+            } else {
+                $classname = 'open_activity';
+            }
+        } else {
+            $classname = 'closed_activity';
+        }
+
+        $contact_name = $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'];
+
+        $activity_rows .= '<tr>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/cases/one.php?case_id=$case_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
+        $activity_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$categories_sql = "select category_pretty_name
+from categories
+where category_record_status = 'a'
+and category_id in (select category_id from entity_category_map where on_what_table = 'cases' and on_what_id = $case_id)
+order by category_pretty_name";
+
+$rst = $con->execute($categories_sql);
+$categories = array();
+
+if ($rst) {
+    while (!$rst->EOF) {
+        array_push($categories, $rst->fields['category_pretty_name']);
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$categories = implode($categories, ", ");
+
+$sql = "select * from notes
+where on_what_table = 'cases' and on_what_id = $case_id
+and note_record_status = 'a' order by entered_at desc";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $note_rows .= '<tr>';
+        $note_rows .= '<td class=widget_content>' . $rst->fields['note_description'] . '</td>';
+        $note_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$sql = "select * from files, users where files.entered_by = users.user_id and on_what_table = 'cases' and on_what_id = $case_id and file_record_status = 'a'";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $file_rows .= '<tr>';
+        $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/cases/one.php?case_id=$case_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
+        $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
+        $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
+        $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
+        $file_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$sql = "select username, user_id from users where user_record_status = 'a' order by username";
+$rst = $con->execute($sql);
+$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
+$rst->close();
+
+$sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
+$rst = $con->execute($sql);
+$activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+$rst->close();
+
+$con->close();
+
+if (strlen($note_rows) == 0) {
+    $note_rows = "<tr><td class=widget_content colspan=4>No notes</td></tr>";
+}
+
+if (strlen($categories) == 0) {
+    $categories = "No categories";
+}
+
+if (strlen($file_rows) == 0) {
+    $file_rows = "<tr><td class=widget_content colspan=4>No files</td></tr>";
+}
+
+$page_title = "One Case : $case_title";
+start_page($page_title, true, $msg);
+
+?>
+
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+    <tr>
+        <td class=lcol width=70% valign=top>
+
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header>Case Details</td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+
+                    <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                        <tr>
+                            <td width=50% class=clear align=left valign=top>
+                                <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                                <tr>
+                                    <td width=1% class=sublabel>Title</td>
+                                    <td class=clear><?php  echo $case_title; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Type</td>
+                                    <td class=clear><?php  echo $case_type_display_html; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Owner</td>
+                                    <td class=clear><?php  echo $case_owner_username; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Status</td>
+                                    <td class=clear><?php  echo $case_status_display_html; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Priority</td>
+                                    <td class=clear><?php  echo $case_priority_display_html; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Created</td>
+                                    <td class=clear><?php  echo $entered_at; ?> (<?php  echo $entered_by; ?>)</td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Last Modified</td>
+                                    <td class=clear><?php  echo $last_modified_at; ?> (<?php  echo $last_modified_by; ?>)</td>
+                                </tr>
+                                </table>
+                            </td>
+
+                            <td width=50% class=clear align=left valign=top>
+
+                                <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                                <tr>
+                                    <td width=1% class=sublabel>Contact</td>
+                                    <td class=clear><a href="<?php  echo $http_site_root; ?>/contacts/one.php?contact_id=<?php  echo $contact_id; ?>"><?php  echo $first_names; ?> <?php  echo $last_name; ?></a></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Work Phone</td>
+                                    <td class=clear><?php  echo $work_phone; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>E-Mail</td>
+                                    <td class=clear><a href="mailto:<?php  echo $email; ?>"><?php  echo $email; ?></a></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Company</td>
+                                    <td class=clear><a href="<?php  echo $http_site_root; ?>/companies/one.php?company_id=<?php  echo $company_id; ?>"><?php  echo $company_name; ?></a> (<?php  echo $company_code; ?>)</td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Acct. Owner</td>
+                                    <td class=clear><?php  echo $account_owner_username; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>CRM Status</td>
+                                    <td class=clear><?php  echo $crm_status_display_html; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Account Status</td>
+                                    <td class=clear><?php  echo $account_status_display_html; ?></td>
+                                </tr>
+                            </table>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p><?php  echo $profile; ?>
+
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input class=button type=button value="Edit" onclick="javascript: location.href='edit.php?case_id=<?php  echo $case_id; ?>';"></td>
+            </tr>
+        </table>
+
+        <!-- activities //-->
+        <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
+        <input type=hidden name=return_url value="/cases/one.php?case_id=<?php  echo $case_id; ?>">
+        <input type=hidden name=on_what_table value="cases">
+        <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
+        <input type=hidden name=activity_status value="o">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=5>Activities</td>
+            </tr>
+            <tr>
+                <td class=widget_label>Title</td>
+                <td class=widget_label>User</td>
+                <td class=widget_label>Type</td>
+                <td colspan=2 class=widget_label>On</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button onclick="javascript: markComplete();" value="Done"></td>
+            </tr>
+            <?php  echo $activity_rows; ?>
+        </table>
+        </form>
+
+        </td>
+        <!-- gutter //-->
+        <td class=gutter width=1%>
+        &nbsp;
+        </td>
+        <!-- right column //-->
+        <td class=rcol width=29% valign=top>
+
+        <!-- categories //-->
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header>Categories</td>
+            </tr>
+            <tr>
+                <td class=widget_content><?php  echo $categories; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?case_id=<?php  echo $case_id; ?>';" value="Manage"></td>
+            </tr>
+        </table>
+
+        <!-- notes //-->
+        <form action="<?php  echo $http_site_root; ?>/notes/new.php" method="post">
+        <input type=hidden name=on_what_table value="cases">
+        <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
+        <input type=hidden name=return_url value="/cases/one.php?case_id=<?php  echo $case_id; ?>">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header>Notes</td>
+            </tr>
+            <?php  echo $note_rows; ?>
+            <tr>
+                <td class=widget_content_form_element><input type=submit class=button value="New"></td>
+            </tr>
+        </table>
+        </form>
+
+        <!-- files //-->
+        <form action="<?php  echo $http_site_root; ?>/files/new.php" method="post">
+        <input type=hidden name=on_what_table value="cases">
+        <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
+        <input type=hidden name=return_url value="/cases/one.php?case_id=<?php  echo $case_id; ?>">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=5>Files</td>
+            </tr>
+            <tr>
+                <td class=widget_label>Name</td>
+                <td class=widget_label>Size</td>
+                <td class=widget_label>Owner</td>
+                <td class=widget_label>Date</td>
+
+            </tr>
+            <?php  echo $file_rows; ?>
+            <tr>
+                <td class=widget_content_form_element colspan=5><input type=submit class=button value="New"></td>
+            </tr>
+        </table>
+        </form>
+
+        </td>
+    </tr>
+</table>
+
+<script language=javascript>
+
+function initialize() {
+    document.forms[0].case_title.focus();
+}
+
+function validate() {
+
+    var numberOfErrors = 0;
+    var msgToDisplay = '';
+
+    if (document.forms[0].case_title.value == '') {
+        numberOfErrors ++;
+        msgToDisplay += '\nYou must enter a case title.';
+    }
+
+    if (numberOfErrors > 0) {
+        alert(msgToDisplay);
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
+initialize();
+
+</script>
+<?php end_page(); ?>

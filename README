@@ -1,0 +1,99 @@
+XRMS - README
+
+---
+
+SUMMARY
+
+XRMS is a web-based application for managing business entities such as employees, customers, contacts, activities with those contacts, etc.
+
+---
+
+VERSION
+
+0.8b2 -- August 2003
+
+It's a bit better than the first one, but most of the code is still sloppy, some of it still doesn't work, and you probably still shouldn't trust it with anything important, as the data model may change substantially, and in some cases we may not feel like making future versions compatible with this one.
+
+---
+
+COPYRIGHTS
+
+Copyright (c) 2000-2003 Chris Woofter <chris_at_brokerstream_dot_com>
+
+---
+
+LICENSE
+
+Licensed under the Open Software License version 2.0
+
+A copy of this license -- called LICENSE -- is in this folder.
+
+---
+
+CREDITS
+
+XRMS includes, and makes extensive use of, John Lim's excellent ADOdb database abstraction library.
+http://php.weblogs.com/adodb/
+
+We also currently use Netscape's Javascript Graph Builder (written by Michael Bostock) for some reports.
+http://developer.netscape.com/docs/technote/javascript/graph/index.html
+
+The date-picker widget is from SoftComplex -- it's their Tigra Calendar.
+http://www.softcomplex.com/
+
+---
+
+REQUIREMENTS
+
+Currently, you'll need MySQL v4.0 and PHP v4.2 (or higher) for XRMS.
+
+I like Red Hat machines, but XRMS should work just fine on Apple and Microsoft systems, too.  (Actually, I haven't tested XRMS with Windows machines in a while... should probably check this out.)
+
+---
+
+INSTALLATION
+
+1. Create a MySQL database to hold the XRMS tables, and pick a valid MySQL account for XRMS to use.
+
+2. Find the appropriate scripts in [xrms_root]/sql/mysql, and run them against this database, in numeric order.
+
+3. Modify the file [xrms_root]/include/vars.php as appropriate for your company.  This is the primary XRMS configuration file. Make sure that your web server has the appropriate permissions for the specified file storage directories.
+
+4. Make a decision about where the XRMS "include" directory should go.  By default, it's at [xrms_root]/include, but this isn't very secure.  You should probably put it outside the document root of the web server, but some of you won't have this option.  Either way, you'll need to modify the [xrms_root]/include-locations.inc file as appropriate.
+
+5. After building the database, putting the file directory where it should go, and modifying the vars.php and include-locations.inc files, point your web browser to the appropriate [xrms_root] directory.  If all has been successful, you'll be able to log in using 'user1' and 'user1' for the username and password.  Now would be a good time to change the username/password for that account (go to Administration -> Users).
+
+---
+
+NOTES
+
+1. For now, it's all in English, but translation capabilities are in progress.  If you can translate English business terms (like "customer" and "opportunity") into other languages, please let me know.
+
+2. There's almost no validation (client- or server-side) being performed yet, so don't try anything funny.
+
+3. Dates are expected to be in 'YYYY-MM-DD' format... the date-picker widget should handle this automatically.
+
+4. I never finished some mail-merge stuff, so mail merge doesn't work in this release.
+
+5. Some admin pages are still missing... e.g., industries, company sources... but will arrive soon.
+
+6. I'm still trying to figure out how best to include a flexible security layer (roles, permissions, etc.) into XRMS, so for now, there's no ability to limit what a logged-in user may do.  I've got some ideas for this, but it really is difficult to make this both flexible and convenient.
+
+7. To import companies, export a .csv file of companies (e.g., from Outlook) and put the columns in this order:
+
+   company_name - the name of each company
+   company_phone - the primary telephone number for each company
+   company_address - the primary address for each company
+   company_city - the primary city address for each company
+   company_state - the primary state address for each company
+   company_postal_code - the primary postal_code for each company
+   contact_first_names - the first name of the primary contact for each company
+   contact_last_name - the last name of the primary contact for each company
+   contact_phone - the phone number of the primary contact for each company
+   contact_email - the e-mail address of the primary contact for each company
+
+Then visit Administration -> Import Companies/Contacts, select the appopriate default values, and upload the file.
+
+8. There's no documentation... until further notice, just use the forums at SourceForge for support.  I'll be around to answer questions.
+
+9. If you've got suggestions, please pass them along!

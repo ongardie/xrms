@@ -1,0 +1,606 @@
+<?php
+
+require_once('../include-locations.inc');
+
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'utils-accounting.php');
+
+$session_user_id = session_check();
+require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
+
+
+$msg = $_GET['msg'];
+
+$company_id = $_GET['company_id'];
+
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+// $con->debug = 1;
+
+update_recent_items($con, $session_user_id, "companies", $company_id);
+
+$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u.username
+        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u
+        where c.account_status_id = as1.account_status_id
+        and c.industry_id = i.industry_id
+        and c.rating_id = r.rating_id
+        and c.company_source_id = cs2.company_source_id
+        and c.crm_status_id = cs.crm_status_id
+        and c.user_id = u.user_id
+        and company_id = $company_id";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    $company_name = $rst->fields['company_name'];
+    $company_code = $rst->fields['company_code'];
+    $crm_status_pretty_name = $rst->fields['crm_status_pretty_name'];
+    $company_source = $rst->fields['company_source_display_html'];
+    $industry_pretty_name = $rst->fields['industry_pretty_name'];
+    $user_id = $rst->fields['user_id'];
+    $username = $rst->fields['username'];
+    $address = $rst->fields['address'];
+    $city = $rst->fields['city'];
+    $state = $rst->fields['state'];
+    $postal_code = $rst->fields['postal_code'];
+    $country = $rst->fields['country'];
+    $phone = $rst->fields['phone'];
+    $phone2 = $rst->fields['phone2'];
+    $fax = $rst->fields['fax'];
+    $url = $rst->fields['url'];
+    $employees = $rst->fields['employees'];
+    $revenue = $rst->fields['revenue'];
+    $account_status = $rst->fields['account_status_display_html'];
+    $credit_limit = $rst->fields['credit_limit'];
+    $rating = $rst->fields['rating_display_html'];
+    $terms = $rst->fields['terms'];
+    $profile = $rst->fields['profile'];
+    $extref1 = $rst->fields['extref1'];
+    $extref2 = $rst->fields['extref2'];
+    $rst->close();
+}
+
+$has_access_p = ($has_access_p == 't') ? $strYes : $strNo;
+$last_extranet_visit = (strlen($last_extranet_visit) > 0) ? $con->userdate($last_extranet_visit) : "Never";
+$credit_limit = number_format($credit_limit, 2);
+$current_credit_limit = fetch_current_customer_credit_limit($extref1);
+
+if (strlen($url) > 0) {
+    $url = "<a target='_new' href='" . $url . "'>$url</a>";
+}
+
+//
+//  list of most recent activities
+//
+
+$sql_activities = "select activity_id, activity_title, scheduled_at, on_what_table, on_what_id, a.entered_at, activity_status, at.activity_type_pretty_name, cont.first_names
+as contact_first_names, cont.last_name as contact_last_name, u.username,
+if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
+from activity_types at, users u, activities a left join contacts cont on a.on_what_id = cont.contact_id
+where ((a.on_what_table = 'companies' and a.on_what_id = $company_id) or
+(a.on_what_table = 'contacts' and on_what_id in (select contact_id from contacts where company_id = $company_id)))
+and a.user_id = u.user_id
+and a.activity_type_id = at.activity_type_id
+and a.activity_record_status = 'a'
+order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
+
+
+//$con->debug = 1;
+$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_company_page);
+
+if ($rst) {
+    while (!$rst->EOF) {
+
+        $open_p = $rst->fields['activity_status'];
+        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
+        $is_overdue = $rst->fields['is_overdue'];
+
+        if ($open_p == 'o') {
+            if ($is_overdue) {
+                $classname = 'overdue_activity';
+            } else {
+                $classname = 'open_activity';
+            }
+        } else {
+            $classname = 'closed_activity';
+        }
+
+        if ($rst->fields['on_what_table'] == 'contacts') {
+            $contact_name = $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'];
+        } else {
+            $contact_name = '';
+        }
+
+        $activity_rows .= '<tr>';
+        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/companies/one.php?company_id=$company_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $contact_name . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
+        $activity_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$sql = "select * from contacts where company_id = $company_id and contact_record_status = 'a' order by first_names";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $contact_rows .= '<tr>';
+        $contact_rows .= "<td class=widget_content><a href='$http_site_root/contacts/one.php?contact_id=" . $rst->fields['contact_id'] . "'>" . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
+        $contact_rows .= '<td class=widget_content>' . $rst->fields['summary'] . '</td>';
+        $contact_rows .= '<td class=widget_content>' . $rst->fields['title'] . '</td>';
+        $contact_rows .= '<td class=widget_content>' . $rst->fields['description'] . '</td>';
+        $contact_rows .= '<td class=widget_content>' . $rst->fields['work_phone'] . '</td>';
+        $contact_rows .= "<td class=widget_content><a href='mailto:" . $rst->fields['email'] . " ' > " . htmlspecialchars($rst->fields['email']) . '</a></td>';
+        $contact_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+// associated with
+
+$categories_sql = "select category_pretty_name
+from categories
+where category_record_status = 'a'
+and category_id in (select category_id from entity_category_map where on_what_table = 'companies' and on_what_id = $company_id)
+order by category_pretty_name";
+
+$rst = $con->execute($categories_sql);
+$categories = array();
+
+if ($rst) {
+    while (!$rst->EOF) {
+        array_push($categories, $rst->fields['category_pretty_name']);
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$categories = implode($categories, ", ");
+
+$sql = "select * from notes
+where on_what_table = 'companies' and on_what_id = $company_id
+and note_record_status = 'a' order by entered_at desc";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $note_rows .= '<tr>';
+        $note_rows .= '<td class=widget_content>' . $rst->fields['note_description'] . '</td>';
+        $note_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$sql = "select * from opportunities opp, opportunity_statuses os, users u
+where opp.opportunity_status_id = os.opportunity_status_id
+and opp.company_id = $company_id
+and opp.user_id = u.user_id
+and opportunity_record_status = 'a'
+order by close_at desc";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $opportunity_rows .= '<tr>';
+        $opportunity_rows .= "<td class=widget_content><a href='$http_site_root/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "'>" . $rst->fields['opportunity_title'] . '</a></td>';
+        $opportunity_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
+        $opportunity_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_pretty_name'] . '</td>';
+        $opportunity_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['close_at']) . '</td>';
+        $opportunity_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$sql = "select * from cases, case_priorities, users
+where cases.case_priority_id = case_priorities.case_priority_id
+and company_id = $company_id
+and cases.user_id = users.user_id
+and case_record_status = 'a'
+order by due_at desc";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $case_rows .= '<tr>';
+        $case_rows .= "<td class=widget_content><a href='$http_site_root/cases/one.php?case_id=" . $rst->fields['case_id'] . "'>" . $rst->fields['case_title'] . '</a></td>';
+        $case_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
+        $case_rows .= '<td class=widget_content>' . $rst->fields['case_priority_pretty_name'] . '</td>';
+        $case_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['due_at']) . '</td>';
+        $case_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$sql = "select * from files, users where files.entered_by = users.user_id and on_what_table = 'companies' and on_what_id = $company_id and file_record_status = 'a'";
+
+$rst = $con->execute($sql);
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $file_rows .= '<tr>';
+        $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?return_url=/companies/one.php?company_id=$company_id&file_id=" . $rst->fields['file_id'] . "'>" . $rst->fields['file_pretty_name'] . '</a></td>';
+        $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
+        $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
+        $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
+        $file_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+$sql = "select concat(first_names, ' ', last_name) as contact_name, contact_id from contacts where company_id = $company_id and contact_record_status = 'a'";
+$rst = $con->execute($sql);
+$contact_menu = $rst->getmenu2('contact_id', '', true);
+$rst->close();
+
+$sql = "select username, user_id from users where user_record_status = 'a' order by username";
+$rst = $con->execute($sql);
+$user_menu = $rst->getmenu2('user_id', $session_user_id, false);
+$rst->close();
+
+$sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a' order by activity_type_pretty_name";
+$rst = $con->execute($sql);
+$activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+$rst->close();
+
+add_audit_item($con, $session_user_id, 'view company', 'companies', $company_id);
+
+$con->close();
+
+if (strlen($activity_rows) == 0) {
+    $activity_rows = "<tr><td class=widget_content colspan=6>$strCompaniesOneNoActivitiesMessage</td></tr>";
+}
+
+if (strlen($contact_rows) == 0) {
+    $contact_rows = "<tr><td class=widget_content colspan=6>$strCompaniesOneNoContactsMessage</td></tr>";
+}
+
+if (strlen($categories) == 0) {
+    $categories = $strCompaniesOneNoCategoriesMessage;
+}
+
+if (strlen($opportunity_rows) == 0) {
+    $opportunity_rows = "<tr><td class=widget_content colspan=4>$strCompaniesOneNoOpportunitiesMessage</td></tr>";
+}
+
+if (strlen($note_rows) == 0) {
+    $note_rows = "<tr><td class=widget_content colspan=4>$strCompaniesOneNoNotesMessage</td></tr>";
+}
+
+if (strlen($case_rows) == 0) {
+    $case_rows = "<tr><td class=widget_content colspan=4>$strCompaniesOneNoCasesMessage</td></tr>";
+}
+
+if (strlen($file_rows) == 0) {
+    $file_rows = "<tr><td class=widget_content colspan=4>$strCompaniesOneNoFilesMessage</td></tr>";
+}
+
+$page_title = (strlen($strCompaniesOnePageTitle) > 0) ? $strCompaniesOnePageTitle . ' : ' . $company_name : $company_name;
+start_page($page_title, true, $msg);
+
+?>
+
+<script language=javascript>
+<!--
+function markComplete() {
+    document.forms[0].activity_status.value = "c";
+    document.forms[0].submit();
+}
+
+function openNewsWindow() {
+    window_url = "http://news.google.com/news?q=%22<?php  echo str_replace(' ', '+', $company_name); ?>%22";
+    window_name = "News";
+    window_attr = "";
+    window.open(window_url, window_name, window_attr);
+}
+
+//-->
+</script>
+
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+    <tr>
+        <td class=lcol width=70% valign=top>
+
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header><?php  echo $strCompaniesOneCompanyDetailsTitle; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+
+                    <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                        <tr>
+                            <td width=50% class=clear align=left valign=top>
+                                <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                                <tr>
+                                    <td width=1% class=sublabel><?php  echo $strCompaniesOneCompanyNameLabel; ?></td>
+                                    <td class=clear><?php  echo $company_name; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCodeLabel; ?></td>
+                                    <td class=clear><?php  echo $company_code; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyTypesLabel; ?></td>
+                                    <td class=clear><?php  echo $company_type_list; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCRMStatusLabel; ?></td>
+                                    <td class=clear><?php  echo $crm_status_pretty_name; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyUserLabel; ?></td>
+                                    <td class=clear><?php  echo $username; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyPhoneLabel; ?></td>
+                                    <td class=clear><?php  echo $phone; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyPhone2Label; ?></td>
+                                    <td class=clear><?php  echo $phone2; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyFaxLabel; ?></td>
+                                    <td class=clear><?php  echo $fax; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyURLLabel; ?></td>
+                                    <td class=clear><?php  echo $url; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo 'Primary Address' ?></td>
+                                    <td class=clear><?php  echo $address; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCityLabel; ?></td>
+                                    <td class=clear><?php  echo $city; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyStateLabel; ?></td>
+                                    <td class=clear><?php  echo $state; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo 'Postal Code' ?></td>
+                                    <td class=clear><?php  echo $postal_code; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCountryLabel; ?></td>
+                                    <td class=clear><?php  echo $country; ?></td>
+                                </tr>
+                                </table>
+
+                            </td>
+
+                            <td width=50% class=clear align=left valign=top>
+
+                                <table border=0 cellpadding=0 cellspacing=0 width=100%>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyAccountStatusLabel; ?></td>
+                                    <td class=clear><?php  echo $account_status; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyCreditLimitLabel; ?></td>
+                                    <td class=clear>$<?php  echo $credit_limit; ?> <?php echo $current_credit_limit; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyRatingLabel; ?></td>
+                                    <td class=clear><?php  echo $rating; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyTermsLabel; ?></td>
+                                    <td class=clear><?php  echo $terms; ?> days</td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td width=1% class=sublabel><?php  echo $strCompaniesOneCompanySourceLabel; ?></td>
+                                    <td class=clear><?php  echo $company_source; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyIndustryLabel; ?></td>
+                                    <td class=clear><?php  echo $industry_pretty_name; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyEmployeesLabel; ?></td>
+                                    <td class=clear><?php  echo $employees; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyRevenueLabel; ?></td>
+                                    <td class=clear><?php  echo $revenue; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>&nbsp;</td>
+                                    <td class=clear>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyHasExtranetAccessLabel; ?></td>
+                                    <td class=clear><?php  echo $has_extranet_access; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel><?php  echo $strCompaniesOneCompanyLastExtranetVisitLabel; ?></td>
+                                    <td class=clear><?php  echo $last_extranet_visit; ?></td>
+                                </tr>
+                            </table>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p><?php  echo $profile; ?>
+
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input class=button type=button value="<?php  echo
+$strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?company_id=<?php echo $company_id; ?>';">
+<input
+class=button type=button value="<?php echo $strCompaniesOneAdminButton; ?>" onclick="javascript:
+location.href='admin.php?company_id=<?php echo $company_id; ?>';"> <input class=button type=button value="<?php echo
+$strCompaniesOneCloneButton; ?>" onclick="javascript: location.href='new.php?clone_id=<?php $company_id ?>';"> <input
+class=button type=button value="<?php echo $strCompaniesOneMailMergeButton; ?>" onclick="javascript:
+location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';"> <input class=button type=button
+value="<?php echo $strCompaniesOneNewsButton; ?>" onclick="javascript: openNewsWindow();"> <input class=button type=button
+value="<?php echo $strCompaniesOneAddressesButton; ?>" onclick="javascript: location.href='addresses.php?company_id=<?php
+echo $company_id; ?>';"></td>
+            </tr>
+        </table>
+
+        <!-- contacts //-->
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=6><?php  echo $strCompaniesOneContactsTitle; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label><?php  echo $strCompaniesOneContactNameLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesOneContactSummaryLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesOneContactTitleLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesOneContactDescriptionLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesOneContactPhoneLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesOneContactEmailLabel; ?></td>
+            </tr>
+            <?php  echo $contact_rows; ?>
+            <tr>
+                <td class=widget_content_form_element colspan=6><input type=button class=button
+onclick="location.href='<?php echo $http_site_root; ?>/contacts/new.php?company_id=<?php echo $company_id; ?>';" value="<?php echo $strCompaniesOneNewContactButton; ?>"></td>
+            </tr>
+        </table>
+
+        <!-- activities //-->
+        <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
+        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
+        <input type=hidden name=on_what_table value="companies">
+        <input type=hidden name=on_what_id value="<?php  echo $company_id; ?>">
+        <input type=hidden name=activity_status value="o">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=6><?php  echo $strCompaniesOneActivitiesTitle; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label><?php  echo $strCompaniesOneActivityTitleLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesOneActivityUserLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesOneActivityTypeLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesOneActivityContactLabel; ?></td>
+                <td colspan=2 class=widget_label><?php  echo $strCompaniesOneActivityStartsAtLabel; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text name=activity_title size=40></td>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
+                <td colspan=2 class=widget_content_form_element><input type=text size=10 name=scheduled_at
+value="<?php echo date('Y-m-d'); ?>"> <input class=button type=submit value="Add"> <input class=button type=button
+onclick="javascript: markComplete();" value="Done"></td>
+            </tr>
+            <?php  echo $activity_rows; ?>
+        </table>
+        </form>
+
+        </td>
+
+        <!-- gutter //-->
+        <td class=gutter width=1%>
+        &nbsp;
+        </td>
+
+        <!-- right column //-->
+        <td class=rcol width=29% valign=top>
+
+        <!-- categories //-->
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header><?php  echo $strCompaniesOneCategoriesTitle; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content><?php  echo $categories; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?company_id=<?php  echo $company_id; ?>';" value="Manage"></td>
+            </tr>
+        </table>
+
+        <!-- opportunities //-->
+        <form action="<?php  echo $http_site_root; ?>/opportunities/new.php" method="post">
+        <input type="hidden" name="company_id" value="<?php  echo $company_id; ?>">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=4><?php  echo $strCompaniesOneOpportunitiesTitle; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label>Name</td>
+                <td class=widget_label>Owner</td>
+                <td class=widget_label>Status</td>
+                <td class=widget_label>Due</td>
+            </tr>
+            <?php  echo $opportunity_rows; ?>
+            <tr>
+                <td class=widget_content_form_element colspan=4><input type=submit class=button value="New"> <input type=button class=button onclick="javascript: location.href='<?php  echo $http_site_root; ?>/opportunities/some.php?company_code=<?php $company_code ?>';" value="More"></td>
+            </tr>
+        </table>
+        </form>
+
+        <!-- cases //-->
+        <form action="<?php  echo $http_site_root; ?>/cases/new.php" method="post">
+        <input type="hidden" name="company_id" value="<?php  echo $company_id; ?>">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=5><?php  echo $strCompaniesOneCasesTitle; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label>Name</td>
+                <td class=widget_label>Owner</td>
+                <td class=widget_label>Priority</td>
+                <td class=widget_label>Due</td>
+            </tr>
+            <?php  echo $case_rows; ?>
+            <tr>
+                <td class=widget_content_form_element colspan=5><input type=submit class=button value="New"> <input type=button class=button onclick="javascript: location.href='<?php  echo $http_site_root; ?>/cases/some.php?company_code=<?php $company_code ?>';" value="More"></td>
+            </tr>
+        </table>
+        </form>
+
+        <!-- files //-->
+        <form action="<?php  echo $http_site_root; ?>/files/new.php" method="post">
+        <input type=hidden name=on_what_table value="companies">
+        <input type=hidden name=on_what_id value="<?php  echo $company_id; ?>">
+        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?>">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=5><?php  echo $strCompaniesOneFilesTitle; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label>Name</td>
+                <td class=widget_label>Size</td>
+                <td class=widget_label>Owner</td>
+                <td class=widget_label>Date</td>
+
+            </tr>
+            <?php  echo $file_rows; ?>
+            <tr>
+                <td class=widget_content_form_element colspan=5><input type=submit class=button value="New"></td>
+            </tr>
+        </table>
+        </form>
+
+        </td>
+    </tr>
+</table>
+
+<?php end_page(); ?>
