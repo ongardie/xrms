@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.27 2004/07/26 03:49:57 braverock Exp $
+ * $Id: utils-interface.php,v 1.28 2004/07/26 13:10:20 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -84,6 +84,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 
     global $page_title_height;
     global $http_site_root;
+    global $app_title;
 
     $msg = status_msg($msg);
 
@@ -209,6 +210,9 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.28  2004/07/26 13:10:20  braverock
+ * - added global $app_title to place it in function scope.
+ *
  * Revision 1.27  2004/07/26 03:49:57  braverock
  * - added $app_title to browser page title
  *   - implements SF Feature Request # 966189
