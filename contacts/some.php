@@ -4,11 +4,11 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.37 2004/08/22 23:54:03 niclowe Exp $
+ * $Id: some.php,v 1.38 2004/09/21 18:34:15 introspectshun Exp $
  */
 
 //include the standard files
-require_once('../include-locations.inc');
+require_once('include-locations-location.inc');
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -360,6 +360,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.38  2004/09/21 18:34:15  introspectshun
+ * - Recommitting revised include of include-locations-location.inc
+ *
  * Revision 1.37  2004/08/22 23:54:03  niclowe
  * Fixed blown edit caused by niclowe merged changes since 1.34 into this version
  * it should restore the following functionality:
