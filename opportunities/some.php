@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.19 2004/07/14 20:19:50 cpsource Exp $
+ * $Id: some.php,v 1.20 2004/07/15 13:15:58 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -19,43 +19,23 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 $tmp = $_SERVER['REQUEST_URI'];
 $session_user_id = session_check( $tmp );
 
-$msg = $_GET['msg'];
-$offset = $_POST['offset'];
-$clear = ($_GET['clear'] == 1) ? 1 : 0;
-$use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-$resort = $_POST['resort'];
+$resort = isset($_POST['resort']) ? $_POST['resort'] : '';
 
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $opportunity_title = '';
-    $company_name = '';
-    $user_id = '';
-    $opportunity_status_id = '';
-    $opportunity_category_id = '';
-} elseif ($use_post_vars) {
-    $sort_column = $_POST['sort_column'];
-    $current_sort_column = $_POST['current_sort_column'];
-    $sort_order = $_POST['sort_order'];
-    $current_sort_order = $_POST['current_sort_order'];
-    $opportunity_title = $_POST['opportunity_title'];
-    $company_name = $_POST['company_name'];
-    $user_id = $_POST['user_id'];
-    $opportunity_status_id = $_POST['opportunity_status_id'];
-    $opportunity_category_id = $_POST['opportunity_category_id'];
-} else {
-    $sort_column = $_SESSION['opportunities_sort_column'];
-    $current_sort_column = $_SESSION['opportunities_current_sort_column'];
-    $sort_order = $_SESSION['opportunities_sort_order'];
-    $current_sort_order = $_SESSION['opportunities_current_sort_order'];
-    $opportunity_title = $_SESSION['opportunities_opportunity_title'];
-    $company_name = (strlen($_GET['company_name']) > 0) ? $_GET['company_name'] : $_SESSION['opportunities_company_name'];
-    $user_id = $_SESSION['opportunities_user_id'];
-    $opportunity_status_id = $_SESSION['opportunities_opportunity_status_id'];
-    $opportunity_category_id = $_SESSION['opportunities_opportunity_category_id'];
-}
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+		   'sort_column'             => array ( 'opportunities_sort_column', arr_vars_SESSION ),
+		   'current_sort_column'     => array ( 'opportunities_current_sort_column', arr_vars_SESSION ),
+		   'sort_order'              => array ( 'opportunities_sort_order', arr_vars_SESSION ),
+		   'current_sort_order'      => array ( 'opportunities_current_sort_order', arr_vars_SESSION ),
+		   'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
+		   'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
+		   'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
+		   'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_SESSION ),
+		   'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
+		   );
+
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -74,14 +54,8 @@ $ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif"
 $descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-$_SESSION['opportunities_sort_column'] = $sort_column;
-$_SESSION['opportunities_current_sort_column'] = $sort_column;
-$_SESSION['opportunities_sort_order'] = $sort_order;
-$_SESSION['opportunities_current_sort_order'] = $sort_order;
-$_SESSION['opportunities_opportunity_title'] = $opportunity_title;
-$_SESSION['opportunities_company_name'] = $company_name;
-$_SESSION['opportunities_opportunity_category_id'] = $opportunity_category_id;
-$_SESSION['opportunities_user_id'] = $user_id;
+// set all session variables
+arr_vars_session_set ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -103,7 +77,7 @@ if ($opportunity_category_id > 0) {
     $from = "from companies c, opportunities opp, opportunity_statuses os, users u ";
 }
 
-$where .= "where opp.opportunity_status_id = os.opportunity_status_id ";
+$where  = "where opp.opportunity_status_id = os.opportunity_status_id ";
 $where .= "and opp.company_id = c.company_id ";
 $where .= "and opp.user_id = u.user_id ";
 $where .= "and opportunity_record_status = 'a'";
@@ -157,6 +131,7 @@ and r.on_what_id = opp.opportunity_id
 and opportunity_record_status = 'a'
 order by r.recent_item_timestamp desc";
 
+$recently_viewed_table_rows = '';
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
 if ($rst) {
@@ -361,6 +336,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.20  2004/07/15 13:15:58  cpsource
+ * - Add arr_vars sub-system
+ *   Get rid of misc undefined variable usages.
+ *
  * Revision 1.19  2004/07/14 20:19:50  cpsource
  * - Resolved $company_count not being set properly
  *   opportunities/some.php tried to set $this which can't be done in PHP V5
