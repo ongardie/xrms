@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.25 2004/07/09 18:47:27 introspectshun Exp $
+ * $Id: home.php,v 1.26 2004/07/10 12:00:48 braverock Exp $
  */
 
 // include the common files
@@ -443,7 +443,7 @@ start_page($page_title);
                 <td class=widget_header>Documentation</td>
             </tr>
             <tr>
-                <td class=widget_label><a href="../doc/users/xrms_user_manual.pdf">User Manual</a> (PDF)</td>
+                <td class=widget_label><a href="../doc/users/XRMS_User_Manual.pdf">User Manual</a> (PDF)</td>
             </tr>
         </table>
 
@@ -474,6 +474,10 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.26  2004/07/10 12:00:48  braverock
+ * - changed xrms_user_manual.pdf to XRMS_User_Manual.pdf
+ *   - resolves SF bug 987496 reported by kennyg1
+ *
  * Revision 1.25  2004/07/09 18:47:27  introspectshun
  * - Removed CAST(x AS CHAR) for wider database compatibility
  * - The modified MSSQL driver overrides the default Concat function to cast all datatypes as strings
