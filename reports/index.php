@@ -2,7 +2,7 @@
 /**
  * Index for reports.
  *
- * $Id: index.php,v 1.12 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: index.php,v 1.13 2004/06/21 15:40:02 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -102,6 +102,10 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
+                <td class=widget_content><a href="overdue-items.php">Overdue Items</a></td>
+                <td class=widget_content>List Overdue Items by User and Type</td>
+            </tr>
+            <tr>
                 <td class=widget_content><a href="open-items.php">Open Items</a></td>
                 <td class=widget_content>List Open Items by User and Type</td>
             </tr>
@@ -147,6 +151,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.13  2004/06/21 15:40:02  gpowers
+ * - added "overdue items" report
+ *
  * Revision 1.12  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
