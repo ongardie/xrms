@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Delete a Rating by setting the rating_record_status to 'd'
+ *
+ * $Id: delete.php,v 1.2 2004/02/14 15:41:12 braverock Exp $
+ */
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -20,4 +24,10 @@ $con->close();
 
 header("Location: some.php");
 
+/**
+ * $Log: delete.php,v $
+ * Revision 1.2  2004/02/14 15:41:12  braverock
+ * - add phpdoc
+ *
+ */
 ?>
