@@ -24,12 +24,15 @@ $session_user_id = session_check();
 $title = $_POST['title'];
 $contact = $_POST['contact'];
 $company = $_POST['company'];
-$owner = $_POST['owner'];
-$date = $_POST['date'];
 $before_after = $_POST['before_after'];
 $activity_type_id = $_POST['activity_type_id'];
 $completed = $_POST['completed'];
 $user_id = $_POST['user_id'];
+
+// undefines
+//$owner = $_POST['owner'];
+//$date = $_POST['date'];
+$date = '';
 
 $sql = "SELECT
  a.*,
@@ -117,9 +120,13 @@ $con->close();
 
 header("Location: {$http_site_root}/export/{$filename}");
 
-
 /**
  * $Log: export.php,v $
+ * Revision 1.4  2004/08/03 11:39:52  cpsource
+ * - Get rid of ^m's
+ *   Add newline at end
+ *   Stub date and user as they were not passed in from POST
+ *
  * Revision 1.3  2004/06/03 16:11:00  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
