@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.28 2004/06/04 17:20:30 gpowers Exp $
+ * $Id: one.php,v 1.29 2004/06/09 16:51:24 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -96,7 +96,7 @@ switch ($gender) {
         break;
 }
 
-$address_to_display = get_formatted_address($con, $address_id);
+if ($address_id) { $address_to_display = get_formatted_address($con, $address_id); }
 
 // most recent activities
 $sql_activities = "select activity_id,
@@ -454,7 +454,9 @@ function markComplete() {
             <tr>
                 <td class=widget_content_form_element>
                     <input class=button type=button value="<?php  echo $strCompaniesOneEditButton; ?>" onclick="javascript: location.href='edit.php?contact_id=<?php echo $contact_id; ?>';">
-                    <input class=button type=button value="<?php  echo 'Vcard'; ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';"></td>
+                    <input class=button type=button value="<?php  echo 'Vcard'; ?>" onclick="javascript: location.href='vcard.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=button value="Edit Address" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+                </td>
             </tr>
         </table>
         <?php jscalendar_includes(); ?>
@@ -545,6 +547,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.29  2004/06/09 16:51:24  gpowers
+ * Added a button to "Edit Address"
+ *
  * Revision 1.28  2004/06/04 17:20:30  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags
