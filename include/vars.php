@@ -31,7 +31,7 @@ $file_storage_directory = "/full/path/to/xrms/files/storage/";
 // directory must be writable by apache, and should not be world readable (0700)
 // this needs to be relative to the xrms web root (browser needs to be able to see it)
 // (no trailing slash)
-$tmp_export_directory = "/tmp";
+$tmp_export_directory = "/full/path/to/xrms/export/";
 
 // accounting software integration is in the works, but for now
 $accounting_system = ''; // no integration
@@ -44,7 +44,7 @@ $xrms_system_id = "XRMS";
 $app_title = 'XRMS';
 
 // replace this with your organization's name
-$system_company_name = 'Acme Distribution';
+$system_company_name = 'XRMS';
 
 // so that order numbers can be continuous with whatever you're using now
 $order_number_seed = 1000;
@@ -85,5 +85,21 @@ $company_custom1_label = "(Custom 1)";
 $company_custom2_label = "(Custom 2)";
 $company_custom3_label = "(Custom 3)";
 $company_custom4_label = "(Custom 4)";
+
+/** Optional LDAP configuration parameters **/
+/**
+ * Set $xrms_use_ldap to truw to tur on LDAP
+ * username and password lookup
+ *
+ * LDAP code contributed by
+ * nick <at> barcet <dot> com
+ */
+$xrms_use_ldap = false; //set to true if you want ldap authenthication
+    //all other ldap params are useless if $xrms_use_ldap is false
+    $xrms_ldap["server"] = "localhost";                             //ldap server address
+    $xrms_ldap["search_user"] = "cn=search,ou=services,o=barcet";   //user name to do the search as (leave blank for anonymous login)
+    $xrms_ldap["search_pw"] = "search";                             //password for the user to do the search as (leave blank for anonymous login)
+    $xrms_ldap["search_context"] = "o=novell";                      //context where to start the search in the tree
+    $xrms_ldap["search_attribute"] = "cn";                          //usually, search is done on cn, uid or mail
 
 ?>
