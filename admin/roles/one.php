@@ -4,7 +4,7 @@
  *
  * Edit roles
  *
- * $Id: one.php,v 1.6 2004/07/25 15:58:46 johnfawcett Exp $
+ * $Id: one.php,v 1.7 2004/07/25 19:11:54 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -73,17 +73,17 @@ start_page($page_title);
 		</table>
 		</form>
 
-		<form action=delete.php method=post>
-		<input type=hidden name=role_id value="<?php  echo $role_id;; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Role").'?'; ?>');">
+		<form action=delete.php method=post  onsubmit="javascript: return confirm('<?php echo _("Delete Role?"); ?>');">
+		<input type=hidden name=role_id value="<?php  echo $role_id;; ?>">
 		<table class=widget cellspacing=1>
 			<tr>
 				<td class=widget_header colspan=4><?php echo _("Delete Role"); ?></td>
 			</tr>
 			<tr>
 				<td class=widget_content>
-				<?php echo _("Click the button below to remove this role from the system."); ?>
-				<p><?php echo _("Note: This action CANNOT be undone!"); ?>
-				<p><input class=button type=submit value="<?php echo _("Delete Role"); ?>">
+				<?php echo _("Click the button below to permanently remove this item."); ?>
+				<p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+				<p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
 				</td>
 			</tr>
 		</table>
@@ -105,6 +105,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.7  2004/07/25 19:11:54  johnfawcett
+ * - reinserted ? in gettext string - needed by some languages
+ * - standardized delete text and button
+ * - corrected bug: confirm delete not working
+ *
  * Revision 1.6  2004/07/25 15:58:46  johnfawcett
  * - unified page title
  * - removed punctuation from gettext strings
