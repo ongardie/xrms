@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.25 2004/08/02 08:31:30 maulani Exp $
+ * $Id: new-2.php,v 1.26 2004/08/05 14:57:14 braverock Exp $
  */
 
 //where do we include from
@@ -47,7 +47,7 @@ $arr_vars = array ( // local var name       // session variable name
                    );
 
 // get all passed in variables
-arr_vars_get_all ( $arr_vars, true );
+arr_vars_get_request ( $arr_vars, true );
 
 // beagle bites squirrel - getGlobalVar calls removed
 
@@ -189,6 +189,10 @@ if (($activities_default_behavior == "Fast") or ($activity_status == 'c')) {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.26  2004/08/05 14:57:14  braverock
+ *- update to use new arr_vars_get_request fn
+ *  - resolves several bugs reported on SF
+ *
  *Revision 1.25  2004/08/02 08:31:30  maulani
  *- Create Activities Default Behavior system parameter.  Replaces vars.php
  *  variable $activities_default_behavior
