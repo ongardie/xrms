@@ -5,8 +5,10 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.4 2004/07/13 12:57:10 cpsource Exp $
+ * $Id: install.php,v 1.5 2004/07/14 19:14:40 braverock Exp $
  */
+
+define('IN_XRMS', true);
 
 // include the installation utility routines
 require_once('install-utils.inc');
@@ -241,6 +243,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.5  2004/07/14 19:14:40  braverock
+ *- add IN_XRMS to support secure use in installation.
+ *
  *Revision 1.4  2004/07/13 12:57:10  cpsource
  *Make sure $msg is always defined.
  *
