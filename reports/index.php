@@ -51,12 +51,20 @@ start_page($page_title, true, $msg);
 				<td colspan=2 class=widget_label_center>Opportunity Reports</td>
 			</tr>
 			<tr>
-				<td class=widget_content><a href="opportunities-by-opportunity-status.php">Opportunities by Status</a></td>
+				<td class=widget_content><a href="opportunities-quantity-by-opportunity-status.php">Quantity by Status</a></td>
+				<td class=widget_content>How many opportunities are in each stage of the sales closing process?</td>
+			</tr>
+			<tr>
+				<td class=widget_content><a href="opportunities-size-by-opportunity-status.php">Size by Status</a></td>
 				<td class=widget_content>How much potential revenue is in each stage of the sales closing process?</td>
 			</tr>
 			<tr>
-				<td class=widget_content><a href="opportunities-by-industry.php">Opportunities by Industry</a></td>
-				<td class=widget_content>How much potential revenue is tied to opportunities in each industry?</td>
+				<td class=widget_content><a href="opportunities-quantity-by-industry.php">Quantity by Industry</a></td>
+				<td class=widget_content>How many opportunities are tied to companies in each industry?</td>
+			</tr>
+			<tr>
+				<td class=widget_content><a href="opportunities-size-by-industry.php">Size by Industry</a></td>
+				<td class=widget_content>How much potential revenue is tied to companies in each industry?</td>
 			</tr>
 			<tr>
 				<td colspan=2 class=widget_label_center>Case Reports</td>
