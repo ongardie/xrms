@@ -8,7 +8,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.18 2004/12/23 16:05:54 neildogg Exp $
+ * $Id: browse-next.php,v 1.19 2004/12/27 18:29:42 neildogg Exp $
  */
 
 //include required files
@@ -39,6 +39,7 @@ if(isset($_GET['pos']) and !$pos) {
 }
 
 if($saved_id) {
+    $next_to_check = array();
     $pos = 0;
     $_SESSION['browse_start'] = time(); 
     $sql = "SELECT saved_data
@@ -155,6 +156,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.19  2004/12/27 18:29:42  neildogg
+ * - Array was not being cleared
+ *
  * Revision 1.18  2004/12/23 16:05:54  neildogg
  * - Makes sure not to visit an activity already visited by another user
  *
