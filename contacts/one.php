@@ -4,7 +4,7 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * $Id: one.php,v 1.18 2004/04/17 16:03:45 maulani Exp $
+ * $Id: one.php,v 1.19 2004/04/19 22:19:54 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -492,7 +492,7 @@ function markComplete() {
                 <td colspan=2 class=widget_label>On</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title size=50></td>
+                <td class=widget_content_form_element><input type=text name=activity_title></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element>&nbsp;</td>
@@ -556,6 +556,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.19  2004/04/19 22:19:54  maulani
+ * - Adjust table for CSS2 positioning
+ *
  * Revision 1.18  2004/04/17 16:03:45  maulani
  * - Add CSS2 positioning
  *

@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.27 2004/04/19 14:10:45 braverock Exp $
+ * $Id: one.php,v 1.28 2004/04/19 22:19:54 maulani Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -571,7 +571,7 @@ function openNewsWindow() {
                 <td class=widget_header colspan=7><?php  echo $strCompaniesOneActivitiesTitle; ?></td>
             </tr>
             <tr>
-                <td class=widget_label>Activity</td>
+                <td class=widget_label>Title</td>
                 <td class=widget_label>User</td>
                 <td class=widget_label>Type</td>
                 <td class=widget_label>Contact</td>
@@ -579,7 +579,7 @@ function openNewsWindow() {
                 <td colspan=2 class=widget_label>Starts</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title size=40></td>
+                <td class=widget_content_form_element><input type=text name=activity_title></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
@@ -648,6 +648,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.28  2004/04/19 22:19:54  maulani
+ * - Adjust table for CSS2 positioning
+ *
  * Revision 1.27  2004/04/19 14:10:45  braverock
  * - sort list by last name and display lastname, firstname
  *  - apply SF patch 926962 submitted by Glenn Powers
