@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.9 2004/06/15 14:24:44 gpowers Exp $
+ * $Id: new.php,v 1.10 2004/07/25 16:40:31 johnfawcett Exp $
  */
 
 require_once('../include-locations.inc');
@@ -44,7 +44,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = "Attach File";
+$page_title = _("Attach File");
 start_page($page_title, true, $msg);
 
 ?>
@@ -61,33 +61,33 @@ start_page($page_title, true, $msg);
         <input type=hidden name=return_url value="<?php  echo $return_url ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>File Information</td>
+                <td class=widget_header colspan=2><?php echo _("File Information"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Attached&nbsp;To</td>
+                <td class=widget_label_right><?php echo _("Attached To"); ?></td>
                 <td class=widget_content_form_element><?php echo $attached_to_name; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right>File&nbsp;Name</td>
+                <td class=widget_label_right><?php echo _("File Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px>Description</td>
+                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description></textarea></td>
             </tr>
             <tr>
-                <td class=widget_label_right>Date</td>
+                <td class=widget_label_right><?php echo _("Date"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=file_entered_at value="<?php  echo $file_entered_at; ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right>Upload</td>
+                <td class=widget_label_right><?php echo _("Upload"); ?></td>
                 <td class=widget_content_form_element><input type=file name=file1></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Upload"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Upload");?>"></td>
             </tr>
         </table>
         </form>
@@ -129,6 +129,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.10  2004/07/25 16:40:31  johnfawcett
+ * - added gettext calls
+ *
  * Revision 1.9  2004/06/15 14:24:44  gpowers
  * - placed calendar setup code inside <script> tag
  *
