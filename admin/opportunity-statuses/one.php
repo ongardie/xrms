@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.7 2004/06/14 22:36:43 introspectshun Exp $
+ * $Id: one.php,v 1.8 2004/06/24 20:06:19 braverock Exp $
  */
 
 //uinclude required common files
@@ -49,15 +49,13 @@ $table_name = "opportunity_statuses";
 $sql_activity_templates="select activity_title,
         duration,
         activity_template_id,
-        activity_type_pretty_name, sort_order
+        activity_type_pretty_name, activity_templates.sort_order
         from activity_templates, activity_types
         where on_what_id=$opportunity_status_id
         and on_what_table='$table_name'
         and activity_templates.activity_type_id=activity_types.activity_type_id
         and activity_template_record_status='a'
-        order by sort_order";
-
-$rst = $con->execute($sql_activity_templates);
+        order by activity_templates.sort_order";
 
 $classname = 'open_activity';
 
@@ -65,6 +63,7 @@ $classname = 'open_activity';
 $cnt = 1;
 $maxcnt = $rst->rowcount();
 
+$rst = $con->execute($sql_activity_templates);
 //make activity_templates table in HTML
 if ($rst) {
     while (!$rst->EOF) {
@@ -73,8 +72,8 @@ if ($rst) {
 //        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_title'] . '</td>';
         $activity_rows .= "<td class='$classname'>"
             . "<a href='$http_site_root/admin/activity-templates/edit.php?activity_template_id="
-	    . $rst->fields['activity_template_id'] . "&on_what_table=opportunity_statuses&on_what_id="
-	    . $opportunity_status_id . "&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id="
+            . $rst->fields['activity_template_id'] . "&on_what_table=opportunity_statuses&on_what_id="
+            . $opportunity_status_id . "&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id="
             . $opportunity_status_id . "'>"
             . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['duration'] . '</td>';
@@ -233,6 +232,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/06/24 20:06:19  braverock
+ * - add sort order to activity templates
+ *   - patch provided by Neil Roberts
+ *
  * Revision 1.7  2004/06/14 22:36:43  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
