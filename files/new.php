@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.10 2004/07/25 16:40:31 johnfawcett Exp $
+ * $Id: new.php,v 1.11 2004/07/30 12:59:19 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,11 +14,11 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $on_what_table = $_POST['on_what_table'];
-$on_what_id = $_POST['on_what_id'];
-$return_url = $_POST['return_url'];
+$on_what_id    = $_POST['on_what_id'];
+$return_url    = $_POST['return_url'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -38,14 +38,20 @@ if ($on_what_table == 'opportunities') {
 $rst = $con->execute($sql);
 
 if ($rst) {
+  if ( !$rst->EOF ) {
     $attached_to_name = $rst->fields['attached_to_name'];
-    $rst->close();
+  } else {
+    $attached_to_name = '';
+  }
+  $rst->close();
 }
 
 $con->close();
 
 $page_title = _("Attach File");
 start_page($page_title, true, $msg);
+
+$file_entered_at = '';
 
 ?>
 
@@ -129,6 +135,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.11  2004/07/30 12:59:19  cpsource
+ * - Handle $msg in the standard way
+ *   Fix problem with Date field displaying garbage because
+ *     date was undefined, and if E_ALL is turned on.
+ *
  * Revision 1.10  2004/07/25 16:40:31  johnfawcett
  * - added gettext calls
  *

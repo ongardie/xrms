@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.11 2004/07/25 16:34:00 johnfawcett Exp $
+ * $Id: one.php,v 1.12 2004/07/30 12:59:19 cpsource Exp $
  */
 
 //include required files
@@ -16,11 +16,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 // get call arguments
-if ( isset($_GET['msg']) ) {
-    $msg = $_GET['msg'];
-} else {
-    $msg = '';
-}
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 if ( isset($_GET['return_url']) ) {
     $return_url = $_GET['return_url'];
@@ -156,6 +152,11 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.12  2004/07/30 12:59:19  cpsource
+ *- Handle $msg in the standard way
+ *  Fix problem with Date field displaying garbage because
+ *    date was undefined, and if E_ALL is turned on.
+ *
  *Revision 1.11  2004/07/25 16:34:00  johnfawcett
  *- added gettext
  *

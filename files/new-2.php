@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.10 2004/07/10 13:37:43 braverock Exp $
+ * $Id: new-2.php,v 1.11 2004/07/30 12:59:19 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,20 +17,18 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$on_what_table = $_POST['on_what_table'];
-$on_what_id = $_POST['on_what_id'];
-$return_url = $_POST['return_url'];
-
+$on_what_table    = $_POST['on_what_table'];
+$on_what_id       = $_POST['on_what_id'];
+$return_url       = $_POST['return_url'];
 $file_pretty_name = $_POST['file_pretty_name'];
 $file_description = $_POST['file_description'];
-$file_entered_at = $_POST['file_entered_at'];
-
-$file_name = $_FILES['file1']['name'];
-$file_type = $_FILES['file1']['type'];
-$file_size = $_FILES['file1']['size'];
-$file_tmp_name = $_FILES['file1']['tmp_name'];
+$file_entered_at  = $_POST['file_entered_at'];
+$file_name        = $_FILES['file1']['name'];
+$file_type        = $_FILES['file1']['type'];
+$file_size        = $_FILES['file1']['size'];
+$file_tmp_name    = $_FILES['file1']['tmp_name'];
 
 $file_pretty_name = (strlen(trim($file_pretty_name)) > 0) ? $file_pretty_name : $file_name;
 
@@ -60,6 +58,7 @@ $con->execute($ins);
 
 $file_id = $con->insert_id();
 
+$error = '';
 if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
     move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
 } elseif ($_FILES['file1']['tmp_name'] and (strlen($file_pretty_name))){
@@ -105,14 +104,18 @@ $con->close();
 
 if ($error) {
     start_page();
-
-    echo $msg;
+    echo $error;
 } else {
     header("Location: " . $http_site_root . $return_url);
 }
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.11  2004/07/30 12:59:19  cpsource
+ * - Handle $msg in the standard way
+ *   Fix problem with Date field displaying garbage because
+ *     date was undefined, and if E_ALL is turned on.
+ *
  * Revision 1.10  2004/07/10 13:37:43  braverock
  * - fixed timestamp on new file attach
  *

@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to 
  * the user's default location.
  * 
- * $Id: download.php,v 1.4 2004/06/12 07:20:40 introspectshun Exp $
+ * $Id: download.php,v 1.5 2004/07/30 12:59:19 cpsource Exp $
  */ 
 
 require_once('../include-locations.inc');
@@ -17,7 +17,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $file_id = $_GET['file_id'];
 
@@ -72,6 +72,11 @@ exit();
 
 /** 
  * $Log: download.php,v $
+ * Revision 1.5  2004/07/30 12:59:19  cpsource
+ * - Handle $msg in the standard way
+ *   Fix problem with Date field displaying garbage because
+ *     date was undefined, and if E_ALL is turned on.
+ *
  * Revision 1.4  2004/06/12 07:20:40  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *
