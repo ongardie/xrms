@@ -1,4 +1,11 @@
 <?php
+/**
+ * Edit a single contact.
+ *
+ * This screen allows the user to edit all the details of a contact.
+ *
+ * $Id: edit.php,v 1.7 2004/01/26 19:13:34 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -29,7 +36,8 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $company_id = $rst->fields['company_id'];
-	$address_id = $rst->fields['address_id'];
+    $division_id = $rst->fields['division_id'];
+    $address_id = $rst->fields['address_id'];
     $company_name = $rst->fields['company_name'];
     $last_name = $rst->fields['last_name'];
     $first_names = $rst->fields['first_names'];
@@ -55,6 +63,17 @@ if ($rst) {
     $custom4 = $rst->fields['custom4'];
     $rst->close();
 }
+
+$sql = "select division_name, division_id
+        from company_division
+        where
+        company_division.company_id = $company_id and
+        division_record_status = 'a'";
+$rst = $con->execute($sql);
+if ($rst) {
+    $division_menu = $rst->getmenu2('division_id', $division_id, true);
+}
+$rst->close();
 
 $salutation_menu = build_salutation_menu($salutation);
 
@@ -102,6 +121,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a></td>
             </tr>
             <tr>
+                <td class=widget_label_right>Division</td>
+                <td class=widget_content_form_element><?php echo $division_menu; ?></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right>Address</td>
                 <td class=widget_content_form_element><?php echo $address_menu; ?></td>
             </tr>
@@ -121,6 +144,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right>Gender</td>
                 <td class=widget_content_form_element>
                 <select name="gender">
+                    <option value="u" <?php if (($gender == "u") or ($gender == '')) {print " selected ";} ?>>Unknown
                     <option value="m" <?php if ($gender == "m") {print " selected ";} ?>>Male
                     <option value="f" <?php if ($gender == "f") {print " selected ";} ?>>Female
                 </select>
@@ -216,4 +240,15 @@ start_page($page_title, true, $msg);
     </tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: edit.php,v $
+ * Revision 1.7  2004/01/26 19:13:34  braverock
+ * - added company division fields
+ * - added phpdoc
+ *
+ */
+?>

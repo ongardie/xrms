@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * One Contact Page
+ *
+ * This page allows for the viewing of the details for a single contact.
+ *
+ * $Id: one.php,v 1.12 2004/01/26 19:13:34 braverock Exp $
+ */
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -19,28 +25,30 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
 $sql = "select cont.*,
-c.company_id, company_name, company_code, line1, line2, addresses.city, province, addresses.postal_code, address_body, use_pretty_address, iso_code3, address_format_string, 
-u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner, 
-account_status_display_html, crm_status_display_html 
-from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm, addresses, countries, address_format_strings afs 
-where cont.company_id = c.company_id 
-and cont.entered_by = u1.user_id 
-and cont.last_modified_by = u2.user_id 
-and c.user_id = u3.user_id 
-and c.account_status_id = as1.account_status_id 
-and c.crm_status_id = crm.crm_status_id 
-and countries.country_id = addresses.country_id 
-and countries.address_format_string_id = afs.address_format_string_id 
-and addresses.address_id = cont.address_id 
+c.company_id, company_name, company_code,
+line1, line2, addresses.city, province, addresses.postal_code, address_body, use_pretty_address, iso_code3, address_format_string,
+u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner,
+account_status_display_html, crm_status_display_html
+from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm, addresses, countries, address_format_strings afs
+where cont.company_id = c.company_id
+and cont.entered_by = u1.user_id
+and cont.last_modified_by = u2.user_id
+and c.user_id = u3.user_id
+and c.account_status_id = as1.account_status_id
+and c.crm_status_id = crm.crm_status_id
+and countries.country_id = addresses.country_id
+and countries.address_format_string_id = afs.address_format_string_id
+and addresses.address_id = cont.address_id
 and contact_id = $contact_id";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     $company_id = $rst->fields['company_id'];
-	$address_id = $rst->fields['address_id'];
+    $address_id = $rst->fields['address_id'];
     $company_name = $rst->fields['company_name'];
     $company_code = $rst->fields['company_code'];
+    $division_id  = $rst->fields['division_id'];
     $crm_status_display_html = $rst->fields['crm_status_display_html'];
     $account_status_display_html = $rst->fields['account_status_display_html'];
     $account_owner = $rst->fields['account_owner'];
@@ -66,15 +74,15 @@ if ($rst) {
     $custom2 = $rst->fields['custom2'];
     $custom3 = $rst->fields['custom3'];
     $custom4 = $rst->fields['custom4'];
-	$line1 = $rst->fields['line1'];
-	$line2 = $rst->fields['line2'];
-	$city = $rst->fields['city'];
-	$province = $rst->fields['province'];
-	$postal_code = $rst->fields['postal_code'];
-	$address_body = $rst->fields['address_body'];
-	$use_pretty_address = $rst->fields['use_pretty_address'];
-	$country = $rst->fields['iso_code3'];
-	$address_format_string = $rst->fields['address_format_string'];
+    $line1 = $rst->fields['line1'];
+    $line2 = $rst->fields['line2'];
+    $city = $rst->fields['city'];
+    $province = $rst->fields['province'];
+    $postal_code = $rst->fields['postal_code'];
+    $address_body = $rst->fields['address_body'];
+    $use_pretty_address = $rst->fields['use_pretty_address'];
+    $country = $rst->fields['iso_code3'];
+    $address_format_string = $rst->fields['address_format_string'];
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
     $entered_by = $rst->fields['entered_by_username'];
@@ -82,29 +90,42 @@ if ($rst) {
     $rst->close();
 }
 
-$gender = ($gender == 'f') ? 'Female' : 'Male';
+
+switch ($gender) {
+    case 'f':
+        $gender = 'Female';
+        break;
+    case 'm':
+        $gender = 'Male';
+        break;
+    case 'u':
+        $gender = 'Unknown';
+        break;
+    default:
+        $gender = 'Unknown';
+        break;
+}
 
 if ($use_pretty_address == 't') {
-	$address_to_display = $address_body;
+    $address_to_display = $address_body;
 } else {
-	$lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
-	eval("\$address_to_display = \"$address_format_string\";");
-	// eval ("\$str = \"$str\";");
+    $lines = (strlen($line2) > 0) ? "$line1<br>$line2" : $line1;
+    eval("\$address_to_display = \"$address_format_string\";");
+    // eval ("\$str = \"$str\";");
 }
 
 // most recent activities
-
-$sql_activities = "select activity_id, 
-activity_title, 
-scheduled_at, 
-a.entered_at, 
+$sql_activities = "select activity_id,
+activity_title,
+scheduled_at,
+a.entered_at,
 a.on_what_table,
 a.on_what_id,
-activity_status, 
-at.activity_type_pretty_name, 
-cont.first_names as contact_first_names, 
-cont.last_name as contact_last_name, 
-u.username, 
+activity_status,
+at.activity_type_pretty_name,
+cont.first_names as contact_first_names,
+cont.last_name as contact_last_name,
+u.username,
 if(activity_status = 'o' and scheduled_at < now(), 1, 0) as is_overdue
 from activity_types at, users u, activities a, contacts cont
 where a.contact_id = $contact_id
@@ -124,7 +145,7 @@ if ($rst) {
         $is_overdue = $rst->fields['is_overdue'];
         $on_what_table = $rst->fields['on_what_table'];
         $on_what_id = $rst->fields['on_what_id'];
-		
+
         if ($open_p == 'o') {
             if ($is_overdue) {
                 $classname = 'overdue_activity';
@@ -134,26 +155,26 @@ if ($rst) {
         } else {
             $classname = 'closed_activity';
         }
-		
-		if ($on_what_table == 'opportunities') {
-			$attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
-		    $sql2 = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
-		} elseif ($on_what_table == 'cases') {
-		    $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
-		    $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-		} else {
-		    $attached_to_link = "N/A";
-			$sql2 = "select * from companies where 1 = 2";
-		}
-		
-		$rst2 = $con->execute($sql2);
-		
-		if ($rst) {
-		    $attached_to_name = $rst2->fields['attached_to_name'];
-			$attached_to_link .= $attached_to_name . "</a>";
-		    $rst2->close();
-		}
-		
+
+        if ($on_what_table == 'opportunities') {
+            $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
+            $sql2 = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
+        } elseif ($on_what_table == 'cases') {
+            $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
+            $sql2 = "select case_title as attached_to_name from cases where case_id = $on_what_id";
+        } else {
+            $attached_to_link = "N/A";
+            $sql2 = "select * from companies where 1 = 2";
+        }
+
+        $rst2 = $con->execute($sql2);
+
+        if ($rst) {
+            $attached_to_name = $rst2->fields['attached_to_name'];
+            $attached_to_link .= $attached_to_name . "</a>";
+            $rst2->close();
+        }
+
         $activity_rows .= '<tr>';
         $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/contacts/one.php?contact_id=$contact_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
@@ -166,9 +187,19 @@ if ($rst) {
     $rst->close();
 }
 
-// associated with
+// division
+if ($division_id != '') {
+    $division_sql = "select division_id, division_name from company_division where division_id = $division_id";
+    $div_rst = $con->execute($division_sql);
 
-$categories_sql = "select category_display_html 
+    if ($div_rst) {
+        $division_row .= '<input type=hidden name=division_id value='.$div_rst->fields['division_id'].'>'
+                       .  $div_rst->fields['division_name'];
+    }
+} //end division select
+
+// associated with
+$categories_sql = "select category_display_html
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
 where ecm.on_what_table = 'contacts'
 and ecm.on_what_id = $contact_id
@@ -271,13 +302,14 @@ if ($rst) {
 }
 
 // we should allow users to delete this contact if there are others
-
+/*
 $sql = "select count(contact_id) as contact_count from contacts where company_id = $company_id and contact_record_status = 'a'";
 $rst = $con->execute($sql);
 if ($rst) {
     $contact_count = $rst->fields['contact_count'];
     $rst->close();
 }
+*/
 
 $sql = "select username, user_id from users where user_record_status = 'a' order by username";
 $rst = $con->execute($sql);
@@ -384,7 +416,7 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel>E-Mail</td>
-                                    <td class=clear><a href='mailto:<?php echo $email . "'>" . htmlspecialchars($email); ?></a></td>
+                                    <td class=clear><a href='mailto:<?php echo $email . "' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&on_what_id=$contact_id&contact_id=$contact_id&company_id=$company_id&email=$email&return_url=/contacts/one.php?contact_id=$contact_id'\" >" . htmlspecialchars($email); ?></a></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Work Phone</td>
@@ -439,6 +471,10 @@ function markComplete() {
                                     <td class=clear><a href="<?php  echo $http_site_root?>/companies/one.php?company_id=<?php echo $company_id;; ?>"><?php echo $company_name; ?></a> (<?php echo $company_code;?>)</td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel>Division</td>
+                                    <td class=clear><?php  echo $division_row; ?></td>
+                                </tr>
+                                 <tr>
                                     <td class=sublabel>Acct. Owner</td>
                                     <td class=clear><?php  echo $account_owner; ?></td>
                                 </tr>
@@ -639,4 +675,15 @@ function markComplete() {
     </tr>
 </table>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: one.php,v $
+ * Revision 1.12  2004/01/26 19:13:34  braverock
+ * - added company division fields
+ * - added phpdoc
+ *
+ */
+?>

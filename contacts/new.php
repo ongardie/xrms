@@ -1,4 +1,9 @@
 <?php
+/**
+ * Create a new contact for a company.
+ *
+ * $Id: new.php,v 1.6 2004/01/26 19:13:34 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -17,14 +22,29 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $sql = "select company_name, phone, fax from companies where company_id = $company_id";
 
+//$con->debug=1;
+
 $rst = $con->execute($sql);
 
 if ($rst) {
-	$company_name = $rst->fields['company_name'];
-	$phone = $rst->fields['phone'];
-	$fax = $rst->fields['fax'];
-	$rst->close();
+    $company_name = $rst->fields['company_name'];
+    $phone = $rst->fields['phone'];
+    $fax = $rst->fields['fax'];
+    $rst->close();
 }
+
+//build division menu
+$sql = "select division_name, division_id
+        from company_division
+        where
+        company_division.company_id = $company_id and
+        division_record_status = 'a'";
+$rst = $con->execute($sql);
+if ($rst) {
+    $division_menu = $rst->getmenu2('division_id', $division_id, true);
+}
+$rst->close();
+
 
 $salutation_menu = build_salutation_menu($salutation);
 
@@ -41,35 +61,40 @@ start_page($page_title, true, $msg);
 ?>
 
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
-	<tr>
-		<td class=lcol width=45% valign=top>
+    <tr>
+        <td class=lcol width=45% valign=top>
 
-		<form action=new-2.php method=post>
-		<input type=hidden name=company_id value="<?php echo $company_id; ?>">
-		<table class=widget cellspacing=1 width=100%>
-			<tr>
-				<td class=widget_header colspan=2>Contact Information</td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Address</td>
-				<td class=widget_content_form_element><?php echo $address_menu ?></td>
-			</tr>
+        <form action=new-2.php method=post>
+        <input type=hidden name=company_id value="<?php echo $company_id; ?>">
+        <table class=widget cellspacing=1 width=100%>
+            <tr>
+                <td class=widget_header colspan=2>Contact Information</td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Division</td>
+                <td class=widget_content_form_element><?php echo $division_menu ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Address</td>
+                <td class=widget_content_form_element><?php echo $address_menu ?></td>
+            </tr>
             <tr>
                 <td class=widget_label_right>Salutation</td>
                 <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
             </tr>
-			<tr>
-				<td class=widget_label_right>First Names</td>
-				<td class=widget_content_form_element><input type=text name=first_names size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Last Name</td>
-				<td class=widget_content_form_element><input type=text name=last_name size=30></td>
-			</tr>
+            <tr>
+                <td class=widget_label_right>First Names</td>
+                <td class=widget_content_form_element><input type=text name=first_names size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Last Name</td>
+                <td class=widget_content_form_element><input type=text name=last_name size=30></td>
+            </tr>
             <tr>
                 <td class=widget_label_right>Gender</td>
                 <td class=widget_content_form_element>
                 <select name="gender">
+                    <option value="u" <?php if (($gender == "u") or ($gender == '')) {print " selected ";} ?>>Unknown
                     <option value="m" <?php if ($gender == "m") {print " selected ";} ?>>Male
                     <option value="f" <?php if ($gender == "f") {print " selected ";} ?>>Female
                 </select>
@@ -77,56 +102,56 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right>Date of Birth</td>
-                <td class=widget_content_form_element><input type=text name=date_of_birth size=10></td>
+                <td class=widget_content_form_element><input type=text name=date_of_birth size=12></td>
             </tr>
-			<tr>
-				<td class=widget_label_right>Summary</td>
-				<td class=widget_content_form_element><input type=text name=summary size=35></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Title</td>
-				<td class=widget_content_form_element><input type=text name=title size=35></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Description</td>
-				<td class=widget_content_form_element><input type=text name=description size=35></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>E-Mail</td>
-				<td class=widget_content_form_element><input type=text name=email size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Work Phone</td>
-				<td class=widget_content_form_element><input type=text name=work_phone size=30 value="<?php  echo $phone; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Cell Phone</td>
-				<td class=widget_content_form_element><input type=text name=cell_phone size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Home Phone</td>
-				<td class=widget_content_form_element><input type=text name=home_phone size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Fax</td>
-				<td class=widget_content_form_element><input type=text name=fax size=30 value="<?php  echo $fax; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>AOL Name</td>
-				<td class=widget_content_form_element><input type=text name=aol_name size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Yahoo Name</td>
-				<td class=widget_content_form_element><input type=text name=yahoo_name size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>MSN Name</td>
-				<td class=widget_content_form_element><input type=text name=msn_name size=30></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right>Interests</td>
-				<td class=widget_content_form_element><input type=text name=interests size=35></td>
-			</tr>
+            <tr>
+                <td class=widget_label_right>Summary</td>
+                <td class=widget_content_form_element><input type=text name=summary size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Title</td>
+                <td class=widget_content_form_element><input type=text name=title size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Description</td>
+                <td class=widget_content_form_element><input type=text name=description size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>E-Mail</td>
+                <td class=widget_content_form_element><input type=text name=email size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Work Phone</td>
+                <td class=widget_content_form_element><input type=text name=work_phone size=30 value="<?php  echo $phone; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Cell Phone</td>
+                <td class=widget_content_form_element><input type=text name=cell_phone size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Home Phone</td>
+                <td class=widget_content_form_element><input type=text name=home_phone size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Fax</td>
+                <td class=widget_content_form_element><input type=text name=fax size=30 value="<?php  echo $fax; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>AOL Name</td>
+                <td class=widget_content_form_element><input type=text name=aol_name size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Yahoo Name</td>
+                <td class=widget_content_form_element><input type=text name=yahoo_name size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>MSN Name</td>
+                <td class=widget_content_form_element><input type=text name=msn_name size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right>Interests</td>
+                <td class=widget_content_form_element><input type=text name=interests size=35></td>
+            </tr>
             <tr>
                 <td class=widget_label_right_166px>Profile</td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
@@ -147,34 +172,45 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php  echo $contact_custom4_label; ?></td>
                 <td class=widget_content_form_element><input type=text name=custom4 size=35></td>
             </tr>
-			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Add Contact"></td>
-			</tr>
-		</table>
-		</form>
+            <tr>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Add Contact"></td>
+            </tr>
+        </table>
+        </form>
 
-		</td>
-		<!-- gutter //-->
-		<td class=gutter width=2%>
-		&nbsp;
-		</td>
-		<!-- right column //-->
-		<td class=rcol width=53% valign=top>
-		
-		&nbsp;
-		
-		</td>
-	</tr>
+        </td>
+        <!-- gutter //-->
+        <td class=gutter width=2%>
+        &nbsp;
+        </td>
+        <!-- right column //-->
+        <td class=rcol width=53% valign=top>
+
+        &nbsp;
+
+        </td>
+    </tr>
 </table>
 
 <script language=javascript>
 
 function initialize() {
-	document.forms[0].first_names.focus();
+    document.forms[0].first_names.focus();
 }
 
 initialize();
 
 </script>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: new.php,v $
+ * Revision 1.6  2004/01/26 19:13:34  braverock
+ * - added company division fields
+ * - added phpdoc
+ *
+ */
+?>
