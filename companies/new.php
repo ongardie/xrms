@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.9 2004/07/21 19:17:57 introspectshun Exp $
+ * $Id: new.php,v 1.10 2004/07/22 15:39:05 cpsource Exp $
  */
 
 /* Include required files */
@@ -20,8 +20,9 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
-$clone_id = $_GET['clone_id'];
+
+$msg      = isset($_GET['msg'])      ? $_GET['msg']      : '';
+$clone_id = isset($_GET['clone_id']) ? $_GET['clone_id'] : 0;
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -29,14 +30,37 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 if ($clone_id > 0) {
     $sql = "select * from companies where company_id = $clone_id";
     $rst = $con->execute($sql);
-    if ($rst) {
-        $company_name = 'Copy of ' . $rst->fields['company_name'];
+
+    // was there a database error?
+    if ( $rst ) {
+      // no
+      // was data found ???
+      if ( !$rst->EOF ) {
+	// yes - data found
+        $company_name      = 'Copy of ' . $rst->fields['company_name'];
         $company_source_id = $rst->fields['company_source_id'];
-        $crm_status_id = $rst->fields['crm_status_id'];
-        $industry_id = $rst->fields['industry_id'];
-        $user_id = $rst->fields['user_id'];
+        $crm_status_id     = $rst->fields['crm_status_id'];
+        $industry_id       = $rst->fields['industry_id'];
+        $user_id           = $rst->fields['user_id'];
+      } else {
+	// no - data not found
+        $company_name      = '';
+        $company_source_id = '';
+        $crm_status_id     = '';
+        $industry_id       = '';
+        $user_id           = '';
+      }
+    } else {
+      // yes - database error
+      db_error_handler ($con, $sql);
     }
     $rst->close();
+} else {
+  $company_name      = '';
+  $company_source_id = '';
+  $crm_status_id     = '';
+  $industry_id       = '';
+  $user_id           = '';
 }
 
 $user_id = ($user_id > 0) ? $user_id : $session_user_id;
@@ -85,7 +109,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Company Name"); ?></td>
-                <td class=widget_content_form_element><input type=text size=50 name=company_name value="<?php  echo $company_name; ?>"> <?php echo $required_indicator; ?></td>
+		<td class=widget_content_form_element><input type=text size=50 name=company_name value="<?php echo $company_name; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Legal Name"); ?></td>
@@ -267,6 +291,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.10  2004/07/22 15:39:05  cpsource
+ * - Fix multiple undefines
+ *   Check for records retrieved from db
+ *
  * Revision 1.9  2004/07/21 19:17:57  introspectshun
  * - Localized strings for i18n/l10n support
  *
