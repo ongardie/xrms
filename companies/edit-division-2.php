@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.6 2005/01/28 23:05:29 braverock Exp $
+ * $Id: edit-division-2.php,v 1.7 2005/02/08 16:59:43 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -45,10 +45,16 @@ $rec['last_modified_by'] = $session_user_id;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+do_hook_function('edit_division_process', $upd);
+
+
 header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.7  2005/02/08 16:59:43  vanmer
+ * - added hook for processing division edit
+ *
  * Revision 1.6  2005/01/28 23:05:29  braverock
  * - change return url to send you back to companies/one.php
  *
