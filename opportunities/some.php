@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.37 2005/02/10 01:44:31 braverock Exp $
+ * $Id: some.php,v 1.38 2005/02/10 03:58:49 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-require_once($include_directory . 'classes/Pager/XRMS_Pager.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 
@@ -43,7 +43,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
 $sql = "SELECT "
-. $con->Concat("'<a href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
+. $con->Concat("'<a id=\"'", "opp.opportunity_title",  "'\" href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
 . " AS " . $con->qstr( _("opportunity"),get_magic_quotes_gpc()) . ",
   c.company_name AS 'company', u.username AS " . $con->qstr(_("owner"),get_magic_quotes_gpc()) . ",
   CASE
@@ -104,17 +104,18 @@ if (strlen($opportunity_status_id) > 0) {
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 } else {
-    $list=get_list($session_user_id, 'Read', false, $on_what_table);
-    //print_r($list);
-    if ($list) {
-        $list=implode(",",$list);
-        $where .= " and opp.opportunity_id IN ($list) ";
+    $acl_id_list=get_list($session_user_id, 'Read', false, $on_what_table);
+    //print_r($acl_id_list);
+    if ($acl_id_list) {
+        $acl_id_list=implode(",",$acl_id_list);
+        $where .= " and opp.opportunity_id IN ($acl_id_list) ";
     } else { $where .= ' AND 1 = 2 '; }
 }
 
 
-$sql .= $from . $where;
 
+
+$sql .= $from . $where;
 
 $sql_recently_viewed = "select * from recent_items r, companies c, opportunities opp, opportunity_statuses os
 where r.user_id = $session_user_id
@@ -231,22 +232,35 @@ start_page($page_title, true, $msg);
 $_SESSION['search_sql']=$sql;
 
 
+//SELECT CONCAT('<a id="',opp.opportunity_title,'" href="one.php?opportunity_id=',opp.opportunity_id,'">',opp.opportunity_title,'</a>') AS 'Opportunity', c.company_name AS 'Company', u.username AS 'Owner', CASE WHEN (opp.size > 0) THEN opp.size ELSE 0 END AS 'Opportunity Size', CASE WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100) ELSE 0 END AS 'Weighted Size', os.opportunity_status_pretty_name AS 'Status', DATE_FORMAT(close_at,'%Y-%b-%d') AS 'Close Date' FROM companies c, opportunities opp, opportunity_statuses os, users u ,contacts cont where opp.opportunity_status_id = os.opportunity_status_id and opp.company_id = c.company_id and opp.user_id = u.user_id and opportunity_record_status = 'a' and cont.contact_id=opp.contact_id and opp.opportunity_id IN
+
+$owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user_id)", "')'") . ", u.user_id $from $where group by u.username order by u.username";
+
+$owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
+
+
+$status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name", "' ('", "count(os.opportunity_status_id)", "')'") . ", os.opportunity_status_id $from $where group by os.opportunity_status_id order by os.opportunity_status_pretty_name";
+
+$status_query_select = $sql . 'AND os.opportunity_status_id = XXX-value-XXX';
+
+//echo htmlentities($group_query_list);
+//echo htmlentities($group_query_select);
 
 $columns = array();
-$columns[] = array('name' => _("Opportunity"), 'index' => 'opportunity');
-$columns[] = array('name' => _("Company"), 'index' => 'company');
-$columns[] = array('name' => _("Owner"), 'index' => 'owner');
-$columns[] = array('name' => _("Opportunity Size"), 'index' => 'opportunity_size', 'subtotal' => true);
-$columns[] = array('name' => _("Weighted Size"), 'index' => 'weighted_size', 'subtotal' => true);
-$columns[] = array('name' => _("Status"), 'index' => 'status');
-$columns[] = array('name' => _("Close Date"), 'index' => 'close_date');
+$columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
+$columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
+$columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true);
+$columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true);
+$columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
+$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date');
 
 
 
 // selects the columns this user is interested in
 $default_columns =  array('opportunity', 'company', 'owner', 'opportunity_size', 'weighted_size', 'status', 'close_date');
 
-$pager_columns = new Pager_Columns('Opportunity', $columns, $default_columns, 'OpportunityData');
+$pager_columns = new Pager_Columns('OpportunityPager', $columns, $default_columns, 'OpportunityData');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
 $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
@@ -263,7 +277,7 @@ echo $pager_columns_selects;
 
 
 
-$pager = new XRMS_Pager($con, $sql, _('Search Results'), 'OpportunityData', 'OpportunityPager', $columns);
+$pager = new GUP_Pager($con, $sql, null,  _('Search Results'), 'OpportunityData', 'OpportunityPager', $columns);
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 $con->close();
@@ -328,6 +342,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.38  2005/02/10 03:58:49  daturaarutad
+ * Updated to use the new Grand Unified Pager, which allows grouping and has a tidier UI
+ *
  * Revision 1.37  2005/02/10 01:44:31  braverock
  * - fix malformed $_SESSION declaration to use single quoted array index
  *   fixes "script possibly relies on a session side-effect" error
