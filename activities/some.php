@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.72 2004/12/20 15:51:37 neildogg Exp $
+ * $Id: some.php,v 1.73 2004/12/20 22:16:06 neildogg Exp $
  */
 
 // handle includes
@@ -33,7 +33,7 @@ $arr_vars = array ( // local var name       // session variable name
            'browse'             => arr_vars_POST_UNDEF,
            );
 
-$advanced_search = (isset($_GET['advanced_search'])) ? true : false;
+$advanced_search = (isset($_REQUEST['advanced_search'])) ? true : false;
 
 // get all passed in variables
 arr_vars_post_with_cmd ( $arr_vars );
@@ -452,6 +452,7 @@ start_page($page_title, true, $msg);
     <div id="Content">
 
     <form action=some.php method=post>
+        <input type=hidden name=advanced_search value="<?php echo $advanced_search; ?>">        
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=activities_next_page value="<?php  echo $activities_next_page; ?>">
         <input type=hidden name=resort value="0">
@@ -664,6 +665,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.73  2004/12/20 22:16:06  neildogg
+ * - Saves advanced search status
+ *
  * Revision 1.72  2004/12/20 15:51:37  neildogg
  * - Because you can't order by a string
  *
