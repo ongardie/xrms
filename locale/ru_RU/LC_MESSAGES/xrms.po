@@ -1,5 +1,5 @@
 # translation of xrms.po to Russian
-# translation of xrms.po to 
+# translation of xrms.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2004.
 # Eugene N Shylaev <buzz@zamki.biz>, 2004.
@@ -9,181 +9,153 @@ msgstr ""
 "Project-Id-Version: xrms\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-09-09 04:59-0500\n"
-"PO-Revision-Date: 2004-11-24 12:22+0500\n"
+"PO-Revision-Date: 2004-11-30 10:13+0500\n"
 "Last-Translator: Eugene N Shylaev <buzz@zamki.biz>\n"
 "Language-Team: Russian <en@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=KOI8-R\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: relationships/new-relationship-2.php:133
-#, fuzzy
 msgid " by that ID"
-msgstr "по ИД"
+msgstr "п©п╬ п≤п■"
 
 #: relationships/new-relationship-2.php:119
-#, fuzzy
 msgid " by that name"
-msgstr "по имени"
+msgstr "п©п╬ п╦п╪п╣п╫п╦"
 
 #: activities/some.php:171 activities/some.php:174
-#, fuzzy
 msgid "%"
 msgstr "%"
 
 #: email/email-4.php:61 email/email-4.php:71
-#, fuzzy
 msgid "'Messages Sent"
-msgstr "Сообщение отправлено"
+msgstr "п║п╬п╬п╠я┴п╣п╫п╦п╣ п╬я┌п©я─п╟п╡п╩п╣п╫п╬"
 
 #: activities/one.php:305
-#, fuzzy
 msgid "(%)"
 msgstr "(%)"
 
 #: admin/case-statuses/one.php:154 admin/opportunity-statuses/one.php:177
-#, fuzzy
 msgid "(defaults to days)"
-msgstr "(дефолт в днях)"
+msgstr "(п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌, п╡ п╢п╫я▐я┘)"
 
 #: include/utils-misc.php:527
 msgid ".  Make sure you have run the administration update."
-msgstr ".  Убедитесь, что вы делаете административное обновление."
+msgstr ".  пёп╠п╣п╢п╦я┌п╣я│я▄, я┤я┌п╬ п╡я▀ п╢п╣п╩п╟п╣я┌п╣ п╟п╢п╪п╦п╫п╦я│я┌я─п╟я┌п╦п╡п╫п╬п╣ п╬п╠п╫п╬п╡п╩п╣п╫п╦п╣."
 
 #: include/utils-misc.php:520
 msgid ".  The data entry appears to be corrupted."
-msgstr ".  Введенные данные, похоже, неверны."
+msgstr ".  п▓п╡п╣п╢п╣п╫п╫я▀п╣ п╢п╟п╫п╫я▀п╣, п©п╬я┘п╬п╤п╣, п╫п╣п╡п╣я─п╫я▀."
 
 #: relationships/sidebar.php:329
-#, fuzzy
 msgid "/"
 msgstr "/"
 
 #: contacts/one.php:390
-#, fuzzy
 msgid "AOL IM"
-msgstr "Аська"
+msgstr "ICQ"
 
 #: contacts/edit.php:198 contacts/new.php:193
-#, fuzzy
 msgid "AOL Name"
-msgstr "Имя в Аське"
+msgstr "п≤п╪я▐ п╡ ICQ"
 
 #: companies/one.php:681 contacts/one.php:494 plugins/info/one.php:366
 #: private/home.php:449
-#, fuzzy
 msgid "About"
-msgstr "О"
+msgstr "п я─п╟я┌п╨п╬"
 
 #: activities/one.php:272
-#, fuzzy
 msgid "About This Activity"
-msgstr "Об этом деле"
+msgstr "п·п╠ я█я┌п╬п╪ п╢п╣п╩п╣"
 
 #: admin/import/import-companies.php:115 cases/one.php:289
 #: companies/one.php:499 contacts/one.php:411 opportunities/one.php:377
-#, fuzzy
 msgid "Account Owner"
-msgstr "Владелец аккаунта"
+msgstr "п°п╣п╫п╣п╢п╤п╣я─ п╨п╩п╦п╣п╫я┌п╟"
 
 #: admin/import/import-companies.php:135 cases/one.php:297
 #: companies/admin.php:74 companies/one.php:546
 #: companies/some-advanced.php:139 companies/some.php:74 contacts/one.php:419
 #: opportunities/one.php:385
-#, fuzzy
 msgid "Account Status"
-msgstr "Статус аккаунта"
+msgstr "п║я┌п╟я┌я┐я│ п╨п╩п╦п╣п╫я┌п╟"
 
 #: admin/account-statuses/one.php:40
-#, fuzzy
 msgid "Account Status Details"
-msgstr "Статус аккаунта (подробно)"
+msgstr "п║я┌п╟я┌я┐я│ п╨п╩п╦п╣п╫я┌п╟ (п©п╬п╢я─п╬п╠п╫п╬)"
 
 #: admin/index.php:183 admin/account-statuses/some.php:47
-#, fuzzy
 msgid "Account Statuses"
-msgstr "Все статусы аккаунта "
+msgstr "п║я┌п╟я┌я┐я│я▀ п╨п╩п╦п╣п╫я┌п╟ "
 
 #: activities/associate-activities.php:33
-#, fuzzy
 msgid "Action"
-msgstr "Действие"
+msgstr "п■п╣п╧я│я┌п╡п╦п╣"
 
 #: cases/one.php:324 companies/one.php:674 contacts/one.php:488
 #: include/utils-interface.php:133 opportunities/one.php:423
 #: plugins/info/one.php:359 reports/completed-items.php:96
 #: reports/open-items.php:78 reports/overdue-items.php:92
-#, fuzzy
 msgid "Activities"
-msgstr "Дела"
+msgstr "п■п╣п╩п╟"
 
 #: locale/datastrings.php:12
-#, fuzzy
 msgid "Activities Default Behavior"
-msgstr "Дела по умолчанию"
+msgstr "п■п╣п╩п╟ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: activities/one.php:298 private/home.php:445 reports/activitytimes.php:78
 #: reports/completed-items.php:203 reports/open-items.php:189
 #: reports/overdue-items.php:204
-#, fuzzy
 msgid "Activity"
-msgstr "Дело"
+msgstr "п■п╣п╩п╬"
 
 #: include/utils-interface.php:64
 msgid "Activity Added."
-msgstr "Дело добавлено."
+msgstr "п■п╣п╩п╬ п╢п╬п╠п╟п╡п╩п╣п╫п╬."
 
 #: include/utils-interface.php:66
 msgid "Activity Deleted."
-msgstr "Дело удалено."
+msgstr "п■п╣п╩п╬ я┐п╢п╟п╩п╣п╫п╬."
 
 #: activities/one.php:225
-#, fuzzy
 msgid "Activity Details"
-msgstr "Дело подробно"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ п╢п╣п╩п╣"
 
 #: activities/one.php:330
-#, fuzzy
 msgid "Activity Notes"
-msgstr "Заметки о деле"
+msgstr "п≈п╟п╪п╣я┌п╨п╦ п╬ п╢п╣п╩п╣"
 
 #: reports/index.php:133
-#, fuzzy
 msgid "Activity Report for"
-msgstr "Отчет о деятельности для"
+msgstr "п·п╠п╥п╬я─ п╢п╣я▐я┌п╣п╩я▄п╫п╬я│я┌п╦ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐"
 
 #: reports/user-activity.php:68 reports/user-activity.php:80
 #: reports/user-activity.php:83
-#, fuzzy
 msgid "Activity Summary"
-msgstr "Обзор дела"
+msgstr "п·п╠п╥п╬я─ п╢п╣я▐я┌п╣п╩я▄п╫п╬я│я┌п╦"
 
 #: admin/activity-templates/edit.php:47
-#, fuzzy
 msgid "Activity Template Details"
-msgstr "Подробнее о шаблонах дела"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╣п╣ п╬ я┬п╟п╠п╩п╬п╫п╟я┘ п╢п╣п╩п╟"
 
 #: admin/index.php:136 admin/activity-templates/some.php:59
-#, fuzzy
 msgid "Activity Templates"
-msgstr "Шаблоны дела"
+msgstr "п╗п╟п╠п╩п╬п╫я▀ п╢п╣п╩п╟"
 
 #: reports/index.php:105
-#, fuzzy
 msgid "Activity Time Sheets"
-msgstr "Расписание дела"
+msgstr "п═п╟п╠п╬я┤п╦п╧ пЁя─п╟я└п╦п╨"
 
 #: admin/activity-types/one.php:42
-#, fuzzy
 msgid "Activity Type Details"
-msgstr "Подробнее о типах дела"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╣п╣ п╬ я┌п╦п©п╟я┘ п╢п╣п╩п╟"
 
 #: admin/index.php:158 admin/activity-types/some.php:54
-#, fuzzy
 msgid "Activity Types"
-msgstr "Типы дела"
+msgstr "п╒п╦п©я▀ п╢п╣п╩п╟"
 
 #: admin/account-statuses/some.php:82 admin/activity-types/some.php:93
 #: admin/campaign-statuses/some.php:92 admin/campaign-types/some.php:80
@@ -197,621 +169,513 @@ msgstr "Типы дела"
 #: admin/users/some.php:118 cases/one.php:338 companies/addresses.php:171
 #: companies/divisions.php:78 companies/one.php:693 contacts/one.php:505
 #: opportunities/one.php:437
-#, fuzzy
 msgid "Add"
-msgstr "Добавить"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄"
 
 #: relationships/new-relationship-2.php:72
 #: relationships/new-relationship.php:88
-#, fuzzy
 msgid "Add "
-msgstr "Добавить'"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄'"
 
 #: include/strings.php:17 include/strings.php:22
-#, fuzzy
 msgid "Add Company"
-msgstr "Добавить Компанию"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п п╬п╪п©п╟п╫п╦я▌"
 
 #: contacts/new.php:229 include/strings.php:16 include/strings.php:21
-#, fuzzy
 msgid "Add Contact"
-msgstr "Добавить контакт"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╨п╬п╫я┌п╟п╨я┌"
 
 #: companies/former-names.php:93
-#, fuzzy
 msgid "Add Former Name"
-msgstr "Добавить название заказчика"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ я│я┌п╟я─п╬п╣ п╫п╟п╥п╡п╟п╫п╦п╣"
 
 #: admin/account-statuses/some.php:63
-#, fuzzy
 msgid "Add New Account Status"
-msgstr "Добавить новый статус аккаунта"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я│я┌п╟я┌я┐я│ п╨п╩п╦п╣п╫я┌п╟"
 
 #: admin/activity-types/some.php:70
-#, fuzzy
 msgid "Add New Activity Type"
-msgstr "Добавить тип нового дела"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ я┌п╦п© п╫п╬п╡п╬пЁп╬ п╢п╣п╩п╟"
 
 #: admin/crm-statuses/some.php:66
-#, fuzzy
 msgid "Add New CRM Status"
-msgstr "Добавить новый статус CRM"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я│я┌п╟я┌я┐я│ CRM"
 
 #: campaigns/some.php:271
-#, fuzzy
 msgid "Add New Campaign"
-msgstr "Добавить новую кампанию"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я┐я▌ п╨п╟п╪п©п╟п╫п╦я▌"
 
 #: admin/campaign-statuses/some.php:63
-#, fuzzy
 msgid "Add New Campaign Status"
-msgstr "Добавитьновый статус кампании"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я│я┌п╟я┌я┐я│ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/campaign-types/some.php:61
-#, fuzzy
 msgid "Add New Campaign Type"
-msgstr "Добавить новый тип кампании"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я┌п╦п© п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/case-statuses/some.php:85
-#, fuzzy
 msgid "Add New Case Status"
-msgstr "Добавить новый статус события"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я│я┌п╟я┌я┐я│ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/case-types/some.php:61
-#, fuzzy
 msgid "Add New Case Type"
-msgstr "Добавить новый тип события"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я┌п╦п© я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/categories/some.php:62
-#, fuzzy
 msgid "Add New Category"
-msgstr "Добавить новую категорию"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я┐я▌ п╨п╟я┌п╣пЁп╬я─п╦я▌"
 
 #: admin/company-sources/some.php:65
-#, fuzzy
 msgid "Add New Company Source"
-msgstr "Добавить новый источник информации"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ п╦я│я┌п╬я┤п╫п╦п╨ п╦п╫я└п╬я─п╪п╟я├п╦п╦"
 
 #: admin/company-types/some.php:60
-#, fuzzy
 msgid "Add New Company Type"
-msgstr "Добавить новый тип компании"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я┌п╦п© я└п╦я─п╪я▀"
 
 #: admin/industries/some.php:60
-#, fuzzy
 msgid "Add New Industry"
-msgstr "добавить новую сферу деятельности"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я┐я▌ я│я└п╣я─я┐ п╢п╣я▐я┌п╣п╩я▄п╫п╬я│я┌п╦"
 
 #: admin/opportunity-statuses/some.php:108
-#, fuzzy
 msgid "Add New Opportunity Status"
-msgstr "Добавить новый статус возможности"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я│я┌п╟я┌я┐я│ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: admin/case-priorities/some.php:63
-#, fuzzy
 msgid "Add New Priority Type"
-msgstr "Добавить новый тип приоритета"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я┌п╦п© п©я─п╦п╬я─п╦я┌п╣я┌п╟"
 
 #: admin/ratings/some.php:64
-#, fuzzy
 msgid "Add New Rating"
-msgstr "Добавить новый рейтинг"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я▀п╧ я─п╣п╧я┌п╦п╫пЁ"
 
 #: admin/relationship-types/some.php:68 admin/roles/some.php:63
-#, fuzzy
 msgid "Add New Role"
-msgstr "Добавить новую должность"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡я┐я▌ я─п╬п╩я▄"
 
 #: admin/users/some.php:79
-#, fuzzy
 msgid "Add New User"
-msgstr "Добавить нового пользователя"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╫п╬п╡п╬пЁп╬ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐"
 
 #: companies/relationships.php:126 relationships/sidebar.php:336
-#, fuzzy
 msgid "Add Relationship"
-msgstr "Добавить отношения"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╬я┌п╫п╬я┬п╣п╫п╦я▐"
 
 #: activities/some.php:525
-#, fuzzy
 msgid "Add to Everyone"
-msgstr "Добавить всем"
+msgstr "п■п╬п╠п╟п╡п╦я┌я▄ п╡я│п╣п╪"
 
 #: include/utils-interface.php:73
-#, fuzzy
 msgid "Added"
-msgstr "Добавлено"
+msgstr "п■п╬п╠п╟п╡п╩п╣п╫п╬"
 
 #: admin/update.php:301
 msgid "Added an Activities Default Behavior system parameter."
-msgstr "Дела добавлены в параметры системы."
+msgstr "п■п╣п╩п╟ п╢п╬п╠п╟п╡п╩п╣п╫я▀ п╡ п©п╟я─п╟п╪п╣я┌я─я▀ я│п╦я│я┌п╣п╪я▀."
 
 #: admin/update.php:284
 msgid "Added an Audit Level."
-msgstr "Добавлен уровень аудита."
+msgstr "п■п╬п╠п╟п╡п╩п╣п╫ я┐я─п╬п╡п╣п╫я▄ п╟я┐п╢п╦я┌п╟."
 
 #: companies/advanced-search.php:234 companies/new.php:198
 #: companies/one.php:523 contacts/edit.php:136 contacts/new.php:131
 #: contacts/one.php:427 reports/companies-list.php:150
-#, fuzzy
 msgid "Address"
-msgstr "Адрес"
+msgstr "п░п╢я─п╣я│"
 
 #: include/utils-interface.php:51
 msgid "Address Added."
-msgstr "Адрес добавлен."
+msgstr "п░п╢я─п╣я│ п╢п╬п╠п╟п╡п╩п╣п╫."
 
 #: companies/edit-address.php:101 contacts/edit-address.php:218
-#, fuzzy
 msgid "Address Body"
-msgstr "Адрес боди(?)"
+msgstr "п░п╢я─п╣я│ п©п╬п╢я─п╬п╠п╫п╬"
 
 #: include/utils-interface.php:53
 msgid "Address Deleted."
-msgstr "Адрес удален."
+msgstr "п░п╢я─п╣я│ я┐п╢п╟п╩п╣п╫."
 
 #: admin/country-address-format/index.php:45
-#, fuzzy
 msgid "Address Format"
-msgstr "Формат адреса"
+msgstr "п╓п╬я─п╪п╟я┌ п╟п╢я─п╣я│п╟"
 
 #: companies/addresses.php:111 companies/addresses.php:139
 #: companies/advanced-search.php:237 companies/edit-address.php:73
 #: companies/new.php:201 contacts/edit-address.php:190
-#, fuzzy
 msgid "Address Name"
-msgstr "Название адреса"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╟п╢я─п╣я│п╟"
 
 #: companies/addresses.php:95 companies/addresses.php:108
 #: companies/one.php:624
-#, fuzzy
 msgid "Addresses"
-msgstr "Адреса"
+msgstr "п░п╢я─п╣я│п╟"
 
 #: companies/admin.php:58 companies/one.php:619
 #, fuzzy
 msgid "Admin"
-msgstr "Админ"
+msgstr "п░п╢п╪п╦п╫"
 
 #: admin/index.php:37 include/utils-interface.php:145
-#, fuzzy
 msgid "Administration"
-msgstr "Администрация"
+msgstr "п░п╢п╪п╦п╫п╦я│я┌я─п╦я─п╬п╡п╟п╫п╦п╣"
 
 #: activities/some.php:541 companies/some.php:320
-#, fuzzy
 msgid "Advanced Search"
-msgstr "Расширеный поиск"
+msgstr "п═п╟я│я┬п╦я─п╣п╫я▀п╧ п©п╬п╦я│п╨"
 
 #: locale/datastrings.php:13
-#, fuzzy
 msgid "Advertisement"
-msgstr "Реклама"
+msgstr "п═п╣п╨п╩п╟п╪п╟"
 
 #: locale/datastrings.php:14
-#, fuzzy
 msgid "Advertisements"
-msgstr "Рекламы(?)"
+msgstr "п═п╣п╨п╩п╟п╪п╟"
 
 #: locale/datastrings.php:15
-#, fuzzy
 msgid "Advertising"
-msgstr "Рекламирование(?)"
+msgstr "п═п╣п╨п╩п╟п╪п╟"
 
 #: activities/some.php:471
-#, fuzzy
 msgid "After"
-msgstr "После"
+msgstr "п÷п╬я│п╩п╣"
 
 #: activities/some.php:481 reports/completed-items.php:89
 #: reports/open-items.php:71 reports/overdue-items.php:85
-#, fuzzy
 msgid "All"
-msgstr "Все"
+msgstr "п▓я│п╣"
 
 #: reports/audit-items.php:56
-#, fuzzy
 msgid "All Dates"
-msgstr "Все даты"
+msgstr "п≈п╟ п╡я│п╣ п╡я─п╣п╪я▐"
 
 #: reports/completed-items.php:144 reports/open-items.php:113
 #: reports/overdue-items.php:128
-#, fuzzy
 msgid "All Users"
-msgstr "Все пользователи"
+msgstr "п▓я│п╣ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩п╦"
 
 #: admin/users/some.php:114
-#, fuzzy
 msgid "Allow Access"
-msgstr "Разрешить доступ"
+msgstr "п═п╟п╥я─п╣я┬п╦я┌я▄ п╢п╬я│я┌я┐п©"
 
 #: companies/advanced-search.php:182 companies/edit.php:133
 #: companies/new.php:143 companies/one.php:507
-#, fuzzy
 msgid "Alt. Phone"
-msgstr "Другой телефон"
+msgstr "п■я─я┐пЁп╬п╧ я┌п╣п╩п╣я└п╬п╫"
 
 #: locale/datastrings.php:16
-#, fuzzy
 msgid "Approved"
-msgstr "Одобрено"
+msgstr "п·п╢п╬п╠я─п╣п╫п╬"
 
 #: locale/datastrings.php:17
-#, fuzzy
 msgid "Architecture"
-msgstr "Архитектура"
+msgstr "п░я─я┘п╦я┌п╣п╨я┌я┐я─п╟"
 
 #: activities/associate-activities.php:29
-#, fuzzy
 msgid "Associate Activities"
-msgstr "Объединить дела"
+msgstr "п·п╠я┼п╣п╢п╦п╫п╦я┌я▄ п╢п╣п╩п╟"
 
 #: activities/associate-activities.php:148
-#, fuzzy
 msgid "Associated"
-msgstr "Обединено"
+msgstr "п·п╠п╣п╢п╦п╫п╣п╫п╬"
 
 #: include/strings.php:27
-#, fuzzy
 msgid "Associated Companies"
-msgstr "Объединенные компании"
+msgstr "п·п╠я┼п╣п╢п╦п╫п╣п╫п╫я▀п╣ я└п╦я─п╪я▀"
 
 #: include/strings.php:26
-#, fuzzy
 msgid "Associated Contacts"
-msgstr "Объединенные контакты"
+msgstr "п·п╠я┼п╣п╢п╦п╫п╣п╫п╫я▀п╣ п╨п╬п╫я┌п╟п╨я┌я▀"
 
 #: admin/categories/one.php:142 campaigns/categories.php:99
 #: cases/categories.php:99 companies/categories.php:103
 #: contacts/categories.php:105 opportunities/categories.php:99
-#, fuzzy
 msgid "Associated With"
-msgstr "Объединить с"
+msgstr "п║п╡я▐п╥п╟п╫п╬ я│"
 
 #: files/new.php:52
-#, fuzzy
 msgid "Attach File"
-msgstr "Прикрепить файл"
+msgstr "п÷я─п╦п╨я─п╣п©п╦я┌я▄ я└п╟п╧п╩"
 
 #: notes/new.php:41
-#, fuzzy
 msgid "Attach Note"
-msgstr "Прикрепить замечание"
+msgstr "п÷я─п╦п╨я─п╣п©п╦я┌я▄ п╥п╟п╪п╣я┌п╨я┐"
 
 #: activities/one.php:287
-#, fuzzy
 msgid "Attached"
-msgstr "Прикреплено"
+msgstr "п÷я─п╦п╨я─п╣п©п╩п╣п╫п╬"
 
 #: files/new.php:74 notes/sidebar.php:24
-#, fuzzy
 msgid "Attached To"
-msgstr "Прикрепить к"
+msgstr "п÷я─п╦п╨я─п╣п©п╦я┌я▄ п╨"
 
 #: reports/index.php:123
-#, fuzzy
 msgid "Audit Items"
-msgstr "Объекты аудита"
+msgstr "п·п╠я┼п╣п╨я┌я▀ п╟я┐п╢п╦я┌п╟"
 
 #: locale/datastrings.php:18
-#, fuzzy
 msgid "Audit Level"
-msgstr "Уровень аудита"
+msgstr "пёя─п╬п╡п╣п╫я▄ п╟я┐п╢п╦я┌п╟"
 
 #: reports/audit-items.php:27
-#, fuzzy
 msgid "Audit Log"
-msgstr "Журнал аудита"
+msgstr "п√я┐я─п╫п╟п╩ п╟я┐п╢п╦я┌п╟"
 
 #: plugins/radtest/radtest.php:48
-#, fuzzy
 msgid "Back"
-msgstr "Назад"
+msgstr "п²п╟п╥п╟п╢"
 
 #: companies/relationships.php:127
-#, fuzzy
 msgid "Back to"
-msgstr "Назад к"
+msgstr "п²п╟п╥п╟п╢ п╨"
 
 #: email/email-2.php:82 email/one-template.php:82
-#, fuzzy
 msgid "Bcc"
-msgstr "Копия (Всс?)"
+msgstr "п п╬п©п╦я▐"
 
 #: activities/some.php:470
-#, fuzzy
 msgid "Before"
-msgstr "До"
+msgstr "п■п╬"
 
 #: contacts/edit-address.php:95
-#, fuzzy
 msgid "Billing Address"
-msgstr "Адрес для счетов"
+msgstr "п░п╢я─п╣я│ п╢п╩я▐ я│я┤п╣я┌п╬п╡"
 
 #: companies/addresses.php:115
-#, fuzzy
 msgid "Billing Default"
-msgstr "Счет по умолчанию"
+msgstr "п║я┤п╣я┌ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: activities/some.php:533
-#, fuzzy
 msgid "Browse"
-msgstr "Показать"
+msgstr "п÷п╬п╨п╟п╥п╟я┌я▄"
 
 #: locale/datastrings.php:19
-#, fuzzy
 msgid "Bug"
-msgstr "Жук(?)"
+msgstr "п╢п╣я└п╣п╨я┌"
 
 #: locale/datastrings.php:20
-#, fuzzy
 msgid "Bugs"
-msgstr "Жуки(?)"
+msgstr "п÷я─п╬п╠п╩п╣п╪я▀"
 
 #: activities/some.php:537 campaigns/some.php:246 cases/some.php:263
 #: companies/some.php:317 email/email.php:106 email/index.php:56
 #: files/some.php:329 opportunities/some.php:241
-#, fuzzy
 msgid "Bulk E-Mail"
-msgstr "Электронная почта Балк(?)"
+msgstr "п╜п╩п╣п╨я┌я─п╬п╫п╫п╟я▐ п©п╬я┤я┌п╟"
 
 #: reports/completed-items.php:194
-#, fuzzy
 msgid "COMPLETED ACTIVITIES for"
-msgstr "ЗАВЕРШЕНО ДЕЛО для"
+msgstr "п≈п░п▓п∙п═п╗п∙п²п²п╚п∙ п■п∙п⌡п░ п╢п╩я▐"
 
 #: reports/completed-items.php:245
-#, fuzzy
 msgid "COMPLETED CAMPAIGNS for"
-msgstr "ЗАВЕРШЕНА КАМПАНИЯ для"
+msgstr "п≈п░п▓п∙п═п╗п∙п²п²п╚п∙ п п░п°п÷п░п²п≤п≤ п╢п╩я▐"
 
 #: reports/completed-items.php:336
-#, fuzzy
 msgid "COMPLETED CASES for"
-msgstr "ЗАВЕРШЕНЫ СОБЫТИЯ для"
+msgstr "п≈п░п▓п∙п═п╗п∙п²п²п╚п∙ п║п·п▒п╚п╒п≤п╞ п╢п╩я▐"
 
 #: reports/completed-items.php:287
-#, fuzzy
 msgid "COMPLETED OPPORTUNITIES for"
-msgstr "ЗАВЕРШЕНЫ ВОЗМОЖНОСТИ для"
+msgstr "п≈п░п▓п∙п═п╗п∙п²п²п╚п∙ п▓п·п≈п°п·п√п²п·п║п╒п≤ п╢п╩я▐"
 
 #: admin/import/import-companies.php:119 cases/one.php:293
 #: companies/advanced-search.php:162 companies/edit.php:113
 #: companies/new.php:123 companies/one.php:495 companies/some-advanced.php:138
 #: companies/some.php:73 contacts/one.php:415 opportunities/one.php:381
 #: reports/companies-list.php:100
-#, fuzzy
 msgid "CRM Status"
-msgstr "Статус CRM"
+msgstr "п║я┌п╟я┌я┐я│ CRM"
 
 #: admin/crm-statuses/one.php:38
-#, fuzzy
 msgid "CRM Status Details"
-msgstr "Подробный статус CRM"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я│я┌п╟я┌я┐я│ CRM"
 
 #: admin/index.php:178
-#, fuzzy
 msgid "CRM Statuses"
-msgstr "Статусы CRM"
+msgstr "п║я┌п╟я┌я┐я│я▀ CRM"
 
 #: plugins/webcalendar/setup.php:22
-#, fuzzy
 msgid "Calendar"
-msgstr "Календарь"
+msgstr "п п╟п╩п╣п╫п╢п╟я─я▄"
 
 #: campaigns/some.php:65 campaigns/some.php:281 files/some.php:90
 #: opportunities/edit.php:186 opportunities/new.php:88
 #: opportunities/one.php:313 private/home.php:297
 #: reports/completed-items.php:252 reports/open-items.php:236
 #: reports/overdue-items.php:253
-#, fuzzy
 msgid "Campaign"
-msgstr "Кампания"
+msgstr "п п╟п╪п©п╟п╫п╦я▐"
 
 #: include/utils-interface.php:56
 msgid "Campaign Added."
-msgstr "Кампания добавлена."
+msgstr "п п╟п╪п©п╟п╫п╦я▐ п╢п╬п╠п╟п╡п╩п╣п╫п╟."
 
 #: include/utils-interface.php:58
 msgid "Campaign Deleted."
-msgstr "Кампания удалена."
+msgstr "п п╟п╪п©п╟п╫п╦я▐ я┐п╢п╟п╩п╣п╫п╟."
 
 #: campaigns/edit.php:78 campaigns/new.php:66 campaigns/one.php:126
 #: campaigns/one.php:136
-#, fuzzy
 msgid "Campaign Details"
-msgstr "Подробно о кампании"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: campaigns/some.php:214
-#, fuzzy
 msgid "Campaign Name"
-msgstr "Название кампании"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/campaign-statuses/one.php:41
-#, fuzzy
 msgid "Campaign Status Details"
-msgstr "Подробный статус кампании"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я│я┌п╟я┌я┐я│п╣ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/index.php:223 admin/campaign-statuses/some.php:47
-#, fuzzy
 msgid "Campaign Statuses"
-msgstr "Статусы кампании"
+msgstr "п║я┌п╟я┌я┐я│я▀ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: campaigns/edit.php:81 campaigns/new.php:69
-#, fuzzy
 msgid "Campaign Title"
-msgstr "Псевдоним кампании"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/campaign-types/one.php:38
-#, fuzzy
 msgid "Campaign Type Details"
-msgstr "Подробный тип кампании"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я┌п╦п©п╣ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/index.php:218
-#, fuzzy
 msgid "Campaign Types"
-msgstr "Типы кампании"
+msgstr "п╒п╦п©я▀ п╨п╟п╪п©п╟п╫п╦п╧"
 
 #: campaigns/some.php:193 files/some.php:309 include/utils-interface.php:136
 #: reports/completed-items.php:103 reports/open-items.php:85
 #: reports/overdue-items.php:99
-#, fuzzy
 msgid "Campaigns"
-msgstr "Кампании"
+msgstr "п п╟п╪п©п╟п╫п╦п╦"
 
 #: cases/some.php:63 cases/some.php:287 files/some.php:102
 #: reports/index.php:78 reports/open-items.php:326
 #: reports/overdue-items.php:347
-#, fuzzy
 msgid "Case"
-msgstr "Событие"
+msgstr "п║п╬п╠я▀я┌п╦п╣"
 
 #: cases/one.php:211
-#, fuzzy
 msgid "Case #"
-msgstr "Событие #"
+msgstr "п║п╬п╠я▀я┌п╦п╣ #"
 
 #: include/utils-interface.php:68
 msgid "Case Added."
-msgstr "Событие добавлено."
+msgstr "п║п╬п╠я▀я┌п╦п╣ п╢п╬п╠п╟п╡п╩п╣п╫п╬."
 
 #: include/utils-interface.php:70
 msgid "Case Deleted."
-msgstr "Событие удалено."
+msgstr "п║п╬п╠я▀я┌п╦п╣ я┐п╢п╟п╩п╣п╫п╬."
 
 #: cases/edit.php:177 cases/new.php:100 cases/one.php:221
-#, fuzzy
 msgid "Case Details"
-msgstr "Подробно о событии"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я│п╬п╠я▀я┌п╦п╦"
 
 #: cases/some.php:241
-#, fuzzy
 msgid "Case Name"
-msgstr "Название события"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ я│п╬п╠я▀я┌п╦я▐"
 
 #: cases/some.php:242
-#, fuzzy
 msgid "Case Number"
-msgstr "Номер события"
+msgstr "п²п╬п╪п╣я─ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/index.php:213 admin/case-priorities/some.php:47
-#, fuzzy
 msgid "Case Priorities"
-msgstr "Приоритет события"
+msgstr "п÷я─п╦п╬я─п╦я┌п╣я┌ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/case-priorities/one.php:41
-#, fuzzy
 msgid "Case Priority Details"
-msgstr "Подробно о приоритете события"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ п©я─п╦п╬я─п╦я┌п╣я┌п╣ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/case-statuses/one.php:106
-#, fuzzy
 msgid "Case Status Details"
-msgstr "Подробно о статусе события"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я│я┌п╟я┌я┐я│п╣ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/index.php:208 admin/case-statuses/some.php:68
-#, fuzzy
 msgid "Case Statuses"
-msgstr "Статусы события"
+msgstr "п║я┌п╟я┌я┐я│я▀ я│п╬п╠я▀я┌п╦п╧"
 
 #: cases/edit.php:180 cases/new.php:103
-#, fuzzy
 msgid "Case Title"
-msgstr "Псевдоним события"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/case-types/one.php:40
-#, fuzzy
 msgid "Case Type Details"
-msgstr "Подробный тип события"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я┌п╦п©п╣ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/index.php:203 admin/case-types/some.php:45
-#, fuzzy
 msgid "Case Types"
-msgstr "Типы события"
+msgstr "п╒п╦п©я▀ я│п╬п╠я▀я┌п╦п╧"
 
 #: cases/some.php:220 files/some.php:311 include/utils-interface.php:138
 #: reports/completed-items.php:117 reports/open-items.php:99
 #: reports/overdue-items.php:113
-#, fuzzy
 msgid "Cases"
-msgstr "События"
+msgstr "п║п╬п╠я▀я┌п╦я▐"
 
 #: reports/cases-by-case-status.php:59 reports/cases-by-case-status.php:71
 #: reports/cases-by-case-status.php:74 reports/index.php:81
-#, fuzzy
 msgid "Cases by Status"
-msgstr "События по статусу"
+msgstr "п║п╬п╠я▀я┌п╦я▐ п©п╬ я│я┌п╟я┌я┐я│я┐"
 
 #: admin/index.php:153 admin/categories/some.php:46 campaigns/one.php:202
 #: cases/one.php:352 companies/one.php:710 contacts/one.php:521
 #: opportunities/one.php:451 plugins/info/one.php:394
 #: reports/companies-list.php:155
-#, fuzzy
 msgid "Categories"
-msgstr "Категории"
+msgstr "п п╟я┌п╣пЁп╬я─п╦п╦"
 
 #: admin/import/import-companies.php:127 campaigns/some.php:228
 #: cases/some.php:252 companies/some.php:279 contacts/some.php:253
 #: opportunities/some.php:232 reports/companies-list.php:99
-#, fuzzy
 msgid "Category"
-msgstr "Категория"
+msgstr "п п╟я┌п╣пЁп╬я─п╦я▐"
 
 #: admin/categories/one.php:79
-#, fuzzy
 msgid "Category Details"
-msgstr "Подробно о категории"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ п╨п╟я┌п╣пЁп╬я─п╦п╦"
 
 #: admin/categories/one.php:139
-#, fuzzy
 msgid "Category Scopes"
-msgstr "Категория под прицелом(?)"
+msgstr "п║п╡я▐п╥п╦ п╨п╟я┌п╣пЁп╬я─п╦п╦"
 
 #: contacts/edit.php:186 contacts/new.php:181 contacts/one.php:363
 #: contacts/sidebar.php:150
-#, fuzzy
 msgid "Cell Phone"
-msgstr "Мобильный телефон"
+msgstr "п°п╬п╠п╦п╩я▄п╫я▀п╧ я┌п╣п╩п╣я└п╬п╫"
 
 #: admin/country-address-format/edit.php:63
-#, fuzzy
 msgid "Change"
-msgstr "Изменить"
+msgstr "п≤п╥п╪п╣п╫п╦я┌я▄"
 
 #: files/one.php:83
-#, fuzzy
 msgid "Change Date"
-msgstr "Изменить дату"
+msgstr "п≤п╥п╪п╣п╫п╦я┌я▄ п╢п╟я┌я┐"
 
 #: files/one.php:90
-#, fuzzy
 msgid "Change File"
-msgstr "Изменить файл"
+msgstr "п≤п╥п╪п╣п╫п╦я┌я▄ я└п╟п╧п╩"
 
 #: reports/opportunities-quantity-by-opportunity-status.php:107
-#, fuzzy
 msgid "Change Graph"
-msgstr "Изменить график"
+msgstr "п≤п╥п╪п╣п╫п╦я┌я▄ пЁя─п╟я└п╦п╨"
 
 #: admin/users/change-password.php:30 admin/users/change-password.php:42
 #: admin/users/one.php:117 admin/users/self.php:92
-#, fuzzy
 msgid "Change Password"
-msgstr "Сменить пароль"
+msgstr "п║п╪п╣п╫п╦я┌я▄ п©п╟я─п╬п╩я▄"
 
 #: include/utils-interface.php:81
 msgid "Changes saved."
-msgstr "Изменения приняты."
+msgstr "п≤п╥п╪п╣п╫п╣п╫п╦я▐ п©я─п╦п╫я▐я┌я▀."
 
 #: locale/datastrings.php:21
-#, fuzzy
 msgid "Chemicals"
-msgstr "Химия"
+msgstr "п╔п╦п╪п╦я┤п╣я│п╨п╟я▐ п©я─п╬п╪я▀я┬п╩п╣п╫п╫п╬я│я┌я▄"
 
 #: relationships/sidebar.php:351
-#, fuzzy
 msgid "Choose a relationship"
-msgstr "Выбрать отношения"
+msgstr "п▓я▀п╠я─п╟я┌я▄ п╬я┌п╫п╬я┬п╣п╫п╦я▐"
 
 #: companies/addresses.php:151 companies/advanced-search.php:249
 #: companies/edit-address.php:85 companies/new.php:213 companies/some.php:122
@@ -819,16 +683,14 @@ msgstr "Выбрать отношения"
 #: reports/companies-list.php:101 reports/companies-list.php:152
 #: reports/company-contacts-printout.php:124
 #: reports/company-contacts-printout.php:134
-#, fuzzy
 msgid "City"
-msgstr "Город"
+msgstr "п⌠п╬я─п╬п╢"
 
 #: activities/some.php:534 campaigns/some.php:245 cases/some.php:263
 #: companies/advanced-search.php:271 companies/some.php:314
 #: contacts/some.php:270 files/some.php:328 opportunities/some.php:241
-#, fuzzy
 msgid "Clear Search"
-msgstr "Очистить поиск"
+msgstr "п·я┤п╦я│я┌п╦я┌я▄ п©п╬п╦я│п╨"
 
 #: admin/account-statuses/one.php:88 admin/activity-templates/edit.php:104
 #: admin/activity-types/one.php:90 admin/campaign-statuses/one.php:95
@@ -840,89 +702,77 @@ msgstr "Очистить поиск"
 #: admin/ratings/one.php:81 admin/relationship-types/one.php:99
 #: admin/roles/one.php:84 admin/users/one.php:131
 msgid "Click the button below to permanently remove this item."
-msgstr "Нажмите кнопку внизу для удаления объектов."
+msgstr "п²п╟п╤п╪п╦я┌п╣ п╨п╫п╬п©п╨я┐ п╡п╫п╦п╥я┐ п╢п╩я▐ я┐п╢п╟п╩п╣п╫п╦я▐ п╬п╠я┼п╣п╨я┌п╬п╡."
 
 #: companies/admin.php:115
 msgid ""
 "Click the button below to remove this company (and all associated contacts, "
 "activities, opportunities, cases, etc.) from the system."
-msgstr "Нажмите кнопку внизу для удаления компании (и объектов с ней связанных) из системы."
+msgstr "п²п╟п╤п╪п╦я┌п╣ п╨п╫п╬п©п╨я┐ п╡п╫п╦п╥я┐ п╢п╩я▐ я┐п╢п╟п╩п╣п╫п╦я▐ я└п╦я─п╪я▀ (п╦ п╬п╠я┼п╣п╨я┌п╬п╡ я│ п╫п╣п╧ я│п╡я▐п╥п╟п╫п╫я▀я┘) п╦п╥ я│п╦я│я┌п╣п╪я▀."
 
 #: companies/one.php:620
-#, fuzzy
 msgid "Clone"
-msgstr "Копировать"
+msgstr "п п╬п©п╦я─п╬п╡п╟я┌я▄"
 
 #: opportunities/edit.php:221 opportunities/new.php:123
 #: opportunities/some.php:74 opportunities/some.php:267
-#, fuzzy
 msgid "Close Date"
-msgstr "Дата закрытия"
+msgstr "п■п╟я┌п╟ п╥п╟п╨я─я▀я┌п╦я▐"
 
 #: admin/campaign-statuses/one.php:76 admin/campaign-statuses/some.php:87
 #: locale/datastrings.php:22
-#, fuzzy
 msgid "Closed"
-msgstr "Закрыто"
+msgstr "п≈п╟п╨я─я▀я┌п╬"
 
 #: admin/opportunity-statuses/one.php:154
 #: admin/opportunity-statuses/some.php:136 locale/datastrings.php:23
-#, fuzzy
 msgid "Closed/Lost"
-msgstr "Закрыто/Неудачно"
+msgstr "п≈п╟п╨я─я▀я┌п╬/п²п╣я┐п╢п╟я┤п╫п╬"
 
 #: admin/opportunity-statuses/one.php:153
 #: admin/opportunity-statuses/some.php:135 locale/datastrings.php:24
-#, fuzzy
 msgid "Closed/Won"
-msgstr "Закрыто/Успешно"
+msgstr "п≈п╟п╨я─я▀я┌п╬/пёя│п©п╣я┬п╫п╬"
 
 #: opportunities/one.php:333
 #, fuzzy
 msgid "Closes"
-msgstr "Ближе(?)"
+msgstr "п▒п╩п╦п╤п╣(?)"
 
 #: companies/one.php:487 contacts/some.php:69 contacts/some.php:251
 #: reports/companies-list.php:148
-#, fuzzy
 msgid "Code"
-msgstr "Код"
+msgstr "п п╬п╢"
 
 #: locale/datastrings.php:25
-#, fuzzy
 msgid "Communications"
-msgstr "Коммуникации, связь"
+msgstr "п п╬п╪п╪я┐п╫п╦п╨п╟я├п╦п╦, я│п╡я▐п╥я▄"
 
 #: companies/advanced-search.php:130 files/some.php:308 include/strings.php:31
 #: include/utils-interface.php:134
-#, fuzzy
 msgid "Companies"
-msgstr "Компании"
+msgstr "п╓п╦я─п╪я▀"
 
 #: reports/companies-list.php:64
-#, fuzzy
 msgid "Companies List"
-msgstr "Список компаний"
+msgstr "п║п©п╦я│п╬п╨ я└п╦я─п╪"
 
 #: reports/companies-by-crm-status.php:58
 #: reports/companies-by-crm-status.php:70
 #: reports/companies-by-crm-status.php:73 reports/index.php:45
-#, fuzzy
 msgid "Companies by CRM Status"
-msgstr "Компании по статусу CRM"
+msgstr "п╓п╦я─п╪я▀ п©п╬ я│я┌п╟я┌я┐я│я┐ CRM"
 
 #: reports/companies-by-industry.php:57 reports/companies-by-industry.php:69
 #: reports/companies-by-industry.php:72 reports/index.php:49
-#, fuzzy
 msgid "Companies by Industry"
-msgstr "Компании по сфере деятельности"
+msgstr "п╓п╦я─п╪я▀ п©п╬ п╬я┌я─п╟я│п╩я▐п╪"
 
 #: reports/companies-by-company-source.php:59
 #: reports/companies-by-company-source.php:71
 #: reports/companies-by-company-source.php:74 reports/index.php:53
-#, fuzzy
 msgid "Companies by Source"
-msgstr "Компании по источникам информации"
+msgstr "п╓п╦я─п╪я▀ п©п╬ п╦я│я┌п╬я┤п╫п╦п╨п╟п╪ п╦п╫я└п╬я─п╪п╟я├п╦п╦"
 
 #: activities/associate-activities.php:33 activities/one.php:275
 #: activities/some.php:168 activities/some.php:433 cases/edit.php:184
@@ -943,53 +793,45 @@ msgstr "Компании по источникам информации"
 #: reports/open-items.php:187 reports/open-items.php:324
 #: reports/overdue-items.php:202 reports/overdue-items.php:297
 #: reports/overdue-items.php:345
-#, fuzzy
 msgid "Company"
-msgstr "Компания"
+msgstr "п╓п╦я─п╪п╟"
 
 #: include/utils-interface.php:43
 msgid "Company Added."
-msgstr "Компания добавлена."
+msgstr "п╓п╦я─п╪п╟ п╢п╬п╠п╟п╡п╩п╣п╫п╟."
 
 #: reports/company-contacts-printout.php:213
-#, fuzzy
 msgid "Company Category"
-msgstr "Категория компании"
+msgstr "п п╟я┌п╣пЁп╬я─п╦я▐ я└п╦я─п╪я▀"
 
 #: reports/company-contacts-printout.php:214
-#, fuzzy
 msgid "Company City"
-msgstr "Город компании"
+msgstr "п⌠п╬я─п╬п╢ я└п╦я─п╪я▀"
 
 #: companies/advanced-search.php:158 companies/edit.php:109
 #: companies/new.php:119 companies/some-advanced.php:135 companies/some.php:70
-#, fuzzy
 msgid "Company Code"
-msgstr "Код компании"
+msgstr "п п╬п╢ я└п╦я─п╪я▀"
 
 #: include/utils-interface.php:45
 msgid "Company Deleted."
-msgstr "Компания удалена."
+msgstr "п╓п╦я─п╪п╟ я┐п╢п╟п╩п╣п╫п╟."
 
 #: companies/one.php:441 companies/one.php:468
-#, fuzzy
 msgid "Company Details"
-msgstr "Подробно о компании"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я└п╦я─п╪п╣"
 
 #: activities/some.php:447
-#, fuzzy
 msgid "Company ID"
-msgstr "ИД компании"
+msgstr "п≤п■ я└п╦я─п╪я▀"
 
 #: companies/advanced-search.php:147 companies/new.php:108
-#, fuzzy
 msgid "Company Information"
-msgstr "Информация о компании"
+msgstr "п≤п╫я└п╬я─п╪п╟я├п╦я▐ п╬ я└п╦я─п╪п╣"
 
 #: reports/index.php:94
-#, fuzzy
 msgid "Company List"
-msgstr "Список компании"
+msgstr "п║п©п╦я│п╬п╨ я└п╦я─п╪"
 
 #: companies/advanced-search.php:150 companies/edit.php:101
 #: companies/new.php:111 companies/one.php:478 companies/some-advanced.php:134
@@ -997,119 +839,98 @@ msgstr "Список компании"
 #: companies/some.php:273 companies/some.php:359 reports/companies-list.php:97
 #: reports/companies-list.php:149 reports/company-contacts-printout.php:211
 #: reports/company-contacts-printout.php:244
-#, fuzzy
 msgid "Company Name"
-msgstr "Название компании"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ я└п╦я─п╪я▀"
 
 #: companies/some-advanced.php:399 companies/some.php:346
-#, fuzzy
 msgid "Company Options"
-msgstr "Опции(выбор?) компании"
+msgstr "п▓я▀п╠п╬я─ я└п╦я─п╪я▀"
 
 #: reports/index.php:91
-#, fuzzy
 msgid "Company Reports"
-msgstr "Отчет по компании"
+msgstr "п·я┌я┤п╣я┌ п©п╬ я└п╦я─п╪п╣"
 
 #: admin/import/import-companies.php:123 companies/advanced-search.php:166
 #: companies/edit.php:121 companies/new.php:127 companies/one.php:570
-#, fuzzy
 msgid "Company Source"
-msgstr "Источник информации компании"
+msgstr "п≤я│я┌п╬я┤п╫п╦п╨ п╦п╫я└п╬я─п╪п╟я├п╦п╦"
 
 #: admin/company-sources/one.php:43
-#, fuzzy
 msgid "Company Source Details"
-msgstr "Подробно об источнике информации компании"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬п╠ п╦я│я┌п╬я┤п╫п╦п╨п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦"
 
 #: admin/index.php:173 admin/company-sources/some.php:49
-#, fuzzy
 msgid "Company Sources"
-msgstr "Источник информации компании"
+msgstr "п≤я│я┌п╬я┤п╫п╦п╨ п╦п╫я└п╬я─п╪п╟я├п╦п╦"
 
 #: reports/company-contacts-printout.php:215
-#, fuzzy
 msgid "Company State"
-msgstr "Регион компании"
+msgstr "п═п╣пЁп╦п╬п╫ я└п╦я─п╪я▀"
 
 #: admin/company-types/one.php:37
-#, fuzzy
 msgid "Company Type Details"
-msgstr "Подробный тип компании"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я┌п╦п©п╣ я└п╦я─п╪я▀"
 
 #: admin/index.php:168 admin/company-types/some.php:44
-#, fuzzy
 msgid "Company Types"
-msgstr "Типы компании"
+msgstr "п╒п╦п©я▀ я└п╦я─п╪"
 
 #: reports/company-contacts-printout.php:212
 #, fuzzy
 msgid "Company User"
-msgstr "Пользователь компании"
+msgstr "п÷п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▄ я└п╦я─п╪я▀"
 
 #: locale/datastrings.php:26
-#, fuzzy
 msgid "Competitor"
-msgstr "Конкурент"
+msgstr "п п╬п╫п╨я┐я─п╣п╫я┌"
 
 #: locale/datastrings.php:27
-#, fuzzy
 msgid "Competitors"
-msgstr "Конкуренты"
+msgstr "п п╬п╫п╨я┐я─п╣п╫я┌я▀"
 
 #: activities/some.php:462 activities/some.php:483
-#, fuzzy
 msgid "Completed"
-msgstr "Завершено"
+msgstr "п≈п╟п╡п╣я─я┬п╣п╫п╬"
 
 #: reports/completed-items.php:48 reports/index.php:119
-#, fuzzy
 msgid "Completed Items"
-msgstr "Завершенные объекты"
+msgstr "п≈п╟п╡п╣я─я┬п╣п╫п╫я▀п╣ я─п╟п╠п╬я┌я▀"
 
 #: activities/one.php:376
-#, fuzzy
 msgid "Completed?"
-msgstr "Завершить?"
+msgstr "п≈п╟п╡п╣я─я┬п╦я┌я▄?"
 
 #: locale/datastrings.php:28
-#, fuzzy
 msgid "Computers"
-msgstr "Компьютеры"
+msgstr "п п╬п╪п©я▄я▌я┌п╣я─я▀"
 
 #: admin/plugin/plugin-admin.php:292
-#, fuzzy
 msgid "Config file can't be opened. Please check vars.php."
-msgstr "Конфигурационный файл не может быть открыть. Проверьте файл vars.php."
+msgstr "п п╬п╫я└п╦пЁя┐я─п╟я├п╦п╬п╫п╫я▀п╧ я└п╟п╧п╩ п╫п╣ п╪п╬п╤п╣я┌ п╠я▀я┌я▄ п╬я┌п╨я─я▀я┌. п÷я─п╬п╡п╣я─я▄я┌п╣ я└п╟п╧п╩ vars.php."
 
 #: admin/plugin/plugin-admin.php:286
 msgid "Config written successfully."
-msgstr "Конфигурация записана успешно."
+msgstr "п п╬п╫я└п╦пЁя┐я─п╟я├п╦я▐ п╥п╟п©п╦я│п╟п╫п╟ я┐я│п©п╣я┬п╫п╬."
 
 #: admin/users/change-password.php:49
-#, fuzzy
 msgid "Confirm New Password"
-msgstr "Подтвердите новый пароль"
+msgstr "п÷п╬п╢я┌п╡п╣я─п╢п╦я┌п╣ п╫п╬п╡я▀п╧ п©п╟я─п╬п╩я▄"
 
 #: email/email-3.php:70 email/email-3.php:81
-#, fuzzy
 msgid "Confirm Recipients"
-msgstr "Подтвердите получателя"
+msgstr "п÷п╬п╢я┌п╡п╣я─п╢п╦я┌п╣ п©п╬п╩я┐я┤п╟я┌п╣п╩я▐"
 
 #: reports/audit-items.php:58
-#, fuzzy
 msgid "Connection Details"
-msgstr "Подробности соеденения(?)"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬я│я┌п╦ я│п╬п╣п╢п╣п╫п╣п╫п╦я▐"
 
 #: locale/datastrings.php:29
-#, fuzzy
 msgid "Construction"
-msgstr "Строительство"
+msgstr "п║я┌я─п╬п╦я┌п╣п╩я▄я│я┌п╡п╬"
 
 #: locale/datastrings.php:30
-#, fuzzy
 msgid "Consulting"
-msgstr "Консалтинг (советы? подсказки?)"
+msgstr "п п╬п╫я│п╟п╩я┌п╦п╫пЁ"
 
 #: activities/one.php:281 activities/some.php:163 activities/some.php:432
 #: admin/users/one.php:85 cases/edit.php:188 cases/new.php:107
@@ -1123,174 +944,146 @@ msgstr "Консалтинг (советы? подсказки?)"
 #: reports/open-items.php:188 reports/open-items.php:325
 #: reports/overdue-items.php:203 reports/overdue-items.php:298
 #: reports/overdue-items.php:346
-#, fuzzy
 msgid "Contact"
-msgstr "Контакт"
+msgstr "п п╬п╫я┌п╟п╨я┌"
 
 #: include/utils-interface.php:47
 msgid "Contact Added."
-msgstr "Контакт добавлен."
+msgstr "п п╬п╫я┌п╟п╨я┌ п╢п╬п╠п╟п╡п╩п╣п╫."
 
 #: reports/company-contacts-printout.php:180
-#, fuzzy
 msgid "Contact Call List"
-msgstr "Список звонков"
+msgstr "п║п©п╦я│п╬п╨ п╥п╡п╬п╫п╨п╬п╡"
 
 #: include/utils-interface.php:49
 msgid "Contact Deleted."
-msgstr "Контакт удален."
+msgstr "п п╬п╫я┌п╟п╨я┌ я┐п╢п╟п╩п╣п╫."
 
 #: contacts/one.php:286 contacts/one.php:313
-#, fuzzy
 msgid "Contact Details"
-msgstr "Подробно о контакте"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ п╨п╬п╫я┌п╟п╨я┌п╣"
 
 #: activities/some.php:446
-#, fuzzy
 msgid "Contact ID"
-msgstr "ИД контакта"
+msgstr "п≤п■ п╨п╬п╫я┌п╟п╨я┌п╟"
 
 #: companies/new.php:239 contacts/edit.php:125 contacts/new.php:124
 #: contacts/sidebar.php:101
-#, fuzzy
 msgid "Contact Information"
-msgstr "Информация о контакте"
+msgstr "п≤п╫я└п╬я─п╪п╟я├п╦я▐ п╬ п╨п╬п╫я┌п╟п╨я┌п╣"
 
 #: companies/one.php:633 companies/some-advanced.php:141
 #: companies/some-advanced.php:300 contacts/some.php:213 files/some.php:306
 #: include/strings.php:30 include/utils-interface.php:135
 #: reports/company-contacts-printout.php:245
-#, fuzzy
 msgid "Contacts"
-msgstr "Контакты"
+msgstr "п п╬п╫я┌п╟п╨я┌я▀"
 
 #: reports/index.php:98
-#, fuzzy
 msgid "Contacts at Companies"
-msgstr "Контакты с компаниями"
+msgstr "п п╬п╫я┌п╟п╨я┌я▀ я│ я└п╦я─п╪п╟п╪п╦"
 
 #: reports/company-contacts-printout.php:241
-#, fuzzy
 msgid "Contacts for Companies"
-msgstr "Контакты для компании"
+msgstr "п п╬п╫я┌п╟п╨я┌я▀ п╢п╩я▐ я└п╦я─п╪я▀"
 
 #: files/some.php:307
-#, fuzzy
 msgid "Contacts of Companies"
-msgstr "Контакты компаний"
+msgstr "п п╬п╫я┌п╟п╨я┌я▀ я└п╦я─п╪"
 
 #: email/email-2.php:95 email/email-3.php:92 email/email.php:125
 #: email/index.php:75
-#, fuzzy
 msgid "Continue"
-msgstr "Продолжить"
+msgstr "п÷я─п╬п╢п╬п╩п╤п╦я┌я▄"
 
 #: campaigns/edit.php:111 campaigns/new.php:99 campaigns/one.php:158
-#, fuzzy
 msgid "Cost"
-msgstr "Стоимость"
+msgstr "п║я┌п╬п╦п╪п╬я│я┌я▄"
 
 #: admin/country-address-format/edit.php:43
 #: admin/country-address-format/index.php:43 companies/addresses.php:163
 #: companies/advanced-search.php:261 companies/edit-address.php:97
 #: companies/new.php:225 contacts/edit-address.php:214
 #: reports/companies-list.php:103 reports/companies-list.php:153
-#, fuzzy
 msgid "Country"
-msgstr "Страна"
+msgstr "п║я┌я─п╟п╫п╟"
 
 #: admin/index.php:131 admin/country-address-format/index.php:32
-#, fuzzy
 msgid "Country Localization Formats"
-msgstr "Национальный формат"
+msgstr "п²п╟я├п╦п╬п╫п╟п╩я▄п╫я▀п╧ я└п╬я─п╪п╟я┌"
 
 #: contacts/some.php:281
-#, fuzzy
+# ,fuzzy
 msgid "Create Contact for 'Self'"
-msgstr "Создать контакт для SELF(?)"
+msgstr "п║п╬п╥п╢п╟я┌я▄ п╨п╬п╫я┌п╟п╨я┌ п╢п╩я▐ я│п╣п╠я▐"
 
 #: contacts/edit-address.php:170
-#, fuzzy
 msgid "Create New Address?"
-msgstr "Создать новый адрес?"
+msgstr "п║п╬п╥п╢п╟я┌я▄ п╫п╬п╡я▀п╧ п╟п╢я─п╣я│?"
 
 #: contacts/edit-address.php:177
-#, fuzzy
 msgid "Create a New Address?"
-msgstr "Создать а(?) новый адрес?"
+msgstr "п║п╬п╥п╢п╟я┌я▄ п╫п╬п╡я▀п╧ п╟п╢я─п╣я│?"
 
 #: campaigns/one.php:166 cases/one.php:255 companies/one.php:531
 #: contacts/one.php:455 opportunities/one.php:341
-#, fuzzy
 msgid "Created"
-msgstr "Создано"
+msgstr "п║п╬п╥п╢п╟п╫п╬"
 
 #: companies/admin.php:82 companies/one.php:554
-#, fuzzy
 msgid "Credit Limit"
-msgstr "Предел кредита"
+msgstr "п⌡п╦п╪п╦я┌ п╨я─п╣п╢п╦я┌п╟"
 
 #: locale/datastrings.php:31
 #, fuzzy
 msgid "Critical"
-msgstr "Критично"
+msgstr "п я─п╦я┌п╦я┤п╫п╬"
 
 #: reports/index.php:139
-#, fuzzy
 msgid "Custom Reports"
-msgstr "Отчет настраиваемый(?)"
+msgstr "п²п╟я│я┌я─п╟п╦п╡п╟п╣п╪я▀п╣ п╬я┌я┤п╣я┌я▀"
 
 #: locale/datastrings.php:32
-#, fuzzy
 msgid "Customer"
-msgstr "Заказчик"
+msgstr "п≈п╟п╨п╟п╥я┤п╦п╨"
 
 #: companies/admin.php:94
-#, fuzzy
 msgid "Customer Key"
-msgstr "Ключ заказчика"
+msgstr "п п╩я▌я┤ п╥п╟п╨п╟п╥я┤п╦п╨п╟"
 
 #: locale/datastrings.php:33
-#, fuzzy
 msgid "Customers"
-msgstr "Заказчики"
+msgstr "п≈п╟п╨п╟п╥я┤п╦п╨п╦"
 
 #: admin/index.php:56
-#, fuzzy
 msgid "Data Cleanup"
-msgstr "Очистить данные"
+msgstr "п·я┤п╦я│я┌п╦я┌я▄ п╢п╟п╫п╫я▀п╣"
 
 #: admin/data_clean.php:323
-#, fuzzy
 msgid "Database Cleanup Complete"
-msgstr "База данных очищена"
+msgstr "п▒п╟п╥п╟ п╢п╟п╫п╫я▀я┘ п╬я┤п╦я┴п╣п╫п╟"
 
 #: admin/index.php:53
-#, fuzzy
 msgid "Database Structure Update"
-msgstr "Структура базы данных обновлена"
+msgstr "п·п╠п╫п╬п╡п╩п╣п╫п╦п╣ я│я┌я─я┐п╨я┌я┐я─я▀ п╠п╟п╥я▀ п╢п╟п╫п╫я▀я┘"
 
 #: campaigns/one.php:241 companies/relationships.php:116 files/new.php:86
 #: files/sidebar.php:24 files/some.php:112 files/some.php:317
 #: files/some.php:360 notes/sidebar.php:27 private/home.php:245
-#, fuzzy
 msgid "Date"
-msgstr "Дата"
+msgstr "п■п╟я┌п╟"
 
 #: contacts/edit.php:162 contacts/new.php:157 contacts/one.php:343
-#, fuzzy
 msgid "Date of Birth"
-msgstr "Дата рождения"
+msgstr "п■п╟я┌п╟ я─п╬п╤п╢п╣п╫п╦я▐"
 
 #: locale/datastrings.php:34
-#, fuzzy
 msgid "Default GST Offset"
-msgstr "какое-то ГСТ смещение(?)"
+msgstr "п═п╟п╥п╫п╦я├п╟ п╡ я┤п╟я│п╟я┘ п╬я┌ п⌠я─п╦п╫п╡п╦я┤п╟"
 
 #: admin/activity-templates/edit.php:79
-#, fuzzy
 msgid "Default Text"
-msgstr "Текст по умолчанию"
+msgstr "п╒п╣п╨я│я┌ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: activities/one.php:389 activities/some.php:383
 #: admin/account-statuses/one.php:94 admin/activity-templates/edit.php:109
@@ -1305,238 +1098,192 @@ msgstr "Текст по умолчанию"
 #: admin/users/one.php:133 campaigns/edit.php:122 cases/edit.php:225
 #: contacts/edit.php:240 files/one.php:94 notes/edit.php:41
 #: opportunities/edit.php:238 plugins/info/one.php:342
-#, fuzzy
 msgid "Delete"
-msgstr "Удалить"
+msgstr "пёп╢п╟п╩п╦я┌я▄"
 
 #: admin/account-statuses/one.php:83
-#, fuzzy
 msgid "Delete Account Status"
-msgstr "Удалить статус аккаунта"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ п╨п╩п╦п╣п╫я┌п╟"
 
 #: admin/account-statuses/one.php:80
-#, fuzzy
 msgid "Delete Account Status?"
-msgstr "Удалить статус аккаунта?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ п╨п╩п╦п╣п╫я┌п╟?"
 
 #: admin/activity-templates/edit.php:100
-#, fuzzy
 msgid "Delete Activity Template"
-msgstr "Удалить шаблон дела"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┬п╟п╠п╩п╬п╫ п╢п╣п╩п╟"
 
 #: admin/activity-templates/edit.php:94
-#, fuzzy
 msgid "Delete Activity Template?"
-msgstr "Удалить шаблон дела?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┬п╟п╠п╩п╬п╫ п╢п╣п╩п╟?"
 
 #: admin/activity-types/one.php:86
-#, fuzzy
 msgid "Delete Activity Type"
-msgstr "Удалить тип дела"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© п╢п╣п╩п╟"
 
 #: admin/activity-types/one.php:82
-#, fuzzy
 msgid "Delete Activity Type?"
-msgstr "Удалить тип дела?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© п╢п╣п╩п╟?"
 
 #: activities/one.php:388
-#, fuzzy
 msgid "Delete Activity?"
-msgstr "Удалить дело?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╢п╣п╩п╬?"
 
 #: companies/edit-address.php:110 contacts/edit-address.php:226
-#, fuzzy
 msgid "Delete Address"
-msgstr "Удалить адрес"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╟п╢я─п╣я│"
 
 #: companies/edit-address.php:109 contacts/edit-address.php:225
-#, fuzzy
 msgid "Delete Address?"
-msgstr "Удалить адрес?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╟п╢я─п╣я│?"
 
 #: admin/crm-statuses/one.php:78
-#, fuzzy
 msgid "Delete CRM Status"
-msgstr "Удалить статус CRM"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ CRM"
 
 #: admin/crm-statuses/one.php:74
-#, fuzzy
 msgid "Delete CRM Status?"
-msgstr "Удалить статус CRM?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ CRM?"
 
 #: admin/campaign-statuses/one.php:91
-#, fuzzy
 msgid "Delete Campaign Status"
-msgstr "Удалить статус кампании"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/campaign-statuses/one.php:87
-#, fuzzy
 msgid "Delete Campaign Status?"
-msgstr "Удалить статус кампании?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ п╨п╟п╪п©п╟п╫п╦п╦?"
 
 #: admin/campaign-types/one.php:78
-#, fuzzy
 msgid "Delete Campaign Type"
-msgstr "Удалить тип кампании"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/campaign-types/one.php:74
-#, fuzzy
 msgid "Delete Campaign Type?"
-msgstr "Удалить тип кампании?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© п╨п╟п╪п©п╟п╫п╦п╦?"
 
 #: campaigns/edit.php:121
-#, fuzzy
 msgid "Delete Campaign?"
-msgstr "Удалить кампанию?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╨п╟п╪п©п╟п╫п╦я▌?"
 
 #: admin/case-statuses/one.php:189
-#, fuzzy
 msgid "Delete Case Status"
-msgstr "Удалить статус события"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/case-statuses/one.php:185
-#, fuzzy
 msgid "Delete Case Status?"
-msgstr "Удалить статус события?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ я│п╬п╠я▀я┌п╦я▐?"
 
 #: admin/case-types/one.php:80
-#, fuzzy
 msgid "Delete Case Type"
-msgstr "Удалить тип события"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/case-types/one.php:76
-#, fuzzy
 msgid "Delete Case Type?"
-msgstr "Удалить тип события?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© я│п╬п╠я▀я┌п╦я▐?"
 
 #: cases/edit.php:224
-#, fuzzy
 msgid "Delete Case?"
-msgstr "Удалить событие?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│п╬п╠я▀я┌п╦п╣?"
 
 #: admin/categories/one.php:119
-#, fuzzy
 msgid "Delete Category"
-msgstr "Удалить категорию"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╨п╟я┌п╣пЁп╬я─п╦я▌"
 
 #: admin/categories/one.php:115
-#, fuzzy
 msgid "Delete Category?"
-msgstr "Удалить категорию?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╨п╟я┌п╣пЁп╬я─п╦я▌?"
 
 #: companies/admin.php:111 companies/admin.php:116
-#, fuzzy
 msgid "Delete Company"
-msgstr "Удалить компанию"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╓п╦я─п╪я┐"
 
 #: admin/company-sources/one.php:87
-#, fuzzy
 msgid "Delete Company Source"
-msgstr "Удалить источник информации компании"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╦я│я┌п╬я┤п╫п╦п╨ п╦п╫я└п╬я─п╪п╟я├п╦п╦"
 
 #: admin/company-sources/one.php:83
-#, fuzzy
 msgid "Delete Company Source?"
-msgstr "Удалить источник информации компании?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╦я│я┌п╬я┤п╫п╦п╨ п╦п╫я└п╬я─п╪п╟я├п╦п╦?"
 
 #: admin/company-types/one.php:77
-#, fuzzy
 msgid "Delete Company Type"
-msgstr "Удалить тип компании"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© я└п╦я─п╪я▀"
 
 #: admin/company-types/one.php:73
-#, fuzzy
 msgid "Delete Company Type?"
-msgstr "Удалить тип компании?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© я└п╦я─п╪я▀?"
 
 #: companies/admin.php:107
-#, fuzzy
 msgid "Delete Company?"
-msgstr "Удалить компанию?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╨п╬п╪п©п╟п╫п╦я▌?"
 
 #: contacts/edit.php:239
-#, fuzzy
 msgid "Delete Contact?"
-msgstr "Удалить контакт?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╨п╬п╫я┌п╟п╨я┌?"
 
 #: companies/edit-division.php:66
 msgid "Delete Division"
-msgstr "Удалить отдел (подразделение)"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╬я┌п╢п╣п╩ (п©п╬п╢я─п╟п╥п╢п╣п╩п╣п╫п╦п╣)"
 
 #: admin/industries/one.php:77
-#, fuzzy
 msgid "Delete Industry"
-msgstr "Удалить сферу деятельности"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╬я┌я─п╟я│п╩я▄"
 
 #: admin/industries/one.php:73
-#, fuzzy
 msgid "Delete Industry?"
-msgstr "Удалить сферу деятельности?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╬я┌я─п╟я│п╩я▄?"
 
 #: admin/opportunity-statuses/one.php:212
-#, fuzzy
 msgid "Delete Opportunity Status"
-msgstr "Удалить статус возможности"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: admin/opportunity-statuses/one.php:208
-#, fuzzy
 msgid "Delete Opportunity Status?"
-msgstr "Удалить статус возможности?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я│я┌п╟я┌я┐я│ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦?"
 
 #: opportunities/edit.php:237
-#, fuzzy
 msgid "Delete Opportunity?"
-msgstr "Удалить возможность?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌я▄?"
 
 #: admin/case-priorities/one.php:85
-#, fuzzy
 msgid "Delete Priority Type"
-msgstr "Удалить тип приоритета"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© п©я─п╦п╬я─п╦я┌п╣я┌п╟"
 
 #: admin/case-priorities/one.php:81
-#, fuzzy
 msgid "Delete Priority Type?"
-msgstr "Удалить тип приоритета?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© п©я─п╦п╬я─п╦я┌п╣я┌п╟?"
 
 #: admin/ratings/one.php:77
-#, fuzzy
 msgid "Delete Rating"
-msgstr "Удалить рейтинг"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я─п╣п╧я┌п╦п╫пЁ"
 
 #: admin/ratings/one.php:73
-#, fuzzy
 msgid "Delete Rating?"
-msgstr "Удалить рейтинг?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я─п╣п╧я┌п╦п╫пЁ?"
 
 #: admin/relationship-types/one.php:91
-#, fuzzy
 msgid "Delete Relationship Type?"
-msgstr "Удалить тип отношений?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я┌п╦п© п╬я┌п╫п╬я┬п╣п╫п╦п╧?"
 
 #: admin/relationship-types/one.php:95 admin/roles/one.php:80
-#, fuzzy
 msgid "Delete Role"
-msgstr "Удалить должность"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я─п╬п╩я▄"
 
 #: admin/roles/one.php:76
-#, fuzzy
 msgid "Delete Role?"
-msgstr "Удалить должность?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ я─п╬п╩я▄?"
 
 #: admin/users/one.php:127
-#, fuzzy
 msgid "Delete User"
-msgstr "Удалить пользователя"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐"
 
 #: admin/users/one.php:123
-#, fuzzy
 msgid "Delete User?"
-msgstr "Удалить пользователя?"
+msgstr "пёп╢п╟п╩п╦я┌я▄ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐?"
 
 #: include/utils-interface.php:75
-#, fuzzy
 msgid "Deleted"
-msgstr "Удалено"
+msgstr "пёп╢п╟п╩п╣п╫п╬"
 
 #: admin/activity-templates/edit.php:75 admin/opportunity-statuses/some.php:93
 #: admin/opportunity-statuses/some.php:127 campaigns/edit.php:115
@@ -1547,34 +1294,28 @@ msgstr "Удалено"
 #: files/new.php:82 files/one.php:79 files/some.php:66
 #: opportunities/edit.php:229 opportunities/new.php:130
 #: opportunities/opportunity-view.php:49 private/home.php:242
-#, fuzzy
 msgid "Description"
-msgstr "Описание"
+msgstr "п·п©п╦я│п╟п╫п╦п╣"
 
 #: plugins/info/one.php:319
-#, fuzzy
 msgid "Details"
-msgstr "Детали (подробно)"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬я│я┌п╦"
 
 #: locale/datastrings.php:35
-#, fuzzy
 msgid "Developed"
-msgstr "Разработка (разрабатывать?)"
+msgstr "п═п╟п╥я─п╟п╠п╬я┌п╨п╟"
 
 #: admin/index.php:50
-#, fuzzy
 msgid "Digital Dashboard"
-msgstr "Цифровой щит"
+msgstr "п≤п╫я└п╬я─п╪п╟я├п╦п╬п╫п╫п╬п╣ я┌п╟п╠п╩п╬"
 
 #: locale/datastrings.php:36
-#, fuzzy
 msgid "Direct Mail"
-msgstr "Директ-мэйл"
+msgstr "п÷п╬я┤я┌п╬п╡п╟я▐ я─п╟я│я│я▀п╩п╨п╟"
 
 #: locale/datastrings.php:37
-#, fuzzy
 msgid "Discussion"
-msgstr "Обсуждение"
+msgstr "п·п╠я│я┐п╤п╢п╣п╫п╦п╣"
 
 #: admin/account-statuses/one.php:70 admin/account-statuses/some.php:78
 #: admin/activity-types/one.php:69 admin/activity-types/some.php:85
@@ -1591,497 +1332,409 @@ msgstr "Обсуждение"
 #: admin/opportunity-statuses/one.php:141
 #: admin/opportunity-statuses/some.php:123 admin/ratings/one.php:64
 #: admin/ratings/some.php:79 admin/roles/one.php:67 admin/roles/some.php:78
-#, fuzzy
 msgid "Display HTML"
-msgstr "Показать HTML"
+msgstr "п▓п╦п╢ п╡ HTML"
 
 #: locale/datastrings.php:38
-#, fuzzy
 msgid "Distribution"
-msgstr "Распространение (дистрибуция?)"
+msgstr "п·п©я┌п╬п╡п╟я▐ я┌п╬я─пЁп╬п╡п╩я▐"
 
 #: contacts/edit.php:132 contacts/new.php:127 contacts/one.php:407
-#, fuzzy
 msgid "Division"
-msgstr "Отдел (подразделение?)"
+msgstr "п·я┌п╢п╣п╩ (п©п╬п╢я─п╟п╥п╢п╣п╩п╣п╫п╦п╣)"
 
 #: companies/divisions.php:74
-#, fuzzy
 msgid "Division Description"
-msgstr "Описание отдела"
+msgstr "п·п©п╦я│п╟п╫п╦п╣ п╬я┌п╢п╣п╩п╟(п©п╬п╢я─п╟п╥п╢п╣п╩п╣п╫п╦я▐)"
 
 #: companies/divisions.php:70 companies/edit-division.php:58
-#, fuzzy
 msgid "Division Name"
-msgstr "Название отдела"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╬я┌п╢п╣п╩п╟ (п©п╬п╢я─п╟п╥п╢п╣п╩п╣п╫п╦я▐)"
 
 #: companies/divisions.php:51 companies/divisions.php:85 companies/one.php:625
-#, fuzzy
 msgid "Divisions"
-msgstr "Отделы"
+msgstr "п·я┌п╢п╣п╩я▀ (п÷п╬п╢я─п╟п╥п╢п╣п╩п╣п╫п╦я▐)"
 
 #: private/home.php:466
-#, fuzzy
 msgid "Documentation"
-msgstr "Документация"
+msgstr "п■п╬п╨я┐п╪п╣п╫я┌п╟я├п╦я▐"
 
 #: cases/one.php:338 companies/one.php:694 contacts/one.php:506
 #: opportunities/one.php:437
-#, fuzzy
 msgid "Done"
-msgstr "Сделано"
+msgstr "п║п╢п╣п╩п╟п╫п╬"
 
 #: files/one.php:94
-#, fuzzy
 msgid "Download"
-msgstr "Скачать"
+msgstr "п║п╨п╟я┤п╟я┌я▄"
 
 #: include/utils-interface.php:195
-#, fuzzy
 msgid "Dr."
-msgstr "Др."
+msgstr "п■я─."
 
 #: activities/some.php:167 cases/sidebar.php:24 cases/some.php:65
 #: cases/some.php:290 opportunities/sidebar.php:24 private/home.php:451
 #: reports/open-items.php:323 reports/overdue-items.php:344
-#, fuzzy
 msgid "Due"
-msgstr "Точно (?)"
+msgstr "п■п╟я┌п╟ п╬п╨п╬п╫я┤п╟п╫п╦я▐"
 
 #: cases/edit.php:211
 #, fuzzy
 msgid "Due At"
-msgstr "Точно в"
+msgstr "п╒п╬я┤п╫п╬ п╡"
 
 #: cases/edit.php:208 cases/new.php:127
-#, fuzzy
 msgid "Due By"
-msgstr "Точно как(?)"
+msgstr "п╒п╬я┤п╫п╬п╣ п╡я─п╣п╪я▐"
 
 #: admin/activity-templates/edit.php:67 admin/case-statuses/one.php:154
 #: admin/opportunity-statuses/one.php:177 reports/activitytimes.php:74
-#, fuzzy
 msgid "Duration"
-msgstr "Продолжительность"
+msgstr "п÷я─п╬п╢п╬п╩п╤п╦я┌п╣п╩я▄п╫п╬я│я┌я▄"
 
 #: admin/users/one.php:104 admin/users/self.php:76 admin/users/some.php:66
 #: admin/users/some.php:102 cases/one.php:277 companies/new.php:250
 #: companies/one.php:641 contacts/edit.php:178 contacts/new.php:173
 #: contacts/one.php:347 email/email-3.php:88 locale/datastrings.php:39
 #: opportunities/one.php:363
-#, fuzzy
 msgid "E-Mail"
 msgstr "E-Mail"
 
 #: email/email.php:117 email/index.php:67 email/templates.php:53
 #: email/templates.php:63
-#, fuzzy
 msgid "E-Mail Templates"
-msgstr "Шаблон письма е-мейл"
+msgstr "п╗п╟п╠п╩п╬п╫ п©п╦я│я▄п╪п╟"
 
 #: admin/country-address-format/index.php:63 campaigns/one.php:190
 #: cases/one.php:311 companies/one.php:618 contacts/one.php:474
 #: opportunities/one.php:405 plugins/info/one.php:340
 #: relationships/sidebar.php:181
-#, fuzzy
 msgid "Edit"
-msgstr "Редактировать"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣"
 
 #: companies/admin.php:71
-#, fuzzy
 msgid "Edit Account Information"
-msgstr "Редактировать информацию об аккаунте"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬п╠ п╨п╩п╦п╣п╫я┌п╣"
 
 #: admin/account-statuses/one.php:53
-#, fuzzy
 msgid "Edit Account Status Information"
-msgstr "Редактировать информацию о статусе аккаунта"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟я┌я▄ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╬ я│я┌п╟я┌я┐я│п╣ п╨п╩п╦п╣п╫я┌п╟"
 
 #: admin/activity-templates/edit.php:60
-#, fuzzy
 msgid "Edit Activity Template Information"
-msgstr "Редактировать информацию о шаблоне дела"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я┬п╟п╠п╩п╬п╫п╣ п╢п╣п╩п╟"
 
 #: admin/activity-types/one.php:54
-#, fuzzy
 msgid "Edit Activity Type Information"
-msgstr "Редактировать информацию о типе дела"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╬ я┌п╦п©п╣ п╢п╣п╩п╟"
 
 #: companies/edit-address.php:50 companies/edit-address.php:66
 #: contacts/edit-address.php:145 contacts/edit-address.php:183
 #: contacts/edit.php:246
-#, fuzzy
 msgid "Edit Address"
-msgstr "Редактировать адрес"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╟п╢я─п╣я│"
 
 #: admin/country-address-format/edit.php:30
-#, fuzzy
 msgid "Edit Address Country Format"
-msgstr "Редактировать национальный формат адреса"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╫п╟я├п╦п╬п╫п╟п╩я▄п╫п╬пЁп╬ я└п╬я─п╪п╟я┌п╟ п╟п╢я─п╣я│п╟"
 
 #: relationships/edit.php:29
-#, fuzzy
 msgid "Edit Association"
-msgstr "Редактировать объединение(?)"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╬п╠я┼п╣п╢п╦п╫п╣п╫п╦я▐"
 
 #: campaigns/edit.php:61
-#, fuzzy
 msgid "Edit Campaign"
-msgstr "Редактировать кампанию"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/campaign-statuses/one.php:53
-#, fuzzy
 msgid "Edit Campaign Status Information"
-msgstr "Редактировать информацию о статусе кампании"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я│я┌п╟я┌я┐я│п╣ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: admin/campaign-types/one.php:50
-#, fuzzy
 msgid "Edit Campaign Type Information"
-msgstr "Редактировать информацию о типе кампании"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я┌п╦п©п╣ п╨п╟п╪п©п╟п╫п╦п╦"
 
 #: cases/edit.php:156
-#, fuzzy
 msgid "Edit Case #"
-msgstr "Редактировать событие #"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ я│п╬п╠я▀я┌п╦п╣ #"
 
 #: admin/case-statuses/one.php:118
-#, fuzzy
 msgid "Edit Case Status Information"
-msgstr "Редактирвать информацию о статусе события"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я│я┌п╟я┌я┐я│п╣ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/case-types/one.php:52
-#, fuzzy
 msgid "Edit Case Type Information"
-msgstr "Редактировать информацию о типе события"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я┌п╦п©п╣ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/categories/one.php:91
-#, fuzzy
 msgid "Edit Category Information"
-msgstr "Редактировать информацию о катеогрии"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ п╨п╟я┌п╣п╬пЁя─п╦п╦"
 
 #: admin/company-sources/one.php:55
-#, fuzzy
 msgid "Edit Company Source Information"
-msgstr "Редактировать информацию о источнике информации компании"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟я┌я▄ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╬ п╦я│я┌п╬я┤п╫п╦п╨п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦"
 
 #: admin/company-types/one.php:49
-#, fuzzy
 msgid "Edit Company Type Information"
-msgstr "Редактировать информацию о типе компании"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я┌п╦п©п╣ я└п╦я─п╪я▀"
 
 #: companies/edit-division.php:38 companies/edit-division.php:51
-#, fuzzy
 msgid "Edit Division"
-msgstr "Редактировать отдел"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╬я┌п╢п╣п╩п╟ (п©п╬п╢я─п╟п╥п╢п╣п╩п╣п╫п╦я▐)"
 
 #: companies/edit.php:178
-#, fuzzy
 msgid "Edit Former Names"
-msgstr "Редактировать название Формера(?)"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟я┌я▄ я│я┌п╟я─п╬п╣ п╫п╟п╥п╡п╟п╫п╦п╣"
 
 #: admin/industries/one.php:49
-#, fuzzy
 msgid "Edit Industry Information"
-msgstr "Редактировать информацию о сфере деятельности"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟я┌я▄ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╬п╠ п╬я┌я─п╟я│п╩п╦"
 
 #: email/email-2.php:44 email/email-2.php:71 email/one-template.php:44
 #: email/one-template.php:71
-#, fuzzy
 msgid "Edit Message"
-msgstr "Редактировать сообщение"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ я│п╬п╬п╠я┴п╣п╫п╦я▐"
 
 #: notes/edit.php:36 notes/edit.php:42
-#, fuzzy
 msgid "Edit Note"
-msgstr "Редактировать заметку"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╥п╟п╪п╣я┌п╨п╦"
 
 #: admin/opportunity-statuses/one.php:126
-#, fuzzy
 msgid "Edit Opportunity Status Information"
-msgstr "Редактировать информацию о статусе возможности"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я│я┌п╟я┌я┐я│п╣ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: admin/case-priorities/one.php:53
-#, fuzzy
 msgid "Edit Priority Type Information"
-msgstr "Редактироватьинформацию о типе приоритета"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я┌п╦п©п╣ п©я─п╦п╬я─п╦я┌п╣я┌п╟"
 
 #: companies/edit.php:86 companies/edit.php:98
-#, fuzzy
 msgid "Edit Profile"
-msgstr "Редактировать профиль"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п©я─п╬я└п╦п╩я▐"
 
 #: admin/crm-statuses/one.php:50 admin/ratings/one.php:49
-#, fuzzy
 msgid "Edit Rating Information"
-msgstr "Редактировать информацию о рейтинге"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я─п╣п╧я┌п╦п╫пЁп╣"
 
 #: admin/relationship-types/one.php:55 admin/roles/one.php:52
-#, fuzzy
 msgid "Edit Role Information"
-msgstr "редактирвать информацию о должности"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ я─п╬п╩п╦"
 
 #: admin/users/one.php:75 admin/users/self.php:61
-#, fuzzy
 msgid "Edit User Information"
-msgstr "Редактировать информацию о пользователе"
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩п╣"
 
 #: contacts/edit-address.php:175
 msgid ""
 "Editing/Deleting this record will change the address for all companies and "
 "contacts listed above."
-msgstr "Редактирование или удаление этой записи изменит информацию в адресах всех компаний и контактах в списке сверху."
+msgstr "п═п╣п╢п╟п╨я┌п╦я─п╬п╡п╟п╫п╦п╣ п╦п╩п╦ я┐п╢п╟п╩п╣п╫п╦п╣ я█я┌п╬п╧ п╥п╟п©п╦я│п╦ п╦п╥п╪п╣п╫п╦я┌ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╡ п╟п╢я─п╣я│п╟я┘ п╡я│п╣я┘ я└п╦я─п╪ п╦ п╨п╬п╫я┌п╟п╨я┌п╟я┘ п╡ я│п©п╦я│п╨п╣ я│п╡п╣я─я┘я┐."
 
 #: locale/datastrings.php:40
-#, fuzzy
 msgid "Education"
-msgstr "Образование"
+msgstr "п·п╠я─п╟п╥п╬п╡п╟п╫п╦п╣"
 
 #: activities/one.php:372
-#, fuzzy
 msgid "Email This To"
-msgstr "Отправить по эл. почте"
+msgstr "п·я┌п©я─п╟п╡п╦я┌я▄ п©п╬ я█п╩. п©п╬я┤я┌п╣"
 
 #: companies/advanced-search.php:194 companies/edit.php:145
 #: companies/new.php:155 companies/one.php:574
-#, fuzzy
 msgid "Employees"
-msgstr "Служащие"
+msgstr "п║п╩я┐п╤п╟я┴п╦п╣"
 
 #: reports/activitytimes.php:52 reports/activitytimes.php:73
 #: reports/audit-items.php:44 reports/completed-items.php:72
 #: reports/completed-items.php:199 reports/completed-items.php:250
 #: reports/open-items.php:185 reports/open-items.php:234
 #: reports/overdue-items.php:200 reports/overdue-items.php:251
-#, fuzzy
 msgid "End"
-msgstr "Конец"
+msgstr "п п╬п╫п╣я├ п©п╣я─п╦п╬п╢п╟"
 
 #: activities/some.php:460
-#, fuzzy
 msgid "End/Due Date"
-msgstr "Дата окончания/дуе(?)"
+msgstr "п п╬п╫я┌я─п╬п╩я▄п╫п╟я▐ п╢п╟я┌п╟"
 
 #: activities/one.php:365 campaigns/some.php:67
-#, fuzzy
 msgid "Ends"
-msgstr "Концы(?)"
+msgstr "п·п╨п╬п╫я┤п╟п╫п╦п╣"
 
 #: campaigns/edit.php:104 campaigns/new.php:92
-#, fuzzy
 msgid "Ends On"
-msgstr "Концы на (??)"
+msgstr "п·п╨п╬п╫я┤п╟п╫п╦п╣"
 
 #: admin/users/self.php:83 admin/users/some.php:107
-#, fuzzy
 msgid "English"
-msgstr "Английский"
+msgstr "п░п╫пЁп╩п╦п╧я│п╨п╦п╧"
 
 #: contacts/sidebar.php:156
-#, fuzzy
 msgid "Enter Cell"
-msgstr "Ввести ячейку(?)"
+msgstr "п▓п╡п╣я│я┌п╦ п╫п╬п╪п╣я─ п╪п╬п╠п╦п╩я▄п╫п╬пЁп╬ я┌п╣п╩п╣я└п╬п╫п╟"
 
 #: contacts/sidebar.php:189
-#, fuzzy
 msgid "Enter Email Address"
-msgstr "Ввести адрес эл. почты"
+msgstr "п▓п╡п╣я│я┌п╦ п╟п╢я─п╣я│ я█п╩. п©п╬я┤я┌я▀"
 
 #: contacts/sidebar.php:176
-#, fuzzy
 msgid "Enter Home Phone"
-msgstr "Ввести домашний телефон"
+msgstr "п▓п╡п╣я│я┌п╦ п╢п╬п╪п╟я┬п╫п╦п╧ я┌п╣п╩п╣я└п╬п╫"
 
 #: admin/country-address-format/edit.php:65
-#, fuzzy
 msgid "Enter New format"
-msgstr "Ввести новый формат"
+msgstr "п▓п╡п╣я│я┌п╦ п╫п╬п╡я▀п╧ я└п╬я─п╪п╟я┌"
 
 #: contacts/sidebar.php:166
-#, fuzzy
 msgid "Enter Work Phone"
-msgstr "Ввести рабочий телефон"
+msgstr "п▓п╡п╣я│я┌п╦ я─п╟п╠п╬я┤п╦п╧ я┌п╣п╩п╣я└п╬п╫"
 
 #: reports/completed-items.php:291 reports/open-items.php:322
 #: reports/overdue-items.php:295 reports/overdue-items.php:343
-#, fuzzy
 msgid "Entered"
-msgstr "Вставлено(введено?)"
+msgstr "п▓п╡п╣п╢п╣п╫п╬"
 
 #: admin/country-address-format/edit.php:73
 msgid "Error. No Data."
-msgstr "Ошибка. Нет данных."
+msgstr "п·я┬п╦п╠п╨п╟. п²п╣я┌ п╢п╟п╫п╫я▀я┘."
 
 #: locale/datastrings.php:41
-#, fuzzy
 msgid "Event"
-msgstr "Случай, событие, происшествие(?)"
+msgstr "п║п╩я┐я┤п╟п╧, я│п╬п╠я▀я┌п╦п╣, п©я─п╬п╦я│я┬п╣я│я┌п╡п╦п╣"
 
 #: reports/opportunities-quantity-by-opportunity-status.php:106
-#, fuzzy
 msgid "Exclude Closed Opportunities"
-msgstr "Исключить закрытые возможности"
+msgstr "п≤я│п╨п╩я▌я┤п╦я┌я▄ п╥п╟п╨я─я▀я┌я▀п╣ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: admin/crm-statuses/some.php:50
-#, fuzzy
 msgid "Existing CRM Statuses"
-msgstr "Существующие статусы CRM"
+msgstr "п║я┐я┴п╣я│я┌п╡я┐я▌я┴п╦п╣ я│я┌п╟я┌я┐я│я▀ CRM"
 
 #: activities/pager.php:49 companies/pager.php:49
-#, fuzzy
 msgid "Export"
-msgstr "Экспорт"
+msgstr "п╜п╨я│п©п╬я─я┌"
 
 #: admin/index.php:109
-#, fuzzy
 msgid "Export Companies with address and phone info"
-msgstr "Экспорт компаний с информацией с адресами и телефонами"
+msgstr "п╜п╨я│п©п╬я─я┌ я└п╦я─п╪ я│ п╦п╫я└п╬я─п╪п╟я├п╦п╣п╧ я│ п╟п╢я─п╣я│п╟п╪п╦ п╦ я┌п╣п╩п╣я└п╬п╫п╟п╪п╦"
 
 #: admin/index.php:99
-#, fuzzy
 msgid "Export Companies/Contacts"
-msgstr "Экспорт компаний/контактов"
+msgstr "п╜п╨я│п©п╬я─я┌ я└п╦я─п╪/п╨п╬п╫я┌п╟п╨я┌п╬п╡"
 
 #: admin/index.php:104
-#, fuzzy
 msgid "Export Companies/Contacts as LDAP/LDIF"
-msgstr "Экспорт компаний/контактов в формате LDIF(LDAP)"
+msgstr "п╜п╨я│п©п╬я─я┌ я└п╦я─п╪/п╨п╬п╫я┌п╟п╨я┌п╬п╡ п╡ я└п╬я─п╪п╟я┌п╣ LDIF(LDAP)"
 
 #: include/utils-misc.php:520 include/utils-misc.php:527
-#, fuzzy
 msgid "Failure to get system parameter "
-msgstr "Не удалось получить параметры системы"
+msgstr "п²п╣ я┐п╢п╟п╩п╬я│я▄ п©п╬п╩я┐я┤п╦я┌я▄ п©п╟я─п╟п╪п╣я┌я─я▀ я│п╦я│я┌п╣п╪я▀"
 
 #: locale/datastrings.php:42
-#, fuzzy
 msgid "Fair"
-msgstr "Выставка"
+msgstr "п·п╠п╫п╟п╢п╣п╤п╦п╡п╟п╣я┌"
 
 #: locale/datastrings.php:43
-#, fuzzy
 msgid "Fast"
-msgstr "Быстро"
+msgstr "п▒я▀я│я┌я─п╬"
 
 #: companies/advanced-search.php:186 companies/edit.php:137
 #: companies/new.php:147 companies/one.php:511 companies/sidebar.php:61
 #: contacts/edit.php:194 contacts/new.php:189 contacts/one.php:367
-#, fuzzy
 msgid "Fax"
-msgstr "Факс"
+msgstr "п╓п╟п╨я│"
 
 #: locale/datastrings.php:44
 #, fuzzy
 msgid "Feature Request"
-msgstr "Будущий запрос"
+msgstr "п▒я┐п╢я┐я┴п╦п╧ п╥п╟п©я─п╬я│"
 
 #: locale/datastrings.php:45
 #, fuzzy
 msgid "Feature Requests"
-msgstr "Будущие запросы"
+msgstr "п▒я┐п╢я┐я┴п╦п╣ п╥п╟п©я─п╬я│я▀"
 
 #: contacts/edit.php:157 contacts/new.php:152 contacts/one.php:89
-#, fuzzy
 msgid "Female"
-msgstr "Женщина"
+msgstr "п√п╣п╫я│п╨п╦п╧"
 
 #: admin/import/import-companies.php:91
-#, fuzzy
 msgid "Field Delimiter"
-msgstr "Поле разделителя"
+msgstr "п÷п╬п╩п╣ я─п╟п╥п╢п╣п╩п╦я┌п╣п╩я▐"
 
 #: admin/import/import-companies.php:87
-#, fuzzy
 msgid "File"
-msgstr "Файл"
+msgstr "п╓п╟п╧п╩"
 
 #: files/some.php:296
-#, fuzzy
 msgid "File Description"
-msgstr "Описание файла"
+msgstr "п·п©п╦я│п╟п╫п╦п╣ я└п╟п╧п╩п╟"
 
 #: files/one.php:49
-#, fuzzy
 msgid "File Details"
-msgstr "Подробно о файле"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я└п╟п╧п╩п╣"
 
 #: admin/import/import-companies.php:99
-#, fuzzy
 msgid "File Format"
-msgstr "Формат файла"
+msgstr "п╓п╬я─п╪п╟я┌ я└п╟п╧п╩п╟"
 
 #: files/some.php:294 files/some.php:361 private/home.php:246
-#, fuzzy
 msgid "File ID"
-msgstr "ИД файла"
+msgstr "п≤п■ я└п╟п╧п╩п╟"
 
 #: files/new.php:71 files/one.php:64
-#, fuzzy
 msgid "File Information"
-msgstr "Информация о файле"
+msgstr "п≤п╫я└п╬я─п╪п╟я├п╦я▐ п╬ я└п╟п╧п╩п╣"
 
 #: files/new.php:78 files/one.php:67 files/some.php:295
-#, fuzzy
 msgid "File Name"
-msgstr "Название файла"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ я└п╟п╧п╩п╟"
 
 #: campaigns/one.php:235 files/some.php:273 include/utils-interface.php:139
-#, fuzzy
 msgid "Files"
-msgstr "Файлы"
+msgstr "п╓п╟п╧п╩я▀"
 
 #: locale/datastrings.php:46
-#, fuzzy
 msgid "Finance"
-msgstr "Финансы"
+msgstr "п╓п╦п╫п╟п╫я│я▀"
 
 #: campaigns/categories.php:107 cases/categories.php:107
 #: companies/categories.php:111 contacts/categories.php:113
 #: locale/datastrings.php:47 opportunities/categories.php:107
-#, fuzzy
 msgid "Finished"
-msgstr "Закончено"
+msgstr "п⌠п╬я┌п╬п╡п╬"
 
 #: admin/users/one.php:96 admin/users/self.php:68 admin/users/some.php:90
 #: companies/new.php:242 contacts/edit.php:144 contacts/new.php:139
 #: contacts/some.php:239
-#, fuzzy
 msgid "First Names"
-msgstr "Имя"
+msgstr "п≤п╪я▐"
 
 #: companies/addresses.php:113
-#, fuzzy
 msgid "Formatted Address"
-msgstr "Форматированый адрес(?)"
+msgstr "п╓п╬я─п╪п╟я┌ п╟п╢я─п╣я│п╟"
 
 #: admin/relationship-types/some.php:55
-#, fuzzy
 msgid "Formatting"
-msgstr "Форматирование"
+msgstr "п╓п╬я─п╪п╟я┌п╦я─п╬п╡п╟п╫п╦п╣"
 
 #: companies/former-names.php:89 companies/one.php:267
-#, fuzzy
 msgid "Former Name"
-msgstr "Название формера(?)"
+msgstr "п║я┌п╟я─п╬п╣ п╫п╟п╥п╡п╟п╫п╦п╣"
 
 #: companies/former-names.php:65 companies/former-names.php:78
 #: companies/former-names.php:85
-#, fuzzy
 msgid "Former Names"
-msgstr "Названия Формера(??)"
+msgstr "п║я┌п╟я─п╬п╣ п╫п╟п╥п╡п╟п╫п╦п╣"
 
 #: email/email-2.php:74 email/one-template.php:74
-#, fuzzy
 msgid "From"
-msgstr "От"
+msgstr "п·я┌"
 
 #: admin/relationship-types/one.php:70 admin/relationship-types/some.php:83
-#, fuzzy
 msgid "From Text"
-msgstr "Из текста"
+msgstr "п≤п╥ я┌п╣п╨я│я┌п╟"
 
 #: admin/relationship-types/one.php:62 admin/relationship-types/some.php:75
-#, fuzzy
 msgid "From What Table"
-msgstr "Из какой таблицы(?)"
+msgstr "п≤п╥ я┌п╟п╠п╩п╦я├я▀"
 
 #: admin/account-statuses/one.php:62 admin/account-statuses/some.php:70
 #: admin/activity-types/one.php:61 admin/activity-types/some.php:77
@@ -2099,9 +1752,8 @@ msgstr "Из какой таблицы(?)"
 #: admin/opportunity-statuses/some.php:115 admin/ratings/one.php:56
 #: admin/ratings/some.php:71 admin/roles/one.php:59 admin/roles/some.php:70
 #: admin/users/some.php:65
-#, fuzzy
 msgid "Full Name"
-msgstr "Полное имя(название(?)"
+msgstr "п÷п╬п╩п╫п╬п╣ п╫п╟п╦п╪п╣п╫п╬п╡п╟п╫п╦п╣"
 
 #: admin/account-statuses/one.php:66 admin/activity-types/one.php:65
 #: admin/campaign-statuses/one.php:64 admin/campaign-types/one.php:61
@@ -2111,9 +1763,8 @@ msgstr "Полное имя(название(?)"
 #: admin/crm-statuses/one.php:61 admin/industries/one.php:60
 #: admin/opportunity-statuses/one.php:137 admin/ratings/one.php:60
 #: admin/roles/one.php:63
-#, fuzzy
 msgid "Full Plural"
-msgstr "Полное множество(?)"
+msgstr "п÷п╬п╩п╫п╬п╣ п╡п╬ п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫п╬п╪ я┤п╦я│п╩п╣"
 
 #: admin/account-statuses/some.php:74 admin/activity-types/some.php:81
 #: admin/campaign-statuses/some.php:74 admin/campaign-types/some.php:72
@@ -2123,307 +1774,266 @@ msgstr "Полное множество(?)"
 #: admin/crm-statuses/some.php:77 admin/industries/some.php:71
 #: admin/opportunity-statuses/some.php:119 admin/ratings/some.php:75
 #: admin/roles/some.php:74
-#, fuzzy
 msgid "Full Plural Name"
-msgstr "Название полного множества(?)"
+msgstr "п÷п╬п╩п╫п╬п╣ п╫п╟п╦п╪п╣п╫п╬п╡п╟п╫п╦п╣ п╡п╬ п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫п╬п╪ я┤п╦я│п╩п╣"
 
 #: admin/users/one.php:112 admin/users/self.php:86 admin/users/some.php:110
-#, fuzzy
 msgid "GMT Offset"
-msgstr "Смещение ГМТ(?)"
+msgstr "п╖п╟я│п╬п╡п╬п╧ п©п╬я▐я│ (п╬я┌ п⌠я─п╦п╫п╡п╦я┤п╟)"
 
 #: contacts/edit.php:152 contacts/new.php:147 contacts/one.php:327
-#, fuzzy
 msgid "Gender"
-msgstr "Пол"
+msgstr "п÷п╬п╩"
 
 #: reports/activitytimes.php:62 reports/audit-items.php:60
 #: reports/completed-items.php:120 reports/index.php:134
 #: reports/open-items.php:102 reports/overdue-items.php:117
 msgid "Go"
-msgstr "Пшел"
+msgstr "п▓я▀п©п╬п╩п╫п╦я┌я▄"
 
 #: locale/datastrings.php:48
-#, fuzzy
 msgid "Good"
-msgstr "Хорошо"
+msgstr "п╔п╬я─п╬я┬п╬"
 
 #: locale/datastrings.php:49
-#, fuzzy
 msgid "Government"
-msgstr "Правтельство, государственное"
+msgstr "п⌠п╬я│я┐п╤п╣я─п╣п╤п╢п╣п╫п╦п╣"
 
 #: reports/index.php:39
-#, fuzzy
 msgid "Graphs"
-msgstr "График"
+msgstr "п⌠я─п╟я└п╦п╨"
 
 #: activities/pager.php:12 contacts/sidebar.php:71 include/utils-misc.php:16
 #, fuzzy
 msgid "Hacking attempt"
-msgstr "Ппытка подделки(?)"
+msgstr "п÷п╬п©я▀я┌п╨п╟ п©п╬п╢п╢п╣п╩п╨п╦(?)"
 
 #: locale/datastrings.php:50
-#, fuzzy
 msgid "Healthcare"
-msgstr "Здравоохранение"
+msgstr "п≈п╢я─п╟п╡п╬п╬я┘я─п╟п╫п╣п╫п╦п╣"
 
 #: locale/datastrings.php:51
-#, fuzzy
 msgid "Help Item"
-msgstr "Помощь (предметы, список?)"
+msgstr "п÷п╣я─п╢п╪п╣я┌ п©п╬п╪п╬я┴п╦"
 
 #: locale/datastrings.php:52
 #, fuzzy
 msgid "Help Items"
-msgstr "Помощь (предметы, списки?)"
+msgstr "п÷я─п╣п╢п╪п╣я┌я▀ п©п╬п╪п╬я┴п╦"
 
 #: locale/datastrings.php:53
-#, fuzzy
 msgid "High"
-msgstr "Высоко"
+msgstr "п▓я▀я│п╬п╨п╦п╧"
 
 #: locale/datastrings.php:54
 #, fuzzy
 msgid "Hold"
-msgstr "Держать"
+msgstr "п■п╣я─п╤п╟я┌я▄"
 
 #: include/utils-interface.php:132 private/home.php:431
-#, fuzzy
 msgid "Home"
-msgstr "Дом"
+msgstr "п⌠п╩п╟п╡п╫п╟я▐"
 
 #: contacts/edit.php:190 contacts/new.php:185 contacts/one.php:359
 #: contacts/sidebar.php:170
-#, fuzzy
 msgid "Home Phone"
-msgstr "Домашний телефон"
+msgstr "п■п╬п╪п╟я┬п╫п╦п╧ я┌п╣п╩п╣я└п╬п╫"
 
 #: reports/index.php:82
-#, fuzzy
 msgid "How many cases are in each stage of the case resolution process?"
-msgstr "Сколько событий в каждой стадии процесса(?)?"
+msgstr "п═п╟я│п©я─п╣п╢п╣п╩п╣п╫п╦п╣ я│п╬п╠я▀я┌п╦п╧ п©п╬ я│я┌п╟я┌я┐я│я┐"
 
 #: reports/index.php:50
 msgid "How many companies are in each industry?"
-msgstr "Сколько компаний в каждой отрасли."
+msgstr "п·я┌п╫п╬я│п╦я┌п╣п╩я▄п╫п╬п╣ я│п╬п╬я┌п╫п╬я┬п╣п╫п╦п╣ я└п╦я─п╪ п╡ п╨п╟п╤п╢п╬п╧ п╬я┌я─п╟я│п╩п╦"
 
 #: reports/index.php:54
 msgid "How many of your accounts come from each source?"
-msgstr "Сколько упоминаний в источникоах информации."
+msgstr "п║я─п╟п╫п╦я┌п╣п╩я▄п╫п╬п╣ я│п╬п╬я┌п╫п╬я┬п╣п╫п╦п╣ я─п╟п╥п╩п╦я┤п╫я▀я┘ п╦я│я┌п╬я┤п╫п╦п╨п╬п╡ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╦п╥ п╨п╬я┌п╬я─я▀я┘ п╨п╩п╦п╣п╫я┌я▀ п©п╬п╩я┐я┤п╦п╩п╦ п╬ п╫п╟я│ п╦п╫я└п╬я─п╪п╟я├п╦я▌."
 
 #: reports/index.php:63
-#, fuzzy
 msgid "How many opportunities are in each stage of the sales closing process?"
-msgstr "Сколько возможностей в каждом этапе(стадии) а процессе продаж?(???)"
+msgstr "п═п╟я│п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╣п╧ п©п╬ я│я┌п╟я┌я┐я│я┐"
 
 #: reports/index.php:71
 msgid "How many opportunities are tied to companies in each industry?"
-msgstr "Сколько возможностей связанных с комапниями в каждой отрасли."
+msgstr "п═п╟я│п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╣п╧ я│п╡я▐п╥п╟п╫п╫я▀я┘ я│ я└п╦я─п╪п╟п╪п╦ п╡ п╨п╟п╤п╢п╬п╧ п╬я┌я─п╟я│п╩п╦"
 
 #: reports/index.php:67
 msgid "How much potential revenue is in each stage of the sales closing process?"
-msgstr "Каковы возможные доходы в каждой стадии процесса продаж?"
+msgstr "п═п╟я│п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╡п╬п╥п╪п╬п╤п╫я▀я┘ п╢п╬я┘п╬п╢п╬п╡ п©п╬ я│я┌п╟я┌я┐я│я┐ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╣п╧"
 
 #: reports/index.php:75
 msgid "How much potential revenue is tied to companies in each industry?"
-msgstr "Каков потенциальный доход связанный с компаниями в каждой отрасли?(??)"
+msgstr "п▓п╬п╥п╪п╬п╤п╫я▀п╣ п╢п╬я┘п╬п╢я▀ я│п╡я▐п╥п╟п╫п╫я▀п╣ я│ я└п╦я─п╪п╟п╪п╦ п╡ п╨п╟п╤п╢п╬п╧ п╬я┌я─п╟я│п╩п╦"
 
 #: include/utils-misc.php:629
-#, fuzzy
 msgid "I tried to execute:"
-msgstr "Я попытаюсь выполнить:"
+msgstr "п╞ п©я▀я┌п╟п╩п╟я│я▄ п╡я▀п©п╬п╩п╫п╦я┌я▄:"
 
 #: files/some.php:113
-#, fuzzy
 msgid "ID"
-msgstr "ИД"
+msgstr "п≤п■"
 
 #: admin/import/import-companies.php:27 admin/import/import-companies.php:143
-#, fuzzy
 msgid "Import"
-msgstr "Импорт"
+msgstr "п≤п╪п©п╬я─я┌"
 
 #: admin/import/import-companies.php:84
-#, fuzzy
 msgid "Import Companies"
-msgstr "Импорт компаний"
+msgstr "п≤п╪п©п╬я─я┌ я└п╦я─п╪"
 
 #: admin/index.php:94
-#, fuzzy
 msgid "Import Companies/Contacts"
-msgstr "Импорт компаний/контактов"
+msgstr "п≤п╪п©п╬я─я┌ я└п╦я─п╪/п╨п╬п╫я┌п╟п╨я┌п╬п╡"
 
 #: admin/index.php:90
-#, fuzzy
 msgid "Import/Export"
-msgstr "Импорт/Экспорт"
+msgstr "п≤п╪п©п╬я─я┌/п╜п╨я│п©п╬я─я┌"
 
 #: locale/datastrings.php:55
-#, fuzzy
 msgid "In Progress"
-msgstr "В процессе(в развитии,  в прогрессе??)"
+msgstr "п▓ п©я─п╬я├п╣я│я│п╣"
 
 #: admin/index.php:163 admin/industries/some.php:44
-#, fuzzy
 msgid "Industries"
-msgstr "Отрасли"
+msgstr "п·я┌я─п╟я│п╩п╦"
 
 #: admin/import/import-companies.php:131 companies/advanced-search.php:170
 #: companies/edit.php:125 companies/new.php:131 companies/one.php:491
 #: companies/some-advanced.php:137 companies/some.php:72
 #: companies/some.php:282
-#, fuzzy
 msgid "Industry"
-msgstr "Отрасль"
+msgstr "п·я┌я─п╟я│п╩я▄"
 
 #: admin/industries/one.php:37
-#, fuzzy
 msgid "Industry Details"
-msgstr "Подробно об отрасли"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬п╠ п╬я┌я─п╟я│п╩п╦"
 
 #: activities/one.php:340
-#, fuzzy
 msgid "Insert Log"
-msgstr "Журнал вставок(??)"
+msgstr "п▓п╫п╣я│я┌п╦ п╦п╥п╪п╣п╫п╣п╫п╦я▐"
 
 #: locale/datastrings.php:56
-#, fuzzy
 msgid "Insurance"
-msgstr "Страхование"
+msgstr "п║я┌я─п╟я┘п╬п╡п╟п╫п╦п╣"
 
 #: contacts/edit.php:210 contacts/new.php:205 contacts/one.php:371
-#, fuzzy
 msgid "Interests"
-msgstr "Интересы"
+msgstr "п≤п╫я┌п╣я─п╣я│я▀"
 
 #: admin/users/one.php:108 admin/users/self.php:82 admin/users/some.php:106
-#, fuzzy
 msgid "Language"
-msgstr "Язык"
+msgstr "п╞п╥я▀п╨"
 
 #: campaigns/one.php:170 cases/one.php:259 companies/one.php:535
 #: contacts/one.php:459 opportunities/one.php:345
-#, fuzzy
 msgid "Last Modified"
-msgstr "Последнее обновление"
+msgstr "п÷п╬я│п╩п╣п╢п╫п╣п╣ п╬п╠п╫п╬п╡п╩п╣п╫п╦п╣"
 
 #: admin/users/one.php:92 admin/users/self.php:64 admin/users/some.php:86
 #: companies/new.php:246 contacts/edit.php:148 contacts/new.php:143
 #: contacts/some.php:238
-#, fuzzy
 msgid "Last Name"
-msgstr "Фамилия"
+msgstr "п╓п╟п╪п╦п╩п╦я▐"
 
 #: locale/datastrings.php:57
-#, fuzzy
 msgid "Lead"
-msgstr "вести(лмдерб свинец??)"
+msgstr "п⌡п╦п╢п╦я─я┐п╣я┌"
 
 #: locale/datastrings.php:58
-#, fuzzy
 msgid "Leads"
-msgstr "лидеры(??)"
+msgstr "п⌡п╦п╢п╣я─я▀"
 
 #: locale/datastrings.php:59
-#, fuzzy
 msgid "Legal"
-msgstr "Юридический"
+msgstr "п╝я─п╦я│п©я─я┐п╢п╣п╫я├п╦я▐"
 
 #: companies/advanced-search.php:154 companies/edit.php:105
 #: companies/new.php:115 companies/one.php:482
-#, fuzzy
 msgid "Legal Name"
-msgstr "Юридическое название"
+msgstr "п╝я─п╦п╢п╦я┤п╣я│п╨п╬п╣ п╫п╟п╥п╡п╟п╫п╦п╣"
 
 #: reports/audit-items.php:92
 #, fuzzy
 msgid "Line"
-msgstr "Линия"
+msgstr "п⌡п╦п╫п╦я▐"
 
 #: companies/addresses.php:143 companies/advanced-search.php:241
 #: companies/edit-address.php:77 companies/new.php:205
 #: contacts/edit-address.php:194
 #, fuzzy
 msgid "Line 1"
-msgstr "Линия'1"
+msgstr "п⌡п╦п╫п╦я▐'1"
 
 #: companies/addresses.php:147 companies/advanced-search.php:245
 #: companies/edit-address.php:81 companies/new.php:209
 #: contacts/edit-address.php:198
 #, fuzzy
 msgid "Line 2"
-msgstr "Линия'2"
+msgstr "п⌡п╦п╫п╦я▐'2"
 
 #: admin/case-statuses/one.php:150
-#, fuzzy
 msgid "Link Activity To Case Status"
-msgstr "Ссылка дела на статус события"
+msgstr "п║я│я▀п╩п╨п╟ п╢п╣п╩п╟ п╫п╟ я│я┌п╟я┌я┐я│ я│п╬п╠я▀я┌п╦я▐"
 
 #: admin/opportunity-statuses/one.php:173
-#, fuzzy
 msgid "Link Activity To Opportunity Status"
-msgstr "ссылка дела на статус возможности"
+msgstr "п║я│я▀п╩п╨п╟ п╢п╣п╩п╟ п╫п╟ я│я┌п╟я┌я┐я│ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: admin/activity-templates/some.php:64
-#, fuzzy
 msgid "Linked Table"
-msgstr "Таблица ссылок(?)"
+msgstr "п║я│я▀п╩п╨п╦ п╫п╟ я┌п╟п╠п╩п╦я├я▀"
 
 #: reports/index.php:107
-#, fuzzy
 msgid ""
 "List Activiites by Start, End, and User (also shows Duration, Company and "
 "Contact)"
-msgstr "Списо кдел по Началу, Окончанию и Пользователю (также отображается Продолжительность, Компания, Контакт)"
+msgstr "п║п©п╦я│п╬п╨ п╢п╣п╩ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩п╣п╧ п©п╬ п╢п╟я┌п╣ п╫п╟я┤п╟п╩п╟, п╬п╨п╬п╫я┤п╟п╫п╦я▐, п©я─п╬п╢п╬п╩п╤п╦я┌п╣п╩я▄п╫п╬я│я┌п╦, я└п╦я─п╪п╣, п╨п╬п╫я┌п╟п╨я┌я┐."
 
 #: reports/index.php:124
-#, fuzzy
 msgid "List Audit Items by Date and User"
-msgstr "Список объектов аудита по Дате и Пользователю"
+msgstr "п║п©п╦я│п╬п╨ п╬п╠я┼п╣п╨я┌п╬п╡ п╟я┐п╢п╦я┌п╟ п©п╬ п╢п╟я┌п╣ п╦ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▌"
 
 #: reports/index.php:120
-#, fuzzy
 msgid "List Completed Items by Date Range, User and Type"
-msgstr "Список завершенных объектов по периоду, Пользователям и Типам"
+msgstr "п║п©п╦я│п╬п╨ п╥п╟п╡п╣я─я┬п╣п╫п╫я▀я┘ п╢п╣п╩ п©п╬ п©п╣я─п╦п╬п╢я┐, п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐п╪ п╦ я┌п╦п©п╟п╪"
 
 #: reports/index.php:116
-#, fuzzy
 msgid "List Open Items by User and Type"
-msgstr "Список открытых объектов по Пользователям и Типам"
+msgstr "п║п©п╦я│п╬п╨ п╬я┌п╨я─я▀я┌я▀я┘ п╢п╣п╩ п©п╬ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐п╪ п╦ я┌п╦п©п╟п╪."
 
 #: reports/index.php:112
-#, fuzzy
 msgid "List Overdue Items by User and Type"
-msgstr "Список просроченых объектов по Пользователям и Типам"
+msgstr "п║п©п╦я│п╬п╨ п©я─п╬я│я─п╬я┤п╣п╫я▀я┘ п╢п╣п╩ п©п╬ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐п╪ п╦ я┌п╦п©п╟п╪"
 
 #: reports/index.php:95
 msgid "List of companies, addresses and phone numbers"
-msgstr "Список компаний, адресов и телефонов"
+msgstr "п║п©п╦я│п╬п╨ я└п╦я─п╪, п╟п╢я─п╣я│п╬п╡ п╦ я┌п╣п╩п╣я└п╬п╫п╬п╡"
 
 #: activities/one.php:347
 msgid "Local Time"
-msgstr "Местное время"
+msgstr "п°п╣я│я┌п╫п╬п╣ п╡я─п╣п╪я▐"
 
 #: activities/some.php:489
 msgid "Local Time Between"
-msgstr "Местное время между"
+msgstr "п°п╣я│я┌п╫п╬п╣ п╡я─п╣п╪я▐ п╪п╣п╤п╢я┐"
 
 #: include/utils-interface.php:147
 msgid "Logged in as"
-msgstr "Зарегистрирован как"
+msgstr "п≈п╟я─п╣пЁп╦я│я┌я─п╦я─п╬п╡п╟п╫ п╨п╟п╨"
 
 #: include/utils-interface.php:147
 msgid "Logout"
-msgstr "Выйти"
+msgstr "п▓я▀п╧я┌п╦"
 
 #: admin/opportunity-statuses/one.php:145
 msgid "Long Description"
-msgstr "Полное описание"
+msgstr "п÷п╬п╩п╫п╬п╣ п╬п©п╦я│п╟п╫п╦п╣"
 
 #: locale/datastrings.php:60
 msgid "Low"
-msgstr "Низко"
+msgstr "п²п╦п╥п╨п╦п╧"
 
 #: plugins/mrtg/setup.php:36
 msgid "MRTG"
@@ -2435,65 +2045,65 @@ msgstr "MSN IM"
 
 #: contacts/edit.php:206 contacts/new.php:201
 msgid "MSN Name"
-msgstr "Имя в MSN"
+msgstr "п≤п╪я▐ п╡ MSN"
 
 #: locale/datastrings.php:61
 msgid "Magazine"
-msgstr "Журнал (магазин)"
+msgstr "п√я┐я─п╫п╟п╩"
 
 #: locale/datastrings.php:62
 msgid "Mail"
-msgstr "Почта"
+msgstr "п÷п╬я┤я┌п╟"
 
 #: activities/pager.php:50 companies/one.php:621 companies/pager.php:50
 #: contacts/edit.php:236
 msgid "Mail Merge"
-msgstr "Общая почта"
+msgstr "п÷п╬я┤я┌п╟"
 
 #: contacts/edit.php:156 contacts/new.php:151 contacts/one.php:92
 msgid "Male"
-msgstr "Мужчина"
+msgstr "п°я┐п╤я│п╨п╬п╧"
 
 #: admin/index.php:117 campaigns/one.php:208 cases/one.php:358
 #: companies/one.php:716 contacts/one.php:527 opportunities/one.php:457
 msgid "Manage"
-msgstr "Управление"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣"
 
 #: admin/account-statuses/some.php:37
 msgid "Manage Account Statuses"
-msgstr "Управление статусом аккаунта"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я│я┌п╟я┌я┐я│п╬п╪ п╨п╩п╦п╣п╫я┌п╬п╡"
 
 #: admin/activity-templates/some.php:49
 msgid "Manage Activity Templates"
-msgstr "Управление шаблонами дел"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я┬п╟п╠п╩п╬п╫п╟п╪п╦ п╢п╣п╩"
 
 #: admin/activity-types/some.php:44
 msgid "Manage Activity Types"
-msgstr "Управление типами дел"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я┌п╦п©п╟п╪п╦ п╢п╣п╩"
 
 #: admin/crm-statuses/some.php:40
 msgid "Manage CRM Statuses"
-msgstr "Управление статусом CRM"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я│я┌п╟я┌я┐я│п╬п╪ CRM"
 
 #: admin/campaign-statuses/some.php:37
 msgid "Manage Campaign Statuses"
-msgstr "Управление статусом кампаний"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я│я┌п╟я┌я┐я│п╬п╪ п╨п╟п╪п©п╟п╫п╦п╧"
 
 #: admin/campaign-types/some.php:35
 msgid "Manage Campaign Types"
-msgstr "Управление типом кампаний"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я┌п╦п©п╬п╪ п╨п╟п╪п©п╟п╫п╦п╧"
 
 #: admin/case-priorities/some.php:37
 msgid "Manage Case Priorities"
-msgstr "Управление приоритетом событий"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ п©я─п╦п╬я─п╦я┌п╣я┌п╬п╪ я│п╬п╠я▀я┌п╦п╧"
 
 #: admin/case-statuses/some.php:58
 msgid "Manage Case Statuses"
-msgstr "Управление сатусом событий"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я│я┌п╟я┌я┐я│п╬п╪ я│п╬п╠я▀я┌п╦п╧"
 
 #: admin/case-types/some.php:35
 msgid "Manage Case Types"
-msgstr "Управление типами событий"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я┌п╦п©п╟п╪п╦ я│п╬п╠я▀я┌п╦п╧"
 
 #: admin/categories/some.php:36 campaigns/categories.php:86
 #: campaigns/categories.php:96 cases/categories.php:86 cases/categories.php:96
@@ -2501,136 +2111,138 @@ msgstr "Управление типами событий"
 #: contacts/categories.php:92 contacts/categories.php:102
 #: opportunities/categories.php:86 opportunities/categories.php:96
 msgid "Manage Categories"
-msgstr "Управление категориями"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ п╨п╟я┌п╣пЁп╬я─п╦я▐п╪п╦"
 
 #: admin/company-sources/some.php:39
 msgid "Manage Company Sources"
-msgstr "Управление источниками информации компаний"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ п╦я│я┌п╬я┤п╫п╦п╨п╟п╪п╦ п╦п╫я└п╬я─п╪п╟я├п╦п╦ я└п╦я─п╪"
 
 #: admin/company-types/some.php:34
 msgid "Manage Company Types"
-msgstr "Управление"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я┌п╦п©п╟п╪п╦ п╨п╬п╪п©п╟п╫п╦п╦"
 
 #: admin/industries/some.php:34
 msgid "Manage Industries"
-msgstr "Управление отраслями"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ п╬я┌я─п╟я│п╩я▐п╪п╦"
 
 #: admin/opportunity-statuses/some.php:78
 msgid "Manage Opportunity Statuses"
-msgstr "Управление статусом возможностей"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я│я┌п╟я┌я┐я│п╬п╪ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╣п╧"
 
 #: admin/ratings/some.php:38
 msgid "Manage Ratings"
-msgstr "Управление рейтингом"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я─п╣п╧я┌п╦п╫пЁп╬п╪"
 
 #: admin/relationship-types/some.php:39
 msgid "Manage Relationship Types"
-msgstr "Управление типами отношений"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я┌п╦п©п╟п╪п╦ п╬я┌п╫п╬я┬п╣п╫п╦п╧"
 
 #: admin/roles/some.php:37
 msgid "Manage Roles"
-msgstr "Управление должностями"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ я─п╬п╩я▐п╪п╦"
 
 #: admin/users/some.php:50
 msgid "Manage Users"
-msgstr "Управление пользователями"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐п╪п╦"
 
 #: locale/datastrings.php:63
 msgid "Manufacturing"
-msgstr "Промышленость(Легкая?)"
+msgstr "п÷я─п╬п╪я▀я┬п╩п╣п╫п╬я│я┌я▄"
 
 #: reports/index.php:128
 msgid "Measure performance of users over a selectable timeframe"
-msgstr "Оценка производительности пользователей в выбранном периоде(??)"
+msgstr "п·я├п╣п╫п╨п╟ п©я─п╬п╦п╥п╡п╬п╢п╦я┌п╣п╩я▄п╫п╬я│я┌п╦ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩п╣п╧ п╥п╟ п╡я▀п╠я─п╟п╫п╫я▀п╧ п©п╣я─п╦п╬п╢"
 
 #: campaigns/some.php:229
 msgid "Media"
-msgstr "СМИ"
+msgstr "п║п°п≤"
 
 #: locale/datastrings.php:64
 msgid "Medium"
-msgstr "Средне"
+msgstr "п║я─п╣п╢п╫п╦п╧"
 
 #: include/utils-interface.php:195
 msgid "Miss"
-msgstr "Miss"
+msgstr "п⌠-п╤п╟"
 
 #: relationships/new-relationship-2.php:114
 msgid "More Info"
-msgstr "Больше информации"
+msgstr "п▒п╬п╩я▄я┬п╣ п╦п╫я└п╬я─п╪п╟я├п╦п╦"
 
 #: admin/activity-types/some.php:57 admin/case-statuses/some.php:72
 #: admin/opportunity-statuses/some.php:94
 msgid "Move"
-msgstr "Двигать"
+msgstr "п■п╡п╦пЁп╟я┌я▄"
 
 #: include/utils-interface.php:195
 msgid "Mr."
-msgstr "Mr."
+msgstr "п⌠-п╫."
 
 #: include/utils-interface.php:195
 msgid "Mrs."
-msgstr "Mrs."
+msgstr "п⌠-п╤п╟."
 
 #: include/utils-interface.php:195
+#, fuzzy
 msgid "Ms."
 msgstr "Ms."
 
 #: plugins/mrtg/mrtg.php:19
+#, fuzzy
 msgid "Multi Router Traffic Grapher"
 msgstr "Multi Router Traffic Grapher"
 
 #: contacts/one.php:159 locale/datastrings.php:65
 msgid "N/A"
-msgstr "Не активен"
+msgstr "п²/п■"
 
 #: reports/completed-items.php:230
 msgid "NO COMPLETED ACTIVITIES for"
-msgstr "НЕ ЗАВЕРШЕНЫ ДЕЛА для"
+msgstr "п²п∙п╒ п≈п░п▓п∙п═п╗п∙п²п²п╚п╔ п■п∙п⌡ п╢п╩я▐"
 
 #: reports/completed-items.php:272
 msgid "NO COMPLETED CAMPAIGNS for"
-msgstr "НЕ ЗАВЕРШЕНЫ КАМПАНИИ для"
+msgstr "п²п∙п╒ п≈п░п▓п∙п═п╗п∙п²п²п╚п╔ п п░п°п÷п░п²п≤п≥ п╢п╩я▐"
 
 #: reports/completed-items.php:367
 msgid "NO COMPLETED CASES for"
-msgstr "НЕ ЗАВЕРШЕНЫ СОБЫТИЯ для"
+msgstr "п²п∙п╒ п≈п░п▓п∙п═п╗п∙п²п²п╚п╔ п║п·п▒п╚п╒п≤п≥ п╢п╩я▐"
 
 #: reports/completed-items.php:321
 msgid "NO COMPLETED OPPORTUNITIES for"
-msgstr "НЕ ЗАВЕРШЕНЫ ВОЗМОЖНОСТИ для"
+msgstr "п²п∙п╒ п≈п░п▓п∙п═п╗п∙п²п²п╚п╔ п▓п·п≈п°п·п√п²п·п║п╒п∙п≥ п╢п╩я▐"
 
 #: reports/open-items.php:216
 msgid "NO OPEN ACTIVITIES for"
-msgstr "НЕТ ОТКРЫТЫХ ДЕЛ для"
+msgstr "п²п∙п╒ п·п╒п п═п╚п╒п╚п╔ п■п∙п⌡ п╢п╩я▐"
 
 #: reports/open-items.php:256
 msgid "NO OPEN CAMPAIGNS for"
-msgstr "НЕТ ОТКРЫТЫХ КАМПАНИЙ для"
+msgstr "п²п∙п╒ п·п╒п п═п╚п╒п╚п╔ п п░п°п÷п░п²п≤п≥ п╢п╩я▐"
 
 #: reports/open-items.php:349
 msgid "NO OPEN CASES for"
-msgstr "НЕТ ОТКРЫТЫХ СОБЫТИЙ для"
+msgstr "п²п∙п╒ п·п╒п п═п╚п╒п╚п╔ п║п·п▒п╚п╒п≤п≥ п╢п╩я▐"
 
 #: reports/open-items.php:303
 msgid "NO OPEN OPPORTUNITIES for"
-msgstr "НЕТ ОТКРЫТЫХ ВОЗМОЖНОСТЕЙ для"
+msgstr "п²п∙п╒ п·п╒п п═п╚п╒п╚п╔ п▓п·п≈п°п·п√п²п·п║п╒п∙п≥ п╢п╩я▐"
 
 #: reports/overdue-items.php:232
 msgid "NO OVERDUE ACTIVITIES for"
-msgstr "НЕТ ПРОСРОЧЕННЫХ ДЕЛ для"
+msgstr "п²п∙п╒ п÷п═п·п║п═п·п╖п∙п²п²п╚п╔ п■п∙п⌡ п╢п╩я▐"
 
 #: reports/overdue-items.php:274
 msgid "NO OVERDUE CAMPAIGNS for"
-msgstr "НЕТ ПРОСРОЧЕННЫХ АМПАНИЙ для"
+msgstr "п²п∙п╒ п÷п═п·п║п═п·п╖п∙п²п²п╚п╔ п п░п°п÷п░п²п≤п≥ п╢п╩я▐"
 
 #: reports/overdue-items.php:371
 msgid "NO OVERDUE CASES for"
-msgstr "НЕТ ПРОСРОЧЕННЫХ СОБЫТИЙ для"
+msgstr "п²п∙п╒ п÷п═п·п║п═п·п╖п∙п²п²п╚п╔ п║п·п▒п╚п╒п≤п≥ п╢п╩я▐"
 
 #: reports/overdue-items.php:323
 msgid "NO OVERDUE OPPORTUNITIES for"
-msgstr "НЕТ ПРОСРОЧЕННЫХ ВОЗМОЖНОСТЕЙ для"
+msgstr "п²п∙п╒ п÷п═п·п║п═п·п╖п∙п²п²п╚п╔ п▓п·п≈п°п·п√п²п·п║п╒п∙п≥ п╢п╩я▐"
 
 #: admin/account-statuses/some.php:50 admin/activity-templates/some.php:62
 #: admin/campaign-statuses/some.php:50 admin/case-priorities/some.php:50
@@ -2647,196 +2259,196 @@ msgstr "НЕТ ПРОСРОЧЕННЫХ ВОЗМОЖНОСТЕЙ для"
 #: private/home.php:283 private/home.php:290 private/home.php:302
 #: private/home.php:309 relationships/edit.php:52 reports/audit-items.php:97
 msgid "Name"
-msgstr "Имя"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣"
 
 #: contacts/transfer.php:49 relationships/new-relationship.php:107
 msgid "Name or ID"
-msgstr "Имя или ИД"
+msgstr "п≤п╪я▐ п╦п╩п╦ п≤п■"
 
 #: locale/datastrings.php:66
 msgid "Negotiation"
-msgstr "Согласование"
+msgstr "п║п╬пЁп╩п╟я│п╬п╡п╟п╫п╦п╣"
 
 #: admin/country-address-format/edit.php:69 campaigns/one.php:223
 #: campaigns/one.php:246 cases/sidebar.php:66 companies/one.php:645
 #: files/sidebar.php:94 locale/datastrings.php:67 notes/sidebar.php:188
 #: notes/sidebar.php:200 opportunities/sidebar.php:65 plugins/info/one.php:344
 msgid "New"
-msgstr "Новый(новое)"
+msgstr "п²п╬п╡я▀п╧"
 
 #: companies/addresses.php:132
 msgid "New Address"
-msgstr "Новый адрес"
+msgstr "п²п╬п╡я▀п╧ п╟п╢я─п╣я│"
 
 #: campaigns/new.php:48
 msgid "New Campaign"
-msgstr "Новая кампания"
+msgstr "п²п╬п╡п╟я▐ п╨п╟п╪п©п╟п╫п╦я▐"
 
 #: cases/new.php:86
 msgid "New Case"
-msgstr "Новое событие"
+msgstr "п²п╬п╡п╬п╣ я│п╬п╠я▀я┌п╦п╣"
 
 #: companies/new.php:95 companies/some-advanced.php:402 companies/some.php:349
 msgid "New Company"
-msgstr "Новая компания"
+msgstr "п²п╬п╡п╟я▐ я└п╦я─п╪п╟"
 
 #: contacts/new.php:112
 msgid "New Contact for"
-msgstr "Новый договор для"
+msgstr "п²п╬п╡я▀п╧ п╨п╬п╫я┌п╟п╨я┌ п╢п╩я▐"
 
 #: companies/divisions.php:63
 msgid "New Division"
-msgstr "Новый отдел"
+msgstr "п²п╬п╡я▀п╧ п╬я┌п╢п╣п╩ (п©п╬п╢я─п╟п╥п╢п╣п╩п╣п╫п╦п╣)"
 
 #: opportunities/new.php:63
 msgid "New Opportunity"
-msgstr "Новоая возможность"
+msgstr "п²п╬п╡п╟я▐ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌я▄"
 
 #: admin/users/change-password.php:45
 msgid "New Password"
-msgstr "Новый пароль"
+msgstr "п²п╬п╡я▀п╧ п©п╟я─п╬п╩я▄"
 
 #: private/home.php:489
 msgid "New Personal Note"
-msgstr "Новая персональная записка"
+msgstr "п²п╬п╡п╟я▐ п©п╣я─я│п╬п╫п╟п╩я▄п╫п╟я▐ п╥п╟п╪п╣я┌п╨п╟"
 
 #: companies/one.php:622
 msgid "News"
-msgstr "Новости(новые?)"
+msgstr "п²п╬п╡п╬я│я┌п╦ п╡ я│п╣я┌п╦"
 
 #: relationships/sidebar.php:354
 msgid "Next"
-msgstr "Следующий"
+msgstr "п■п╟п╩я▄я┬п╣"
 
 #: companies/one.php:422
 msgid "No Activities"
-msgstr "Нет дел"
+msgstr "п²п╣я┌ п╢п╣п╩"
 
 #: reports/audit-items.php:170
 msgid "No Activity."
-msgstr "Нет дела."
+msgstr "п²п╣я┌ п╢п╣п╩п╟."
 
 #: include/utils-interface.php:40
 msgid "No Case To Delete."
-msgstr "Нет события для удаления."
+msgstr "п²п╣я┌ я│п╬п╠я▀я┌п╦я▐ п╢п╩я▐ я┐п╢п╟п╩п╣п╫п╦я▐."
 
 #: contacts/sidebar.php:197
 msgid "No Contact Selected."
-msgstr "Нет выбраных контактов."
+msgstr "п²п╣я┌ п╡я▀п╠я─п╟п╫я▀я┘ п╨п╬п╫я┌п╟п╨я┌п╬п╡."
 
 #: companies/one.php:426
 msgid "No Contacts"
-msgstr "Нет контактов"
+msgstr "п²п╣я┌ п╨п╬п╫я┌п╟п╨я┌п╬п╡"
 
 #: activities/some.php:519
 msgid "No Saved Searches"
-msgstr "нет сохраненых резултатов поиска"
+msgstr "п╫п╣я┌ я│п╬я┘я─п╟п╫п╣п╫я▀я┘ я─п╣п╥я┐п╩я▄я┌п╟я┌п╬п╡ п©п╬п╦я│п╨п╟"
 
 #: companies/one.php:438
 msgid "No associated categories"
-msgstr "Нет объедененных категорий"
+msgstr "п²п╣я┌ п╬п╠я┼п╣п╢п╣п╫п╣п╫п╫я▀я┘ п╨п╟я┌п╣пЁп╬я─п╦п╧"
 
 #: include/strings.php:33
 msgid "No attached companies"
-msgstr "Нет прикрепленных компаний"
+msgstr "п²п╣я┌ п©я─п╦п╨я─п╣п©п╩п╣п╫п╫я▀я┘ я└п╦я─п╪"
 
 #: include/strings.php:32
 msgid "No attached contacts"
-msgstr "Нет прикрепленных контактов"
+msgstr "п²п╣я┌ п©я─п╦п╨я─п╣п©п╩п╣п╫п╫я▀я┘ п╨п╬п╫я┌п╟п╨я┌п╬п╡"
 
 #: files/sidebar.php:82
 msgid "No attached files"
-msgstr "Нет прикрепленных файлов"
+msgstr "п²п╣я┌ п©я─п╦п╨я─п╣п©п╩п╣п╫п╫я▀я┘ я└п╟п╧п╩п╬п╡"
 
 #: notes/sidebar.php:164
 msgid "No attached notes"
-msgstr "Нет прикрепленных записок"
+msgstr "п²п╣я┌ п©я─п╦п╨я─п╣п©п╩п╣п╫п╫я▀я┘ п╥п╟п╪п╣я┌п╬п╨"
 
 #: campaigns/one.php:119 contacts/one.php:283
 msgid "No categories"
-msgstr "Нет категорий"
+msgstr "п²п╣я┌ п╨п╟я┌п╣пЁп╬я─п╦п╧"
 
 #: contacts/transfer-2.php:66
 msgid "No companies found"
-msgstr "Не найдено компаний"
+msgstr "п²п╣ п╫п╟п╧п╢п╣п╫п╬ я└п╦я─п╪"
 
 #: email/email.php:101 email/index.php:53 email/templates.php:50
 msgid "No e-mail templates"
-msgstr "Нет шаблонов эл. писем"
+msgstr "п²п╣я┌ я┬п╟п╠п╩п╬п╫п╬п╡ я█п╩. п©п╦я│п╣п╪"
 
 #: campaigns/one.php:123
 msgid "No files"
-msgstr "Нет файлов"
+msgstr "п²п╣я┌ я└п╟п╧п╩п╬п╡"
 
 #: admin/case-statuses/one.php:171 admin/opportunity-statuses/one.php:194
 msgid "No linked activities"
-msgstr "Нет связанных дел"
+msgstr "п²п╣я┌ я│п╡я▐п╥п╟п╫п╫я▀я┘ п╢п╣п╩"
 
 #: campaigns/one.php:115
 msgid "No notes"
-msgstr "Нет записок"
+msgstr "п²п╣я┌ п╥п╟п╪п╣я┌п╬п╨"
 
 #: private/home.php:428
 msgid "No open activities"
-msgstr "Нет открытых дел"
+msgstr "п²п╣я┌ п╬я┌п╨я─я▀я┌я▀я┘ п╢п╣п╩"
 
 #: cases/sidebar.php:55
 msgid "No open cases"
-msgstr "Нет открытых событий"
+msgstr "п²п╣я┌ п╬я┌п╨я─я▀я┌я▀я┘ я│п╬п╠я▀я┌п╦п╧"
 
 #: private/home.php:421
 msgid "No open files"
-msgstr "Нет открытых файлов"
+msgstr "п²п╣я┌ п╬я┌п╨я─я▀я┌я▀я┘ я└п╟п╧п╩п╬п╡"
 
 #: opportunities/sidebar.php:54
 msgid "No open opportunities"
-msgstr "Нет открытых возможностей"
+msgstr "п²п╣я┌ п╬я┌п╨я─я▀я┌я▀я┘ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╣п╧"
 
 #: campaigns/some.php:148
 msgid "No recently viewed campaigns"
-msgstr "Нет недавно просмотренных кампаний"
+msgstr "п²п╣я┌ п╫п╣п╢п╟п╡п╫п╬ п©я─п╬я│п╪п╬я┌я─п╣п╫п╫я▀я┘ п╨п╟п╪п©п╟п╫п╦п╧"
 
 #: cases/some.php:164
 msgid "No recently viewed cases"
-msgstr "Нет недавно просмотренных событий"
+msgstr "п²п╣я┌ п╫п╣п╢п╟п╡п╫п╬ п©я─п╬я│п╪п╬я┌я─п╣п╫п╫я▀я┘ я│п╬п╠я▀я┌п╦п╧"
 
 #: companies/some-advanced.php:335 companies/some.php:207
 msgid "No recently viewed companies"
-msgstr "Нет недавно просмотренных компаний"
+msgstr "п²п╣я┌ п╫п╣п╢п╟п╡п╫п╬ п©я─п╬я│п╪п╬я┌я─п╣п╫п╫я▀я┘ я└п╦я─п╪"
 
 #: contacts/some.php:190
 msgid "No recently viewed contacts"
-msgstr "Нет недавно просмотренных контактов"
+msgstr "п²п╣я┌ п╫п╣п╢п╟п╡п╫п╬ п©я─п╬я│п╪п╬я┌я─п╣п╫п╫я▀я┘ п╨п╬п╫я┌п╟п╨я┌п╬п╡"
 
 #: files/some.php:249
 msgid "No recently viewed file"
-msgstr "Нет недавно просмотренных файлов"
+msgstr "п²п╣я┌ п╫п╣п╢п╟п╡п╫п╬ п©я─п╬я│п╪п╬я┌я─п╣п╫п╫я▀я┘ я└п╟п╧п╩п╬п╡"
 
 #: opportunities/export.php:98
 msgid "No results returned from database by query"
-msgstr "Нет результатов по запросу из базы данных"
+msgstr "п²п╣я┌ я─п╣п╥я┐п╩я▄я┌п╟я┌п╬п╡ п©п╬ п╥п╟п©я─п╬я│я┐ п╦п╥ п╠п╟п╥я▀ п╢п╟п╫п╫я▀я┘"
 
 #: private/home.php:238
 msgid "Non Uploaded Files"
-msgstr "Нет закачанных файлов"
+msgstr "п²п╣я┌ п╥п╟п╨п╟я┤п╟п╫п╫я▀я┘ я└п╟п╧п╩п╬п╡"
 
 #: activities/some.php:482
 msgid "Non-Completed"
-msgstr "Не завершено"
+msgstr "п²п╣ п╥п╟п╡п╣я─я┬п╣п╫п╬"
 
 #: locale/datastrings.php:68
 msgid "Non-Profit"
-msgstr "Нет пользы (бесполезно?)"
+msgstr "п·п╠я┴п╣я│я┌п╡п╣п╫п╫п╟я▐  п╬я─пЁп╟п╫п╦п╥п╟я├п╦я▐"
 
 #: admin/categories/one.php:143 campaigns/categories.php:100
 #: cases/categories.php:100 companies/categories.php:104
 #: contacts/categories.php:106 opportunities/categories.php:100
 msgid "Not Associated With"
-msgstr "Не связано с"
+msgstr "п²п╣ я│п╡я▐п╥п╟п╫п╬ я│"
 
 #: notes/edit.php:43 notes/new.php:44
 msgid "Note Body"
-msgstr "Боди (?) записки"
+msgstr "п╒п╣п╨я│я┌ п╥п╟п╪п╣я┌п╨п╦"
 
 #: admin/account-statuses/one.php:90 admin/activity-templates/edit.php:106
 #: admin/activity-types/one.php:92 admin/campaign-statuses/one.php:96
@@ -2848,106 +2460,106 @@ msgstr "Боди (?) записки"
 #: admin/ratings/one.php:82 admin/relationship-types/one.php:101
 #: admin/roles/one.php:85 admin/users/one.php:132
 msgid "Note: This action CANNOT be undone!"
-msgstr "ВНИМАНИЕ: Это действие не может быть отменено!"
+msgstr "п▓п²п≤п°п░п²п≤п∙: п╜я┌п╬ п╢п╣п╧я│я┌п╡п╦п╣ п╫п╣ п╪п╬п╤п╣я┌ п╠я▀я┌я▄ п╬я┌п╪п╣п╫п╣п╫п╬!"
 
 #: campaigns/one.php:219 notes/sidebar.php:19 reports/companies-list.php:157
 msgid "Notes"
-msgstr "Записки"
+msgstr "п≈п╟п╪п╣я┌п╨п╦"
 
 #: reports/open-items.php:180
 msgid "OPEN ACTIVITIES"
-msgstr "ОТКРЫТЬ ДЕЛА"
+msgstr "п■п∙п⌡п░ п▓ п═п░п▒п·п╒п∙"
 
 #: reports/open-items.php:229
 msgid "OPEN CAMPAIGNS for"
-msgstr "ОТКРЫТЬ КАМПАНИИ для"
+msgstr "п·п╒п п═п╚п╒п╚п∙ п п░п°п÷п░п²п≤п≤ п╢п╩я▐"
 
 #: reports/open-items.php:318
 msgid "OPEN CASES for"
-msgstr "ОТКРЫТЬ СОБЫТИЯ для"
+msgstr "п·п╒п п═п╚п╒п╚п∙ п║п·п▒п╚п╒п≤п╞ п╢п╩я▐"
 
 #: admin/country-address-format/edit.php:65
 msgid "OR"
-msgstr "ИЛИ"
+msgstr "п≤п⌡п≤"
 
 #: reports/overdue-items.php:195
 msgid "OVERDUE ACTIVITIES for"
-msgstr "ПРОСРОЧЕННЫЕ ДЕЛА для"
+msgstr "п÷п═п·п║п═п·п╖п∙п²п²п╚п∙ п■п∙п⌡п░ п╢п╩я▐"
 
 #: reports/overdue-items.php:246
 msgid "OVERDUE CAMPAIGNS for"
-msgstr "ПРОСРОЧЕННЫЕ КАМПАНИИ для"
+msgstr "п÷п═п·п║п═п·п╖п∙п²п²п╚п∙ п п░п°п÷п░п²п≤п≤ п╢п╩я▐"
 
 #: reports/overdue-items.php:339
 msgid "OVERDUE CASES for"
-msgstr "ПРОСРОЧЕННЫЕ СОБЫТИЯ для"
+msgstr "п÷п═п·п║п═п·п╖п∙п²п²п╚п∙ п║п·п▒п╚п╒п≤п╞ п╢п╩я▐"
 
 #: reports/overdue-items.php:291
 msgid "OVERDUE OPPORTUNITIES for"
-msgstr "ПРОСРОЧЕННЫЕ ВОЗМОЖНОСТИ для"
+msgstr "п÷п═п·п║п═п·п╖п∙п²п²п╚п∙ п▓п·п≈п°п·п√п²п·п║п╒п≤ п╢п╩я▐"
 
 #: cases/one.php:331 contacts/one.php:495 opportunities/one.php:430
 msgid "On"
-msgstr "На"
+msgstr "п²п╟я┤п╟п╩п╬"
 
 #: files/some.php:297 private/home.php:243
 msgid "On What"
-msgstr "На что(???)"
+msgstr "п  я┤п╣п╪я┐ п╬я┌п╫п╬я│п╦я┌я│я▐"
 
 #: files/some.php:316
 msgid "On what Name"
-msgstr "На какое имя(?)"
+msgstr "п²п╟ я┤я▄п╣ п╦п╪я▐"
 
 #: admin/users/self.php:44
 msgid "One User :"
-msgstr "Один пользователь:"
+msgstr "п·п╢п╦п╫ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▄:"
 
 #: reports/activitytimes.php:61
 msgid "Only show completed activities"
-msgstr "Показывать только завершенные дела"
+msgstr "п÷п╬п╨п╟п╥я▀п╡п╟я┌я▄ я┌п╬п╩я▄п╨п╬ п╥п╟п╡п╣я─я┬п╣п╫п╫я▀п╣ п╢п╣п╩п╟"
 
 #: admin/campaign-statuses/one.php:75 admin/campaign-statuses/some.php:86
 #: admin/opportunity-statuses/one.php:152
 #: admin/opportunity-statuses/some.php:134 locale/datastrings.php:69
 msgid "Open"
-msgstr "Открыть"
+msgstr "п·я┌п╨я─я▀я┌я▄"
 
 #: activities/some.php:408 private/home.php:442
 msgid "Open Activities"
-msgstr "Открыть дела"
+msgstr "п■п╣п╩п╟"
 
 #: cases/sidebar.php:18
 msgid "Open Cases"
-msgstr "Открыть события"
+msgstr "п·я┌п╨я─я▀я┌я▀п╣ я│п╬п╠я▀я┌п╦я▐"
 
 #: reports/index.php:115 reports/open-items.php:35
 msgid "Open Items"
-msgstr "Открыть объекты (или что?)"
+msgstr "п■п╣п╩п╟ п╡ п©я─п╬я├п╣я│я│п╣"
 
 #: admin/campaign-statuses/one.php:72 admin/campaign-statuses/some.php:83
 #: admin/opportunity-statuses/one.php:149
 #: admin/opportunity-statuses/some.php:131
 msgid "Open Status"
-msgstr "Открыть статус"
+msgstr "п·я┌п╨я─я▀я┌я▀п╣ я│я┌п╟я┌я┐я│я▀"
 
 #: files/some.php:310 include/utils-interface.php:137
 #: opportunities/sidebar.php:18 opportunities/some.php:201
 #: reports/completed-items.php:110 reports/open-items.php:92
 #: reports/overdue-items.php:106
 msgid "Opportunities"
-msgstr "Возможности"
+msgstr "п▓п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: reports/opportunities-size-by-industry.php:71
 #: reports/opportunities-size-by-industry.php:83
 #: reports/opportunities-size-by-industry.php:86
 msgid "Opportunities (Size) by Industry"
-msgstr "Возможности (размер) по отраслям"
+msgstr "п▓п╬п╥п╪п╬п╤п╫п╬я│я┌п╦ (п╬п╠я┼п╣п╪) п©п╬ п╬я┌я─п╟я│п╩я▐п╪"
 
 #: reports/opportunities-size-by-opportunity-status.php:82
 #: reports/opportunities-size-by-opportunity-status.php:94
 #: reports/opportunities-size-by-opportunity-status.php:97
 msgid "Opportunities (Size) by Status"
-msgstr "Возможности (размер) по статусу"
+msgstr "п▓п╬п╥п╪п╬п╤п╫п╬я│я┌п╦ (п╬п╠я┼п╣п╪) п©п╬ я│я┌п╟я┌я┐я│я┐"
 
 #: reports/opportunities-by-industry.php:60
 #: reports/opportunities-by-industry.php:72
@@ -2956,7 +2568,7 @@ msgstr "Возможности (размер) по статусу"
 #: reports/opportunities-quantity-by-industry.php:72
 #: reports/opportunities-quantity-by-industry.php:75
 msgid "Opportunities by Industry"
-msgstr "Возможности по отраслям"
+msgstr "п▓п╬п╥п╪п╬п╤п╫п╬я│я┌п╦ п©п╬ п╬я┌я─п╟я│п╩я▐п╪"
 
 #: reports/opportunities-by-opportunity-status.php:59
 #: reports/opportunities-by-opportunity-status.php:71
@@ -2965,90 +2577,91 @@ msgstr "Возможности по отраслям"
 #: reports/opportunities-quantity-by-opportunity-status.php:83
 #: reports/opportunities-quantity-by-opportunity-status.php:86
 msgid "Opportunities by Status"
-msgstr "Возможности по статусу"
+msgstr "п▓п╬п╥п╪п╬п╤п╫п╬я│я┌п╦ п©п╬ я│я┌п╟я┌я┐я│я┐"
 
 #: files/some.php:95 opportunities/edit.php:151 opportunities/some.php:64
 #: opportunities/some.php:264 reports/completed-items.php:295
 #: reports/index.php:57 reports/overdue-items.php:299
 msgid "Opportunity"
-msgstr "Возможность"
+msgstr "п▓п╬п╥п╪п╬п╤п╫п╬я│я┌я▄"
 
 #: include/utils-interface.php:60
 msgid "Opportunity Added."
-msgstr "Возиожность добавлена."
+msgstr "п▓п╬п╥п╪п╬п╤п╫п╬я│я┌я▄ п╢п╬п╠п╟п╡п╩п╣п╫п╟."
 
 #: include/utils-interface.php:62
 msgid "Opportunity Deleted."
-msgstr "Возможность удалена."
+msgstr "п▓п╬п╥п╪п╬п╤п╫п╬я│я┌я▄ я┐п╢п╟п╩п╣п╫п╟."
 
 #: opportunities/edit.php:171 opportunities/new.php:77
 #: opportunities/one.php:275 opportunities/one.php:295
 msgid "Opportunity Details"
-msgstr "Подробно о возможности"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: opportunities/some.php:223
 msgid "Opportunity Name"
-msgstr "Название возможности"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: activities/one.php:337
 msgid "Opportunity Notes"
-msgstr "Записка о возможности"
+msgstr "п≈п╟п╪п╣я┌п╨п╟ п╬ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: opportunities/some.php:69
 msgid "Opportunity Size"
-msgstr "Размер  возможности"
+msgstr "п·п╠я┼п╣п╪ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: activities/some.php:490
 msgid "Opportunity Status"
-msgstr "Статус возможности"
+msgstr "п║я┌п╟я┌я┐я│ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: admin/opportunity-statuses/one.php:114
 msgid "Opportunity Status Details"
-msgstr "Подробно о статусе возможности"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я│я┌п╟я┌я┐я│п╣ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: admin/index.php:193 admin/opportunity-statuses/some.php:89
 #: opportunities/opportunity-view.php:45
 msgid "Opportunity Statuses"
-msgstr "Статусы возможности"
+msgstr "п║я┌п╟я┌я┐я│я▀ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: opportunities/edit.php:174 opportunities/new.php:80
 msgid "Opportunity Title"
-msgstr "Псевдоним возможности"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦"
 
 #: campaigns/some.php:268
 msgid "Options"
-msgstr "Опции"
+msgstr "п·п©я├п╦п╦"
 
 #: locale/datastrings.php:70
 msgid "Other"
-msgstr "Другой"
+msgstr "п■я─я┐пЁп╬п╣"
 
 #: relationships/sidebar.php:118
 msgid "Other "
-msgstr "Другой'"
+msgstr "п■я─я┐пЁп╬п╧'"
 
 #: include/strings.php:29
 msgid "Other Companies"
-msgstr "Другая компания"
+msgstr "п■я─я┐пЁп╦п╣ я└п╦я─п╪я▀"
 
 #: include/strings.php:28
 msgid "Other Contacts"
-msgstr "Другой контакт"
+msgstr "п■я─я┐пЁп╦п╣ п╨п╬п╫я┌п╟п╨я┌я▀"
 
 #: activities/some.php:161 activities/some.php:263
 msgid "Overdue"
-msgstr "Просрочка (??)"
+msgstr "п≈п╟п╢п╣я─п╤п╨п╟"
 
 #: reports/index.php:111 reports/overdue-items.php:52
 msgid "Overdue Items"
-msgstr "Просроенные объекты(?)"
+msgstr "п÷я─п╬я│я─п╬я┤п╣п╫п╫я▀п╣ п╢п╣п╩п╟"
 
 #: companies/addresses.php:167 companies/advanced-search.php:265
 #: companies/new.php:229
 msgid "Override Address"
-msgstr "Просроченный адрес"
+msgstr "п░п╫п╫я┐п╩п╦я─п╬п╡п╟п╫я▀п╧ п╟п╢я─п╣я│"
 
 #: files/some.php:338
+#, fuzzy
 msgid "Owl File Management"
 msgstr "Owl File Management"
 
@@ -3064,156 +2677,158 @@ msgstr "Owl File Management"
 #: opportunities/sidebar.php:22 opportunities/some.php:65
 #: opportunities/some.php:231 reports/companies-list.php:98
 msgid "Owner"
-msgstr "Владелец"
+msgstr "п°п╣п╫п╣п╢п╤п╣я─"
 
 #: locale/datastrings.php:71
 msgid "Partner"
-msgstr "Партнер"
+msgstr "п÷п╟я─я┌п╫п╣я─"
 
 #: locale/datastrings.php:72
 msgid "Partners"
-msgstr "Партнеры"
+msgstr "п÷п╟я─я┌п╫п╣я─я▀"
 
 #: admin/users/some.php:98
 msgid "Password"
-msgstr "Пароль"
+msgstr "п÷п╟я─п╬п╩я▄"
 
 #: include/utils-interface.php:77
 msgid "Password Does Not Match."
-msgstr "Пароль не тот нах!"
+msgstr "п²п╣п╡п╣я─п╫я▀п╧ п©п╟я─п╬п╩я▄"
 
 #: contacts/edit-address.php:105
 msgid "Payment Address"
-msgstr "Адрес для платежей"
+msgstr "п░п╢я─п╣я│ п╢п╩я▐ п©п╩п╟я┌п╣п╤п╣п╧"
 
 #: companies/addresses.php:117
 msgid "Payment Default"
-msgstr "Платежи по умолчанию"
+msgstr "п÷п╩п╟я┌п╣п╤п╦ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: companies/advanced-search.php:178 companies/edit.php:129
 #: companies/new.php:139 companies/one.php:503 companies/one.php:640
 #: companies/sidebar.php:55 locale/datastrings.php:73
 msgid "Phone"
-msgstr "Телефон"
+msgstr "п╒п╣п╩п╣я└п╬п╫"
 
 #: admin/country-address-format/index.php:44
 msgid "Phone Format"
-msgstr "Формат телефонного номера"
+msgstr "п╓п╬я─п╪п╟я┌ я┌п╣п╩п╣я└п╬п╫п╫п╬пЁп╬ п╫п╬п╪п╣я─п╟"
 
 #: include/utils-misc.php:241 include/utils-misc.php:625
 msgid "Please correct this error."
-msgstr "Пожалуйста, исправьте эту ошибку."
+msgstr "п÷п╬п╤п╟п╩я┐п╧я│я┌п╟, п╦я│п©я─п╟п╡я▄я┌п╣ я█я┌я┐ п╬я┬п╦п╠п╨я┐."
 
 #: include/utils-interface.php:79
 msgid "Please try again."
-msgstr "Попробуйте еще раз."
+msgstr "п÷п╬п©я─п╬п╠я┐п╧я┌п╣ п╣я┴п╣ я─п╟п╥."
 
 #: admin/index.php:235
 msgid "Plugin Activation"
-msgstr "Активация Плагина"
+msgstr "п░п╨я┌п╦п╡п╟я├п╦я▐"
 
 #: admin/plugin/plugin-admin.php:170
 msgid "Plugin Administration"
-msgstr "Админстриация Плагинов"
+msgstr "пёп©я─п╟п╡п╩п╣п╫п╦п╣ п╢п╬п©п╬п╩п╫п╦я┌п╣п╩я▄п╫я▀п╪п╦ п╪п╬п╢я┐п╩я▐п╪п╦ (plug-ins)"
 
 #: admin/plugin/plugin-admin.php:246
 msgid "Plugin directory could not be found: "
-msgstr "Каталог плагина не найден"
+msgstr "п п╟я┌п╟п╩п╬пЁ п╪п╬п╢я┐п╩я▐ п╫п╣ п╫п╟п╧п╢п╣п╫"
 
 #: admin/index.php:231 admin/plugin/plugin-admin.php:187
 msgid "Plugins"
-msgstr "Плагины"
+msgstr "п■п╬п©п╬п╩п╫п╦я┌п╣п╩я▄п╫я▀п╣ п╪п╬п╢я┐п╩п╦"
 
 #: locale/datastrings.php:74
 msgid "Poor"
-msgstr "Бедно (плохо?)"
+msgstr "п÷п╩п╬я┘п╬"
 
 #: admin/relationship-types/one.php:82
 msgid "Post Formatting"
-msgstr "После форматирование(последний шанс?)"
+msgstr "п≈п╟п╨я─я▀п╡п╟я▌я┴п╦п╧ я┌я█пЁ я└п╬я─п╪п╟я┌п╦я─п╬п╡п╟п╫п╦я▐"
 
 #: admin/relationship-types/some.php:95
 msgid "Post-Text Formatting"
-msgstr "Post-Text Formatting"
+msgstr "п≈п╟п╨я─я▀п╡я▌я┴п╦п╧ я┌я█пЁ"
 
 #: companies/addresses.php:159 companies/advanced-search.php:257
 #: companies/edit-address.php:93 companies/new.php:221
 #: contacts/edit-address.php:210 reports/companies-list.php:151
 msgid "Postal Code"
-msgstr "Почтовый индекс"
+msgstr "п÷п╬я┤я┌п╬п╡я▀п╧ п╦п╫п╢п╣п╨я│"
 
 #: admin/relationship-types/one.php:78
 msgid "Pre Formatting"
-msgstr "Предварительное форматирование"
+msgstr "п·я┌п╨я─я▀п╡п╟я▌я┴п╦п╧ я┌я█пЁ я└п╬я─п╪п╟я┌п╦я─п╬п╡п╟п╫п╦я▐"
 
 #: admin/relationship-types/some.php:91
 msgid "Pre-Text Formatting"
-msgstr "Предварительное форматирование текста"
+msgstr "п·я┌п╨я─я▀п╡п╟я▌я┴п╦п╧ я┌я█пЁ"
 
 #: locale/datastrings.php:75
 msgid "Preliminaries"
-msgstr "Предварительные сведения"
+msgstr "п÷я─п╣п╢п╡п╟я─п╦я┌п╣п╩я▄п╫я▀п╣ я│п╡п╣п╢п╣п╫п╦я▐"
 
 #: contacts/edit-address.php:90 reports/company-contacts-printout.php:246
 msgid "Primary Address"
-msgstr "Главный адрес"
+msgstr "п⌠п╩п╟п╡п╫я▀п╧ п╟п╢я─п╣я│"
 
 #: companies/addresses.php:114
 msgid "Primary Default"
-msgstr "Главный по умолчанию"
+msgstr "п⌠п╩п╟п╡п╫я▀п╧ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: reports/index.php:99
 msgid "Printable contact summary information for Companies in search Results."
-msgstr "Информационный обзор контактов по компаниям для печати."
+msgstr "п≤п╫я└п╬я─п╪п╟я├п╦п╬п╫п╫я▀п╧ п╬п╠п╥п╬я─ п╨п╬п╫я┌п╟п╨я┌п╬п╡ п©п╬ я└п╦я─п╪п╟п╪ п╢п╩я▐ п©п╣я┤п╟я┌п╦."
 
 #: reports/completed-items.php:153 reports/open-items.php:122
 #: reports/overdue-items.php:137
 msgid "Printer Friendly"
-msgstr "Для печати"
+msgstr "п■п╩я▐ п©п╣я┤п╟я┌п╦"
 
 #: cases/edit.php:200 cases/new.php:119 cases/one.php:247 cases/sidebar.php:23
 #: cases/some.php:64
 msgid "Priority"
-msgstr "Приоритет"
+msgstr "п÷я─п╦п╬я─п╦я┌п╣я┌"
 
 #: activities/one.php:305 opportunities/new.php:105 opportunities/one.php:321
 msgid "Probability"
-msgstr "Вероятность"
+msgstr "п▓п╣я─п╬я▐я┌п╫п╬я│я┌я▄"
 
 #: opportunities/edit.php:203
 msgid "Probability (%)"
-msgstr "Вероятность (%)"
+msgstr "п▓п╣я─п╬я▐я┌п╫п╬я│я┌я▄ (%)"
 
 #: companies/advanced-search.php:218 companies/edit.php:173
 #: companies/new.php:179 contacts/edit.php:230 contacts/new.php:225
 msgid "Profile"
-msgstr "Профиль"
+msgstr "п÷я─п╬я└п╦п╩я▄"
 
 #: locale/datastrings.php:76
 msgid "Prospect"
-msgstr "Перспектива (ожидаемое что?)"
+msgstr "п÷п╣я─я│п©п╣п╨я┌п╦п╡п╟"
 
 #: locale/datastrings.php:77
 msgid "Prospects"
-msgstr "Перспективы"
+msgstr "п÷п╣я─я│п©п╣п╨я┌п╦п╡я▀"
 
 #: locale/datastrings.php:78
+#, fuzzy
 msgid "Qualified"
-msgstr "Пригодный (квалифицирован, годен?)"
+msgstr "п п╡п╟п╩п╦я└п╦я├п╦я─п╬п╡п╟п╫"
 
 #: reports/index.php:70
 msgid "Quantity by Industry"
-msgstr "Квалифицировать по отраслям"
+msgstr "п п╬п╩п╦я┤п╣я│я┌п╡п╬ п©п╬ п╬я┌я─п╟я│п╩я▐п╪"
 
 #: reports/index.php:61
 msgid "Quantity by Status"
-msgstr "Квалифицировать п остатусу"
+msgstr "п п╬п╩п╦я┤п╣я│я┌п╡п╬ п©п╬ я│я┌п╟я┌я┐я│я┐"
 
 #: locale/datastrings.php:79
 msgid "Radio"
-msgstr "Радио"
+msgstr "п═п╟п╢п╦п╬"
 
 #: plugins/radtest/radtest.php:38 plugins/radtest/setup.php:26
+#, fuzzy
 msgid "Radius Test"
 msgstr "Radius Test"
 
@@ -3221,108 +2836,110 @@ msgstr "Radius Test"
 #: companies/edit.php:153 companies/one.php:558
 #: companies/some-advanced.php:140 companies/some.php:75
 msgid "Rating"
-msgstr "Рейтинг"
+msgstr "п═п╣п╧я┌п╦п╫пЁ"
 
 #: admin/ratings/one.php:37
 msgid "Rating Details"
-msgstr "Подробно о рейтинге"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я─п╣п╧я┌п╦п╫пЁп╣"
 
 #: admin/index.php:188 admin/ratings/some.php:48
 msgid "Ratings"
-msgstr "Рейтинги"
+msgstr "п═п╣п╧я┌п╦п╫пЁп╦"
 
 #: locale/datastrings.php:80
 msgid "Real Estate"
-msgstr "Недвижимость"
+msgstr "п²п╣п╢п╡п╦п╤п╦п╪п╬я│я┌я▄"
 
 #: campaigns/some.php:278 cases/some.php:284 companies/some-advanced.php:409
 #: companies/some.php:356 contacts/some.php:300 files/some.php:355
 #: opportunities/some.php:261
 msgid "Recently Viewed"
-msgstr "Недавно просмотрен"
+msgstr "п²п╣п╢п╟п╡п╫п╬ п©я─п╬я│п╪п╬я┌я─п╣п╫п╫я▀п╣"
 
 #: admin/relationship-types/some.php:54 companies/relationships.php:114
 msgid "Relationship"
-msgstr "Отношения"
+msgstr "п·я┌п╫п╬я┬п╣п╫п╦я▐"
 
 #: admin/relationship-types/one.php:58 admin/relationship-types/some.php:71
 msgid "Relationship Name"
-msgstr "Название отношений"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╬я┌п╫п╬я┬п╣п╫п╦п╧"
 
 #: admin/relationship-types/one.php:43
 msgid "Relationship Type Details"
-msgstr "Подробно о типе отношений"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я┌п╦п©п╣ п╬я┌п╫п╬я┬п╣п╫п╦п╧"
 
 #: admin/index.php:198 admin/relationship-types/some.php:49
 msgid "Relationship Types"
-msgstr "Типы отношений"
+msgstr "п╒п╦п©я▀ п╬я┌п╫п╬я┬п╣п╫п╦п╧"
 
 #: companies/one.php:623 companies/relationships.php:100
 #: companies/relationships.php:111 relationships/sidebar.php:64
 msgid "Relationships"
-msgstr "Отношения"
+msgstr "п·я┌п╫п╬я┬п╣п╫п╦я▐"
 
 #: reports/opportunities-size-by-industry.php:97
 #: reports/opportunities-size-by-opportunity-status.php:107
 msgid "Remainder"
-msgstr "Остаток (разность?)"
+msgstr "п═п╟п╥п╫п╬я│я┌я▄"
 
 #: reports/audit-items.php:102
 msgid "Remote Addr"
-msgstr "Удаленный адрес(?)"
+msgstr "пёп╢п╟п╩п╣п╫п╫я▀п╧ п╟п╢я─п╣я│"
 
 #: reports/audit-items.php:103
 msgid "Remote Port"
-msgstr "Удаленный порт"
+msgstr "пёп╢п╟п╩п╣п╫п╫я▀п╧ п©п╬я─я┌"
 
 #: email/email-2.php:78 email/one-template.php:78
 msgid "Reply to"
-msgstr "Ответить"
+msgstr "п·я┌п╡п╣я┌п╦я┌я▄"
 
 #: include/utils-interface.php:144 reports/index.php:29 reports/index.php:88
 msgid "Reports"
-msgstr "Отчеты"
+msgstr "п·я┌я┤п╣я┌я▀"
 
 #: locale/datastrings.php:81
 msgid "Restaurant"
-msgstr "Ресторна"
+msgstr "п·п╠я┴п╣я│я┌п╡п╣п╫п╫п╬п╣ п©п╦я┌п╟п╫п╦п╣"
 
 #: locale/datastrings.php:82
 msgid "Retail"
-msgstr "Продажа (ретэйл)"
+msgstr "п═п╬п╥п╫п╦я├п╟"
 
 #: include/utils-interface.php:195
+#, fuzzy
 msgid "Rev."
 msgstr "Rev."
 
 #: companies/advanced-search.php:198 companies/edit.php:149
 #: companies/new.php:159 companies/one.php:578
 msgid "Revenue"
-msgstr "Доход (поступление?)"
+msgstr "п■п╬я┘п╬п╢"
 
 #: admin/users/one.php:78 admin/users/some.php:64 admin/users/some.php:82
 msgid "Role"
-msgstr "Должность"
+msgstr "п═п╬п╩я▄"
 
 #: admin/roles/one.php:40
 msgid "Role Details"
-msgstr "Подробно о должности"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ я─п╬п╩п╦"
 
 #: admin/index.php:126 admin/roles/some.php:47
 msgid "Roles"
-msgstr "Должности"
+msgstr "п═п╬п╩п╦"
 
 #: reports/index.php:127
+#, fuzzy
 msgid "Sales Force Automation"
 msgstr "Sales Force Automation"
 
 #: contacts/edit.php:140 contacts/new.php:135
 msgid "Salutation"
-msgstr "Приветствие"
+msgstr "п÷я─п╦п╡п╣я┌я│я┌п╡п╦п╣"
 
 #: contacts/edit.php:235 contacts/transfer-2.php:70
 msgid "Save"
-msgstr "Сохранить"
+msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄"
 
 #: activities/one.php:381 admin/account-statuses/one.php:74
 #: admin/activity-templates/edit.php:83 admin/activity-types/one.php:77
@@ -3341,41 +2958,41 @@ msgstr "Сохранить"
 #: files/one.php:94 notes/edit.php:40 notes/new.php:50
 #: opportunities/edit.php:234 opportunities/new.php:134
 msgid "Save Changes"
-msgstr "Сохранить изменения"
+msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄ п╦п╥п╪п╣п╫п╣п╫п╦я▐"
 
 #: companies/addresses.php:122
 msgid "Save Defaults"
-msgstr "Сохранить по умолчанию"
+msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: activities/one.php:383
 msgid "Save and Next"
-msgstr "Сохранить и дальше (следующий)"
+msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄ п╦ п╢п╟п╩я▄я┬п╣"
 
 #: contacts/transfer-2.php:70
 msgid "Save and Update All Records"
-msgstr "Сохранить и обновить все записи"
+msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄ п╦ п╬п╠п╫п╬п╡п╦я┌я▄ п╡я│п╣ п╥п╟п©п╦я│п╦"
 
 #: email/email-2.php:95 email/one-template.php:95
 msgid "Save as New Template"
-msgstr "Сохранить как новый шаблон"
+msgstr "п║п╬я┘я─п╟п╫п╦я┌я▄ п╨п╟п╨ п╫п╬п╡я▀п╧ я┬п╟п╠п╩п╬п╫"
 
 #: activities/some.php:514
 msgid "Saved Searches"
-msgstr "Сохраненные поиски(?)"
+msgstr "п║п╬я┘я─п╟п╫п╣п╫п╫я▀п╣ я─п╣п╥я┐п╩я▄я┌п╟я┌я▀ п©п╬п╦я│п╨п╟"
 
 #: activities/one.php:385
 msgid "Schedule Followup"
-msgstr "Schedule Followup"
+msgstr "п÷п╣я─п╣п╫п╣я│я┌п╦"
 
 #: activities/some.php:166 activities/some.php:271 private/home.php:450
 msgid "Scheduled"
-msgstr "Scheduled"
+msgstr "п≈п╟п©п╩п╟п╫п╦я─п╬п╡п╟п╫п╬"
 
 #: admin/activity-types/one.php:73 admin/activity-types/some.php:89
 #: admin/case-priorities/one.php:72 admin/case-priorities/some.php:82
 #: admin/company-sources/one.php:74 admin/company-sources/some.php:84
 msgid "Score Adjustment"
-msgstr "Поравка счета(?)"
+msgstr "пёя│я┌п╟п╫п╬п╡п╨п╟ п╬я├п╣п╫п╨п╦"
 
 #: activities/some.php:532 campaigns/some.php:244 cases/sidebar.php:67
 #: cases/sidebar.php:75 cases/some.php:263 companies/advanced-search.php:270
@@ -3385,81 +3002,84 @@ msgstr "Поравка счета(?)"
 #: relationships/new-relationship.php:120
 #: reports/company-contacts-printout.php:227
 msgid "Search"
-msgstr "Поиск"
+msgstr "п÷п╬п╦я│п╨"
 
 #: companies/some-advanced.php:363 companies/some.php:245
 msgid "Search Companies"
-msgstr "Поиск компаний"
+msgstr "п╓п╦я─п╪я▀"
 
 #: activities/some.php:428 campaigns/some.php:211 cases/some.php:238
 #: companies/some.php:268 contacts/some.php:235 files/some.php:291
 #: opportunities/some.php:220 reports/company-contacts-printout.php:208
 msgid "Search Criteria"
-msgstr "Параметры поиска"
+msgstr "п÷п╟я─п╟п╪п╣я┌я─я▀ п©п╬п╦я│п╨п╟"
 
 #: locale/datastrings.php:83
 msgid "Search Engine"
-msgstr "Поисковая машинка Search Engine"
+msgstr "п÷п╬п╦я│п╨ п╡ п╦п╫я┌п╣я─п╫п╣я┌"
 
 #: locale/datastrings.php:84
+#, fuzzy
 msgid "Search Engines"
 msgstr "Search Engines"
 
 #: activities/pager.php:35
 msgid "Search Results"
-msgstr "Результаты поиска"
+msgstr "п═п╣п╥я┐п╩я▄я┌п╟я┌я▀ п©п╬п╦я│п╨п╟"
 
 #: activities/some.php:515
 msgid "Search Title"
-msgstr "Search Title"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ я─п╣п╥я┐п╩я▄я┌п╟я┌п╬п╡ п©п╬п╦я│п╨п╟"
 
 #: relationships/new-relationship.php:104
 msgid "Search for "
-msgstr "Поиск для"
+msgstr "п÷п╬п╦я│п╨ п╢п╩я▐"
 
 #: contacts/transfer.php:46 include/strings.php:19
 msgid "Search for Company"
-msgstr "Поиск компаний"
+msgstr "п÷п╬п╦я│п╨ я└п╦я─п╪"
 
 #: include/strings.php:18
 msgid "Search for Contact"
-msgstr "Поиск контактов"
+msgstr "п÷п╬п╦я│п╨ п╨п╬п╫я┌п╟п╨я┌п╬п╡"
 
 #: locale/datastrings.php:85
 msgid "Seminar"
-msgstr "Семинар"
+msgstr "п║п╣п╪п╦п╫п╟я─"
 
 #: locale/datastrings.php:86
 msgid "Seminars"
-msgstr "Семинары"
+msgstr "п║п╣п╪п╦п╫п╟я─я▀"
 
 #: reports/completed-items.php:132 reports/open-items.php:136
 #: reports/overdue-items.php:151
 msgid "Send Email To"
-msgstr "Послать эл. писмо"
+msgstr "п÷п╬я│п╩п╟я┌я▄ я█п╩. п©п╦я│п╪п╬"
 
 #: plugins/autostatus/autostatus.php:54 plugins/autostatus/setup.php:37
+#, fuzzy
 msgid "Server Status"
 msgstr "Server Status"
 
 #: reports/audit-items.php:104
+#, fuzzy
 msgid "Session Id"
 msgstr "Session Id"
 
 #: contacts/edit-address.php:100
 msgid "Shipping Address"
-msgstr "Shipping Address"
+msgstr "п░п╢я─п╣я│ п╢п╩я▐ п©п╣я─п╣я│я▀п╩п╨п╦"
 
 #: companies/addresses.php:116
 msgid "Shipping Default"
-msgstr "Shipping Default"
+msgstr "п÷п╣я─п╣я│я▀п╩п╨п╟ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌t"
 
 #: admin/account-statuses/one.php:56 admin/account-statuses/some.php:66
 #: admin/activity-types/one.php:57 admin/activity-types/some.php:73
 #: admin/campaign-statuses/one.php:56 admin/campaign-statuses/some.php:66
 #: admin/campaign-types/one.php:53 admin/campaign-types/some.php:64
 #: admin/case-priorities/one.php:56 admin/case-priorities/some.php:66
-#: admin/case-statuses/one.php:121 admin/case-statuses/some.php:88
+#: admin/case-statuses/one.php:п║п╬п╨я─п╟я┴п╣п╫п╫п╬121 admin/case-statuses/some.php:88
 #: admin/case-types/one.php:55 admin/case-types/some.php:64
 #: admin/categories/one.php:94 admin/categories/some.php:65
 #: admin/company-sources/one.php:58 admin/company-sources/some.php:68
@@ -3470,30 +3090,31 @@ msgstr "Shipping Default"
 #: admin/opportunity-statuses/some.php:111 admin/ratings/one.php:52
 #: admin/ratings/some.php:67 admin/roles/one.php:55 admin/roles/some.php:66
 msgid "Short Name"
-msgstr "Короткое имя (инициалы?)"
+msgstr "п║п╬п╨я─п╟я┴п╣п╫п╫п╬"
 
 #: campaigns/one.php:239 files/one.php:75 files/sidebar.php:22
 #: files/some.php:359 opportunities/one.php:317
 msgid "Size"
-msgstr "Размер"
+msgstr "п·п╠я┼п╣п╪"
 
 #: opportunities/edit.php:199 opportunities/new.php:101
 msgid "Size (in dollars)"
-msgstr "Размер (в деньгах?)"
+msgstr "п═п╟п╥п╪п╣я─ (п╡ п╢п╣п╫п╣п╤п╫п╬п╪ п╡я▀я─п╟п╤п╣п╫п╦п╦)"
 
 #: reports/index.php:74
 msgid "Size by Industry"
-msgstr "Размер по отрасли"
+msgstr "п·п╠я┼п╣п╪ п©п╬ п╬я┌я─п╟я│п╩п╦"
 
 #: reports/index.php:66
 msgid "Size by Status"
-msgstr "Размер по статусу"
+msgstr "п·п╠я┼п╣п╪ п©п╬ я│я┌п╟я┌я┐я│я┐"
 
 #: locale/datastrings.php:87
 msgid "Special"
-msgstr "Специально"
+msgstr "п║п©п╣я├п╦п╟п╩я▄п╫п╬"
 
 #: relationships/new-relationship-2.php:96
+#, fuzzy
 msgid "Specify a search condition"
 msgstr "Specify a search condition"
 
@@ -3503,28 +3124,28 @@ msgstr "Specify a search condition"
 #: reports/open-items.php:184 reports/open-items.php:233
 #: reports/overdue-items.php:199 reports/overdue-items.php:250
 msgid "Start"
-msgstr "Старт"
+msgstr "п²п╟я┤п╟п╩п╬ п©п╣я─п╦п╬п╢п╟"
 
 #: activities/one.php:357 campaigns/some.php:67 companies/one.php:682
 #: plugins/info/one.php:367
 msgid "Starts"
-msgstr "Старты (веселые что ли?)"
+msgstr "п²п╟я┤п╟п╩п╬"
 
 #: campaigns/edit.php:97 campaigns/new.php:85
 msgid "Starts On"
-msgstr "Начать на"
+msgstr "п²п╟я┤п╟я┌я▄"
 
 #: companies/some.php:124 companies/some.php:134 companies/some.php:288
 #: reports/companies-list.php:102 reports/company-contacts-printout.php:126
 #: reports/company-contacts-printout.php:136
 msgid "State"
-msgstr "Штат (регион, область?)"
+msgstr "п·п╠п╩п╟я│я┌я▄"
 
 #: companies/addresses.php:155 companies/advanced-search.php:253
 #: companies/edit-address.php:89 companies/new.php:217
 #: contacts/edit-address.php:206
 msgid "State/Province"
-msgstr "Округ/Область"
+msgstr "п·п╠п╩п╟я│я┌я▄/п═п╟п╧п╬п╫"
 
 #: activities/one.php:291 admin/activity-templates/some.php:63
 #: campaigns/edit.php:89 campaigns/new.php:77 campaigns/one.php:154
@@ -3536,117 +3157,120 @@ msgstr "Округ/Область"
 #: opportunities/some.php:233 opportunities/some.php:266
 #: reports/overdue-items.php:296
 msgid "Status"
-msgstr "Статус"
+msgstr "п║я┌п╟я┌я┐я│"
 
 #: opportunities/new.php:94
 msgid "Status Definitions"
-msgstr "Определение статуса"
+msgstr "п·п©я─п╣п╢п╣п╩п╣п╫п╦п╣ я│я┌п╟я┌я┐я│п╟"
 
 #: include/utils-interface.php:83
 msgid "Status not changed."
-msgstr "Статус не изменен."
+msgstr "п║я┌п╟я┌я┐я│ п╫п╣ п╦п╥п╪п╣п╫п╣п╫."
 
 #: email/email-2.php:88 email/one-template.php:88
 msgid "Subject"
-msgstr "Тема (сабж?)"
+msgstr "п╒п╣п╪п╟"
 
 #: admin/plugin/plugin-admin.php:243
 msgid "Submit"
-msgstr "Представить (послать?)"
+msgstr "п░п╨я┌п╦п╡п╦я─п╬п╡п╟я┌я▄"
 
 #: companies/one.php:637 contacts/edit.php:166 contacts/new.php:161
 #: contacts/one.php:331
 msgid "Summary"
-msgstr "Обзор (итог?)"
+msgstr "п я─п╟я┌п╨п╦п╧ п╬я┌я┤п╣я┌"
 
 #: admin/index.php:47
 msgid "System Administration"
-msgstr "Системное администриование"
+msgstr "п║п╦я│я┌п╣п╪п╫п╬п╣ п╟п╢п╪п╦п╫п╦я│я┌я─п╦п╬п╡п╟п╫п╦п╣"
 
 #: reports/activitytimes.php:121
+#, fuzzy
 msgid "TOTAL"
 msgstr "TOTAL"
 
 #: reports/audit-items.php:96
 msgid "Table"
-msgstr "Таблица"
+msgstr "п╒п╟п╠п╩п╦я├п╟"
 
 #: admin/relationship-types/some.php:53
 msgid "Tables"
-msgstr "Таблицы"
+msgstr "п╒п╟п╠п╩п╦я├я▀"
 
 #: companies/admin.php:78 companies/one.php:550
 msgid "Tax ID"
-msgstr "ИД цены"
+msgstr "п╕п╣п╫п╟"
 
 #: reports/companies-list.php:154
 msgid "Tel"
-msgstr "Телефон"
+msgstr "п╒п╣п╩п╣я└п╬п╫"
 
 #: locale/datastrings.php:88
+#, fuzzy
 msgid "Telemarketing"
 msgstr "Telemarketing"
 
 #: locale/datastrings.php:89
+#, fuzzy
 msgid "Telemarketings"
 msgstr "Telemarketings"
 
 #: locale/datastrings.php:90
 msgid "Television"
-msgstr "Телевидение"
+msgstr "п╒п╣п╩п╣п╡п╦п╢п╣п╫п╦п╣"
 
 #: email/email.php:121 email/index.php:71
 msgid "Template"
-msgstr "Шаблон"
+msgstr "п╗п╟п╠п╩п╬п╫"
 
 #: activities/some.php:445
 msgid "Template Titles"
-msgstr "Псевдоним шаблона"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ я┬п╟п╠п╩п╬п╫п╟"
 
 #: companies/admin.php:90 companies/one.php:562
 msgid "Terms"
-msgstr "Понятия"
+msgstr "п║я─п╬п╨"
 
 #: email/email-4.php:74
 msgid "The bulk e-mail sub-system has sent"
-msgstr "The bulk e-mail sub-system has sent"
+msgstr "п║п╬п╬п╠я┴п╣п╫п╦п╣п©п╬я┤я┌п╬п╡п╬п╧ п©п╬п╢я│п╦я│я┌п╣п╪я▀п╠я▀п╩п╬ п©п╬я│п╩п╟п╫п╬"
 
 #: relationships/new-relationship-2.php:119
 #: relationships/new-relationship-2.php:133
 msgid "There is no "
-msgstr "Здесь нет(?)"
+msgstr "п≈п╢п╣я│я▄ п╫п╣я┌"
 
 #: include/strings.php:24
 msgid "There is no company by that name"
-msgstr "Здесь нет компании по имени(?)"
+msgstr "п≈п╢п╣я│я▄ п╫п╣я┌ я└п╦я─п╪я▀ п©п╬ п╦п╪п╣п╫п╦"
 
 #: include/strings.php:23
 msgid "There is no contact by that name"
-msgstr "Здесь нет контактов по имени(?)"
+msgstr "п≈п╢п╣я│я▄ п╫п╣я┌ п╨п╬п╫я┌п╟п╨я┌п╬п╡ п©п╬ п╦п╪п╣п╫п╦"
 
 #: opportunities/export.php:93
 msgid "There was a problem with your export"
-msgstr "обнаружена проблем с экспортом ваших данных"
+msgstr "п·п╠п╫п╟я─я┐п╤п╣п╫п╟ п©я─п╬п╠п╩п╣п╪ я│ я█п╨я│п©п╬я─я┌п╬п╪ п╡п╟я┬п╦я┘ п╢п╟п╫п╫я▀я┘"
 
 #: contacts/edit-address.php:162
 msgid "This Address Is Also Used By"
-msgstr "Этот адрес используется также"
+msgstr "п╜я┌п╬я┌ п╟п╢я─п╣я│ п╦я│п©п╬п╩я▄п╥я┐п╣я┌я│я▐ я┌п╟п╨п╤п╣"
 
 #: include/utils-interface.php:83
 msgid "This activity is still open."
-msgstr "Это дело все еще открыто."
+msgstr "п╜я┌п╬ п╢п╣п╩п╬ п╡я│п╣ п╣я┴п╣ п╬я┌п╨я─я▀я┌п╬."
 
 #: reports/audit-items.php:93
 msgid "Time"
-msgstr "Время"
+msgstr "п▓я─п╣п╪я▐"
 
 #: reports/overdue-items.php:72
 msgid "Time Window"
-msgstr "Время окошко(?)"
+msgstr "п÷п╣я─п╦п╬п╢ п©я─п╬я│я─п╬я┤п╣п╫п╫п╬я│я┌п╦"
 
 #: reports/activitytimes.php:36
 msgid "Timesheets"
-msgstr "Timesheets"
+msgstr "п═п╟п╠п╬я┤п╦п╧ пЁя─п╟я└п╦п╨"
 
 #: activities/one.php:320 activities/some.php:165 activities/some.php:431
 #: admin/activity-templates/edit.php:63 admin/case-statuses/one.php:153
@@ -3657,40 +3281,40 @@ msgstr "Timesheets"
 #: contacts/some.php:240 opportunities/one.php:305 opportunities/one.php:426
 #: plugins/info/one.php:362
 msgid "Title"
-msgstr "Псевдоним"
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣"
 
 #: activities/one.php:287
 msgid "To"
-msgstr "К (то?)"
+msgstr "п╨"
 
 #: admin/relationship-types/one.php:74 admin/relationship-types/some.php:87
 msgid "To Text"
-msgstr "В текст"
+msgstr "п▓ я┌п╣п╨я│я┌"
 
 #: admin/relationship-types/one.php:66 admin/relationship-types/some.php:79
 msgid "To What Table"
-msgstr "В какую таблицу"
+msgstr "п▓ я┌п╟п╠п╩п╦я├я┐"
 
 #: reports/companies-list.php:247
 msgid "Total records"
-msgstr "Все записи"
+msgstr "п▓я│п╣ п╥п╟п©п╦я│п╦"
 
 #: locale/datastrings.php:91
 msgid "Trade Show"
-msgstr "Trade Show"
+msgstr "п╒п╬я─пЁп╬п╡п╟я▐ п╡я▀я│я┌п╟п╡п╨п╟"
 
 #: locale/datastrings.php:92
 msgid "Trade Shows"
-msgstr "Trade Shows"
+msgstr "п╒п╬я─пЁп╬п╡я▀п╣ п╡я▀я│я┌п╟п╡п╨п╦"
 
 #: contacts/edit.php:245
 msgid "Transfer"
-msgstr "Передача"
+msgstr "п÷п╣я─п╣п╢п╟я┤п╟"
 
 #: contacts/transfer-2.php:48 contacts/transfer-2.php:63
 #: contacts/transfer.php:33
 msgid "Transfer to Another Company"
-msgstr "Передача (трансфер?) другой компании"
+msgstr "п÷п╣я─п╣п╢п╟я┤п╟ п╢я─я┐пЁп╬п╧ я└п╦я─п╪п╣"
 
 #: activities/one.php:298 activities/some.php:162 activities/some.php:461
 #: admin/activity-templates/edit.php:71 campaigns/edit.php:85
@@ -3706,11 +3330,11 @@ msgstr "Передача (трансфер?) другой компании"
 #: reports/overdue-items.php:71 reports/overdue-items.php:201
 #: reports/overdue-items.php:252
 msgid "Type"
-msgstr "тип"
+msgstr "п╒п╦п©"
 
 #: admin/index.php:149
 msgid "Types and Statuses"
-msgstr "Типы и статусы"
+msgstr "п╒п╦п©я▀ п╦ я│я┌п╟я┌я┐я│я▀"
 
 #: companies/advanced-search.php:190 companies/edit.php:141
 #: companies/new.php:151 companies/one.php:515
@@ -3721,71 +3345,71 @@ msgstr "URL"
 #: admin/export/export-companies.php:99
 #: admin/export/export-company-address.php:52
 msgid "Unable to Open file for writing."
-msgstr "Невозмлжно открыть файл для записи."
+msgstr "п²п╣п╡п╬п╥п╪п╩п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ п╢п╩я▐ п╥п╟п©п╦я│п╦."
 
 #: activities/associate-activities.php:155
 msgid ""
 "Unable to associate Activities because there are multiple Cases or "
 "Opportunities"
-msgstr "Не могу соеденить дела по причине множественности (составности?) событий или возможностей"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬п╠п╣п╢п╣п╫п╦я┌я▄ п╢п╣п╩п╟ п©п╬ п©я─п╦я┤п╦п╫п╣ п╪п╫п╬п╤п╣я│я┌п╡п╣п╫п╫п╬я│я┌п╦ я│п╬п╠я▀я┌п╦п╧ п╦п╩п╦ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╣п╧"
 
 #: activities/associate-activities.php:162
 msgid "Unable to associate Activities because there is no open Case or Opportunity"
-msgstr "Не могу объединить дела по причине отсутсвия открытых дел или возможностей"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬п╠я┼п╣п╢п╦п╫п╦я┌я▄ п╢п╣п╩п╟ п©п╬ п©я─п╦я┤п╦п╫п╣ п╬я┌я│я┐я┌я│п╡п╦я▐ п╬я┌п╨я─я▀я┌я▀я┘ п╢п╣п╩ п╦п╩п╦ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╣п╧"
 
 #: include/utils-misc.php:624
 msgid "Unable to execute your query."
-msgstr "Не могу выполнить Ваш запрос."
+msgstr "п²п╣ п╪п╬пЁя┐ п╡я▀п©п╬п╩п╫п╦я┌я▄ п▓п╟я┬ п╥п╟п©я─п╬я│."
 
 #: admin/users/some.php:39
 msgid "Unable to get data from database"
-msgstr "Не могу получить данные из базы данных"
+msgstr "п²п╣ п╪п╬пЁя┐ п©п╬п╩я┐я┤п╦я┌я▄ п╢п╟п╫п╫я▀п╣ п╦п╥ п╠п╟п╥я▀ п╢п╟п╫п╫я▀я┘"
 
 #: include/utils-misc.php:240 opportunities/export.php:95
 msgid "Unable to open file"
-msgstr "Не могу открыть файл"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩"
 
 #: relationships/edit.php:60
 msgid "Unassociate"
-msgstr "Разъединить"
+msgstr "п═п╟п╥я┼п╣п╢п╦п╫п╦я┌я▄"
 
 #: contacts/edit.php:155 contacts/new.php:150 contacts/one.php:95
 #: contacts/one.php:98
 msgid "Unknown"
-msgstr "неизвестный(неизвестно?)"
+msgstr "п²п╣п╦п╥п╡п╣я│я┌п╫п╬"
 
 #: admin/country-address-format/index.php:60
 msgid "Update"
-msgstr "Обновить"
+msgstr "п·п╠п╫п╬п╡п╦я┌я▄"
 
 #: admin/update.php:2299
 msgid "Update Complete"
-msgstr "Обновить полностью"
+msgstr "п·п╠п╫п╬п╡п╩п╣п╫п╦п╣ п╥п╟п╡п╣я─я┬п╣п╫п╬"
 
 #: email/email-2.php:95 email/one-template.php:95
 msgid "Update Template"
-msgstr "Обновить шаблон"
+msgstr "п·п╠п╫п╬п╡п╦я┌я▄ я┬п╟п╠п╩п╬п╫"
 
 #: files/new.php:93 files/new.php:97
 msgid "Upload"
-msgstr "Загрузить"
+msgstr "п≈п╟пЁя─я┐п╥п╦я┌я▄"
 
 #: files/one.php:71
 msgid "Uploaded"
-msgstr "Загружено"
+msgstr "п≈п╟пЁя─я┐п╤п╣п╫п╬"
 
 #: companies/addresses.php:168 companies/edit-address.php:103
 #: companies/new.php:231 contacts/edit-address.php:219
 msgid "Use"
-msgstr "Использовать"
+msgstr "п≤я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄"
 
 #: contacts/edit-address.php:166
 msgid "Use Alternate Address"
-msgstr "использовать другой адрес"
+msgstr "п≤я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄ п╢я─я┐пЁп╬п╧ п╟п╢я─п╣я│"
 
 #: companies/addresses.php:112
 msgid "Used by Contacts"
-msgstr "Использовано контактами (в контактах?)"
+msgstr "п≤я│п©п╬п╩я▄п╥я┐п╣я┌я│я▐ п╡ п╨п╬п╫я┌п╟п╨я┌п╟я┘"
 
 #: activities/one.php:326 cases/one.php:328 companies/one.php:678
 #: companies/some-advanced.php:136 companies/some.php:71 contacts/one.php:492
@@ -3795,99 +3419,99 @@ msgstr "Использовано контактами (в контактах?)"
 #: reports/companies-list.php:156 reports/completed-items.php:73
 #: reports/open-items.php:57 reports/overdue-items.php:70
 msgid "User"
-msgstr "пользователь"
+msgstr "п÷п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▄"
 
 #: admin/users/one.php:59
 msgid "User Details"
-msgstr "Подробно о пользователе"
+msgstr "п÷п╬п╢я─п╬п╠п╫п╬ п╬ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩п╣"
 
 #: private/home.php:469
 msgid "User Manual"
-msgstr "Руководство пользователя"
+msgstr "п═я┐п╨п╬п╡п╬п╢я│я┌п╡п╬ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐"
 
 #: reports/index.php:102
 msgid "User Reports"
-msgstr "Отчеты пользователя"
+msgstr "п·я┌я┤п╣я┌я▀ п©п╬ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐п╪"
 
 #: admin/users/one.php:100 admin/users/self.php:72 admin/users/some.php:63
 #: admin/users/some.php:94
 msgid "Username"
-msgstr "Имя пользователя"
+msgstr "п≤п╪я▐ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐"
 
 #: admin/index.php:121 admin/users/some.php:60
 msgid "Users"
-msgstr "Пользователи"
+msgstr "п÷п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩п╦"
 
 #: locale/datastrings.php:93
 msgid "Vendor"
-msgstr "Поставщик"
+msgstr "п÷п╬я│я┌п╟п╡я┴п╦п╨"
 
 #: companies/admin.php:98
 msgid "Vendor Key"
-msgstr "Ключ поставщика"
+msgstr "п п╩я▌я┤ п©п╬я│я┌п╟п╡я┴п╦п╨п╟"
 
 #: locale/datastrings.php:94
 msgid "Vendors"
-msgstr "Поставщики"
+msgstr "п÷п╬я│я┌п╟п╡я┴п╦п╨п╦"
 
 #: opportunities/opportunity-view.php:35
 msgid "View Opportunity Statuses"
-msgstr "Увидеть (или показать?) статусы возможностей"
+msgstr "п÷п╬п╨п╟п╥п╟я┌я▄ я│я┌п╟я┌я┐я│я▀ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╣п╧"
 
 #: notes/sidebar.php:142
 msgid "View/Edit"
-msgstr "Смотреть/редактировать"
+msgstr "п║п╪п╬я┌я─п╣я┌я▄/я─п╣п╢п╟п╨я┌п╦я─п╬п╡п╟я┌я▄"
 
 #: email/email-3.php:37
 msgid "WARNING: No array of contacts!"
-msgstr "ПРЕДУПРЕЖДЕНИЕ: Нет записей в котактах!"
+msgstr "п÷п═п∙п■пёп÷п═п∙п√п■п∙п²п≤п∙: п²п╣я┌ п╥п╟п©п╦я│п╣п╧ п╡ п╨п╬я┌п╟п╨я┌п╟я┘!"
 
 #: include/utils-interface.php:79
 msgid "We could not authenticate you."
-msgstr "Не могу Вас опознать."
+msgstr "п²п╣ п╪п╬пЁя┐ п▓п╟я│ п╬п©п╬п╥п╫п╟я┌я▄."
 
 #: companies/sidebar.php:70 locale/datastrings.php:95
 msgid "Web Site"
-msgstr "Web Site"
+msgstr "п▓п╣п╠-я│п╟п╧я┌"
 
 #: locale/datastrings.php:96
 msgid "Web Sites"
-msgstr "Web Sites"
+msgstr "п▓п╣п╠-я│п╟п╧я┌я▀"
 
 #: plugins/webcalendar/setup.php:28
 msgid "WebCalendar SysAdmin Manual"
-msgstr "WebCalendar SysAdmin Manual"
+msgstr "п═я┐п╨п╬п╡п╬п╢я│я┌п╡п╬ п▓п╣п╠-п╨п╟п╩п╣п╫п╢п╟я─я▐ (п╢п╩я▐ п╟п╢п╪п╦п╫п╦я│я┌я─п╟я┌п╬я─п╟)"
 
 #: reports/opportunities-size-by-industry.php:97
 #: reports/opportunities-size-by-opportunity-status.php:107
 msgid "Weighted"
-msgstr "Нагрузка (вес, оценка?)"
+msgstr "п·я├п╣п╫п╨п╟"
 
 #: opportunities/one.php:325 opportunities/some.php:73
 msgid "Weighted Size"
-msgstr "Размер нагрузки (веса, оценки?)"
+msgstr "п÷я─п╣п╢п©п╬п╩п╟пЁп╟п╣п╪я▀п╣ п©п╬я│я┌я┐п©п╩п╣п╫п╦я▐"
 
 #: locale/datastrings.php:97
 msgid "Word of Mouth"
-msgstr "Word of Mouth"
+msgstr "п≤п╥ я─п╟п╥пЁп╬п╡п╬я─п╟"
 
 #: cases/one.php:273 contacts/edit.php:182 contacts/new.php:177
 #: contacts/one.php:355 contacts/sidebar.php:160 contacts/some.php:305
 #: opportunities/one.php:359
 msgid "Work Phone"
-msgstr "Рабочий телефон"
+msgstr "п═п╟п╠п╬я┤п╦п╧ я┌п╣п╩п╣я└п╬п╫"
 
 #: reports/open-items.php:363
 msgid "XRMS: Open Items"
-msgstr "XRMS: Открыть объекты"
+msgstr "XRMS: п·я┌п╨я─я▀я┌я▄ п╬п╠я┼п╣п╨я┌я▀"
 
 #: reports/overdue-items.php:386
 msgid "XRMS: Overdue Items"
-msgstr "XRMS: Просроченные объекты(шо за объекты?)"
+msgstr "XRMS: п÷я─п╬я│я─п╬я┤п╣п╫п╫я▀п╣ п╬п╠я┼п╣п╨я┌я▀"
 
 #: contacts/edit.php:202 contacts/new.php:197
 msgid "Yahoo Name"
-msgstr "Имя в Yahoo"
+msgstr "п≤п╪я▐ п╡ Yahoo"
 
 #: contacts/one.php:379
 msgid "Yahoo! IM"
@@ -3895,157 +3519,157 @@ msgstr "Yahoo! IM"
 
 #: campaigns/edit.php:153 campaigns/new.php:137
 msgid "You must enter a campaign title."
-msgstr "Вы должны ввести псевдоним кампании."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п╫п╟п╥п╡п╟п╫п╦п╣ п╨п╟п╪п©п╟п╫п╦п╦."
 
 #: cases/edit.php:258 cases/new.php:167
 msgid "You must enter a case title."
-msgstr "Вы должны ввести псевдоним события."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п╫п╟п╥п╡п╟п╫п╦п╣ я│п╬п╠я▀я┌п╦я▐."
 
 #: companies/edit.php:203 companies/new.php:274
 msgid "You must enter a company name."
-msgstr "Вы должны ввести псевдоним компании."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п╫п╟п╥п╡п╟п╫п╦п╣ я└п╦я─п╪я▀."
 
 #: admin/users/some.php:141
 msgid "You must enter a last name."
-msgstr "Вы должны ввести псевдоним фамилии."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п╫п╟п╥п╡п╟п╫п╦п╣ я└п╟п╪п╦п╩п╦п╦."
 
 #: email/email-2.php:136 email/one-template.php:136
 msgid "You must enter a name to let the recipient know who the email is from."
-msgstr "Вы должны ввести имя получателя know who the email is from."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п╦п╪я▐, я┤я┌п╬ п╠я▀ п©п╬п╩я┐я┤п╟я┌п╣п╩я▄ п╥п╫п╟п╩ п╬я┌ п╨п╬пЁп╬ п©п╦я│я▄п╪п╬ п╦ п╨п╬п╪я┐ п╬я┌п╡п╣я┤п╟я┌я▄."
 
 #: admin/users/some.php:146
 msgid "You must enter a password."
-msgstr "Вы должны ввести пароль."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п©п╟я─п╬п╩я▄."
 
 #: admin/users/some.php:136
 msgid "You must enter a username."
-msgstr "Вы должны ввести имя пользователя."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п╦п╪я▐ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐."
 
 #: opportunities/edit.php:271 opportunities/new.php:163
 msgid "You must enter an opportunity title."
-msgstr "Вы должны ввести псевдоним возможности."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п╫п╟п╥п╡п╟п╫п╦п╣ п╡п╬п╥п╪п╬п╤п╫п╬я│я┌п╦."
 
 #: email/email-2.php:141 email/one-template.php:141
 msgid "You must enter an reply address so the recipient can reply to the message."
-msgstr "Вы должны ввести адрес для ответа, что бы получатель смог вам ответить."
+msgstr "п▓я▀ п╢п╬п╩п╤п╫я▀ п╡п╡п╣я│я┌п╦ п╟п╢я─п╣я│ п╢п╩я▐ п╬я┌п╡п╣я┌п╟, я┤я┌п╬ п╠я▀ п©п╬п╩я┐я┤п╟я┌п╣п╩я▄ я│п╪п╬пЁ п╡п╟п╪ п╬я┌п╡п╣я┌п╦я┌я▄."
 
 #: admin/relationship-types/one.php:100
 msgid ""
 "You should NOT delete the last element of a relationship type, or a used "
 "relationship type."
-msgstr "Не нужно удалять последний элемент типа отношений или использованый тип отношений."
+msgstr "п²п╣ я│п╩п╣п╢я┐п╣я┌ я┐п╢п╟п╩я▐я┌я▄ п©п╬я│п╩п╣п╢п╫п╦п╧ п╬я│я┌п╟п╡я┬п╦п╧я│я▐ я█п╩п╣п╪п╣п╫я┌ я┌п╦п©п╬п╡ п╬я┌п╫п╬я┬п╣п╫п╦п╧ п╦п╩п╦ п╦я│п©п╬п╩я▄п╥я┐п╣п╪я▀п╧ я┌п╦п© п╬я┌п╫п╬я┬п╣п╫п╦п╧. п╜я┌п╬ п╪п╬п╤п╣я┌ п©я─п╦п╡п╣я│я┌п╦ п╨ п╫п╣п©я─п╣п╢я│п╨п╟п╥я┐п╣п╪я▀п╪ п©п╬я│п╩п╣п╢я│я┌п╡п╦я▐п╪."
 
 #: admin/data_clean.php:330
 msgid "Your database has been cleaned."
-msgstr "Ваша база данных была очищена."
+msgstr "п▓п╟я┬п╟ п╠п╟п╥п╟ п╢п╟п╫п╫я▀я┘ п╠я▀п╩п╟ п╬я┤п╦я┴п╣п╫п╟."
 
 #: admin/update.php:2306
 msgid "Your database has been updated."
-msgstr "Ваша база данных была обновлена."
+msgstr "п▓п╟я┬п╟ п╠п╟п╥п╟ п╢п╟п╫п╫я▀я┘ п╠я▀п╩п╟ п╬п╠п╫п╬п╡п╩п╣п╫п╟."
 
 #: reports/index.php:46
 msgid ""
 "Your sales funnel - how many of your accounts are in each stage of the "
 "customer development process?"
-msgstr "Суммирование Ваших продаж - сколько Ваших аккаунтов в каждой стадии процесса развития отношений с покупателями."
+msgstr "п═п╟я│п©я─п╣п╢п╣п╩п╣п╫п╦п╣ п╨п╩п╦п╣п╫я┌п╬п╡ п©п╬ я│я┌п╟я┌я┐я│я┐ CRM п╡ я│я─п╟п╡п╫п╦я┌п╣п╩я▄п╫п╬п╪ я│п╬п╬я┌п╫п╬я┬п╣п╫п╦п╦"
 
 #: activities/associate-activities.php:148
 msgid "activities"
-msgstr "дела"
+msgstr "п╢п╣п╩п╟"
 
 #: locale/datastrings.php:98
 msgid "call from"
-msgstr "звонок из"
+msgstr "п╥п╡п╬п╫п╬п╨ п╦п╥"
 
 #: locale/datastrings.php:99
 msgid "call to"
-msgstr "звонок в"
+msgstr "п╥п╡п╬п╫п╬п╨ п╡"
 
 #: locale/datastrings.php:100
 msgid "calls from"
-msgstr "звонки из"
+msgstr "п╥п╡п╬п╫п╨п╦ п╦п╥"
 
 #: locale/datastrings.php:101
 msgid "calls to"
-msgstr "звонки в"
+msgstr "п╥п╡п╬п╫п╨п╦ п╡"
 
 #: admin/import/import-companies.php:93
 msgid "comma"
-msgstr "запятая"
+msgstr "п╥п╟п©я▐я┌п╟я▐"
 
 #: include/strings.php:34
 msgid "companies/contacts"
-msgstr "компании/контакты"
+msgstr "я└п╦я─п╪я▀/п╨п╬п╫я┌п╟п╨я┌я▀"
 
 #: companies/one.php:563
 msgid "days"
-msgstr "дни"
+msgstr "п╢п╫."
 
 #: admin/case-statuses/some.php:47
 msgid "down"
-msgstr "вниз"
+msgstr "п╡п╫п╦п╥"
 
 #: locale/datastrings.php:102
 msgid "e-mail from"
-msgstr "эл. почта от"
+msgstr "я█п╩. п©п╬я┤я┌п╟ п╬я┌"
 
 #: locale/datastrings.php:103
 msgid "e-mail to"
-msgstr "эл почта в"
+msgstr "я█п╩ п©п╬я┤я┌п╟ п╡"
 
 #: locale/datastrings.php:104
 msgid "e-mails from"
-msgstr "эл. письма от"
+msgstr "я█п╩. п©п╦я│я▄п╪п╟ п╬я┌"
 
 #: locale/datastrings.php:105
 msgid "e-mails to"
-msgstr "эл. письма в"
+msgstr "я█п╩. п©п╦я│я▄п╪п╟ п╡"
 
 #: locale/datastrings.php:106
 msgid "fax from"
-msgstr "факс от"
+msgstr "я└п╟п╨я│ п╬я┌"
 
 #: locale/datastrings.php:107
 msgid "fax to"
-msgstr "факс в"
+msgstr "я└п╟п╨я│ п╡"
 
 #: locale/datastrings.php:108
 msgid "faxes from"
-msgstr "факсы от"
+msgstr "я└п╟п╨я│я▀ п╬я┌"
 
 #: locale/datastrings.php:109
 msgid "faxes to"
-msgstr "факсы в"
+msgstr "я└п╟п╨я│я▀ п╡"
 
 #: locale/datastrings.php:110
 msgid "internal"
-msgstr "внутренний"
+msgstr "п╡п╫я┐я┌я─п╣п╫п╫п╦п╧"
 
 #: locale/datastrings.php:111
 msgid "letter from"
-msgstr "письмо от"
+msgstr "п©п╦я│я▄п╪п╬ п╬я┌"
 
 #: locale/datastrings.php:112
 msgid "letter to"
-msgstr "письмо в"
+msgstr "п©п╦я│я▄п╪п╬ п╡"
 
 #: admin/import/import-companies.php:95
 msgid "pipe"
-msgstr "труба (?)"
+msgstr "п╢п╣я└п╦я│"
 
 #: locale/datastrings.php:113
 msgid "process"
-msgstr "процесс"
+msgstr "п©я─п╬я├п╣я│я│"
 
 #: admin/import/import-companies.php:96
 msgid "semi-colon"
-msgstr "точка с запятой"
+msgstr "я┌п╬я┤п╨п╟ я│ п╥п╟п©я▐я┌п╬п╧"
 
 #: admin/import/import-companies.php:94
 msgid "tab"
-msgstr "tab"
+msgstr "п╒п╟п╠я┐п╩я▐я├п╦я▐"
 
 #: admin/case-statuses/some.php:42
 msgid "up"
-msgstr "вверх"
+msgstr "п╡п╡п╣я─я┘"
 
