@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.24 2004/07/13 19:52:37 braverock Exp $
+ * $Id: edit-2.php,v 1.25 2004/07/14 15:22:17 cpsource Exp $
  */
 
 //include required files
@@ -20,27 +20,30 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
-$return_url = $_POST['return_url'];
-$activity_id = $_POST['activity_id'];
-$activity_type_id = $_POST['activity_type_id'];
-$contact_id = $_POST['contact_id'];
-$activity_title = $_POST['activity_title'];
-$activity_description = $_POST['activity_description'];
+// get all posted data
+$return_url              = $_POST['return_url'];
+$activity_id             = $_POST['activity_id'];
+$activity_type_id        = $_POST['activity_type_id'];
+$contact_id              = $_POST['contact_id'];
+$activity_title          = $_POST['activity_title'];
+$activity_description    = $_POST['activity_description'];
 $opportunity_description = $_POST['opportunity_description'];
-$scheduled_at = $_POST['scheduled_at'];
-$ends_at = $_POST['ends_at'];
-$activity_status = $_POST['activity_status'];
+$scheduled_at            = $_POST['scheduled_at'];
+$ends_at                 = $_POST['ends_at'];
+$activity_status         = $_POST['activity_status'];
 $current_activity_status = $_POST['current_activity_status'];
-$user_id    = $_POST['user_id'];
-$followup   = $_POST['followup'];
-$saveandnext = $_POST['saveandnext'];
-$on_what_table = $_POST['on_what_table'];
-$on_what_id = $_POST['on_what_id'];
-$company_id = $_POST['company_id'];
-$email_to = $_POST['email_to'];
-$table_name = $_POST['table_name'];
-$table_status_id = $_POST['table_status_id'];
-$probability = $_POST['probability'];
+$user_id                 = $_POST['user_id'];
+$on_what_table           = $_POST['on_what_table'];
+$on_what_id              = $_POST['on_what_id'];
+$company_id              = $_POST['company_id'];
+$email_to                = $_POST['email_to'];
+$table_name              = $_POST['table_name'];
+$table_status_id         = $_POST['table_status_id'];
+
+// optionally posted data
+$probability             = isset($_POST['probability']) ? $_POST['probability'] : '';
+$followup                = isset($_POST['followup'])    ? $_POST['followup']    : '';
+$saveandnext             = isset($_POST['saveandnext']) ? $_POST['saveandnext'] : '';
 
 //mark this activity as completed if follow up is to be scheduled
 if ($followup) { $activity_status = 'c'; }
@@ -376,6 +379,14 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.25  2004/07/14 15:22:17  cpsource
+ * - Fixed various undefines, including:
+ *     $opportunity_description
+ *     $followup
+ *     $saveandnext
+ *     $table_status_id
+ *     $probability
+ *
  * Revision 1.24  2004/07/13 19:52:37  braverock
  * - add ability to process activity association to open Opportunity/Case
  *   for unassociated activities based on $associate_activities global

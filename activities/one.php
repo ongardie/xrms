@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.34 2004/07/11 15:12:40 braverock Exp $
+ * $Id: one.php,v 1.35 2004/07/14 15:22:17 cpsource Exp $
  */
 
 //include required files
@@ -17,9 +17,9 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
-$msg = $_GET['msg'];
-$activity_id = $_GET['activity_id'];
-$return_url = $_GET['return_url'];
+$msg         = isset($_GET['msg']) ? $_GET['msg'] : '';
+$activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
+$return_url  = isset($_GET['return_url']) ? $_GET['return_url'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -158,6 +158,7 @@ else {
 
 
 //Check if activity is linked to something, then generate a SQL statement
+$table_status_id = '';
 if ($is_linked) {
     $sql = "select ".$table_name."_id,
             ".$table_name."_statuses.".$table_name."_status_pretty_name,
@@ -195,6 +196,8 @@ if ($is_linked) {
 // add_audit_item($con, $session_user_id, 'viewed', $table_name, $table_status_id, 3);
 
 $table_name=ucwords($table_name);
+
+$opportunity_description = '';
 
 if($on_what_table == 'opportunities') {
     $sql = "select opportunity_description from opportunities where opportunity_id='$on_what_id'";
@@ -245,6 +248,8 @@ function logTime() {
         <input type=hidden name=on_what_table value="<?php  echo $on_what_table; ?>">
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
         <input type=hidden name=table_name value="<?php echo $table_name ?>">
+        <input type=hidden name=table_status_id value="<?php echo $table_status_id ?>">
+        <input type=hidden name=opportunity_description value="<?php echo $opportunity_description ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -398,6 +403,14 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.35  2004/07/14 15:22:17  cpsource
+ * - Fixed various undefines, including:
+ *     $opportunity_description
+ *     $followup
+ *     $saveandnext
+ *     $table_status_id
+ *     $probability
+ *
  * Revision 1.34  2004/07/11 15:12:40  braverock
  * - Change 'Description' to 'Activity Notes' for consistency
  *
