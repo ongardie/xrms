@@ -1,5 +1,13 @@
 <?php
+/**
+ * Search for and Display Multiple Contacts
+ *
+ * This is the main interface for locating Contacts in XRMS
+ *
+ * $Id: some.php,v 1.5 2004/03/09 21:45:34 braverock Exp $
+ */
 
+//include the standard files
 require_once('../include-locations.inc');
 
 require_once($include_directory . 'vars.php');
@@ -25,6 +33,7 @@ if ($clear) {
     $title = '';
     $description = '';
     $company_name = '';
+    $company_code = '';
     $company_type_id = '';
     $user_id = '';
 } elseif ($use_post_vars) {
@@ -37,6 +46,7 @@ if ($clear) {
     $title = $_POST['title'];
     $description = $_POST['description'];
     $company_name = $_POST['company_name'];
+    $company_code = $_POST['company_code'];
     $company_type_id = $_POST['company_type_id'];
     $user_id = $_POST['user_id'];
 } else {
@@ -49,6 +59,7 @@ if ($clear) {
     $title = $_SESSION['contacts_title'];
     $description = $_SESSION['contacts_description'];
     $company_name = (strlen($_GET['company_name']) > 0) ? $_GET['company_name'] : $_SESSION['contacts_company_name'];
+    $company_code = (strlen($_GET['company_code']) > 0) ? $_GET['company_code'] : $_SESSION['contacts_company_code'];
     $company_type_id = $_SESSION['contacts_company_type_id'];
     $user_id = $_SESSION['contacts_user_id'];
 }
@@ -75,6 +86,7 @@ $_SESSION['contacts_current_sort_column'] = $sort_column;
 $_SESSION['contacts_sort_order'] = $sort_order;
 $_SESSION['contacts_current_sort_order'] = $sort_order;
 $_SESSION['contacts_company_name'] = $company_name;
+$_SESSION['contacts_company_code'] = $company_code;
 $_SESSION['contacts_last_name'] = $last_name;
 $_SESSION['contacts_first_names'] = $first_names;
 $_SESSION['contacts_title'] = $title;
@@ -87,7 +99,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
-$sql = "select concat('<a href=one.php?contact_id=', cont.contact_id, '>', cont.first_names, ' ', cont.last_name, '</a>') as 'Name', concat('<a href=../companies/one.php?company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company', title as 'Title', description as 'Description', work_phone as 'Phone', concat('<a href=mailto:',cont.email,'>',cont.email, '</a>') as 'E-Mail', u.username as 'Owner' ";
+$sql = "select concat('<a href=one.php?contact_id=', cont.contact_id, '>', cont.first_names, ' ', cont.last_name, '</a>') as 'Name', concat('<a href=../companies/one.php?company_id=', c.company_id, '>', c.company_name, '</a>') as 'Company', company_code as 'Code', title as 'Title', description as 'Description', work_phone as 'Phone', concat('<a href=mailto:',cont.email,'>',cont.email, '</a>') as 'E-Mail', u.username as 'Owner' ";
 
 $from = "from contacts cont, companies c, users u ";
 
@@ -120,6 +132,11 @@ if (strlen($description) > 0) {
 if (strlen($company_name) > 0) {
     $criteria_count++;
     $where .= " and c.company_name like " . $con->qstr($company_name . '%', get_magic_quotes_gpc());
+}
+
+if (strlen($company_code) > 0) {
+    $criteria_count++;
+    $where .= " and c.company_code like " . $con->qstr($company_code, get_magic_quotes_gpc());
 }
 
 if (strlen($user_id) > 0) {
@@ -197,26 +214,28 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1 width=100%>
             <tr>
-                <td class=widget_header colspan=6>Search Criteria</td>
+                <td class=widget_header colspan=7>Search Criteria</td>
             </tr>
             <tr>
                 <td class=widget_label>Last Name</td>
                 <td class=widget_label>First Names</td>
                 <td class=widget_label>Title</td>
-                <td class=widget_label>Description</td>
                 <td class=widget_label>Company</td>
+                <td class=widget_label>Company Code</td>
+                <td class=widget_label>Description</td>
                 <td class=widget_label>Owner</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name="last_name" size=12 value="<?php  echo $last_name; ?>"></td>
                 <td class=widget_content_form_element><input type=text name="first_names" size=12 value="<?php  echo $first_names; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="title" size=12 value="<?php  echo $title; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="description" size=12 value="<?php  echo $description; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="title" size=15 value="<?php  echo $title; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_code" size=5 value="<?php  echo $company_code; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="description" size=15 value="<?php  echo $description; ?>"></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=6><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
+                <td class=widget_content_form_element colspan=7><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
             </tr>
         </table>
         </form>
@@ -287,4 +306,15 @@ function resort(sortColumn) {
 //-->
 </script>
 
-<?php end_page();; ?>
+<?php
+
+end_page();
+
+/**
+ * $Log: some.php,v $
+ * Revision 1.5  2004/03/09 21:45:34  braverock
+ * - added search for company code
+ * - patch provided by Thibaut Midon (SF: tjm-fc)
+ *
+ */
+?>
