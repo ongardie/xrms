@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.11 2004/10/13 07:59:16 niclowe Exp $
+ * $Id: edit-2.php,v 1.12 2004/12/30 19:06:58 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,7 +44,11 @@ $rec['email']           = $email;
 $rec['gmt_offset']      = $gmt_offset;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+$rst = $con->execute($upd);
+
+if(!$rst) {
+    db_error_handler($con, $upd);
+}
 
 add_audit_item($con, $session_user_id, 'updated', 'users', $edit_user_id, 1);
 
@@ -58,6 +62,10 @@ header("Location: self.php?msg=saved");
 
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.12  2004/12/30 19:06:58  braverock
+ *- add db_error_handler
+ *- patch provided by Ozgur Cayci
+ *
  *Revision 1.11  2004/10/13 07:59:16  niclowe
  *fixed bug  1003428
  *
@@ -96,8 +104,5 @@ header("Location: self.php?msg=saved");
  *Revision 1.3  2004/03/12 16:34:31  maulani
  *- Add audit trail
  *- Add phpdoc
- *
- *
- *
  */
 ?>

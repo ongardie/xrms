@@ -2,7 +2,7 @@
 /**
  * commit a new user to the Database
  *
- * $Id: add-2.php,v 1.7 2004/07/16 23:51:38 cpsource Exp $
+ * $Id: add-2.php,v 1.8 2004/12/30 19:06:26 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -41,7 +41,11 @@ $rec['language'] = 'english';
 
 $tbl = 'users';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con->execute($ins);
+$rst = $con->execute($ins);
+
+if(!$rst) {
+    db_error_handler($con, $ins);
+}
 
 $con->close();
 
@@ -49,6 +53,10 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.8  2004/12/30 19:06:26  braverock
+ * - add db_error_handler
+ * - patch provided by Ozgur Cayci
+ *
  * Revision 1.7  2004/07/16 23:51:38  cpsource
  * - require session_check ( 'Admin' )
  *
