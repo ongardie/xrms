@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.48 2004/07/08 19:42:32 neildogg Exp $
+ * $Id: one.php,v 1.49 2004/07/09 15:41:14 neildogg Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -304,7 +304,10 @@ $opportunity_limit_sql = "and opportunities.".$on_what_string."_id = $on_what_id
 require_once("../opportunities/sidebar.php");
 
 //include the contacts-companies sidebar
-require_once("../companies/company-sidebar.php");
+$relationship_name = "company link";
+$working_direction = "to";
+$to_what_id = $company_id;
+require_once("../relationships/sidebar.php");
 
 
 //include the files sidebar
@@ -637,7 +640,7 @@ function openNewsWindow() {
         <?php echo $case_rows; ?>
 
         <!-- contact/company //-->
-        <?php echo $company_link_rows; ?>
+        <?php echo $relationship_link_rows; ?>
 
         <!-- notes //-->
         <?php echo $note_rows; ?>
@@ -670,6 +673,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.49  2004/07/09 15:41:14  neildogg
+ * - Uses the new, generic relationship sidebar
+ *
  * Revision 1.48  2004/07/08 19:42:32  neildogg
  * Added Contacts count
  *
