@@ -2,7 +2,7 @@
 /**
  * Common Include file for XRMS Info Plugin
  *
- * $Id: info.inc,v 1.2 2005/02/11 13:49:46 braverock Exp $
+ * $Id: info.inc,v 1.3 2005/02/11 13:52:39 braverock Exp $
  */
  
 # How checkboxes values should be shown
@@ -10,7 +10,7 @@ $checkbox_set = _("yes");
 $checkbox_clear = _("no");
 
 # Titles
-$info_info_heading = _("Information");
+$info_heading = _("Information");
 $info_list = _("List");
 $info_heading = _("Item");
 $company_heading = _("Company");
@@ -29,6 +29,9 @@ $sort_by_companyname = false;
 
 /**
  * $Log: info.inc,v $
+ * Revision 1.3  2005/02/11 13:52:39  braverock
+ * - change info_info_heading to info_heading
+ *
  * Revision 1.2  2005/02/11 13:49:46  braverock
  * - add phpdoc
  * - remove references to server_info and replace with just info
