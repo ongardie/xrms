@@ -21,7 +21,6 @@ if ($rst) {
 	
     $user_type_id = $rst->fields['user_type_id'];
 	$username = $rst->fields['username'];
-	$password = $rst->fields['password'];
 	$first_names = $rst->fields['first_names'];
 	$last_name = $rst->fields['last_name'];
 	$email = $rst->fields['email'];
@@ -70,10 +69,6 @@ start_page($page_title);
 				<td class=widget_content_form_element><input type=text name=username value="<?php  echo $username; ?>"></td>
 			</tr>
 			<tr>
-				<td class=widget_label_right>Password</td>
-				<td class=widget_content_form_element><input type=password name=password value="<?php  echo $password; ?>"></td>
-			</tr>
-			<tr>
 				<td class=widget_label_right>E-Mail</td>
 				<td class=widget_content_form_element><input type=text size=40 name=email value="<?php  echo $email; ?>"></td>
 			</tr>
@@ -86,7 +81,7 @@ start_page($page_title);
 				<td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
 			</tr>
 			<tr>
-				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+				<td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"> <input class=button type=button onclick="javascript: location.href='change-password.php?user_id=<?php echo $user_id ?>';" value="Change Password"></td>
 			</tr>
 		</table>
 		</form>
