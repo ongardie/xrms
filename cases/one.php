@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.16 2004/07/21 21:04:29 neildogg Exp $
+ * $Id: one.php,v 1.17 2004/07/25 13:23:05 johnfawcett Exp $
  */
 
 //include required files
@@ -206,7 +206,7 @@ if (strlen($categories) == 0) {
     $categories = "No categories";
 }
 
-$page_title = _("Case #") . $case_id . _(": ") . $case_title;
+$page_title = _("Case #") . $case_id . ": " . $case_title;
 start_page($page_title, true, $msg);
 
 ?>
@@ -372,6 +372,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.17  2004/07/25 13:23:05  johnfawcett
+ * - removed punctuation form gettext call
+ *
  * Revision 1.16  2004/07/21 21:04:29  neildogg
  * - Added get_formatted_phone
  *
