@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.45 2004/07/14 11:50:50 cpsource Exp $
+ * $Id: utils-misc.php,v 1.46 2004/07/14 16:21:23 maulani Exp $
  */
 
 /**
@@ -531,7 +531,7 @@ function set_system_parameter(&$con, $param, $new_val) {
         //there was a problem, notify the user
         db_error_handler ($con, $sql);
     }
-    $sql ="update system_parameters set $myfield=$set_val where param_id='$param'";
+    $sql ="update system_parameters set $my_field=$set_val where param_id='$param'";
     $sysst = $con->execute($sql);
     if (!$sysst){
         //there was a problem, notify the user
@@ -695,6 +695,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.46  2004/07/14 16:21:23  maulani
+ * - Fix sql bug (typo) in set_system_parameters routine
+ *
  * Revision 1.45  2004/07/14 11:50:50  cpsource
  * - Added security feature IN_XRMS
  *
