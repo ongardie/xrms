@@ -7,7 +7,7 @@
  *
  * @author Chris Woofter
  *
- * $Id: utils-misc.php,v 1.6 2004/02/01 00:36:08 braverock Exp $
+ * $Id: utils-misc.php,v 1.7 2004/02/01 00:45:41 braverock Exp $
  */
 
 /**
@@ -205,9 +205,59 @@ function getGlobalVar( &$value, $name ) {
 }
 
 /**
+ * Find company id from company name
+ * to see if the company exists before adding it
+ *
+ * @param  handle  $con database connection
+ * @param  string  $company_name to search for
+ * @return integer $company_id found ID or 0 (ZERO) if no match
+ */
+function fetch_company_id($con, $company_name) {
+
+    $sql_fetch_company_id = "select company_id from companies where company_name = " . $con->qstr($company_name, get_magic_quotes_gpc());
+    $rst_company_id = $con->execute($sql_fetch_company_id);
+    if ($rst_company_id) {
+        $company_id = $rst_company_id->fields['company_id'];
+        $rst_company_id->close();
+    } else {
+        $company_id = 0;
+    }
+
+    return $company_id;
+}
+
+/**
+ * Find the appropriate default address for an
+ * existing company so that contacts have it set properly
+ *
+ * @param  handle  $con database connection
+ * @param  integer $company_id to search for
+ * @return integer $address_id found ID or 1 if no match
+ */
+function fetch_default_address($con, $company_id) {
+
+    $sql_fetch_address_id = "select default_primary_address from companies where company_id = $company_id";
+    $rst_address_id = $con->execute($sql_fetch_address_id);
+    if ($rst_address_id) {
+        $address_id = $rst_address_id->fields['default_primary_address'];
+        $rst_address_id->close();
+    } else {
+        $address_id = 1;
+    }
+
+    return $address_id;
+}
+
+/**
  * $Log: utils-misc.php,v $
+ * Revision 1.7  2004/02/01 00:45:41  braverock
+ * added Chris's fetch_company_id and fetch_default_address fns
+ *
  * Revision 1.6  2004/02/01 00:36:08  braverock
  * improved sql formatting of update_recent_items fn sql
+ *
+ * Revision 1.5  2004/01/30 21:09:45  cdwtech
+ * update_recent_items was broken
  *
  * Revision 1.4  2004/01/26 19:24:51  braverock
  * - added getGlobalVar fn
