@@ -25,6 +25,6 @@ $con->execute($sql);
 
 $con->close();
 
-header("Location: one.php?case_id=$case_id");
+header("Location: categories.php?case_id=$case_id");
 
 ?>
