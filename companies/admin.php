@@ -2,7 +2,7 @@
 /**
  * Set admin items for a company
  *
- * $Id: admin.php,v 1.5 2004/06/12 05:03:16 introspectshun Exp $
+ * $Id: admin.php,v 1.6 2004/07/19 20:59:31 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,9 +16,9 @@ require_once($include_directory . 'adodb-params.php');
 // require_once($include_directory . 'phpgacl/gacl.class.php');
 
 $session_user_id = session_check();
-$msg = $_GET['msg'];
 
-$company_id = $_GET['company_id'];
+$msg        = isset($_GET['msg'])        ? $_GET['msg'] : '';
+$company_id = isset($_GET['company_id']) ? $_GET['company_id'] : '';
 
 // $gacl = new gacl();
 // $gacl_check = $gacl->acl_check('users', $session_user_id, 'company', 'view', 'companies', $company_id);
@@ -135,6 +135,9 @@ end_page();
 
 /**
  * $Log: admin.php,v $
+ * Revision 1.6  2004/07/19 20:59:31  cpsource
+ * - Fix undefined $msg
+ *
  * Revision 1.5  2004/06/12 05:03:16  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  * - Corrected order of arguments to implode() function.
