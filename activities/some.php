@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.43 2004/07/22 22:00:24 introspectshun Exp $
+ * $Id: some.php,v 1.44 2004/07/22 23:48:25 braverock Exp $
  */
 
 // handle includes
@@ -19,6 +19,7 @@ require_once($include_directory . 'adodb-params.php');
 
 // create session
 $session_user_id = session_check();
+error_reporting ('E_ALL');
 
 // Start connection
 $con = &adonewconnection($xrms_db_dbtype);
@@ -85,16 +86,12 @@ $arr_vars = array ( // local var name       // session variable name
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
 
-// TBD - BUG - search date hack !!!
-// $search_date = date('Y-m-d', time());     
-// I don't know what the bug is, but this creates a relative search
-//  so that it can be used as a recurring search. Neat, huh?
 // (introspectshun) Updated to use portable database code; removed MySQL-centric date functions
 // This will work for positive and negative intervals automatically, so no need for conditional assignment of offset
 // (a search for today will add an interval of '0 days')
 // Warning: if a user wants to save a search for a particular date, this won't allow it, as it defaults to recurring search
 $day_diff = (strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400;
-$curdate = $con->DBTimeStamp;
+$curdate = $con->DBTimeStamp();
 $offset = $con->OffsetDate($day_diff, $curdate);
 
 if (!strlen($sort_column) > 0) {
@@ -281,42 +278,6 @@ if($rst->rowcount()) {
     $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
 }
 
-// Stub out $open_activities is never used. The ENTIRE code base
-// was searched and $open_activities NEVER appears outside what
-// was stubbed.
-//
-// Note (1):
-//
-//      If you're going to see if a string contains
-//      data, you're better off doing:
-//
-//        if ( !$open_activities ) {
-//           ... string is 0 length ...
-//
-//      as you don't waste the time calculating the
-//      length of the string.
-//
-// Note (2):
-//
-//      Remember that doing something like:
-//
-//         !strlen($open_activities) > 0
-//
-//     first calculates the length of the string
-//     then NOT's it
-//     then compares to see if the NOT'ed result is > 0
-//
-//     The author probably intended to do
-//
-//        !(strlen($open_activities) > 0)
-//
-//     which is just as bad from an efficiency point of view.
-//
-//check to see if $open_activities record set is empty
-//if (!strlen($open_activities) > 0) {
-//    $open_activities = "<tr><td class=widget_content colspan=5>No open activities</td></tr>";
-//}
-
 add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 
 //debug
@@ -411,7 +372,7 @@ start_page($page_title, true, $msg);
                 </td>
                 <td class=widget_content_form_element colspan="2"> 
                     <input type=text name="saved_title" size=24> 
-                    <?php if($_SESSION['role_short_name'] === 'Admin') { echo _("Add to Everyone"); ?> <input type=checkbox name="group_item" value=1><? } ?>
+                    <?php if($_SESSION['role_short_name'] === 'Admin') { echo _("Add to Everyone"); ?> <input type=checkbox name="group_item" value=1><?php } ?>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=4><input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
@@ -495,6 +456,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.44  2004/07/22 23:48:25  braverock
+ * - fixed a short php tag that was causing a parse error
+ * - removed a bunch of stubbed out useless code
+ *
  * Revision 1.43  2004/07/22 22:00:24  introspectshun
  * - Updated date offset logic to use portable database code
  *   - Removed MySQL-centric date functions and conditional block
@@ -641,6 +606,5 @@ end_page();
  * - display search results using adodb pager for consistency
  * - allow export of search results as CSV file
  *   - modified files submitted by Olivier Collonna of Fontaine Consulting
- *
  */
 ?>
