@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: ControlledObjectRelationship_list.php,v 1.2 2005/02/14 23:43:49 vanmer Exp $
+ * $Id: ControlledObjectRelationship_list.php,v 1.3 2005/02/15 19:43:14 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -62,8 +62,8 @@ $order_by .= " $sort_order";
 // end sorted columns stuff
 
 
-$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_ControlledObjectRelationship.php?form_action=edit&return_url=ControlledObjectRelationship_list.php&ControlledObjectRelationship_id="), 'ControlledObjectRelationship_id', $con->qstr("'\">")) . "AS LINK, 
-ControlledObjectRelationship_id as ID,
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_ControlledObjectRelationship.php?form_action=edit&return_url=ControlledObjectRelationship_list.php&CORelationship_id="), 'CORelationship_id', $con->qstr("'\">")) . "AS LINK, 
+CORelationship_id as ID,
 Child.ControlledObject_name as 'Child Object', 
 Parent.ControlledObject_name as 'Parent Object' 
 FROM ControlledObjectRelationship LEFT OUTER JOIN ControlledObject AS Parent ON Parent.ControlledObject_id=ControlledObjectRelationship.ParentControlledObject_id
@@ -122,6 +122,9 @@ end_page();
 
 /**
  * $Log: ControlledObjectRelationship_list.php,v $
+ * Revision 1.3  2005/02/15 19:43:14  vanmer
+ * - altered to reflect new fieldnames
+ *
  * Revision 1.2  2005/02/14 23:43:49  vanmer
  * -requoted strings in sql statement
  *
