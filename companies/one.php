@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.87 2005/01/25 21:56:01 daturaarutad Exp $
+ * $Id: one.php,v 1.88 2005/01/28 23:05:57 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -194,8 +194,10 @@ elseif ($division_rst->numRows()>0) {
 TILLEND;
 
     $division_select.=$division_rst->getmenu2('division_id',$division_id, true, false, 1, "id=division_id onchange=javascript:restrictByDivision();");
+    if ($division_id) {
+        $division_select.="&nbsp; <input class=button type=button value=\"". _("Administer Division")."\" onclick=\"javascript:location.href='http://localhost/xrms/companies/edit-division.php?company_id=$company_id&division_id=$division_id';\">";
+    }
 } else { $division_select=false; }
-
 //
 //  list of most recent activities
 //
@@ -691,7 +693,12 @@ function openNewsWindow() {
                 <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=company&company_id=<?php echo $company_id; ?>';">
                 <input class=button type=button value="<?php echo _("News"); ?>" onclick="javascript: openNewsWindow();">
                 <input class=button type=button value="<?php echo _("Addresses"); ?>" onclick="javascript: location.href='addresses.php?company_id=<?php echo $company_id; ?>';">
+                <?php
+                    if (!$division_id) {
+                        //only show the Division button if we are not already scoped by Division
+                ?>    
                 <input class=button type=button value="<?php echo _("Divisions"); ?>" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
+                <?php } //end Division button check ?>
                 <?php do_hook('company_buttons'); ?>
                 </td>
             </tr>
@@ -823,6 +830,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.88  2005/01/28 23:05:57  braverock
+ * - show the correct button for editing divisions depending on division scoping
+ *
  * Revision 1.87  2005/01/25 21:56:01  daturaarutad
  * fixed bug when adding an activity to a company
  *
