@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.30 2005/01/11 13:39:59 braverock Exp $
+ * $Id: one.php,v 1.31 2005/01/11 13:57:24 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -303,7 +303,7 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Status"); ?></td>
                                     <td class=clear>
                                         <?php  echo $opportunity_status_display_html; ?>
-                                        <a href="javascript:window.open('opportunity-view.php');"><?php echo _("Status Definitions"); ?></a>
+                                        <a href="#" onclick="javascript:window.open('opportunity-view.php');"><?php echo _("Status Definitions"); ?></a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -447,6 +447,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.31  2005/01/11 13:57:24  braverock
+ * - removed bad javascript window.open hack - now set empty anchor on current page
+ *
  * Revision 1.30  2005/01/11 13:39:59  braverock
  * - removed on_what_string hack, changed to use standard make_singular function
  *
