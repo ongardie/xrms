@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.40 2005/02/14 21:48:17 vanmer Exp $
+ * $Id: some.php,v 1.41 2005/02/16 16:15:27 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -107,7 +107,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     $acl_id_list=acl_get_list($session_user_id, 'Read', false, $on_what_table);
     //print_r($acl_id_list);
     if ($acl_id_list) {
-        if ($list!==true) {
+        if ($acl_id_list!==true) {
             $acl_id_list=implode(",",$acl_id_list);
             $where .= " and opp.opportunity_id IN ($acl_id_list) ";
         }
@@ -233,9 +233,6 @@ start_page($page_title, true, $msg);
 
 $_SESSION['search_sql']=$sql;
 
-
-//SELECT CONCAT('<a id="',opp.opportunity_title,'" href="one.php?opportunity_id=',opp.opportunity_id,'">',opp.opportunity_title,'</a>') AS 'Opportunity', c.company_name AS 'Company', u.username AS 'Owner', CASE WHEN (opp.size > 0) THEN opp.size ELSE 0 END AS 'Opportunity Size', CASE WHEN (opp.size > 0) THEN ((opp.size * opp.probability) / 100) ELSE 0 END AS 'Weighted Size', os.opportunity_status_pretty_name AS 'Status', DATE_FORMAT(close_at,'%Y-%b-%d') AS 'Close Date' FROM companies c, opportunities opp, opportunity_statuses os, users u ,contacts cont where opp.opportunity_status_id = os.opportunity_status_id and opp.company_id = c.company_id and opp.user_id = u.user_id and opportunity_record_status = 'a' and cont.contact_id=opp.contact_id and opp.opportunity_id IN
-
 $owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user_id)", "')'") . ", u.user_id $from $where group by u.username order by u.username";
 
 $owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
@@ -244,9 +241,6 @@ $owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
 $status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name", "' ('", "count(os.opportunity_status_id)", "')'") . ", os.opportunity_status_id $from $where group by os.opportunity_status_id order by os.opportunity_status_pretty_name";
 
 $status_query_select = $sql . 'AND os.opportunity_status_id = XXX-value-XXX';
-
-//echo htmlentities($group_query_list);
-//echo htmlentities($group_query_select);
 
 $columns = array();
 $columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity');
@@ -344,6 +338,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.41  2005/02/16 16:15:27  daturaarutad
+ * fixed a bug $list should have been $acl_id_list, removed some commented out lines
+ *
  * Revision 1.40  2005/02/14 21:48:17  vanmer
  * - updated to reflect speed changes in ACL operation
  *
