@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.11 2004/09/02 23:34:26 maulani Exp $
+ * $Id: completed-items.php,v 1.12 2005/01/03 06:37:19 ebullient Exp $
  */
 require_once('../include-locations.inc');
 
@@ -63,9 +63,8 @@ $rst->close();
 <?php
 if (($display) || (!$friendly)) {
     echo "
-<p>&nbsp;</p>
+<form action=completed-items.php method=get>
 <table>
-    <form action=completed-items.php method=get>
     <input type=hidden name=display value=y>
     <tr>
         <th align=left>" . _("Start") . "</th>
@@ -157,8 +156,8 @@ if (($display) || (!$friendly)) {
             </td>
         </tr>
     </table>
-    <p>&nbsp;</p>
-    ";
+</form>
+    <p>&nbsp;</p>".'<div id="report">';
 }
 ?>
 
@@ -384,11 +383,15 @@ else {
     echo $output;
 }
 if (($display) || (!$friendly)) {
+    echo '</div>';
     end_page();
 }
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.12  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.11  2004/09/02 23:34:26  maulani
  * - Fix syntax error
  * - Eliminate deleted users from all users report

@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: activitytimes.php,v 1.5 2004/07/20 18:36:57 introspectshun Exp $
+ * $Id: activitytimes.php,v 1.6 2005/01/03 06:37:19 ebullient Exp $
  */
 require_once('../include-locations.inc');
 
@@ -46,6 +46,7 @@ $user_menu = $rst->getmenu2('user_id', $user_id, false);
 $rst->close();
 ?>
 
+<form action="activitytimes.php" method=post>
 <table>
     <tr>
         <th><?php echo _("Start"); ?></th>
@@ -54,16 +55,16 @@ $rst->close();
         <th></th>
     </tr>
         <tr>
-            <form action="activitytimes.php" method=post>
                 <td><input type=text name=starting value="<?php  echo $starting; ?>"></td>
                 <td><input type=text name=ending value="<?php  echo $ending; ?>"></td>
                 <td><?php echo $user_menu; ?></td>
             <td><input type=checkbox name=only_show_completed value="true" <?php  echo $checked_only_show_completed; ?>><?php echo _("Only show completed activities"); ?></input></td>
             <td><input class=button type=submit value="<?php echo _("Go"); ?>"></td>
-            </form>
         </tr>
 </table>
-<p>&nbsp;</p>
+</form>
+
+<div id="report">
 
 <?php
 if ($user_id) {
@@ -121,7 +122,7 @@ if ($user_id) {
     echo "<tr><td></td><td align=right><strong>" . _("TOTAL") . "</strong><td><strong>" . formatSeconds($total_time) . "</strong> ($total_time sec)</td><td></td><td></td><td></td></tr>\n";
     echo "</table>";
 }
-
+echo "</div>\n";
 end_page();
 
 function calcDateDiff( $date1, $date2 ) {
@@ -180,6 +181,9 @@ function formatSeconds( $diff ) {
 
 /**
  * $Log: activitytimes.php,v $
+ * Revision 1.6  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.5  2004/07/20 18:36:57  introspectshun
  * - Localized strings for i18n/translation support
  *

@@ -2,7 +2,7 @@
 /**
  * @author Glenn Powers
  *
- * $Id: open-items.php,v 1.15 2005/01/03 04:38:13 ebullient Exp $
+ * $Id: open-items.php,v 1.16 2005/01/03 06:37:19 ebullient Exp $
  */
 require_once('../include-locations.inc');
 
@@ -50,8 +50,8 @@ $rst->close();
 <?php
 if (($display) || (!$friendly)) {
     echo "
+<form action=open-items.php method=get>
 <table>
-    <form action=open-items.php method=get>
     <input type=hidden name=display value=y>
     <tr>
         <th>" . _("User") . "</th>
@@ -138,11 +138,11 @@ echo ">" . _("Cases") . "</option>
             <td>
                 <input name=send_email_to type=text value=" . $send_email_to . ">
             </td>
-
-    </form>
 </table>
+</form>
 <p>&nbsp;</p>
     ";
+    echo '<div id="report">';
 }
 ?>
 
@@ -330,7 +330,7 @@ foreach ($userArray as $key => $user_id) {
             $output .= "        <th align=left>" . _("Case") . "</th>";
             $output .= "    </tr>";
             $output .= "<tr><td colspan=5><hr></td></tr>\n";
-            if ($rst-NumRows()>0 ) {
+            if ($rst->NumRows()>0 ) {
                 while (!$rst->EOF) {
                     $output .= "<tr>\n<td>" . $rst->fields['entered_at'] . "&nbsp;&nbsp;&nbsp;</td>\n";
                     $output .= "<td>" . $rst->fields['due_at'] . "&nbsp;&nbsp;</td>\n";
@@ -376,11 +376,15 @@ else {
 }
 
 if (($display) || (!$friendly)) {
+    echo '</div>';
     end_page();
 }
 
 /**
  * $Log: open-items.php,v $
+ * Revision 1.16  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.15  2005/01/03 04:38:13  ebullient
  * missing {
  *

@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.7 2004/12/30 21:56:17 braverock Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.8 2005/01/03 06:37:19 ebullient Exp $
  */
 
 require_once('../include-locations.inc');
@@ -87,14 +87,11 @@ start_page($page_title, true, $msg);
 <script language="javascript" src="../js/graph.js"></script>
 
 <div id="Main">
-    <div id="Content">
+    <div id="ContentFullWidth">
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header><?php echo _("Opportunities (Size) by Status"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_center><?php echo _("Opportunities (Size) by Status"); ?></td>
+                <th class=widget_header><?php echo _("Opportunities (Size) by Status"); ?></th>
             </tr>
             <tr>
                 <td class=widget_content_graph>
@@ -123,13 +120,6 @@ start_page($page_title, true, $msg);
 
     </div>
 
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
-
 </div>
 
 <?php
@@ -138,6 +128,9 @@ end_page();
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.8  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.7  2004/12/30 21:56:17  braverock
  * - localize strings
  *

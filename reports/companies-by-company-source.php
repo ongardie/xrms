@@ -3,7 +3,7 @@
  *
  * Companies by company source report.
  *
- * $Id: companies-by-company-source.php,v 1.6 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: companies-by-company-source.php,v 1.7 2005/01/03 06:37:19 ebullient Exp $
  */
 
 require_once('../include-locations.inc');
@@ -64,14 +64,11 @@ start_page($page_title, true, $msg);
 <SCRIPT LANGUAGE="JavaScript1.2" SRC="<?php  echo $http_site_root; ?>/js/graph.js"></SCRIPT>
 
 <div id="Main">
-    <div id="Content">
+    <div id="ContentFullWidth">
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header><?php echo _("Companies by Source"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_center><?php echo _("Companies by Source"); ?></td>
+                <th class=widget_header><?php echo _("Companies by Source"); ?></th>
             </tr>
             <tr>
 
@@ -92,13 +89,6 @@ start_page($page_title, true, $msg);
 
     </div>
 
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
-
 </div>
 
 <?php
@@ -107,6 +97,9 @@ end_page();
 
 /**
  * $Log: companies-by-company-source.php,v $
+ * Revision 1.7  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.6  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *

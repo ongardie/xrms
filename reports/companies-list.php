@@ -101,9 +101,8 @@ $rst = $con->execute($sql);
 $crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, true);
 $rst->close();
 ?>
-
+<form action="companies-list.php" method=get>
 <table>
-    <form action="companies-list.php" method=get>
     <tr>
         <td><?php echo _("Company Name"); ?></td>
         <td><?php echo _("Owner"); ?></td>
@@ -131,14 +130,17 @@ $rst->close();
             <input class=button type=submit name="pdf" value="<?php echo _("PDF"); ?>">
         </td>
     </tr>
-    </form>
 </table>
+</form>
+
+<div id="report">
 <?php
 if ($go)
 {
     echo companies_list($con,$pdf,$name,$city,$state,$country,$user_id,$company_category_id,
             $company_source_id,$crm_status_id);
 }
+echo '</div>';
 end_page();
 exit;
 
@@ -328,6 +330,9 @@ function nbsp($in)
 
 /**
  * $Log: companies-list.php,v $
+ * Revision 1.7  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.6  2004/12/31 15:35:16  braverock
  * - add company source to search
  * - move buttons to be more visible

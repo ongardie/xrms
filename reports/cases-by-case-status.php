@@ -3,7 +3,7 @@
  *
  * Cases by case status report.
  *
- * $Id: cases-by-case-status.php,v 1.5 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: cases-by-case-status.php,v 1.6 2005/01/03 06:37:19 ebullient Exp $
  */
 
 require_once('../include-locations.inc');
@@ -64,14 +64,11 @@ start_page($page_title, true, $msg);
 <SCRIPT LANGUAGE="JavaScript1.2" SRC="<?php  echo $http_site_root; ?>/js/graph.js"></SCRIPT>
 
 <div id="Main">
-    <div id="Content">
+    <div id="ContentFullWidth">
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header><?php echo _("Cases by Status"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_center><?php echo _("Cases by Status"); ?></td>
+                <th class=widget_header><?php echo _("Cases by Status"); ?></th>
             </tr>
             <tr>
                 <td class=widget_content_graph>
@@ -89,13 +86,6 @@ start_page($page_title, true, $msg);
 
     </div>
 
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
-
 </div>
 
 <?php
@@ -104,6 +94,9 @@ end_page();
 
 /**
  * $Log: cases-by-case-status.php,v $
+ * Revision 1.6  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.5  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *

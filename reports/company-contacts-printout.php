@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: company-contacts-printout.php,v 1.9 2004/12/30 21:43:46 braverock Exp $
+ * $Id: company-contacts-printout.php,v 1.10 2005/01/03 06:37:19 ebullient Exp $
  */
 
 require_once('../include-locations.inc');
@@ -193,7 +193,6 @@ start_page($page_title, $show_navbar, $msg);
 ?>
 
 <div id="Main">
-    <div>
 
 <?php if ($show_navbar) { ?>
 
@@ -237,7 +236,7 @@ start_page($page_title, $show_navbar, $msg);
         </form>
 
 <?php } //end printer friendly check ?>
-
+    <div id="report">
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=3><?php echo _("Contacts for Companies"); ?></td>
@@ -341,6 +340,9 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.10  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.9  2004/12/30 21:43:46  braverock
  * - localize strings
  *

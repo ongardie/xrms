@@ -3,7 +3,7 @@
  *
  * Opportunities size by industry report.
  *
- * $Id: opportunities-size-by-industry.php,v 1.5 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: opportunities-size-by-industry.php,v 1.6 2005/01/03 06:37:19 ebullient Exp $
  */
 
 require_once('../include-locations.inc');
@@ -76,14 +76,11 @@ start_page($page_title, true, $msg);
 <script language="javascript" src="../js/graph.js"></script>
 
 <div id="Main">
-    <div id="Content">
+    <div id="ContentFullWidth">
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header><?php echo _("Opportunities (Size) by Industry"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_center><?php echo _("Opportunities (Size) by Industry"); ?></td>
+                <th class=widget_header><?php echo _("Opportunities (Size) by Industry"); ?></th>
             </tr>
             <tr>
 
@@ -105,13 +102,6 @@ start_page($page_title, true, $msg);
 
     </div>
 
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
-
 </div>
 
 <?php
@@ -120,6 +110,9 @@ end_page();
 
 /**
  * $Log: opportunities-size-by-industry.php,v $
+ * Revision 1.6  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.5  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *

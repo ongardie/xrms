@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: audit-items.php,v 1.7 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: audit-items.php,v 1.8 2005/01/03 06:37:19 ebullient Exp $
  */
 require_once('../include-locations.inc');
 
@@ -36,7 +36,6 @@ $rst = $con->execute($sql);
 $user_menu = $rst->getmenu2('user_id', '', false);
 $rst->close();
 ?>
-
 <form action="audit-items.php" method=get>
 <table>
     <tr>
@@ -63,6 +62,7 @@ $rst->close();
 </form>
 
 <p>&nbsp;</p>
+<div id="report">
 
 <?php
 if ($user_id) {
@@ -173,10 +173,14 @@ if ($user_id) {
     $con->close();
 }
 
+echo '</div>';
 end_page();
 
 /**
  * $Log: audit-items.php,v $
+ * Revision 1.8  2005/01/03 06:37:19  ebullient
+ * update reports - graphs centered on page, reports surrounded by divs
+ *
  * Revision 1.7  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *
