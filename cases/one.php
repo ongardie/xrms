@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.20 2004/07/30 11:02:14 cpsource Exp $
+ * $Id: one.php,v 1.21 2004/10/26 16:36:26 introspectshun Exp $
  */
 
 //include required files
@@ -134,30 +134,6 @@ if ($rst) {
     $rst->close();
 }
 
-$categories_sql = "select category_pretty_name
-from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
-where ecm.on_what_table = 'cases'
-and ecm.on_what_id = $case_id
-and ecm.category_id = c.category_id
-and cs.category_scope_id = ccsm.category_scope_id
-and c.category_id = ccsm.category_id
-and cs.on_what_table = 'cases'
-and category_record_status = 'a'
-order by category_pretty_name";
-
-$rst = $con->execute($categories_sql);
-$categories = array();
-
-if ($rst) {
-    while (!$rst->EOF) {
-        array_push($categories, $rst->fields['category_pretty_name']);
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-$categories = implode(', ', $categories);
-
 /*********************************/
 /*** Include the sidebar boxes ***/
 
@@ -165,6 +141,9 @@ $categories = implode(', ', $categories);
 $on_what_table = 'cases';
 $on_what_id = $case_id;
 $on_what_string = 'case';
+
+//include the categories sidebar
+require_once($include_directory . 'categories-sidebar.php');
 
 //include the Cases sidebar
 //$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
@@ -203,10 +182,6 @@ if ($rst) {
 }
 
 $con->close();
-
-if (strlen($categories) == 0) {
-    $categories = "No categories";
-}
 
 $page_title = _("Case #") . $case_id . ": " . $case_title;
 start_page($page_title, true, $msg);
@@ -347,17 +322,7 @@ start_page($page_title, true, $msg);
     <div id="Sidebar">
 
         <!-- categories //-->
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header><?php echo _("Categories"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><?php  echo $categories; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?case_id=<?php  echo $case_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
-            </tr>
-        </table>
+        <?php echo $category_rows; ?>
 
         <!-- notes //-->
         <?php echo $note_rows; ?>
@@ -374,6 +339,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.21  2004/10/26 16:36:26  introspectshun
+ * - Centralized category handling as sidebar
+ *
  * Revision 1.20  2004/07/30 11:02:14  cpsource
  * - Optionally define msg
  *   set default no_update flag to false in edit-2.php

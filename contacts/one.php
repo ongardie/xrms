@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries (e.g. addresses)
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.47 2004/10/21 05:58:18 gpowers Exp $
+ * $Id: one.php,v 1.48 2004/10/26 16:37:55 introspectshun Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -207,38 +207,16 @@ if ($division_id != '') {
     }
 } //end division select
 
-// associated with
-$categories_sql = "select category_display_html
-        from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
-        where ecm.on_what_table = 'contacts'
-        and ecm.on_what_id = $contact_id
-        and ecm.category_id = c.category_id
-        and cs.category_scope_id = ccsm.category_scope_id
-        and c.category_id = ccsm.category_id
-        and cs.on_what_table = 'contacts'
-        and category_record_status = 'a'
-        order by category_display_html";
-
-$rst = $con->execute($categories_sql);
-$categories = array();
-
-if ($rst) {
-    while (!$rst->EOF) {
-        array_push($categories, $rst->fields['category_display_html']);
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-$categories = implode(', ', $categories);
-
 /*********************************/
 /*** Include the sidebar boxes ***/
 
-//set up our substitution variables for use in the siddebars
+//set up our substitution variables for use in the sidebars
 $on_what_table = 'contacts';
 $on_what_id = $contact_id;
 $on_what_string = 'contact';
+
+//include the categories sidebar
+require_once($include_directory . 'categories-sidebar.php');
 
 //include the Cases sidebar
 $case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
@@ -296,10 +274,6 @@ if ($rst) {
 }
 
 $con->close();
-
-if (strlen($categories) == 0) {
-    $categories = _("No categories");
-}
 
 $page_title = _("Contact Details").': '.$first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
@@ -547,17 +521,7 @@ function markComplete() {
         <?php echo $sidebar_rows_top; ?>
 
         <!-- categories //-->
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header><?php echo _("Categories"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><?php  echo $categories; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?contact_id=<?php  echo $contact_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
-            </tr>
-        </table>
+        <?php echo $category_rows; ?>
 
         <!-- opportunities //-->
         <?php echo $opportunity_rows; ?>
@@ -598,6 +562,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.48  2004/10/26 16:37:55  introspectshun
+ * - Centralized category handling as sidebar
+ *
  * Revision 1.47  2004/10/21 05:58:18  gpowers
  * - added contact_sidebar_top plugin hook
  *

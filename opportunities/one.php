@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.24 2004/07/30 10:05:36 cpsource Exp $
+ * $Id: one.php,v 1.25 2004/10/26 16:39:00 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -177,32 +177,6 @@ if ($rst) {
     db_error_handler ($con, $sql_activities);
 }
 
-$categories_sql = "select category_pretty_name
-    from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
-    where ecm.on_what_table = 'opportunities'
-    and ecm.on_what_id = $opportunity_id
-    and ecm.category_id = c.category_id
-    and cs.category_scope_id = ccsm.category_scope_id
-    and c.category_id = ccsm.category_id
-    and cs.on_what_table = 'opportunities'
-    and category_record_status = 'a'
-    order by category_pretty_name";
-
-$rst = $con->execute($categories_sql);
-$categories = array();
-
-if ($rst) {
-    while (!$rst->EOF) {
-        array_push($categories, $rst->fields['category_pretty_name']);
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-    db_error_handler ($con, $categories_sql);
-}
-
-$categories = implode(', ', $categories);
-
 /*********************************/
 /*** Include the sidebar boxes ***/
 
@@ -210,6 +184,9 @@ $categories = implode(', ', $categories);
 $on_what_table = 'opportunities';
 $on_what_id = $opportunity_id;
 $on_what_string = 'opportunity';
+
+//include the categories sidebar
+require_once($include_directory . 'categories-sidebar.php');
 
 //include the Cases sidebar
 //$case_limit_sql = "and cases.".$on_what_string."_id = $on_what_id";
@@ -261,15 +238,10 @@ if ($rst) {
     db_error_handler ($con, $sql);
 }
 
-
 $con->close();
 
-if (strlen($categories) == 0) {
-    $categories = "No categories";
-}
-
 if (strlen($activity_rows) == 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=6>No activities</td></tr>";
+    $activity_rows = "<tr><td class=widget_content colspan=6>" . _("No activities") . "</td></tr>";
 }
 
 $page_title = _("Opportunity Details") . " : " . $opportunity_title;
@@ -446,17 +418,7 @@ function markComplete() {
     <div id="Sidebar">
 
         <!-- categories //-->
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header><?php echo _("Categories"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content><?php  echo $categories; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=button class=button onclick="javascript: location.href='categories.php?opportunity_id=<?php  echo $opportunity_id; ?>';" value="<?php echo _("Manage"); ?>"></td>
-            </tr>
-        </table>
+        <?php echo $category_rows; ?>
 
         <!-- notes //-->
         <?php echo $note_rows; ?>
@@ -473,6 +435,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.25  2004/10/26 16:39:00  introspectshun
+ * - Centralized category handling as sidebar
+ *
  * Revision 1.24  2004/07/30 10:05:36  cpsource
  * - Remove undefines
  *     activity_rows
