@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.4 2004/06/12 05:35:58 introspectshun Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.5 2004/07/04 09:10:56 metamedia Exp $
  */
 
 require_once('../include-locations.inc');
@@ -21,7 +21,19 @@ $msg = $_GET['msg'];
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql1 = "select opportunity_status_id, opportunity_status_pretty_plural from opportunity_statuses where opportunity_status_record_status = 'a'";
+$exclude_closed_opps = $_GET['exclude_closed_opps'];
+if (strlen($exclude_closed_opps) > 0) {
+	$checked_exclude_closed_opps = "checked";
+	$exclude_closed_opps = true;
+}
+else $exclude_closed_opps = false;
+
+$sql1 = "select opportunity_status_id, opportunity_status_pretty_plural
+from opportunity_statuses
+where opportunity_status_record_status = 'a'";
+
+if ($exclude_closed_opps) $sql1 .= " and status_open_indicator = 'o'";
+
 $rst1 = $con->execute($sql1);
 $opportunity_status_count = $rst1->recordcount();
 $graph_legend_array = array();
@@ -85,7 +97,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_center>Opportunities (Size) by Status</td>
             </tr>
             <tr>
-
                 <td class=widget_content_graph>
                 <SCRIPT LANGUAGE="JavaScript1.2">
                 var g = new Graph(<?php echo $report_graph_width; ?>,<?php echo $report_graph_height; ?>);
@@ -97,9 +108,17 @@ start_page($page_title, true, $msg);
                 g.build();
                 </SCRIPT>
                 </td>
-
             </tr>
-
+	     </tr>
+		<tr>
+                <td class=widget_content_form_element>
+		<form method=get>
+		<input type=checkbox name=exclude_closed_opps value="true" <?php echo $checked_exclude_closed_opps; ?>>
+		Exclude Closed Opportunities</input>
+		<input type=submit class=button value="Change Graph">
+		</form>
+		</td>
+            </tr>
         </table>
 
     </div>
@@ -119,6 +138,9 @@ end_page();
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.5  2004/07/04 09:10:56  metamedia
+ * Added option to exclude closed opportunities from the graph.
+ *
  * Revision 1.4  2004/06/12 05:35:58  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
