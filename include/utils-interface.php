@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.20 2004/07/14 11:50:50 cpsource Exp $
+ * $Id: utils-interface.php,v 1.21 2004/07/19 14:40:12 cpsource Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -20,24 +20,28 @@ require_once ($include_directory.'plugin.php');
  */
 function status_msg($msg) {
     switch ($msg) {
+
+      // handle know messages
         case 'noauth':
             return _("We could not authenticate you.") . ' ' . _("Please try again.");
-            break;
         case 'saved':
             return _("Changes saved.");
-            break;
         case 'activity_added':
             return _("Activity added.");
-            break;
         case 'contact_added':
             return _("Contact added.");
-            break;
         case 'company_added':
             return _("Company added.");
-            break;
         case 'no_change':
             return _("Status not changed.") . ' ' . _("This activity is still open.");
-            break;
+
+    // handle unknown messages
+    default:
+      if ( $msg ) {
+	// at least TRY to return a message
+	return _("$msg.") . ' ' . _("$msg.");
+      }
+      break;
     }
 } //end status_msg fn
 
@@ -183,6 +187,10 @@ EOQ;
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.21  2004/07/19 14:40:12  cpsource
+ * - Remove unnecessary 'break' from status_msg
+ *   Allow status_msg to at least TRY to return an error message
+ *
  * Revision 1.20  2004/07/14 11:50:50  cpsource
  * - Added security feature IN_XRMS
  *
