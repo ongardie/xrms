@@ -9,12 +9,15 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.16 2004/08/03 22:03:20 neildogg Exp $
+ * $Id: sidebar.php,v 1.17 2004/08/05 15:10:52 neildogg Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
+$new_home_phone         = isset($_GET['home_phone']) ? $_GET['home_phone'] : false;
+$new_work_phone         = isset($_GET['work_phone']) ? $_GET['work_phone'] : false;
+$new_email         = isset($_GET['email']) ? $_GET['email'] : false;
 
-if($new_cell_phone) {
+if($new_cell_phone or $new_home_phone or $new_work_phone or $new_email) {
     $contact_id         = isset($_GET['contact_id']) ? $_GET['contact_id'] : false;
     if($contact_id) {
         // handle includes
@@ -39,7 +42,18 @@ if($new_cell_phone) {
         $rst = $con->execute($sql);
         
         $rec = array();
-        $rec['cell_phone'] = $new_cell_phone;
+        if($new_cell_phone) {
+            $rec['cell_phone'] = $new_cell_phone;
+        }
+        elseif($new_home_phone) {
+            $rec['home_phone'] = $new_home_phone;        
+        }
+        elseif($new_work_phone) {
+            $rec['cell_phone'] = $new_cell_phone;
+        }
+        elseif($new_email) {
+            $rec['email'] = $new_email;
+        }
         
         $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
         $con->execute($upd);
@@ -120,9 +134,7 @@ if ( $contact_id ) {
       //
       $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
 	. '<a href="../contacts/one.php?contact_id=' . $contact_id . '">'
-	. $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a><br>"
-	. '<a href="../companies/one.php?company_id=' . $rst->fields['company_id'] . '">'
-	. $company_name . "</a></td>\n\t</tr>";
+	. $rst->fields['first_names'] . " " . $rst->fields['last_name'] . "</a></td>\n\t</tr>";
       if ( $rst->fields['address_id'] != $default_primary_address ) {
         $contact_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
 	  . get_formatted_address ($con, $rst->fields['address_id'])
@@ -138,7 +150,7 @@ if ( $contact_id ) {
     }
     else {
         $contact_block .= "<a href=\"javascript: updateVariable('Enter Cell Phone', 'cell_phone', 'contact_id=" . $contact_id . "');\">"
-                       . "Enter Cell</a><br>";
+                       . _("Enter Cell") . "</a><br>";
     }
     
     if ($rst->fields['work_phone']) {
@@ -146,11 +158,19 @@ if ( $contact_id ) {
                         . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) 
                         . "</strong><br>";
     }
+    else {
+        $contact_block .= "<a href=\"javascript: updateVariable('Enter Work Phone', 'work', 'contact_id=" . $contact_id . "');\">"
+                       . _("Enter Work Phone") . "</a><br>";
+    }
     
     if ($rst->fields['home_phone']) {
         $contact_block .= _("Home Phone") . ": <strong>"
                         . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone']) 
                         . "</strong><br>";
+    }
+    else {
+        $contact_block .= "<a href=\"javascript: updateVariable('Enter Home Phone', 'home_phone', 'contact_id=" . $contact_id . "');\">"
+                       . _("Enter Home Phone") . "</a><br>";
     }
 
     $contact_block .= "</td>\n\t</tr>";
@@ -160,6 +180,11 @@ if ( $contact_id ) {
 	  . "<a href=\"mailto:" . $rst->fields['email'] . "\">"
 	  . $rst->fields['email'] . "</a></td>\n\t</tr>";
       }
+    else {
+        $contact_block .= "<tr>\n\t\t<td class=widget_content>"
+      . "<a href=\"javascript: updateVariable('Enter Email', 'email', 'contact_id=" . $contact_id . "');\">"
+                       . _("Enter Email Address") . "</a></td>\n\t</tr>";
+    }
 
       $rst->close();
 
@@ -175,6 +200,10 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.17  2004/08/05 15:10:52  neildogg
+ * - Localized strings, removed company
+ *  - Added update from sidebar to all phones and email
+ *
  * Revision 1.16  2004/08/03 22:03:20  neildogg
  * - Malformed script tag, my bad
  *
