@@ -2,7 +2,7 @@
 /**
  * Export contacts from the search rwsults from contacts/some.php
  *
- * $Id: export.php,v 1.6 2005/01/13 22:39:30 braverock Exp $
+ * $Id: export.php,v 1.7 2005/02/24 18:48:55 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -109,7 +109,7 @@ $sql .= $from . $where . $group_by ;
 
 $rst = $con->execute($sql);
 
-$filename =  'contacts_' . . date('Y-m-d_H-i') . . '.csv';
+$filename =  'contacts_' . date('Y-m-d_H-i') . '.csv';
 
 if ($rst) {
     $csvdata= rs2csv($rst);
@@ -134,6 +134,9 @@ echo $csvdata;
 
 /**
  * $Log: export.php,v $
+ * Revision 1.7  2005/02/24 18:48:55  vanmer
+ * - removed errant periods from string
+ *
  * Revision 1.6  2005/01/13 22:39:30  braverock
  * - modified to use SendDownLoadHeaders
  * - modified to send data directly,rather than writing a file
