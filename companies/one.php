@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.26 2004/04/17 16:02:41 maulani Exp $
+ * $Id: one.php,v 1.27 2004/04/19 14:10:45 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -201,14 +201,19 @@ if ($rst) {
 
 // contacts
 
-$sql = "select * from contacts where company_id = $company_id and contact_record_status = 'a' order by first_names";
+$sql = "select * from contacts where company_id = $company_id
+        and contact_record_status = 'a'
+        order by last_name";
 
 $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
         $contact_rows .= '<tr>';
-        $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id=" . $rst->fields['contact_id'] . "'>" . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
+        $contact_rows .= "<td class=widget_content><a href='../contacts/one.php?contact_id="
+                        . $rst->fields['contact_id'] . "'>"
+                        . $rst->fields['last_name'] . ', ' . $rst->fields['first_names']
+                        . '</a></td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['summary'] . '</td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['title'] . '</td>';
         $contact_rows .= '<td class=widget_content>' . $rst->fields['description'] . '</td>';
@@ -643,6 +648,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.27  2004/04/19 14:10:45  braverock
+ * - sort list by last name and display lastname, firstname
+ *  - apply SF patch 926962 submitted by Glenn Powers
+ *
  * Revision 1.26  2004/04/17 16:02:41  maulani
  * - Add CSS2 positioning
  *
