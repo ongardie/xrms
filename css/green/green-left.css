@@ -4,13 +4,13 @@
  * to move sidebar to the left side
  *  (URIs are always relative to the stylesheet)
  */
-@import url(basic.css);
+@import url(green.css);
 /**
  * Change margin/width for sidebar on the left
  */
 #Main #Content {
     /** Match sidebar width for right (by default) margin */
-    margin: 0em 0em 0em 30.2%;
+    margin: 0em 1px 0em 30.2%;
     width: auto;
 }
 #Main #Sidebar {

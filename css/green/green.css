@@ -1,0 +1,85 @@
+/**
+ * Green XRMS theme
+ *
+ * This style sheet overlays the default XRMS sheets:
+ *    xrmsstyle.css, xrmsstyle-ie.css (if IE), and xrmsstyle-screen.css
+ *
+ */
+/**
+ * Page colors
+ * foregrounds and backgrounds (except page background)
+ * should stick with this subset of colors + black, white
+ */
+.darkest   { color: rgb(67,104,47); }
+.dark      { color: rgb(113,149,92); }
+.middle    { color: rgb(137,164,122); }
+.light     { color: rgb(183,210,168); }
+
+.lightpink { color: #fee; }
+.paleyellow { color: #ffe; } 
+
+/** ----------
+ * FOREGROUND COLORS - black by default (body - inherited) 
+ */
+a:hover {
+    text-decoration: none;
+}
+#loginbar,
+#page_header,
+table.widget .widget_header {
+    color: white;
+}
+a {
+    color: #009;
+}
+#loginbar a,
+#page_header a,
+table.widget .widget_header a {
+    color: #ffe;            /* pale yellow, to stand out against dark green */
+}
+/**
+ * BACKGROUND COLORS
+ */
+body {
+    background-color: #ffe; /* pale yellow - accents green for page background */
+}
+table.widget {
+    background-color: rgb(137,164,122); /* middle */
+}
+table.widget td {
+    background-color: white;
+}
+#navline,
+table.widget .widget_label {
+    background-color: rgb(183,210,168); /* light */
+}
+#page_header,
+table.widget .widget_header {
+    background-color: rgb(67,104,47);   /* darkest */
+}
+#msg,
+table.widget .non_uploaded_file,
+table.widget .overdue_activity {
+    background-color: #fee;             /* lightpink */
+}
+/** 
+ * BORDERS
+ */
+#page_header {
+    border:        1px solid rgb(137,164,122);        /* middle */
+    border-top:    3px solid rgb(137,164,122);        /* middle */
+    border-bottom: 2px solid rgb(137,164,122);        /* middle */
+}
+#navline {
+    border:        1px solid rgb(137,164,122);        /* middle */
+}
+#msg {
+    background-image: url(../../img/msg_background.gif);
+    border: 1px solid #ccc;
+}
+/**
+ * PADDING/MARGINS 
+ */
+#page_header {
+    padding: 4px;
+}

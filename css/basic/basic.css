@@ -74,10 +74,8 @@ table.widget .overdue_activity {
     background-color: #f77;
 }
 #page_header,
+table.widget .widget_header,
 table.widget .widget_label {
-    background-color: rgb(20%,40%,60%);
-}
-table.widget .widget_header  {
     background-color: rgb(20%,40%,60%);
 }
 /** -------
