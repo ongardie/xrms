@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.4 2005/03/03 22:30:32 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.5 2005/03/05 00:33:34 daturaarutad Exp $
  */
 
 
@@ -290,7 +290,10 @@
 
 			  		$rst=$dbh->execute($sql);
 	
-			  		if (!$rst) { db_error_handler($dbh,$sql); exit; }
+			  		if (!$rst) { 
+						db_error_handler($dbh,$sql); 
+						return false; 
+					}
 
 					while (!$rst->EOF) {
 						// update for array
@@ -344,6 +347,7 @@
 						$form->addElement('static',  $field_name, $field['displayName'], 'Blob data not shown');
 						break;
 					case 'int':
+					case 'smallint':
 					case 'tinyint':
 					case 'double':
 					case 'float':
