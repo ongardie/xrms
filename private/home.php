@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.34 2004/07/20 11:40:53 cpsource Exp $
+ * $Id: home.php,v 1.35 2004/07/20 19:59:04 introspectshun Exp $
  */
 
 // include the common files
@@ -481,7 +481,7 @@ start_page($page_title,true,$msg);
                 <input type="hidden" name="on_what_table" value="users">
                 <input type="hidden" name="on_what_id" value=<?php echo $session_user_id ?>>
                 <input type="hidden" name="return_url" value="/private/home.php">
-                <input type="submit" class=button value="New Personal Note">
+                <input type="submit" class=button value="<?php echo _("New Personal Note"); ?>">
             </form>
 
         <!-- sidebar plugins //-->
@@ -496,6 +496,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.35  2004/07/20 19:59:04  introspectshun
+ * - Localized button value for i18n/l10n support
+ *
  * Revision 1.34  2004/07/20 11:40:53  cpsource
  * - Added support for $msg
  *
