@@ -26,7 +26,8 @@
 
 .mediumnavy { color: #009; }
 
-.disabled   { color: #ccc; }
+.lightgray     { color: #ccc; }
+.lightestgray  { color: #eee; }
 
 /** ----------
  * FOREGROUND COLORS - black by default (body - inherited) 
@@ -44,7 +45,7 @@ table.widget .widget_header {
     color: black;
 }
 .calendar tbody .disabled {
-    color: #ccc;             /* disabled */
+    color: #ccc;             /* lightgray */
 }
 .calendar tbody .day.othermonth {
   color: rgb(92,119,77);     /* dark */
@@ -88,6 +89,10 @@ body {
 .calendar td.time .ampm,
 table.widget td {
     background-color: white;
+}
+table.widget .closed_activity,
+table.widget .widget_content_alt {
+    background-color: #eee;            /* lightestgray */
 }
 .calendar .combo,
 .calendar tbody .rowhilite td,
