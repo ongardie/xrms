@@ -385,6 +385,7 @@ td.rcol {
 
 input, select, textarea {
   background-color: White;
+  color: Black;
   font-family: arial, sans-serif;
   font-size: small;
   margin: 0px;
