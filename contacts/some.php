@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.50 2005/02/28 22:42:32 daturaarutad Exp $
+ * $Id: some.php,v 1.51 2005/03/04 20:13:37 daturaarutad Exp $
  */
 
 //include the standard files
@@ -42,14 +42,15 @@ arr_vars_session_set ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
+// Note: last_name and first_names are used by GUP_Pager to speed up the sorting.
 $sql = "SELECT " . 
-	$con->Concat($con->qstr('<a id="'), "cont.last_name", $con->qstr('_'), "cont.first_names", $con->qstr('" href="one.php?contact_id='), "cont.contact_id", $con->qstr('">'), "cont.last_name", "', '", "cont.first_names", $con->qstr('</a>')) . " AS name," . 
+	$con->Concat($con->qstr('<a href="one.php?contact_id='), "cont.contact_id", $con->qstr('">'), "cont.last_name", "', '", "cont.first_names", $con->qstr('</a>')) . " AS name," . 
 	$con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
-	"company_code, title, description, u.username, cont.email, cont.contact_id"; 
+	"company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name"; 
 
 $from = " from contacts cont, companies c, users u ";
 
@@ -121,23 +122,6 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 
 //gorup by shouldn't be needed, contact_id is already unique
 //$group_by = " group by contact_id";
-
-if ($sort_column == 1) {
-    $order_by = "cont.last_name";
-} elseif ($sort_column == 2) {
-    $order_by = "c.company_name";
-} else {
-    $order_by = $sort_column;
-}
-
-if(strlen($last_name)) {
-    $order_by .= ", (CASE WHEN (cont.last_name = " . $con->qstr($last_name, get_magic_quotes_gpc()) . ") THEN 0 ELSE 1 END) ";
-}
-if(strlen($first_names)) {
-    $order_by .= ", (CASE WHEN (cont.first_names = " . $con->qstr($first_names, get_magic_quotes_gpc()) . ") THEN 0 ELSE 1 END) ";
-}
-
-$order_by .= " $sort_order";
 
 $sql .= $from . $where;
 
@@ -289,8 +273,8 @@ if(!isset($contacts_next_page)) {
 $_SESSION["search_sql"]=$sql;
 
 $columns = array();
-$columns[] = array('name' => _("Name"), 'index_sql' => 'name');
-$columns[] = array('name' => _("Company"), 'index_sql' => 'company');
+$columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => '8,9');
+$columns[] = array('name' => _("Company"), 'index_sql' => 'company', 'sql_sort_column' => '10');
 $columns[] = array('name' => _("Code"), 'index_sql' => 'company_code');
 $columns[] = array('name' => _("Title"), 'index_sql' => 'title');
 $columns[] = array('name' => _("Description"), 'index_sql' => 'description');
@@ -386,6 +370,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.51  2005/03/04 20:13:37  daturaarutad
+ * tweaked the main query to speed things up when sorting on columns that use concat()
+ *
  * Revision 1.50  2005/02/28 22:42:32  daturaarutad
  * changed columns to be index_sql so that the pager knows it doesnt have to get the whole data set
  *
