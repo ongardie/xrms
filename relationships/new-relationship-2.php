@@ -106,7 +106,8 @@ else
 	    $sql = "select " . $name_concat . " as name, " . $what_table_singular . "_id
 	            from " . $what_table . "
 	            where " . $what_table_singular . "_record_status='a'
-	            having name like " . $search_on . "
+                group by " . $name_concat . ", " . $what_table_singular . "_id, " . $name_order . "
+	            having " . $name_concat . " like " . $search_on . "
 	            order by " . $name_order;
 	    $rst = $con->execute($sql);
 	    if($rst->rowcount()) {
