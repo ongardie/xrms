@@ -2,7 +2,7 @@
 /**
  * Edit item details
  *
- * $Id: edit.php,v 1.8 2005/02/11 13:49:02 braverock Exp $
+ * $Id: edit.php,v 1.9 2005/02/11 19:03:12 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -211,10 +211,12 @@ $con->close();
         <tr>
           <td class=widget_content_form_element colspan=2>
             <input class=button type=submit value="Save Changes">&nbsp;
+<?php if (check_user_role(false, $session_user_id, 'Administrator')) { ?>
             <input class=button type=button
               value="Edit element definitions" onclick="javascript:
               location.href='<?php echo
               "edit-definitions.php?info_id=$info_id&info_type_id=$info_type_id&contact_id=$contact_id&company_id=$company_id&division_id=$division_id&return_url=$return_url"; ?>';">&nbsp;
+<?php } ?>
             <input class=button type=button
               value="Delete" onclick="javascript:
               location.href='<?php echo
@@ -240,6 +242,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.9  2005/02/11 19:03:12  vanmer
+ * - added check for role access before allowing user to edit item definitions
+ *
  * Revision 1.8  2005/02/11 13:49:02  braverock
  * - fix handling of return_url
  * - remove references to server_info and replace with just info
