@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-16 18:37+0200\n"
+"POT-Creation-Date: 2004-08-17 12:29+0200\n"
 "PO-Revision-Date: 2004-08-12 00.52+0200\n"
 "Last-Translator: John Fawcett <johnfawcett@users.sourceforge.net>\n"
 "Language-Team: John Fawcett <johnfawcett@users.sourceforge.net>\n"
@@ -85,7 +85,7 @@ msgid "Action"
 msgstr "Azione"
 
 #: cases/one.php:324 companies/one.php:674 contacts/one.php:488
-#: include/utils-interface.php:137 opportunities/one.php:423
+#: include/utils-interface.php:133 opportunities/one.php:423
 #: plugins/info/one.php:359 reports/completed-items.php:95
 #: reports/open-items.php:78 reports/overdue-items.php:92
 msgid "Activities"
@@ -97,11 +97,11 @@ msgstr "Attività"
 msgid "Activity"
 msgstr "Attività"
 
-#: include/utils-interface.php:61
+#: include/utils-interface.php:64
 msgid "Activity Added."
 msgstr "Attività inserita."
 
-#: include/utils-interface.php:63
+#: include/utils-interface.php:66
 msgid "Activity Deleted."
 msgstr "Attività cancellata."
 
@@ -162,7 +162,11 @@ msgstr "Aggiungi"
 msgid "Add "
 msgstr "Aggiungi "
 
-#: contacts/new.php:229
+#: include/strings.php:17 include/strings.php:22
+msgid "Add Company"
+msgstr "Aggiungi Azienda"
+
+#: contacts/new.php:229 include/strings.php:16 include/strings.php:21
 msgid "Add Contact"
 msgstr "Aggiungi Contatto"
 
@@ -246,13 +250,14 @@ msgstr "Aggiungi Relazione"
 msgid "Add to Everyone"
 msgstr "Aggiungi a Tutti"
 
-#: include/utils-interface.php:70
+#: include/utils-interface.php:73
 msgid "Added"
 msgstr "Aggiunto"
 
 #: admin/update.php:253
 msgid "Added an Activities Default Behavior system parameter."
-msgstr "Aggiunto nuovo parametro di sistema per gestione preimpostata delle attività."
+msgstr ""
+"Aggiunto nuovo parametro di sistema per gestione preimpostata delle attività."
 
 #: admin/update.php:236
 msgid "Added an Audit Level."
@@ -264,7 +269,7 @@ msgstr "Aggiungi Livello Audit"
 msgid "Address"
 msgstr "Indirizzo"
 
-#: include/utils-interface.php:48
+#: include/utils-interface.php:51
 msgid "Address Added."
 msgstr "Indirizzo inserito."
 
@@ -272,7 +277,7 @@ msgstr "Indirizzo inserito."
 msgid "Address Body"
 msgstr "Corpo Indirizzo"
 
-#: include/utils-interface.php:50
+#: include/utils-interface.php:53
 msgid "Address Deleted."
 msgstr "Indirizzo cancellato."
 
@@ -295,13 +300,17 @@ msgstr "Indirizzi"
 msgid "Admin"
 msgstr "Gestionale"
 
-#: admin/index.php:37 include/utils-interface.php:149
+#: admin/index.php:37 include/utils-interface.php:145
 msgid "Administration"
 msgstr "Gestione"
 
 #: companies/some.php:320
 msgid "Advanced Search"
 msgstr "Ricerca Avanzata"
+
+#: locale/datastrings.php:4
+msgid "Advertising"
+msgstr "Pubblicità"
 
 #: activities/some.php:380
 msgid "After"
@@ -330,6 +339,10 @@ msgstr "Consenti l'accesso"
 msgid "Alt. Phone"
 msgstr "Tel. altern."
 
+#: locale/datastrings.php:5
+msgid "Architecture"
+msgstr "Architettura"
+
 #: activities/associate-activities.php:29
 msgid "Associate Activities"
 msgstr "Associa le Attività"
@@ -337,6 +350,14 @@ msgstr "Associa le Attività"
 #: activities/associate-activities.php:148
 msgid "Associated"
 msgstr "Associate"
+
+#: include/strings.php:27
+msgid "Associated Companies"
+msgstr "Aziende Associate"
+
+#: include/strings.php:26
+msgid "Associated Contacts"
+msgstr "Contatti Associati"
 
 #: admin/categories/one.php:142 campaigns/categories.php:99
 #: cases/categories.php:99 companies/categories.php:103
@@ -446,11 +467,11 @@ msgstr "Calendario"
 msgid "Campaign"
 msgstr "Campagna"
 
-#: include/utils-interface.php:53
+#: include/utils-interface.php:56
 msgid "Campaign Added."
 msgstr "Campagna inserita."
 
-#: include/utils-interface.php:55
+#: include/utils-interface.php:58
 msgid "Campaign Deleted."
 msgstr "Campagna cancellata."
 
@@ -483,7 +504,7 @@ msgstr "Dettaglio Tipi Campagna"
 msgid "Campaign Types"
 msgstr "Tipi Campagna"
 
-#: campaigns/some.php:193 files/some.php:309 include/utils-interface.php:140
+#: campaigns/some.php:193 files/some.php:309 include/utils-interface.php:136
 #: reports/completed-items.php:102 reports/open-items.php:85
 #: reports/overdue-items.php:99
 msgid "Campaigns"
@@ -499,11 +520,11 @@ msgstr "Richieste"
 msgid "Case #"
 msgstr "Richiesta n."
 
-#: include/utils-interface.php:65
+#: include/utils-interface.php:68
 msgid "Case Added."
 msgstr "Richiesta inserita."
 
-#: include/utils-interface.php:67
+#: include/utils-interface.php:70
 msgid "Case Deleted."
 msgstr "Richiesta cancellata."
 
@@ -547,7 +568,7 @@ msgstr "Dettaglio Tipi Richiesta"
 msgid "Case Types"
 msgstr "Tipi Richiesta"
 
-#: cases/some.php:214 files/some.php:311 include/utils-interface.php:142
+#: cases/some.php:214 files/some.php:311 include/utils-interface.php:138
 #: reports/completed-items.php:116 reports/open-items.php:99
 #: reports/overdue-items.php:113
 msgid "Cases"
@@ -605,9 +626,13 @@ msgstr "Modifica Grafico"
 msgid "Change Password"
 msgstr "Modifica Password"
 
-#: include/utils-interface.php:78
+#: include/utils-interface.php:81
 msgid "Changes saved."
 msgstr "Modifiche salvate"
+
+#: locale/datastrings.php:6
+msgid "Chemicals"
+msgstr "Chimica"
 
 #: companies/addresses.php:151 companies/advanced-search.php:219
 #: companies/edit-address.php:85 companies/new.php:213 companies/some.php:122
@@ -676,8 +701,12 @@ msgstr "Chiude"
 msgid "Code"
 msgstr "Codice"
 
-#: companies/advanced-search.php:100 files/some.php:308
-#: include/utils-interface.php:138
+#: locale/datastrings.php:7
+msgid "Communications"
+msgstr "Communicazioni"
+
+#: companies/advanced-search.php:100 files/some.php:308 include/strings.php:31
+#: include/utils-interface.php:134
 msgid "Companies"
 msgstr "Aziende"
 
@@ -724,7 +753,7 @@ msgstr "Aziende per Fonte"
 msgid "Company"
 msgstr "Azienda"
 
-#: include/utils-interface.php:40
+#: include/utils-interface.php:43
 msgid "Company Added."
 msgstr "Azienda inserita"
 
@@ -741,7 +770,7 @@ msgstr "Città Azienda"
 msgid "Company Code"
 msgstr "Codice Azienda"
 
-#: include/utils-interface.php:42
+#: include/utils-interface.php:45
 msgid "Company Deleted."
 msgstr "Azienda cancellata"
 
@@ -815,6 +844,10 @@ msgstr "Completati"
 msgid "Completed?"
 msgstr "Completato?"
 
+#: locale/datastrings.php:8
+msgid "Computers"
+msgstr "Informatica"
+
 #: admin/plugin/plugin-admin.php:292
 msgid "Config file can't be opened. Please check vars.php."
 msgstr "Il file di configurazione non può essere letto. Controlla vars.php"
@@ -835,6 +868,14 @@ msgstr "Conferma Destinatari"
 msgid "Connection Details"
 msgstr "Dettagli Collegamento"
 
+#: locale/datastrings.php:9
+msgid "Construction"
+msgstr "Costruzione"
+
+#: locale/datastrings.php:10
+msgid "Consulting"
+msgstr "Consulenza"
+
 #: activities/one.php:277 activities/some.php:149 activities/some.php:356
 #: admin/users/one.php:85 cases/edit.php:188 cases/new.php:107
 #: cases/one.php:269 cases/one.php:330 companies/one.php:633
@@ -850,7 +891,7 @@ msgstr "Dettagli Collegamento"
 msgid "Contact"
 msgstr "Contatto"
 
-#: include/utils-interface.php:44
+#: include/utils-interface.php:47
 msgid "Contact Added."
 msgstr "Contatto inserito."
 
@@ -858,7 +899,7 @@ msgstr "Contatto inserito."
 msgid "Contact Call List"
 msgstr "Lista Contatti"
 
-#: include/utils-interface.php:46
+#: include/utils-interface.php:49
 msgid "Contact Deleted."
 msgstr "Contatto cancellato."
 
@@ -872,7 +913,8 @@ msgid "Contact Information"
 msgstr "Informazioni Contatto"
 
 #: companies/one.php:633 contacts/some.php:213 files/some.php:306
-#: include/utils-interface.php:139 reports/company-contacts-printout.php:245
+#: include/strings.php:30 include/utils-interface.php:135
+#: reports/company-contacts-printout.php:245
 msgid "Contacts"
 msgstr "Contatti"
 
@@ -1156,7 +1198,7 @@ msgstr "Cancella Utente"
 msgid "Delete User?"
 msgstr "Cancella Utente?"
 
-#: include/utils-interface.php:72
+#: include/utils-interface.php:75
 msgid "Deleted"
 msgstr "Cancellato."
 
@@ -1198,6 +1240,10 @@ msgstr "Cruscotto Digitale"
 msgid "Display HTML"
 msgstr "HTML visualizzato"
 
+#: locale/datastrings.php:11
+msgid "Distribution"
+msgstr "Distribuzione"
+
 #: contacts/edit.php:132 contacts/new.php:127 contacts/one.php:407
 msgid "Division"
 msgstr "Divisione"
@@ -1227,7 +1273,7 @@ msgstr "Chiuso"
 msgid "Download"
 msgstr "Scarica"
 
-#: include/utils-interface.php:199
+#: include/utils-interface.php:195
 msgid "Dr."
 msgstr "Dott."
 
@@ -1388,6 +1434,10 @@ msgstr ""
 "Modificare/Cancellare queste informazioni cambierà l'indirizzo per tutti le "
 "aziende e i contatti elencati"
 
+#: locale/datastrings.php:12
+msgid "Education"
+msgstr "Istruzione"
+
 #: activities/one.php:358
 msgid "Email This To"
 msgstr "Invia email a"
@@ -1516,9 +1566,13 @@ msgstr "Informazioni File"
 msgid "File Name"
 msgstr "Nome File"
 
-#: campaigns/one.php:235 files/some.php:273 include/utils-interface.php:143
+#: campaigns/one.php:235 files/some.php:273 include/utils-interface.php:139
 msgid "Files"
 msgstr "File"
+
+#: locale/datastrings.php:13
+msgid "Finance"
+msgstr "Finanza"
 
 #: campaigns/categories.php:107 cases/categories.php:107
 #: companies/categories.php:111 contacts/categories.php:113
@@ -1616,6 +1670,10 @@ msgstr "Sesso"
 msgid "Go"
 msgstr "Invia"
 
+#: locale/datastrings.php:14
+msgid "Government"
+msgstr "Pubblica Amministrazione"
+
 #: reports/index.php:39
 msgid "Graphs"
 msgstr "Grafici"
@@ -1624,7 +1682,11 @@ msgstr "Grafici"
 msgid "Hacking attempt"
 msgstr "Tentativo di intrusione"
 
-#: include/utils-interface.php:136 private/home.php:424
+#: locale/datastrings.php:15
+msgid "Healthcare"
+msgstr "Sanità"
+
+#: include/utils-interface.php:132 private/home.php:424
 msgid "Home"
 msgstr "Home"
 
@@ -1707,6 +1769,10 @@ msgstr "Dettaglio Categoria Industria"
 msgid "Insert Log"
 msgstr "Log degli inserimenti"
 
+#: locale/datastrings.php:16
+msgid "Insurance"
+msgstr "Assicurazione"
+
 #: contacts/edit.php:210 contacts/new.php:205 contacts/one.php:371
 msgid "Interests"
 msgstr "Interessi"
@@ -1725,6 +1791,10 @@ msgstr "Ultima Modifica"
 #: contacts/some.php:238
 msgid "Last Name"
 msgstr "Cognome"
+
+#: locale/datastrings.php:17
+msgid "Legal"
+msgstr "Legale"
 
 #: companies/advanced-search.php:124 companies/edit.php:105
 #: companies/new.php:115 companies/one.php:482
@@ -1788,11 +1858,11 @@ msgstr "Lista di Attività/Opportunità scadute per Utente e Tipo"
 msgid "List of companies, addresses and phone numbers"
 msgstr "Lista di aziende, indirizzi e n. telefonici"
 
-#: include/utils-interface.php:151
+#: include/utils-interface.php:147
 msgid "Logged in as"
 msgstr "Utente collegato"
 
-#: include/utils-interface.php:151
+#: include/utils-interface.php:147
 msgid "Logout"
 msgstr "Esci"
 
@@ -1901,6 +1971,10 @@ msgstr "Gestione Ruoli"
 msgid "Manage Users"
 msgstr "Gestione Utenti"
 
+#: locale/datastrings.php:18
+msgid "Manufacturing"
+msgstr "Produzione industriale"
+
 #: reports/index.php:128
 msgid "Measure performance of users over a selectable timeframe"
 msgstr "Misurare prestazioni di utenti in un intervallo di tempo"
@@ -1909,7 +1983,7 @@ msgstr "Misurare prestazioni di utenti in un intervallo di tempo"
 msgid "Media"
 msgstr "Media"
 
-#: include/utils-interface.php:199
+#: include/utils-interface.php:195
 msgid "Miss"
 msgstr "Sig.na"
 
@@ -1922,15 +1996,15 @@ msgstr "Ulteriori Informazioni"
 msgid "Move"
 msgstr "Sposta"
 
-#: include/utils-interface.php:199
+#: include/utils-interface.php:195
 msgid "Mr."
 msgstr "Sig."
 
-#: include/utils-interface.php:199
+#: include/utils-interface.php:195
 msgid "Mrs."
 msgstr "Sig.a"
 
-#: include/utils-interface.php:199
+#: include/utils-interface.php:195
 msgid "Ms."
 msgstr "Sig.a"
 
@@ -2066,7 +2140,7 @@ msgstr "Nessuna Attività"
 msgid "No Activity."
 msgstr "Nessuna Attività"
 
-#: include/utils-interface.php:37
+#: include/utils-interface.php:40
 msgid "No Case To Delete."
 msgstr "Nessuna Richiesta da cancellare."
 
@@ -2086,9 +2160,17 @@ msgstr "Nessuna Ricerca Salvata"
 msgid "No associated categories"
 msgstr "Nessuna categoria associata"
 
+#: include/strings.php:33
+msgid "No attached companies"
+msgstr "Nessuna azienda associata"
+
+#: include/strings.php:32
+msgid "No attached contacts"
+msgstr "Nessun contatto associato"
+
 #: files/sidebar.php:82
 msgid "No attached files"
-msgstr "Nessuna file associato"
+msgstr "Nessun file associato"
 
 #: notes/sidebar.php:164
 msgid "No attached notes"
@@ -2165,6 +2247,10 @@ msgstr "Nessun file caricato"
 #: activities/some.php:391
 msgid "Non-Completed"
 msgstr "Non completato"
+
+#: locale/datastrings.php:19
+msgid "Non-Profit"
+msgstr "ONLUS"
 
 #: admin/categories/one.php:143 campaigns/categories.php:100
 #: cases/categories.php:100 companies/categories.php:104
@@ -2268,7 +2354,7 @@ msgstr "Aperti"
 msgid "Open Status"
 msgstr "Stato Aperto"
 
-#: files/some.php:310 include/utils-interface.php:141
+#: files/some.php:310 include/utils-interface.php:137
 #: opportunities/sidebar.php:18 opportunities/some.php:195
 #: reports/completed-items.php:109 reports/open-items.php:92
 #: reports/overdue-items.php:106
@@ -2311,11 +2397,11 @@ msgstr "Opportunità per Stato"
 msgid "Opportunity"
 msgstr "Opportunità"
 
-#: include/utils-interface.php:57
+#: include/utils-interface.php:60
 msgid "Opportunity Added."
 msgstr "Opportunità inserita."
 
-#: include/utils-interface.php:59
+#: include/utils-interface.php:62
 msgid "Opportunity Deleted."
 msgstr "Opportunità cancellata."
 
@@ -2353,9 +2439,21 @@ msgstr "Titolo dell'Opportunità"
 msgid "Options"
 msgstr "Opzioni"
 
+#: locale/datastrings.php:3
+msgid "Other"
+msgstr "Altri "
+
 #: relationships/sidebar.php:118
 msgid "Other "
 msgstr "Altri "
+
+#: include/strings.php:29
+msgid "Other Companies"
+msgstr "Altre Aziende"
+
+#: include/strings.php:28
+msgid "Other Contacts"
+msgstr "Altri Contatti"
 
 #: activities/some.php:147 activities/some.php:210
 msgid "Overdue"
@@ -2392,7 +2490,7 @@ msgstr "Proprietario"
 msgid "Password"
 msgstr "Password"
 
-#: include/utils-interface.php:74
+#: include/utils-interface.php:77
 msgid "Password Does Not Match."
 msgstr "Password non corrisponde"
 
@@ -2418,7 +2516,7 @@ msgstr "Formato tel."
 msgid "Please correct this error."
 msgstr "Correggi l'errore."
 
-#: include/utils-interface.php:76
+#: include/utils-interface.php:79
 msgid "Please try again."
 msgstr "Riprova."
 
@@ -2517,6 +2615,10 @@ msgstr "Dettaglio Valutazione"
 msgid "Ratings"
 msgstr "Valutazioni"
 
+#: locale/datastrings.php:20
+msgid "Real Estate"
+msgstr "Immobiliare"
+
 #: campaigns/some.php:278 cases/some.php:278 companies/some-advanced.php:398
 #: companies/some.php:352 contacts/some.php:300 files/some.php:355
 #: opportunities/some.php:255
@@ -2561,11 +2663,19 @@ msgstr "Porta Remota"
 msgid "Reply to"
 msgstr "Rispondi a"
 
-#: include/utils-interface.php:148 reports/index.php:29 reports/index.php:88
+#: include/utils-interface.php:144 reports/index.php:29 reports/index.php:88
 msgid "Reports"
 msgstr "Report"
 
-#: include/utils-interface.php:199
+#: locale/datastrings.php:21
+msgid "Restaurant"
+msgstr "Ristorazione"
+
+#: locale/datastrings.php:22
+msgid "Retail"
+msgstr "Vendita al Dettaglio"
+
+#: include/utils-interface.php:195
 msgid "Rev."
 msgstr "Rev."
 
@@ -2679,9 +2789,13 @@ msgstr "Titolo della Ricerca"
 msgid "Search for "
 msgstr "Cerca per "
 
-#: contacts/transfer.php:46
+#: contacts/transfer.php:46 include/strings.php:19
 msgid "Search for Company"
 msgstr "Cerca per Azienda"
+
+#: include/strings.php:18
+msgid "Search for Contact"
+msgstr "Cerca per Contatto"
 
 #: reports/completed-items.php:131 reports/open-items.php:136
 #: reports/overdue-items.php:151
@@ -2787,7 +2901,7 @@ msgstr "Stato"
 msgid "Status Definitions"
 msgstr "Definizioni Stati"
 
-#: include/utils-interface.php:80
+#: include/utils-interface.php:83
 msgid "Status not changed."
 msgstr "Stato non modificato."
 
@@ -2845,6 +2959,14 @@ msgstr "Il sottosistema email ha inviato"
 msgid "There is no "
 msgstr "Non esiste "
 
+#: include/strings.php:24
+msgid "There is no company by that name"
+msgstr "Nessuna azienda con questo nome"
+
+#: include/strings.php:23
+msgid "There is no contact by that name"
+msgstr "Nessun contatto con questo nome"
+
 #: opportunities/export.php:83
 msgid "There was a problem with your export"
 msgstr "Si è verificato un errore durante l'export"
@@ -2853,7 +2975,7 @@ msgstr "Si è verificato un errore durante l'export"
 msgid "This Address Is Also Used By"
 msgstr "Questo indirizzo è utilizzato anche da"
 
-#: include/utils-interface.php:80
+#: include/utils-interface.php:83
 msgid "This activity is still open."
 msgstr "Questa attività è ancora aperta."
 
@@ -3048,7 +3170,7 @@ msgstr "Visualizza/Modifica"
 msgid "WARNING: No array of contacts!"
 msgstr "AVVISO: Nessun array di contatti"
 
-#: include/utils-interface.php:76
+#: include/utils-interface.php:79
 msgid "We could not authenticate you."
 msgstr "Sì è verificato un errore di autenticazione"
 
@@ -3133,8 +3255,7 @@ msgid ""
 "You should NOT delete the last element of a relationship type, or a used "
 "relationship type."
 msgstr ""
-"Non cancellare l'ultimo elemento di un tipo relazione, o un tipo già "
-"in uso."
+"Non cancellare l'ultimo elemento di un tipo relazione, o un tipo già in uso."
 
 #: admin/data_clean.php:330
 msgid "Your database has been cleaned."
@@ -3182,4 +3303,3 @@ msgstr "tabulatore"
 #: admin/case-statuses/some.php:42
 msgid "up"
 msgstr "su"
-
