@@ -4,7 +4,7 @@
  *
  * An include file to override ADODB_Pager to implement cases specific functions
  *
- * $Id: pager.php,v 1.2 2004/09/21 18:26:31 introspectshun Exp $
+ * $Id: pager.php,v 1.3 2005/01/09 03:22:51 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -46,7 +46,7 @@ class Cases_Pager extends ADODB_Pager{
 
         if ($this->how_many_rows > 0)           
         {
-            echo "<tr><td class=widget_content_form_element colspan=10><input type=button class=button onclick=\"javascript: exportIt();\" value='" . _("Export") . " - " . _("Not Coded Yet") . "'> ";
+            echo "<tr><td class=widget_content_form_element colspan=10><input type=button class=button onclick=\"javascript: exportIt();\" value='" . _("Export") . "'> ";
             echo "<input type=button class=button onclick=\"javascript: bulkEmail();\" value='" . _("Mail Merge") . "'></td></tr>";
         }
 
@@ -57,6 +57,9 @@ class Cases_Pager extends ADODB_Pager{
 
 /**
  * $Log: pager.php,v $
+ * Revision 1.3  2005/01/09 03:22:51  braverock
+ * - turn on export
+ *
  * Revision 1.2  2004/09/21 18:26:31  introspectshun
  * - Localized strings for i18n compatibility
  *
