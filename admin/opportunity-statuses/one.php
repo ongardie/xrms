@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.12 2004/07/25 18:38:17 johnfawcett Exp $
+ * $Id: one.php,v 1.13 2005/01/11 22:23:32 vanmer Exp $
  */
 
 //uinclude required common files
@@ -59,11 +59,11 @@ $sql_activity_templates="select activity_title,
 
 $classname = 'open_activity';
 
+
+$rst = $con->execute($sql_activity_templates);
 //get first record count and last record count
 $cnt = 1;
 $maxcnt = $rst->rowcount();
-
-$rst = $con->execute($sql_activity_templates);
 //make activity_templates table in HTML
 if ($rst) {
     while (!$rst->EOF) {
@@ -77,20 +77,21 @@ if ($rst) {
             . $opportunity_status_id . "'>"
             . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['duration'] . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>'
                 . '<table width=100% cellpadding=0 border=0 cellspacing=0>'
-                . '<tr><td>' . $rst->fields['activity_type_pretty_name'] . '</td>'
+                . '<tr><td>' . $sort_order . '</td>'
                 . '<td align=right>';
         if ($sort_order != $cnt) {
             $activity_rows .= '<a href="' . $http_site_root
-            . '/admin/sort.php?direction=up&sort_order='
+            . '/admin/sort.php?allowMultiple=1&direction=up&sort_order='
             . $sort_order . '&table_name=opportunity_status&on_what_id=' . $opportunity_status_id
             . '&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id='
             . $opportunity_status_id . '&activity_template=1">up</a> &nbsp; ';
         }
         if ($sort_order != $maxcnt) {
             $activity_rows .= '<a href="' . $http_site_root
-            . '/admin/sort.php?direction=down&sort_order='
+            . '/admin/sort.php?allowMultiple=1&direction=down&sort_order='
             . $sort_order . '&table_name=opportunity_status&on_what_id=' . $opportunity_status_id
             . '&return_url=/admin/opportunity-statuses/one.php?opportunity_status_id='
             . $opportunity_status_id . '&activity_template=1">down</a>';
@@ -170,16 +171,17 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=3><?php echo _("Link Activity To Opportunity Status"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Link Activity To Opportunity Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Duration"); ?><br><?php echo _("(defaults to days)"); ?></td>
                 <td class=widget_label>Type</td>
+                <td class=widget_label>Sort Order</td>
             <tr>
                 <td class=widget_content_form_element><input type=text size=40 name="title"></td>
                 <td class=widget_content_form_element><input type=text name="duration"></td>
-                <td class=widget_content_form_element>
+                <td class=widget_content_form_element colspan=2>
                     <?php
                         echo $activity_type_menu;
                     ?>
@@ -232,6 +234,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2005/01/11 22:23:32  vanmer
+ * - altered to allow multiple activities to exist at the same sort_order, for workflow additions
+ * - altered to properly show up/down links by retrieving record count from correct recordset
+ *
  * Revision 1.12  2004/07/25 18:38:17  johnfawcett
  * - corrected erroneously pasted string
  *
