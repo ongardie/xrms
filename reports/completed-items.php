@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: completed-items.php,v 1.10 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: completed-items.php,v 1.11 2004/09/02 23:34:26 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -27,7 +27,8 @@ $send_email_to = $_GET['send_email_to'];
 $all_users = $_GET['all_users'];
 $display = $_GET['display'];
 
-$use_hr = 1; // comment this out to remove <hr>'s from between lines
+//These need to be moved to system parameters or options when requesting the report
+$use_hr = 0; // comment this out to remove <hr>'s from between lines
 $say_no_when_none = 1; // display "NO (CASES|ACTIVITIES|CAMPAIGNS|OPPORTUNITES} for First_Names Last_Name"
 
 $userArray = array();
@@ -168,7 +169,7 @@ if (($user_id) && (!$all_users)) {
 }
 
 if ($all_users) {
-    $sql = "select user_id from users";
+    $sql = "select user_id from users where user_record_status = 'a' order by last_name, first_names";
     $rst = $con->execute($sql);
     while (!$rst->EOF) {
         array_push($userArray, $rst->fields['user_id']);
@@ -226,7 +227,7 @@ foreach ($userArray as $key => $user_id) {
         }
     else {
         if ($say_no_when_none) {
-            $output .= "<p><b>" _("NO COMPLETED ACTIVITIES for") . " $name</b><br></p>\n";
+            $output .= "<p><b>" . _("NO COMPLETED ACTIVITIES for") . " $name</b><br></p>\n";
         }
     }
     } // End Activities
@@ -388,6 +389,10 @@ if (($display) || (!$friendly)) {
 
 /**
  * $Log: completed-items.php,v $
+ * Revision 1.11  2004/09/02 23:34:26  maulani
+ * - Fix syntax error
+ * - Eliminate deleted users from all users report
+ *
  * Revision 1.10  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *
