@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.4 2004/04/07 19:38:26 maulani Exp $
+ * $Id: sidebar.php,v 1.5 2004/04/19 12:12:10 braverock Exp $
  */
 
 $opportunity_rows = "<div id='opportunity_sidebar'>
@@ -22,6 +22,7 @@ $opportunity_sql = "select * from opportunities, opportunity_statuses, users
 where opportunities.opportunity_status_id = opportunity_statuses.opportunity_status_id
 and opportunities.user_id = users.user_id
 and opportunity_record_status = 'a'
+and opportunity_statuses.status_open_indicator = 'o'
 $opportunity_limit_sql
 order by close_at, sort_order
 limit 5";
@@ -74,6 +75,9 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.5  2004/04/19 12:12:10  braverock
+ * - show only open opportunities in sidebar
+ *
  * Revision 1.4  2004/04/07 19:38:26  maulani
  * - Add CSS2 positioning
  * - Repair HTML to meet validation
