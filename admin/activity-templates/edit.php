@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.1 2004/06/03 16:11:53 braverock Exp $
+ * $Id: edit.php,v 1.2 2004/06/14 20:50:11 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -10,6 +10,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -115,6 +116,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.2  2004/06/14 20:50:11  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.1  2004/06/03 16:11:53  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall

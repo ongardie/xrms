@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.1 2004/06/03 16:11:53 braverock Exp $
+ * $Id: new.php,v 1.2 2004/06/14 20:50:11 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 
@@ -43,15 +44,19 @@ $rst = $con->execute($sql);
 $sort_order = $rst->rowcount() + 1;
 $rst->close();
 
-$sql = "insert into activity_templates set
-        activity_title = ". $con->qstr($activity_title, get_magic_quotes_gpc()) . ",
-        on_what_id = " . $con->qstr($on_what_id, get_magic_quotes_gpc()) . ",
-        on_what_table = " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ",
-        activity_type_id = " . $con->qstr($activity_type_id, get_magic_quotes_gpc()) . ",
-        duration = ". $con->qstr($duration, get_magic_quotes_gpc()) . ",
-        sort_order = " . $con->qstr($sort_order, get_magic_quotes_gpc());
+$sql = "SELECT * FROM activity_templates WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
 
-$con->execute($sql);
+$rec = array();
+$rec['activity_title'] = $activity_title;
+$rec['on_what_id'] = $on_what_id;
+$rec['on_what_table'] = $on_what_table;
+$rec['activity_type_id'] = $activity_type_id;
+$rec['duration'] = $duration;
+$rec['sort_order'] = $sort_order;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $con->close();
 
@@ -64,6 +69,10 @@ header("Location: ".$http_site_root.'/'.$on_what_table.'/one.php?'.$table_name.'
 
 /**
  * $Log: new.php,v $
+ * Revision 1.2  2004/06/14 20:50:11  introspectshun
+ * - Add adodb-params.php include for multi-db compatibility.
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL functions.
+ *
  * Revision 1.1  2004/06/03 16:11:53  braverock
  * - add functionality to support workflow and activity templates
  *   - functionality contributed by Brad Marshall
