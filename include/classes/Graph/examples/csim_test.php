@@ -1,10 +1,10 @@
 <?php
 
-require_once('../../../include-locations.inc');
+require_once('../../../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 
-require_once('BarGraph.php');
+require_once('../BarGraph.php');
 
 
 $data1 = array();
