@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.11 2004/07/07 21:59:47 introspectshun Exp $
+ * $Id: new-2.php,v 1.12 2004/07/08 19:47:50 neildogg Exp $
  */
 require_once('../include-locations.inc');
 
@@ -43,6 +43,10 @@ $custom4 = $_POST['custom4'];
 
 $last_name = (strlen($last_name) > 0) ? $last_name : "[last name]";
 $first_names = (strlen($first_names) > 0) ? $first_names : "[first names]";
+// If salutation is 0, make sure you replace it with an empty string
+if(!$salutation) {
+    $salutation = "";
+}
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -89,6 +93,9 @@ header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id"
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.12  2004/07/08 19:47:50  neildogg
+ * - Salutation was inserting 0 on a null salutation choice
+ *
  * Revision 1.11  2004/07/07 21:59:47  introspectshun
  * - Now passes a table name instead of a recordset into GetInsertSQL
  *
