@@ -4,7 +4,7 @@
  *
  * Edit account-status
  *
- * $Id: one.php,v 1.7 2004/07/25 15:00:20 johnfawcett Exp $
+ * $Id: one.php,v 1.8 2004/07/25 17:19:59 johnfawcett Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -77,7 +77,7 @@ start_page($page_title);
         </form>
 
         <form action=delete.php method=post>
-        <input type=hidden name=account_status_id value="<?php  echo $account_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Account Status").'?'; ?>');">
+        <input type=hidden name=account_status_id value="<?php  echo $account_status_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Account Status?"); ?>');">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Account Status"); ?></td>
@@ -85,12 +85,13 @@ start_page($page_title);
             <tr>
                 <td class=widget_content>
                 <?php
-                    echo _("Click the button below to remove this account status from the system.")
+                    echo _("Click the button below to permanently remove this item.")
                        . '<p>'
-                       . _("Note: This action CANNOT be undone!");
+                       . _("Note: This action CANNOT be undone!")
+					   . '</p>';
                 ?>
                 <p>
-                <input class=button type=submit value="<?php echo _("Delete Account Status"); ?>">
+                <input class=button type=submit value="<?php echo _("Delete"); ?>">
                 </td>
             </tr>
         </table>
@@ -118,6 +119,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.8  2004/07/25 17:19:59  johnfawcett
+ * - Reinserted ? in gettext strings - needed for some languages
+ * - Standardized Delete text and button
+ *
  * Revision 1.7  2004/07/25 15:00:20  johnfawcett
  * - unified page title
  * - corrected gettext call
