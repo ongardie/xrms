@@ -2,7 +2,7 @@
 /**
  * Insert Updated File information into the database
  *
- * $Id: edit-2.php,v 1.3 2004/06/12 07:20:40 introspectshun Exp $
+ * $Id: edit-2.php,v 1.4 2005/01/13 18:51:23 vanmer Exp $
  */
 
 //include required files
@@ -14,9 +14,9 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
-
 $file_id = $_POST['file_id'];
+$session_user_id = session_check('','Update');
+
 $file_pretty_name = $_POST['file_pretty_name'];
 $file_description = $_POST['file_description'];
 $file_entered_at = $_POST['file_entered_at'];
@@ -73,6 +73,9 @@ header("Location: one.php?msg=saved&file_id=$file_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.4  2005/01/13 18:51:23  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.3  2004/06/12 07:20:40  introspectshun
  * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
  *

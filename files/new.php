@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.12 2004/08/03 18:05:56 cpsource Exp $
+ * $Id: new.php,v 1.13 2005/01/13 18:51:23 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('','Create');
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
@@ -136,6 +136,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.13  2005/01/13 18:51:23  vanmer
+ * - Basic ACL changes to allow create/delete/update functionality to be restricted
+ *
  * Revision 1.12  2004/08/03 18:05:56  cpsource
  * - Set mime type when database entry is created
  *
