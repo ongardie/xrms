@@ -20,6 +20,8 @@ alter table addresses add line2 varchar(255) not null;
 alter table addresses add city varchar(255) not null;
 alter table addresses add province varchar(255) not null;
 alter table addresses add postal_code varchar(255) not null;
+alter table addresses add use_pretty_address char(1) not null;
+alter table addresses alter column use_pretty_address set default 'f';
 
 create table countries (
 	country_id													int not null primary key auto_increment,
