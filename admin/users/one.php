@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.17 2005/01/13 17:56:13 vanmer Exp $
+ * $Id: one.php,v 1.18 2005/02/10 23:46:13 vanmer Exp $
  */
 
 //include required files
@@ -34,7 +34,9 @@ if ($rst) {
     $role_id         = $rst->fields['role_id'];
     $gmt_offset      = $rst->fields['gmt_offset'];
     $language        = $rst->fields['language'];
-
+    $record_status  = $rst->fields['user_record_status'];
+    if ($record_status=='a') $enabled=true;
+    else $enabled=false;
     $rst->close();
 }
 
@@ -115,6 +117,10 @@ start_page($page_title);
                 <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Enabled"); ?></td>
+                <td class=widget_content_form_element><input type=checkbox name=enabled value="YES" <?php if ($enabled) echo "CHECKED";?>></td>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
                     <input class=button type=button onclick="javascript: location.href='change-password.php?edit_user_id=<?php echo $edit_user_id ?>';" value="<?php echo _("Change Password"); ?>">
                 </td>
@@ -154,6 +160,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.18  2005/02/10 23:46:13  vanmer
+ * - added enabled flag to reflect user account status
+ *
  * Revision 1.17  2005/01/13 17:56:13  vanmer
  * - added new ACL code to user management section
  *
