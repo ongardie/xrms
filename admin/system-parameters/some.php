@@ -2,7 +2,7 @@
 /**
  * View the system parameters
  *
- * $Id: some.php,v 1.1 2004/07/14 16:23:37 maulani Exp $
+ * $Id: some.php,v 1.2 2004/07/14 16:46:03 maulani Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -22,9 +22,9 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
-        $theparameter = str_replace (" ", "%20", $rst->fields['param_id']);
+        $theparameter = urlencode ($rst->fields['param_id']);
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?param_id=' . htmlentities ($theparameter, ENT_QUOTES) . '>' . $rst->fields['param_id'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href=one.php?param_id=' . $theparameter . '>' . $rst->fields['param_id'] . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -61,6 +61,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.2  2004/07/14 16:46:03  maulani
+ * - Fix URL encode bug
+ *
  * Revision 1.1  2004/07/14 16:23:37  maulani
  * - Add administrator capability to modify system parameters
  *
