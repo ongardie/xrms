@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.35 2005/03/14 18:52:36 daturaarutad Exp $
+ * $Id: one.php,v 1.36 2005/03/15 21:23:23 daturaarutad Exp $
  */
 
 //include required files
@@ -146,7 +146,7 @@ and a.activity_record_status = 'a'";
     $endrows = "<tr><td class=widget_content_form_element colspan=10>
                 $pager_columns_button
                 <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
 
     $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'CasesActivitiesPager', $columns, false, true);
     $pager->AddEndRows($endrows);
@@ -428,12 +428,23 @@ start_page($page_title, true, $msg);
     </div>
 </div>
 
+
+<script language="JavaScript" type="text/javascript">
+function bulkEmail() {
+    document.forms[0].action = "../email/email.php";
+    document.forms[0].submit();
+}
+</script>
+
 <?php
 
 end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.36  2005/03/15 21:23:23  daturaarutad
+ * fixed Mail Merge for activities pager
+ *
  * Revision 1.35  2005/03/14 18:52:36  daturaarutad
  * added default_sort to On column of activities pager
  *
