@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.30 2005/01/07 03:40:54 braverock Exp $
+ * $Id: new-2.php,v 1.31 2005/01/09 00:01:39 braverock Exp $
  */
 
 //where do we include from
@@ -212,14 +212,20 @@ if ($activity_status == 'c') {
     header("Location: " . $http_site_root . $return_url);
 } elseif ($activities_default_behavior == "Fast") {
     header("Location: " . $http_site_root . $return_url);
-//} elseif(!empty($opportunity_status_id)) {
-//    header("Location: " . $http_site_root . "/opportunities/one.php?return_url=" . $return_url . "&opportunity_id=" . $opportunity_id);
+} elseif ($activities_default_behavior == "Long") {  //If Long activities are the default, send them to edit the activity
+    header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
+} elseif(!empty($opportunity_status_id)) {
+    header("Location: " . $http_site_root . "/opportunities/one.php?return_url=" . $return_url . "&opportunity_id=" . $opportunity_id);
 } else {  //If Long activities are the default, send them to edit the activity
     header("Location: " . $http_site_root . "/activities/one.php?return_url=" . $return_url . "&activity_id=" . $activity_id);
 }
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.31  2005/01/09 00:01:39  braverock
+ *- fixed Fast/Long processing
+ *- re-enable opportunity status code accidentally commented out
+ *
  *Revision 1.30  2005/01/07 03:40:54  braverock
  *- add status pop-up link
  *
