@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.1 2004/03/18 01:07:18 maulani Exp $
+ * $Id: install.php,v 1.2 2004/03/19 23:48:43 maulani Exp $
  */
 
 // include the installation utility routines
@@ -21,6 +21,20 @@ if ($include_directory == "/full/path/to/xrms/include/") {
     // Oops!  The include directory is still set to it's default value
     // Now instruct the user in how to set this value
     $problem = 'The include directory variable has not been set.<BR><BR>';
+    $problem .= 'Please open the include-locations.inc file which is located ';
+    $problem .= 'at the top level of the xrms installation.  Change the value ';
+    $problem .= 'of the $include_directory variable to the correct path.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+    
+    install_fatal_error($problem);
+}
+
+// now check to make sure that the include-directory actually exists
+if (!file_exists ($include_directory) ) {
+    // Oops!  The include directory does not exist
+    // Now instruct the user in how to set this value
+    $problem = 'The include directory variable has not been set correctly.<BR><BR>';
+    $problem .= "It is currently set to '$include_directory', which does not exist.<BR><BR>";
     $problem .= 'Please open the include-locations.inc file which is located ';
     $problem .= 'at the top level of the xrms installation.  Change the value ';
     $problem .= 'of the $include_directory variable to the correct path.<BR><BR>';
@@ -47,6 +61,104 @@ if ($xrms_db_username == "your_mysql_username") {
     $problem .= 'in the xrms include directory.  Change the value ';
     $problem .= 'of the $xrms_db_username variable to the database username and ';
     $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+    
+    install_fatal_error($problem);
+}
+
+// has a database password been set?
+if ($xrms_db_password == "your_mysql_password") {
+    // Oops!  The database username does not have a valid value
+    // Now instruct the user in how to set this value
+    $problem = 'The database password variable has not been set.<BR><BR>';
+    $problem .= 'Please open the vars.php file which is located ';
+    $problem .= 'in the xrms include directory.  Change the value ';
+    $problem .= 'of the $xrms_db_password variable to the database password and ';
+    $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+    
+    install_fatal_error($problem);
+}
+
+// has a database name been set?
+if ($xrms_db_dbname == "your_mysql_database") {
+    // Oops!  The database username does not have a valid value
+    // Now instruct the user in how to set this value
+    $problem = 'The database name variable has not been set.<BR><BR>';
+    $problem .= 'Please open the vars.php file which is located ';
+    $problem .= 'in the xrms include directory.  Change the value ';
+    $problem .= 'of the $xrms_db_dbname variable to the database name and ';
+    $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+    
+    install_fatal_error($problem);
+}
+
+// has a web root url been set?
+if ($http_site_root == "http://www.yoursitename.com/xrms") {
+    // Oops!  The database username does not have a valid value
+    // Now instruct the user in how to set this value
+    $problem = 'The http site root variable has not been set.<BR><BR>';
+    $problem .= 'Please open the vars.php file which is located ';
+    $problem .= 'in the xrms include directory.  Change the value ';
+    $problem .= 'of the $http_site_root variable to the correct URL and ';
+    $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+    
+    install_fatal_error($problem);
+}
+
+// has a file root been set?
+if ($xrms_file_root == "/full/path/to/xrms") {
+    // Oops!  The database username does not have a valid value
+    // Now instruct the user in how to set this value
+    $problem = 'The application file root variable has not been set.<BR><BR>';
+    $problem .= 'Please open the vars.php file which is located ';
+    $problem .= 'in the xrms include directory.  Change the value ';
+    $problem .= 'of the $xrms_file_root variable to the correct path and ';
+    $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+    
+    install_fatal_error($problem);
+}
+
+// now check to make sure that the file root actually exists
+if (!file_exists ($xrms_file_root) ) {
+    // Oops!  The application file root directory does not exist
+    // Now instruct the user in how to set this value
+    $problem = 'The application file root directory variable has not been set correctly.<BR><BR>';
+    $problem .= "It is currently set to '$xrms_file_root', which does not exist.<BR><BR>";
+    $problem .= 'Please open the vars.php file which is located ';
+    $problem .= 'in the include folder.  Change the value ';
+    $problem .= 'of the $xrms_file_root variable to the correct path.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+    
+    install_fatal_error($problem);
+}
+
+// has a temporary upload directory been set?
+if ($tmp_upload_directory == "/full/path/to/xrms/tmp/") {
+    // Oops!  The database username does not have a valid value
+    // Now instruct the user in how to set this value
+    $problem = 'The temporary upload directory variable has not been set.<BR><BR>';
+    $problem .= 'Please open the vars.php file which is located ';
+    $problem .= 'in the xrms include directory.  Change the value ';
+    $problem .= 'of the $tmp_upload_directory variable to the correct path and ';
+    $problem .= 'set all of the other variables in the vars.php file.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+    
+    install_fatal_error($problem);
+}
+
+// now check to make sure that the temporary upload directory actually exists
+if (!file_exists ($tmp_upload_directory) ) {
+    // Oops!  The application file root directory does not exist
+    // Now instruct the user in how to set this value
+    $problem = 'The temporary upload directory variable has not been set correctly.<BR><BR>';
+    $problem .= "It is currently set to '$tmp_upload_directory', which does not exist.<BR><BR>";
+    $problem .= 'Please open the vars.php file which is located ';
+    $problem .= 'in the include folder.  Change the value ';
+    $problem .= 'of the $tmp_upload_directory variable to the correct path.<BR><BR>';
     $problem .= 'Then run this installation again.<BR><BR>';
     
     install_fatal_error($problem);
@@ -108,6 +220,10 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.2  2004/03/19 23:48:43  maulani
+ *- Add additional tests to insure that include-locations
+ *  and vars.php are setup correctly
+ *
  *Revision 1.1  2004/03/18 01:07:18  maulani
  *- Create installation tests to check whether the include location and
  *  vars.php have been configured.
