@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.10 2004/04/15 22:04:39 maulani Exp $
+ * $Id: some.php,v 1.11 2004/05/06 13:55:49 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -40,6 +40,7 @@ if ($clear) {
     $company_code = '';
     $user_id = '';
     $crm_status_id = '';
+    $industry_id = '';
 } elseif ($use_post_vars) {
     $sort_column = $_POST['sort_column'];
     $current_sort_column = $_POST['current_sort_column'];
@@ -53,6 +54,7 @@ if ($clear) {
     $state = $_POST ['state'];
     $user_id = $_POST['user_id'];
     $crm_status_id = $_POST['crm_status_id'];
+    $industry_id = $_POST['industry_id'];
 } else {
     $sort_column = $_SESSION['campaigns_sort_column'];
     $current_sort_column = $_SESSION['campaigns_current_sort_column'];
@@ -64,6 +66,7 @@ if ($clear) {
     $company_code = $_SESSION['companies_company_code'];
     $user_id = $_SESSION['companies_user_id'];
     $crm_status_id = $_SESSION['companies_crm_status_id'];
+    $industry_id = $_SESSION['industry_id'];
 }
 
 if (!strlen($sort_column) > 0) {
@@ -103,6 +106,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "select concat('<a href=\"one.php?company_id=', c.company_id, '\">', c.company_name, '</a>') as '$strCompaniesSomeCompanyNameLabel',
 c.company_code as '$strCompaniesSomeCompanyCodeLabel',
 u.username as '$strCompaniesSomeCompanyUserLabel',
+industry_pretty_name as '$strCompaniesSomeCompanyIndustrylabel',
 crm_status_pretty_name as '$strCompaniesSomeCompanyCRMStatusLabel',
 as1.account_status_display_html as '$strCompaniesSomeCompanyAccountStatusLabel',
 r.rating_display_html as '$strCompaniesSomeCompanyRatingLabel' \n";
@@ -111,12 +115,13 @@ $criteria_count = 0;
 
 if ($company_category_id > 0) {
     $criteria_count++;
-    $from = "from companies c, addresses addr, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
+    $from = "from companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u, entity_category_map ecm ";
 } else {
-    $from = "from companies c, addresses addr, crm_statuses crm, ratings r, account_statuses as1, users u ";
+    $from = "from companies c, addresses addr, industries i, crm_statuses crm, ratings r, account_statuses as1, users u ";
 }
 
-$where .= "where c.crm_status_id = crm.crm_status_id ";
+$where .= "where c.industry_id = i.industry_id ";
+$where .= "and c.crm_status_id = crm.crm_status_id ";
 $where .= "and c.default_primary_address = addr.address_id ";
 $where .= "and r.rating_id = c.rating_id ";
 $where .= "and as1.account_status_id = c.account_status_id ";
@@ -169,6 +174,12 @@ if (strlen($crm_status_id) > 0) {
     $criteria_count++;
     $where .= " and c.crm_status_id = $crm_status_id";
 }
+
+if (strlen($industry_id) > 0) {
+    $criteria_count++;
+    $where .= " and c.industry_id = $industry_id";
+}
+
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
@@ -234,6 +245,11 @@ $rst = $con->execute($sql2);
 $crm_status_menu = $rst->getmenu2('crm_status_id', $crm_status_id, true);
 $rst->close();
 
+$sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_id";
+$rst = $con->execute($sql2);
+$industry_menu = $rst->getmenu2('industry_id', $industry_id, true);
+$rst->close();
+
 if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'search companies', '', '');
 }
@@ -256,13 +272,14 @@ start_page($page_title, true, $msg);
         <input type=hidden name=companies_next_page>
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=7><?php  echo $strCompaniesSomeSearchCriteriaTitle; ?></td>
+                <td class=widget_header colspan=8><?php  echo $strCompaniesSomeSearchCriteriaTitle; ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php  echo $strCompaniesSomeCompanyNameLabel; ?></td>
                 <td class=widget_label><?php  echo $strCompaniesSomeCompanyCodeLabel; ?></td>
                 <td class=widget_label><?php  echo $strCompaniesSomeCompanyUserLabel; ?></td>
                 <td class=widget_label><?php  echo $strCompaniesSomeCompanyCategoryLabel; ?></td>
+                <td class=widget_label><?php  echo $strCompaniesSomeCompanyIndustrylabel; ?></td>
                 <td class=widget_label><?php  echo $strCompaniesSomeCompanyCRMStatusLabel; ?></td>
                 <td class=widget_label><?php  echo $strCompaniesSomeCompanyCityLabel; ?></td>
                 <td class=widget_label><?php  echo $strCompaniesSomeCompanyStateLabel; ?></td>
@@ -270,15 +287,16 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name="company_name" size=15 value="<?php  echo $company_name; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="company_code" size=5 value="<?php  echo $company_code; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="company_code" size=4 value="<?php  echo $company_code; ?>"></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $company_category_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $industry_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
                 <td class=widget_content_form_element><input type=text name="city" size=10 value="<?php  echo $city; ?>"></td>
-                <td class=widget_content_form_element><input type=text name="state" size=10 value="<?php echo $state; ?>"></td>
+                <td class=widget_content_form_element><input type=text name="state" size=5 value="<?php echo $state; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=7><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
+                <td class=widget_content_form_element colspan=8><input class=button type=submit value="Search"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="Clear Search"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='Bulk E-Mail'>";}; ?> </td>
             </tr>
         </table>
         </form>
@@ -359,6 +377,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2004/05/06 13:55:49  braverock
+ * -add industry search to Companies
+ *  - modified form of SF patch 949147 submitted by frenchman
+ *
  * Revision 1.10  2004/04/15 22:04:39  maulani
  * - Change to CSS2 positioning
  * - Clean HTML to achieve validation

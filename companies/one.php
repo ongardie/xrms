@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.33 2004/05/04 16:41:35 gpowers Exp $
+ * $Id: one.php,v 1.34 2004/05/06 13:55:49 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -53,6 +53,7 @@ if ($rst) {
     $legal_name = $rst->fields['legal_name'];
     $tax_id = $rst->fields['tax_id'];
     $company_code = $rst->fields['company_code'];
+    $industry_pretty_name = $rst->fields['industry_pretty_name'];
     $crm_status_pretty_name = $rst->fields['crm_status_pretty_name'];
     $company_source = $rst->fields['company_source_display_html'];
     $industry_pretty_name = $rst->fields['industry_pretty_name'];
@@ -403,6 +404,10 @@ function openNewsWindow() {
                                     <td class=clear><?php  echo $company_code; ?></td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel>Industry</td>
+                                    <td class=clear><?php  echo $industry_pretty_name; ?></td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel>CRM Status</td>
                                     <td class=clear><?php  echo $crm_status_pretty_name; ?></td>
                                 </tr>
@@ -649,6 +654,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.34  2004/05/06 13:55:49  braverock
+ * -add industry search to Companies
+ *  - modified form of SF patch 949147 submitted by frenchman
+ *
  * Revision 1.33  2004/05/04 16:41:35  gpowers
  * Removed duplicate "Relationship." Oops.
  *
