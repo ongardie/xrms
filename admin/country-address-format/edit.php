@@ -4,7 +4,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: edit.php,v 1.6 2004/07/25 12:30:58 braverock Exp $
+ * $Id: edit.php,v 1.7 2004/07/25 14:45:57 johnfawcett Exp $
  */
 
 //include required files
@@ -40,7 +40,7 @@ $sql = "select country_id, country_name, countries.address_format_string_id, afs
 $rst = $con->execute($sql);
 
 if ($rst) {
-    echo "<p>"._("Country:"). $rst->fields['country_name'] . "<br></p>
+    echo "<p>"._("Country").': ' .$rst->fields['country_name'] . "<br></p>
     <form action=edit-2.php method=get>
     <input type=hidden name=country_id value=$country_id>
     <input type=hidden name=address_format_string_id value=$address_format_string_id>
@@ -62,7 +62,7 @@ if ($rst) {
     echo "
 <input class=button type=submit value="._("Change")."></form><br><br>";
 
-echo "<b> "._("OR ")."</b>"._("Enter New format:")."
+echo "<b> "._("OR")."</b> "._("Enter New format").":
 <form action=new.php method=post>
 <input type=hidden name=country_id value=$country_id>
 <textarea rows=5 cols=40 name=address_format_string></textarea><br>
@@ -77,6 +77,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.7  2004/07/25 14:45:57  johnfawcett
+ * - removed some punctuation from gettext strings
+ *
  * Revision 1.6  2004/07/25 12:30:58  braverock
  * - remove lang file require_once, as it is no longer used
  *
