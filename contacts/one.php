@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.75 2005/04/04 18:11:40 ycreddy Exp $
+ * $Id: one.php,v 1.76 2005/04/05 18:02:09 ycreddy Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -84,6 +84,9 @@ if ($rst) {
     $fax = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['fax']);
     $entered_at = $con->userdate($rst->fields['entered_at']);
     $last_modified_at = $con->userdate($rst->fields['last_modified_at']);
+    $entered_by = $rst->fields['entered_by_username'];
+    $last_modified_by = $rst->fields['last_modified_by_username'];
+
     $rst->close();
 }
 
@@ -592,6 +595,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.76  2005/04/05 18:02:09  ycreddy
+ * added assignment for entered_by and last_modified_by that use names different from column names
+ *
  * Revision 1.75  2005/04/04 18:11:40  ycreddy
  * Instantiated variable for each contact field for plugin access without an extra read and also moved ->close() to the end of the page for plugin use without creating a new DB connection
  *
