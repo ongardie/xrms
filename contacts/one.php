@@ -54,6 +54,7 @@ if ($rst) {
     $work_phone = $rst->fields['work_phone'];
     $cell_phone = $rst->fields['cell_phone'];
     $home_phone = $rst->fields['home_phone'];
+    $fax = $rst->fields['fax'];
     $aol_name = $rst->fields['aol_name'];
     $yahoo_name = $rst->fields['yahoo_name'];
     $msn_name = $rst->fields['msn_name'];
@@ -382,6 +383,10 @@ function markComplete() {
                                 <tr>
                                     <td class=sublabel>Cell Phone</td>
                                     <td class=clear><?php  echo $cell_phone;; ?></td>
+                                </tr>
+                                <tr>
+                                    <td class=sublabel>Fax</td>
+                                    <td class=clear><?php  echo $fax; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel>Interests</td>

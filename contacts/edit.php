@@ -39,6 +39,7 @@ if ($rst) {
     $work_phone = $rst->fields['work_phone'];
     $cell_phone = $rst->fields['cell_phone'];
     $home_phone = $rst->fields['home_phone'];
+    $fax = $rst->fields['fax'];
     $aol_name = $rst->fields['aol_name'];
     $yahoo_name = $rst->fields['yahoo_name'];
     $msn_name = $rst->fields['msn_name'];
@@ -134,16 +135,20 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=home_phone value='<?php  echo $home_phone; ?>' size=30></td>
             </tr>
             <tr>
+                <td class=widget_label_right>Fax</td>
+                <td class=widget_content_form_element><input type=text name=fax value='<?php echo $fax; ?>' size=30></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right>AOL&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text name=aol_name value='<?php  echo $aol_name; ?>' size=25></td>
+                <td class=widget_content_form_element><input type=text name=aol_name value='<?php echo $aol_name; ?>' size=25></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Yahoo&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text name=yahoo_name value='<?php  echo $yahoo_name; ?>' size=25></td>
+                <td class=widget_content_form_element><input type=text name=yahoo_name value='<?php echo $yahoo_name; ?>' size=25></td>
             </tr>
             <tr>
                 <td class=widget_label_right>MSN&nbsp;Name</td>
-                <td class=widget_content_form_element><input type=text name=msn_name value='<?php  echo $msn_name; ?>' size=25></td>
+                <td class=widget_content_form_element><input type=text name=msn_name value='<?php echo $msn_name; ?>' size=25></td>
             </tr>
             <tr>
                 <td class=widget_label_right>Interests</td>
