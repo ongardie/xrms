@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.34 2004/07/28 20:41:30 neildogg Exp $
+ * $Id: some.php,v 1.35 2004/07/31 12:14:59 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -320,9 +320,15 @@ start_page($page_title, true, $msg);
                     if ($company_count > 0) {
                         print "<input class=button type=button onclick='javascript: bulkEmail()' value='". _("Bulk E-Mail")."'>";
                     };
+if ( 0 ) {
+  //
+  // doesn't seem to work
+  // re-enable this when you get it going
+  //
                 //mark Advanced Search as experimental for now.
                 print "\n\t\t"
                      .'&nbsp;<input type=button class=button onclick="javascript: location.href=\'advanced-search.php\';" value="'. _("Advanced Search").'- Experimental">';
+}
                 ?>
             </td>
         </tr>
@@ -405,6 +411,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.35  2004/07/31 12:14:59  cpsource
+ * - Stub advanced search as it doesn't seem to work.
+ *
  * Revision 1.34  2004/07/28 20:41:30  neildogg
  * - Added field recent_action to recent_items
  *  - Same function works transparently
