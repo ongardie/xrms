@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.17 2004/07/14 20:19:50 cpsource Exp $
+ * $Id: some.php,v 1.18 2004/07/15 13:49:54 cpsource Exp $
  */
 
 //include required files
@@ -16,76 +16,23 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 
 $session_user_id = session_check();
 
-$msg    = isset($_GET['msg'])     ? $_GET['msg'] : '';
-$offset = isset($_POST['offset']) ? $_POST['offset'] : '';
-if ( isset($_GET['clear']) ) {
-  $clear = ($_GET['clear'] == 1) ? 1 : 0;
-} else {
-  $clear = 0;
-}
-if ( isset($_POST['use_post_vars']) ) {
-  $use_post_vars = ($_POST['use_post_vars'] == 1) ? 1 : 0;
-} else {
-  $use_post_vars = 0;
-}
-$resort = isset($_POST['resort']) ? $_POST['resort'] : '';
+// declare passed in variables
+$arr_vars = array ( // local var name       // session variable name
+		   'sort_column'        => array ( 'files_sort_column', arr_vars_SESSION ),
+		   'current_sort_column'=> array ( 'files_current_sort_column', arr_vars_SESSION ),
+		   'sort_order'         => array ( 'files_sort_order', arr_vars_SESSION ),
+		   'current_sort_order' => array ( 'files_current_sort_order', arr_vars_SESSION ),
+		   'file_id'            => array ( 'file_id', arr_vars_SESSION ),
+		   'file_name'          => array ( 'file_name', arr_vars_SESSION ),
+		   'file_description'   => array ( 'file_description', arr_vars_SESSION ),
+		   'file_on_what'       => array ( 'file_on_what', arr_vars_SESSION ),
+		   'file_on_what_name'  => array ( 'file_on_what_name', arr_vars_SESSION ),
+		   'file_date'          => array ( 'file_date', arr_vars_SESSION ),
+		   'user_id'            => array ( 'file_user_id', arr_vars_SESSION ),
+		   );
 
-if ($clear) {
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $file_id= '';
-    $file_name= '';
-    $file_description= '';
-    $file_on_what= '';
-    $file_on_what_name= '';
-    $file_date= '';
-    $user_id = '';
-} elseif ($use_post_vars) {
-    $sort_column = $_POST['sort_column'];
-    $current_sort_column = $_POST['current_sort_column'];
-    $sort_order = $_POST['sort_order'];
-    $current_sort_order = $_POST['current_sort_order'];
-    $file_id= $_POST['file_id'];
-    $file_name= $_POST['file_name'];
-    $file_description= $_POST['file_description'];
-    $file_on_what= $_POST['file_on_what'];
-    $file_on_what_name= $_POST['file_on_what_name'];
-    $file_date= $_POST['file_date'];
-    $user_id = $_POST['user_id'];
-} else {
-
-  // first time in ???
-  if ( isset( $_SESSION['files_sort_column'] ) ) {
-    // no - get from session
-    $sort_column = $_SESSION['files_sort_column'];
-    $current_sort_column = $_SESSION['files_current_sort_column'];
-    $sort_order = $_SESSION['files_sort_order'];
-    $current_sort_order = $_SESSION['files_current_sort_order'];
-    $file_id= $_SESSION['file_id'];
-    $file_name= $_SESSION['file_name'];
-    $file_description= $_SESSION['file_description'];
-    $file_on_what= $_SESSION['file_on_what'];
-    $file_on_what_name= $_SESSION['file_on_what_name'];
-    $file_date= $_SESSION['file_date'];
-    $user_id = $_SESSION['file_user_id'];
-  } else {
-    // yes - clear
-    $sort_column = '';
-    $current_sort_column = '';
-    $sort_order = '';
-    $current_sort_order = '';
-    $file_id= '';
-    $file_name= '';
-    $file_description= '';
-    $file_on_what= '';
-    $file_on_what_name= '';
-    $file_date= '';
-    $user_id = '';
-  }
-
-}
+// get all passed in variables
+arr_vars_get_all ( $arr_vars );
 
 if (!strlen($sort_column) > 0) {
     $sort_column = 1;
@@ -104,17 +51,8 @@ $ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif"
 $descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
 $pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
-$_SESSION['files_sort_column'] = $sort_column;
-$_SESSION['files_current_sort_column'] = $sort_column;
-$_SESSION['files_sort_order'] = $sort_order;
-$_SESSION['files_current_sort_order'] = $sort_order;
-$_SESSION['file_id'] = $file_id;
-$_SESSION['file_name'] = $file_name;
-$_SESSION['file_description'] = $file_description;
-$_SESSION['file_on_what'] = $file_on_what;
-$_SESSION['file_on_what_name'] = $file_on_what_name;
-$_SESSION['file_date'] = $file_date;
-$_SESSION['file_user_id'] = $user_id;
+// set all session variables
+arr_vars_session_set ( $arr_vars );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -462,6 +400,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.18  2004/07/15 13:49:54  cpsource
+ * - Added arr_vars sub-system.
+ *
  * Revision 1.17  2004/07/14 20:19:50  cpsource
  * - Resolved $company_count not being set properly
  *   opportunities/some.php tried to set $this which can't be done in PHP V5

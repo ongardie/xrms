@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.29 2004/07/15 13:05:08 cpsource Exp $
+ * $Id: some.php,v 1.30 2004/07/15 13:49:53 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -21,9 +21,6 @@ $_SESSION['language'] = 'english';
 
 $session_user_id = session_check();
 require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
-
-$offset = isset($_POST['offset']) ? $_POST['offset'] : '';
-$resort = isset($_POST['resort']) ? $_POST['resort'] : '';
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -410,6 +407,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.30  2004/07/15 13:49:53  cpsource
+ * - Added arr_vars sub-system.
+ *
  * Revision 1.29  2004/07/15 13:05:08  cpsource
  * - Add arr_vars sub-system for passing variables between code streams.
  *

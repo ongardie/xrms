@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.47 2004/07/15 13:05:09 cpsource Exp $
+ * $Id: utils-misc.php,v 1.48 2004/07/15 13:49:54 cpsource Exp $
  */
 
 /**
@@ -726,9 +726,10 @@ function get_formatted_address (&$con,$address_id) {
  */
 
 // determine BEHAVIOR for getting data when !$clear && !$use_post_vars
-define ( "arr_vars_SESSION"    , 0 );  // just try a SESSION
-define ( "arr_vars_GET"        , 1 );  // just try a GET
-define ( "arr_vars_GET_SESSION", 2 );  // try a GET first, and then if it fails, do a SESSION
+define ( "arr_vars_SESSION"           , 0 );  // just try a SESSION
+define ( "arr_vars_GET"               , 1 );  // just try a GET
+define ( "arr_vars_GET_SESSION"       , 2 );  // try a GET first, and then if it fails, do a SESSION
+define ( "arr_vars_GET_STRLEN_SESSION", 3 );  // try a GET first with length > 0, and then if it fails, do a SESSION
 
 // get all variables
 function arr_vars_get_all ( $ary )
@@ -736,8 +737,12 @@ function arr_vars_get_all ( $ary )
   global $clear;
   global $use_post_vars;
   global $msg;
+  global $resort;
+  global $offset;
 
   $msg    = isset($_GET['msg'])     ? $_GET['msg']     : '';
+  $resort = isset($_POST['resort']) ? $_POST['resort'] : '';
+  $offset = isset($_POST['offset']) ? $_POST['offset'] : '';
 
   if ( isset($_GET['clear']) ) {
     $clear = ($_GET['clear'] == 1) ? 1 : 0;
@@ -785,6 +790,17 @@ function arr_vars_session_get ( $ary )
 	$GLOBALS[$key] = isset($_GET["$value[0]"]) ? $_GET["$value[0]"] : isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
 	break;
 
+      case arr_vars_GET_STRLEN_SESSION:  // try a GET first with length > 0, and then if it fails, do a SESSION
+	if ( isset($_GET["$value[0]"]) ) {
+	  $tmp = isset($_GET["$value[0]"]);
+	  if ( strlen($tmp) > 0 ) {
+	    $GLOBALS[$key] = $tmp;
+	    break;
+	  }
+	}
+	$GLOBALS[$key] = isset($_SESSION["$value[0]"]) ? $_SESSION["$value[0]"] : '';
+	break;
+
       default:
 	echo "utils-misc.php::arr_vars_session_get: unknown flag = $flag<br>";
 	exit;
@@ -820,6 +836,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.48  2004/07/15 13:49:54  cpsource
+ * - Added arr_vars sub-system.
+ *
  * Revision 1.47  2004/07/15 13:05:09  cpsource
  * - Add arr_vars sub-system for passing variables between code streams.
  *

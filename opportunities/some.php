@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.20 2004/07/15 13:15:58 cpsource Exp $
+ * $Id: some.php,v 1.21 2004/07/15 13:49:54 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,8 +18,6 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 //set target and see if we are logged in
 $tmp = $_SERVER['REQUEST_URI'];
 $session_user_id = session_check( $tmp );
-
-$resort = isset($_POST['resort']) ? $_POST['resort'] : '';
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -336,6 +334,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.21  2004/07/15 13:49:54  cpsource
+ * - Added arr_vars sub-system.
+ *
  * Revision 1.20  2004/07/15 13:15:58  cpsource
  * - Add arr_vars sub-system
  *   Get rid of misc undefined variable usages.

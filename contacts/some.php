@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.25 2004/07/15 13:05:09 cpsource Exp $
+ * $Id: some.php,v 1.26 2004/07/15 13:49:53 cpsource Exp $
  */
 
 //include the standard files
@@ -18,13 +18,6 @@ require_once($include_directory . 'adodb/adodb-pager.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
-
-// get call arguments
-if ( isset($_POST['resort']) ) {
-    $resort = $_POST['resort'];
-} else {
-    $resort = '';
-}
 
 // declare passed in variables
 $arr_vars = array ( // local var name             // session variable name, flag
@@ -338,6 +331,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.26  2004/07/15 13:49:53  cpsource
+ * - Added arr_vars sub-system.
+ *
  * Revision 1.25  2004/07/15 13:05:09  cpsource
  * - Add arr_vars sub-system for passing variables between code streams.
  *
