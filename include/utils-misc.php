@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.84 2004/08/13 19:35:12 gpowers Exp $
+ * $Id: utils-misc.php,v 1.85 2004/08/14 00:43:23 gpowers Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -721,7 +721,7 @@ function get_formatted_phone ($con, $address_id, $phone) {
  */
 function get_formatted_address (&$con,$address_id) {
     $sql = "select a.address_body, a.line1, a.line2, a.city, a.province, a.postal_code, a.use_pretty_address, ";
-    $sql .= 'afs.address_format_string, c.country_name ';
+    $sql .= 'afs.address_format_string, c.country_name, c.iso_code2 ';
     $sql .= 'from addresses a, address_format_strings afs, countries c ';
     $sql .= "where a.address_id=$address_id ";
     $sql .= 'and a.country_id=c.country_id ';
@@ -730,14 +730,15 @@ function get_formatted_address (&$con,$address_id) {
 
     if ($rst) {
         $address_body = $rst->fields['address_body'];
-        $line1 = $rst->fields['line1'];
-        $line2 = $rst->fields['line2'];
-        $city = $rst->fields['city'];
-        $province = $rst->fields['province'];
-        $postal_code = $rst->fields['postal_code'];
+        $GLOBALS["line1"] = $line1 = $rst->fields['line1'];
+        $GLOBALS["line2"] = $line2 = $rst->fields['line2'];
+        $GLOBALS["city"] = $city = $rst->fields['city'];
+        $GLOBALS["province"] = $province = $rst->fields['province'];
+        $GLOBALS["postal_code"] = $postal_code = $rst->fields['postal_code'];
         $use_pretty_address = $rst->fields['use_pretty_address'];
         $address_format_string = $rst->fields['address_format_string'];
-        $country = $rst->fields['country_name'];
+        $GLOBALS["country_name"] = $country = $rst->fields['country_name'];
+        $GLOBALS["iso_code2"] = $iso_code2 = $rst->fields['iso_code2'];
 
         if ($use_pretty_address == 't') {
             $address_to_display = nl2br($address_body);
@@ -753,7 +754,19 @@ function get_formatted_address (&$con,$address_id) {
         $address_to_display = ob_get_contents();
         ob_end_clean();
     }
-    return $address_to_display;
+
+    // do not return an empty link
+    if ($address_to_display) {
+
+        // added for mapquest plugin
+        global $use_mapquest_link;
+        if ($use_mapquest_link == "y") {
+            // this is defined in plugins/mapquest/setup.php:
+            return mapquest($line1, $city, $province, $iso_code2, $address_to_display);
+        } else {
+            return $address_to_display;
+        }
+    }
 } //end fn get_formatted_address
 
 /**
@@ -1253,6 +1266,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.85  2004/08/14 00:43:23  gpowers
+ * - added code for mapquest plugin support
+ * - registered address vards as GLOBALS (needed for plugins)
+ *
  * Revision 1.84  2004/08/13 19:35:12  gpowers
  * - added support for CTI/dial plugin (link phone number to dial function)
  *   - added a conditional check to avoid returning an empty link
