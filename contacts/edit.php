@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.15 2004/06/15 17:26:21 introspectshun Exp $
+ * $Id: edit.php,v 1.16 2004/06/21 14:02:06 gpowers Exp $
  */
 
 require_once('../include-locations.inc');
@@ -229,7 +229,8 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <input class=button type=submit value="Save">
-                    <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';"><?php if ($contact_count > 1) {echo(" <input type=button class=button onclick=\"javascript: location.href='delete.php?company_id=$company_id&contact_id=$contact_id';\" value='Delete' onclick=\"javascript: return confirm('Delete Contact?')\"");} ?>
+                    <input class=button type=button value="Mail Merge" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';">
+                    <?php if ($contact_count > 1) {echo("<input type=button class=button onclick=\"javascript: location.href='delete.php?company_id=$company_id&contact_id=$contact_id';\" value='Delete' onclick=\"javascript: return confirm('Delete Contact?')\">\n");} ?>
                     <input class=button type=button value="Transfer" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
                     <input class=button type=button value="Edit Address" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
                 </td>
@@ -253,6 +254,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.16  2004/06/21 14:02:06  gpowers
+ * - added space between "Transfer" and "Delete" buttons
+ *
  * Revision 1.15  2004/06/15 17:26:21  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
