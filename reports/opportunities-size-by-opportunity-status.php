@@ -3,7 +3,7 @@
  *
  * Opportunities size by opportunity status report.
  *
- * $Id: opportunities-size-by-opportunity-status.php,v 1.6 2004/07/20 18:36:58 introspectshun Exp $
+ * $Id: opportunities-size-by-opportunity-status.php,v 1.7 2004/12/30 21:56:17 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -114,8 +114,8 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element>
 		<form method=get>
 		<input type=checkbox name=exclude_closed_opps value="true" <?php echo $checked_exclude_closed_opps; ?>>
-		<?php echo ("Exclude Closed Opportunities"); ?>
-		<input type=submit class=button value="<?php echo ("Change Graph"); ?>">
+		<?php echo _("Exclude Closed Opportunities"); ?>
+		<input type=submit class=button value="<?php echo _("Change Graph"); ?>">
 		</form>
 		</td>
             </tr>
@@ -138,6 +138,9 @@ end_page();
 
 /**
  * $Log: opportunities-size-by-opportunity-status.php,v $
+ * Revision 1.7  2004/12/30 21:56:17  braverock
+ * - localize strings
+ *
  * Revision 1.6  2004/07/20 18:36:58  introspectshun
  * - Localized strings for i18n/translation support
  *
