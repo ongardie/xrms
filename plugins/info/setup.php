@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2004 The XRMS Project Team
  *
- * $Id: setup.php,v 1.5 2004/12/31 22:54:18 gpowers Exp $
+ * $Id: setup.php,v 1.6 2005/01/03 16:42:19 gpowers Exp $
  */
 
 
@@ -22,6 +22,8 @@ function xrms_plugin_init_info () {
       = 'private_sidebar_bottom';
     $xrms_plugin_hooks['info_sidebar_bottom']['info']
       = 'info_sidebar_bottom';
+    $xrms_plugin_hooks['company_content_bottom']['info']
+      = 'company_content_bottom';
     $xrms_plugin_hooks['plugin_admin']['info'] = 'info_setup';
 }
 
@@ -40,7 +42,9 @@ function display_on_menu () {
     $menu .= "<option ";
     if ($display_on == "company_accounting") $menu .= "SELECTED ";
     $menu .= "value=\"company_accounting\">Company Accounting</option>";
-    // $menu .= "<option value=\"\"></option>";
+    $menu .= "<option ";
+    if ($display_on == "company_content_bottom") $menu .= "SELECTED ";
+    $menu .= "value=\"company_content_bottom\">Company Content Bottom</option>";
     $menu .= "</select>";
     return $menu;
 }
@@ -48,6 +52,17 @@ function display_on_menu () {
 function info_setup() {
     global $http_site_root;
     echo "<tr><td class=widget_content>\n<a href='$http_site_root/plugins/info/admin/some.php'>Manage Info Types</a>\n</td>\n</tr>\n";
+}
+
+function company_content_bottom () {
+    global $xrms_file_root, $http_site_root, $con, $company_id, $server_list, $display_on;
+    include("info.inc");
+    ob_start();
+    $display_on = "company_content_bottom";
+    include("$xrms_file_root/plugins/info/sidebar.php");
+    $sidebar_string = ob_get_contents();
+    ob_end_clean();
+    return $sidebar_string;
 }
 
 function company_accounting () {
