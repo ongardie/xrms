@@ -2,7 +2,7 @@
 /**
  * Details about one item
  *
- * $Id: one.php,v 1.12 2005/02/11 13:55:14 braverock Exp $
+ * $Id: one.php,v 1.13 2005/02/15 15:10:13 ycreddy Exp $
  *
  */
 
@@ -13,6 +13,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 require_once('info.inc');
 
@@ -191,6 +192,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2005/02/15 15:10:13  ycreddy
+ * Included adodb-params.php so that Column name based lookup on a Result Set works properly on SQL Server
+ *
  * Revision 1.12  2005/02/11 13:55:14  braverock
  * - fix handling of return_url
  * - remove references to server_info and replace with just info
