@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.7 2004/05/08 13:58:42 braverock Exp $ **/
+/** $Id: README,v 1.8 2004/06/21 14:23:07 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -9,27 +9,69 @@ SUMMARY
 XRMS is a web-based application for managing business entities such as
 employees, customers, contacts, activities with those contacts, etc.
 
+XRMS generally falls into the category of application known as Customer
+Relationship Management (CRM), Sales Force Automation (SFA), with aspects
+of Business Intelligence (BI).  Basically, if your company needs to manage
+relationships with your customers and business partners, XRMS should be able
+to fulfill your needs.
+
 ========================
 VERSION
 
-20 April 2004
+Development Snapshot.
 
 This version has had many many bug fixes and enhancements.  We have also
 added an automated installation, update, and data integrity process. See
 the file install/INSTALL for details.
 
+We recommend that if more than a few days has passed since the date on a
+release tarball that you consider downloading and installing a development
+snapshot instead.  These are normally quite stable, as the development team
+is probably using that code in production at their respective companies.
+
+This version of XRMS raises the MySQL recommendation to 4.x for better
+compatibility with the ADOdb Concat and Cast operators.  ADOdb attempts to mirror
+this functionality in older MySQL installations, so you can try things without
+upgrading MySQL first, but be aware that you may need to upgrade to a newer
+MySQL version to get everything running.
+
 ========================
 COPYRIGHTS
 
 Copyright (c) 2000-2003 Chris Woofter <chris_at_brokerstream_dot_com>
-Copyright (c) 2003-2004 XRMS Development Team
+Copyright (c) 2003-2004 XRMS Development Team http://xrms.sourceforge.net/
 
 ========================
 REQUIREMENTS
 
-Currently, you'll need MySQL v 3.23 (v4.x recommended) and PHP v4.2 (or higher) for XRMS.
-XRMS is being ported to PostgresSQL, stay tuned to the Forums for more information.
-XRMS should work without modification on SAPDB/MaxDB if you need a really huge installation.
+PHP v4.2 or higher with database extensions for your database.
+
+A web server that supports PHP.
+XRMS has been extensively deployed on Apache and IIS.
+
+PHP should be compiled with gettext and recode support if you need
+i18n/internationalization/translation.
+
+We are officially stating that XRMS should now work with any database supported
+by ADOdb.  ADOdb is an excellent free software database abstraction layer for PHP.
+David Rogers did most of the heavy lifting to convert XRMS to truly be
+multi-database compliant, and the rest of the development team is very grateful
+for David's hard work.  At this point, any database supported by
+ADOdb version 4.22 *should* work seamlessly with XRMS.  To the best of our
+knowledge, XRMS has been successfully deployed on MySQL, MS SQL Server,
+Postgres, and SAP-DB/MaxDB.  It should work flawlessly on Oracle and DB/2 as
+well.  If you encounter problems or would like to tweak things to work better
+with some other database, please let the development team know, and we will be
+happy to work with you to get your issue resolved.
+
+See include/adodb/docs/docs-adodb.htm#drivers for more information on the
+databases supported by ADOdb.
+
+This version of XRMS raises the MySQL recommendation to 4.x for better
+compatibility with the ADOdb Concat and Cast operators.  ADOdb attempts to mirror
+this functionality in older MySQL installations, so you can try things without
+upgrading MySQL first, but be aware that you may need to upgrade to a newer
+MySQL version to get everything running.
 
 XRMS is reported to work well under several Linux/Unix flavors, Mac OSX, and Windows Servers.
 
@@ -48,9 +90,9 @@ We've included templates for many common CRM/SFA applications, such as
 Microsoft Outlook, Act!, SalesForce.com, and Goldmine, as well as a 'default'
 import template.
 
-Then visit Administration -> Import Companies/Contacts, select the appopriate
+Then visit Administration -> Import Companies/Contacts, select the appropriate
 default values, and upload the file.  You will be able to preview the upload before
-you actualy commit to loading everything into the database.
+you actually commit to loading everything into the database.
 
 We've tried to make the import 'safe'.
 The import scripts run multiple checks on each record and attempts to not overwrite
@@ -129,10 +171,10 @@ All other data will be handled safely if it is missing (we think).
 You may also create your own templates, and submit them for
 inclusion with XRMS.
 
-If you create a template for a third party CRM or contact management
-application, or if you need help creating a template, please contact
-the development team so that we may assist you and so that we may
-include the new template in the next release.
+If you create an import template for a third party CRM or contact
+management application, or if you need help creating a template,
+please contact the development team so that we may assist you and
+so that we may include the new template in the next release.
 
 ========================
 LICENSE
@@ -141,17 +183,41 @@ Licensed under the Open Software License version 2.0
 
 A copy of this license -- called LICENSE -- is in this folder.
 
+XRMS also includes code that is licensed under the GNU General Public
+License (GPL) and GNU Lesser General Public License (LGPL).
+For full details see the file COPYING in this folder.
+
+Whether the Open Software License and the GPL are fully 'compatible' licenses
+in legal terms is an issue for a lawyer, not the development team of XRMS.
+When in doubt, it is the intention of the development team that the more
+'open' of the two licenses should apply.
+
+Plugins that use the plugin architecture of XRMS may have any licensing
+status that the authors of the plugin wish.  XRMS plugins do not need to
+be distributed, at the sole discretion of the author.  XRMS Plugins that are
+distributed may be distributed under any license, and will not be restricted
+to the Open Software License or the GPL.  The development team certainly
+wishes to encourage plugins to be distributed under an 'open source' or
+'free software' license, and any plugin distributed with XRMS must be
+under one of the licenses used by XRMS code.
+
 ========================
 CREDITS
 
-XRMS includes, and makes extensive use of, John Lim's excellent ADOdb database abstraction library.
+XRMS includes, and makes extensive use of, John Lim's excellent ADOdb
+database abstraction library.
 http://php.weblogs.com/adodb/
 
-We also currently use Netscape's Javascript Graph Builder (written by Michael Bostock) for some reports.
-http://developer.netscape.com/docs/technote/javascript/graph/index.html
+XRMS makes extensive use of code from Squirrelmail for the plugin architecture,
+i18n/translation/localization, and a variety of utility functions.
+http://www.squirrelmail.org/
 
-The date-picker widget is from SoftComplex -- it's their Tigra Calendar.
-http://www.softcomplex.com/
+The calendar widget is the excellent Dynarch DTML Calendar jscalendar-0.9.6
+http://dynarch.com/mishoo/calendar.epl
+
+We also currently use Netscape's Javascript Graph Builder
+(written by Michael Bostock) for some reports.
+http://developer.netscape.com/docs/technote/javascript/graph/index.html
 
 ========================
 NOTES
@@ -163,22 +229,19 @@ NOTES
 2. We are still adding validation on form submits, and have a long way to go here,
    so don't try anything funny.
 
-3. Dates are expected to be in 'YYYY-MM-DD' format... the date-picker widget
-   should handle this automatically.
-
-4. We never finished some mail-merge stuff, but the mail-merge functionality is now
+3. We never finished some mail-merge stuff, but the mail-merge functionality is now
    available for preliminary testing and bug-fixing.
 
-5. We're still trying to figure out how best to include a flexible security layer
+4. We're still trying to figure out how best to include a flexible security layer
    (roles, permissions, etc.) into XRMS, so for now, there's only limited ability
    to limit what a logged-in user may do.  We've got some ideas for this, but it
    really is difficult to make this both flexible and convenient.
 
-6. There's very little documentation.  We are happily accepting contributions of user
+5. Documentation is still improving  We are happily accepting contributions of user
    documentation. Until further notice, just use the forums at SourceForge
    for support.  We'll be around to answer questions.
 
-7. If you've got suggestions, please pass them along!
+6. If you've got suggestions, please pass them along!
 
 ========================
 CONTRIBUTING to XRMS
@@ -187,7 +250,7 @@ Many people have asked how they may contribute code back to XRMS.
 We'll try to address most of those questions here.
 
 If you wish to contribute documentation to XRMS, please contact the
-a member of the development team or post to the Sourceforge Forums.
+a member of the development team or post to the SourceForge Forums.
 
 If you wish to contribute code to XRMS, you should be working from
 the most current code possible.  In the case of bug fixes, this may
@@ -195,17 +258,17 @@ save you some work (someone else may have fixed it already), and in the
 case of enhancements or other more complex patches, it will save work
 for the developers by making very clear what has changed. For large,
 sweeping changes, you probably want to discuss your proposed change on
-the Sourceforge Forums, so that the development team and the XRMS user
+the SourceForge Forums, so that the development team and the XRMS user
 community can comment on your proposed changes.
 
 If you want to integrate third party software to XRMS, you should probably
 familiarize yourself with the Plugin architecture, as that is what plugins
 are for.  If you find yourself needing more plugin hooks as you develop your
 plugin, let the development team know by posting to the Plugins
-Forum on Sourceforge.  Somebody there will be happy to help you.
+Forum on SourceForge.  Somebody there will be happy to help you.
 
 Start with a clean checkout from CVS or with a release tarball or snapshot.
-The rest of these instructions will assume that you are worknig from a
+The rest of these instructions will assume that you are working from a
 snapshot tarball, which uncompresses to a directory called xrms.devel.
 Change as required for your installation.
 
@@ -214,17 +277,24 @@ directory above your working directory:
 
 cvs -d :pserver:anonymous@cvs.sf.net:/cvsroot/xrms update xrms.devel/
 
-You will see cvs 'P' - Patch, 'U' Update, and possibly 'M' Merge your files
-(vars.php and include-locations.inc will most likely 'M' merge)
+You will see cvs 'P' - Patch, 'U' Update, and 'M' Merge your files
+(vars.php, plugin-cfg.php, and include-locations.inc will most likely 'M' merge)
 
-Make the changes you need to this code.  Make a 'clean' copy of the files
-you intend to modify, you'll need it later for creating the patch.
+'C' denotes a conflict.  You will need to examine the file with a conflict
+and resolve any problems.  If you anticipate conflicts (like its been weeks
+since you did a cvs update), you should probably call cvs with the -n flag,
+which will just report on what will happen when you actually update, so that
+you will be warned of conflicts in advance.
 
-Do frequent CVS updates.
+Make the changes you need to current CVS code.  Make a 'clean' copy of the
+files you intend to modify, you'll need it later for creating the patch.
+
+*** Do frequent CVS updates. ***
+
 We recommend doing a CVS update before each development session.
 This makes life easier for everybody.
 Always do a CVS update immediately before submitting patch files, and
-resolve any conflicts.
+resolve and test any conflicts.
 
 Once you've made your changes and are happy with the result, create a
 patch file for each file you changed using the following command:
@@ -236,9 +306,12 @@ diff with several lines of context.  This allows the patch program to find
 where to insert the changed lines, even if the file has changed slightly
 since the patch was generated.
 
-Post your patch with a description of the changes to the Sourceforge
-Patches Forum.  One of the XRMS developers will review it and commit your
-changes to CVS.  Thanks for your interest in contributing to XRMS!
+Post your patch with a description of the changes to the SourceForge
+Patches Forum.  It usually helps to submit both a patch file and a copy
+of the full,modified file.One of the XRMS developers will review it and
+commit your changes to CVS.
+
+Thanks for your interest in contributing to XRMS!
 
 ========================
 HINTS
@@ -261,34 +334,40 @@ error_reporting = E_ALL & ~E_NOTICE
 If you get errors like "Warning: Cannot modify header
 information -.. " the set the following option in your php.ini:
 output_buffering = On
+Note that turning on output buffering if you don't need it can cause
+all sorts of problems, so leave it off unless absolutely necessary.
 
 =======
 HINTS, daily reports
 
 To have daily reports emailed, put one or more of the following lines into
-the crontab of your web server (adjust paths as nessecary):
+the crontab of your web server (adjust paths as necessary):
 
 To have a daily report of ALL users open items emailed:
 0 6 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./open-items.php "&send_email=y&type=all&send_email_to=USER@DOMAIN.COMt&all_users=y" >> /dev/null)
 
-To have a daily report of A user's open items emailed:
+To have a daily report of a single user's open items emailed:
 0 6 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./open-items.php "&send_email=y&type=all&user_id=1" >> /dev/null)
 
 To have a daily report of ALL users completed items report emailed:
 0 23 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./completed-items.php "&send_email=y&type=all&send_email_to=USER@DOMAIN.COM&all_users=y" >> /dev/null)
 
-To have a daily report of A user's completed items report emailed:
+To have a daily report of a single user's completed items report emailed:
 0 23 * * * (cd /var/www/html/xrms/reports; /usr/bin/php ./completed-items.php "&send_email=y&type=all&user_id=1" >> /dev/null)
 
 ============================================================
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.8  2004/06/21 14:23:07  braverock
+ * - updated to reflect current state of multi-database conversion
+ * - added more information for potential contributors
+ *
  * Revision 1.7  2004/05/08 13:58:42  braverock
  * - updated import section
  *
  * Revision 1.6  2004/05/04 15:18:38  gpowers
- * added daily report HINTS
+ * - added daily report HINTS
  *
  * Revision 1.5  2004/04/20 14:26:27  braverock
  * - update to include more complete information about importing CSV files
@@ -296,5 +375,5 @@ To have a daily report of A user's completed items report emailed:
  * - update requirements
  *
  * Revision 1.4  2004/03/22 15:36:35  braverock
- * Update to reference the install scripts and documentation
+ * - Update to reference the install scripts and documentation
  */
