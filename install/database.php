@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.7 2004/05/14 18:46:54 braverock Exp $
+ * $Id: database.php,v 1.8 2004/06/03 16:23:13 braverock Exp $
  */
 
 /**
@@ -494,11 +494,32 @@ function company_db_tables($con, $table_list) {
         $rst = $con->execute($sql);
     }
 
+    // activity_templates
+    // for relating several activities to an opportunity status. links to the opportunity status
+    // table on opportunity_status_id, and stores the important data about the activities that are
+    // triggered when an opportunity moves to that status.
+    if (!in_array('activity_templates',$table_list)) {
+        $sql ="create table activity_templates (
+                activity_template_id    int not null primary key auto_increment,
+                role_id                 int not null default 0,
+                activity_type_id        int not null default 0,
+                on_what_table           varchar(100) not null default '',
+                on_what_id              int not null default 0,
+                activity_title          varchar(100) not null default '',
+                activity_description    text not null default '',
+                duration                smallint not null default 0,
+                sort_order              tinyint not null default 1,
+                activity_template_record_status         char not null default 'a'
+                )";
+        //execute
+        $rst = $con->execute($sql);
+    }
+
     // company_former_names
     // Keep track of company name changes
     if (!in_array('company_former_names',$table_list)) {
         $sql ="create table company_former_names (
-               company_id       int(11) NOT NULL default '0',
+               company_id       int NOT NULL default '0',
                namechange_at    datetime NOT NULL default '0000-00-00 00:00:00',
                former_name      varchar(100) NOT NULL default '',
                description      varchar(100) default NULL,
@@ -512,9 +533,9 @@ function company_db_tables($con, $table_list) {
     // Track relationships between companies
     if (!in_array('company_relationship',$table_list)) {
         $sql ="create table company_relationship (
-               company_from_id      int(11) NOT NULL default '0',
+               company_from_id      int NOT NULL default '0',
                relationship_type    varchar(100) NOT NULL default '',
-               company_to_id        int(11) NOT NULL default '0',
+               company_to_id        int NOT NULL default '0',
                established_at       datetime NOT NULL default '0000-00-00 00:00:00',
                KEY company_from_id (company_from_id,company_to_id)
                )";
@@ -756,6 +777,7 @@ function activity_db_tables($con, $table_list) {
                contact_id                      int not null default 0,
                on_what_table                   varchar(100) not null default '',
                on_what_id                      int not null default 0,
+               on_what_status                  int not null default 0,
                activity_title                  varchar(100) not null default '',
                activity_description            text not null default '',
                entered_at                      datetime,
@@ -792,6 +814,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.8  2004/06/03 16:23:13  braverock
+ * - add functionality to support workflow and activity templates
+ *   - functionality contributed by Brad Marshall
+ *
  * Revision 1.7  2004/05/14 18:46:54  braverock
  * - change default gender to 'u'
  *
