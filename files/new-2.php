@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.6 2004/06/03 16:23:48 braverock Exp $
+ * $Id: new-2.php,v 1.7 2004/06/12 07:20:40 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -26,12 +27,12 @@ $file_pretty_name = $_POST['file_pretty_name'];
 $file_description = $_POST['file_description'];
 $file_entered_at = $_POST['file_entered_at'];
 
-$filename = $_FILES['file1']['name'];
-$filetype = $_FILES['file1']['type'];
-$filesize = $_FILES['file1']['size'];
-$filetmpname = $_FILES['file1']['tmp_name'];
+$file_name = $_FILES['file1']['name'];
+$file_type = $_FILES['file1']['type'];
+$file_size = $_FILES['file1']['size'];
+$file_tmp_name = $_FILES['file1']['tmp_name'];
 
-$file_pretty_name = (strlen(trim($file_pretty_name)) > 0) ? $file_pretty_name : $filename;
+$file_pretty_name = (strlen(trim($file_pretty_name)) > 0) ? $file_pretty_name : $file_name;
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -42,13 +43,26 @@ if ($file_entered_at == "")
 else
   { $file_entered_at = $con->dbtimestamp($file_entered_at . ' 23:59:59'); }
 
-$sql = "insert into files (file_pretty_name, file_description, file_filesystem_name, file_size, on_what_table, on_what_id, entered_at, entered_by) values (" . $con->qstr($file_pretty_name, get_magic_quotes_gpc()) . ", " . $con->qstr($file_description, get_magic_quotes_gpc()) . ", " . $con->qstr($filename, get_magic_quotes_gpc()) . ", $filesize, " . $con->qstr($on_what_table, get_magic_quotes_gpc()) . ", $on_what_id, " . $file_entered_at . ", $session_user_id)";
-$con->execute($sql);
+$sql = "SELECT * FROM files WHERE 1 = 2"; //select empty record as placeholder
+$rst = $con->execute($sql);
+
+$rec = array();
+$rec['file_pretty_name'] = $file_pretty_name;
+$rec['file_description'] = $file_description;
+$rec['file_filesystem_name'] = $file_name;
+$rec['file_size'] = $file_size;
+$rec['on_what_table'] = $on_what_table;
+$rec['on_what_id'] = $on_what_id;
+$rec['entered_at'] = $file_entered_at;
+$rec['entered_by'] = $session_user_id;
+
+$ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
+$con->execute($ins);
 
 $file_id = $con->insert_id();
 
 if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
-    move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $filename);
+    move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
 } elseif ($_FILES['file1']['tmp_name'] and (strlen($file_pretty_name))){
         $error = $_FILES['file1']['tmp_name'];
         $msg .= '<p>'
@@ -79,9 +93,14 @@ if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
     };
 
 // update the file record
+$sql = "SELECT * FROM files WHERE file_id = $file_id";
+$rst = $con->execute($sql);
 
-$sql = "update files set file_filesystem_name = '" . $file_id . '_' . $filename . "' where file_id = $file_id";
-$con->execute($sql);
+$rec = array();
+$rec['file_filesystem_name'] = $file_id . '_' . $file_name;
+
+$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$con->execute($upd);
 
 $con->close();
 
@@ -95,6 +114,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.7  2004/06/12 07:20:40  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ *
  * Revision 1.6  2004/06/03 16:23:48  braverock
  * - fixed typo
  *

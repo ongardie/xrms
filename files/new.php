@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.7 2004/06/04 17:28:03 gpowers Exp $
+ * $Id: new.php,v 1.8 2004/06/12 07:20:40 introspectshun Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,6 +11,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -29,7 +30,7 @@ if ($on_what_table == 'opportunities') {
 } elseif ($on_what_table == 'companies') {
     $sql = "select company_name as attached_to_name from companies where company_id = $on_what_id";
 } elseif ($on_what_table == 'contacts') {
-    $sql = "select concat(first_names, ' ', last_name) as attached_to_name from contacts where contact_id = $on_what_id";
+    $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS attached_to_name FROM contacts WHERE contact_id = $on_what_id";
 } elseif ($on_what_table == 'campaigns') {
     $sql = "select campaign_title as attached_to_name from campaigns where campaign_id = $on_what_id";
 }
@@ -129,6 +130,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.8  2004/06/12 07:20:40  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ *
  * Revision 1.7  2004/06/04 17:28:03  gpowers
  * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  * w/minor changes: changed includes to function, used complete php tags

@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to 
  * the user's default location.
  * 
- * $Id: download.php,v 1.3 2004/03/04 00:05:13 maulani Exp $
+ * $Id: download.php,v 1.4 2004/06/12 07:20:40 introspectshun Exp $
  */ 
 
 require_once('../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -71,6 +72,9 @@ exit();
 
 /** 
  * $Log: download.php,v $
+ * Revision 1.4  2004/06/12 07:20:40  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ *
  * Revision 1.3  2004/03/04 00:05:13  maulani
  * *** empty log message ***
  *

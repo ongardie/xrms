@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.4 2004/04/07 19:38:26 maulani Exp $
+ * $Id: sidebar.php,v 1.5 2004/06/12 07:20:40 introspectshun Exp $
  */
 
 $file_rows = "<div id='file_sidebar'>
@@ -25,19 +25,18 @@ if (strlen($on_what_table)>0){
             and on_what_id = $on_what_id
             and file_record_status = 'a'
             order by entered_at";
+    $rst = $con->execute($file_sql);
 } else {
     $file_sql = "select * from files, users where
             files.entered_by = '$session_user_id'
             and files.entered_by = users.user_id
             and file_record_status = 'a'
-            order by entered_at
-            limit 5";
+            order by entered_at";
+    $rst = $con->SelectLimit($file_sql, 5, 0);
 }
 
 //uncomment the debug line to see what's going on with the query
 //$con->debug=1;
-
-$rst = $con->execute($file_sql);
 
 if (strlen($rst->fields['username']) > 0) {
     while (!$rst->EOF) {
@@ -86,6 +85,9 @@ $file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.5  2004/06/12 07:20:40  introspectshun
+ * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ *
  * Revision 1.4  2004/04/07 19:38:26  maulani
  * - Add CSS2 positioning
  * - Repair HTML to meet validation

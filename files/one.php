@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.8 2004/06/04 17:27:26 gpowers Exp $
+ * $Id: one.php,v 1.9 2004/06/12 07:20:40 introspectshun Exp $
  */
 
 //include required files
@@ -12,6 +12,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
@@ -145,6 +146,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.9  2004/06/12 07:20:40  introspectshun
+ *- Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
+ *
  *Revision 1.8  2004/06/04 17:27:26  gpowers
  *Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
  *w/minor changes: changed includes to function, used complete php tags
