@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.24 2004/12/31 18:08:03 braverock Exp $
+ * $Id: database.php,v 1.25 2005/01/06 20:45:11 vanmer Exp $
  */
 
 /**
@@ -711,6 +711,7 @@ function opportunity_db_tables($con, $table_list) {
                opportunity_status_id        int not null default 0,
                campaign_id                  int,
                company_id                   int not null default 0,
+               division_id                      int,
                contact_id                   int not null default 0,
                user_id                      int not null default 0,
                opportunity_title            varchar(100) not null default '',
@@ -812,6 +813,7 @@ function case_db_tables($con, $table_list) {
                case_status_id          int not null default 0,
                case_priority_id        int not null default 0,
                company_id              int not null default 0,
+               division_id                 int,
                contact_id              int not null default 0,
                user_id                 int not null default 0,
                priority                int not null default 0,
@@ -1044,6 +1046,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.25  2005/01/06 20:45:11  vanmer
+ * - added optional division_id to cases and opportunities
+ *
  * Revision 1.24  2004/12/31 18:08:03  braverock
  * - add case_type_id FK to case_statuses
  * - add long_desc to case_statuses for consistency

@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.44 2004/12/31 17:57:20 braverock Exp $
+ * $Id: update.php,v 1.45 2005/01/06 20:44:24 vanmer Exp $
  */
 
 // where do we include from
@@ -3836,6 +3836,14 @@ if ($rst->NumRows()==0) {
 
 } //end check for currency codes
 
+//add division_id to opportunities table (for use in scoping opportunities by division)
+$sql = "ALTER TABLE `opportunities` ADD `division_id` INT UNSIGNED AFTER `company_id`";
+$con->execute($sql);
+
+//add division_id to cases table (for use in scoping cases by division)
+$sql="ALTER TABLE `cases` ADD `division_id` INT UNSIGNED AFTER `company_id`";
+$con->execute($sql);
+
 //close the database connection, because we don't need it anymore
 $con->close();
 
@@ -3857,6 +3865,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.45  2005/01/06 20:44:24  vanmer
+ * - added optional division_id to cases and opportunities
+ *
  * Revision 1.44  2004/12/31 17:57:20  braverock
  * - added description column to case_statuses to match opportunity_statuses
  *
