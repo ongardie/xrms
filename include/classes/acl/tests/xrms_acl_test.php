@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.2 2005/01/25 05:28:20 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.3 2005/02/15 19:42:51 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -110,7 +110,7 @@ Class ACLTest extends PHPUnit_TestCase {
 
     
    
-   function test_add_controlled_object($name=false, $table=false, $field=false, $user_field=false $data_source=false) {
+   function test_add_controlled_object($name=false, $table=false, $field=false, $user_field=false, $data_source=false) {
        if (!$name) { $name = $this->controlled_objectName; }
        if (!$table) { $table = $this->controlled_objectTable; }
        if (!$field) { $field = $this->controlled_objectField; }
@@ -396,11 +396,11 @@ Class ACLTest extends PHPUnit_TestCase {
 //        $group = $this->test_get_group($searchGroup);
 //        $object = $this->test_get_controlled_object($searchObject);
         
-        $ControlledObjectRelationship_id = $this->test_get_controlled_object_relationship($parentObject, $childObject);
-        $ControlledObjectRelationship_id = $ControlledObjectRelationship_id['ControlledObjectRelationship_id'];
-        $this->assertTrue($ControlledObjectRelationship_id,"Failed to locate controlled object $parentObject parent to $childObject child for delete.");
+        $CORelationship_id = $this->test_get_controlled_object_relationship($parentObject, $childObject);
+        $CORelationship_id = $CORelationship_id['CORelationship_id'];
+        $this->assertTrue($CORelationship_id,"Failed to locate controlled object $parentObject parent to $childObject child for delete.");
         
-        $result=$this->acl->delete_controlled_object_relationship($ControlledObjectRelationship_id);
+        $result=$this->acl->delete_controlled_object_relationship($CORelationship_id);
         $this->assertTrue($result,"Failed to delete object relationship $parentObject to child $childObject");
         
         if ($_parentObject===false) $this->test_delete_controlled_object($parentObject);
@@ -433,12 +433,12 @@ Class ACLTest extends PHPUnit_TestCase {
             $Role_id=$Role['Role_id'];
         if (!$ControlledObjectRelationship) { 
             $ControlledObjectRelationship = $this->test_get_controlled_object_relationship(); 
-            $ControlledObjectRelationship_id=$ControlledObjectRelationship['ControlledObjectRelationship_id'];
+            $CORelationship_id=$ControlledObjectRelationship['CORelationship_id'];
         }
         if (!$Scope) { $Scope = $this->scope; }
         if (!$Permission) { $Permission = $this->permission; }
         
-        $result=$this->acl->get_role_permission($Role_id, $ControlledObjectRelationship_id, $Scope, $Permission, $RolePermission_id);
+        $result=$this->acl->get_role_permission($Role_id, $CORelationship_id, $Scope, $Permission, $RolePermission_id);
         $this->assertTrue($result,"Unable to find role permission with role $Role, obj $ControlledObjectRelationship scope $Scope perm $Permission id $RolePermission_id");
         $this->assertTrue(is_array($result), "Role Permission should be an array");
         return $result;
@@ -560,10 +560,9 @@ Class ACLTest extends PHPUnit_TestCase {
         
                 
         $ControlledObjectID=$controlled_objectresult2; 
-        
         $result=$this->acl->get_object_groups_recursive($ControlledObjectID, $on_what_child_id);
-        
-        $this->assertTrue($result, "Failed to find groups associated with object $ControlledObjec21");
+	
+	$this->assertTrue($result, "Failed to find groups associated with object $ControlledObjec21");
         $this->assertTrue(is_array($result),"Group list is not an array, should be");
         $key = array_search($groupresult1,$result);
         $this->assertTrue($key!==false,"Group 1 $Group1 not found in group result");
@@ -885,10 +884,10 @@ Class ACLTest extends PHPUnit_TestCase {
             $ChildField="company_id";
         } else { $ChildField=$_ChildField; }
         if (!$_ControlledObjectRelationship) { 
-            $ControlledObjectRelationship_id=$this->test_add_controlled_object_relationship($ParentControlledObject, $ControlledObject, $ChildField); 
+            $CORelationship_id=$this->test_add_controlled_object_relationship($ParentControlledObject, $ControlledObject, $ChildField); 
         } else {
             $ControlledObjectRelationshipData = $this->test_get_controlled_object_relationship($ParentControlledObject, $ControlledObject);
-            $ControlledObjectRelationship_id = $ControlledObjectRelationshipData['ControlledObjectRelationship_id'];
+            $CORelationship_id = $ControlledObjectRelationshipData['CORelationship_id'];
         }
 
         $result = $this->acl->get_object_relationship_parent($ControlledObject_id, $on_what_id);
@@ -926,19 +925,19 @@ Class ACLTest extends PHPUnit_TestCase {
         $Permission3 = $this->permission+2;
         
         
-        $ControlledObjectRelationship_id = $this->test_add_controlled_object_relationship(NULL, $ControlledObject);
-        $this->assertTrue($ControlledObjectRelationship_id, "Failed to add top level controoled object relationship for permission");
+        $CORelationship_id = $this->test_add_controlled_object_relationship(NULL, $ControlledObject);
+        $this->assertTrue($CORelationship_id, "Failed to add top level controoled object relationship for permission");
         
         $GroupMember_id=$this->test_add_group_object($Group, $ControlledObject, $on_what_id);
         $this->assertTrue($GroupMember_id, "Failed to add $ControlledObject to group $Group on $on_what_id");
         
         
         //Add permissions 1 (Read) and 2 (Create) to test roles/objects with world scope
-        $RolePermission_id=$this->test_add_role_permission($Role, $ControlledObjectRelationship_id,$Scope,$Permission);
-        $this->assertTrue($RolePermission_id, "Failed to add $ControlledObjectRelationship_id to role $Role with permission $Permission scoped at $Scope");
+        $RolePermission_id=$this->test_add_role_permission($Role, $CORelationship_id,$Scope,$Permission);
+        $this->assertTrue($RolePermission_id, "Failed to add $CORelationship_id to role $Role with permission $Permission scoped at $Scope");
 
-        $RolePermission_id=$this->test_add_role_permission($Role, $ControlledObjectRelationship_id,$Scope,$Permission2);
-        $this->assertTrue($RolePermission_id, "Failed to add $ControlledObjectRelationship_id to role $Role with permission $Permission2 scoped at $Scope");
+        $RolePermission_id=$this->test_add_role_permission($Role, $CORelationship_id,$Scope,$Permission2);
+        $this->assertTrue($RolePermission_id, "Failed to add $CORelationship_id to role $Role with permission $Permission2 scoped at $Scope");
         
         //Add user to role in group
         $GroupUser_id = $this->test_add_group_user($Group,$Role,$User_id);
@@ -956,8 +955,8 @@ Class ACLTest extends PHPUnit_TestCase {
         $this->assertTrue(array_search($Permission2, $result)!==false,"Failed to find searched for permission2 in list");
                 
         $this->test_delete_group_user($Group, $Role, $User_id);        
-        $this->test_delete_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission);
-        $this->test_delete_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission2);
+        $this->test_delete_role_permission($Role, $CORelationship_id, $Scope, $Permission);
+        $this->test_delete_role_permission($Role, $CORelationship_id, $Scope, $Permission2);
         $this->test_delete_group_object($Group, $ControlledObject, $on_what_id);
         $this->test_delete_controlled_object_relationship(NULL, $ControlledObject);
         $this->test_delete_group($Group);
@@ -1001,19 +1000,19 @@ Class ACLTest extends PHPUnit_TestCase {
         $Permission3 = $this->permission+2;
         
         
-        $ControlledObjectRelationship_id = $this->test_add_controlled_object_relationship(NULL, $ControlledObject);
-        $this->assertTrue($ControlledObjectRelationship_id, "Failed to add top level controlled object relationship for permission");
+        $CORelationship_id = $this->test_add_controlled_object_relationship(NULL, $ControlledObject);
+        $this->assertTrue($CORelationship_id, "Failed to add top level controlled object relationship for permission");
         
         $GroupMember_id=$this->test_add_group_object($Group, $ControlledObject, $on_what_id);
         $this->assertTrue($GroupMember_id, "Failed to add $ControlledObject to group $Group on $on_what_id");
         
         
         //Add permissions 1 (Read) and 2 (Create) to test roles/objects with world scope
-        $RolePermission_id=$this->test_add_role_permission($Role, $ControlledObjectRelationship_id,$Scope,$Permission);
-        $this->assertTrue($RolePermission_id, "Failed to add $ControlledObjectRelationship_id to role $Role with permission $Permission scoped at $Scope");
+        $RolePermission_id=$this->test_add_role_permission($Role, $CORelationship_id,$Scope,$Permission);
+        $this->assertTrue($RolePermission_id, "Failed to add $CORelationship_id to role $Role with permission $Permission scoped at $Scope");
 
-        $RolePermission_id=$this->test_add_role_permission($Role, $ControlledObjectRelationship_id,$Scope,$Permission2);
-        $this->assertTrue($RolePermission_id, "Failed to add $ControlledObjectRelationship_id to role $Role with permission $Permission2 scoped at $Scope");
+        $RolePermission_id=$this->test_add_role_permission($Role, $CORelationship_id,$Scope,$Permission2);
+        $this->assertTrue($RolePermission_id, "Failed to add $CORelationship_id to role $Role with permission $Permission2 scoped at $Scope");
         
         //Add user to role in group
         $GroupUser_id = $this->test_add_group_user($Group,$Role,$User_id);
@@ -1024,7 +1023,7 @@ Class ACLTest extends PHPUnit_TestCase {
         $result = $this->acl->get_restricted_object_list($ControlledObject_id, $User_id);
         $this->assertTrue($result, "Failed to correctly list objects for $ControlledObject_id user $User_id");
         $this->assertTrue(is_array($result), "Failed to get an array as return");
-        $this->assertTrue(is_array($result['controlled_objects']), "Failed to get a list of objects");
+        $this->assertTrue(is_array($result['controlled_objects']) OR $result['ALL'], "Failed to get a list of objects");
 //        echo "<pre>"; print_r($result); echo "</pre>";
 //        $this->assertTrue(array_search($Permission, $result)!==false,"Failed to find searched for permission in list");
 
@@ -1032,8 +1031,8 @@ Class ACLTest extends PHPUnit_TestCase {
 //        $this->assertTrue(array_search($Permission2, $result)!==false,"Failed to find searched for permission2 in list");
                 
         $this->test_delete_group_user($Group, $Role, $User_id);        
-        $this->test_delete_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission);
-        $this->test_delete_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission2);
+        $this->test_delete_role_permission($Role, $CORelationship_id, $Scope, $Permission);
+        $this->test_delete_role_permission($Role, $CORelationship_id, $Scope, $Permission2);
         $this->test_delete_group_object($Group, $ControlledObject, $on_what_id);
         $this->test_delete_controlled_object_relationship(NULL, $ControlledObject);
         $this->test_delete_group($Group);
@@ -1058,22 +1057,22 @@ Class ACLTest extends PHPUnit_TestCase {
         $Scope = 'World';
         if (!is_numeric($Permission)) { $PermissionData=$this->acl->get_permission($Permission); $Permission=$PermissionData['Permission_id']; }
         
-        $ControlledObjectRelationship_id = $this->test_add_controlled_object_relationship(NULL, $ControlledObject);
-        $this->assertTrue($ControlledObjectRelationship_id, "Failed to add top level controlled object relationship for permission");
+        $CORelationship_id = $this->test_add_controlled_object_relationship(NULL, $ControlledObject);
+        $this->assertTrue($CORelationship_id, "Failed to add top level controlled object relationship for permission");
                 
         //Add user to role in group
         $GroupUser_id = $this->test_add_group_user($Group,$Role,$User_id);
         $this->assertTrue($GroupUser_id, "Failed to add user $User_id to group $Group with role $Role for permission test");
         
         //Add permissions 1 (Read) and 2 (Create) to test roles/objects with world scope
-        $RolePermission_id=$this->test_add_role_permission($Role, $ControlledObjectRelationship_id,$Scope,$Permission);
-        $this->assertTrue($RolePermission_id, "Failed to add $ControlledObjectRelationship_id to role $Role with permission $Permission scoped at $Scope");
+        $RolePermission_id=$this->test_add_role_permission($Role, $CORelationship_id,$Scope,$Permission);
+        $this->assertTrue($RolePermission_id, "Failed to add $CORelationship_id to role $Role with permission $Permission scoped at $Scope");
         $ret=$this->acl->get_permission_user_object($ControlledObject_id, $User_id, false, $Permission);
         $this->assertTrue($ret, "Failed to find any permissions on object $ControlledObject for user $User_id");
         $this->assertTrue(array_search($Permission, $ret)!==false,"Failed to find permission $Permission on object $ControlledObject for user $User_id");
                
         $this->test_delete_group_user($Group, $Role, $User_id);        
-        $this->test_delete_role_permission($Role, $ControlledObjectRelationship_id, $Scope, $Permission);
+        $this->test_delete_role_permission($Role, $CORelationship_id, $Scope, $Permission);
         $this->test_delete_controlled_object_relationship(NULL, $ControlledObject);
         $this->test_delete_group($Group);
         $this->test_delete_role($Role);
@@ -1105,6 +1104,10 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.3  2005/02/15 19:42:51  vanmer
+ * - updated to reflect new output of restricted object list
+ * - updated to reflect new fieldnames
+ *
  * Revision 1.2  2005/01/25 05:28:20  vanmer
  * - added tests for newly added data source manipulation functions
  * - added parameters for changed ACL controlled object functions
