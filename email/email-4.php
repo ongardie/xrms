@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.8 2004/12/02 18:21:37 niclowe Exp $
+* $Id: email-4.php,v 1.9 2004/12/30 06:40:03 gpowers Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -84,13 +84,21 @@ start_page($page_title, true, $msg);
 
 		<table class=widget cellspacing=1>
 	<tr>
-                 <td class=widget_header><?php echo _("'Messages Sent"); ?></td>
+                 <td class=widget_header><?php echo _("Messages Sent"); ?></td>
 	</tr>
 	<tr>
                 <td class=widget_content><?php echo _("The bulk e-mail sub-system has sent"); ?>:<br>
 		<?php echo $feedback;?>
 		</td>
 	</tr>
+	<tr>
+                 <td class=widget_header><?php echo _("WARNING"); ?></td>
+	</tr>
+	<tr>
+                <td class=widget_content><?php echo _("DO NOT RELOAD THIS PAGE! If you do, your message will be sent again."); ?>:<br>
+		</td>
+	</tr>
+
 		</table>
 
 </div>
@@ -110,6 +118,10 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.9  2004/12/30 06:40:03  gpowers
+* - removed extra single quote from titles
+* - added "DO NOT RELOAD" warning
+*
 * Revision 1.8  2004/12/02 18:21:37  niclowe
 * added default email origination from user table, added completed activity when a bulk email is sent
 *
