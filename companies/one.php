@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.32 2004/05/04 16:19:23 gpowers Exp $
+ * $Id: one.php,v 1.33 2004/05/04 16:41:35 gpowers Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -398,7 +398,6 @@ function openNewsWindow() {
                                     <td class=clear><?php  echo $legal_name; ?></td>
                                 </tr>
                                 <?php  echo $former_name_rows; ?>
-                                <?php  echo $relationship_rows; ?>
                                 <tr>
                                     <td class=sublabel>Code</td>
                                     <td class=clear><?php  echo $company_code; ?></td>
@@ -518,9 +517,7 @@ function openNewsWindow() {
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
-                                <tr>
                                     <?php echo $relationship_rows; ?>
-                                </tr>
                             </table>
 
                             </td>
@@ -652,6 +649,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.33  2004/05/04 16:41:35  gpowers
+ * Removed duplicate "Relationship." Oops.
+ *
  * Revision 1.32  2004/05/04 16:19:23  gpowers
  * Enabled the display of relationships
  *
