@@ -3,7 +3,7 @@
  *
  * Email.
  *
- * $Id: email.php,v 1.5 2004/06/14 16:54:37 introspectshun Exp $
+ * $Id: email.php,v 1.6 2004/07/03 14:48:52 metamedia Exp $
  */
 
 require_once('../include-locations.inc');
@@ -17,46 +17,48 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
-$scope = $_POST['scope'];
-
+$scope = $_GET['scope'];
+$company_id = $_GET['company_id'];
 // opportunities
 $user_id = $_POST['user_id'];
 $contact_id = $_POST['contact_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 
 switch ($scope) {
     case "companies":
-        $sql = "select cont.contact_id 
-        from contacts cont, companies c, opportunities o 
-        where c.company_id = o.company_id 
-        and c.company_id = cont.company_id 
+        $sql = "select cont.contact_id
+        from contacts cont, companies c, opportunities o
+        where c.company_id = o.company_id
+        and c.company_id = cont.company_id
         and cont.contact_record_status = 'a'";
+	break;
     case "company":
-        $sql = "select cont.contact_id 
-        from contacts cont, companies c, cases ca 
-        where c.company_id = ca.case_id 
-        and c.company_id = cont.company_id 
+        $sql = "select cont.contact_id
+        from contacts cont, companies c
+        where c.company_id = $company_id
+	and c.company_id = cont.company_id
         and cont.contact_record_status = 'a'";
+	break;
     case "opportunities":
-        $sql = "select cont.contact_id 
-        from contacts cont, companies c, opportunities o 
-        where c.company_id = o.company_id 
-        and c.company_id = cont.company_id 
+        $sql = "select cont.contact_id
+        from contacts cont, companies c, opportunities o
+        where c.company_id = o.company_id
+        and c.company_id = cont.company_id
         and cont.contact_record_status = 'a'";
+	break;
     case "cases":
-        $sql = "select cont.contact_id 
-        from contacts cont, companies c, cases ca 
-        where c.company_id = ca.case_id 
-        and c.company_id = cont.company_id 
+        $sql = "select cont.contact_id
+        from contacts cont, companies c, cases ca
+        where c.company_id = ca.case_id
+        and c.company_id = cont.company_id
         and cont.contact_record_status = 'a'";
+	break;
 }
-
 $rst = $con->execute($sql);
 $array_of_contacts = array();
-
 if ($rst) {
     while (!$rst->EOF) {
         array_push($array_of_contacts, $rst->fields['contact_id']);
@@ -131,6 +133,9 @@ end_page();
 
 /**
  * $Log: email.php,v $
+ * Revision 1.6  2004/07/03 14:48:52  metamedia
+ * Minor bug fixes so that the "mail merge" from a company work.
+ *
  * Revision 1.5  2004/06/14 16:54:37  introspectshun
  * - Add adodb-params.php include for multi-db compatibility.
  * - Corrected order of arguments to implode() function.
