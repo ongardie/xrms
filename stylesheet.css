@@ -15,15 +15,15 @@ td.widget_header {padding: 5px; background-color: #6666bb; color: #ffffee; font-
 td.widget_header_stock {padding: 5px; background-color: #bb6666; color: #ffffee; font-family: verdana; font-size: 9pt; font-weight: bold; background-image: url("img/widget_header_stock_background.gif");}
 
 td.widget_label {padding: 5px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; background-image: url("img/widget_label_background.gif"); white-space: nowrap;}
-td.widget_label_right {padding: 8px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: right; background-image: url("img/widget_label_right_background.gif");}
+td.widget_label_right {padding: 8px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: right; background-image: url("img/widget_label_right_background.gif"); background-repeat: no repeat; background-position: top right;}
 td.widget_label_center {padding: 5px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: center; background-image: url("img/widget_label_background.gif");}
 
 td.widget_label_alt {padding: 5px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; background-image: url("img/widget_label_alt_background.gif"); white-space: nowrap;}
-td.widget_label_alt_right {padding: 3px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: right; background-image: url("img/widget_label_alt_background.gif");}
+td.widget_label_alt_right {padding: 3px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: right; background-image: url("img/widget_label_alt_right_background.gif");}
 td.widget_label_alt_center {padding: 5px; background-color: #eeeeee; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: center; background-image: url("img/widget_label_alt_background.gif");}
 
 td.widget_label_right_91px {padding: 4px; background-color: #ffffff; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: right; background-image: url("img/widget_label_91px.gif");}
-td.widget_label_right_166px {padding: 4px; background-color: #ffffff; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: right; background-image: url("img/widget_label_background_large.gif");}
+td.widget_label_right_166px {padding: 4px; background-color: #ffffff; font-family: arial; font-size: 9pt; font-weight: normal; color: #333333; text-align: right; background-image: url("img/widget_label_background_large.gif"); background-repeat: no repeat; background-position: top right;}
 
 td.widget_header_stock {padding: 5px; background-color: #bb6666; color: #ffffee; font-family: verdana; font-size: 9pt; font-weight: bold; background-image: url("img/widget_header_stock_background.gif");}
 td.widget_label_stock {padding: 5px; background-color: #eeeeee; color: #666666; font-family: arial; font-size: 9pt; font-weight: normal; background-image: url("img/widget_label_alt_background.gif");}
