@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.17 2004/06/21 17:26:07 braverock Exp $
+ * $Id: edit.php,v 1.18 2004/07/15 14:49:45 cpsource Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,6 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 // require_once($include_directory . 'lang/' . $_SESSION['language'] . '.php');
 
+$msg        = isset($_GET['msg']) ? $_GET['msg'] : '';
 $contact_id = $_GET['contact_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -254,6 +255,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.18  2004/07/15 14:49:45  cpsource
+ * - Define $msg from $_GET or else ''
+ *
  * Revision 1.17  2004/06/21 17:26:07  braverock
  * - address can be blank, revised argument to getmenu2
  *
