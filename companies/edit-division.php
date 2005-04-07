@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.10 2005/02/08 17:08:29 vanmer Exp $
+ * $Id: edit-division.php,v 1.11 2005/04/07 18:10:04 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -47,7 +47,7 @@ $sidebar='';
 $sidebar=do_hook_function('division_sidebar_bottom',$sidebar);
 
 $edit_division_form_extra='';
-$edit_division_form = do_hook_function('edit_division_form', &$edit_division_form_extra);
+$edit_division_form = do_hook_function('edit_division_form', $edit_division_form_extra);
 
 if (!$sidebar) $sidebar = '&nbsp';
 
@@ -110,6 +110,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.11  2005/04/07 18:10:04  vanmer
+ * - changed second parameter to do_hook_function to pass variable instead of passing reference (reference is now in function definition)
+ *
  * Revision 1.10  2005/02/08 17:08:29  vanmer
  * - removed second passed parameter (does not work with do_hook_function)
  *

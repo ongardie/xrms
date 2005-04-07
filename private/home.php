@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.44 2005/01/17 13:39:50 braverock Exp $
+ * $Id: home.php,v 1.45 2005/04/07 18:16:20 vanmer Exp $
  */
 
 // include the common files
@@ -502,7 +502,7 @@ start_page($page_title,true,$msg);
             <tr>
                 <td><a href="../doc/users/XRMS_User_Manual.pdf"><?php echo _("User Manual"); ?></a> (PDF)</td>
             </tr>
-<?php echo do_hook_function('home_docs'); ?>
+<?php $param=NULL; echo do_hook_function('home_docs', $param); ?>
         </table>
 
             <!-- opportunities //-->
@@ -529,6 +529,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.45  2005/04/07 18:16:20  vanmer
+ * - changed second parameter to do_hook_function to pass variable instead of passing reference (reference is now in function definition)
+ *
  * Revision 1.44  2005/01/17 13:39:50  braverock
  * - add db_error_handler to all queries
  *

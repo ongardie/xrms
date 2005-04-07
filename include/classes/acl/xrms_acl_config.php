@@ -5,7 +5,7 @@
  * Design copyright 2004 Explorer Fund Advisors
  * All Rights Reserved
  *
- * $Id: xrms_acl_config.php,v 1.3 2005/01/25 06:25:25 vanmer Exp $
+ * $Id: xrms_acl_config.php,v 1.4 2005/04/07 18:14:30 vanmer Exp $
  */
 
 /**
@@ -40,7 +40,7 @@
  $options['default']['db_dbname'] = $xrms_acl_db_dbname;
 
 
- $plugin_options=do_hook_function('xrms_acl_database_access',&$options);
+ $plugin_options=do_hook_function('xrms_acl_database_access',$options);
  
  $options['ACL_Test']=$options['default'];
  $options['ACL_Test']['db_dbname'] = $xrms_acl_test_db_dbname;
@@ -51,6 +51,9 @@
  }
 /**
  * $Log: xrms_acl_config.php,v $
+ * Revision 1.4  2005/04/07 18:14:30  vanmer
+ * - changed second parameter to do_hook_function to pass variable instead of passing reference (reference is now in function definition)
+ *
  * Revision 1.3  2005/01/25 06:25:25  vanmer
  * - changed to use pointer to array to allow plugins to modify directly
  *
