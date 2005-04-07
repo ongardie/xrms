@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.4 2005/03/04 23:20:44 vanmer Exp $
+ * $Id: acl_results.php,v 1.5 2005/04/07 17:46:49 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -120,7 +120,9 @@ TILLEND;
             if (!$result) { echo "No objects available."; }
             else {
 //            echo "<pre>Final Result:\n";print_r($result); echo "</pre>";
-            $controlled_objects=$result['controlled_objects'];
+            if ($result['ALL']) $controlled_objects=true;
+            else $controlled_objects=$result['controlled_objects'];
+            
             //print_r($ret);
 echo <<<TILLEND
             <form method="POST">
@@ -157,7 +159,7 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false) {
                 $objectData = $acl->get_controlled_object(false, $object);
                 $on_what_field=$objectData['on_what_field'];
                 $on_what_table=$objectData['on_what_table'];
-                if ($ids) $fieldRestriction[$on_what_field]=$ids;
+                if ($ids AND is_array($ids)) $fieldRestriction[$on_what_field]=$ids;
             }
 
             $ret = $acl->get_controlled_object_data($object, false, $fieldRestriction, false, true);
@@ -242,6 +244,9 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.5  2005/04/07 17:46:49  vanmer
+  * - changed ACL results to reflect new ALL method of returning ACL results
+  *
   * Revision 1.4  2005/03/04 23:20:44  vanmer
   * - quoted to allow permission check to correctly create radio buttons
   *
