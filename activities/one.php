@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.81 2005/03/22 22:12:43 gpowers Exp $
+ * $Id: one.php,v 1.82 2005/04/07 17:45:43 vanmer Exp $
  */
 
 //include required files
@@ -260,7 +260,9 @@ if ( !isset($activity_content_bottom) ) {
   $activity_content_bottom = '';
 }
 //call the activity_content_bottom hook
-$activity_content_bottom = do_hook_function('activity_content_bottom');
+//sending null parameter, expecting return instead of change to passed in reference
+$param=NULL;
+$activity_content_bottom = do_hook_function('activity_content_bottom',$param);
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -288,7 +290,9 @@ require("../relationships/sidebar.php");
 require_once( '../files/sidebar.php');
 
 //Add optional tables
-$sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom');
+//sending null parameter, expecting return instead of change to passed in reference
+$param=NULL;
+$sidebar_plugin_rows = do_hook_function('activity_sidebar_bottom',$param);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -525,6 +529,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.82  2005/04/07 17:45:43  vanmer
+ * - added NULL parameter to do_hook_function, to fulfill new requirement of passing a second parameter to do_hook_function
+ *
  * Revision 1.81  2005/03/22 22:12:43  gpowers
  * - added activity_content_bottom plugin hook
  *
