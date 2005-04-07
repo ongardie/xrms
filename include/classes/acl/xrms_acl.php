@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.14 2005/03/24 20:27:06 ycreddy Exp $
+ * $Id: xrms_acl.php,v 1.15 2005/04/07 18:13:15 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -32,12 +32,13 @@ class xrms_acl {
      * @return Object of type xrms_acl
      *
      **/
-    function xrms_acl($DBOptionSet=false) {
+    function xrms_acl($DBOptionSet=false, $con=false) {
         if ($DBOptionSet) {
             $this->DBOptions=$DBOptionSet;
         }
-        $this->DBConnection = $this->get_object_adodbconnection();
-        
+        if (!$con) {
+            $this->DBConnection = $this->get_object_adodbconnection();
+        } else $this->DBConnection=$con;        
     }
     
     /*****************************************************************************/
@@ -2070,6 +2071,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.15  2005/04/07 18:13:15  vanmer
+ * - allow ACL to be called with initial DB connection already instantiated
+ *
  * Revision 1.14  2005/03/24 20:27:06  ycreddy
  * Assignment of enum type made conditional to xrms_db_dbtype
  *
