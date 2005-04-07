@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.103 2005/04/05 16:53:30 ycreddy Exp $
+ * $Id: one.php,v 1.104 2005/04/07 14:21:43 maulani Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -56,8 +56,13 @@ $accounting_rows = do_hook_function('company_accounting_inline_display', $accoun
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
-$sql = "select cs.*, c.*, account_status_display_html, rating_display_html, company_source_display_html, i.industry_pretty_name, u1.username as owner_username, u2.username as entered_by, u3.username as last_modified_by, c.default_primary_address
-        from crm_statuses cs, companies c, account_statuses as1, ratings r, company_sources cs2, industries i, users u1, users u2, users u3
+$sql = 'select cs.*, c.*, account_status_display_html, rating_display_html, 
+        company_source_display_html, i.industry_pretty_name, c.default_primary_address, ' .
+		$con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
+		$con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
+		$con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by " .
+       "from crm_statuses cs, companies c, account_statuses as1, ratings r, 
+        company_sources cs2, industries i, users u1, users u2, users u3
         where c.account_status_id = as1.account_status_id
         and c.industry_id = i.industry_id
         and c.rating_id = r.rating_id
@@ -833,6 +838,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.104  2005/04/07 14:21:43  maulani
+ * - Replace username with actual name in display
+ *   RFE 933629 by sdavey
+ *
  * Revision 1.103  2005/04/05 16:53:30  ycreddy
  * Added trim to custom fields
  *
