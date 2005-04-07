@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.11 2005/01/26 22:49:09 gpowers Exp $
+ * $Id: divisions.php,v 1.12 2005/04/07 17:49:14 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -54,7 +54,7 @@ $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
 
 $con->close();
-$new_division_form = do_hook_function('new_division_form', &$new_division_form_extra);
+$new_division_form = do_hook_function('new_division_form', $new_division_form_extra);
 
 $page_title = $company_name . " - " . _("Divisions");
 start_page($page_title, true, $msg);
@@ -112,6 +112,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.12  2005/04/07 17:49:14  vanmer
+ * - changed second parameter to do_hook_function to pass variable instead of passing reference (reference is now in function definition)
+ *
  * Revision 1.11  2005/01/26 22:49:09  gpowers
  * - removed "localhost" from add/edit address URL
  *
