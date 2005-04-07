@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.76 2005/04/05 18:02:09 ycreddy Exp $
+ * $Id: one.php,v 1.77 2005/04/07 14:09:43 maulani Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -54,9 +54,11 @@ $contact_buttons = do_hook_function('one_contact_buttons', $contact_buttons);
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
 $sql = "select cont.*,
-c.company_id, company_name, company_code, home_address_id,
-u1.username as entered_by_username, u2.username as last_modified_by_username, u3.username as account_owner,
-account_status_display_html, crm_status_display_html
+c.company_id, company_name, company_code, home_address_id, " .
+$con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS entered_by_username," .
+$con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS last_modified_by_username," .
+$con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS account_owner," .
+"account_status_display_html, crm_status_display_html
 from contacts cont, companies c, users u1, users u2, users u3, account_statuses as1, crm_statuses crm
 where cont.company_id = c.company_id
 and cont.entered_by = u1.user_id
@@ -459,11 +461,11 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Created"); ?></td>
-                                    <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by; ?></td>
+                                    <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by_username; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
-                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
+                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by_username; ?></td>
                                 </tr>
                                 <?php do_hook('one_contact_right'); ?>
                             </table>
@@ -595,6 +597,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.77  2005/04/07 14:09:43  maulani
+ * - Change use of username to use actual name
+ *   From RFE 933629 by sdavey
+ *
  * Revision 1.76  2005/04/05 18:02:09  ycreddy
  * added assignment for entered_by and last_modified_by that use names different from column names
  *
