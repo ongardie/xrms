@@ -12,7 +12,7 @@
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.8 2005/03/17 20:49:50 gpowers Exp $
+ * $Id: plugin.php,v 1.9 2005/04/07 18:15:08 vanmer Exp $
  * @package xrms
  */
 
@@ -87,10 +87,10 @@ function do_hook ($name) {
  * This function executes a hook and allows for parameters to be passed.
  *
  * @param string name the name of the hook
- * @param mixed param the parameters to pass to the hook function
+ * @param mixed param the parameters to pass to the hook function (by reference)
  * @return mixed the return value of the hook function
  */
-function do_hook_function($name, $parm=NULL) {
+function do_hook_function($name, &$parm) {
     global $xrms_plugin_hooks;
     $ret = '';
 
@@ -213,6 +213,9 @@ if (isset($plugins) && is_array($plugins)) {
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.9  2005/04/07 18:15:08  vanmer
+ * - changed second parameter to do_hook_function to take reference
+ *
  * Revision 1.8  2005/03/17 20:49:50  gpowers
  * - fixed bug: "only displays one plugin per hook"
  *
