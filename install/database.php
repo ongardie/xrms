@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.31 2005/03/20 01:45:54 maulani Exp $
+ * $Id: database.php,v 1.32 2005/04/07 13:57:03 maulani Exp $
  */
 
 /**
@@ -202,6 +202,20 @@ function misc_db_tables($con, $table_list) {
                telephone_code                          varchar(50) not null default '',
                country_record_status                   char(1) not null default 'a',
                phone_format                            varchar(25) not null default ''
+               )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
+    // salutations
+    if (!in_array('salutations',$table_list)) {
+        $sql ="create table salutations (
+               salutation_id                           int not null primary key auto_increment,
+               salutation                              varchar(20) not null default '',
+               salutation_sort_value                   varchar(20) not null default ''
                )";
         //execute
         $rst = $con->execute($sql);
@@ -1095,6 +1109,11 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.32  2005/04/07 13:57:03  maulani
+ * - Add salutation table to allow installation configurable list.  Also add
+ *   many more default entries.
+ *   RFE 913526 by algon.
+ *
  * Revision 1.31  2005/03/20 01:45:54  maulani
  * - Remove company_company_type_map table because it is not used.
  *

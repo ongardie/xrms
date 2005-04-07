@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.20 2005/01/13 18:42:30 vanmer Exp $
+ * $Id: new.php,v 1.21 2005/04/07 13:57:05 maulani Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -81,7 +81,7 @@ if ( !isset($division_menu) ) {
 if ( !isset($salutation) ) {
   $salutation = '';
 }
-$salutation_menu = build_salutation_menu($salutation);
+$salutation_menu = build_salutation_menu($con, $salutation);
 
 // build address menu
 if ( isset($company_id) ) {
@@ -261,6 +261,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.21  2005/04/07 13:57:05  maulani
+ * - Add salutation table to allow installation configurable list.  Also add
+ *   many more default entries.
+ *   RFE 913526 by algon.
+ *
  * Revision 1.20  2005/01/13 18:42:30  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.50 2005/03/29 19:10:44 gpowers Exp $
+ * $Id: utils-interface.php,v 1.51 2005/04/07 13:57:04 maulani Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -323,34 +323,29 @@ function end_page($use_hook = true) {
 } //end end_page fn
 
 /**
- * build salutation menu
+ * Retrieve menu of Salutations 
  *
- * @todo move the salutation strings into the database, and make configurable
- *
- * @param integer $salutation
- * @return string $salutation_menu
+ * @param  handle  $con database connection
+ * @param  integer $salutation to set the menu to
+ * @param  boolean $blank_salutation include a blank area
+ * @return string  $salutation_menu the html menu to display
  */
-function build_salutation_menu($salutation) {
+function build_salutation_menu(&$con, $salutation='', $blank_salutation=false) {
 
-    global $include_directory;
-
-    $salutation_array = array(_("Mr."), _("Ms."), _("Mrs."), _("Miss"), _("Dr."), _("Rev."));
-
-    $salutation_menu  = "<select name=salutation>";
-    $salutation_menu .= "\n<option value=0 > ";
-
-    for ($i = 0; $i < sizeof($salutation_array); $i++) {
-        $salutation_menu .= "\n<option value='" . $salutation_array[$i] . "'";
-        if ($salutation == $salutation_array[$i]) {
-            $salutation_menu .= " selected";
-        }
-        $salutation_menu .= ">" . $salutation_array[$i];
+    $sql = "
+    SELECT salutation
+    FROM salutations
+    ORDER BY salutation_sort_value
+    ";
+	$rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
     }
-
-    $salutation_menu .= "\n</select>";
-
-    return $salutation_menu;
-} //end build_salutation_menu fn
+	$salutation_menu = $rst->getmenu('salutation', $salutation, $blank_salutation);
+	$rst->close();
+	
+	return $salutation_menu;
+}
 
 /*****************************************************************************/
 /**
@@ -573,6 +568,11 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.51  2005/04/07 13:57:04  maulani
+ * - Add salutation table to allow installation configurable list.  Also add
+ *   many more default entries.
+ *   RFE 913526 by algon.
+ *
  * Revision 1.50  2005/03/29 19:10:44  gpowers
  * - based Reports ACL on object name, not table name (bug?)
  * - changed 'reports' to 'Reports' for consistancy
