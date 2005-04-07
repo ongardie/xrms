@@ -39,18 +39,20 @@ function check_acl_object_recursion($con, $ParentControlledObject_id, $ChildCont
     $acl = new xrms_acl($acl_options, $con);
     //get list of objects above the parent
     $ControlledObjectRelationships = $acl->get_controlled_object_relationship(false, $ParentControlledObject_id, false, true);
-    if (!is_array(current($ControlledObjectRelationships))) {   
-        $ControlledObjectRelationships=array($ControlledObjectRelationships['CORelationship_id']=>$ControlledObjectRelationships);
-    }
-    foreach ($ControlledObjectRelationships as $cor_id => $cor) {
-        if ($cor['ParentControlledObject_id']) {
+    if ($ControlledObjectRelationships) {
+	    if (!is_array(current($ControlledObjectRelationships))) {   
+        	$ControlledObjectRelationships=array($ControlledObjectRelationships['CORelationship_id']=>$ControlledObjectRelationships);
+    	}
+    	foreach ($ControlledObjectRelationships as $cor_id => $cor) {
+        	if ($cor['ParentControlledObject_id']) {
 //            echo "<pre>"; print_r($cor); echo "</pre>";
-            if ($cor['ParentControlledObject_id']==$ChildControlledObject_id) {
-                return false;
-            }
-            $ret = check_acl_object_recursion($con, $cor['ParentControlledObject_id'],$ChildControlledObject_id);
-            if (!$ret) return false;
-        }
+            	if ($cor['ParentControlledObject_id']==$ChildControlledObject_id) {
+                	return false;
+            	}
+            	$ret = check_acl_object_recursion($con, $cor['ParentControlledObject_id'],$ChildControlledObject_id);
+            	if (!$ret) return false;
+        	}
+    	}
     }
     return true;
 }
