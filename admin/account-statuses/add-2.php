@@ -1,4 +1,11 @@
 <?php
+/**
+ * /admin/account-statuses/add-2.php
+ *
+ * Add account status
+ *
+ * $Id: add-2.php,v 1.6 2005/04/10 17:34:54 maulani Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -36,4 +43,11 @@ $con->close();
 
 header("Location: some.php");
 
+/**
+ * $Log: add-2.php,v $
+ * Revision 1.6  2005/04/10 17:34:54  maulani
+ * - Add phpdoc
+ *
+ *
+ */
 ?>

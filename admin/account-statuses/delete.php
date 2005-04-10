@@ -1,4 +1,11 @@
 <?php
+/**
+ * /admin/account-statuses/some.php
+ *
+ * Delete account-status
+ *
+ * $Id: delete.php,v 1.4 2005/04/10 17:34:54 maulani Exp $
+ */
 
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
@@ -27,4 +34,11 @@ $con->close();
 
 header("Location: some.php");
 
+/**
+ * $Log: delete.php,v $
+ * Revision 1.4  2005/04/10 17:34:54  maulani
+ * - Add phpdoc
+ *
+ *
+ */
 ?>
