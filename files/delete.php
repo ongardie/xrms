@@ -33,6 +33,6 @@ $con->execute($upd);
 
 $con->close();
 
-header("Location: {$http_site_root}/{$return_url}");
+header("Location: {$http_site_root}{$return_url}");
 
 ?>
