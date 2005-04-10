@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.14 2005/04/10 11:44:22 maulani Exp $
+ * $Id: new-2.php,v 1.15 2005/04/10 16:19:02 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -96,9 +96,9 @@ if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
 $sql = "SELECT * FROM files WHERE file_id = $file_id";
 $rst = $con->execute($sql);
 
-$lookup_file_type = mime_get_type ( $file_name );
-show_test_values($file_type, $lookup_file_type);
-if ($lookup_file_type != '') $file_type = $lookup_file_type;
+if ($file_type == '') {
+    $file_type = mime_get_type ( $file_name );
+}
 
 $rec = array();
 $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
@@ -118,6 +118,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.15  2005/04/10 16:19:02  maulani
+ * - remove errant test code
+ *
  * Revision 1.14  2005/04/10 11:44:22  maulani
  * - Retain file type if not found in lookup table
  *
