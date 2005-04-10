@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.20 2005/04/07 13:57:03 maulani Exp $
+ * $Id: data.php,v 1.21 2005/04/10 23:46:33 maulani Exp $
  */
 
 /**
@@ -2091,6 +2091,16 @@ function misc_db_data($con) {
         $sql = "INSERT INTO time_zones VALUES (720,218,'WY',NULL,NULL,3,-7,'y')";
         $con->execute($sql);
     }
+    
+    // address_types
+    if (confirm_no_records($con, 'address_types')) {
+        $sql = "INSERT INTO address_types VALUES (1,'unknown','100')";
+        $con->execute($sql);
+        $sql = "INSERT INTO address_types VALUES (2,'commercial','200')";
+        $con->execute($sql);
+        $sql = "INSERT INTO address_types VALUES (3,'residential','300')";
+        $con->execute($sql);
+    }
 
     // salutations
     if (confirm_no_records($con, 'salutations')) {
@@ -2851,6 +2861,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.21  2005/04/10 23:46:33  maulani
+ * - Add address types
+ *
  * Revision 1.20  2005/04/07 13:57:03  maulani
  * - Add salutation table to allow installation configurable list.  Also add
  *   many more default entries.

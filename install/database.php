@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.32 2005/04/07 13:57:03 maulani Exp $
+ * $Id: database.php,v 1.33 2005/04/10 23:47:09 maulani Exp $
  */
 
 /**
@@ -216,6 +216,20 @@ function misc_db_tables($con, $table_list) {
                salutation_id                           int not null primary key auto_increment,
                salutation                              varchar(20) not null default '',
                salutation_sort_value                   varchar(20) not null default ''
+               )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
+    // address_types
+    if (!in_array('address_types',$table_list)) {
+        $sql ="create table address_types (
+               address_type_id                           int not null primary key auto_increment,
+               address_type                              varchar(20) not null default '',
+               address_type_sort_value                   varchar(20) not null default ''
                )";
         //execute
         $rst = $con->execute($sql);
@@ -523,6 +537,7 @@ function company_db_tables($con, $table_list) {
                city                varchar(255) not null default '',
                province            varchar(255) not null default '',
                postal_code         varchar(255) not null default '',
+               address_type        varchar(20) not null default 'unknown',
                use_pretty_address      char(1) not null default 'f',
                offset               float,
                daylight_savings_id     int unsigned,
@@ -1109,6 +1124,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.33  2005/04/10 23:47:09  maulani
+ * - Add address types
+ *
  * Revision 1.32  2005/04/07 13:57:03  maulani
  * - Add salutation table to allow installation configurable list.  Also add
  *   many more default entries.
