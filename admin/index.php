@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.30 2005/04/10 16:51:02 maulani Exp $
+ * $Id: index.php,v 1.31 2005/04/10 17:34:22 maulani Exp $
  */
 
 //include required stuff
@@ -204,6 +204,11 @@ start_page($page_title, true, $msg);
                     <a href="relationship-types/some.php"><?php echo _("Relationship Types"); ?></a>
                 </td>
             </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="salutations/some.php"><?php echo _("Salutations"); ?></a>
+                </td>
+            </tr>
         </table>
 
         <!-- plugins //-->
@@ -229,6 +234,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.31  2005/04/10 17:34:22  maulani
+ * - Add salutations
+ *
  * Revision 1.30  2005/04/10 16:51:02  maulani
  * - Alphabetize types and statuses
  *
