@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.13 2005/01/13 18:51:23 vanmer Exp $
+ * $Id: new-2.php,v 1.14 2005/04/10 11:44:22 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -30,7 +30,6 @@ $file_name        = $_FILES['file1']['name'];
 $file_type        = $_FILES['file1']['type'];
 $file_size        = $_FILES['file1']['size'];
 $file_tmp_name    = $_FILES['file1']['tmp_name'];
-
 $file_pretty_name = (strlen(trim($file_pretty_name)) > 0) ? $file_pretty_name : $file_name;
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -48,6 +47,7 @@ $rec['file_pretty_name'] = $file_pretty_name;
 $rec['file_description'] = $file_description;
 $rec['file_filesystem_name'] = $file_name;
 $rec['file_size'] = $file_size;
+$rec['file_type'] = $file_type;
 $rec['on_what_table'] = $on_what_table;
 $rec['on_what_id'] = $on_what_id;
 $rec['entered_at'] = $file_entered_at;
@@ -60,8 +60,9 @@ $con->execute($ins);
 $file_id = $con->insert_id();
 
 $error = '';
+
 if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
-    move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
+    $success = move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
 } elseif ($_FILES['file1']['tmp_name'] and (strlen($file_pretty_name))){
         $error = $_FILES['file1']['tmp_name'];
         $msg .= '<p>'
@@ -95,9 +96,13 @@ if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
 $sql = "SELECT * FROM files WHERE file_id = $file_id";
 $rst = $con->execute($sql);
 
+$lookup_file_type = mime_get_type ( $file_name );
+show_test_values($file_type, $lookup_file_type);
+if ($lookup_file_type != '') $file_type = $lookup_file_type;
+
 $rec = array();
 $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
-$rec['file_type']            = mime_get_type ( $file_name );
+$rec['file_type']            = $file_type;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
@@ -113,6 +118,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.14  2005/04/10 11:44:22  maulani
+ * - Retain file type if not found in lookup table
+ *
  * Revision 1.13  2005/01/13 18:51:23  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *
