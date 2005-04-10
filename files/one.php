@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.13 2005/01/13 18:47:28 vanmer Exp $
+ * $Id: one.php,v 1.14 2005/04/10 16:42:19 maulani Exp $
  */
 
 //include required files
@@ -64,6 +64,10 @@ start_page($page_title, true, $msg);
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("File Information");?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("ID"); ?></td>
+                <td class=widget_content_form_element><?php  echo $file_id ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("File Name"); ?></td>
@@ -156,6 +160,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.14  2005/04/10 16:42:19  maulani
+ *- RFE 1107920 (maulani) Display file_id on one.php screen
+ *
  *Revision 1.13  2005/01/13 18:47:28  vanmer
  *- Basic ACL changes to allow display functionality to be restricted
  *
