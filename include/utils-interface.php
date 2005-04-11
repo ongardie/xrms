@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.52 2005/04/11 02:07:56 maulani Exp $
+ * $Id: utils-interface.php,v 1.53 2005/04/11 19:34:41 gpowers Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -142,7 +142,6 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     global $http_site_root;
     global $app_title;
     global $css_theme;
-    global $body_tags;
     
     if (!$xcon) {
         global $xrms_db_dbtype;
@@ -216,8 +215,11 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
         }
     }
 ?>
+
 </head>
-<body $body_tags>
+
+  <body <?php do_hook('bodytags'); ?>>
+  <?php do_hook('topofpage'); ?>
   <div id="page_header"><?php echo $page_title; ?></div>
 <?php
   // Show navbar..
@@ -592,6 +594,10 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.53  2005/04/11 19:34:41  gpowers
+ * - replaced $body_tags var with bodytags plugin hook
+ * - added topofpage plugin hook
+ *
  * Revision 1.52  2005/04/11 02:07:56  maulani
  * - Add address-type menu
  *
