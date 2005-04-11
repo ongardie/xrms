@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.20 2005/04/05 18:09:07 daturaarutad Exp $
+ * $Id: addresses.php,v 1.21 2005/04/11 02:06:48 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -107,7 +107,7 @@ global $system_rows_per_page;
 
 $address_pager = $pager->Render($system_rows_per_page);
 
-
+$address_type_menu = build_address_type_menu($con, 'unknown');
 
 $sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
 $rst = $con->execute($sql);
@@ -170,6 +170,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php echo $country_menu ?></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Address Type"); ?></td>
+                <td class=widget_content_form_element><?php echo $address_type_menu ?></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right_91px><?php echo _("Override Address"); ?></td>
                 <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body></textarea> <input type="checkbox" name="use_pretty_address"> <?php echo _("Use"); ?></td>
             </tr>
@@ -188,6 +192,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.21  2005/04/11 02:06:48  maulani
+ * - Add address type.  RFE 862049 (maulani)
+ *
  * Revision 1.20  2005/04/05 18:09:07  daturaarutad
  * fixed missing edit link
  *

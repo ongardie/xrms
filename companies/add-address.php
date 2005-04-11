@@ -2,7 +2,7 @@
 /**
  * Add an address
  *
- * $Id: add-address.php,v 1.11 2004/08/09 19:28:07 neildogg Exp $
+ * $Id: add-address.php,v 1.12 2005/04/11 02:06:37 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -25,6 +25,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'city'               => array('companies_city',arr_vars_SESSION),
                    'province'           => array('companies_province',arr_vars_SESSION),
                    'postal_code'        => array('companies_postal_code',arr_vars_SESSION),
+                   'address_type'       => array('companies_address_type',arr_vars_SESSION),
                    'address_body'       => array('companies_address_body',arr_vars_SESSION),
                    'use_pretty_address' => array('companies_use_pretty_address',arr_vars_SESSION),
 		   );
@@ -49,6 +50,7 @@ $rec['line2'] = $line2;
 $rec['city'] = $city;
 $rec['province'] = $province;
 $rec['postal_code'] = $postal_code;
+$rec['address_type'] = $address_type;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
 
@@ -86,6 +88,9 @@ header("Location: addresses.php?msg=address_added&company_id=$company_id");
 
 /**
  * $Log: add-address.php,v $
+ * Revision 1.12  2005/04/11 02:06:37  maulani
+ * - Add address type.  RFE 862049 (maulani)
+ *
  * Revision 1.11  2004/08/09 19:28:07  neildogg
  * - Now adds daylight savings information to new
  * company addresses

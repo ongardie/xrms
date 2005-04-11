@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.7 2004/06/16 22:09:10 introspectshun Exp $
+ * $Id: edit-address-2.php,v 1.8 2005/04/11 02:06:48 maulani Exp $
  */
 
 
@@ -26,6 +26,7 @@ $line2 = $_POST['line2'];
 $city = $_POST['city'];
 $province = $_POST['province'];
 $postal_code = $_POST['postal_code'];
+$address_type = $_POST['address_type'];
 $use_pretty_address = $_POST['use_pretty_address'];
 
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
@@ -44,6 +45,7 @@ $rec['line2'] = $line2;
 $rec['city'] = $city;
 $rec['province'] = $province;
 $rec['postal_code'] = $postal_code;
+$rec['address_type'] = $address_type;
 $rec['address_name'] = $address_name;
 $rec['address_body'] = $address_body;
 $rec['use_pretty_address'] = $use_pretty_address;
@@ -57,6 +59,9 @@ header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.8  2005/04/11 02:06:48  maulani
+ * - Add address type.  RFE 862049 (maulani)
+ *
  * Revision 1.7  2004/06/16 22:09:10  introspectshun
  * - removed double quoting from t/f
  *
