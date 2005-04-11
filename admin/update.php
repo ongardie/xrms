@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.64 2005/04/07 13:57:03 maulani Exp $
+ * $Id: update.php,v 1.65 2005/04/11 00:26:53 maulani Exp $
  */
 
 // where do we include from
@@ -1160,15 +1160,46 @@ if($recCount == 0) {
     $con->execute($sql);
 }
 
-// create the salutations table if we need it
-$sql ="create table salutations (
-	   salutation_id                           int not null primary key auto_increment,
-	   salutation                              varchar(20) not null default '',
-	   salutation_sort_value                   varchar(20) not null default ''
-	   )";
+// create the address_types table if we need it
+$table_list = list_db_tables($con);
+if (!in_array('address_types',$table_list)) {
+	$sql ="create table address_types (
+		   address_type_id                           int not null primary key auto_increment,
+		   address_type                              varchar(20) not null default '',
+		   address_type_sort_value                   varchar(20) not null default ''
+		   )";
+	$rst = $con->execute($sql);
+	if (!$rst) {
+		db_error_handler ($con, $sql);
+	}
+}
+
+// Add address_types if none exist
+$sql = "select count(*) as recCount from address_types";
 $rst = $con->execute($sql);
-if (!$rst) {
-	db_error_handler ($con, $sql);
+$recCount = $rst->fields['recCount'];
+if($recCount == 0) {
+    $msg .= 'Added address types.<BR><BR>';
+        $sql = "INSERT INTO address_types VALUES (1,'unknown','100')";
+        $con->execute($sql);
+        $sql = "INSERT INTO address_types VALUES (2,'commercial','200')";
+        $con->execute($sql);
+        $sql = "INSERT INTO address_types VALUES (3,'residential','300')";
+        $con->execute($sql);
+}
+
+// create the salutations table if we need it
+$table_list = list_db_tables($con);
+if (!in_array('salutations',$table_list)) {
+	$sql ="create table salutations (
+		   salutation_id                           int not null primary key auto_increment,
+		   salutation                              varchar(20) not null default '',
+		   salutation_sort_value                   varchar(20) not null default ''
+		   )";
+	$rst = $con->execute($sql);
+	if (!$rst) {
+		db_error_handler ($con, $sql);
+	}
 }
 
 // Add salutations if none exist
@@ -1566,6 +1597,7 @@ if($recCount == 0) {
         $sql = "INSERT INTO salutations VALUES (287,'Viscountess','761')";
         $con->execute($sql);
         $sql = "INSERT INTO salutations VALUES (288,'Wg Cdr','764')";
+        $con->execute($sql);
 }
 
 
@@ -3043,6 +3075,8 @@ $rst = $con->execute($sql);
 $sql = "alter table addresses add offset float";
 $con->execute($sql);
 $sql = "alter table addresses add daylight_savings_id int unsigned";
+$con->execute($sql);
+$sql = "alter table addresses add address_type varchar(20) not null default 'unknown' after postal_code";
 $con->execute($sql);
 
 //Go through each address to insert daylight savings
@@ -4695,6 +4729,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.65  2005/04/11 00:26:53  maulani
+ * - Add address_types
+ *
  * Revision 1.64  2005/04/07 13:57:03  maulani
  * - Add salutation table to allow installation configurable list.  Also add
  *   many more default entries.
