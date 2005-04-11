@@ -5,7 +5,17 @@ http://www.asterisk.org/
 copyright 2004 Glenn Powers <glenn@net127.com>
 Licensed Under the Open Software License v. 2.0
 
-this plugin has not been tested yet.
+*** THIS PLUGIN IS UNDER ACTIVE DEVELOPMENT ***
+
+YOU *MUST* INSTALL THE TABLE IN cti-call-queue.sql to your database
+BEFORE you activate this plugin.  If you don't, you'll get a Javascript
+error every second on every page.
+
+The screen pop function uses the JPSpan library. (It's one of those
+cool Ajax things you've been hearing about.)
+
+The Cisco 7960 config writer currently provides only basic functionality.
+Specifically, you can't edit a config file with XRMS once you create it.
 
 XRMS Voice Mail Plugin v0.1
 for use with the Asterisk Open Source PBX http://www.asterisk.org/
