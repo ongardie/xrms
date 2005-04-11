@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.31 2005/04/10 17:34:22 maulani Exp $
+ * $Id: index.php,v 1.32 2005/04/11 00:43:51 maulani Exp $
  */
 
 //include required stuff
@@ -141,6 +141,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
+                    <a href="address-types/some.php"><?php echo _("Address Types"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
                     <a href="campaign-statuses/some.php"><?php echo _("Campaign Statuses"); ?></a>
                 </td>
             </tr>
@@ -234,6 +239,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.32  2005/04/11 00:43:51  maulani
+ * - Add address-types
+ *
  * Revision 1.31  2005/04/10 17:34:22  maulani
  * - Add salutations
  *
