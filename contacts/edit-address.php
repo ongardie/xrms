@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.8 2004/08/02 22:28:11 maulani Exp $
+ * $Id: edit-address.php,v 1.9 2005/04/11 02:08:44 maulani Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -42,10 +42,13 @@ if ($rst) {
     $city = $rst->fields['city'];
     $province = $rst->fields['province'];
     $postal_code = $rst->fields['postal_code'];
+    $address_type = $rst->fields['address_type'];
     $address_body = $rst->fields['address_body'];
     $use_pretty_address = $rst->fields['use_pretty_address'];
     $rst->close();
 }
+
+$address_type_menu = build_address_type_menu($con, $address_type);
 
 $sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
 $rst = $con->execute($sql);
@@ -215,6 +218,10 @@ confGoTo_includes();
                 <td class=widget_content_form_element><?php echo $country_menu; ?></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Address Type"); ?></td>
+                <td class=widget_content_form_element><?php echo $address_type_menu; ?></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right_91px><?php echo _("Address Body"); ?></td>
                 <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> <?php echo _("Use"); ?></td>
             </tr>
@@ -248,6 +255,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.9  2005/04/11 02:08:44  maulani
+ * - Add address types.  RFE 862049 (maulani)
+ *
  * Revision 1.8  2004/08/02 22:28:11  maulani
  * - Have delete address button use confGoTo confirmation dialog to confirm delete
  *

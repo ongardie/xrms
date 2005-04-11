@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.9 2004/08/25 14:18:27 neildogg Exp $
+ * $Id: edit-address-2.php,v 1.10 2005/04/11 02:08:44 maulani Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -29,6 +29,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
 		   'city' => array ( 'city' , arr_vars_SESSION ),
 		   'province' => array ( 'province' , arr_vars_SESSION ),
 		   'postal_code' => array ( 'postal_code' , arr_vars_SESSION ),
+		   'address_type' => array ( 'address_type' , arr_vars_SESSION ),
 		   'use_pretty_address' => array ( 'use_pretty_address' , arr_vars_SESSION ),
 		   'new' => array ( 'new' , arr_vars_SESSION ),
 		   'alt_address' => array ( 'alt_address' , arr_vars_SESSION ),
@@ -66,6 +67,7 @@ if ($alt_address) {
     $rec['city'] = $city;
     $rec['province'] = $province;
     $rec['postal_code'] = $postal_code;
+    $rec['address_type'] = $address_type;
     $rec['address_name'] = $address_name;
     $rec['address_body'] = $address_body;
     $rec['use_pretty_address'] = $use_pretty_address;
@@ -87,6 +89,7 @@ if ($alt_address) {
     $rec['city'] = $city;
     $rec['province'] = $province;
     $rec['postal_code'] = $postal_code;
+    $rec['address_type'] = $address_type;
     $rec['address_body'] = $address_body;
     $rec['use_pretty_address'] = $use_pretty_address;
 
@@ -138,6 +141,9 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.10  2005/04/11 02:08:44  maulani
+ * - Add address types.  RFE 862049 (maulani)
+ *
  * Revision 1.9  2004/08/25 14:18:27  neildogg
  * - Daylight savings now applied to all new addresses
  *
@@ -163,7 +169,7 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.9 2004/08/25 14:18:27 neildogg Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.10 2005/04/11 02:08:44 maulani Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
