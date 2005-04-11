@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.51 2005/04/07 13:57:04 maulani Exp $
+ * $Id: utils-interface.php,v 1.52 2005/04/11 02:07:56 maulani Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -345,7 +345,31 @@ function build_salutation_menu(&$con, $salutation='', $blank_salutation=false) {
 	$rst->close();
 	
 	return $salutation_menu;
-}
+} //end build_salutation_menu fn
+
+/**
+ * Retrieve menu of Address Types 
+ *
+ * @param  handle  $con database connection
+ * @param  integer $address_type to set the menu to
+ * @return string  $address_type_menu the html menu to display
+ */
+function build_address_type_menu(&$con, $address_type='') {
+
+    $sql = "
+    SELECT address_type
+    FROM address_types
+    ORDER BY address_type_sort_value
+    ";
+	$rst = $con->execute($sql);
+    if (!$rst) {
+        db_error_handler($con, $sql);
+    }
+	$address_type_menu = $rst->getmenu('address_type', $address_type, false);
+	$rst->close();
+	
+	return $address_type_menu;
+} //end build_salutation_menu fn
 
 /*****************************************************************************/
 /**
@@ -568,6 +592,9 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.52  2005/04/11 02:07:56  maulani
+ * - Add address-type menu
+ *
  * Revision 1.51  2005/04/07 13:57:04  maulani
  * - Add salutation table to allow installation configurable list.  Also add
  *   many more default entries.
