@@ -38,7 +38,7 @@
     $company_code        = $row['company_code'];
     $company_phone       = $row['phone'];
     $company_phone2      = $row['phone2'];
-    $company_fax         = $row['fax'];
+    $company_fax         = $row['company_fax'];
 
     //contact info
     $contact_first_names   = $row['first_name'];
@@ -46,7 +46,7 @@
     $contact_email         = htmlspecialchars($row['email']);
     $contact_work_phone    = $row['work_phone'];
     $contact_home_phone    = $row['home_phone'];
-    $contact_fax           = $row['fax'];
+    $contact_fax           = $row['contact_fax'];
     $contact_division      = $row['division'];
     $contact_salutation    = $row['salutation'];
     $contact_date_of_birth = $row['date_of_birth'];
@@ -84,6 +84,9 @@
 
 /**
  * $Log: import-template-default.php,v $
+ * Revision 1.3  2005/04/12 13:13:47  niclowe
+ * Fixed  bug[ 1180292 ] import of fax fails (ambiguous company and contact fax fields)
+ *
  * Revision 1.2  2004/07/07 22:18:33  braverock
  * - minor improvements to import process
  *
