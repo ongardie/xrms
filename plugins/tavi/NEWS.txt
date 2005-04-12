@@ -1,0 +1,49 @@
+$Id: NEWS.txt,v 1.1 2005/04/12 20:45:10 gpowers Exp $
+
+WikkiTikkiTavi - News
+---------------------
+See also ChangeLog.txt for more details of changes.
+
+2003-03-31  Even Holen <evenh+tavi@pvv.ntnu.no>
+  The long promised version 0.26 of WikkiTikkiTavi is released. It contains
+  loads of bug fixes, extension to Transclude and TitleSearch macros. But most
+  important it includes an AntiSpam module, and a translation module allowing
+  for translation of the user interface (11 languages included). 
+  
+2003-12-16  Even Holen <evenh+tavi@pvv.ntnu.no>
+  WikkiTikkiTavi version 0.25 is released. A lot has been changed and added
+  since the last releases, but some of the most prominient changes are better
+  support of TaviSubpages, fully compliant xthml-coding including proper
+  handling of paragraphs, better and wider support of UTF-8, and quite a few
+  bug fixes which has been long overdue. 
+  
+
+2003-09-08  Even Holen <evenh+tavi@pvv.ntnu.no>
+  WikkiTikkiTavi version 0.24 is released. And this file hasn't been updated
+  in a while. Changes since version 0.21 includes lots of bug fixes and minor
+  adjustments to formatting rules. With this new version the macro TitleSearch
+  has been added, and the implementation of CurlyOptions has begun. This
+  affects in this version changes to table formatting and to the macros
+  TitleSearch and WantedPages.
+
+---------------------
+
+2002-01-16  Scott Moonen  <smoonen@andstuff.org>
+
+  WikkiTikkiTavi version 0.21 is released.  Several bug fixes (including a
+  security fix) and several minor new features, such as HTML anchors;
+  arbitrary link text for free links; RSS syndication; the use of style
+  sheets and XHTML-Strict markup; compatibility with register_globals=off;
+  the option to split words in page titles, headers, and links; and a time
+  zone preference for visitors.
+
+  Users should note that the transclude syntax, %%PageName%%, has been
+  deprecated for this release.  It is superseded by the
+  [[Transclude PageName]] macro.  The double-% syntax will be removed
+  as of version 0.30.
+
+
+2001-11-17  Christopher Cashell <topher@zyp.org>
+
+  WikkiTikkiTavi has had a CVS reorganization, intending to bring it to a
+  more "normal" state (as defined by common CVS usage conventions).

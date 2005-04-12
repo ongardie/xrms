@@ -1,0 +1,768 @@
+flf2a$ 8 7 11 1 7
+"ROMAN___" file. Commodore2Figlet v1.00 by David Proper
+Net13 1134:666/1 - Rosenet 696:2666/666 - Ace of Spades BBS 1-330-339-4592
+FidoNet 1:2265/105 - DProper@Juno.com
+NOTE: I got the font from a Commodore 64 charactor set file. (Wrote a little
+program to convert them to Figlet). And since some charactors are different in
+PETSCII then in ASCII, certain charactors will be different or even
+non-existant. Such as `~{}\| _^
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @@
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+$        @
+$        @
+   ZZ$   @
+$        @@
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+$        @
+$        @
+$        @
+$        @
+$        @@
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ZZZZZZZZ$@
+ ZZ  ZZ$ @
+ZZZZZZZZ$@
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+$        @@
+   ZZ$   @
+  ZZZZZ$ @
+ ZZ$     @
+  ZZZZ$  @
+     ZZ$ @
+ ZZZZZ$  @
+   ZZ$   @
+$        @@
+ ZZ   Z$ @
+ ZZ  ZZ$ @
+    ZZ$  @
+   ZZ$   @
+  ZZ$    @
+ ZZ  ZZ$ @
+ Z   ZZ$ @
+$        @@
+  ZZZZ$  @
+ ZZ  ZZ$ @
+  ZZZZ$  @
+  ZZZ  Z$@
+ ZZ  ZZZ$@
+ ZZ  ZZ$ @
+  ZZZZ Z$@
+$        @@
+     ZZ$ @
+    ZZ$  @
+   ZZ$   @
+$        @
+$        @
+$        @
+$        @
+$        @@
+    ZZ$  @
+   ZZ$   @
+  ZZ$    @
+  ZZ$    @
+  ZZ$    @
+   ZZ$   @
+    ZZ$  @
+$        @@
+  ZZ$    @
+   ZZ$   @
+    ZZ$  @
+    ZZ$  @
+    ZZ$  @
+   ZZ$   @
+  ZZ$    @
+$        @@
+$        @
+ ZZ  ZZ$ @
+  ZZZZ$  @
+ZZZZZZZZ$@
+  ZZZZ$  @
+ ZZ  ZZ$ @
+$        @
+$        @@
+$        @
+   ZZ$   @
+   ZZ$   @
+ ZZZZZZ$ @
+   ZZ$   @
+   ZZ$   @
+$        @
+$        @@
+$        @
+$        @
+$        @
+$        @
+$        @
+   ZZ$   @
+   ZZ$   @
+  ZZ$    @@
+$        @
+$        @
+$        @
+ ZZZZZZ$ @
+$        @
+$        @
+$        @
+$        @@
+$        @
+$        @
+$        @
+$        @
+$        @
+   ZZ$   @
+   ZZ$   @
+$        @@
+$        @
+      ZZ$@
+     ZZ$ @
+    ZZ$  @
+   ZZ$   @
+  ZZ$    @
+ ZZ$     @
+$        @@
+   ZZZZZ$@
+  ZZ  ZZ$@
+  ZZ  ZZ$@
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ZZ  ZZ$  @
+ZZZZZ$   @
+$        @@
+      Z$ @
+    ZZZ$ @
+  ZZZZ$  @
+    ZZ$  @
+   ZZ$   @
+   ZZ$   @
+ ZZZZZZ$ @
+$        @@
+   ZZZZ$ @
+  Z   ZZ$@
+ ZZ  ZZ$ @
+    ZZ$  @
+  ZZ$    @
+ ZZ    Z$@
+ZZZZZZZ$ @
+$        @@
+  ZZZZ$  @
+  Z  ZZ$ @
+    ZZ$  @
+  ZZZ$   @
+    ZZ$  @
+    ZZ$  @
+   ZZ$   @
+ ZZ$     @@
+     ZZZ$@
+    ZZZ$ @
+   Z ZZ$ @
+  Z ZZ$  @
+ZZZZZZZZ$@
+   ZZ$   @
+  ZZZZ$  @
+$        @@
+  ZZZZZZ$@
+  ZZ$    @
+ ZZZZ$   @
+ Z   ZZ$ @
+     ZZ$ @
+     ZZ$ @
+ ZZZZZ$  @
+$        @@
+   ZZZZZ$@
+  ZZ$    @
+ ZZ$     @
+ ZZZZZZ$ @
+ZZ   ZZ$ @
+ZZ   ZZ$ @
+ ZZZZZ$  @
+$        @@
+ ZZZZZZZ$@
+ Z   Z$  @
+   ZZ$   @
+  ZZ$    @
+  ZZ$    @
+ ZZ$     @
+ ZZ$     @
+$        @@
+  ZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZZZZ$  @
+ZZ  ZZ$  @
+ZZ  ZZ$  @
+ZZZZZ$   @
+$        @@
+  ZZZZ$  @
+ ZZ  ZZ$ @
+ZZ   ZZ$ @
+ ZZZZZZ$ @
+     ZZ$ @
+    ZZ$  @
+ZZZZZ$   @
+$        @@
+$        @
+$        @
+   ZZ$   @
+$        @
+$        @
+   ZZ$   @
+$        @
+$        @@
+$        @
+$        @
+   ZZ$   @
+$        @
+$        @
+   ZZ$   @
+   ZZ$   @
+  ZZ$    @@
+    ZZZ$ @
+   ZZ$   @
+  ZZ$    @
+ ZZ$     @
+  ZZ$    @
+   ZZ$   @
+    ZZZ$ @
+$        @@
+$        @
+$        @
+ ZZZZZZ$ @
+$        @
+ ZZZZZZ$ @
+$        @
+$        @
+$        @@
+ ZZZ$    @
+   ZZ$   @
+    ZZ$  @
+     ZZ$ @
+    ZZ$  @
+   ZZ$   @
+ ZZZ$    @
+$        @@
+  ZZZZ$  @
+ ZZ  ZZ$ @
+     ZZ$ @
+    ZZ$  @
+   ZZ$   @
+$        @
+   ZZ$   @
+$        @@
+$        @
+$        @
+$        @
+ZZZZZZZZ$@
+ZZZZZZZZ$@
+$        @
+$        @
+$        @@
+  ZZZ$   @
+  ZZZ$   @
+  Z ZZ$  @
+ Z  ZZ$  @
+ZZZZZZZ$ @
+Z    ZZ$ @
+ZZ   ZZZ$@
+$        @@
+ZZZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ZZZZZZ$  @
+$        @@
+  ZZZZZZ$@
+ ZZ   ZZ$@
+ ZZ    Z$@
+ ZZ$     @
+ ZZ$     @
+ ZZ   ZZ$@
+  ZZZZZ$ @
+$        @@
+ZZZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ   ZZ$@
+ ZZ   ZZ$@
+ ZZ   ZZ$@
+ ZZ  ZZ$ @
+ZZZZZZ$  @
+$        @@
+ ZZZZZZZ$@
+  ZZ   Z$@
+  ZZ$    @
+  ZZZZZ$ @
+  ZZ$    @
+  ZZ   Z$@
+ ZZZZZZZ$@
+$        @@
+ZZZZZZZ$ @
+ ZZ  ZZ$ @
+ ZZ   Z$ @
+ ZZZZ$   @
+ ZZ$     @
+ ZZ$     @
+ZZZZ$    @
+$        @@
+ ZZZZZZ$ @
+ZZ   ZZ$ @
+ZZ$      @
+ZZ ZZZZZ$@
+ZZ   ZZ$ @
+ZZ   ZZ$ @
+ ZZZZZZ$ @
+$        @@
+ZZZ  ZZZ$@
+ ZZ   ZZ$@
+ ZZ   ZZ$@
+ ZZZZZZZ$@
+ ZZ   ZZ$@
+ ZZ   ZZ$@
+ZZZ  ZZZ$@
+$        @@
+ ZZZZZZ$ @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+ ZZZZZZ$ @
+$        @@
+    ZZZZ$@
+     ZZ$ @
+     ZZ$ @
+ ZZ  ZZ$ @
+ZZ   ZZ$ @
+ZZ   ZZ$ @
+ ZZZZZ$  @
+$        @@
+ZZZZ ZZZ$@
+ ZZ  Z$  @
+ ZZ Z$   @
+ ZZZZ$   @
+ ZZ ZZ$  @
+ ZZ  ZZ$ @
+ZZZZ ZZZ$@
+$        @@
+ZZZZ$    @
+ ZZ$     @
+ ZZ$     @
+ ZZ$     @
+ ZZ   Z$ @
+ ZZ  ZZ$ @
+ZZZZZZZ$ @
+$        @@
+ZZ    ZZ$@
+ ZZZ ZZZ$@
+ Z ZZ ZZ$@
+ Z ZZ ZZ$@
+ Z ZZ ZZ$@
+ Z  Z ZZ$@
+ZZZ   ZZ$@
+$        @@
+ZZZ  ZZZ$@
+ ZZZ  Z$ @
+ Z ZZ Z$ @
+ Z ZZ Z$ @
+ Z  ZZZ$ @
+ Z   ZZ$ @
+ZZZ   ZZ$@
+$        @@
+  ZZZZ$  @
+ ZZ  ZZ$ @
+ Z    Z$ @
+ Z    Z$ @
+ Z    Z$ @
+ ZZ  ZZ$ @
+  ZZZZ$  @
+$        @@
+ZZZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZZZZ$  @
+ ZZ$     @
+ ZZ$     @
+ZZZZ$    @
+$        @@
+  ZZZZ$  @
+ ZZ  ZZ$ @
+ZZ    ZZ$@
+ZZ    ZZ$@
+ZZ    ZZ$@
+ ZZ  ZZ$ @
+  ZZZZ$  @
+ Z  ZZZZ$@@
+ZZZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZZZZ$  @
+ ZZ ZZ$  @
+ ZZ  ZZ$ @
+ZZZZ ZZZ$@
+$        @@
+  ZZZZZ$ @
+ ZZ   Z$ @
+ ZZZ$    @
+  ZZZZ$  @
+    ZZZ$ @
+ Z   ZZ$ @
+ ZZZZZ$  @
+$        @@
+ZZZZZZZZ$@
+Z  ZZ  Z$@
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+  ZZZZ$  @
+$        @@
+ZZZZ ZZZ$@
+ ZZ   Z$ @
+ ZZ   Z$ @
+ ZZ   Z$ @
+ ZZ   Z$ @
+ ZZ   Z$ @
+  ZZZZ$  @
+$        @@
+ZZZZ ZZZ$@
+ ZZ   Z$ @
+ ZZ   Z$ @
+ ZZ   Z$ @
+  ZZ Z$  @
+  ZZ Z$  @
+   ZZ$   @
+$        @@
+ZZ  Z  Z$@
+ZZ  Z  Z$@
+ZZ ZZZ Z$@
+ZZ ZZZ Z$@
+ZZ ZZZ Z$@
+ ZZ ZZZ$ @
+ ZZ  ZZ$ @
+$        @@
+ZZZ   ZZ$@
+ ZZ   Z$ @
+  ZZ Z$  @
+   ZZ$   @
+  Z ZZ$  @
+ Z   ZZ$ @
+ZZZ  ZZZ$@
+$        @@
+ZZZZ ZZZ$@
+ ZZ   Z$ @
+  ZZ Z$  @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+  ZZZZ$  @
+$        @@
+ ZZZZZZ$ @
+ Z   ZZ$ @
+    ZZ$  @
+   ZZ$   @
+  ZZ$    @
+ ZZ   Z$ @
+ ZZZZZZ$ @
+$        @@
+  ZZZZ$  @
+  ZZ$    @
+  ZZ$    @
+  ZZ$    @
+  ZZ$    @
+  ZZ$    @
+  ZZZZ$  @
+$        @@
+    ZZZ$ @
+   ZZ  Z$@
+  ZZ$    @
+ZZZZZZZ$ @
+  ZZ$    @
+ ZZ$     @
+ZZZZZZZZ$@
+$        @@
+  ZZZZ$  @
+    ZZ$  @
+    ZZ$  @
+    ZZ$  @
+    ZZ$  @
+    ZZ$  @
+  ZZZZ$  @
+$        @@
+$        @
+   ZZ$   @
+  ZZZZ$  @
+ ZZZZZZ$ @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @@
+$        @
+   Z$    @
+  ZZ$    @
+ ZZZZZZZ$@
+ ZZZZZZZ$@
+  ZZ$    @
+   Z$    @
+$        @@
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @@
+$        @
+  ZZZZ$  @
+     ZZ$ @
+  ZZZZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+  ZZZ ZZ$@
+$        @@
+ZZZ$     @
+ ZZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ZZZZZZ$  @
+$        @@
+$        @
+  ZZZZZ$ @
+ ZZ  ZZ$ @
+ ZZ$     @
+ ZZ$     @
+ ZZ   Z$ @
+  ZZZZ$  @
+$        @@
+     ZZZ$@
+  ZZZZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+  ZZZ ZZ$@
+$        @@
+$        @
+  ZZZZ$  @
+ ZZ  ZZ$ @
+ ZZZZZZ$ @
+ ZZ$     @
+ ZZ$     @
+  ZZZZ$  @
+$        @@
+   ZZZZ$ @
+  ZZ Z$  @
+  ZZ$    @
+ ZZZZZ$  @
+  ZZ$    @
+  ZZ$    @
+ ZZZZ$   @
+$        @@
+      ZZ$@
+  ZZZZZ$ @
+ ZZ  ZZ$ @
+ ZZZZZ$  @
+  ZZ$    @
+  ZZZZZ$ @
+ ZZ  ZZ$ @
+ ZZZZZ$  @@
+ZZZ$     @
+ ZZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ZZZZ ZZZ$@
+$        @@
+   ZZ$   @
+$        @
+  ZZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+ ZZZZZZ$ @
+$        @@
+    ZZ$  @
+$        @
+   ZZZ$  @
+    ZZ$  @
+    ZZ$  @
+    ZZ$  @
+ ZZ ZZ$  @
+  ZZZ$   @@
+ZZZ$     @
+ ZZ ZZZ$ @
+ ZZ Z$   @
+ ZZZZZ$  @
+ ZZ ZZ$  @
+ ZZ  ZZ$ @
+ZZZZ ZZZ$@
+$        @@
+  ZZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+  ZZZZ$  @
+$        @@
+$        @
+ ZZZZZZ$ @
+ZZ ZZ ZZ$@
+ZZ ZZ ZZ$@
+ZZ ZZ ZZ$@
+ZZ ZZ ZZ$@
+ZZ ZZ ZZ$@
+$        @@
+$        @
+ZZZ ZZ$  @
+ ZZZ ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ZZZZ ZZZ$@
+$        @@
+$        @
+  ZZZZ$  @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+  ZZZZ$  @
+$        @@
+$        @
+ZZZ ZZ$  @
+ ZZZ ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZZ ZZ$ @
+ ZZ ZZ$  @
+ZZZ$     @@
+$        @
+  ZZZZ Z$@
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+  ZZZZZ$ @
+     ZZZ$@@
+$        @
+ ZZZ ZZZ$@
+  ZZZ ZZ$@
+  ZZ$    @
+  ZZ$    @
+  ZZ$    @
+ ZZZZ$   @
+$        @@
+$        @
+  ZZZZZ$ @
+ ZZ$     @
+  ZZZZ$  @
+   ZZZZ$ @
+ Z    Z$ @
+ ZZZZZ$  @
+$        @@
+    Z$   @
+ ZZZZZZ$ @
+   ZZ$   @
+   ZZ$   @
+   ZZ$   @
+   ZZ Z$ @
+    ZZ$  @
+$        @@
+$        @
+ZZZ ZZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+  ZZZ ZZ$@
+$        @@
+$        @
+ZZZZ ZZZ$@
+ ZZ   Z$ @
+ ZZ   Z$ @
+  ZZ Z$  @
+  ZZZ$   @
+   ZZ$   @
+$        @@
+$        @
+ZZ  Z ZZ$@
+ZZ  Z  Z$@
+ ZZ ZZ Z$@
+ ZZZ ZZ$ @
+  ZZ ZZ$ @
+  Z   Z$ @
+$        @@
+$        @
+ZZZZ ZZZ$@
+ ZZ   Z$ @
+  ZZZZ$  @
+  ZZZ$   @
+ Z  ZZ$  @
+ZZZ  ZZZ$@
+$        @@
+$        @
+ZZZ ZZZZ$@
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZ  ZZ$ @
+ ZZZZZZ$ @
+     ZZ$ @
+ ZZZZZ$  @@
+$        @
+ ZZZZZZZ$@
+ ZZ  ZZ$ @
+    ZZ$  @
+   ZZ$   @
+  ZZ  ZZ$@
+ ZZZZZZZ$@
+$        @@
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @@
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @@
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @@
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @
+$        @@

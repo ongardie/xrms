@@ -1,0 +1,17 @@
+$Id: TODO.txt,v 1.1 2005/04/12 20:45:10 gpowers Exp $
+
+WikkiTikkiTavi - Todo
+---------------------
+What's todo with WikkiTikkiTavi is maintained on the web site. Especially look
+at the official todo logs on:
+  o http://tavi.sourceforge.net/TaviTodo
+  o http://tavi.sourceforge.net/TaviTodo/WorkingSet
+  
+If you feel like contributing, and have suggestions, patches or bugs (or bug
+fixes) then please feel free to make addition on the corresponding pages:
+  o http://tavi.sourceforge.net/TaviBugs
+  o http://tavi.sourceforge.net/TaviPatches
+  o http://tavi.sourceforge.net/TaviSuggestions
+
+It is in everybodys interest to improve WikkiTikkiTavi so please contribute!  
+  

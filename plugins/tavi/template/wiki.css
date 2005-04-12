@@ -1,0 +1,88 @@
+/* WikkiTikkiTavi default style sheet. */
+/* $Id: wiki.css,v 1.1 2005/04/12 20:45:13 gpowers Exp $ */
+body
+  { background-color: #f5f5f5;
+    color:            #000000;
+    margin-right:     3%;
+    margin-left:      3%; }
+a:link
+  { color:      #97694f;
+    background: transparent; }
+a:visited
+  { color:      #4e2f2f;
+    background: transparent; }
+a:active
+  { color:      #7f3030;
+    background: transparent; }
+a.title
+  { text-decoration: none; }
+img
+  { border: 0; }
+div.logo
+  { float: right; }
+table.diff
+  { width: 95%; }
+td.diff-added
+  { background-color: #cfffcf;
+    color:            #000000; }
+td.diff-removed
+  { background-color: #ffffaf;
+    color:            #000000; }
+h1
+  { margin-bottom: 0; }
+textarea
+  { width: 100%; }
+dl, ul, ol
+  { margin-top:    0px;
+    margin-bottom: 0px; }
+form
+  { margin-top: 0px; }
+p.warning
+  { color:      #ff3f3f;
+    background: transparent; }
+span.twin
+  { font-size: smaller; }
+tt
+  { background: transparent;
+    color:      #383838; }
+pre
+  { background: transparent;
+    color:      #383838; }
+
+/* Used together with TitleSearch */
+ul.oneline
+  { list-style-type: none;
+    display: inline;
+    margin-left: 0em; }
+ul.oneline li
+  { display: inline; }
+ul.prelist
+  { list-style-type: none;
+    font-family: monospace; }
+
+div#header #logo
+  { float: right; }
+div#header hr
+  { clear: both; }
+
+/* Some php-syntax highlighting defaults */
+pre.phpsource { border-width: 1px; border-style: solid;  border-color: #000000; 
+                background-color: #d5d5d5; 
+                padding: 0.3em;  } 
+
+.phpsource span.html    { color: #000000; }
+.phpsource span.default { color: #0000CC; }
+.phpsource span.keyword { color: #11cc11; }
+.phpsource span.string  { color: #CC0000; }
+.phpsource span.comment { color: #FF9900; }
+
+table.codephr {float: right}
+td.codephr {font-size: 7px}
+td.codehdr {vertical-align: top}
+
+@media print {
+ body                       { background-color: #ffffff; color: #000000; }
+ div#header #toolbar-top    { display: none; }
+ div#footer #toolbar-bottom { display: none; }
+ div#footer form            { display: none; }
+}

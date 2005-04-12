@@ -1,0 +1,7 @@
+The following files were removed for security and easy of maintence:
+
+doc/
+doc/template.txt
+install/configure.pl
+install/settings.cnf
+
