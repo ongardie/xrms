@@ -1,5 +1,5 @@
 <?php
-// $Id: common.php,v 1.1 2005/04/12 20:45:13 gpowers Exp $
+// $Id: common.php,v 1.2 2005/04/13 14:24:03 gpowers Exp $
 
 // This function generates the common prologue and header
 // for the various templates.
@@ -14,6 +14,11 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
 $session_user_id = session_check();
+
+if (!check_object_permission_bool($_SESSION['session_user_id'], 'wiki', 'Read')) {
+    echo _("You do not have permissions to access this page.");
+    exit;
+}
 
 function template_common_prologue($args)
 {
