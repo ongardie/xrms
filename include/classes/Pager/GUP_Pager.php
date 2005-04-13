@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.18 2005/04/13 06:30:36 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.19 2005/04/13 16:30:58 daturaarutad Exp $
  */
 
 
@@ -1015,7 +1015,6 @@ END;
 
 		$this->sql .= " $order_by";
 		if(!$this->do_export) {
-			echo "no export so let's get visible<br>";
 			$this->get_only_visible = true;
 		}
 	}
@@ -1032,6 +1031,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.19  2005/04/13 16:30:58  daturaarutad
+ * removed debug msg
+ *
  * Revision 1.18  2005/04/13 06:30:36  daturaarutad
  * added export functionality
  *
