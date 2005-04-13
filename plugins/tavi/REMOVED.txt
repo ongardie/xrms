@@ -4,4 +4,6 @@ doc/
 doc/template.txt
 install/configure.pl
 install/settings.cnf
-
+install/create-db.pl
+  - required Perl and DBI.pm
+  - replaced by install/tavi.sql
