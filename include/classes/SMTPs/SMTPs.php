@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.4 2005/03/21 05:38:56 jswalter Exp $
+// $Id: SMTPs.php,v 1.5 2005/04/13 15:23:59 jswalter Exp $
 
   /**
    * Class SMTPs
@@ -19,14 +19,13 @@
    *  - multi-part message
    *    - plain text
    *    - HTML
-   *  - attachements
+   *    - attachements
+   *  - GPG access
    *
    * This Class is based off of 'SMTP PHP MAIL'
    *    by Dirk Paehl, http://www.paehl.de
    *
    * @package SMTPs
-   * @uses class|method|global|variable description
-   * @requires class_name
    *
    * @tutorial /path/to/tutorial.php Complete Class tutorial
    * @example url://path/to/example.php description
@@ -36,9 +35,8 @@
    * @reference http://www.gordano.com/kb.htm?q=803
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
-   * @contributors name <email address> description
    *
-   * @version $Revision: 1.4 $
+   * @version $Revision: 1.5 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -52,7 +50,7 @@
     * @const SMTPs_VER
     *
     */
-    define('SMTPs_VER', '1.2', false);
+    define('SMTPs_VER', '1.5', false);
 
    /**
     * SMTPs Success value
@@ -504,9 +502,27 @@ class SMTPs
 // ** Basic System configuration
 
    /**
-    * Method public void setConfig( string )
+    * Method public void setConfig( mixed )
     *
-    * Open file from given path and uses values in there to setup configration
+    * The method is used to populate select class properties from either
+    * a user defined INI file or the systems 'php.ini' file
+    *
+    * If a user defined INI is to be used, its complete path is passed
+    * a the method single parameter. The INI can define and class properties
+    * and user properties.
+    *
+    * If the systems 'php.ini' file is to be used, the method is called without
+    * parameters. In this case, only HOST, PORT and FROM properties will be set
+    * as they are the only properties that are defined within the 'php.ini'.
+    *
+    * If secure SMTP is to be used, the user ID and Password can be defined with
+    * the user INI file, but the properties are not defined with the systems
+    * 'php.ini'file, they must be defined via their setter methods
+    *
+    * This method can be called twice, if desired. Once without a parameter to
+    * load the properties as defined within the systems 'php.ini' file, and a
+    * second time, with a path to a user INI file for other properties to be
+    * defined.
     *
     * @name setConfig()
     *
@@ -515,13 +531,22 @@ class SMTPs
     *
     * @since 1.0
     *
-    * @param string $_strConfigPath path to config file
+    * @param mixed $_strConfigPath path to config file or VOID
     * @return void
     *
     */
-    function setConfig ( $_strConfigPath )
+    function setConfig ( $_strConfigPath = null )
     {
-        include ( $_strConfigPath );
+        // if we have a path...
+        if ( ! empty ($_strConfigPath) )
+            include ( $_strConfigPath );
+
+        else
+        {
+            $this->setHost ( ini_get ('SMTP') );
+            $this->setPort ( ini_get ('smtp_port') );
+            $this->setFrom ( ini_get ('sendmail_from') );
+        }
     }
 
 
@@ -1253,7 +1278,7 @@ class SMTPs
 
         $_header .= 'Subject: '    . $this->getSubject()     . "\r\n"
                  .  'Date: '       . date("r")               . "\r\n"
-                 .  'Message-ID: <' . MD5( time() ) . '.SMPTs@torres.ws>' . "\r\n";
+                 .  'Message-ID: <' . MD5( time() ) . '.SMPTs@' . $this->_siteDomain . ">\r\n";
 //                 . 'Read-Receipt-To: '   . $this->getFrom( 'org' ) . "\r\n"
 //                 . 'Return-Receipt-To: ' . $this->getFrom( 'org' ) . "\r\n";
 
@@ -1639,6 +1664,9 @@ function server_parse($socket, $response)
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.5  2005/04/13 15:23:59  jswalter
+  *  - updated 'setConfig()' to handle external ini or 'php.ini'
+  *
   * Revision 1.4  2005/03/21 05:38:56  jswalter
   *  - made 'CC' a conditional insert
   *  - made 'BCC' a conditional insert
