@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.17 2005/04/04 15:19:29 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.18 2005/04/13 06:30:36 daturaarutad Exp $
  */
 
 
@@ -78,16 +78,22 @@ class GUP_Pager {
     var $maximize;
 
 
-	var $get_only_visible = false; // used internally; whether or not to get the whole sql dataset
-	var $use_cached = true; 	// whether or not to use the cache
-	var $using_cached = false;	// whether or not we are currently using cached data
-	var $group_mode = false;
+	var $get_only_visible 		= false; // used internally; whether or not to get the whole sql dataset
+	var $use_cached 			= true; 	// whether or not to use the cache
+	var $using_cached 			= false;	// whether or not we are currently using cached data
+	var $group_mode 			= false;
 	var $buffer_output;
-	var $rows_displayed = 0;
+	var $rows_displayed 		= 0;
 
-	var $show_cached_indicator = false;
+	var $show_cached_indicator 	= false;
+	// show the export button
+	var $show_export 			= false;
+	// do the actual export
+	var $do_export 				= false;
 
 	var $modify_data_functions = array();
+
+
     /**
     * see @example for details
     *
@@ -139,6 +145,7 @@ class GUP_Pager {
 		getGlobalVar($this->group_mode, $this->pager_id . '_group_mode');
 		getGlobalVar($this->group_id, $this->pager_id . '_group_id');
 		getGlobalVar($refresh, $this->pager_id . '_refresh');
+		getGlobalVar($this->do_export, $this->pager_id . '_export');
 
 		if($refresh) { $this->use_cached	= false; }
 		// don't use the cache if we are in sql-only mode (no data or callbacks)
@@ -146,6 +153,7 @@ class GUP_Pager {
 		// don't use the cache if there is no sql and the data is not
 		if(isset($data) && !function_exists($data)) { $this->use_cached	= false; }
 
+		if($this->do_export) { unset($this->group_mode); }  // group mode doesn't make sense for export
 		if(!is_numeric($this->group_mode)) { unset($this->group_mode); }
 		if(isset($this->group_mode)) { $this->maximize = true; }
 
@@ -312,7 +320,6 @@ class GUP_Pager {
 				
 			if($this->column_info[$this->group_mode]['group_query_list']) {
 
-
 				$old_fetch_mode = $this->db->fetchMode;
 				$this->db->SetFetchMode(ADODB_FETCH_NUM);
 
@@ -391,6 +398,7 @@ class GUP_Pager {
 			//sto it in the session cache
 		    if(!$this->get_only_visible) {	
 				$_SESSION[$cache_name] = $this->data;
+				$_SESSION[$this->pager_id . '_columns'] = $this->column_info;
 			}
 
 		}
@@ -484,6 +492,42 @@ class GUP_Pager {
 	* private function Render_JS outputs the Javascript functions and hidden form variables
 	*/
 	function Render_JS() {
+		global $http_site_root;
+
+		// this JS code submits the page to the export handler script.
+		if($this->do_export) {
+
+			// exporting works in two passes...on this pass we output this part which will cause a reload to pager-export.php
+	        $cache_name = $this->pager_id . '_data';
+			$pager_id = $this->pager_id;
+
+        	echo <<<END
+
+				<!-- used by pager-export.php -->
+            	<input type=hidden name=pager_id value="">
+
+            	<script language="JavaScript" type="text/javascript">
+					// don't clobber any existing onload functions
+					var oldEvt = window.onload; 
+					window.onload = function() { 
+						if (oldEvt) oldEvt(); 
+
+
+						var oldAction = document.{$this->form_id}.action;
+						document.{$this->form_id}.action = '$http_site_root/include/classes/Pager/pager-export.php';
+						document.{$this->form_id}.pager_id.value = '$pager_id';
+
+						document.{$this->form_id}.submit();
+						document.{$this->form_id}.action = oldAction;
+
+						document.{$this->form_id}.{$this->pager_id}_export.value = '';
+						
+					}
+				</script>
+END;
+		}
+
+
         echo <<<END
             <script language="JavaScript" type="text/javascript">
             <!--
@@ -545,6 +589,8 @@ class GUP_Pager {
             <input type=hidden name={$this->pager_id}_sort_order value="{$this->sort_order}">
             <input type=hidden name={$this->pager_id}_maximize value="{$this->maximize}">
             <input type=hidden name={$this->pager_id}_refresh value="">
+            <input type=hidden name={$this->pager_id}_export value="">
+
 END;
 	}
     /**
@@ -553,7 +599,6 @@ END;
     function RenderGrid()
     {
         ob_start();
-
 
         $color_counter = 0;
 		$col_classnames = array();
@@ -969,12 +1014,27 @@ END;
 		} 
 
 		$this->sql .= " $order_by";
-		$this->get_only_visible = true;
+		if(!$this->do_export) {
+			echo "no export so let's get visible<br>";
+			$this->get_only_visible = true;
+		}
 	}
+	/**
+	*  Public function to enable the export button..also triggers the Javascript code to support the export
+	*/
+	function GetAndUseExportButton() {
+		$this->show_export = true;
+
+		return "<input type=button class=button value=\"" . _('Export') . "\" onclick=\"document.{$this->form_id}.{$this->pager_id}_export.value='set'; document.{$this->form_id}.submit();\">";
+	}
+
 }
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.18  2005/04/13 06:30:36  daturaarutad
+ * added export functionality
+ *
  * Revision 1.17  2005/04/04 15:19:29  daturaarutad
  * added not_sortable flag for columns
  *
