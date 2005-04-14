@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.45 2005/04/07 18:16:20 vanmer Exp $
+ * $Id: home.php,v 1.46 2005/04/14 21:20:17 daturaarutad Exp $
  */
 
 // include the common files
@@ -23,6 +23,7 @@ $session_user_id = session_check();
 
 // get call arguments
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+$results_view_type = isset($_GET['results_view_type']) ? $_GET['results_view_type'] : 'list';
 
 
 //if phone browser detected redirect to phone plugin
@@ -91,84 +92,140 @@ ORDER BY is_overdue DESC, a.scheduled_at, a.entered_at
 
 $activity_rows = '';
 
-$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_home_page);
+if('list' == $results_view_type) {
 
-$_SESSION['browse_start']=time();
-$_SESSION["search_sql"]=$sql_activities;
-$pos=1;
-$_SESSION['pos']=$pos;
-$next_to_check=array();
-if ($rst) {
-    while (!$rst->EOF) {
+	$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_home_page);
 
-        $company_id = $rst->fields['company_id'];
-        $activity_id = $rst->fields['activity_id'];
-        $company_name = $rst->fields['company_name'];
-        $activity_title = $rst->fields['activity_title'];
-        $activity_description = $rst->fields['activity_description'];
-        $on_what_table = $rst->fields['on_what_table'];
-        $on_what_id = $rst->fields['on_what_id'];
-        $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
-        $ends_at = $con->userdate($rst->fields['ends_at']);
-        $activity_status = $rst->fields['activity_status'];
-        $next_to_check[]=$activity_id;        
+	$_SESSION['browse_start']=time();
+	$_SESSION["search_sql"]=$sql_activities;
+	$pos=1;
+	$_SESSION['pos']=$pos;
+	$next_to_check=array();
+	if ($rst) {
+	    while (!$rst->EOF) {
+	
+	        $company_id = $rst->fields['company_id'];
+	        $activity_id = $rst->fields['activity_id'];
+	        $company_name = $rst->fields['company_name'];
+	        $activity_title = $rst->fields['activity_title'];
+	        $activity_description = $rst->fields['activity_description'];
+	        $on_what_table = $rst->fields['on_what_table'];
+	        $on_what_id = $rst->fields['on_what_id'];
+	        $scheduled_at = $con->userdate($rst->fields['scheduled_at']);
+	        $ends_at = $con->userdate($rst->fields['ends_at']);
+	        $activity_status = $rst->fields['activity_status'];
+	        $next_to_check[]=$activity_id;        
+	
+	        $attached_to_link = '';
+	        $attached_to_name = '';
+	
+	        if ($on_what_table == 'opportunities') {
+	            $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
+	            $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
+	        } elseif ($on_what_table == 'cases') {
+	            $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
+	            $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
+	        } else {
+	            $attached_to_link = "";
+	            $sql = "select * from users where 1 = 2";
+	        }
+	
+	        $rst2 = $con->execute($sql);
+	
+	        if ($rst2) {
+	            $attached_to_name = $rst2->fields['attached_to_name'];
+	            $rst2->close();
+	        }
+	
+	        $attached_to_link .= $attached_to_name . "</a>";
+	
+	        $open_p = $rst->fields['activity_status'];
+	        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
+	        $is_overdue = $rst->fields['is_overdue'];
+	
+	        if ($open_p == 'o') {
+	            if ($is_overdue) {
+	                $classname = 'overdue_activity';
+	            } else if (mktime() < $scheduled_at){
+	                $classname = 'scheduled_activity';
+	            } else {
+	                $classname = 'open_activity';
+	                }
+	        } else {
+	            $classname = 'closed_activity';
+	        }
+	
+	        $activity_rows .= '<tr>';
+	        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?save_and_next=true&activity_id=" . $rst->fields['activity_id']."&return_url=/private/home.php" . "'>" . $rst->fields['activity_title'] . '</a></td>';
+	        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
+	        $activity_rows .= '<td class=' . $classname . "><a href='../companies/one.php?company_id=" . $rst->fields['company_id'] . "'>" . $rst->fields['company_name'] . '</a></td>';
+	        $activity_rows .= '<td class=' . $classname . "><a href='../contacts/one.php?contact_id=" . $rst->fields['contact_id'] . "'>" . $rst->fields['contact_first_names'] . ' ' .  $rst->fields['contact_last_name'] . '</a></td>';
+	        $activity_rows .= '<td class=' . $classname . '>' . $attached_to_link . '</td>';
+	        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
+	        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['ends_at']) . '</td>';
+	        $activity_rows .= '</tr>';
+	        $rst->movenext();
+	    }
+	    $rst->close();
+	} else {
+	   db_error_handler ($con, $sql_activities);
+	}
 
-        $attached_to_link = '';
-        $attached_to_name = '';
+	$activities_widget = "
+        <!-- Activity Rows //-->
+        <table class=widget cellspacing=1 width=\"100%\">
+            <tr>
+                <td class=widget_header colspan=7>" .  _("Open Activities") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_label>" . _("Activity") . "</td>
+                <td class=widget_label>" . _("Type") . "</td>
+                <td class=widget_label>" . _("Company") . "</td>
+                <td class=widget_label>" . _("Contact") . "</td>
+                <td class=widget_label>" . _("About") . "</td>
+                <td class=widget_label>" . _("Scheduled") . "</td>
+                <td class=widget_label>" . _("Due") . "</td>
+            </tr>
+            $activity_rows
+        </table>";
 
-        if ($on_what_table == 'opportunities') {
-            $attached_to_link = "<a href='$http_site_root/opportunities/one.php?opportunity_id=$on_what_id'>";
-            $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
-        } elseif ($on_what_table == 'cases') {
-            $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
-            $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-        } else {
-            $attached_to_link = "";
-            $sql = "select * from users where 1 = 2";
-        }
-
-        $rst2 = $con->execute($sql);
-
-        if ($rst2) {
-            $attached_to_name = $rst2->fields['attached_to_name'];
-            $rst2->close();
-        }
-
-        $attached_to_link .= $attached_to_name . "</a>";
-
-        $open_p = $rst->fields['activity_status'];
-        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
-        $is_overdue = $rst->fields['is_overdue'];
-
-        if ($open_p == 'o') {
-            if ($is_overdue) {
-                $classname = 'overdue_activity';
-            } else if (mktime() < $scheduled_at){
-                $classname = 'scheduled_activity';
-            } else {
-                $classname = 'open_activity';
-                }
-        } else {
-            $classname = 'closed_activity';
-        }
-
-        $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?save_and_next=true&activity_id=" . $rst->fields['activity_id']."&return_url=/private/home.php" . "'>" . $rst->fields['activity_title'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . "><a href='../companies/one.php?company_id=" . $rst->fields['company_id'] . "'>" . $rst->fields['company_name'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . "><a href='../contacts/one.php?contact_id=" . $rst->fields['contact_id'] . "'>" . $rst->fields['contact_first_names'] . ' ' .  $rst->fields['contact_last_name'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $attached_to_link . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $con->userdate($rst->fields['ends_at']) . '</td>';
-        $activity_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
+	
+	$_SESSION['next_to_check']=$next_to_check;
+	
 } else {
-   db_error_handler ($con, $sql_activities);
+
+	// begin calendar stuff
+	require_once('../calendar/agenda/Calendar_View.php');
+	
+	$activity_calendar_rst = $con->execute($sql_activities);
+	
+	if($activity_calendar_rst) {
+	
+    	$i=0;
+
+    	while (!$activity_calendar_rst->EOF) {
+        	$activity_calendar_data[$i]['activity_id'] = $activity_calendar_rst->fields['activity_id'];
+        	$activity_calendar_data[$i]['scheduled_at'] = $activity_calendar_rst->fields['scheduled_at'];
+        	$activity_calendar_data[$i]['ends_at'] = $activity_calendar_rst->fields['ends_at'];
+        	$activity_calendar_data[$i]['contact_id'] = $activity_calendar_rst->fields['contact_id'];
+        	$activity_calendar_data[$i]['activity_title'] = $activity_calendar_rst->fields['activity_title'];
+        	$activity_calendar_data[$i]['activity_description'] = $activity_calendar_rst->fields['activity_description'];
+        	$activity_calendar_data[$i]['user_id'] = $activity_calendar_rst->fields['user_id'];
+	
+        	$activity_calendar_rst->movenext();
+        	$i++;
+    	}
+	}
+
+	$calendar = new CalendarView('ActivitiesView', 'calendar_start_date');
+
+	$calendar_widget_js_functions = $calendar->GetCalendarJS();
+	$calendar_widget = $calendar->Render($results_view_type, $activity_calendar_data, date('Y-m-d'));
+	$activities_widget = $calendar_widget['result'] . "\n\n" . $calendar_widget_js_functions;
+	
+	// end calendar stuff
 }
 
-$_SESSION['next_to_check']=$next_to_check;
 
 ///////////////////////////////////
 // Show contacts non-uploaded files
@@ -469,25 +526,34 @@ start_page($page_title,true,$msg);
 
 <div id="Main">
     <div id="Content">
-
-        <!-- Activity Rows //-->
+		<!-- Display Type -->
+		<form action="home.php" method="GET" name="ActivitiesView">
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=7><?php echo _("Open Activities"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Activity"); ?></td>
-                <td class=widget_label><?php echo _("Type"); ?></td>
-                <td class=widget_label><?php echo _("Company"); ?></td>
-                <td class=widget_label><?php echo _("Contact"); ?></td>
-                <td class=widget_label><?php echo _("About"); ?></td>
-                <td class=widget_label><?php echo _("Scheduled"); ?></td>
-                <td class=widget_label><?php echo _("Due"); ?></td>
-            </tr>
-            <?php  echo $activity_rows; ?>
-        </table>
+                <td class=widget_header colspan=7><?php echo _("Activities View"); ?></td>
+			<tr>
+                <td class=widget_label colspan="4">
+                    <?php echo _("View as List:"); ?> <input type="radio" name="results_view_type" value="list"<?php if(!$results_view_type || 'list' == $results_view_type) echo ' checked="true" ' ?>> &nbsp; &nbsp; &nbsp;
+                    <?php echo ' ' . _("View as Calendar: "); ?>
+<!--
+                    <?php echo ' ' . _("Day"); ?> <input type="radio" name="results_view_type" value="day"<?php if('day' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+-->
+                    <?php echo _("Week"); ?> <input type="radio" name="results_view_type" value="week"<?php if('week' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+                    <?php echo _("Month"); ?> <input type="radio" name="results_view_type" value="month"<?php if('month' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+<!--
+                    <?php echo _("Year"); ?> <input type="radio" name="results_view_type" value="year"<?php if('year' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+-->
+					<input type=button class=button value="Refresh" onclick="document.ActivitiesView.submit();">
+                
+                </td>
+			</tr>
+		</table>
+		<!-- List or Calendar View -->
+		<?php echo $activities_widget; ?>
+		</form>
+
         <!-- Non-Uploaded Files //-->
-            <?php  echo $nu_file_rows; ?>
+        <?php  echo $nu_file_rows; ?>
 
     </div>
 
@@ -529,6 +595,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.46  2005/04/14 21:20:17  daturaarutad
+ * added calendar view of activities
+ *
  * Revision 1.45  2005/04/07 18:16:20  vanmer
  * - changed second parameter to do_hook_function to pass variable instead of passing reference (reference is now in function definition)
  *
