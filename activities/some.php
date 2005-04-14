@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.101 2005/04/14 20:30:45 daturaarutad Exp $
+ * $Id: some.php,v 1.102 2005/04/14 20:46:34 daturaarutad Exp $
  */
 
 // handle includes
@@ -185,7 +185,7 @@ if (strlen($search_date) > 0 && $start_end != 'all') {
 				$day_diff_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
 				$day_diff_view_end = min($day_diff_view_end, $day_diff);
 				$offset_end = $con->OffsetDate($day_diff_view_end);
-				$offset_sql .= "and a.$field > $offset_start and a.$field < $offset_end";
+				$offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
 				break;
 		}
     } elseif ($before_after === 'after') {
@@ -200,7 +200,7 @@ if (strlen($search_date) > 0 && $start_end != 'all') {
 				//echo "new date: " . date('Y-m-d', strtotime("$calendar_start_date +1 $results_view_type")) . "<br>";
 				$day_diff_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
 				$offset_end = $con->OffsetDate(min($day_diff_view_end, $day_diff));
-				$offset_sql .= "and a.$field > $offset_start and a.$field < $offset_end";
+				$offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
 				break;
 
 /*
@@ -896,6 +896,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.102  2005/04/14 20:46:34  daturaarutad
+ * fixed query syntax error
+ *
  * Revision 1.101  2005/04/14 20:30:45  daturaarutad
  * added calendar to some.php
  *
