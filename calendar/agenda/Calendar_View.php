@@ -30,6 +30,11 @@ class CalendarView {
 
 		getGlobalVar($calendar_start_date, $calendar_date_field);
 
+		if(empty($calendar_start_date)) {
+			$calendar_start_date = date('Y-m-d', time());
+		}
+		//echo "calendar date is $calendar_start_date";
+
 		global $form_id;
 		$form_id = $form_id_in;
 
@@ -139,6 +144,7 @@ function GetCalendarJS() {
 	$calendar_start_date = $this->start_date;
 	$date_field_name = $this->calendar_date_field;
 
+        $year = date('Y', strtotime(null));
         $year = date('Y', strtotime($calendar_start_date));
         $month = date('m', strtotime($calendar_start_date));
         $day = date('d', strtotime($calendar_start_date));
