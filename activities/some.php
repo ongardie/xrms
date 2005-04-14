@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.100 2005/03/15 22:34:45 daturaarutad Exp $
+ * $Id: some.php,v 1.101 2005/04/14 20:30:45 daturaarutad Exp $
  */
 
 // handle includes
@@ -17,6 +17,9 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+require_once ($include_directory . 'classes/Pager/Session_Var_Watcher.php');
+require_once('../activities/activities-pager-functions.php');
+
 
 // create session
 $on_what_table='activities';
@@ -83,7 +86,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'campaign_id'          => array ( 'activities_campaign_id', arr_vars_SESSION ) ,
            // 'owner'               => array ( 'activities_owner', arr_vars_SESSION ) ,
                    'before_after'        => array ( 'activities_before_after', arr_vars_SESSION ) ,
-                   'start_end'        => array ( 'activities_start_end', arr_vars_SESSION ) ,
+                   'start_end'           => array ( 'activities_start_end', arr_vars_SESSION ) ,
                    'activity_type_id'    => array ( 'activity_type_id', arr_vars_SESSION ) ,
                    'completed'           => array ( 'activities_completed', arr_vars_SESSION ) ,
                    'user_id'             => array ( 'activities_user_id', arr_vars_SESSION ) ,
@@ -92,6 +95,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'time_zone_between'   => array ( 'time_zone_between', arr_vars_SESSION ) ,
                    'time_zone_between2'  => array ( 'time_zone_between2', arr_vars_SESSION ) ,
                    'opportunity_status_id' => array ( 'opportunity_status_id', arr_vars_SESSION ) ,
+                   'results_view_type' 	 => array ( 'results_view_type', arr_vars_SESSION ) ,
                    );
 
 // get all passed in variables
@@ -104,15 +108,122 @@ arr_vars_get_all ( $arr_vars );
 // Warning: if a user wants to save a search for a particular date, this won't allow it, as it defaults to recurring search
 if(isset($day_diff) and $day_diff) {
     $search_date = date('Y-m-d', time() + ($day_diff * 86400));
-}
-else {
+} else {
     if ( !$search_date ) {
         $search_date = date('Y-m-d', time());
     }
     $day_diff = round((strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400);
 }
 
-$offset = $con->OffsetDate($day_diff);
+$search_date_sql = $con->OffsetDate($day_diff);
+
+
+// watch to see if activities_date has changed
+$var_watcher = new SessionVarWatcher('Activities_Search');
+$var_watcher->RegisterCGIVars(array('activities_date','activities_before_after','activities_start_end'));
+
+// set calendar_start_date from search_date if it's not set already
+getGlobalVar($calendar_start_date, 'calendar_start_date');
+
+if($var_watcher->VarsChanged() || empty($calendar_start_date)) {
+
+	if(!$before_after) {
+		switch($results_view_type) {
+			case 'day':
+			case 'week':
+				$calendar_start_date = date("Y-m-d", strtotime('-1 ' . $results_view_type . ' ' . $search_date));
+				break;
+			case 'month':
+				$calendar_start_date = date("Y-m-", strtotime('-1 ' . $results_view_type . ' ' . $search_date));
+				$calendar_start_date .= '01';
+				break;
+			case 'year':
+				$calendar_start_date = date("Y-", strtotime('-1 ' . $results_view_type . ' ' . $search_date));
+				$calendar_start_date .= '01-01';
+				break;
+		}
+		//echo "calendar_start_date not set, setting to $calendar_start_date aka - 1 $results_view_type from $search_date<br>";
+   	} else { 
+		$calendar_start_date = $search_date;
+
+		//echo "calendar_start_date not set, setting to search date $search_date<br>";
+	}
+	// this is for the calendar widget
+	$_POST['calendar_start_date'] = $calendar_start_date;
+}
+
+
+/*
+	if view = list, just do before/after
+
+	otherwise day_diff2 and viewport comes into play
+	instead of day_diff2, do calendar_view_start, calendar_view_end
+
+	if calendar_view_start < search_date, use search_date
+	if calendar_view_end > search_date, use search_date
+*/
+
+if (strlen($search_date) > 0 && $start_end != 'all') {
+    $criteria_count++;
+
+    if($start_end == 'start') {
+        $field = 'scheduled_at';
+    } else {
+        $field = 'ends_at';
+    }
+
+    if (!$before_after) {
+		// before
+		switch($results_view_type) {
+			case 'day':
+			case 'week':
+			case 'month':
+			case 'year':
+				$day_diff_view_start = $day_diff + (strtotime($calendar_start_date) - time()) / 86400;
+				$offset_start = $con->OffsetDate($day_diff_view_start);
+//echo "new date: " . date('Y-m-d', strtotime("$calendar_start_date +1 $results_view_type")) . "<br>";
+				$day_diff_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
+				$day_diff_view_end = min($day_diff_view_end, $day_diff);
+				$offset_end = $con->OffsetDate($day_diff_view_end);
+				$offset_sql .= "and a.$field > $offset_start and a.$field < $offset_end";
+				break;
+		}
+    } elseif ($before_after === 'after') {
+
+		switch($results_view_type) {
+			case 'day':
+			case 'week':
+			case 'month':
+			case 'year':
+				$day_diff_view_start = $day_diff + (strtotime($calendar_start_date) - time()) / 86400;
+				$offset_start = $con->OffsetDate($day_diff_view_start);
+				//echo "new date: " . date('Y-m-d', strtotime("$calendar_start_date +1 $results_view_type")) . "<br>";
+				$day_diff_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
+				$offset_end = $con->OffsetDate(min($day_diff_view_end, $day_diff));
+				$offset_sql .= "and a.$field > $offset_start and a.$field < $offset_end";
+				break;
+
+/*
+				$day_diff_view_start = (strtotime($search_date) - strtotime("$calendar_start_date +1 $results_view_type")) / 86400;
+				$offset_start = $con->offsetdate($day_diff_view_start);
+				$offset_end = $con->offsetdate(min($day_diff_view_start, $day_diff));
+				$offset_sql .= "and a.$field < $offset_end and a.$field > $offset_start ";
+*/
+				break;
+		}
+    } elseif ($before_after === 'on') {
+        $offset_sql .= " and cast(a.$field as date) = cast(" . $offset_date_sql . " as date)";
+		$calendar_start_date = date("ymd", strtotime($search_date));
+    }
+}
+/*
+echo "day_diff is $day_diff<br>";
+echo "day_diff_view_start is $day_diff_view_start aka " . date('Y-m-d H:i', time() + $day_diff_view_start*24*3600)  . "<br>";
+echo "day_diff_view_end is $day_diff_view_end aka " . date('Y-m-d H:i', time() + $day_diff_view_end*24*3600)  . "<br>";
+echo "query window is from " . date('Y-m-d H:i', time() + $day_diff_view_start*24*3600) . " to " . date('Y-m-d H:i', time() + $day_diff_view_end*24*3600) . '<br>';
+echo "calendar start date is $calendar_start_date<br>";
+echo "offset_sql is $offset_sql<br>";
+*/
 
 if (!strlen($completed) > 0) {
     $completed ='o';
@@ -145,7 +256,7 @@ $sql = "SELECT
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
   . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
-  . "u.username AS owner, "
+  . "u.username AS owner, u.user_id, activity_id,"
   // these are to speed up the pager sorting
   . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name ";
 
@@ -242,23 +353,9 @@ if (strlen($completed) > 0 and $completed != "all") {
     $sql .= " and a.activity_status = " . $con->qstr($completed, get_magic_quotes_gpc());
 }
 
-if (strlen($search_date) > 0 && $start_end != 'all') {
+if (strlen($offset_sql) > 0) {
     $criteria_count++;
-
-    if($start_end == 'start') {
-        $field = 'scheduled_at';
-    }
-    else {
-        $field = 'ends_at';
-    }
-
-    if (!$before_after) {
-        $sql .= " and a.$field < " . $offset;
-    } elseif ($before_after === 'after') {
-        $sql .= " and a.$field > " . $offset;
-    } elseif ($before_after === 'on') {
-        $sql .= " and CAST(a.$field AS date) = CAST(" . $offset . " AS date)";
-    }
+    $sql .= $offset_sql;
 }
 
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
@@ -450,6 +547,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
         <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
+
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Search Criteria"); ?></td>
@@ -612,6 +710,24 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
+                <td class=widget_label colspan="4"><?php echo _("Results View"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label colspan="4">
+					<?php echo _("View as List:"); ?> <input type="radio" name="results_view_type" value="list"<?php if(!$results_view_type || 'list' == $results_view_type) echo ' checked="true" ' ?>> &nbsp; &nbsp; &nbsp; 
+					<?php echo ' ' . _("View as Calendar: "); ?> 
+<!--
+					<?php echo ' ' . _("Calendar: Day"); ?> <input type="radio" name="results_view_type" value="day"<?php if('day' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+-->
+					<?php echo _("Week"); ?> <input type="radio" name="results_view_type" value="week"<?php if('week' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+					<?php echo _("Month"); ?> <input type="radio" name="results_view_type" value="month"<?php if('month' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+<!--
+					<?php echo _("Year"); ?> <input type="radio" name="results_view_type" value="year"<?php if('year' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+-->
+				
+				</td>
+            </tr>
+            <tr>
                 <td class=widget_content_form_element colspan=4>
                     <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
                     <input name="browse" type=submit class=button value="<?php echo _("Browse"); ?>">
@@ -659,16 +775,59 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
 
 echo $pager_columns_selects;
 
+
 // caching is disabled for this pager (since it's all sql)
-$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'ActivitiesData', 'SomeActivitiesPager', $columns, false);
+$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', _('Search Results'), 'ActivitiesData', 'SomeActivitiesPager', $columns, false);
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
-$con->close();
 
+//echo htmlentities($sql);
+
+$activity_calendar_rst=$con->execute($sql);
+
+$activity_calendar_data = array();
+
+if($activity_calendar_rst) {
+
+	$i=0;
+ 	while (!$activity_calendar_rst->EOF) {
+		$activity_calendar_data[$i]['activity_id'] = $activity_calendar_rst->fields['activity_id'];
+		$activity_calendar_data[$i]['scheduled_at'] = $activity_calendar_rst->fields['scheduled_at'];
+		$activity_calendar_data[$i]['ends_at'] = $activity_calendar_rst->fields['ends_at'];
+		$activity_calendar_data[$i]['contact_id'] = $activity_calendar_rst->fields['contact_id'];
+		$activity_calendar_data[$i]['activity_title'] = $activity_calendar_rst->fields['activity_title'];
+		$activity_calendar_data[$i]['activity_description'] = $activity_calendar_rst->fields['activity_description'];
+		$activity_calendar_data[$i]['user_id'] = $activity_calendar_rst->fields['user_id'];
+
+		$activity_calendar_rst->movenext();
+		$i++;	
+	}
+}
+
+require_once('../calendar/agenda/Calendar_View.php');
+$calendar = new CalendarView('ActivitiesData', 'calendar_start_date');
+
+$calendar_js_functions = $calendar->GetCalendarJS();
+
+
+$widget = $calendar->Render($results_view_type, $activity_calendar_data);
+
+echo $widget['result'];
+
+//echo $widget['features'];
+
+/*
+
+$calendar=require_once('../calendar/agenda/agenda_index.php');
+echo $calendar['result'];
+
+*/
+$con->close();
 ?>
 
     </form>
+
     </div>
         <!-- right column //-->
     <?php
@@ -731,10 +890,15 @@ Calendar.setup({
 
 <?php
 
+	echo $calendar_js_functions; 
+
 end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.101  2005/04/14 20:30:45  daturaarutad
+ * added calendar to some.php
+ *
  * Revision 1.100  2005/03/15 22:34:45  daturaarutad
  * pager tuning sql_sort_column
  *
