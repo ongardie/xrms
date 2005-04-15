@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.28 2005/03/22 15:49:14 gpowers Exp $
+ * $Id: import-companies-3.php,v 1.29 2005/04/15 18:32:21 introspectshun Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -92,100 +92,100 @@ $template='import-template-' . $file_format . '.php';
 
 $pointer = (strlen($_POST['pointer']) > 0) ? $_POST['pointer'] : 0;
 
-$page_title = "Import Data";
+$page_title = _("Import Data");
 
 start_page($page_title, true, $msg);
-
-echo <<<TILLEND
+?>
 
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
    <tr>
+     <td>
        <table class=widget cellspacing=1>
            <tr>
-               <td class=widget_header colspan=54>Preview Data</td>
+               <td class=widget_header colspan=54><?php echo _("Imported Data"); ?></td>
            </tr>
 
        <tr>
            <!-- base company info //-->
-           <td class=widget_header colspan=4>Company</td>
+           <td class=widget_header colspan=4><?php echo _("Company"); ?></td>
 
            <!-- contact info //-->
-           <td class=widget_header colspan=22>Contact Info</td>
+           <td class=widget_header colspan=22><?php echo _("Contact Info"); ?></td>
 
            <!-- address info //-->
-           <td class=widget_header colspan=9>Address</td>
+           <td class=widget_header colspan=9><?php echo _("Address"); ?></td>
 
            <!-- address info //-->
-           <td class=widget_header colspan=19>Additional Company Info</td>
+           <td class=widget_header colspan=19><?php echo _("Additional Company Info"); ?></td>
        </tr>
 
        <tr>
-           <td class=widget_content>Row Number</td>
+           <td class=widget_content><?php echo _("Row Number"); ?></td>
 
            <!-- base company info //-->
-           <td class=widget_content>Company ID</td>
-           <td class=widget_content>Company Name</td>
-           <td class=widget_content>Division Name</td>
+           <td class=widget_content><?php echo _("Company ID"); ?></td>
+           <td class=widget_content><?php echo _("Company Name"); ?></td>
+           <td class=widget_content><?php echo _("Division Name"); ?></td>
 
            <!-- contact info //-->
-           <td class=widget_content>Contact ID</td>
-           <td class=widget_content>First Names</td>
-           <td class=widget_content>Last Name</td>
-           <td class=widget_content>Email</td>
-           <td class=widget_content>Work Phone</td>
-           <td class=widget_content>Cell Phone</td>
-           <td class=widget_content>Home Phone</td>
-           <td class=widget_content>Fax</td>
-           <td class=widget_content>Division</td>
-           <td class=widget_content>Salutation</td>
-           <td class=widget_content>Date of Birth</td>
-           <td class=widget_content>Summary</td>
-           <td class=widget_content>Title</td>
-           <td class=widget_content>Description</td>
-           <td class=widget_content>AOL</td>
-           <td class=widget_content>Yahoo</td>
-           <td class=widget_content>MSN</td>
-           <td class=widget_content>Interests</td>
-           <td class=widget_content>Custom 1</td>
-           <td class=widget_content>Custom 2</td>
-           <td class=widget_content>Custom 3</td>
-           <td class=widget_content>Custom 4</td>
-           <td class=widget_content>Profile</td>
+           <td class=widget_content><?php echo _("Contact ID"); ?></td>
+           <td class=widget_content><?php echo _("First Names"); ?></td>
+           <td class=widget_content><?php echo _("Last Name"); ?></td>
+           <td class=widget_content><?php echo _("Email"); ?></td>
+           <td class=widget_content><?php echo _("Work Phone"); ?></td>
+           <td class=widget_content><?php echo _("Cell Phone"); ?></td>
+           <td class=widget_content><?php echo _("Home Phone"); ?></td>
+           <td class=widget_content><?php echo _("Fax"); ?></td>
+           <td class=widget_content><?php echo _("Division"); ?></td>
+           <td class=widget_content><?php echo _("Salutation"); ?></td>
+           <td class=widget_content><?php echo _("Date of Birth"); ?></td>
+           <td class=widget_content><?php echo _("Summary"); ?></td>
+           <td class=widget_content><?php echo _("Title"); ?></td>
+           <td class=widget_content><?php echo _("Description"); ?></td>
+           <td class=widget_content><?php echo _("AOL"); ?></td>
+           <td class=widget_content><?php echo _("Yahoo"); ?></td>
+           <td class=widget_content><?php echo _("MSN"); ?></td>
+           <td class=widget_content><?php echo _("Interests"); ?></td>
+           <td class=widget_content><?php echo _("Custom 1"); ?></td>
+           <td class=widget_content><?php echo _("Custom 2"); ?></td>
+           <td class=widget_content><?php echo _("Custom 3"); ?></td>
+           <td class=widget_content><?php echo _("Custom 4"); ?></td>
+           <td class=widget_content><?php echo _("Profile"); ?></td>
 
            <!-- address info //-->
-           <td class=widget_content>Address Name</td>
-           <td class=widget_content>Line 1</td>
-           <td class=widget_content>Line 2</td>
-           <td class=widget_content>City</td>
-           <td class=widget_content>State</td>
-           <td class=widget_content>Postal Code</td>
-           <td class=widget_content>Country</td>
-           <td class=widget_content>Address Body</td>
-           <td class=widget_content>Use Pretty Address</td>
+           <td class=widget_content><?php echo _("Address Name"); ?></td>
+           <td class=widget_content><?php echo _("Line 1"); ?></td>
+           <td class=widget_content><?php echo _("Line 2"); ?></td>
+           <td class=widget_content><?php echo _("City"); ?></td>
+           <td class=widget_content><?php echo _("State"); ?></td>
+           <td class=widget_content><?php echo _("Postal Code"); ?></td>
+           <td class=widget_content><?php echo _("Country"); ?></td>
+           <td class=widget_content><?php echo _("Address Body"); ?></td>
+           <td class=widget_content><?php echo _("Use Pretty Address"); ?></td>
 
            <!-- extra company info //-->
-           <td class=widget_content>Code</td>
-           <td class=widget_content>Phone</td>
-           <td class=widget_content>Alt. Phone</td>
-           <td class=widget_content>Fax</td>
-           <td class=widget_content>Website</td>
-           <td class=widget_content>Legal Name</td>
-           <td class=widget_content>Tax ID</td>
-           <td class=widget_content>External Ref 1</td>
-           <td class=widget_content>External Ref 1</td>
-           <td class=widget_content>External Ref 1</td>
-           <td class=widget_content>Custom 1</td>
-           <td class=widget_content>Custom 2</td>
-           <td class=widget_content>Custom 3</td>
-           <td class=widget_content>Custom 4</td>
-           <td class=widget_content>No. Employees</td>
-           <td class=widget_content>Revenue</td>
-           <td class=widget_content>Credit Limit</td>
-           <td class=widget_content>Terms</td>
-           <td class=widget_content>Profile/Notes</td>
+           <td class=widget_content><?php echo _("Code"); ?></td>
+           <td class=widget_content><?php echo _("Phone"); ?></td>
+           <td class=widget_content><?php echo _("Alt. Phone"); ?></td>
+           <td class=widget_content><?php echo _("Fax"); ?></td>
+           <td class=widget_content><?php echo _("Website"); ?></td>
+           <td class=widget_content><?php echo _("Legal Name"); ?></td>
+           <td class=widget_content><?php echo _("Tax ID"); ?></td>
+           <td class=widget_content><?php echo _("External Ref 1"); ?></td>
+           <td class=widget_content><?php echo _("External Ref 2"); ?></td>
+           <td class=widget_content><?php echo _("External Ref 3"); ?></td>
+           <td class=widget_content><?php echo _("Custom 1"); ?></td>
+           <td class=widget_content><?php echo _("Custom 2"); ?></td>
+           <td class=widget_content><?php echo _("Custom 3"); ?></td>
+           <td class=widget_content><?php echo _("Custom 4"); ?></td>
+           <td class=widget_content><?php echo _("No. Employees"); ?></td>
+           <td class=widget_content><?php echo _("Revenue"); ?></td>
+           <td class=widget_content><?php echo _("Credit Limit"); ?></td>
+           <td class=widget_content><?php echo _("Terms"); ?></td>
+           <td class=widget_content><?php echo _("Profile/Notes"); ?></td>
 
        </tr>
-TILLEND;
+<?php
 
 switch ($delimiter) {
     case 'comma':
@@ -232,7 +232,7 @@ foreach ($filearray as $row) {
     $address_id = 0;
 
     //debug line to view the array
-    //echo "\n<br><pre>". print_r ($row). "\n</pre>";
+    //echo "\n<br><pre>". print_r($row). "\n</pre>";
 
 
     //assign array values to variables
@@ -254,9 +254,9 @@ foreach ($filearray as $row) {
     //echo "<pre>"; print_r($GLOBALS); echo "</pre>"; // debug
 
     if ((strlen($contact_first_names) == 0) && (strlen($contact_last_name) == 0)) {
-        $contact_last_name   = 'Contact';
-        $contact_first_names = 'Default';
-        importMessage("Creating default contact");
+        $contact_last_name   = _('Contact');
+        $contact_first_names = _('Default');
+        importMessage(_("Creating default contact"));
     }
 
     if (strlen($company_name) > 0) {
@@ -274,12 +274,11 @@ foreach ($filearray as $row) {
             $rec['entered_by'] = $entered_by;
             $rec['company_name'] = $company_name;
 
-            importMessage("Created company '$company_name'");
+            importMessage(_("Created company ") + $company_name);
         } else {
             //Empty array for UPDATE
             $rec = array();
-
-            importMessage("Updated company '$company_name'");
+            importMessage(_("Updated company ") + $company_name);
         }
 
         $rec['company_record_status'] = 'a';
@@ -354,14 +353,22 @@ foreach ($filearray as $row) {
             $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
             debugSql($upd);
             if (strlen($upd)>0) {
-                $con->execute($upd);
+                $rst = $con->execute($upd);
+                if (!$rst) {
+                    db_error_handler($con, $upd);
+                }
             }
         } else {
             //INSERT
             $tbl = 'companies';
             $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
             debugSql($ins);
-            $con->execute($ins);
+            if (strlen($ins)>0) {
+                $rst = $con->execute($ins);
+                if (!$rst) {
+                    db_error_handler($con, $ins);
+                }
+            }
         }
 
         $error='';
@@ -369,10 +376,12 @@ foreach ($filearray as $row) {
         // figure out where to print this out.
         if ($error) {
             echo "<tr><td class=widget_error colspan=54>"
-                 ."<br> Unable to insert/update Company $company_name."
-                 ."Please correct this error.<br>"
+                 ."<br>"
+                 ._("Unable to insert/update Company") .  " $company_name."
+                 ._("Please correct this error.") . "<br>"
                  . htmlspecialchars($error)
-                 ."<br> I tried to execute: <br>"
+                 ."<br>"
+                 ._("I tried to execute:") . "<br>"
                  . htmlspecialchars ($create_instrument)
                  ."</td></tr></table>";
             //now skip to the next record
@@ -395,7 +404,10 @@ foreach ($filearray as $row) {
             $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
             debugSql($upd);
             if (strlen($upd)>0) {
-                $con->execute($upd);
+                $rst = $con->execute($upd);
+                if (!$rst) {
+                    db_error_handler($con, $upd);
+                }
             }
         }
 
@@ -407,9 +419,13 @@ foreach ($filearray as $row) {
             $tbl = 'company_division';
             $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
             debugSql($ins);
-            $con->execute($ins);
-
-            $division_id = $con->insert_id();
+            if (strlen($ins)>0) {
+                $rst = $con->execute($ins);
+                if (!$rst) {
+                    db_error_handler($con, $ins);
+                }
+                $division_id = $con->insert_id();
+            }
         }
 
         //insert new address
@@ -429,7 +445,7 @@ foreach ($filearray as $row) {
                 $address_id = $rst->fields['address_id'];
                 //should probably echo here to indicate that we didn't import this address
 		// The following line was added by cgg
-		importMessage("Duplicate address.  Using address id $address_id\n");
+                importMessage(_("Duplicate address. Using address id: ") . $address_id);
             }
             if (!$address_id and $company_id) {
                 //figure out a country, because country is required as well
@@ -458,12 +474,12 @@ foreach ($filearray as $row) {
                             importMessage("Country found: ".$address_country);
                         } else {
                             $address_country = $default_country_id;
-                            importFailedMessage("Failed to get country. Using default country");
+                            importFailedMessage(_("Failed to get country. Using default country"));
                         }
                     }
                 } else {
                     $address_country = $default_country_id;
-                    importFailedMessage("Country not specified. Using default country");
+                    importFailedMessage(_("Country not specified. Using default country"));
                 }
 		// added by cgg
 		if (!isset($address_line2)) {
@@ -491,15 +507,18 @@ foreach ($filearray as $row) {
                 $rec['postal_code'] = $address_postal_code;
                 $rec['country_id'] = $address_country;
 
-		$tbl = 'addresses';
-//		Changed by cgg
+		        $tbl = 'addresses';
                 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-//		$ins = $con->GetInsertSQL($tbl, $rec);
 
                 debugSql($ins);
-                $con->Execute($ins);
+                if (strlen($ins)>0) {
+                    $rst = $con->execute($ins);
+                    if (!$rst) {
+                        db_error_handler($con, $ins);
+                    }
+                    $address_id = $con->insert_id();
+                }
 
-                $address_id = $con->insert_id();
                 if($time_zone_offset = time_zone_offset($con, $address_id)) {
                     $sql = 'SELECT *
                             FROM addresses
@@ -514,9 +533,11 @@ foreach ($filearray as $row) {
                         $rec['offset'] = $time_zone_offset['offset'];
 
                         $upd = $con->getUpdateSQL($rst, $rec, true, get_magic_quotes_gpc());
+                        if (strlen($upd)>0) {
                         $rst = $con->execute($upd);
-                        if(!$rst) {
-                            db_error_handler($con, $sql);
+                            if (!$rst) {
+                                db_error_handler($con, $upd);
+                            }
                         }
                     }
                 } 
@@ -542,7 +563,10 @@ foreach ($filearray as $row) {
                 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
                 debugSql($upd);
                 if (strlen($upd)>0) {
-                    $con->execute($upd);
+                    $rst = $con->execute($upd);
+                    if (!$rst) {
+                        db_error_handler($con, $upd);
+                    }
                 }
                 $default_address_id = $address_id;
             }
@@ -551,8 +575,8 @@ foreach ($filearray as $row) {
         //check to see if we should insert a contact
         $sql_check_contact = 'select contact_id, first_names, last_name from contacts where
                               first_names = '. $con->qstr($contact_first_names) . ' and
-                              last_name   = '. $con->qstr($contact_last_name) . " and
-                              company_id  = $company_id" ;
+                              last_name   = '. $con->qstr($contact_last_name) . ' and
+                              company_id  = '. $company_id;
         debugSql($sql_check_contact);
         $rst = $con->execute($sql_check_contact);
         if ($rst) {
@@ -642,9 +666,14 @@ foreach ($filearray as $row) {
             $tbl = 'contacts';
             $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
             debugSql($ins);
-            $con->execute($ins);
+            if (strlen($ins)>0) {
+                $rst = $con->execute($ins);
+                if (!$rst) {
+                    db_error_handler($con, $ins);
+                }
+            }
 
-            importMessage("Updated contact '$contact_first_names $contact_last_name'");
+            importMessage("Imported contact '$contact_first_names $contact_last_name'");
 
         } //end insert contact
     else {
@@ -662,7 +691,12 @@ foreach ($filearray as $row) {
             $tbl = 'entity_category_map';
             $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
             debugSql($ins);
-            $con->execute($ins);
+            if (strlen($ins)>0) {
+                $rst = $con->execute($ins);
+                if (!$rst) {
+                    db_error_handler($con, $ins);
+                }
+            }
         }
 
     } // end company_name insert/update check
@@ -734,7 +768,6 @@ foreach ($filearray as $row) {
            <td class=widget_content>$credit_limit</td>
            <td class=widget_content>$terms</td>
            <td class=widget_content>$company_profile</td>
-
        </tr>
 
 TILLEND;
@@ -745,9 +778,7 @@ TILLEND;
 }; //end foreach, loop back and do the next row.
 
 $con->close();
-
-
-    echo <<<TILLEND
+?>
 
         </table>
 
@@ -763,15 +794,18 @@ $con->close();
     </tr>
 </table>
 <form action=../data_clean.php method=get>
-    <input class=button type=submit value="Run Data Cleanup">
+    <input class=button type=submit value="<?php echo _("Run Data Cleanup"); ?>">
 </form>
 
-TILLEND;
-
+<?php
 end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.29  2005/04/15 18:32:21  introspectshun
+ * - i18n compliance
+ * - Added db_error_handler to ins and upd statments
+ *
  * Revision 1.28  2005/03/22 15:49:14  gpowers
  * - patched address import bug
  *   - patch provided by cgg
