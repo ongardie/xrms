@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Wrapper class for calendar widget.
+ *
+ * $Id: Calendar_View.php,v 1.3 2005/04/15 01:39:26 daturaarutad Exp $
+ */
+
+
 include("$include_directory../calendar/global.inc");
 include("$include_directory../calendar/global_pref.inc");
 
@@ -528,5 +535,11 @@ function get_agenda_action() {
 
 
 }
+/**
+* $Log: Calendar_View.php,v $
+* Revision 1.3  2005/04/15 01:39:26  daturaarutad
+* added phpdoc comments
+*
+*/
 
 ?>
