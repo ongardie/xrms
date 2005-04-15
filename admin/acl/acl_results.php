@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.5 2005/04/07 17:46:49 vanmer Exp $
+ * $Id: acl_results.php,v 1.6 2005/04/15 07:01:25 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -154,6 +154,7 @@ echo "</div></div>";
 end_page();
  
 function display_object_list($acl, $object, $ids=false, $extrafield=false) {
+//            echo "BLAH"; exit;
         global $http_site_root;
             if ($ids OR $extrafield) {
                 $objectData = $acl->get_controlled_object(false, $object);
@@ -161,8 +162,7 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false) {
                 $on_what_table=$objectData['on_what_table'];
                 if ($ids AND is_array($ids)) $fieldRestriction[$on_what_field]=$ids;
             }
-
-            $ret = $acl->get_controlled_object_data($object, false, $fieldRestriction, false, true);
+            $ret = $acl->get_controlled_object_data($object, false, $fieldRestriction, false, true, false, false, false, true);
 
            // begin sorted columns stuff
             getGlobalVar($sort_column, 'sort_column'); 
@@ -244,6 +244,9 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.6  2005/04/15 07:01:25  vanmer
+  * - added extra parameters to acl_results calls
+  *
   * Revision 1.5  2005/04/07 17:46:49  vanmer
   * - changed ACL results to reflect new ALL method of returning ACL results
   *
