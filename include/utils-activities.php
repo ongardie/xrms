@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.1 2005/04/15 07:33:49 vanmer Exp $
+ * $Id: utils-activities.php,v 1.2 2005/04/15 08:02:53 vanmer Exp $
  
  */
 
@@ -153,10 +153,11 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
  * @param array $activity_data with associative array defining activity data to update
  * @param integer $activity_id optionally identifying activity in the database (required if not passing in a ecordset to $activity_rst)
  * @param adodbrecordset $activity_rst optionally providing a recordset to use for the update (required if not passing in an integer for $activity_id)
+ * @param boolean $update_default_participant specifying if default participant for activity should be updated, if contact_id is updated (defaults to true, will update default participant)
  * 
  * @return boolean specifying if update succeeded
  */
-function update_activity($con, $activity_data, $activity_id=false, $activity_rst=false) {
+function update_activity($con, $activity_data, $activity_id=false, $activity_rst=false, $update_default_participant=true) {
 	if (!$activity_id AND !$activity_rst) return false;
 	if (!$activity_data) return false;
 	if (!$activity_rst) { 
@@ -164,6 +165,28 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
 		$activity_rst=$con->execute($sql);
 		if (!$activity_rst) { db_error_handler($con, $activity_sql); return false; }
 	}
+        if (!$activity_id) $activity_id=$activity_rst->fields['activity_id'];
+        
+        if ($update_default_participant) {
+            if ($activity_data['contact_id']) {
+                if ($activity_data['contact_id']!=$activity_rst->fields['contact_id']) {
+                //contact changed, change default participant
+                if ($activity_rst->fields['contact_id']) {
+                    $activity_participant=get_activity_participants($con, $activity_id, $activity_rst->fields['contact_id'], 1);
+                    if ($activity_participant) {
+                        //get existing default participant, mark it as removed
+                        $participant_data=current($activity_participant);
+                        $activity_participant_id=$participant_data['activity_participant_id'];
+                        $ret=delete_activity_participant($con, $activity_participant_id);
+                    }
+                }
+               }
+            }
+            if ($activity_data['contact_id'] AND $activity_data['contact_id']!='NULL') {
+                //new contact for activity is not blank, so add it as the new default participant
+                $activity_participant_id=add_activity_participant($con, $activity_id, $activity_data['contact_id'], 1);
+            }
+        }       
 	$update_sql = $con->getUpdateSQL($activity_rst, $activity_data);
 	if ($update_sql) {
 		$update_rst=$con->execute($update_sql);
@@ -181,10 +204,11 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
  * @param adodbconnection $con handle to the database
  * @param integer $activity_id identifying which activity to delete
  * @param boolean $delete_from_database specifying if activity should be deleted from the database, or simply marked with a deleted flag (defaults to false, mark with deleted flag)
+ * @param boolean $delete_participants indicating if activity_participants should also be removed
  * 
  * @return array $activity_data with results of search or false if search finds no results/failed
  */
-function delete_activity($con, $activity_id=false, $delete_from_database=false) {
+function delete_activity($con, $activity_id=false, $delete_from_database=false, $delete_participants=true) {
     if (!$activity_id) return false;
     if ($delete_from_database) {
         $sql = "DELETE FROM activities WHERE activity_id=$activity_id";
@@ -196,10 +220,13 @@ function delete_activity($con, $activity_id=false, $delete_from_database=false) 
         $sql = $con->GetUpdateSQL($update_rst, $update_array, true, get_magic_quotes_gpc());
     }
     if (!$sql) return false;        
-    $activity_participants=get_activity_participants($con, $activity_id);
-    if ($activity_participants) {
-        foreach ($activity_participants as $participant_info) {
-            $ret=delete_activity_participant($con, $participant_info['activity_participant_id'], $delete_from_database);
+    
+    if ($delete_participants) {
+        $activity_participants=get_activity_participants($con, $activity_id);
+        if ($activity_participants) {
+            foreach ($activity_participants as $participant_info) {
+                $ret=delete_activity_participant($con, $participant_info['activity_participant_id'], $delete_from_database);
+            }
         }
     }
     $rst=$con->execute($sql);
@@ -408,6 +435,10 @@ function delete_activity_participant($con, $activity_participant_id, $delete_fro
  
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.2  2005/04/15 08:02:53  vanmer
+  * - added flag to control delete of participants when activity is deleted through API
+  * - added logic for allowing contact change in activity update code to update default participant
+  *
   * Revision 1.1  2005/04/15 07:33:49  vanmer
   * - Initial revision of API for managing activities, participants, and participant positions
   *
