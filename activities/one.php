@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.82 2005/04/07 17:45:43 vanmer Exp $
+ * $Id: one.php,v 1.83 2005/04/15 07:48:21 vanmer Exp $
  */
 
 //include required files
@@ -105,7 +105,7 @@ if ($rst) {
     $rst->close();
 }
 
-$show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ?�true : false);
+$show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ? true : false);
 $user_menu = get_user_menu($con, $user_id, $show_blank);
 
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
@@ -266,6 +266,8 @@ $activity_content_bottom = do_hook_function('activity_content_bottom',$param);
 
 /*********************************/
 /*** Include the sidebar boxes ***/
+
+require_once('participant_sidebar.php');
 
 if ($contact_id) {
     // include the contact sidebar code
@@ -486,6 +488,8 @@ function logTime() {
 
     <!-- right column //-->
     <div id="Sidebar">
+        <!-- participant list block //-->
+        <?php echo $participant_block; ?>
         <!-- company information block //-->
         <?php echo $company_block; ?>
         <!-- contact information block //-->
@@ -529,6 +533,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.83  2005/04/15 07:48:21  vanmer
+ * - added sidebar for display of activity participants
+ *
  * Revision 1.82  2005/04/07 17:45:43  vanmer
  * - added NULL parameter to do_hook_function, to fulfill new requirement of passing a second parameter to do_hook_function
  *
