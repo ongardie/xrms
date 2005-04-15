@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.19 2005/04/13 16:30:58 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.20 2005/04/15 17:25:41 daturaarutad Exp $
  */
 
 
@@ -398,11 +398,12 @@ class GUP_Pager {
 			//sto it in the session cache
 		    if(!$this->get_only_visible) {	
 				$_SESSION[$cache_name] = $this->data;
-				$_SESSION[$this->pager_id . '_columns'] = $this->column_info;
 			}
 
 		}
-		
+		// store the column_info array for pager-export.php always, becuase they may have changed columns but not needed to re-calculate data
+		$_SESSION[$this->pager_id . '_columns'] = $this->column_info;
+
 		// if sort column is one of the calculated ones...do this thingy 
 		if($this->using_cache || !$this->get_only_visible) {
 			// in the same dir as us...
@@ -1031,6 +1032,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.20  2005/04/15 17:25:41  daturaarutad
+ * now storing column_info in session always for pager-export.php
+ *
  * Revision 1.19  2005/04/13 16:30:58  daturaarutad
  * removed debug msg
  *
