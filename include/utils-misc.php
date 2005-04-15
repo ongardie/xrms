@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.122 2005/03/18 01:23:56 vanmer Exp $
+ * $Id: utils-misc.php,v 1.123 2005/04/15 07:36:16 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -1468,6 +1468,35 @@ function arr_vars_show_ses_vars ( $ary )
 
 }  // end fn SendDownloadHeaders
 
+/**********************************************************************/
+/**
+ *
+ * Creates a where clause for use in a SELECT statement, from criteria in an associative array
+ *
+ * @param adodbconnection $con handle to the database
+ * @param array $criteria_array with array of criteria, keyed by fieldname
+ * @param string $tablename optionally providing tablename to prepend to criteria fieldnames
+ * 
+ * @return string which can be used after the WHERE in a sql statement or false if no criteria are found
+ */
+function make_where_string($con, $criteria_array, $tablename=false) {
+    $magic_quotes_gpc=get_magic_quotes_gpc();
+    if (!$criteria_array) return '';
+    foreach ($criteria_array as $akey=>$aval) {
+        if ($aval!==false) {
+            if ($tablename) $akey="$tablename.$akey";
+            if (is_numeric($aval) OR (substr($aval,0,1)=="'")) {
+                $where[]="$akey=$aval";
+            } else $where[]="$akey=".$con->qstr($aval, $magic_quotes_gpc);
+        }
+    }
+    if (count($where)>0) {
+        $wherestr=implode(" AND ", $where);
+    } else $wherestr=false;
+    if ($wherestr) return $wherestr;
+    else return false;
+}
+
 /**
  * Include the i18n files, as every file with output will need them
  *
@@ -1483,6 +1512,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.123  2005/04/15 07:36:16  vanmer
+ * - added function for creating a where clause for a select statement using an associative array of
+ * criteria
+ *
  * Revision 1.122  2005/03/18 01:23:56  vanmer
  * - added array and check if count of array is 0, instead of simple if check on variable
  *
