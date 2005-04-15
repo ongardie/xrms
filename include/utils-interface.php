@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.53 2005/04/11 19:34:41 gpowers Exp $
+ * $Id: utils-interface.php,v 1.54 2005/04/15 07:02:32 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -593,7 +593,34 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
 }
 
 /**
+ *
+ * Creates an HTML SELECT list to display contents of an array
+ *
+ * @param adodbconnection $con
+ * @param string $fieldname specifying html fieldname to use
+ * @param integer $selected_value specifying which value should be selected by default
+ * @param string $extra_html_elements  specifying any extra HTML attributes to be included inside the SELECT tag
+ * @param bool $show_blank_first indicating if a blank record should be placed first in the select list (allows for no value to be submitted)
+ *
+ * @return string containing html widget for HTML SELECT Object
+ */
+function create_select_from_array($array, $fieldname, $selected_value=false, $extra_html_elements='', $show_blank_first=true) {
+    if (!$array OR !$fieldname) return false;
+    $html_element="<SELECT name=\"$fieldname\" $extra_html_elements>\n";
+    if ($show_blank_first) $html_element.="<OPTION value=\"\">---Please select one---</OPTION>\n";
+    foreach ($array as $akey=>$aval) {
+        $selected=(($akey==$selected_value) ? ' SELECTED ' : '');
+        $html_element.="<OPTION value=\"$akey\"$selected>$aval</OPTION>\n";
+    }
+    $html_element.="</SELECT>\n";
+    return $html_element;
+}
+
+/**
  * $Log: utils-interface.php,v $
+ * Revision 1.54  2005/04/15 07:02:32  vanmer
+ * - added function to display array as an html select
+ *
  * Revision 1.53  2005/04/11 19:34:41  gpowers
  * - replaced $body_tags var with bodytags plugin hook
  * - added topofpage plugin hook
