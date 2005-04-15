@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.53 2005/02/10 14:29:29 maulani Exp $
+ * $Id: edit-2.php,v 1.54 2005/04/15 07:50:00 vanmer Exp $
  */
 
 //include required files
@@ -15,6 +15,7 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -208,7 +209,23 @@ $rec['completed_at']         = $completed_at;
 $rec['activity_status']      = $activity_status;
 $rec['on_what_table']        = $on_what_table;
 $rec['on_what_id']           = $on_what_id;
+if ($rst->fields['contact_id']!=$contact_id) {
+    //contact changed, change default participant
+    if ($rst->fields['contact_id']) {
+        $activity_participant=get_activity_participants($con, $activity_id, $rst->fields['contact_id'], 1);
+        if ($activity_participant) {
+            //get existing default participant, mark it as removed
+            $participant_data=current($activity_participant);
+            $activity_participant_id=$participant_data['activity_participant_id'];
+            $ret=delete_activity_participant($con, $activity_participant_id);
+        }
+    }
+    if ($contact_id AND $contact_id!='NULL') {
+        //new contact for activity is not blank, so add it as the new default participant
+        $activity_participant_id=add_activity_participant($con, $activity_id, $contact_id, 1);
+    }
 
+}
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 if (strlen($upd)>0) {
     $rst = $con->execute($upd);
@@ -478,6 +495,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.54  2005/04/15 07:50:00  vanmer
+ * - added handling of change to contact, update activity_participants contact as well
+ *
  * Revision 1.53  2005/02/10 14:29:29  maulani
  * - Add last modified timestamp and user fields to activities
  *
