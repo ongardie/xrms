@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.35 2005/02/10 14:29:30 maulani Exp $
+ * $Id: new-2.php,v 1.36 2005/04/15 08:05:10 vanmer Exp $
  */
 
 //where do we include from
@@ -21,6 +21,7 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -181,6 +182,9 @@ if(empty($opportunity_status_id)) {
 
     $activity_id = $con->insert_id();
     add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
+    if ($rec['contact_id']>0) {
+        add_activity_participant($con, $activity_id, $contact_id, 1);
+    }
 }
 else {
     $tbl = 'opportunities';
@@ -222,6 +226,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.36  2005/04/15 08:05:10  vanmer
+ *- added code to add default participant when new activity is added
+ *
  *Revision 1.35  2005/02/10 14:29:30  maulani
  *- Add last modified timestamp and user fields to activities
  *
