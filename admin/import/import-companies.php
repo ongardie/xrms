@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.14 2005/03/21 13:05:58 maulani Exp $
+ * $Id: import-companies.php,v 1.15 2005/04/15 18:34:43 introspectshun Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -99,13 +99,20 @@ $con->close();
                 <td class=widget_content_form_element><select name="file_format">
 <?php
 if ($handle = opendir('.')) {
+   $opts = array();
    $mask = '/^(import-template-)([^\.]+)(.php)$/i';
    while (false !== ($filename = readdir($handle))) {
       if (preg_match($mask, $filename)) {
          preg_match($mask,$filename,$format_name);
-         echo "<option value=\"" . $format_name[2] . "\">" . $format_name[2] . "</option>";
-         };
-      };
+         $opts[] = "<option value=\"" . $format_name[2] . "\">" . $format_name[2] . "</option>";
+      }
+   }
+   if (!empty($opts)) {
+       natsort($opts);
+       foreach ($opts as $opt) {
+           echo $opt;
+       }
+   }
 };
 ?>
                 </select>
@@ -160,6 +167,9 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
+ * Revision 1.15  2005/04/15 18:34:43  introspectshun
+ * - Now sorts templates alphanumerically
+ *
  * Revision 1.14  2005/03/21 13:05:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *
