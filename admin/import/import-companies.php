@@ -13,7 +13,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: import-companies.php,v 1.15 2005/04/15 18:34:43 introspectshun Exp $
+ * $Id: import-companies.php,v 1.16 2005/04/15 18:43:09 introspectshun Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -104,7 +104,7 @@ if ($handle = opendir('.')) {
    while (false !== ($filename = readdir($handle))) {
       if (preg_match($mask, $filename)) {
          preg_match($mask,$filename,$format_name);
-         $opts[] = "<option value=\"" . $format_name[2] . "\">" . $format_name[2] . "</option>";
+         $opts[] = '<option value="' . $format_name[2] . '">' . $format_name[2] . '</option>';
       }
    }
    if (!empty($opts)) {
@@ -167,8 +167,8 @@ if ($handle = opendir('.')) {
 <?php end_page();
 /**
  * $Log: import-companies.php,v $
- * Revision 1.15  2005/04/15 18:34:43  introspectshun
- * - Now sorts templates alphanumerically
+ * Revision 1.16  2005/04/15 18:43:09  introspectshun
+ * - Updated quoting for better readability
  *
  * Revision 1.14  2005/03/21 13:05:58  maulani
  * - Remove redundant code by centralizing common user menu call
