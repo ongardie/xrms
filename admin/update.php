@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.65 2005/04/11 00:26:53 maulani Exp $
+ * $Id: update.php,v 1.66 2005/04/15 07:37:12 vanmer Exp $
  */
 
 // where do we include from
@@ -4688,6 +4688,46 @@ $con->execute($sql);
         }
     }
 
+    if (!in_array('activity_participants',$table_list)) {
+        $sql ="CREATE TABLE activity_participants (
+                    activity_participant_id INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+                    activity_id INT UNSIGNED NOT NULL ,
+                    contact_id INT UNSIGNED NOT NULL ,
+                    activity_participant_position_id INT UNSIGNED NOT NULL ,
+		    activity_participant_record_status VARCHAR(1) DEFAULT 'a' NOT NULL,
+                    PRIMARY KEY ( activity_participant_id ) ,
+                    INDEX ( activity_id ),
+                    INDEX ( contact_id ),
+                    INDEX ( activity_participant_position_id )
+                    ) TYPE = InnoDB; ";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
+    if (!in_array('activity_participant_positions',$table_list)) {
+        $sql ="CREATE TABLE activity_participant_positions (
+                    activity_participant_position_id INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+                    activity_type_id INT UNSIGNED NULL ,
+                    participant_position_name VARCHAR(50) NOT NULL ,
+                    global_flag TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+                    PRIMARY KEY ( activity_participant_position_id ) ,
+                    INDEX ( activity_type_id )
+                    ) TYPE = InnoDB; ";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+       $sql = " INSERT INTO `activity_participant_positions` ( activity_type_id , participant_position_name , global_flag )
+                    VALUES ( NULL , 'Participant', '1')";
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }                          
+    }
 
 install_upgrade_acl($con);
 
@@ -4729,6 +4769,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.66  2005/04/15 07:37:12  vanmer
+ * - added tables for handling multiple contacts in activities, and positions for different activity types
+ *
  * Revision 1.65  2005/04/11 00:26:53  maulani
  * - Add address_types
  *
