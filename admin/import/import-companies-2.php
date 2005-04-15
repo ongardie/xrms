@@ -17,7 +17,7 @@
  * @author Brian Peterson
  *
  *
- * $Id: import-companies-2.php,v 1.8 2004/07/16 23:51:37 cpsource Exp $
+ * $Id: import-companies-2.php,v 1.9 2005/04/15 18:30:20 introspectshun Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -42,112 +42,108 @@ $template='import-template-' . $file_format . '.php';
 
 move_uploaded_file($_FILES['file1']['tmp_name'], $tmp_upload_directory . 'companies-to-import.txt');
 
-$page_title = "Preview Data";
+$page_title = _("Preview Data");
 
 start_page($page_title, true, $msg);
-
-echo <<<TILLEND
-
+?>
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
         <td class=lcol width=65% valign=top>
 
         <form action="import-companies-3.php" method="post">
-        <input type=hidden name=file_format value="$file_format">
-        <input type=hidden name=delimiter value="$delimiter">
-        <input type=hidden name=user_id value="$user_id">
-        <input type=hidden name=category_id value="$category_id">
-        <input type=hidden name=crm_status_id value="$crm_status_id">
-        <input type=hidden name=company_source_id value="$company_source_id">
-        <input type=hidden name=industry_id value="$industry_id">
-        <input type=hidden name=account_status_id value="$account_status_id">
-        <input type=hidden name=rating_id value="$rating_id">
+        <input type=hidden name=file_format value="<?php echo $file_format; ?>">
+        <input type=hidden name=delimiter value="<?php echo $delimiter; ?>">
+        <input type=hidden name=user_id value="<?php echo $user_id; ?>">
+        <input type=hidden name=category_id value="<?php echo $category_id; ?>">
+        <input type=hidden name=crm_status_id value="<?php echo $crm_status_id; ?>">
+        <input type=hidden name=company_source_id value="<?php echo $company_source_id; ?>">
+        <input type=hidden name=industry_id value="<?php echo $industry_id; ?>">
+        <input type=hidden name=account_status_id value="<?php echo $account_status_id; ?>">
+        <input type=hidden name=rating_id value="<?php echo $rating_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=54>Preview Data</td>
+                <td class=widget_header colspan=54><?php echo _("Preview Data"); ?></td>
             </tr>
 
         <tr>
             <!-- base company info //-->
-            <td class=widget_header colspan=4>Company</td>
+           <td class=widget_header colspan=4><?php echo _("Company"); ?></td>
 
             <!-- contact info //-->
-            <td class=widget_header colspan=22>Contact Info</td>
+           <td class=widget_header colspan=22><?php echo _("Contact Info"); ?></td>
 
             <!-- address info //-->
-            <td class=widget_header colspan=9>Address</td>
+           <td class=widget_header colspan=9><?php echo _("Address"); ?></td>
 
             <!-- address info //-->
-            <td class=widget_header colspan=19>Additional Company Info</td>
-
+           <td class=widget_header colspan=19><?php echo _("Additional Company Info"); ?></td>
         </tr>
        <tr>
-           <td class=widget_content>Row Number</td>
+           <td class=widget_content><?php echo _("Row Number"); ?></td>
 
            <!-- base company info //-->
-           <td class=widget_content>Company ID</td>
-           <td class=widget_content>Company Name</td>
-           <td class=widget_content>Division Name</td>
+           <td class=widget_content><?php echo _("Company ID"); ?></td>
+           <td class=widget_content><?php echo _("Company Name"); ?></td>
+           <td class=widget_content><?php echo _("Division Name"); ?></td>
 
            <!-- contact info //-->
-           <td class=widget_content>First Names</td>
-           <td class=widget_content>Last Name</td>
-           <td class=widget_content>Email</td>
-           <td class=widget_content>Work Phone</td>
-           <td class=widget_content>Cell Phone</td>
-           <td class=widget_content>Home Phone</td>
-           <td class=widget_content>Fax</td>
-           <td class=widget_content>Division</td>
-           <td class=widget_content>Salutation</td>
-           <td class=widget_content>Date of Birth</td>
-           <td class=widget_content>Summary</td>
-           <td class=widget_content>Title</td>
-           <td class=widget_content>Description</td>
-           <td class=widget_content>AOL</td>
-           <td class=widget_content>Yahoo</td>
-           <td class=widget_content>MSN</td>
-           <td class=widget_content>Interests</td>
-           <td class=widget_content>Custom 1</td>
-           <td class=widget_content>Custom 2</td>
-           <td class=widget_content>Custom 3</td>
-           <td class=widget_content>Custom 4</td>
-           <td class=widget_content>Profile</td>
+           <td class=widget_content><?php echo _("First Names"); ?></td>
+           <td class=widget_content><?php echo _("Last Name"); ?></td>
+           <td class=widget_content><?php echo _("Email"); ?></td>
+           <td class=widget_content><?php echo _("Work Phone"); ?></td>
+           <td class=widget_content><?php echo _("Cell Phone"); ?></td>
+           <td class=widget_content><?php echo _("Home Phone"); ?></td>
+           <td class=widget_content><?php echo _("Fax"); ?></td>
+           <td class=widget_content><?php echo _("Division"); ?></td>
+           <td class=widget_content><?php echo _("Salutation"); ?></td>
+           <td class=widget_content><?php echo _("Date of Birth"); ?></td>
+           <td class=widget_content><?php echo _("Summary"); ?></td>
+           <td class=widget_content><?php echo _("Title"); ?></td>
+           <td class=widget_content><?php echo _("Description"); ?></td>
+           <td class=widget_content><?php echo _("AOL"); ?></td>
+           <td class=widget_content><?php echo _("Yahoo"); ?></td>
+           <td class=widget_content><?php echo _("MSN"); ?></td>
+           <td class=widget_content><?php echo _("Interests"); ?></td>
+           <td class=widget_content><?php echo _("Custom 1"); ?></td>
+           <td class=widget_content><?php echo _("Custom 2"); ?></td>
+           <td class=widget_content><?php echo _("Custom 3"); ?></td>
+           <td class=widget_content><?php echo _("Custom 4"); ?></td>
+           <td class=widget_content><?php echo _("Profile"); ?></td>
 
            <!-- address info //-->
-           <td class=widget_content>Address Name</td>
-           <td class=widget_content>Line 1</td>
-           <td class=widget_content>Line 2</td>
-           <td class=widget_content>City</td>
-           <td class=widget_content>State</td>
-           <td class=widget_content>Postal Code</td>
-           <td class=widget_content>Country</td>
-           <td class=widget_content>Address Body</td>
-           <td class=widget_content>Use Pretty Address</td>
+           <td class=widget_content><?php echo _("Address Name"); ?></td>
+           <td class=widget_content><?php echo _("Line 1"); ?></td>
+           <td class=widget_content><?php echo _("Line 2"); ?></td>
+           <td class=widget_content><?php echo _("City"); ?></td>
+           <td class=widget_content><?php echo _("State"); ?></td>
+           <td class=widget_content><?php echo _("Postal Code"); ?></td>
+           <td class=widget_content><?php echo _("Country"); ?></td>
+           <td class=widget_content><?php echo _("Address Body"); ?></td>
+           <td class=widget_content><?php echo _("Use Pretty Address"); ?></td>
 
            <!-- extra company info //-->
-           <td class=widget_content>Code</td>
-           <td class=widget_content>Phone</td>
-           <td class=widget_content>Alt. Phone</td>
-           <td class=widget_content>Fax</td>
-           <td class=widget_content>Website</td>
-           <td class=widget_content>Legal Name</td>
-           <td class=widget_content>Tax ID</td>
-           <td class=widget_content>External Ref 1</td>
-           <td class=widget_content>External Ref 1</td>
-           <td class=widget_content>External Ref 1</td>
-           <td class=widget_content>Custom 1</td>
-           <td class=widget_content>Custom 2</td>
-           <td class=widget_content>Custom 3</td>
-           <td class=widget_content>Custom 4</td>
-           <td class=widget_content>No. Employees</td>
-           <td class=widget_content>Revenue</td>
-           <td class=widget_content>Credit Limit</td>
-           <td class=widget_content>Terms</td>
-           <td class=widget_content>Profile/Notes</td>
+           <td class=widget_content><?php echo _("Code"); ?></td>
+           <td class=widget_content><?php echo _("Phone"); ?></td>
+           <td class=widget_content><?php echo _("Alt. Phone"); ?></td>
+           <td class=widget_content><?php echo _("Fax"); ?></td>
+           <td class=widget_content><?php echo _("Website"); ?></td>
+           <td class=widget_content><?php echo _("Legal Name"); ?></td>
+           <td class=widget_content><?php echo _("Tax ID"); ?></td>
+           <td class=widget_content><?php echo _("External Ref 1"); ?></td>
+           <td class=widget_content><?php echo _("External Ref 2"); ?></td>
+           <td class=widget_content><?php echo _("External Ref 3"); ?></td>
+           <td class=widget_content><?php echo _("Custom 1"); ?></td>
+           <td class=widget_content><?php echo _("Custom 2"); ?></td>
+           <td class=widget_content><?php echo _("Custom 3"); ?></td>
+           <td class=widget_content><?php echo _("Custom 4"); ?></td>
+           <td class=widget_content><?php echo _("No. Employees"); ?></td>
+           <td class=widget_content><?php echo _("Revenue"); ?></td>
+           <td class=widget_content><?php echo _("Credit Limit"); ?></td>
+           <td class=widget_content><?php echo _("Terms"); ?></td>
+           <td class=widget_content><?php echo _("Profile/Notes"); ?></td>
 
        </tr>
-TILLEND;
-
+<?php
 switch ($delimiter) {
     case 'comma':
         $delimiter = ",";
@@ -271,10 +267,9 @@ TILLEND;
 
 //fclose($handle);
 $con->close();
-
-echo <<<TILLEND
+?>
             <tr>
-                <td class=widget_content><input class=button type=submit value="Import"></td>
+                <td class=widget_content><input class=button type=submit value="<?php echo _("Import"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -291,13 +286,14 @@ echo <<<TILLEND
     </tr>
 </table>
 
-TILLEND;
-
-
+<?php
 end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.9  2005/04/15 18:30:20  introspectshun
+ * - i18n compliance
+ *
  * Revision 1.8  2004/07/16 23:51:37  cpsource
  * - require session_check ( 'Admin' )
  *
