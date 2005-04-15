@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.21 2005/04/10 23:46:33 maulani Exp $
+ * $Id: data.php,v 1.22 2005/04/15 07:46:47 vanmer Exp $
  */
 
 /**
@@ -2839,6 +2839,14 @@ function activity_db_data($con) {
         $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('PRO', 'process', 'process', 'process',10)";
         $rst = $con->execute($sql);
     }
+     if (confirm_no_records($con, 'activity_participant_positions')) {
+       $sql = " INSERT INTO `activity_participant_positions` ( activity_type_id , participant_position_name , global_flag )
+                    VALUES ( NULL , 'Participant', '1')";
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
 
 } // end activity_db_data fn
 
@@ -2861,6 +2869,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.22  2005/04/15 07:46:47  vanmer
+ * - ensure that database has proper default position
+ *
  * Revision 1.21  2005/04/10 23:46:33  maulani
  * - Add address types
  *
