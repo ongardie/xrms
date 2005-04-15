@@ -2,7 +2,7 @@
 /**
  * Export pager contents
  *
- * $Id: pager-export.php,v 1.1 2005/04/13 06:27:06 daturaarutad Exp $
+ * $Id: pager-export.php,v 1.2 2005/04/15 17:41:51 daturaarutad Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -40,6 +40,9 @@ if(is_array($session_data) && is_array($column_info)) {
 	
 	foreach($session_data as $row) {
 		foreach($column_info as $column) {
+			if(false !== strpos($row[$column['index']], ',')) {
+				$row[$column['index']] = '"' . $row[$column['index']] . '"';
+			}
 			$csvdata .= $row[$column['index']] . ',';
 		}
 		$csvdata = substr($csvdata, 0, -1);
@@ -63,6 +66,9 @@ if(is_array($session_data) && is_array($column_info)) {
 
 /**
  * $Log: pager-export.php,v $
+ * Revision 1.2  2005/04/15 17:41:51  daturaarutad
+ * add quotes around values that contain commas...temporary fix until we implement a filter/hook
+ *
  * Revision 1.1  2005/04/13 06:27:06  daturaarutad
  * new file
  *
