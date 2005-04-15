@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.9 2004/07/25 17:28:19 johnfawcett Exp $
+ * $Id: one.php,v 1.10 2005/04/15 07:42:43 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -37,14 +37,14 @@ if ($rst) {
     $rst->close();
 }
 
-$con->close();
+getGlobalVar($msg, 'msg');
 
 $page_title = _("Activity Type Details").': '.$activity_type_pretty_name;
-start_page($page_title);
-
+start_page($page_title, true, $msg);
+echo '<div id="Main">';
+require_once('participant_positions_sidebar.php');
 ?>
-
-<div id="Main">
+        
     <div id="Content">
 
         <form action="edit-2.php" method=post>
@@ -109,11 +109,14 @@ start_page($page_title);
 </div>
 
 <?php
-
+$con->close();
 end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2005/04/15 07:42:43  vanmer
+ * - added a new sidebar for managing positions for contacts on activities
+ *
  * Revision 1.9  2004/07/25 17:28:19  johnfawcett
  * - reinserted ? in gettext - needed for some languages
  * - standardized delete text and button
