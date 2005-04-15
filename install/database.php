@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.33 2005/04/10 23:47:09 maulani Exp $
+ * $Id: database.php,v 1.34 2005/04/15 07:47:24 vanmer Exp $
  */
 
 /**
@@ -1102,6 +1102,43 @@ function activity_db_tables($con, $table_list) {
         }
     }
 
+    if (!in_array('activity_participants',$table_list)) {
+        $sql ="CREATE TABLE activity_participants (
+                    activity_participant_id INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+                    activity_id INT UNSIGNED NOT NULL ,
+                    contact_id INT UNSIGNED NOT NULL ,
+                    activity_participant_position_id INT UNSIGNED NOT NULL ,
+                    activity_participant_position_record_status CHAR(1) DEFAULT 'a' NOT NULL,
+                    PRIMARY KEY ( activity_participant_id ) ,
+                    INDEX ( activity_id ),
+                    INDEX ( contact_id ),
+                    INDEX ( activity_participant_position_id )
+                    ) TYPE = InnoDB; ";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
+    if (!in_array('activity_participant_positions',$table_list)) {
+        $sql ="CREATE TABLE activity_participant_positions (
+                    activity_participant_position_id INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+                    activity_type_id INT UNSIGNED NULL ,
+                    participant_position_name VARCHAR(50) NOT NULL ,
+                    global_flag TINYINT UNSIGNED DEFAULT '0' NOT NULL, 
+                    PRIMARY KEY ( activity_participant_position_id ) ,
+                    INDEX ( activity_type_id )
+                    ) TYPE = InnoDB; ";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+            
+    
+    
 } // end activity_db_tables fn
 
 
@@ -1124,6 +1161,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.34  2005/04/15 07:47:24  vanmer
+ * - added tables for activity participants and positions
+ *
  * Revision 1.33  2005/04/10 23:47:09  maulani
  * - Add address types
  *
