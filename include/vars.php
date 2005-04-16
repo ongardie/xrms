@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.32 2004/09/30 20:24:36 dmazand Exp $
+ * $Id: vars.php,v 1.33 2005/04/16 20:33:38 maulani Exp $
  */
 
 /**
