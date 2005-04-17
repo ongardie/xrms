@@ -6,7 +6,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: install-utils.inc,v 1.8 2004/08/21 01:30:56 d2uhlman Exp $
+ * $Id: install-utils.inc,v 1.9 2005/04/17 15:10:52 maulani Exp $
  */
 
 /**
@@ -41,13 +41,18 @@ function check_extra_whitespace($path, $filename) {
     $filepath = $path . $filename;
     $contents = file($filepath);
     $endchars = $contents[count($contents) -1];
-    //char 10 is a linefeed, this is acceptable at the end of a file
-    if(!($endchars == "?>" xor $endchars == ("?>" . chr(10)))) {
+    //this is an include file.  no whitespace characters are
+    //acceptable at the end because they trigger php to send the page
+    //headers too early.  char(10) and char(13) must be eliminated along
+    //with other whitespace.
+    if($endchars != '?>') {
         $failuremsg = "The file  ";
         $failuremsg .= $filename;
         $failuremsg .= " does not end with the characters ?>. ";
         $failuremsg .= "You probably have added extra whitespace to the end. ";
-        $failuremsg .= "Please remove the extra characters and run install again.";
+        $failuremsg .= "Please remove the extra characters and run install again.  ";
+        $failuremsg .= "(Whitespace includes spaces, tabs, carriage returns ";
+        $failuremsg .= "and line feeds.)";
         install_fatal_error($failuremsg);
     }
 } // end check_extra_whitespace fn
@@ -55,6 +60,9 @@ function check_extra_whitespace($path, $filename) {
 
 /**
  * $Log: install-utils.inc,v $
+ * Revision 1.9  2005/04/17 15:10:52  maulani
+ * - Fix whitespace check
+ *
  * Revision 1.8  2004/08/21 01:30:56  d2uhlman
  * better whitespace check, linefeeds 0A,char(10) are acceptable and common at the end of a php file
  *
