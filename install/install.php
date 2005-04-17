@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.14 2005/01/28 15:34:43 braverock Exp $
+ * $Id: install.php,v 1.15 2005/04/17 15:11:30 maulani Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -39,12 +39,42 @@ if ($include_directory == "/full/path/to/xrms/include/") {
     install_fatal_error($problem);
 }
 
+
+// now check to make sure that the include_directory variable ends with a slash
+if (substr($include_directory, -1) != "/") {
+    // Oops!  The include directory variable does not end with a slash
+    // Now instruct the user in how to set this value
+    $problem = 'The include directory variable has not been set correctly.<BR><BR>';
+    $problem .= 'Please open the include-locations.inc file which is located ';
+    $problem .= 'at the top level of the xrms installation.  Change the value ';
+    $problem .= 'of the $include_directory variable to the correct path. A slash ';
+    $problem .= 'should be the last character of the path.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+
+    install_fatal_error($problem);
+}
+
 // now check to make sure that the include-directory actually exists
 if (!file_exists ($include_directory) ) {
     // Oops!  The include directory does not exist
     // Now instruct the user in how to set this value
     $problem = 'The include directory variable has not been set correctly.<BR><BR>';
     $problem .= "It is currently set to '$include_directory', which does not exist.<BR><BR>";
+    $problem .= 'Please open the include-locations.inc file which is located ';
+    $problem .= 'at the top level of the xrms installation.  Change the value ';
+    $problem .= 'of the $include_directory variable to the correct path.<BR><BR>';
+    $problem .= 'Then run this installation again.<BR><BR>';
+
+    install_fatal_error($problem);
+}
+
+// now check to make sure that the include-directory actually has include files
+if (!file_exists ($include_directory . 'vars.php') ) {
+    // Oops!  The include directory does not have an expected file in it!
+    // Now instruct the user in how to set this value
+    $problem = 'The include directory variable has not been set correctly.<BR><BR>';
+    $problem .= "It is currently set to '$include_directory', but vars.php could not ";
+    $problem .= "be found in this directory.<BR><BR>";
     $problem .= 'Please open the include-locations.inc file which is located ';
     $problem .= 'at the top level of the xrms installation.  Change the value ';
     $problem .= 'of the $include_directory variable to the correct path.<BR><BR>';
@@ -276,6 +306,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.15  2005/04/17 15:11:30  maulani
+ *- Add additional install checks
+ *
  *Revision 1.14  2005/01/28 15:34:43  braverock
  *- fix problem with some PHP versions where register_globals check may return 0
  *  (others return an empty string) - new test catches either
