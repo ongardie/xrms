@@ -4,7 +4,7 @@
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  *
- * $Id: one.php,v 1.83 2005/04/15 07:48:21 vanmer Exp $
+ * $Id: one.php,v 1.84 2005/04/18 16:32:39 vanmer Exp $
  */
 
 //include required files
@@ -475,7 +475,7 @@ function logTime() {
                         
                         echo render_create_button("Schedule Followup",'submit',false,'followup');
 
-                        echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
+                        echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode('/activities/some.php')."'", false, false, 'activities',$activity_id);
                     ?>
 
                 </td>
@@ -533,6 +533,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.84  2005/04/18 16:32:39  vanmer
+ * - changed default behavior when clicking the delete button: used to redirect to arbitrary return_url (by default same page)
+ * - now redirects back to /activities/some.php
+ *
  * Revision 1.83  2005/04/15 07:48:21  vanmer
  * - added sidebar for display of activity participants
  *
