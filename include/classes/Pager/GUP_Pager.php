@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.20 2005/04/15 17:25:41 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.21 2005/04/18 21:42:49 daturaarutad Exp $
  */
 
 
@@ -86,6 +86,7 @@ class GUP_Pager {
 	var $rows_displayed 		= 0;
 
 	var $show_cached_indicator 	= false;
+	var $cached_indicator_url 	= null;
 	// show the export button
 	var $show_export 			= false;
 	// do the actual export
@@ -873,7 +874,12 @@ END;
 		//  same as usual except the refresh button isn't clickable 
 		// (this is for instances where the data is entirely calculated and out of our control.)
 		if($this->show_cached_indicator) {
-			$cache_indicator = "<img border=0 src=\"$http_site_root/img/refresh.gif\"> ";
+
+			if($this->cached_indicator_url) {
+				$cache_indicator = "<a onmouseover=\"this.T_OFFSETX=-360; this.T_OFFSETY=10; return escape('" . _('Refresh Data') . "')\" href=\"{$this->cached_indicator_url}\"><img alt=\"" . _('Refresh Pager') . "\" border=0 src=\"$http_site_root/img/refresh.gif\"></a> ";
+			} else {
+				$cache_indicator = "<img border=0 src=\"$http_site_root/img/refresh.gif\"> ";
+			}
 
 		} elseif($this->using_cache) {
 			//$cache_indicator = '<input type="button" class="button" value="(cached)" onclick=javascript:' . $this->pager_id . '_refresh();>';
@@ -990,7 +996,8 @@ END;
 	/**
 	* public method to show the cache indicator
 	*/
-	function SetCachedIndicator() {
+	function SetCachedIndicator($url = null) {
+		if($url) $this->cached_indicator_url = $url;
 		$this->show_cached_indicator = true;
 	}
 	/**
@@ -1032,6 +1039,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.21  2005/04/18 21:42:49  daturaarutad
+ * added ability to set a URL for the externally-controlled cache_indicator
+ *
  * Revision 1.20  2005/04/15 17:25:41  daturaarutad
  * now storing column_info in session always for pager-export.php
  *
