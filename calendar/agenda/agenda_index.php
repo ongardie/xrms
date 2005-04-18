@@ -4,7 +4,7 @@
 //     - Desc : Agenda Index File                                            //
 // 2002-11-26 - Mehdi Rande                                                  //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: agenda_index.php,v 1.1 2005/04/14 20:27:11 daturaarutad Exp $ //
+// $Id: agenda_index.php,v 1.2 2005/04/18 15:32:15 daturaarutad Exp $ //
 ///////////////////////////////////////////////////////////////////////////////
 // Actions :
 // - index (default) -- this week for this user.
@@ -49,8 +49,8 @@ if ($obminclude == "") $obminclude = "obminclude";
 //include required files
 //require_once('../include-locations.inc');
 
-include("$include_directory../calendar/global.inc");
-include("$include_directory../calendar/global_pref.inc");
+include("../global.inc");
+include("../global_pref.inc");
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
