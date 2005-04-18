@@ -15,13 +15,13 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.1 2005/04/15 16:55:07 vanmer Exp $
+ * $Id: participant_sidebar.php,v 1.2 2005/04/18 23:34:12 maulani Exp $
  */
 require_once($include_directory.'utils-activities.php');
 // add participant information block on sidebar
 if (!$activity_id) { $participant_block=''; return false; }
-$return_url="/activities/one.php?activity_id=$activity_id";
-$participant_block = "<form action=new_activity_participant.php method=POST><input type=hidden name=activity_id value=$activity_id><input type=hidden name=return_url value=\"$return_url\">";
+$participant_return_url="/activities/one.php?activity_id=$activity_id";
+$participant_block = "<form action=new_activity_participant.php method=POST><input type=hidden name=activity_id value=$activity_id><input type=hidden name=return_url value=\"$participant_return_url\">";
 $participant_block .= '<table class=widget cellspacing=1 width="100%">
     <tr>
         <td class=widget_header colspan=5>Activity Participants</td>
@@ -36,7 +36,7 @@ if (!$participants) {
     $colspan=3;
     $participant_block.='<tr><td class=widget_label>'._("Name").'</td><td class=widget_label>'._("Position").'</td><td class=widget_label>'._("Action").'</td></tr>';
     foreach ($participants as $participant_info) {
-        $remove_link="new_activity_participant?activity_participant_action=deleteActivityParticipant&activity_participant_id={$participant_info['activity_participant_id']}&return_url=".urlencode($return_url);
+        $remove_link="new_activity_participant?activity_participant_action=deleteActivityParticipant&activity_participant_id={$participant_info['activity_participant_id']}&return_url=".urlencode($participant_return_url);
         $participant_block.="<tr><td class=widget_content>{$participant_info['contact_name']}</td><td>{$participant_info['participant_position_name']}</td><td><a href=\"$remove_link\">Remove</a></td></tr>";    
     }
 }
@@ -45,6 +45,10 @@ $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.2  2005/04/18 23:34:12  maulani
+ * - participant sidebar include was stomping on $return_url variable.  Changed
+ *   variable name to resolve conflict in activities/one.php
+ *
  * Revision 1.1  2005/04/15 16:55:07  vanmer
  * -Initial revision of the sidebar for participant lists on an activity
  *
