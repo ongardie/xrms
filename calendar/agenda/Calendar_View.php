@@ -3,12 +3,12 @@
 /**
  * Wrapper class for calendar widget.
  *
- * $Id: Calendar_View.php,v 1.3 2005/04/15 01:39:26 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.4 2005/04/18 15:26:13 daturaarutad Exp $
  */
 
 
-include("$include_directory../calendar/global.inc");
-include("$include_directory../calendar/global_pref.inc");
+include("../global.inc");
+include("../global_pref.inc");
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -537,6 +537,9 @@ function get_agenda_action() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.4  2005/04/18 15:26:13  daturaarutad
+* removed bad include path
+*
 * Revision 1.3  2005/04/15 01:39:26  daturaarutad
 * added phpdoc comments
 *
