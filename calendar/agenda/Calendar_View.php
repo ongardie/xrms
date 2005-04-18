@@ -3,7 +3,7 @@
 /**
  * Wrapper class for calendar widget.
  *
- * $Id: Calendar_View.php,v 1.5 2005/04/18 16:34:40 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.6 2005/04/18 17:44:26 daturaarutad Exp $
  */
 
 
@@ -151,7 +151,6 @@ function GetCalendarJS() {
 	$calendar_start_date = $this->start_date;
 	$date_field_name = $this->calendar_date_field;
 
-        $year = date('Y', strtotime(null));
         $year = date('Y', strtotime($calendar_start_date));
         $month = date('m', strtotime($calendar_start_date));
         $day = date('d', strtotime($calendar_start_date));
@@ -537,6 +536,9 @@ function get_agenda_action() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.6  2005/04/18 17:44:26  daturaarutad
+* removed debug msg
+*
 * Revision 1.5  2005/04/18 16:34:40  daturaarutad
 * fixed the last fix
 *
