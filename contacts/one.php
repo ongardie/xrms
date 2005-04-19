@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.78 2005/04/19 21:10:10 neildogg Exp $
+ * $Id: one.php,v 1.79 2005/04/19 21:14:59 neildogg Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -474,7 +474,7 @@ function markComplete() {
                         </tr>
                     </table>
 
-                    <p id="profile" class="hidden"><?php if(strlen($profile) >= 500) { echo substr($profile, 0, 500); ?><span><?php echo substr($profile, 500); ?></span><a href="#" onclick="document.getElementById('profile').className = (document.getElementById('profile').className == '') ? 'hidden' : ''; return false">...</a><?php } ?></p>
+                    <p id="profile" class="hidden"><?php if(strlen($profile) >= 500) { echo substr($profile, 0, 500); ?><span><?php echo substr($profile, 500); ?></span><a href="#" onclick="document.getElementById('profile').className = (document.getElementById('profile').className == '') ? 'hidden' : ''; return false">...</a><?php } else { echo $profile; } ?></p>
 
                 </td>
             </tr>
@@ -597,6 +597,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.79  2005/04/19 21:14:59  neildogg
+ * - Profile bug if short
+ *
  * Revision 1.78  2005/04/19 21:10:10  neildogg
  * - Contact profile shrunken by default. Can be enlarged
  *
