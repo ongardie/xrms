@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.48 2005/04/01 22:06:18 ycreddy Exp $
+ * $Id: some.php,v 1.49 2005/04/19 14:10:59 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -57,7 +57,7 @@ $sql = "SELECT "
     ELSE 0
   END AS weighted_size" . ",
   os.opportunity_status_pretty_name AS status " . ","
-  . " $close_at AS close_date, opp.opportunity_title"  . ' ';
+  . " $close_at AS close_date, close_at, opp.opportunity_title"  . ' ';
 
 
 if ($opportunity_category_id > 0) {
@@ -128,6 +128,8 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 
 
 $sql .= $from . $where;
+
+//echo $sql;
 
 $sql_recently_viewed = "select * from recent_items r, companies c, opportunities opp, opportunity_statuses os
 where r.user_id = $session_user_id
@@ -277,7 +279,7 @@ $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_li
 $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
 $columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
-$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date');
+$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
 
 
 
@@ -368,6 +370,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.49  2005/04/19 14:10:59  daturaarutad
+ * added sql_sort_column => close_at for opportunities pager
+ *
  * Revision 1.48  2005/04/01 22:06:18  ycreddy
  * Modified the INNER JOIN to a portable syntax
  *
