@@ -68,6 +68,9 @@ table.widget .widget_header,
 #msg {
     font-weight: bold;
 }
+#profile.hidden span {
+    display: none;
+}
 /**
  * text alignment
  */

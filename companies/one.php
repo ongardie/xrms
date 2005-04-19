@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.104 2005/04/07 14:21:43 maulani Exp $
+ * $Id: one.php,v 1.105 2005/04/19 21:07:15 neildogg Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -687,7 +687,7 @@ function markComplete() {
                         </tr>
                     </table>
 
-                    <p><?php echo $profile; ?>
+                    <p id="profile" class="hidden"><?php if(strlen($profile) >= 500) { echo substr($profile, 0, 500); ?><span><?php echo substr($profile, 500); ?></span><a href="#" onclick="document.getElementById('profile').className = (document.getElementById('profile').className == '') ? 'hidden' : ''; return false">...</a><?php } ?></p>
 
                 </td>
             </tr>
@@ -838,6 +838,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.105  2005/04/19 21:07:15  neildogg
+ * - Company profile shrunken by default. Can be enlarged
+ *
  * Revision 1.104  2005/04/07 14:21:43  maulani
  * - Replace username with actual name in display
  *   RFE 933629 by sdavey
