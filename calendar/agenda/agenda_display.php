@@ -4,7 +4,7 @@
 //     - Desc : Agenda Display File                                          //
 // 2002-11-26 Mehdi Rande                                                    //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: agenda_display.php,v 1.1 2005/04/14 20:27:11 daturaarutad Exp $ //
+// $Id: agenda_display.php,v 1.2 2005/04/19 15:33:14 daturaarutad Exp $ //
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -314,7 +314,7 @@ function dis_month_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 	         			if($event_data[$event_id]["privacy"] == 0 || $id == $auth->auth["uid"]) {
 	             			$titleEvent = $event_data[$event_id]["title"];
 	             			$descEvent = $event_data[$event_id]["description"];
-							$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
+							$linkEvent = "$http_site_root/activities/one.php?activity_id=$event_id&return_url=" . current_page();
 
 	             			$typeEvent = $event_data[$event_id]["type"];
 	         			} else {
