@@ -2,9 +2,9 @@
 /**
  * Edit the details for a single Activity
  *
- * @todo Fix fields to use CSS instead of absolute positioning
+ * $Id: one.php,v 1.86 2005/04/20 21:26:27 braverock Exp $
  *
- * $Id: one.php,v 1.85 2005/04/18 23:34:13 maulani Exp $
+ * @todo Fix fields to use CSS instead of absolute positioning
  */
 
 //include required files
@@ -111,36 +111,36 @@ $user_menu = get_user_menu($con, $user_id, $show_blank);
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
 
 if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
-	$history_text = '<tr> <td class=widget_content colspan=2>';
-	
-	//get user info for who entered the activity
-	$sql = "select first_names, last_name from users where user_id = $entered_by";
-	$rst = $con->execute($sql);
-	if ($rst) {
-		$entered_by_firstname = $rst->fields['first_names'];
-		$entered_by_lastname = $rst->fields['last_name'];
-		$history_text .= _("ID") . ' ' . $activity_id . ' ' . 
-						 _("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' . 
-						 _("at") . ' ' . $entered_at . '. ';
-		$rst->close();
-	} else {
-		db_error_handler($con, $sql);
-	}
-	
-	//get user info for who modified the activity
-	$sql = "select first_names, last_name from users where user_id = $last_modified_by";
-	$rst = $con->execute($sql);
-	if ($rst) {
-		$last_modified_by_firstname = $rst->fields['first_names'];
-		$last_modified_by_lastname = $rst->fields['last_name'];
-		$history_text .= _("Last modified by") . ' ' . $last_modified_by_firstname . ' ' . $last_modified_by_lastname . ' ' . 
-						 _("at") . ' ' . $last_modified_at . '.';
-		$rst->close();
-	} else {
-		db_error_handler($con, $sql);
-	}
-	
-	$history_text .= '</td> </tr>';
+    $history_text = '<tr> <td class=widget_content colspan=2>';
+
+    //get user info for who entered the activity
+    $sql = "select first_names, last_name from users where user_id = $entered_by";
+    $rst = $con->execute($sql);
+    if ($rst) {
+        $entered_by_firstname = $rst->fields['first_names'];
+        $entered_by_lastname = $rst->fields['last_name'];
+        $history_text .= _("ID") . ' ' . $activity_id . ' ' .
+                         _("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' .
+                         _("at") . ' ' . $entered_at . '. ';
+        $rst->close();
+    } else {
+        db_error_handler($con, $sql);
+    }
+
+    //get user info for who modified the activity
+    $sql = "select first_names, last_name from users where user_id = $last_modified_by";
+    $rst = $con->execute($sql);
+    if ($rst) {
+        $last_modified_by_firstname = $rst->fields['first_names'];
+        $last_modified_by_lastname = $rst->fields['last_name'];
+        $history_text .= _("Last modified by") . ' ' . $last_modified_by_firstname . ' ' . $last_modified_by_lastname . ' ' .
+                         _("at") . ' ' . $last_modified_at . '.';
+        $rst->close();
+    } else {
+        db_error_handler($con, $sql);
+    }
+
+    $history_text .= '</td> </tr>';
 } else {
 $history_text = '';
 }
@@ -209,13 +209,13 @@ if ($is_linked) {
             ".$table_name."_statuses.".$table_name."_status_pretty_name,
             ".$on_what_table.".".$table_name."_id,
             ".$on_what_table.".".$table_name."_status_id,
-            ".$table_name."_statuses.".$table_name."_status_id 
+            ".$table_name."_statuses.".$table_name."_status_id
             $type_field_limit
             from ".$table_name."_statuses, ".$on_what_table."
             where ".$on_what_table.".".$table_name."_id=$on_what_id
             and ".$on_what_table.".".$table_name."_status_id=".$table_name."_statuses.".$table_name."_status_id";
     $rst = $con->execute($sql);
-    
+
     //If not empty, get pretty name and id
     if ($rst) {
         $table_status = $rst->fields[$table_name.'_status_pretty_name'];
@@ -231,7 +231,7 @@ if ($is_linked) {
     $sql = "select ".$table_name."_status_pretty_name,
             ".$table_name."_status_id
             from ".$table_name."_statuses
-            where ".$table_name."_status_record_status='a'           
+            where ".$table_name."_status_record_status='a'
             $type_limit
             order by sort_order";
     $rst = $con->execute($sql);
@@ -289,7 +289,11 @@ if(!empty($on_what_table)) {
 require("../relationships/sidebar.php");
 
 //include the files sidebar
+$ori_on_what_table=$on_what_table;
+$on_what_table='activities';
+$on_what_id=$activity_id;
 require_once( '../files/sidebar.php');
+$on_what_table=$ori_on_what_table;
 
 //Add optional tables
 //sending null parameter, expecting return instead of change to passed in reference
@@ -467,12 +471,12 @@ function logTime() {
                     <?php
 
                         echo render_edit_button("Save Changes",'submit',false,'save');
-                                                
+
                         if($save_and_next) {
                             echo '<input class=button type=submit name="saveandnext" value="'._("Save and Next").'"';
                             $save_and_next="&save_and_next=true";
                         }
-                        
+
                         echo render_create_button("Schedule Followup",'submit',false,'followup');
 
                         echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
@@ -483,7 +487,7 @@ function logTime() {
            <?php  echo $history_text; ?>
         </table>
         </form>
-		<?php echo $activity_content_bottom; ?>
+        <?php echo $activity_content_bottom; ?>
     </div>
 
     <!-- right column //-->
@@ -533,6 +537,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.86  2005/04/20 21:26:27  braverock
+ * - change $on_what_table to 'activities' before calling file sidebar
+ *
  * Revision 1.85  2005/04/18 23:34:13  maulani
  * - participant sidebar include was stomping on $return_url variable.  Changed
  *   variable name to resolve conflict in activities/one.php
