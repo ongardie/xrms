@@ -16,7 +16,7 @@ if ( !defined('IN_XRMS') )
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.13 2005/03/10 18:26:51 ycreddy Exp $
+ * $Id: sidebar.php,v 1.14 2005/04/21 15:27:05 ycreddy Exp $
  */
 
 // add company information block on sidebar
@@ -66,6 +66,10 @@ if ($rst) {
     }
 
     if (trim($rst->fields['url'])) {
+ 	if ( substr($url, 0, 4)!=='http' ) {
+       	    $url = 'http://'.$url;
+    	}
+
         $company_block .= "\n\t<tr>\n\t\t<td class=widget_content>"
 	                   . "<a href=\"" . $url . "\" target=\"_new\">" . _("Web Site") . "</a></td>\n\t</tr>";
     }
@@ -88,6 +92,9 @@ $company_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.14  2005/04/21 15:27:05  ycreddy
+ * Added http prefix to url if it does not exist already
+ *
  * Revision 1.13  2005/03/10 18:26:51  ycreddy
  * Added trim before displaying Phone, Fax and url links in the company side bar
  *
