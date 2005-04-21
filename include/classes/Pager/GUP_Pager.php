@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.21 2005/04/18 21:42:49 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.22 2005/04/21 16:37:43 daturaarutad Exp $
  */
 
 
@@ -77,7 +77,6 @@ class GUP_Pager {
     var $EndRows;
     var $maximize;
 
-
 	var $get_only_visible 		= false; // used internally; whether or not to get the whole sql dataset
 	var $use_cached 			= true; 	// whether or not to use the cache
 	var $using_cached 			= false;	// whether or not we are currently using cached data
@@ -93,6 +92,7 @@ class GUP_Pager {
 	var $do_export 				= false;
 
 	var $modify_data_functions = array();
+	var $debug					= false;
 
 
     /**
@@ -148,11 +148,20 @@ class GUP_Pager {
 		getGlobalVar($refresh, $this->pager_id . '_refresh');
 		getGlobalVar($this->do_export, $this->pager_id . '_export');
 
-		if($refresh) { $this->use_cached	= false; }
+		if($refresh) { 
+			if($this->debug) echo "CGI refresh, not using cache<br>\n";
+			$this->use_cached	= false; 
+		}
 		// don't use the cache if we are in sql-only mode (no data or callbacks)
-		if(!isset($data)) { $this->use_cached	= false; }
+		if(!isset($data)) { 
+			if($this->debug) echo "SQL-only mode (no data or callbacks), not using cache<br>\n";
+			$this->use_cached	= false; 
+		}
 		// don't use the cache if there is no sql and the data is not
-		if(isset($data) && !function_exists($data)) { $this->use_cached	= false; }
+		if(isset($data) && !function_exists($data)) { 
+			if($this->debug) echo "Data-only mode (no SQL or callbacks), not using cache<br>\n";
+			$this->use_cached	= false; 
+		}
 
 		if($this->do_export) { unset($this->group_mode); }  // group mode doesn't make sense for export
 		if(!is_numeric($this->group_mode)) { unset($this->group_mode); }
@@ -185,7 +194,7 @@ class GUP_Pager {
         $this->pretty_sort_order = ($this->sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 		// here we add the ORDER BY clause to the SQL query.
-		// this is done seperately for grouping later because we don't know enough yet to contruct it for grouping
+		// this is done seperately for grouping later because we don't know enough yet to construct the query for grouping
 		if($this->column_info[$this->sort_column-1]['index_sql']) {
 			$this->SetUpSQLOrderByClause();
 		}
@@ -347,10 +356,13 @@ class GUP_Pager {
 		}
 
 		if($_SESSION[$cache_name] && $this->use_cached) {
+			if($this->debug) echo "Getting Data From Cache<br>";
+
 			$this->data = $_SESSION[$cache_name];
 			$this->using_cache = true;
 
 		} else {
+			if($this->debug) echo "Not Using Cache<br>";
 
 			// clear the cache
 			$_SESSION[$cache_name] = null;
@@ -359,6 +371,8 @@ class GUP_Pager {
 				//echo htmlentities($this->sql) . '<br/>';
 	
 				if($this->get_only_visible) {
+					if($this->debug) echo "Running SQL query for a page of the data<br>";
+
         			$savec = $ADODB_COUNTRECS;
         			if ($this->db->pageExecuteCountRows) $ADODB_COUNTRECS = true;
         			if ($this->cache)
@@ -368,6 +382,7 @@ class GUP_Pager {
         			$ADODB_COUNTRECS = $savec;
 		
 				} else {
+					if($this->debug) echo "Running SQL query for all data<br>";
 					$rs = &$this->db->Execute($this->sql);
 				}
 
@@ -380,6 +395,8 @@ class GUP_Pager {
        			}
 		
 				if(function_exists($this->data)) {
+					if($this->debug) echo "Running callback for calculated data<br>";
+
 					$user_data_fn = $this->data;
 					$this->data = array();
 					while (!$rs->EOF) {
@@ -1034,11 +1051,18 @@ END;
 
 		return "<input type=button class=button value=\"" . _('Export') . "\" onclick=\"document.{$this->form_id}.{$this->pager_id}_export.value='set'; document.{$this->form_id}.submit();\">";
 	}
+	/**
+	*  Public function to enable debugging output for this pager
+	*/
+	function SetDebug($debug = true) { $this->debug = $debug; }
 
 }
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.22  2005/04/21 16:37:43  daturaarutad
+ * added SetDebug function for showing some basic debug output
+ *
  * Revision 1.21  2005/04/18 21:42:49  daturaarutad
  * added ability to set a URL for the externally-controlled cache_indicator
  *
