@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.2 2005/04/18 23:34:12 maulani Exp $
+ * $Id: participant_sidebar.php,v 1.3 2005/04/22 22:05:53 ycreddy Exp $
  */
 require_once($include_directory.'utils-activities.php');
 // add participant information block on sidebar
@@ -36,7 +36,7 @@ if (!$participants) {
     $colspan=3;
     $participant_block.='<tr><td class=widget_label>'._("Name").'</td><td class=widget_label>'._("Position").'</td><td class=widget_label>'._("Action").'</td></tr>';
     foreach ($participants as $participant_info) {
-        $remove_link="new_activity_participant?activity_participant_action=deleteActivityParticipant&activity_participant_id={$participant_info['activity_participant_id']}&return_url=".urlencode($participant_return_url);
+        $remove_link="new_activity_participant.php?activity_participant_action=deleteActivityParticipant&activity_participant_id={$participant_info['activity_participant_id']}&return_url=".urlencode($participant_return_url);
         $participant_block.="<tr><td class=widget_content>{$participant_info['contact_name']}</td><td>{$participant_info['participant_position_name']}</td><td><a href=\"$remove_link\">Remove</a></td></tr>";    
     }
 }
@@ -45,6 +45,9 @@ $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.3  2005/04/22 22:05:53  ycreddy
+ * Added the missing .php extension for the Remove Participant Link
+ *
  * Revision 1.2  2005/04/18 23:34:12  maulani
  * - participant sidebar include was stomping on $return_url variable.  Changed
  *   variable name to resolve conflict in activities/one.php
