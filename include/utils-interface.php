@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.54 2005/04/15 07:02:32 vanmer Exp $
+ * $Id: utils-interface.php,v 1.55 2005/04/22 07:41:02 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -214,6 +214,10 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
                 echo css_link($cssfile, $theme, ($theme != $curtheme));
         }
     }
+    //quick and dirty hack to include and force logo style after all other styles have been applied
+    //should also check system parameters to see if logo should be displayed
+    echo css_link($cssroot.'logo.css', $curtheme, false);
+
 ?>
 
 </head>
@@ -618,6 +622,10 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.55  2005/04/22 07:41:02  vanmer
+ * - by default include stylesheet for logo display on every page
+ * @TODO check system parameters before including stylesheet
+ *
  * Revision 1.54  2005/04/15 07:02:32  vanmer
  * - added function to display array as an html select
  *
