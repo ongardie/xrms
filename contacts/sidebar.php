@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.19 2004/12/27 14:21:50 braverock Exp $
+ * $Id: sidebar.php,v 1.20 2005/04/22 22:14:36 ycreddy Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -157,7 +157,7 @@ if ( $contact_id ) {
 
     $contact_block .= "<tr><td class=widget_content>";
 
-        if ($rst->fields['work_phone']) {
+        if (trim($rst->fields['work_phone'])) {
             $contact_block .= _("Work Phone") . ": <strong>"
                             . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone'])
                             . "</strong><br>";
@@ -167,7 +167,7 @@ if ( $contact_id ) {
                            . _("Enter Work Phone") . "</a><br>";
         }
 
-        if ($rst->fields['cell_phone']) {
+        if (trim($rst->fields['cell_phone'])) {
             $contact_block .= _("Cell Phone") . ": <strong>"
                             . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone'])
                             . "</strong><br>";
@@ -177,7 +177,7 @@ if ( $contact_id ) {
                            . _("Enter Cell") . "</a><br>";
         }
 
-        if ($rst->fields['home_phone']) {
+        if (trim($rst->fields['home_phone'])) {
             $contact_block .= _("Home Phone") . ": <strong>"
                             . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone'])
                             . "</strong><br>";
@@ -204,6 +204,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.20  2005/04/22 22:14:36  ycreddy
+ * Added trim to work, cell and fax fields
+ *
  * Revision 1.19  2004/12/27 14:21:50  braverock
  * - localized untranslated strings
  *
