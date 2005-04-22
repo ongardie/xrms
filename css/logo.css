@@ -1,0 +1,13 @@
+/**
+ * Add-on XRMS theme for logo addition
+ *
+ * This style sheet overlays the default XRMS sheets:
+ *    xrmsstyle.css, xrmsstyle-ie.css (if IE), and xrmsstyle-screen.css
+ *
+ * It is used to input a background image (img/logo.gif) into the header of every page, as a logo.
+ */
+ #page_header {
+ 	background-image: url("../img/logo.gif");
+	background-repeat: no-repeat;
+	background-position: 60%;
+ }
