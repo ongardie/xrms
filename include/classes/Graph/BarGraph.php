@@ -6,8 +6,9 @@
 *	creating bar charts.
 *
 *	@author daturaarutad
-*	$Id: BarGraph.php,v 1.7 2005/04/02 00:10:13 daturaarutad Exp $
+*	$Id: BarGraph.php,v 1.8 2005/04/22 20:55:23 daturaarutad Exp $
 */
+
 
 global $jpgraph_include_directory;
 
@@ -47,68 +48,16 @@ var $graph_info;
 * @param array contains all of the settings that drive the graph
 */
 function BarGraph($graph_info) {
+	
+	global $include_directory;
+
+	require_once($include_directory . 'jpgraph-config.php');
 
 	// graph type
-	$this->graph_info 								= array();
-	$this->graph_info['bar_colors'] 				= array('darkblue', 'red', 'purple','orange','darkgreen','pink','green');
-	$this->graph_info['scale'] 						= 'textlin';
-	$this->graph_info['antialiasing']				= false;
-	
-	// image settings
-	$this->graph_info['margins']					= array(50,30,20,80); // left, right, top, bottom
-
-	// graph settings
-	$this->graph_info['graph_margin_color']			= 'white';
-	$this->graph_info['graph_title']				= null;
-	$this->graph_info['graph_title_color']			= 'black';
-	$this->graph_info['graph_title_font']			= FF_ARIAL;
-	$this->graph_info['graph_title_style']			= FS_NORMAL;
-	$this->graph_info['graph_title_size']			= 8;
-	$this->graph_info['graph_show_frame']			= false;
-	$this->graph_info['graph_show_box']				= true;
-
-	// x axis
-	$this->graph_info['xaxis_color']				= 'darkgray';
-	$this->graph_info['xaxis_font']					= FF_ARIAL;
-	$this->graph_info['xaxis_font_style']			= FS_NORMAL;
-	$this->graph_info['xaxis_font_size']			= 8;
-	$this->graph_info['xaxis_label_angle']			= null;
-	$this->graph_info['xaxis_label_interval']		= null;
-	$this->graph_info['xaxis_label_margin']			= 10;
-	$this->graph_info['xaxis_hide_ticks_major']		= true;
-	$this->graph_info['xaxis_hide_ticks_minor']		= false;
-	$this->graph_info['xaxis_tick_interval_step']	= 1;
-	$this->graph_info['xaxis_tick_interval_start']	= 0;
-	$this->graph_info['xaxis_position']		= 'min'; // "min" will position the x-axis at the minimum value of the Y-axis
-
-	// y axis
-	$this->graph_info['yaxis_color']				= 'darkgray';
-	$this->graph_info['yaxis_font']					= FF_ARIAL;
-	$this->graph_info['yaxis_font_style']			= FS_NORMAL;
-	$this->graph_info['yaxis_font_size']			= 8;
-
-	// y grid
-	$this->graph_info['ygrid_show_major']			= true;
-	$this->graph_info['ygrid_show_minor']			= false;
-	$this->graph_info['ygrid_line_style']			= 'solid';
-	$this->graph_info['ygrid_color']				= 'lightgray';
-
-	// x grid
-	$this->graph_info['xgrid_fill']					= array(true,'#EEEEEE@0.5','#FFFFFF@0.5');
-	$this->graph_info['xgrid_show_major']			= true;
-	$this->graph_info['xgrid_show_minor']			= false;
-	$this->graph_info['xgrid_line_style']			= 'dashed';
-	$this->graph_info['xgrid_color']				= 'lightgray';
-
+	$this->graph_info = GetJPGraphConfig();
 
 	// now overwrite them with user specified settings
 	$this->graph_info = array_merge($this->graph_info, $graph_info);
-/*
-	echo '<pre>';
-	print_r($this->graph_info);
-	echo '</pre>';
-	*/
-
 }
 
 
@@ -342,6 +291,9 @@ function DisplayCSIM($url, $filename, $map_name, $border = 0) {
 
 /**
 * $Log: BarGraph.php,v $
+* Revision 1.8  2005/04/22 20:55:23  daturaarutad
+* moved configuration of graph_info to include/jpgraph-config.php
+*
 * Revision 1.7  2005/04/02 00:10:13  daturaarutad
 * really removed PlotFactory this time and other simplifications
 *
