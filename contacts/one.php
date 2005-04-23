@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.79 2005/04/19 21:14:59 neildogg Exp $
+ * $Id: one.php,v 1.80 2005/04/23 17:47:47 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -33,7 +33,6 @@ global $con;
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
 
 $form_name = 'One_Contact';
 
@@ -139,11 +138,13 @@ CASE
   WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
   ELSE 0
 END AS is_overdue
-FROM activity_types at, contacts cont, activities a
+FROM activities a
+LEFT OUTER JOIN activity_types at ON (at.activity_type_id = a.activity_type_id)
 LEFT OUTER JOIN users u ON (a.user_id = u.user_id)
-WHERE a.contact_id = $contact_id
-  AND a.contact_id = cont.contact_id
-  AND a.activity_type_id = at.activity_type_id
+LEFT OUTER JOIN activity_participants ap ON (ap.activity_id = a.activity_id)
+LEFT OUTER JOIN contacts cont ON (a.contact_id = cont.contact_id)
+WHERE ((a.contact_id = $contact_id) OR 
+((ap.contact_id = $contact_id) AND (ap.ap_record_status = 'a')))
   AND a.activity_record_status = 'a'";
     $list=acl_get_list($session_user_id, 'Read', false, 'activities');
     //print_r($list);
@@ -597,6 +598,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.80  2005/04/23 17:47:47  vanmer
+ * - Added activities to list for contacts who are listed in the activity_participants table
+ * - Changed activity sql to use left outer joins for all secondary tables
+ *
  * Revision 1.79  2005/04/19 21:14:59  neildogg
  * - Profile bug if short
  *
