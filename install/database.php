@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.34 2005/04/15 07:47:24 vanmer Exp $
+ * $Id: database.php,v 1.35 2005/04/23 17:50:02 vanmer Exp $
  */
 
 /**
@@ -1108,7 +1108,7 @@ function activity_db_tables($con, $table_list) {
                     activity_id INT UNSIGNED NOT NULL ,
                     contact_id INT UNSIGNED NOT NULL ,
                     activity_participant_position_id INT UNSIGNED NOT NULL ,
-                    activity_participant_position_record_status CHAR(1) DEFAULT 'a' NOT NULL,
+                    ap_record_status CHAR(1) DEFAULT 'a' NOT NULL,
                     PRIMARY KEY ( activity_participant_id ) ,
                     INDEX ( activity_id ),
                     INDEX ( contact_id ),
@@ -1161,6 +1161,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.35  2005/04/23 17:50:02  vanmer
+ * - fixed database layout to reflect shorter fieldname for record status on activity participants
+ *
  * Revision 1.34  2005/04/15 07:47:24  vanmer
  * - added tables for activity participants and positions
  *
