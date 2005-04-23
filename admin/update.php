@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.66 2005/04/15 07:37:12 vanmer Exp $
+ * $Id: update.php,v 1.67 2005/04/23 17:48:42 vanmer Exp $
  */
 
 // where do we include from
@@ -4694,7 +4694,7 @@ $con->execute($sql);
                     activity_id INT UNSIGNED NOT NULL ,
                     contact_id INT UNSIGNED NOT NULL ,
                     activity_participant_position_id INT UNSIGNED NOT NULL ,
-		    activity_participant_record_status VARCHAR(1) DEFAULT 'a' NOT NULL,
+		    ap_record_status VARCHAR(1) DEFAULT 'a' NOT NULL,
                     PRIMARY KEY ( activity_participant_id ) ,
                     INDEX ( activity_id ),
                     INDEX ( contact_id ),
@@ -4705,6 +4705,19 @@ $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
+    } else {
+	$sql = "SELECT * FROM activity_participants";
+	$rst = $con->SelectLimit($sql, 1);
+	if (!$rst) { db_error_handler($con, $sql); }
+	else { 
+	    if (!$rst->EOF) { 
+		    if (!array_key_exists('ap_record_status',$rst->fields)) {
+			$sql = "ALTER TABLE `activity_participants` CHANGE `activity_participant_record_status` `ap_record_status` CHAR( 1 ) DEFAULT 'a' NOT NULL";
+			$rst = $con->execute($sql);
+			if (!$rst) { db_error_handler($con, $sql); }
+		    }
+	    }
+	}    
     }
 
     if (!in_array('activity_participant_positions',$table_list)) {
@@ -4769,6 +4782,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.67  2005/04/23 17:48:42  vanmer
+ * - changed activity_participant_record_status field to ap_record_status field to work around 30 character limit for adodb mssql driver
+ *
  * Revision 1.66  2005/04/15 07:37:12  vanmer
  * - added tables for handling multiple contacts in activities, and positions for different activity types
  *
