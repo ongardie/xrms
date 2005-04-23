@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.2 2005/04/15 08:02:53 vanmer Exp $
+ * $Id: utils-activities.php,v 1.3 2005/04/23 17:49:25 vanmer Exp $
  
  */
 
@@ -330,9 +330,9 @@ function add_activity_participant($con, $activity_id, $contact_id, $activity_par
         $current_participants=get_activity_participants($con, $activity_id, $contact_id, $activity_participant_position_id, false);
         if ($current_participants) {
             $participant=current($current_participants);
-            if ($participant['activity_participant_record_status']=='d') {
+            if ($participant['ap_record_status']=='d') {
                 //participant already exists, is deleted, so update to active
-                $update_sql = "UPDATE activity_participants SET activity_participant_record_status=" . $con->qstr('a',get_magic_quotes_gpc()) . " WHERE activity_participant_id={$participant['activity_participant_id']}";
+                $update_sql = "UPDATE activity_participants SET ap_record_status=" . $con->qstr('a',get_magic_quotes_gpc()) . " WHERE activity_participant_id={$participant['activity_participant_id']}";
                 $update_rst=$con->execute($update_sql);
                 if (!$update_rst) { db_error_handler($con, $update_sql); return false; }
                 else return $participant['activity_participant_id'];
@@ -381,7 +381,7 @@ function get_activity_participants($con, $activity_id, $contact_id=false, $activ
         $where['activity_participant_position_id']=$activity_participant_position_id;
     }
     if ($show_active) {
-        $where['activity_participant_record_status']='a';
+        $where['ap_record_status']='a';
     }
     
     $tablename="activity_participants";
@@ -424,7 +424,7 @@ function delete_activity_participant($con, $activity_participant_id, $delete_fro
     if ($delete_from_database) {
         $sql = "DELETE FROM $tablename WHERE $wherestr";
     } else {
-        $sql = "UPDATE $tablename SET activity_participant_record_status=".$con->qstr('d',get_magic_quotes_gpc());
+        $sql = "UPDATE $tablename SET ap_record_status=".$con->qstr('d',get_magic_quotes_gpc());
         $sql .= " WHERE $wherestr";
     }
     $result_rst=$con->execute($sql);
@@ -435,6 +435,9 @@ function delete_activity_participant($con, $activity_participant_id, $delete_fro
  
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.3  2005/04/23 17:49:25  vanmer
+  * - changed activity_participant_record_status to ap_record_status to work around 30 character limit in mssql adodb driver
+  *
   * Revision 1.2  2005/04/15 08:02:53  vanmer
   * - added flag to control delete of participants when activity is deleted through API
   * - added logic for allowing contact change in activity update code to update default participant
