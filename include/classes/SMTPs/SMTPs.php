@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.5 2005/04/13 15:23:59 jswalter Exp $
+// $Id: SMTPs.php,v 1.6 2005/04/25 04:55:06 jswalter Exp $
 
   /**
    * Class SMTPs
@@ -19,6 +19,7 @@
    *  - multi-part message
    *    - plain text
    *    - HTML
+   *    - inline attachements
    *    - attachements
    *  - GPG access
    *
@@ -36,7 +37,7 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.5 $
+   * @version $Revision: 1.6 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -50,7 +51,7 @@
     * @const SMTPs_VER
     *
     */
-    define('SMTPs_VER', '1.5', false);
+    define('SMTPs_VER', '1.10', false);
 
    /**
     * SMTPs Success value
@@ -209,7 +210,6 @@ class SMTPs
     */
     var $_msgRecipients = null;
 
-
    /**
     * Property private string var $_msgSubject
     *
@@ -302,7 +302,6 @@ class SMTPs
     */
     var $_aryPriority = array ('Bulk', 'Highest', 'High', 'Normal', 'Low', 'Lowest' );
 
-
    /**
     * Property private string var $_msgXheader
     *
@@ -333,7 +332,6 @@ class SMTPs
     *
     */
     var $_smtpsCharSet = 'iso-8859-1';
-
 
    /**
     * Property private string var $_smtpsTransEncode
@@ -366,18 +364,97 @@ class SMTPs
     */
     var $_smtpsBoundry = null;
 
+   /**
+    * Property private int var $_transportType
+    *
+    * @property private int Determines the method inwhich the message are to be sent.
+    * @name var $_transportType
+    *
+    * Determines the method inwhich the message are to be sent.
+    * - 'sockets' [0] - conect via network to SMTP server - default
+    * - 'pipe     [1] - use UNIX path to EXE
+    * - 'phpmail  [2] - use the PHP built-in mail function
+    *
+    * NOTE: Not yet implemented
+    *
+    * @access private
+    * @static
+    * @since 1.8
+    *
+    */
+    var $_transportType = 0;
+
+   /**
+    * Property private string var $_mailPath
+    *
+    * @property private string Path to the sendmail execuable
+    * @name var $_mailPath
+    *
+    * Path to the sendmail execuable
+    *
+    * @access private
+    * @static
+    * @since 1.8
+    *
+    */
+    var $_mailPath = '';
+
+   /**
+    * Property private int var $_smtpTimeout
+    *
+    * @property private int Sets the SMTP server timeout in seconds.
+    * @name var $_smtpTimeout
+    *
+    * Sets the SMTP server timeout in seconds.
+    *
+    * @access private
+    * @static
+    * @since 1.8
+    *
+    */
+    var $_smtpTimeout = 10;
+
+   /**
+    * Property private array var $_smtpsErrors
+    *
+    * @property private array Class error codes and messages
+    * @name var $_smtpsErrors
+    *
+    * Class error codes and messages
+    *
+    * @access private
+    * @static
+    * @since 1.0
+    *
+    */
+    var $_smtpsErrors = null;
+
+   /**
+    * Property private boolean var $_debug
+    *
+    * @property private boolean Place Class in" debug" mode
+    * @name var $_debug
+    *
+    * Place Class in" debug" mode
+    *
+    * @access private
+    * @static
+    * @since 1.8
+    *
+    */
+    var $_debug = false;
+
 
 
 // =============================================================
 // ** Class methods
 
-
    /**
-    * Method public void sendMsg( void )
+    * Method public void buildRCPTlist( void )
     *
     * Now send the message
     *
-    * @name sendMsg()
+    * @name buildRCPTlist()
     *
     * @final
     * @access public
@@ -394,7 +471,6 @@ class SMTPs
         $_aryToList = $this->getTO();
 
     }
-
 
    /**
     * Method public void sendMsg( void )
@@ -414,15 +490,37 @@ class SMTPs
     */
     function sendMsg ( )
     {
-        // Create Message Boundry
-        $this->_setBoundry();
+        // We have to make sure the HOST given is valid
+        // I do this here because '@fsockopen' will not give me this
+        // information if it failes to connect because it can't find the HOST
+        if ( (gethostbyname ( $this->getHost() )) == $this->getHost() )
+        {
+            $this->_setErr ( 99, $this->getHost() . ' is either offline or is an invalid host name' );
+            return false;
+        }
 
         //See if we can connect to the SMTP server
-        if( !$socket = fsockopen($this->getHost(), $this->getPort(), $errno, $errstr, 20) )
-            die('Could not connect to smtp host [' . $this->getHost() . '] : ' . $errno . ' : ' . $errstr );
+        $this->socket = @fsockopen($this->getHost(),      // Host to 'hit', IP or domain
+                                   $this->getPort(),      // which Port number to use
+                                   $this->errno,          // actual system level error
+                                   $this->errstr,         // and any text that goes with the error
+                                   $this->_smtpTimeout);  // timeout for reading/writing data over the socket
 
-        // Check responce from Server
-        $this->server_parse($socket, "220");
+        if( ! $this->socket )
+        {
+            $this->_setErr ( $this->errno, $this->errstr  );
+            return false;
+        }
+
+        // Fix from PHP SMTP class by Chris Ryan
+        // Sometimes the SMTP server takes a little longer to respond
+        // so we will give it a longer timeout for the first read
+        // Windows still does not have support for this timeout function
+        if( function_exists('socket_set_timeout') )
+            socket_set_timeout($this->socket, $this->_smtpTimeout, 0);
+
+        // Check response from Server
+        $this->server_parse($this->socket, "220");
 
         // If a User ID (with or without password) is given, assume Authentication is needed
         if( !empty($this->_smtpsID) && !empty($this->_smtpsPW) )
@@ -430,70 +528,54 @@ class SMTPs
             // Send the RFC2554 specified EHLO.
             // This improvment as provided by SirSir to
             // accomodate both SMTP AND ESMTP capable servers
-            fputs($socket, "EHLO " . $this->getHost() . "\r\n");
-            $this->server_parse($socket, "250");
+            $this->socket_send_str('EHLO ' . $this->getHost(), '250');
 
-            // Send Authenticationto Server
+            // Send Authentication to Server
             // Check for errors along the way
-            fputs($socket, "AUTH LOGIN\r\n");
-            $this->server_parse($socket, "334");
-
-            fputs($socket, base64_encode($this->_smtpsID) . "\r\n");
-            $this->server_parse($socket, "334");
-
-            fputs($socket, base64_encode($this->_smtpsPW) . "\r\n");
-            $this->server_parse($socket, "235");
+            $this->socket_send_str('AUTH LOGIN', '334');
+            $this->socket_send_str(base64_encode($this->_smtpsID), '334');
+            $this->socket_send_str(base64_encode($this->_smtpsPW), '235');
         }
 
         // This is a "normal" SMTP Server "handshack"
         else
         {
             // Send the RFC821 specified HELO.
-            fputs($socket, "HELO " . $this->getHost() . "\r\n");
-            $this->server_parse($socket, "250");
+            $this->socket_send_str('HELO ' . $this->getHost(), '250');
         }
 
         // From this point onward most server response codes should be 250
         // Specify who the mail is from....
         // This has to be the raw email address, strip the "name" off
-        fputs($socket, "MAIL FROM: " . $this->getFrom( 'addr' ) . "\r\n");
-        $this->server_parse($socket, "250");
+        $this->socket_send_str('MAIL FROM: ' . $this->getFrom( 'addr' ), '250');
 
         // 'RCPT TO:' must be given a single address, so this has to loop
         // through the list of addresses, regardless of TO, CC or BCC
         // and send it out "single file"
         foreach ( $this->get_RCPT_list() as $_address )
         {
-            fputs( $socket, 'RCPT TO: <' . $_address . ">\r\n" );
-
             // After each 'RCPT TO:' is sent, we need to make sure it was kosher,
             // if not, the whole message will fail
             // If any email address fails, we will need to RESET the connection,
             // mark the last address as "bad" and start the address loop over again.
             // If any address fails, the entire message fails.
-            $this->server_parse( $socket, "250" );
+            $this->socket_send_str('RCPT TO: <' . $_address . '>', '250');
         }
 
         // Ok now we tell the server we are ready to start sending data
-        fputs($socket, "DATA\r\n");
-
-        // Now any custom headers....
-        fputs($socket, $this->getHeader());
-
+        // with any custom headers...
         // This is the last response code we look for until the end of the message.
-        $this->server_parse($socket, "354");
+        $this->socket_send_str('DATA' . "\r\n" . $this->getHeader(), '354', '');
 
-        // Ok now we are ready for the message...
-        fputs($socket, $this->getBodyContent() );
-        fputs($socket, $msg);
-
+        // Now we are ready for the message...
         // Ok the all the ingredients are mixed in let's cook this puppy...
-        //fputs($socket, "\r\n.\r\n");
-        $this->server_parse($socket, "250");
+        $this->socket_send_str($this->getBodyContent() . "\r\n" . '.', '250');
 
         // Now tell the server we are done and close the socket...
-        fputs($socket, "QUIT\r\n");
-        fclose($socket);
+        fputs($this->socket, 'QUIT');
+        fclose($this->socket );
+
+        return true;
     }
 
 // =============================================================
@@ -504,12 +586,13 @@ class SMTPs
    /**
     * Method public void setConfig( mixed )
     *
-    * The method is used to populate select class properties from either
+    * setConfig() is used to populate select class properties from either
     * a user defined INI file or the systems 'php.ini' file
     *
-    * If a user defined INI is to be used, its complete path is passed
-    * a the method single parameter. The INI can define and class properties
-    * and user properties.
+    * If a user defined INI is to be used, the files complete path is passed
+    * as the method single parameter. The INI can define any class and/or
+    * user properties. Only properties defined within this file will be setter
+    * and/or orverwritten
     *
     * If the systems 'php.ini' file is to be used, the method is called without
     * parameters. In this case, only HOST, PORT and FROM properties will be set
@@ -541,20 +624,110 @@ class SMTPs
         if ( ! empty ($_strConfigPath) )
             include ( $_strConfigPath );
 
+        // Read the Systems php.ini file
         else
         {
-            $this->setHost ( ini_get ('SMTP') );
-            $this->setPort ( ini_get ('smtp_port') );
-            $this->setFrom ( ini_get ('sendmail_from') );
+            // Set these properties ONLY if they are set in the php.ini file.
+            // Otherwise the default values will be used.
+            if ( $_host = ini_get ('SMTP') )
+                $this->setHost ( $_host );
+
+            if ( $_port = ini_get ('smtp_port') )
+                $this->setPort ( $_port );
+
+            if ( $_from = ini_get ('sendmail_from') )
+                $this->setFrom ( $_from );
         }
     }
 
+   /**
+    * Method public void setTransportType( int )
+    *
+    * Determines the method inwhich the message are to be sent.
+    * - 'sockets' [0] - conect via network to SMTP server
+    * - 'pipe     [1] - use UNIX path to EXE
+    * - 'phpmail  [2] - use the PHP built-in mail function
+    *
+    * NOTE: Not yet implemented
+    *
+    * @name setTransportType()
+    *
+    * @uses Class property $_transportType
+    * @final
+    * @access public
+    *
+    * @since 1.8
+    *
+    * @param int $_strHost Host Name or IP of the Mail Server to use
+    * @return void
+    *
+    */
+    function setTransportType ( $_type )
+    {
+        // This feature is not yet implemented
+        return true;
+
+        if ( $_type )
+            $this->_transportType = $_type;
+    }
+
+   /**
+    * Method public int getTransportType( void )
+    *
+    * Return the method inwhich the message is to be sent.
+    * - 'sockets' [0] - conect via network to SMTP server
+    * - 'pipe     [1] - use UNIX path to EXE
+    * - 'phpmail  [2] - use the PHP built-in mail function
+    *
+    * NOTE: Not yet implemented
+    *
+    * @name getTransportType()
+    *
+    * @uses Class property $_transportType
+    * @final
+    * @access public
+    *
+    * @since 1.8
+    *
+    * @param void
+    * @return int $_strHost Host Name or IP of the Mail Server to use
+    *
+    */
+    function getTransportType ()
+    {
+        return $this->_transportType;
+    }
+
+   /**
+    * Method public void setMailPath( string )
+    *
+    * Path to the sendmail execuable
+    *
+    * @name setMailPath()
+    *
+    * @uses Class property $_mailPath
+    * @final
+    * @access public
+    *
+    * @since 1.8
+    *
+    * @param string $_path Path to the sendmail execuable
+    * @return void
+    *
+    */
+    function setMailPath ( $_path )
+    {
+        if ( $_path )
+            $this->_mailPath = $_path;
+    }
 
    /**
     * Method public void setHost( string )
     *
     * Defines the Host Name or IP of the Mail Server to use.
     * This is defaulted to 'localhost'
+    *
+    * This is  used only with 'socket' based mail transmission
     *
     * @name setHost()
     *
@@ -570,13 +743,16 @@ class SMTPs
     */
     function setHost ( $_strHost )
     {
-        $this->_smtpsHost = $_strHost;
+        if ( $_strHost )
+            $this->_smtpsHost = $_strHost;
     }
 
    /**
     * Method public string getHost( void )
     *
     * Retrieves the Host Name or IP of the Mail Server to use
+    *
+    * This is  used only with 'socket' based mail transmission
     *
     * @name getHost()
     *
@@ -601,6 +777,8 @@ class SMTPs
     * Defines the Port Number of the Mail Server to use
     * This is defaulted to '25'
     *
+    * This is  used only with 'socket' based mail transmission
+    *
     * @name setPort()
     *
     * @uses Class property $_smtpsPort
@@ -615,13 +793,16 @@ class SMTPs
     */
     function setPort ( $_strPort )
     {
-        $this->_smtpsPort = $_strPort;
+        if ( $_strPort )
+            $this->_smtpsPort = $_strPort;
     }
 
    /**
     * Method public string getPort( void )
     *
     * Retrieves the Port Number of the Mail Server to use
+    *
+    * This is  used only with 'socket' based mail transmission
     *
     * @name getPort()
     *
@@ -748,7 +929,8 @@ class SMTPs
     */
     function setCharSet ( $_strCharSet )
     {
-        $this->_smtpsCharSet = $_strPW;
+        if ( $_strPW )
+            $this->_smtpsCharSet = $_strPW;
     }
 
    /**
@@ -793,7 +975,8 @@ class SMTPs
     */
     function setTransEncode ( $_strTransEncode )
     {
-        $this->_smtpsTransEncode = $_strTransEncode;
+        if ( $_strTransEncode )
+            $this->_smtpsTransEncode = $_strTransEncode;
     }
 
    /**
@@ -840,7 +1023,8 @@ class SMTPs
     */
     function setFrom ( $_strFrom )
     {
-        $this->_msgFrom = $this->_strip_email ( $_strFrom );
+        if ( $_strFrom )
+            $this->_msgFrom = $this->_strip_email ( $_strFrom );
     }
 
    /**
@@ -958,14 +1142,14 @@ class SMTPs
     * This assumes a well formed address:
     * - "Real name" <username@domain.tld>
     * - "Real Name" is optional
-    * - if "Real Name" does not exist, the square brackets are optional
+    * - if "Real Name" does not exist, the angle brackets are optional
     *
     * This will split an email address into 4 or 5 parts.
     * - $_aryEmail[org]  = orignal string
     * - $_aryEmail[real] = "real name" - if there is one
     * - $_aryEmail[addr] = address part "username@domain.tld"
     * - $_aryEmail[host] = "domain.tld"
-    * - $_aryEmail[user] = userName
+    * - $_aryEmail[user] = "userName"
     *
     * @name _strip_email()
     *
@@ -1018,6 +1202,9 @@ class SMTPs
     *
     * Returns an array of bares addresses for use with 'RCPT TO:'
     *
+    * This is a "build as you go" method. Each time this method is called
+    * the underlaying array is destroyed and reconstructed.
+    *
     * @name get_RCPT_list()
     *
     * @uses Class property $_msgRecipients
@@ -1032,6 +1219,22 @@ class SMTPs
     */
     function get_RCPT_list()
     {
+    /**
+        * Variable local array $_RCPT_list
+        *
+        * An array of bares addresses for use with 'RCPT TO:'
+        *
+        * Reset this array each time this method is called.
+        *
+        * @var array $_RCPT_list 'RCPT TO:' address list
+        * @access private
+        * @static
+        * @final
+        *
+        * @since 1.8
+        */
+        unset ( $_RCPT_list );
+
         // walk down Recipients array and pull just email addresses
         foreach ( $this->_msgRecipients as $_host => $_list )
         {
@@ -1106,7 +1309,8 @@ class SMTPs
     */
     function setTO ( $_addrTo )
     {
-        $this->_buildAddrList( 'to', $_addrTo );
+        if ( $_addrTo )
+            $this->_buildAddrList( 'to', $_addrTo );
     }
 
    /**
@@ -1150,7 +1354,8 @@ class SMTPs
     */
     function setCC ( $_strCC )
     {
-        $this->_buildAddrList( 'cc', $_strCC );
+        if ( $_strCC )
+            $this->_buildAddrList( 'cc', $_strCC );
     }
 
    /**
@@ -1194,7 +1399,8 @@ class SMTPs
     */
     function setBCC ( $_strBCC )
     {
-        $this->_buildAddrList( 'bcc', $_strBCC );
+        if ( $_strBCC )
+            $this->_buildAddrList( 'bcc', $_strBCC );
     }
 
    /**
@@ -1238,7 +1444,8 @@ class SMTPs
     */
     function setSubject ( $_strSubject )
     {
-        $this->_msgSubject = $_strSubject;
+        if ( $_strSubject )
+            $this->_msgSubject = $_strSubject;
     }
 
    /**
@@ -1333,12 +1540,25 @@ class SMTPs
     * @return void
     *
     */
-    function setBodyContent ( $strContent, $strType = 'text/plain' )
+    function setBodyContent ( $strContent, $strType = 'plain' )
     {
-        // Make RFC821 Compliant, replace bare linefeeds
-        $strContent = preg_replace("/(?<!\r)\n/si", "\r\n", $strContent );
+        if ( $strContent )
+        {
+            if ( $strType == 'html' )
+                $strMimeType = 'text/html';
+            else
+                $strMimeType = 'text/plain';
 
-        $this->_msgContent[$strType] = $strContent;
+            // Make RFC821 Compliant, replace bare linefeeds
+            $strContent = preg_replace("/(?<!\r)\n/si", "\r\n", $strContent );
+
+            $strContent = rtrim(chunk_split($strContent, 76, "\r\n"));
+
+            $this->_msgContent[$strType] = array();
+
+            $this->_msgContent[$strType]['mimeType'] = $strMimeType;
+            $this->_msgContent[$strType]['data']     = $strContent;
+        }
     }
 
    /**
@@ -1376,12 +1596,15 @@ class SMTPs
         // If we have ONE, we can use the simple format
         else if( $keyCount === 1 )
         {
-            $content = 'Content-Type: ' . $_types[0] . '; charset="' . $this->getCharSet() . '"' . "\r\n"
+            $_msgData = $this->_msgContent;
+            $_msgData = $_msgData[$_types[0]];
+
+            $content = 'Content-Type: ' . $_msgData['mimeType'] . '; charset="' . $this->getCharSet() . '"' . "\r\n"
                      . 'Content-Transfer-Encoding: ' . $this->getTransEncode() . "\r\n"
-                     . 'Content-Disposition: inline' . "\r\n"
-                     . 'Content-Description: message' . "\r\n"
+                     . 'Content-Disposition: inline'  . "\r\n"
+                     . 'Content-Description: ' . $this->_msgContent[0] . ' message' . "\r\n"
                      . "\r\n"
-                     . $this->_msgContent[$_types[0]] . "\r\n";
+                     . $_msgData['data'] . "\r\n";
         }
 
         // If we have more than ONE, we use the multi-part format
@@ -1390,30 +1613,75 @@ class SMTPs
             // Since this is an actual multi-part message
             // We need to define a content message boundry
             $content = 'Content-Type: multipart/alternative;' . "\r\n"
-                     . '   boundary="' . $this->_getBoundry() . '"' . "\r\n"
+                     . '   boundary="' . $this->_getBoundry() . '"'   . "\r\n"
                      . "\r\n"
                      . 'This is a multi-part message in MIME format.' . "\r\n";
 
             // Loop through message content array
             foreach ($this->_msgContent as $type => $_content )
             {
-                $content .= "\r\n--" . $this->_getBoundry() . "\r\n"
-                         . 'Content-Type: ' . $type . '; charset="' . $this->getCharSet() . '"' . "\r\n"
-                         . 'Content-Transfer-Encoding: ' . $this->getTransEncode() . "\r\n"
-                         . 'Content-Disposition: inline' . "\r\n"
-                         . 'Content-Description: message' . "\r\n"
-                         . "\r\n"
-                         . $_content . "\r\n";
+                if ( $type == 'attachement' )
+                {
+                    $content .= "\r\n--" . $this->_getBoundry() . "\r\n"
+                             .  'Content-Disposition: attachment; filename="' . $_content['fileName'] . '"' . "\r\n"
+                             .  'Content-Type: ' . $_content['mimeType'] . '; name="' . $_content['fileName'] . '"' . "\r\n"
+                             .  'Content-Transfer-Encoding: base64' . "\r\n"
+                             . 'Content-Description: File Attachment' . "\r\n"
+                             . "\r\n"
+                             . $_content['data'] . "\r\n";
+                }
+                else
+                {
+                    $content .= "\r\n--" . $this->_getBoundry() . "\r\n"
+                             . 'Content-Type: ' . $_content['mimeType'] . '; '
+                             . 'charset="' . $this->getCharSet() . '"';
+                    $content .= ( $type == 'html') ? '; name="HTML Part"' : '';
+                    $content .=  "\r\n";
+                    $content .= 'Content-Transfer-Encoding: ';
+                    $content .= ( $type == 'html') ? 'quoted-printable' : $this->getTransEncode();
+                    $content .=  "\r\n"
+                             . 'Content-Disposition: inline'  . "\r\n"
+                             . 'Content-Description: ' . $type . ' message' . "\r\n"
+                             . "\r\n"
+                             . $_content['data'] . "\r\n";
+                }
             }
 
             // Close message boundries
-            $content .= "\r\n--" . $this->_getBoundry() . "\r\n";
+            $content .= "\r\n--" ;//. $this->_getBoundry() . "\r\n";
         }
 
-        // All email MUST end with a PERIOD on a line all by itself
-        $content .= "\n.\n";
-
         return $content;
+    }
+
+   /**
+    * Method public void setAttachement( string, string, string )
+    *
+    * Message Content
+    *
+    * @name setBodyContent()
+    *
+    * @uses Class property $_msgContent
+    * @final
+    * @access public
+    *
+    * @since 1.0
+    *
+    * @param string $strContent  File data to attach to message
+    * @param string $strFileName File Name to give to attachment
+    * @param string $strMimeType File Mime Type of attachment
+    * @return void
+    *
+    */
+    function setAttachement ( $strContent, $strFileName = '', $strMimeType = 'unknown' )
+    {
+        $strContent = rtrim(chunk_split(base64_encode($strContent), 76, "\r\n"));
+
+        $this->_msgContent['attachement'] = array();
+
+        $this->_msgContent['attachement']['mimeType'] = $strMimeType;
+        $this->_msgContent['attachement']['fileName'] = $strFileName;
+        $this->_msgContent['attachement']['data']     = $strContent;
     }
 
    /**
@@ -1552,7 +1820,8 @@ class SMTPs
     */
     function setXheader ( $strXdata )
     {
-        $this->_msgXheader[] = $strXdata;
+        if ( $strXdata )
+            $this->_msgXheader[] = $strXdata;
     }
 
    /**
@@ -1642,19 +1911,84 @@ function server_parse($socket, $response)
       }
    }
 
+//do_print_r ( $server_response );
+
    if( !( substr($server_response, 0, 3) == $response ) )
    {
       die("Ran into problems sending Mail. Response: $server_response");
    }
-
 }
 
+
+function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
+{
+//do_print_r ( $_strSend );
+
+    fputs($this->socket, $_strSend . $CRLF);
+
+    if ( $_returnCode )
+        $this->server_parse($this->socket, $_returnCode);
+}
 
 // =============================================================
 // ** Error handling methods
 
+   /**
+    * Method private void _setErr( int code, string message )
+    *
+    * Defines errors codes and messages for Class
+    *
+    * @name _setErr()
+    *
+    * @uses Class property $_smtpsErrors
+    * @final
+    * @access private
+    *
+    * @since 1.8
+    *
+    * @param  int    $_errNum  Error Code Number
+    * @param  string $_errMsg  Error Message
+    * @return void
+    *
+    */
+    function _setErr ( $_errNum, $_errMsg )
+    {
+        $this->_smtpsErrors[] = array( 'num' => $_errNum,
+                                       'msg' => $_errMsg );
+    }
 
+   /**
+    * Method private string getErrors ( void )
+    *
+    * Returns errors codes and messages for Class
+    *
+    * @name _setErr()
+    *
+    * @uses Class property $_smtpsErrors
+    * @final
+    * @access private
+    *
+    * @since 1.8
+    *
+    * @param  void
+    * @return string $_errMsg  Error Message
+    *
+    */
+    function getErrors()
+    {
+        $_errMsg = '';
 
+        if ( $this->_smtpsErrors )
+        {
+            foreach ( $this->_smtpsErrors as $_err => $_info )
+            {
+                $this->_smtpsErrors[] = array( 'num' => $_errNum,
+                                               'msg' => $_errMsg );
+            }
+        }
+
+        return $_errMsg;
+    }
 
 };
 
@@ -1664,23 +1998,44 @@ function server_parse($socket, $response)
 
  /**
   * $Log: SMTPs.php,v $
-  * Revision 1.5  2005/04/13 15:23:59  jswalter
-  *  - updated 'setConfig()' to handle external ini or 'php.ini'
+  * Revision 1.6  2005/04/25 04:55:06  jswalter
+  *  - cloned from Master Version
   *
-  * Revision 1.4  2005/03/21 05:38:56  jswalter
+  * Revision 1.10  2005/04/25 04:54:10  walter
+  *  - "fixed" 'getBodyContent()' to handle a "simple" text only message
+  *
+  * Revision 1.9  2005/04/25 03:52:01  walter
+  *  - replace closing curly bracket. Removed it in last revision!
+  *
+  * Revision 1.8  2005/04/25 02:29:49  walter
+  *  - added '$_transportType' and its getter/setter methods.
+  *    for future use. NOT yet implemented.
+  *  - in 'sendMsg()', added HOST validation check
+  *  - added error check for initial Socket Connection
+  *  - created new method 'socket_send_str()' to process socket
+  *    communication in a unified means. Socket calls within
+  *    'sendMsg()' have been modified to use this new method.
+  *  - expanded comments in 'setConfig()'
+  *  - added "error" check on PHP ini file properties. If these
+  *    properties not set within the INI file, the default values
+  *    will be used.
+  *  - modified 'get_RCPT_list()' to reset itself each time it is called
+  *  - modified 'setBodyContent()' to store data in a sub-array for better
+  *    parsing within the 'getBodyContent()' method
+  *  - modified 'getBodyContent()' to process contents array better.
+  *    Also modified to handle attachements.
+  *  - added 'setAttachement()' so files and other data can be attached
+  *    to messages
+  *  - added '_setErr()' and 'getErrors()' as an attempt to begin an error
+  *    handling process within this class
+  *
+  * Revision 1.7  2005/04/13 15:23:50  walter
   *  - made 'CC' a conditional insert
   *  - made 'BCC' a conditional insert
   *  - fixed 'Message-ID'
-  *
-  * Revision 1.3  2005/03/21 05:24:27  jswalter
   *  - corrected 'getSensitivity()'
-  *
-  * Revision 1.2  2005/03/21 05:10:45  jswalter
   *  - modified '$_aryPriority[]' to proper values
-  *
-  * Revision 1.1  2005/03/17 20:40:57  jswalter
-  *  - initial commit
-  *  - cloned from PHP-YACS site
+  *  - updated 'setConfig()' to handle external Ini or 'php.ini'
   *
   * Revision 1.6  2005/03/15 17:34:06  walter
   *  - corrected Message Sensitivity property and method comments
