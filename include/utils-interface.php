@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.55 2005/04/22 07:41:02 vanmer Exp $
+ * $Id: utils-interface.php,v 1.56 2005/04/26 17:53:31 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -216,8 +216,9 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     }
     //quick and dirty hack to include and force logo style after all other styles have been applied
     //should also check system parameters to see if logo should be displayed
-    echo css_link($cssroot.'logo.css', $curtheme, false);
-
+    if (get_system_parameter($xcon, 'Show Logo') == 'y') {
+        echo css_link($cssroot.'logo.css', $curtheme, false);
+    }
 ?>
 
 </head>
@@ -622,6 +623,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.56  2005/04/26 17:53:31  vanmer
+ * -check for system parameter for Show Logo before including logo.css
+ *
  * Revision 1.55  2005/04/22 07:41:02  vanmer
  * - by default include stylesheet for logo display on every page
  * @TODO check system parameters before including stylesheet
