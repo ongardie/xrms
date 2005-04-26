@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.69 2005/04/26 17:55:41 vanmer Exp $
+ * $Id: update.php,v 1.70 2005/04/26 18:33:55 gpowers Exp $
  */
 
 // where do we include from
@@ -235,7 +235,7 @@ $rst = $con->execute($sql);
 //end division_id update
 
 //add Extensions (ext) field to contacts table (for CTI plugin to work properly)
-$sql = "alter table contacts add work_phone_ext int null after work_phone";
+$sql = "alter table contacts add work_phone_ext not null default '' after work_phone";
 $rst = $con->execute($sql);
 //end work_phone_ext update
 
@@ -4824,6 +4824,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.70  2005/04/26 18:33:55  gpowers
+ * - changed contacts.work_phone_ext to NOT null default '' to match other columns in table
+ *
  * Revision 1.69  2005/04/26 17:55:41  vanmer
  * - added system parameter to control display of logo
  * - added better upgrade for field name change in activity participants
