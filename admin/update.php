@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.67 2005/04/23 17:48:42 vanmer Exp $
+ * $Id: update.php,v 1.68 2005/04/26 17:33:07 gpowers Exp $
  */
 
 // where do we include from
@@ -233,6 +233,12 @@ $rst = $con->execute($sql);
 $sql = "alter table contacts add division_id int not null after company_id";
 $rst = $con->execute($sql);
 //end division_id update
+
+//add Extensions (ext) field to contacts table (for CTI plugin to work properly)
+$sql = "alter table contacts add work_phone_ext int null after work_phone";
+$rst = $con->execute($sql);
+//end work_phone_ext update
+
 
 // Fix problem introduced by buggy Mar 19, 2004 install code
 // This will modify the initial data appropriately
@@ -4782,6 +4788,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.68  2005/04/26 17:33:07  gpowers
+ * - added contacts.work_phone_ext column
+ *
  * Revision 1.67  2005/04/23 17:48:42  vanmer
  * - changed activity_participant_record_status field to ap_record_status field to work around 30 character limit for adodb mssql driver
  *
