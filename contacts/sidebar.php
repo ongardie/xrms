@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.21 2005/04/26 17:28:04 gpowers Exp $
+ * $Id: sidebar.php,v 1.22 2005/04/26 18:11:35 gpowers Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -159,8 +159,13 @@ if ( $contact_id ) {
 
         if (trim($rst->fields['work_phone'])) {
             $contact_block .= _("Work Phone") . ": <strong>"
-                            . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone'])
-                            . ' x' . $rst->fields['work_phone_ext'] . "</strong><br>";
+                            . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
+                                $work_phone_ext = $rst->fields['work_phone_ext'];
+                                
+            if ($work_phone_ext) {
+                $contact_block .= '&nbsp;' . _("x") . $work_phone_ext;
+            }
+                $contact_block .= "</strong><br>";
         }
         else {
             $contact_block .= "<a href=\"javascript: updateVariable('"._("Enter Work Phone")."', 'work_phone', 'contact_id=" . $contact_id . "');\">"
@@ -204,6 +209,9 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.22  2005/04/26 18:11:35  gpowers
+ * - don't display "x" if no extension
+ *
  * Revision 1.21  2005/04/26 17:28:04  gpowers
  * - added Extension ("x") to contact work phone
  * - removed non-digits from phone numbers in edit-2's, new-2's
