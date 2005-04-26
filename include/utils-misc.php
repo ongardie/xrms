@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.123 2005/04/15 07:36:16 vanmer Exp $
+ * $Id: utils-misc.php,v 1.124 2005/04/26 23:15:10 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -1024,16 +1024,26 @@ function update_daylight_savings($con) {
 }
 
 /**
- * Get the current page
+ * Get the current page including any GET variables, relative to the http_site_root
  *
- * Gets the current page with extras
+ * This function can be called and used to set return_url, with $return_url=current_page(); where a page uses:
+ * Header("Location: $http_site_root.$return_url");
  *
+ * @param string $vars with string of variables to add to the URL (or replace if already exist in current URL), parseable by parse_str
+ * @param string $anchor providing the anchor to append to the current URL (overriding current anchor, if exists)
+ * @return string $page with current URL relative to http_site_root, including parameters and anchor
  * @author Neil Roberts
+ * @author Aaron van Meerten
  */
 function current_page($vars = false, $anchor = false) {
     global $http_site_root;
+    //start with blank page
     $page = '';
+    
+    //get array of subdirectories for base site URL
     $site_directories = explode('/', $http_site_root);
+    
+    //Get the REQUEST_URI or QUERY_STRING from the server (works differently for apache vs. IIS)
     if(!trim($_SERVER['REQUEST_URI'])) {
     	if (array_key_exists('argv',$_SERVER)) {
       		$request_uri = substr($_SERVER['argv'][0], strpos($_SERVER['argv'][0], ';') + 1);
@@ -1043,42 +1053,67 @@ function current_page($vars = false, $anchor = false) {
     } else {
     	$request_uri = $_SERVER['REQUEST_URI'];
     } 
+    
+    //Split up request into URL and CGI parameters
     $parts = explode('?', $request_uri, 2);
+    
+    //split directories for current URL
     $directories = explode('/', $parts[0]);
+    //loop on each directory in current URL
     foreach($directories as $directory) {
+        //if directory is not not in the base site root directory list, add it to the page 
+        //(so if base is /xrms then xrms/activities/one.php will split into xrms and activities, xrms will be ignored, activities will be added)
         if(!in_array($directory, $site_directories) and $directory) {
             $page .= '/' . $directory;
         }
     }
+    //check to see that we have any CGI parameters at all in the current URL
     if(count($parts) > 1) {
+        //make sure passed in CGI parameters get split into array
         parse_str($vars, $vars);
+        
+        //if there is no anchor specified, split CGI parameters into parameters and anchor
         if(!$anchor) {
             list($parts[1], $anchor) = split('#', $parts[1], 2);
         }
 
+        //split the CGI parameters (without anchor tag) into array called parts
         parse_str($parts[1], $parts);
+        
+        //Loop on passed in parameters, if they are already set in the current page then remove them from the current page array (will be overrided by passed in parameter)
         foreach($vars as $key => $value) {
             if(in_array($key, array_keys($parts))) {
                 unset($parts[$key]);
             }
         }
+        
+        //merge previous parameters (parts) with passed in parameters (vars)
         $parts = array_merge($parts, $vars);
 
+        //Add CGI parameter separator to page
         $page .= '?';
         $pagevars=array();
+        
+        //loop on  all CGI parameters, turn them into an array of key=value pairs
         foreach ($parts as $key => $value) {
             $pagevars[] = $key . '=' . $value;
         }
+        //append all key=value pairs into URL seperated by & seperator
         $page .= implode('&',$pagevars);
     }
     else {
+        //No existing CGI parameters exist for current page, if we have passed in parameters simply append them to the URL
         if($vars) {
             $page .= '?' . $vars;
         }
     }
+    
+    //If an anchor has been set, append it to the URL with the anchor separator
     if($anchor) {
         $page .= '#' . $anchor;
     }
+    
+    //return URL (relative to http_site_root)
     return $page;
 }
 
@@ -1512,6 +1547,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.124  2005/04/26 23:15:10  vanmer
+ * - added comments to the current_page function, to make it more readable
+ *
  * Revision 1.123  2005/04/15 07:36:16  vanmer
  * - added function for creating a where clause for a select statement using an associative array of
  * criteria
