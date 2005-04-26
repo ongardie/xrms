@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.35 2005/04/23 17:50:02 vanmer Exp $
+ * $Id: database.php,v 1.36 2005/04/26 18:11:00 gpowers Exp $
  */
 
 /**
@@ -605,6 +605,7 @@ function company_db_tables($con, $table_list) {
                email                           varchar(100) not null default '',
                email_status                    char(1) default 'a',
                work_phone                      varchar(50) not null default '',
+               work_phone_ext                  int not null default '',
                cell_phone                      varchar(50) not null default '',
                home_phone                      varchar(50) not null default '',
                fax                             varchar(50) not null default '',
@@ -1161,6 +1162,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.36  2005/04/26 18:11:00  gpowers
+ * - added contacts.work_phone_ext
+ *
  * Revision 1.35  2005/04/23 17:50:02  vanmer
  * - fixed database layout to reflect shorter fieldname for record status on activity participants
  *
