@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.68 2005/04/26 17:33:07 gpowers Exp $
+ * $Id: update.php,v 1.69 2005/04/26 17:55:41 vanmer Exp $
  */
 
 // where do we include from
@@ -626,6 +626,45 @@ if ($recCount == 0) {
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $con->execute($ins);
 }
+
+// Make sure that there is Allow Unassigned Activities and Display Item Technical Details Found in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='Show Logo'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Show Logo system parameters.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Show Logo';
+    $rec['string_val'] = 'n';
+    $rec['description'] = 'Controls custom logo display in the head of every page in XRMS.';
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the Show Logo in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id=".$con->qstr('Show Logo',get_magic_quotes_gpc());
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Show Logo system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Show Logo';
+    $rec['string_val'] = 'n';
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters_options';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    
+    $rec['string_val'] = 'y';
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
 
 // Make sure that there is options for the Display Item Technical Details in system_parameters_options
 $sql = "select count(*) as recCount from system_parameters_options where param_id='Display Item Technical Details'";
@@ -4700,7 +4739,7 @@ $con->execute($sql);
                     activity_id INT UNSIGNED NOT NULL ,
                     contact_id INT UNSIGNED NOT NULL ,
                     activity_participant_position_id INT UNSIGNED NOT NULL ,
-		    ap_record_status VARCHAR(1) DEFAULT 'a' NOT NULL,
+                    ap_record_status VARCHAR(1) DEFAULT 'a' NOT NULL,
                     PRIMARY KEY ( activity_participant_id ) ,
                     INDEX ( activity_id ),
                     INDEX ( contact_id ),
@@ -4712,20 +4751,17 @@ $con->execute($sql);
             db_error_handler ($con, $sql);
         }
     } else {
-	$sql = "SELECT * FROM activity_participants";
-	$rst = $con->SelectLimit($sql, 1);
-	if (!$rst) { db_error_handler($con, $sql); }
-	else { 
-	    if (!$rst->EOF) { 
-		    if (!array_key_exists('ap_record_status',$rst->fields)) {
-			$sql = "ALTER TABLE `activity_participants` CHANGE `activity_participant_record_status` `ap_record_status` CHAR( 1 ) DEFAULT 'a' NOT NULL";
-			$rst = $con->execute($sql);
-			if (!$rst) { db_error_handler($con, $sql); }
-		    }
-	    }
-	}    
+        $sql = "SELECT * FROM activity_participants";
+        $rst = $con->SelectLimit($sql, 1);
+        if (!$rst) { db_error_handler($con, $sql); }
+        else { 
+            if ($rst->EOF OR array_key_exists('activity_participant_record_status',$rst->fields)) {
+                $sql = "ALTER TABLE `activity_participants` CHANGE `activity_participant_record_status` `ap_record_status` CHAR( 1 ) DEFAULT 'a' NOT NULL";
+                $rst = $con->execute($sql);
+                if ($rst) $msg .= _("Successfully updated overly long activity participant record status field").'<BR><BR>';
+            }
+        }    
     }
-
     if (!in_array('activity_participant_positions',$table_list)) {
         $sql ="CREATE TABLE activity_participant_positions (
                     activity_participant_position_id INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -4788,6 +4824,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.69  2005/04/26 17:55:41  vanmer
+ * - added system parameter to control display of logo
+ * - added better upgrade for field name change in activity participants
+ *
  * Revision 1.68  2005/04/26 17:33:07  gpowers
  * - added contacts.work_phone_ext column
  *
