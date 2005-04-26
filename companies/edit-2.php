@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.15 2005/03/18 20:53:29 gpowers Exp $
+ * $Id: edit-2.php,v 1.16 2005/04/26 17:28:04 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -26,8 +26,8 @@ $company_source_id = $_POST['company_source_id'];
 $industry_id = $_POST['industry_id'];
 $rating_id = $_POST['rating_id'];
 $user_id = $_POST['user_id'];
-$phone = $_POST['phone'];
-$phone2 = $_POST['phone2'];
+$phone = preg_replace("/[^\d]/", '', $_POST['phone']);
+$phone2 = preg_replace("/[^\d]/", '',$_POST['phone2']);
 $fax = $_POST['fax'];
 $url = $_POST['url'];
 $employees = $_POST['employees'];
@@ -84,6 +84,11 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.16  2005/04/26 17:28:04  gpowers
+ * - added Extension ("x") to contact work phone
+ * - removed non-digits from phone numbers in edit-2's, new-2's
+ * - updated work phone display to include Extension
+ *
  * Revision 1.15  2005/03/18 20:53:29  gpowers
  * - added hooks for inline info plugin
  *

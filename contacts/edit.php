@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.26 2005/04/07 13:57:05 maulani Exp $
+ * $Id: edit.php,v 1.27 2005/04/26 17:28:03 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -60,6 +60,7 @@ if ($rst) {
     $salutation = $rst->fields['salutation'];
     $email = $rst->fields['email'];
     $work_phone = $rst->fields['work_phone'];
+    $work_phone_ext = $rst->fields['work_phone_ext'];
     $cell_phone = $rst->fields['cell_phone'];
     $home_phone = $rst->fields['home_phone'];
     $profile = $rst->fields['profile'];
@@ -182,7 +183,9 @@ confGoTo_includes();
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
-                <td class=widget_content_form_element><input type=text name=work_phone value='<?php echo $work_phone; ?>' size=30></td>
+                <td class=widget_content_form_element><input type=text name=work_phone value='<?php echo $work_phone; ?>' size=30>&nbsp;
+                <?php echo _("x"); ?>&nbsp;<input type=text name=work_phone_ext size=5 value='<?php if ($work_phone_ext) {echo $work_phone_ext; } ?>'></td>
+           </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Cell Phone"); ?></td>
@@ -270,6 +273,11 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.27  2005/04/26 17:28:03  gpowers
+ * - added Extension ("x") to contact work phone
+ * - removed non-digits from phone numbers in edit-2's, new-2's
+ * - updated work phone display to include Extension
+ *
  * Revision 1.26  2005/04/07 13:57:05  maulani
  * - Add salutation table to allow installation configurable list.  Also add
  *   many more default entries.

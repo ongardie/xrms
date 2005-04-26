@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.21 2005/01/13 18:20:28 vanmer Exp $
+ * $Id: new-2.php,v 1.22 2005/04/26 17:28:04 gpowers Exp $
  */
 require_once('../include-locations.inc');
 
@@ -26,8 +26,8 @@ $crm_status_id = $_POST['crm_status_id'];
 $user_id = $_POST['user_id'];
 $company_source_id = $_POST['company_source_id'];
 $industry_id = $_POST['industry_id'];
-$phone = $_POST['phone'];
-$phone2 = $_POST['phone2'];
+$phone = preg_replace("/[^\d]/", '', $_POST['phone']);
+$phone2 = preg_replace("/[^\d]/", '', $_POST['phone2']);
 $fax = $_POST['fax'];
 $url = $_POST['url'];
 $employees = $_POST['employees'];
@@ -219,6 +219,11 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.22  2005/04/26 17:28:04  gpowers
+ * - added Extension ("x") to contact work phone
+ * - removed non-digits from phone numbers in edit-2's, new-2's
+ * - updated work phone display to include Extension
+ *
  * Revision 1.21  2005/01/13 18:20:28  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

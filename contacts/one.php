@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries 
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.80 2005/04/23 17:47:47 vanmer Exp $
+ * $Id: one.php,v 1.81 2005/04/26 17:28:04 gpowers Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -80,6 +80,10 @@ if ($rst) {
 
     $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
+    $work_phone_ext = $rst->fields['work_phone_ext'];
+    if ($work_phone_ext) {
+            $work_phone_ext_display = '&nbsp;' . _("x") . $work_phone_ext;
+    }
     $cell_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']);
     $home_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['home_phone']);
     $fax = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['fax']);
@@ -340,7 +344,7 @@ function markComplete() {
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Work Phone"); ?></td>
-                                    <td class=clear><?php  echo $work_phone; ?></td>
+                                    <td class=clear><?php  echo $work_phone . $work_phone_ext_display; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Home Phone"); ?></td>
@@ -598,6 +602,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.81  2005/04/26 17:28:04  gpowers
+ * - added Extension ("x") to contact work phone
+ * - removed non-digits from phone numbers in edit-2's, new-2's
+ * - updated work phone display to include Extension
+ *
  * Revision 1.80  2005/04/23 17:47:47  vanmer
  * - Added activities to list for contacts who are listed in the activity_participants table
  * - Changed activity sql to use left outer joins for all secondary tables

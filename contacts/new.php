@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.21 2005/04/07 13:57:05 maulani Exp $
+ * $Id: new.php,v 1.22 2005/04/26 17:28:04 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -174,7 +174,8 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
-                <td class=widget_content_form_element><input type=text name=work_phone size=30 value="<?php  echo $phone; ?>"></td>
+                <td class=widget_content_form_element><input type=text name=work_phone size=30 value="<?php  echo $phone; ?>">&nbsp;
+                <?php echo _("x"); ?>&nbsp;<input type=text name=work_phone_ext size=5 value=""></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Cell Phone"); ?></td>
@@ -261,6 +262,11 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.22  2005/04/26 17:28:04  gpowers
+ * - added Extension ("x") to contact work phone
+ * - removed non-digits from phone numbers in edit-2's, new-2's
+ * - updated work phone display to include Extension
+ *
  * Revision 1.21  2005/04/07 13:57:05  maulani
  * - Add salutation table to allow installation configurable list.  Also add
  *   many more default entries.

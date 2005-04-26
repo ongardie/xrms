@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.15 2005/03/18 21:10:33 gpowers Exp $
+ * $Id: edit-2.php,v 1.16 2005/04/26 17:28:03 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -31,6 +31,7 @@ $gender = $_POST['gender'];
 $salutation = $_POST['salutation'];
 $email = $_POST['email'];
 $work_phone = $_POST['work_phone'];
+$work_phone_ext = $_POST['work_phone_ext'];
 $cell_phone = $_POST['cell_phone'];
 $home_phone = $_POST['home_phone'];
 $fax = $_POST['fax'];
@@ -64,7 +65,8 @@ $rec['summary'] = $summary;
 $rec['title'] = $title;
 $rec['description'] = $description;
 $rec['email'] = $email;
-$rec['work_phone'] = $work_phone;
+$rec['work_phone'] = preg_replace("/[^\d]/", '', $work_phone);
+$rec['work_phone_ext'] = preg_replace("/[^\d]/", '', $work_phone_ext);
 $rec['cell_phone'] = $cell_phone;
 $rec['home_phone'] = $home_phone;
 $rec['fax'] = $fax;
@@ -99,6 +101,11 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.16  2005/04/26 17:28:03  gpowers
+ * - added Extension ("x") to contact work phone
+ * - removed non-digits from phone numbers in edit-2's, new-2's
+ * - updated work phone display to include Extension
+ *
  * Revision 1.15  2005/03/18 21:10:33  gpowers
  * - removed (commented) debug code
  *

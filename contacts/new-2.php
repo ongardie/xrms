@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.17 2005/03/29 18:23:54 maulani Exp $
+ * $Id: new-2.php,v 1.18 2005/04/26 17:28:03 gpowers Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -31,6 +31,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
 		   'email' => array ( 'email' , arr_vars_SESSION ),
 		   'email2' => array ( 'email2' , arr_vars_SESSION ),
 		   'work_phone' => array ( 'work_phone' , arr_vars_SESSION ),
+		   'work_phone_ext' => array ( 'work_phone_ext' , arr_vars_SESSION ),
 		   'cell_phone' => array ( 'cell_phone' , arr_vars_SESSION ),
 		   'home_phone' => array ( 'home_phone' , arr_vars_SESSION ),
 		   'fax' => array ( 'fax' , arr_vars_SESSION ),
@@ -70,7 +71,8 @@ $rec['summary'] = $summary;
 $rec['title'] = $title;
 $rec['description'] = $description;
 $rec['email'] = $email;
-$rec['work_phone'] = $work_phone;
+$rec['work_phone'] = preg_replace("/[^\d]/", '', $work_phone);
+$rec['work_phone_ext'] = preg_replace("/[^\d]/", '', $work_phone_ext);
 $rec['cell_phone'] = $cell_phone;
 $rec['home_phone'] = $home_phone;
 $rec['fax'] = $fax;
@@ -109,6 +111,11 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.18  2005/04/26 17:28:03  gpowers
+ * - added Extension ("x") to contact work phone
+ * - removed non-digits from phone numbers in edit-2's, new-2's
+ * - updated work phone display to include Extension
+ *
  * Revision 1.17  2005/03/29 18:23:54  maulani
  * - Add audit log entry for contact creation
  *

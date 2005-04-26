@@ -9,7 +9,7 @@
  * @author Brad Marshall
  * - moved to seperate include file and extended by Brian Perterson
  *
- * $Id: sidebar.php,v 1.20 2005/04/22 22:14:36 ycreddy Exp $
+ * $Id: sidebar.php,v 1.21 2005/04/26 17:28:04 gpowers Exp $
  */
 
 $new_cell_phone         = isset($_GET['cell_phone']) ? $_GET['cell_phone'] : false;
@@ -102,7 +102,7 @@ $contact_block .= '<table class=widget cellspacing=1 width="100%">
     </tr>'."\n";
 
 if ( $contact_id ) {
-    $sql = "SELECT ct.first_names, ct.last_name, ct.work_phone, ct.address_id, ct.email, ct.cell_phone, ct.home_phone, ct.company_id
+    $sql = "SELECT ct.first_names, ct.last_name, ct.work_phone, ct.work_phone_ext, ct.address_id, ct.email, ct.cell_phone, ct.home_phone, ct.company_id
             FROM contacts ct
             WHERE ct.contact_id=$contact_id";
 
@@ -160,7 +160,7 @@ if ( $contact_id ) {
         if (trim($rst->fields['work_phone'])) {
             $contact_block .= _("Work Phone") . ": <strong>"
                             . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone'])
-                            . "</strong><br>";
+                            . ' x' . $rst->fields['work_phone_ext'] . "</strong><br>";
         }
         else {
             $contact_block .= "<a href=\"javascript: updateVariable('"._("Enter Work Phone")."', 'work_phone', 'contact_id=" . $contact_id . "');\">"
@@ -204,6 +204,11 @@ $contact_block .= "\n</table>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.21  2005/04/26 17:28:04  gpowers
+ * - added Extension ("x") to contact work phone
+ * - removed non-digits from phone numbers in edit-2's, new-2's
+ * - updated work phone display to include Extension
+ *
  * Revision 1.20  2005/04/22 22:14:36  ycreddy
  * Added trim to work, cell and fax fields
  *
