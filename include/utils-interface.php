@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.56 2005/04/26 17:53:31 vanmer Exp $
+ * $Id: utils-interface.php,v 1.57 2005/04/27 01:08:15 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -596,6 +596,69 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
 	
 	return $user_menu;
 }
+/**
+ * Creates an HTML form element based on parameters, and returns it as a string
+ *
+ *
+ * @param string $element_type specifying type of element, currently supported: checkbox, select, radio, textarea and text (default)
+ * @param string $element_name specifying the name of the html element
+ * @param string $element_value optionally providing a value to set for the element
+ * @param string $element_extra_attributes optionally providing extra parameters to the html element, added to end of element tag
+ * @param integer $element_length optionally providing a length for attributes that can use it (text and textarea)
+ * @param integer $element_height optionally providing a height for the attribute (only textarea)
+ * @param array $possible_values providing values to populate, required for select and radio, should be in format so that array key is value of the element, and array value is the text to display
+ * @param boolean $show_blank_first optionally specifying if a blank row should be added to element (select only)
+ *
+ * @return string $html with html element defined by parameters 
+ */
+function create_form_element($element_type, $element_name, $element_value=false, $element_extra_attributes='', $element_length=false, $element_height=false, $possible_values=false, $show_blank_first=false) { 
+if (!$element_type) return false;
+if (!$element_name) return false;
+
+switch ($element_type) {
+  case "checkbox":
+    if ($element_value) { $show_value=$element_value; }
+    else { $show_value=1; }
+    $html .= "<input type=checkbox value=\"$show_value\" name=\"$element_name\"";
+    if ($element_value) $html .= " CHECKED";
+    $html .= " $element_extra_attributes>";
+    break;
+
+  case "select":
+    $html=create_select_from_array($possible_values, $element_name, $element_value, $element_extra_attributes, $show_blank_first);
+    break;
+
+  case "radio":
+    $contenders = $possible_values;
+    foreach ($contenders as $pkey=>$possible_value) {
+      $html .= "<label><input type=radio name=".$element_name;
+      $html .= " VALUE=\"$pkey\"";
+      if ($pkey == $element_value) {
+        $html .= " CHECKED";
+      }
+      $html .= " $element_extra_attributes>".$possible_value."</label>&nbsp;";
+    }
+    break;
+
+    $html .= "(radio) ".$element_value;
+    break;
+
+  case "textarea":
+    if (!$element_length) $element_length=80;
+    if (!$element_heigh) $element_height=8;
+    $html .= "<textarea rows=$element_height cols=$element_length name='$element_name' $element_extra_attributes>";
+    $html .= "$element_value</textarea>";
+    break;
+
+  case "text":
+  default:
+    if (!$element_length) $element_length=40;
+    $html .= "<input type=text size=$element_length name='$element_name'";
+    $html .= " value='$element_value' $element_extra_attributes>";
+    break;
+  }
+  return $html;
+}
 
 /**
  *
@@ -623,6 +686,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.57  2005/04/27 01:08:15  vanmer
+ * - added function for rendering an html form element based on parameters
+ *
  * Revision 1.56  2005/04/26 17:53:31  vanmer
  * -check for system parameter for Show Logo before including logo.css
  *
