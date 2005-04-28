@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.124 2005/04/26 23:15:10 vanmer Exp $
+ * $Id: utils-misc.php,v 1.125 2005/04/28 19:01:17 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 if ( !defined('IN_XRMS') )
@@ -536,14 +536,14 @@ function get_system_parameter(&$con, $param) {
             $my_val=$datetime_val;
         } else {
             echo _('Failure to get system parameter ') . $param . _('.  The data entry appears to be corrupted.');
-            exit;
+            return false;
         }
 
       } else {
         // no - it was not found
 
         echo _('Failure to get system parameter ') . $param . _('.  Make sure you have run the administration update.');
-        exit;
+        return false;
 
       } // if ( $sysst->RecordCount() > 0 ) ...
 
@@ -553,7 +553,7 @@ function get_system_parameter(&$con, $param) {
     } else {
         //there was a problem, notify the user
         db_error_handler ($con, $sql);
-        exit;
+        return false;
     }
 
     return $my_val;
@@ -1547,6 +1547,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.125  2005/04/28 19:01:17  vanmer
+ * - cause system parameters function to not exit entirely, but simply output an error and return false
+ *
  * Revision 1.124  2005/04/26 23:15:10  vanmer
  * - added comments to the current_page function, to make it more readable
  *
