@@ -1,0 +1,4489 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0.0\n"
+"POT-Creation-Date: 2005-04-12 21:37-0330\n"
+"PO-Revision-Date: 2005-04-15 08:44+0330\n"
+"Last-Translator: Alan Baghumian <alan@lugir.org>\n"
+"Language-Team: Persian language team <alan@lugir.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: relationships/new-relationship-2.php:172
+msgid " by that ID"
+msgstr "با شماره ID"
+
+#: relationships/new-relationship-2.php:154
+msgid " by that name"
+msgstr "با نام"
+
+#: activities/some.php:176
+#: activities/some.php:179
+msgid "%"
+msgstr "%"
+
+#: email/email-4.php:77
+msgid "'Messages Sent"
+msgstr "'پیام ارسال شد"
+
+#: activities/one.php:350
+msgid "(%)"
+msgstr "(%)"
+
+#: admin/case-statuses/one.php:154
+#: admin/opportunity-statuses/one.php:177
+msgid "(defaults to days)"
+msgstr "(پیش‌گزیده به روز)"
+
+#: include/utils-misc.php:531
+msgid ".  Make sure you have run the administration update."
+msgstr ". اطمینان حاصل نمایید که شما بروز رسانی مدیریتی را انجام داده باشید."
+
+#: include/utils-misc.php:524
+msgid ".  The data entry appears to be corrupted."
+msgstr ". ورودی داده‌ها به نظر خراب شده می‌آید."
+
+#: relationships/sidebar.php:336
+msgid "/"
+msgstr "/"
+
+#: contacts/one.php:383
+msgid "AOL IM"
+msgstr "AOL IM"
+
+#: contacts/edit.php:198
+#: contacts/new.php:193
+msgid "AOL Name"
+msgstr "نام AOL"
+
+#: companies/one.php:611
+#: contacts/one.php:487
+#: plugins/info/one.php:368
+#: private/home.php:452
+msgid "About"
+msgstr "درباره"
+
+#: activities/one.php:310
+msgid "About This Activity"
+msgstr "درباره این فعالیت"
+
+#: admin/import/import-companies.php:118
+#: cases/one.php:264
+#: companies/one.php:428
+#: contacts/one.php:404
+#: opportunities/one.php:357
+msgid "Account Owner"
+msgstr "صاحب حساب"
+
+#: admin/import/import-companies.php:138
+#: cases/one.php:272
+#: companies/admin.php:74
+#: companies/one.php:475
+#: companies/some-advanced.php:139
+#: companies/some.php:74
+#: contacts/one.php:412
+#: opportunities/one.php:365
+msgid "Account Status"
+msgstr "وضعیت حساب"
+
+#: admin/account-statuses/one.php:40
+msgid "Account Status Details"
+msgstr "جزئیات وضعیت حساب"
+
+#: admin/index.php:183
+#: admin/account-statuses/some.php:47
+msgid "Account Statuses"
+msgstr "وضعیت‌های حساب"
+
+#: activities/associate-activities.php:33
+msgid "Action"
+msgstr "کنش"
+
+#: cases/one.php:299
+#: companies/one.php:604
+#: contacts/one.php:481
+#: include/utils-interface.php:211
+#: opportunities/one.php:403
+#: plugins/info/one.php:361
+#: reports/completed-items.php:96
+#: reports/open-items.php:78
+#: reports/overdue-items.php:92
+msgid "Activities"
+msgstr "فعالیت‌ها"
+
+#: locale/datastrings.php:12
+msgid "Activities Default Behavior"
+msgstr "وضعیت پیش‌گزیده فعالیت‌ها"
+
+#: activities/one.php:343
+#: private/home.php:448
+#: reports/activitytimes.php:78
+#: reports/completed-items.php:203
+#: reports/open-items.php:189
+#: reports/overdue-items.php:204
+msgid "Activity"
+msgstr "فعالیت"
+
+#: include/utils-interface.php:64
+msgid "Activity Added."
+msgstr "فعالیت اضافه شد."
+
+#: include/utils-interface.php:66
+msgid "Activity Deleted."
+msgstr "فعالیت پاک شد."
+
+#: activities/one.php:263
+msgid "Activity Details"
+msgstr "جزئیات فعالیت"
+
+#: activities/one.php:375
+msgid "Activity Notes"
+msgstr "یادداشت‌های فعالیت‌ها"
+
+#: reports/index.php:133
+msgid "Activity Report for"
+msgstr "گزارش فعالیت برای"
+
+#: reports/user-activity.php:68
+#: reports/user-activity.php:80
+#: reports/user-activity.php:83
+msgid "Activity Summary"
+msgstr "خلاصه فعالیت"
+
+#: admin/activity-templates/edit.php:47
+msgid "Activity Template Details"
+msgstr "جزئیات الگوی فعالیت"
+
+#: admin/index.php:136
+#: admin/activity-templates/some.php:59
+msgid "Activity Templates"
+msgstr "الگوهای فعالیت"
+
+#: reports/index.php:105
+msgid "Activity Time Sheets"
+msgstr "جداول زمانی فعالیت‌ها"
+
+#: admin/activity-types/one.php:42
+msgid "Activity Type Details"
+msgstr "جزئیات نوع فعالیت"
+
+#: admin/index.php:158
+#: admin/activity-types/some.php:54
+msgid "Activity Types"
+msgstr "نوع فعالیت‌ها"
+
+#: admin/account-statuses/some.php:82
+#: admin/activity-types/some.php:94
+#: admin/campaign-statuses/some.php:92
+#: admin/campaign-types/some.php:80
+#: admin/case-priorities/some.php:86
+#: admin/case-statuses/one.php:163
+#: admin/case-statuses/some.php:104
+#: admin/case-types/some.php:80
+#: admin/categories/some.php:81
+#: admin/company-sources/some.php:88
+#: admin/company-types/some.php:79
+#: admin/crm-statuses/some.php:85
+#: admin/industries/some.php:79
+#: admin/opportunity-statuses/one.php:186
+#: admin/opportunity-statuses/some.php:141
+#: admin/ratings/some.php:83
+#: admin/relationship-types/some.php:99
+#: admin/roles/some.php:82
+#: admin/users/some.php:118
+#: cases/one.php:313
+#: companies/addresses.php:171
+#: companies/divisions.php:78
+#: companies/one.php:623
+#: contacts/one.php:498
+#: opportunities/one.php:417
+msgid "Add"
+msgstr "اضافه کردن"
+
+#: include/strings.php:17
+#: include/strings.php:22
+msgid "Add Company"
+msgstr "اضافه کردن شرکت"
+
+#: contacts/new.php:233
+#: include/strings.php:16
+#: include/strings.php:21
+msgid "Add Contact"
+msgstr "اضافه کردن تماس"
+
+#: companies/former-names.php:93
+msgid "Add Former Name"
+msgstr "اضافه کردن نام سابق"
+
+#: admin/account-statuses/some.php:63
+msgid "Add New Account Status"
+msgstr "اضافه کردن وضعیت جدید حساب"
+
+#: admin/activity-types/some.php:71
+msgid "Add New Activity Type"
+msgstr "اضافه کردن نوع فعالیت جدید"
+
+#: admin/crm-statuses/some.php:66
+msgid "Add New CRM Status"
+msgstr "اضافه کردن وضعیت CRM جدید"
+
+#: campaigns/some.php:271
+msgid "Add New Campaign"
+msgstr "اضافه کردن رشته عملیات"
+
+#: admin/campaign-statuses/some.php:63
+msgid "Add New Campaign Status"
+msgstr "اضافه کردن وضعیت رشته عملیات جدید"
+
+#: admin/campaign-types/some.php:61
+msgid "Add New Campaign Type"
+msgstr "اضافه کردن نوع رشته عملیات جدید"
+
+#: admin/case-statuses/some.php:85
+msgid "Add New Case Status"
+msgstr "اضافه کردن وضعیت جدید برای مورد"
+
+#: admin/case-types/some.php:61
+msgid "Add New Case Type"
+msgstr "اضافه کردن نوع جدید مورد"
+
+#: admin/categories/some.php:62
+msgid "Add New Category"
+msgstr "اضافه کردن طبقه بندی جدید"
+
+#: admin/company-sources/some.php:65
+msgid "Add New Company Source"
+msgstr "اضافه کردن منبع شرکت جدید"
+
+#: admin/company-types/some.php:60
+msgid "Add New Company Type"
+msgstr "اضافه کردن نوع شرکت جدید"
+
+#: admin/industries/some.php:60
+msgid "Add New Industry"
+msgstr "اضافه کردن صنعت جدید"
+
+#: admin/opportunity-statuses/some.php:108
+msgid "Add New Opportunity Status"
+msgstr "اضافه کردن وضعیت جدید فرصت"
+
+#: admin/case-priorities/some.php:63
+msgid "Add New Priority Type"
+msgstr "اضافه کردن نوع اولویت جدید"
+
+#: admin/ratings/some.php:64
+msgid "Add New Rating"
+msgstr "اضافه کردن امتیاز بندی جدید"
+
+#: admin/relationship-types/some.php:68
+#: admin/roles/some.php:63
+msgid "Add New Role"
+msgstr "اضافه کردن نقش جدید"
+
+#: admin/users/some.php:79
+msgid "Add New User"
+msgstr "اضافه کردن کاربر جدید"
+
+#: companies/relationships.php:126
+#: relationships/sidebar.php:345
+msgid "Add Relationship"
+msgstr "اضافه کردن ارتباط"
+
+#: relationships/new-relationship-2.php:101
+#: relationships/new-relationship.php:79
+msgid "Add Relationship for "
+msgstr "اضافه کردن ارتباط برای "
+
+#: activities/some.php:593
+msgid "Add to Everyone"
+msgstr "اضافه کردن به همه"
+
+#: include/utils-interface.php:73
+msgid "Added"
+msgstr "اضافه شد"
+
+#: admin/update.php:305
+msgid "Added an Activities Default Behavior system parameter."
+msgstr "یک پارامتر وضعیت پیش‌گزیده سیستم فعالیت‌ها، اضافه شد."
+
+#: admin/update.php:288
+msgid "Added an Audit Level."
+msgstr "یک سطح رسیدگی  اضافه شد."
+
+#: companies/advanced-search.php:234
+#: companies/new.php:198
+#: companies/one.php:452
+#: contacts/edit.php:136
+#: contacts/new.php:131
+#: contacts/one.php:420
+#: reports/companies-list.php:166
+msgid "Address"
+msgstr "آدرس"
+
+#: include/utils-interface.php:51
+msgid "Address Added."
+msgstr "آدرس اضافه شد."
+
+#: companies/edit-address.php:101
+#: contacts/edit-address.php:218
+msgid "Address Body"
+msgstr "متن آدرس"
+
+#: include/utils-interface.php:53
+msgid "Address Deleted."
+msgstr "آدرس پاک شد."
+
+#: admin/country-address-format/index.php:45
+msgid "Address Format"
+msgstr "فرمت آدرس"
+
+#: companies/addresses.php:111
+#: companies/addresses.php:139
+#: companies/advanced-search.php:237
+#: companies/edit-address.php:73
+#: companies/new.php:201
+#: contacts/edit-address.php:190
+msgid "Address Name"
+msgstr "نام آدرس"
+
+#: admin/country-address-format/index.php:45
+msgid "Address Types"
+msgstr "انواع آدرس"
+
+#: companies/addresses.php:95
+#: companies/addresses.php:108
+#: companies/one.php:552
+msgid "Addresses"
+msgstr "آدرسها"
+
+#: companies/admin.php:58
+#: companies/one.php:548
+msgid "Admin"
+msgstr "مدیر"
+
+#: admin/index.php:37
+#: include/utils-interface.php:224
+msgid "Administration"
+msgstr "مدیریت"
+
+#: activities/some.php:608
+#: companies/some.php:318
+msgid "Advanced Search"
+msgstr "جستجوی پیشرفته"
+
+#: locale/datastrings.php:13
+msgid "Advertisement"
+msgstr "تبلیغات"
+
+#: locale/datastrings.php:14
+msgid "Advertisements"
+msgstr "تبلیغات"
+
+#: locale/datastrings.php:15
+msgid "Advertising"
+msgstr "تبلیغ کنید"
+
+#: activities/some.php:538
+msgid "After"
+msgstr "پس از"
+
+#: activities/some.php:549
+#: reports/completed-items.php:89
+#: reports/open-items.php:71
+#: reports/overdue-items.php:85
+msgid "All"
+msgstr "تمام"
+
+#: activities/some.php:534
+#: reports/audit-items.php:56
+msgid "All Dates"
+msgstr "تمام تاریخ‌ها"
+
+#: reports/completed-items.php:144
+#: reports/open-items.php:113
+#: reports/overdue-items.php:128
+msgid "All Users"
+msgstr "تمام کاربران"
+
+#: admin/users/some.php:114
+msgid "Allow Access"
+msgstr "اجازه دسترسی داده شود"
+
+#: companies/advanced-search.php:182
+#: companies/edit.php:133
+#: companies/new.php:143
+#: companies/one.php:436
+msgid "Alt. Phone"
+msgstr "تلفن جایگزین"
+
+#: locale/datastrings.php:16
+msgid "Approved"
+msgstr "مجاز است"
+
+#: locale/datastrings.php:17
+msgid "Architecture"
+msgstr "ساختار"
+
+#: activities/associate-activities.php:29
+msgid "Associate Activities"
+msgstr "فعالیت‌های وابسته"
+
+#: activities/associate-activities.php:148
+msgid "Associated"
+msgstr "وابسته"
+
+#: include/strings.php:27
+msgid "Associated Companies"
+msgstr "شرکت‌های وابسطه"
+
+#: include/strings.php:26
+msgid "Associated Contacts"
+msgstr "تماس‌های وابسته"
+
+#: admin/categories/one.php:142
+#: campaigns/categories.php:99
+#: cases/categories.php:99
+#: companies/categories.php:103
+#: contacts/categories.php:105
+#: opportunities/categories.php:99
+msgid "Associated With"
+msgstr "وابسته به"
+
+#: files/new.php:52
+msgid "Attach File"
+msgstr "ضمیمه کردن فایل"
+
+#: notes/new.php:41
+msgid "Attach Note"
+msgstr "یادداشت برای فایل ضمیمه"
+
+#: activities/one.php:332
+msgid "Attached"
+msgstr "ضمیمه شد"
+
+#: files/new.php:74
+#: notes/sidebar.php:24
+msgid "Attached To"
+msgstr "ضمیمه شده به"
+
+#: reports/index.php:123
+msgid "Audit Items"
+msgstr "آیتم‌های رسیدگی"
+
+#: locale/datastrings.php:18
+msgid "Audit Level"
+msgstr "سطح رسیدگی"
+
+#: reports/audit-items.php:27
+msgid "Audit Log"
+msgstr "ثبت رسیدگی"
+
+#: plugins/radtest/radtest.php:48
+msgid "Back"
+msgstr "بازگشت"
+
+#: companies/relationships.php:127
+msgid "Back to"
+msgstr "بازگشت به"
+
+#: email/email-2.php:83
+#: email/one-template.php:82
+msgid "Bcc"
+msgstr "کپی مخفی"
+
+#: activities/some.php:537
+msgid "Before"
+msgstr "پیش از"
+
+#: contacts/edit-address.php:95
+msgid "Billing Address"
+msgstr "آدرس ارسال صورتحساب"
+
+#: companies/addresses.php:115
+msgid "Billing Default"
+msgstr "پیش‌گزیده صورتحساب"
+
+#: activities/some.php:601
+msgid "Browse"
+msgstr "مرور"
+
+#: locale/datastrings.php:19
+msgid "Bug"
+msgstr "اشکال"
+
+#: locale/datastrings.php:20
+msgid "Bugs"
+msgstr "اشکالات"
+
+#: activities/some.php:605
+#: campaigns/some.php:246
+#: cases/some.php:263
+#: companies/some.php:315
+#: email/email.php:106
+#: email/index.php:56
+#: files/some.php:329
+#: opportunities/some.php:243
+msgid "Bulk E-Mail"
+msgstr "نامه الکترونیکی انبوه"
+
+#: reports/completed-items.php:194
+msgid "COMPLETED ACTIVITIES for"
+msgstr "فعالیت‌های به اتمام رسیده برای"
+
+#: reports/completed-items.php:245
+msgid "COMPLETED CAMPAIGNS for"
+msgstr "رشته عملیات به اتمام رسیده برای"
+
+#: reports/completed-items.php:336
+msgid "COMPLETED CASES for"
+msgstr "موارد به اتمام رسیده برای"
+
+#: reports/completed-items.php:287
+msgid "COMPLETED OPPORTUNITIES for"
+msgstr "فرصت‌های به اتمام رسیده برای"
+
+#: admin/import/import-companies.php:122
+#: cases/one.php:268
+#: companies/advanced-search.php:162
+#: companies/edit.php:113
+#: companies/new.php:123
+#: companies/one.php:424
+#: companies/some-advanced.php:138
+#: companies/some.php:73
+#: contacts/one.php:408
+#: opportunities/one.php:361
+#: reports/companies-list.php:101
+msgid "CRM Status"
+msgstr "وضعیت CRM"
+
+#: admin/crm-statuses/one.php:38
+msgid "CRM Status Details"
+msgstr "جزئیات وضعیت CRM"
+
+#: admin/index.php:178
+msgid "CRM Statuses"
+msgstr "وضعیت CRM"
+
+#: plugins/webcalendar/setup.php:22
+msgid "Calendar"
+msgstr "تقویم"
+
+#: campaigns/some.php:65
+#: campaigns/some.php:281
+#: files/some.php:90
+#: opportunities/edit.php:162
+#: opportunities/new.php:88
+#: opportunities/one.php:293
+#: private/home.php:300
+#: reports/completed-items.php:252
+#: reports/open-items.php:236
+#: reports/overdue-items.php:253
+msgid "Campaign"
+msgstr "رشته عملیات"
+
+#: include/utils-interface.php:56
+msgid "Campaign Added."
+msgstr "رشته عملیات اضافه شد."
+
+#: include/utils-interface.php:58
+msgid "Campaign Deleted."
+msgstr "رشته عملیات پاک شد."
+
+#: campaigns/edit.php:78
+#: campaigns/new.php:66
+#: campaigns/one.php:77
+#: campaigns/one.php:87
+msgid "Campaign Details"
+msgstr "جزئیات رشته عملیات"
+
+#: campaigns/some.php:214
+msgid "Campaign Name"
+msgstr "نام رشته عملیات"
+
+#: admin/campaign-statuses/one.php:41
+msgid "Campaign Status Details"
+msgstr "جزئیات وضعیت رشته عملیات"
+
+#: admin/index.php:223
+#: admin/campaign-statuses/some.php:47
+msgid "Campaign Statuses"
+msgstr "وضعیت رشته عملیات"
+
+#: campaigns/edit.php:81
+#: campaigns/new.php:69
+msgid "Campaign Title"
+msgstr "عنوان رشته عملیات"
+
+#: admin/campaign-types/one.php:38
+msgid "Campaign Type Details"
+msgstr "جزئیات نوع رشته عملیات"
+
+#: admin/index.php:218
+msgid "Campaign Types"
+msgstr "انواع رشته عملیات"
+
+#: activities/some.php:514
+#: campaigns/some.php:193
+#: files/some.php:309
+#: include/utils-interface.php:214
+#: reports/completed-items.php:103
+#: reports/open-items.php:85
+#: reports/overdue-items.php:99
+msgid "Campaigns"
+msgstr "رشته عملیات"
+
+#: cases/some.php:63
+#: cases/some.php:287
+#: files/some.php:102
+#: reports/index.php:78
+#: reports/open-items.php:330
+#: reports/overdue-items.php:347
+msgid "Case"
+msgstr "مورد"
+
+#: cases/one.php:186
+msgid "Case #"
+msgstr "مورد شماره"
+
+#: include/utils-interface.php:68
+msgid "Case Added."
+msgstr "مورد اضافه شد."
+
+#: include/utils-interface.php:70
+msgid "Case Deleted."
+msgstr "مورد پاک شد."
+
+#: cases/edit.php:177
+#: cases/new.php:100
+#: cases/one.php:196
+msgid "Case Details"
+msgstr "جزئیات مورد"
+
+#: cases/some.php:241
+msgid "Case Name"
+msgstr "نام مورد"
+
+#: cases/some.php:242
+msgid "Case Number"
+msgstr "شماره مورد"
+
+#: admin/index.php:213
+#: admin/case-priorities/some.php:47
+msgid "Case Priorities"
+msgstr "اولویت مورد"
+
+#: admin/case-priorities/one.php:41
+msgid "Case Priority Details"
+msgstr "جزئیات اولویت مورد"
+
+#: admin/case-statuses/one.php:106
+msgid "Case Status Details"
+msgstr "جزئیات وضعیت مورد"
+
+#: admin/index.php:208
+#: admin/case-statuses/some.php:68
+msgid "Case Statuses"
+msgstr "وضعیت مورد"
+
+#: cases/edit.php:180
+#: cases/new.php:103
+msgid "Case Title"
+msgstr "عنوان مورد"
+
+#: admin/case-types/one.php:40
+msgid "Case Type Details"
+msgstr "جزئیات نوع مورد"
+
+#: admin/index.php:203
+#: admin/case-types/some.php:45
+msgid "Case Types"
+msgstr "انواع مورد"
+
+#: cases/some.php:220
+#: files/some.php:311
+#: include/utils-interface.php:216
+#: reports/completed-items.php:117
+#: reports/open-items.php:99
+#: reports/overdue-items.php:113
+msgid "Cases"
+msgstr "موارد"
+
+#: reports/cases-by-case-status.php:59
+#: reports/cases-by-case-status.php:71
+#: reports/cases-by-case-status.php:74
+#: reports/index.php:81
+msgid "Cases by Status"
+msgstr "موارد با وضعیت"
+
+#: admin/index.php:153
+#: admin/categories/some.php:46
+#: include/categories-sidebar.php:18
+#: plugins/info/one.php:396
+#: reports/companies-list.php:171
+msgid "Categories"
+msgstr "طبقه‌بندی‌ها"
+
+#: admin/import/import-companies.php:130
+#: campaigns/some.php:228
+#: cases/some.php:252
+#: companies/some.php:277
+#: contacts/some.php:278
+#: opportunities/some.php:234
+#: reports/companies-list.php:100
+msgid "Category"
+msgstr "طبقه‌بندی"
+
+#: admin/categories/one.php:79
+msgid "Category Details"
+msgstr "جزئیات طبقه‌بندی"
+
+#: admin/categories/one.php:139
+msgid "Category Scopes"
+msgstr "وسعت طبقه‌بندی"
+
+#: contacts/edit.php:186
+#: contacts/new.php:181
+#: contacts/one.php:356
+#: contacts/sidebar.php:171
+msgid "Cell Phone"
+msgstr "تلفن همراه"
+
+#: admin/country-address-format/edit.php:63
+msgid "Change"
+msgstr "تغییر"
+
+#: files/one.php:83
+msgid "Change Date"
+msgstr "تغییر تاریخ"
+
+#: files/one.php:90
+msgid "Change File"
+msgstr "تغییر فایل"
+
+#: reports/opportunities-quantity-by-opportunity-status.php:107
+#: reports/opportunities-size-by-opportunity-status.php:118
+msgid "Change Graph"
+msgstr "تغییر نمودار"
+
+#: admin/users/change-password.php:30
+#: admin/users/change-password.php:42
+#: admin/users/one.php:117
+#: admin/users/self.php:92
+msgid "Change Password"
+msgstr "تغییر کلمه عبور"
+
+#: include/utils-interface.php:81
+msgid "Changes saved."
+msgstr "تغییرات ذخیره شد"
+
+#: include/utils-interface.php:81
+msgid "Change Record Owner"
+msgstr "تغییر مالک رکورد"
+
+#: locale/datastrings.php:21
+msgid "Chemicals"
+msgstr "شیمیایی"
+
+#: companies/addresses.php:151
+#: companies/advanced-search.php:249
+#: companies/edit-address.php:85
+#: companies/new.php:213
+#: companies/some.php:122
+#: companies/some.php:132
+#: companies/some.php:283
+#: contacts/edit-address.php:202
+#: reports/companies-list.php:102
+#: reports/companies-list.php:168
+#: reports/company-contacts-printout.php:126
+#: reports/company-contacts-printout.php:136
+msgid "City"
+msgstr "شهر"
+
+#: activities/some.php:602
+#: campaigns/some.php:245
+#: cases/some.php:263
+#: companies/advanced-search.php:271
+#: companies/some.php:312
+#: contacts/some.php:301
+#: files/some.php:328
+#: opportunities/some.php:243
+msgid "Clear Search"
+msgstr "جستجوی واضح"
+
+#: admin/account-statuses/one.php:88
+#: admin/activity-templates/edit.php:104
+#: admin/activity-types/one.php:90
+#: admin/campaign-statuses/one.php:95
+#: admin/campaign-types/one.php:82
+#: admin/case-priorities/one.php:89
+#: admin/case-statuses/one.php:193
+#: admin/case-types/one.php:84
+#: admin/categories/one.php:123
+#: admin/company-sources/one.php:91
+#: admin/company-types/one.php:81
+#: admin/crm-statuses/one.php:82
+#: admin/industries/one.php:81
+#: admin/opportunity-statuses/one.php:216
+#: admin/ratings/one.php:81
+#: admin/relationship-types/one.php:99
+#: admin/roles/one.php:84
+#: admin/users/one.php:131
+msgid "Click the button below to permanently remove this item."
+msgstr "برای پاک شدن دائمی این آیتم، روی کلید زیر کلیک کنید."
+
+#: companies/admin.php:115
+msgid "Click the button below to remove this company (and all associated contacts, activities, opportunities, cases, etc.) from the system."
+msgstr "برای پاک شدن این شرکت و تمامی اطلاعات زیر مجموعه مربوط به آن مانند تماس‌ها، فعالیت‌ها، فرصت‌ها و غیره، بر روی کلید زیر کلیک کنید."
+
+#: companies/one.php:549
+msgid "Clone"
+msgstr "کپی"
+
+#: opportunities/edit.php:197
+#: opportunities/new.php:123
+#: opportunities/some.php:76
+#: opportunities/some.php:269
+msgid "Close Date"
+msgstr "تاریخ اتمام"
+
+#: admin/campaign-statuses/one.php:76
+#: admin/campaign-statuses/some.php:87
+#: locale/datastrings.php:22
+msgid "Closed"
+msgstr "تمام شده"
+
+#: admin/opportunity-statuses/one.php:154
+#: admin/opportunity-statuses/some.php:136
+#: locale/datastrings.php:23
+msgid "Closed/Lost"
+msgstr "تمام شده/گم شده"
+
+#: admin/opportunity-statuses/one.php:153
+#: admin/opportunity-statuses/some.php:135
+#: locale/datastrings.php:24
+msgid "Closed/Won"
+msgstr "تمام شده/موفقیت آمیز"
+
+#: opportunities/one.php:313
+msgid "Closes"
+msgstr "تمام شده"
+
+#: companies/one.php:416
+#: contacts/some.php:74
+#: contacts/some.php:276
+#: reports/companies-list.php:164
+msgid "Code"
+msgstr "کد"
+
+#: locale/datastrings.php:25
+msgid "Communications"
+msgstr "ارتباطات"
+
+#: companies/advanced-search.php:130
+#: files/some.php:308
+#: include/strings.php:31
+#: include/utils-interface.php:212
+msgid "Companies"
+msgstr "شرکت‌ها"
+
+#: reports/companies-list.php:65
+msgid "Companies List"
+msgstr "لیست شرکت‌ها"
+
+#: reports/companies-by-crm-status.php:58
+#: reports/companies-by-crm-status.php:70
+#: reports/companies-by-crm-status.php:73
+#: reports/index.php:45
+msgid "Companies by CRM Status"
+msgstr "شرکت‌ها با وضعیت CRM"
+
+#: reports/companies-by-industry.php:57
+#: reports/companies-by-industry.php:69
+#: reports/companies-by-industry.php:72
+#: reports/index.php:49
+msgid "Companies by Industry"
+msgstr "شرکت‌ها با صنعت"
+
+#: reports/companies-by-company-source.php:59
+#: reports/companies-by-company-source.php:71
+#: reports/companies-by-company-source.php:74
+#: reports/index.php:53
+msgid "Companies by Source"
+msgstr "شرکت‌ها با منبع"
+
+#: activities/associate-activities.php:33
+#: activities/one.php:313
+#: activities/some.php:173
+#: activities/some.php:489
+#: cases/edit.php:184
+#: cases/one.php:260
+#: cases/some.php:64
+#: cases/some.php:243
+#: cases/some.php:288
+#: companies/addresses.php:135
+#: companies/divisions.php:66
+#: companies/edit-address.php:69
+#: companies/edit-division.php:54
+#: companies/former-names.php:81
+#: companies/relationships.php:115
+#: contacts/edit.php:128
+#: contacts/one.php:396
+#: contacts/some.php:69
+#: contacts/some.php:258
+#: contacts/some.php:335
+#: email/email-3.php:85
+#: files/some.php:73
+#: files/some.php:80
+#: files/some.php:85
+#: files/some.php:97
+#: files/some.php:104
+#: opportunities/edit.php:154
+#: opportunities/one.php:353
+#: opportunities/some.php:226
+#: opportunities/some.php:267
+#: private/home.php:247
+#: private/home.php:281
+#: private/home.php:288
+#: private/home.php:295
+#: private/home.php:307
+#: private/home.php:314
+#: private/home.php:450
+#: reports/activitytimes.php:76
+#: reports/company-contacts-printout.php:94
+#: reports/company-contacts-printout.php:289
+#: reports/completed-items.php:201
+#: reports/completed-items.php:293
+#: reports/index.php:42
+#: reports/open-items.php:187
+#: reports/open-items.php:328
+#: reports/overdue-items.php:202
+#: reports/overdue-items.php:297
+#: reports/overdue-items.php:345
+msgid "Company"
+msgstr "شرکت"
+
+#: include/utils-interface.php:43
+msgid "Company Added."
+msgstr "شرکت اضافه شد."
+
+#: reports/company-contacts-printout.php:215
+msgid "Company Category"
+msgstr "طبقه‌بندی شرکت"
+
+#: reports/company-contacts-printout.php:216
+msgid "Company City"
+msgstr "شهر شرکت"
+
+#: companies/advanced-search.php:158
+#: companies/edit.php:109
+#: companies/new.php:119
+#: companies/some-advanced.php:135
+#: companies/some.php:70
+msgid "Company Code"
+msgstr "کد شرکت"
+
+#: include/utils-interface.php:45
+msgid "Company Deleted."
+msgstr "شرکت پاک شد."
+
+#: companies/one.php:370
+#: companies/one.php:397
+msgid "Company Details"
+msgstr "جزئیات شرکت"
+
+#: activities/some.php:503
+msgid "Company ID"
+msgstr "شماره شناسایی شرکت"
+
+#: companies/advanced-search.php:147
+#: companies/new.php:108
+msgid "Company Information"
+msgstr "اطلاعات شرکت"
+
+#: reports/index.php:94
+msgid "Company List"
+msgstr "لیست شرکت"
+
+#: companies/advanced-search.php:150
+#: companies/edit.php:101
+#: companies/new.php:111
+#: companies/one.php:407
+#: companies/some-advanced.php:134
+#: companies/some-advanced.php:412
+#: companies/some.php:69
+#: companies/some.php:271
+#: companies/some.php:357
+#: reports/companies-list.php:98
+#: reports/companies-list.php:165
+#: reports/company-contacts-printout.php:213
+#: reports/company-contacts-printout.php:246
+msgid "Company Name"
+msgstr "نام شرکت"
+
+#: companies/some-advanced.php:399
+#: companies/some.php:344
+msgid "Company Options"
+msgstr "گزینه‌های شرکت"
+
+#: reports/index.php:91
+msgid "Company Reports"
+msgstr "گزارشات شرکت"
+
+#: admin/import/import-companies.php:126
+#: companies/advanced-search.php:166
+#: companies/edit.php:121
+#: companies/new.php:127
+#: companies/one.php:499
+msgid "Company Source"
+msgstr "منبع شرکت"
+
+#: admin/company-sources/one.php:43
+msgid "Company Source Details"
+msgstr "جزئیات منبع شرکت"
+
+#: admin/index.php:173
+#: admin/company-sources/some.php:49
+msgid "Company Sources"
+msgstr "منابع شرکت"
+
+#: reports/company-contacts-printout.php:217
+msgid "Company State"
+msgstr "وضعیت شرکت"
+
+#: admin/company-types/one.php:37
+msgid "Company Type Details"
+msgstr "جزئیات نوع شرکت"
+
+#: admin/index.php:168
+#: admin/company-types/some.php:44
+msgid "Company Types"
+msgstr "انواع شرکت"
+
+#: reports/company-contacts-printout.php:214
+msgid "Company User"
+msgstr "کاربر شرکت"
+
+#: locale/datastrings.php:26
+msgid "Competitor"
+msgstr "رقیب"
+
+#: locale/datastrings.php:27
+msgid "Competitors"
+msgstr "رقباء"
+
+#: activities/some.php:524
+#: activities/some.php:551
+msgid "Completed"
+msgstr "تکمیل شده"
+
+#: reports/completed-items.php:48
+#: reports/index.php:119
+msgid "Completed Items"
+msgstr "آیتم‌های تکمیل شده"
+
+#: activities/one.php:421
+msgid "Completed?"
+msgstr "تمام شده است؟"
+
+#: locale/datastrings.php:28
+msgid "Computers"
+msgstr "کامپیوترها"
+
+#: admin/plugin/plugin-admin.php:292
+msgid "Config file can't be opened. Please check vars.php."
+msgstr "امکان باز کردن فایل پیکربندی وجود ندارد. لطفا vars.php را بررسی نمایید."
+
+#: admin/plugin/plugin-admin.php:286
+msgid "Config written successfully."
+msgstr "پیکربندی با موفقیت ذخیره شد."
+
+#: admin/users/change-password.php:49
+msgid "Confirm New Password"
+msgstr "کلمه عبور جدید را تایید نمایید"
+
+#: email/email-3.php:70
+#: email/email-3.php:81
+msgid "Confirm Recipients"
+msgstr "دریافت کننده‌ها را تایید کنید"
+
+#: reports/audit-items.php:58
+msgid "Connection Details"
+msgstr "جزئیات تماس"
+
+#: locale/datastrings.php:29
+msgid "Construction"
+msgstr "ساخت"
+
+#: locale/datastrings.php:30
+msgid "Consulting"
+msgstr "مشاوره"
+
+#: activities/one.php:319
+#: activities/some.php:167
+#: activities/some.php:488
+#: admin/users/one.php:85
+#: cases/edit.php:188
+#: cases/new.php:107
+#: cases/one.php:244
+#: cases/one.php:305
+#: companies/one.php:562
+#: companies/one.php:610
+#: contacts/edit-address.php:186
+#: contacts/some.php:334
+#: email/email-3.php:87
+#: files/some.php:71
+#: files/some.php:78
+#: opportunities/edit.php:158
+#: opportunities/new.php:84
+#: opportunities/one.php:335
+#: opportunities/one.php:409
+#: plugins/info/one.php:367
+#: private/home.php:451
+#: reports/activitytimes.php:77
+#: reports/completed-items.php:202
+#: reports/completed-items.php:294
+#: reports/open-items.php:188
+#: reports/open-items.php:329
+#: reports/overdue-items.php:203
+#: reports/overdue-items.php:298
+#: reports/overdue-items.php:346
+msgid "Contact"
+msgstr "تماس"
+
+#: include/utils-interface.php:47
+msgid "Contact Added."
+msgstr "تماس اضافه شد."
+
+#: reports/company-contacts-printout.php:182
+msgid "Contact Call List"
+msgstr "لیست تلفن تماس"
+
+#: include/utils-interface.php:49
+msgid "Contact Deleted."
+msgstr "تماس پاک شد."
+
+#: contacts/one.php:279
+#: contacts/one.php:306
+msgid "Contact Details"
+msgstr "Détails du contact"
+
+#: activities/some.php:502
+msgid "Contact ID"
+msgstr " شماره شناسایی تماس"
+
+#: companies/new.php:239
+#: contacts/edit.php:125
+#: contacts/new.php:124
+#: contacts/sidebar.php:101
+msgid "Contact Information"
+msgstr "اطلاعات تماس"
+
+#: companies/one.php:562
+#: companies/some-advanced.php:141
+#: companies/some-advanced.php:300
+#: contacts/some.php:230
+#: files/some.php:306
+#: include/strings.php:30
+#: include/utils-interface.php:213
+#: reports/company-contacts-printout.php:247
+msgid "Contacts"
+msgstr "تماس‌ها"
+
+#: reports/index.php:98
+msgid "Contacts at Companies"
+msgstr "تماس‌ها در شرکت‌ها"
+
+#: reports/company-contacts-printout.php:243
+msgid "Contacts for Companies"
+msgstr "تماس‌ها برای شرکت‌ها"
+
+#: files/some.php:307
+msgid "Contacts of Companies"
+msgstr "تماس‌های شرکت‌ها"
+
+#: email/email-2.php:96
+#: email/email-3.php:92
+#: email/email.php:125
+#: email/index.php:75
+msgid "Continue"
+msgstr "ادامه"
+
+#: campaigns/edit.php:111
+#: campaigns/new.php:99
+#: campaigns/one.php:109
+msgid "Cost"
+msgstr "هزینه"
+
+#: admin/country-address-format/edit.php:43
+#: admin/country-address-format/index.php:43
+#: companies/addresses.php:163
+#: companies/advanced-search.php:261
+#: companies/edit-address.php:97
+#: companies/new.php:225
+#: contacts/edit-address.php:214
+#: reports/companies-list.php:104
+#: reports/companies-list.php:169
+msgid "Country"
+msgstr "کشور"
+
+#: admin/index.php:131
+#: admin/country-address-format/index.php:32
+msgid "Country Localization Formats"
+msgstr "فرمت‌های محلی کشور"
+
+#: contacts/some.php:312
+msgid "Create Contact for 'Self'"
+msgstr "ایجاد تماس برای «شخص»'"
+
+#: contacts/edit-address.php:170
+msgid "Create New Address?"
+msgstr "آدرس جدیدی ایجاد شود؟"
+
+#: contacts/edit-address.php:177
+msgid "Create a New Address?"
+msgstr "آدرس جدیدی ایجاد شود؟"
+
+#: campaigns/one.php:125
+#: cases/one.php:230
+#: companies/one.php:460
+#: contacts/one.php:448
+#: opportunities/one.php:321
+msgid "Created"
+msgstr "ایجاد شد"
+
+#: companies/admin.php:82
+#: companies/one.php:483
+msgid "Credit Limit"
+msgstr "محدوده اعتبار"
+
+#: locale/datastrings.php:31
+msgid "Critical"
+msgstr "بحرانی"
+
+#: activities/some.php:349
+msgid "Current User"
+msgstr "کاربر جاری"
+
+#: reports/index.php:139
+msgid "Custom Reports"
+msgstr "گزارشات سفارشی"
+
+#: locale/datastrings.php:32
+msgid "Customer"
+msgstr "مشتری"
+
+#: companies/admin.php:94
+msgid "Customer Key"
+msgstr "کد مشتری"
+
+#: locale/datastrings.php:33
+msgid "Customers"
+msgstr "مشتریان"
+
+#: email/email-4.php:98
+msgid "DO NOT RELOAD THIS PAGE! If you do, your message will be sent again."
+msgstr "این صفحه را Refresh نکنید. در غیر اینصورت پیام شما مجددا ارسال خواهد شد!"
+
+#: admin/index.php:56
+msgid "Data Cleanup"
+msgstr "پاک کردن داده‌ها"
+
+#: admin/data_clean.php:344
+msgid "Database Cleanup Complete"
+msgstr "پاکسازی بانک اطلاعاتی به اتمام رسید"
+
+#: admin/index.php:53
+msgid "Database Structure Update"
+msgstr "بروز رسانی ساختار بانک اطلاعاتی"
+
+#: companies/relationships.php:116
+#: files/new.php:86
+#: files/sidebar.php:24
+#: files/some.php:112
+#: files/some.php:317
+#: files/some.php:360
+#: notes/sidebar.php:27
+#: private/home.php:248
+msgid "Date"
+msgstr "تاریخ"
+
+#: contacts/edit.php:162
+#: contacts/new.php:157
+#: contacts/one.php:336
+msgid "Date of Birth"
+msgstr "تاریخ تولد"
+
+#: locale/datastrings.php:34
+msgid "Default GST Offset"
+msgstr "اختلاف زمانی پیش‌گزیده"
+
+#: admin/activity-templates/edit.php:79
+msgid "Default Text"
+msgstr "متن پیش‌گزیده"
+
+#: activities/one.php:434
+#: activities/some.php:438
+#: admin/account-statuses/one.php:94
+#: admin/activity-templates/edit.php:109
+#: admin/activity-types/one.php:94
+#: admin/campaign-statuses/one.php:97
+#: admin/campaign-types/one.php:84
+#: admin/case-priorities/one.php:91
+#: admin/case-statuses/one.php:195
+#: admin/case-types/one.php:86
+#: admin/categories/one.php:125
+#: admin/company-sources/one.php:93
+#: admin/company-types/one.php:83
+#: admin/country-address-format/edit.php:58
+#: admin/crm-statuses/one.php:84
+#: admin/industries/one.php:83
+#: admin/opportunity-statuses/one.php:218
+#: admin/ratings/one.php:83
+#: admin/relationship-types/one.php:102
+#: admin/roles/one.php:86
+#: admin/users/one.php:133
+#: campaigns/edit.php:122
+#: cases/edit.php:225
+#: contacts/edit.php:240
+#: files/one.php:94
+#: notes/edit.php:41
+#: opportunities/edit.php:214
+#: plugins/info/one.php:344
+msgid "Delete"
+msgstr "پاک کردن"
+
+#: admin/account-statuses/one.php:83
+msgid "Delete Account Status"
+msgstr "پاک کردن وضعیت حساب"
+
+#: admin/account-statuses/one.php:80
+msgid "Delete Account Status?"
+msgstr "وضعیت حساب پاک شود؟"
+
+#: admin/activity-templates/edit.php:100
+msgid "Delete Activity Template"
+msgstr "پاک کردن الگوی فعالیت"
+
+#: admin/activity-templates/edit.php:94
+msgid "Delete Activity Template?"
+msgstr "الگوی فعالیت پاک شود؟"
+
+#: admin/activity-types/one.php:86
+msgid "Delete Activity Type"
+msgstr "پاک کردن نوع فعالیت"
+
+#: admin/activity-types/one.php:82
+msgid "Delete Activity Type?"
+msgstr "نوع فعالیت پاک شود؟"
+
+#: activities/one.php:433
+msgid "Delete Activity?"
+msgstr "فعالیت پاک شود؟"
+
+#: companies/edit-address.php:110
+#: contacts/edit-address.php:226
+msgid "Delete Address"
+msgstr "پاک کردن آدرس"
+
+#: companies/edit-address.php:109
+#: contacts/edit-address.php:225
+msgid "Delete Address?"
+msgstr "آدرس پاک شود؟"
+
+#: admin/crm-statuses/one.php:78
+msgid "Delete CRM Status"
+msgstr "پاک کردن وضعیت CRM"
+
+#: admin/crm-statuses/one.php:74
+msgid "Delete CRM Status?"
+msgstr "وضعیت CRM پاک شود؟"
+
+#: admin/campaign-statuses/one.php:91
+msgid "Delete Campaign Status"
+msgstr "پاک کردن وضعیت رشته عملیات"
+
+#: admin/campaign-statuses/one.php:87
+msgid "Delete Campaign Status?"
+msgstr "وضعیت رشته عملیات پاک شود؟"
+
+#: admin/campaign-types/one.php:78
+msgid "Delete Campaign Type"
+msgstr "پاک کردن نوع رشته عملیات"
+
+#: admin/campaign-types/one.php:74
+msgid "Delete Campaign Type?"
+msgstr "نوع رشته عملیات پاک شود؟"
+
+#: campaigns/edit.php:121
+msgid "Delete Campaign?"
+msgstr "رشته عملیات پاک شود؟"
+
+#: admin/case-statuses/one.php:189
+msgid "Delete Case Status"
+msgstr "پاک کردن وضعیت مورد"
+
+#: admin/case-statuses/one.php:185
+msgid "Delete Case Status?"
+msgstr "وضعیت مورد پاک شود؟"
+
+#: admin/case-types/one.php:80
+msgid "Delete Case Type"
+msgstr "پاک کردن نوع مورد"
+
+#: admin/case-types/one.php:76
+msgid "Delete Case Type?"
+msgstr "نوع مورد پاک شود؟"
+
+#: cases/edit.php:224
+msgid "Delete Case?"
+msgstr "مورد پاک شود؟"
+
+#: admin/categories/one.php:119
+msgid "Delete Category"
+msgstr "پاک کردن طبقه بندی"
+
+#: admin/categories/one.php:115
+msgid "Delete Category?"
+msgstr "طبقه‌بندی پاک شود؟"
+
+#: companies/admin.php:111
+#: companies/admin.php:116
+msgid "Delete Company"
+msgstr "پاک کردن شرکت"
+
+#: admin/company-sources/one.php:87
+msgid "Delete Company Source"
+msgstr "پاک کردن منبع شرکت"
+
+#: admin/company-sources/one.php:83
+msgid "Delete Company Source?"
+msgstr "منبع شرکت پاک شود؟"
+
+#: admin/company-types/one.php:77
+msgid "Delete Company Type"
+msgstr "پاک کردن نوع شرکت"
+
+#: admin/company-types/one.php:73
+msgid "Delete Company Type?"
+msgstr "نوع شرکت پاک شود؟"
+
+#: companies/admin.php:107
+msgid "Delete Company?"
+msgstr "شرکت پاک شود؟"
+
+#: contacts/edit.php:239
+msgid "Delete Contact?"
+msgstr "تماس پاک شود؟"
+
+#: companies/edit-division.php:66
+msgid "Delete Division"
+msgstr "پاک کردن بخش"
+
+#: admin/industries/one.php:77
+msgid "Delete Industry"
+msgstr "پاک کردن صنعت"
+
+#: admin/industries/one.php:73
+msgid "Delete Industry?"
+msgstr "صنعت پاک شود؟"
+
+#: admin/opportunity-statuses/one.php:212
+msgid "Delete Opportunity Status"
+msgstr "پاک کردن وضعیت فرصت"
+
+#: admin/opportunity-statuses/one.php:208
+msgid "Delete Opportunity Status?"
+msgstr "وضعیت فرصت پاک شود؟"
+
+#: opportunities/edit.php:213
+msgid "Delete Opportunity?"
+msgstr "فرصت پاک شود؟"
+
+#: admin/case-priorities/one.php:85
+msgid "Delete Priority Type"
+msgstr "پاک کردن نوع اولویت"
+
+#: admin/case-priorities/one.php:81
+msgid "Delete Priority Type?"
+msgstr "نوع اولویت پاک شود؟"
+
+#: admin/ratings/one.php:77
+msgid "Delete Rating"
+msgstr "پاک کردن امتیاز"
+
+#: admin/ratings/one.php:73
+msgid "Delete Rating?"
+msgstr "امتیاز پاک شود؟"
+
+#: admin/relationship-types/one.php:91
+msgid "Delete Relationship Type?"
+msgstr "نوع ارتباط پاک شود؟"
+
+#: admin/relationship-types/one.php:95
+#: admin/roles/one.php:80
+msgid "Delete Role"
+msgstr "پاک کردن نقش"
+
+#: admin/roles/one.php:76
+msgid "Delete Role?"
+msgstr "نقش پاک شود؟"
+
+#: admin/users/one.php:127
+msgid "Delete User"
+msgstr "پاک کردن کاربر"
+
+#: admin/users/one.php:123
+msgid "Delete User?"
+msgstr "کاربر پاک شود؟"
+
+#: include/utils-interface.php:75
+msgid "Deleted"
+msgstr "پاک شد"
+
+#: admin/activity-templates/edit.php:75
+#: admin/opportunity-statuses/some.php:93
+#: admin/opportunity-statuses/some.php:127
+#: campaigns/edit.php:115
+#: campaigns/new.php:103
+#: cases/edit.php:218
+#: cases/new.php:134
+#: companies/divisions.php:89
+#: companies/edit-division.php:62
+#: companies/one.php:568
+#: contacts/edit.php:174
+#: contacts/new.php:169
+#: contacts/one.php:332
+#: contacts/some.php:80
+#: contacts/some.php:277
+#: files/new.php:82
+#: files/one.php:79
+#: files/some.php:66
+#: opportunities/edit.php:205
+#: opportunities/new.php:130
+#: opportunities/opportunity-view.php:49
+#: private/home.php:245
+msgid "Description"
+msgstr "شرح"
+
+#: plugins/info/one.php:320
+msgid "Details"
+msgstr "جزئیات"
+
+#: locale/datastrings.php:35
+msgid "Developed"
+msgstr "توسعه یافته"
+
+#: admin/index.php:50
+msgid "Digital Dashboard"
+msgstr "تابلوی دیجیتالی"
+
+#: locale/datastrings.php:36
+msgid "Direct Mail"
+msgstr "نامه مستقیم"
+
+#: locale/datastrings.php:37
+msgid "Discussion"
+msgstr "بحث"
+
+#: admin/account-statuses/one.php:70
+#: admin/account-statuses/some.php:78
+#: admin/activity-types/one.php:69
+#: admin/activity-types/some.php:86
+#: admin/campaign-statuses/one.php:68
+#: admin/campaign-statuses/some.php:78
+#: admin/campaign-types/one.php:65
+#: admin/campaign-types/some.php:76
+#: admin/case-priorities/one.php:68
+#: admin/case-priorities/some.php:78
+#: admin/case-statuses/one.php:133
+#: admin/case-statuses/some.php:100
+#: admin/case-types/one.php:67
+#: admin/case-types/some.php:76
+#: admin/categories/one.php:106
+#: admin/categories/some.php:77
+#: admin/company-sources/one.php:70
+#: admin/company-sources/some.php:80
+#: admin/company-types/one.php:64
+#: admin/company-types/some.php:75
+#: admin/crm-statuses/one.php:65
+#: admin/crm-statuses/some.php:81
+#: admin/industries/one.php:64
+#: admin/industries/some.php:75
+#: admin/opportunity-statuses/one.php:141
+#: admin/opportunity-statuses/some.php:123
+#: admin/ratings/one.php:64
+#: admin/ratings/some.php:79
+#: admin/roles/one.php:67
+#: admin/roles/some.php:78
+msgid "Display HTML"
+msgstr "نمایش HTML"
+
+#: locale/datastrings.php:38
+msgid "Distribution"
+msgstr "توزیع"
+
+#: contacts/edit.php:132
+#: contacts/new.php:127
+#: contacts/one.php:400
+msgid "Division"
+msgstr "بخش"
+
+#: companies/divisions.php:74
+msgid "Division Description"
+msgstr "شرح بخش"
+
+#: companies/divisions.php:70
+#: companies/edit-division.php:58
+msgid "Division Name"
+msgstr "نام بخش"
+
+#: companies/divisions.php:51
+#: companies/divisions.php:85
+#: companies/one.php:553
+msgid "Divisions"
+msgstr "بخش‌ها"
+
+#: private/home.php:469
+msgid "Documentation"
+msgstr "مستندات"
+
+#: cases/one.php:313
+#: companies/one.php:624
+#: contacts/one.php:499
+#: opportunities/one.php:417
+msgid "Done"
+msgstr "انجام شد"
+
+#: files/one.php:94
+msgid "Download"
+msgstr "دریافت"
+
+#: include/utils-interface.php:272
+msgid "Dr."
+msgstr "دکتر "
+
+#: activities/some.php:171
+#: cases/sidebar.php:24
+#: cases/some.php:65
+#: cases/some.php:290
+#: opportunities/sidebar.php:24
+#: private/home.php:454
+#: reports/open-items.php:327
+#: reports/overdue-items.php:344
+msgid "Due"
+msgstr "سررسید"
+
+#: cases/edit.php:211
+msgid "Due At"
+msgstr "سررسید در"
+
+#: cases/edit.php:208
+#: cases/new.php:127
+msgid "Due By"
+msgstr "سررسید بوسیله"
+
+#: admin/activity-templates/edit.php:67
+#: admin/case-statuses/one.php:154
+#: admin/opportunity-statuses/one.php:177
+#: reports/activitytimes.php:74
+msgid "Duration"
+msgstr "دوره"
+
+#: admin/users/one.php:104
+#: admin/users/self.php:76
+#: admin/users/some.php:64
+#: admin/users/some.php:102
+#: cases/one.php:252
+#: companies/new.php:250
+#: companies/one.php:570
+#: contacts/edit.php:178
+#: contacts/new.php:173
+#: contacts/one.php:340
+#: email/email-3.php:88
+#: locale/datastrings.php:39
+#: opportunities/one.php:343
+msgid "E-Mail"
+msgstr "پست الکترونیکی"
+
+#: email/email.php:117
+#: email/index.php:67
+#: email/templates.php:53
+#: email/templates.php:63
+msgid "E-Mail Templates"
+msgstr "الگوهای پست الکترونیکی"
+
+#: admin/country-address-format/index.php:63
+#: campaigns/one.php:149
+#: cases/one.php:286
+#: companies/one.php:547
+#: contacts/one.php:467
+#: opportunities/one.php:385
+#: plugins/info/one.php:342
+#: relationships/sidebar.php:198
+msgid "Edit"
+msgstr "ویرایش"
+
+#: companies/admin.php:71
+msgid "Edit Account Information"
+msgstr "ویرایش اطلاعات حساب"
+
+#: admin/account-statuses/one.php:53
+msgid "Edit Account Status Information"
+msgstr "ویرایش اطلاعات وضعیت حساب"
+
+#: admin/activity-templates/edit.php:60
+msgid "Edit Activity Template Information"
+msgstr "ویرایش اطلاعات الگوی فعالیت"
+
+#: admin/activity-types/one.php:54
+msgid "Edit Activity Type Information"
+msgstr "ویرایش اطلاعات نوع فعالیت"
+
+#: companies/edit-address.php:50
+#: companies/edit-address.php:66
+#: contacts/edit-address.php:145
+#: contacts/edit-address.php:183
+#: contacts/edit.php:246
+#: contacts/new.php:229
+msgid "Edit Address"
+msgstr "ویرایش آدرس"
+
+#: admin/country-address-format/edit.php:30
+msgid "Edit Address Country Format"
+msgstr "ویرایش فرمت آدرس کشور"
+
+#: relationships/edit.php:29
+msgid "Edit Association"
+msgstr "ویرایش ارتباط"
+
+#: campaigns/edit.php:61
+msgid "Edit Campaign"
+msgstr "ویرایش رشته عملیات"
+
+#: admin/campaign-statuses/one.php:53
+msgid "Edit Campaign Status Information"
+msgstr "ویرایش اطلاعات وضعیت رشته عملیات"
+
+#: admin/campaign-types/one.php:50
+msgid "Edit Campaign Type Information"
+msgstr "ویرایش اطلاعات نوع رشته عملیات"
+
+#: cases/edit.php:156
+msgid "Edit Case #"
+msgstr "ویرایش مورد شماره"
+
+#: admin/case-statuses/one.php:118
+msgid "Edit Case Status Information"
+msgstr "ویرایش اطلاعات وضعیت مورد"
+
+#: admin/case-types/one.php:52
+msgid "Edit Case Type Information"
+msgstr "ویرایش اطلاعات نوع مورد"
+
+#: admin/categories/one.php:91
+msgid "Edit Category Information"
+msgstr "ویرایش اطلاعات طبقه‌بندی"
+
+#: admin/company-sources/one.php:55
+msgid "Edit Company Source Information"
+msgstr "ویرایش اطلاعات منبع شرکت"
+
+#: admin/company-types/one.php:49
+msgid "Edit Company Type Information"
+msgstr "ویرایش اطلاعات نوع شرکت"
+
+#: companies/edit-division.php:38
+#: companies/edit-division.php:51
+msgid "Edit Division"
+msgstr "ویرایش بخش"
+
+#: companies/edit.php:178
+msgid "Edit Former Names"
+msgstr "ویرایش نام‌های سابق"
+
+#: admin/industries/one.php:49
+msgid "Edit Industry Information"
+msgstr "ویرایش اطلاعات صنعت"
+
+#: email/email-2.php:45
+#: email/email-2.php:72
+#: email/one-template.php:44
+#: email/one-template.php:71
+msgid "Edit Message"
+msgstr "ویرایش پیام‌ها"
+
+#: notes/edit.php:36
+#: notes/edit.php:42
+msgid "Edit Note"
+msgstr "ویرایش یادداشت"
+
+#: admin/opportunity-statuses/one.php:126
+msgid "Edit Opportunity Status Information"
+msgstr "ویرایش اطلاعات وضعیت فرصت"
+
+#: admin/case-priorities/one.php:53
+msgid "Edit Priority Type Information"
+msgstr "ویرایش اطلاعات نوع اولویت"
+
+#: companies/edit.php:86
+#: companies/edit.php:98
+msgid "Edit Profile"
+msgstr "ویرایش پروفایل"
+
+#: admin/crm-statuses/one.php:50
+#: admin/ratings/one.php:49
+msgid "Edit Rating Information"
+msgstr "ویرایش اطلاعات امتیازات"
+
+#: admin/relationship-types/one.php:55
+#: admin/roles/one.php:52
+msgid "Edit Role Information"
+msgstr "ویرایش اطلاعات نقش‌ها"
+
+#: admin/users/one.php:75
+#: admin/users/self.php:61
+msgid "Edit User Information"
+msgstr "ویرایش اطلاعات کاربران"
+
+#: contacts/edit-address.php:175
+msgid "Editing/Deleting this record will change the address for all companies and contacts listed above."
+msgstr "ویرایش یا حذف این رکورد، آدرس تمامی شرکت‌ها و تماس‌های زیر را تغییر خواهد داد."
+
+#: locale/datastrings.php:40
+msgid "Education"
+msgstr "آموزش"
+
+#: contacts/some.php:71
+#: contacts/some.php:275
+msgid "Email"
+msgstr "پست الکترونیکی"
+
+#: activities/one.php:417
+msgid "Email This To"
+msgstr "ارسال به"
+
+#: companies/advanced-search.php:194
+#: companies/edit.php:145
+#: companies/new.php:155
+#: companies/one.php:503
+msgid "Employees"
+msgstr "کارمندان"
+
+#: reports/activitytimes.php:52
+#: reports/activitytimes.php:73
+#: reports/audit-items.php:44
+#: reports/completed-items.php:72
+#: reports/completed-items.php:199
+#: reports/completed-items.php:250
+#: reports/open-items.php:185
+#: reports/open-items.php:234
+#: reports/overdue-items.php:200
+#: reports/overdue-items.php:251
+msgid "End"
+msgstr "پایان"
+
+#: activities/one.php:410
+#: campaigns/one.php:117
+#: campaigns/some.php:67
+msgid "Ends"
+msgstr "پایان‌ها"
+
+#: campaigns/edit.php:104
+#: campaigns/new.php:92
+msgid "Ends On"
+msgstr "پایان‌ها فعال"
+
+#: activities/some.php:532
+msgid "Ends/Due"
+msgstr "پایان/سررسید"
+
+#: admin/users/self.php:83
+#: admin/users/some.php:107
+msgid "English"
+msgstr "انگلیسی"
+
+#: contacts/sidebar.php:177
+msgid "Enter Cell"
+msgstr "شماره تلفن را وارد کنید"
+
+#: contacts/sidebar.php:176
+msgid "Enter Cell Phone"
+msgstr "شماره تلفن همراه را وارد کنید"
+
+#: contacts/sidebar.php:155
+msgid "Enter Email Address"
+msgstr "آدرس پست الکترونیکی را وارد کنید"
+
+#: contacts/sidebar.php:186
+#: contacts/sidebar.php:187
+msgid "Enter Home Phone"
+msgstr "شماره تلفن منزل را وارد کنید"
+
+#: admin/country-address-format/edit.php:65
+msgid "Enter New format"
+msgstr "ورود فرمت جدید"
+
+#: contacts/sidebar.php:166
+#: contacts/sidebar.php:167
+msgid "Enter Work Phone"
+msgstr "تلفن محل کار را وارد کنید"
+
+#: reports/completed-items.php:291
+#: reports/open-items.php:326
+#: reports/overdue-items.php:295
+#: reports/overdue-items.php:343
+msgid "Entered"
+msgstr "وارد شد"
+
+#: admin/country-address-format/edit.php:73
+msgid "Error. No Data."
+msgstr "خطا: داده‌ای وجود ندارد"
+
+#: locale/datastrings.php:41
+msgid "Event"
+msgstr "رخداد"
+
+#: reports/opportunities-quantity-by-opportunity-status.php:106
+#: reports/opportunities-size-by-opportunity-status.php:117
+msgid "Exclude Closed Opportunities"
+msgstr "فرصت‌های بسته شده در نظر گرفته نشوند"
+
+#: admin/crm-statuses/some.php:50
+msgid "Existing CRM Statuses"
+msgstr "وضعیت‌های موجود CRM"
+
+#: activities/pager.php:49
+#: cases/pager.php:49
+#: companies/pager.php:49
+msgid "Export"
+msgstr "صدور"
+
+#: admin/index.php:109
+msgid "Export Companies with address and phone info"
+msgstr "صدور اطلاعات شرکت‌ها به همراه اطلاعات آدرس و تلفن آنها"
+
+#: admin/index.php:99
+msgid "Export Companies/Contacts"
+msgstr "صدور شرکت‌ها/تماس‌ها"
+
+#: admin/index.php:104
+msgid "Export Companies/Contacts as LDAP/LDIF"
+msgstr "صدور اطلاعات شرکت‌ها/تماس‌ها به فرمت LDAP/LDIF"
+
+#: include/utils-misc.php:524
+#: include/utils-misc.php:531
+msgid "Failure to get system parameter "
+msgstr "خطا در دریافت پارامتر سیستمی"
+
+#: locale/datastrings.php:42
+msgid "Fair"
+msgstr "نمایشگاه"
+
+#: locale/datastrings.php:43
+msgid "Fast"
+msgstr "سریع"
+
+#: companies/advanced-search.php:186
+#: companies/edit.php:137
+#: companies/new.php:147
+#: companies/one.php:440
+#: companies/sidebar.php:61
+#: contacts/edit.php:194
+#: contacts/new.php:189
+#: contacts/one.php:360
+msgid "Fax"
+msgstr "فاکس"
+
+#: locale/datastrings.php:44
+msgid "Feature Request"
+msgstr "درخواست قابلیت"
+
+#: locale/datastrings.php:45
+msgid "Feature Requests"
+msgstr "درخواست‌های قابلیت"
+
+#: contacts/edit.php:157
+#: contacts/new.php:152
+#: contacts/one.php:90
+msgid "Female"
+msgstr "زن"
+
+#: admin/import/import-companies.php:93
+msgid "Field Delimiter"
+msgstr "جداکننده فیلد"
+
+#: admin/import/import-companies.php:89
+msgid "File"
+msgstr "فایل"
+
+#: files/some.php:296
+msgid "File Description"
+msgstr "شرح فایل"
+
+#: files/one.php:49
+msgid "File Details"
+msgstr "جزئیات فایل"
+
+#: admin/import/import-companies.php:101
+msgid "File Format"
+msgstr "فرمت فایل"
+
+#: files/some.php:294
+#: files/some.php:361
+#: private/home.php:249
+msgid "File ID"
+msgstr "شماره شناسایی فایل"
+
+#: files/new.php:71
+#: files/one.php:64
+msgid "File Information"
+msgstr "اطلاعات فایل"
+
+#: files/new.php:78
+#: files/one.php:67
+#: files/some.php:295
+msgid "File Name"
+msgstr "نام فایل"
+
+#: files/sidebar.php:18
+#: files/some.php:273
+#: include/utils-interface.php:217
+msgid "Files"
+msgstr "فایل‌ها"
+
+#: locale/datastrings.php:46
+msgid "Finance"
+msgstr "مالی"
+
+#: campaigns/categories.php:107
+#: cases/categories.php:107
+#: companies/categories.php:111
+#: contacts/categories.php:113
+#: locale/datastrings.php:47
+#: opportunities/categories.php:107
+msgid "Finished"
+msgstr "تمام شده"
+
+#: admin/users/one.php:96
+#: admin/users/self.php:68
+#: admin/users/some.php:90
+#: companies/new.php:242
+#: contacts/edit.php:144
+#: contacts/new.php:139
+#: contacts/some.php:256
+msgid "First Names"
+msgstr "نام"
+
+#: reports/company-contacts-printout.php:232
+msgid "Format for Printer"
+msgstr "فرمت برای چاپگر"
+
+#: companies/addresses.php:113
+msgid "Formatted Address"
+msgstr "آدرس فرمت بندی شده"
+
+#: admin/relationship-types/some.php:55
+msgid "Formatting"
+msgstr "فرمت"
+
+#: companies/former-names.php:89
+#: companies/one.php:268
+msgid "Former Name"
+msgstr "نام سابق"
+
+#: companies/former-names.php:65
+#: companies/former-names.php:78
+#: companies/former-names.php:85
+msgid "Former Names"
+msgstr "نام سابق"
+
+#: email/email-2.php:75
+#: email/one-template.php:74
+msgid "From"
+msgstr "از"
+
+#: admin/relationship-types/one.php:70
+#: admin/relationship-types/some.php:83
+msgid "From Text"
+msgstr "متن از"
+
+#: admin/relationship-types/one.php:62
+#: admin/relationship-types/some.php:75
+msgid "From What Table"
+msgstr "از کدام جدول"
+
+#: admin/account-statuses/one.php:62
+#: admin/account-statuses/some.php:70
+#: admin/activity-types/one.php:61
+#: admin/activity-types/some.php:78
+#: admin/campaign-statuses/one.php:60
+#: admin/campaign-statuses/some.php:70
+#: admin/campaign-types/one.php:57
+#: admin/campaign-types/some.php:68
+#: admin/case-priorities/one.php:60
+#: admin/case-priorities/some.php:70
+#: admin/case-statuses/one.php:125
+#: admin/case-statuses/some.php:92
+#: admin/case-types/one.php:59
+#: admin/case-types/some.php:68
+#: admin/categories/one.php:98
+#: admin/categories/some.php:69
+#: admin/company-sources/one.php:62
+#: admin/company-sources/some.php:72
+#: admin/company-types/one.php:56
+#: admin/company-types/some.php:67
+#: admin/crm-statuses/one.php:57
+#: admin/crm-statuses/some.php:73
+#: admin/industries/one.php:56
+#: admin/industries/some.php:67
+#: admin/opportunity-statuses/one.php:133
+#: admin/opportunity-statuses/some.php:115
+#: admin/ratings/one.php:56
+#: admin/ratings/some.php:71
+#: admin/roles/one.php:59
+#: admin/roles/some.php:70
+#: admin/users/some.php:63
+msgid "Full Name"
+msgstr "نام کامل"
+
+#: admin/account-statuses/one.php:66
+#: admin/activity-types/one.php:65
+#: admin/campaign-statuses/one.php:64
+#: admin/campaign-types/one.php:61
+#: admin/case-priorities/one.php:64
+#: admin/case-statuses/one.php:129
+#: admin/case-types/one.php:63
+#: admin/categories/one.php:102
+#: admin/company-sources/one.php:66
+#: admin/company-types/one.php:60
+#: admin/crm-statuses/one.php:61
+#: admin/industries/one.php:60
+#: admin/opportunity-statuses/one.php:137
+#: admin/ratings/one.php:60
+#: admin/roles/one.php:63
+msgid "Full Plural"
+msgstr "جمع کل"
+
+#: admin/account-statuses/some.php:74
+#: admin/activity-types/some.php:82
+#: admin/campaign-statuses/some.php:74
+#: admin/campaign-types/some.php:72
+#: admin/case-priorities/some.php:74
+#: admin/case-statuses/some.php:96
+#: admin/case-types/some.php:72
+#: admin/categories/some.php:73
+#: admin/company-sources/some.php:76
+#: admin/company-types/some.php:71
+#: admin/crm-statuses/some.php:77
+#: admin/industries/some.php:71
+#: admin/opportunity-statuses/some.php:119
+#: admin/ratings/some.php:75
+#: admin/roles/some.php:74
+msgid "Full Plural Name"
+msgstr "نام جمع کل"
+
+#: admin/users/one.php:112
+#: admin/users/self.php:86
+#: admin/users/some.php:110
+msgid "GMT Offset"
+msgstr "اختلاف GMT"
+
+#: contacts/edit.php:152
+#: contacts/new.php:147
+#: contacts/one.php:320
+msgid "Gender"
+msgstr "جنسیت"
+
+#: reports/activitytimes.php:62
+#: reports/audit-items.php:60
+#: reports/companies-list.php:117
+#: reports/completed-items.php:120
+#: reports/index.php:134
+#: reports/open-items.php:102
+#: reports/overdue-items.php:117
+msgid "Go"
+msgstr "برو"
+
+#: locale/datastrings.php:48
+msgid "Good"
+msgstr "خوب"
+
+#: locale/datastrings.php:49
+msgid "Government"
+msgstr "دولت"
+
+#: reports/index.php:39
+msgid "Graphs"
+msgstr "نمودارها"
+
+#: activities/pager.php:12
+#: cases/pager.php:12
+#: companies/pager.php:12
+#: contacts/sidebar.php:71
+#: files/sidebar.php:10
+#: include/categories-sidebar.php:5
+#: include/utils-misc.php:16
+#: notes/sidebar.php:5
+#: relationships/sidebar.php:5
+msgid "Hacking attempt"
+msgstr "تلاش برای شکستن سیستم"
+
+#: locale/datastrings.php:50
+msgid "Healthcare"
+msgstr "بهداشت و سلامتی"
+
+#: locale/datastrings.php:51
+msgid "Help Item"
+msgstr "آیتم کمک"
+
+#: locale/datastrings.php:52
+msgid "Help Items"
+msgstr "آیتم‌های کمک"
+
+#: locale/datastrings.php:53
+msgid "High"
+msgstr "بالا"
+
+#: locale/datastrings.php:54
+msgid "Hold"
+msgstr "نگهداری"
+
+#: include/utils-interface.php:210
+#: private/home.php:434
+msgid "Home"
+msgstr "صفحه خانگی"
+
+#: contacts/edit.php:190
+#: contacts/new.php:185
+#: contacts/one.php:352
+#: contacts/sidebar.php:181
+msgid "Home Phone"
+msgstr "تلفن منزل"
+
+#: reports/index.php:82
+msgid "How many cases are in each stage of the case resolution process?"
+msgstr "چه تعداد مورد در هر مرحله از پردازش تجزیه و تحلیل موردها وجود دارد؟"
+
+#: reports/index.php:50
+msgid "How many companies are in each industry?"
+msgstr "چه تعداد شرکت در هر صنعت وجود دارند؟"
+
+#: reports/index.php:54
+msgid "How many of your accounts come from each source?"
+msgstr "چه تعداد از حساب‌های شما از هر منبع وارد می‌شود؟"
+
+#: reports/index.php:63
+msgid "How many opportunities are in each stage of the sales closing process?"
+msgstr "چه تعداد فرصت در هر مرحله از پروسه بستن فروش وجود دارد؟"
+
+#: reports/index.php:71
+msgid "How many opportunities are tied to companies in each industry?"
+msgstr "چه تعداد فرصت به شرکت‌های موجود در هر صنعت گره خورده است؟"
+
+#: reports/index.php:67
+msgid "How much potential revenue is in each stage of the sales closing process?"
+msgstr "پتانسیل درآمدی در هر مرحله از پروسه بستن فروش چقدر است؟"
+
+#: reports/index.php:75
+msgid "How much potential revenue is tied to companies in each industry?"
+msgstr "پتانسیل درآمدی مربوط به شرکت‌های هر صنعت چقدر است؟"
+
+#: include/utils-misc.php:633
+msgid "I tried to execute:"
+msgstr "سعی در اجرای:"
+
+#: files/some.php:113
+msgid "ID"
+msgstr "شماره"
+
+#: admin/import/import-companies.php:28
+#: admin/import/import-companies.php:146
+msgid "Import"
+msgstr "ورود"
+
+#: admin/import/import-companies.php:86
+msgid "Import Companies"
+msgstr "ورود شرکت‌ها"
+
+#: admin/index.php:94
+msgid "Import Companies/Contacts"
+msgstr "ورود شرکت‌ها/تماس‌ها"
+
+#: admin/index.php:90
+msgid "Import/Export"
+msgstr "ورود/صدور"
+
+#: locale/datastrings.php:55
+msgid "In Progress"
+msgstr "در حال پیشرفت"
+
+#: admin/index.php:163
+#: admin/industries/some.php:44
+msgid "Industries"
+msgstr "صنایع"
+
+#: admin/import/import-companies.php:134
+#: companies/advanced-search.php:170
+#: companies/edit.php:125
+#: companies/new.php:131
+#: companies/one.php:420
+#: companies/some-advanced.php:137
+#: companies/some.php:72
+#: companies/some.php:280
+msgid "Industry"
+msgstr "صنعت"
+
+#: admin/industries/one.php:37
+msgid "Industry Details"
+msgstr "جزئیات صنعت"
+
+#: activities/one.php:385
+msgid "Insert Log"
+msgstr "ورود ثبت"
+
+#: locale/datastrings.php:56
+msgid "Insurance"
+msgstr "بیمه"
+
+#: contacts/edit.php:210
+#: contacts/new.php:205
+#: contacts/one.php:364
+msgid "Interests"
+msgstr "بهره‌ها"
+
+#: admin/users/one.php:108
+#: admin/users/self.php:82
+#: admin/users/some.php:106
+msgid "Language"
+msgstr "زبان"
+
+#: campaigns/one.php:129
+#: cases/one.php:234
+#: companies/one.php:464
+#: contacts/one.php:452
+#: opportunities/one.php:325
+msgid "Last Modified"
+msgstr "آخرین ویرایش"
+
+#: admin/users/one.php:92
+#: admin/users/self.php:64
+#: admin/users/some.php:86
+#: companies/new.php:246
+#: contacts/edit.php:148
+#: contacts/new.php:143
+#: contacts/some.php:255
+msgid "Last Name"
+msgstr "نام خانوادگی"
+
+#: locale/datastrings.php:57
+msgid "Lead"
+msgstr "تقدم"
+
+#: locale/datastrings.php:58
+msgid "Leads"
+msgstr "تقدم"
+
+#: locale/datastrings.php:59
+msgid "Legal"
+msgstr "قانونی"
+
+#: companies/advanced-search.php:154
+#: companies/edit.php:105
+#: companies/new.php:115
+#: companies/one.php:411
+msgid "Legal Name"
+msgstr "نام قانونی"
+
+#: reports/audit-items.php:92
+msgid "Line"
+msgstr "خط"
+
+#: companies/addresses.php:143
+#: companies/advanced-search.php:241
+#: companies/edit-address.php:77
+#: companies/new.php:205
+#: contacts/edit-address.php:194
+msgid "Line 1"
+msgstr "خط ۱"
+
+#: companies/addresses.php:147
+#: companies/advanced-search.php:245
+#: companies/edit-address.php:81
+#: companies/new.php:209
+#: contacts/edit-address.php:198
+msgid "Line 2"
+msgstr "خط ۲"
+
+#: admin/case-statuses/one.php:150
+msgid "Link Activity To Case Status"
+msgstr "اتصال فعالیت به وضعیت مورد"
+
+#: admin/opportunity-statuses/one.php:173
+msgid "Link Activity To Opportunity Status"
+msgstr "اتصال فعالیت به وضعیت فرصت"
+
+#: admin/activity-templates/some.php:64
+msgid "Linked Table"
+msgstr "جدول لینک شده"
+
+#: reports/index.php:107
+msgid "List Activiites by Start, End, and User (also shows Duration, Company and Contact)"
+msgstr "لیست فعالیت‌ها با شروع، پایان و کاربر. دوره، شرکت و تماس نیز نمایش داده خواهد شد"
+
+#: reports/index.php:124
+msgid "List Audit Items by Date and User"
+msgstr "لیست آیتم‌های رسیدگی شده با تاریخ و کاربر"
+
+#: reports/index.php:120
+msgid "List Completed Items by Date Range, User and Type"
+msgstr "لیست آیتم‌های تکمیل شده با محدوده تاریخ، کاربر و نوع"
+
+#: reports/index.php:116
+msgid "List Open Items by User and Type"
+msgstr "لیست آیتم‌های باز با کاربر و نوع"
+
+#: reports/index.php:112
+msgid "List Overdue Items by User and Type"
+msgstr "لیست آیتم‌های دیر کرده با کاربر و نوع"
+
+#: reports/index.php:95
+msgid "List of companies, addresses and phone numbers"
+msgstr "لیست شرکت‌ها، آدرس‌ها و شماره‌های تلفن"
+
+#: activities/one.php:392
+msgid "Local Time"
+msgstr "زمان محلی"
+
+#: activities/some.php:557
+msgid "Local Time Between"
+msgstr "زمان محلی بین"
+
+#: include/utils-interface.php:203
+msgid "Logged in as"
+msgstr "کاربر حاضر"
+
+#: include/utils-interface.php:203
+msgid "Login"
+msgstr "ورود به سیستم"
+
+#: include/utils-interface.php:204
+msgid "Logout"
+msgstr "خروج"
+
+#: admin/opportunity-statuses/one.php:145
+msgid "Long Description"
+msgstr "شرح بلند"
+
+#: locale/datastrings.php:60
+msgid "Low"
+msgstr "پایین"
+
+#: plugins/mrtg/setup.php:36
+msgid "MRTG"
+msgstr "MRTG"
+
+#: contacts/one.php:378
+msgid "MSN IM"
+msgstr "MSN IM"
+
+#: contacts/edit.php:206
+#: contacts/new.php:201
+msgid "MSN Name"
+msgstr "نام کاربری MSN"
+
+#: locale/datastrings.php:61
+msgid "Magazine"
+msgstr "مجله"
+
+#: locale/datastrings.php:62
+msgid "Mail"
+msgstr "پست"
+
+#: activities/pager.php:50
+#: cases/pager.php:50
+#: companies/one.php:550
+#: companies/pager.php:50
+#: contacts/edit.php:236
+msgid "Mail Merge"
+msgstr "ادغام پستی"
+
+#: contacts/edit.php:156
+#: contacts/new.php:151
+#: contacts/one.php:93
+msgid "Male"
+msgstr "مرد"
+
+#: admin/index.php:117
+#: include/categories-sidebar.php:61
+msgid "Manage"
+msgstr "مدیریت"
+
+#: admin/account-statuses/some.php:37
+msgid "Manage Account Statuses"
+msgstr "مدیریت وضعیت حساب‌ها"
+
+#: admin/activity-templates/some.php:49
+msgid "Manage Activity Templates"
+msgstr "مدیریت الگوهای فعالیت"
+
+#: admin/activity-types/some.php:44
+msgid "Manage Activity Types"
+msgstr "مدیریت نوع فعالیت"
+
+#: admin/crm-statuses/some.php:40
+msgid "Manage CRM Statuses"
+msgstr "مدیریت وضعیت CRM"
+
+#: admin/campaign-statuses/some.php:37
+msgid "Manage Campaign Statuses"
+msgstr " مدیریت وضعیت‌های رشته عملیات"
+
+#: admin/campaign-types/some.php:35
+msgid "Manage Campaign Types"
+msgstr "مدیریت انواع رشته عملیات"
+
+#: admin/case-priorities/some.php:37
+msgid "Manage Case Priorities"
+msgstr "مدیریت اولویت‌های موارد"
+
+#: admin/case-statuses/some.php:58
+msgid "Manage Case Statuses"
+msgstr "مدیریت وضعیت‌های موارد"
+
+#: admin/case-types/some.php:35
+msgid "Manage Case Types"
+msgstr "مدیریت نوع مورد"
+
+#: admin/categories/some.php:36
+#: campaigns/categories.php:86
+#: campaigns/categories.php:96
+#: cases/categories.php:86
+#: cases/categories.php:96
+#: companies/categories.php:90
+#: companies/categories.php:100
+#: contacts/categories.php:92
+#: contacts/categories.php:102
+#: opportunities/categories.php:86
+#: opportunities/categories.php:96
+msgid "Manage Categories"
+msgstr "مدیریت طبقه‌بندی‌ها"
+
+#: admin/company-sources/some.php:39
+msgid "Manage Company Sources"
+msgstr "مدیریت منابع شرکت‌ها"
+
+#: admin/company-types/some.php:34
+msgid "Manage Company Types"
+msgstr "مدیریت انواع شرکت‌ها"
+
+#: admin/industries/some.php:34
+msgid "Manage Industries"
+msgstr "مدیریت صنایع"
+
+#: admin/opportunity-statuses/some.php:78
+msgid "Manage Opportunity Statuses"
+msgstr "مدیریت وضعیت فرصت‌ها"
+
+#: admin/ratings/some.php:38
+msgid "Manage Ratings"
+msgstr "مدیریت امتیازات"
+
+#: admin/relationship-types/some.php:39
+msgid "Manage Relationship Types"
+msgstr "مدیریت انواع ارتباطات"
+
+#: admin/roles/some.php:37
+msgid "Manage Roles"
+msgstr "مدیریت نقش‌ها"
+
+#: admin/system-parameters/some.php:36
+msgid "Manage System Parameters"
+msgstr "مدیریت پارامترهای سیستمی"
+
+#: admin/users/some.php:50
+msgid "Manage Users"
+msgstr "مدیریت کاربران"
+
+#: locale/datastrings.php:63
+msgid "Manufacturing"
+msgstr "تولید"
+
+#: reports/index.php:128
+msgid "Measure performance of users over a selectable timeframe"
+msgstr "سنجش کارایی کاربران در یک محدوده زمانی قابل انتخاب"
+
+#: campaigns/some.php:229
+msgid "Media"
+msgstr "رسانه‌ها"
+
+#: locale/datastrings.php:64
+msgid "Medium"
+msgstr "متوسط"
+
+#: email/email-4.php:87
+msgid "Messages Sent"
+msgstr "پیام‌ها ارسال شد"
+
+#: include/utils-interface.php:272
+msgid "Miss"
+msgstr "دوشیزه"
+
+#: relationships/new-relationship-2.php:149
+msgid "More Info"
+msgstr "اطلاعات بیشتر"
+
+#: admin/activity-types/some.php:58
+#: admin/case-statuses/some.php:72
+#: admin/opportunity-statuses/some.php:94
+msgid "Move"
+msgstr "انتقال"
+
+#: include/utils-interface.php:272
+msgid "Mr."
+msgstr "آقای"
+
+#: include/utils-interface.php:272
+msgid "Mrs."
+msgstr "خانم"
+
+#: include/utils-interface.php:272
+msgid "Ms."
+msgstr "خانم"
+
+#: plugins/mrtg/mrtg.php:19
+msgid "Multi Router Traffic Grapher"
+msgstr "ایجاد کننده نمودار ترافیک چند مسیره"
+
+#: contacts/one.php:170
+#: locale/datastrings.php:65
+msgid "N/A"
+msgstr "نامشخص"
+
+#: reports/completed-items.php:230
+msgid "NO COMPLETED ACTIVITIES for"
+msgstr "فعالیت تکمیل شده‌ای یافت نشد برای"
+
+#: reports/completed-items.php:230
+msgid "no export so let's get visible"
+msgstr "هیچ فایل صادر شده‌ای برای نمایش وجود ندارد"
+
+#: reports/completed-items.php:272
+msgid "NO COMPLETED CAMPAIGNS for"
+msgstr "رشته عملیات تکمیل شده‌ای یافت نشد برای"
+
+#: reports/completed-items.php:367
+msgid "NO COMPLETED CASES for"
+msgstr "مورد تکمیل شده‌ای یافت نشد برای"
+
+#: reports/completed-items.php:321
+msgid "NO COMPLETED OPPORTUNITIES for"
+msgstr "فرصت تکمیل شده‌ای یافت نشد برای"
+
+#: reports/open-items.php:216
+msgid "NO OPEN ACTIVITIES for"
+msgstr "هیچ فعالیت در حال اجرایی برای"
+
+#: reports/open-items.php:258
+msgid "NO OPEN CAMPAIGNS for"
+msgstr "هیچ رشته عملیات درحال اجرایی برای"
+
+#: reports/open-items.php:355
+msgid "NO OPEN CASES for"
+msgstr "هیچ مورد در حال اجرایی برای"
+
+#: reports/open-items.php:307
+msgid "NO OPEN OPPORTUNITIES for"
+msgstr "هیچ فرصت در حال اجرایی برای"
+
+#: reports/overdue-items.php:232
+msgid "NO OVERDUE ACTIVITIES for"
+msgstr "هیچ فعالیت دیر شده‌ای برای"
+
+#: reports/overdue-items.php:274
+msgid "NO OVERDUE CAMPAIGNS for"
+msgstr "هیچ رشته عملیات دیر شده‌ای برای"
+
+#: reports/overdue-items.php:371
+msgid "NO OVERDUE CASES for"
+msgstr "هیچ مورد دیر شده‌ای برای"
+
+#: reports/overdue-items.php:323
+msgid "NO OVERDUE OPPORTUNITIES for"
+msgstr "هیچ فرصت دیر شده‌ای برای"
+
+#: admin/account-statuses/some.php:50
+#: admin/activity-templates/some.php:62
+#: admin/activity-types/some.php:57
+#: admin/campaign-statuses/some.php:50
+#: admin/case-priorities/some.php:50
+#: admin/case-statuses/some.php:71
+#: admin/case-types/some.php:48
+#: admin/categories/some.php:49
+#: admin/company-sources/some.php:52
+#: admin/company-types/some.php:47
+#: admin/crm-statuses/some.php:53
+#: admin/industries/some.php:47
+#: admin/opportunity-statuses/some.php:92
+#: admin/ratings/some.php:51
+#: admin/relationship-types/some.php:52
+#: admin/roles/some.php:50
+#: cases/sidebar.php:21
+#: companies/divisions.php:88
+#: companies/one.php:565
+#: contacts/one.php:316
+#: contacts/some.php:68
+#: email/templates.php:66
+#: files/sidebar.php:21
+#: files/some.php:66
+#: files/some.php:358
+#: opportunities/opportunity-view.php:48
+#: opportunities/sidebar.php:21
+#: private/home.php:244
+#: private/home.php:279
+#: private/home.php:286
+#: private/home.php:293
+#: private/home.php:305
+#: private/home.php:312
+#: relationships/edit.php:52
+#: reports/audit-items.php:97
+msgid "Name"
+msgstr "نام"
+
+#: contacts/transfer.php:49
+msgid "Name or ID"
+msgstr "نام یا شماره شناسایی"
+
+#: locale/datastrings.php:66
+msgid "Negotiation"
+msgstr "مذاکره"
+
+#: admin/country-address-format/edit.php:69
+#: cases/sidebar.php:66
+#: companies/one.php:574
+#: files/sidebar.php:94
+#: locale/datastrings.php:67
+#: notes/sidebar.php:229
+#: opportunities/sidebar.php:65
+#: plugins/info/one.php:346
+msgid "New"
+msgstr "جدید"
+
+#: companies/addresses.php:132
+msgid "New Address"
+msgstr "آدرس جدید"
+
+#: campaigns/new.php:48
+msgid "New Campaign"
+msgstr "رشته عملیات جدید"
+
+#: cases/new.php:86
+msgid "New Case"
+msgstr "مورد جدید"
+
+#: companies/new.php:95
+#: companies/some-advanced.php:402
+#: companies/some.php:347
+msgid "New Company"
+msgstr "شرکت جدید"
+
+#: contacts/new.php:112
+msgid "New Contact for"
+msgstr "تماس جدید برای"
+
+#: companies/divisions.php:63
+msgid "New Division"
+msgstr "بخش جدید"
+
+#: opportunities/new.php:63
+msgid "New Opportunity"
+msgstr "فرصت جدید"
+
+#: admin/users/change-password.php:45
+msgid "New Password"
+msgstr "کلمه عبور جدید"
+
+#: companies/one.php:551
+msgid "News"
+msgstr "اخبار"
+
+#: companies/one.php:355
+msgid "No Activities"
+msgstr "هیچ فعالیتی"
+
+#: reports/audit-items.php:170
+msgid "No Activity."
+msgstr "هیچ فعالیتی."
+
+#: include/utils-interface.php:40
+msgid "No Case To Delete."
+msgstr "هیچ موردی برای پاک کردن وجود ندارد."
+
+#: contacts/sidebar.php:198
+msgid "No Contact Selected."
+msgstr "هیچ تماسی انتخاب نشده است."
+
+#: companies/one.php:359
+msgid "No Contacts"
+msgstr "هیچ تماسی"
+
+#: activities/some.php:587
+msgid "No Saved Searches"
+msgstr "هیچ جستجوی ذخیره شده‌ای یافت نشد"
+
+#: opportunities/one.php:252
+msgid "No activities"
+msgstr "هیچ فعالیتی"
+
+#: include/strings.php:33
+msgid "No attached companies"
+msgstr "هیچ شرکت ضمیمه‌ای"
+
+#: include/strings.php:32
+msgid "No attached contacts"
+msgstr "هیچ تماس ضمیمه‌ای"
+
+#: files/sidebar.php:82
+msgid "No attached files"
+msgstr "هیچ فایل ضمیمه‌ای وجود ندارد"
+
+#: notes/sidebar.php:174
+msgid "No attached notes"
+msgstr "هیچ یادداشت ضمیمه‌ای وجود ندارد"
+
+#: include/categories-sidebar.php:53
+msgid "No categories"
+msgstr "هیچ طبقه‌بندی"
+
+#: contacts/transfer-2.php:66
+msgid "No companies found"
+msgstr "هیچ شرکتی یافت نشد"
+
+#: email/email.php:101
+#: email/index.php:53
+#: email/templates.php:50
+msgid "No e-mail templates"
+msgstr "هیچ الگوی پست الکترونیکی"
+
+#: admin/case-statuses/one.php:171
+#: admin/opportunity-statuses/one.php:194
+msgid "No linked activities"
+msgstr "هیچ فعالیت لینک شده‌ای"
+
+#: include/adodb/tohtml.inc.php:150
+msgid "No matches"
+msgstr "هیچ موردی یافت نشد"
+
+#: private/home.php:431
+msgid "No open activities"
+msgstr "هیچ فعالیت در حال اجرایی وجود ندارد"
+
+#: cases/sidebar.php:55
+msgid "No open cases"
+msgstr "هیچ مورد در حال اجرایی وجود ندارد"
+
+#: private/home.php:424
+msgid "No open files"
+msgstr "هیچ فایل بازی وجود ندارد"
+
+#: opportunities/sidebar.php:54
+msgid "No open opportunities"
+msgstr "هیچ فرصت در حال اجرایی وجود ندارد"
+
+#: campaigns/some.php:148
+msgid "No recently viewed campaigns"
+msgstr "هیچ رشته عملیات به تازگی مشاهده شده وجود ندارد"
+
+#: cases/some.php:164
+msgid "No recently viewed cases"
+msgstr "هیچ مورد به تازگی مشاهده شده‌ای وجود ندارد"
+
+#: companies/some-advanced.php:335
+#: companies/some.php:205
+msgid "No recently viewed companies"
+msgstr "هیچ شرکت به تازگی مشاهده شده‌ای وجود ندارد"
+
+#: contacts/some.php:207
+msgid "No recently viewed contacts"
+msgstr "هیچ تماس به تازگی مشاهده شده‌ای وجود ندارد"
+
+#: files/some.php:249
+msgid "No recently viewed file"
+msgstr "هیچ فایل به تازگی مشاهده شده‌ای وجود ندارد"
+
+#: opportunities/some.php:163
+msgid "No recently viewed opportunities"
+msgstr "هیچ فرصت به تازگی مشاهده شده‌ای وجود ندارد"
+
+#: opportunities/export.php:98
+msgid "No results returned from database by query"
+msgstr "هیچ نتیجه‌ای از جستجوی بانک اطلاعاتی باز گردانده نشد"
+
+#: private/home.php:241
+msgid "Non Uploaded Files"
+msgstr "هیچ فایل ارسال شده‌ای وجود ندارد"
+
+#: activities/some.php:550
+msgid "Non-Completed"
+msgstr "به اتمام نرسیده"
+
+#: locale/datastrings.php:68
+msgid "Non-Profit"
+msgstr "غیر انتفاعی"
+
+#: admin/categories/one.php:143
+#: campaigns/categories.php:100
+#: cases/categories.php:100
+#: companies/categories.php:104
+#: contacts/categories.php:106
+#: opportunities/categories.php:100
+msgid "Not Associated With"
+msgstr "مربوط نیست به"
+
+#: cases/pager.php:49
+#: companies/pager.php:49
+msgid "Not Coded Yet"
+msgstr "هنوز کد نشده‌است"
+
+#: activities/some.php:351
+msgid "Not Set"
+msgstr "تنظیم نشده"
+
+#: notes/edit.php:43
+#: notes/new.php:44
+msgid "Note Body"
+msgstr "متن یادداشت"
+
+#: admin/account-statuses/one.php:90
+#: admin/activity-templates/edit.php:106
+#: admin/activity-types/one.php:92
+#: admin/campaign-statuses/one.php:96
+#: admin/campaign-types/one.php:83
+#: admin/case-priorities/one.php:90
+#: admin/case-statuses/one.php:194
+#: admin/case-types/one.php:85
+#: admin/categories/one.php:124
+#: admin/company-sources/one.php:92
+#: admin/company-types/one.php:82
+#: admin/crm-statuses/one.php:83
+#: admin/industries/one.php:82
+#: admin/opportunity-statuses/one.php:217
+#: admin/ratings/one.php:82
+#: admin/relationship-types/one.php:101
+#: admin/roles/one.php:85
+#: admin/users/one.php:132
+msgid "Note: This action CANNOT be undone!"
+msgstr "تذکر: امکان برگشت وجود نخواهد شد!"
+
+#: notes/sidebar.php:19
+#: reports/companies-list.php:173
+msgid "Notes"
+msgstr "یادداشت‌ها"
+
+#: reports/open-items.php:180
+msgid "OPEN ACTIVITIES"
+msgstr "فعالیت‌های درحال اجرا"
+
+#: reports/open-items.php:229
+msgid "OPEN CAMPAIGNS for"
+msgstr "رشته عملیات در حال اجرا برای"
+
+#: reports/open-items.php:322
+msgid "OPEN CASES for"
+msgstr "موردهای درحال اجرا برای"
+
+#: admin/country-address-format/edit.php:65
+msgid "OR"
+msgstr "یا"
+
+#: reports/overdue-items.php:195
+msgid "OVERDUE ACTIVITIES for"
+msgstr "فعالیت‌های دیر شده برای"
+
+#: reports/overdue-items.php:246
+msgid "OVERDUE CAMPAIGNS for"
+msgstr "رشته‌ عملیات دیر شده برای"
+
+#: reports/overdue-items.php:339
+msgid "OVERDUE CASES for"
+msgstr "موارد دیر شده برای"
+
+#: reports/overdue-items.php:291
+msgid "OVERDUE OPPORTUNITIES for"
+msgstr "فرصت‌های دیر شده برای"
+
+#: activities/some.php:539
+#: cases/one.php:306
+#: contacts/one.php:488
+#: opportunities/one.php:410
+msgid "On"
+msgstr "در"
+
+#: opportunities/one.php:410
+msgid "one"
+msgstr "یک"
+
+#: files/some.php:297
+#: private/home.php:246
+msgid "On What"
+msgstr "در چه"
+
+#: files/some.php:316
+msgid "On what Name"
+msgstr "در چه نامی"
+
+#: admin/users/self.php:44
+msgid "One User"
+msgstr "یک کاربر"
+
+#: reports/activitytimes.php:61
+msgid "Only show completed activities"
+msgstr "فقط فعالیت‌های تکمیل شده نمایش دهده شوند"
+
+#: admin/campaign-statuses/one.php:75
+#: admin/campaign-statuses/some.php:86
+#: admin/opportunity-statuses/one.php:152
+#: admin/opportunity-statuses/some.php:134
+#: locale/datastrings.php:69
+msgid "Open"
+msgstr "باز"
+
+#: activities/some.php:463
+#: private/home.php:445
+msgid "Open Activities"
+msgstr "فعالیت‌های در حال اجرا"
+
+#: cases/sidebar.php:18
+msgid "Open Cases"
+msgstr "موارد در حال اجرا"
+
+#: reports/index.php:115
+#: reports/open-items.php:35
+msgid "Open Items"
+msgstr "آیتم‌های در حال اجرا"
+
+#: admin/campaign-statuses/one.php:72
+#: admin/campaign-statuses/some.php:83
+#: admin/opportunity-statuses/one.php:149
+#: admin/opportunity-statuses/some.php:131
+msgid "Open Status"
+msgstr "وضعیت‌های باز"
+
+#: files/some.php:310
+#: include/utils-interface.php:215
+#: opportunities/sidebar.php:18
+#: opportunities/some.php:203
+#: reports/completed-items.php:110
+#: reports/open-items.php:92
+#: reports/overdue-items.php:106
+msgid "Opportunities"
+msgstr "فرصت‌ها"
+
+#: reports/opportunities-size-by-industry.php:71
+#: reports/opportunities-size-by-industry.php:83
+#: reports/opportunities-size-by-industry.php:86
+msgid "Opportunities (Size) by Industry"
+msgstr "میزان فرصت به صنعت"
+
+#: reports/opportunities-size-by-opportunity-status.php:82
+#: reports/opportunities-size-by-opportunity-status.php:94
+#: reports/opportunities-size-by-opportunity-status.php:97
+msgid "Opportunities (Size) by Status"
+msgstr "میزان فرصت به وضعیت"
+
+#: reports/opportunities-by-industry.php:60
+#: reports/opportunities-by-industry.php:72
+#: reports/opportunities-by-industry.php:75
+#: reports/opportunities-quantity-by-industry.php:60
+#: reports/opportunities-quantity-by-industry.php:72
+#: reports/opportunities-quantity-by-industry.php:75
+msgid "Opportunities by Industry"
+msgstr "فرصت به صنعت"
+
+#: reports/opportunities-by-opportunity-status.php:59
+#: reports/opportunities-by-opportunity-status.php:71
+#: reports/opportunities-by-opportunity-status.php:74
+#: reports/opportunities-quantity-by-opportunity-status.php:71
+#: reports/opportunities-quantity-by-opportunity-status.php:83
+#: reports/opportunities-quantity-by-opportunity-status.php:86
+msgid "Opportunities by Status"
+msgstr "فرصت به وضعیت"
+
+#: files/some.php:95
+#: opportunities/edit.php:127
+#: opportunities/some.php:65
+#: opportunities/some.php:266
+#: reports/completed-items.php:295
+#: reports/index.php:57
+#: reports/overdue-items.php:299
+msgid "Opportunity"
+msgstr "فرصت"
+
+#: include/utils-interface.php:60
+msgid "Opportunity Added."
+msgstr "فرصت اضافه شد"
+
+#: include/utils-interface.php:62
+msgid "Opportunity Deleted."
+msgstr "فرصت حذف شد."
+
+#: opportunities/edit.php:147
+#: opportunities/new.php:77
+#: opportunities/one.php:255
+#: opportunities/one.php:275
+msgid "Opportunity Details"
+msgstr "جزئیات فرصت"
+
+#: opportunities/some.php:225
+msgid "Opportunity Name"
+msgstr "نام فرصت"
+
+#: activities/one.php:382
+msgid "Opportunity Notes"
+msgstr "یادداشت‌های فرصت"
+
+#: opportunities/some.php:70
+msgid "Opportunity Size"
+msgstr "اندازه فرصت"
+
+#: activities/some.php:558
+msgid "وضعیت فرصت"
+msgstr "Statuts Opportunité"
+
+#: admin/opportunity-statuses/one.php:114
+msgid "Opportunity Status Details"
+msgstr "جزئیات وضعیت فرصت"
+
+#: admin/index.php:193
+#: admin/opportunity-statuses/some.php:89
+#: opportunities/opportunity-view.php:45
+msgid "Opportunity Statuses"
+msgstr "وضعیت‌های فرصت"
+
+#: opportunities/edit.php:150
+#: opportunities/new.php:80
+msgid "Opportunity Title"
+msgstr "عنوان فرصت"
+
+#: campaigns/some.php:268
+msgid "Options"
+msgstr "گزینه‌ها"
+
+#: locale/datastrings.php:70
+msgid "Other"
+msgstr "سایر"
+
+#: relationships/sidebar.php:135
+msgid "Other "
+msgstr "سایر"
+
+#: include/strings.php:29
+msgid "Other Companies"
+msgstr "سایر شرکت‌ها"
+
+#: include/strings.php:28
+msgid "Other Contacts"
+msgstr "سایر تماس‌ها"
+
+#: activities/some.php:164
+#: activities/some.php:290
+msgid "Overdue"
+msgstr "دیر کرده"
+
+#: reports/index.php:111
+#: reports/overdue-items.php:52
+msgid "Overdue Items"
+msgstr "آیتم‌های دیر کرده"
+
+#: companies/addresses.php:167
+#: companies/advanced-search.php:265
+#: companies/new.php:229
+msgid "Override Address"
+msgstr "آدرس در نظر گرفته نشود"
+
+#: files/some.php:338
+msgid "Owl File Management"
+msgstr "مدیریت فایل‌ها"
+
+#: activities/some.php:174
+#: activities/some.php:304
+#: activities/some.php:521
+#: campaigns/edit.php:93
+#: campaigns/new.php:81
+#: campaigns/some.php:66
+#: campaigns/some.php:216
+#: cases/edit.php:204
+#: cases/new.php:123
+#: cases/one.php:214
+#: cases/sidebar.php:22
+#: cases/some.php:64
+#: cases/some.php:251
+#: companies/advanced-search.php:174
+#: companies/edit.php:117
+#: companies/new.php:135
+#: companies/some.php:274
+#: contacts/some.php:83
+#: contacts/some.php:279
+#: email/email-3.php:86
+#: files/sidebar.php:23
+#: files/some.php:318
+#: notes/sidebar.php:30
+#: opportunities/edit.php:171
+#: opportunities/new.php:97
+#: opportunities/one.php:289
+#: opportunities/sidebar.php:22
+#: opportunities/some.php:66
+#: opportunities/some.php:233
+#: reports/companies-list.php:99
+msgid "Owner"
+msgstr "مالک"
+
+#: reports/companies-list.php:118
+msgid "PDF"
+msgstr "PDF"
+
+#: admin/system-parameters/some.php:49
+msgid "Parameter"
+msgstr "پارامتر"
+
+#: locale/datastrings.php:71
+msgid "Partner"
+msgstr "شریک"
+
+#: locale/datastrings.php:72
+msgid "Partners"
+msgstr "شرکاء"
+
+#: admin/users/some.php:98
+msgid "Password"
+msgstr "کلمه عبور"
+
+#: include/utils-interface.php:77
+msgid "Password Does Not Match."
+msgstr "کلمات عبور باهم همخوانی ندارند."
+
+#: contacts/edit-address.php:105
+msgid "Payment Address"
+msgstr "آدرس پرداخت"
+
+#: companies/addresses.php:117
+msgid "Payment Default"
+msgstr "پیش‌گزیده پرداخت"
+
+#: companies/advanced-search.php:178
+#: companies/edit.php:129
+#: companies/new.php:139
+#: companies/one.php:432
+#: companies/one.php:569
+#: companies/sidebar.php:55
+#: locale/datastrings.php:73
+msgid "Phone"
+msgstr "تلفن"
+
+#: admin/country-address-format/index.php:44
+msgid "Phone Format"
+msgstr "فرمت شماره تلفن"
+
+#: include/utils-misc.php:245
+#: include/utils-misc.php:629
+msgid "Please correct this error."
+msgstr "لطفا این خطا را تصحیح نمایید."
+
+#: include/utils-interface.php:79
+msgid "Please try again."
+msgstr "لطفا مجددا سعی کنید."
+
+#: admin/index.php:235
+msgid "Plugin Activation"
+msgstr "فعال سازی Plugin"
+
+#: admin/plugin/plugin-admin.php:170
+msgid "Plugin Administration"
+msgstr "مدیریت Plugin"
+
+#: admin/plugin/plugin-admin.php:246
+msgid "Plugin directory could not be found: "
+msgstr "دایرکتوری مربوط به Pluginها یافت نشد: "
+
+#: admin/index.php:231
+#: admin/plugin/plugin-admin.php:187
+msgid "Plugins"
+msgstr "Pluginها"
+
+#: locale/datastrings.php:74
+msgid "Poor"
+msgstr "ضعیف"
+
+#: admin/relationship-types/one.php:82
+msgid "Post Formatting"
+msgstr "فرمت پست"
+
+#: admin/relationship-types/some.php:95
+msgid "Post-Text Formatting"
+msgstr "فرمت متن پست"
+
+#: companies/addresses.php:159
+#: companies/advanced-search.php:257
+#: companies/edit-address.php:93
+#: companies/new.php:221
+#: contacts/edit-address.php:210
+#: reports/companies-list.php:167
+msgid "Postal Code"
+msgstr "کد پستی"
+
+#: admin/relationship-types/one.php:78
+msgid "Pre Formatting"
+msgstr "پیش فرمت"
+
+#: include/utils-interface.php:294
+msgid "Preferences"
+msgstr "تنظیمات"
+
+#: admin/relationship-types/some.php:91
+msgid "Pre-Text Formatting"
+msgstr "پیش فرمت متن"
+
+#: locale/datastrings.php:75
+msgid "Preliminaries"
+msgstr "مقدماتی"
+
+#: contacts/edit-address.php:90
+#: reports/company-contacts-printout.php:248
+msgid "Primary Address"
+msgstr "آدرس اولیه"
+
+#: companies/addresses.php:114
+msgid "Primary Default"
+msgstr "پیش‌گزیده اولیه"
+
+#: reports/index.php:99
+msgid "Printable contact summary information for Companies in search Results."
+msgstr "اطلاعات تماس جمع بندی شده رشته عملیات از جستجو برای چاپ."
+
+#: reports/completed-items.php:153
+#: reports/open-items.php:122
+#: reports/overdue-items.php:137
+msgid "Printer Friendly"
+msgstr "نسخه چاپگر"
+
+#: cases/edit.php:200
+#: cases/new.php:119
+#: cases/one.php:222
+#: cases/sidebar.php:23
+#: cases/some.php:64
+msgid "Priority"
+msgstr "اولویت"
+
+#: activities/one.php:350
+#: opportunities/new.php:105
+#: opportunities/one.php:301
+msgid "Probability"
+msgstr "احتمال"
+
+#: opportunities/edit.php:179
+msgid "Probability (%)"
+msgstr "احتمال (%)"
+
+#: companies/advanced-search.php:218
+#: companies/edit.php:173
+#: companies/new.php:179
+#: contacts/edit.php:230
+#: contacts/new.php:225
+msgid "Profile"
+msgstr "پروفایل"
+
+#: locale/datastrings.php:76
+msgid "Prospect"
+msgstr "دورنما"
+
+#: locale/datastrings.php:77
+msgid "Prospects"
+msgstr "دورنما"
+
+#: locale/datastrings.php:78
+msgid "Qualified"
+msgstr "شایسته"
+
+#: reports/index.php:70
+msgid "Quantity by Industry"
+msgstr "تعداد با صنعت"
+
+#: reports/index.php:61
+msgid "Quantity by Status"
+msgstr "تعداد با وضعیت"
+
+#: locale/datastrings.php:79
+msgid "Radio"
+msgstr "رادیو"
+
+#: plugins/radtest/radtest.php:38
+#: plugins/radtest/setup.php:26
+msgid "Radius Test"
+msgstr "آزمایش شعاع"
+
+#: admin/import/import-companies.php:142
+#: companies/admin.php:86
+#: companies/edit.php:153
+#: companies/one.php:487
+#: companies/some-advanced.php:140
+#: companies/some.php:75
+msgid "Rating"
+msgstr "امتیاز"
+
+#: admin/ratings/one.php:37
+msgid "Rating Details"
+msgstr "جزئیات امتیاز"
+
+#: admin/index.php:188
+#: admin/ratings/some.php:48
+msgid "Ratings"
+msgstr "امتیازات"
+
+#: locale/datastrings.php:80
+msgid "Real Estate"
+msgstr "املاک"
+
+#: campaigns/some.php:278
+#: cases/some.php:284
+#: companies/some-advanced.php:409
+#: companies/some.php:354
+#: contacts/some.php:331
+#: files/some.php:355
+#: opportunities/some.php:263
+msgid "Recently Viewed"
+msgstr "اخیرا نمایش داده شده"
+
+#: admin/relationship-types/some.php:54
+#: companies/relationships.php:114
+msgid "Relationship"
+msgstr "ارتباط"
+
+#: admin/relationship-types/one.php:58
+#: admin/relationship-types/some.php:71
+msgid "Relationship Name"
+msgstr "نام ارتباط"
+
+#: admin/relationship-types/one.php:43
+msgid "Relationship Type Details"
+msgstr "جزئیات نوع ارتباط"
+
+#: admin/index.php:198
+#: admin/relationship-types/some.php:49
+msgid "Relationship Types"
+msgstr "نوع ارتباط"
+
+#: companies/relationships.php:100
+#: companies/relationships.php:111
+#: relationships/sidebar.php:85
+msgid "Relationships"
+msgstr "ارتباطات"
+
+#: reports/opportunities-size-by-industry.php:97
+#: reports/opportunities-size-by-opportunity-status.php:107
+msgid "Remainder"
+msgstr "باقیمانده"
+
+#: reports/audit-items.php:102
+msgid "Remote Addr"
+msgstr "آدرس راه دور"
+
+#: reports/audit-items.php:103
+msgid "Remote Port"
+msgstr "درگاه راه دور"
+
+#: email/email-2.php:79
+#: email/one-template.php:78
+msgid "Reply to"
+msgstr "پاسخ به"
+
+#: include/utils-interface.php:223
+#: reports/index.php:29
+#: reports/index.php:88
+msgid "Reports"
+msgstr "گزارشات"
+
+#: locale/datastrings.php:81
+msgid "Restaurant"
+msgstr "رستوران"
+
+#: locale/datastrings.php:82
+msgid "Retail"
+msgstr "خرده فروشی"
+
+#: include/utils-interface.php:272
+msgid "Rev."
+msgstr "ویراست"
+
+#: companies/advanced-search.php:198
+#: companies/edit.php:149
+#: companies/new.php:159
+#: companies/one.php:507
+msgid "Revenue"
+msgstr "درآمد"
+
+#: admin/users/one.php:78
+#: admin/users/some.php:65
+#: admin/users/some.php:82
+msgid "Role"
+msgstr "نقش"
+
+#: admin/roles/one.php:40
+msgid "Role Details"
+msgstr "جزئیات نقش"
+
+#: admin/index.php:126
+#: admin/roles/some.php:47
+msgid "Roles"
+msgstr "نقش‌ها"
+
+#: reports/index.php:127
+msgid "Sales Force Automation"
+msgstr "خودکارسازی نیروی فروش"
+
+#: contacts/edit.php:140
+#: contacts/new.php:135
+msgid "Salutations"
+msgstr "تهنیت"
+
+#: contacts/edit.php:235
+#: contacts/transfer-2.php:70
+msgid "Save"
+msgstr "ذخیره"
+
+#: activities/one.php:426
+#: admin/account-statuses/one.php:74
+#: admin/activity-templates/edit.php:83
+#: admin/activity-types/one.php:77
+#: admin/campaign-statuses/one.php:82
+#: admin/campaign-types/one.php:69
+#: admin/case-priorities/one.php:76
+#: admin/case-statuses/one.php:137
+#: admin/case-types/one.php:71
+#: admin/categories/one.php:110
+#: admin/company-sources/one.php:78
+#: admin/company-types/one.php:68
+#: admin/crm-statuses/one.php:69
+#: admin/industries/one.php:68
+#: admin/opportunity-statuses/one.php:160
+#: admin/ratings/one.php:68
+#: admin/relationship-types/one.php:86
+#: admin/roles/one.php:71
+#: admin/users/change-password.php:53
+#: admin/users/one.php:116
+#: admin/users/self.php:91
+#: campaigns/edit.php:119
+#: campaigns/new.php:107
+#: cases/edit.php:222
+#: cases/new.php:138
+#: companies/admin.php:102
+#: companies/edit-address.php:107
+#: companies/edit-division.php:66
+#: companies/edit.php:177
+#: companies/new.php:183
+#: contacts/edit-address.php:223
+#: files/one.php:94
+#: notes/edit.php:40
+#: notes/new.php:50
+#: opportunities/edit.php:210
+#: opportunities/new.php:134
+msgid "Save Changes"
+msgstr "ذخیره تغییرات"
+
+#: companies/addresses.php:122
+msgid "Save Defaults"
+msgstr "ذخیره پیش‌گزیده‌ها"
+
+#: activities/one.php:428
+msgid "Save and Next"
+msgstr "ذخیره و بعدی"
+
+#: contacts/transfer-2.php:70
+msgid "Save and Update All Records"
+msgstr "ذخیره و بروز رسانی تمام رکوردها"
+
+#: email/email-2.php:96
+#: email/one-template.php:95
+msgid "Save as New Template"
+msgstr "ذخیره به عنوان الگوی جدید"
+
+#: activities/some.php:582
+msgid "Saved Searches"
+msgstr "جستجوهای ذخیره شده"
+
+#: activities/one.php:430
+msgid "Schedule Followup"
+msgstr "پی‌گیری زمان بندی شده"
+
+#: activities/some.php:170
+#: activities/some.php:298
+#: activities/some.php:533
+#: private/home.php:453
+msgid "Scheduled"
+msgstr "زمان بندی شده"
+
+#: admin/activity-types/one.php:73
+#: admin/activity-types/some.php:90
+#: admin/case-priorities/one.php:72
+#: admin/case-priorities/some.php:82
+#: admin/company-sources/one.php:74
+#: admin/company-sources/some.php:84
+msgid "Score Adjustment"
+msgstr "تنظیم امتیاز"
+
+#: activities/some.php:600
+#: campaigns/some.php:244
+#: cases/sidebar.php:67
+#: cases/sidebar.php:75
+#: cases/some.php:263
+#: companies/advanced-search.php:270
+#: companies/some.php:311
+#: contacts/some.php:300
+#: contacts/transfer.php:56
+#: files/some.php:327
+#: opportunities/sidebar.php:66
+#: opportunities/sidebar.php:74
+#: opportunities/some.php:243
+#: relationships/new-relationship.php:94
+#: reports/company-contacts-printout.php:229
+msgid "Search"
+msgstr "جستجو"
+
+#: activities/some.php:522
+msgid "Search By Date"
+msgstr "جستجو با تاریخ"
+
+#: activities/some.php:522
+msgid "Select Column Layouts"
+msgstr "انتخاب چیدمان ستونها"
+
+
+#: activities/some.php:522
+msgid "Select Columns"
+msgstr "انتخاب ستون‌ها"
+
+#: companies/some-advanced.php:363
+#: companies/some.php:243
+msgid "Search Companies"
+msgstr "جستجوی شرکت‌ها"
+
+#: activities/some.php:484
+#: campaigns/some.php:211
+#: cases/some.php:238
+#: companies/some.php:266
+#: contacts/some.php:252
+#: files/some.php:291
+#: opportunities/some.php:222
+#: reports/company-contacts-printout.php:210
+msgid "Search Criteria"
+msgstr "محدوده جستجو"
+
+#: locale/datastrings.php:83
+msgid "Search Engine"
+msgstr "موتور جستجو"
+
+#: locale/datastrings.php:84
+msgid "Search Engines"
+msgstr "موتورهای جستجو"
+
+#: activities/pager.php:35
+#: cases/pager.php:35
+#: companies/pager.php:35
+#: include/adodb/adodb-pager.inc.php:287
+#: opportunities/pager.php:35
+msgid "Search Results"
+msgstr "نتایج جستجو"
+
+#: activities/some.php:583
+msgid "Search Title"
+msgstr "عنوان جستجو"
+
+#: contacts/transfer.php:46
+#: include/strings.php:19
+msgid "Search for Company"
+msgstr "جستجو برای شرکت"
+
+#: include/strings.php:18
+msgid "Search for Contact"
+msgstr "جستجو برای تماس"
+
+#: locale/datastrings.php:85
+msgid "Seminar"
+msgstr "سمینار"
+
+#: locale/datastrings.php:86
+msgid "Seminars"
+msgstr "سمینارها"
+
+#: reports/completed-items.php:132
+#: reports/open-items.php:136
+#: reports/overdue-items.php:151
+msgid "Send Email To"
+msgstr "ارسال نامه الکترونیکی به"
+
+#: plugins/autostatus/autostatus.php:54
+#: plugins/autostatus/setup.php:37
+msgid "Server Status"
+msgstr "وضعیت سرویس‌دهنده"
+
+#: reports/audit-items.php:104
+msgid "Session Id"
+msgstr "شماره نشست"
+
+#: contacts/edit-address.php:100
+msgid "Shipping Address"
+msgstr "آدرس حمل"
+
+#: companies/addresses.php:116
+msgid "Shipping Default"
+msgstr "حمل پیش‌گزیده"
+
+#: admin/account-statuses/one.php:56
+#: admin/account-statuses/some.php:66
+#: admin/activity-types/one.php:57
+#: admin/activity-types/some.php:74
+#: admin/campaign-statuses/one.php:56
+#: admin/campaign-statuses/some.php:66
+#: admin/campaign-types/one.php:53
+#: admin/campaign-types/some.php:64
+#: admin/case-priorities/one.php:56
+#: admin/case-priorities/some.php:66
+#: admin/case-statuses/one.php:121
+#: admin/case-statuses/some.php:88
+#: admin/case-types/one.php:55
+#: admin/case-types/some.php:64
+#: admin/categories/one.php:94
+#: admin/categories/some.php:65
+#: admin/company-sources/one.php:58
+#: admin/company-sources/some.php:68
+#: admin/company-types/one.php:52
+#: admin/company-types/some.php:63
+#: admin/crm-statuses/one.php:53
+#: admin/crm-statuses/some.php:69
+#: admin/industries/one.php:52
+#: admin/industries/some.php:63
+#: admin/opportunity-statuses/one.php:129
+#: admin/opportunity-statuses/some.php:111
+#: admin/ratings/one.php:52
+#: admin/ratings/some.php:67
+#: admin/roles/one.php:55
+#: admin/roles/some.php:66
+msgid "Short Name"
+msgstr "نام کوتاه"
+
+#: files/one.php:75
+#: files/sidebar.php:22
+#: files/some.php:359
+#: opportunities/one.php:297
+msgid "Size"
+msgstr "اندازه"
+
+#: opportunities/edit.php:175
+#: opportunities/new.php:101
+msgid "Size (in dollars)"
+msgstr "اندازه به ریال"
+
+#: reports/index.php:74
+msgid "Size by Industry"
+msgstr "اندازه به صنعت"
+
+#: reports/index.php:66
+msgid "Size by Status"
+msgstr "اندازه با وضعیت"
+
+#: locale/datastrings.php:87
+msgid "Special"
+msgstr "مخصوص"
+
+#: reports/activitytimes.php:51
+#: reports/activitytimes.php:72
+#: reports/audit-items.php:43
+#: reports/completed-items.php:71
+#: reports/completed-items.php:198
+#: reports/completed-items.php:249
+#: reports/open-items.php:184
+#: reports/open-items.php:233
+#: reports/overdue-items.php:199
+#: reports/overdue-items.php:250
+msgid "Start"
+msgstr "شروع"
+
+#: activities/one.php:402
+#: campaigns/one.php:113
+#: campaigns/some.php:67
+#: companies/one.php:612
+#: plugins/info/one.php:369
+msgid "Starts"
+msgstr "شروع"
+
+#: campaigns/edit.php:97
+#: campaigns/new.php:85
+msgid "Starts On"
+msgstr "شروع در"
+
+#: companies/some.php:124
+#: companies/some.php:134
+#: companies/some.php:286
+#: reports/companies-list.php:103
+#: reports/company-contacts-printout.php:128
+#: reports/company-contacts-printout.php:138
+msgid "State"
+msgstr "استان"
+
+#: companies/addresses.php:155
+#: companies/advanced-search.php:253
+#: companies/edit-address.php:89
+#: companies/new.php:217
+#: contacts/edit-address.php:206
+msgid "State/Province"
+msgstr "استان/منطقه"
+
+#: activities/one.php:336
+#: admin/activity-templates/some.php:63
+#: campaigns/edit.php:89
+#: campaigns/new.php:77
+#: campaigns/one.php:105
+#: campaigns/some.php:66
+#: campaigns/some.php:230
+#: campaigns/some.php:283
+#: cases/edit.php:196
+#: cases/new.php:115
+#: cases/one.php:218
+#: cases/some.php:65
+#: cases/some.php:254
+#: cases/some.php:289
+#: opportunities/edit.php:166
+#: opportunities/new.php:92
+#: opportunities/one.php:309
+#: opportunities/sidebar.php:23
+#: opportunities/some.php:75
+#: opportunities/some.php:235
+#: opportunities/some.php:268
+#: reports/overdue-items.php:296
+msgid "Status"
+msgstr "وضعیت"
+
+#: opportunities/new.php:94
+msgid "Status Definitions"
+msgstr "تعاریف وضعیت"
+
+#: include/utils-interface.php:83
+msgid "Status not changed."
+msgstr "وضعیت تغییر نکرده است."
+
+#: email/email-2.php:89
+#: email/one-template.php:88
+msgid "Subject"
+msgstr "موضوع"
+
+#: admin/plugin/plugin-admin.php:243
+msgid "Submit"
+msgstr "ارسال"
+
+#: companies/one.php:566
+#: contacts/edit.php:166
+#: contacts/new.php:161
+#: contacts/one.php:324
+msgid "Summary"
+msgstr "جمع بندی"
+
+#: activities/one.php:325
+msgid "Switch Opportunity"
+msgstr "گزینش فرصت"
+
+#: admin/index.php:47
+msgid "System Administration"
+msgstr "مدیریت سیستم"
+
+#: admin/index.php:141
+#: admin/system-parameters/some.php:46
+msgid "System Parameters"
+msgstr "پارامترهای سیستم"
+
+#: reports/activitytimes.php:121
+msgid "TOTAL"
+msgstr "جمع کل"
+
+#: reports/audit-items.php:96
+msgid "Table"
+msgstr "جدول"
+
+#: admin/relationship-types/some.php:53
+msgid "Tables"
+msgstr "جداول"
+
+#: companies/admin.php:78
+#: companies/one.php:479
+msgid "Tax ID"
+msgstr "شماره مالیات"
+
+#: reports/companies-list.php:170
+msgid "Tel"
+msgstr "تلفن"
+
+#: locale/datastrings.php:88
+msgid "Telemarketing"
+msgstr "بازاریابی تلویزیونی"
+
+#: locale/datastrings.php:89
+msgid "Telemarketings"
+msgstr "بازاریابی‌های تلویزیونی"
+
+#: locale/datastrings.php:90
+msgid "Television"
+msgstr "تلویزیون"
+
+#: email/email.php:121
+#: email/index.php:71
+msgid "Template"
+msgstr "الگو"
+
+#: activities/some.php:501
+msgid "Template Titles"
+msgstr "عناوین الگو"
+
+#: companies/admin.php:90
+#: companies/one.php:491
+msgid "Terms"
+msgstr "شرایط"
+
+#: email/email-4.php:90
+msgid "The bulk e-mail sub-system has sent"
+msgstr "سیستم ارسال نامه‌های انبوه ارسال کرده است"
+
+#: relationships/new-relationship-2.php:154
+#: relationships/new-relationship-2.php:172
+msgid "There is no "
+msgstr "وجود ندارد"
+
+#: include/strings.php:24
+msgid "There is no company by that name"
+msgstr "هیچ شرکتی با این نام وجود ندارد"
+
+#: include/strings.php:23
+msgid "There is no contact by that name"
+msgstr "هیچ تماسی با این نام وجود ندارد"
+
+#: opportunities/export.php:93
+msgid "There was a problem with your export"
+msgstr "اشکالی با صدور شما وجود دارد"
+
+#: contacts/edit-address.php:162
+msgid "This Address Is Also Used By"
+msgstr "این آدرس قبلا استفاده شده است. توسط:"
+
+#: include/utils-interface.php:83
+msgid "This activity is still open."
+msgstr "این فعالیت هنوز در حال اجراست."
+
+#: reports/audit-items.php:93
+msgid "Time"
+msgstr "زمان"
+
+#: reports/overdue-items.php:72
+msgid "Time Window"
+msgstr "پنجره زمان"
+
+#: reports/activitytimes.php:36
+msgid "Timesheets"
+msgstr "جداول زمانی"
+
+#: activities/one.php:365
+#: activities/some.php:169
+#: activities/some.php:487
+#: admin/activity-templates/edit.php:63
+#: admin/case-statuses/one.php:153
+#: admin/opportunity-statuses/one.php:176
+#: campaigns/one.php:97
+#: cases/one.php:206
+#: cases/one.php:302
+#: companies/one.php:567
+#: companies/one.php:607
+#: contacts/edit.php:170
+#: contacts/new.php:165
+#: contacts/one.php:328
+#: contacts/one.php:484
+#: contacts/some.php:77
+#: contacts/some.php:257
+#: opportunities/one.php:285
+#: opportunities/one.php:406
+#: plugins/info/one.php:364
+msgid "Title"
+msgstr "عنوان"
+
+#: activities/one.php:332
+msgid "To"
+msgstr "به"
+
+#: admin/relationship-types/one.php:74
+#: admin/relationship-types/some.php:87
+msgid "To Text"
+msgstr "متن به"
+
+#: admin/relationship-types/one.php:66
+#: admin/relationship-types/some.php:79
+msgid "To What Table"
+msgstr "به چه جدولی"
+
+#: reports/companies-list.php:263
+msgid "Total records"
+msgstr "جمع رکوردها"
+
+#: locale/datastrings.php:91
+msgid "Trade Show"
+msgstr "نمایشگاه تجاری"
+
+#: locale/datastrings.php:92
+msgid "Trade Shows"
+msgstr "Présentations commerciales"
+
+#: contacts/edit.php:245
+msgid "Transfer"
+msgstr "Transférer"
+
+#: contacts/transfer-2.php:48
+#: contacts/transfer-2.php:63
+#: contacts/transfer.php:33
+msgid "Transfer to Another Company"
+msgstr "Transférer vers une autre société"
+
+#: activities/one.php:343
+#: activities/some.php:165
+#: activities/some.php:523
+#: admin/activity-templates/edit.php:71
+#: campaigns/edit.php:85
+#: campaigns/new.php:73
+#: campaigns/one.php:101
+#: campaigns/some.php:66
+#: campaigns/some.php:215
+#: campaigns/some.php:282
+#: cases/edit.php:192
+#: cases/new.php:111
+#: cases/one.php:210
+#: cases/one.php:304
+#: cases/some.php:64
+#: cases/some.php:253
+#: companies/one.php:609
+#: contacts/one.php:486
+#: opportunities/one.php:408
+#: plugins/info/one.php:366
+#: private/home.php:449
+#: reports/audit-items.php:95
+#: reports/completed-items.php:74
+#: reports/completed-items.php:200
+#: reports/completed-items.php:251
+#: reports/completed-items.php:292
+#: reports/open-items.php:58
+#: reports/open-items.php:186
+#: reports/open-items.php:235
+#: reports/overdue-items.php:71
+#: reports/overdue-items.php:201
+#: reports/overdue-items.php:252
+msgid "Type"
+msgstr "نوع"
+
+#: admin/index.php:149
+msgid "Types and Statuses"
+msgstr "انواع و وضعیت‌ها"
+
+#: companies/advanced-search.php:190
+#: companies/edit.php:141
+#: companies/new.php:151
+#: companies/one.php:444
+msgid "URL"
+msgstr "URL"
+
+#: admin/export/export-companies-ldap.php:149
+#: admin/export/export-companies.php:99
+#: admin/export/export-company-address.php:52
+msgid "Unable to Open file for writing."
+msgstr "امکان باز کردن فایل برای نوشتن وجود ندارد."
+
+#: activities/associate-activities.php:155
+msgid "Unable to associate Activities because there are multiple Cases or Opportunities"
+msgstr "امکان ارتباط دهی فعالیت‌ها وجود ندارد. بدلیل اینکه چندین مورد و فرصت وجود دارد."
+
+#: activities/associate-activities.php:162
+msgid "Unable to associate Activities because there is no open Case or Opportunity"
+msgstr "امکان ارتباط دهی فعالیت‌ها وجود ندارد. بدلیل اینکه هیج مورد یا فرصت باز موجود نیست."
+
+#: include/utils-misc.php:628
+msgid "Unable to execute your query."
+msgstr "امکان اجرای پرسش روی بانک اطلاعاتی وجود ندارد."
+
+#: admin/users/some.php:39
+msgid "Unable to get data from database"
+msgstr "امکان دریافت داده‌ها از بانک اطلاعاتی وجود ندارد"
+
+#: include/utils-misc.php:244
+#: opportunities/export.php:95
+msgid "Unable to open file"
+msgstr "امکان باز کردن فایل وجود ندارد"
+
+#: relationships/edit.php:60
+msgid "Unassociate"
+msgstr "نا مربوط"
+
+#: contacts/edit.php:155
+#: contacts/new.php:150
+#: contacts/one.php:96
+#: contacts/one.php:99
+msgid "Unknown"
+msgstr "ناشناس"
+
+#: admin/country-address-format/index.php:60
+msgid "Update"
+msgstr "بروز رسانی"
+
+#: admin/update.php:3833
+msgid "Update Complete"
+msgstr "بروز رسانی به اتمام رسید"
+
+#: email/email-2.php:96
+#: email/one-template.php:95
+msgid "Update Template"
+msgstr "بروز رسانی الگو"
+
+#: files/new.php:93
+#: files/new.php:97
+msgid "Upload"
+msgstr "ارسال"
+
+#: files/one.php:71
+msgid "Uploaded"
+msgstr "ارسال شد"
+
+#: companies/addresses.php:168
+#: companies/edit-address.php:103
+#: companies/new.php:231
+#: contacts/edit-address.php:219
+msgid "Use"
+msgstr "استفاده"
+
+#: contacts/edit-address.php:166
+msgid "Use Alternate Address"
+msgstr "استفاده از آدرس جایگزین"
+
+#: companies/addresses.php:112
+msgid "Used by Contacts"
+msgstr "استفاده شده توسط تماس‌ها"
+
+#: activities/one.php:371
+#: cases/one.php:303
+#: companies/one.php:608
+#: companies/some-advanced.php:136
+#: companies/some.php:71
+#: contacts/one.php:485
+#: opportunities/one.php:407
+#: plugins/info/one.php:365
+#: reports/activitytimes.php:53
+#: reports/activitytimes.php:75
+#: reports/audit-items.php:45
+#: reports/audit-items.php:94
+#: reports/companies-list.php:172
+#: reports/completed-items.php:73
+#: reports/open-items.php:57
+#: reports/overdue-items.php:70
+msgid "User"
+msgstr "کاربر"
+
+#: admin/users/one.php:59
+msgid "User Details"
+msgstr "جزئیات کاربر"
+
+#: private/home.php:472
+msgid "User Manual"
+msgstr "راهنمای استفاده"
+
+#: reports/index.php:102
+msgid "User Reports"
+msgstr "گزارشات کاربری"
+
+#: admin/users/one.php:100
+#: admin/users/self.php:72
+#: admin/users/some.php:66
+#: admin/users/some.php:94
+msgid "Username"
+msgstr "نام کاربری"
+
+#: admin/index.php:121
+#: admin/users/some.php:60
+msgid "Users"
+msgstr "کاربران"
+
+#: locale/datastrings.php:93
+msgid "Vendor"
+msgstr "فروشنده"
+
+#: companies/admin.php:98
+msgid "Vendor Key"
+msgstr "شماره فروشنده"
+
+#: locale/datastrings.php:94
+msgid "Vendors"
+msgstr "فروشنده‌ها"
+
+#: opportunities/opportunity-view.php:35
+msgid "View Opportunity Statuses"
+msgstr "نمایش وضعیت فرصت‌ها"
+
+#: opportunities/edit.php:168
+msgid "View Statuses"
+msgstr "نمایش وضعیت‌ها"
+
+#: notes/sidebar.php:151
+msgid "View/Edit"
+msgstr "نمایش/ویرایش"
+
+#: email/email-4.php:95
+msgid "WARNING"
+msgstr "هشدار"
+
+#: email/email-3.php:37
+msgid "WARNING: No array of contacts!"
+msgstr "هشدار: آرایه‌ای از تماس‌ها وجود ندارد!"
+
+#: include/utils-interface.php:79
+msgid "We could not authenticate you."
+msgstr "امکان احراز هویت شما وجود ندارد."
+
+#: companies/sidebar.php:70
+#: locale/datastrings.php:95
+msgid "Web Site"
+msgstr "سایت وب"
+
+#: locale/datastrings.php:96
+msgid "Web Sites"
+msgstr "سایت‌های وب"
+
+#: plugins/webcalendar/setup.php:28
+msgid "WebCalendar SysAdmin Manual"
+msgstr "راهنمای استفاده از WebCalendar"
+
+#: reports/opportunities-size-by-industry.php:97
+#: reports/opportunities-size-by-opportunity-status.php:107
+msgid "Weighted"
+msgstr "وزن شده"
+
+#: opportunities/one.php:305
+#: opportunities/some.php:74
+msgid "Weighted Size"
+msgstr "اندازه وزن شده"
+
+#: locale/datastrings.php:97
+msgid "Word of Mouth"
+msgstr "کلمه مدخل"
+
+#: cases/one.php:248
+#: contacts/edit.php:182
+#: contacts/new.php:177
+#: contacts/one.php:348
+#: contacts/sidebar.php:161
+#: contacts/some.php:336
+#: opportunities/one.php:339
+msgid "Work Phone"
+msgstr "تلفن محل کار"
+
+#: reports/open-items.php:369
+msgid "XRMS: Open Items"
+msgstr "XRMS : آیتم‌های باز"
+
+#: reports/overdue-items.php:386
+msgid "XRMS: Overdue Items"
+msgstr "XRMS : آیتم‌های دیر کرده"
+
+#: contacts/edit.php:202
+#: contacts/new.php:197
+msgid "Yahoo Name"
+msgstr "نام کاربری Yahoo"
+
+#: contacts/one.php:372
+msgid "Yahoo! IM"
+msgstr "Yahoo! IM"
+
+#: activities/some.php:163
+msgid "Yes"
+msgstr "بله"
+
+#: campaigns/edit.php:153
+#: campaigns/new.php:137
+msgid "You must enter a campaign title."
+msgstr "شما باید عنوان رشته عملیات را وارد نمایید."
+
+#: cases/edit.php:258
+#: cases/new.php:167
+msgid "You must enter a case title."
+msgstr "شما باید عنوان مورد را وارد نمایید."
+
+#: companies/edit.php:203
+#: companies/new.php:274
+msgid "You must enter a company name."
+msgstr "شما باید نام شرکت را وارد نمایید."
+
+#: admin/users/some.php:141
+msgid "You must enter a last name."
+msgstr "شما باید نام خانوادگی را وارد نمایید."
+
+#: email/email-2.php:137
+#: email/one-template.php:136
+msgid "You must enter a name to let the recipient know who the email is from."
+msgstr "شما باید نامی وارد کنید تا دریافت کننده بداند که این نامه الکترونیکی از کجاست."
+
+#: admin/users/some.php:146
+msgid "You must enter a password."
+msgstr "شما باید کلمه عبور را وارد نمایید."
+
+#: admin/users/some.php:136
+msgid "You must enter a username."
+msgstr "شما باید نام کاربری را وارد نمایید."
+
+#: opportunities/edit.php:247
+#: opportunities/new.php:163
+msgid "You must enter an opportunity title."
+msgstr "شما باید عنوان فرصت را وارد نمایید."
+
+#: email/email-2.php:142
+#: email/one-template.php:141
+msgid "You must enter an reply address so the recipient can reply to the message."
+msgstr "شما باید یک آدرس پاسخ وارد نمایید تا گیرنده بتواند به نامه شما پاسخ دهد."
+
+#: admin/relationship-types/one.php:100
+msgid "You should NOT delete the last element of a relationship type, or a used relationship type."
+msgstr "شما نباید آخرین المان‌های یک نوع ارتباط و یا یک نوع ارتباط استفاده شده را پاک کنید."
+
+#: admin/data_clean.php:351
+msgid "Your database has been cleaned."
+msgstr "بانک اطلاعاتی شما پاکسازی شد."
+
+#: admin/update.php:3840
+msgid "Your database has been updated."
+msgstr "بانک اطلاعاتی شما بروز شد."
+
+#: reports/index.php:46
+msgid "Your sales funnel - how many of your accounts are in each stage of the customer development process?"
+msgstr "گلوگاه فروش شما - چه تعداد از حساب‌های شما در هر مرحله از پروسه توسعه مشتریان وجود دارند؟"
+
+#: admin/account-statuses/some.php:28
+msgid "account_status_pretty_name"
+msgstr "نام مناسب وضعیت حساب"
+
+#: activities/associate-activities.php:148
+msgid "activities"
+msgstr "فعالیت‌ها"
+
+#: locale/datastrings.php:98
+msgid "call from"
+msgstr "تماس از"
+
+#: locale/datastrings.php:99
+msgid "call to"
+msgstr "تماس به"
+
+#: locale/datastrings.php:100
+msgid "calls from"
+msgstr "تماس‌ها از"
+
+#: locale/datastrings.php:101
+msgid "calls to"
+msgstr "تماس‌ها به"
+
+#: admin/import/import-companies.php:95
+msgid "comma"
+msgstr "کاما"
+
+#: include/strings.php:34
+msgid "companies/contacts"
+msgstr "شرکت‌ها/تماس‌ها"
+
+#: admin/company-sources/some.php:30
+msgid "company_source_pretty_name"
+msgstr "نام مناسب منبع شرکت"
+
+#: admin/company-types/some.php:27
+msgid "company_type_pretty_name"
+msgstr "نام مناسب نوع شرکت"
+
+#: admin/crm-statuses/some.php:26
+msgid "crm_status_display_html"
+msgstr "نام مناسب نمایش HTML"
+
+#: admin/crm-statuses/some.php:28
+msgid "crm_status_pretty_name"
+msgstr "نام مناسب وضعیت CRM"
+
+#: companies/one.php:492
+msgid "days"
+msgstr "روز"
+
+#: admin/activity-types/some.php:35
+#: admin/case-statuses/some.php:47
+msgid "down"
+msgstr "پایین"
+
+#: locale/datastrings.php:102
+msgid "e-mail from"
+msgstr "نامه الکترونیکی از"
+
+#: locale/datastrings.php:103
+msgid "e-mail to"
+msgstr "نامه الکترونیکی به"
+
+#: locale/datastrings.php:104
+msgid "e-mails from"
+msgstr "نامه‌های الکترونیکی از"
+
+#: locale/datastrings.php:105
+msgid "e-mails to"
+msgstr "نامه‌های الکترونیکی به"
+
+#: locale/datastrings.php:106
+msgid "fax from"
+msgstr "فاکس از"
+
+#: locale/datastrings.php:107
+msgid "fax to"
+msgstr "فاکس به"
+
+#: locale/datastrings.php:108
+msgid "faxes from"
+msgstr "فاکس‌ها از"
+
+#: locale/datastrings.php:109
+msgid "faxes to"
+msgstr "فاکس‌ها به"
+
+#: admin/industries/some.php:27
+msgid "industry_pretty_name"
+msgstr "نام مناسب صنعت"
+
+#: locale/datastrings.php:110
+msgid "internal"
+msgstr "داخلی"
+
+#: locale/datastrings.php:111
+msgid "letter from"
+msgstr "حرف از"
+
+#: locale/datastrings.php:112
+msgid "letter to"
+msgstr "حرف تا"
+
+#: admin/import/import-companies.php:97
+msgid "pipe"
+msgstr "لوله‌بندی"
+
+#: locale/datastrings.php:113
+msgid "process"
+msgstr "پروسه"
+
+#: admin/import/import-companies.php:98
+msgid "semi-colon"
+msgstr "سمی کالن"
+
+#: admin/import/import-companies.php:96
+msgid "tab"
+msgstr "جدول بندی"
+
+#: admin/activity-types/some.php:31
+#: admin/case-statuses/some.php:42
+msgid "up"
+msgstr "بالا"
+
