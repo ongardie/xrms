@@ -1,0 +1,50 @@
+
+
+Please Note that this OWL plugin is not yet finished and should not be used at all!
+
+
+This document is currently where I'm keeping my notes on the pieces left to be finished.
+
+
+
+Search:
+XRMS has certain search abilities such as searching on fields that are only stored in the XRMS files table.
+
+OWL also has certain search capabilities such as searching the contents of files.
+
+Since the search terms are always ANDed together, we can perform the two searches independantly and return the union of the sets.
+
+
+
+
+Things to think about: 
+
+	How will the files get downloaded
+
+	What does files/one.php need added?
+
+
+
+
+Table changes
+
+ALTER TABLE files add external_id int default 0;
+
+CREATE TABLE owl_folders (
+               folder_id                                int primary key not null auto_increment,
+               folder_name                              varchar(100),
+               folder_description                       text,
+               on_what_table                           varchar(100) not null default '',
+               on_what_id                              int not null default 0,
+               entered_at                              datetime,
+               entered_by                              int not null default 0,
+               file_record_status                      char(1) default 'a');
+
+
+
+
+
+
+
+
+
