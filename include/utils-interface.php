@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.57 2005/04/27 01:08:15 vanmer Exp $
+ * $Id: utils-interface.php,v 1.58 2005/04/28 15:58:46 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -138,7 +138,7 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
  * @param boolean $show_navbar true/false whether to show the menu bar
  * @param string  $msg         error or other notification message
  */
-function start_page($page_title = '', $show_navbar = true, $msg = '') {
+function start_page($page_title = '', $show_navbar = true, $msg = '', $direction='ltr') {
     global $http_site_root;
     global $app_title;
     global $css_theme;
@@ -686,6 +686,11 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.58  2005/04/28 15:58:46  braverock
+ * - applied patch to use language direction (rtl or ltr) supplied by
+ *   XRMS Farsi translator Alan Baghumian (alanbach)
+ *   allows use with rtl language like Farsi, Arabic, traditional Chinese
+ *
  * Revision 1.57  2005/04/27 01:08:15  vanmer
  * - added function for rendering an html form element based on parameters
  *

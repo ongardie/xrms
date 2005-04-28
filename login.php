@@ -2,7 +2,7 @@
 /**
  * Display login screen
  *
- * $Id: login.php,v 1.11 2004/12/30 18:49:52 braverock Exp $
+ * $Id: login.php,v 1.12 2005/04/28 15:58:46 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -35,7 +35,7 @@ if ( isset($_GET['target']) ) {
 */
 
 $page_title = $app_title;
-start_page($page_title, false, $msg);
+start_page($page_title, false, $msg, $languages[$xrms_language]['DIR']);
 
 ?>
 
@@ -79,6 +79,11 @@ end_page();
 
 /**
  * $Log: login.php,v $
+ * Revision 1.12  2005/04/28 15:58:46  braverock
+ * - applied patch to use language direction (rtl or ltr) supplied by
+ *   XRMS Farsi translator Alan Baghumian (alanbach)
+ *   allows use with rtl language like Farsi, Arabic, traditional Chinese
+ *
  * Revision 1.11  2004/12/30 18:49:52  braverock
  * - localize strings
  * - patch provided by Ozgur Cayci
