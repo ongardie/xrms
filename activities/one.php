@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.86 2005/04/20 21:26:27 braverock Exp $
+ * $Id: one.php,v 1.87 2005/04/28 15:31:35 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -289,11 +289,13 @@ if(!empty($on_what_table)) {
 require("../relationships/sidebar.php");
 
 //include the files sidebar
+$ori_on_what_id=$on_what_id;
 $ori_on_what_table=$on_what_table;
 $on_what_table='activities';
 $on_what_id=$activity_id;
 require_once( '../files/sidebar.php');
 $on_what_table=$ori_on_what_table;
+$on_what_id=$ori_on_what_id;
 
 //Add optional tables
 //sending null parameter, expecting return instead of change to passed in reference
@@ -537,6 +539,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.87  2005/04/28 15:31:35  braverock
+ * - applied patch for clearing case/opp/campaign id on editing of activities
+ *   patch supplied by Miguel Gonçalves (mig77)
+ *
  * Revision 1.86  2005/04/20 21:26:27  braverock
  * - change $on_what_table to 'activities' before calling file sidebar
  *
@@ -836,6 +842,5 @@ function logTime() {
  * - fix ends-at display bug
  * - make sure both scheduled_at and ends_at have legal values
  * - add phpdoc
- *
  */
 ?>
