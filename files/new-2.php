@@ -5,7 +5,7 @@
  * Files that are uploaded to the server are moved to the
  * correct folder and a database entry is made.
  *
- * $Id: new-2.php,v 1.15 2005/04/10 16:19:02 maulani Exp $
+ * $Id: new-2.php,v 1.16 2005/04/28 18:40:55 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -41,6 +41,7 @@ if ($file_entered_at == "")
 else
   { $file_entered_at = strtotime($file_entered_at); }
 
+
 //save to database
 $rec = array();
 $rec['file_pretty_name'] = $file_pretty_name;
@@ -53,6 +54,16 @@ $rec['on_what_id'] = $on_what_id;
 $rec['entered_at'] = $file_entered_at;
 $rec['entered_by'] = $session_user_id;
 
+// files plugin hook allows external storage of files.  see plugins/owl/README for example
+// params: (file_field_name, record associative array)
+$file_plugin_params = array('file1', $rec);
+do_hook_function('file_add_file', &$file_plugin_params);
+
+if($file_plugin_params['external_id']) { 
+	$rec['external_id'] = $file_plugin_params['external_id']; 
+}
+
+
 $tbl = 'files';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
@@ -61,51 +72,54 @@ $file_id = $con->insert_id();
 
 $error = '';
 
-if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
-    $success = move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
-} elseif ($_FILES['file1']['tmp_name'] and (strlen($file_pretty_name))){
-        $error = $_FILES['file1']['tmp_name'];
-        $msg .= '<p>'
-             . 'A PHP error has occurred, your file was not uploaded.'
-             . '<br>'
-             . 'You attempted to upload file: '
-             . htmlspecialchars($file_pretty_name)
-             . '<br>'
-             . 'If you feel that you have received this message in error, Please try to upload again.'
-             . '<br>'
-             . 'If this error recurs, please contact your system administrator for assistance.'
-             . "\n";
-
-        switch ($error) {
-            case '1':
-                $msg .= '<p><b>UPLOAD_ERR_INI_SIZE: The uploaded file exceeds the upload_max_filesize directive in php.ini.</b>';
-                break;
-            case '2':
-                $msg .= '<p><b>UPLOAD_ERR_FORM_SIZE: The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the html form.</b>';
-                break;
-            case '3':
-                $msg .= '<p><b>UPLOAD_ERR_PARTIAL: The uploaded file was only partially uploaded.</b>';
-                break;
-            case '4':
-                $msg .= '<p><b>UPLOAD_ERR_NO_FILE: No file was uploaded. </b>';
-                break;
-        };
-    };
-
-// update the file record
-$sql = "SELECT * FROM files WHERE file_id = $file_id";
-$rst = $con->execute($sql);
-
-if ($file_type == '') {
-    $file_type = mime_get_type ( $file_name );
+if(!$file_plugin_params['file_stored']) {
+	
+	if (is_uploaded_file($_FILES['file1']['tmp_name'])) {
+	    $success = move_uploaded_file($_FILES['file1']['tmp_name'], $file_storage_directory . $file_id . '_' . $file_name);
+	} elseif ($_FILES['file1']['tmp_name'] and (strlen($file_pretty_name))){
+	        $error = $_FILES['file1']['tmp_name'];
+	        $msg .= '<p>'
+	             . 'A PHP error has occurred, your file was not uploaded.'
+	             . '<br>'
+	             . 'You attempted to upload file: '
+	             . htmlspecialchars($file_pretty_name)
+	             . '<br>'
+	             . 'If you feel that you have received this message in error, Please try to upload again.'
+	             . '<br>'
+	             . 'If this error recurs, please contact your system administrator for assistance.'
+	             . "\n";
+	
+	        switch ($error) {
+	            case '1':
+	                $msg .= '<p><b>UPLOAD_ERR_INI_SIZE: The uploaded file exceeds the upload_max_filesize directive in php.ini.</b>';
+	                break;
+	            case '2':
+	                $msg .= '<p><b>UPLOAD_ERR_FORM_SIZE: The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the html form.</b>';
+	                break;
+	            case '3':
+	                $msg .= '<p><b>UPLOAD_ERR_PARTIAL: The uploaded file was only partially uploaded.</b>';
+	                break;
+	            case '4':
+	                $msg .= '<p><b>UPLOAD_ERR_NO_FILE: No file was uploaded. </b>';
+	                break;
+	        };
+	    };
+	
+	// update the file record
+	$sql = "SELECT * FROM files WHERE file_id = $file_id";
+	$rst = $con->execute($sql);
+	
+	if ($file_type == '') {
+	    $file_type = mime_get_type ( $file_name );
+	}
+	
+	$rec = array();
+	$rec['file_filesystem_name'] = $file_id . '_' . $file_name;
+	$rec['file_type']            = $file_type;
+	
+	$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+	$con->execute($upd);
 }
-
-$rec = array();
-$rec['file_filesystem_name'] = $file_id . '_' . $file_name;
-$rec['file_type']            = $file_type;
-
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
 
 $con->close();
 
@@ -118,6 +132,9 @@ if ($error) {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.16  2005/04/28 18:40:55  daturaarutad
+ * added files plugin hook
+ *
  * Revision 1.15  2005/04/10 16:19:02  maulani
  * - remove errant test code
  *

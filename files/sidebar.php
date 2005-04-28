@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.14 2005/04/05 19:41:54 daturaarutad Exp $
+ * $Id: sidebar.php,v 1.15 2005/04/28 18:44:50 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -19,18 +19,6 @@ else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN
 
 // Avoid undefined errors until ACL is integrated
 $file_limit_sql = '';
-
-$file_rows = "<div id='file_sidebar'>
-        <table class=widget cellspacing=1 width=\"100%\">
-            <tr>
-                <td class=widget_header colspan=4>"._("Files")."</td>
-            </tr>
-            <tr>
-                <td class=widget_label>"._("Name")."</td>
-                <td class=widget_label>"._("Size")."</td>
-                <td class=widget_label>"._("Owner")."</td>
-                <td class=widget_label>"._("Date")."</td>
-            </tr>\n";
 
 //uncomment the debug line to see what's going on with the query
 //$con->debug=1;
@@ -61,58 +49,84 @@ if ( !$rst ) {
   db_error_handler($con, $file_sql);
 }
 
-if (strlen($rst->fields['username']) > 0) {
-    while (!$rst->EOF) {
 
-      // get contact id
-      $user_contact_id = $rst->fields['user_contact_id'];
+// files plugin hook
+$plugin_params = array($rst);
+do_hook_function('file_browse_files', $plugin_params);
+$file_rows = $plugin_params['file_rows'];
 
-        $file_rows .= "
-             <tr>";
-        if ($rst->fields['file_size'] == "0")
-          {
-          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() ."'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
-          $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($rst->fields['file_size']) . '</b></td>';
-          $file_rows .= '<td class=non_uploaded_file><b>' . $rst->fields['username'] . '</b></td>';
-          $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($rst->fields['entered_at']) . '</b></td>';
-          }
-        else
-          {
-          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() ."'>" . $rst->fields['file_pretty_name'] . '</a></td>';
-          $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
-          $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-          $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
-          }
-        $file_rows .= "
-             </tr>";
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-    $file_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached files")." </td> </tr>\n";
+if(!$file_rows) {
+
+	$file_rows = "<div id='file_sidebar'>
+        			<table class=widget cellspacing=1 width=\"100%\">
+            			<tr>
+                			<td class=widget_header colspan=4>"._("Files")."</td>
+            			</tr>
+            			<tr>
+                			<td class=widget_label>"._("Name")."</td>
+                			<td class=widget_label>"._("Size")."</td>
+                			<td class=widget_label>"._("Owner")."</td>
+                			<td class=widget_label>"._("Date")."</td>
+            			</tr>\n";
+
+
+
+	if (strlen($rst->fields['username']) > 0) {
+	    while (!$rst->EOF) {
+	
+	      // get contact id
+	      $user_contact_id = $rst->fields['user_contact_id'];
+	
+	        $file_rows .= "
+	             <tr>";
+	        if ($rst->fields['file_size'] == "0")
+	          {
+	          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() ."'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
+	          $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($rst->fields['file_size']) . '</b></td>';
+	          $file_rows .= '<td class=non_uploaded_file><b>' . $rst->fields['username'] . '</b></td>';
+	          $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($rst->fields['entered_at']) . '</b></td>';
+	          }
+	        else
+	          {
+	          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() ."'>" . $rst->fields['file_pretty_name'] . '</a></td>';
+	          $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
+	          $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
+	          $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
+	          }
+	        $file_rows .= "
+	             </tr>";
+	        $rst->movenext();
+	    }
+	    $rst->close();
+	} else {
+	    $file_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached files")." </td> </tr>\n";
+	}
+	
+	//put in the new button
+	if (strlen($on_what_table)>0){
+	    $new_file_button=render_create_button('New', 'submit');
+	    $file_rows .= "
+	            <tr>
+	            <form action='".$http_site_root."/files/new.php' method='post'>
+	                <td class=widget_content_form_element colspan=4>
+	                        <input type=hidden name=on_what_table value='$on_what_table'>
+	                        <input type=hidden name=on_what_id value='$on_what_id'>
+	                        <input type=hidden name=return_url value='/".$on_what_table."/one.php?".make_singular($on_what_table)."_id=".$on_what_id."'>
+	                        $new_file_button
+	                </td>
+	            </form>
+	            </tr>";
+	}
+	
+	//now close the table, we're done
+	$file_rows .= "        </table>\n</div>";
 }
-
-//put in the new button
-if (strlen($on_what_table)>0){
-    $new_file_button=render_create_button('New', 'submit');
-    $file_rows .= "
-            <tr>
-            <form action='".$http_site_root."/files/new.php' method='post'>
-                <td class=widget_content_form_element colspan=4>
-                        <input type=hidden name=on_what_table value='$on_what_table'>
-                        <input type=hidden name=on_what_id value='$on_what_id'>
-                        <input type=hidden name=return_url value='/".$on_what_table."/one.php?".make_singular($on_what_table)."_id=".$on_what_id."'>
-                        $new_file_button
-                </td>
-            </form>
-            </tr>";
-}
-
-//now close the table, we're done
-$file_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.15  2005/04/28 18:44:50  daturaarutad
+ * added files plugin hook
+ *
  * Revision 1.14  2005/04/05 19:41:54  daturaarutad
  * now use current_page() to set return_url
  *

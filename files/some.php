@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.31 2005/03/21 13:40:56 maulani Exp $
+ * $Id: some.php,v 1.32 2005/04/28 18:46:18 daturaarutad Exp $
  */
 
 //include required files
@@ -253,6 +253,8 @@ if ($criteria_count > 0) {
 $page_title = _("Files");
 start_page($page_title, true, $msg);
 
+$plugin_search_rows = concat_hook_function('file_get_search_fields_html');
+
 ?>
 
 <div id="Main">
@@ -296,19 +298,24 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name="file_date" size=8 value="<?php echo $file_date; ?>"></td>
                 <td class=widget_content_form_element><?php echo $user_menu; ?></td>
         </tr>
+      	<?php echo $plugin_search_rows; ?>
         <tr>
                 <td colspan=4 class=widget_content_form_element>
                     <input class=button type=submit value="<?php echo _("Search"); ?>">
                     <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
           </td>
         </tr>
-      </table>
+	  </table>
         <p>
 <?php
 
 if ( $use_owl ) {
   echo "<input class=button type=button onclick='javascript: owl()' value='"._("Owl File Management")."'><br><br>";
 }
+
+
+
+
 
 
 $columns = array();
@@ -329,6 +336,17 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
 
 $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FilePager', $columns, false);
+
+
+function FileDataCallback($rows) {
+	$params = array($rows);
+	do_hook_function('file_search_files', $params);
+	return $params[0];
+}
+
+$pager->AddModifyDataCallback('FileDataCallback');
+
+
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
@@ -403,6 +421,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.32  2005/04/28 18:46:18  daturaarutad
+ * added files plugin hook
+ *
  * Revision 1.31  2005/03/21 13:40:56  maulani
  * - Remove redundant code by centralizing common user menu call
  *
