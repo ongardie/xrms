@@ -245,11 +245,10 @@ return "
 /**
 * 	You'll be needing a files array that ya got from the XRMS search that's already ACL filtered.
 *	You also might need to run an OWL search that filters on that result set.
-*
 */
 function fn_search_files(&$params) {
 
-	getGlobalVars($owl_search_string, 'owl_search_string');
+	getGlobalVar($owl_search_string, 'owl_search_string');
 
 	global $owl_location;
 	require_once($owl_location . 'OWL_API.php');
@@ -262,7 +261,7 @@ function fn_search_files(&$params) {
 		echo "error in param count";
 		return null;
 	}
-	$params =  OWL_Search_Files($owl_search_string, $file_data);
+	$params[0] =  OWL_Search_Files($owl_search_string, $file_data);
 }
 
 // You can use this for adding new API fns
@@ -284,6 +283,9 @@ function fn_template() {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.2  2005/04/28 18:49:07  daturaarutad
+ * small tweak for search files
+ *
  * Revision 1.1  2005/04/28 15:47:10  daturaarutad
  * new files
  *
