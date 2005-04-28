@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.9 2005/01/25 05:59:59 vanmer Exp $
+ * $Id: utils-database.php,v 1.10 2005/04/28 22:02:04 introspectshun Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -22,23 +22,8 @@ if ( !defined('IN_XRMS') )
  * @param handle @$con handle to database connection
  */
 function list_db_tables(&$con) {
-    $sql = "show tables";
-
-    //execute
-    $rst = $con->execute($sql);
-
-    $number_of_rows = $rst->RecordCount();
-    if ($number_of_rows > 0) {
-        $my_array = $rst->GetRows($number_of_rows);
-        $table_list = array();
-        for ($i=0;$i<$number_of_rows;$i++) $table_list[$i] = current($my_array[$i]);
-        return ($table_list);
-    } else {
-        $table_list = array();
-        return ($table_list);
-    }
-} // end list_db_tables fn
-
+    return $con->MetaTables('TABLES');
+}
 
 /**
  * Confirm that the table does not currently have any records.
@@ -135,6 +120,10 @@ function execute_batch_sql_file($con, $file_path) {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.10  2005/04/28 22:02:04  introspectshun
+ * - Updated list_db_tables to use ADODB MetaTables fn
+ *   - Inspired by eduqate's post regarding Postgres compat
+ *
  * Revision 1.9  2005/01/25 05:59:59  vanmer
  * - altered to use current function instead of hardcoded element 0
  * - added function for executing a batch sql file
