@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.49 2005/04/19 14:10:59 daturaarutad Exp $
+ * $Id: some.php,v 1.50 2005/04/29 14:39:41 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -29,7 +29,7 @@ $arr_vars = array ( // local var name       // session variable name
            'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_GET_SESSION ),
            'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
            'campaign_id'          => array ( 'opportunities_campaign_id', arr_vars_SESSION ) ,
-           'industry_id' 			 => array ( 'industry_id', arr_vars_GET_SESSION ),
+           'industry_id'             => array ( 'industry_id', arr_vars_GET_SESSION ),
            );
 
 // get all passed in variables
@@ -78,7 +78,7 @@ if($campaign_id) {
 }
 
 //added by Nic to be able to create mail merge to contacts
-$where.="and cont.contact_id=opp.contact_id ";
+$where.=" and cont.contact_id=opp.contact_id ";
 
 $criteria_count = 0;
 
@@ -160,7 +160,7 @@ if ($rst) {
 
 //get campaign titles
 $sql2 = "SELECT campaign_title, campaign_id
-         FROM campaigns c, campaign_statuses cs 
+         FROM campaigns c, campaign_statuses cs
          WHERE c.campaign_status_id = cs.campaign_status_id
            AND c.campaign_record_status = 'a'
            AND campaign_status_record_status = 'a'
@@ -270,7 +270,7 @@ $owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
 
 $status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name", "' ('", "count(os.opportunity_status_id)", "')'") . ", os.opportunity_status_id $from $where group by os.opportunity_status_id order by os.opportunity_status_pretty_name";
 
-$status_query_select = $sql . 'AND os.opportunity_status_id = XXX-value-XXX';
+$status_query_select = $sql . ' AND os.opportunity_status_id = XXX-value-XXX';
 
 $columns = array();
 $columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title');
@@ -300,7 +300,7 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
- 
+
 echo $pager_columns_selects;
 
 
@@ -370,6 +370,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.50  2005/04/29 14:39:41  braverock
+ * - fixed SQL spacing that was causing opportunity status query to fail with run-on...
+ *
  * Revision 1.49  2005/04/19 14:10:59  daturaarutad
  * added sql_sort_column => close_at for opportunities pager
  *
