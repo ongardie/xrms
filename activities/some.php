@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.102 2005/04/14 20:46:34 daturaarutad Exp $
+ * $Id: some.php,v 1.103 2005/04/29 16:12:22 daturaarutad Exp $
  */
 
 // handle includes
@@ -747,11 +747,11 @@ $_SESSION["search_sql"]=$sql;
 $columns = array();
 $columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
-$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names');
-$columns[] = array('name' => _('Title'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title');
+$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
+$columns[] = array('name' => _('Title'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
 $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
 $columns[] = array('name' => _('Due'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
-$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
 
 
@@ -767,17 +767,18 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 $columns = $pager_columns->GetUserColumns('default');
 
 
-
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            <input type=button class=button onclick=\"javascript: exportIt();\" value=\"" . _('Export') ."\">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
-
+// output the selectable columns widget
 echo $pager_columns_selects;
-
 
 // caching is disabled for this pager (since it's all sql)
 $pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', _('Search Results'), 'ActivitiesData', 'SomeActivitiesPager', $columns, false);
+
+// set up the bottom row of buttons
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+			" . $pager->GetAndUseExportButton() .  "
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
+
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
@@ -853,13 +854,6 @@ function bulkEmail() {
     document.forms[0].submit();
 }
 
-function exportIt() {
-    document.forms[0].action = "export.php";
-    document.forms[0].submit();
-    // reset the form so that post-export searches work
-    document.forms[0].action = "some.php";
-}
-
 function clearSearchCriteria() {
     location.href = "some.php?clear=1";
 }
@@ -896,6 +890,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.103  2005/04/29 16:12:22  daturaarutad
+ * updated to use GUP_Pager for export
+ *
  * Revision 1.102  2005/04/14 20:46:34  daturaarutad
  * fixed query syntax error
  *
