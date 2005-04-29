@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.29 2005/03/21 13:40:54 maulani Exp $
+ * $Id: some.php,v 1.30 2005/04/29 16:10:20 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,18 +11,16 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+
 
 $on_what_table='cases';
 $session_user_id = session_check();
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
-         'sort_column'         => array ( 'cases_sort_column', arr_vars_SESSION ),
-         'current_sort_column' => array ( 'cases_current_sort_column', arr_vars_SESSION ),
-         'sort_order'          => array ( 'cases_sort_order', arr_vars_SESSION ),
-         'current_sort_order'  => array ( 'cases_current_sort_order', arr_vars_SESSION ),
          'case_title'          => array ( 'cases_case_title', arr_vars_SESSION ),
          'case_id'             => array ( 'cases_case_id', arr_vars_SESSION ),
          'company_name'        => array ( 'cases_company_name', arr_vars_GET_STRLEN_SESSION ),
@@ -35,23 +33,6 @@ $arr_vars = array ( // local var name       // session variable name
 
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
-
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-    $current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 src="../img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="../img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
 
 // set all session variables
 arr_vars_session_set ( $arr_vars );
@@ -134,14 +115,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     } else { $where .= ' AND 1 = 2 '; }
 }
 
-if ($sort_column == 1) {
-    $order_by = "case_title";
-} else {
-    $order_by = $sort_column;
-}
-
-$order_by .= " $sort_order";
-$sql .= $from . $where . " order by $order_by";
+$sql .= $from . $where;
 
 $sql_recently_viewed = "select * from recent_items r, companies c, cases ca, case_statuses cas
 where r.user_id = $session_user_id
@@ -232,14 +206,8 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post>
+        <form action=some.php name="CasesData" method=post>
         <input type=hidden name=use_post_vars value=1>
-        <input type=hidden name=cases_next_page value="<?php  echo $cases_next_page ?>">
-        <input type=hidden name=resort value="0">
-        <input type=hidden name=current_sort_column value="<?php  echo $sort_column ?>">
-        <input type=hidden name=sort_column value="<?php  echo $sort_column ?>">
-        <input type=hidden name=current_sort_order value="<?php  echo $sort_order ?>">
-        <input type=hidden name=sort_order value="<?php  echo $sort_order ?>">
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Search Criteria"); ?></td>
@@ -270,16 +238,50 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";} ?> </td>
             </tr>
         </table>
-        </form>
 
 <?php
 $_SESSION["search_sql"]=$sql;
-$pager = new Cases_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
-$pager->render($rows_per_page=$system_rows_per_page);
+
+$columns = array();
+$columns[] = array('name' => _('Case'), 'index_sql' => 'Case', 'sql_sort_column' => 'ca.case_title', 'type' => 'url');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'Company');
+$columns[] = array('name' => _('Owner'), 'index_sql' => 'Owner');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'Type');
+$columns[] = array('name' => _('Priority'), 'index_sql' => 'Priority');
+$columns[] = array('name' => _('Status'), 'index_sql' => 'Status');
+$columns[] = array('name' => _('Due'), 'index_sql' => 'Due');
+
+
+// selects the columns this user is interested in
+// no reason to set this if you don't want all by default
+$default_columns = null;
+
+$pager_columns = new Pager_Columns('SomeCasesPager', $columns, $default_columns, 'CasesData');
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+// output the selectable columns widget
+echo $pager_columns_selects;
+
+// caching is disabled for this pager (since it's all sql)
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CasesData', 'SomeCasesPager', $columns, false);
+
+// set up the bottom row of buttons
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            " . $pager->GetAndUseExportButton() .  "
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
+
+$pager->AddEndRows($endrows);
+$pager->Render($system_rows_per_page);
+
 $con->close();
 
 ?>
 
+        </form>
     </div>
 
         <!-- right column //-->
@@ -315,19 +317,6 @@ function bulkEmail() {
     document.forms[0].action = "../email/email.php";
     document.forms[0].submit();
 }
-function exportIt() {
-    document.forms[0].action = "export.php";
-    document.forms[0].submit();
-    // reset the form so that post-export searches work
-    document.forms[0].action = "some.php";
-    // alert('Export functionality hasnt been implemented yet for multiple cases')
-}
-
-//function bulkEmail() {
-//    document.forms[0].action = "../email/email.php";
-//    document.forms[0].submit();
-	//	alert('Mail Merge functionality hasnt been implemented yet for multiple cases')
-//}
 
 function clearSearchCriteria() {
     location.href = "some.php?clear=1";
@@ -335,13 +324,6 @@ function clearSearchCriteria() {
 
 function submitForm(adodbNextPage) {
     document.forms[0].cases_next_page.value = adodbNextPage;
-    document.forms[0].submit();
-}
-
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].cases_next_page.value = '';
-    document.forms[0].resort.value = 1;
     document.forms[0].submit();
 }
 
@@ -354,6 +336,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.30  2005/04/29 16:10:20  daturaarutad
+ * updated to use GUP_Pager for display, export
+ *
  * Revision 1.29  2005/03/21 13:40:54  maulani
  * - Remove redundant code by centralizing common user menu call
  *
