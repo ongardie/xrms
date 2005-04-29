@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.63 2005/04/29 16:22:46 daturaarutad Exp $
+ * $Id: some.php,v 1.64 2005/04/29 17:54:22 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -207,7 +207,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post name="CompanyForm">
+        <form action=some.php class="print" method=post name="CompanyForm">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=resort value="0">
         <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
@@ -325,6 +325,7 @@ $con->close();
     <div id="Sidebar">
 
         <!-- new company //-->
+		<div class="noprint">
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Company Options"); ?></td>
@@ -333,6 +334,7 @@ $con->close();
                 <td class=widget_content><a href="new.php"><?php echo _("New Company"); ?></a></td>
             </tr>
         </table>
+		</div>
 
         <!-- recently viewed companies //-->
         <table class=widget cellspacing=1 width="100%">
@@ -390,6 +392,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.64  2005/04/29 17:54:22  daturaarutad
+ * fixed printing of form/search results
+ *
  * Revision 1.63  2005/04/29 16:22:46  daturaarutad
  * updated to use GUP_Pager for export
  *

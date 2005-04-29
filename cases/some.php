@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.30 2005/04/29 16:10:20 daturaarutad Exp $
+ * $Id: some.php,v 1.31 2005/04/29 17:52:37 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -206,7 +206,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php name="CasesData" method=post>
+        <form action=some.php class="print" name="CasesData" method=post>
         <input type=hidden name=use_post_vars value=1>
         <table class=widget cellspacing=1 width="100%">
             <tr>
@@ -336,6 +336,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.31  2005/04/29 17:52:37  daturaarutad
+ * fixed printing of form/search results
+ *
  * Revision 1.30  2005/04/29 16:10:20  daturaarutad
  * updated to use GUP_Pager for display, export
  *

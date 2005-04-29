@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.54 2005/04/29 16:26:53 daturaarutad Exp $
+ * $Id: some.php,v 1.55 2005/04/29 17:55:58 daturaarutad Exp $
  */
 
 //include the standard files
@@ -198,7 +198,7 @@ if(!isset($contacts_next_page)) {
 <div id="Main">
     <div id="Content">
 
-    <form action=some.php method=post name="ContactForm">
+    <form action=some.php class="print" method=post name="ContactForm">
         <input type=hidden name=use_post_vars value=1>
 
         <table class=widget cellspacing=1 width="100%">
@@ -362,6 +362,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.55  2005/04/29 17:55:58  daturaarutad
+ * fixed printing of form/search results
+ *
  * Revision 1.54  2005/04/29 16:26:53  daturaarutad
  * updated to use GUP_Pager for export
  *

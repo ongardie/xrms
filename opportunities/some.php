@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.51 2005/04/29 16:30:38 daturaarutad Exp $
+ * $Id: some.php,v 1.52 2005/04/29 17:57:21 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -221,7 +221,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post name="OpportunityData">
+        <form action=some.php class="print" method=post name="OpportunityData">
         <input type=hidden name=scope value="opportunities">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=opportunities_next_page value="<?php  echo $opportunities_next_page; ?>">
@@ -368,6 +368,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.52  2005/04/29 17:57:21  daturaarutad
+ * fixed printing of form/search results
+ *
  * Revision 1.51  2005/04/29 16:30:38  daturaarutad
  * updated to use GUP_Pager for export
  *

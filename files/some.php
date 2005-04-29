@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.32 2005/04/28 18:46:18 daturaarutad Exp $
+ * $Id: some.php,v 1.33 2005/04/29 17:56:44 daturaarutad Exp $
  */
 
 //include required files
@@ -260,7 +260,7 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
 <div id="Main">
     <div id="Content">
 
-        <form action=some.php method=post name="FileForm">
+        <form action=some.php class="print" method=post name="FileForm">
         <input type=hidden name=use_post_vars value=1>
         <table class=widget cellspacing=1>
         <tr>
@@ -421,6 +421,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.33  2005/04/29 17:56:44  daturaarutad
+ * fixed printing of form/search results
+ *
  * Revision 1.32  2005/04/28 18:46:18  daturaarutad
  * added files plugin hook
  *

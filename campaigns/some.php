@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.30 2005/03/21 13:40:53 maulani Exp $
+ * $Id: some.php,v 1.31 2005/04/29 17:51:43 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -166,7 +166,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-    <form action=some.php method=post name="CampaignForm">
+    <form action=some.php method=post class="print" name="CampaignForm">
     <input type=hidden name=use_post_vars value=1>
     <input type=hidden name=campaigns_next_page value="<?php  echo $campaigns_next_page ?>">
     <input type=hidden name=resort value="0">
@@ -220,7 +220,7 @@ start_page($page_title, true, $msg);
 //Campaign 	Type	Status	Owner	Starts	Ends
 
 $columns = array();
-$columns[] = array('name' => _('Campaign'), 'index_sql' => 'campaign');
+$columns[] = array('name' => _('Campaign'), 'index_sql' => 'campaign', 'type' => 'url');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
@@ -239,16 +239,16 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
 $columns = $pager_columns->GetUserColumns('default');
 
-
-
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
-
 echo $pager_columns_selects;
 
 
 $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CampaignForm', 'CampaignPager', $columns, false);
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+			" . $pager->GetAndUseExportButton() .  "
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
@@ -261,6 +261,7 @@ $pager->Render($system_rows_per_page);
     <div id="Sidebar">
 
         <!-- new campaign //-->
+		<div class="noprint">
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Options"); ?></td>
@@ -269,6 +270,7 @@ $pager->Render($system_rows_per_page);
                 <td class=widget_content><a href="new.php"><?php echo _("Add New Campaign"); ?></a></td>
             </tr>
         </table>
+		</div>
 
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
@@ -325,6 +327,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.31  2005/04/29 17:51:43  daturaarutad
+ * fixed printing of form/search results
+ *
  * Revision 1.30  2005/03/21 13:40:53  maulani
  * - Remove redundant code by centralizing common user menu call
  *
