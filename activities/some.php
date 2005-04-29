@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.103 2005/04/29 16:12:22 daturaarutad Exp $
+ * $Id: some.php,v 1.104 2005/04/29 17:44:11 daturaarutad Exp $
  */
 
 // handle includes
@@ -538,7 +538,7 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="ContentFullWidth">
 
-    <form action=some.php method=post name="ActivitiesData">
+    <form action=some.php class="print" method=post name="ActivitiesData">
         <input type=hidden name=advanced_search value="<?php echo $advanced_search; ?>">
         <input type=hidden name=use_post_vars value=1>
         <input type=hidden name=activities_next_page value="<?php  echo $activities_next_page; ?>">
@@ -890,6 +890,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.104  2005/04/29 17:44:11  daturaarutad
+ * made form printable
+ *
  * Revision 1.103  2005/04/29 16:12:22  daturaarutad
  * updated to use GUP_Pager for export
  *
