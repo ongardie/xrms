@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.50 2005/04/29 14:39:41 braverock Exp $
+ * $Id: some.php,v 1.51 2005/04/29 16:30:38 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -273,7 +273,7 @@ $status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name
 $status_query_select = $sql . ' AND os.opportunity_status_id = XXX-value-XXX';
 
 $columns = array();
-$columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title');
+$columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title', 'type' => 'url');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
@@ -294,18 +294,16 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
 $columns = $pager_columns->GetUserColumns('default');
 
-
-
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
-
 echo $pager_columns_selects;
 
 
 
 $pager = new GUP_Pager($con, $sql, null,  _('Search Results'), 'OpportunityData', 'OpportunityPager', $columns);
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+			" . $pager->GetAndUseExportButton() .  "
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 $con->close();
@@ -370,6 +368,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.51  2005/04/29 16:30:38  daturaarutad
+ * updated to use GUP_Pager for export
+ *
  * Revision 1.50  2005/04/29 14:39:41  braverock
  * - fixed SQL spacing that was causing opportunity status query to fail with run-on...
  *

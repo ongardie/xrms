@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.62 2005/03/30 17:29:21 daturaarutad Exp $
+ * $Id: some.php,v 1.63 2005/04/29 16:22:46 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -282,13 +282,13 @@ $searchsql['where'] = $where;
 $_SESSION['search_sql'] = $searchsql;
 
 $columns = array();
-$columns[] = array('name' => _("Company Name"), 'index_sql' => 'name');
+$columns[] = array('name' => _("Company Name"), 'index_sql' => 'name', 'type' => 'url');
 $columns[] = array('name' => _("Company Code"), 'index_sql' => 'code');
 $columns[] = array('name' => _("User"), 'index_sql' => 'user');
 $columns[] = array('name' => _("Industry"), 'index_sql' => 'industry');
 $columns[] = array('name' => _("CRM Status"), 'index_sql' => 'crm_status');
-$columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status');
-$columns[] = array('name' => _("Rating"), 'index_sql' => 'rating');
+$columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status', 'type' => 'html');
+$columns[] = array('name' => _("Rating"), 'index_sql' => 'rating', 'type' => 'html');
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
@@ -301,17 +301,16 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
 $columns = $pager_columns->GetUserColumns('default');
 
-
-
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
-
 echo $pager_columns_selects;
 
 
 $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CompanyForm', 'CompanyPager', $columns);
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+			" . $pager->GetAndUseExportButton() .  "
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
@@ -391,6 +390,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.63  2005/04/29 16:22:46  daturaarutad
+ * updated to use GUP_Pager for export
+ *
  * Revision 1.62  2005/03/30 17:29:21  daturaarutad
  * s/Rating/rating/ in $columns
  *

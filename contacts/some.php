@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.53 2005/03/21 13:40:56 maulani Exp $
+ * $Id: some.php,v 1.54 2005/04/29 16:26:53 daturaarutad Exp $
  */
 
 //include the standard files
@@ -271,8 +271,8 @@ $_SESSION["search_sql"]=$sql;
 	"company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name"; 
 
 $columns = array();
-$columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => 'cont.last_name,cont.first_names');
-$columns[] = array('name' => _("Company"), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name');
+$columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
+$columns[] = array('name' => _("Company"), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
 $columns[] = array('name' => _("Code"), 'index_sql' => 'company_code');
 $columns[] = array('name' => _("Title"), 'index_sql' => 'title');
 $columns[] = array('name' => _("Description"), 'index_sql' => 'description');
@@ -292,17 +292,17 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 $columns = $pager_columns->GetUserColumns('default');
 
 
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'ContactForm', 'ContactPager', $columns, false);
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-            <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
+			" . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
 
 echo $pager_columns_selects;
 
 
 
-$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'ContactForm', 'ContactPager', $columns, false);
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
 
@@ -353,14 +353,6 @@ function createContact() {
     location.href = "new.php";
 }
 
-function exportIt() {
-    document.forms[0].action = "export.php";
-    document.forms[0].submit();
-    // reset the form so that post-export searches work
-    document.forms[0].action = "some.php";
-}
-
-
 //-->
 </script>
 
@@ -370,6 +362,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.54  2005/04/29 16:26:53  daturaarutad
+ * updated to use GUP_Pager for export
+ *
  * Revision 1.53  2005/03/21 13:40:56  maulani
  * - Remove redundant code by centralizing common user menu call
  *
