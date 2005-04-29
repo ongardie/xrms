@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.44 2005/03/21 13:40:56 maulani Exp $
+ * $Id: one.php,v 1.45 2005/04/29 16:36:28 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -172,10 +172,10 @@ WHERE a.on_what_table = 'opportunities'
 
     // begin Activities Pager
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title');
+    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title', 'type' => 'url');
     $columns[] = array('name' => _('User'), 'index_sql' => 'username', 'sql_sort_column' => 'u.username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names');
+    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names', 'type' => 'url');
     $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
     
 	// no reason to set this if you don't want all by default
@@ -190,13 +190,13 @@ WHERE a.on_what_table = 'opportunities'
 
     $columns = $pager_columns->GetUserColumns('default');
 
+    $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'OpportunityActivitiesPager', $columns, false, true);
+
     $endrows = "<tr><td class=widget_content_form_element colspan=10>
                 $pager_columns_button
-                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
+				" . $pager->GetAndUseExportButton() .  "
                 <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
 
-
-    $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'OpportunityActivitiesPager', $columns, false, true);
     $pager->AddEndRows($endrows);
 
     $activity_rows = $pager->Render($system_rows_per_page);
@@ -482,6 +482,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.45  2005/04/29 16:36:28  daturaarutad
+ * updated to use GUP_Pager for export
+ *
  * Revision 1.44  2005/03/21 13:40:56  maulani
  * - Remove redundant code by centralizing common user menu call
  *
