@@ -21,6 +21,10 @@ input.button,
 #navline {
     display: none;
 }
+/* But make an exception for some forms that we want to print */
+form.print {
+    display: inline;
+}
 /* Make Sidebar follow Content */
 #Main #Content {
     width: auto;
