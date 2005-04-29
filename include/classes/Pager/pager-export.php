@@ -2,7 +2,7 @@
 /**
  * Export pager contents
  *
- * $Id: pager-export.php,v 1.3 2005/04/29 15:15:39 daturaarutad Exp $
+ * $Id: pager-export.php,v 1.4 2005/04/29 16:22:26 daturaarutad Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -51,6 +51,11 @@ if(is_array($session_data) && is_array($column_info)) {
 				    $row[$column['index']] = $matches[1];
 				}
 			}
+			if('html' == $column['type']) {
+				// extract all html
+				$row[$column['index']] = preg_replace("/(<\/?)(\w+)([^>]*>)/e", '', $row[$column['index']]);
+			}
+
 			if(false !== strpos($row[$column['index']], ',')) {
 				$row[$column['index']] = '"' . $row[$column['index']] . '"';
 			}
@@ -78,6 +83,9 @@ if(is_array($session_data) && is_array($column_info)) {
 
 /**
  * $Log: pager-export.php,v $
+ * Revision 1.4  2005/04/29 16:22:26  daturaarutad
+ * added html type which strips all html from column
+ *
  * Revision 1.3  2005/04/29 15:15:39  daturaarutad
  * remove anchors for urls
  *
