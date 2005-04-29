@@ -2,7 +2,7 @@
 /**
  * Export pager contents
  *
- * $Id: pager-export.php,v 1.2 2005/04/15 17:41:51 daturaarutad Exp $
+ * $Id: pager-export.php,v 1.3 2005/04/29 15:15:39 daturaarutad Exp $
  */
 
 require_once('../../../include-locations.inc');
@@ -31,6 +31,7 @@ $session_data = $_SESSION[$pager_id . "_data"];
 $column_info = $_SESSION[$pager_id . "_columns"];
 
 if(is_array($session_data) && is_array($column_info)) {
+	// first output the column names
 	$csvdata = '';
 	foreach($column_info as $column) {
 		$csvdata .= $column['name'] . ',';
@@ -38,11 +39,22 @@ if(is_array($session_data) && is_array($column_info)) {
 	$csvdata = substr($csvdata, 0, -1);
 	$csvdata .= "\n";
 	
+	// now output the data
 	foreach($session_data as $row) {
+
 		foreach($column_info as $column) {
+			// do some formatting of the data before moving to csvdata
+			if('url' == $column['type']) {
+				// extract <a...>(good stuff)</a>
+				if(preg_match("/<a[^>]*>(.*)<\/a>/", $row[$column['index']], $matches))
+				{
+				    $row[$column['index']] = $matches[1];
+				}
+			}
 			if(false !== strpos($row[$column['index']], ',')) {
 				$row[$column['index']] = '"' . $row[$column['index']] . '"';
 			}
+			
 			$csvdata .= $row[$column['index']] . ',';
 		}
 		$csvdata = substr($csvdata, 0, -1);
@@ -66,6 +78,9 @@ if(is_array($session_data) && is_array($column_info)) {
 
 /**
  * $Log: pager-export.php,v $
+ * Revision 1.3  2005/04/29 15:15:39  daturaarutad
+ * remove anchors for urls
+ *
  * Revision 1.2  2005/04/15 17:41:51  daturaarutad
  * add quotes around values that contain commas...temporary fix until we implement a filter/hook
  *
