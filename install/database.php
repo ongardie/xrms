@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.36 2005/04/26 18:11:00 gpowers Exp $
+ * $Id: database.php,v 1.37 2005/05/01 01:27:37 braverock Exp $
  */
 
 /**
@@ -560,7 +560,7 @@ function company_db_tables($con, $table_list) {
         $sql ="create table company_division (
                division_id                      int not null primary key auto_increment,
                company_id                       int not null,
-               address_id                         int,
+               address_id                       int,
                user_id                          int not null default 0,
                company_source_id                int not null default 0,
                industry_id                      int not null default 0,
@@ -593,7 +593,8 @@ function company_db_tables($con, $table_list) {
                contact_id                      int not null primary key auto_increment,
                company_id                      int not null default 0,
                division_id                     int not null default 0,
-               address_id                      int not null default 0,
+               address_id                      int not null default 1,
+               home_address_id                 int not null default 1,
                salutation                      varchar(20) not null default '',
                last_name                       varchar(100) not null default '',
                first_names                     varchar(100) not null default '',
@@ -1114,7 +1115,7 @@ function activity_db_tables($con, $table_list) {
                     INDEX ( activity_id ),
                     INDEX ( contact_id ),
                     INDEX ( activity_participant_position_id )
-                    ) TYPE = InnoDB; ";
+                    ); ";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -1130,7 +1131,7 @@ function activity_db_tables($con, $table_list) {
                     global_flag TINYINT UNSIGNED DEFAULT '0' NOT NULL, 
                     PRIMARY KEY ( activity_participant_position_id ) ,
                     INDEX ( activity_type_id )
-                    ) TYPE = InnoDB; ";
+                    ); ";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -1162,6 +1163,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.37  2005/05/01 01:27:37  braverock
+ * - remove InnoDB requirement from install and update scripts as
+ *   it causes problems in non-MySQL env. or MySQL env w/o InnoDB support
+ *
  * Revision 1.36  2005/04/26 18:11:00  gpowers
  * - added contacts.work_phone_ext
  *

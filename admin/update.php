@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.71 2005/04/28 15:39:28 braverock Exp $
+ * $Id: update.php,v 1.72 2005/05/01 01:27:37 braverock Exp $
  */
 
 // where do we include from
@@ -4746,7 +4746,7 @@ $con->execute($sql);
                     INDEX ( activity_id ),
                     INDEX ( contact_id ),
                     INDEX ( activity_participant_position_id )
-                    ) TYPE = InnoDB; ";
+                    ); ";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -4772,7 +4772,7 @@ $con->execute($sql);
                     global_flag TINYINT UNSIGNED DEFAULT '0' NOT NULL,
                     PRIMARY KEY ( activity_participant_position_id ) ,
                     INDEX ( activity_type_id )
-                    ) TYPE = InnoDB; ";
+                    ); ";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -4826,6 +4826,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.72  2005/05/01 01:27:37  braverock
+ * - remove InnoDB requirement from install and update scripts as
+ *   it causes problems in non-MySQL env. or MySQL env w/o InnoDB support
+ *
  * Revision 1.71  2005/04/28 15:39:28  braverock
  * - fixed alter table command for work_phone_ext
  *   patch supplied by Miguel Gonçalves (mig77)
