@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.15 2005/04/07 18:13:15 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.16 2005/05/02 15:59:28 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -192,7 +192,7 @@ class xrms_acl {
         $con = $this->DBConnection;
         $table = "ControlledObjectRelationship";
         $objectList=array();
-        $sql = "SELECT CORelationship_id, ParentControlledObject_id, on_what_field, on_what_table, on_what_child_field, on_what_parent_field, cross_table, singular FROM $table JOIN ControlledObject ON ControlledObject_id=ParentControlledObject_id WHERE ChildControlledObject_id=$ControlledObject_id";
+        $sql = "SELECT CORelationship_id, ParentControlledObject_id, on_what_field, on_what_table, on_what_child_field, on_what_parent_field, cross_table, singular FROM $table INNER JOIN ControlledObject ON ControlledObject_id=ParentControlledObject_id WHERE ChildControlledObject_id=$ControlledObject_id";
         if ($CORelationship_id) { $sql .=" AND CORelationship_id=$CORelationship_id"; }
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
@@ -1271,7 +1271,7 @@ class xrms_acl {
         if ($IncludeControlledObject) {
             $sql = "SELECT $tblName.*, Parent.on_what_table as parent_table, Parent.on_what_field as parent_field, Child.* FROM $tblName
              LEFT OUTER JOIN ControlledObject As Parent ON Parent.ControlledObject_id=$tblName.ParentControlledObject_id
-             JOIN ControlledObject As Child ON Child.ControlledObject_id=$tblName.ChildControlledObject_id ";
+             INNER JOIN ControlledObject As Child ON Child.ControlledObject_id=$tblName.ChildControlledObject_id ";
         } else {
             $sql = "SELECT * FROM $tblName ";
         }
@@ -2071,6 +2071,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.16  2005/05/02 15:59:28  vanmer
+ * - added explicit INNER to JOIN statements, to support older mysql installs
+ *
  * Revision 1.15  2005/04/07 18:13:15  vanmer
  * - allow ACL to be called with initial DB connection already instantiated
  *
