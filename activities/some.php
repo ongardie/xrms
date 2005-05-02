@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.104 2005/04/29 17:44:11 daturaarutad Exp $
+ * $Id: some.php,v 1.105 2005/05/02 17:11:55 daturaarutad Exp $
  */
 
 // handle includes
@@ -115,7 +115,6 @@ if(isset($day_diff) and $day_diff) {
     $day_diff = round((strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400);
 }
 
-$search_date_sql = $con->OffsetDate($day_diff);
 
 
 // watch to see if activities_date has changed
@@ -153,16 +152,12 @@ if($var_watcher->VarsChanged() || empty($calendar_start_date)) {
 }
 
 
-/*
-	if view = list, just do before/after
-
-	otherwise day_diff2 and viewport comes into play
-	instead of day_diff2, do calendar_view_start, calendar_view_end
+/*	sql date restriction
+	if view is calendar, we limit the query to what is currently visible.
 
 	if calendar_view_start < search_date, use search_date
 	if calendar_view_end > search_date, use search_date
 */
-
 if (strlen($search_date) > 0 && $start_end != 'all') {
     $criteria_count++;
 
@@ -175,13 +170,16 @@ if (strlen($search_date) > 0 && $start_end != 'all') {
     if (!$before_after) {
 		// before
 		switch($results_view_type) {
+			case 'list':
+				$offset_end = $con->OffsetDate($day_diff);
+				$offset_sql .= " and a.$field < $offset_end";
+				break;
 			case 'day':
 			case 'week':
 			case 'month':
 			case 'year':
 				$day_diff_view_start = $day_diff + (strtotime($calendar_start_date) - time()) / 86400;
 				$offset_start = $con->OffsetDate($day_diff_view_start);
-//echo "new date: " . date('Y-m-d', strtotime("$calendar_start_date +1 $results_view_type")) . "<br>";
 				$day_diff_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
 				$day_diff_view_end = min($day_diff_view_end, $day_diff);
 				$offset_end = $con->OffsetDate($day_diff_view_end);
@@ -191,6 +189,10 @@ if (strlen($search_date) > 0 && $start_end != 'all') {
     } elseif ($before_after === 'after') {
 
 		switch($results_view_type) {
+			case 'list':
+				$offset_start = $con->OffsetDate($day_diff);
+				$offset_sql .= " and a.$field > $offset_start";
+				break;
 			case 'day':
 			case 'week':
 			case 'month':
@@ -202,17 +204,12 @@ if (strlen($search_date) > 0 && $start_end != 'all') {
 				$offset_end = $con->OffsetDate(min($day_diff_view_end, $day_diff));
 				$offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
 				break;
-
-/*
-				$day_diff_view_start = (strtotime($search_date) - strtotime("$calendar_start_date +1 $results_view_type")) / 86400;
-				$offset_start = $con->offsetdate($day_diff_view_start);
-				$offset_end = $con->offsetdate(min($day_diff_view_start, $day_diff));
-				$offset_sql .= "and a.$field < $offset_end and a.$field > $offset_start ";
-*/
-				break;
 		}
     } elseif ($before_after === 'on') {
-        $offset_sql .= " and cast(a.$field as date) = cast(" . $offset_date_sql . " as date)";
+		// same query for list and calendar views
+		$offset_start = $con->OffsetDate($day_diff);
+		$offset_end = $con->OffsetDate($day_diff+1);
+		$offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
 		$calendar_start_date = date("ymd", strtotime($search_date));
     }
 }
@@ -890,6 +887,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.105  2005/05/02 17:11:55  daturaarutad
+ * fixed a bug in the date restriction for list view
+ *
  * Revision 1.104  2005/04/29 17:44:11  daturaarutad
  * made form printable
  *
