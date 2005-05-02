@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.28 2005/05/02 13:15:32 braverock Exp $
+ * $Id: edit.php,v 1.29 2005/05/02 13:19:58 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -137,7 +137,10 @@ confGoTo_includes();
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Address"); ?></td>
-                <td class=widget_content_form_element><?php echo $address_menu; ?></td>
+                <td class=widget_content_form_element>
+                    <?php echo $address_menu; ?>
+                    <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Salutation"); ?></td>
@@ -250,7 +253,7 @@ confGoTo_includes();
         }
 ?>
                     <input class=button type=button value="<?php echo _("Transfer"); ?>" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
-                    <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+
 
                 </td>
             </tr>
@@ -273,6 +276,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.29  2005/05/02 13:19:58  braverock
+ * - move edit address button to be next to the Address selector
+ *
  * Revision 1.28  2005/05/02 13:15:32  braverock
  * - add get_formatted_phone rendering to phone numbers
  *
