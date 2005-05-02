@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.22 2005/04/26 17:28:04 gpowers Exp $
+ * $Id: new.php,v 1.23 2005/05/02 15:03:19 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -127,7 +127,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php echo $division_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Address"); ?></td>
+                <td class=widget_label_right><?php echo _("Business Address"); ?></td>
                 <td class=widget_content_form_element><?php echo $address_menu; ?></td>
             </tr>
             <tr>
@@ -262,6 +262,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.23  2005/05/02 15:03:19  braverock
+ * - change Address to 'Business Address' in the display
+ *   @todo: still need to update to handle Home Address
+ *
  * Revision 1.22  2005/04/26 17:28:04  gpowers
  * - added Extension ("x") to contact work phone
  * - removed non-digits from phone numbers in edit-2's, new-2's
