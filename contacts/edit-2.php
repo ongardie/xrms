@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.16 2005/04/26 17:28:03 gpowers Exp $
+ * $Id: edit-2.php,v 1.17 2005/05/02 13:51:51 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -19,8 +19,10 @@ $on_what_id=$contact_id;
 $session_user_id = session_check('','Update');
 
 $address_id = $_POST['address_id'];
+$home_address_id = $_POST['home_address_id'];
 $division_id = $_POST['division_id'];
 if (!$address_id) { $address_id=1; };
+if (!$home_address_id) { $home_address_id=1; };
 $first_names = $_POST['first_names'];
 $last_name = $_POST['last_name'];
 $summary = $_POST['summary'];
@@ -58,6 +60,7 @@ $rst = $con->execute($sql);
 
 $rec = array();
 $rec['address_id'] = $address_id;
+$rec['home_address_id'] = $home_address_id;
 $rec['division_id'] = $division_id;
 $rec['last_name'] = $last_name;
 $rec['first_names'] = $first_names;
@@ -101,6 +104,9 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.17  2005/05/02 13:51:51  braverock
+ * - add support for home address
+ *
  * Revision 1.16  2005/04/26 17:28:03  gpowers
  * - added Extension ("x") to contact work phone
  * - removed non-digits from phone numbers in edit-2's, new-2's

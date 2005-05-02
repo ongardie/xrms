@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.29 2005/05/02 13:19:58 braverock Exp $
+ * $Id: edit.php,v 1.30 2005/05/02 13:51:51 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -25,7 +25,7 @@ $msg        = isset($_GET['msg']) ? $_GET['msg'] : '';
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 
 $sql = "SELECT * FROM users WHERE user_id = $session_user_id";
 $rst = $con->execute($sql);
@@ -49,6 +49,9 @@ if ($rst) {
     $company_id = $rst->fields['company_id'];
     $division_id = $rst->fields['division_id'];
     $address_id = $rst->fields['address_id'];
+    $address= get_formatted_address($con,$address_id);
+    $home_address_id = $rst->fields['home_address_id'];
+    $home_address= get_formatted_address($con,$home_address_id);
     $company_name = $rst->fields['company_name'];
     $last_name = $rst->fields['last_name'];
     $first_names = $rst->fields['first_names'];
@@ -62,7 +65,7 @@ if ($rst) {
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['work_phone']);
     $work_phone_ext = $rst->fields['work_phone_ext'];
     $cell_phone = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['cell_phone']);
-    $home_phone = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['home_phone']);
+    $home_phone = get_formatted_phone($con, $rst->fields['home_address_id'],$rst->fields['home_phone']);
     $profile = $rst->fields['profile'];
     $fax = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['fax']);
     $aol_name = $rst->fields['aol_name'];
@@ -103,8 +106,14 @@ $rst->close();
 
 $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
 $rst = $con->execute($sql);
-$address_menu = $rst->getmenu2('address_id', $address_id, true);
-$rst->close();
+if ($rst){
+    $address_menu = $rst->getmenu2('address_id', $address_id, true);
+    $rst->MoveFirst();
+    $home_address_menu = $rst->getmenu2('home_address_id', $home_address_id, true);
+    $rst->Close();
+} else {
+    db_error_handler ($con, $sql);
+}
 
 $accounting_rows = do_hook_function('contact_accounting_inline_edit', $accounting_rows);
 
@@ -136,10 +145,21 @@ confGoTo_includes();
                 <td class=widget_content_form_element><?php echo $division_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Address"); ?></td>
+                <td class=widget_label_right><?php echo _("Business Address"); ?></td>
                 <td class=widget_content_form_element>
-                    <?php echo $address_menu; ?>
-                    <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+                    <?php echo $address; ?>
+                    <br />
+                        <?php echo _("Choose New Address"). $address_menu ."&nbsp;". _("OR") ."&nbsp;"; ?>
+                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Home Address"); ?></td>
+                <td class=widget_content_form_element>
+                    <?php echo $home_address; ?>
+                    <br />
+                        <?php echo _("Choose New Address"). $home_address_menu ."&nbsp;". _("OR") ."&nbsp;"; ?>
+                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
                 </td>
             </tr>
             <tr>
@@ -276,6 +296,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.30  2005/05/02 13:51:51  braverock
+ * - add support for home address
+ *
  * Revision 1.29  2005/05/02 13:19:58  braverock
  * - move edit address button to be next to the Address selector
  *
