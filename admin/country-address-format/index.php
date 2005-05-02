@@ -6,7 +6,7 @@
  *
  * @author Glenn Powers
  *
- * $Id: index.php,v 1.7 2004/07/25 12:33:10 braverock Exp $
+ * $Id: index.php,v 1.8 2005/05/02 12:39:10 braverock Exp $
  */
 
 //include required files
@@ -56,10 +56,10 @@ if ($rst) {
 <td class=widget_label_right>$country</td>
 <td class=widget_content nowrap><form method=post action=edit-2.php>
     <input type=hidden name=country_id value=$country_id>
-    <input size=18 maxlength=100 name=phone_format value='$phone_format'>
+    <input size=18 maxlength=100 name=phone_format value=\"". htmlspecialchars($phone_format) . "\">
     <input type=submit value="._("Update")." class=button>
 </form></td>
-<td class=widget_content>$address_format_string</td>
+<td class=widget_content>". $address_format_string."</td>
 <td class=widget_content><a href=edit.php?address_format_string_id=" . $address_format_string_id ."&country_id=" . $country_id . ">"._("Edit")."</a></td>
 </tr>";
         $rst->movenext();
@@ -72,6 +72,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.8  2005/05/02 12:39:10  braverock
+ * - double quote a couple of errant records and use htmlspecialchars where needed
+ *
  * Revision 1.7  2004/07/25 12:33:10  braverock
  * - remove lang file require_once, as it is no longer used
  *
