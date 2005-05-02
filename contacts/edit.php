@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.27 2005/04/26 17:28:03 gpowers Exp $
+ * $Id: edit.php,v 1.28 2005/05/02 13:15:32 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -59,12 +59,12 @@ if ($rst) {
     $gender = $rst->fields['gender'];
     $salutation = $rst->fields['salutation'];
     $email = $rst->fields['email'];
-    $work_phone = $rst->fields['work_phone'];
+    $work_phone = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['work_phone']);
     $work_phone_ext = $rst->fields['work_phone_ext'];
-    $cell_phone = $rst->fields['cell_phone'];
-    $home_phone = $rst->fields['home_phone'];
+    $cell_phone = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['cell_phone']);
+    $home_phone = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['home_phone']);
     $profile = $rst->fields['profile'];
-    $fax = $rst->fields['fax'];
+    $fax = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['fax']);
     $aol_name = $rst->fields['aol_name'];
     $yahoo_name = $rst->fields['yahoo_name'];
     $msn_name = $rst->fields['msn_name'];
@@ -242,12 +242,12 @@ confGoTo_includes();
                     <input class=button type=submit value="<?php echo _("Save"); ?>">
                     <input class=button type=button value="<?php echo _("Mail Merge"); ?>" onclick="javascript: location.href='../email/email.php?scope=contact&contact_id=<?php echo $contact_id; ?>';">
 <?php
-		if ( $contact_count > 1 ) {
-		  $quest = _("Delete Contact?");
-		  $button = _("Delete");
-		  $to_url = "delete.php?company_id=$company_id&contact_id=$contact_id";
-		  confGoTo( $quest, $button, $to_url );
-		}
+        if ( $contact_count > 1 ) {
+          $quest = _("Delete Contact?");
+          $button = _("Delete");
+          $to_url = "delete.php?company_id=$company_id&contact_id=$contact_id";
+          confGoTo( $quest, $button, $to_url );
+        }
 ?>
                     <input class=button type=button value="<?php echo _("Transfer"); ?>" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
                     <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
@@ -273,6 +273,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.28  2005/05/02 13:15:32  braverock
+ * - add get_formatted_phone rendering to phone numbers
+ *
  * Revision 1.27  2005/04/26 17:28:03  gpowers
  * - added Extension ("x") to contact work phone
  * - removed non-digits from phone numbers in edit-2's, new-2's
