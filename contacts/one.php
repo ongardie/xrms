@@ -4,10 +4,10 @@
  *
  * This page allows for the viewing of the details for a single contact.
  *
- * @todo break the parts of the contact details qey into seperate queries 
+ * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.81 2005/04/26 17:28:04 gpowers Exp $
+ * $Id: one.php,v 1.82 2005/05/03 23:10:33 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -75,7 +75,7 @@ if ($rst) {
     // added to the contacts table are accessible to plugin code without
     // an extra read from database.
     foreach ($rst->fields as $contact_field => $contact_field_value ) {
-    	$$contact_field = $contact_field_value;
+        $$contact_field = $contact_field_value;
     }
 
     $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
@@ -133,11 +133,11 @@ $rst = $con->execute($sql_opportunity_types);
 $opportunity_status_rows = $rst->GetMenu2('opportunity_status_id', null, true);
 
 // most recent activities
-$sql_activities = "SELECT " . 
+$sql_activities = "SELECT " .
 $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/contacts/one.php%3Fcontact_id=$contact_id\">'", "activity_title", "'</a>'") .
-" AS activity_title_link, u.username, at.activity_type_pretty_name, 
-a.scheduled_at, a.entered_at, a.on_what_table, a.on_what_id, a.activity_status, a.activity_title, 
-  cont.contact_id, 
+" AS activity_title_link, u.username, at.activity_type_pretty_name,
+a.scheduled_at, a.entered_at, a.on_what_table, a.on_what_id, a.activity_status, a.activity_title,
+  cont.contact_id,
 CASE
   WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
   ELSE 0
@@ -147,7 +147,7 @@ LEFT OUTER JOIN activity_types at ON (at.activity_type_id = a.activity_type_id)
 LEFT OUTER JOIN users u ON (a.user_id = u.user_id)
 LEFT OUTER JOIN activity_participants ap ON (ap.activity_id = a.activity_id)
 LEFT OUTER JOIN contacts cont ON (a.contact_id = cont.contact_id)
-WHERE ((a.contact_id = $contact_id) OR 
+WHERE ((a.contact_id = $contact_id) OR
 ((ap.contact_id = $contact_id) AND (ap.ap_record_status = 'a')))
   AND a.activity_record_status = 'a'";
     $list=acl_get_list($session_user_id, 'Read', false, 'activities');
@@ -172,9 +172,9 @@ WHERE ((a.contact_id = $contact_id) OR
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
     $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => 'a.scheduled_at', 'default_sort' => 'desc');
 
-	// no reason to set this if you don't want all by default
-	$default_columns = null;
-	// $default_columns = array('activity_status', 'activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
+    // no reason to set this if you don't want all by default
+    $default_columns = null;
+    // $default_columns = array('activity_status', 'activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
 
 
     // selects the columns this user is interested in
@@ -189,7 +189,7 @@ WHERE ((a.contact_id = $contact_id) OR
                 <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
                 <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
 
-	// this is the callback function that the pager uses to fill in the calculated data.
+    // this is the callback function that the pager uses to fill in the calculated data.
     $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'Contact_ActivitiesPager', $columns, false, true);
     $pager->AddEndRows($endrows);
 
@@ -273,7 +273,7 @@ if ($rst) {
 add_audit_item($con, $session_user_id, 'viewed', 'contacts', $contact_id, 3);
 
 
-$page_title = _("Contact Details").': '.$first_names . ' ' . $last_name;
+$page_title = _("Contact Details").': '.$salutation.' '.$first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
 
 ?>
@@ -312,7 +312,7 @@ function markComplete() {
                                 <table border=0 cellpadding=0 cellspacing=0 width=100%>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _("Name"); ?></td>
-                                    <td class=clear><?php  echo $last_name . ', ' . $salutation . ' ' . $first_names; ?></td>
+                                    <td class=clear><?php  echo $salutation .' '. $first_names.' '.$last_name; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Gender"); ?></td>
@@ -567,7 +567,7 @@ function markComplete() {
 
         <!-- files //-->
         <?php echo $file_rows; ?>
-        
+
         <!-- bottom sidebar plugins //-->
         <?php echo $sidebar_rows_bottom; ?>
 
@@ -602,6 +602,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.82  2005/05/03 23:10:33  braverock
+ * - change Name display to $salutation.' '.$first_names.' '.$last_name
+ *
  * Revision 1.81  2005/04/26 17:28:04  gpowers
  * - added Extension ("x") to contact work phone
  * - removed non-digits from phone numbers in edit-2's, new-2's
