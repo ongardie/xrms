@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.22 2005/04/21 16:37:43 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.23 2005/05/03 22:09:47 daturaarutad Exp $
  */
 
 
@@ -704,6 +704,8 @@ END;
                 if($this->column_info[$j]['type']) {
                     if('currency' == $this->column_info[$j]['type']) {
                         echo "<td class='$row_classnames {$col_classnames[$j]}'>$" . number_format($this->data[$i][$this->column_info[$j]['index']], 2, '.', ',') . "</td>\n";
+                    } elseif('currency_six_places' == $this->column_info[$j]['type']) {
+                        echo "<td class='$row_classnames {$col_classnames[$j]}'>$" . number_format($this->data[$i][$this->column_info[$j]['index']], 6, '.', ',') . "</td>\n";
                     } elseif('date' == $this->column_info[$j]['type']) {
                         echo "<td class='$row_classnames {$col_classnames[$j]}'>" . format_date($this->data[$i][$this->column_info[$j]['index']]) . "</td>\n";
                     } elseif('int' == $this->column_info[$j]['type']) {
@@ -1060,6 +1062,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.23  2005/05/03 22:09:47  daturaarutad
+ * added currency_six_places
+ *
  * Revision 1.22  2005/04/21 16:37:43  daturaarutad
  * added SetDebug function for showing some basic debug output
  *
