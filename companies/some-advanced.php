@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.20 2005/03/21 13:40:55 maulani Exp $
+ * $Id: some-advanced.php,v 1.21 2005/05/03 16:44:28 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -11,8 +11,10 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once('pager.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+
 
 // a helper routine to retrieve one field from a table
 //
@@ -76,11 +78,6 @@ $arr_vars = array ( // local var name       // session variable name
 	             	   'postal_code' => array ( 'companies_postal_code' , arr_vars_SESSION),
 	             	   'country_id' => array ( 'companies_country_id' , arr_vars_SESSION),
 	             	   'address_body' => array ( 'companies_address_body' , arr_vars_SESSION),
-        
-	             	   'sort_column'         => array ( 'sort_column'         , arr_vars_REQUEST),
-	             	   'current_sort_column' => array ( 'current_sort_column' , arr_vars_REQUEST),
-	             	   'sort_order'          => array ( 'sort_order'          , arr_vars_REQUEST),
-	             	   'current_sort_order'  => array ( 'current_sort_order'  , arr_vars_REQUEST),
                    );
 
 // get all passed in variables
@@ -90,33 +87,11 @@ arr_vars_get_all ( $arr_vars );
 // probably a BUG - TBD - Please Fix Me!
 $company_category_id = '';
 
-if ( !$sort_column ) {
-    $sort_column = 1;
-    $current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = ( $resort && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image  = '<img border=0 height=10 width=10 alt="" src=../img/asc.gif>' ;
-$descending_order_image = '<img border=0 height=10 width=10 alt="" src=../img/desc.gif>';
-
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
 //if ( 0 ) {
 // seems to be unused
-//  $_SESSION['companies_sort_column'] = $sort_column;
-//  $_SESSION['companies_current_sort_column'] = $sort_column;
-//  $_SESSION['companies_sort_order'] = $sort_order;
-//  $_SESSION['companies_current_sort_order'] = $sort_order;
 //  $_SESSION['companies_company_name'] = $company_name;
 //  $_SESSION['companies_company_category_id'] = $company_category_id;
 //  $_SESSION['companies_company_code'] = $company_code;
@@ -130,15 +105,18 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
 
+
+  
+
 $sql = "
-SELECT distinct " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS '"._("Company Name")."',
-c.company_code AS '"._("Company Code")."',
-u.username AS '"._("User")."',
-industry_pretty_name as '"._("Industry")."',
-crm_status_pretty_name AS '"._("CRM Status")."',
-as1.account_status_display_html AS '"._("Account Status")."',
-r.rating_display_html AS '"._("Rating")."',
-count(con.contact_id) AS '"._("Contacts")."'
+SELECT distinct " . $con->Concat("'<a href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . " AS name,
+c.company_code AS code,
+u.username AS user,
+industry_pretty_name as industry,
+crm_status_pretty_name AS crm_status,
+as1.account_status_display_html as account_status,
+r.rating_display_html AS rating, 
+count(con.contact_id) AS contacts
 ";
 
 $criteria_count = 0;
@@ -301,18 +279,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     } else { $where .= ' AND 1 = 2 '; }
 }
 
-if ($sort_column == 1) {
-    $order_by = "company_name";
-}
-elseif($sort_column == 8) {
-    $order_by = _("Contacts");
-} else {
-    $order_by = $sort_column;
-}
-
-$order_by .= " $sort_order";
-
-$sql .= $from . $where . " group by c.company_id order by $order_by";
+$sql .= $from . $where . " group by c.company_id ";
 
 //echo "sql = $sql<br>";
 
@@ -354,13 +321,9 @@ start_page($page_title, true, $msg);
 
 <div id="Main">
     <div id="Content">
-		<form action=some-advanced.php method=post>
+		<form action=some-advanced.php method=post name="CompaniesSomeAdvanced">
+	      <input type=hidden name=use_post_vars value=1>
 		  <input type=hidden name=companies_next_page value="<?php  echo $companies_next_page; ?>">
-      <input type=hidden name=resort value="0">
-      <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-      <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-      <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-      <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
 
 
 <?php
@@ -369,8 +332,42 @@ $_SESSION["search_sql"]["from"]=$from;
 $_SESSION["search_sql"]["where"]=$where;
 $_SESSION["search_sql"]["order"]=" order by $order_by";
 
-$pager = new Companies_Pager($con, $sql, $sort_column-1, $pretty_sort_order);
-$pager->render($rows_per_page=$system_rows_per_page);
+$columns = array();
+$columns[] = array('name' => _("Company Name"), 'index_sql' => 'name', 'sql_sort_column' => 'company_name', 'type' => 'url');
+$columns[] = array('name' => _("Company Code"), 'index_sql' => 'code');
+$columns[] = array('name' => _("User"), 'index_sql' => 'user');
+$columns[] = array('name' => _("Industry"), 'index_sql' => 'industry');
+$columns[] = array('name' => _("CRM Status"), 'index_sql' => 'crm_status');
+$columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status', 'type' => 'html');
+$columns[] = array('name' => _("Rating"), 'index_sql' => 'rating', 'type' => 'html');
+$columns[] = array('name' => _("Contacts"), 'index_sql' => 'contacts');
+
+// selects the columns this user is interested in
+// no reason to set this if you don't want all by default
+$default_columns = null;
+// $default_columns =  array("name","code","user","industry","crm_status","account_status","rating");
+
+$pager_columns = new Pager_Columns('CompanyAdvancedPager', $columns, $default_columns, 'CompaniesSomeAdvanced');
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+
+echo $pager_columns_selects;
+
+//echo htmlentities($sql);
+
+
+$pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CompaniesSomeAdvanced', 'CompanyAdvancedPager', $columns);
+
+$endrows = "<tr><td class=widget_content_form_element colspan=10>
+            $pager_columns_button
+            " . $pager->GetAndUseExportButton() .  "
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+
+$pager->AddEndRows($endrows);
+$pager->Render($system_rows_per_page);
+
 $con->close();
 
 ?>
@@ -434,6 +431,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.21  2005/05/03 16:44:28  daturaarutad
+ * updated to use GUP_Pager
+ *
  * Revision 1.20  2005/03/21 13:40:55  maulani
  * - Remove redundant code by centralizing common user menu call
  *
