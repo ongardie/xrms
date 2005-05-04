@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.30 2005/05/02 13:51:51 braverock Exp $
+ * $Id: edit.php,v 1.31 2005/05/04 14:36:14 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -257,7 +257,7 @@ confGoTo_includes();
                 <td class=widget_content_form_element><input type=text name=custom4 size=35 value="<?php  echo $custom4; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
+                <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
             <tr>
@@ -296,6 +296,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.31  2005/05/04 14:36:14  braverock
+ * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  * Revision 1.30  2005/05/02 13:51:51  braverock
  * - add support for home address
  *

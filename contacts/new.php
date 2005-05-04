@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.23 2005/05/02 15:03:19 braverock Exp $
+ * $Id: new.php,v 1.24 2005/05/04 14:36:13 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -222,11 +222,11 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=custom4 size=35></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
+                <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Edit Address"); ?></td>
+                <td class=widget_label_right><?php echo _("Edit Address"); ?></td>
                 <td class=widget_content_form_element><input type=checkbox name=edit_address></td>
             </tr>
             <tr>
@@ -262,6 +262,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.24  2005/05/04 14:36:13  braverock
+ * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  * Revision 1.23  2005/05/02 15:03:19  braverock
  * - change Address to 'Business Address' in the display
  *   @todo: still need to update to handle Home Address

@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of cases
  *
- * $Id: new.php,v 1.18 2005/03/21 13:40:54 maulani Exp $
+ * $Id: new.php,v 1.19 2005/05/04 14:34:55 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -161,7 +161,7 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=case_description></textarea></td>
             </tr>
             <tr>
@@ -226,6 +226,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.19  2005/05/04 14:34:55  braverock
+ * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  * Revision 1.18  2005/03/21 13:40:54  maulani
  * - Remove redundant code by centralizing common user menu call
  *

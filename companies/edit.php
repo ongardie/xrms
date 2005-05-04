@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.16 2005/03/21 13:40:55 maulani Exp $
+ * $Id: edit.php,v 1.17 2005/05/04 14:35:51 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -174,7 +174,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=custom4 size=30 value="<?php echo $custom4; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
+                <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
             <tr>
@@ -226,6 +226,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.17  2005/05/04 14:35:51  braverock
+ * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  * Revision 1.16  2005/03/21 13:40:55  maulani
  * - Remove redundant code by centralizing common user menu call
  *

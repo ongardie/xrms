@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.14 2005/04/10 16:42:19 maulani Exp $
+ * $Id: one.php,v 1.15 2005/05/04 14:36:53 braverock Exp $
  */
 
 //include required files
@@ -82,7 +82,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $file_size ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description><?php  echo $file_description ?></textarea></td>
             </tr>
             <tr>
@@ -160,6 +160,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.15  2005/05/04 14:36:53  braverock
+ *- removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  *Revision 1.14  2005/04/10 16:42:19  maulani
  *- RFE 1107920 (maulani) Display file_id on one.php screen
  *

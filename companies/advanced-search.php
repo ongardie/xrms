@@ -4,7 +4,7 @@
  *
  * This is the advanced screen that allows many more search fields
  *
- * $Id: advanced-search.php,v 1.10 2005/03/21 13:40:55 maulani Exp $
+ * $Id: advanced-search.php,v 1.11 2005/05/04 14:35:51 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -209,7 +209,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=custom4 size=30 value="<?php echo $custom4; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
+                <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=70 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
         </table>
@@ -309,6 +309,9 @@ end_page();
 
 /**
  * $Log: advanced-search.php,v $
+ * Revision 1.11  2005/05/04 14:35:51  braverock
+ * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  * Revision 1.10  2005/03/21 13:40:55  maulani
  * - Remove redundant code by centralizing common user menu call
  *

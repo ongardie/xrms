@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.14 2005/03/21 13:40:55 maulani Exp $
+ * $Id: new.php,v 1.15 2005/05/04 14:35:51 braverock Exp $
  */
 
 /* Include required files */
@@ -173,7 +173,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=custom4 size=30 ></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Profile"); ?></td>
+                <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=70 name=profile></textarea></td>
             </tr>
              <tr>
@@ -290,6 +290,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.15  2005/05/04 14:35:51  braverock
+ * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  * Revision 1.14  2005/03/21 13:40:55  maulani
  * - Remove redundant code by centralizing common user menu call
  *

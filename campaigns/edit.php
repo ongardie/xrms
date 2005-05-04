@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.14 2005/03/21 13:40:53 maulani Exp $
+ * $Id: edit.php,v 1.15 2005/05/04 14:35:25 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -106,7 +106,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text size=10 name=cost value="<?php  echo $cost; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=campaign_description><?php  echo $campaign_description; ?></textarea></td>
             </tr>
             <tr>
@@ -186,6 +186,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.15  2005/05/04 14:35:25  braverock
+ * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  * Revision 1.14  2005/03/21 13:40:53  maulani
  * - Remove redundant code by centralizing common user menu call
  *

@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.13 2005/01/13 18:51:23 vanmer Exp $
+ * $Id: new.php,v 1.14 2005/05/04 14:36:53 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -79,7 +79,7 @@ $file_entered_at = '';
                 <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description></textarea></td>
             </tr>
             <tr>
@@ -136,6 +136,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.14  2005/05/04 14:36:53  braverock
+ * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
+ *
  * Revision 1.13  2005/01/13 18:51:23  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *
