@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.23 2005/05/03 22:09:47 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.24 2005/05/04 19:17:14 daturaarutad Exp $
  */
 
 
@@ -86,6 +86,8 @@ class GUP_Pager {
 
 	var $show_cached_indicator 	= false;
 	var $cached_indicator_url 	= null;
+
+	var $show_caption_bar		= true;
 	// show the export button
 	var $show_export 			= false;
 	// do the actual export
@@ -921,6 +923,10 @@ END;
 
        	echo "<!-- Begin Pager -->\n
 				<table class=widget cellspacing=1 width=\"100%\">
+			";
+
+		if($this->show_caption_bar) {
+			echo "
 				<tr><td colspan=$colspan class=widget_header align=left>
 					<table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
 						<tr><td class=widget_header align=left>{$this->caption}</td>
@@ -928,6 +934,7 @@ END;
 						</tr>
 					</table>
 				</td></tr>\n";
+		}
 
         if ($page_nav != '&nbsp;') {
             echo "<tr><td colspan=$colspan>".
@@ -1019,6 +1026,14 @@ END;
 		if($url) $this->cached_indicator_url = $url;
 		$this->show_cached_indicator = true;
 	}
+
+	/**
+	* public method to hide the caption bar (note that this will also hide the refresh button and others!)
+	*/
+	function HideCaptionBar() {
+		$this->show_caption_bar = false;
+	}
+
 	/**
 	*  Private function to append the order by clause to the SQL query
 	*/
@@ -1062,6 +1077,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.24  2005/05/04 19:17:14  daturaarutad
+ * added HideCaptionBar() so that caption can be hidden
+ *
  * Revision 1.23  2005/05/03 22:09:47  daturaarutad
  * added currency_six_places
  *
