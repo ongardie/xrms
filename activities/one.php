@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.90 2005/05/04 14:30:40 braverock Exp $
+ * $Id: one.php,v 1.91 2005/05/04 14:33:37 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -426,7 +426,7 @@ function logTime() {
             if($on_what_table == 'opportunities') {
             ?>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Opportunity Notes"); ?></td>
+                <td class=widget_label_right><?php echo _("Opportunity Notes"); ?></td>
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
                     <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('Enter note', ''); document.forms[0].opportunity_description.value =
@@ -539,6 +539,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.91  2005/05/04 14:33:37  braverock
+ * - removed obsolete widget_label_right_166px CSS style, replaces w/ widget_label_right
+ *
  * Revision 1.90  2005/05/04 14:30:40  braverock
  * - fix CSS style for 'Activity Notes'
  *
