@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.82 2005/05/03 23:10:33 braverock Exp $
+ * $Id: one.php,v 1.83 2005/05/04 13:34:31 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -170,7 +170,7 @@ WHERE ((a.contact_id = $contact_id) OR
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
-    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => 'a.scheduled_at', 'default_sort' => 'desc');
+    $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'sql_sort_column' => 'a.scheduled_at', 'default_sort' => 'desc');
 
     // no reason to set this if you don't want all by default
     $default_columns = null;
@@ -499,20 +499,18 @@ function markComplete() {
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6><?php echo _("New Activities"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("New Activities"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("User"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
-                <td class=widget_label><?php echo _("About"); ?></td>
-                <td colspan=2 class=widget_label><?php echo _("On"); ?></td>
+                <td colspan=2 class=widget_label><?php echo _("Scheduled"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
-                <td class=widget_content_form_element>&nbsp;</td>
                 <td colspan=2 class=widget_content_form_element>
                     <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
@@ -602,6 +600,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.83  2005/05/04 13:34:31  braverock
+ * - remove spurious 'About' column from new Activity row
+ * - change Start to 'Scheduled' for consistenct of activity start time labels
+ *
  * Revision 1.82  2005/05/03 23:10:33  braverock
  * - change Name display to $salutation.' '.$first_names.' '.$last_name
  *

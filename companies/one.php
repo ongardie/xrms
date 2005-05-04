@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.106 2005/04/19 21:14:58 neildogg Exp $
+ * $Id: one.php,v 1.107 2005/05/04 13:32:32 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -56,12 +56,12 @@ $accounting_rows = do_hook_function('company_accounting_inline_display', $accoun
 
 update_recent_items($con, $session_user_id, "companies", $company_id);
 
-$sql = 'select cs.*, c.*, account_status_display_html, rating_display_html, 
+$sql = 'select cs.*, c.*, account_status_display_html, rating_display_html,
         company_source_display_html, i.industry_pretty_name, c.default_primary_address, ' .
-		$con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
-		$con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
-		$con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by " .
-       "from crm_statuses cs, companies c, account_statuses as1, ratings r, 
+        $con->Concat("u1.first_names", $con->qstr(' '), "u1.last_name") . " AS owner_username," .
+        $con->Concat("u2.first_names", $con->qstr(' '), "u2.last_name") . " AS entered_by," .
+        $con->Concat("u3.first_names", $con->qstr(' '), "u3.last_name") . " AS last_modified_by " .
+       "from crm_statuses cs, companies c, account_statuses as1, ratings r,
         company_sources cs2, industries i, users u1, users u2, users u3
         where c.account_status_id = as1.account_status_id
         and c.industry_id = i.industry_id
@@ -216,11 +216,11 @@ TILLEND;
 //
 //  list of most recent activities (note that the order of sql fields is important for the GUP_Pager)
 //
-$sql_activities = "SELECT " . 
-$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/companies/one.php%3Fcompany_id=$company_id\">'", "activity_title", "'</a>'") .  " AS  activity_title_link," . 
-"u.username, at.activity_type_pretty_name, " . 
-$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' . 
-"a.scheduled_at, a.on_what_table, a.on_what_id, a.entered_at, a.activity_status, a.activity_title, cont.last_name, cont.first_names,     
+$sql_activities = "SELECT " .
+$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/companies/one.php%3Fcompany_id=$company_id\">'", "activity_title", "'</a>'") .  " AS  activity_title_link," .
+"u.username, at.activity_type_pretty_name, " .
+$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' .
+"a.scheduled_at, a.on_what_table, a.on_what_id, a.entered_at, a.activity_status, a.activity_title, cont.last_name, cont.first_names,
 (CASE WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1 ELSE 0 END) AS is_overdue
 FROM activity_types at, users u, activities a
 LEFT JOIN contacts cont ON cont.contact_id = a.contact_id
@@ -230,9 +230,9 @@ WHERE a.company_id = $company_id
   AND a.user_id = u.user_id
   AND a.activity_type_id = at.activity_type_id
   AND a.activity_record_status = 'a'";
-    
+
     $list=acl_get_list($session_user_id, 'Read', false, 'activities');
-    
+
     if ($list) {
         if ($list!==true) {
             $list=implode(",",$list);
@@ -244,7 +244,7 @@ if ($division_id) {
     $sql_activities.=" AND (a.on_what_table='company_division' AND a.on_what_id=$division_id";
     $sql_activities.=" OR a.on_what_table='opportunities' AND o.division_id=$division_id";
     $sql_activities.=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
-    
+
 }
 
 // begin Activities Pager
@@ -282,8 +282,8 @@ $activity_rows = $pager->Render($system_rows_per_page);
 
 
 // contacts query
-$sql = "select " . 
-		$con->Concat($con->qstr('<a id="'), 'last_name', $con->qstr(' '), 'first_names', $con->qstr('" href="' . $http_site_root . '/contacts/one.php?contact_id='), "contact_id", $con->qstr('&amp;return_url=/companies/one.php%3Fcompany_id=' . $company_id . '">'), "last_name", $con->qstr(', '), "first_names", $con->qstr('</a>')) . " AS name, summary, title, description, email, contact_id, first_names, last_name, address_id, work_phone
+$sql = "select " .
+        $con->Concat($con->qstr('<a id="'), 'last_name', $con->qstr(' '), 'first_names', $con->qstr('" href="' . $http_site_root . '/contacts/one.php?contact_id='), "contact_id", $con->qstr('&amp;return_url=/companies/one.php%3Fcompany_id=' . $company_id . '">'), "last_name", $con->qstr(', '), "first_names", $con->qstr('</a>')) . " AS name, summary, title, description, email, contact_id, first_names, last_name, address_id, work_phone
 from contacts where company_id = $company_id and contact_record_status = 'a'";
 
 
@@ -315,22 +315,22 @@ $contacts_pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 $columns = $pager_columns->GetUserColumns('default');
 
 $new_contact_location="../contacts/new.php?company_id=$company_id";
-if ($division_id) $new_contact_location.= "&division_id=$division_id"; 
+if ($division_id) $new_contact_location.= "&division_id=$division_id";
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id'\">" . 
-			render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
+            <input class=button type=button value=\"" .  _('Mail Merge') . "\" onclick=\"javascript: location.href='../email/email.php?scope=company&company_id=$company_id'\">" .
+            render_create_button("New",'button',"location.href='$new_contact_location';") .  "</td></tr>";
 
     // this is the callback function that the pager uses to fill in the calculated data.
     function getContactDetails($row) {
         global $con;
-		global $session_user_id;
-		global $company_id;
+        global $session_user_id;
+        global $company_id;
 
-		// this is for the CTI dialing bit
-		global $contact_id;
-		$contact_id = $row['contact_id'];
+        // this is for the CTI dialing bit
+        global $contact_id;
+        $contact_id = $row['contact_id'];
 
         $row['phone'] = get_formatted_phone($con, $row['address_id'], $row['work_phone']);
         $row['email'] = "<a href='mailto:{$row['email']}' onclick=\"location.href='../activities/new-2.php?user_id=$session_user_id&activity_type_id=3&company_id=$company_id&contact_id={$row['contact_id']}&email=true&return_url=/companies/one.php%3Fcompany_id=$company_id&activity_title=email%20to%20{$row['first_names']}%20{$row['last_name']}'\" >" . htmlspecialchars($row['email']) . '</a>';
@@ -680,7 +680,7 @@ function markComplete() {
                                 <tr>
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
-                                </tr>                                    
+                                </tr>
                             </table>
 
                             </td>
@@ -700,7 +700,7 @@ function markComplete() {
                 <?php
                     if (!$division_id) {
                         //only show the Division button if we are not already scoped by Division
-                ?>    
+                ?>
                 <input class=button type=button value="<?php echo _("Divisions"); ?>" onclick="javascript: location.href='divisions.php?company_id=<?php echo $company_id; ?>';">
                 <?php } //end Division button check ?>
                 <?php echo $company_buttons; ?>
@@ -710,12 +710,12 @@ function markComplete() {
 
         <!-- contacts //-->
         <form name="<?php echo $contacts_form_name; ?>" method=post>
-            <?php 
-				// contacts pager
-				echo $contacts_pager_columns_selects; 
-				echo $contact_rows; 
-			?>
-		</form>
+            <?php
+                // contacts pager
+                echo $contacts_pager_columns_selects;
+                echo $contact_rows;
+            ?>
+        </form>
 
 
 <?php
@@ -744,22 +744,20 @@ function markComplete() {
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=6><?php echo _("Add New Activity"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Add New Activity"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("User"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Contact"); ?></td>
-                <td class=widget_label><?php echo _("About"); ?></td>
-                <td class=widget_label><?php echo _("Starts"); ?></td>
+                <td class=widget_label><?php echo _("Scheduled"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
                 <td class=widget_content_form_element><?php echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php echo $contact_menu; ?></td>
-                <td class=widget_content_form_element>&nbsp;</td>
                 <td class=widget_content_form_element>
                     <input type=text size=10 ID="f_date_d" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
@@ -772,12 +770,12 @@ function markComplete() {
 
         <!-- activities list //-->
         <form name="<?php echo $activities_form_name; ?>" method=post>
-            <?php 
-				// activities pager
-				echo $activities_pager_columns_selects; 
-				echo $activity_rows; 
-			?>
-		</form>
+            <?php
+                // activities pager
+                echo $activities_pager_columns_selects;
+                echo $activity_rows;
+            ?>
+        </form>
 
 
         <!-- company content bottom plugins //-->
@@ -838,6 +836,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.107  2005/05/04 13:32:32  braverock
+ * - remove spurious 'About' column from new Activity row
+ * - change Start to 'Scheduled' for consistenct of activity start time labels
+ *
  * Revision 1.106  2005/04/19 21:14:58  neildogg
  * - Profile bug if short
  *
