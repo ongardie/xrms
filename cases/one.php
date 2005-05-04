@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.40 2005/03/29 23:52:48 maulani Exp $
+ * $Id: one.php,v 1.41 2005/05/04 13:36:49 braverock Exp $
  */
 
 //include required files
@@ -43,7 +43,7 @@ $sql = "SELECT
         case_statuses cas, case_priorities cap, case_types cat, companies c, contacts cont,
         users u1, users u2, users u3, users u4, account_statuses as1, ratings r, crm_statuses crm,
         cases ca LEFT OUTER JOIN company_division d on ca.division_id=d.division_id
-        WHERE 
+        WHERE
         ca.company_id = c.company_id
         and ca.case_status_id = cas.case_status_id
         and ca.case_priority_id = cap.case_priority_id
@@ -93,12 +93,12 @@ if ($rst) {
 
 // most recent activities
 
-$sql_activities = "SELECT " . 
+$sql_activities = "SELECT " .
 $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/cases/one.php%3Fcase_id=$case_id\">'", "activity_title", "'</a>'") .
 " AS  activity_title_link,
 u.username,
-at.activity_type_pretty_name," . 
-$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' .   
+at.activity_type_pretty_name," .
+$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' .
 "scheduled_at,
 a.entered_at,
 a.on_what_table,
@@ -115,7 +115,7 @@ and a.on_what_id = $case_id
 and a.user_id = u.user_id
 and a.activity_type_id = at.activity_type_id
 and a.activity_record_status = 'a'";
-    
+
     $list=acl_get_list($session_user_id, 'Read', false, 'activities');
     //print_r($list);
     if ($list) {
@@ -127,8 +127,8 @@ and a.activity_record_status = 'a'";
 
     // begin Activities Pager
 
-	// Save this for email/email.php is activities Mail Merge
-	$_SESSION["search_sql"]=$sql;
+    // Save this for email/email.php is activities Mail Merge
+    $_SESSION["search_sql"]=$sql;
 
 
     $columns = array();
@@ -136,11 +136,11 @@ and a.activity_record_status = 'a'";
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names');
-    $columns[] = array('name' => _('On'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
+    $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
 
-	// no reason to set this if you don't want all by default
-	$default_columns = null;
-	//$default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
+    // no reason to set this if you don't want all by default
+    $default_columns = null;
+    //$default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
 
     // selects the columns this user is interested in
     $pager_columns = new Pager_Columns('CasesActivitiesPager', $columns, $default_columns, $form_name);
@@ -162,7 +162,7 @@ and a.activity_record_status = 'a'";
 
 
 /*
-$sql_activities.=" 
+$sql_activities.="
 order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
 
 $rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
@@ -396,7 +396,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>"> 
+                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>">
                     <?php echo render_create_button("Add"); ?>
                     <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
                  </td>
@@ -443,6 +443,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.41  2005/05/04 13:36:49  braverock
+ * - change Start to 'Scheduled' for consistenct of activity start time labels
+ *
  * Revision 1.40  2005/03/29 23:52:48  maulani
  * - Add audit trail
  *
