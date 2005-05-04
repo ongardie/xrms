@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.87 2005/04/28 15:31:35 braverock Exp $
+ * $Id: one.php,v 1.88 2005/05/04 13:39:50 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -446,7 +446,7 @@ function logTime() {
             </tr>
             <?php } ?>
             <tr>
-                <td class=widget_label_right><?php echo _("Starts"); ?></td>
+                <td class=widget_label_right><?php echo _("Scheduled Start"); ?></td>
                 <td class=widget_content_form_element>
                     <?php jscalendar_includes(); ?>
                     <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo $scheduled_at; ?>">
@@ -454,7 +454,7 @@ function logTime() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Ends"); ?></td>
+                <td class=widget_label_right><?php echo _("Scheduled End"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
@@ -539,6 +539,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.88  2005/05/04 13:39:50  braverock
+ * - change 'Start' to 'Scheduled Start' for consistenct of activity start time labels
+ * - change 'End' to 'Scheduled End' for consistenct of activity end time labels
+ *
  * Revision 1.87  2005/04/28 15:31:35  braverock
  * - applied patch for clearing case/opp/campaign id on editing of activities
  *   patch supplied by Miguel Gonçalves (mig77)
