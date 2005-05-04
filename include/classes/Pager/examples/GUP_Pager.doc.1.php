@@ -36,7 +36,7 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
 	// Set up the column_info array describing the data
 	$colums = array();
 	$columns[] = array('name' => 'User Name', 'index_sql' => 'username');
-	$columns[] = array('name' => 'Email', 'index_sql' => 'email');
+	$columns[] = array('name' => 'Email', 'index_sql' => 'email', 'default_sort' => 'asc');
 	$columns[] = array('name' => 'Activity Title', 'index_sql' => 'activity_title');
 	$columns[] = array('name' => 'Activity Description', 'index_sql' => 'activity_description');
 	
