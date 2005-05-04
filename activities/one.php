@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.88 2005/05/04 13:39:50 braverock Exp $
+ * $Id: one.php,v 1.89 2005/05/04 14:27:28 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -409,7 +409,7 @@ function logTime() {
                 } //end if on_what_table=opportunities check
             ?>
             <tr>
-                <td class=widget_label_right><?php echo _("Title"); ?></td>
+                <td class=widget_label_right><?php echo _("Summary"); ?></td>
                 <td class=widget_content_form_element>
                     <input type=text size=50 name=activity_title value="<?php  echo htmlspecialchars($activity_title); ?>">
                 </td>
@@ -539,6 +539,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.89  2005/05/04 14:27:28  braverock
+ * - change Activity 'Title' to 'Summary' for consistency
+ *
  * Revision 1.88  2005/05/04 13:39:50  braverock
  * - change 'Start' to 'Scheduled Start' for consistenct of activity start time labels
  * - change 'End' to 'Scheduled End' for consistenct of activity end time labels

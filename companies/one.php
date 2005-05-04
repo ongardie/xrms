@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.107 2005/05/04 13:32:32 braverock Exp $
+ * $Id: one.php,v 1.108 2005/05/04 14:27:30 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -249,7 +249,7 @@ if ($division_id) {
 
 // begin Activities Pager
 $columns = array();
-$columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'a.activity_title');
+$columns[] = array('name' => _('Summary'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'a.activity_title');
 $columns[] = array('name' => _('User'), 'index_sql' => 'username');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
 $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'cont.last_name,cont.first_names');
@@ -747,7 +747,7 @@ function markComplete() {
                 <td class=widget_header colspan=5><?php echo _("Add New Activity"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Summary"); ?></td>
                 <td class=widget_label><?php echo _("User"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Contact"); ?></td>
@@ -836,6 +836,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.108  2005/05/04 14:27:30  braverock
+ * - change Activity 'Title' to 'Summary' for consistency
+ *
  * Revision 1.107  2005/05/04 13:32:32  braverock
  * - remove spurious 'About' column from new Activity row
  * - change Start to 'Scheduled' for consistenct of activity start time labels

@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.83 2005/05/04 13:34:31 braverock Exp $
+ * $Id: one.php,v 1.84 2005/05/04 14:27:29 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -166,7 +166,7 @@ WHERE ((a.contact_id = $contact_id) OR
 
     // begin Activities Pager
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'a.activity_title');
+    $columns[] = array('name' => _('Summary'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'a.activity_title');
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
@@ -502,7 +502,7 @@ function markComplete() {
                 <td class=widget_header colspan=5><?php echo _("New Activities"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Summary"); ?></td>
                 <td class=widget_label><?php echo _("User"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td colspan=2 class=widget_label><?php echo _("Scheduled"); ?></td>
@@ -600,6 +600,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.84  2005/05/04 14:27:29  braverock
+ * - change Activity 'Title' to 'Summary' for consistency
+ *
  * Revision 1.83  2005/05/04 13:34:31  braverock
  * - remove spurious 'About' column from new Activity row
  * - change Start to 'Scheduled' for consistenct of activity start time labels

@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.41 2005/05/04 13:36:49 braverock Exp $
+ * $Id: one.php,v 1.42 2005/05/04 14:27:29 braverock Exp $
  */
 
 //include required files
@@ -132,7 +132,7 @@ and a.activity_record_status = 'a'";
 
 
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title');
+    $columns[] = array('name' => _('Summary'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title');
     $columns[] = array('name' => _('User'), 'index_sql' => 'username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names');
@@ -443,6 +443,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.42  2005/05/04 14:27:29  braverock
+ * - change Activity 'Title' to 'Summary' for consistency
+ *
  * Revision 1.41  2005/05/04 13:36:49  braverock
  * - change Start to 'Scheduled' for consistenct of activity start time labels
  *

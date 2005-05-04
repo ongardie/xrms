@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.46 2005/05/04 13:43:44 braverock Exp $
+ * $Id: one.php,v 1.47 2005/05/04 14:27:30 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -172,7 +172,7 @@ WHERE a.on_what_table = 'opportunities'
 
     // begin Activities Pager
     $columns = array();
-    $columns[] = array('name' => _('Title'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title', 'type' => 'url');
+    $columns[] = array('name' => _('Summary'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title', 'type' => 'url');
     $columns[] = array('name' => _('User'), 'index_sql' => 'username', 'sql_sort_column' => 'u.username');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names', 'type' => 'url');
@@ -420,7 +420,7 @@ function markComplete() {
                 <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Summary"); ?></td>
                 <td class=widget_label><?php echo _("User"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Contact"); ?></td>
@@ -482,6 +482,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.47  2005/05/04 14:27:30  braverock
+ * - change Activity 'Title' to 'Summary' for consistency
+ *
  * Revision 1.46  2005/05/04 13:43:44  braverock
  * - change 'On' to 'Scheduled' for consistenct of activity start time labels
  *
