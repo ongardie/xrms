@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.89 2005/05/04 14:27:28 braverock Exp $
+ * $Id: one.php,v 1.90 2005/05/04 14:30:40 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -419,7 +419,7 @@ function logTime() {
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_166px><?php echo _("Activity Notes"); ?></td>
+                <td class=widget_label_right><?php echo _("Activity Notes"); ?></td>
                 <td class=widget_content_form_element><textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
             </tr>
             <?php
@@ -539,6 +539,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.90  2005/05/04 14:30:40  braverock
+ * - fix CSS style for 'Activity Notes'
+ *
  * Revision 1.89  2005/05/04 14:27:28  braverock
  * - change Activity 'Title' to 'Summary' for consistency
  *
