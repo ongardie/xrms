@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.7 2005/05/05 17:21:33 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.8 2005/05/05 17:50:30 daturaarutad Exp $
  */
 
 
@@ -94,7 +94,6 @@ class CalendarView {
   		$ret_unixtime = strtotime('+12 hours', $ret_unixtime);
   		$ret = date('Y-m-d',$ret_unixtime);
 
-		echo "hooboy! $ret<br>";
 		return $ret;
 	}
 
@@ -576,6 +575,9 @@ function get_agenda_action() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.8  2005/05/05 17:50:30  daturaarutad
+* removed debug msg
+*
 * Revision 1.7  2005/05/05 17:21:33  daturaarutad
 * added better comments...changed Render() and added GetWeekStart
 *
