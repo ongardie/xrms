@@ -3,7 +3,9 @@
 /**
  * Wrapper class for calendar widget.
  *
- * $Id: Calendar_View.php,v 1.6 2005/04/18 17:44:26 daturaarutad Exp $
+ * @author Justin Cooper <daturaarutad@sourceforge.net>
+ *
+ * $Id: Calendar_View.php,v 1.7 2005/05/05 17:21:33 daturaarutad Exp $
  */
 
 
@@ -32,8 +34,15 @@ class CalendarView {
 	var $start_date;
 	var $calendar_date_field;
 	var $form_id;
+	var $calendar_type;
 
-	function CalendarView($form_id_in, $calendar_date_field) {
+	/**
+	* Constructor
+	*
+	* @param string Form Name from <form name="XXX"> used by Javascript
+	* @param string Date Field Name also used by Javascript when Next Week, etc buttons are pressed
+	*/
+	function CalendarView($form_id_in, $calendar_date_field, $calendar_type) {
 
 		getGlobalVar($calendar_start_date, $calendar_date_field);
 
@@ -49,14 +58,46 @@ class CalendarView {
 		$this->calendar_date_field = $calendar_date_field;
 
 		$this->start_date = $calendar_start_date;
+		$this->calendar_type = $calendar_type;
 	}
 
-	function RenderMonth($rs) {
-		return $this->Render('month', $rs);
+	/**
+	* Given the calendar's scope and a starting date, return upper and lower bounds of time in seconds 
+	*
+	*/
+	function GetQueryDates() {
+		switch($this->calendar_type) {
+			case 'day':
+			case 'week':
+			case 'month':
+			case 'year':
+				break;
+		}
+
 	}
-	function RenderWeek($rs, $start_date) {
-		return $this->Render('week', $rs);
+
+	/**
+	* Static Function ($this is not available)
+	*
+	* @param string the starting date (any day of the week)
+	* @param string the day of the week ('Mon','Tuesday',etc)
+	* @return string the first Monday of the week before
+	*/
+	function GetWeekStart($date, $day = 'Monday') { 
+		if (!isset($set_weekstart_default)) 
+			$set_weekstart_default = 'Sunday';
+
+  		$timestamp = strtotime($date);
+  		$num = date('w', strtotime($day));
+  		$start_day_time = strtotime((date('w',$timestamp)==$num ? "$day" : "last $day"), $timestamp);
+  		$ret_unixtime = strtotime($day,$start_day_time);
+  		$ret_unixtime = strtotime('+12 hours', $ret_unixtime);
+  		$ret = date('Y-m-d',$ret_unixtime);
+
+		echo "hooboy! $ret<br>";
+		return $ret;
 	}
+
 
 	/**
 	* @param string one of: 'month','week','day'
@@ -64,8 +105,7 @@ class CalendarView {
 		activity_id, scheduled_at, ends_at, contact_id, activity_title, activity_description, user_id
 
 	*/
-	function Render($type, $activity_data) {
-
+	function Render($activity_data) {
 
 		$display["result"] .= "<!-- Calendar Begins -->\n";
 		$display["result"] .= "<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">";
@@ -85,7 +125,7 @@ class CalendarView {
 
 		$param_date	= date('Ymd', strtotime($this->start_date));
 
-		$set_weekstart_default = 'Sunday';
+		$set_weekstart_default = 'Monday';
 
 		if (count($sel_user_id) != 0 ) {
   			$agenda_user_view = $sel_user_id;
@@ -125,7 +165,7 @@ class CalendarView {
 global $calendar_user;
 
 
-		switch($type) {
+		switch($this->calendar_type) {
 			case 'month':
     			$display["result"] .= dis_month_planning($agenda,$activity_data,$user_q,$user_obm);
 				break;
@@ -135,7 +175,7 @@ global $calendar_user;
 		}
 
 		//$display['result'].= '<link rel="STYLESHEET" type="text/css" href="../css/calendar.css" />';
-    	$display['features'] = html_planning_bar($agenda,$user_obm, $p_user_array,$user_q);
+    	//$display['features'] = html_planning_bar($agenda,$user_obm, $p_user_array,$user_q);
 
 		$display["result"] .= "<!-- Calendar Ends -->\n";
 
@@ -536,6 +576,9 @@ function get_agenda_action() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.7  2005/05/05 17:21:33  daturaarutad
+* added better comments...changed Render() and added GetWeekStart
+*
 * Revision 1.6  2005/04/18 17:44:26  daturaarutad
 * removed debug msg
 *
