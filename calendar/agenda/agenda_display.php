@@ -4,7 +4,7 @@
 //     - Desc : Agenda Display File                                          //
 // 2002-11-26 Mehdi Rande                                                    //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: agenda_display.php,v 1.2 2005/04/19 15:33:14 daturaarutad Exp $ //
+// $Id: agenda_display.php,v 1.3 2005/05/05 17:00:43 daturaarutad Exp $ //
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -211,6 +211,7 @@ function dis_month_planning($agenda,$activity_data,$calendar_user,$usr_q) {
     $date = mktime(0,0,0,"$this_month","$this_day","$this_year");	
     $getdate = $agenda["date"];
     $unix_time = strtotime($getdate);    
+
  
     ereg ("([0-9]{4})([0-9]{2})([0-9]{2})", $getdate, $day_array2);
     $this_day = $day_array2[3]; 
@@ -219,6 +220,7 @@ function dis_month_planning($agenda,$activity_data,$calendar_user,$usr_q) {
     $first_of_month = $this_year.$this_month."01";
     $stop_of_month = $this_year.(substr("0".($this_month +1),-2))."01";
     $start_month_day = dateOfWeek($first_of_month,$set_weekstart_default);    
+
     $next_month = date( "Ymd", strtotime("+1 month",    $unix_time));
     $prev_month = date( "Ymd", strtotime("-1 month",    $unix_time));
 
@@ -227,6 +229,7 @@ function dis_month_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 
     $start_day = strtotime($set_weekstart_default);
     $sunday = strtotime($start_month_day);
+    $start_day = strtotime($set_weekstart_default);
     $whole_month = TRUE;
     $num_of_events = 0;
     $nb_user = count($calendar_user);
@@ -243,8 +246,8 @@ function dis_month_planning($agenda,$activity_data,$calendar_user,$usr_q) {
     for ($i=0; $i<7; $i++) {
         $day_num = date("w", $start_day);
         //$day = $l_daysofweek[$day_num];
-		$day = date('D',  strtotime("+$i days  $getdate "));
-        
+		$day = date('D',  strtotime("+$i days  $start_month_day "));
+
         $dis_day_head .= "<td width=\"105\" class=\"center widget_content\">$day</td>";
         $start_day = strtotime("+1 day", $start_day);
     }
@@ -298,16 +301,18 @@ function dis_month_planning($agenda,$activity_data,$calendar_user,$usr_q) {
         $dis_month_cal .= "$day</a></td>";
 		*/
 
-        $dis_month_cal .= "$day</td>";
+        $dis_month_cal .= "$day</td></tr>";
 
         $current_time = $daylink;    
 
         if(is_array($current_events[$current_time])) {
-            $dis_month_cal .= "<tr>";
-             foreach($calendar_user as $id => $data ) {	
 
-	 			$dis_month_cal .= "<td    valign=\"top\" width=\"$td_width\"><table class=\"widget\" cellspacing=1 height=\"100%\" width=\"$td_width\">";
+             foreach($calendar_user as $id => $data ) {	
+            	$dis_month_cal .= "<tr>";
+
+	 			//$dis_month_cal .= "<td    valign=\"top\" width=\"$td_width\"><table class=\"widget\" cellspacing=1 height=\"100%\" width=\"$td_width\">";
 	 			if(is_array($current_events[$current_time][$id])) {
+	 				$dis_month_cal .= "<td    valign=\"top\" width=\"$td_width\"><table class=\"widget\" cellspacing=1 height=\"100%\" width=\"$td_width\">";
 
 	     			foreach($current_events[$current_time][$id] as $event => $event_id) {
 	         			$dis_month_cal .= "<tr><td class=\"".$data["class"]."\">";
@@ -358,13 +363,14 @@ function dis_month_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 	         			} 
 	         			$dis_month_cal .= "</tr>";     
 	    			}
+	 				$dis_month_cal .= "</table></td>"; 
 
 	 			} else {
-	     			$dis_month_cal .= "<tr><td>&nbsp;</td>";
+	     			//$dis_month_cal .= "<tr><td class=widget_content></td>";
+	     			//$dis_month_cal .= "<tr>";
 	 			}
-	 			$dis_month_cal .= "</table></td>"; 
-			}
 			$dis_month_cal .= "</tr>";
+			}
         }
         $dis_month_cal .= "</table> </td>";
         $sunday = strtotime("+1 day", $sunday); 
@@ -477,7 +483,10 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 
 //echo "***" . dateOfWeek($getdate, $set_weekstart_default) . ":$getdate, $set_weekstart_default<br>";
 
-  $start_week_day = strtotime(dateOfWeek($getdate, $set_weekstart_default));
+  //$start_week_day = strtotime(dateOfWeek($getdate, $set_weekstart_default));
+
+  // justin removed dateOfWeek part...that's done in CalendarView now for weekly view (still exists for monthly)
+  $start_week_day = strtotime($getdate);
   $end_week_time = $start_week_day + ((6 * 24) * 60 * 60);
   $start_week_time = strtotime("+$set_start_time hours",$start_week_day);
   $end_week_time = strtotime("+$set_stop_time hours",$end_week_time);
@@ -504,12 +513,16 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 
   // take our resultset and generate current_events and event_data structures
   store_events_xrms($activity_data, $current_events, $event_data,$start_week_time,$end_week_time);
-
 /*
  echo "<pre>current events: \n";
  print_r($current_events);
  echo "</pre>";
- */
+
+ echo "<pre>event data: \n";
+ print_r($event_data);
+ echo "</pre>";
+*/
+
   // output the days-of-the-week headers
   for($i = $start_week_time; $i < ($start_week_time + 7*(25 * 60 * 60)); $i += (25 * 60 * 60) ) {
     $this_date = date("Ymd", $i);
@@ -539,6 +552,7 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
     $hour_day_list .= 	"<td height=\"15\" rowspan=\"$set_cal_interval\" class=\"widget_content right\">$i:00</td>";
     $hour_day_list .= 	"<td width=\"1\" height=\"15\"><img src=\"/images/$set_theme/$ico_spacer\" alt=\"\" /></td>";
 
+	// first, check for the top of the hour 8:00, 9:00, etc
 	// days of the week
     for($j=0; $j<7;$j++) {
       $current_time = strtotime("+$j days $i hours",$start_week_day);  
@@ -596,20 +610,13 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 	
 		    					$is_title = TRUE;
 		    					$tempDate = date("Ymd",$indice_time);
-		    					if($event_data[$idOfEvent]["privacy"] == 0) { // || $id == $auth->auth["uid"]) 
-                        			//echo "PROCESSING EVENT:<br><pre>"; print_r($event_data); echo "</pre>";
-		      						$titleEvent = $event_data[$idOfEvent]["title"];
-		      						$descEvent = $event_data[$idOfEvent]["description"];
-									$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
 
-		      						$typeEvent = $event_data[$idOfEvent]["type"];
-		    					} else {
+		      					$titleEvent = $event_data[$idOfEvent]["title"];
+		      					$descEvent = $event_data[$idOfEvent]["description"];
+								$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
 
-		      						$titleEvent = $l_private;
-		      						$descEvent = $l_private_description;
-		      						$linkEvent = "javascript:return false;";
-		      						$typeEvent = $l_private;
-		    					} 
+		      					$typeEvent = $event_data[$idOfEvent]["type"];
+		    					
 		    					$event_head_display .= "
 		     					<a href=\"$linkEvent\"
 		      					onMouseOver=\"show(event,'$tempDate-$idOfEvent-$id'); return true;\"
@@ -642,18 +649,13 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 
 		    					$event_head_display .= "<br />";
 		    					$tempDate = date("Ymd",$indice_time);
-		    					if($event_data[$idOfEvent]["privacy"] == 0 || $id == $auth->auth["uid"]) {
-		      						$titleEvent = $event_data[$idOfEvent]["title"];
-		      						$descEvent = $event_data[$idOfEvent]["description"];
-									$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
+		    					
+		      					$titleEvent = $event_data[$idOfEvent]["title"];
+		      					$descEvent = $event_data[$idOfEvent]["description"];
+								$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
 
 		      					$typeEvent = $event_data[$idOfEvent]["type"];
-		    					} else {
-		      						$titleEvent = $l_private;
-		      						$descEvent = $l_private_description;
-		      						$linkEvent = "javascript:return false;";
-		      						$typeEvent = $l_private;
-		    					}  
+		    					
 		    					$event_head_display .= "
 		    					<a href=\"$linkEvent\"
 		      					onMouseOver=\"show(event,'$tempDate-$idOfEvent-$id'); return true;\"
@@ -699,6 +701,8 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 	    		} // if(($temp_data["status"] > 0 && $temp_data["begin"] >= $temp_ib && $temp_data["begin"] < $temp_ie) || $i==$set_start_time) 
 
 	  		} else {
+
+
        	    	if ($user_indice != $nb_user) {
 	      			$hour_day_list .= "<td width=\"1\" class=\"widget_content\">&nbsp;</td>";
 	    		} else {
@@ -715,9 +719,14 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
     }
     $hour_day_list .= "</tr>\n";
 
-	// Now we've checked to see if the event just 'started' and we set event_head_display if so
 
-	// We're still in the 'hours' loop, so now we output a <tr> with a <td> for each day of the week
+// the problem is that you're outputting a TD for each calendar_user!
+
+
+	// Now we've checked the top of the hour to  see if the event just 'started' and we set event_head_display if so
+
+	// We're still in the 'hours' loop, so now we loop days of the week for the other intervals like 8:15,8:30,8:45,
+	// and we output a <tr> with a <td> for each day of the week
     for ($k=1;$k<$set_cal_interval;$k++) {
     	$hour_day_list .= "<tr><td height=\"15\" width=\"1\"><img src=\"/images/$set_theme/$ico_spacer\" alt=\"\" /></td>";
 
@@ -729,8 +738,36 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 			if(is_array($current_events[$current_time])) {
 	  			$user_indice=1;
 
+
+/*
+					my analysis is that the this code is broken.
+					its the multiple calendar users..
+
+					since each pass thru that is outputting a <td> you get doubling up.
+
+					but why is that so?  any time there is a current_even for this time, we loop thru all calendar users...why?
+
+					i think the rowspan should take care of the TD but maybe there's an inner table that's supposed to be there.
+
+
+
+					confusion....try looking at the original obm code again...?
+
+
+					we really need to define how this is going to work for weekly view...that's the sticky one...
+
+					i think it might be better to rewrite that part at this point.  
+
+					make it work well for multiple users.
+
+
+					*/
+
+
+
 	  			foreach ($calendar_user as $id => $user_data ) {
 	    			if(is_array($current_events[$current_time][$id]) && $current_events[$current_time][$id][0] != -1) {    
+
 	      				$temp_data =$event_data[current($current_events[$current_time][$id])];
 	      				$temp_ib = substr("0$i:".(($k)*$time_unit),-5);
 	      				$temp_ie = date("H:i", strtotime("+$j days $i hours ".(($k+1)*$time_unit)." minutes",$start_week_day));
@@ -758,19 +795,12 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 	  	      							$td_begin = "<td width=\"$td_width\" class=\"".$user_data["class"]."\" ";
 		      							$is_title = TRUE;
 		      							$tempDate = date("Ymd",$indice_time);
-		      							if ($event_data[$idOfEvent]["privacy"] == 0 || $id == $auth->auth["uid"]) {
-											$titleEvent = $event_data[$idOfEvent]["title"];
-											$descEvent = $event_data[$idOfEvent]["description"];
-											$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
 
-
-											$typeEvent = $event_data[$idOfEvent]["type"];
-		      							} else {
-											$titleEvent = $l_private;
-											$descEvent = $l_private_description;
-											$linkEvent = "javascript: return false;";
-											$typeEvent = $l_private;
-		      							}  
+										$titleEvent = $event_data[$idOfEvent]["title"];
+										$descEvent = $event_data[$idOfEvent]["description"];
+										$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
+										$typeEvent = $event_data[$idOfEvent]["type"];
+		      							
 		      							$event_head_display .= "
 		       								<a href=\"$linkEvent\"
 												onMouseOver=\"show(event,'$tempDate-$idOfEvent-$id'); return true;\"
@@ -798,19 +828,12 @@ function dis_week_planning($agenda,$activity_data,$calendar_user,$usr_q) {
 		    						} elseif(!in_array($idOfEvent,$temp_array)) {	
 		      							$event_head_display .= "<br />";
 		      							$tempDate = date("Ymd",$indice_time);
-		      							if($event_data[$idOfEvent]["privacy"] == 0 || $id == $auth->auth["uid"]) {
-											$titleEvent = $event_data[$idOfEvent]["title"];
-											$descEvent = $event_data[$idOfEvent]["description"];
-											$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
 
-
-											$typeEvent = $event_data[$idOfEvent]["type"];
-		      							} else {
-											$titleEvent = $l_private;
-											$descEvent = $l_private_description;
-											$linkEvent = "javascript: return false;";
-											$typeEvent = $l_private;
-		      							}  
+										$titleEvent = $event_data[$idOfEvent]["title"];
+										$descEvent = $event_data[$idOfEvent]["description"];
+										$linkEvent = "$http_site_root/activities/one.php?activity_id=$idOfEvent&return_url=" . current_page();
+										$typeEvent = $event_data[$idOfEvent]["type"];
+		      							
 		      							$event_head_display .= "
 		       								<a href=\"$linkEvent\"
 											onMouseOver=\"show(event,'$tempDate-$idOfEvent-$id'); return true;\"
@@ -880,13 +903,17 @@ $block = "
        <tr>
         <td class=\"widget_label center\">
 			<input class=button type=button value=\"Previous Week\" onclick=\"javascript:calendar_previous_week();\">
+			<!--
 			<input class=button type=button value=\"Previous Day\" onclick=\"javascript:calendar_previous_day();\">
+			-->
         </td>
         <td class=\"widget_label center\">
          <b>$display_date</b>
         </td>
         <td class=\"widget_label center\">
+			<!--
 			<input class=button type=button value=\"Next Day\" onclick=\"javascript:calendar_next_day();\">
+			-->
 			<input class=button type=button value=\"Next Week\" onclick=\"javascript:calendar_next_week();\">
          </a>
         </td>
@@ -1084,16 +1111,16 @@ function dis_day_planning($agenda,$obm_q,$calendar_user,$usr_q) {
         }       
 	else {
 	  if ($user_indice != $nb_user) {
-	    $hour_day_list .= "<td width=\"$td_width\" class=\"agendaNoEvent\">&nbsp;</td>";
+	    $hour_day_list .= "<td width=\"$td_width\" class=\"agendaNoEvent\">G&nbsp;</td>";
 	  }
 	  else {
-	    $hour_day_list .= "<td width=\"$td_width\" class=\"agendaVide\">&nbsp;</td>";
+	    $hour_day_list .= "<td width=\"$td_width\" class=\"agendaVide\">H&nbsp;</td>";
 	  }	    
 	}
 	$user_indice++;
       }	  
     } else {
-      $hour_day_list .= "<td colspan=\"$td_colspan\" class=\"agendaVide\">&nbsp;</td>";
+      $hour_day_list .= "<td colspan=\"$td_colspan\" class=\"agendaVide\">I&nbsp;</td>";
     }    
     $hour_day_list .=   "</tr>\n";
     for ($k=1;$k<$set_cal_interval;$k++) {
