@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.92 2005/05/05 21:38:31 daturaarutad Exp $
+ * $Id: one.php,v 1.93 2005/05/05 23:01:02 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -273,42 +273,42 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once('activities-pager-functions.php');
 
 if($on_what_table && $on_what_id) {
-	$on_what_where = "a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id";
+    $on_what_where = "a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id";
 } else {
-	$on_what_where = "1 = 2";
+    $on_what_where = "1 = 2";
 }
 
 $sql = "SELECT
-  	(CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS overdue, "
-  	." at.activity_type_pretty_name AS type, "
-  	. $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
-  	. $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS title, "
-  	. $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
-  	. $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
-  	. $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
-  	. "u.username AS owner, u.user_id, activity_id,"
-  	// these are to speed up the pager sorting
-  	. "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name "
-	. "FROM companies c, activity_types at, addresses addr, activities a 
-		LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
-		LEFT OUTER JOIN users u ON a.user_id = u.user_id
-		WHERE $on_what_where
-		AND a.company_id = c.company_id
-		AND a.activity_record_status = 'a'
-  		AND at.activity_type_id = a.activity_type_id
-  		AND c.default_primary_address=addr.address_id";
+    (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS overdue, "
+    ." at.activity_type_pretty_name AS type, "
+    . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
+    . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS title, "
+    . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
+    . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
+    . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
+    . "u.username AS owner, u.user_id, activity_id,"
+    // these are to speed up the pager sorting
+    . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name "
+    . "FROM companies c, activity_types at, addresses addr, activities a
+        LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
+        LEFT OUTER JOIN users u ON a.user_id = u.user_id
+        WHERE $on_what_where
+        AND a.company_id = c.company_id
+        AND a.activity_record_status = 'a'
+        AND at.activity_type_id = a.activity_type_id
+        AND c.default_primary_address=addr.address_id";
 
 
 $columns = array();
 $columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
 $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
-$columns[] = array('name' => _('Title'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
-$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
-$columns[] = array('name' => _('Due'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
+$columns[] = array('name' => _('Summary'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
+$columns[] = array('name' => _('Scheduled Start'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
+$columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-    
+
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
@@ -318,7 +318,7 @@ $default_columns = null;
 $pager_columns = new Pager_Columns('SomeRelatedActivitiesPager', $columns, $default_columns, 'OneActivityForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
 $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
- 
+
 $columns = $pager_columns->GetUserColumns('default');
 
 
@@ -573,10 +573,10 @@ function logTime() {
         </form>
 
         <form action=one.php name="OneActivityForm" method=post>
-			<input type=hidden name="activity_id" value="<?php echo $activity_id; ?>">
-			<input type=hidden name="return_url" value="<?php echo $return_url; ?>">
-			<?php echo $related_activites_widget; ?>
-		</form>
+            <input type=hidden name="activity_id" value="<?php echo $activity_id; ?>">
+            <input type=hidden name="return_url" value="<?php echo $return_url; ?>">
+            <?php echo $related_activites_widget; ?>
+        </form>
 
         <?php echo $activity_content_bottom; ?>
     </div>
@@ -628,6 +628,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.93  2005/05/05 23:01:02  braverock
+ * - changed labels on Summary, Scheduled Start, Scheduled End columns in pager
+ *   for consistency in naming conventions
+ *
  * Revision 1.92  2005/05/05 21:38:31  daturaarutad
  * added Related Activities Pager and changed $_GET usage to getGlobalVar
  *
