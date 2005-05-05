@@ -4,7 +4,7 @@
 //     - Desc : Agenda query File                                            //
 // 2001-06-27 : Mehdi Rande                                                  //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: agenda_query.php,v 1.1 2005/04/14 20:27:11 daturaarutad Exp $ //
+// $Id: agenda_query.php,v 1.2 2005/05/05 17:02:44 daturaarutad Exp $ //
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -1514,7 +1514,6 @@ function store_events_xrms($activity_data,&$current_event,&$event_data,$p_date_b
             }
 
             if ($start_flag AND $current_time>$db_enddate) {
-//                $current_event[$current_time][1]=-1;
                 $current_event_stop=strtotime("+1 day",$flag_start_time);
                 $current_event[$current_event_stop][$db_user_id][]=-1;
                 $start_flag=false;
@@ -2316,8 +2315,6 @@ function localizeDate($format, $timestamp) {
 function dateOfWeek($Ymd, $day) {
   global $set_weekstart_default;
 
-return $Ymd;
-
   if (!isset($set_weekstart_default)) $set_weekstart_default = 'Sunday';
   $timestamp = strtotime($Ymd);
   $num = date('w', strtotime($set_weekstart_default));
@@ -2325,6 +2322,7 @@ return $Ymd;
   $ret_unixtime = strtotime($day,$start_day_time);
   $ret_unixtime = strtotime('+12 hours', $ret_unixtime);
   $ret = date('Ymd',$ret_unixtime);
+
   return $ret;
 }
 
