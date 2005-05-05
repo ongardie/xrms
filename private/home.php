@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.46 2005/04/14 21:20:17 daturaarutad Exp $
+ * $Id: home.php,v 1.47 2005/05/05 17:37:05 daturaarutad Exp $
  */
 
 // include the common files
@@ -217,10 +217,10 @@ if('list' == $results_view_type) {
     	}
 	}
 
-	$calendar = new CalendarView('ActivitiesView', 'calendar_start_date');
+	$calendar = new CalendarView('ActivitiesView', 'calendar_start_date', $results_view_type);
 
 	$calendar_widget_js_functions = $calendar->GetCalendarJS();
-	$calendar_widget = $calendar->Render($results_view_type, $activity_calendar_data, date('Y-m-d'));
+	$calendar_widget = $calendar->Render($activity_calendar_data);
 	$activities_widget = $calendar_widget['result'] . "\n\n" . $calendar_widget_js_functions;
 	
 	// end calendar stuff
@@ -595,6 +595,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.47  2005/05/05 17:37:05  daturaarutad
+ * updated for changes to CalendarView interface
+ *
  * Revision 1.46  2005/04/14 21:20:17  daturaarutad
  * added calendar view of activities
  *
