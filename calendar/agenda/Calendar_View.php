@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.8 2005/05/05 17:50:30 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.9 2005/05/06 22:12:56 daturaarutad Exp $
  */
 
 
@@ -195,18 +195,20 @@ function GetCalendarJS() {
         $day = date('d', strtotime($calendar_start_date));
 
         $month_n = $month+1;
+        $year_n = $year;
         if($month_n > 12) {
             $month_n = 1;
-            $year++;
+            $year_n = $year +1;
         }
-        $next_month =  "$year-$month_n-$day";
+       	$next_month =  "$year_n-$month_n-$day";
 
         $month_p = $month-1;
+        $year_p = $year;
         if(!$month_p) {
             $month_p=12;
-            $year--;
+            $year_p = $year -1;
         }
-        $prev_month = "$year-$month_p-$day";
+        $prev_month = "$year_p-$month_p-$day";
 
 	return "
 <script language=\"JavaScript\" type=\"text/javascript\">
@@ -575,6 +577,9 @@ function get_agenda_action() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.9  2005/05/06 22:12:56  daturaarutad
+* fixed a bug in year transition when calculating previous month
+*
 * Revision 1.8  2005/05/05 17:50:30  daturaarutad
 * removed debug msg
 *
