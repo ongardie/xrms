@@ -1,0 +1,16 @@
+/**
+ * IE-only modification of Basic XRMS theme with left sidebar
+ * 
+ * Change margin/width for sidebar on the left
+ * IE prefers fixed width to percentage
+ * These values overlay those defined in layout-ie.css
+ */
+/* IE does better with fixed Sidebar size */
+#Main #Sidebar {
+    width: 20em;
+    margin-right: 0px;
+}
+#Main #Content {
+    margin: 0em 0em 0em 20.2em;
+    width: auto;
+}
