@@ -9,6 +9,8 @@
 /** ----------
  * FOREGROUND COLORS - black by default (body)
  */
+@import url(../../js/jscalendar/calendar-blue.css);
+
 body {
     color: #000;
 }
