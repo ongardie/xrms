@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.58 2005/04/28 15:58:46 braverock Exp $
+ * $Id: utils-interface.php,v 1.59 2005/05/06 00:45:47 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -129,6 +129,54 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
     return $ie1.'  <link '.$media.$title.$rel.'type="text/css" '.$href." />\n".$ie2;
 }
 
+function list_files($cssdir,$cssroot) {
+    if (!$cssroot OR !$cssdir) return false;
+   if (is_dir($cssdir)) {
+        $files=array();
+        if ($dh = opendir($cssdir)) {
+            while (($file = readdir($dh)) !== false) {
+                if ((strlen($file)>3) AND strtolower(substr($file,strlen($file)-3,3))=='css') {
+                    $files[]="$cssroot/$file";
+                }
+            }
+        }
+        closedir($dh);
+    }
+    if ($files) {
+        sort($files);    
+        return $files;
+    }
+    return false;
+}
+
+function get_css_themes() {
+    global $http_site_root;
+    global $xrms_file_root;
+    //if themes have been retrieved, use them from the session
+    if (array_key_exists('xrms_css_themes',$_SESSION)) {
+        return $_SESSION['xrms_css_themes'];
+    }
+    $cssroot = $http_site_root.'/css';
+    $cssdir = $xrms_file_root.'/css/';
+   if (is_dir($cssdir)) {
+        $css_themes=array();   
+        if ($dh = opendir($cssdir)) {
+            while (($file = readdir($dh)) !== false) {
+                if ($file!='..' AND $file!='.' AND $file!='CVS') {
+                    $csssubdir=$cssdir.DIRECTORY_SEPARATOR.$file;
+                    if (is_dir($csssubdir)){
+                        
+                        $css_files=list_files($csssubdir, "$cssroot/$file");
+                        $css_themes[$file]=$css_files;
+                    }
+                }
+            }
+            closedir($dh);
+        }
+   }
+   $_SESSION['xrms_css_themes']=$css_themes;
+   return $css_themes;
+}
 /**
  * function start_page
  *
@@ -162,27 +210,12 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $direction
     }
 //    echo "    $css_theme = get_user_preference($con, $user_id, 'css_theme');";
     $curtheme = empty($css_theme) ? 'basic' : $css_theme;
-    $cssroot = $http_site_root.'/css/';
-
     // Array containing list of named styles.
     //    array('basic' => '/path/to/basic.css');
     // If a particular style requires multiple files, specify them as a nested array
     //    array('multi' => array('first.css','second.css','third.css'));
-    $cssthemes = array(
-        'basic'       => array($cssroot.'basic/basic.css',
-                               $http_site_root.'/js/jscalendar/calendar-blue.css'),
-        'basic-left'  => array($cssroot.'basic/basic-left.css',
-                               $cssroot.'basic/basic-left-ie.css',
-                               $http_site_root.'/js/jscalendar/calendar-blue.css'),
-        'green'       => $cssroot.'green/green.css',
-        'green-left'  => array($cssroot.'green/green-left.css',
-                               $cssroot.'green/green-left-ie.css'),
-        'simple'      => array($cssroot.'simple/simple.css',
-                               $cssroot.'simple/calendar-simple.css'),
-        'simple-left' => array($cssroot.'simple/simple-left.css',
-                               $cssroot.'simple/simple-left-ie.css',
-                               $cssroot.'simple/calendar-simple.css')
-                      );
+    $cssroot=$http_site_root.'/css/';    
+    $cssthemes=get_css_themes();    
 ?>
 <!DOCTYPE HTML PUBLIC
     "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -686,6 +719,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.59  2005/05/06 00:45:47  vanmer
+ * - changed handling of css theme to automatically read list of themes from css directory
+ *
  * Revision 1.58  2005/04/28 15:58:46  braverock
  * - applied patch to use language direction (rtl or ltr) supplied by
  *   XRMS Farsi translator Alan Baghumian (alanbach)
