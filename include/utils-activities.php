@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.3 2005/04/23 17:49:25 vanmer Exp $
+ * $Id: utils-activities.php,v 1.4 2005/05/06 00:43:16 vanmer Exp $
  
  */
 
@@ -84,7 +84,7 @@ function add_activity($con, $activity_data, $participants=false) {
     add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
     
     if (!$participants) {
-        $participants=array(array('contact_id'=>$contact_id, 'activity_participant_role_id'=>1));
+        $participants=array(array('contact_id'=>$contact_id, 'activity_participant_position_id'=>1));
     }
     
    foreach ($participants as $pdata) {
@@ -435,6 +435,9 @@ function delete_activity_participant($con, $activity_participant_id, $delete_fro
  
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.4  2005/05/06 00:43:16  vanmer
+  * - fixed misnamed field when adding a new activity without any participants specified
+  *
   * Revision 1.3  2005/04/23 17:49:25  vanmer
   * - changed activity_participant_record_status to ap_record_status to work around 30 character limit in mssql adodb driver
   *
