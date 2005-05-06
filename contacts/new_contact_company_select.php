@@ -19,6 +19,7 @@ $session_user_id = session_check();
 
 GetGlobalVar($return_url,'return_url');
 GetGlobalVar($msg, 'msg');
+GetGlobalVar($noresults, 'noresults');
 getGlobalVar($company_select_action, 'company_select_action');
 getGlobalVar($company_name,'company_name');
 getGlobalVar($btCancel, 'btCancel');
@@ -56,10 +57,10 @@ switch ($company_select_action) {
         if (!$rst) { db_error_handler($con, $sql); exit; }
         if ($rst->EOF) {
             $msg=_("No search results, please try a less restrictive search");
-            Header("Location: new_contact_company_select.php?company_select_action=newCompanySearch&msg=$msg&return_url=$return_url");
+            Header("Location: new_contact_company_select.php?company_select_action=newCompanySearch&msg=$msg&noresults=1&return_url=$return_url");
         }
         $company_menu=$rst->getMenu2('company_id', false, true);
-        $body_content.="Company: $company_menu";
+        $body_content.=_("Company").':'.$company_menu;
         $body_content.="<input type=hidden name=company_select_action  value='newContact'>";
         $body_content.="<input type=hidden name=return_url  value='$return_url'>";
         $body_content.="<input type=submit class=button name=btNewContact value=\""._("Select") ."\">";
@@ -73,6 +74,10 @@ switch ($company_select_action) {
         $body_content.="<input type=hidden name=return_url  value='$return_url'>";
         $body_content.="<input type=submit class=button name=btNewContact value=\""._("Search") ."\">";
         $body_content.="<input type=submit class=button name=btCancel value=\""._("Cancel") ."\">";
+        if ($noresults) {
+            $body_content .= '&nbsp;'._("or create a").'&nbsp;'.
+            '<input class=button type=button value="'._("New Company").'" onclick="javascript: location.href=\'../companies/new.php\'">';
+        }
     break;
 }
 /* This is the main output of these pages.  This could eventually be made into a template which is included */
@@ -99,6 +104,10 @@ end_page();
 
 /*
  * $Log: new_contact_company_select.php,v $
+ * Revision 1.3  2005/05/06 23:37:00  braverock
+ * - add New Company Button if there are no search results
+ * - localize more strings
+ *
  * Revision 1.2  2005/05/06 23:25:42  braverock
  * - add New Company option if found companies aren't correct
  * - localize strings
