@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.37 2005/05/01 01:27:37 braverock Exp $
+ * $Id: database.php,v 1.38 2005/05/06 00:58:01 vanmer Exp $
  */
 
 /**
@@ -311,9 +311,8 @@ function user_db_tables($con, $table_list) {
         `user_preference_type_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
         `preference_type_created_on` DATETIME NOT NULL ,
         `user_preference_type_modified_on` DATETIME NOT NULL ,
-        `user_preference_created_by` INT NOT NULL ,
-        `user_preference_modified_by` INT NOT NULL ,
-        PRIMARY KEY ( `user_preference_type_id` )
+        `form_element_type` varchar(32) NOT NULL default 'text',
+         PRIMARY KEY ( `user_preference_type_id` )
         )";
         //execute
         $rst = $con->execute($sql);
@@ -331,6 +330,8 @@ function user_db_tables($con, $table_list) {
         `user_preference_value` LONGTEXT NOT NULL ,
         `user_preference_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
         `user_preference_modified_on` DATETIME NOT NULL ,
+        `user_preference_created_by` INT NOT NULL ,
+        `user_preference_modified_by` INT NOT NULL ,
         PRIMARY KEY ( `user_preference_id` ) ,
         INDEX ( `user_preference_type_id` )
         );";
@@ -1163,6 +1164,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.38  2005/05/06 00:58:01  vanmer
+ * - added fields for user preferences
+ *
  * Revision 1.37  2005/05/01 01:27:37  braverock
  * - remove InnoDB requirement from install and update scripts as
  *   it causes problems in non-MySQL env. or MySQL env w/o InnoDB support
