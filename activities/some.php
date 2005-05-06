@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.107 2005/05/05 17:58:03 daturaarutad Exp $
+ * $Id: some.php,v 1.108 2005/05/06 15:43:23 braverock Exp $
  */
 
 // handle includes
@@ -127,33 +127,33 @@ if($start_end == 'start') {
 } else {
     $field = 'ends_at';
 }
-	
+
 $offset_sql = '';
 
-// first set up $offset_sql for before/after search_date 
+// first set up $offset_sql for before/after search_date
 if (strlen($search_date) > 0 && $start_end != 'all') {
     $criteria_count++;
 
     if (!$before_after) {
-		// before
-		$offset_end = $con->OffsetDate($day_diff);
-		$offset_sql .= " and a.$field < $offset_end";
+        // before
+        $offset_end = $con->OffsetDate($day_diff);
+        $offset_sql .= " and a.$field < $offset_end";
     } elseif ($before_after === 'after') {
-		// after
-		$offset_start = $con->OffsetDate($day_diff);
-		$offset_sql .= " and a.$field > $offset_start";
+        // after
+        $offset_start = $con->OffsetDate($day_diff);
+        $offset_sql .= " and a.$field > $offset_start";
     } elseif ($before_after === 'on') {
-		// same query for list and calendar views
-		$offset_start = $con->OffsetDate($day_diff);
-		$offset_end = $con->OffsetDate($day_diff+1);
-		// midnight to midnight
-		$offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
+        // same query for list and calendar views
+        $offset_start = $con->OffsetDate($day_diff);
+        $offset_end = $con->OffsetDate($day_diff+1);
+        // midnight to midnight
+        $offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
     }
 }
 
 
 if(!$results_view_type) {
-	$results_view_type = 'list';
+    $results_view_type = 'list';
 }
 
 // watch to see if activities_date | before_after | start_end has changed
@@ -165,75 +165,75 @@ $var_watcher->RegisterLocalVar('results_view_type', $results_view_type);
 // set up $calendar_start_date and append to $offset_sql for calendar views
 if('list' != $results_view_type) {
 
-	require_once('../calendar/agenda/Calendar_View.php');
+    require_once('../calendar/agenda/Calendar_View.php');
 
-	// set calendar_start_date from search_date if it's not set already
-	if($var_watcher->VarsChanged() || empty($calendar_start_date)) {
-	
-		if(!$before_after) {
-			// before
-			$date_modifier = '-1 ' . $results_view_type . ' ';
-   		} else { 
-			$date_modifier = '';
-		}
+    // set calendar_start_date from search_date if it's not set already
+    if($var_watcher->VarsChanged() || empty($calendar_start_date)) {
 
-		switch($results_view_type) {
-			case 'day':
-				$calendar_start_date = date("Y-m-d", strtotime($date_modifier . $search_date));
-				break;
-			case 'week':
-				// align it to the week's start day (e.g. Monday)
-				if(empty($calendar_start_date)) {
-					$calendar_start_date = CalendarView::GetWeekStart($start_date, 'Monday');
-				} else {
-					$calendar_start_date = CalendarView::GetWeekStart($calendar_start_date, 'Monday');
-				}
-				break;
-			case 'month':
-				if(empty($calendar_start_date)) {
-					$calendar_start_date = date("Y-m-", strtotime($date_modifier . $search_date));
-					$calendar_start_date .= '01';
-				} else {
-					// set to first of month
-					$calendar_start_date = date("Y-m-", strtotime($calendar_start_date));
-					$calendar_start_date .= '01';
-				}
-				break;
-			case 'year':
-				$calendar_start_date = date("Y-", strtotime($date_modifier . $search_date));
-				$calendar_start_date .= '01-01';
-				break;
-		}
-		//echo "calendar_start_date not set, setting to $calendar_start_date (search date is $search_date)<br>";
+        if(!$before_after) {
+            // before
+            $date_modifier = '-1 ' . $results_view_type . ' ';
+        } else {
+            $date_modifier = '';
+        }
 
-		// this is for the calendar widget
-		$_POST['calendar_start_date'] = $calendar_start_date;
-	}
+        switch($results_view_type) {
+            case 'day':
+                $calendar_start_date = date("Y-m-d", strtotime($date_modifier . $search_date));
+                break;
+            case 'week':
+                // align it to the week's start day (e.g. Monday)
+                if(empty($calendar_start_date)) {
+                    $calendar_start_date = CalendarView::GetWeekStart($start_date, 'Monday');
+                } else {
+                    $calendar_start_date = CalendarView::GetWeekStart($calendar_start_date, 'Monday');
+                }
+                break;
+            case 'month':
+                if(empty($calendar_start_date)) {
+                    $calendar_start_date = date("Y-m-", strtotime($date_modifier . $search_date));
+                    $calendar_start_date .= '01';
+                } else {
+                    // set to first of month
+                    $calendar_start_date = date("Y-m-", strtotime($calendar_start_date));
+                    $calendar_start_date .= '01';
+                }
+                break;
+            case 'year':
+                $calendar_start_date = date("Y-", strtotime($date_modifier . $search_date));
+                $calendar_start_date .= '01-01';
+                break;
+        }
+        //echo "calendar_start_date not set, setting to $calendar_start_date (search date is $search_date)<br>";
+
+        // this is for the calendar widget
+        $_POST['calendar_start_date'] = $calendar_start_date;
+    }
 
 
 
-	// set up the query offsets for the calendar view
-	if (strlen($search_date) > 0 && $start_end != 'all') {
-	    $criteria_count++;
-	
-		$calendar_view_start =  (strtotime($calendar_start_date) - time()) / 86400;
+    // set up the query offsets for the calendar view
+    if (strlen($search_date) > 0 && $start_end != 'all') {
+        $criteria_count++;
 
-		$offset_start = $con->OffsetDate($calendar_view_start);
-		$calendar_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
-		$offset_end = $con->OffsetDate($calendar_view_end);
-		$offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
-	}
-/*	
-	echo "day_diff is $day_diff<br>";
-	echo "calendar_view_start is $calendar_view_start aka " . date('Y-m-d H:i', time() + $calendar_view_start*24*3600)  . "<br>";
-	echo "calendar_view_end is $calendar_view_end aka " . date('Y-m-d H:i', time() + $calendar_view_end*24*3600)  . "<br>";
-	echo "query window is from " . date('Y-m-d H:i', time() + $calendar_view_start*24*3600) . " to " . date('Y-m-d H:i', time() + $calendar_view_end*24*3600) . '<br>';
-	echo "calendar start date is $calendar_start_date<br>";
-	echo "offset_sql is $offset_sql<br>";
-	*/
+        $calendar_view_start =  (strtotime($calendar_start_date) - time()) / 86400;
 
-	// init the CalendarView object
-	$calendar = new CalendarView('ActivitiesData', 'calendar_start_date', $results_view_type);
+        $offset_start = $con->OffsetDate($calendar_view_start);
+        $calendar_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
+        $offset_end = $con->OffsetDate($calendar_view_end);
+        $offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
+    }
+/*
+    echo "day_diff is $day_diff<br>";
+    echo "calendar_view_start is $calendar_view_start aka " . date('Y-m-d H:i', time() + $calendar_view_start*24*3600)  . "<br>";
+    echo "calendar_view_end is $calendar_view_end aka " . date('Y-m-d H:i', time() + $calendar_view_end*24*3600)  . "<br>";
+    echo "query window is from " . date('Y-m-d H:i', time() + $calendar_view_start*24*3600) . " to " . date('Y-m-d H:i', time() + $calendar_view_end*24*3600) . '<br>';
+    echo "calendar start date is $calendar_start_date<br>";
+    echo "offset_sql is $offset_sql<br>";
+    */
+
+    // init the CalendarView object
+    $calendar = new CalendarView('ActivitiesData', 'calendar_start_date', $results_view_type);
 }
 
 
@@ -565,12 +565,12 @@ start_page($page_title, true, $msg);
                 <td class=widget_header colspan=4><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td colspan="2" class=widget_label><?php echo _("Title"); ?></td>
+                <td colspan="2" class=widget_label><?php echo _("Summary"); ?></td>
                 <td class=widget_label><?php echo _("Contact"); ?></td>
                 <td class=widget_label><?php echo _("Company"); ?></td>
             </tr>
             <tr>
-                <td colspan="2" class=widget_content_form_element> <input type=text name="title" size=24 value="<?php  echo $title; ?>">
+                <td colspan="2" class=widget_content_form_element> <input type=text name="title" size=48 value="<?php  echo $title; ?>">
                 </td>
                 <td class=widget_content_form_element><input type=text name="contact" size=12 value="<?php  echo $contact; ?>">
                 </td>
@@ -610,8 +610,8 @@ start_page($page_title, true, $msg);
                 </td>
                 <td class=widget_content_form_element>
                     <select name="start_end">
-                        <option value="end"<?php if($start_end == 'end') { print " selected"; }?>><?php echo _("Ends/Due"); ?></option>
-                        <option value="start"<?php if($start_end == 'start') { print " selected"; }?>><?php echo _("Scheduled"); ?></option>
+                        <option value="end"<?php if($start_end == 'end') { print " selected"; }?>><?php echo _("Scheduled End"); ?></option>
+                        <option value="start"<?php if($start_end == 'start') { print " selected"; }?>><?php echo _("Scheduled Start"); ?></option>
                         <option value="all"<?php if($start_end == 'all') { print " selected"; }?>><?php echo _("All Dates"); ?></option>
                     </select>
                     <select name="before_after">
@@ -757,75 +757,75 @@ start_page($page_title, true, $msg);
 $_SESSION["search_sql"]=$sql;
 
 if('list' == $results_view_type) {
-	
-	$columns = array();
-	$columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
-	$columns[] = array('name' => _('Type'), 'index_sql' => 'type');
-	$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
-	$columns[] = array('name' => _('Title'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
-	$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
-	$columns[] = array('name' => _('Due'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
-	$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
-	$columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-	
-	
-	// selects the columns this user is interested in
-	// no reason to set this if you don't want all by default
-	$default_columns = null;
-	//$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner');
-	
-	$pager_columns = new Pager_Columns('SomeActivitiesPager', $columns, $default_columns, 'ActivitiesData');
-	$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-	$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-	
-	$columns = $pager_columns->GetUserColumns('default');
-	
-	
-	// output the selectable columns widget
-	echo $pager_columns_selects;
-	
-	// caching is disabled for this pager (since it's all sql)
-	$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', _('Search Results'), 'ActivitiesData', 'SomeActivitiesPager', $columns, false);
-	
-	// set up the bottom row of buttons
-	$endrows = "<tr><td class=widget_content_form_element colspan=10>
-	            $pager_columns_button
-				" . $pager->GetAndUseExportButton() .  "
-	            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
-	
-	$pager->AddEndRows($endrows);
-	$pager->Render($system_rows_per_page);
-	
-	
-	//echo htmlentities($sql);
-	
+
+    $columns = array();
+    $columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
+    $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
+    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
+    $columns[] = array('name' => _('Summary'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
+    $columns[] = array('name' => _('Scheduled Start'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
+    $columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
+    $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
+    $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
+
+
+    // selects the columns this user is interested in
+    // no reason to set this if you don't want all by default
+    $default_columns = null;
+    //$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner');
+
+    $pager_columns = new Pager_Columns('SomeActivitiesPager', $columns, $default_columns, 'ActivitiesData');
+    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+    $columns = $pager_columns->GetUserColumns('default');
+
+
+    // output the selectable columns widget
+    echo $pager_columns_selects;
+
+    // caching is disabled for this pager (since it's all sql)
+    $pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', _('Search Results'), 'ActivitiesData', 'SomeActivitiesPager', $columns, false);
+
+    // set up the bottom row of buttons
+    $endrows = "<tr><td class=widget_content_form_element colspan=10>
+                $pager_columns_button
+                " . $pager->GetAndUseExportButton() .  "
+                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
+
+    $pager->AddEndRows($endrows);
+    $pager->Render($system_rows_per_page);
+
+
+    //echo htmlentities($sql);
+
 } else {
-	$activity_calendar_rst=$con->execute($sql);
-	
-	$activity_calendar_data = array();
-	
-	if($activity_calendar_rst) {
-	
-		$i=0;
-	 	while (!$activity_calendar_rst->EOF) {
-			$activity_calendar_data[$i]['activity_id'] = $activity_calendar_rst->fields['activity_id'];
-			$activity_calendar_data[$i]['scheduled_at'] = $activity_calendar_rst->fields['scheduled_at'];
-			$activity_calendar_data[$i]['ends_at'] = $activity_calendar_rst->fields['ends_at'];
-			$activity_calendar_data[$i]['contact_id'] = $activity_calendar_rst->fields['contact_id'];
-			$activity_calendar_data[$i]['activity_title'] = $activity_calendar_rst->fields['activity_title'];
-			$activity_calendar_data[$i]['activity_description'] = $activity_calendar_rst->fields['activity_description'];
-			$activity_calendar_data[$i]['user_id'] = $activity_calendar_rst->fields['user_id'];
-	
-			$activity_calendar_rst->movenext();
-			$i++;	
-		}
-	}
+    $activity_calendar_rst=$con->execute($sql);
 
-	$calendar_js_functions = $calendar->GetCalendarJS();
+    $activity_calendar_data = array();
 
-	$widget = $calendar->Render($activity_calendar_data);
+    if($activity_calendar_rst) {
 
-	echo $widget['result'];
+        $i=0;
+        while (!$activity_calendar_rst->EOF) {
+            $activity_calendar_data[$i]['activity_id'] = $activity_calendar_rst->fields['activity_id'];
+            $activity_calendar_data[$i]['scheduled_at'] = $activity_calendar_rst->fields['scheduled_at'];
+            $activity_calendar_data[$i]['ends_at'] = $activity_calendar_rst->fields['ends_at'];
+            $activity_calendar_data[$i]['contact_id'] = $activity_calendar_rst->fields['contact_id'];
+            $activity_calendar_data[$i]['activity_title'] = $activity_calendar_rst->fields['activity_title'];
+            $activity_calendar_data[$i]['activity_description'] = $activity_calendar_rst->fields['activity_description'];
+            $activity_calendar_data[$i]['user_id'] = $activity_calendar_rst->fields['user_id'];
+
+            $activity_calendar_rst->movenext();
+            $i++;
+        }
+    }
+
+    $calendar_js_functions = $calendar->GetCalendarJS();
+
+    $widget = $calendar->Render($activity_calendar_data);
+
+    echo $widget['result'];
 }
 
 //echo $widget['features'];
@@ -902,6 +902,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.108  2005/05/06 15:43:23  braverock
+ * - changed labels for scheduled_on, ends_on, and title/summay for consistency
+ *
  * Revision 1.107  2005/05/05 17:58:03  daturaarutad
  * updated to reflect changes in CalendarView interface
  * mostly fixed 'week start' problem...still an issue with week view sometimes
