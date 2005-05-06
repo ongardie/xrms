@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.59 2005/05/06 00:45:47 vanmer Exp $
+ * $Id: utils-interface.php,v 1.60 2005/05/06 15:23:11 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -143,7 +143,7 @@ function list_files($cssdir,$cssroot) {
         closedir($dh);
     }
     if ($files) {
-        sort($files);    
+        sort($files);
         return $files;
     }
     return false;
@@ -159,13 +159,13 @@ function get_css_themes() {
     $cssroot = $http_site_root.'/css';
     $cssdir = $xrms_file_root.'/css/';
    if (is_dir($cssdir)) {
-        $css_themes=array();   
+        $css_themes=array();
         if ($dh = opendir($cssdir)) {
             while (($file = readdir($dh)) !== false) {
                 if ($file!='..' AND $file!='.' AND $file!='CVS') {
                     $csssubdir=$cssdir.DIRECTORY_SEPARATOR.$file;
                     if (is_dir($csssubdir)){
-                        
+
                         $css_files=list_files($csssubdir, "$cssroot/$file");
                         $css_themes[$file]=$css_files;
                     }
@@ -190,7 +190,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $direction
     global $http_site_root;
     global $app_title;
     global $css_theme;
-    
+
     if (!$xcon) {
         global $xrms_db_dbtype;
         global $xrms_db_server;
@@ -202,11 +202,11 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $direction
     }
     $user_id=$_SESSION['session_user_id'];
 
-    
+
     $msg = status_msg($msg);
     if ($user_id) {
         $user_css_theme = get_user_preference($xcon, $user_id, 'css_theme');
-	if ($user_css_theme) $css_theme=$user_css_theme;
+    if ($user_css_theme) $css_theme=$user_css_theme;
     }
 //    echo "    $css_theme = get_user_preference($con, $user_id, 'css_theme');";
     $curtheme = empty($css_theme) ? 'basic' : $css_theme;
@@ -214,8 +214,8 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $direction
     //    array('basic' => '/path/to/basic.css');
     // If a particular style requires multiple files, specify them as a nested array
     //    array('multi' => array('first.css','second.css','third.css'));
-    $cssroot=$http_site_root.'/css/';    
-    $cssthemes=get_css_themes();    
+    $cssroot=$http_site_root.'/css/';
+    $cssthemes=get_css_themes();
 ?>
 <!DOCTYPE HTML PUBLIC
     "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -233,6 +233,11 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $direction
     echo css_link($cssroot.'xrmsstyle.css');
     // base layout and style mods for display in IE
     echo css_link($cssroot.'xrmsstyle-ie.css');
+    //quick and dirty hack to include and force logo style before the theme styles have been applied
+    //should also check system parameters to see if logo should be displayed
+    if (get_system_parameter($xcon, 'Show Logo') == 'y') {
+        echo css_link($cssroot.'logo.css', $curtheme, false);
+    }
 
     // Add stylesheets for defined themes (see comment above, re: $cssthemes)
     // If the URI contains -ie, treat as an ie-only stylesheet
@@ -246,11 +251,6 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $direction
             foreach ( $attr as $cssfile )
                 echo css_link($cssfile, $theme, ($theme != $curtheme));
         }
-    }
-    //quick and dirty hack to include and force logo style after all other styles have been applied
-    //should also check system parameters to see if logo should be displayed
-    if (get_system_parameter($xcon, 'Show Logo') == 'y') {
-        echo css_link($cssroot.'logo.css', $curtheme, false);
     }
 ?>
 
@@ -315,10 +315,10 @@ function render_nav_line() {
     ?>
   </div>
   <div id="navline">
-               
+
       <?php echo http_root_href('/private/home.php',       _("Home")); ?> &bull;
-      
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'activities')) echo http_root_href('/activities/some.php',    _("Activities")). ' &bull; '; ?> 
+
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'activities')) echo http_root_href('/activities/some.php',    _("Activities")). ' &bull; '; ?>
       <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'companies')) echo http_root_href('/companies/some.php',     _("Companies")).' &bull; '; ?>
       <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'contacts')) echo http_root_href('/contacts/some.php',      _("Contacts")).' &bull; '; ?>
       <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'campaigns')) echo http_root_href('/campaigns/some.php',     _("Campaigns")).' &bull; '; ?>
@@ -330,7 +330,7 @@ function render_nav_line() {
     //place the menu_line hook before Reports and Adminstration link
     do_hook ('menuline');
 ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], 'Reports',  'Read')) echo http_root_href('/reports/index.php',      _("Reports")) . ' &bull; '; ?> 
+      <?php if (check_object_permission_bool($_SESSION['session_user_id'], 'Reports',  'Read')) echo http_root_href('/reports/index.php',      _("Reports")) . ' &bull; '; ?>
       <?php if (check_object_permission_bool($_SESSION['session_user_id'], 'Administration', 'Read' )) echo http_root_href('/admin/routing.php',      _("Administration")). ' &bull; '; ?>
       <?php echo http_root_href('/admin/users/self.php', _("Preferences")); ?>
   </div><!-- end of navline -->
@@ -363,7 +363,7 @@ function end_page($use_hook = true) {
 } //end end_page fn
 
 /**
- * Retrieve menu of Salutations 
+ * Retrieve menu of Salutations
  *
  * @param  handle  $con database connection
  * @param  integer $salutation to set the menu to
@@ -377,18 +377,18 @@ function build_salutation_menu(&$con, $salutation='', $blank_salutation=false) {
     FROM salutations
     ORDER BY salutation_sort_value
     ";
-	$rst = $con->execute($sql);
+    $rst = $con->execute($sql);
     if (!$rst) {
         db_error_handler($con, $sql);
     }
-	$salutation_menu = $rst->getmenu('salutation', $salutation, $blank_salutation);
-	$rst->close();
-	
-	return $salutation_menu;
+    $salutation_menu = $rst->getmenu('salutation', $salutation, $blank_salutation);
+    $rst->close();
+
+    return $salutation_menu;
 } //end build_salutation_menu fn
 
 /**
- * Retrieve menu of Address Types 
+ * Retrieve menu of Address Types
  *
  * @param  handle  $con database connection
  * @param  integer $address_type to set the menu to
@@ -401,14 +401,14 @@ function build_address_type_menu(&$con, $address_type='') {
     FROM address_types
     ORDER BY address_type_sort_value
     ";
-	$rst = $con->execute($sql);
+    $rst = $con->execute($sql);
     if (!$rst) {
         db_error_handler($con, $sql);
     }
-	$address_type_menu = $rst->getmenu('address_type', $address_type, false);
-	$rst->close();
-	
-	return $address_type_menu;
+    $address_type_menu = $rst->getmenu('address_type', $address_type, false);
+    $rst->close();
+
+    return $address_type_menu;
 } //end build_salutation_menu fn
 
 /*****************************************************************************/
@@ -539,15 +539,15 @@ EOQ;
 function javascript_tooltips_include() {
     global $javascript_tooltips_included;
 
-	if(!isset($javascript_tooltips_included)) {
-    	global $http_site_root;
+    if(!isset($javascript_tooltips_included)) {
+        global $http_site_root;
         echo <<<EOQ
-    		<!-- TOOLTIP SCRIPT INCLUDES -->
-			<script type="text/javascript" src="$http_site_root/js/wz_tooltip.js"></script>
-    		<!-- TOOLTIP SCRIPT INCLUDES -->
+            <!-- TOOLTIP SCRIPT INCLUDES -->
+            <script type="text/javascript" src="$http_site_root/js/wz_tooltip.js"></script>
+            <!-- TOOLTIP SCRIPT INCLUDES -->
 EOQ;
-    	$javascript_tooltips_included = true;
-	}
+        $javascript_tooltips_included = true;
+    }
 }
 
 function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
@@ -574,8 +574,8 @@ function render_ACL_button($action, $text='Create', $type='submit', $onclick=fal
     else $table=$on_what_table;
     if ($_id) $cid=$_id;
     else $cid=$on_what_id;
-    
-    if (!$cid) { 
+
+    if (!$cid) {
         if (!check_object_permission_bool($session_user_id, false, $action, $table))
             return false;
     } else {
@@ -585,7 +585,7 @@ function render_ACL_button($action, $text='Create', $type='submit', $onclick=fal
     return render_button($text, $type, $onclick, $name, $id);
 }
 
-function render_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false) {        
+function render_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false) {
     $text=_($text);
     $ret= "<input class=button value=\"$text\"";
     if ($name) {
@@ -605,7 +605,7 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 }
 
 /**
- * Retrieve menu of XRMS users 
+ * Retrieve menu of XRMS users
  *
  * @param  handle  $con database connection
  * @param  integer $user_id to set the menu to
@@ -620,14 +620,14 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
     WHERE user_record_status = 'a'
     ORDER BY last_name, first_names
     ";
-	$rst = $con->execute($sql);
+    $rst = $con->execute($sql);
     if (!$rst) {
         db_error_handler($con, $sql);
     }
-	$user_menu = $rst->getmenu2('user_id', $user_id, $blank_user);
-	$rst->close();
-	
-	return $user_menu;
+    $user_menu = $rst->getmenu2('user_id', $user_id, $blank_user);
+    $rst->close();
+
+    return $user_menu;
 }
 /**
  * Creates an HTML form element based on parameters, and returns it as a string
@@ -642,9 +642,9 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
  * @param array $possible_values providing values to populate, required for select and radio, should be in format so that array key is value of the element, and array value is the text to display
  * @param boolean $show_blank_first optionally specifying if a blank row should be added to element (select only)
  *
- * @return string $html with html element defined by parameters 
+ * @return string $html with html element defined by parameters
  */
-function create_form_element($element_type, $element_name, $element_value=false, $element_extra_attributes='', $element_length=false, $element_height=false, $possible_values=false, $show_blank_first=false) { 
+function create_form_element($element_type, $element_name, $element_value=false, $element_extra_attributes='', $element_length=false, $element_height=false, $possible_values=false, $show_blank_first=false) {
 if (!$element_type) return false;
 if (!$element_name) return false;
 
@@ -719,6 +719,10 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.60  2005/05/06 15:23:11  braverock
+ * - change order logo.css stylesheet is loaded in so that later shhets can
+ *   override to change the logo
+ *
  * Revision 1.59  2005/05/06 00:45:47  vanmer
  * - changed handling of css theme to automatically read list of themes from css directory
  *
