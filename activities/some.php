@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.108 2005/05/06 15:43:23 braverock Exp $
+ * $Id: some.php,v 1.109 2005/05/06 22:18:24 daturaarutad Exp $
  */
 
 // handle includes
@@ -158,7 +158,7 @@ if(!$results_view_type) {
 
 // watch to see if activities_date | before_after | start_end has changed
 $var_watcher = new SessionVarWatcher('Activities_Search');
-$var_watcher->RegisterCGIVars(array('activities_date', 'activities_before_after', 'activities_start_end'));
+$var_watcher->RegisterCGIVars(array('search_date', 'before_after', 'start_end'));
 $var_watcher->RegisterLocalVar('results_view_type', $results_view_type);
 
 
@@ -190,14 +190,8 @@ if('list' != $results_view_type) {
                 }
                 break;
             case 'month':
-                if(empty($calendar_start_date)) {
-                    $calendar_start_date = date("Y-m-", strtotime($date_modifier . $search_date));
-                    $calendar_start_date .= '01';
-                } else {
-                    // set to first of month
-                    $calendar_start_date = date("Y-m-", strtotime($calendar_start_date));
-                    $calendar_start_date .= '01';
-                }
+                $calendar_start_date = date("Y-m-", strtotime($date_modifier . $search_date));
+                $calendar_start_date .= '01';
                 break;
             case 'year':
                 $calendar_start_date = date("Y-", strtotime($date_modifier . $search_date));
@@ -902,6 +896,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.109  2005/05/06 22:18:24  daturaarutad
+ * fixed wrong var names for var_watcher; now resetting calendar_start_date whenever search dates are changed
+ *
  * Revision 1.108  2005/05/06 15:43:23  braverock
  * - changed labels for scheduled_on, ends_on, and title/summay for consistency
  *
