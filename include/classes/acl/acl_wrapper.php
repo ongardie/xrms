@@ -114,10 +114,13 @@ function check_role_access($acl=false, $user_id) {
 
 }
 
-function check_permission($user_id, $action=false, $object=false,  $on_what_id, $table=false, $role=false) {
+function check_permission($user_id, $action=false, $object=false,  $on_what_id, $table=false, $role=false, $db_connection=false) {
     global $acl_options;
-    
-    $acl = new xrms_acl($acl_options);
+    if ($db_connection) {
+        $acl=new xrms_acl(false, $db_connection);
+    } else {
+        $acl = new xrms_acl($acl_options);
+    }
     
     $object_id=get_object_id($acl, $object, $table, $role);
     //no object id, returning true to allow access to uncontrolled area
@@ -134,18 +137,21 @@ function check_permission($user_id, $action=false, $object=false,  $on_what_id, 
     return $ret;
 }
 
-function check_permission_bool($user_id, $object=false, $on_what_id, $action='Read',$table=false, $role=false) {
-    $permissions=check_permission($user_id, $action, $object, $on_what_id, $table, $role);
+function check_permission_bool($user_id, $object=false, $on_what_id, $action='Read',$table=false, $role=false, $db_connection=false) {
+    $permissions=check_permission($user_id, $action, $object, $on_what_id, $table, $role, $db_connection);
     if (!$permissions) return false;
     if (!is_array($permissions)) return false;
     if (array_search($action,$permissions)===false) return false;
     else return true;
 }
 
-function check_object_permission($user_id, $object, $action, $table, $role=false) {
+function check_object_permission($user_id, $object, $action, $table, $role=false, $db_connection=false) {
     global $acl_options;
-    
-    $acl = new xrms_acl($acl_options);
+    if ($db_connection) {
+        $acl = new xrms_acl(false, $db_connection);
+    } else {
+        $acl = new xrms_acl($acl_options);
+    }
     $object_id=get_object_id($acl, $object, $table, $role);
     //no object id, returning true to allow access to uncontrolled area
      if (!$object_id) { return array($action); }
@@ -162,8 +168,8 @@ function check_object_permission($user_id, $object, $action, $table, $role=false
     return $ret;
 }
 
-function check_object_permission_bool($user_id, $object=false, $action='Read',$table=false, $role=false) {
-    $permissions=check_object_permission($user_id, $object, $action, $table, $role);
+function check_object_permission_bool($user_id, $object=false, $action='Read',$table=false, $role=false, $db_connection=false) {
+    $permissions=check_object_permission($user_id, $object, $action, $table, $role, $db_connection);
     if (!$permissions) return false;
     if (!is_array($permissions)) return false;
     if (array_search($action,$permissions)===false) return false;
