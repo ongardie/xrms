@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.55 2005/04/29 17:55:58 daturaarutad Exp $
+ * $Id: some.php,v 1.56 2005/05/06 23:03:03 vanmer Exp $
  */
 
 //include the standard files
@@ -222,7 +222,7 @@ if(!isset($contacts_next_page)) {
                     <input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>">
                 </td>
                 <td width="25%" class=widget_content_form_element>
-                    <input type=text name="company_name" size=18 maxlength=100 value="<?php  echo $company_name; ?>">
+                    <input type=text name="company_name" id="contactForm_company_name" size=18 maxlength=100 value="<?php  echo $company_name; ?>">
                 </td>
             </tr>
             <tr>
@@ -301,7 +301,7 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
 
 echo $pager_columns_selects;
 
-
+$newContact_return_url=$http_site_root.current_page();
 
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
@@ -315,6 +315,20 @@ $con->close();
 
         <!-- right column //-->
     <div id="Sidebar">
+        <form action="new_contact_company_select.php" method=POST onSubmit="return setNewContact_company_name()" name=newContact>
+            <input type=hidden name=company_name id='newContact_company_name'>
+            <input type=hidden name=return_url value="<?php echo $newContact_return_url; ?>">
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header><?php echo _("Contact Options"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element>
+                    <input type=submit class=button name=btnewContact value="<?php echo _("New Contact"); ?>">
+                </td>
+            </tr>
+        </table>
+        </form>
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
@@ -353,6 +367,19 @@ function createContact() {
     location.href = "new.php";
 }
 
+function getContact_company_name() {
+    var cname;
+    cname=document.getElementById('contactForm_company_name');
+    return cname.value;
+}
+
+function setNewContact_company_name() {
+    var cname;
+    cname = document.getElementById('newContact_company_name');
+    cname.value = getContact_company_name();
+    return true;   
+}
+
 //-->
 </script>
 
@@ -362,6 +389,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.56  2005/05/06 23:03:03  vanmer
+ * - added sidebar for adding new contact from some.php page
+ * - added javascript to add company_name from some.php search to use as parameter to searching for company before
+ * adding contact
+ * - added id on company_name element in search form to allow javascript to properly identify field
+ *
  * Revision 1.55  2005/04/29 17:55:58  daturaarutad
  * fixed printing of form/search results
  *
