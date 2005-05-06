@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.126 2005/05/06 00:47:03 vanmer Exp $
+ * $Id: utils-misc.php,v 1.127 2005/05/06 15:24:13 braverock Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 
@@ -80,7 +80,7 @@ function session_check($c_role='', $action='Read') {
     }
     $con=get_xrms_dbconnection();
     $user_language=get_user_preference($con, $_SESSION['session_user_id'], 'user_language');
-    
+
     if ($user_language AND ($user_language!=$xrms_default_language)) {
         set_up_language($user_language, false, false, true);
     }
@@ -90,11 +90,11 @@ function session_check($c_role='', $action='Read') {
          $role_ok = check_permission_bool($_SESSION['session_user_id'], false, $on_what_id, $action, $on_what_table, false, $con);
       else
          $role_ok = check_object_permission_bool($_SESSION['session_user_id'], false, $action, $on_what_table, false, $con);
-      
+
       // we are logged in
       if ( !$role_ok ) {
         // we are logged in, go straight to logout.php
-	header("Location: $http_site_root" . "/private/home.php?msg=noauth");
+        header("Location: $http_site_root" . "/private/home.php?msg=noauth");
         exit;
       }
       // just return our current session id
@@ -479,12 +479,12 @@ function fetch_division_id($con, $division_name, $company_id) {
 function show_test_values($param1 = '', $param2 = '', $param3 = '', $param4 = '', $param5 = '') {
 
     $session_username = $_SESSION['username'];
-	$p1 = print_r($param1, true);
-	$p2 = print_r($param2, true);
-	$p3 = print_r($param3, true);
-	$p4 = print_r($param4, true);
-	$p5 = print_r($param5, true);
-    
+    $p1 = print_r($param1, true);
+    $p2 = print_r($param2, true);
+    $p3 = print_r($param3, true);
+    $p4 = print_r($param4, true);
+    $p5 = print_r($param5, true);
+
     $p1 = htmlentities ($p1, ENT_QUOTES );
     $p2 = htmlentities ($p2, ENT_QUOTES );
     $p3 = htmlentities ($p3, ENT_QUOTES );
@@ -791,8 +791,8 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
         } else {
             //create our single line address
             $address_array=array();
-            if ($line1) { $address_array[]=$line1; } 
-                
+            if ($line1) { $address_array[]=$line1; }
+
             if ($city) { $address_array[]=$city; }
 
             if ($province) { $address_array[]=$province; }
@@ -1045,29 +1045,29 @@ function current_page($vars = false, $anchor = false) {
     global $http_site_root;
     //start with blank page
     $page = '';
-    
+
     //get array of subdirectories for base site URL
     $site_directories = explode('/', $http_site_root);
-    
+
     //Get the REQUEST_URI or QUERY_STRING from the server (works differently for apache vs. IIS)
     if(!trim($_SERVER['REQUEST_URI'])) {
-    	if (array_key_exists('argv',$_SERVER)) {
-      		$request_uri = substr($_SERVER['argv'][0], strpos($_SERVER['argv'][0], ';') + 1);
-	} else {
-		$request_uri=$_SERVER['URL'] . '?'.$_SERVER['QUERY_STRING'];
-	}
+        if (array_key_exists('argv',$_SERVER)) {
+            $request_uri = substr($_SERVER['argv'][0], strpos($_SERVER['argv'][0], ';') + 1);
     } else {
-    	$request_uri = $_SERVER['REQUEST_URI'];
-    } 
-    
+        $request_uri=$_SERVER['URL'] . '?'.$_SERVER['QUERY_STRING'];
+    }
+    } else {
+        $request_uri = $_SERVER['REQUEST_URI'];
+    }
+
     //Split up request into URL and CGI parameters
     $parts = explode('?', $request_uri, 2);
-    
+
     //split directories for current URL
     $directories = explode('/', $parts[0]);
     //loop on each directory in current URL
     foreach($directories as $directory) {
-        //if directory is not not in the base site root directory list, add it to the page 
+        //if directory is not not in the base site root directory list, add it to the page
         //(so if base is /xrms then xrms/activities/one.php will split into xrms and activities, xrms will be ignored, activities will be added)
         if(!in_array($directory, $site_directories) and $directory) {
             $page .= '/' . $directory;
@@ -1077,7 +1077,7 @@ function current_page($vars = false, $anchor = false) {
     if(count($parts) > 1) {
         //make sure passed in CGI parameters get split into array
         parse_str($vars, $vars);
-        
+
         //if there is no anchor specified, split CGI parameters into parameters and anchor
         if(!$anchor) {
             list($parts[1], $anchor) = split('#', $parts[1], 2);
@@ -1085,21 +1085,21 @@ function current_page($vars = false, $anchor = false) {
 
         //split the CGI parameters (without anchor tag) into array called parts
         parse_str($parts[1], $parts);
-        
+
         //Loop on passed in parameters, if they are already set in the current page then remove them from the current page array (will be overrided by passed in parameter)
         foreach($vars as $key => $value) {
             if(in_array($key, array_keys($parts))) {
                 unset($parts[$key]);
             }
         }
-        
+
         //merge previous parameters (parts) with passed in parameters (vars)
         $parts = array_merge($parts, $vars);
 
         //Add CGI parameter separator to page
         $page .= '?';
         $pagevars=array();
-        
+
         //loop on  all CGI parameters, turn them into an array of key=value pairs
         foreach ($parts as $key => $value) {
             $pagevars[] = $key . '=' . $value;
@@ -1113,12 +1113,12 @@ function current_page($vars = false, $anchor = false) {
             $page .= '?' . $vars;
         }
     }
-    
+
     //If an anchor has been set, append it to the URL with the anchor separator
     if($anchor) {
         $page .= '#' . $anchor;
     }
-    
+
     //return URL (relative to http_site_root)
     return $page;
 }
@@ -1517,7 +1517,7 @@ function arr_vars_show_ses_vars ( $ary )
  * @param adodbconnection $con handle to the database
  * @param array $criteria_array with array of criteria, keyed by fieldname
  * @param string $tablename optionally providing tablename to prepend to criteria fieldnames
- * 
+ *
  * @return string which can be used after the WHERE in a sql statement or false if no criteria are found
  */
 function make_where_string($con, $criteria_array, $tablename=false) {
@@ -1553,6 +1553,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.127  2005/05/06 15:24:13  braverock
+ * - minor code formatting changes
+ *
  * Revision 1.126  2005/05/06 00:47:03  vanmer
  * - added check for user language, if exists set user language
  * - changed to pass adodb connection to acl when checking for permissions
