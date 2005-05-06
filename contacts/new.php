@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.24 2005/05/04 14:36:13 braverock Exp $
+ * $Id: new.php,v 1.25 2005/05/06 00:14:24 daturaarutad Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -16,29 +16,60 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check('','Create');
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+$clone_id = isset($_GET['clone_id']) ? $_GET['clone_id'] : 0;
+
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-//
-// if $company_id is not passed in, get one for company 'Self' if the feature is set
-// else, don't set $company_id
-//
-if ( isset($_GET['company_id']) ) {
-  // was passed in
-  $company_id = $_GET['company_id'];
-  $division_id = $_GET['division_id'];
-} elseif ( $use_self_contacts ) {
-  // get from database
-  $sql = "select company_id from companies where company_name = 'Self'";
-  //$con->debug=1;
-  $rst = $con->execute($sql);
-  if ($rst) {
-    $company_id = $rst->fields['company_id'];
-    $rst->close();
-  }
-}
+if ($clone_id > 0) {
+	
+    $sql = "select * from contacts where contact_id = $clone_id";
+    $rst = $con->execute($sql);
 
+    // was there a database error?
+    if ( $rst ) {
+      // no
+      // was data found ???
+      if ( !$rst->EOF ) {
+      // yes - data found
+        $company_id 	= $rst->fields['company_id'];
+        $division_id 	= $rst->fields['division_id'];
+        $address_id 	= $rst->fields['address_id'];
+      } else {
+    	// no - data not found
+        $company_id 	= '';
+        $division_id 	= '';
+        $address_id 	= '';
+      }
+    } else {
+      // yes - database error
+      db_error_handler ($con, $sql);
+    }
+    $rst->close();
+
+} else {
+
+	//
+	// if $company_id is not passed in, get one for company 'Self' if the feature is set
+	// else, don't set $company_id
+	//
+	if ( isset($_GET['company_id']) ) {
+	  // was passed in
+	  $company_id = $_GET['company_id'];
+	  $division_id = $_GET['division_id'];
+	} elseif ( $use_self_contacts ) {
+	  // get from database
+	  $sql = "select company_id from companies where company_name = 'Self'";
+	  //$con->debug=1;
+	  $rst = $con->execute($sql);
+	  if ($rst) {
+	    $company_id = $rst->fields['company_id'];
+	    $rst->close();
+	  }
+	}
+}
+	
 // get $company_name, $phone, $fax
 if ( isset($company_id) ) {
   $sql = "select company_name, phone, fax from companies where company_id = $company_id";
@@ -262,6 +293,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.25  2005/05/06 00:14:24  daturaarutad
+ * added ability to clone contacts
+ *
  * Revision 1.24  2005/05/04 14:36:13  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *

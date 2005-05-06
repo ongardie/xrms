@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.84 2005/05/04 14:27:29 braverock Exp $
+ * $Id: one.php,v 1.85 2005/05/06 00:14:24 daturaarutad Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -486,6 +486,7 @@ function markComplete() {
             <tr>
                 <td class=widget_content_form_element>
                     <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?contact_id=$contact_id';"); ?>
+ 					<input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $contact_id ?>';">
                     <?php echo $contact_buttons; ?>
                 </td>
             </tr>
@@ -600,6 +601,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.85  2005/05/06 00:14:24  daturaarutad
+ * added ability to clone contacts
+ *
  * Revision 1.84  2005/05/04 14:27:29  braverock
  * - change Activity 'Title' to 'Summary' for consistency
  *
