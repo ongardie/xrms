@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_activity_test.php,v 1.1 2005/04/15 08:00:32 vanmer Exp $
+ * $Id: xrms_activity_test.php,v 1.2 2005/05/06 20:51:13 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -167,7 +167,17 @@ Class XRMSActivityTest extends PHPUnit_TestCase {
         $get_result=get_activity_participants($this->con, $activity_id);
         $this->assertTrue(!$get_result, "Failed to delete activity participants for activity on activity delete");    
     }
+        
+     function test_get_activity_type($short_name=false,$pretty_name=false, $type_id=false) {
+        if (!$short_name) $short_name='CTO';
+        
+        $ret = get_activity_type($this->con, $short_name, $pretty_name, $type_id);
+        $this->assertTrue($ret, "Activity type failed to return properly for short name $short_name pretty $pretty_name id $type_id");
+        
+        return $ret;
+    }
     
+
 }
 
 $suite= new PHPUnit_TestSuite( "XRMSActivityTest" );
@@ -191,6 +201,9 @@ $display->show();
  */
 /*
  * $Log: xrms_activity_test.php,v $
+ * Revision 1.2  2005/05/06 20:51:13  vanmer
+ * - new test for activity type retrieval
+ *
  * Revision 1.1  2005/04/15 08:00:32  vanmer
  * -Initial revision of tests for the activities participant and position API
  *
