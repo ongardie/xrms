@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.11 2004/09/21 19:21:19 introspectshun Exp $
+ * $Id: self.php,v 1.12 2005/05/06 00:31:30 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,8 +16,9 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
+$user_id=$session_user_id;
 
-$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+getGlobalVar($msg, 'msg');
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -40,6 +41,34 @@ if ($rst) {
     $rst->close();
 }
 //show_test_values($username, $last_name, $first_names, $session_user_id, $user_id);
+
+//get all user preference types
+$types=get_user_preference_type($con, false, false, true);
+if (!$types) { $msg="Failed to load an user preference types, no user preferences available"; $user_preferences_table='';}
+else {
+    $user_preferences_table="<table class=widget>";
+    $user_preferences_table.="<tr><td colspan=2 class=widget_header>User Preferences</td></tr>";
+    foreach ($types as $type_info) {
+        if ($type_info['allow_user_edit_flag']==0) next;
+        $user_preference_type_id=$type_info['user_preference_type_id'];
+        $type_desc=$type_info['user_preference_description'];
+        $type_pretty_name=$type_info['user_preference_pretty_name'];
+        if (!$type_pretty_name) $type_pretty_name=$type_info['user_preference_name'];
+        
+        if ($type_info['allow_multiple_flag']==1) {
+            //branch for showing multiple options, fetch all user set options   
+            $element_field=render_preference_form_multi_element($con, $user_id, $user_preference_type_id, $type_info);
+        } else {
+        //branch for showing single option
+            $preference_value=get_user_preference($con, $user_id, $user_preference_type_id);
+            $element_field=render_preference_form_element($con, $user_preference_type_id, $preference_value, $type_info);
+        }
+        $user_preferences_table.="<tr><td class=widget_content_label><b>$type_pretty_name</b><br>$type_desc</td><td class=widget_content_form_element>$element_field</td></tr>";
+    }
+    $user_preferences_table.="<tr><td colspan=2 class=widget_content_form_element><input type=hidden name=preference_action value=savePrefs><input class=button type=submit value=\""._("Save Preferences") . "\"></tr></td>";
+    $user_preferences_table.="</table>";
+}
+
 
 $page_title = _("One User") . " : " . "$first_names $last_name";
 start_page($page_title, true, $msg);
@@ -79,10 +108,6 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Language"); ?></td>
-                <td class=widget_content_form_element><?php echo _("English"); ?></td>
-            </tr>
-            <tr>
                 <td class=widget_label_right><?php echo _("GMT Offset"); ?></td>
                 <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value="<?php  echo $gmt_offset; ?>"></td>
             </tr>
@@ -95,6 +120,9 @@ start_page($page_title, true, $msg);
         </table>
         </form>
 
+         <form action='user_prefs.php' method=POST>
+          <?php echo $user_preferences_table; ?>      
+        </form>
     </div>
 
     <!-- right column //-->
@@ -110,6 +138,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.12  2005/05/06 00:31:30  vanmer
+ *- added user preference piece for self.php to allow users to alter their preferences
+ *
  *Revision 1.11  2004/09/21 19:21:19  introspectshun
  *- Finished localizing strings for i18n compatibility
  *
