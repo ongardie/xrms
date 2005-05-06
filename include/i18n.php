@@ -19,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.8 2004/08/19 19:59:54 johnfawcett Exp $
+ * @version $Id: i18n.php,v 1.9 2005/05/06 00:42:16 vanmer Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -161,26 +161,27 @@ function fixcharset($charset) {
  * @param bool $default set $xrms_language to $xrms_default_language if language detection fails or language is not set. Defaults to false.
  * @return int function execution error codes.
  */
-function set_up_language($xrms_language, $do_search = false, $default = false) {
-
+function set_up_language($xrms_language_param, $do_search = false, $default = false, $override_setup=false) {
     static $SetupAlready = 0;
+    
     global $use_gettext, $languages,
            $xrms_language, $xrms_default_language,
            $xrms_notAlias, $userid, $data_dir, $xrms_file_root;
-
-    if ($SetupAlready) {
+    
+    if ($xrms_language_param) $xrms_language=$xrms_language_param;
+    
+    if ($SetupAlready AND !$override_setup) {
         return;
     }
-
+    
     $SetupAlready = TRUE;
     if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) { $accept_lang= $_SERVER['HTTP_ACCEPT_LANGUAGE']; };
-
+    
     if ($do_search && ! $xrms_language && isset($accept_lang)) {
         $xrms_language = substr($accept_lang, 0, 2);
     }
 
     if ((!$xrms_language||$default) && isset($xrms_default_language)) {
-        $xrms_language = $xrms_default_language;
         $xrms_language = $xrms_default_language;
     }
 
@@ -198,7 +199,7 @@ function set_up_language($xrms_language, $do_search = false, $default = false) {
     while (isset($languages[$xrms_notAlias]['ALIAS'])) {
         $xrms_notAlias = $languages[$xrms_notAlias]['ALIAS'];
     }
-
+    
     //echo "XRMS Language Alias = ".$xrms_notAlias.'<br>';
 
     // now do all the additional checks and set the appropriate variables for language display
@@ -1008,6 +1009,9 @@ function tag_remove($s)
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.9  2005/05/06 00:42:16  vanmer
+ * - changed parameter passed into setup_language to allow it to override global language already set
+ *
  * Revision 1.8  2004/08/19 19:59:54  johnfawcett
  * - function added which can translate only text within html tags leaving the
  *   tags intact
