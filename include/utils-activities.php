@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.4 2005/05/06 00:43:16 vanmer Exp $
+ * $Id: utils-activities.php,v 1.5 2005/05/06 20:50:43 vanmer Exp $
  
  */
 
@@ -432,9 +432,33 @@ function delete_activity_participant($con, $activity_participant_id, $delete_fro
     else return true;
 }
 
+function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id=false) {
+    if (!$short_name AND !$pretty_name AND !$type_id) return false;
+    $sql = "SELECT * FROM activity_types";
+    if ($short_name) {
+        $where[]="activity_type_short_name LIKE ".$con->qstr($short_name, get_magic_quotes_gpc());
+    }
+    if ($pretty_name) {
+        $where[]="activity_type_pretty_name LIKE ".$con->qstr($short_name, get_magic_quotes_gpc());
+    }
+    if ($type_id) {
+        $where[]="activity_type_id=$type_id";
+    }
+    $wherestr=implode(" AND ", $where);
+    $sql .=" WHERE $wherestr";
+    $rst=$con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql); return false; }
+    
+    if (!$rst->EOF) return $rst->fields;
+    
+    return false;
+}
  
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.5  2005/05/06 20:50:43  vanmer
+  * - added function for fetching activity types
+  *
   * Revision 1.4  2005/05/06 00:43:16  vanmer
   * - fixed misnamed field when adding a new activity without any participants specified
   *
