@@ -8,9 +8,10 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.125 2005/04/28 19:01:17 vanmer Exp $
+ * $Id: utils-misc.php,v 1.126 2005/05/06 00:47:03 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
+
 if ( !defined('IN_XRMS') )
 {
   die(_('Hacking attempt'));
@@ -77,13 +78,18 @@ function session_check($c_role='', $action='Read') {
         $role_ok = false;
       }
     }
-
+    $con=get_xrms_dbconnection();
+    $user_language=get_user_preference($con, $_SESSION['session_user_id'], 'user_language');
+    
+    if ($user_language AND ($user_language!=$xrms_default_language)) {
+        set_up_language($user_language, false, false, true);
+    }
     // make sure we've logged in
     if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
       if ($on_what_id)
-         $role_ok = check_permission_bool($_SESSION['session_user_id'], false, $on_what_id, $action, $on_what_table);
+         $role_ok = check_permission_bool($_SESSION['session_user_id'], false, $on_what_id, $action, $on_what_table, false, $con);
       else
-         $role_ok = check_object_permission_bool($_SESSION['session_user_id'], false, $action, $on_what_table);
+         $role_ok = check_object_permission_bool($_SESSION['session_user_id'], false, $action, $on_what_table, false, $con);
       
       // we are logged in
       if ( !$role_ok ) {
@@ -1547,6 +1553,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.126  2005/05/06 00:47:03  vanmer
+ * - added check for user language, if exists set user language
+ * - changed to pass adodb connection to acl when checking for permissions
+ *
  * Revision 1.125  2005/04/28 19:01:17  vanmer
  * - cause system parameters function to not exit entirely, but simply output an error and return false
  *
