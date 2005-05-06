@@ -117,7 +117,7 @@ function check_role_access($acl=false, $user_id) {
 function check_permission($user_id, $action=false, $object=false,  $on_what_id, $table=false, $role=false, $db_connection=false) {
     global $acl_options;
     if ($db_connection) {
-        $acl=new xrms_acl(false, $db_connection);
+        $acl=new xrms_acl($acl_options, $db_connection);
     } else {
         $acl = new xrms_acl($acl_options);
     }
@@ -148,7 +148,7 @@ function check_permission_bool($user_id, $object=false, $on_what_id, $action='Re
 function check_object_permission($user_id, $object, $action, $table, $role=false, $db_connection=false) {
     global $acl_options;
     if ($db_connection) {
-        $acl = new xrms_acl(false, $db_connection);
+        $acl = new xrms_acl($acl_options, $db_connection);
     } else {
         $acl = new xrms_acl($acl_options);
     }
