@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.72 2005/05/01 01:27:37 braverock Exp $
+ * $Id: update.php,v 1.73 2005/05/06 00:30:46 vanmer Exp $
  */
 
 // where do we include from
@@ -4705,9 +4705,8 @@ $con->execute($sql);
         `user_preference_type_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
         `preference_type_created_on` DATETIME NOT NULL ,
         `user_preference_type_modified_on` DATETIME NOT NULL ,
-        `user_preference_created_by` INT NOT NULL ,
-        `user_preference_modified_by` INT NOT NULL ,
-        PRIMARY KEY ( `user_preference_type_id` )
+        `form_element_type` varchar(32) NOT NULL default 'text',
+         PRIMARY KEY ( `user_preference_type_id` )
         )";
         //execute
         $rst = $con->execute($sql);
@@ -4725,8 +4724,25 @@ $con->execute($sql);
         `user_preference_value` LONGTEXT NOT NULL ,
         `user_preference_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
         `user_preference_modified_on` DATETIME NOT NULL ,
+        `user_preference_created_by` INT NOT NULL ,
+        `user_preference_modified_by` INT NOT NULL ,
         PRIMARY KEY ( `user_preference_id` ) ,
         INDEX ( `user_preference_type_id` )
+        );";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+    if (!in_array('user_preference_type_options',$table_list)) {
+        $sql = "CREATE TABLE `user_preference_type_options` (
+        `up_option_id` INT UNSIGNED NOT NULL AUTO_INCREMENT, 
+        `user_preference_type_id` INT UNSIGNED NOT NULL, 
+        `option_value` VARCHAR(255) NOT NULL, 
+        `sort_order` INT UNSIGNED DEFAULT 1 NOT NULL, 
+        `option_record_status` CHAR(1) DEFAULT 'a' NOT NULL,
+        PRIMARY KEY (`up_option_id`)
         );";
         //execute
         $rst = $con->execute($sql);
@@ -4802,6 +4818,11 @@ $con->execute($sql);
 $sql="UPDATE activities set last_modified_by=entered_by WHERE last_modified_by=0";
 $con->execute($sql);
 
+$sql="ALTER TABLE `user_preference_types` ADD form_element_type varchar(32) NOT NULL default 'text'";
+$con->execute($sql);
+
+add_user_preference_type($con, 'user_language', 'Language', false, false, true, 'select');
+add_user_preference_type($con, 'css_theme', 'Theme', 'Color and Layout Theme for XRMS', false, true, 'select');
 //close the database connection, because we don't need it anymore
 
 do_hook_function('xrms_update', $con);
@@ -4826,6 +4847,12 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.73  2005/05/06 00:30:46  vanmer
+ * - added table for tracking user preference options
+ * - moved fields to user preferences
+ * - added automatic creation of user_language and css_theme user preferences
+ * - added html form type field for preference types
+ *
  * Revision 1.72  2005/05/01 01:27:37  braverock
  * - remove InnoDB requirement from install and update scripts as
  *   it causes problems in non-MySQL env. or MySQL env w/o InnoDB support
