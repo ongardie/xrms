@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.15 2005/05/04 14:35:51 braverock Exp $
+ * $Id: new.php,v 1.16 2005/05/06 22:08:10 vanmer Exp $
  */
 
 /* Include required files */
@@ -244,8 +244,28 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=last_name size=30 value="Contact"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Title"); ?></td>
+                <td class=widget_content_form_element><input type=text name=title size=30></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
                 <td class=widget_content_form_element><input type=text name=email size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
+                <td class=widget_content_form_element><input type=text name=work_phone size=30> X <input type=text name=work_phone_ext size=5></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Home Phone"); ?></td>
+                <td class=widget_content_form_element><input type=text name=home_phone size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Cell Phone"); ?></td>
+                <td class=widget_content_form_element><input type=text name=cell_phone size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Profile"); ?></td>
+                <td class=widget_content_form_element><textarea rows=4 cols=60 name=contact_profile></textarea></td>
             </tr>
         </table>
 
@@ -290,6 +310,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.16  2005/05/06 22:08:10  vanmer
+ * - added more fields for adding a new contact when creating a company
+ *
  * Revision 1.15  2005/05/04 14:35:51  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *
