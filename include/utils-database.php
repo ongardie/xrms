@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.10 2005/04/28 22:02:04 introspectshun Exp $
+ * $Id: utils-database.php,v 1.11 2005/05/06 00:43:41 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -117,9 +117,26 @@ function execute_batch_sql_file($con, $file_path) {
     } else return false;
 }
 
+/*****************************************************************************/
+/**
+ * function portfolio_gpg
+ *
+ * Provides an adodbconnection handle for the XRMS database
+ *
+ * @return adodbconnection $con connected to XRMS database
+ */
+function get_xrms_dbconnection() {
+    global $xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname, $xrms_db_dbtype;
+    $xcon = &adonewconnection($xrms_db_dbtype);
+    $xcon->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    return $xcon;
+}
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.11  2005/05/06 00:43:41  vanmer
+ * - added a new function to instantiate an xrms db connection
+ *
  * Revision 1.10  2005/04/28 22:02:04  introspectshun
  * - Updated list_db_tables to use ADODB MetaTables fn
  *   - Inspired by eduqate's post regarding Postgres compat
