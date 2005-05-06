@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.64 2005/04/29 17:54:22 daturaarutad Exp $
+ * $Id: some.php,v 1.65 2005/05/06 21:54:37 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -30,8 +30,29 @@ $arr_vars = array ( // local var name       // session variable name
                    'industry_id'         => array('industry_id',arr_vars_SESSION),
                    'company_source_id'   => array('company_source_id',arr_vars_GET_SESSION),
                    'city'                => array('city',arr_vars_SESSION),
-                   'state'               => array('state',arr_vars_SESSION)
+                   'state'               => array('state',arr_vars_SESSION),
+                    'legal_name'         => array('companies_legal_name',arr_vars_SESSION),
+                    'phone' 			 => array ( 'companies_phone' , arr_vars_SESSION),
+                    'phone2' 			 => array ( 'companies_phone2' , arr_vars_SESSION),
+                    'fax' 			 	 => array ( 'companies_fax' , arr_vars_SESSION),
+                    'url' 			 	 => array ( 'companies_url' , arr_vars_SESSION),
+                    'employees'			 => array ( 'companies_employees' , arr_vars_SESSION),
+                    'revenue' 			 => array ( 'companies_revenue' , arr_vars_SESSION),
+                    'custom1' 			 => array ( 'companies_custom1' , arr_vars_SESSION),
+                    'custom2' 			 => array ( 'companies_custom2' , arr_vars_SESSION),
+                    'custom3' 			 => array ( 'companies_custom3' , arr_vars_SESSION),
+                    'custom4' 			 => array ( 'companies_custom4' , arr_vars_SESSION),
+                    'profile' 			 => array ( 'companies_profile' , arr_vars_SESSION),
+                    'address_name' 		 => array ( 'companies_address_name' , arr_vars_SESSION),
+                    'line1' 			 => array ( 'companies_line1' , arr_vars_SESSION),
+                    'line2' 			 => array ( 'companies_line2' , arr_vars_SESSION),
+                    'province' 			 => array ( 'companies_province' , arr_vars_SESSION),
+                    'postal_code' 		 => array ( 'companies_postal_code' , arr_vars_SESSION),
+                    'country_id' 		 => array ( 'companies_country_id' , arr_vars_SESSION),
+                    'address_body' 		 => array ( 'companies_address_body' , arr_vars_SESSION),
                    );
+
+$advanced_search = (!empty($_REQUEST['advanced_search'])) ? true : false;
 
 
 // get all passed in variables
@@ -53,7 +74,7 @@ u.username AS "user" ,
 industry_pretty_name as "industry" ,
 crm_status_pretty_name AS "crm_status" ,
 as1.account_status_display_html AS "account_status" ,
-r.rating_display_html AS "rating"' . "\n";
+r.rating_display_html AS "rating"';
 
 $criteria_count = 0;
 
@@ -126,6 +147,137 @@ if (strlen($company_source_id) > 0) {
     $where .= " and c.company_source_id = $company_source_id";
 }
 
+// begin advanced-search query items
+$advanced_search_columns = array();
+
+if ( $legal_name ) {
+    $criteria_count++;
+	$sql .= ', c.legal_name ';
+    $where .= " and c.legal_name like " . $con->qstr($legal_name, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Legal Name"), 'index_sql' => 'legal_name');
+}
+
+if ( $phone ) {
+    $criteria_count++;
+	$sql .= ', c.phone ';
+    $where .= " and c.phone like " . $con->qstr($phone, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
+}
+
+if ( $phone2 ) {
+    $criteria_count++;
+	$sql .= ', c.phone2 ';
+    $where .= " and c.phone2 like " . $con->qstr($phone2, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Phone 2"), 'index_sql' => 'phone2');
+}
+
+if ( $fax ) {
+    $criteria_count++;
+	$sql .= ', c.fax ';
+    $where .= " and c.fax like " . $con->qstr($fax, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Fax"), 'index_sql' => 'fax');
+}
+
+if (strlen($url) > 0) {
+    $criteria_count++;
+	$sql .= ', c.url ';
+    $where .= " and c.url like " . $con->qstr($url, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("URL"), 'index_sql' => 'url');
+}
+
+if ( $employees ) {
+    $criteria_count++;
+	$sql .= ', c.employees ';
+    $where .= " and c.employees like " . $con->qstr($employees, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("employees"), 'index_sql' => 'employees');
+}
+
+if ( $revenue ) {
+    $criteria_count++;
+	$sql .= ', c.revenue ';
+    $where .= " and c.revenue like " . $con->qstr($revenue, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Revenue"), 'index_sql' => 'revenue');
+}
+
+if ( $custom1 ) {
+    $criteria_count++;
+	$sql .= ', c.custom1 ';
+    $where .= " and c.custom1 like " . $con->qstr($custom1, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Custom 1"), 'index_sql' => 'custom1');
+}
+
+if ( $custom2 ) {
+    $criteria_count++;
+	$sql .= ', c.custom2 ';
+    $where .= " and c.custom2 like " . $con->qstr($custom2, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Custom 2"), 'index_sql' => 'custom2');
+}
+
+if ( $custom3 ) {
+    $criteria_count++;
+	$sql .= ', c.custom3 ';
+    $where .= " and c.custom3 like " . $con->qstr($custom3, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Custom 3"), 'index_sql' => 'custom3');
+}
+
+if ( $custom4 ) {
+    $criteria_count++;
+	$sql .= ', c.custom4 ';
+    $where .= " and c.custom4 like " . $con->qstr($custom4, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Custom 4"), 'index_sql' => 'custom4');
+}
+
+if ( $profile ) {
+    $criteria_count++;
+	$sql .= ', c.profile ';
+    $where .= " and c.profile like " . $con->qstr($profile, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Profile"), 'index_sql' => 'profile');
+}
+
+if ( $address_name ) {
+    $criteria_count++;
+	$sql .= ', addr.address_name ';
+    $where .= " and addr.address_name like " . $con->qstr($address_name, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Address"), 'index_sql' => 'address_name');
+}
+
+if ( $line1 ) {
+    $criteria_count++;
+	$sql .= ', addr.line1 ';
+    $where .= " and addr.line1 like " . $con->qstr($line1, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Line 1"), 'index_sql' => 'line1');
+}
+
+if ( $line2 ) {
+    $criteria_count++;
+	$sql .= ', addr.line2 ';
+    $where .= " and addr.line2 like " . $con->qstr($line2, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Line 2"), 'index_sql' => 'line2');
+}
+
+if ( $province ) {
+    $criteria_count++;
+	$sql .= ', addr.province ';
+    $where .= " and addr.province like " . $con->qstr($province, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Province"), 'index_sql' => 'province');
+}
+
+if ( $postal_code ) {
+    $criteria_count++;
+	$sql .= ', addr.postal_code ';
+    $where .= " and addr.postal_code like " . $con->qstr($postal_code, get_magic_quotes_gpc());
+	$advanced_search_columns[] = array('name' => _("Postal Code"), 'index_sql' => 'postal_code');
+}
+
+if ( $country_id ) {
+    $criteria_count++;
+	$from .= ', countries country ';
+	$sql .= ', country.country_name ';
+    $where .= " and addr.country_id = $country_id and country.country_id = addr.country_id ";
+	$advanced_search_columns[] = array('name' => _("Country"), 'index_sql' => 'country_name');
+}
+// end advanced-search query items
+
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
 } else {
@@ -139,6 +291,8 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 }
 
 $sql .= $from . $where;
+
+//echo htmlentities($sql);
 
 $sql_recently_viewed = "select
 c.company_id,
@@ -185,15 +339,35 @@ $rst = $con->execute($sql2);
 $company_category_menu = $rst->getmenu2('company_category_id', $company_category_id, true);
 $rst->close();
 
-$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_pretty_name";
-$rst = $con->execute($sql2);
-$crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', $crm_status_id, true));
-$rst->close();
 
+// secondary queries and menus for basic-search
 $sql2 = "select industry_pretty_name, industry_id from industries where industry_record_status = 'a' order by industry_pretty_name";
 $rst = $con->execute($sql2);
 $industry_menu = translate_menu($rst->getmenu2('industry_id', $industry_id, true));
 $rst->close();
+
+
+// secondary queries and menus for advanced-search
+if($advanced_search) {
+
+	// crm_status_menu
+	$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_pretty_name";
+	$rst = $con->execute($sql2);
+	$crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', $crm_status_id, true));
+	$rst->close();
+
+	// company_source_menu
+	$sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
+	$company_source_menu = check_and_get($con,$sql2,'company_source_id',$company_source_id);
+	//$company_source_menu = check_and_get($con,$sql2,'');
+
+	// country_menu
+	$sql2 = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
+	$country_menu = check_and_get($con,$sql2,'country_id',$country_id);
+	//$country_menu = check_and_get($con,$sql2,'');
+
+
+}
 
 if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
@@ -209,11 +383,7 @@ start_page($page_title, true, $msg);
 
         <form action=some.php class="print" method=post name="CompanyForm">
         <input type=hidden name=use_post_vars value=1>
-        <input type=hidden name=resort value="0">
-        <input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-        <input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-        <input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-        <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
+        <input type=hidden name=advanced_search value="<?php echo $advanced_search; ?>">
         <input type=hidden name=company_type_id value="<?php  echo $company_type_id; ?>">
         <input type=hidden name=company_code value="<?php  echo $company_code; ?>">
         <input type=hidden name=crm_status_id value="<?php  echo $crm_status_id; ?>">
@@ -265,11 +435,98 @@ start_page($page_title, true, $msg);
                 <input type=text name="state" size=5 value="<?php echo $state; ?>">
             </td>
         </tr>
+
+        <?php
+           	if($advanced_search) {
+           		echo "
+
+            <tr>
+                <td class=widget_label>" .   _("Address Name") . "</td>
+                <td class=widget_label>" .   _("Line 1") . "</td>
+                <td class=widget_label>" .   _("Line 2") . "</td>
+                <td class=widget_label>" .   _("Postal Code") . "</td>
+                <td class=widget_label colspan=2>" .   _("Country") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text name=address_name size=30 value=\"" .   $address_name  . "\"></td>
+                <td class=widget_content_form_element><input type=text name=line1 size=30 value=\"" .   $line1  . "\"></td>
+                <td class=widget_content_form_element><input type=text name=line2 size=30 value=\"" .   $line2  . "\"></td>
+                <td class=widget_content_form_element><input type=text name=postal_code size=10 value=\"" .   $postal_code  . "\"></td>
+                <td class=widget_content_form_element colspan=2>" .   $country_menu  . "</td>
+            </tr>
+            <tr>
+                <td class=widget_label colspan=2>" .   _("Override Address") . "</td>
+                <td class=widget_label>" .   _("Phone") . "</td>
+                <td class=widget_label>" .   _("Alt. Phone") . "</td>
+                <td class=widget_label colspan=2>" .   _("Fax") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=2 rowspan=3><textarea rows=5 cols=40 name=address_body value=\"" .   $address_body  . "\"></textarea></td>
+                <td class=widget_content_form_element><input type=text name=phone value=\"" .   $phone  . "\"></td>
+                <td class=widget_content_form_element><input type=text name=phone2 value=\"" .   $phone2  . "\"></td>
+                <td class=widget_content_form_element colspan=2><input type=text name=fax value=\"" .   $fax  . "\"></td>
+            </tr>
+             <tr>
+                <td class=widget_label colspan=4>" .   _("URL") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=4><input type=text name=url size=50 value=\"" .   $url  . "\"></td>
+            </tr>
+
+            <tr>
+                <td class=widget_label colspan=2>" .   _("Legal Name") . "</td>
+                <td class=widget_label>" .   _("Company Code") . "</td>
+                <td class=widget_label>" .   _("CRM Status") . "</td>
+                <td class=widget_label>" .   _("Company Source") . "</td>
+                <td class=widget_label>" .   _("Industry") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=2><input type=text size=50 name=legal_name value=\"" .   $legal_name  . "\"></td>
+                <td class=widget_content_form_element><input type=text size=10 name=company_code value=\"" .   $company_code  . "\"></td>
+                <td class=widget_content_form_element>" .    $crm_status_menu  . "</td>
+                <td class=widget_content_form_element>" .    $company_source_menu  . "</td>
+                <td class=widget_content_form_element>" .    $industry_menu  . "</td>
+            </tr>
+           <tr>
+                <td class=widget_label>" .   _("Employees") . "</td>
+                <td class=widget_label colspan=5>" .   _("Revenue") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text name=employees size=10 value=\"" .   $employees  . "\"></td>
+                <td class=widget_content_form_element colspan=5><input type=text name=revenue size=10 value=\"" .   $revenue  . "\"></td>
+            </tr>
+            <tr>
+                <td class=widget_label>" .   $company_custom1_label  . "</td>
+                <td class=widget_label>" .   $company_custom2_label  . "</td>
+                <td class=widget_label>" .   $company_custom3_label  . "</td>
+                <td class=widget_label colspan=3>" .   $company_custom4_label  . "</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text name=custom1 size=30 value=\"" .   $custom1  . "\"></td>
+                <td class=widget_content_form_element><input type=text name=custom2 size=30 value=\"" .   $custom2  . "\"></td>
+                <td class=widget_content_form_element><input type=text name=custom3 size=30 value=\"" .   $custom3  . "\"></td>
+                <td class=widget_content_form_element colspan=3><input type=text name=custom4 size=30 value=\"" .   $custom4  . "\"></td>
+            </tr>
+            <tr>
+                <td class=widget_label colspan=6>" .   _("Profile") . "</td>
+			<tr>
+			</tr>
+                <td class=widget_content_form_element colspan=6><textarea rows=10 cols=70 name=profile>" .   $profile  . "</textarea></td>
+            </tr>
+
+";
+
+			}
+        ?>
         <tr>
             <td class=widget_content_form_element colspan=6>
                 <input name="submit_form" type=submit class=button value="<?php echo _("Search"); ?>">
                 <input name="clear_search" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
-                <input name="advanced_search" type=button class=button onclick="javascript: location.href='advanced-search.php';" value="<?php echo _("Advanced Search"); ?>">
+                    <?php
+                        if(!$advanced_search) {
+							echo '<input name="advanced_search" type=button class=button onclick="javascript: location.href=\'some.php?advanced_search=true\';" value="' . _("Advanced Search") . '">';
+                        }
+                    ?>
             </td>
         </tr>
       </table>
@@ -289,6 +546,8 @@ $columns[] = array('name' => _("Industry"), 'index_sql' => 'industry');
 $columns[] = array('name' => _("CRM Status"), 'index_sql' => 'crm_status');
 $columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status', 'type' => 'html');
 $columns[] = array('name' => _("Rating"), 'index_sql' => 'rating', 'type' => 'html');
+
+$columns = array_merge($columns, $advanced_search_columns);
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
@@ -388,10 +647,30 @@ function clearSearchCriteria() {
 
 <?php
 
+function check_and_get ( $con, $sql, $nam, $default = false )
+{
+  $rst = $con->execute($sql);
+
+  if ( !$rst ) {
+    db_error_handler($con, $sql);
+  }
+  if ( !$rst->EOF && $nam ) {
+    $GLOBALS[$nam] = $rst->fields[$nam];
+  }
+  $tmp = $rst->getmenu2($nam, $default, true);
+
+  $rst->close();
+
+  return $tmp;
+}
+
 end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.65  2005/05/06 21:54:37  daturaarutad
+ * merged advanced-search fields into query and pager
+ *
  * Revision 1.64  2005/04/29 17:54:22  daturaarutad
  * fixed printing of form/search results
  *
