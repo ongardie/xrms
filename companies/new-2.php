@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.22 2005/04/26 17:28:04 gpowers Exp $
+ * $Id: new-2.php,v 1.23 2005/05/06 22:07:49 vanmer Exp $
  */
 require_once('../include-locations.inc');
 
@@ -57,6 +57,12 @@ $use_pretty_address = isset($_POST['use_pretty_address']) ? $_POST['use_pretty_a
 $first_names = $_POST['first_names'];
 $last_name = $_POST['last_name'];
 $email = $_POST['email'];
+getGlobalVar($title, 'title');
+getGlobalVar($work_phone, 'work_phone');
+getGlobalVar($work_phone_ext, 'work_phone_ext');
+getGlobalVar($cell_phone, 'cell_phone');
+getGlobalVar($home_phone, 'home_phone');
+getGlobalVar($contact_profile, 'contact_profile');
 
 $address_name = (strlen($address_name) > 0) ? $address_name : '[address]';
 $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
@@ -191,7 +197,26 @@ $rec['address_id'] = $address_id;
 $rec['first_names'] = $first_names;
 $rec['last_name'] = $last_name;
 $rec['email'] = $email;
-$rec['work_phone'] = $phone;
+if ($title) {
+    $rec['title'] = $title;
+}
+if ($work_phone) {
+    $rec['work_phone'] = preg_replace("/[^\d]/", '', $work_phone);
+} else {
+    $rec['work_phone'] = $phone;
+}
+if ($work_phone_ext) {
+    $rec['work_phone_ext']=$work_phone_ext;
+}
+if ($cell_phone) {
+    $rec['cell_phone']=preg_replace("/[^\d]/", '', $cell_phone);
+}
+if ($home_phone) {
+    $rec['home_phone']=preg_replace("/[^\d]/", '', $home_phone);
+}
+if ($contact_profile) {
+    $rec['profile']=$contact_profile;
+}
 $rec['fax'] = $fax;
 $rec['entered_at'] = time();
 $rec['entered_by'] = $session_user_id;
@@ -219,6 +244,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.23  2005/05/06 22:07:49  vanmer
+ * - added handling for new fields for a contact when creating a new company
+ *
  * Revision 1.22  2005/04/26 17:28:04  gpowers
  * - added Extension ("x") to contact work phone
  * - removed non-digits from phone numbers in edit-2's, new-2's
