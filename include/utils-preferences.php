@@ -18,7 +18,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.3 2005/05/06 00:49:17 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.4 2005/05/07 17:03:21 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -156,6 +156,9 @@ function delete_default_user_preference($con, $user_id, $preference_type, $delet
  * @return string specifying value of preference requested (or false for failure)
  */
 function get_user_preference($con, $user_id, $preference_type, $preference_name=false, $show_all=false) {
+    if (!$user_id AND $user_id!==0) {
+        return false;
+    }
 //    echo "IN get_user_preference<br>";
     if (is_numeric($preference_type)) {
 //        echo "NUMERIC";
@@ -587,6 +590,9 @@ function list_user_preference_types($con, $show_only_active=true){
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.4  2005/05/07 17:03:21  vanmer
+ * - added check for user_id before executing get preference function
+ *
  * Revision 1.3  2005/05/06 00:49:17  vanmer
  * - added needed expansion of user preferences to handle default options on a preference
  * - expanded preferences system
