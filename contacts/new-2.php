@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.18 2005/04/26 17:28:03 gpowers Exp $
+ * $Id: new-2.php,v 1.19 2005/05/07 00:09:56 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -50,6 +50,53 @@ $arr_vars = array ( // local var name             // session variable name, flag
 // get all posted in variables
 arr_vars_get_all ( $arr_vars , true);
 
+
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+getGlobalVar($home_address_id, 'home_address_id');
+if (!$home_address_id) {
+    getGlobalVar($address_name, 'address_name');    
+    
+    if ($address_name) {
+        getGlobalVar($address_country_id, 'address_country_id');
+        getGlobalVar($line1, 'line1');
+        getGlobalVar($line2, 'line2');
+        getGlobalVar($city, 'city');
+        getGlobalVar($province, 'province');
+        getGlobalVar($postal_code, 'postal_code');
+        getGlobalVar($address_type, 'address_type');
+        getGlobalVar($address_body, 'address_body');
+        getGlobalVar($use_pretty_address, 'use_pretty_address');
+        
+        if (!$city AND $_POST['city']) $city=$_POST['city'];
+        
+        $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
+        
+        $rec = array();
+        $rec['country_id'] = $address_country_id;
+        $rec['company_id']=$company_id;
+        $rec['line1'] = $line1;
+        $rec['line2'] = $line2;
+        $rec['city'] = $city;
+        $rec['province'] = $province;
+        $rec['postal_code'] = $postal_code;
+        $rec['address_type'] = $address_type;
+        $rec['address_name'] = $address_name;
+        $rec['address_body'] = $address_body;
+        $rec['use_pretty_address'] = $use_pretty_address;
+        $tbl = 'addresses';
+        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+        $rst=$con->execute($ins);
+        
+        if (!$rst) { db_error_handler( $con, $ins); }
+        $home_address_id = $con->insert_id();
+        if ($home_address_id!=0) {
+            add_audit_item($con, $session_user_id, 'created', 'addresses', $home_address_id, 1);
+        } else $home_address_id=1;
+    } 
+    else $home_address_id=1;
+}
 $last_name = (strlen($last_name) > 0) ? $last_name : "[last name]";
 $first_names = (strlen($first_names) > 0) ? $first_names : "[first names]";
 // If salutation is 0, make sure you replace it with an empty string
@@ -57,8 +104,6 @@ if(!$salutation) {
     $salutation = "";
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 //save to database
 $rec = array();
@@ -92,6 +137,7 @@ $rec['entered_by'] = $session_user_id;
 $rec['entered_at'] = time();
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
+$rec['home_address_id']=$home_address_id;
 
 $tbl = 'contacts';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -111,6 +157,10 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.19  2005/05/07 00:09:56  vanmer
+ * - added handling for adding a new home address for a contact when adding a new contact
+ * - added default home address to address 1 (unknown)
+ *
  * Revision 1.18  2005/04/26 17:28:03  gpowers
  * - added Extension ("x") to contact work phone
  * - removed non-digits from phone numbers in edit-2's, new-2's
