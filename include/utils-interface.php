@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.60 2005/05/06 15:23:11 braverock Exp $
+ * $Id: utils-interface.php,v 1.61 2005/05/07 17:02:35 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -153,8 +153,10 @@ function get_css_themes() {
     global $http_site_root;
     global $xrms_file_root;
     //if themes have been retrieved, use them from the session
-    if (array_key_exists('xrms_css_themes',$_SESSION)) {
-        return $_SESSION['xrms_css_themes'];
+    if ($_SESSION) {
+        if (array_key_exists('xrms_css_themes',$_SESSION)) {
+            return $_SESSION['xrms_css_themes'];
+        }
     }
     $cssroot = $http_site_root.'/css';
     $cssdir = $xrms_file_root.'/css/';
@@ -719,6 +721,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.61  2005/05/07 17:02:35  vanmer
+ * - added check for session existing before attempting to retrieve xrms themes from session
+ *
  * Revision 1.60  2005/05/06 15:23:11  braverock
  * - change order logo.css stylesheet is loaded in so that later shhets can
  *   override to change the logo
