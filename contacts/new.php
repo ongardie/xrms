@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.25 2005/05/06 00:14:24 daturaarutad Exp $
+ * $Id: new.php,v 1.26 2005/05/07 00:10:56 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -132,12 +132,27 @@ if ( !isset($address_menu) ) {
   $address_menu = '';
 }
 
-$con->close();
-
 // TBD - BUG - $gender should be set from database
 if ( !isset($gender) ) {
   $gender = '';
 }
+
+$sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
+$rst = $con->execute($sql);
+if (!$country_id) {$country_id = $default_country_id;}
+
+$country_menu = $rst->getmenu2('address_country_id', $country_id, false);
+$rst->close();
+
+$address_type_menu = build_address_type_menu($con, $address_type);
+
+$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+$rst = $con->execute($sql);
+$rst->close();
+
+$home_address_menu = $rst->getmenu2('home_address_id', $home_address_id, true);
+
+$con->close();
 
 $page_title = _("New Contact for") . ' ' . $company_name;
 start_page($page_title, true, $msg);
@@ -145,9 +160,53 @@ start_page($page_title, true, $msg);
 ?>
 
 <div id="Main">
+    <div id="Sidebar">
+        <form action=new-2.php method=post>
+        <table class=widget><tr><td colspan=2 class=widget_header>Home Address</td></tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Home Address"); ?></td>
+                <td class=widget_content_form_element><?php echo $home_address_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Address Name"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Line 1"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=line1 value="<?php echo $line1; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Line 2"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=line2 value="<?php echo $line2; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("City"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=city value="<?php echo $city; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("State/Province"); ?></td>
+                <td class=widget_content_form_element><input type=text size=20 name=province value="<?php echo $province; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
+                <td class=widget_content_form_element><input type=text size=10 name=postal_code value="<?php echo $postal_code; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Country"); ?></td>
+                <td class=widget_content_form_element><?php echo $country_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Address Type"); ?></td>
+                <td class=widget_content_form_element><?php echo $address_type_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right_91px><?php echo _("Address Body"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> <?php echo _("Use"); ?></td>
+            </tr>
+        </table>
+    </div>
     <div id="Content">
 
-        <form action=new-2.php method=post>
         <input type=hidden name=company_id value="<?php echo $company_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -268,13 +327,6 @@ start_page($page_title, true, $msg);
 
     </div>
 
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
-
 </div>
 
 <script language="JavaScript" type="text/javascript">
@@ -293,6 +345,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.26  2005/05/07 00:10:56  vanmer
+ * - added sidebar for adding a new address when adding a new contact
+ * - move form to include new address fields
+ *
  * Revision 1.25  2005/05/06 00:14:24  daturaarutad
  * added ability to clone contacts
  *
