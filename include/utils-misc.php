@@ -8,9 +8,10 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.127 2005/05/06 15:24:13 braverock Exp $
+ * $Id: utils-misc.php,v 1.128 2005/05/07 17:04:04 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
+require_once($include_directory.'utils-preferences.php');
 
 if ( !defined('IN_XRMS') )
 {
@@ -1553,6 +1554,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.128  2005/05/07 17:04:04  vanmer
+ * - require utils-preferences in utils-misc, to allow user preference lookups
+ *
  * Revision 1.127  2005/05/06 15:24:13  braverock
  * - minor code formatting changes
  *
