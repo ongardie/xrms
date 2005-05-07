@@ -1,7 +1,7 @@
 XRMS - README
 
 =============================================================
-/** $Id: README,v 1.19 2005/03/09 17:14:05 daturaarutad Exp $ **/
+/** $Id: README,v 1.20 2005/05/07 17:41:25 braverock Exp $ **/
 
 ========================
 SUMMARY
@@ -18,29 +18,33 @@ to fulfill your needs.
 We believe that XRMS is the most advanced open source CRM application
 written in PHP.  We hope that you will find it useful.
 
+XRMS is a community-driven and supported development effort.  Companies that
+are using XRMS contribute money and developer time to improve the system.
+
 ========================
 VERSION
 
-2005-01-12
+2005-03-07
 
 This version has had many many bug fixes and enhancements.  We have also
 added an automated installation, update, and data integrity process. See
 the file install/INSTALL for details.
 
-This release fixes over 50 bugs, and adds many many enhancements.
-The Relationships and Workflow areas have received particular attention.
+This release fixes over 30 bugs, and adds many many enhancements.
+
+We have added significant improvements to the Workflow system, usability across
+XRMS, related activity tracking, and the CSS themes.  This version also
+introduces the User Preference system, starting with preferences for Language
+and Theme. RSS feeds for new companies, contacts, and activites have been added.
+Many new plugins have been contributed by companies using XRMS.
+
+The list goes on and on.
 
 We recommend that if more than a few days has passed since the date on a release
 tarball that you consider downloading and installing a development snapshot
 instead.  These are normally quite stable, as the development team is probably
 using that code in production at their respective companies.
 
-
-This version of XRMS raises the MySQL recommendation to 4.x for better
-compatibility with the ADOdb Concat and Cast operators.  ADOdb attempts to mirror
-this functionality in older MySQL installations, so you can try things without
-upgrading MySQL first, but be aware that you may need to upgrade to a newer
-MySQL version to get everything running.
 
 COPYRIGHTS
 
@@ -66,14 +70,15 @@ for David's hard work.  At this point, any database supported by
 ADOdb version 4.22 *should* work seamlessly with XRMS.  To the best of our
 knowledge, XRMS has been successfully deployed on MySQL, MS SQL Server,
 Postgres, and SAP-DB/MaxDB.  It should work flawlessly on Oracle and DB/2 as
-well.  If you encounter problems or would like to tweak things to work better
-with some other database, please let the development team know, and we will be
-happy to work with you to get your issue resolved.
+well.  Installing on PostgreSQL still requires manual modification of the
+installation scripts. If you encounter problems or would like to tweak things to
+work better with some other database, please let the development team know,
+and we will be happy to work with you to get your issue resolved.
 
 See include/adodb/docs/docs-adodb.htm#drivers for more information on the
 databases supported by ADOdb.
 
-This version of XRMS raises the MySQL recommendation to 4.x for better
+If you are using MySQL, XRMS strongly recommends MySQL v 4.x+ for better
 compatibility with the ADOdb Concat and Cast operators.  ADOdb attempts to mirror
 this functionality in older MySQL installations, so you can try things without
 upgrading MySQL first, but be aware that you may need to upgrade to a newer
@@ -225,7 +230,7 @@ We also currently use Aditus Consulting's JPGraph classes in some reports.
 http://www.aditus.nu/jpgraph/index.php
 
 Some administration pages currently make use of the PEAR HTML_QuickForm classes.
-These may be downloaded from http://pear.php.net/package/HTML_QuickForm or by 
+These may be downloaded from http://pear.php.net/package/HTML_QuickForm or by
 simply entering 'pear install HTML_QuickForm' on the command line, if you have
 PEAR installed.
 
@@ -406,6 +411,9 @@ suggestions, bug fixes, and discussion contributed by each of you.
 /**
  * Changelog for README file
  * $Log: README,v $
+ * Revision 1.20  2005/05/07 17:41:25  braverock
+ * - updated to reflect 2005-05-07 release
+ *
  * Revision 1.19  2005/03/09 17:14:05  daturaarutad
  * updated to reflect new jpgraph usage and HTML_QuickForm requirement; added myself as a developer
  *
