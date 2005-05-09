@@ -11,7 +11,7 @@
  * status = open or scheduled or overdue or closed or current (open or closed).  Default all.
  * type = limit activity type.  Default all.
  *
- * $Id: activities.php,v 1.4 2005/03/20 15:22:23 maulani Exp $
+ * $Id: activities.php,v 1.5 2005/05/09 13:05:21 maulani Exp $
  */
 
 //include required files
@@ -180,6 +180,9 @@ if ($type != 'all') {
 }
 
 switch ($status) {
+case "all":
+	$sql .= 'ORDER BY a.last_modified_at DESC';
+	break;
 case "open":
 	$sql .= "AND a.activity_status = 'o' and a.scheduled_at <= NOW() ";
 	$sql .= 'ORDER BY a.last_modified_at DESC';
@@ -257,6 +260,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: activities.php,v $
+ * Revision 1.5  2005/05/09 13:05:21  maulani
+ * - Correct SQL for All Activities case
+ *
  * Revision 1.4  2005/03/20 15:22:23  maulani
  * - Have RSS feed title relect options selected by user
  *
