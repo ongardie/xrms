@@ -22,10 +22,9 @@ GetGlobalVar($return_url,'return_url');
 GetGlobalVar($msg, 'msg');
 GetGlobalVar($relationship_entities,'relationship_entities');
 GetGlobalVar($relationship_entity, 'relationship_entity');
-    
+
 //retrieve relationship array provided by one.php pages (urlencoded and serialized by relationships/sidebar.php)
 $relationship_entities_array=unserialize(urldecode($relationship_entities));
-
 
 if ($relationship_entity) {
     //Split relationship entity into table and ID (comma separated to start with)
@@ -132,6 +131,7 @@ function restrictByEntity() {
         <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
         <input type="hidden" name="on_what_table" value="<?php echo $on_what_table; ?>">
         <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
+        <input type="hidden" name="relationship_entities" value="<?php echo $relationship_entities; ?>">
         <table class=widget cellspacing=1>
             <tr>
                  <td class=widget_content_form_element><?php echo $entity_select; ?>
@@ -146,6 +146,9 @@ function restrictByEntity() {
 <?php
 /*
  * $Log: new-relationship.php,v $
+ * Revision 1.16  2005/05/09 01:33:50  vanmer
+ * - added relationship entities as hidden variable in order to pass back in case of error
+ *
  * Revision 1.15  2005/01/12 18:16:59  vanmer
  * - updated to allow multiple intial entities to be created, all from single page
  * - reloads to restrict list of possible relationship_types upon initital entity selection
