@@ -6,7 +6,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: install-utils.inc,v 1.9 2005/04/17 15:10:52 maulani Exp $
+ * $Id: install-utils.inc,v 1.10 2005/05/09 13:47:43 maulani Exp $
  */
 
 /**
@@ -40,19 +40,23 @@ EOQ;
 function check_extra_whitespace($path, $filename) {
     $filepath = $path . $filename;
     $contents = file($filepath);
-    $endchars = $contents[count($contents) -1];
+    $endchars = $contents[count($contents) - 1];
     //this is an include file.  no whitespace characters are
     //acceptable at the end because they trigger php to send the page
     //headers too early.  char(10) and char(13) must be eliminated along
     //with other whitespace.
     if($endchars != '?>') {
+        $firstchar = ord(substr($endchars, 1, 1));
+        $secondchar = ord(substr($endchars, 2, 1));
         $failuremsg = "The file  ";
         $failuremsg .= $filename;
         $failuremsg .= " does not end with the characters ?>. ";
         $failuremsg .= "You probably have added extra whitespace to the end. ";
         $failuremsg .= "Please remove the extra characters and run install again.  ";
         $failuremsg .= "(Whitespace includes spaces, tabs, carriage returns ";
-        $failuremsg .= "and line feeds.)";
+        $failuremsg .= "and line feeds.)  The ascii codes (in decimal) for the last two ";
+        $failuremsg .= "characters are $firstchar and $secondchar.  You can ";
+        $failuremsg .= "lookup these codes at www.asciitable.com.";
         install_fatal_error($failuremsg);
     }
 } // end check_extra_whitespace fn
@@ -60,6 +64,9 @@ function check_extra_whitespace($path, $filename) {
 
 /**
  * $Log: install-utils.inc,v $
+ * Revision 1.10  2005/05/09 13:47:43  maulani
+ * - Add additional information to the whitespace failure message
+ *
  * Revision 1.9  2005/04/17 15:10:52  maulani
  * - Fix whitespace check
  *
