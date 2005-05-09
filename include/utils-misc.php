@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.128 2005/05/07 17:04:04 vanmer Exp $
+ * $Id: utils-misc.php,v 1.129 2005/05/09 22:40:37 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1539,6 +1539,94 @@ function make_where_string($con, $criteria_array, $tablename=false) {
     else return false;
 }
 
+
+/**
+ * Check if function is cached
+ *
+ * This returns bool if the function passed is cached or not
+ * Can not just return false on function_cache_get because false is a valid cached response
+ *
+ * @author  Tom Setliff
+ *
+ * @param string $func_name Name of the Function
+ * @param array $params Parameters returned from 
+ *
+ * @return bool if we have the function cached
+ */
+function function_cache_bool($func_name, $params) {
+    global $xrms_function_cache;
+    $key = implode('|',$params);
+    if (isset($xrms_function_cache[$func_name][$key])) {
+        return true;   
+    }
+    if (isset($_SESSION['XRMS_function_cache'][$func_name][$key])) {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Get cached value of function
+ *
+ * Return mixed value of function
+ *
+ * @author Tom Setliff
+ *
+ * @param string $func_name Name of the Function
+ * @param array $params Parameters  of a function to fetch
+ *
+ * @return mixed The return of the function cached
+ */
+function function_cache_get($func_name, $params) {
+    global $xrms_function_cache;
+    $key = implode('|',$params);
+    if (isset($xrms_function_cache[$func_name][$key])) {
+        //echo("returning cache for just this page request");
+        return $xrms_function_cache[$func_name][$key];
+    }
+    //echo("returning cache for session");
+    return $_SESSION['XRMS_function_cache'][$func_name][$key];
+}
+
+/**
+ * Save function return value to cache
+ *
+ * This function will save a cached value to a global var where it will only be avaliable for this page request
+ * or by setting $this_request_only to false you can save it for the duration of the session.  This should be
+ * useful for values that remain constant to a particular user.  This function should be implemented for database
+ * intensive calls that should only be run once per session. To do this add these lines to the start of a function:
+ * $func_args = func_get_args();
+ * $func_name = 'change_this_to_be_the_name_of_your_function';
+ * if (function_cache_bool($func_name, $func_args)) {
+ *     return function_cache_get($func_name, $func_args);   
+ * }
+ * and add function_cache_set($func_name, $func_args, $ret,false); right before the return statement
+ * The number of lines added to the start of the function are required because of the PHP limitation on func_get_args()
+ *
+ * @author  Tom Setliff
+ *
+ * @param string $func_name Name of the Function
+ * @param array $params Parameters returned from 
+ * @param mixed $ret Value from function to save
+ * @param bool $this_request_only If this is set then the result is cached just for this page request in a global var
+ */
+function function_cache_set($func_name, $params, $ret,
+$this_request_only = true) {
+    global $xrms_function_cache;
+    $key = implode('|',$params);
+    if ($this_request_only) {
+        //echo("setting value for this request<br>\n");
+        $xrms_function_cache[$func_name][$key] = $ret;
+        unset($_SESSION['XRMS_function_cache'][$func_name][$key]);
+    } else {
+        //echo("setting $params value for duration of session<br>\n");
+        $_SESSION['XRMS_function_cache'][$func_name][$key] = $ret;
+        unset($function_cache[$func_name][$key]);   
+    }
+}
+
+
+
 /**
  * Include the i18n files, as every file with output will need them
  *
@@ -1554,6 +1642,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.129  2005/05/09 22:40:37  vanmer
+ * - added functions for caching function results into session or global variables for re-use
+ * Based on code from Tom Setliff
+ *
  * Revision 1.128  2005/05/07 17:04:04  vanmer
  * - require utils-preferences in utils-misc, to allow user preference lookups
  *
