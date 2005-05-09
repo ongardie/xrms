@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.85 2005/05/06 00:14:24 daturaarutad Exp $
+ * $Id: one.php,v 1.86 2005/05/09 19:54:34 ycreddy Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -81,7 +81,7 @@ if ($rst) {
     $profile = str_replace ("\n","<br>\n",htmlspecialchars($profile));
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
     $work_phone_ext = $rst->fields['work_phone_ext'];
-    if ($work_phone_ext) {
+    if (trim($work_phone_ext)) {
             $work_phone_ext_display = '&nbsp;' . _("x") . $work_phone_ext;
     }
     $cell_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['cell_phone']);
@@ -601,6 +601,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.86  2005/05/09 19:54:34  ycreddy
+ * Added trim check on work_phone_ext
+ *
  * Revision 1.85  2005/05/06 00:14:24  daturaarutad
  * added ability to clone contacts
  *
