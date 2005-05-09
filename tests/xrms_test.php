@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test.php,v 1.2 2005/05/06 00:51:18 vanmer Exp $
+ * $Id: xrms_test.php,v 1.3 2005/05/09 22:42:10 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -142,6 +142,31 @@ Class XRMSTest extends PHPUnit_TestCase {
         return $ret;
     }
     
+    function test_function_cache($func_name='test_function_cache_set', $params=false, $ret='TEST', $this_request_only=false) {
+        if (!$this_request_only) {
+            session_start();
+        }
+        if (!$params) { 
+            $params=func_get_args();
+        }
+        $key=implode('|',$params);
+        
+        function_cache_set($func_name, $params, $ret, $this_request_only);
+        if ($this_request_only) {
+            global $xrms_function_cache;
+            $this->assertTrue(isset($xrms_function_cache[$func_name][$key]), "Failed to cache function into global variable for $func_name $key");
+            $this->assertTrue($xrms_function_cache[$func_name][$key]==$ret, "Failed to properly cache $func_name $key $ret!={$xrms_function_cache[$func_name][$key]}"); 
+        } else {
+            $this->assertTrue(isset($_SESSION['XRMS_function_cache'][$func_name][$key]), "Failed to cache function into session for $func_name $key");
+            $this->assertTrue($_SESSION['XRMS_function_cache'][$func_name][$key]==$ret, "Failed to properly cache $func_name $key $ret!={$_SESSION['XRMS_function_cache'][$func_name][$key]}");
+        }
+        
+        $this->assertTrue(function_cache_bool($func_name, $params), "Failed function_cache_bool check for $func_name $key");
+        
+        $testRet = function_cache_get($func_name, $params);
+        $this->assertTrue($testRet==$ret, "Failed to successfully fetch cached $func_name $key, got $testRet instead");
+       return $testRet;
+    }
     
 }
 
@@ -166,6 +191,9 @@ $display->show();
  */
 /*
  * $Log: xrms_test.php,v $
+ * Revision 1.3  2005/05/09 22:42:10  vanmer
+ * - added test for new session caching functions
+ *
  * Revision 1.2  2005/05/06 00:51:18  vanmer
  * - added tests for preferences system options
  *
