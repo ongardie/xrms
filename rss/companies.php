@@ -7,7 +7,7 @@
  * max = maximum number of entries.  Overridden by system parameter if necessary
  * status = new or modified.  Default new.
  *
- * $Id: companies.php,v 1.2 2005/03/20 14:46:46 maulani Exp $
+ * $Id: companies.php,v 1.3 2005/05/09 13:06:15 maulani Exp $
  */
 
 //include required files
@@ -58,7 +58,7 @@ default:
 	break;
 }
 
-$sql = "SELECT c.company_id, c.company_name 
+$sql = "SELECT c.company_id, c.company_name, c.entered_at, c.last_modified_at
         FROM companies c
         WHERE c.company_record_status = 'a' ";
 
@@ -80,8 +80,12 @@ if ($rst) {
 		$company_id = $rst->fields['company_id'];
 		$company_name = str_replace("&", "&amp;", htmlentities($rst->fields['company_name'], ENT_COMPAT, 'UTF-8'));
 		$entered_at = $rst->fields['entered_at'];
-		$last_modified_at = $rst->fields['last_modified_at'];
-		$pub_date = date("r", strtotime($ends_at));
+		$last_modified_at = $rst->fields['last_modified_at'];		
+		if ($status == 'modified') {
+			$pub_date = date("r", strtotime($last_modified_at));
+		} else {
+			$pub_date = date("r", strtotime($entered_at));
+		}
 		$items_text .= "      <item>\n";
 		$items_text .= '         <title>' . $company_name . '</title>' . "\n";
 		$items_text .= '         <link>' . $http_site_root . '/companies/one.php?company_id=' .$company_id . '</link>' . "\n";
@@ -123,6 +127,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: companies.php,v $
+ * Revision 1.3  2005/05/09 13:06:15  maulani
+ * - Correct SQL to use correct publication date
+ *
  * Revision 1.2  2005/03/20 14:46:46  maulani
  * - Have RSS feed title relect options selected by user
  *

@@ -7,7 +7,7 @@
  * max = maximum number of entries.  Overridden by system parameter if necessary
  * status = new or modified.  Default new.
  *
- * $Id: contacts.php,v 1.2 2005/03/20 14:46:46 maulani Exp $
+ * $Id: contacts.php,v 1.3 2005/05/09 13:06:15 maulani Exp $
  */
 
 //include required files
@@ -58,7 +58,8 @@ default:
 	break;
 }
 
-$sql = "SELECT c.contact_id, b.company_name, CONCAT(c.first_names, ' ', c.last_name) as contact_name
+$sql = "SELECT c.contact_id, b.company_name, CONCAT(c.first_names, ' ', c.last_name) as contact_name,
+               c.entered_at, c.last_modified_at
         FROM contacts c, companies b
         WHERE c.contact_record_status = 'a' and c.company_id=b.company_id ";
 
@@ -82,7 +83,11 @@ if ($rst) {
 		$company_name = str_replace("&", "&amp;", htmlentities($rst->fields['company_name'], ENT_COMPAT, 'UTF-8'));
 		$entered_at = $rst->fields['entered_at'];
 		$last_modified_at = $rst->fields['last_modified_at'];
-		$pub_date = date("r", strtotime($ends_at));
+		if ($status == 'modified') {
+			$pub_date = date("r", strtotime($last_modified_at));
+		} else {
+			$pub_date = date("r", strtotime($entered_at));
+		}
 		$items_text .= "      <item>\n";
 		$items_text .= '         <title>' . $contact_name . '</title>' . "\n";
 		$items_text .= '         <link>' . $http_site_root . '/contacts/one.php?contact_id=' .$contact_id . '</link>' . "\n";
@@ -124,6 +129,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: contacts.php,v $
+ * Revision 1.3  2005/05/09 13:06:15  maulani
+ * - Correct SQL to use correct publication date
+ *
  * Revision 1.2  2005/03/20 14:46:46  maulani
  * - Have RSS feed title relect options selected by user
  *
