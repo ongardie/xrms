@@ -28,6 +28,7 @@ if ($relationship_entity) {
     $on_what_table=array_shift($relationship_entity_array);
     $on_what_id = array_shift($relationship_entity_array);
 }
+getGlobalVar($relationship_entities,'relationship_entities');
 
 getGlobalVar($relationship_type_direction, 'relationship_type_direction');
 $typedirection = explode(",", $relationship_type_direction);
@@ -84,31 +85,6 @@ else {
 }
 
 
-$page_title = _("Add Relationship for ". $display_name_singular);
-start_page($page_title, true, $msg);
-
-?>
-
-<div id="Main">
-    <div id="Content">
-
-        <form action="<?php echo $http_site_root . "/" . $what_table . "/one.php"; ?>" method=get target="_blank">
-        <input type="hidden" name="<?php echo $what_table_singular; ?>_id">
-        </form>
-        <form action=new-relationship-3.php method=post <?php if($working_direction == "both") { ?>onsubmit="document.forms[1].working_direction.value = (document.forms[1].relationship_type_id.selectedIndex < (document.forms[1].relationship_type_id.length / 2)) ? 'from' : 'to'; return true;"<?php } ?>>
-        <input type="hidden" name="relationship_type_id" value="<?php echo $relationship_type_id; ?>">
-        <input type="hidden" name="working_direction" value="<?php echo $working_direction; ?>">
-        <input type="hidden" name="real_working_direction" value="<?php echo $working_direction; ?>">
-        <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
-        <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header><?php echo $display_name; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><?php echo $name; ?> <?php echo $text; ?>
-
-<?php
 if(empty($search_on) OR !eregi("[0-9]", $search_on)) {
     if(!empty($search_on)) {
         $search_on = $con->qstr("%$search_on%", get_magic_quotes_gpc());
@@ -156,13 +132,13 @@ if(empty($search_on) OR !eregi("[0-9]", $search_on)) {
         db_error_handler($con, $sql);
     }
     elseif(!$rst->EOF) {
-        echo $rst->getmenu2('on_what_id2', '', false);
-        echo " &nbsp; <input type=button class=button value='"._("More Info")."' "
+        $search_output.= $rst->getmenu2('on_what_id2', '', false);
+        $search_output.= " &nbsp; <input type=button class=button value='"._("More Info")."' "
             . "onclick='document.forms[0]." . $what_table_singular
             . "_id.value=document.forms[1].on_what_id2.options[document.forms[1].on_what_id2.selectedIndex].value; document.forms[0].submit();'>";
     }
     else {
-        echo _("There is no $what_table_singular by that name");
+        $error_msg= _("There is no $what_table_singular by that name");
     }
 }
 else {
@@ -177,14 +153,40 @@ else {
         db_error_handler($con, $sql);
     }
     elseif(!$rst->EOF) {
-        echo "<input type=hidden name=on_what_id2 value=$search_on>{$rst->fields['name']}\n";
+        $search_output.= "<input type=hidden name=on_what_id2 value=$search_on>{$rst->fields['name']}\n";
     }
     else {
-        echo _("There is no $what_table_singular by that ID");
+        $error_msg= _("There is no $what_table_singular by that ID");
     }
 }
+if ($error_msg) {
+    $relationship_entities=urlencode($relationship_entities);
+    Header("Location: new-relationship.php?msg=$error_msg&relationship_entities=$relationship_entities&return_url=$return_url");
+}
+$page_title = _("Add Relationship for ". $display_name_singular);
+start_page($page_title, true, $msg);
 
 ?>
+
+<div id="Main">
+    <div id="Content">
+
+        <form action="<?php echo $http_site_root . "/" . $what_table . "/one.php"; ?>" method=get target="_blank">
+        <input type="hidden" name="<?php echo $what_table_singular; ?>_id">
+        </form>
+        <form action=new-relationship-3.php method=post <?php if($working_direction == "both") { ?>onsubmit="document.forms[1].working_direction.value = (document.forms[1].relationship_type_id.selectedIndex < (document.forms[1].relationship_type_id.length / 2)) ? 'from' : 'to'; return true;"<?php } ?>>
+        <input type="hidden" name="relationship_type_id" value="<?php echo $relationship_type_id; ?>">
+        <input type="hidden" name="working_direction" value="<?php echo $working_direction; ?>">
+        <input type="hidden" name="real_working_direction" value="<?php echo $working_direction; ?>">
+        <input type="hidden" name="on_what_id" value="<?php echo $on_what_id; ?>">
+        <input type="hidden" name="return_url" value="<?php echo $return_url ?>">
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header><?php echo $display_name; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><?php echo $name; ?> <?php echo $text; ?>
+                    <?php echo $search_output; ?>
                </td>
             </tr>
             <tr>
@@ -212,6 +214,10 @@ end_page();
 
 /**
  * $Log: new-relationship-2.php,v $
+ * Revision 1.25  2005/05/09 01:34:46  vanmer
+ * - changed output to occur after start_page, calculations to occur before start_page
+ * - changed to redirect to search page when error occurs in search
+ *
  * Revision 1.24  2005/01/12 18:18:11  vanmer
  * - added parsing of relationship_entity to provide ablity for multiple entities on original screen
  *
