@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.65 2005/05/06 21:54:37 daturaarutad Exp $
+ * $Id: some.php,v 1.66 2005/05/09 05:01:53 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -74,7 +74,7 @@ u.username AS "user" ,
 industry_pretty_name as "industry" ,
 crm_status_pretty_name AS "crm_status" ,
 as1.account_status_display_html AS "account_status" ,
-r.rating_display_html AS "rating"';
+r.rating_display_html AS "rating" ';
 
 $criteria_count = 0;
 
@@ -668,6 +668,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.66  2005/05/09 05:01:53  daturaarutad
+ * fixed missing space after query
+ *
  * Revision 1.65  2005/05/06 21:54:37  daturaarutad
  * merged advanced-search fields into query and pager
  *
