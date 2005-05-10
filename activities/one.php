@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.93 2005/05/05 23:01:02 braverock Exp $
+ * $Id: one.php,v 1.94 2005/05/10 21:31:43 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -321,19 +321,15 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
 $columns = $pager_columns->GetUserColumns('default');
 
-
-// output the selectable columns widget
-echo $pager_columns_selects;
-
 // caching is disabled for this pager (since it's all sql)
 //$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', _('Search Results'), 'ActivitiesData', 'SomeActivitiesPager', $columns, false, true);
-$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', _('Related Activities'), 'OneActivityForm', 'SomeActivitiesPager', $columns, false, true);
+$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', _("Related Activities"), 'OneActivityForm', 'SomeActivitiesPager', $columns, false, true);
 
 // set up the bottom row of buttons
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _("Mail Merge") . "\"></td></tr>";
 
 $pager->AddEndRows($endrows);
 
@@ -575,7 +571,12 @@ function logTime() {
         <form action=one.php name="OneActivityForm" method=post>
             <input type=hidden name="activity_id" value="<?php echo $activity_id; ?>">
             <input type=hidden name="return_url" value="<?php echo $return_url; ?>">
-            <?php echo $related_activites_widget; ?>
+            <?php
+                // output the selectable columns widget
+                echo $pager_columns_selects;
+
+                echo $related_activites_widget;
+            ?>
         </form>
 
         <?php echo $activity_content_bottom; ?>
@@ -628,6 +629,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.94  2005/05/10 21:31:43  braverock
+ * - modify so selectable columns widget is rendered inside the <html> and <form> tags
+ *
  * Revision 1.93  2005/05/05 23:01:02  braverock
  * - changed labels on Summary, Scheduled Start, Scheduled End columns in pager
  *   for consistency in naming conventions
