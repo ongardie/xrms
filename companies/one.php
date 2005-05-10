@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.108 2005/05/04 14:27:30 braverock Exp $
+ * $Id: one.php,v 1.109 2005/05/10 13:44:22 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -502,58 +502,58 @@ function markComplete() {
                                 <table border=0 cellpadding=0 cellspacing=0 width="100%">
                                 <tr>
                                     <td width="1%" class=sublabel><?php echo _("Company Name"); ?></td>
-                                    <td class=clear><?php  echo $company_name; ?></td>
+                                    <td class=clear><?php echo $company_name; ?></td>
                                 </tr>
                                 <?php if ($legal_name) { ?>
                                 <tr>
                                     <td width="1%" class=sublabel><?php echo _("Legal Name"); ?></td>
-                                    <td class=clear><?php  echo $legal_name; ?></td>
+                                    <td class=clear><?php echo $legal_name; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php  echo $former_name_rows; ?>
+                                <?php echo $former_name_rows; ?>
                                 <?php if ($company_code) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Code"); ?></td>
-                                    <td class=clear><?php  echo $company_code; ?></td>
+                                    <td class=clear><?php echo $company_code; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if ($industry_pretty_name) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Industry"); ?></td>
-                                    <td class=clear><?php  echo $industry_pretty_name; ?></td>
+                                    <td class=clear><?php echo $industry_pretty_name; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if ($crm_status_pretty_name) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("CRM Status"); ?></td>
-                                    <td class=clear><?php  echo $crm_status_pretty_name; ?></td>
+                                    <td class=clear><?php echo $crm_status_pretty_name; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if ($owner_username) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Account Owner"); ?></td>
-                                    <td class=clear><?php  echo $owner_username; ?></td>
+                                    <td class=clear><?php echo $owner_username; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if ($phone) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Phone"); ?></td>
-                                    <td class=clear><?php  echo $phone; ?></td>
+                                    <td class=clear><?php echo $phone; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($phone2) { ?>
+                                <?php if trim($phone2) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Alt. Phone"); ?></td>
-                                    <td class=clear><?php  echo $phone2; ?></td>
+                                    <td class=clear><?php echo $phone2; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if ($fax) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Fax"); ?></td>
-                                    <td class=clear><?php  echo $fax; ?></td>
+                                    <td class=clear><?php echo $fax; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($url) { ?>
+                                <?php if trim($url) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("URL"); ?></td>
                                     <td class=clear><?php echo $url; ?></td>
@@ -592,16 +592,16 @@ function markComplete() {
                                     <td class=clear><?php echo $account_status; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($tax_id) { ?>
+                                <?php if trim($tax_id) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Tax ID"); ?></td>
                                     <td class=clear><?php echo $tax_id; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($credit_limit OR $current_credit_limit) { ?>
+                                <?php if (trim($credit_limit) OR trim($current_credit_limit)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Credit Limit"); ?></td>
-                                    <td class=clear>$<?php echo $credit_limit; ?> <?php echo $current_credit_limit; ?></td>
+                                    <td class=clear>$<?php echo $credit_limit.' '.$current_credit_limit; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if ($rating) { ?>
@@ -610,10 +610,10 @@ function markComplete() {
                                     <td class=clear><?php echo $rating; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($terms) { ?>
+                                <?php if trim($terms) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Terms"); ?></td>
-                                    <td class=clear><?php echo $terms; ?> <?php echo _("days"); ?></td>
+                                    <td class=clear><?php echo $terms.' '. _("days"); ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <!-- accounting plugin -->
@@ -628,13 +628,13 @@ function markComplete() {
                                     <td class=clear><?php echo $company_source; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($employees) { ?>
+                                <?php if trim($employees) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Employees"); ?></td>
-                                    <td class=clear><?php  echo $employees; ?></td>
+                                    <td class=clear><?php echo $employees; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if ($revenue) { ?>
+                                <?php if trim($revenue) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Revenue"); ?></td>
                                     <td class=clear><?php echo $revenue; ?></td>
@@ -647,25 +647,25 @@ function markComplete() {
                                 <?php if (trim($custom1)) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _($company_custom1_label); ?></td>
-                                    <td class=clear><?php  echo $custom1; ?></td>
+                                    <td class=clear><?php echo $custom1; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if (trim($custom2)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom2_label); ?></td>
-                                    <td class=clear><?php  echo $custom2; ?></td>
+                                    <td class=clear><?php echo $custom2; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if (trim($custom3)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom3_label); ?></td>
-                                    <td class=clear><?php  echo $custom3; ?></td>
+                                    <td class=clear><?php echo $custom3; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <?php if (trim($custom4)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom4_label); ?></td>
-                                    <td class=clear><?php  echo $custom4; ?></td>
+                                    <td class=clear><?php echo $custom4; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 <tr>
@@ -675,11 +675,11 @@ function markComplete() {
                                     <?php echo $relationship_rows; ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Created"); ?></td>
-                                    <td class=clear><?php  echo $entered_at; ?> by <?php echo $entered_by; ?></td>
+                                    <td class=clear><?php echo $entered_at .' '. _("by") .' '. $entered_by; ?></td>
                                 </tr>
                                 <tr>
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
-                                    <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by; ?></td>
+                                    <td class=clear><?php echo $last_modified_at .' '. _("by") .' '. $last_modified_by; ?></td>
                                 </tr>
                             </table>
 
@@ -727,9 +727,9 @@ function markComplete() {
 ?>
 
         <!-- new activity //-->
-        <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
+        <form action="<?php echo $http_site_root; ?>/activities/new-2.php" method=post>
 
-        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php  echo $company_id; ?><?php echo ($division_id) ? "%26division_id=" . $division_id : ''; ?>">
+        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php echo $company_id; ?><?php echo ($division_id) ? "%26division_id=" . $division_id : ''; ?>">
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
         <input type=hidden name=use_post_vars value="1">
@@ -759,7 +759,7 @@ function markComplete() {
                 <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
                 <td class=widget_content_form_element><?php echo $contact_menu; ?></td>
                 <td class=widget_content_form_element>
-                    <input type=text size=10 ID="f_date_d" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
+                    <input type=text size=10 ID="f_date_d" name=scheduled_at value="<?php echo date('Y-m-d H:i:s'); ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                     <?php echo render_create_button("Add"); ?>
                     <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
@@ -836,6 +836,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.109  2005/05/10 13:44:22  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ * - added trim for optional not always used fields
+ *
  * Revision 1.108  2005/05/04 14:27:30  braverock
  * - change Activity 'Title' to 'Summary' for consistency
  *
