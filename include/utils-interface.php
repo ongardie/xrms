@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.61 2005/05/07 17:02:35 vanmer Exp $
+ * $Id: utils-interface.php,v 1.62 2005/05/10 21:37:20 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -99,6 +99,8 @@ function http_root_href($url, $text, $title = NULL) {
     global $http_site_root;
     if ( empty($title) )
         $title = $text;
+        $title = _("$title");
+        $text  = _("$text");
     return '<a title="'.$title.'" href="'.$http_site_root.$url.'">'.$text.'</a>';
 }
 
@@ -107,10 +109,26 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
 
     if ( empty($url) )
         return '';
+    // set to lower case to avoid errors
+    $navigator_user_agent = strtolower( $_SERVER['HTTP_USER_AGENT'] );
 
-    $onlyIE = strpos($url, '-ie') !== false;
-    $ie1 = ( $onlyIE ) ? "<!--[if IE]>\n" : '';
-    $ie2 = ( $onlyIE ) ? "<![endif]-->\n" : '';
+    if (stristr($browser_user_agent, "msie 4"))
+    {
+        $browser = 'msie4';
+        $dom_browser = false;
+        $is_IE = true;
+    }
+    elseif (stristr($browser_user_agent, "msie"))
+    {
+        $browser = 'msie';
+        $dom_browser = true;
+        $is_IE = true;
+    }
+
+    if ((strpos($url, '-ie')!== false) and !$is_IE) {
+        //not IE, so don't render this sheet
+        return;
+    }
 
     if ( strpos($url, 'print') !== false )
         $mtype = 'print';
@@ -126,7 +144,7 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
         $rel   = 'rel="'.( $alt ? 'alternate ' : '' ).'stylesheet" ';
     }
 
-    return $ie1.'  <link '.$media.$title.$rel.'type="text/css" '.$href." />\n".$ie2;
+    return '    <link '.$media.$title.$rel.'type="text/css" '.$href." />\n";
 }
 
 function list_files($cssdir,$cssroot) {
@@ -258,7 +276,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $direction
 
 </head>
 
-  <body <?php do_hook('bodytags'); ?>>
+  <body <?php do_hook('bodytags'); echo "DIR=".$direction; ?>>
   <?php do_hook('topofpage'); ?>
   <div id="page_header"><?php echo $page_title; ?></div>
 <?php
@@ -721,6 +739,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.62  2005/05/10 21:37:20  braverock
+ * - improve IE stylesheet checks
+ *
  * Revision 1.61  2005/05/07 17:02:35  vanmer
  * - added check for session existing before attempting to retrieve xrms themes from session
  *
