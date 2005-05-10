@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.6 2005/03/21 15:56:11 ycreddy Exp $
+ * $Id: GroupUser_list.php,v 1.7 2005/05/10 13:28:14 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,7 +26,7 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 $con = &adonewconnection($xrms_acl_db_dbtype);
 $con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
 
-$page_title = "Manage Group Users";
+$page_title = _("Manage Group Users");
 
 // begin sorted columns stuff
 getGlobalVar($sort_column, 'sort_column'); 
@@ -111,7 +111,7 @@ $pager = new ADODB_Pager($con, $sql, 'GroupUser', false, $sort_column-1, $pretty
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="Add New" onclick="javascript: location.href='one_GroupUser.php?form_action=new&return_url=GroupUser_list.php'">
+<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_GroupUser.php?form_action=new&return_url=GroupUser_list.php'">
 </div></div></form>
 
 <?php
@@ -119,6 +119,9 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.7  2005/05/10 13:28:14  braverock
+ * - localized strings patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.6  2005/03/21 15:56:11  ycreddy
  * Added a quote for AS User to make it compatible with SQL Server
  *

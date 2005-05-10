@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: RolePermission_list.php,v 1.3 2005/02/15 19:49:35 vanmer Exp $
+ * $Id: RolePermission_list.php,v 1.4 2005/05/10 13:28:14 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,7 +26,7 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 $con = &adonewconnection($xrms_acl_db_dbtype);
 $con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
 
-$page_title = "Manage Role Permissions";
+$page_title = _("Manage Role Permissions");
 
 // begin sorted columns stuff
 getGlobalVar($sort_column, 'sort_column'); 
@@ -115,7 +115,7 @@ $pager = new ADODB_Pager($con, $sql, 'RolePermission', false, $sort_column-1, $p
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="Add New" onclick="javascript: location.href='one_RolePermission.php?form_action=new&return_url=RolePermission_list.php'">
+<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_RolePermission.php?form_action=new&return_url=RolePermission_list.php'">
 </div></div></form>
 
 <?php
@@ -123,6 +123,9 @@ end_page();
 
 /**
  * $Log: RolePermission_list.php,v $
+ * Revision 1.4  2005/05/10 13:28:14  braverock
+ * - localized strings patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.3  2005/02/15 19:49:35  vanmer
  * - changes to reflect new fieldnames
  *

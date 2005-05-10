@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.6 2005/04/15 07:01:25 vanmer Exp $
+ * $Id: acl_results.php,v 1.7 2005/05/10 13:28:14 braverock Exp $
  *
  * @author Aaron van Meerten
  */
@@ -43,7 +43,7 @@ getGlobalVar($on_what_id,'on_what_id');
 getGlobalVar($Permission, 'Permission');
 getGlobalVar($msg, 'msg');
 
-$title="ACL Results";
+$title= _("ACL Results");
 $css_theme='basic-left';
 start_page($title, true, $msg);
 echo '<div id="Main">';
@@ -100,16 +100,16 @@ TILLEND;
         echo "</table></form>";
     break;
     case 'calculatePermission':
-        echo "<table class=widget><tr><td class=widget_header>ACL Results</td></tr>";
+        echo "<table class=widget><tr><td class=widget_header>"._("ACL Results")."</td></tr>";
         echo "<tr><td class=widget_content>";
         if ($aclTest=='Permission') {
             $result=$acl->get_permissions_user($object, $on_what_id, $aclUser);
-            if (!$result) { echo "No permission allowed."; }
+            if (!$result) { echo _("No permission allowed."); }
             else {
                 echo "<pre>"; 
                 foreach ($result as $perm) {
                     $permData=$acl->get_permission(false, $perm);
-                    echo "Permission Available: {$permData['Permission_name']}\n";
+                    echo _("Permission Available:")." {$permData['Permission_name']}\n";
                 }
                 echo "</pre>";
             }
@@ -139,12 +139,12 @@ TILLEND;
         echo "</form></td></tr></table>";
         break;
     default:
-echo<<<TILLEND
-        <table class=widget>
-            <tr><td class=widget_header>ACL Result Test</td></tr>
-            <tr><td class=widget_content>Please select an action:<p>
-                <a href="acl_results.php?aclAction=showParamSelect&aclTest=Permission">Check Permission on an object for a user</a><p>
-                <a href="acl_results.php?aclAction=showParamSelect&aclTest=List">Get list of objects for a user</a>
+//echo<<<TILLEND;
+echo '<table class=widget>
+            <tr><td class=widget_header>'._("ACL Result Test").'</td></tr>
+            <tr><td class=widget_content>'._("Please select an action:").'<p>
+                <a href="acl_results.php?aclAction=showParamSelect&aclTest=Permission">'._("Check Permission on an object for a user").'</a><p>
+                <a href="acl_results.php?aclAction=showParamSelect&aclTest=List">'._("Get list of objects for a user").'</a>
             </td></tr>
         </table>
 TILLEND;
@@ -244,6 +244,9 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.7  2005/05/10 13:28:14  braverock
+  * - localized strings patches provided by Alan Baghumian (alanbach)
+  *
   * Revision 1.6  2005/04/15 07:01:25  vanmer
   * - added extra parameters to acl_results calls
   *

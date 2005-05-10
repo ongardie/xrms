@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: index.php,v 1.2 2005/01/13 21:13:58 vanmer Exp $
+ * $Id: index.php,v 1.3 2005/05/10 13:28:14 braverock Exp $
  *
  * @todo write dashboard
  */
@@ -42,7 +42,7 @@ $msg = $_GET['msg'];
 
 //close the database connection, as we are done with it.
 global $css_theme;
-$page_title = "ACL Management";
+$page_title = _("ACL Management");
 $css_theme="basic-left";
 start_page($page_title,true, $msg);
 
@@ -51,7 +51,7 @@ start_page($page_title,true, $msg);
     <?php include("xrms_acl_nav.php"); ?>
     <div id="Content">
         <table class=widget cellspacing=1 width="100%">
-        <tr><td class=widget_header>Dashboard</td></tr>
+        <tr><td class=widget_header><?php echo _("Dashboard");?></td></tr>
             <tr>
                 <td class=widget_content width="75%" valign=top>
           <?php echo _("This is the Access Control List system for XRMS"); ?>.<p>  <?php echo _("Please select a section to manage from the sidebar") ?>.
@@ -66,6 +66,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.3  2005/05/10 13:28:14  braverock
+ * - localized strings patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.2  2005/01/13 21:13:58  vanmer
  * - altered flippant text to reflect production environments
  *

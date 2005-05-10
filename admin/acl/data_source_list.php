@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: data_source_list.php,v 1.2 2005/02/15 00:30:56 vanmer Exp $
+ * $Id: data_source_list.php,v 1.3 2005/05/10 13:28:14 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,7 +26,7 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 $con = &adonewconnection($xrms_acl_db_dbtype);
 $con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
 
-$page_title = "Manage Data Sources";
+$page_title = _("Manage Data Sources");
 
 // begin sorted columns stuff
 getGlobalVar($sort_column, 'sort_column'); 
@@ -108,7 +108,7 @@ $pager = new ADODB_Pager($con, $sql, 'data_source', false, $sort_column-1, $pret
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="Add New" onclick="javascript: location.href='one_data_source.php?form_action=new&return_url=data_source_list.php'">
+<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_data_source.php?form_action=new&return_url=data_source_list.php'">
 </div></div></form>
 
 <?php
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: data_source_list.php,v $
+ * Revision 1.3  2005/05/10 13:28:14  braverock
+ * - localized strings patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.2  2005/02/15 00:30:56  vanmer
  * - requoted strings for general use
  *

@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupMember_list.php,v 1.2 2005/02/15 00:33:36 vanmer Exp $
+ * $Id: GroupMember_list.php,v 1.3 2005/05/10 13:28:14 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -26,7 +26,7 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 $con = &adonewconnection($xrms_acl_db_dbtype);
 $con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
 
-$page_title = "Manage Group Members";
+$page_title = _("Manage Group Members");
 
 // begin sorted columns stuff
 getGlobalVar($sort_column, 'sort_column'); 
@@ -108,7 +108,7 @@ $pager = new ADODB_Pager($con, $sql, 'GroupMember', false, $sort_column-1, $pret
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="Add New" onclick="javascript: location.href='one_GroupMember.php?form_action=new&return_url=GroupMember_list.php'">
+<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_GroupMember.php?form_action=new&return_url=GroupMember_list.php'">
 </div></div></form>
 
 <?php
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: GroupMember_list.php,v $
+ * Revision 1.3  2005/05/10 13:28:14  braverock
+ * - localized strings patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.2  2005/02/15 00:33:36  vanmer
  * requoted for general use
  *
