@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.20 2005/05/07 00:16:43 vanmer Exp $
+ * $Id: new-2.php,v 1.21 2005/05/10 16:28:16 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -17,35 +17,35 @@ $session_user_id = session_check('','Create');
 
 // declare passed in variables
 $arr_vars = array ( // local var name             // session variable name, flag
-		   'company_id' => array ( 'company_id' , arr_vars_SESSION ),
-		   'address_id' => array ( 'address_id' , arr_vars_SESSION ),
-		   'division_id' => array ( 'division_id' , arr_vars_SESSION ),
-		   'salutation' => array ( 'salutation' , arr_vars_SESSION ),
-		   'last_name' => array ( 'last_name' , arr_vars_SESSION ),
-		   'first_names' => array ( 'first_names' , arr_vars_SESSION ),
-		   'gender' => array ( 'gender' , arr_vars_SESSION ),
-		   'date_of_birth' => array ( 'date_of_birth' , arr_vars_SESSION ),
-		   'summary' => array ( 'summary' , arr_vars_SESSION ),
-		   'title' => array ( 'title' , arr_vars_SESSION ),
-		   'description' => array ( 'description' , arr_vars_SESSION ),
-		   'email' => array ( 'email' , arr_vars_SESSION ),
-		   'email2' => array ( 'email2' , arr_vars_SESSION ),
-		   'work_phone' => array ( 'work_phone' , arr_vars_SESSION ),
-		   'work_phone_ext' => array ( 'work_phone_ext' , arr_vars_SESSION ),
-		   'cell_phone' => array ( 'cell_phone' , arr_vars_SESSION ),
-		   'home_phone' => array ( 'home_phone' , arr_vars_SESSION ),
-		   'fax' => array ( 'fax' , arr_vars_SESSION ),
-		   'aol_name' => array ( 'aol_name' , arr_vars_SESSION ),
-		   'yahoo_name' => array ( 'yahoo_name' , arr_vars_SESSION ),
-		   'msn_name' => array ( 'msn_name' , arr_vars_SESSION ),
-		   'interests' => array ( 'interests' , arr_vars_SESSION ),
-		   'profile' => array ( 'profile' , arr_vars_SESSION ),
-		   'custom1' => array ( 'custom1' , arr_vars_SESSION ),
-		   'custom2' => array ( 'custom2' , arr_vars_SESSION ),
-		   'custom3' => array ( 'custom3' , arr_vars_SESSION ),
-		   'custom4' => array ( 'custom4' , arr_vars_SESSION ),
-		   'edit_address' => array ( 'edit_address' , arr_vars_SESSION ),
-		   );
+           'company_id' => array ( 'company_id' , arr_vars_SESSION ),
+           'address_id' => array ( 'address_id' , arr_vars_SESSION ),
+           'division_id' => array ( 'division_id' , arr_vars_SESSION ),
+           'salutation' => array ( 'salutation' , arr_vars_SESSION ),
+           'last_name' => array ( 'last_name' , arr_vars_SESSION ),
+           'first_names' => array ( 'first_names' , arr_vars_SESSION ),
+           'gender' => array ( 'gender' , arr_vars_SESSION ),
+           'date_of_birth' => array ( 'date_of_birth' , arr_vars_SESSION ),
+           'summary' => array ( 'summary' , arr_vars_SESSION ),
+           'title' => array ( 'title' , arr_vars_SESSION ),
+           'description' => array ( 'description' , arr_vars_SESSION ),
+           'email' => array ( 'email' , arr_vars_SESSION ),
+           'email2' => array ( 'email2' , arr_vars_SESSION ),
+           'work_phone' => array ( 'work_phone' , arr_vars_SESSION ),
+           'work_phone_ext' => array ( 'work_phone_ext' , arr_vars_SESSION ),
+           'cell_phone' => array ( 'cell_phone' , arr_vars_SESSION ),
+           'home_phone' => array ( 'home_phone' , arr_vars_SESSION ),
+           'fax' => array ( 'fax' , arr_vars_SESSION ),
+           'aol_name' => array ( 'aol_name' , arr_vars_SESSION ),
+           'yahoo_name' => array ( 'yahoo_name' , arr_vars_SESSION ),
+           'msn_name' => array ( 'msn_name' , arr_vars_SESSION ),
+           'interests' => array ( 'interests' , arr_vars_SESSION ),
+           'profile' => array ( 'profile' , arr_vars_SESSION ),
+           'custom1' => array ( 'custom1' , arr_vars_SESSION ),
+           'custom2' => array ( 'custom2' , arr_vars_SESSION ),
+           'custom3' => array ( 'custom3' , arr_vars_SESSION ),
+           'custom4' => array ( 'custom4' , arr_vars_SESSION ),
+           'edit_address' => array ( 'edit_address' , arr_vars_SESSION ),
+           );
 
 // get all posted in variables
 arr_vars_get_all ( $arr_vars , true);
@@ -56,8 +56,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 getGlobalVar($home_address_id, 'home_address_id');
 if (!$home_address_id) {
-    getGlobalVar($address_name, 'address_name');    
-    
+    getGlobalVar($address_name, 'address_name');
+
     if ($address_name) {
         $sql = "SELECT address_id FROM addresses WHERE company_id=$company_id AND address_name=".$con->qstr($address_name, get_magic_quotes_gpc());
         $address_rst=$con->execute($sql);
@@ -74,11 +74,11 @@ if (!$home_address_id) {
             getGlobalVar($address_type, 'address_type');
             getGlobalVar($address_body, 'address_body');
             getGlobalVar($use_pretty_address, 'use_pretty_address');
-            
+
             if (!$city AND $_POST['city']) $city=$_POST['city'];
-            
+
             $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
-            
+
             $rec = array();
             $rec['country_id'] = $address_country_id;
             $rec['company_id']=$company_id;
@@ -94,7 +94,7 @@ if (!$home_address_id) {
             $tbl = 'addresses';
             $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
             $rst=$con->execute($ins);
-            
+
             if (!$rst) { db_error_handler( $con, $ins); }
             $home_address_id = $con->insert_id();
             if ($home_address_id!=0) {
@@ -154,16 +154,23 @@ $contact_id = $con->Insert_ID();
 
 add_audit_item($con, $session_user_id, 'created', 'contacts', $contact_id, 1);
 
+//add to recently viewed list
+update_recent_items($con, $session_user_id, "contacts", $contact_id);
+
 $con->close();
 
 if ($edit_address == "on") {
-	header("Location: edit-address.php?msg=contact_added&contact_id=$contact_id");
-	} else {
-	header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id");
+    header("Location: edit-address.php?msg=contact_added&contact_id=$contact_id");
+    } else {
+    header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id");
 }
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.21  2005/05/10 16:28:16  braverock
+ * - add new contact to recently viewed list
+ *   resolves SF bug 1119511 reported by Beth Maknick (maulani)
+ *
  * Revision 1.20  2005/05/07 00:16:43  vanmer
  * - added check for duplicate address names for a company, uses specified address name if match is found
  *
