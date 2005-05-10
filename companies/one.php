@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.109 2005/05/10 13:44:22 braverock Exp $
+ * $Id: one.php,v 1.110 2005/05/10 23:44:59 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -541,7 +541,7 @@ function markComplete() {
                                     <td class=clear><?php echo $phone; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if trim($phone2) { ?>
+                                <?php if (trim($phone2)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Alt. Phone"); ?></td>
                                     <td class=clear><?php echo $phone2; ?></td>
@@ -553,7 +553,7 @@ function markComplete() {
                                     <td class=clear><?php echo $fax; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if trim($url) { ?>
+                                <?php if (trim($url)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("URL"); ?></td>
                                     <td class=clear><?php echo $url; ?></td>
@@ -592,7 +592,7 @@ function markComplete() {
                                     <td class=clear><?php echo $account_status; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if trim($tax_id) { ?>
+                                <?php if (trim($tax_id)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Tax ID"); ?></td>
                                     <td class=clear><?php echo $tax_id; ?></td>
@@ -610,7 +610,7 @@ function markComplete() {
                                     <td class=clear><?php echo $rating; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if trim($terms) { ?>
+                                <?php if (trim($terms)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Terms"); ?></td>
                                     <td class=clear><?php echo $terms.' '. _("days"); ?></td>
@@ -628,13 +628,13 @@ function markComplete() {
                                     <td class=clear><?php echo $company_source; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if trim($employees) { ?>
+                                <?php if (trim($employees)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Employees"); ?></td>
                                     <td class=clear><?php echo $employees; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if trim($revenue) { ?>
+                                <?php if (trim($revenue)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Revenue"); ?></td>
                                     <td class=clear><?php echo $revenue; ?></td>
@@ -836,6 +836,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.110  2005/05/10 23:44:59  vanmer
+ * - added needed parenthesis around trim statements
+ *
  * Revision 1.109  2005/05/10 13:44:22  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  * - added trim for optional not always used fields
