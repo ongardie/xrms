@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.42 2005/05/04 14:27:29 braverock Exp $
+ * $Id: one.php,v 1.43 2005/05/10 16:19:01 braverock Exp $
  */
 
 //include required files
@@ -385,7 +385,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Summary"); ?></td>
                 <td class=widget_label><?php echo _("User"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
                 <td class=widget_label><?php echo _("Contact"); ?></td>
@@ -443,11 +443,14 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.43  2005/05/10 16:19:01  braverock
+ * - change Activity 'Title' to 'Summary' for consistency
+ *
  * Revision 1.42  2005/05/04 14:27:29  braverock
  * - change Activity 'Title' to 'Summary' for consistency
  *
  * Revision 1.41  2005/05/04 13:36:49  braverock
- * - change Start to 'Scheduled' for consistenct of activity start time labels
+ * - change Start to 'Scheduled' for consistency of activity start time labels
  *
  * Revision 1.40  2005/03/29 23:52:48  maulani
  * - Add audit trail
