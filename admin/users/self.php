@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.12 2005/05/06 00:31:30 vanmer Exp $
+ * $Id: self.php,v 1.13 2005/05/10 13:34:13 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -47,7 +47,7 @@ $types=get_user_preference_type($con, false, false, true);
 if (!$types) { $msg="Failed to load an user preference types, no user preferences available"; $user_preferences_table='';}
 else {
     $user_preferences_table="<table class=widget>";
-    $user_preferences_table.="<tr><td colspan=2 class=widget_header>User Preferences</td></tr>";
+    $user_preferences_table.="<tr><td colspan=2 class=widget_header>"._("User Preferences")."</td></tr>";
     foreach ($types as $type_info) {
         if ($type_info['allow_user_edit_flag']==0) next;
         $user_preference_type_id=$type_info['user_preference_type_id'];
@@ -63,7 +63,13 @@ else {
             $preference_value=get_user_preference($con, $user_id, $user_preference_type_id);
             $element_field=render_preference_form_element($con, $user_preference_type_id, $preference_value, $type_info);
         }
-        $user_preferences_table.="<tr><td class=widget_content_label><b>$type_pretty_name</b><br>$type_desc</td><td class=widget_content_form_element>$element_field</td></tr>";
+        
+        //this is to avoid printing translation file header instead of type description! 
+        if($type_desc != NULL){
+	        $user_preferences_table.="<tr><td class=widget_content_label><b>"._($type_pretty_name)."</b><br>"._($type_desc)."</td><td class=widget_content_form_element>$element_field</td></tr>";
+	     }else{
+	     	  $user_preferences_table.="<tr><td class=widget_content_label><b>"._($type_pretty_name)."</b><br>$type_desc</td><td class=widget_content_form_element>$element_field</td></tr>";
+	     }   
     }
     $user_preferences_table.="<tr><td colspan=2 class=widget_content_form_element><input type=hidden name=preference_action value=savePrefs><input class=button type=submit value=\""._("Save Preferences") . "\"></tr></td>";
     $user_preferences_table.="</table>";
@@ -138,6 +144,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.13  2005/05/10 13:34:13  braverock
+ *- localized string patches provided by Alan Baghumian (alanbach)
+ *
  *Revision 1.12  2005/05/06 00:31:30  vanmer
  *- added user preference piece for self.php to allow users to alter their preferences
  *

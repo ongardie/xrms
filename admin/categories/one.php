@@ -2,7 +2,7 @@
 /**
  * Manage categories
  *
- * $Id: one.php,v 1.13 2004/07/25 18:02:28 johnfawcett Exp $
+ * $Id: one.php,v 1.14 2005/05/10 13:31:22 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -49,7 +49,7 @@ array_push($array_of_category_scopes, 0);
 
 if ($rst) {
         while (!$rst->EOF) {
-                $associated_with .= "<a href='remove-scope.php?category_id=$category_id&category_scope_id=" . $rst->fields['category_scope_id'] . "'>" . $rst->fields['category_scope_pretty_plural'] . "</a><br>";
+                $associated_with .= "<a href='remove-scope.php?category_id=$category_id&category_scope_id=" . $rst->fields['category_scope_id'] . "'>" . _($rst->fields['category_scope_pretty_plural']) . "</a><br>";
                 array_push($array_of_category_scopes, $rst->fields['category_scope_id']);
                 $rst->movenext();
         }
@@ -68,7 +68,7 @@ $rst = $con->execute($sql);
 
 if ($rst) {
         while (!$rst->EOF) {
-                $not_associated_with .= "<a href='add-scope.php?category_id=$category_id&category_scope_id=" . $rst->fields['category_scope_id'] . "'>" . $rst->fields['category_scope_pretty_plural'] . "</a><br>";
+                $not_associated_with .= "<a href='add-scope.php?category_id=$category_id&category_scope_id=" . $rst->fields['category_scope_id'] . "'>" . _($rst->fields['category_scope_pretty_plural']) . "</a><br>";
                 $rst->movenext();
         }
         $rst->close();
@@ -158,6 +158,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.14  2005/05/10 13:31:22  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.13  2004/07/25 18:02:28  johnfawcett
  * - reinserted ? into gettext string - needed for some languages
  * - standardized delete text

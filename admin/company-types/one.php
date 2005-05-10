@@ -2,7 +2,7 @@
 /**
  * Manage company types
  *
- * $Id: one.php,v 1.10 2004/08/04 18:54:17 introspectshun Exp $
+ * $Id: one.php,v 1.11 2005/05/10 13:31:23 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -34,7 +34,7 @@ if ($rst) {
     $rst->close();
 }
 
-$page_title = _("Company Type Details").': '.$company_type_pretty_name;
+$page_title = _("Company Type Details").': '._($company_type_pretty_name);
 start_page($page_title);
 
 ?>
@@ -102,6 +102,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2005/05/10 13:31:23  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.10  2004/08/04 18:54:17  introspectshun
  * - Corrected spelling of Company
  *

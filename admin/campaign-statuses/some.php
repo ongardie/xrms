@@ -4,7 +4,7 @@
  *
  * List campaign-statuses
  *
- * $Id: some.php,v 1.6 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: some.php,v 1.7 2005/05/10 13:29:37 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,7 +25,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href="one.php?campaign_status_id=' . $rst->fields['campaign_status_id'] . '">' . $rst->fields['campaign_status_pretty_name'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href="one.php?campaign_status_id=' . $rst->fields['campaign_status_id'] . '">' . _($rst->fields['campaign_status_pretty_name']) . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -102,6 +102,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2005/05/10 13:29:37  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.6  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *

@@ -4,7 +4,7 @@
  *
  * Description
  *
- * $Id: one.php,v 1.9 2004/07/25 18:05:42 johnfawcett Exp $
+ * $Id: one.php,v 1.10 2005/05/10 13:31:23 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -40,7 +40,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("Company Source Details").': '.$company_source_pretty_name;
+$page_title = _("Company Source Details").': '._($company_source_pretty_name);
 start_page($page_title);
 
 ?>
@@ -112,6 +112,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2005/05/10 13:31:23  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.9  2004/07/25 18:05:42  johnfawcett
  * - reinserted ? in gettext string - needed by some languages
  * - standardized delete text and button

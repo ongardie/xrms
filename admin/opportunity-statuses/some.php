@@ -5,7 +5,7 @@
  *
  * @todo modify all opportunity status uses to use a sort order
  *
- * $Id: some.php,v 1.10 2004/12/31 17:23:04 braverock Exp $
+ * $Id: some.php,v 1.11 2005/05/10 13:31:53 braverock Exp $
  */
 
 //include required XRMS common files
@@ -41,9 +41,9 @@ if ($rst) {
                      . '>';
       
       if (strlen ($opportunity_status_display_html) > 0) {
-         $table_rows .= $rst->fields['opportunity_status_pretty_html'];
+         $table_rows .= _($rst->fields['opportunity_status_pretty_html']);
       } else {
-         $table_rows .= $rst->fields['opportunity_status_pretty_name'];
+         $table_rows .= _($rst->fields['opportunity_status_pretty_name']);
       }
 
       $table_rows .= '</a></td>'
@@ -57,13 +57,13 @@ if ($rst) {
            $table_rows .= '<a href="' . $http_site_root
                . '/admin/sort.php?direction=up&sort_order='
                . $sort_order . '&table_name=opportunity_status'
-               . '&return_url=/admin/opportunity-statuses/some.php">up</a> &nbsp; ';
+               . '&return_url=/admin/opportunity-statuses/some.php">'._("up").'</a> &nbsp; ';
        }
        if ($sort_order != $maxcnt) {
            $table_rows .= '<a href="' . $http_site_root
                         . '/admin/sort.php?direction=down&sort_order='
                         . $sort_order . '&table_name=opportunity_status'
-                        . '&return_url=/admin/opportunity-statuses/some.php">down</a>';
+                        . '&return_url=/admin/opportunity-statuses/some.php">'._("down").'</a>';
        }
        $table_rows .= '</td>';
 
@@ -155,6 +155,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.11  2005/05/10 13:31:53  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.10  2004/12/31 17:23:04  braverock
  * - cleaned up code formatting
  * - add db_error_handler

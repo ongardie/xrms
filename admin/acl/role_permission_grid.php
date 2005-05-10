@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.2 2005/02/15 19:51:59 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.3 2005/05/10 13:28:39 braverock Exp $
  *
  */
 
@@ -34,7 +34,7 @@ print_r($_SESSION);
 echo "</pre>";
 */
 if (!$grid_action) { $grid_action="chooseRole"; }
-$page_title = "Manage Permissions for Role";
+$page_title = _("Manage Permissions for Role");
 
 if ($grid_action=='showGrid' && !$gridrole_id) { $grid_action="chooseRole"; $msg="Please select a role"; }
 

@@ -4,7 +4,7 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.13 2005/01/11 22:23:32 vanmer Exp $
+ * $Id: one.php,v 1.14 2005/05/10 13:31:52 braverock Exp $
  */
 
 //uinclude required common files
@@ -176,8 +176,8 @@ start_page($page_title);
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Duration"); ?><br><?php echo _("(defaults to days)"); ?></td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Sort Order</td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Sort Order"); ?></td>
             <tr>
                 <td class=widget_content_form_element><input type=text size=40 name="title"></td>
                 <td class=widget_content_form_element><input type=text name="duration"></td>
@@ -234,6 +234,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.14  2005/05/10 13:31:52  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.13  2005/01/11 22:23:32  vanmer
  * - altered to allow multiple activities to exist at the same sort_order, for workflow additions
  * - altered to properly show up/down links by retrieving record count from correct recordset

@@ -2,7 +2,7 @@
 /**
  * Display all case priorities
  *
- * $Id: some.php,v 1.6 2004/07/16 23:51:35 cpsource Exp $
+ * $Id: some.php,v 1.7 2005/05/10 13:30:07 braverock Exp $
  */
 
 //include required files
@@ -25,7 +25,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?case_priority_id=' . $rst->fields['case_priority_id'] . '>' . $rst->fields['case_priority_pretty_name'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href=one.php?case_priority_id=' . $rst->fields['case_priority_id'] . '>' . _($rst->fields['case_priority_pretty_name']) . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -97,6 +97,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2005/05/10 13:30:07  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.6  2004/07/16 23:51:35  cpsource
  * - require session_check ( 'Admin' )
  *

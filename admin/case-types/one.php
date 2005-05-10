@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single case
  *
- * $Id: one.php,v 1.8 2004/07/25 17:56:23 johnfawcett Exp $
+ * $Id: one.php,v 1.9 2005/05/10 13:30:52 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -37,7 +37,7 @@ if ($rst) {
 
 $con->close();
 
-$page_title = _("Case Type Details").': '.$case_type_pretty_name;
+$page_title = _("Case Type Details").': '._($case_type_pretty_name);
 start_page($page_title);
 
 ?>
@@ -105,6 +105,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.9  2005/05/10 13:30:52  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.8  2004/07/25 17:56:23  johnfawcett
  * - reinserted ? in gettex string - needed by some languages
  * - corrected bug: did not ask for confirm on delete

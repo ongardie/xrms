@@ -2,7 +2,7 @@
 /**
  * View the system parameters
  *
- * $Id: some.php,v 1.3 2004/12/30 19:04:20 braverock Exp $
+ * $Id: some.php,v 1.4 2005/05/10 13:32:21 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,8 +23,9 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $theparameter = urlencode ($rst->fields['param_id']);
+        $theparameter_str = _($rst->fields['param_id']);
         $table_rows .= '<tr>';
-        $table_rows .= '<td class=widget_content><a href=one.php?param_id=' . $theparameter . '>' . $rst->fields['param_id'] . '</a></td>';
+        $table_rows .= '<td class=widget_content><a href=one.php?param_id=' . $theparameter . '>' .$theparameter_str. '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -61,6 +62,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.4  2005/05/10 13:32:21  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.3  2004/12/30 19:04:20  braverock
  * - localize strings
  * - patch provided by Ozgur Cayci

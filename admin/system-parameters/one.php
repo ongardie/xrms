@@ -2,7 +2,7 @@
 /**
  * Edit the information for a system parameter
  *
- * $Id: one.php,v 1.4 2005/02/05 16:39:38 maulani Exp $
+ * $Id: one.php,v 1.5 2005/05/10 13:32:21 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -102,7 +102,7 @@ if ($options) {
 	$field = "<input type=text size=40 name=param_value value=\"$my_val\">";
 }
 
-$page_title = "System Parameter : $param_id";
+$page_title = _("System Parameter")." : "._($param_id);
 start_page($page_title);
 
 ?>
@@ -114,17 +114,17 @@ start_page($page_title);
         <input type=hidden name=param_id value="<?php  echo $param_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2>Edit System Parameter</td>
+                <td class=widget_header colspan=2><?php echo _("Edit System Parameter"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo $param_id; ?></td>
-                <td class=widget_content_form_element><?php echo $field; ?></td>
+                <td class=widget_label_right><?php echo _($param_id); ?></td>
+                <td class=widget_content_form_element><?php echo _($field); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><?php echo $description; ?></td>
+                <td class=widget_content_form_element colspan=2><?php echo _($description); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="Save Changes"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -138,6 +138,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.5  2005/05/10 13:32:21  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.4  2005/02/05 16:39:38  maulani
  * - Fix field name
  *

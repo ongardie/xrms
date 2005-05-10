@@ -2,7 +2,7 @@
 /**
  * Manage Campaign Types
  *
- * $Id: some.php,v 1.6 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: some.php,v 1.7 2005/05/10 13:29:48 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,7 +23,7 @@ $rst = $con->execute($sql);
 if ($rst) {
 	while (!$rst->EOF) {
 		$table_rows .= '<tr>';
-		$table_rows .= '<td class=widget_content><a href=one.php?campaign_type_id=' . $rst->fields['campaign_type_id'] . '>' . $rst->fields['campaign_type_pretty_name'] . '</a></td>';
+		$table_rows .= '<td class=widget_content><a href=one.php?campaign_type_id=' . $rst->fields['campaign_type_id'] . '>' . _($rst->fields['campaign_type_pretty_name']) . '</a></td>';
 		$table_rows .= '</tr>';
 		$rst->movenext();
 	}
@@ -42,10 +42,10 @@ start_page($page_title);
 
 		<table class=widget cellspacing=1>
 			<tr>
-				<td class=widget_header colspan=4>Campaign Types</td>
+				<td class=widget_header colspan=4><?php echo _("Campaign Types"); ?></td>
 			</tr>
 			<tr>
-				<td class=widget_label>Name</td>
+				<td class=widget_label><?php echo _("Name"); ?></td>
 			</tr>
 			<?php  echo $table_rows; ?>
 		</table>
@@ -91,6 +91,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.7  2005/05/10 13:29:48  braverock
+ * - localized string patches provided by Alan Baghumian (alanbach)
+ *
  * Revision 1.6  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *

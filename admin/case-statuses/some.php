@@ -2,7 +2,7 @@
 /**
 * Manage Case Statuses
 *
-* $Id: some.php,v 1.12 2005/02/24 12:42:46 braverock Exp $
+* $Id: some.php,v 1.13 2005/05/10 13:30:35 braverock Exp $
 *
 * @todo manage case statuses by type
 *       will require working on creating the rows by type,
@@ -54,7 +54,7 @@ if ($acase_type_id) {
             $sort_order = $rst->fields['sort_order'];
             $table_rows .= '<tr>'
                         . '<td class=widget_content><a href=one.php?case_status_id=' . $rst->fields['case_status_id'] . '>'
-                        . $rst->fields['case_status_pretty_name'] . '</a></td>';
+                        . _($rst->fields['case_status_pretty_name']) . '</a></td>';
         
             //add descriptions
             $table_rows .= '<td class=widget_content>'
@@ -194,6 +194,9 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.13  2005/05/10 13:30:35  braverock
+* - localized string patches provided by Alan Baghumian (alanbach)
+*
 * Revision 1.12  2005/02/24 12:42:46  braverock
 * - improve SQL formatting
 * - only show case statuses/types that have an 'a'ctive status

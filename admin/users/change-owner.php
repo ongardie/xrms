@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-owner.php,v 1.2 2005/03/28 17:49:10 gpowers Exp $
+ * $Id: change-owner.php,v 1.3 2005/05/10 13:34:12 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,10 +44,10 @@ start_page($page_title);
             <table class=widget cellspacing=1>
                 <tr>
                     <td class=widget_header width=\"33%">
-                        Current Owner
+                        <?php echo _("Current Owner"); ?>
                     </td>
                     <td class=widget_header width=\"33%">
-                        New Owner
+                        <?php echo _("New Owner"); ?>
                     </td>
                     <td class=widget_header width=\"33%">
                     </td>
@@ -106,6 +106,9 @@ end_page();
 
 /**
  *$Log: change-owner.php,v $
+ *Revision 1.3  2005/05/10 13:34:12  braverock
+ *- localized string patches provided by Alan Baghumian (alanbach)
+ *
  *Revision 1.2  2005/03/28 17:49:10  gpowers
  *- limited to changing open activities and active records
  *
