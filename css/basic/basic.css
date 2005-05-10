@@ -27,8 +27,9 @@ table.widget .widget_header,
 table.widget .widget_content_graph,
 table.widget .overdue_activity,
 table.widget .non_uploaded_file  {
-  color: #ffe;
+  color: white;
 }
+
 /** --------
  * ANCHOR TAGS - colors/decorations
  */
@@ -86,8 +87,6 @@ table.widget .widget_label {
  */
 #page_header {
     border: 1px solid Gainsboro;
-    background-image: url(../../img/page_title_background.gif);
-    background-repeat: repeat-x;
     line-height: 40px;   /* set line height for image */
 }
 #msg {
@@ -130,7 +129,7 @@ table.widget .widget_header {
     padding: 4px;
 }
 table.widget .widget_label_center {
-	padding: 0em 0.5em 0em 0.5em;
+    padding: 0em 0.5em 0em 0.5em;
 }
 input.button {
     margin: 2px 1px;
