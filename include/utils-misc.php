@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.129 2005/05/09 22:40:37 vanmer Exp $
+ * $Id: utils-misc.php,v 1.130 2005/05/11 16:29:28 braverock Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -674,6 +674,8 @@ function db_error_handler (&$con,$sql,$colspan=20) {
  */
 
 function get_formatted_phone ($con, $address_id, $phone) {
+    global $company_id;
+    global $contact_id;
 
     $phone_to_display = $phone;
     $sql = "select
@@ -1549,7 +1551,7 @@ function make_where_string($con, $criteria_array, $tablename=false) {
  * @author  Tom Setliff
  *
  * @param string $func_name Name of the Function
- * @param array $params Parameters returned from 
+ * @param array $params Parameters returned from
  *
  * @return bool if we have the function cached
  */
@@ -1557,7 +1559,7 @@ function function_cache_bool($func_name, $params) {
     global $xrms_function_cache;
     $key = implode('|',$params);
     if (isset($xrms_function_cache[$func_name][$key])) {
-        return true;   
+        return true;
     }
     if (isset($_SESSION['XRMS_function_cache'][$func_name][$key])) {
         return true;
@@ -1598,7 +1600,7 @@ function function_cache_get($func_name, $params) {
  * $func_args = func_get_args();
  * $func_name = 'change_this_to_be_the_name_of_your_function';
  * if (function_cache_bool($func_name, $func_args)) {
- *     return function_cache_get($func_name, $func_args);   
+ *     return function_cache_get($func_name, $func_args);
  * }
  * and add function_cache_set($func_name, $func_args, $ret,false); right before the return statement
  * The number of lines added to the start of the function are required because of the PHP limitation on func_get_args()
@@ -1606,7 +1608,7 @@ function function_cache_get($func_name, $params) {
  * @author  Tom Setliff
  *
  * @param string $func_name Name of the Function
- * @param array $params Parameters returned from 
+ * @param array $params Parameters returned from
  * @param mixed $ret Value from function to save
  * @param bool $this_request_only If this is set then the result is cached just for this page request in a global var
  */
@@ -1621,7 +1623,7 @@ $this_request_only = true) {
     } else {
         //echo("setting $params value for duration of session<br>\n");
         $_SESSION['XRMS_function_cache'][$func_name][$key] = $ret;
-        unset($function_cache[$func_name][$key]);   
+        unset($function_cache[$func_name][$key]);
     }
 }
 
@@ -1642,6 +1644,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.130  2005/05/11 16:29:28  braverock
+ * - explicitly set contacT_id and company_id in phone format for cti integration
+ *
  * Revision 1.129  2005/05/09 22:40:37  vanmer
  * - added functions for caching function results into session or global variables for re-use
  * Based on code from Tom Setliff
