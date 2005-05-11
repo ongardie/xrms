@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.56 2005/05/06 23:03:03 vanmer Exp $
+ * $Id: some.php,v 1.57 2005/05/11 16:28:46 braverock Exp $
  */
 
 //include the standard files
@@ -47,10 +47,10 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 
 // Note: last_name and first_names are used by GUP_Pager to speed up the sorting.
-$sql = "SELECT " . 
-	$con->Concat($con->qstr('<a href="one.php?contact_id='), "cont.contact_id", $con->qstr('">'), "cont.last_name", "', '", "cont.first_names", $con->qstr('</a>')) . " AS name," . 
-	$con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
-	"company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name"; 
+$sql = "SELECT " .
+    $con->Concat($con->qstr('<a href="one.php?contact_id='), "cont.contact_id", $con->qstr('">'), "cont.last_name", "', '", "cont.first_names", $con->qstr('</a>')) . " AS name," .
+    $con->Concat($con->qstr('<a id="'), "c.company_name",  $con->qstr('" href="../companies/one.php?company_id='), "c.company_id", $con->qstr('">'), "c.company_name", $con->qstr('</a>')) . " AS company,".
+    "company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
 
 $from = " from contacts cont, companies c, users u ";
 
@@ -67,7 +67,7 @@ if (strlen($last_name) > 0) {
 
 if (strlen($first_names) > 0) {
     $criteria_count++;
-    $where .= " and cont.first_names like " . $con->qstr('%' . $first_names . '%', get_magic_quotes_gpc());
+    $where .= " and cont.first_names like " . $con->qstr($first_names . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($title) > 0) {
@@ -155,6 +155,10 @@ $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 $recently_viewed_table_rows = '';
 if ($rst) {
     while (!$rst->EOF) {
+        $contact_id='';
+        $company_id='';
+        $contact_id=$rst->fields['contact_id'];
+        $company_id=$rst->fields['company_id'];
         $recently_viewed_table_rows .= '<tr>';
         $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">';
         $recently_viewed_table_rows .= $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
@@ -162,6 +166,8 @@ if ($rst) {
         $recently_viewed_table_rows .= '<td class=widget_content>' . get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']) . '</td>';
         $recently_viewed_table_rows .= '</tr>';
         $rst->movenext();
+        $contact_id='';
+        $company_id='';
     }
     $rst->close();
 }
@@ -268,7 +274,7 @@ if(!isset($contacts_next_page)) {
                   </table>';
       }
 $_SESSION["search_sql"]=$sql;
-	"company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name"; 
+    "company_code, title, description, u.username, cont.email, cont.contact_id, cont.last_name, cont.first_names, c.company_name";
 
 $columns = array();
 $columns[] = array('name' => _("Name"), 'index_sql' => 'name', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
@@ -296,7 +302,7 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'ContactForm', 'Co
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-			" . $pager->GetAndUseExportButton() .  "
+            " . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
 
 echo $pager_columns_selects;
@@ -377,7 +383,7 @@ function setNewContact_company_name() {
     var cname;
     cname = document.getElementById('newContact_company_name');
     cname.value = getContact_company_name();
-    return true;   
+    return true;
 }
 
 //-->
@@ -389,6 +395,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.57  2005/05/11 16:28:46  braverock
+ * - explicitly set contact_id and company_id in recently viewed list for cti integration
+ *
  * Revision 1.56  2005/05/06 23:03:03  vanmer
  * - added sidebar for adding new contact from some.php page
  * - added javascript to add company_name from some.php search to use as parameter to searching for company before
