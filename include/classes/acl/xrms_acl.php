@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.16 2005/05/02 15:59:28 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.17 2005/05/13 21:21:12 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -945,7 +945,7 @@ class xrms_acl {
        * @return integer RolePermission_id with new identifier for new entry for the relationship or false if duplicate/failed (or array if no on_what_id is specified)
        *
        */
-    function get_role_permission($Roles=false, $CORelationships=false, $Scopes=false, $Permission_id=false, $RolePermission_id=false) {
+    function get_role_permission($Roles=false, $CORelationships=false, $Scopes=false, $Permission_id=false, $RolePermission_id=false, $inheritable=true) {
         if (!$Roles and !$CORelationships and !$RolePermission_id) { return false; }
         $tblName = "RolePermission";
         
@@ -963,6 +963,9 @@ class xrms_acl {
                 else{ $where[]="CORelationship_id=$CORelationships"; }
             }
             if ($Permission_id) { $where[]="Permission_id=$Permission_id"; }
+            
+            if ($inheritable) { $where[]="Inheritable_flag=1"; }  else if ($inheritable===NULL) { $where[]='inheritable_flag=0'; }
+            
             if ($Scopes) { 
                 if (!is_array($Scopes)) $Scopes=array($Scopes);
                 $scopewhere=array();
@@ -979,6 +982,7 @@ class xrms_acl {
         $whereclause = implode (" and ", $where);
         //Search within group specified
         $sql = "SELECT * FROM $tblName WHERE $whereclause ORDER BY Permission_id";
+//        echo $sql;
          
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
@@ -1006,10 +1010,11 @@ class xrms_acl {
        * @param integer CORelationship_id specifying which controlled object the permission applies to
        * @param string Scope determining what scope the permission should apply to (currently World, Group and User)
        * @param integer Permission_id specifying which type of permission to add on this controlled object for this role
+       * @param boolean Inheritable specifying whether permission can be inherited by children (defaults to true, children inherit permissions of the parent)
        * @return integer RolePermission_id with new identifier for role permission in the database or false if duplicate/failed
        *
        */
-     function add_role_permission ($Role_id, $CORelationship_id, $Scope, $Permission_id) {
+     function add_role_permission ($Role_id, $CORelationship_id, $Scope, $Permission_id, $inheritable=true) {
 
 	global $xrms_db_dbtype;
         if (!$Role_id or !$CORelationship_id or !$Scope or !$Permission_id) { return false; }
@@ -1018,7 +1023,7 @@ class xrms_acl {
         $con = $this->DBConnection;
         
         //no duplicates
-        if ($this->get_role_permission($Role_id, $CORelationship_id, $Scope, $Permission_id)!==false) { return false; }
+        if ($this->get_role_permission($Role_id, $CORelationship_id, $Scope, $Permission_id, false, $inheritable)!==false) { return false; }
         
         $RolePermissionRow['Role_id']=$Role_id;
         $RolePermissionRow['CORelationship_id']=$CORelationship_id;
@@ -1028,7 +1033,10 @@ class xrms_acl {
 	else {
 	    $RolePermissionRow['Scope']=$con->qstr($Scope, get_magic_quotes_gpc());
 	}
-        $RolePermissionRow['Permission_id']=$Permission_id;        
+        $RolePermissionRow['Permission_id']=$Permission_id;
+        if ($inheritable) {
+            $RolePermissionRow['Inheritable_flag']=1;
+        }
         
         //Create insert statement
         $sql = $con->getInsertSQL($tblName, $RolePermissionRow, false);
@@ -1464,10 +1472,18 @@ class xrms_acl {
      * @param integer ControlledObject_id identifying the type ControlledObject for which to retrieve the a list of ids
      * @param integer User_id specifying which user to search permissions on
      * @param integer Permission_id identifying the permission to search on (defaults to Read)
+     * @param integer level of permission search (used to keep track of recursive calls to function)
      * @return array $restricted_list with key 'controlled_objects' array of ID's of the ControlledObject ID for which user has searched for permission, key 'groups' array of GroupIDs to which the user has access, key 'roles' used to find list
      *
      **/
-    function get_restricted_object_list($ControlledObject_id, $User_id, $Permission_id=false) {
+    function get_restricted_object_list($ControlledObject_id, $User_id, $Permission_id=false, $level=0) {
+        $level++;
+        if ($level==1) {
+            //if this is the first call to this function, allow non-inheritable permissions to apply
+            $inheritable=false;
+        //otherwise only allow inheritable permissions
+        } else $inheritable=true;
+        
 //        echo "SEARCHING FOR OBJECTS OF TYPE $ControlledObject_id for $User_id to $Permission_id";
         $con=$this->DBConnection;
         //default to search for read permission
@@ -1511,7 +1527,7 @@ class xrms_acl {
 //                     $CORelationship_id=$ControlledObjectRelationship["CORelationship_id"];
                     //Search for permission for all roles on controlled object relationships
                     $Scopes=array('World','User');
-                    $RolePermissions = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, $Scopes, $Permission_id);
+                    $RolePermissions = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, $Scopes, $Permission_id, false, $inheritable);
 //                    echo "$RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id)";
                     
                     if ($RolePermissions) {
@@ -1563,7 +1579,7 @@ class xrms_acl {
 //                foreach ($ControlledObjectRelationships as $ControlledObjectRelationship) {
 //                    $CORelationship_id=$ControlledObjectRelationship["CORelationship_id"];
                     //Search for permission for all roles on controlled object relationships
-                    $RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_ids, $Scope, $Permission_id);
+                    $RolePermission = $this->get_role_permission($Role, $ControlledObjectRelationship_ids, $Scope, $Permission_id, false, $inheritable);
 //                    echo "<pre>                    $RolePermission = $this->get_role_permission($Role, $CORelationship_id, $Scope, $Permission_id)";
                     if ($RolePermission) {
 //                        print_r($RolePermission);
@@ -1598,7 +1614,7 @@ class xrms_acl {
             if ($ParentObject) {
 //                echo "<br>Recursing to parent $ParentObject<br>";
                 //This recursively calls same function
-                $recurse = $this->get_restricted_object_list($ParentObject, $User_id, $Permission_id);
+                $recurse = $this->get_restricted_object_list($ParentObject, $User_id, $Permission_id, $level);
                 
                 if ($recurse) {
 //                    echo "Results: <pre>"; print_r($recurse); echo "</pre>";
@@ -1677,16 +1693,24 @@ class xrms_acl {
      * @param integer User_id identifying which group to check permissions on
      * @param integer _CORelationship_id optional, identifying in what relationship of the controlled object to check permissions on
      * @param array PermissionList of Permission_id's to search for (or integer to only search for one)
+     * @param integer level keeps track of recursive calls to function, defaults to 0
      * @return array of Permission_ids on a class of ControlledObject for a user
     */    
     function get_permission_user_object(
                                                     $ControlledObject_id, 
                                                     $User_id, 
                                                     $_CORelationship_id=false,
-                                                    $PermissionList=false
+                                                    $PermissionList=false,
+                                                    $level=0
                                                   )                                                  
     {
-    
+        $level++;
+        if ($level==1) {
+            //if this is the first level, allow non-inheritable permissions to be found
+            $inheritable=false;
+        //otherwise only allow inheritable permissions to befound
+        } else $inheritable=true;
+        
         if (!$User_id OR !$ControlledObject_id) return false;
         if (!$PermissionList) {
             $PermissionList=$this->get_permissions_list();
@@ -1721,7 +1745,7 @@ class xrms_acl {
         $ControlledObjectRelationship_ids=array_keys($ControlledObjectRelationships);
 //        echo "SEARCHING CONTROLLED OBJECTS: <pre>"; print_r($ControlledObjectRelationships);
             //foreach ($UserRoleList as $Role) {
-                $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids);
+                $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, false,false,false,$inheritable);
                 if ($RolePermission) {
                     if (!is_array(current($RolePermission))) $RolePermission=array($RolePermission);
                     foreach ($RolePermission as $IndividualRolePerm) {
@@ -1739,7 +1763,7 @@ class xrms_acl {
         foreach ($ControlledObjectRelationships as $CORelationship_id=>$ControlledObjectRelationship_data) {
             if ($ControlledObjectRelationship_data['ParentControlledObject_id'] AND $ControlledObjectRelationship_data['ParentControlledObject_id']>0) {
 //                echo "\nLOOPING TO PARENT\n";
-                $parentPermissionList=$this->get_permission_user_object($ControlledObjectRelationship_data['ParentControlledObject_id'], $User_id, false, $leftPermissions);
+                $parentPermissionList=$this->get_permission_user_object($ControlledObjectRelationship_data['ParentControlledObject_id'], $User_id, false, $leftPermissions, $level);
                 if ($parentPermissionList) {
                     $FoundPermissionList = array_unique(array_merge($FoundPermissionList, $parentPermissionList));
                     $leftPermissions = array_diff($PermissionList,$FoundPermissionList);
@@ -1771,6 +1795,9 @@ class xrms_acl {
      * @param integer User_id identifying which group to check permissions on
      * @param integer CORelationship_id optional, identifying in what relationship of the controlled object to check permissions on
      * @param array PermissionList of Permission_id's to search for (or integer to only search for one)
+     * @param array _ControlledObjectRelationships providing list of already found controlled object relationships to search for permissions on
+     * @param array _ScopeList providing a scope list to search for instead of using all scopes
+     * @param integer level keeping track of the recursive calls to function (defaults to 0)
      * @return array of Permission_ids on a particular ControlledObject for a user
      *
      **/
@@ -1781,9 +1808,17 @@ class xrms_acl {
                                                     $_CORelationship_id=false,
                                                     $PermissionList=false,
                                                     $_ControlledObjectRelationships=false,
-                                                    $_ScopeList=false
+                                                    $_ScopeList=false,
+                                                    $level=0                                                    
                                                   )
     {        
+        $level++;
+        if ($level==1) {
+            //if this is the first level, allow non-inheritable permissions to be found
+            $inheritable=false;
+        //otherwise only allow inheritable permissions to befound
+        } else $inheritable=true;
+        
         if (!$PermissionList) { $PermissionList = $this->get_permissions_list(); }
         if (!is_array($PermissionList)) { $PermissionList = array( $PermissionList ); }
         foreach($PermissionList as $pkey=>$Perm) {
@@ -1848,7 +1883,7 @@ class xrms_acl {
             $Scopes=array('World');
             if ($SearchUser) $Scopes[]='User';
             $ApplyUserPerms=$SearchUser;
-            $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, $Scopes);
+            $RolePermission = $this->get_role_permission($UserRoleList, $ControlledObjectRelationship_ids, $Scopes, false, false, $inheritable);
             if ($RolePermission) {
                 if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
                 //add up all permissions found
@@ -1906,7 +1941,7 @@ class xrms_acl {
                 }
                 if ($SearchGroups) {
                     $Scopes=array('Group');
-                    $RolePermission = $this->get_role_permission($GroupRoleList, $ControlledObjectRelationship_ids, $Scopes);
+                    $RolePermission = $this->get_role_permission($GroupRoleList, $ControlledObjectRelationship_ids, $Scopes, false, false, $inheritable);
                     if ($RolePermission) {
                         if (!is_array(current($RolePermission))) { $RolePermission = array ( $RolePermission); }
                         //add up all permissions found
@@ -1934,7 +1969,7 @@ class xrms_acl {
                 //Recurse into parent objects to get permissions, only searching for permissions we haven't found yet
                 if (!is_array(current($aparent))) $aparent=array($aparent);
                 foreach ($aparent as $parent) {
-                    $ret = $this->get_permissions_user($parent['ControlledObject_id'],$parent['on_what_id'],$User_id, false, $leftPermissions, $ControlledObjectRelationships);
+                    $ret = $this->get_permissions_user($parent['ControlledObject_id'],$parent['on_what_id'],$User_id, false, $leftPermissions, $ControlledObjectRelationships, false, $level);
                     if ($ret) {
                         //if any permissions are found, add them to the found list, and reset the permissions left
                         $FoundPermissionList = array_unique(array_merge($FoundPermissionList,$ret));
@@ -2071,6 +2106,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.17  2005/05/13 21:21:12  vanmer
+ * - altered to make use of Inheritable flag to mark permissions assigned as inheritable
+ *
  * Revision 1.16  2005/05/02 15:59:28  vanmer
  * - added explicit INNER to JOIN statements, to support older mysql installs
  *
