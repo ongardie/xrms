@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.3 2005/02/15 19:42:51 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.4 2005/05/13 21:22:37 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -61,7 +61,10 @@ Class ACLTest extends PHPUnit_TestCase {
        $this->controlled_objectDataSource=NULL;
        $this->data_sourceName=NULL;
     }
-    
+
+    function test_assert() {
+        $this->assertTrue(true,"This should never fail");
+    }    
    function test_add_role($name=false) {
         if (!$name) { $name = $this->roleName; }
        $result = $this->acl->add_role( $name);
@@ -249,13 +252,13 @@ Class ACLTest extends PHPUnit_TestCase {
        $result = $this->acl->get_group_user($groupid,$user,$roleid,$childGroup,$groupUser_id);
        $this->assertTrue($result,"Locate of user $user in group $groupid with role $roleid or child $childGroup or id $groupUser_id failed.");
        $this->assertTrue(is_array($result),"Group user get should return array, failed.");
+       if ($result) {
+           $groupUserInfo=current($result);
+           $this->assertTrue(is_array($groupUserInfo), "Individual group User record should be an array, failed");
        
-       $groupUserInfo=current($result);
-       $this->assertTrue(is_array($groupUserInfo), "Individual group User record should be an array, failed");
-       
-       $groupUser_id=$groupUserInfo['GroupUser_id'];
-       $this->assertTrue($groupUser_id, "Find of user $user in group $group with role $role failed");
-
+            $groupUser_id=$groupUserInfo['GroupUser_id'];
+            $this->assertTrue($groupUser_id, "Find of user $user in group $group with role $role failed");
+       }
        return $result;
               
     }
@@ -274,15 +277,15 @@ Class ACLTest extends PHPUnit_TestCase {
        $result = $this->test_get_group_user($group,$role,$user);
        $this->assertTrue($result,"Locate of user $user in group $group with role $role failed.");
        $this->assertTrue(is_array($result),"Group user get should return array, failed.");
-       
-       $groupUserInfo=array_shift($result);
-       
-       $result=$groupUserInfo['GroupUser_id'];
-       $this->assertTrue($result, "Find of user $user in group $group with role $role failed, delete should also fail");
-       
-       $result=$this->acl->delete_group_user($result);
-       $this->assertTrue($result,"Delete of user from group should succeed");
-        
+       if ($result) {
+            $groupUserInfo=array_shift($result);
+            
+            $result=$groupUserInfo['GroupUser_id'];
+            $this->assertTrue($result, "Find of user $user in group $group with role $role failed, delete should also fail");
+            
+            $result=$this->acl->delete_group_user($result);
+            $this->assertTrue($result,"Delete of user from group should succeed");
+     }
        if (!$_group) $this->test_delete_group($group);
        if (!$_role) $this->test_delete_role($role);
 
@@ -512,7 +515,7 @@ Class ACLTest extends PHPUnit_TestCase {
         return $result;
         
     }
-
+    //NOTE THAT THIS FUNCTION ASSUMES THAT ACTIVITY #3 IS ATTACHED TO COMPANY #2.  IF THIS IS NOT TRUE IN YOUR SYSTEM, THIS TEST WILL FAIL
     function test_get_object_groups_object_inherit() {
         $Group1 = $this->groupName."object1";
         $Group2 = $this->groupName."object2";
@@ -561,8 +564,7 @@ Class ACLTest extends PHPUnit_TestCase {
                 
         $ControlledObjectID=$controlled_objectresult2; 
         $result=$this->acl->get_object_groups_recursive($ControlledObjectID, $on_what_child_id);
-	
-	$this->assertTrue($result, "Failed to find groups associated with object $ControlledObjec21");
+	$this->assertTrue($result, "Failed to find groups associated with object $ControlledObject2");
         $this->assertTrue(is_array($result),"Group list is not an array, should be");
         $key = array_search($groupresult1,$result);
         $this->assertTrue($key!==false,"Group 1 $Group1 not found in group result");
@@ -572,7 +574,6 @@ Class ACLTest extends PHPUnit_TestCase {
         
         $key = array_search($groupresult3,$result);
         $this->assertTrue($key!==false,"Group 3 $Group3 not found in group result");
-
                 
         $this->test_delete_group_object($Group1, $ControlledObject1, $on_what_parent_id);
         $this->test_delete_group_object($Group2, $ControlledObject1, $on_what_parent_id);
@@ -860,8 +861,9 @@ Class ACLTest extends PHPUnit_TestCase {
         $this->test_delete_group($group2);
         $this->test_delete_group($group3);
         return $ret;
-    }    
-
+    }
+        
+    //NOTE THAT THIS FUNCTION ASSUMES THAT ACTIVITY #3 EXISTS IN THE SYSTEM.  IF THIS IS NOT TRUE IN YOUR SYSTEM, THIS TEST WILL FAIL
     function test_get_object_relationship_parent($_ParentControlledObject=false, $_ControlledObject=false, $on_what_id=false, $_ControlledObjectRelationship=false, $_ChildField=false) {
         if (!$_ParentControlledObject) { 
             $ParentControlledObject=$this->controlled_objectName."Company"; 
@@ -893,11 +895,11 @@ Class ACLTest extends PHPUnit_TestCase {
         $result = $this->acl->get_object_relationship_parent($ControlledObject_id, $on_what_id);
         $this->assertTrue($result, "Failed to find parent information for object $ControlledObject id $on_what_id");
         $this->assertTrue(is_array($result), "Parent information should be an array");
-            
-        $relationshipParent = current($result);
-            
-        $this->assertTrue(is_array($relationshipParent), "Parent information record should be an array");
-        $this->assertTrue($relationshipParent['ControlledObject_id']==$ParentControlledObject_id,"Parent controlled object not found in record");
+         if (is_array($result)) {  
+            $relationshipParent = current($result);    
+            $this->assertTrue(is_array($relationshipParent), "Parent information record should be an array");
+            $this->assertTrue($relationshipParent['ControlledObject_id']==$ParentControlledObject_id,"Parent controlled object not found in record");
+        }
         $this->test_delete_controlled_object_relationship($ParentControlledObject, $ControlledObject);
        $this->test_delete_controlled_object($ParentControlledObject);
        $this->test_delete_controlled_object($ControlledObject);
@@ -1104,6 +1106,9 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.4  2005/05/13 21:22:37  vanmer
+ * - added checks in tests to ensure that some code/subtests only get run when initial test succeeds
+ *
  * Revision 1.3  2005/02/15 19:42:51  vanmer
  * - updated to reflect new output of restricted object list
  * - updated to reflect new fieldnames
