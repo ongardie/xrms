@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.52 2005/04/29 17:57:21 daturaarutad Exp $
+ * $Id: some.php,v 1.53 2005/05/13 13:47:09 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -317,6 +317,7 @@ $con->close();
     <div id="Sidebar">
 
         <!-- recently viewed companies //-->
+	<div id="Recent" class="noprint">
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Recently Viewed"); ?></td>
@@ -329,7 +330,7 @@ $con->close();
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
-
+	</div>
     </div>
 </div>
 
@@ -368,6 +369,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.53  2005/05/13 13:47:09  braverock
+ * - make Recently Viewed Items not print
+ *
  * Revision 1.52  2005/04/29 17:57:21  daturaarutad
  * fixed printing of form/search results
  *
