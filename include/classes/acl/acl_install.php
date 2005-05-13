@@ -46,7 +46,7 @@ function install_upgrade_acl($con=false) {
     if (!$inst_ret) { echo "ACL User Update Failed<br>"; return false; }
     
     $sql = "SELECT * FROM ControlledObjectRelationship";
-    $rst = $con->execute($sql);
+    $rst = $con->SelectLimit($sql,1);
     if (!$rst) db_error_handler($con, $sql);
     if ($rst->numRows()>0) {
         if ($rst->fields['ControlledObjectRelationship_id']) {
@@ -57,6 +57,13 @@ function install_upgrade_acl($con=false) {
             $rst=$con->execute($sql);
             if (!$rst) db_error_handler($con, $sql);
         }
+    }
+    $sql = "SELECT * FROM RolePermission";
+    $rst = $con->SelectLimit($sql,1);
+    if (!$rst) db_error_handler($con, $sql);
+    if (!array_key_exists('Inheritable_flag',$rst->fields)) {
+        $sql = "ALTER TABLE `RolePermission` ADD `Inheritable_flag` TINYINT DEFAULT '1' NOT NULL ";
+        $rst=$con->execute($sql);
     }
     return true;   
 }
@@ -102,6 +109,7 @@ CREATE TABLE `RolePermission` (
   `CORelationship_id` int(10) unsigned NOT NULL default '0',
   `Scope` enum('World','Group','User') NOT NULL default 'World',
   `Permission_id` int(10) unsigned NOT NULL default '0',
+  `Inheritable_flag` TINYINT DEFAULT '1' NOT NULL,
   PRIMARY KEY  (`RolePermission_id`),
   KEY `Role_id` (`Role_id`),
   KEY `CORelationship_id` (`CORelationship_id`),
