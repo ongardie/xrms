@@ -2,7 +2,7 @@
 /**
 * Manage Case Statuses
 *
-* $Id: some.php,v 1.13 2005/05/10 13:30:35 braverock Exp $
+* $Id: some.php,v 1.14 2005/05/13 22:50:10 braverock Exp $
 *
 * @todo manage case statuses by type
 *       will require working on creating the rows by type,
@@ -45,24 +45,24 @@ if ($acase_type_id) {
     //get first row count and last row count
     $cnt = 1;
     $maxcnt = $rst->rowcount();
-                                                                                                                            
+
     //get rows, place them in table form
     $table_rows='';
     if ($rst) {
         while (!$rst->EOF) {
-            
+
             $sort_order = $rst->fields['sort_order'];
             $table_rows .= '<tr>'
                         . '<td class=widget_content><a href=one.php?case_status_id=' . $rst->fields['case_status_id'] . '>'
                         . _($rst->fields['case_status_pretty_name']) . '</a></td>';
-        
+
             //add descriptions
             $table_rows .= '<td class=widget_content>'
                         . htmlspecialchars($rst->fields['case_status_long_desc'])
                         . '</td>';
-                        
+
             //sets up ordering links in the table
-            
+
             $table_rows .= '<td class=widget_content>';
             if ($sort_order != $cnt) {
                 $table_rows .= '<a href="' . $http_site_root
@@ -75,11 +75,11 @@ if ($acase_type_id) {
                             . $sort_order . "&table_name=case_status&case_type_id=$acase_type_id&return_url=/admin/case-statuses/some.php?acase_type_id=$acase_type_id\">"._("down").'</a>';
             }
             $table_rows .= '</td></tr>';
-        
+
             $rst->movenext();
         }
         $rst->close();
-        if (!$table_rows) { 
+        if (!$table_rows) {
             $table_rows='<tr><td colspan=3 class=widget_content>'._("No statuses defined for specified status type") . '</td></tr>';
         }
     }
@@ -103,7 +103,7 @@ start_page($page_title);
    <div id="Content">
                 <table class=widget classpacing=1>
                     <tr>
-                        <td class=widget_header><?php echo _("Status Type"); ?></td>
+                        <td class=widget_header><?php echo _("Case Type"); ?></td>
                     </tr>
                     <tr>
                         <td class=widget_content><?php echo $type_menu; ?></td>
@@ -127,7 +127,7 @@ start_page($page_title);
       <!-- right column //-->
    <div id="Sidebar">
 
-<?php if ($acase_type_id) { ?>    
+<?php if ($acase_type_id) { ?>
     <form action=new-2.php method=post>
         <input type=hidden name=case_type_id value="<?php echo $acase_type_id; ?>">
     <table class=widget cellspacing=1>
@@ -176,7 +176,7 @@ start_page($page_title);
             <input type=text size=30 name=case_status_long_desc>
          </td>
       </tr>
-      
+
         <tr>
             <td class=widget_content_form_element colspan=2>
             <input class=button type=submit value="<?php echo _("Add"); ?>">
@@ -194,6 +194,9 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.14  2005/05/13 22:50:10  braverock
+* - change 'Status Type' to 'Case Type'
+*
 * Revision 1.13  2005/05/10 13:30:35  braverock
 * - localized string patches provided by Alan Baghumian (alanbach)
 *
