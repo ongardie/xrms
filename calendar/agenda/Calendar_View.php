@@ -5,12 +5,9 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.9 2005/05/06 22:12:56 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.10 2005/05/14 18:08:08 daturaarutad Exp $
  */
 
-
-include($xrms_file_root . "/calendar/global.inc");
-include($xrms_file_root . "/calendar/global_pref.inc");
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -20,9 +17,6 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-require("agenda_query.php");
-require("agenda_display.php");
 
 
 /**
@@ -98,89 +92,380 @@ class CalendarView {
 	}
 
 
-	/**
-	* @param string one of: 'month','week','day'
-	* @param array array of assoc arrays of activity values.  expected fields are:
-		activity_id, scheduled_at, ends_at, contact_id, activity_title, activity_description, user_id
-
-	*/
-	function Render($activity_data) {
-
-		$display["result"] .= "<!-- Calendar Begins -->\n";
-		$display["result"] .= "<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">";
-
-		// week planning details
-  		global $set_theme,$ico_left_day,$ico_right_day,$ico_spacer,$l_description ,$ico_event,$auth;
-  		global $set_weekstart_default, $set_start_time, $set_stop_time,$set_cal_interval,$ico_new_event;
-  		global $l_private,$l_private_description;
-/*
-		echo "global $set_theme,$ico_left_day,$ico_right_day,$ico_spacer,$l_description ,$ico_event,$auth;<br>";
-        echo "global $set_weekstart_default, $set_start_time, $set_stop_time,$set_cal_interval,$ico_new_event;<br>";
-        echo "global $l_private,$l_private_description;<br>";
+/**
+* @param array array of assoc arrays of activity values.  expected fields are: activity_id, scheduled_at, ends_at, contact_id, activity_title, activity_description, user_id
+*
 */
-		global $param_date;
-		//global $tf_date_begin;
-		//$tf_date_begin = $this->start_date;
-
-		$param_date	= date('Ymd', strtotime($this->start_date));
-
-		$set_weekstart_default = 'Monday';
-
-		if (count($sel_user_id) != 0 ) {
-  			$agenda_user_view = $sel_user_id;
-  		}
-  		//$sess->register("agenda_user_view");
-  		//page_close();
-  		$sel_user_id = $agenda_user_view;
-  		getGlobalVar($action,"action");
-  		if ($action == "") $action = "index";
-  		$agenda = $this->get_param_agenda();
-  		$this->get_agenda_action();
-  		//$perm->check_permissions($menu, $action);
+function Render($activity_data) {
 
 
-	  	$sel_user_id = slice_user($sel_user_id);
-	  	$obm_wait = run_query_waiting_events();
-
-    	if(count($sel_user_id) != 0) { 
-      		$p_user_array =  $sel_user_id;
-    	} else {
-      		$p_user_array =  array($auth->auth["uid"]);
-    	}
-    	require("agenda_js.inc");
-
-//echo "activity calendar rst is $rs<BR>";
-  	
 /*
-    	if (!$activity_calendar_rst)
-        	$obm_q = run_query_week_event_list($agenda,$p_user_array);
-    	else $obm_q = $activity_calendar_rst;
+	New calendar code follows
+
+	@todo
+		-Make starting day a parameter (currently set to Monday)
+		-Add tooltips 
+		-Create multi-user 'icon mode' and return legend
+		-nicen up the display with custom CSS
+		
+
+
 */
+
+		global $http_site_root;
 	
-    	$user_q = store_users(run_query_get_user_name($p_user_array));
-    	$user_obm = run_query_userobm_readable();
-
-// you could handle this one better
-global $calendar_user;
-
-
-		switch($this->calendar_type) {
-			case 'month':
-    			$display["result"] .= dis_month_planning($agenda,$activity_data,$user_q,$user_obm);
-				break;
-			case 'week':
-    			$display["result"] .= dis_week_planning($agenda,$activity_data,$user_q,$user_obm);
-				break;
-		}
-
-		//$display['result'].= '<link rel="STYLESHEET" type="text/css" href="../css/calendar.css" />';
-    	//$display['features'] = html_planning_bar($agenda,$user_obm, $p_user_array,$user_q);
-
-		$display["result"] .= "<!-- Calendar Ends -->\n";
-
-		return $display;
-
+	switch($this->calendar_type) {
+	
+		case 'month': 
+			$events = $this->BuildWeekEvents($activity_data);
+			
+			// display starts on monday, not necessarily the 1st
+			$visible_start_date = $this->GetWeekStart($this->start_date, 'Monday');
+	
+			$current_month = date('m', strtotime($this->start_date));
+	
+			$widget = '';
+			$week_count = 5;
+			if($visible_start_date == $this->start_date) $week_count--;
+	
+	/*		each day looks like this
+			 ____________
+			|          2 |
+			|------------|
+			|  ________  |
+			| | event1 | |
+			| |--------| |
+			| | event2 | |
+			|  --------  |
+			|____________|
+			*/
+			for($week=0; $week < $week_count; $week++) {
+				$widget .= "<tr>";
+	
+				for($day=0; $day<7; $day++) {
+	
+					$day_of_month = $week * 7 + $day;
+	
+					$day_start_time = strtotime($visible_start_date . " + $day_of_month days");
+	
+					$td_class = '';
+					$events_rows = '';
+	
+					if(is_array($events[$day_of_month])) {
+	
+						$events_rows = '<table>';
+	
+						foreach(($events[$day_of_month]) as $event) {
+	
+							$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\">" . 
+										 ' ' . $event['activity_title'] . 
+										"</a><br>" .  date('h:iA', $event['scheduled_at']) . ' - ' . date('h:iA', $event['ends_at']) ;
+	
+							$events_rows .= '<tr><td class="widget_content_alt">' . $event_link .  '</td></tr>';
+						}
+						$events_rows .= '</table>';
+					}
+	
+					// CSS classes for prev, next month, current day highlighting 
+					if($events_rows) {
+						$td_class .= 'widget_content_alt';
+					} elseif($current_month != date('m', $day_start_time)) {
+						$td_class .= 'widget_content_alt2';
+					} elseif(date('Y-m-d') == date('Y-m-d', $day_start_time)) {
+						$td_class .= 'widget_content_alt';
+					} else {
+						$td_class .= 'widget_content';
+					}
+	
+					$widget .= "<td class=\"$td_class\" width=105 height=105> 
+								<table width=\"100%\" border=0 cellspacing=0 cellpadding=1>
+									<tr><td class=\"$td_class right\">" . date('d', $day_start_time) . "</td></tr>
+									<tr><td class=\"$td_class\" valign=top width=105>$events_rows</td></tr>
+								</table></td>";
+	
+				}
+				$widget .= "</tr>\n";
+			}
+	
+			$display_date = date('F Y', strtotime($this->start_date));
+		
+	    	for ($i=0; $i<7; $i++) {
+	        	$day = date('D',  strtotime("+$i days  $visible_start_date "));
+		
+	        	$days_of_week .= "<td width=\"105\" class=\"center widget_content\">$day</td>";
+	    	}
+	
+		    $next_month_display = date("M Y", strtotime($this->start_date . ' +1 month'));
+		    $prev_month_display = date( "M Y", strtotime($this->start_date . ' -1 month'));
+	
+			$block = "
+			<!-- Calendar Begins -->\n
+			<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">
+		   <table class=\"widget\">
+		    <tr>
+		        <td colspan=30 class='widget_header'>Calendar</td>
+		    </tr>
+		    <tr>
+		     <td colspan=30 class=widget_content>
+		      <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+		       <tr>
+		        <td class=\"widget_label center\">
+		            <input class=button type=button value=\"$prev_month_display\" onclick=\"javascript:calendar_previous_month();\">
+		            <!--
+		            <input class=button type=button value=\"Previous Day\" onclick=\"javascript:calendar_previous_day();\">
+		            -->
+		        <td class=\"widget_label center\">
+		         $display_date
+		        </td>
+		        <td class=\"widget_label center\">
+		            <!--
+		            <input class=button type=button value=\"Next Day\" onclick=\"javascript:calendar_next_day();\">
+		            -->
+		            <input class=button type=button value=\"$next_month_display\" onclick=\"javascript:calendar_next_month();\">
+		        </td>
+		       </tr>
+		      </table>
+			</td>
+		 	</tr>
+			<tr> $days_of_week </tr>
+			$days_header
+		
+			$widget
+			</table>
+			<!-- Calendar Ends -->
+			";
+		
+			$return['result'] = $block;
+		
+			return $return;
+	
+			break;
+	
+	
+		case 'week':
+	
+			global $http_site_root;
+		
+			$events = $this->BuildWeekEvents($activity_data);
+		
+			$widget = '';
+		
+			$start_hour = '8:00:00';
+			$end_hour = '22:00:00';
+			$slice_length_minutes = '30';
+		
+			$start_time = strtotime(date('Y-m-d', strtotime($this->start_date)) . ' ' . $start_hour);
+			$end_time = strtotime(date('Y-m-d', strtotime($this->start_date)) . ' ' . $end_hour);
+			
+			//echo "start time is $start_time aka " . date('Y-m-d H:i', $start_time) . "<br>";
+			//echo "end time is $end_time aka " . date('Y-m-d H:i', $end_time) . "<br>";
+		
+		
+			$days_header .= '<tr>';
+			$days_header .= '<td class=widget_content_alt>&nbsp;</td>';
+		
+		
+			// Some days will have simultaneous events happening, so we need to calculate
+			// the value that will be used for colspan=N in the | Mon 2 | Tue 3 | Weds ... header
+			// and also to know how many dummy columns to output to keep the table lined up
+			$colspan_by_day = array();
+		
+			for($day_of_week=0; $day_of_week<7; $day_of_week++) {
+		
+				$days_slice_event_count = 0;
+		
+				if(is_array($events[$day_of_week])) {
+					// foreach day
+					for($i=0; $i<(($end_time - $start_time)/($slice_length_minutes * 60)); $i++) {
+			
+						$current_time = $start_time + $i*$slice_length_minutes*60;
+						$current_time_this_day = $current_time + $day_of_week*86400;
+			
+						$slot_start = $current_time_this_day;
+						$slot_end = $current_time_this_day + $slice_length_minutes*60;
+		
+						$slice_events_count = 0;
+		
+						// count how many events occur during this time slot
+						foreach($events[$day_of_week] as $event_key => $event) {
+							// if it ends before the slot starts or starts after the slot ends we don't want it
+							if(strtotime($event['ends_at']) <= $slot_start || strtotime($event['scheduled_at']) >= $slot_end) {
+								//echo "event {$event['title']} at {$event['scheduled_at']} not happening during " . 
+								//date('Y-m-d H:i', $slot_start) . ' and ' . date('Y-m-d H:i', $slot_end) . '<br>';
+							} else {
+		
+								$slice_events_count++;
+		
+								//echo "event {$event['title']} at {$event['scheduled_at']} happening during " . 
+								//date('Y-m-d H:i', $slot_start) . ' and ' . date('Y-m-d H:i', $slot_end) . '<br>';
+							}
+						}
+						// store the max # of simultaneous events today
+						$days_slice_event_count = max($days_slice_event_count, $slice_events_count);
+					}
+				}
+				//echo "max is $days_slice_event_count for day $day_of_week<br>";
+				$colspan_by_day[$day_of_week] = $days_slice_event_count;
+		
+				$colspan = ($colspan_by_day[$day_of_week] > 1) ? "colspan=\"" . $colspan_by_day[$day_of_week] . '"' : '';
+		
+				$days_header .= "<td width=13% class=\"widget_content_alt center\" $colspan>" . date('D d', $start_time + $day_of_week*86400) . "</td>\n";
+			}
+			$days_header .= "</tr>\n";
+		
+			// render the week
+			for($i=0; $i<(($end_time - $start_time)/($slice_length_minutes * 60)); $i++) {
+		
+				$current_time = $start_time + $i*$slice_length_minutes*60;
+				//echo date('Y-m-d H:i', $current_time) . '<br>';
+				$widget .= '<tr>';
+		
+				$widget .= '<td class=widget_content_alt>' . date('H:i', $current_time) . '</td>';
+				for($day_of_week=0; $day_of_week<7; $day_of_week++) {
+		
+					// if there are events happening today
+					if(is_array($events[$day_of_week])) {
+		
+						$current_time_this_day = $current_time + $day_of_week*86400;
+						$start_time_this_day = $start_time + $day_of_week*86400;
+						$end_time_this_day = $end_time + $day_of_week*86400;
+		
+		
+						$virtual_columns_outputted_count = 0;
+		
+						// loop through the events, outputting maximum of $colspan_by_day[$day_of_week] <td>'s
+						// output the events and count how many we output or are virtual (covered by rowspan)
+						foreach($events[$day_of_week] as $event_key => $event) {
+		
+							$event_start = strtotime($event['scheduled_at']);
+		
+							$event_start = max($event_start, $start_time_this_day);
+		
+							// avoid a division by zero error later by making sure the duration is at least 1 second.
+							$event_end = max(strtotime($event['ends_at']), $event_start+1);
+							// if this event goes on to tomorrow, we cut it off a the end of the day.
+							$event_end = min(strtotime($event['ends_at']), $end_time_this_day);
+		
+							$slot_start = $current_time_this_day;
+							$slot_end = $current_time_this_day + $slice_length_minutes*60;
+		
+							// if event is starting in this slot
+							if($event_start >= $slot_start && $event_start < $slot_end) {
+		
+								$rowspan = intval(($event_end - $slot_start + $slice_length_minutes*60-1) / ($slice_length_minutes*60));
+								if($rowspan) $rowspan_html = "rowspan=$rowspan";
+		
+								// save the rowspan
+								$events[$day_of_week][$event_key]['rowspan'] = $rowspan-1;
+		
+								// show the event
+								$widget .= "<td class=widget_content_alt $rowspan_html><a href=\"" . 
+											$http_site_root . "/activities/one.php?activity_id={$event['activity_id']}\">{$event['activity_title']}</a><br>" . 
+											"(" . date('H:i', strtotime($event['scheduled_at'])) . '-' . date('H:i', strtotime($event['ends_at'])) . ")</td>";
+								$virtual_columns_outputted_count++;
+							} else {
+								if($events[$day_of_week][$event_key]['rowspan']) {
+									$events[$day_of_week][$event_key]['rowspan']--;
+									$virtual_columns_outputted_count++;
+								}
+							}
+						} 
+		
+						// pad the remainder of <td>s 
+						$finishing_colspan = $colspan_by_day[$day_of_week] - $virtual_columns_outputted_count;
+		
+						if($finishing_colspan > 0) {
+							$finishing_colspan_html = "colspan=$finishing_colspan";
+		
+							$widget .= "<td class=widget_content $finishing_colspan_html>&nbsp;</td>";
+						}
+						/*
+						while($virtual_columns_outputted_count < $colspan_by_day[$day_of_week]) {
+							$widget .= '<td class=widget_content>&nbsp;</td>';
+							$virtual_columns_outputted_count++;
+						}
+						*/
+					} else {
+						// no events today.
+						$widget .= '<td class=widget_content>&nbsp;</td>';
+					}
+				}
+				$widget .= "</tr>\n";
+			}
+		
+			$display_date = date('M d', strtotime($this->start_date)) . ' - ' . date('M d', strtotime($this->start_date) + 6 * 86400);
+		
+		
+			$block = "
+			<!-- Calendar Begins -->\n
+			<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">
+		   <table class=\"widget\">
+		    <tr>
+		        <td colspan=30 class='widget_header'>Calendar</td>
+		    </tr>
+		    <tr>
+		     <td colspan=30 class=widget_content>
+		      <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+		       <tr>
+		        <td class=\"widget_label center\">
+		            <input class=button type=button value=\"Previous Week\" onclick=\"javascript:calendar_previous_week();\">
+		            <!--
+		            <input class=button type=button value=\"Previous Day\" onclick=\"javascript:calendar_previous_day();\">
+		            -->
+		        <td class=\"widget_label center\">
+		         $display_date
+		        </td>
+		        <td class=\"widget_label center\">
+		            <!--
+		            <input class=button type=button value=\"Next Day\" onclick=\"javascript:calendar_next_day();\">
+		            -->
+		            <input class=button type=button value=\"Next Week\" onclick=\"javascript:calendar_next_week();\">
+		        </td>
+		       </tr>
+		      </table>
+			</td>
+		 	</tr>
+			$days_header
+		
+			$widget
+			</table>
+			<!-- Calendar Ends -->
+		
+		
+			";
+		
+			$return['result'] = $block;
+		
+			return $return;
+		break;
+	
+	
 	}
+
+}
+
+function BuildWeekEvents($activity_data) {
+
+	$events = array();
+
+	foreach($activity_data as $activity) {
+
+		if($activity['scheduled_at']) {
+
+			$activity_start_unixtime = strtotime($activity['scheduled_at']);
+			$activity_end_unixtime = strtotime($activity['ends_at']);
+			$start_date_unixtime = strtotime($this->start_date);
+
+			$start_day_of_week = intval(($activity_start_unixtime - $start_date_unixtime) / 86400);
+			$end_day_of_week = intval(($activity_end_unixtime - $start_date_unixtime) / 86400);
+			for($i=$start_day_of_week; $i<($end_day_of_week+1); $i++) {
+				$events[$i][] = $activity;
+				//echo "adding event at day $i<br>";
+			}
+	 	}
+	}
+	return $events;
+}
 
 /**
 * Returns the javascript functions like calendar_next_day that are used by the buttons in the calendar.
@@ -244,339 +529,12 @@ function calendar_previous_month() {
 
 
 
-// Stores in $agenda hash, Agenda parameters transmited
-// returns : $agenda hash with parameters set
-///////////////////////////////////////////////////////////////////////////////
-function get_param_agenda() {
-  global $param_date,$param_event,$tf_title,$sel_category_id,$sel_priority,$ta_event_description;
-  global $set_start_time, $set_stop_time,$tf_date_begin,$sel_time_begin,$sel_min_begin,$sel_time_end,$sel_min_end;
-  global $tf_date_end,$sel_repeat_kind,$hd_conflict_end,$hd_old_end,$hd_old_begin,$action,$param_user;
-  global $cdg_param,$cb_repeatday_0,$cb_repeatday_1,$cb_repeatday_2,$cb_repeatday_3,$cb_repeatday_4,$cb_repeatday_5;
-  global $cb_repeatday_6,$cb_repeatday_7,$tf_repeat_end,$cb_force,$cb_privacy,$cb_repeat_update,$rd_conflict_event;
-  global $hd_date_begin, $hd_date_end,$rd_decision_event,$param_date_begin,$param_date_end,$cb_mail,$param_duration;
-  global $sel_accept_write,$sel_deny_write,$sel_deny_read,$sel_accept_read,$sel_time_duration,$sel_min_duration;
-  global $hd_category_label,$tf_category_upd, $sel_category,$tf_category_new,$sel_grp_id;
-
-  // Agenda fields
-  if (isset($tf_category_new)) $agenda["category_label"] = $tf_category_new;
-  if (isset($hd_category_label)) $agenda["category_label"] = $hd_category_label;
-  if (isset($tf_category_upd)) $agenda["category_label"] = $tf_category_upd;
-  if (isset($sel_category)) $agenda["category_id"] = $sel_category;
-  if (isset ($param_date))
-    $agenda["date"] = $param_date;
-  else
-    $agenda["date"] = date("Ymd",time());
-
-  if (isset($param_event)) $agenda["id"] = $param_event;
-  if (isset($tf_title)) $agenda["title"] = $tf_title;
-  if (isset($sel_category_id)) $agenda["category"] = $sel_category_id;
-  if (isset($sel_priority)) $agenda["priority"] = $sel_priority;
-  if (isset($ta_event_description)) $agenda["description"] = $ta_event_description;
-  if (isset($cb_force))  $agenda["force"] = $cb_force;
-  if (isset($cb_privacy))  $agenda["privacy"] = $cb_privacy;
-  if (is_array($rd_conflict_event)) $agenda["conflict_event"] = $rd_conflict_event;
-  if (is_array($hd_conflict_end)) $agenda["conflict_end"] = $hd_conflict_end;
-  if (isset($hd_old_begin)) $agenda["old_begin"] = $hd_old_begin;
-  if (isset($hd_old_end)) $agenda["old_end"] = $hd_old_end;
-  if (isset($cb_mail)) $agenda["mail"] = $cb_mail;
-  if (is_array($sel_accept_write)) $agenda["accept_w"] = $sel_accept_write;
-  if (is_array($sel_deny_write)) $agenda["deny_w"] = $sel_deny_write;
-  if (is_array($sel_deny_read)) $agenda["deny_r"] = $sel_deny_read;
-  if (is_array($sel_accept_read)) $agenda["accept_r"] = $sel_accept_read;
-  if (isset($sel_time_duration)) {
-    $agenda["duration"] = $sel_time_duration;
-    if(isset($sel_min_duration)) {
-      $agenda["duration"] +=  $sel_min_duration/60;
-    }
-  }
-  if(isset($param_user)) $agenda["user_id"] = $param_user;
-  if(isset($param_duration)) $agenda["duration"] = $param_duration;
-  if (isset($tf_repeat_end)){
-    ereg ("([0-9]{4}).([0-9]{2}).([0-9]{2})",$tf_repeat_end , $day_array1);
-    $agenda["repeat_end"] =  $day_array1[1].$day_array1[2].$day_array1[3];
-   }
-  if (isset($cb_repeat_update)) $agenda["repeat_update"] = 1;
-  if (isset($tf_date_begin)) {
-    ereg ("([0-9]{4}).([0-9]{2}).([0-9]{2})",$tf_date_begin , $day_array2);
-    $agenda["date_begin"] .=  $day_array2[1].$day_array2[2].$day_array2[3];
-    $agenda["date"] = $agenda["date_begin"];
-    if (isset($sel_time_begin) && isset($sel_min_begin)) {
-      $agenda["date_begin"] = $agenda["date_begin"].$sel_time_begin.$sel_min_begin;
-    }
-    else {
-      $agenda["date_begin"] = date("YmdHi",strtotime("+$set_start_time hours",strtotime($agenda["date_begin"])));
-    }
-  }
-  else {
-    $agenda["date_begin"] = date("YmdHi",strtotime("+$set_start_time hours",strtotime(date("Ymd"))));
-  }
-
-  if (isset($tf_date_end)) {
-    ereg ("([0-9]{4}).([0-9]{2}).([0-9]{2})",$tf_date_end , $day_array);
-    $agenda["date_end"] =  $day_array[1].$day_array[2].$day_array[3];
-    if (isset($sel_time_end) && isset($sel_min_end)) {
-      $agenda["date_end"] =  $agenda["date_end"].$sel_time_end.$sel_min_end;
-    }
-    else {
-      $agenda["date_end"] = date("YmdHi",strtotime("+$set_stop_time hours",strtotime($agenda["date_end"])));
-    }
-  }
-  else {
-    $agenda["date_end"] = date("YmdHi",strtotime("+$set_stop_time hours",strtotime(date("Ymd"))));
-  }
-  if (isset($param_date_begin)) {
-    $agenda["date_begin"] = $param_date_begin;
-  }
-  if (isset($param_date_end))
-    $agenda["date_end"] = $param_date_end;
-  if (isset($sel_repeat_kind)) $agenda["kind"] = $sel_repeat_kind;
-  for ($i=0; $i<7; $i++) {
-    if (isset(${"cb_repeatday_".$i}))  {
-      $agenda["repeat_days"] .= '1';
-    }
-    else {
-      $agenda["repeat_days"] .= '0';
-    }
-
-  }
-  if (isset($hd_date_begin)) $agenda["date_begin"] = $hd_date_begin;
-  if (isset($hd_date_end)) $agenda["date_end"] = $hd_date_end;
-  if (isset($rd_decision_event)) $agenda["decision_event"] = $rd_decision_event;
-  if (is_array($sel_grp_id)) $agenda["group"] = $sel_grp_id;
-
-
-  if (debug_level_isset($cdg_param)) {
-    if ( $agenda ) {
-      while ( list( $key, $val ) = each( $agenda ) ) {
-        echo "<br />agenda[$key]=";var_dump($val);
-      }
-    }
-    echo "<br />action = $action";
-  }
-
-  return $agenda;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  Agenda Action 
-///////////////////////////////////////////////////////////////////////////////
-function get_agenda_action() {
-  global $actions, $path;
-  global $l_header_update,$l_header_right,$l_header_meeting;
-  global $l_header_day,$l_header_week,$l_header_year,$l_header_delete;
-  global $l_header_month,$l_header_new_event,$param_event,$param_date,$l_header_admin, $l_header_export;
-  global $cright_read, $cright_write, $cright_read_admin, $cright_write_admin;
-
-  // Index
-  $actions["AGENDA"]["index"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=index",
-    'Right'    => $cright_read,
-    'Condition'=> array ('None') 
-  );
-  
-  // Decision
-  $actions["AGENDA"]["decision"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=decision",
-    'Right'    => $cright_read,
-    'Condition'=> array ('None') 
-                                         );
-
-  // Decision
-  $actions["AGENDA"]["calendar"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=calendar",
-    'Right'    => $cright_read,
-    'Condition'=> array ('None') 
-                                         );
-  // New   
-  $actions["AGENDA"]["new"] = array (
-    'Name'     => $l_header_new_event,
-    'Url'      => "$path/agenda/agenda_index.php?action=new",
-    'Right'    => $cright_write,
-    'Condition'=> array ('index','detailconsult','insert','insert_conflict',
-		  'update_decision','decision','update','delete',
-                  'view_month','view_week','view_day','view_year',
-		  'rights_admin','rights_update')
-		);
-		
-//Detail Update
-
-  $actions["AGENDA"]["detailconsult"] = array (
-    'Name'     => $l_header_update,
-    'Url'      => "$path/agenda/agenda_index.php?action=detailconsult&amp;param_event=".$param_event."&amp;param_date=$param_date",
-    'Right'    => $cright_read,
-    'Condition'=> array ('None') 
-  );
-
-		
-//Detail Update
-
-  $actions["AGENDA"]["detailupdate"] = array (
-    'Name'     => $l_header_update,
-    'Url'      => "$path/agenda/agenda_index.php?action=detailupdate&amp;param_event=".$param_event."&amp;param_date=$param_date",
-    'Right'    => $cright_write,
-    'Condition'=> array ('detailconsult') 
-  );
-
-//Check Delete
-
-  $actions["AGENDA"]["check_delete"] = array (
-    'Name'     => $l_header_delete,
-    'Url'      => "$path/agenda/agenda_index.php?action=check_delete&amp;param_event=".$param_event."&amp;param_date=$param_date",
-    'Right'    => $cright_write_admin,
-    'Condition'=> array ('detailconsult') 
-                                     		 );
-
-
-//Delete
-  $actions["AGENDA"]["delete"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=delete&amp;param_event=".$param_event."&amp;param_date=$param_date",
-    'Right'    => $cright_write_admin,
-    'Condition'=> array ('None') 
-                                     		 );
-
-						 
-//Insert
-
-  $actions["AGENDA"]["insert"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=insert",
-    'Right'    => $cright_write,
-    'Condition'=> array ('None') 
-                                         );
-
-
-//View Year
-
-  $actions["AGENDA"]["view_year"] = array (
-    'Name'     => $l_header_year,
-    'Url'      => "$path/agenda/agenda_index.php?action=view_year",
-    'Right'    => $cright_read,  
-    'Condition'=> array ('all') 
-                                    	    );
-
-//View Month
-
-  $actions["AGENDA"]["view_month"] = array (
-    'Name'     => $l_header_month,
-    'Url'      => "$path/agenda/agenda_index.php?action=view_month",
-    'Right'    => $cright_read,  
-    'Condition'=> array ('all') 
-                                    	    );
-
-//View Week
-
-  $actions["AGENDA"]["view_week"] = array (
-    'Name'     => $l_header_week,
-    'Url'      => "$path/agenda/agenda_index.php?action=view_week",
-    'Right'    => $cright_read, 
-    'Condition'=> array ('all') 
-                                    	  );
-
-//View Day
-
-  $actions["AGENDA"]["view_day"] = array (
-    'Name'     => $l_header_day,
-    'Url'      => "$path/agenda/agenda_index.php?action=view_day",
-    'Right'    => $cright_read, 
-    'Condition'=> array ('all') 
-                                    	 );
-
-//Update
-
-  $actions["AGENDA"]["update"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=update",
-    'Right'    => $cright_write,
-    'Condition'=> array ('None') 
-                                         );
-					 
-//Update
-
-  $actions["AGENDA"]["update_decision"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=update",
-    'Right'    => $cright_write,
-    'Condition'=> array ('None') 
-                                         );
-					 
-//Meeting managment.					 
-  $actions["AGENDA"]["new_meeting"] = array (
-    'Name'     => $l_header_meeting,
-    'Url'      => "$path/agenda/agenda_index.php?action=new_meeting",
-    'Right'    => $cright_write,
-    'Condition'=> array ('all') 
-                                         );
-
-//Meeting managment.					 
-  $actions["AGENDA"]["perform_meeting"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=perform_meeting",
-    'Right'    => $cright_write,
-    'Condition'=> array ('None') 
-                                         );
-
-  // Right admin.					 
-  $actions["AGENDA"]["rights_admin"] = array (
-    'Name'     => $l_header_right,
-    'Url'      => "$path/agenda/agenda_index.php?action=rights_admin",
-    'Right'    => $cright_write,
-    'Condition'=> array ('all') 
-                                         );
-
-  // Update Right
-  $actions["AGENDA"]["rights_update"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=rights_update",
-    'Right'    => $cright_write,
-    'Condition'=> array ('None') 
-                                         );
-
-// Admin
-  $actions["AGENDA"]["admin"] = array (
-    'Name'     => $l_header_admin,
-    'Url'      => "$path/agenda/agenda_index.php?action=admin",
-    'Right'    => $cright_read_admin,
-    'Condition'=> array ('all') 
-                                       );
-				       
-// Kind Insert
-  $actions["AGENDA"]["category_insert"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=category_insert",
-    'Right'    => $cright_write_admin,
-    'Condition'=> array ('None') 
-                                     	     );
-
-// Kind Update
-  $actions["AGENDA"]["category_update"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=category_update",
-    'Right'    => $cright_write_admin,
-    'Condition'=> array ('None') 
-                                     	      );
-
-// Kind Check Link
-  $actions["AGENDA"]["category_checklink"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=category_checklink",
-    'Right'    => $cright_write_admin,
-    'Condition'=> array ('None') 
-                                     		);
-
-// Kind Delete
-  $actions["AGENDA"]["category_delete"] = array (
-    'Url'      => "$path/agenda/agenda_index.php?action=category_delete",
-    'Right'    => $cright_write_admin,
-    'Condition'=> array ('None') 
-                                     	       );
-					       
-// Export
-  $actions["AGENDA"]["export"] = array (
-    'Name'     => $l_header_export,
-    'Url'      => "$path/agenda/agenda_index.php?action=export&amp;popup=1",
-    'Right'    => $cright_read,
-    'Condition'=> array ('all') 
-                                       );
-
-}
- 
-
-
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.10  2005/05/14 18:08:08  daturaarutad
+* rewrite.  see @todo for what is left
+*
 * Revision 1.9  2005/05/06 22:12:56  daturaarutad
 * fixed a bug in year transition when calculating previous month
 *
