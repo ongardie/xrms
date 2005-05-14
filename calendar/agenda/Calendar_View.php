@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.10 2005/05/14 18:08:08 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.11 2005/05/14 18:18:57 daturaarutad Exp $
  */
 
 
@@ -159,7 +159,7 @@ function Render($activity_data) {
 	
 							$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\">" . 
 										 ' ' . $event['activity_title'] . 
-										"</a><br>" .  date('h:iA', $event['scheduled_at']) . ' - ' . date('h:iA', $event['ends_at']) ;
+										"</a><br>" .  date('h:iA', strtotime($event['scheduled_at'])) . ' - ' . date('h:iA', strtotime($event['ends_at'])) ;
 	
 							$events_rows .= '<tr><td class="widget_content_alt">' . $event_link .  '</td></tr>';
 						}
@@ -532,6 +532,9 @@ function calendar_previous_month() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.11  2005/05/14 18:18:57  daturaarutad
+* fixed missing strtotime() calls
+*
 * Revision 1.10  2005/05/14 18:08:08  daturaarutad
 * rewrite.  see @todo for what is left
 *
