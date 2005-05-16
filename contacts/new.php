@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.26 2005/05/07 00:10:56 vanmer Exp $
+ * $Id: new.php,v 1.27 2005/05/16 16:50:27 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -159,52 +159,8 @@ start_page($page_title, true, $msg);
 
 ?>
 
+<form action=new-2.php method=post>
 <div id="Main">
-    <div id="Sidebar">
-        <form action=new-2.php method=post>
-        <table class=widget><tr><td colspan=2 class=widget_header>Home Address</td></tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Home Address"); ?></td>
-                <td class=widget_content_form_element><?php echo $home_address_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Address Name"); ?></td>
-                <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Line 1"); ?></td>
-                <td class=widget_content_form_element><input type=text size=30 name=line1 value="<?php echo $line1; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Line 2"); ?></td>
-                <td class=widget_content_form_element><input type=text size=30 name=line2 value="<?php echo $line2; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("City"); ?></td>
-                <td class=widget_content_form_element><input type=text size=30 name=city value="<?php echo $city; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("State/Province"); ?></td>
-                <td class=widget_content_form_element><input type=text size=20 name=province value="<?php echo $province; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
-                <td class=widget_content_form_element><input type=text size=10 name=postal_code value="<?php echo $postal_code; ?>"></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Country"); ?></td>
-                <td class=widget_content_form_element><?php echo $country_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Address Type"); ?></td>
-                <td class=widget_content_form_element><?php echo $address_type_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right_91px><?php echo _("Address Body"); ?></td>
-                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body><?php echo $address_body; ?></textarea> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>> <?php echo _("Use"); ?></td>
-            </tr>
-        </table>
-    </div>
     <div id="Content">
 
         <input type=hidden name=company_id value="<?php echo $company_id; ?>">
@@ -323,11 +279,54 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add Contact"); ?>"></td>
             </tr>
         </table>
-        </form>
 
     </div>
-
+    <div id="Sidebar">
+        <table class=widget><tr><td colspan=2 class=widget_header>Home Address</td></tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Home Address"); ?></td>
+                <td class=widget_content_form_element><?php echo $home_address_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Address Name"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Line 1"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=line1 value="<?php echo $line1; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Line 2"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=line2 value="<?php echo $line2; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("City"); ?></td>
+                <td class=widget_content_form_element><input type=text size=30 name=city value="<?php echo $city; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("State/Province"); ?></td>
+                <td class=widget_content_form_element><input type=text size=20 name=province value="<?php echo $province; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
+                <td class=widget_content_form_element><input type=text size=10 name=postal_code value="<?php echo $postal_code; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Country"); ?></td>
+                <td class=widget_content_form_element><?php echo $country_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Address Type"); ?></td>
+                <td class=widget_content_form_element><?php echo $address_type_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right_91px><?php echo _("Address Body"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=25 name=address_body><?php echo $address_body; ?></textarea><br> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>><?php echo _("Use"); ?></td>
+            </tr>
+        </table>
+    </div>
 </div>
+ </form>
 
 <script language="JavaScript" type="text/javascript">
 
@@ -345,6 +344,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.27  2005/05/16 16:50:27  vanmer
+ * - moved sidebar to appear after main div, for IE compatibility
+ *
  * Revision 1.26  2005/05/07 00:10:56  vanmer
  * - added sidebar for adding a new address when adding a new contact
  * - move form to include new address fields
