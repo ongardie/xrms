@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.73 2005/05/06 00:30:46 vanmer Exp $
+ * $Id: update.php,v 1.74 2005/05/16 21:30:49 vanmer Exp $
  */
 
 // where do we include from
@@ -4823,10 +4823,13 @@ $con->execute($sql);
 
 add_user_preference_type($con, 'user_language', 'Language', false, false, true, 'select');
 add_user_preference_type($con, 'css_theme', 'Theme', 'Color and Layout Theme for XRMS', false, true, 'select');
-//close the database connection, because we don't need it anymore
+
+$sql = "ALTER TABLE `contacts` ADD `tax_id` VARCHAR( 32 )";
+$con->execute($sql);
 
 do_hook_function('xrms_update', $con);
 
+//close the database connection, because we don't need it anymore
 $con->close();
 
 $page_title = _("Update Complete");
@@ -4847,6 +4850,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.74  2005/05/16 21:30:49  vanmer
+ * - added tax_id field to contacts table
+ *
  * Revision 1.73  2005/05/06 00:30:46  vanmer
  * - added table for tracking user preference options
  * - moved fields to user preferences
