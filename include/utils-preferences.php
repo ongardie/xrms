@@ -18,7 +18,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.5 2005/05/16 20:48:36 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.6 2005/05/16 22:00:57 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -78,9 +78,8 @@ function set_user_preference(&$con, $user_id, $preference_type, $preference_valu
     if ($preference_name AND $set_default) {
         set_default_user_preference($con, $user_id, $preference_type, $preference_name);
     }
-    $func_name='get_user_preference';
-    $params=array($con, $user_id, $preference_type_id, $preference_name);
-    function_cache_set($func_name, $params, $preference_value, false);
+    $params=array($user_id, $preference_type, false);
+    function_cache_set('get_user_preference',$params, $preference_value, false);
     return true;
 }
 
@@ -163,11 +162,6 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
         return false;
     }
     
-    $func_name='get_user_preference';
-    $params=func_get_args();
-    if (function_cache_bool($func_name, $params)) {
-        return function_cache_get($func_name, $params);
-    }
 //    echo "IN get_user_preference<br>";
     if (is_numeric($preference_type)) {
 //        echo "NUMERIC";
@@ -178,6 +172,11 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
         $preference_type_data=get_user_preference_type($con, $preference_type);
     }
     $preference_type=$preference_type_data['user_preference_type_id'];
+    $func_name='get_user_preference';
+    $params=array($user_id,$preference_type, $show_all);
+    if (function_cache_bool($func_name, $params)) {
+        return function_cache_get($func_name, $params);
+    }
     if (!$preference_type) { return false; }
     if ($preference_type_data['allow_multiple_flag']==1) {
         $allow_multiple=true;
@@ -609,6 +608,10 @@ function list_user_preference_types($con, $show_only_active=true){
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.6  2005/05/16 22:00:57  vanmer
+ * - altered to cache user preference value only after preference type number is found
+ * - changed set preference to recache newly set value
+ *
  * Revision 1.5  2005/05/16 20:48:36  vanmer
  * - added session caching to user preference functions, both for user preference type and user preference
  * values
