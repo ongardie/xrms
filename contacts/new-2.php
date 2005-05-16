@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.21 2005/05/10 16:28:16 braverock Exp $
+ * $Id: new-2.php,v 1.22 2005/05/16 21:30:22 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -25,6 +25,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
            'first_names' => array ( 'first_names' , arr_vars_SESSION ),
            'gender' => array ( 'gender' , arr_vars_SESSION ),
            'date_of_birth' => array ( 'date_of_birth' , arr_vars_SESSION ),
+           'tax_id' => array ( 'tax_id' , arr_vars_SESSION ),
            'summary' => array ( 'summary' , arr_vars_SESSION ),
            'title' => array ( 'title' , arr_vars_SESSION ),
            'description' => array ( 'description' , arr_vars_SESSION ),
@@ -135,6 +136,7 @@ $rec['interests'] = $interests;
 $rec['salutation'] = $salutation;
 $rec['gender'] = $gender;
 $rec['date_of_birth'] = $date_of_birth;
+$rec['tax_id'] = $tax_id;
 $rec['profile'] = $profile;
 $rec['custom1'] = $custom1;
 $rec['custom2'] = $custom2;
@@ -167,6 +169,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.22  2005/05/16 21:30:22  vanmer
+ * - added tax_id handling to contacts pages
+ *
  * Revision 1.21  2005/05/10 16:28:16  braverock
  * - add new contact to recently viewed list
  *   resolves SF bug 1119511 reported by Beth Maknick (maulani)

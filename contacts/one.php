@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.86 2005/05/09 19:54:34 ycreddy Exp $
+ * $Id: one.php,v 1.87 2005/05/16 21:30:22 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -335,6 +335,10 @@ function markComplete() {
                                     <td class=clear><?php  echo $date_of_birth; ?></td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel><?php echo _("Tax ID"); ?></td>
+                                    <td class=clear><?php  echo $tax_id; ?></td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel><?php echo _("E-Mail"); ?></td>
 
                                     <td class=clear>
@@ -601,6 +605,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.87  2005/05/16 21:30:22  vanmer
+ * - added tax_id handling to contacts pages
+ *
  * Revision 1.86  2005/05/09 19:54:34  ycreddy
  * Added trim check on work_phone_ext
  *

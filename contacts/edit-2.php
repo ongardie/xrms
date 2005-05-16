@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.17 2005/05/02 13:51:51 braverock Exp $
+ * $Id: edit-2.php,v 1.18 2005/05/16 21:30:22 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -29,6 +29,7 @@ $summary = $_POST['summary'];
 $title = $_POST['title'];
 $description = $_POST['description'];
 $date_of_birth = $_POST['date_of_birth'];
+$tax_id = $_POST['tax_id'];
 $gender = $_POST['gender'];
 $salutation = $_POST['salutation'];
 $email = $_POST['email'];
@@ -79,6 +80,7 @@ $rec['msn_name'] = $msn_name;
 $rec['interests'] = $interests;
 $rec['gender'] = $gender;
 $rec['date_of_birth'] = $date_of_birth;
+$rec['tax_id'] = $tax_id;
 $rec['profile'] = $profile;
 $rec['custom1'] = $custom1;
 $rec['custom2'] = $custom2;
@@ -104,6 +106,9 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.18  2005/05/16 21:30:22  vanmer
+ * - added tax_id handling to contacts pages
+ *
  * Revision 1.17  2005/05/02 13:51:51  braverock
  * - add support for home address
  *

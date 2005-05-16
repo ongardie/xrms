@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.31 2005/05/04 14:36:14 braverock Exp $
+ * $Id: edit.php,v 1.32 2005/05/16 21:30:22 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -59,6 +59,7 @@ if ($rst) {
     $title = $rst->fields['title'];
     $description = $rst->fields['description'];
     $date_of_birth = $rst->fields['date_of_birth'];
+    $tax_id = $rst->fields['tax_id'];
     $gender = $rst->fields['gender'];
     $salutation = $rst->fields['salutation'];
     $email = $rst->fields['email'];
@@ -189,6 +190,10 @@ confGoTo_includes();
                 <td class=widget_content_form_element><input type=text name=date_of_birth value="<?php echo $date_of_birth; ?>" size=10></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
+                <td class=widget_content_form_element><input type=text name=date_of_birth value="<?php echo $tax_id; ?>" size=32></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Summary"); ?></td>
                 <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
             </tr>
@@ -296,6 +301,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.32  2005/05/16 21:30:22  vanmer
+ * - added tax_id handling to contacts pages
+ *
  * Revision 1.31  2005/05/04 14:36:14  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *

@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.27 2005/05/16 16:50:27 vanmer Exp $
+ * $Id: new.php,v 1.28 2005/05/16 21:30:22 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -203,6 +203,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=date_of_birth size=12></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
+                <td class=widget_content_form_element><input type=text name=tax_id size=35></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Summary"); ?></td>
                 <td class=widget_content_form_element><input type=text name=summary size=35></td>
             </tr>
@@ -344,6 +348,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.28  2005/05/16 21:30:22  vanmer
+ * - added tax_id handling to contacts pages
+ *
  * Revision 1.27  2005/05/16 16:50:27  vanmer
  * - moved sidebar to appear after main div, for IE compatibility
  *
