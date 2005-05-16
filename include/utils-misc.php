@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.130 2005/05/11 16:29:28 braverock Exp $
+ * $Id: utils-misc.php,v 1.131 2005/05/16 20:47:55 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -658,6 +658,67 @@ function db_error_handler (&$con,$sql,$colspan=20) {
         }
 } //end fn db_error_handler
 
+
+/**
+ * function get_country_from_address
+ *
+ * Takes an address and returns the country id for the address, either from the database or the cache
+ *
+ * @author Aaron van Meerten
+ *
+ * @param object $con Database connection
+ * @param int $address_id with address to find country_id for
+ *
+ * @return integer $country_id with country db identifier for which address resides
+ */
+function get_country_from_address($con, $address_id) {
+    if (!$address_id OR !$con) return false;
+    $func_name='get_country_from_address';
+    $params=array($address_id);
+    if (function_cache_bool($func_name, $params)) {
+        return function_cache_get($func_name, $params);
+    }
+    $sql = "select country_id FROM addresses where address_id=$address_id";
+    $rst=$con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql);  return false; }
+    if (!$rst->EOF) {
+        $country_id=$rst->fields['country_id'];
+        function_cache_set($func_name, $params, $country_id, false);
+        return $country_id;
+    }
+    return false;
+}
+
+/**
+ * function get_phone_format_from_country
+ *
+ * takes a country id and returns the phone format, either from the database or the cache
+ *
+ * @author Aaron van Meerten
+ *
+ * @param object $con Database connection
+ * @param int $country_id with database id of country to load format for
+ *
+ * @return string $phone_format to use for formatting phone number
+ */
+ function get_phone_format_from_country($con, $country_id) {
+    if (!$country_id OR !$con) return false;
+    $func_name='get_phone_format_from_country';
+    $params=array($country_id);  
+    if (function_cache_bool($func_name, $params)) {
+//        echo "<pre>"; print_r($_SESSION); echo "</pre>";
+        return function_cache_get($func_name, $params);
+    }
+    $sql = "select countries.phone_format FROM countries WHERE country_id=$country_id";
+    $rst=$con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql);  return false; }
+    if (!$rst->EOF) {
+        $phone_format=$rst->fields['phone_format'];
+        function_cache_set($func_name, $params, $phone_format, false);
+        return $phone_format;
+    }
+    return false;
+}
 /**
  * function get_formatted_phone : get the phone number and format it based on the country
  *
@@ -672,25 +733,15 @@ function db_error_handler (&$con,$sql,$colspan=20) {
  *
  * @return string $phone_to_display
  */
-
-function get_formatted_phone ($con, $address_id, $phone) {
+function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
     global $company_id;
     global $contact_id;
-
+    if (!$country_id) {
+        $country_id=get_country_from_address($con, $address_id);
+    }
+    $expression=get_phone_format_from_country($con, $country_id);
+    
     $phone_to_display = $phone;
-    $sql = "select
-                c.phone_format
-            from
-                addresses a,
-                countries c
-            where
-                a.address_id='$address_id'
-            and
-                a.country_id=c.country_id";
-    $rst = $con->execute($sql);
-    $expression = $rst->fields['phone_format'];
-    $rst->close();
-
     $pos = 0;
     $number_length = 0;
 
@@ -1644,6 +1695,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.131  2005/05/16 20:47:55  vanmer
+ * - added caching of database results for address formatting functions
+ *
  * Revision 1.130  2005/05/11 16:29:28  braverock
  * - explicitly set contacT_id and company_id in phone format for cti integration
  *
