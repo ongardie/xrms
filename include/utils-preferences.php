@@ -18,7 +18,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.4 2005/05/07 17:03:21 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.5 2005/05/16 20:48:36 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -78,6 +78,9 @@ function set_user_preference(&$con, $user_id, $preference_type, $preference_valu
     if ($preference_name AND $set_default) {
         set_default_user_preference($con, $user_id, $preference_type, $preference_name);
     }
+    $func_name='get_user_preference';
+    $params=array($con, $user_id, $preference_type_id, $preference_name);
+    function_cache_set($func_name, $params, $preference_value, false);
     return true;
 }
 
@@ -159,6 +162,12 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     if (!$user_id AND $user_id!==0) {
         return false;
     }
+    
+    $func_name='get_user_preference';
+    $params=func_get_args();
+    if (function_cache_bool($func_name, $params)) {
+        return function_cache_get($func_name, $params);
+    }
 //    echo "IN get_user_preference<br>";
     if (is_numeric($preference_type)) {
 //        echo "NUMERIC";
@@ -209,6 +218,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
         $ret=$pref_rst->fields['user_preference_value'];
     }
     if ($ret) {
+        function_cache_set($func_name, $params, $ret, false);
         return $ret;
     }
     else return false;
@@ -459,6 +469,13 @@ function delete_preference_option($con, $user_preference_type_id, $option_value,
  */
 function get_user_preference_type($con, $type_name=false, $type_id=false, $return_all=false) {
     if (!$type_name AND !$type_id AND !$return_all) return false;
+    $func_name='get_user_preference_type';
+    $params = func_get_args();
+    if (!$return_all) {
+        if (function_cache_bool($func_name, $params)) {
+            return function_cache_get($func_name, $params);
+        }
+    }
     $where=array();
     $where[]="user_preference_type_status='a'";
     if ($type_name) $where[]="user_preference_name=". $con->qstr($type_name);
@@ -480,7 +497,9 @@ function get_user_preference_type($con, $type_name=false, $type_id=false, $retur
                 return $types;
             }
          } else {
-            return $type_rst->fields;
+            $preference_type_data=$type_rst->fields;
+            function_cache_set($func_name, $params, $preference_type_data, false);
+            return $preference_type_data;
         }
     }
     return false;
@@ -590,6 +609,10 @@ function list_user_preference_types($con, $show_only_active=true){
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.5  2005/05/16 20:48:36  vanmer
+ * - added session caching to user preference functions, both for user preference type and user preference
+ * values
+ *
  * Revision 1.4  2005/05/07 17:03:21  vanmer
  * - added check for user_id before executing get preference function
  *
