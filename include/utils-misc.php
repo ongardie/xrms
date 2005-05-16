@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.131 2005/05/16 20:47:55 vanmer Exp $
+ * $Id: utils-misc.php,v 1.132 2005/05/16 20:56:24 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -519,7 +519,11 @@ exit;
  * @param string $param System Parameter to be retrieved
  */
 function get_system_parameter(&$con, $param) {
-
+    $func_name='get_system_parameter';
+    $params=array($param);
+    if (function_cache_bool($func_name, $params)) {
+        return function_cache_get($func_name, $params);
+    }
     $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
     $sysst = $con->execute($sql);
     if ($sysst) {
@@ -562,7 +566,7 @@ function get_system_parameter(&$con, $param) {
         db_error_handler ($con, $sql);
         return false;
     }
-
+    function_cache_set($func_name, $params, $my_val, false);
     return $my_val;
 } //end fn get_system_parameter
 
@@ -1695,6 +1699,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.132  2005/05/16 20:56:24  vanmer
+ * - added caching for system parameter function calls
+ *
  * Revision 1.131  2005/05/16 20:47:55  vanmer
  * - added caching of database results for address formatting functions
  *
