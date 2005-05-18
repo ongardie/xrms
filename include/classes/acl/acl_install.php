@@ -50,10 +50,10 @@ function install_upgrade_acl($con=false) {
     if (!$rst) db_error_handler($con, $sql);
     if ($rst->numRows()>0) {
         if ($rst->fields['ControlledObjectRelationship_id']) {
-            $sql = "ALTER TABLE `RolePermission` CHANGE `ControlledObjectRelationship_id` `CORelationship_id` INT( 10 ) UNSIGNED DEFAULT '0' NOT NULL";
+            $sql = "ALTER TABLE RolePermission CHANGE ControlledObjectRelationship_id CORelationship_id INT( 10 ) UNSIGNED DEFAULT '0' NOT NULL";
             $rst=$con->execute($sql);
             if (!$rst) db_error_handler($con, $sql);
-            $sql = "ALTER TABLE `ControlledObjectRelationship` CHANGE `ControlledObjectRelationship_id` `CORelationship_id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
+            $sql = "ALTER TABLE ControlledObjectRelationship CHANGE ControlledObjectRelationship_id CORelationship_id INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
             $rst=$con->execute($sql);
             if (!$rst) db_error_handler($con, $sql);
         }
@@ -62,7 +62,7 @@ function install_upgrade_acl($con=false) {
     $rst = $con->SelectLimit($sql,1);
     if (!$rst) db_error_handler($con, $sql);
     if (!array_key_exists('Inheritable_flag',$rst->fields)) {
-        $sql = "ALTER TABLE `RolePermission` ADD `Inheritable_flag` TINYINT DEFAULT '1' NOT NULL ";
+        $sql = "ALTER TABLE RolePermission ADD Inheritable_flag TINYINT DEFAULT '1' NOT NULL ";
         $rst=$con->execute($sql);
     }
     return true;   
@@ -103,17 +103,17 @@ function install_role_permissions($con) {
     $return=true;
     if (!$crst) {
         $sql=<<<TILLEND
-CREATE TABLE `RolePermission` (
-  `RolePermission_id` int(10) unsigned NOT NULL auto_increment,
-  `Role_id` int(10) unsigned NOT NULL default '0',
-  `CORelationship_id` int(10) unsigned NOT NULL default '0',
-  `Scope` enum('World','Group','User') NOT NULL default 'World',
-  `Permission_id` int(10) unsigned NOT NULL default '0',
-  `Inheritable_flag` TINYINT DEFAULT '1' NOT NULL,
-  PRIMARY KEY  (`RolePermission_id`),
-  KEY `Role_id` (`Role_id`),
-  KEY `CORelationship_id` (`CORelationship_id`),
-  KEY `Permission_id` (`Permission_id`)
+CREATE TABLE RolePermission (
+  RolePermission_id int(10) unsigned NOT NULL auto_increment,
+  Role_id int(10) unsigned NOT NULL default '0',
+  CORelationship_id int(10) unsigned NOT NULL default '0',
+  Scope enum('World','Group','User') NOT NULL default 'World',
+  Permission_id int(10) unsigned NOT NULL default '0',
+  Inheritable_flag TINYINT DEFAULT '1' NOT NULL,
+  PRIMARY KEY  (RolePermission_id),
+  KEY Role_id (Role_id),
+  KEY CORelationship_id (CORelationship_id),
+  KEY Permission_id (Permission_id)
 )
 TILLEND;
     
@@ -123,24 +123,24 @@ TILLEND;
     }
     if ($crst->numRows()==0) {
         $sql=<<<TILLEND
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (1, 2, 1, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (2, 2, 1, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (3, 2, 1, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (4, 2, 1, 'World', 4);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (5, 1, 1, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (6, 1, 1, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (7, 1, 1, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (8, 1, 2, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (9, 1, 2, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (10, 1, 2, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (11, 2, 2, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (12, 2, 2, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (13, 2, 2, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (14, 2, 2, 'World', 4);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (15, 2, 21, 'World', 1);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (16, 2, 21, 'World', 2);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (17, 2, 21, 'World', 3);
-INSERT INTO `RolePermission` (`RolePermission_id`, `Role_id`, `CORelationship_id`, `Scope`, `Permission_id`) VALUES (18, 2, 21, 'World', 4);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (1, 2, 1, 'World', 1);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (2, 2, 1, 'World', 2);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (3, 2, 1, 'World', 3);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (4, 2, 1, 'World', 4);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (5, 1, 1, 'World', 1);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (6, 1, 1, 'World', 2);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (7, 1, 1, 'World', 3);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (8, 1, 2, 'World', 1);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (9, 1, 2, 'World', 2);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (10, 1, 2, 'World', 3);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (11, 2, 2, 'World', 1);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (12, 2, 2, 'World', 2);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (13, 2, 2, 'World', 3);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (14, 2, 2, 'World', 4);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (15, 2, 21, 'World', 1);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (16, 2, 21, 'World', 2);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (17, 2, 21, 'World', 3);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (18, 2, 21, 'World', 4);
 TILLEND;
         $return=execute_batch_sql($con, $sql);
     }
@@ -154,14 +154,14 @@ function install_group_members($con) {
     $return=true;
     if (!$crst) {
         $sql=<<<TILLEND
-CREATE TABLE `GroupMember` (
-  `GroupMember_id` int(10) unsigned NOT NULL auto_increment,
-  `Group_id` int(10) unsigned NOT NULL default '0',
-  `ControlledObject_id` int(10) unsigned NOT NULL default '0',
-  `on_what_id` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`GroupMember_id`),
-  KEY `Group_id` (`Group_id`),
-  KEY `ControlledObject_id` (`ControlledObject_id`)
+CREATE TABLE GroupMember (
+  GroupMember_id int(10) unsigned NOT NULL auto_increment,
+  Group_id int(10) unsigned NOT NULL default '0',
+  ControlledObject_id int(10) unsigned NOT NULL default '0',
+  on_what_id int(11) NOT NULL default '0',
+  PRIMARY KEY  (GroupMember_id),
+  KEY Group_id (Group_id),
+  KEY ControlledObject_id (ControlledObject_id)
 )
 TILLEND;
     
@@ -184,10 +184,10 @@ function install_data_sources($con) {
     $return=true;
     if (!$crst) {
         $sql=<<<TILLEND
-CREATE TABLE `data_source` (
-  `data_source_id` int(10) unsigned NOT NULL auto_increment,
-  `data_source_name` varchar(128) NOT NULL default '',
-  PRIMARY KEY  (`data_source_id`)
+CREATE TABLE data_source (
+  data_source_id int(10) unsigned NOT NULL auto_increment,
+  data_source_name varchar(128) NOT NULL default '',
+  PRIMARY KEY  (data_source_id)
 )
 TILLEND;
     
@@ -197,7 +197,7 @@ TILLEND;
     }
     if ($crst->numRows()==0) {
         $sql=<<<TILLEND
-INSERT INTO `data_source` VALUES (1, 'XRMS');
+insert into data_source values (1, 'XRMS');
 TILLEND;
         $return=execute_batch_sql($con, $sql);
     }
@@ -210,16 +210,16 @@ function install_group_users($con) {
     $return=true;
     if (!$crst) {
         $sql=<<<TILLEND
-CREATE TABLE `GroupUser` (
-  `GroupUser_id` int(10) unsigned NOT NULL auto_increment,
-  `Group_id` int(10) unsigned NOT NULL default '0',
-  `user_id` int(10) unsigned default NULL,
-  `Role_id` int(10) unsigned default NULL,
-  `ChildGroup_id` int(10) unsigned default NULL,
-  PRIMARY KEY  (`GroupUser_id`),
-  KEY `Group_id` (`Group_id`),
-  KEY `Role_id` (`Role_id`),
-  KEY `ChildGroup_id` (`ChildGroup_id`)
+CREATE TABLE GroupUser (
+  GroupUser_id int(10) unsigned NOT NULL auto_increment,
+  Group_id int(10) unsigned NOT NULL default '0',
+  user_id int(10) unsigned default NULL,
+  Role_id int(10) unsigned default NULL,
+  ChildGroup_id int(10) unsigned default NULL,
+  PRIMARY KEY  (GroupUser_id),
+  KEY Group_id (Group_id),
+  KEY Role_id (Role_id),
+  KEY ChildGroup_id (ChildGroup_id)
 )
 TILLEND;
     
@@ -241,11 +241,11 @@ function install_permissions($con) {
     $return=true;
     if (!$crst) {
         $sql=<<<TILLEND
-CREATE TABLE `Permission` (
-  `Permission_id` int(10) unsigned NOT NULL auto_increment,
-  `Permission_name` varchar(64) NOT NULL default '',
-  `Permission_abbr` varchar(5) NOT NULL default '',
-  PRIMARY KEY  (`Permission_id`)
+CREATE TABLE Permission (
+  Permission_id int(10) unsigned NOT NULL auto_increment,
+  Permission_name varchar(64) NOT NULL default '',
+  Permission_abbr varchar(5) NOT NULL default '',
+  PRIMARY KEY  (Permission_id)
 )
 TILLEND;
     
@@ -254,12 +254,15 @@ TILLEND;
         $crst=$con->execute($csql);
     }
     if ($crst->numRows()==0) {
-        $sql=<<<TILLEND
-INSERT INTO `Permission` (`Permission_id`, `Permission_name`, `Permission_abbr`) VALUES (1, 'Create', 'C');
-INSERT INTO `Permission` (`Permission_id`, `Permission_name`, `Permission_abbr`) VALUES (2, 'Read', 'R');
-INSERT INTO `Permission` (`Permission_id`, `Permission_name`, `Permission_abbr`) VALUES (3, 'Update', 'U');
-INSERT INTO `Permission` (`Permission_id`, `Permission_name`, `Permission_abbr`) VALUES (4, 'Delete', 'D');
-TILLEND;
+        $sql='';
+$sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (1, 'Create', 'C')";
+$sql .=";\n";
+$sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (2, 'Read', 'R')";
+$sql .=";\n";
+$sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (3, 'Update', 'U')";
+$sql .=";\n";
+$sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (4, 'Delete', 'D')";
+$sql .=";\n";
         $return=execute_batch_sql($con, $sql);
     }
     return $return;
@@ -271,10 +274,10 @@ function install_roles($con) {
     $return=true;
     if (!$crst) {
         $sql=<<<TILLEND
-CREATE TABLE `Role` (
-  `Role_id` int(10) unsigned NOT NULL auto_increment,
-  `Role_name` varchar(128) NOT NULL default '',
-  PRIMARY KEY  (`Role_id`)
+CREATE TABLE Role (
+  Role_id int(10) unsigned NOT NULL auto_increment,
+  Role_name varchar(128) NOT NULL default '',
+  PRIMARY KEY  (Role_id)
 )
 TILLEND;
     
@@ -283,10 +286,13 @@ TILLEND;
         $crst=$con->execute($csql);
     }
     if ($crst->numRows()==0) {
-        $sql=<<<TILLEND
-INSERT INTO `Role` (`Role_id`, `Role_name`) VALUES (1, 'User');
-INSERT INTO `Role` (`Role_id`, `Role_name`) VALUES (2, 'Administrator');
-TILLEND;
+        $sql='';
+        $sql.=
+"insert into Role (Role_id, Role_name) values (1, 'User')";
+$sql .=";\n";
+        $sql.=
+"insert into Role (Role_id, Role_name) values (2, 'Administrator')";
+$sql .=";\n";
         $return=execute_batch_sql($con, $sql);
     }
     return $return;
@@ -299,10 +305,10 @@ function install_groups($con) {
     if (!$grst) {
         
         $sql=<<<TILLEND
-CREATE TABLE `Groups` (
-`Group_id` int(10) unsigned NOT NULL auto_increment,
-`Group_name` varchar(128) NOT NULL default '',
-PRIMARY KEY  (`Group_id`)
+CREATE TABLE Groups (
+Group_id int(10) unsigned NOT NULL auto_increment,
+Group_name varchar(128) NOT NULL default '',
+PRIMARY KEY  (Group_id)
 )   
 TILLEND;
     
@@ -312,7 +318,7 @@ TILLEND;
     }
     $return=true;
     if ($grst->numRows()==0) {
-        $sql="INSERT INTO `Groups` (`Group_id`, `Group_name`) VALUES (1, 'Users');";
+        $sql="insert into Groups (Group_id, Group_name) values (1, 'Users');";
         
         $rst=$con->execute($sql);
         if (!$rst) { db_error_handler($con, $sql); $return=false;}
@@ -326,17 +332,17 @@ function install_controlled_object_relationships($con) {
     $return=true;
     if (!$crst) {
         $sql=<<<TILLEND
-CREATE TABLE `ControlledObjectRelationship` (
-  `CORelationship_id` int(10) unsigned NOT NULL auto_increment,
-  `ChildControlledObject_id` int(10) unsigned NOT NULL default '0',
-  `ParentControlledObject_id` int(10) unsigned default NULL,
-  `on_what_child_field` varchar(128) default NULL,
-  `on_what_parent_field` varchar(128) default NULL,
-  `cross_table` varchar(128) default NULL,
-  `singular` tinyint(4) default NULL,
-  PRIMARY KEY  (`CORelationship_id`),
-  KEY `ParentControlledObject_id` (`ParentControlledObject_id`),
-  KEY `ChildControlledObject_id` (`ChildControlledObject_id`)
+CREATE TABLE ControlledObjectRelationship (
+  CORelationship_id int(10) unsigned NOT NULL auto_increment,
+  ChildControlledObject_id int(10) unsigned NOT NULL default '0',
+  ParentControlledObject_id int(10) unsigned default NULL,
+  on_what_child_field varchar(128) default NULL,
+  on_what_parent_field varchar(128) default NULL,
+  cross_table varchar(128) default NULL,
+  singular tinyint(4) default NULL,
+  PRIMARY KEY  (CORelationship_id),
+  KEY ParentControlledObject_id (ParentControlledObject_id),
+  KEY ChildControlledObject_id (ChildControlledObject_id)
 )
 TILLEND;
     
@@ -346,26 +352,26 @@ TILLEND;
     }
     if ($crst->numRows()==0) {
         $sql=<<<TILLEND
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (1, 1, NULL, '', '', '', 0);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (2, 3, NULL, '', '', '', 0);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (3, 2, 1, '', '', '', 0);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (5, 4, 1, '', '', '', 0);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (6, 5, 1, '', '', '', 0);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (7, 6, 1, '', '', '', 0);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (8, 8, 1, '', '', '', 0);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (9, 6, 2, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (10, 6, 3, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (11, 6, 4, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (12, 6, 8, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (13, 6, 5, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (14, 6, 2, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (15, 7, 6, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (16, 7, 1, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (17, 7, 4, NULL, NULL, NULL, 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (18, 7, 3, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (19, 7, 2, NULL, NULL, NULL, 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (20, 7, 5, '', '', '', 1);
-INSERT INTO `ControlledObjectRelationship` (`CORelationship_id`, `ChildControlledObject_id`, `ParentControlledObject_id`, `on_what_child_field`, `on_what_parent_field`, `cross_table`, `singular`) VALUES (21, 9, NULL, '', '', '', 0);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (1, 1, NULL, '', '', '', 0);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (2, 3, NULL, '', '', '', 0);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (3, 2, 1, '', '', '', 0);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (5, 4, 1, '', '', '', 0);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (6, 5, 1, '', '', '', 0);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (7, 6, 1, '', '', '', 0);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (8, 8, 1, '', '', '', 0);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (9, 6, 2, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (10, 6, 3, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (11, 6, 4, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (12, 6, 8, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (13, 6, 5, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (14, 6, 2, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (15, 7, 6, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (16, 7, 1, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (17, 7, 4, NULL, NULL, NULL, 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (18, 7, 3, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (19, 7, 2, NULL, NULL, NULL, 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (20, 7, 5, '', '', '', 1);
+insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (21, 9, NULL, '', '', '', 0);
 TILLEND;
         $return=execute_batch_sql($con, $sql);
     }
@@ -378,15 +384,15 @@ function install_controlled_objects($con) {
     $return=true;
     if (!$crst) {
         $sql=<<<TILLEND
-CREATE TABLE `ControlledObject` (
-  `ControlledObject_id` int(10) unsigned NOT NULL auto_increment,
-  `ControlledObject_name` varchar(128) NOT NULL default '',
-  `on_what_table` varchar(128) default NULL,
-  `on_what_field` varchar(128) default NULL,
-  `user_field` varchar(32) default NULL,
-  `data_source_id` int(10) unsigned default NULL,
-  PRIMARY KEY  (`ControlledObject_id`),
-  KEY `data_source_id` (`data_source_id`)
+CREATE TABLE ControlledObject (
+  ControlledObject_id int(10) unsigned NOT NULL auto_increment,
+  ControlledObject_name varchar(128) NOT NULL default '',
+  on_what_table varchar(128) default NULL,
+  on_what_field varchar(128) default NULL,
+  user_field varchar(32) default NULL,
+  data_source_id int(10) unsigned default NULL,
+  PRIMARY KEY  (ControlledObject_id),
+  KEY data_source_id (data_source_id)
 )
 TILLEND;
     
@@ -395,17 +401,25 @@ TILLEND;
         $crst=$con->execute($csql);
     }
     if ($crst->numRows()==0) {
-        $sql=<<<TILLEND
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (1, 'Company', 'companies', 'company_id', '', 1);
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (2, 'Contact', 'contacts', 'contact_id', '', 1);
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (3, 'Campaign', 'campaigns', 'campaign_id', '', 1);
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (4, 'Case', 'cases', 'case_id', '', 1);
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (5, 'Opportunity', 'opportunities', 'opportunity_id', '', 1);
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (6, 'Activity', 'activities', 'activity_id', '', 1);
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (7, 'File', 'files', 'file_id', '', 1);
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (8, 'Division', 'company_division', 'division_id', '', 1);
-INSERT INTO `ControlledObject` (`ControlledObject_id`, `ControlledObject_name`, `on_what_table`, `on_what_field`, `user_field`, `data_source_id`) VALUES (9, 'Administration', '', '', '', 1);
-TILLEND;
+    $sql='';
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (1, 'Company', 'companies', 'company_id', '', 1)";
+$sql.=";\n";
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (2, 'Contact', 'contacts', 'contact_id', '', 1)";
+$sql.=";\n";
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (3, 'Campaign', 'campaigns', 'campaign_id', '', 1)";
+$sql.=";\n";
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (4, 'Case', 'cases', 'case_id', '', 1)";
+$sql.=";\n";
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (5, 'Opportunity', 'opportunities', 'opportunity_id', '', 1)";
+$sql.=";\n";
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (6, 'Activity', 'activities', 'activity_id', '', 1)";
+$sql.=";\n";
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (7, 'File', 'files', 'file_id', '', 1)";
+$sql.=";\n";
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (8, 'Division', 'company_division', 'division_id', '', 1)";
+$sql.=";\n";
+$sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (9, 'Administration', '', '', '', 1)";
+$sql.=";\n";
         $return=execute_batch_sql($con, $sql);
     }
     return $return;
