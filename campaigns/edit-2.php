@@ -29,6 +29,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "SELECT * FROM campaigns WHERE campaign_id = $campaign_id";
 $rst = $con->execute($sql);
 
+$old_status=$rst->fields['campaign_status_id'];
+
 $rec = array();
 $rec['campaign_type_id'] = $campaign_type_id;
 $rec['campaign_status_id'] = $campaign_status_id;
@@ -41,8 +43,13 @@ $rec['cost'] = $cost;
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 
+
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
+
+if ($old_status!==$campaign_status_id) {
+    add_workflow_history($con, 'campaigns', $campaign_id, $old_status, $campaign_status_id);
+}
 
 $con->close();
 
