@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: RolePermission_list.php,v 1.4 2005/05/10 13:28:14 braverock Exp $
+ * $Id: RolePermission_list.php,v 1.5 2005/05/18 06:24:51 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -63,7 +63,7 @@ $order_by .= " $sort_order";
 
 
 $sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_RolePermission.php?form_action=edit&return_url=RolePermission_list.php&RolePermission_id="), 'RolePermission_id', $con->qstr("'\">")) . "AS LINK,
-Role_name as 'Role', Child.ControlledObject_name as 'Child Object', Parent.ControlledObject_name as 'Parent Object', Scope, Permission_name as 'Permission'
+Role_name as 'Role', Child.ControlledObject_name as 'Child Object', Parent.ControlledObject_name as 'Parent Object', Scope, Permission_name as 'Permission', Inheritable_flag as Inheritable 
 FROM RolePermission JOIN Permission ON Permission.Permission_id=RolePermission.Permission_id 
 JOIN Role on Role.Role_id=RolePermission.Role_id
 JOIN ControlledObjectRelationship ON ControlledObjectRelationship.CORelationship_id=RolePermission.CORelationship_id
@@ -123,6 +123,9 @@ end_page();
 
 /**
  * $Log: RolePermission_list.php,v $
+ * Revision 1.5  2005/05/18 06:24:51  vanmer
+ * - added Inheritable flag to list of role permissions
+ *
  * Revision 1.4  2005/05/10 13:28:14  braverock
  * - localized strings patches provided by Alan Baghumian (alanbach)
  *
