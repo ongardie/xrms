@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.38 2005/05/06 00:58:01 vanmer Exp $
+ * $Id: database.php,v 1.39 2005/05/18 06:20:44 vanmer Exp $
  */
 
 /**
@@ -260,29 +260,11 @@ function misc_db_tables($con, $table_list) {
  *
  */
 function user_db_tables($con, $table_list) {
-    // roles
-    if (!in_array('roles',$table_list)) {
-        $sql ="create table roles (
-               role_id                 int not null primary key auto_increment,
-               role_short_name         varchar(10) not null default '',
-               role_pretty_name        varchar(100) not null default '',
-               role_pretty_plural      varchar(100) not null default '',
-               role_display_html       varchar(100) not null default '',
-               role_record_status      char(1) default 'a'
-               )";
-        //execute
-        $rst = $con->execute($sql);
-        if (!$rst) {
-            db_error_handler ($con, $sql);
-        }
-    }
-
     // users
     if (!in_array('users',$table_list)) {
         $sql ="create table users (
                user_id             int not null primary key auto_increment,
                user_contact_id     int not null default 0,
-               role_id             int not null default 0,
                username            varchar(100) not null default '' unique,
                password            varchar(100) not null default '',
                last_name           varchar(100) not null default '',
@@ -1164,6 +1146,10 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.39  2005/05/18 06:20:44  vanmer
+ * - removed roles table from initial install
+ * - removed role_id field from users table
+ *
  * Revision 1.38  2005/05/06 00:58:01  vanmer
  * - added fields for user preferences
  *
