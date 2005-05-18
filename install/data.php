@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.22 2005/04/15 07:46:47 vanmer Exp $
+ * $Id: data.php,v 1.23 2005/05/18 06:19:57 vanmer Exp $
  */
 
 /**
@@ -2503,17 +2503,9 @@ function misc_db_data($con) {
  *
  */
 function user_db_data($con) {
-    // roles
-    if (confirm_no_records($con, 'roles')) {
-        $sql ="insert into roles (role_short_name, role_pretty_name, role_pretty_plural, role_display_html) values ('User', 'User', 'Users', 'User')";
-        $rst = $con->execute($sql);
-        $sql ="insert into roles (role_short_name, role_pretty_name, role_pretty_plural, role_display_html) values ('Admin', 'Admin', 'Admin', 'Admin')";
-        $rst = $con->execute($sql);
-    }
-
     // users
     if (confirm_no_records($con, 'users')) {
-        $sql ="insert into users (user_contact_id, role_id, username, password, last_name, first_names, email, language) values (0, 2, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english')";
+        $sql ="insert into users (user_contact_id, username, password, last_name, first_names, email, language) values (0, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english')";
         $rst = $con->execute($sql);
     }
 
@@ -2869,6 +2861,10 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.23  2005/05/18 06:19:57  vanmer
+ * - removed references to role_id in users table
+ * - removed roles table
+ *
  * Revision 1.22  2005/04/15 07:46:47  vanmer
  * - ensure that database has proper default position
  *
