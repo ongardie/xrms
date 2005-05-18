@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.1 2005/05/18 16:16:57 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.2 2005/05/18 21:51:23 daturaarutad Exp $
  */
 
 
@@ -22,7 +22,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 /**
 * Note: user of this class must provide a form and a hidden form field for the calendar_start_date f
-*	
+*
 */
 class CalendarView {
 
@@ -73,7 +73,7 @@ class CalendarView {
 	}
 
 	/**
-	* Given the calendar's scope and a starting date, return upper and lower bounds of time in seconds 
+	* Given the calendar's scope and a starting date, return upper and lower bounds of time in seconds
 	*
 	* not currently used by anything
 	*/
@@ -95,8 +95,8 @@ class CalendarView {
 	* @param string the day of the week ('Mon','Tuesday',etc)
 	* @return string the first Monday of the week before
 	*/
-	function GetWeekStart($date, $day = 'Monday') { 
-		if (!isset($set_weekstart_default)) 
+	function GetWeekStart($date, $day = 'Monday') {
+		if (!isset($set_weekstart_default))
 			$set_weekstart_default = 'Sunday';
 
   		$timestamp = strtotime($date);
@@ -112,7 +112,7 @@ class CalendarView {
 
 /**
 * Render the calendar widgets
-* @param array array of assoc arrays of activity values.  
+* @param array array of assoc arrays of activity values.
 * expected fields are: activity_id, scheduled_at, ends_at, contact_id, activity_title, activity_description, user_id
 * @return array assoc. array containing 'calendar' and 'user_legend' values which contain the calendar widgets
 *
@@ -124,13 +124,13 @@ function Render($activity_data) {
 
 	@todo
 		-Make starting day a parameter (currently set to Monday)
-		-Add tooltips 
+		-Add tooltips
 		-Create multi-user 'icon mode' and return legend
 		-nicen up the display with custom CSS
-		
+
 */
 	global $http_site_root;
-	
+
 	$events = $this->BuildDailyEvents($activity_data);
 
 	$return = '';
@@ -142,14 +142,14 @@ function Render($activity_data) {
 
 
 	switch($this->calendar_type) {
-			
-		case 'month': 
-			
+
+		case 'month':
+
 			// display starts on monday, not necessarily the 1st
 			$visible_start_date = $this->GetWeekStart($this->start_date, 'Monday');
 
 			$current_month = date('m', strtotime($this->start_date));
-	
+
 			$widget = '';
 			$week_count = 5;
 
@@ -159,7 +159,7 @@ function Render($activity_data) {
 				$days_offset = 0;
 				$week_count--;
 			}
-	
+
 
 	/*		each day looks like this
 			 ____________
@@ -174,28 +174,28 @@ function Render($activity_data) {
 			*/
 			for($week=0; $week < $week_count; $week++) {
 				$widget .= "<tr>";
-	
+
 				for($day=0; $day<7; $day++) {
-	
+
 					$day_of_month = $week * 7 + $day;
-	
+
 					$day_start_time = strtotime($visible_start_date . " + $day_of_month days");
-	
+
 					$td_class = '';
 					$events_rows = '';
-	
+
 					if(is_array($events[$day_of_month-$days_offset])) {
-	
+
 						$events_rows = '<table>';
-	
+
 						foreach(($events[$day_of_month-$days_offset]) as $event) {
 
 							if('text' == $this->display_mode) {
-								$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\">" . 
-										 	' ' . $event['activity_title'] . 
+								$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\">" .
+										 	' ' . $event['activity_title'] .
 											"</a><br>" .  date('h:iA', strtotime($event['scheduled_at'])) . ' - ' . date('h:iA', strtotime($event['ends_at'])) ;
 							} else {
-								$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\" onmouseover=\"return escape('" . addslashes("{$event['activity_title']}<br/>(" . date('H:i', strtotime($event['scheduled_at'])) . '-' . date('H:i', strtotime($event['ends_at'])) . ")") . "')\">" . 
+								$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\" onmouseover=\"return escape('" . addslashes("{$event['activity_title']}<br/>(" . date('H:i', strtotime($event['scheduled_at'])) . '-' . date('H:i', strtotime($event['ends_at'])) . ")") . "')\">" .
 										 	" <img src=\"$http_site_root/img/calendar_time_icon.gif\"></a>";
 
 
@@ -210,8 +210,8 @@ function Render($activity_data) {
 						}
 						$events_rows .= '</table>';
 					}
-	
-					// CSS classes for prev, next month, current day highlighting 
+
+					// CSS classes for prev, next month, current day highlighting
 					if($current_month != date('m', $day_start_time)) {
 						$td_class .= 'widget_content_alt2';
 					} elseif(date('Y-m-d') == date('Y-m-d', $day_start_time)) {
@@ -219,28 +219,28 @@ function Render($activity_data) {
 					} else {
 						$td_class .= 'widget_content';
 					}
-	
-					$widget .= "<td class=\"$td_class\" width=105 height=105> 
+
+					$widget .= "<td class=\"$td_class\" width=105 height=105>
 								<table width=\"100%\" border=0 cellspacing=0 cellpadding=1>
 									<tr><td class=\"$td_class right\">" . date('j', $day_start_time) . "</td></tr>
 									<tr><td class=\"$td_class\" valign=top width=105>$events_rows</td></tr>
 								</table></td>";
-	
+
 				}
 				$widget .= "</tr>\n";
 			}
-	
+
 			$display_date = date('F Y', strtotime($this->start_date));
-		
+
 	    	for ($i=0; $i<7; $i++) {
 	        	$day = date('D',  strtotime("+$i days  $visible_start_date "));
-		
+
 	        	$days_of_week .= "<td width=\"105\" class=\"center widget_content\">$day</td>";
 	    	}
-	
+
 		    $next_month_display = date("M Y", strtotime($this->start_date . ' +1 month'));
 		    $prev_month_display = date( "M Y", strtotime($this->start_date . ' -1 month'));
-	
+
 			$block = "
 			<!-- Calendar Begins -->\n
 			<div id=\"xrms_calendar\">
@@ -273,69 +273,69 @@ function Render($activity_data) {
 		 	</tr>
 			<tr> $days_of_week </tr>
 			$days_header
-		
+
 			$widget
 			</table>
 			</div>
 			<!-- Calendar Ends -->
 			";
-		
+
 			$return['calendar'] = $block;
 			break;
-	
 
 
-		// week	
+
+		// week
 		case 'week':
-	
+
 			$widget = '';
-		
+
 			$start_hour = '8:00:00';
 			$end_hour = '22:00:00';
 			$slice_length_minutes = '30';
-		
+
 			$start_time = strtotime(date('Y-m-d', strtotime($this->start_date)) . ' ' . $start_hour);
 			$end_time = strtotime(date('Y-m-d', strtotime($this->start_date)) . ' ' . $end_hour);
-			
+
 			//echo "start time is $start_time aka " . date('Y-m-d H:i', $start_time) . "<br>";
 			//echo "end time is $end_time aka " . date('Y-m-d H:i', $end_time) . "<br>";
-		
+
 			$days_header .= '<tr>';
 			$days_header .= '<td class=widget_content_alt>&nbsp;</td>';
-		
-		
+
+
 			// Some days will have simultaneous events happening, so we need to calculate
 			// the value that will be used for colspan=N in the | Mon 2 | Tue 3 | Weds ... header
 			// and also to know how many dummy columns to output to keep the table lined up
 			$colspan_by_day = array();
-		
+
 			for($day_of_week=0; $day_of_week<7; $day_of_week++) {
-		
+
 				$days_slice_event_count = 0;
-		
+
 				if(is_array($events[$day_of_week])) {
 					// foreach day
 					for($i=0; $i<(($end_time - $start_time)/($slice_length_minutes * 60)); $i++) {
-			
+
 						$current_time = $start_time + $i*$slice_length_minutes*60;
 						$current_time_this_day = $current_time + $day_of_week*86400;
-			
+
 						$slot_start = $current_time_this_day;
 						$slot_end = $current_time_this_day + $slice_length_minutes*60;
-		
+
 						$slice_events_count = 0;
-		
+
 						// count how many events occur during this time slot
 						foreach($events[$day_of_week] as $event_key => $event) {
 							// if it ends before the slot starts or starts after the slot ends we don't want it
 							if(strtotime($event['ends_at']) <= $slot_start || strtotime($event['scheduled_at']) >= $slot_end) {
-								//echo "event {$event['title']} at {$event['scheduled_at']} not happening during " . 
+								//echo "event {$event['title']} at {$event['scheduled_at']} not happening during " .
 								//date('Y-m-d H:i', $slot_start) . ' and ' . date('Y-m-d H:i', $slot_end) . '<br>';
 							} else {
-		
+
 								$slice_events_count++;
-		
-								//echo "event {$event['title']} at {$event['scheduled_at']} happening during " . 
+
+								//echo "event {$event['title']} at {$event['scheduled_at']} happening during " .
 								//date('Y-m-d H:i', $slot_start) . ' and ' . date('Y-m-d H:i', $slot_end) . '<br>';
 							}
 						}
@@ -345,52 +345,52 @@ function Render($activity_data) {
 				}
 				//echo "max is $days_slice_event_count for day $day_of_week<br>";
 				$colspan_by_day[$day_of_week] = $days_slice_event_count;
-		
+
 				$colspan = ($colspan_by_day[$day_of_week] > 1) ? "colspan=\"" . $colspan_by_day[$day_of_week] . '"' : '';
-		
+
 				$days_header .= "<td width=13% class=\"widget_content_alt center\" $colspan>" . date('D d', $start_time + $day_of_week*86400) . "</td>\n";
 			}
 			$days_header .= "</tr>\n";
-		
+
 			// render the week
 			for($i=0; $i<(($end_time - $start_time)/($slice_length_minutes * 60)); $i++) {
-		
+
 				$current_time = $start_time + $i*$slice_length_minutes*60;
 				//echo date('Y-m-d H:i', $current_time) . '<br>';
 				$widget .= '<tr>';
-		
+
 				$widget .= '<td class=widget_content_alt>' . date('H:i', $current_time) . '</td>';
 				for($day_of_week=0; $day_of_week<7; $day_of_week++) {
-		
+
 					// if there are events happening today
 					if(is_array($events[$day_of_week])) {
-		
+
 						$current_time_this_day = $current_time + $day_of_week*86400;
 						$start_time_this_day = $start_time + $day_of_week*86400;
 						$end_time_this_day = $end_time + $day_of_week*86400;
-		
-		
+
+
 						$virtual_columns_outputted_count = 0;
-		
+
 						// loop through the events, outputting maximum of $colspan_by_day[$day_of_week] <td>'s
 						// output the events and count how many we output or are virtual (covered by rowspan)
 						foreach($events[$day_of_week] as $event_key => $event) {
-		
+
 							$event_start = strtotime($event['scheduled_at']);
-		
+
 							$event_start = max($event_start, $start_time_this_day);
-		
+
 							// avoid a division by zero error later by making sure the duration is at least 1 second.
 							$event_end = max(strtotime($event['ends_at']), $event_start+1);
 							// if this event goes on to tomorrow, we cut it off a the end of the day.
 							$event_end = min($event_end, $end_time_this_day);
-		
+
 							$slot_start = $current_time_this_day;
 							$slot_end = $current_time_this_day + $slice_length_minutes*60;
-		
+
 							// if event is starting in this slot
 							if($event_start >= $slot_start && $event_start < $slot_end) {
-		
+
 								$rowspan = intval(($event_end - $slot_start + $slice_length_minutes*60-1) / ($slice_length_minutes*60));
 								if($rowspan) {
 									$rowspan_html = "rowspan=$rowspan";
@@ -398,19 +398,19 @@ function Render($activity_data) {
 									$events[$day_of_week][$event_key]['rowspan'] = $rowspan-1;
 								}
 
-		
+
 								// show the event
 
 							if('text' == $this->display_mode) {
 
 								$widget .= "<td class=\"small {$this->user_style_prefix}{$this->td_user_class[$event['user_id']]}\" $rowspan_html>
-											<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}\">{$event['activity_title']}</a><br>" . 
+											<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}\">{$event['activity_title']}</a><br>" .
 											"(" . date('H:i', strtotime($event['scheduled_at'])) . '-' . date('H:i', strtotime($event['ends_at'])) . ")</td>";
 							} else {
 								$widget .= "<td class=\"small {$this->user_style_prefix}{$this->td_user_class[$event['user_id']]}\" $rowspan_html>
 											<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}\" onmouseover=\"return escape('" .
-											addslashes("{$event['activity_title']} (" . date('H:i', strtotime($event['scheduled_at'])) . '-' . date('H:i', strtotime($event['ends_at'])) . ")") . 
-											
+											addslashes("{$event['activity_title']} (" . date('H:i', strtotime($event['scheduled_at'])) . '-' . date('H:i', strtotime($event['ends_at'])) . ")") .
+
 											"')\"><img src=\"$http_site_root/img/calendar_time_icon.gif\"></a></td>";
 
 							}
@@ -421,18 +421,18 @@ function Render($activity_data) {
 									$virtual_columns_outputted_count++;
 								}
 							}
-						} 
-		
-						// pad the remainder of <td>s 
+						}
+
+						// pad the remainder of <td>s
 
 						// store the column number when you store the rowspan
 						// because there might be no events, but your rowspan is actually there in the middle so you need to output<td>fin</td><td colspan=2>fin</td>
 
 						$finishing_colspan = $colspan_by_day[$day_of_week] - $virtual_columns_outputted_count;
-		
+
 						if($finishing_colspan > 0) {
 							$finishing_colspan_html = "colspan=$finishing_colspan";
-		
+
 							$widget .= "<td class=widget_content $finishing_colspan_html>&nbsp;</td>";
 						}
 						/*
@@ -448,10 +448,10 @@ function Render($activity_data) {
 				}
 				$widget .= "</tr>\n";
 			}
-		
+
 			$display_date = date('M d', strtotime($this->start_date)) . ' - ' . date('M d', strtotime($this->start_date) + 6 * 86400);
-		
-		
+
+
 			$block = "
 			<!-- Calendar Begins -->\n
 			<div id=\"xrms_calendar\">
@@ -483,50 +483,49 @@ function Render($activity_data) {
 			</td>
 		 	</tr>
 			$days_header
-		
+
 			$widget
 			</table>
 			</div>
 			<!-- Calendar Ends -->
-		
-		
+
+
 			";
-		
+
 			$return['calendar'] = $block;
 			$return['user_legend'] = '';
-		
+
 		break;
-	
-	
+
+
 	}
 
 
 	// Build the user_legend sub-widget
+	$legend = '';
+	if(count($this->td_user_class)) {
+		$legend .= '<div id="xrms_calendar_legend">';
+		$legend .= '<table class="widget"><tr><td class="widget_header" colspan=23>' . _('Legend') . '</td></tr>';
 
-	// gotta query the db..here?(no $con for starters)
-	// in some.php AND anywhere you want to show a calendar?  don't think so....here it is.
+		$i=1;
+		foreach($this->td_user_class as $user_id => $user_style_id) {
 
-	$legend = '<div id="xrms_calendar_legend">';
-	$legend .= '<table class="widget"><tr><td class="widget_header" colspan=23>' . _('Legend') . '</td></tr>';
+			$user_info = get_xrms_user($this->con, null, $user_id);
 
-	$i=1;
-	foreach($this->td_user_class as $user_id => $user_style_id) {
-
-		$user_info = get_xrms_user($this->con, null, $user_id);
-
-		$legend .= "<tr><td class=\"{$this->user_style_prefix}$i small\"><img src=\"$http_site_root/img/calendar_time_icon.gif\"></td><td class=\"widget_content\">{$user_info['last_name']}, {$user_info['first_names']}</td></tr>\n";
-		$i++;
+			$legend .= "<tr><td class=\"{$this->user_style_prefix}$i small\"><img src=\"$http_site_root/img/calendar_time_icon.gif\"></td><td class=\"widget_content\">{$user_info['last_name']}, {$user_info['first_names']}</td></tr>\n";
+			$i++;
+		}
+		$legend .= '</table>';
+		$legend .= '</div>';
 	}
-	$legend .= '</table>';
-	$legend .= '</div>';
-	
+
 	$return['user_legend'] = $legend;
 
 	return $return;
 }
 
 /**
-* Given an array of activities, builds an array of "day's events".  
+* Given an array of activities, builds an array of "day's events".
 * This is used to simplify the rendering of events that span multiple days.
 * @param array activities
 * @return array events
@@ -537,7 +536,7 @@ function BuildDailyEvents($activity_data) {
 
 
 
-	
+
 	$user_style_index = 1;
 
 	foreach($activity_data as $activity) {
@@ -596,29 +595,29 @@ function GetCalendarJS() {
 <script language=\"JavaScript\" type=\"text/javascript\">
 
 function calendar_next_day() {
-    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' +1 days')) . "'; 
-    document.{$this->form_id}.submit(); 
+    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' +1 days')) . "';
+    document.{$this->form_id}.submit();
 }
 function calendar_next_week() {
-    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' +7 days')) . "'; 
-    document.{$this->form_id}.submit(); 
+    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' +7 days')) . "';
+    document.{$this->form_id}.submit();
 }
 function calendar_next_month() {
     document.{$this->form_id}.$date_field_name.value = '$next_month';
-    document.{$this->form_id}.submit(); 
+    document.{$this->form_id}.submit();
 }
 
 function calendar_previous_week() {
-    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' -7 days')) . "'; 
-    document.{$this->form_id}.submit(); 
+    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' -7 days')) . "';
+    document.{$this->form_id}.submit();
 }
 function calendar_previous_day() {
-    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' -1 days')) . "'; 
-    document.{$this->form_id}.submit(); 
+    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' -1 days')) . "';
+    document.{$this->form_id}.submit();
 }
 function calendar_previous_month() {
     document.{$this->form_id}.$date_field_name.value = '$prev_month';
-    document.{$this->form_id}.submit(); 
+    document.{$this->form_id}.submit();
 }
 </script>
 	";
@@ -629,6 +628,9 @@ function calendar_previous_month() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.2  2005/05/18 21:51:23  daturaarutad
+* removed trailing spaces...added check that there are events before creating legend
+*
 * Revision 1.1  2005/05/18 16:16:57  daturaarutad
 * new location for this file. (old was calendar/agenda/Calendar_View.php)
 *
