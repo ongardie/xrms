@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.74 2005/05/16 21:30:49 vanmer Exp $
+ * $Id: update.php,v 1.75 2005/05/18 06:20:18 vanmer Exp $
  */
 
 // where do we include from
@@ -29,68 +29,6 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 $msg = '';
-
-// Make sure that there is an admin record in roles
-$sql = "select count(*) as recCount from roles where role_short_name='Admin'";
-$rst = $con->execute($sql);
-$recCount = $rst->fields['recCount'];
-if ($recCount == 0) {
-    $msg .= 'Added an Admin role.<BR><BR>';
-    $sql = "SELECT * FROM roles WHERE 1 = 2"; //select empty record as placeholder
-    $rst = $con->execute($sql);
-
-    $rec = array();
-    $rec['role_short_name'] = 'Admin';
-    $rec['role_pretty_name'] = 'Admin';
-    $rec['role_pretty_plural'] = 'Admin';
-    $rec['role_display_html'] = 'Admin';
-
-    $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
-    $con->execute($ins);
-}
-
-
-// Make sure that there is a user with admin privileges
-$sql = "select role_id from roles where role_short_name='Admin'";
-$rst = $con->execute($sql);
-$role_id = $rst->fields['role_id'];
-$sql = "select count(*) as recCount from users where role_id=$role_id";
-$rst = $con->execute($sql);
-$recCount = $rst->fields['recCount'];
-if ($recCount == 0) {
-    // none of the users have Admin access, so give the user with the lowest user_id Admin access
-    $sql = "select min(user_id) as user_id from users";
-    $rst = $con->execute($sql);
-    if (!$rst) {
-        // Oops.  The real problem is that we have no users.  Create one with admin access
-        $msg .= 'Add user1 with Admin access.<BR><BR>';
-        $sql = "SELECT * FROM roles WHERE 1 = 2"; //select empty record as placeholder
-        $rst = $con->execute($sql);
-
-        $rec = array();
-        $rec['role_id'] = $role_id;
-        $rec['username'] = 'user1';
-        $rec['password'] = '24c9e15e52afc47c225b757e7bee1f9d';
-        $rec['last_name'] = 'One';
-        $rec['first_names'] = 'User';
-        $rec['email'] = 'user1@example.com';
-        $rec['language'] = 'english';
-
-        $ins = $con->GetInsertSQL($rst, $rec, get_magic_quotes_gpc());
-        $con->execute($ins);
-    } else {
-        $user_id = $rst->fields['user_id'];
-        $msg .= "Give Admin access to $user_id.<BR><BR>";
-        $sql = "SELECT * FROM users WHERE user_id = $user_id";
-        $rst = $con->execute($sql);
-
-        $rec = array();
-        $rec['role_id'] = $role_id;
-
-        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-        $con->execute($upd);
-    }
-}
 
 //make sure that there is a case_priority_score_adjustment column
 //should put a test here, but alter table is non-destructive
@@ -4827,6 +4765,13 @@ add_user_preference_type($con, 'css_theme', 'Theme', 'Color and Layout Theme for
 $sql = "ALTER TABLE `contacts` ADD `tax_id` VARCHAR( 32 )";
 $con->execute($sql);
 
+$sql="ALTER TABLE `users` DROP `role_id`";
+$con->execute($sql);
+
+$sql = "DROP TABLE roles";
+$con->execute($sql);
+
+
 do_hook_function('xrms_update', $con);
 
 //close the database connection, because we don't need it anymore
@@ -4850,6 +4795,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.75  2005/05/18 06:20:18  vanmer
+ * - removed reference to roles table
+ * - removed reference to role_id in users table
+ *
  * Revision 1.74  2005/05/16 21:30:49  vanmer
  * - added tax_id field to contacts table
  *
