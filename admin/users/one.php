@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.19 2005/03/31 21:39:11 gpowers Exp $
+ * $Id: one.php,v 1.20 2005/05/18 05:50:02 vanmer Exp $
  */
 
 //include required files
@@ -58,13 +58,38 @@ if($my_company_id) {
     $contact_menu = $rst->getmenu2('user_contact_id', $user_contact_id, true);
 }
 
+$user_roles=get_user_roles(false, $edit_user_id);
+$role_rows=<<<TILLEND
+<script language=javascript>
+<!---
+    function deleteRole(role_id) {
+        location.href='edit-2.php?edit_user_id=$edit_user_id&userAction=deleteRole&role_id='+role_id;
+    };
+</script>
+TILLEND;
+foreach ($user_roles as $rkey=>$user_role) {
+    $role_rows.="<tr><td>$user_role</td><td><input type=button class=button onclick=\"deleteRole($rkey);\" value=\""._("Delete") . "\"></td></tr>";
+}
+$role_rows.="<tr><td>$role_menu</td><td><input type=submit class=button name=btAddRole value=\""._("Add Role") . "\"></td></tr>";
+
+$user_role_sidebar=<<<TILLEND
+    <form method=POST action='edit-2.php'>
+        <input type=hidden name=userAction value=addRole>
+        <input type=hidden name=edit_user_id value=$edit_user_id>
+    <table class=widget><tr><td class=widget_header colspan=2>User Roles</td></tr>
+        $role_rows
+    </table>
+   </form>
+TILLEND;
+
 // make sure $sidebar_rows is defined
 if ( !isset($sidebar_rows) ) {
   $sidebar_rows = '';
 }
+
 //call the sidebar hook
 $sidebar_rows = do_hook_function('admin_user_edit_sidebar', $sidebar_rows);
-
+$sidebar_rows = $user_role_sidebar . $sidebar_rows;
 $con->close();
 
 $page_title = _("User Details") . ': ' . $first_names . ' ' . $last_name;
@@ -84,10 +109,6 @@ start_page($page_title);
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Edit User Information"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Role"); ?></td>
-                <td class=widget_content_form_element><?php  echo $role_menu; ?></td>
             </tr>
 <?php
     if($my_company_id) {
@@ -167,6 +188,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.20  2005/05/18 05:50:02  vanmer
+ * - added sidebar to manage user roles from user edit page
+ *
  * Revision 1.19  2005/03/31 21:39:11  gpowers
  * - added sidebar plugin hook
  *
