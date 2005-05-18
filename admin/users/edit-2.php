@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.14 2005/02/10 23:48:40 vanmer Exp $
+ * $Id: edit-2.php,v 1.15 2005/05/18 05:51:11 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,56 +24,104 @@ $last_name       = $_POST['last_name'];
 $first_names     = $_POST['first_names'];
 $email           = $_POST['email'];
 $gmt_offset      = $_POST['gmt_offset'];
-if (array_key_exists('enabled',$_POST)) $enabled=true;
-else $enabled=false;
-$user_record_status = ($enabled) ? 'a' : 'd';
 
-$gmt_offset = (strlen($gmt_offset) > 0) ? $gmt_offset : 0;
+getGlobalVar($userAction,'userAction');
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+if (!$userAction) { $userAction='editUser'; }
 
-$sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
-$rst = $con->execute($sql);
-if ($rst->fields['role_id']!=$role_id) {
-    if (!$group) {
-        $group="Users";
-    }
-    if (!delete_user_group(false, false, $group, $edit_user_id, $rst->fields['role_id'])) echo _("Failed to add user to group.");
-    $ret=add_user_group(false, $group, $edit_user_id, $role_id);
-    if (!is_array($ret)) echo _("Failed to add user to group.");
-}
-$rec = array();
-
-$rec['role_id']         = $role_id;
-$rec['user_contact_id'] = $user_contact_id;
-$rec['last_name']       = $last_name;
-$rec['first_names']     = $first_names;
-$rec['username']        = $new_username;
-$rec['email']           = $email;
-$rec['gmt_offset']      = $gmt_offset;
-$rec['user_record_status'] = $user_record_status;
-
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-if ($upd) {
-    $rst = $con->execute($upd);
-    if(!$rst) {
-        db_error_handler($con, $upd);
-    }
-    
-    add_audit_item($con, $session_user_id, 'updated', 'users', $edit_user_id, 1);
-}
-
-$con->close();
-
-if ( $_SESSION['role_short_name'] == 'Admin' ) {
-  header("Location: some.php");
-}else{
-header("Location: self.php?msg=saved");
-}
-
+switch ($userAction) {
+    case 'deleteRole':
+        getGlobalVar($edit_user_id, 'edit_user_id');
+        $role_id=$_GET['role_id'];
+        getGlobalVar($group, 'group');
+            if (!$group) {
+                $group="Users";
+            }
+            if (delete_user_group(false, false, $group, $edit_user_id, $role_id)) {
+                $msg="Deleted role $role_id for user $edit_user_id in group $group successfully";
+            } else {
+                $msg="Failed to delete role $role_id for user $edit_user_id in group $group";
+            }
+            Header("Location: one.php?edit_user_id=$edit_user_id&msg=$msg");
+            exit();       
+    break;
+    case 'addRole':
+            getGlobalVar($edit_user_id, 'edit_user_id');
+            $role_id=$_POST['role_id'];
+            getGlobalVar($group, 'group');
+            if (!$group) {
+                $group="Users";
+            }
+            $ret=add_user_group(false, $group, $edit_user_id, $role_id);
+            if (!is_array($ret)) { 
+                $msg= _("Failed to add user to role in group.");
+            } else {
+                $msg = _("Added user to role in group successfully");
+            }
+            Header("Location: one.php?edit_user_id=$edit_user_id&msg=$msg");
+            exit();       
+    default:
+           return false;
+    break;
+    case 'editUser':
+        if (array_key_exists('enabled',$_POST)) $enabled=true;
+        else $enabled=false;
+        $user_record_status = ($enabled) ? 'a' : 'd';
+        
+        $gmt_offset = (strlen($gmt_offset) > 0) ? $gmt_offset : 0;
+        
+        $con = &adonewconnection($xrms_db_dbtype);
+        $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+        
+        $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
+        $rst = $con->execute($sql);
+        if ($rst->fields['role_id']!=$role_id) {
+            if (!$group) {
+                $group="Users";
+            }
+            if (!delete_user_group(false, false, $group, $edit_user_id, $rst->fields['role_id'])) echo _("Failed to add user to group.");
+            $ret=add_user_group(false, $group, $edit_user_id, $role_id);
+            if (!is_array($ret)) echo _("Failed to add user to group.");
+        }
+        $rec = array();
+        
+        $rec['role_id']         = $role_id;
+        $rec['user_contact_id'] = $user_contact_id;
+        $rec['last_name']       = $last_name;
+        $rec['first_names']     = $first_names;
+        $rec['username']        = $new_username;
+        $rec['email']           = $email;
+        $rec['gmt_offset']      = $gmt_offset;
+        $rec['user_record_status'] = $user_record_status;
+        
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        if ($upd) {
+            $rst = $con->execute($upd);
+            if(!$rst) {
+                db_error_handler($con, $upd);
+            }
+            
+            add_audit_item($con, $session_user_id, 'updated', 'users', $edit_user_id, 1);
+        }
+        
+        $con->close();
+        
+        if ( $_SESSION['role_short_name'] == 'Admin' ) {
+            header("Location: some.php");
+        }else{
+            header("Location: self.php?msg=saved");
+        }
+        exit;
+    break;
+}    
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.15  2005/05/18 05:51:11  vanmer
+ *- altered to change behavior based on userAction parameter
+ *- defaults to basic (change user information)
+ *- added case for deleting roles from a user
+ *- added case for adding role for a user
+ *
  *Revision 1.14  2005/02/10 23:48:40  vanmer
  *- added handling of enabling/disabling user accounts
  *
