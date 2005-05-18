@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.16 2005/02/10 23:47:51 vanmer Exp $
+ * $Id: some.php,v 1.17 2005/05/18 05:47:45 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,12 +16,13 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
 
+getGlobalVar($msg, 'msg');
+
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug=1;
 
-$sql = "select *, Role.Role_name from users, Role
-WHERE users.role_id=Role.Role_id order by last_name, first_names";
+$sql = "select * from users order by last_name, first_names";
 
 $rst = $con->execute($sql);
 
@@ -32,7 +33,6 @@ if ($rst) {
         $table_rows .= '<td class=widget_content>' . $enabled . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
-        $table_rows .= '<td class=widget_content>' . $rst->fields['Role_name'] . '</td>';
         $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';        
         $table_rows .= '</tr>';
         $rst->movenext();
@@ -43,14 +43,14 @@ if ($rst) {
     $table_rows = '<tr><td>'._("Unable to get data from database").'</td> </tr>';
 }
 
-//hack to show ACL roles
-$role_menu=get_role_list();
+//hack to show ACL roles, no initlal element in the menu
+$role_menu=get_role_list(false, true, 'role_id', false, false);
 
 $default_gst = get_system_parameter($con, 'Default GST Offset');
 $con->close();
 
 $page_title = _("Manage Users");
-start_page($page_title);
+start_page($page_title, true, $msg);
 
 ?>
 
@@ -65,7 +65,6 @@ start_page($page_title);
                 <td class=widget_label><?php echo _("Enabled"); ?></td>
                 <td class=widget_label><?php echo _("Full Name"); ?></td>
                 <td class=widget_label><?php echo _("E-Mail"); ?></td>
-                <td class=widget_label><?php echo _("Role"); ?></td>
                 <td class=widget_label><?php echo _("Username"); ?></td>
             </tr>
             <?php echo $table_rows;; ?>
@@ -166,6 +165,12 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.17  2005/05/18 05:47:45  vanmer
+ * - added handling for msg parameter
+ * - removed role table join for roles
+ * - removed all reference to roles in user list
+ * - removed blank option for role when adding new user, must specify a role when adding a new user
+ *
  * Revision 1.16  2005/02/10 23:47:51  vanmer
  * - added enabled view on users
  * - altered to show all users accounts in the system
