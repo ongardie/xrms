@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.110 2005/05/18 16:20:07 daturaarutad Exp $
+ * $Id: some.php,v 1.111 2005/05/18 20:07:04 daturaarutad Exp $
  */
 
 // handle includes
@@ -214,8 +214,10 @@ if('list' != $results_view_type) {
         $calendar_view_start =  (strtotime($calendar_start_date) - time()) / 86400;
 
         $offset_start = $con->OffsetDate($calendar_view_start);
+		$offset_start = ereg_replace(",",".",$offset_start);
         $calendar_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
         $offset_end = $con->OffsetDate($calendar_view_end);
+		$offset_end = ereg_replace(",",".",$offset_end);
         $offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
     }
 /*
@@ -365,6 +367,7 @@ if (strlen($offset_sql) > 0) {
     $criteria_count++;
     $sql .= $offset_sql;
 }
+
 
 if(strlen($time_zone_between) and strlen($time_zone_between2)) {
     update_daylight_savings($con);
@@ -902,6 +905,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.111  2005/05/18 20:07:04  daturaarutad
+ * fixed a bug regarding . vs , in $con->Offset() for non-English languages (calendar)
+ *
  * Revision 1.110  2005/05/18 16:20:07  daturaarutad
  * updated calendar
  *
