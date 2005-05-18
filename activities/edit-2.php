@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.54 2005/04/15 07:50:00 vanmer Exp $
+ * $Id: edit-2.php,v 1.55 2005/05/18 21:47:27 vanmer Exp $
  */
 
 //include required files
@@ -425,6 +425,7 @@ if ($table_name !== "attached to") {
             if (strlen($upd)>0) {
                 //update the records
                 $sc_rst = $con->execute($upd);
+                add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $table_status_id);
                 if (!$sc_rst) {
                     db_error_handler($con, $upd);
                 } else {
@@ -495,6 +496,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.55  2005/05/18 21:47:27  vanmer
+ * - added workflow tracking when changing status of entity as activity completes
+ *
  * Revision 1.54  2005/04/15 07:50:00  vanmer
  * - added handling of change to contact, update activity_participants contact as well
  *
