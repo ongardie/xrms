@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.133 2005/05/18 05:45:24 vanmer Exp $
+ * $Id: utils-misc.php,v 1.134 2005/05/18 21:40:27 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1678,7 +1678,35 @@ $this_request_only = true) {
     }
 }
 
-
+/**
+ * Function to add to workflow history, used to track status changes in entities that have workflow
+ * 
+ * @param adodbconnection $con handle to the database
+ * @param string $on_what_table with table of entity for which status changed
+ * @param integer $on_what_id with db identifier for entity in table
+ * @param integer $old_status with number of status entity has now
+ * @param integer $new_status with number of status entity will have after change
+ * @return integer with database identifier of history entry, or false if failed
+ *
+**/
+function add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $new_status) {
+    if (!$on_what_table OR !$on_what_id OR !$old_status OR !$new_status) return false;
+    $ins['on_what_table']=$on_what_table;
+    $ins['on_what_id']=$on_what_id;
+    $ins['old_status']=$old_status;
+    $ins['new_status']=$new_status;
+    $ins['status_changed_by']=$_SESSION['session_user_id'];
+    $ins['status_changed_timestamp']=time();
+    
+    $table='workflow_history';
+    
+    $sql=$con->GetInsertSQL($table, $ins);
+    if ($sql) {
+        $rst=$con->execute($sql);
+        if ($rst) return $con->Insert_ID();
+    }
+    return false;
+}
 
 /**
  * Include the i18n files, as every file with output will need them
@@ -1695,6 +1723,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.134  2005/05/18 21:40:27  vanmer
+ * - added function for adding entries to workflow history, to track status changes on workflow elements
+ *
  * Revision 1.133  2005/05/18 05:45:24  vanmer
  * - removed code that uses role_short_name in session for security
  * - replaced with a check for Update access on the Administration controlled object
