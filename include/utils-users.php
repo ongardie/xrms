@@ -2,7 +2,7 @@
 /**
  * Utility functions for manipulating users
  *
- * $Id: utils-users.php,v 1.1 2005/02/10 23:44:20 vanmer Exp $
+ * $Id: utils-users.php,v 1.2 2005/05/18 05:46:47 vanmer Exp $
  */
 
 /**
@@ -22,14 +22,13 @@
  * @param integer $user_id optionally specifying the user_id for the new user
  * @return integer $user_id with user_id of new user
  */
-function add_xrms_user($con, $new_username, $password, $role_id, $first_names, $last_name, $email, $gmt_offset, $user_enabled=true, $user_id=false) {
-    
+function add_xrms_user($con, $new_username, $password, $role_id, $first_names, $last_name, $email, $gmt_offset, $user_enabled=true, $user_id=false, &$error_msg) {
+    if (!$new_username) { $error_msg=_("No username specified"); return false; }
     $gmt_offset = ($gmt_offset < 0) || ($gmt_offset > 0) ? $gmt_offset : 0;
     $password = md5($password);
     $user_record_status = ($user_enabled) ? 'a' : 'd';    
     //save to database
     $rec = array();
-    $rec['role_id'] = $role_id;
     $rec['last_name'] = $last_name;
     $rec['first_names'] = $first_names;
     $rec['username'] = $new_username;
@@ -51,7 +50,9 @@ function add_xrms_user($con, $new_username, $password, $role_id, $first_names, $
     if (!$group) {
         $group="Users";
     }
-    add_user_group(false, $group, $user_id, $role_id);
+    if ($role_id AND $user_id) {
+        add_user_group(false, $group, $user_id, $role_id, true);
+    }
     return $user_id;
 }
 
@@ -84,6 +85,10 @@ function get_xrms_user($con, $username=false, $user_id=false) {
 
 /**
  * $Log: utils-users.php,v $
+ * Revision 1.2  2005/05/18 05:46:47  vanmer
+ * - removed role id from user table on add_xrms_user
+ * - made role an optional field, in case of adding a user with no role
+ *
  * Revision 1.1  2005/02/10 23:44:20  vanmer
  * -Initial revision of a set of functions for manipulating user data
  *
