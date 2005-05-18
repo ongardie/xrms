@@ -226,8 +226,8 @@ function get_user_roles($acl=false, $user_id, $group=false, $use_role_names=true
     if ($UserRoleList) {
         if ($use_role_names) {
             foreach ($UserRoleList as $Role) {
-                $ret[]=get_role_name($acl, $Role);
-            }    
+                $ret[$Role]=get_role_name($acl, $Role);
+            }
             return $ret;
         } else return $UserRoleList;
     }
@@ -322,14 +322,14 @@ function get_role_id($acl=false, $role=false) {
     return $role_id;
 }
 
-function get_role_list($acl=false, $return_menu=true, $field_name='role_id', $role_id=false) {
+function get_role_list($acl=false, $return_menu=true, $field_name='role_id', $role_id=false, $show_blank_first=true) {
     global $acl_options;
     if (!$acl) $acl = new xrms_acl($acl_options);
 
     if ($return_menu) {
         $list_rst=$acl->get_role_list(false);
         if ($list_rst) {
-            $role_menu=$list_rst->getmenu2('role_id', $role_id, true);
+            $role_menu=$list_rst->getmenu2('role_id', $role_id, $show_blank_first);
             return $role_menu;
         } else return false;
     } else {
@@ -426,7 +426,7 @@ function delete_group_object($acl, $GroupMember_id=false, $group=false, $object=
     return $acl->delete_group_object($GroupMember_id);
 }
 
-function add_user_group($acl=false, $group, $user_id, $role) {
+function add_user_group($acl=false, $group, $user_id, $role, $silent=false) {
     global $acl_options;
     
     if (!$acl) $acl = new xrms_acl($acl_options);
@@ -441,7 +441,9 @@ function add_user_group($acl=false, $group, $user_id, $role) {
     if (!$ret) {
         $group_user=$acl->get_group_user($group_id, $user_id, $role_id, false);
         if ($group_user) { 
-            echo "Failed to add user $user_id with role $role to group $group: already exists\n"; 
+            if (!$silent) {
+                echo "Failed to add user $user_id with role $role to group $group: already exists\n"; 
+            }
             if (is_array(current($group_user))) $group_user=current($group_user);            
             return $group_user;
         }
@@ -450,7 +452,7 @@ function add_user_group($acl=false, $group, $user_id, $role) {
         if ($group_user) {
             if (is_array(current($group_user))) $group_user=current($group_user);
             return $group_user;
-        } else { echo "Failing user group lookup"; return false; }
+        } else { if (!$silent)  { echo "Failing user group lookup";  } return false; }
     }
 }
 
