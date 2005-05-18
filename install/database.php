@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.39 2005/05/18 06:20:44 vanmer Exp $
+ * $Id: database.php,v 1.40 2005/05/18 21:42:54 vanmer Exp $
  */
 
 /**
@@ -446,6 +446,25 @@ function company_db_tables($con, $table_list) {
                crm_status_display_html     varchar(100) not null default '',
                crm_status_record_status    char(1) default 'a'
                )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+    
+    //workflow history, tracks changes in statuses of workflow entities
+    if (!in_array('workflow_history',$table_list)) {
+        $sql="CREATE TABLE `workflow_history` (
+                `workflow_history_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+                `on_what_table` VARCHAR( 32 ) NOT NULL ,
+                `on_what_id` INT UNSIGNED NOT NULL ,
+                `old_status` INT UNSIGNED NOT NULL ,
+                `new_status` INT UNSIGNED NOT NULL ,
+                `status_change_timestamp` DATETIME NOT NULL ,
+                `status_change_by` INT UNSIGNED NOT NULL ,
+                PRIMARY KEY ( `workflow_history_id` )
+                );";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -1146,6 +1165,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.40  2005/05/18 21:42:54  vanmer
+ * - added table for workflow_history to initial install
+ *
  * Revision 1.39  2005/05/18 06:20:44  vanmer
  * - removed roles table from initial install
  * - removed role_id field from users table
