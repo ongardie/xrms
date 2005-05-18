@@ -40,7 +40,6 @@ $rst = $con->execute($sql);
 
 $old_status = $rst->fields['opportunity_status_id'];
 if ($old_status != $opportunity_status_id) {
-
     $on_what_id = $opportunity_id;
     $on_what_id_template = $opportunity_status_id;
     $on_what_table_template = "opportunity_statuses";
@@ -96,7 +95,9 @@ if (!$no_update) {
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
-
+    if ($old_status!==$opportunity_status_id) {
+        add_workflow_history($con, 'opportunities', $opportunity_id, $old_status, $opportunity_status_id);
+    }
     header("Location: one.php?msg=saved&opportunity_id=$opportunity_id");
 }
 
