@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.109 2005/05/06 22:18:24 daturaarutad Exp $
+ * $Id: some.php,v 1.110 2005/05/18 16:20:07 daturaarutad Exp $
  */
 
 // handle includes
@@ -96,6 +96,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'time_zone_between2'  => array ( 'time_zone_between2', arr_vars_SESSION ) ,
                    'opportunity_status_id' => array ( 'opportunity_status_id', arr_vars_SESSION ) ,
                    'results_view_type'   => array ( 'results_view_type', arr_vars_SESSION ) ,
+                   'calendar_display_type'   => array ( 'calendar_display_type', arr_vars_SESSION ) ,
                    );
 
 // get all passed in variables
@@ -165,7 +166,7 @@ $var_watcher->RegisterLocalVar('results_view_type', $results_view_type);
 // set up $calendar_start_date and append to $offset_sql for calendar views
 if('list' != $results_view_type) {
 
-    require_once('../calendar/agenda/Calendar_View.php');
+    require_once('../calendar/Calendar_View.php');
 
     // set calendar_start_date from search_date if it's not set already
     if($var_watcher->VarsChanged() || empty($calendar_start_date)) {
@@ -227,7 +228,8 @@ if('list' != $results_view_type) {
     */
 
     // init the CalendarView object
-    $calendar = new CalendarView('ActivitiesData', 'calendar_start_date', $results_view_type);
+    $calendar = new CalendarView($con, 'ActivitiesData', 'calendar_start_date', $results_view_type);
+
 }
 
 
@@ -727,6 +729,7 @@ start_page($page_title, true, $msg);
 -->
                     <?php echo _("Week"); ?> <input type="radio" name="results_view_type" value="week"<?php if('week' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
                     <?php echo _("Month"); ?> <input type="radio" name="results_view_type" value="month"<?php if('month' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
+                    <?php echo _("Compact Display"); ?> <input type="checkbox" name="calendar_display_type" value="iconic"<?php if('iconic' == $calendar_display_type) echo ' checked="true" ' ?> > &nbsp;
 <!--
                     <?php echo _("Year"); ?> <input type="radio" name="results_view_type" value="year"<?php if('year' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
 -->
@@ -817,19 +820,22 @@ if('list' == $results_view_type) {
 
     $calendar_js_functions = $calendar->GetCalendarJS();
 
+	if('iconic' == $calendar_display_type) {
+		$calendar->SetDisplayMode('iconic');
+	} else {
+		$calendar->SetDisplayMode('text');
+	}
+
     $widget = $calendar->Render($activity_calendar_data);
 
-    echo $widget['result'];
+	// this needs some tuning
+	echo "<table><tr><td>";
+    echo $widget['calendar'];
+	echo "</td><td valign=top width=\"20%\">";
+    echo $widget['user_legend'];
+	echo "</td></tr></table>";
 }
 
-//echo $widget['features'];
-
-/*
-
-$calendar=require_once('../calendar/agenda/agenda_index.php');
-echo $calendar['result'];
-
-*/
 $con->close();
 ?>
 
@@ -896,6 +902,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.110  2005/05/18 16:20:07  daturaarutad
+ * updated calendar
+ *
  * Revision 1.109  2005/05/06 22:18:24  daturaarutad
  * fixed wrong var names for var_watcher; now resetting calendar_start_date whenever search dates are changed
  *
