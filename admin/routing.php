@@ -8,7 +8,7 @@
  * This is intended as a temporary solution until full access control is introduced
  * in XRMS.
  *
- * $Id: routing.php,v 1.8 2004/07/20 12:45:21 cpsource Exp $
+ * $Id: routing.php,v 1.9 2005/05/18 05:54:55 vanmer Exp $
  */
 
 //where do we include from
@@ -42,9 +42,7 @@ if ( $msg ) {
 }
 
 //if this is a mailto link, try to open the user's default mail application
-if ($role == 'Admin') {
-  header("Location: " . $http_site_root . "/admin/index.php"      . $msg);
-} elseif ($role == 'Developer') {
+if (check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
   header("Location: " . $http_site_root . "/admin/index.php"      . $msg);
 } else {
   header("Location: " . $http_site_root . "/admin/users/self.php" . $msg);
@@ -52,6 +50,9 @@ if ($role == 'Admin') {
 
 /**
  *$Log: routing.php,v $
+ *Revision 1.9  2005/05/18 05:54:55  vanmer
+ *- changed to reference ACL for administration routing, instead of SESSION variable
+ *
  *Revision 1.8  2004/07/20 12:45:21  cpsource
  *- Allow non-Admin users to change their passwords, but do so
  *  in a secure manner.
