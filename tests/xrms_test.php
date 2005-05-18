@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test.php,v 1.3 2005/05/09 22:42:10 vanmer Exp $
+ * $Id: xrms_test.php,v 1.4 2005/05/18 21:49:29 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -106,7 +106,7 @@ Class XRMSTest extends PHPUnit_TestCase {
     function test_set_multi_user_preference($user_id=1, $preference_type=false, $preference_values=false) {
         $con = $this->con;    
         if (!$preference_type) { $preference_type='random_multi_option'; $user_preference_type_id=$this->test_add_user_preference_type($preference_type, 'TEST MULTI OPTION', 'Test Type for Multiple Options: Ignore', true, false); $created=true; }
-        if (!$preference_values) { $preference_values=array('size'=>'1','shape'=>'two and two is four','texture'=>'goddamn'); }
+        if (!$preference_values) { $preference_values=array('size'=>'1','shape'=>'two and two is four','texture'=>'testTexture'); }
         foreach ($preference_values as $pkey=>$pval) {
             $ret = $this->test_set_user_preference($user_id, $preference_type, $pval, $pkey, true, false);
             $this->assertTrue($ret, "Failed to assign multi-select for preference $preference_type, $pkey=$pval");
@@ -168,6 +168,17 @@ Class XRMSTest extends PHPUnit_TestCase {
        return $testRet;
     }
     
+    function test_add_workflow_history($on_what_table='TEST', $on_what_id=1, $old_status=1, $new_status=2, $delete_from_database=true) {
+        $ret=add_workflow_history($this->con, $on_what_table, $on_what_id, $old_status, $new_status);
+        $this->assertTrue($ret, "Failed to add workflow history for $on_what_table $on_what_id, $old_status -> $new_status");
+        if ($delete_from_database AND $ret) {
+            $sql="DELETE FROM workflow_history WHERE on_what_table=".$this->con->qstr($on_what_table)." AND on_what_id=$on_what_id";
+            $rst=$this->con->execute($sql);
+            $this->assertTrue($rst, "Return from delete of workflow history failed");   
+        }
+        return $ret;
+    }
+    
 }
 
 $suite= new PHPUnit_TestSuite( "XRMSTest" );
@@ -191,6 +202,9 @@ $display->show();
  */
 /*
  * $Log: xrms_test.php,v $
+ * Revision 1.4  2005/05/18 21:49:29  vanmer
+ * - added test for adding workflow history
+ *
  * Revision 1.3  2005/05/09 22:42:10  vanmer
  * - added test for new session caching functions
  *
