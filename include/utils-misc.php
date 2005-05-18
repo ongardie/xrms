@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.132 2005/05/16 20:56:24 vanmer Exp $
+ * $Id: utils-misc.php,v 1.133 2005/05/18 05:45:24 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -67,24 +67,13 @@ function session_check($c_role='', $action='Read') {
     // make sure the session has started
     session_startup();
 
-    // make sure we have a role to do this
-    $role_ok = true;
-    if ( $c_role ) {
-      $s_role = isset($_SESSION['role_short_name']) ? $_SESSION['role_short_name'] : '';
-      if ( 0 == strcmp($s_role, $c_role) ) {
-        // yes
-        $role_ok = true;
-      } else {
-        // no
-        $role_ok = false;
-      }
-    }
     $con=get_xrms_dbconnection();
     $user_language=get_user_preference($con, $_SESSION['session_user_id'], 'user_language');
 
     if ($user_language AND ($user_language!=$xrms_default_language)) {
         set_up_language($user_language, false, false, true);
     }
+    
     // make sure we've logged in
     if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
       if ($on_what_id)
@@ -92,6 +81,13 @@ function session_check($c_role='', $action='Read') {
       else
          $role_ok = check_object_permission_bool($_SESSION['session_user_id'], false, $action, $on_what_table, false, $con);
 
+    // make sure we have a role to do this
+    if ( $c_role AND $c_role=='Admin' ) {
+        $admin_object='Administration';
+        $action='Update';
+        $role_ok = check_object_permission_bool($_SESSION['session_user_id'],  $admin_object, $action, false, false, $con);
+    }
+      
       // we are logged in
       if ( !$role_ok ) {
         // we are logged in, go straight to logout.php
@@ -1699,6 +1695,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.133  2005/05/18 05:45:24  vanmer
+ * - removed code that uses role_short_name in session for security
+ * - replaced with a check for Update access on the Administration controlled object
+ *
  * Revision 1.132  2005/05/16 20:56:24  vanmer
  * - added caching for system parameter function calls
  *
