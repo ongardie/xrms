@@ -2,7 +2,7 @@
 /**
  * commit a new user to the Database
  *
- * $Id: add-2.php,v 1.10 2005/02/10 23:45:05 vanmer Exp $
+ * $Id: add-2.php,v 1.11 2005/05/18 05:51:24 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,15 +27,22 @@ else $enabled=false;
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-$user_id=add_xrms_user($con, $new_username, $password, $role_id, $first_names, $last_name, $email, $gmt_offset, $enabled);
-
+$error_msg='';
+$user_id=add_xrms_user($con, $new_username, $password, $role_id, $first_names, $last_name, $email, $gmt_offset, $enabled, false, $error_msg);
 $con->close();
+if (!$user_id) {
+    $msg="Failed to add user: $error_msg.";
+    header("Location: some.php?msg=$msg");
+    exit;
+}
 
 header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.11  2005/05/18 05:51:24  vanmer
+ * - changed to call add user function with silent parameter, error message variable
+ *
  * Revision 1.10  2005/02/10 23:45:05  vanmer
  * -altered to use new add_xrms_user function
  * -altered to use enabled flag to set user account status
