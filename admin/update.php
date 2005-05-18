@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.75 2005/05/18 06:20:18 vanmer Exp $
+ * $Id: update.php,v 1.76 2005/05/18 21:40:58 vanmer Exp $
  */
 
 // where do we include from
@@ -4740,6 +4740,24 @@ $con->execute($sql);
         }
     }
 
+    if (!in_array('workflow_history',$table_list)) {
+        $sql="CREATE TABLE `workflow_history` (
+                `workflow_history_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+                `on_what_table` VARCHAR( 32 ) NOT NULL ,
+                `on_what_id` INT UNSIGNED NOT NULL ,
+                `old_status` INT UNSIGNED NOT NULL ,
+                `new_status` INT UNSIGNED NOT NULL ,
+                `status_change_timestamp` DATETIME NOT NULL ,
+                `status_change_by` INT UNSIGNED NOT NULL ,
+                PRIMARY KEY ( `workflow_history_id` )
+                );";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+    
 install_upgrade_acl($con);
 
 $sql = "ALTER TABLE user_preferences ADD user_id INT( 11 ) UNSIGNED NOT NULL";
@@ -4772,6 +4790,7 @@ $sql = "DROP TABLE roles";
 $con->execute($sql);
 
 
+
 do_hook_function('xrms_update', $con);
 
 //close the database connection, because we don't need it anymore
@@ -4795,6 +4814,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.76  2005/05/18 21:40:58  vanmer
+ * - added workflow_history table to update
+ *
  * Revision 1.75  2005/05/18 06:20:18  vanmer
  * - removed reference to roles table
  * - removed reference to role_id in users table
