@@ -6,7 +6,7 @@
 require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 
-$data_filename = $xrms_file_root.'/install/data.php';
+$data_filenames= array($xrms_file_root.'/install/data.php', $xrms_file_root.'/include/classes/acl/acl_install.php');
 $output_filename = $xrms_file_root.'/locale/datastrings.php';
 
 // Add more table names to $tables_to_extract if they are loaded by data.php
@@ -27,30 +27,34 @@ $tables_to_extract = array("account_statuses",
                            "ratings",
                            "relationship_types",
                            "system_parameters",
+                           "ControlledObject",
+                           "Permission",
+                           "Role",
                            );
-
-$file = file_get_contents($data_filename);
-$strings = array();
-foreach ($tables_to_extract as $t)
-{
-// extract values from the insert into statements 
-    if (preg_match_all("/insert\s+into\s+$t.*values\s+\((.*)\)\s*(?:\"|\')\s*;/Ui",$file,$matches))
+    $strings = array();
+foreach ($data_filenames as $data_filename) {
+    $file = file_get_contents($data_filename);
+    foreach ($tables_to_extract as $t)
     {
-        foreach ($matches[1] as $m)
+    // extract values from the insert into statements 
+        if (preg_match_all("/insert\s+into\s+$t.*values\s+\((.*)\)\s*(?:\"|\')\s*;/Ui",$file,$matches))
         {
-// get the single values
-			$matched_val = split(',',$m);
-			foreach ($matched_val as $mv)
-			{
-				$mv = trim($mv);
-// if the strings is not numeric, it is longer than 1 (3 including the quotes) or it isn't a short
-// code which at the moment I have assumed to be uppercase strings of length <=5 (<=7 including quotes)
-				if (!is_numeric($mv) && strlen($mv) > 3 && !(strtoupper($mv)==$mv && strlen($mv) <= 7))
-				{
-					$strings[]= tag_remove($mv);
-				}
-			}
-			
+            foreach ($matches[1] as $m)
+            {
+    // get the single values
+                            $matched_val = split(',',$m);
+                            foreach ($matched_val as $mv)
+                            {
+                                    $mv = trim($mv);
+    // if the strings is not numeric, it is longer than 1 (3 including the quotes) or it isn't a short
+    // code which at the moment I have assumed to be uppercase strings of length <=5 (<=7 including quotes)
+                                    if (!is_numeric($mv) && strlen($mv) > 3 && !(strtoupper($mv)==$mv && strlen($mv) <= 7))
+                                    {
+                                            $strings[]= tag_remove($mv);
+                                    }
+                            }
+                            
+            }
         }
     }
 }
@@ -66,12 +70,12 @@ fwrite($fp, '/**
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: getdatastrings.php,v 1.4 2005/01/29 13:28:53 braverock Exp $
+ * $Id: getdatastrings.php,v 1.5 2005/05/18 22:50:27 vanmer Exp $
  */'."\n");
 foreach ($output_strings as $s)
 {
-    $s=trim($s);
-    fwrite($fp, '$s=_('.$s.");\n");
+    $s=trim($s, "' ");
+    fwrite($fp, '$s=_("'.$s."\");\n");
 }
 fwrite($fp, "?>\n");
 fclose($fp);
@@ -84,4 +88,3 @@ function tag_remove($s)
 }
 
 ?>
-
