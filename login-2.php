@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.21 2005/03/18 14:55:50 maulani Exp $
+ * $Id: login-2.php,v 1.22 2005/05/18 06:12:27 vanmer Exp $
  */
 require_once('include-locations.inc');
 
@@ -91,23 +91,10 @@ if ($xrms_use_ldap) {
                     $ldapok = false;
                }
           } else {
-               // if the user does not exist in the database but we were able to authenticate him, we create it automatically in the database
-               $rec = array();
-               $rec['role_id'] = $xrms_ldap['default_role_id'];
-               $rec['last_name'] = $info[0]['sn'][0];
-               $rec['first_names'] = $info[0]['givenname'][0];
-               $rec['username'] = $info[0]['uid'][0];
-               $rec['password'] = 'NOPASSWORD';
-               $rec['email'] = $info[0]['mail'][0];
-               $rec['gmt_offset'] = $xrms_ldap['default_gmt_offset'];
-               $rec['language'] = 'english';
-
-               $tbl = 'users';
-               $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-               $rst = $con->execute($ins);
-               if (!$rst) {
-                  db_error_handler ($con, $ins);
-               }
+                   // if the user does not exist in the database but we were able to authenticate him, we create it automatically in the database
+                $error_msg='';
+                add_xrms_user($con, $info[0]['uid'][0], 'NOPASSWORD', $xrms_ldap['default_role_id'], $info[0]['givenname'][0], $info[0]['sn'][0], $info[0]['mail'][0], $xrms_ldap['default_gmt_offset'], true, false, $error_msg);
+               
                // and now pull the data we just inserted
                $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc());
                $rst = $con->execute($sql);
@@ -133,7 +120,6 @@ if ($rst && !$rst->EOF && $ldapok) {
 
     // get variables
     $session_user_id = $rst->fields['user_id'];
-    $role_id         = $rst->fields['role_id'];
     $username        = $rst->fields['username'];
     $language        = $rst->fields['language'];
     $gmt_offset      = $rst->fields['gmt_offset'];
@@ -141,32 +127,13 @@ if ($rst && !$rst->EOF && $ldapok) {
     // close result set
     $rst->close();
 
-    // get role_short_name from table 'roles'
-    $sql = "select r.role_short_name as role
-        from roles r, users u
-        where u.role_id=r.role_id
-        and u.user_id = $session_user_id";
-    $role_short_name = '';
-    $rst = $con->execute($sql);
-    if ($rst) {
-      while (!$rst->EOF) {
-         $role_short_name = $rst->fields['role'];
-         break;
-      }
-      $rst->close();
-    } else {
-      db_error_handler($con,$sql);
-    }
-
     // make sure we have a session, and place variables in it
     session_startup();
     $_SESSION['session_user_id'] = $session_user_id;
     $_SESSION['xrms_system_id']  = $xrms_system_id;
-    $_SESSION['role_id']         = $role_id;
     $_SESSION['username']        = $username;
     $_SESSION['language']        = $language;
     $_SESSION['gmt_offset']      = $gmt_offset;
-    $_SESSION['role_short_name'] = $role_short_name;
 
     // audit
     add_audit_item($con, $session_user_id, 'login', '', '', 2);
@@ -179,6 +146,10 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.22  2005/05/18 06:12:27  vanmer
+ * - changed ldap new user code to use new user function
+ * - changed to remove references to roles when logging in
+ *
  * Revision 1.21  2005/03/18 14:55:50  maulani
  * - Fix creating new user after LDAP Authentication.  Patch submitted by
  *   markcallen (Mark Allen) in bug report 1121632.
