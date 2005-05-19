@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.6 2005/04/25 04:55:06 jswalter Exp $
+// $Id: SMTPs.php,v 1.7 2005/05/19 21:12:34 braverock Exp $
 
   /**
    * Class SMTPs
@@ -37,7 +37,7 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.6 $
+   * @version $Revision: 1.7 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -1552,7 +1552,7 @@ class SMTPs
             // Make RFC821 Compliant, replace bare linefeeds
             $strContent = preg_replace("/(?<!\r)\n/si", "\r\n", $strContent );
 
-            $strContent = rtrim(chunk_split($strContent, 76, "\r\n"));
+            $strContent = rtrim(wordwrap($strContent));
 
             $this->_msgContent[$strType] = array();
 
@@ -1998,6 +1998,9 @@ function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.7  2005/05/19 21:12:34  braverock
+  * - replace chunk_split() with wordwrap() to fix funky wrapping of templates
+  *
   * Revision 1.6  2005/04/25 04:55:06  jswalter
   *  - cloned from Master Version
   *
