@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.95 2005/05/19 13:20:43 maulani Exp $
+ * $Id: one.php,v 1.96 2005/05/19 20:29:41 daturaarutad Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -65,10 +65,19 @@ if ($rst) {
     $ends_at = date('Y-m-d H:i:s', strtotime($rst->fields['ends_at']));
     $local_time = calculate_time_zone_time($con, $rst->fields['daylight_savings_id'], $rst->fields['offset']);
     $activity_status = $rst->fields['activity_status'];
+    $thread_id = $rst->fields['thread_id'];
+    $followup_from_id = $rst->fields['followup_from_id'];
+    $on_what_table = $rst->fields['on_what_table'];
     $rst->close();
 } else {
     db_error_handler($con, $sql);
 }
+
+// set thread_id to activity_id if it's not set already.
+if(!$thread_id) {
+	$thread_id = $activity_id;
+}
+
 
 if($on_what_table == 'opportunities') {
     $sql = "select o.probability
@@ -427,6 +436,8 @@ function logTime() {
         <input type=hidden name=on_what_id value="<?php  echo $on_what_id; ?>">
         <input type=hidden name=table_name value="<?php echo $table_name ?>">
         <input type=hidden name=table_status_id value="<?php echo $table_status_id ?>">
+        <input type=hidden name=thread_id value="<?php  echo $thread_id; ?>">
+        <input type=hidden name=followup_from_id value="<?php  echo $followup_from_id; ?>">
 
         <table class=widget cellspacing=1>
             <tr>
@@ -629,6 +640,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.96  2005/05/19 20:29:41  daturaarutad
+ * added support for followup activities
+ *
  * Revision 1.95  2005/05/19 13:20:43  maulani
  * - Remove trailing whitespace
  *

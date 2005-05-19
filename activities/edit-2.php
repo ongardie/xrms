@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.56 2005/05/19 13:20:43 maulani Exp $
+ * $Id: edit-2.php,v 1.57 2005/05/19 20:29:17 daturaarutad Exp $
  */
 
 //include required files
@@ -40,6 +40,8 @@ $arr_vars = array (
                    'email_to' => arr_vars_POST ,
                    'table_name' => arr_vars_POST ,
                    'table_status_id' => arr_vars_POST ,
+                   'thread_id' => arr_vars_POST ,
+                   'followup_from_id' => arr_vars_POST ,
 
                    // optionally posted data
                    'opportunity_description' => arr_vars_POST_UNDEF ,
@@ -362,7 +364,7 @@ if ($table_name !== "attached to") {
     } else {
         db_error_handler ($con, $sql);
     }
-    
+
     //check if there are open activities from this status
     // if no more activities are open, advance status
     $no_update = true;
@@ -371,7 +373,7 @@ if ($table_name !== "attached to") {
             $no_update = false;
         } else {
             $sort_order++;
-            //$con->debug=1;            
+            //$con->debug=1;
             $sql = "select * from {$table_name}_statuses
                 where sort_order=$sort_order";
             if ($type_id) {
@@ -382,12 +384,12 @@ if ($table_name !== "attached to") {
             if (!$status_rst) db_error_handler($con, $sql);
             if ($status_rst AND ($status_rst->numRows()>0)) {
                 $table_status_id = $status_rst->fields[$table_name . '_status_id'];
-                
+
                 //look for activity_templates defined for the next status in the workflow
                 $sql = "select * from activity_templates where on_what_table=" . $con->qstr($table_name.'_statuses') . " AND on_what_id=$table_status_id";
                 $rst=$con->execute($sql);
                 if (!$rst) { db_error_handler($con,$sql); }
-    
+
                 //if there are templates defined for the next status, find it
                 if ($rst->numRows()>0) {
                     $no_update = false;
@@ -408,7 +410,7 @@ if ($table_name !== "attached to") {
                 else { $sep='?'; }
                 $return_url.=$sep.'msg=no_change';
              }
-             else 
+             else
                 $return_url="/private/home.php?msg=no_change";
         }
 
@@ -487,7 +489,8 @@ if ($email_to) {
 }
 
 if ($followup) {
-    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( _("Follow-up") . ' ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&on_what_status=$old_status&return_url=$return_url&followup=true" );
+
+    header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( _("Follow-up") . ' ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&on_what_status=$old_status&return_url=$return_url&thread_id=$thread_id&followup_from_id=$activity_id&followup=true" );
 } elseif($saveandnext) {
     header("Location: browse-next.php?activity_id=$activity_id");
 } else {
@@ -496,6 +499,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.57  2005/05/19 20:29:17  daturaarutad
+ * added support for followup activities
+ *
  * Revision 1.56  2005/05/19 13:20:43  maulani
  * - Remove trailing whitespace
  *

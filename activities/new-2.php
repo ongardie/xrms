@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.36 2005/04/15 08:05:10 vanmer Exp $
+ * $Id: new-2.php,v 1.37 2005/05/19 20:28:13 daturaarutad Exp $
  */
 
 //where do we include from
@@ -45,6 +45,8 @@ $arr_vars = array ( // local var name       // session variable name
                    'user_id'          => array ( 'user_id' , arr_vars_REQUEST_SESSION ),
                    'email'            => array ( 'email' , arr_vars_REQUEST_SESSION ),
                    'followup'         => array ( 'followup' , arr_vars_REQUEST_SESSION ),
+                   'followup_from_id' => array ( 'followup_from_id' , arr_vars_REQUEST_SESSION ),
+                   'thread_id'        => array ( 'thread_id' , arr_vars_REQUEST_SESSION ),
                    'opportunity_status_id'  => array ( 'opportunity_status_id' , arr_vars_REQUEST_SESSION ),
                    );
 
@@ -159,6 +161,8 @@ $rec['ends_at']          = strtotime($ends_at);
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 $rec['opportunity_status_id'] = $opportunity_status_id;
+if($thread_id) $rec['thread_id'] 		 = $thread_id;
+if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
 
 if(empty($opportunity_status_id)) {
     $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
@@ -178,6 +182,7 @@ else {
 if(empty($opportunity_status_id)) {
     $tbl = 'activities';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+
     $con->execute($ins);
 
     $activity_id = $con->insert_id();
@@ -226,6 +231,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.37  2005/05/19 20:28:13  daturaarutad
+ *added support for followup activities
+ *
  *Revision 1.36  2005/04/15 08:05:10  vanmer
  *- added code to add default participant when new activity is added
  *
