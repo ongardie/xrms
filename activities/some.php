@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.111 2005/05/18 20:07:04 daturaarutad Exp $
+ * $Id: some.php,v 1.112 2005/05/19 13:20:43 maulani Exp $
  */
 
 // handle includes
@@ -905,6 +905,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.112  2005/05/19 13:20:43  maulani
+ * - Remove trailing whitespace
+ *
  * Revision 1.111  2005/05/18 20:07:04  daturaarutad
  * fixed a bug regarding . vs , in $con->Offset() for non-English languages (calendar)
  *

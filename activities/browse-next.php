@@ -8,7 +8,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.19 2004/12/27 18:29:42 neildogg Exp $
+ * $Id: browse-next.php,v 1.20 2005/05/19 13:20:43 maulani Exp $
  */
 
 //include required files
@@ -156,6 +156,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.20  2005/05/19 13:20:43  maulani
+ * - Remove trailing whitespace
+ *
  * Revision 1.19  2004/12/27 18:29:42  neildogg
  * - Array was not being cleared
  *

@@ -2,7 +2,7 @@
 /**
  * Shared activity pager functions
  *
- * $Id: activities-pager-functions.php,v 1.3 2005/03/01 15:48:09 daturaarutad Exp $
+ * $Id: activities-pager-functions.php,v 1.4 2005/05/19 13:20:43 maulani Exp $
  */
 
 /**
@@ -54,6 +54,9 @@ function GetActivitiesPagerData($row) {
 
 /**
  * $Log: activities-pager-functions.php,v $
+ * Revision 1.4  2005/05/19 13:20:43  maulani
+ * - Remove trailing whitespace
+ *
  * Revision 1.3  2005/03/01 15:48:09  daturaarutad
  * changed name from GUP_Pager_TD_Classname to Pager_TD_CSS_All_Rows
  *

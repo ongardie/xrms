@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.3 2005/04/22 22:05:53 ycreddy Exp $
+ * $Id: participant_sidebar.php,v 1.4 2005/05/19 13:20:43 maulani Exp $
  */
 require_once($include_directory.'utils-activities.php');
 // add participant information block on sidebar
@@ -45,6 +45,9 @@ $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.4  2005/05/19 13:20:43  maulani
+ * - Remove trailing whitespace
+ *
  * Revision 1.3  2005/04/22 22:05:53  ycreddy
  * Added the missing .php extension for the Remove Participant Link
  *

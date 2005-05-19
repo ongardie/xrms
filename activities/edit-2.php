@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.55 2005/05/18 21:47:27 vanmer Exp $
+ * $Id: edit-2.php,v 1.56 2005/05/19 13:20:43 maulani Exp $
  */
 
 //include required files
@@ -496,6 +496,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.56  2005/05/19 13:20:43  maulani
+ * - Remove trailing whitespace
+ *
  * Revision 1.55  2005/05/18 21:47:27  vanmer
  * - added workflow tracking when changing status of entity as activity completes
  *

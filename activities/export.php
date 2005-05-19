@@ -122,6 +122,9 @@ echo $csvdata;
 
 /**
  * $Log: export.php,v $
+ * Revision 1.7  2005/05/19 13:20:43  maulani
+ * - Remove trailing whitespace
+ *
  * Revision 1.6  2005/01/29 13:08:45  braverock
  * - change error message to reflect the fact that we no longer use the export directory here
  *

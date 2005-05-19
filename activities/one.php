@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.94 2005/05/10 21:31:43 braverock Exp $
+ * $Id: one.php,v 1.95 2005/05/19 13:20:43 maulani Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -629,6 +629,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.95  2005/05/19 13:20:43  maulani
+ * - Remove trailing whitespace
+ *
  * Revision 1.94  2005/05/10 21:31:43  braverock
  * - modify so selectable columns widget is rendered inside the <html> and <form> tags
  *
