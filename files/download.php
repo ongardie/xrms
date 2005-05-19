@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to 
  * the user's default location.
  * 
- * $Id: download.php,v 1.8 2005/03/02 21:23:25 vanmer Exp $
+ * $Id: download.php,v 1.9 2005/05/19 13:14:55 maulani Exp $
  */ 
 
 require_once('../include-locations.inc');
@@ -82,6 +82,9 @@ exit();
 
 /** 
  * $Log: download.php,v $
+ * Revision 1.9  2005/05/19 13:14:55  maulani
+ * - Remove trailing whitespace
+ *
  * Revision 1.8  2005/03/02 21:23:25  vanmer
  * - changed to force pop-up of download dialogue, instead of showing attachment inline
  *
@@ -112,4 +115,4 @@ exit();
  *
  * 
  */ 
-?> 
+?>
