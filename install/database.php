@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.40 2005/05/18 21:42:54 vanmer Exp $
+ * $Id: database.php,v 1.41 2005/05/19 19:58:05 daturaarutad Exp $
  */
 
 /**
@@ -34,7 +34,7 @@ function misc_db_tables($con, $table_list) {
             db_error_handler ($con, $sql);
         }
     }
-    
+
     // system_parameters_options
     if (!in_array('system_parameters_options',$table_list)) {
         $sql ="create table system_parameters_options (
@@ -250,7 +250,7 @@ function misc_db_tables($con, $table_list) {
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
-    }    
+    }
 } // end misc_db_tables fn
 
 
@@ -731,7 +731,7 @@ function company_db_tables($con, $table_list) {
             db_error_handler ($con, $sql);
         }
     }
-    
+
     if (!in_array('saved_actions',$table_list)) {
         $sql = "CREATE TABLE saved_actions (
                  saved_id int(10) unsigned NOT NULL auto_increment,
@@ -855,7 +855,7 @@ function opportunity_db_tables($con, $table_list) {
             db_error_handler ($con, $sql);
         }
     }
-    
+
     if (!in_array('time_zones',$table_list)) {
     // create the time_zones table if we need it
         $sql ="CREATE TABLE time_zones (
@@ -1093,6 +1093,8 @@ function activity_db_tables($con, $table_list) {
                entered_by                      int not null default 0,
                last_modified_at                datetime,
                last_modified_by                int not null default 0,
+			   thread_id              		   int not null default 0,
+			   followup_from_id                int not null default 0,
                scheduled_at                    datetime,
                ends_at                         datetime,
                completed_at                    datetime,
@@ -1130,7 +1132,7 @@ function activity_db_tables($con, $table_list) {
                     activity_participant_position_id INT UNSIGNED NOT NULL AUTO_INCREMENT ,
                     activity_type_id INT UNSIGNED NULL ,
                     participant_position_name VARCHAR(50) NOT NULL ,
-                    global_flag TINYINT UNSIGNED DEFAULT '0' NOT NULL, 
+                    global_flag TINYINT UNSIGNED DEFAULT '0' NOT NULL,
                     PRIMARY KEY ( activity_participant_position_id ) ,
                     INDEX ( activity_type_id )
                     ); ";
@@ -1140,9 +1142,9 @@ function activity_db_tables($con, $table_list) {
             db_error_handler ($con, $sql);
         }
     }
-            
-    
-    
+
+
+
 } // end activity_db_tables fn
 
 
@@ -1165,6 +1167,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.41  2005/05/19 19:58:05  daturaarutad
+ * added thread_id and followup_from_id to activities
+ *
  * Revision 1.40  2005/05/18 21:42:54  vanmer
  * - added table for workflow_history to initial install
  *
