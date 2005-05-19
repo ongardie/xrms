@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.77 2005/05/19 19:55:24 daturaarutad Exp $
+ * $Id: update.php,v 1.78 2005/05/19 20:04:43 daturaarutad Exp $
  */
 
 // where do we include from
@@ -4768,9 +4768,9 @@ $sql = "ALTER TABLE `activities` ADD `last_modified_at` datetime AFTER `entered_
 $rst = $con->execute($sql);
 $sql = "ALTER TABLE `activities` ADD `last_modified_by` int not null default 0 AFTER `last_modified_at`";
 $rst = $con->execute($sql);
-$sql = "ALTER TABLE `activities` ADD `thread_id` int default NULL AFTER `last_modified_by`";
+$sql = "ALTER TABLE `activities` ADD `thread_id` int not null default 0 AFTER `last_modified_by`";
 $rst = $con->execute($sql);
-$sql = "ALTER TABLE `activities` ADD `followup_from_id` int default NULL AFTER `thread_id`";
+$sql = "ALTER TABLE `activities` ADD `followup_from_id` int not null default 0 AFTER `thread_id`";
 $rst = $con->execute($sql);
 
 $sql="UPDATE activities set last_modified_at=entered_at WHERE last_modified_at is NULL";
@@ -4818,6 +4818,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.78  2005/05/19 20:04:43  daturaarutad
+ * changed thread_id and followup_from_id to follow activities convention
+ *
  * Revision 1.77  2005/05/19 19:55:24  daturaarutad
  * added thread_id and followup_from_id to activities
  *
