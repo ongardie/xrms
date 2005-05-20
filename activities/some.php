@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.112 2005/05/19 13:20:43 maulani Exp $
+ * $Id: some.php,v 1.113 2005/05/20 22:18:01 daturaarutad Exp $
  */
 
 // handle includes
@@ -259,14 +259,14 @@ if(strlen($time_zone_between) and strlen($time_zone_between2)) {
 }
 
 $sql = "SELECT
-  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS overdue, "
+  (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END) AS is_overdue, "
   ." at.activity_type_pretty_name AS type, "
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
   . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS title, "
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
   . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
-  . "u.username AS owner, u.user_id, activity_id,"
+  . "u.username AS owner, u.user_id, activity_id, activity_status, "
   // these are to speed up the pager sorting
   . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name ";
 
@@ -759,7 +759,7 @@ $_SESSION["search_sql"]=$sql;
 if('list' == $results_view_type) {
 
     $columns = array();
-    $columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
+    $columns[] = array('name' => _('Overdue'), 'index_sql' => 'is_overdue');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
     $columns[] = array('name' => _('Summary'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
@@ -772,7 +772,7 @@ if('list' == $results_view_type) {
     // selects the columns this user is interested in
     // no reason to set this if you don't want all by default
     $default_columns = null;
-    //$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner');
+    //$default_columns =  array('is_overdue','type','contact','title','scheduled','due','company','owner');
 
     $pager_columns = new Pager_Columns('SomeActivitiesPager', $columns, $default_columns, 'ActivitiesData');
     $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -905,6 +905,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.113  2005/05/20 22:18:01  daturaarutad
+ * fixed broken coloring for overdue/closed activities
+ *
  * Revision 1.112  2005/05/19 13:20:43  maulani
  * - Remove trailing whitespace
  *
