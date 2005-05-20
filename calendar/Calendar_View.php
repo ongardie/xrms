@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.2 2005/05/18 21:51:23 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.3 2005/05/20 17:20:24 daturaarutad Exp $
  */
 
 
@@ -245,7 +245,7 @@ function Render($activity_data) {
 			<!-- Calendar Begins -->\n
 			<div id=\"xrms_calendar\">
 			<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">
-		   <table class=\"widget\">
+		   <table class=\"widget\" cellspacing=\"1\">
 		    <tr>
 		        <td colspan=30 class='widget_header'>Calendar</td>
 		    </tr>
@@ -456,7 +456,7 @@ function Render($activity_data) {
 			<!-- Calendar Begins -->\n
 			<div id=\"xrms_calendar\">
 			<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">
-		   <table class=\"widget\">
+		   <table class=\"widget\" cellspacing=\"1\">
 		    <tr>
 		        <td colspan=30 class='widget_header'>Calendar</td>
 		    </tr>
@@ -628,6 +628,9 @@ function calendar_previous_month() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.3  2005/05/20 17:20:24  daturaarutad
+* added cellspacing=1 to tables
+*
 * Revision 1.2  2005/05/18 21:51:23  daturaarutad
 * removed trailing spaces...added check that there are events before creating legend
 *
