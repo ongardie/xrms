@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.23 2005/05/18 06:19:57 vanmer Exp $
+ * $Id: data.php,v 1.24 2005/05/20 19:26:17 vanmer Exp $
  */
 
 /**
@@ -41,6 +41,8 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters (param_id, string_val, description) values ('Allow Unassigned Activities', 'n', 'Unassigned activities are useful when creating activity pools, but can result in activities erroneously created without accountability.')";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters (param_id, string_val, description) values ('Display Item Technical Details', 'n', 'Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.')";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('Show Logo', 'n', 'Controls custom logo display in the head of every page in XRMS.')";
         $rst = $con->execute($sql);
     }
 
@@ -83,6 +85,10 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Display Item Technical Details', 'n', 1)";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Display Item Technical Details', 'y', 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Show Logo', 'n', 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Show Logo', 'y', 2)";
         $rst = $con->execute($sql);
     }
 
@@ -2507,6 +2513,10 @@ function user_db_data($con) {
     if (confirm_no_records($con, 'users')) {
         $sql ="insert into users (user_contact_id, username, password, last_name, first_names, email, language) values (0, 'user1', '24c9e15e52afc47c225b757e7bee1f9d', 'One', 'User', 'user1@somecompany.com', 'english')";
         $rst = $con->execute($sql);
+        $user_id=$con->Insert_ID();
+        $group_id=get_group_id(false, 'Users');
+        $role_id=get_role_id(false, 'Administrator');
+        $ret=add_user_group(false, $group_id, $user_id, $role_id);
     }
 
 } // end user_db_data fn
@@ -2810,30 +2820,31 @@ function campaign_db_data($con) {
 function activity_db_data($con) {
     // activity_types
      if (confirm_no_records($con, 'activity_types')) {
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('CTO', 'call to', 'calls to', 'call to',1)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('CTO', 'call to', 'calls to', 'call to',1,0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('CFR', 'call from', 'calls from', 'call from',2)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('CFR', 'call from', 'calls from', 'call from',2,0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('ETO', 'e-mail to', 'e-mails to', 'e-mail to',3)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('ETO', 'e-mail to', 'e-mails to', 'e-mail to',3, 0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('EFR', 'e-mail from', 'e-mails from', 'e-mail from',4)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order, user_editable_flag) values ('EFR', 'e-mail from', 'e-mails from', 'e-mail from',4,0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('FTO', 'fax to', 'faxes to', 'fax to',5)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order, user_editable_flag) values ('FTO', 'fax to', 'faxes to', 'fax to',5, 0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('FFR', 'fax from', 'faxes from', 'fax from',6)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('FFR', 'fax from', 'faxes from', 'fax from',6, 0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('LTT', 'letter to', 'letter to', 'letter to',7)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('LTT', 'letter to', 'letter to', 'letter to',7, 1)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('LTF', 'letter from', 'letter from', 'letter from',8)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('LTF', 'letter from', 'letter from', 'letter from',8, 1)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('INT', 'internal', 'internal', 'internal',9)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('INT', 'internal', 'internal', 'internal',9,0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order) values ('PRO', 'process', 'process', 'process',10)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('PRO', 'process', 'process', 'process',10,0)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('SYS', 'system, 'system', 'system',9,0)";
         $rst = $con->execute($sql);
     }
+    
      if (confirm_no_records($con, 'activity_participant_positions')) {
-       $sql = " INSERT INTO `activity_participant_positions` ( activity_type_id , participant_position_name , global_flag )
-                    VALUES ( NULL , 'Participant', '1')";
+       $sql = " insert into activity_participant_positions (activity_type_id , participant_position_name , global_flag) values ( NULL , 'Participant', 1)";
         $rst = $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
@@ -2861,6 +2872,11 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.24  2005/05/20 19:26:17  vanmer
+ * - fixed error in insert of participant position record
+ * - added Show Logo system parameter
+ * - added user editable flag on activity types
+ *
  * Revision 1.23  2005/05/18 06:19:57  vanmer
  * - removed references to role_id in users table
  * - removed roles table
