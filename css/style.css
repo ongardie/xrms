@@ -39,6 +39,12 @@ table.widget .widget_content_graph table {
 table.widget .sublabel {
     padding-right: 4px;
 }
+table.embedded, td.embedded {
+	margin: 0;
+	padding: 0;
+	border-collapse: collapse;
+}
+
 #loginbar,
 #msg,
 #navline {
