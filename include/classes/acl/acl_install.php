@@ -13,6 +13,7 @@ function upgrade_role($user_id, $role, $group='Users') {
         switch ($role) {
             default:
             case 'User':
+                $role='User';
                 break;
             case 'Admin':
                 $role='Administrator';
@@ -41,7 +42,7 @@ function install_upgrade_acl($con=false) {
     $rst = $con->execute($sql);
     if (!$rst) db_error_handler($con, $sql);
     if ($rst->numRows()==0) {
-        $inst_ret=install_acl_users($con);
+        $inst_ret=upgrade_acl_users($con);
    } else $inst_ret=true;
     if (!$inst_ret) { echo "ACL User Update Failed<br>"; return false; }
     
@@ -68,18 +69,20 @@ function install_upgrade_acl($con=false) {
     return true;   
 }
 
-function install_acl_users($con) {
+function upgrade_acl_users($con) {
 
     $sql = "SELECT * from users, roles WHERE users.role_id=roles.role_id";
     $rst = $con->execute($sql);
     $install_status=true;
-    while (!$rst->EOF) {
-        $ret=upgrade_role($rst->fields['user_id'],$rst->fields['role_short_name']);
-        $rst->movenext();
-        if (!$ret AND $install_status) {
-            $install_status=false;
+    if ($rst) {
+        while (!$rst->EOF) {
+            $ret=upgrade_role($rst->fields['user_id'],$rst->fields['role_short_name']);
+            $rst->movenext();
+            if (!$ret AND $install_status) {
+                $install_status=false;
+            }
         }
-    }
+    } else return true;
     return $install_status;
 }
 
