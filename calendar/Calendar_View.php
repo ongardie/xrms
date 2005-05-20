@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.3 2005/05/20 17:20:24 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.4 2005/05/20 17:39:15 daturaarutad Exp $
  */
 
 
@@ -258,6 +258,7 @@ function Render($activity_data) {
 		            <!--
 		            <input class=button type=button value=\"Previous Day\" onclick=\"javascript:calendar_previous_day();\">
 		            -->
+				</td>
 		        <td class=\"widget_label center\">
 		         $display_date
 		        </td>
@@ -469,6 +470,7 @@ function Render($activity_data) {
 		            <!--
 		            <input class=button type=button value=\"Previous Day\" onclick=\"javascript:calendar_previous_day();\">
 		            -->
+				</td>
 		        <td class=\"widget_label center\">
 		         $display_date
 		        </td>
@@ -628,6 +630,9 @@ function calendar_previous_month() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.4  2005/05/20 17:39:15  daturaarutad
+* added missing </td>s
+*
 * Revision 1.3  2005/05/20 17:20:24  daturaarutad
 * added cellspacing=1 to tables
 *
