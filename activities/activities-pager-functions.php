@@ -2,7 +2,7 @@
 /**
  * Shared activity pager functions
  *
- * $Id: activities-pager-functions.php,v 1.4 2005/05/19 13:20:43 maulani Exp $
+ * $Id: activities-pager-functions.php,v 1.5 2005/05/20 22:18:55 daturaarutad Exp $
  */
 
 /**
@@ -16,13 +16,16 @@ function GetActivitiesPagerData($row) {
 	// Set the CSS classes for the rows
     if ($row['activity_status'] == 'o') {
         if ($row['is_overdue']) {
+        	$row['is_overdue'] = _('Yes');
             $row['activity_status'] = _('Overdue');
             $row['Pager_TD_CSS_All_Rows'] = 'overdue_activity';
         } else {
+        	$row['is_overdue'] = '';
             $row['activity_status'] = _('Open');
             $row['Pager_TD_CSS_All_Rows'] = 'open_activity';
         }
     } else {
+       	$row['is_overdue'] = '';
         $row['activity_status'] = _('Closed');
         $row['Pager_TD_CSS_All_Rows'] = 'closed_activity';
     }
@@ -54,6 +57,9 @@ function GetActivitiesPagerData($row) {
 
 /**
  * $Log: activities-pager-functions.php,v $
+ * Revision 1.5  2005/05/20 22:18:55  daturaarutad
+ * homogenized is_overdue behavior for all pagers
+ *
  * Revision 1.4  2005/05/19 13:20:43  maulani
  * - Remove trailing whitespace
  *
