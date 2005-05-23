@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.15 2005/04/17 15:11:30 maulani Exp $
+ * $Id: install.php,v 1.16 2005/05/23 19:45:41 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -269,11 +269,11 @@ if($xrms_db_dbtype=="mysql"){
 // create the database tables
 create_db_tables($con);
 
-// create the database data
-create_db_data($con);
-
 // install ACL data
 install_upgrade_acl($con);
+
+// create the database data
+create_db_data($con);
 
 //run plugin installation, pass adodb database connection
 do_hook_function('xrms_install', $con);
@@ -306,6 +306,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.16  2005/05/23 19:45:41  vanmer
+ *- moved create database data to after ACL tables are installed
+ *
  *Revision 1.15  2005/04/17 15:11:30  maulani
  *- Add additional install checks
  *
