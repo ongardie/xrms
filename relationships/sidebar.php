@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.32 2005/03/01 15:11:11 vanmer Exp $
+ * $Id: sidebar.php,v 1.33 2005/05/23 22:05:06 vanmer Exp $
  */
 
 require_once('relationship_functions.php');
@@ -80,6 +80,7 @@ $relationship_link_rows = '';
         
         //loop on each relationship that this entity exists in
         //if we get no results, skip to the next type
+        $contacts=array();
 	if ($relationship_data) {
             foreach ($relationship_data as $relationship_id=>$relationship_details) {            
                 //retrieve needed relationship information from relationship details
@@ -88,7 +89,6 @@ $relationship_link_rows = '';
                 
                 $working_direction=$relationship_details['working_direction'];
                 $opposite_direction=$relationship_details['opposite_direction'];
-                
                 
                 
                 $display_name = ucfirst($relationship_type_data[$working_direction.'_what_table']);
@@ -112,6 +112,13 @@ $relationship_link_rows = '';
                 }
                     //grab current id, relationship details
                     $current_id = $relationship_details[$relationship_type_data[$opposite_direction.'_what_table_singular'] . '_id'];
+                    if (($relationship_type_data[$working_direction.'_what_table']=='contacts') AND ($_on_what_id!=$relationship_details[$relationship_type_data[$working_direction.'_what_table_singular'] . '_id'])) {
+                        if ($relationship_details[$relationship_type_data[$working_direction.'_what_table_singular'] . '_id'])
+                            $contacts[]=$relationship_details[$relationship_type_data[$working_direction.'_what_table_singular'] . '_id'];
+                    }
+                    if (($relationship_type_data[$opposite_direction.'_what_table']=='contacts') AND ($_on_what_id!=$current_id)) {
+                        $contacts[]=$current_id;
+                    }
                     $current_ids[] = $current_id;
                     $relationship_ids[] = $relationship_details['relationship_id'];
                     $agent_count = 0;
@@ -293,7 +300,7 @@ $relationship_link_rows = '';
             else {
                 $relationship_link_rows .= "
                         <tr>
-                            <td class=widget_label colspan=2 align=center>" . _("Add Relationship") . "</td>";
+                            <td class=widget_label colspan=2 align=center>" . _("Add Relationship") . "</td></tr>";
             }
 	    $relationship_link_rows .= "
                         <tr>
@@ -307,7 +314,14 @@ $relationship_link_rows = '';
                                 <input type=submit class=button value=\""._("New Relationship")."\">
                             </td>
                         </form>
-                        </tr><!-- Form End -->";            
+                        </tr><!-- Form End -->";
+            $contacts=array_unique($contacts);
+            if (count($contacts)>0) {
+                $relationship_link_rows .= "<tr><td class=widget_label colspan=2 align=center>"._("Mail Merge")."</td></tr>";
+                $contact_list=implode(",",$contacts);
+                $relationship_link_rows .= "<tr><td class=widget_content_form_element colspan=2><input type=button class=button value=\""._("Mail Merge")."\" onclick=\"javascript:location.href='$http_site_root/email/email.php?scope=contact_list&contact_list=$contact_list'\"></td></tr>";
+                $contacts=array();
+            }
 	}
             
             $relationship_link_rows .= "        <!-- Content End --></table>\n";
@@ -316,6 +330,11 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.33  2005/05/23 22:05:06  vanmer
+ * - added check for contact relationships, add to contact list used for mail merge on relationships
+ * - added mail merge button which calls email for a mail merge for all contacts in a relationship in the
+ * sidebar
+ *
  * Revision 1.32  2005/03/01 15:11:11  vanmer
  * - changed to show New Relationship button for each type of relationship on a page
  *
