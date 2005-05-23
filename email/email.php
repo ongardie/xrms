@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.11 2005/03/15 18:06:44 daturaarutad Exp $
+  * $Id: email.php,v 1.12 2005/05/23 22:04:12 vanmer Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -38,6 +38,7 @@
 
 
 
+   $array_of_contacts = array();
   switch ($scope) {
     case "company":
       $sql = "select cont.contact_id
@@ -56,7 +57,21 @@
 			$order_by=$_SESSION["search_sql"]["order"];
 			$from.=" LEFT JOIN contacts cont on cont.company_id=c.company_id ";
 			$sql="SELECT cont.contact_id ".$from.$where.$order_by;
-			break;
+            $rst = $con->execute($sql);
+        
+            if ($rst) {
+                while (!$rst->EOF) {
+                    array_push($array_of_contacts, $rst->fields['contact_id']);
+                    $rst->movenext();
+                }
+            }
+   break;
+   case 'contact_list':
+    getGlobalVar($contact_list, 'contact_list');
+    if ($contact_list) {
+        $array_of_contacts=explode(",",$contact_list);
+    }
+   break;
    default:
       $search_sql=$_SESSION["search_sql"];
       list($select, $from) = spliti("FROM", $search_sql,2);//need limit otherwise from_unixtime functions get captured
@@ -69,19 +84,19 @@
       //look out for group bys...
       if($groupby)$sql.="GROUP BY ".$groupby;
 	  if($orderby)$sql.=" ORDER BY ".$orderby;
-			break;
-    }
+        $rst = $con->execute($sql);
+    
+        if ($rst) {
+            while (!$rst->EOF) {
+                array_push($array_of_contacts, $rst->fields['contact_id']);
+                $rst->movenext();
+            }
+        }
+    break;
+    
+}
 
 
-    $rst = $con->execute($sql);
-
-    $array_of_contacts = array();
-    if ($rst) {
-      while (!$rst->EOF) {
-        array_push($array_of_contacts, $rst->fields['contact_id']);
-        $rst->movenext();
-      }
-    }
     
     $_SESSION['array_of_contacts'] = serialize($array_of_contacts);
 
@@ -151,6 +166,11 @@
 
     /**
     * $Log: email.php,v $
+    * Revision 1.12  2005/05/23 22:04:12  vanmer
+    * - moved database retrieval of contacts section to within switch statement, duplicated for each case which
+    * uses the databsae
+    * - added case to have list of contacts passed in a GET, with scope contact_list
+    *
     * Revision 1.11  2005/03/15 18:06:44  daturaarutad
     * now we check for order by value before appending to query
     *
