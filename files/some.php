@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.33 2005/04/29 17:56:44 daturaarutad Exp $
+ * $Id: some.php,v 1.34 2005/05/23 01:59:35 maulani Exp $
  */
 
 //include required files
@@ -309,7 +309,7 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
         <p>
 <?php
 
-if ( $use_owl ) {
+if (get_system_parameter($con, 'Use Owl') == 'y') {
   echo "<input class=button type=button onclick='javascript: owl()' value='"._("Owl File Management")."'><br><br>";
 }
 
@@ -421,6 +421,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.34  2005/05/23 01:59:35  maulani
+ * - Access system parameters for Use Owl parameter
+ *
  * Revision 1.33  2005/04/29 17:56:44  daturaarutad
  * fixed printing of form/search results
  *
