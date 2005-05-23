@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.24 2005/05/20 19:26:17 vanmer Exp $
+ * $Id: data.php,v 1.25 2005/05/23 01:55:33 maulani Exp $
  */
 
 /**
@@ -43,6 +43,8 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters (param_id, string_val, description) values ('Display Item Technical Details', 'n', 'Expose ID numbers and other technical tidbits on production screens. Useful for developers tracking issues in production. Otherwise not necessary.')";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters (param_id, string_val, description) values ('Show Logo', 'n', 'Controls custom logo display in the head of every page in XRMS.')";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters (param_id, string_val, description) values ('Use Owl', 'n', 'Provide an experimental link to OWL, a file management utility that supports more features (like revisions) than xrms.  To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl and set this parameter to y.')";
         $rst = $con->execute($sql);
     }
 
@@ -89,6 +91,10 @@ function misc_db_data($con) {
         $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Show Logo', 'n', 1)";
         $rst = $con->execute($sql);
         $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Show Logo', 'y', 2)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Use Owl', 'n', 1)";
+        $rst = $con->execute($sql);
+        $sql ="insert into system_parameters_options (param_id, string_val, sort_order) values ('Use Owl', 'y', 2)";
         $rst = $con->execute($sql);
     }
 
@@ -2872,6 +2878,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.25  2005/05/23 01:55:33  maulani
+ * - Add Use Owl system parameter
+ *
  * Revision 1.24  2005/05/20 19:26:17  vanmer
  * - fixed error in insert of participant position record
  * - added Show Logo system parameter
