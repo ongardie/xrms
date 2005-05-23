@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.78 2005/05/19 20:04:43 daturaarutad Exp $
+ * $Id: update.php,v 1.79 2005/05/23 01:58:47 maulani Exp $
  */
 
 // where do we include from
@@ -405,6 +405,44 @@ if ($recCount == 0) {
     $con->execute($ins);
 }
 
+// Make sure that there is Use Owl in system_parameters
+$sql = "select count(*) as recCount from system_parameters where param_id='Use Owl'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Move many variables from vars.php to system_parameters.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Use Owl';
+    $rec['string_val'] = 'n';
+    $rec['description'] = 'Provide an experimental link to OWL, a file management utility that supports more features (like revisions) than xrms.  To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl and set this parameter to y.';
+
+    $tbl = 'system_parameters';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
+// Make sure that there is options for the Use Owl in system_parameters_options
+$sql = "select count(*) as recCount from system_parameters_options where param_id='Use Owl'";
+$rst = $con->execute($sql);
+$recCount = $rst->fields['recCount'];
+if ($recCount == 0) {
+    $msg .= _("Added Display Item Technical Details system parameters options.").'<BR><BR>';
+
+    $rec = array();
+    $rec['param_id'] = 'Use Owl';
+    $rec['string_val'] = 'n';
+    $rec['sort_order'] = 1;
+    $tbl = 'system_parameters_options';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+
+    $rec['string_val'] = 'y';
+    $rec['sort_order'] = 2;
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+}
+
 // Make sure that there is options for the Audit Level in system_parameters_options
 $sql = "select count(*) as recCount from system_parameters_options where param_id='Audit Level'";
 $rst = $con->execute($sql);
@@ -567,7 +605,7 @@ if ($recCount == 0) {
     $con->execute($ins);
 }
 
-// Make sure that there is Allow Unassigned Activities and Display Item Technical Details Found in system_parameters
+// Make sure that there is Show Logo in system_parameters
 $sql = "select count(*) as recCount from system_parameters where param_id='Show Logo'";
 $rst = $con->execute($sql);
 $recCount = $rst->fields['recCount'];
@@ -4818,6 +4856,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.79  2005/05/23 01:58:47  maulani
+ * - Add Use Owl system parameter.  Move from vars.php
+ *
  * Revision 1.78  2005/05/19 20:04:43  daturaarutad
  * changed thread_id and followup_from_id to follow activities convention
  *
