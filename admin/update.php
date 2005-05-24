@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.79 2005/05/23 01:58:47 maulani Exp $
+ * $Id: update.php,v 1.80 2005/05/24 23:03:31 braverock Exp $
  */
 
 // where do we include from
@@ -4713,10 +4713,10 @@ $con->execute($sql);
     }
     if (!in_array('user_preference_type_options',$table_list)) {
         $sql = "CREATE TABLE `user_preference_type_options` (
-        `up_option_id` INT UNSIGNED NOT NULL AUTO_INCREMENT, 
-        `user_preference_type_id` INT UNSIGNED NOT NULL, 
-        `option_value` VARCHAR(255) NOT NULL, 
-        `sort_order` INT UNSIGNED DEFAULT 1 NOT NULL, 
+        `up_option_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        `user_preference_type_id` INT UNSIGNED NOT NULL,
+        `option_value` VARCHAR(255) NOT NULL,
+        `sort_order` INT UNSIGNED DEFAULT 1 NOT NULL,
         `option_record_status` CHAR(1) DEFAULT 'a' NOT NULL,
         PRIMARY KEY (`up_option_id`)
         );";
@@ -4778,6 +4778,42 @@ $con->execute($sql);
         }
     }
 
+    if (!in_array('email_template_type',$table_list)) {
+        $sql ="create table email_template_type (
+              email_template_type_id int not null primary key auto_increment,
+              email_template_type_name varchar(64) not null default '',
+              modified_by int not null default '0',
+              modified_on timestamp not null,
+              created_by int not null default '0',
+              created_on timestamp not null default '00000000000000'
+              )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+        if ($rst) $msg .= _("Successfully added email_template_type table.").'<BR><BR>';
+        //add the email_template_type_id to the email_templates table
+        $sql ="alter table  email_templates
+               ADD email_template_type_id int NOT NULL default '0' after email_template_id";
+        $rst= $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+        //create the base type
+        $sql ="INSERT INTO `email_template_type` (email_template_type_id , email_template_type_name) VALUES (1, 'Email Merge Letter')";
+        $rst= $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+        //set all the templates to be 'Email Merge Template'
+        $sql ="update email_templates set email_template_type_id=1 where email_template_type_id=0;";
+        $rst= $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
     if (!in_array('workflow_history',$table_list)) {
         $sql="CREATE TABLE `workflow_history` (
                 `workflow_history_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -4795,7 +4831,7 @@ $con->execute($sql);
             db_error_handler ($con, $sql);
         }
     }
-    
+
 install_upgrade_acl($con);
 
 $sql = "ALTER TABLE user_preferences ADD user_id INT( 11 ) UNSIGNED NOT NULL";
@@ -4856,6 +4892,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.80  2005/05/24 23:03:31  braverock
+ * - add email_tepplate_type table in advance of support for email template types in core
+ *
  * Revision 1.79  2005/05/23 01:58:47  maulani
  * - Add Use Owl system parameter.  Move from vars.php
  *
