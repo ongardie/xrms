@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.25 2005/05/23 01:55:33 maulani Exp $
+ * $Id: data.php,v 1.26 2005/05/24 23:01:46 braverock Exp $
  */
 
 /**
@@ -649,7 +649,7 @@ function misc_db_data($con) {
         $sql ="insert into address_format_strings (address_format_string_id, address_format_string) values (15, '" . '$lines<br>$city, $province $postal_code<br>$country' . "')";
         $rst = $con->execute($sql);
     }
-    
+
     // time_daylight_savings
     if (confirm_no_records($con, 'time_daylight_savings')) {
         $sql = "INSERT INTO time_daylight_savings VALUES (1,'','',0,'','',0,0,'2004-08-02',0)";
@@ -659,7 +659,7 @@ function misc_db_data($con) {
         $sql = "INSERT INTO time_daylight_savings VALUES (3,'first','Sunday',4,'last','Sunday',0,1,'2004-08-02',1)";
         $con->execute($sql);
     }
-    
+
     // time_zones
     if (confirm_no_records($con, 'time_zones')) {
         $sql = "INSERT INTO time_zones VALUES (1,218,'AL',NULL,NULL,3,-6,'y')";
@@ -2103,7 +2103,7 @@ function misc_db_data($con) {
         $sql = "INSERT INTO time_zones VALUES (720,218,'WY',NULL,NULL,3,-7,'y')";
         $con->execute($sql);
     }
-    
+
     // address_types
     if (confirm_no_records($con, 'address_types')) {
         $sql = "INSERT INTO address_types VALUES (1,'unknown','100')";
@@ -2667,6 +2667,10 @@ function company_db_data($con) {
         $sql ="insert into email_templates (email_template_title, email_template_body) values ('Customer Service Inquiry', '')";
         $rst = $con->execute($sql);
     }
+    if (confirm_no_records($con, 'email_template_type')) {
+        $sql ="insert into email_template_type (email_template_type_id , email_template_type_name) values (1, 'Email Merge Letter')";
+        $rst = $con->execute($sql);
+    }
 
     if (confirm_no_records($con, 'relationship_types')) {
         $sql = "INSERT INTO relationship_types
@@ -2848,7 +2852,7 @@ function activity_db_data($con) {
         $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('SYS', 'system, 'system', 'system',9,0)";
         $rst = $con->execute($sql);
     }
-    
+
      if (confirm_no_records($con, 'activity_participant_positions')) {
        $sql = " insert into activity_participant_positions (activity_type_id , participant_position_name , global_flag) values ( NULL , 'Participant', 1)";
         $rst = $con->execute($sql);
@@ -2878,6 +2882,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.26  2005/05/24 23:01:46  braverock
+ * - add email_template_type table in advance of email template type support in core
+ *
  * Revision 1.25  2005/05/23 01:55:33  maulani
  * - Add Use Owl system parameter
  *

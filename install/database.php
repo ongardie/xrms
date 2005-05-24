@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.41 2005/05/19 19:58:05 daturaarutad Exp $
+ * $Id: database.php,v 1.42 2005/05/24 23:01:47 braverock Exp $
  */
 
 /**
@@ -452,7 +452,7 @@ function company_db_tables($con, $table_list) {
             db_error_handler ($con, $sql);
         }
     }
-    
+
     //workflow history, tracks changes in statuses of workflow entities
     if (!in_array('workflow_history',$table_list)) {
         $sql="CREATE TABLE `workflow_history` (
@@ -642,6 +642,7 @@ function company_db_tables($con, $table_list) {
     if (!in_array('email_templates',$table_list)) {
         $sql ="create table email_templates (
                email_template_id                   int not null primary key auto_increment,
+               email_template_type_id              int not null default 0,
                email_template_title                varchar(100) not null default '',
                email_template_body                 text not null default '',
                email_template_record_status        char(1) not null default 'a'
@@ -652,6 +653,23 @@ function company_db_tables($con, $table_list) {
             db_error_handler ($con, $sql);
         }
     }
+
+    if (!in_array('email_template_type',$table_list)) {
+        $sql ="create table email_template_type (
+              email_template_type_id int not null primary key auto_increment,
+              email_template_type_name varchar(64) not null default '',
+              modified_by int not null default '0',
+              modified_on timestamp not null,
+              created_by int not null default '0',
+              created_on timestamp not null default '00000000000000'
+              )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
 
     // activity_templates
     // for relating several activities to an opportunity status. links to the opportunity status
@@ -1093,8 +1111,8 @@ function activity_db_tables($con, $table_list) {
                entered_by                      int not null default 0,
                last_modified_at                datetime,
                last_modified_by                int not null default 0,
-			   thread_id              		   int not null default 0,
-			   followup_from_id                int not null default 0,
+               thread_id                       int not null default 0,
+               followup_from_id                int not null default 0,
                scheduled_at                    datetime,
                ends_at                         datetime,
                completed_at                    datetime,
@@ -1167,6 +1185,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.42  2005/05/24 23:01:47  braverock
+ * - add email_template_type table in advance of email template type support in core
+ *
  * Revision 1.41  2005/05/19 19:58:05  daturaarutad
  * added thread_id and followup_from_id to activities
  *
