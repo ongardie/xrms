@@ -6,7 +6,7 @@
  * when evaluating xrms.
  *
  * @author Beth Macknik
- * $Id: sample.php,v 1.1 2004/03/18 01:07:18 maulani Exp $
+ * $Id: sample.php,v 1.2 2005/05/24 15:20:36 braverock Exp $
  */
 
 /**
@@ -36,16 +36,17 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 // companies
 if (confirm_no_records($con, 'companies')) {
-    $sql ="insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 1, 2, 1, 4, 4, 'Bushwood Components', 'BUSH01', '(Bushwood Components is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-2000', '(800) 555-2001', '(800) 555-2002', 'http://www.bushwood.com', 1, 1, 1, 1, 100000, 10, '10090', '10091', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1)";
+    $sql ="insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 1, 2, 1, 4, 4, 'Bushwood Components', 'BUSH01', '(Bushwood Components is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-2000', '(800) 555-2001', '(800) 555-2002', 'http://www.bushwood.com', 2, 2, 2, 2, 100000, 10, '10090', '10091', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1)";
     $rst = $con->execute($sql);
-    $sql ="insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 2, 3, 2, 4, 4, 'Polymer Electronics', 'POLY01', '(Polymer Electronics is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-3000', '(800) 555-3001', '(800) 555-3002', 'http://www.polymer.com', 2, 2, 2, 2, 200000, 20, '10092', '10093', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1)";
+    $sql ="insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 2, 3, 2, 4, 4, 'Polymer Electronics', 'POLY01', '(Polymer Electronics is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-3000', '(800) 555-3001', '(800) 555-3002', 'http://www.polymer.com', 3, 3, 3, 3, 200000, 20, '10092', '10093', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1)";
     $rst = $con->execute($sql);
-    $sql ="insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 3, 4, 3, 4, 4, 'Callahan Manufacturing', 'CALL01', '(Callahan Manufacturing is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-4000', '(800) 555-4001', '(800) 555-4002', 'http://www.callahan.com', 3, 3, 3, 3, 300000, 30, '10094', '10095', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1)";
+    $sql ="insert into companies (user_id, company_source_id, crm_status_id, industry_id, account_status_id, rating_id, company_name, company_code, profile, phone, phone2, fax, url, default_primary_address, default_billing_address, default_shipping_address, default_payment_address, credit_limit, terms, extref1, extref2, entered_at, entered_by, last_modified_at, last_modified_by) values (1, 3, 4, 3, 4, 4, 'Callahan Manufacturing', 'CALL01', '(Callahan Manufacturing is a fictitious company.)<p>This field can be used to hold a paragraph or two of text (either plain or <font color=blue><b>HTML</b></font>) about a company.', '(800) 555-4000', '(800) 555-4001', '(800) 555-4002', 'http://www.callahan.com', 4, 4, 4, 4, 300000, 30, '10094', '10095', '2003-01-01 12:00', 1, '2003-01-01 12:00', 1)";
     $rst = $con->execute($sql);
 }
 
 // addresses
 if (confirm_no_records($con, 'addresses')) {
+    $sql ="insert into addresses (address_id, company_id, address_name, address_body, address_record_status, country_id, line1, line2, city, province, postal_code, address_type, use_pretty_address, offset, daylight_savings_id) VALUES (1, 0, 'Unknown Address', 'This company or contact has an unknown address. Please Update', 'a', 218, 'Unknown Address', '', 'Unknown Address', 'AA', '', 'unknown', 't', NULL, NULL);
     $sql ="insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (1, 1, 'Address 1', '3201 West Rolling Hills Circle', '', 'Ft. Lauderdale', 'FL', '33328', '3201 West Rolling Hills Circle\nFt. Lauderdale, FL 33328\nUSA')";
     $rst = $con->execute($sql);
     $sql ="insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (2, 1, 'Address 2', '11 Platinum Drive', '', 'Los Angeles', 'CA', '90001', '11 Platinum Drive\nLos Angeles, CA 90001\nUSA')";
@@ -84,9 +85,9 @@ start_page($page_title, false, $msg);
 ?>
 
 <BR>
-Some sample data has been populated in your database.  
+Some sample data has been populated in your database.
 <BR><BR>
-The initial user available is "user1" with a password of "user1".  You should change this 
+The initial user available is "user1" with a password of "user1".  You should change this
 as soon as you login.  (It can be changed in Users within the Administration section.)
 <BR><BR>
 You may now <a href="../login.php">login</a> to get started.
@@ -99,6 +100,9 @@ end_page();
 
 /**
  * $Log: sample.php,v $
+ * Revision 1.2  2005/05/24 15:20:36  braverock
+ * - add unknown address as first address in sample data
+ *
  * Revision 1.1  2004/03/18 01:07:18  maulani
  * - Create installation tests to check whether the include location and
  *   vars.php have been configured.
