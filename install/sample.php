@@ -6,7 +6,7 @@
  * when evaluating xrms.
  *
  * @author Beth Macknik
- * $Id: sample.php,v 1.2 2005/05/24 15:20:36 braverock Exp $
+ * $Id: sample.php,v 1.3 2005/05/24 15:21:24 braverock Exp $
  */
 
 /**
@@ -46,7 +46,7 @@ if (confirm_no_records($con, 'companies')) {
 
 // addresses
 if (confirm_no_records($con, 'addresses')) {
-    $sql ="insert into addresses (address_id, company_id, address_name, address_body, address_record_status, country_id, line1, line2, city, province, postal_code, address_type, use_pretty_address, offset, daylight_savings_id) VALUES (1, 0, 'Unknown Address', 'This company or contact has an unknown address. Please Update', 'a', 218, 'Unknown Address', '', 'Unknown Address', 'AA', '', 'unknown', 't', NULL, NULL);
+    $sql ="insert into addresses (address_id, company_id, address_name, address_body, address_record_status, country_id, line1, line2, city, province, postal_code, address_type, use_pretty_address, offset, daylight_savings_id) VALUES (1, 0, 'Unknown Address', 'This company or contact has an unknown address. Please Update', 'a', 218, 'Unknown Address', '', 'Unknown Address', 'AA', '', 'unknown', 't', NULL, NULL)";
     $sql ="insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (1, 1, 'Address 1', '3201 West Rolling Hills Circle', '', 'Ft. Lauderdale', 'FL', '33328', '3201 West Rolling Hills Circle\nFt. Lauderdale, FL 33328\nUSA')";
     $rst = $con->execute($sql);
     $sql ="insert into addresses (company_id, country_id, address_name, line1, line2, city, province, postal_code, address_body) values (2, 1, 'Address 2', '11 Platinum Drive', '', 'Los Angeles', 'CA', '90001', '11 Platinum Drive\nLos Angeles, CA 90001\nUSA')";
@@ -100,6 +100,9 @@ end_page();
 
 /**
  * $Log: sample.php,v $
+ * Revision 1.3  2005/05/24 15:21:24  braverock
+ * - add missing "
+ *
  * Revision 1.2  2005/05/24 15:20:36  braverock
  * - add unknown address as first address in sample data
  *
