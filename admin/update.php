@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.81 2005/05/25 05:24:13 daturaarutad Exp $
+ * $Id: update.php,v 1.82 2005/05/25 05:39:19 vanmer Exp $
  */
 
 // where do we include from
@@ -4888,7 +4888,17 @@ $con->execute($sql);
 $sql = "DROP TABLE roles";
 $con->execute($sql);
 
+$sql = "ALTER TABLE activity_types ADD user_editable_flag tinyint not null default '1'";
+$con->execute($sql);
 
+/*
+* commented until further workflow additions occur
+$sql = "UPDATE activity_types SET user_editable_flag=0 WHERE ((activity_type_short_name='CTO') OR (activity_type_short_name='CFR') OR (activity_type_short_name='ETO') OR (activity_type_short_name='EFR') OR (activity_type_short_name='PRO') OR (activity_type_short_name='INT') OR (activity_type_short_name='SYS'))";
+$con->execute($sql);
+*/
+
+$sql = "ALTER TABLE activities ADD completed_by INT( 11 )";
+$con->execute($sql);
 
 do_hook_function('xrms_update', $con);
 
@@ -4913,6 +4923,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.82  2005/05/25 05:39:19  vanmer
+ * - added field to control user editability of activity types
+ * - added field for determining which user completed an activity
+ *
  * Revision 1.81  2005/05/25 05:24:13  daturaarutad
  * added activities_recurrence
  *
