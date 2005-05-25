@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.96 2005/05/19 20:29:41 daturaarutad Exp $
+ * $Id: one.php,v 1.97 2005/05/25 05:35:51 daturaarutad Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -353,6 +353,7 @@ $related_activites_widget = $pager->Render($system_rows_per_page);
 /*** Include the sidebar boxes ***/
 
 require_once('participant_sidebar.php');
+require_once('recurrence_sidebar.php');
 
 if ($contact_id) {
     // include the contact sidebar code
@@ -597,6 +598,8 @@ function logTime() {
     <div id="Sidebar">
         <!-- participant list block //-->
         <?php echo $participant_block; ?>
+        <!-- recurrence list block //-->
+        <?php echo $recurrence_block; ?>
         <!-- company information block //-->
         <?php echo $company_block; ?>
         <!-- contact information block //-->
@@ -640,6 +643,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.97  2005/05/25 05:35:51  daturaarutad
+ * added the activity recurrence sidebar
+ *
  * Revision 1.96  2005/05/19 20:29:41  daturaarutad
  * added support for followup activities
  *
