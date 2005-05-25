@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.57 2005/05/19 20:29:17 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.58 2005/05/25 05:37:00 vanmer Exp $
  */
 
 //include required files
@@ -105,6 +105,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 // if it's closed but wasn't before, update the closed_at timestamp
 $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : 'NULL';
+$completed_by= ($activity_status == 'c') && ($current_activity_status != 'c') ? $_SESSION['session_user_id'] : 'NULL';
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities == true ) {
@@ -211,6 +212,8 @@ $rec['completed_at']         = $completed_at;
 $rec['activity_status']      = $activity_status;
 $rec['on_what_table']        = $on_what_table;
 $rec['on_what_id']           = $on_what_id;
+$rec['completed_by']      = $completed_by;
+
 if ($rst->fields['contact_id']!=$contact_id) {
     //contact changed, change default participant
     if ($rst->fields['contact_id']) {
@@ -499,6 +502,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.58  2005/05/25 05:37:00  vanmer
+ * - added update of completed_by field when completing an activity
+ *
  * Revision 1.57  2005/05/19 20:29:17  daturaarutad
  * added support for followup activities
  *
