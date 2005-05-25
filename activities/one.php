@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.99 2005/05/25 14:55:32 braverock Exp $
+ * $Id: one.php,v 1.100 2005/05/25 15:10:52 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -25,8 +25,8 @@ if (!$return_url) $return_url='/activities/some.php';
 $on_what_id=$activity_id;
 $session_user_id = session_check();
 
-if(!isset($activity_id){
-    header("Location: " . $http_site_root . $return_url.'?msg='._("Error: No Activity ID Specified"));
+if(!isset($activity_id)){
+    header("Location: " . $http_site_root . $return_url.'?msg='.urlencode(_("Error: No Activity ID Specified")));
 };
 
 $save_and_next = isset($_GET['save_and_next']) ? true : false;
@@ -70,7 +70,7 @@ if ($rst) {
     $activity_status = $rst->fields['activity_status'];
     $completed_at = $rst->fields['completed_at'];
     $completed_by = $rst->fields['completed_by'];
-    
+
     $thread_id = $rst->fields['thread_id'];
     $followup_from_id = $rst->fields['followup_from_id'];
     $on_what_table = $rst->fields['on_what_table'];
@@ -657,6 +657,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.100  2005/05/25 15:10:52  braverock
+ * - changed to urlencode the string for localized error msg
+ *
  * Revision 1.99  2005/05/25 14:55:32  braverock
  * - add error message and return if no activity_id is passed in
  *
