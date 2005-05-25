@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.2.1\n"
+"Project-Id-Version: 1.2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-11 09:00+0430\n"
-"PO-Revision-Date: 2005-05-10 13:38+0330\n"
+"POT-Creation-Date: 2005-05-11 10:27+0430\n"
+"PO-Revision-Date: 2005-05-11 12:45+0330\n"
 "Last-Translator: Alan Baghumian <alan@lugir.org>\n"
 "Language-Team: Persian language team <alan@lugir.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 #: reports/opportunities-quantity-by-opportunity-status.php:162
 #: reports/opportunities-size-by-opportunity-status.php:174
 msgid " - "
-msgstr ""
+msgstr "-"
 
 #: opportunities/one.php:306
 msgid "$"
-msgstr ""
+msgstr "ریال"
 
 #: email/email-4.php:122
 msgid "'Messages Sent"
@@ -44,20 +44,19 @@ msgstr ". ورودی داده‌ها به نظر خراب شده می‌آید."
 
 #: locale/datastrings.php:124
 msgid "1 - inserts & updates"
-msgstr ""
+msgstr "۱- ورود و بروز رسانی‌ها"
 
 #: locale/datastrings.php:125
 msgid "2 - and login/logout"
-msgstr ""
+msgstr "۲ - بعلاوه ورود و خروج"
 
 #: locale/datastrings.php:126
 msgid "3 - and views"
-msgstr ""
+msgstr "۳ - بعلاوه نمایش‌ها"
 
 #: locale/datastrings.php:127
-#, fuzzy
 msgid "4 - and searches"
-msgstr "جستجوهای ذخیره شده"
+msgstr "۴- بعلاوه جستجوها"
 
 #: admin/index.php:97
 msgid "ACL"
@@ -81,9 +80,8 @@ msgstr "نتایج کنترل‌های دسترسی"
 
 #: admin/import/import-companies-2.php:103
 #: admin/import/import-companies-3.php:145
-#, fuzzy
 msgid "AOL"
-msgstr "AOL IM"
+msgstr "AOL"
 
 #: contacts/one.php:386 plugins/phone/contacts_one.php:406
 msgid "AOL IM"
@@ -166,9 +164,8 @@ msgid "Activity Details"
 msgstr "جزئیات فعالیت"
 
 #: activities/one.php:112
-#, fuzzy
 msgid "Activity ID:"
-msgstr "فعالیت"
+msgstr "شماره فعالیت:"
 
 #: activities/one.php:498
 msgid "Activity Notes"
@@ -295,9 +292,8 @@ msgid "Add New Opportunity Status"
 msgstr "اضافه کردن وضعیت جدید فرصت"
 
 #: activities/participant_sidebar.php:43
-#, fuzzy
 msgid "Add New Participant"
-msgstr "اضافه کردن امتیاز بندی جدید"
+msgstr "اضافه کردن شریک جدید"
 
 #: admin/case-priorities/some.php:63
 msgid "Add New Priority Type"
@@ -338,46 +334,40 @@ msgid "Added"
 msgstr "اضافه شد"
 
 #: admin/update.php:511
-#, fuzzy
 msgid "Added Activities Default Behavior system parameters options."
-msgstr "یک پارامتر وضعیت پیش‌گزیده سیستم فعالیت‌ها، اضافه شد."
+msgstr "گزینه پارامتر سیستمی رفتار پیش‌گزیده فعالیت‌ها اضافه شد."
 
 #: admin/update.php:449
-#, fuzzy
 msgid ""
 "Added Allow Unassigned Activities and Display Item Technical Details system "
 "parameters."
 msgstr "یک پارامتر وضعیت پیش‌گزیده سیستم فعالیت‌ها، اضافه شد."
 
 #: admin/update.php:616
-#, fuzzy
 msgid "Added Allow Unassigned Activities system parameters options."
 msgstr "یک پارامتر وضعیت پیش‌گزیده سیستم فعالیت‌ها، اضافه شد."
 
 #: admin/update.php:475
-#, fuzzy
 msgid "Added Audit Level system parameters options."
 msgstr "یک پارامتر وضعیت پیش‌گزیده سیستم فعالیت‌ها، اضافه شد."
 
 #: admin/update.php:676
-#, fuzzy
 msgid "Added Display Item Technical Details system parameters options."
 msgstr "نمایش جزئیات فنی مورد"
 
 #: admin/update.php:532
 msgid "Added LDAP Version system parameters options."
-msgstr ""
+msgstr "گزینه پارامتر سیستمی شماره نسخه LDAP اضافه شد."
 
 #: admin/update.php:397
 msgid "Added RSS Feeds Enabled and Maximum RSS Feed Entries system parameters."
-msgstr ""
+msgstr "پارامترهای سیستمی فعال بودن RSS و حداکثر تعداد ورودی آن اضافه شد."
 
 #: admin/update.php:553
 msgid "Added RSS Feeds Enabled system parameters options."
-msgstr ""
+msgstr "گزینه‌های پارامتر سیستمی فعال بودن RSS اضافه شد."
 
 #: admin/update.php:595
-#, fuzzy
 msgid "Added Reports--Show No Items Found system parameters options."
 msgstr "نمایش «موردی پیدا نشد» در گزارشات"
 
@@ -386,19 +376,18 @@ msgid ""
 "Added Reports--Use Horizontal Rule and Reports--Show No Items Found system "
 "parameters."
 msgstr ""
+"پارامترهای سیستمی استفاده از خطکش افقی در گزارشات و نمایش هیچ آیتمی پیدا "
+"نشد، اضافه شد."
 
 #: admin/update.php:574
-#, fuzzy
 msgid "Added Reports--Use Horizontal Rule system parameters options."
 msgstr "استفاده از خطکش افقی در گزارشات"
 
 #: admin/update.php:654
-#, fuzzy
 msgid "Added Show Logo system parameters options."
 msgstr "خطا در دریافت پارامتر سیستمی"
 
 #: admin/update.php:637
-#, fuzzy
 msgid "Added Show Logo system parameters."
 msgstr "خطا در دریافت پارامتر سیستمی"
 
@@ -411,13 +400,11 @@ msgid "Added an Audit Level."
 msgstr "یک سطح ثبت  اضافه شد."
 
 #: admin/update.php:380
-#, fuzzy
 msgid "Added an LDAP Version system parameter."
 msgstr "یک پارامتر وضعیت پیش‌گزیده سیستم فعالیت‌ها، اضافه شد."
 
 #: admin/import/import-companies-2.php:79
 #: admin/import/import-companies-3.php:119
-#, fuzzy
 msgid "Additional Company Info"
 msgstr "اضافه کردن شرکت"
 
@@ -476,9 +463,8 @@ msgid "Admin"
 msgstr "مدیر"
 
 #: companies/one.php:212
-#, fuzzy
 msgid "Administer Division"
-msgstr "ویرایش بخش"
+msgstr "بخش مدیر"
 
 #: admin/index.php:34 include/utils-interface.php:354
 msgid "Administration"
@@ -633,9 +619,8 @@ msgid "Bulk E-Mail"
 msgstr "نامه الکترونیکی انبوه"
 
 #: contacts/edit.php:148 contacts/new.php:220 contacts/one.php:428
-#, fuzzy
 msgid "Business Address"
-msgstr "آدرس ارسال صورتحساب"
+msgstr "آدرس تجاری"
 
 #: reports/completed-items.php:189
 msgid "COMPLETED ACTIVITIES for"
@@ -675,18 +660,16 @@ msgid "Calendar"
 msgstr "تقویم"
 
 #: activities/some.php:726
-#, fuzzy
 msgid "Calendar: Day"
-msgstr "تقویم"
+msgstr "تقویم: روز"
 
 #: plugins/cti/screen_pop_redirect.php:24
-#, fuzzy
 msgid "Call From: "
-msgstr "تماس از"
+msgstr "تماس از: "
 
 #: plugins/cti/asteriskdial.php:141
 msgid "Call%20To%20"
-msgstr ""
+msgstr "تماس%20به%20"
 
 #: campaigns/some.php:223 campaigns/some.php:281 files/some.php:326
 #: opportunities/edit.php:170 opportunities/new.php:95
@@ -743,9 +726,8 @@ msgstr "رشته عملیات"
 #: activities/new_activity_participant.php:29
 #: contacts/new_contact_company_select.php:67
 #: contacts/new_contact_company_select.php:76
-#, fuzzy
 msgid "Cancel"
-msgstr "تغییر"
+msgstr "انصراف"
 
 #: cases/some.php:45 cases/some.php:246 cases/some.php:296 files/some.php:328
 #: reports/index.php:76 reports/open-items.php:327
@@ -884,9 +866,8 @@ msgid "Chemicals"
 msgstr "شیمیایی"
 
 #: contacts/edit.php:152 contacts/edit.php:161
-#, fuzzy
 msgid "Choose New Address"
-msgstr "آدرس جدید"
+msgstr "آدرس جدیدی انتخاب کنید"
 
 #: admin/import/import-companies-2.php:117
 #: admin/import/import-companies-3.php:159 companies/addresses.php:157
@@ -971,9 +952,8 @@ msgid "Code"
 msgstr "کد"
 
 #: plugins/info/edit-definitions.php:257
-#, fuzzy
 msgid "Column"
-msgstr "شرکت"
+msgstr "ستون"
 
 #: locale/datastrings.php:25
 msgid "Communications"
@@ -987,7 +967,6 @@ msgstr "شرکت‌ها"
 #: reports/companies-by-company-source.php:155
 #: reports/companies-by-crm-status.php:150
 #: reports/companies-by-industry.php:154
-#, fuzzy
 msgid "Companies "
 msgstr "شرکت‌ها"
 
@@ -1135,7 +1114,6 @@ msgstr "رقباء"
 
 #: plugins/cti/update-company-phone-numbers.php:74
 #: plugins/cti/update-contact-phone-numbers.php:60
-#, fuzzy
 msgid "Complete"
 msgstr "تکمیل شده"
 
@@ -1224,9 +1202,8 @@ msgstr " شماره شناسایی تماس"
 
 #: admin/import/import-companies-2.php:73
 #: admin/import/import-companies-3.php:113
-#, fuzzy
 msgid "Contact Info"
-msgstr " شماره شناسایی تماس"
+msgstr "اطلاعات تماس"
 
 #: companies/new.php:236 contacts/edit.php:137 contacts/new.php:213
 #: contacts/sidebar.php:101
@@ -1234,9 +1211,8 @@ msgid "Contact Information"
 msgstr "اطلاعات تماس"
 
 #: contacts/some.php:323
-#, fuzzy
 msgid "Contact Options"
-msgstr "Détails du contact"
+msgstr "گزینه‌های تماس"
 
 #: companies/one.php:342 companies/some-advanced.php:343 contacts/some.php:190
 #: files/some.php:282 include/strings.php:30 include/utils-interface.php:343
@@ -1283,21 +1259,19 @@ msgstr "فرمت‌های محلی کشور"
 
 #: admin/import/import-companies-3.php:482
 msgid "Country not specified. Using default country"
-msgstr ""
+msgstr "کشور مشخص نشده است. از کشور پیش‌گزیده استفاده شد"
 
 #: plugins/cti/setup.php:122
-#, fuzzy
 msgid "Create"
-msgstr "ایجاد شد"
+msgstr "ایجاد"
 
 #: contacts/some.php:265
 msgid "Create Contact for 'Self'"
 msgstr "ایجاد تماس برای «شخص»'"
 
 #: plugins/cti/setup.php:23 plugins/cti/setup.php:24 plugins/cti/setup.php:25
-#, fuzzy
 msgid "Create New"
-msgstr "ایجاد شد"
+msgstr "ایجاد جدید"
 
 #: contacts/edit-address.php:173
 msgid "Create New Address?"
@@ -1311,16 +1285,15 @@ msgstr "آدرس جدیدی ایجاد شود؟"
 #: contacts/one.php:468 opportunities/one.php:332
 #: plugins/phone/companies_one.php:535 plugins/phone/contacts_one.php:474
 msgid "Created"
-msgstr "ایجاد شد"
+msgstr "ایجاد شده"
 
 #: admin/import/import-companies-3.php:277
-#, fuzzy
 msgid "Created company "
-msgstr "پاک کردن شرکت"
+msgstr "ایجاد شرکت "
 
 #: admin/import/import-companies-3.php:259
 msgid "Creating default contact"
-msgstr ""
+msgstr "ایجاد تماس پیش‌گزیده"
 
 #: admin/import/import-companies-2.php:141
 #: admin/import/import-companies-3.php:183 companies/admin.php:82
@@ -1344,33 +1317,29 @@ msgstr "کاربر جاری"
 #: admin/import/import-companies-2.php:135
 #: admin/import/import-companies-3.php:149
 #: admin/import/import-companies-3.php:177 companies/some.php:206
-#, fuzzy
 msgid "Custom 1"
-msgstr "مشتری"
+msgstr "مشتری ۱"
 
 #: admin/import/import-companies-2.php:108
 #: admin/import/import-companies-2.php:136
 #: admin/import/import-companies-3.php:150
 #: admin/import/import-companies-3.php:178 companies/some.php:213
-#, fuzzy
 msgid "Custom 2"
-msgstr "مشتری"
+msgstr "مشتری ۲"
 
 #: admin/import/import-companies-2.php:109
 #: admin/import/import-companies-2.php:137
 #: admin/import/import-companies-3.php:151
 #: admin/import/import-companies-3.php:179 companies/some.php:220
-#, fuzzy
 msgid "Custom 3"
-msgstr "مشتری"
+msgstr "مشتری ۳"
 
 #: admin/import/import-companies-2.php:110
 #: admin/import/import-companies-2.php:138
 #: admin/import/import-companies-3.php:152
 #: admin/import/import-companies-3.php:180 companies/some.php:227
-#, fuzzy
 msgid "Custom 4"
-msgstr "مشتری"
+msgstr "مشتری ۴"
 
 #: reports/index.php:138
 msgid "Custom Reports"
@@ -1424,12 +1393,11 @@ msgstr "تاریخ تولد"
 
 #: private/home.php:539
 msgid "Day"
-msgstr ""
+msgstr "روز"
 
 #: admin/import/import-companies-3.php:258
-#, fuzzy
 msgid "Default"
-msgstr "متن پیش‌گزیده"
+msgstr "پیش‌گزیده"
 
 #: locale/datastrings.php:34
 msgid "Default GST Offset"
@@ -1440,9 +1408,8 @@ msgid "Default Text"
 msgstr "متن پیش‌گزیده"
 
 #: plugins/info/edit-definitions.php:259
-#, fuzzy
 msgid "Default Value"
-msgstr "متن پیش‌گزیده"
+msgstr "مقدار پیش‌گزیده"
 
 #: locale/datastrings.php:35
 msgid "Default timezone offset"
@@ -1665,11 +1632,11 @@ msgstr "انجام شده"
 
 #: plugins/cti/setup.php:80
 msgid "Dial"
-msgstr ""
+msgstr "شماره تلفن"
 
 #: plugins/cti/asteriskdial.php:77
 msgid "Dialing Phone Number: "
-msgstr ""
+msgstr "شماره تلفن تماس: "
 
 #: admin/index.php:47
 msgid "Digital Dashboard"
@@ -1703,7 +1670,7 @@ msgstr "نمایش HTML"
 
 #: plugins/info/edit-definitions.php:261
 msgid "Display in Sidebar"
-msgstr ""
+msgstr "نمایش در نوار کناری"
 
 #: locale/datastrings.php:39
 msgid "Distribution"
@@ -1719,9 +1686,8 @@ msgid "Division"
 msgstr "بخش"
 
 #: include/utils-interface.php:86
-#, fuzzy
 msgid "Division Added."
-msgstr "نام بخش"
+msgstr "بخش اضافه شد."
 
 #: companies/divisions.php:86
 msgid "Division Description"
@@ -1762,7 +1728,7 @@ msgstr "سررسید بوسیله"
 
 #: admin/import/import-companies-3.php:448
 msgid "Duplicate address. Using address id: "
-msgstr ""
+msgstr "آدرس تکراری است. استفاده از ادرس شماره: "
 
 #: admin/activity-templates/edit.php:68 admin/case-statuses/one.php:177
 #: admin/opportunity-statuses/one.php:178 reports/activitytimes.php:72
@@ -1859,9 +1825,8 @@ msgid "Edit Division"
 msgstr "ویرایش بخش"
 
 #: plugins/info/edit-definitions.php:238
-#, fuzzy
 msgid "Edit Element Definitions"
-msgstr "تعاریف وضعیت"
+msgstr "ویرایش تعاریف عناصر"
 
 #: companies/edit.php:182
 msgid "Edit Former Names"
@@ -1920,9 +1885,8 @@ msgid "Education"
 msgstr "آموزش"
 
 #: plugins/info/edit-definitions.php:252
-#, fuzzy
 msgid "Element Definitions"
-msgstr "تعاریف وضعیت"
+msgstr "تعاریف عناصر"
 
 #: admin/import/import-companies-2.php:92
 #: admin/import/import-companies-3.php:134 contacts/some.php:229
@@ -1944,9 +1908,8 @@ msgid "Enabled"
 msgstr "فعال"
 
 #: plugins/info/edit-definitions.php:262
-#, fuzzy
 msgid "Enabled<"
-msgstr "فعال"
+msgstr "فعال<"
 
 #: reports/activitytimes.php:50 reports/activitytimes.php:71
 #: reports/audit-items.php:42 reports/completed-items.php:67
@@ -2004,7 +1967,7 @@ msgstr "خطا: داده‌ای وجود ندارد"
 
 #: plugins/info/edit-definitions.php:78
 msgid "Error: Unreconised Element Type"
-msgstr ""
+msgstr "خطا: نوع عنصر شناخته نشده"
 
 #: locale/datastrings.php:42
 msgid "Event"
@@ -2037,52 +2000,51 @@ msgstr "صدور اطلاعات شرکت‌ها/تماس‌ها به فرمت LD
 
 #: plugins/cti/setup.php:103
 msgid "Extension"
-msgstr ""
+msgstr "شماره داخلی"
 
 #: plugins/cti/update-company-phone-numbers.php:55
 msgid "Extension2: "
-msgstr ""
+msgstr "شماره داخلی ۲: "
 
 #: plugins/cti/update-company-phone-numbers.php:44
 msgid "Extension: "
-msgstr ""
+msgstr "شماره داخلی: "
 
 #: admin/import/import-companies-2.php:132
 #: admin/import/import-companies-3.php:174
 msgid "External Ref 1"
-msgstr ""
+msgstr "مرجع خارجی شماره ۱"
 
 #: admin/import/import-companies-2.php:133
 #: admin/import/import-companies-3.php:175
 msgid "External Ref 2"
-msgstr ""
+msgstr "مرجع خارجی شماره ۲"
 
 #: admin/import/import-companies-2.php:134
 #: admin/import/import-companies-3.php:176
 msgid "External Ref 3"
-msgstr ""
+msgstr "مرجع خارجی شماره ۳"
 
 #: admin/activity-types/one_activity_participant_position.php:35
 #: admin/activity-types/one_activity_participant_position.php:44
 msgid "Failed to add participant position"
-msgstr ""
+msgstr "خطا در اضافه کردن موقعیت شریک"
 
 #: admin/users/edit-2.php:42 admin/users/edit-2.php:44
 msgid "Failed to add user to group."
-msgstr ""
+msgstr "خطا در اضافه کردن کاربر به گروه"
 
 #: admin/activity-types/one_activity_participant_position.php:54
 msgid "Failed to edit position, no position id specified"
-msgstr ""
+msgstr "خطا در ویرایش موقعیت. هیچ شماره شناسایی موقعیتی تعیین نشده است"
 
 #: activities/new_activity_participant.php:45
-#, fuzzy
 msgid "Failed to find activity"
-msgstr "هیچ فعالیت لینک شده‌ای یافت نشد"
+msgstr "هیچ فعالیتی یافت نشد"
 
 #: admin/import/import-companies-3.php:477
 msgid "Failed to get country. Using default country"
-msgstr ""
+msgstr "خطا در دریافت کشور، از کشور پیش‌گزیده استفاده خواهد شد"
 
 #: admin/users/user_prefs.php:49
 msgid "Failed to set preference value for preference"
@@ -2179,9 +2141,8 @@ msgid "First Names"
 msgstr "نام"
 
 #: activities/edit-2.php:489
-#, fuzzy
 msgid "Follow-up"
-msgstr "پی‌گیری زمان بندی شده"
+msgstr "پی‌گیری"
 
 #: reports/company-contacts-printout.php:227
 msgid "Format for Printer"
@@ -2315,16 +2276,15 @@ msgstr "بالا"
 
 #: locale/datastrings.php:55
 msgid "Hold"
-msgstr "نگهداری"
+msgstr "تامل شود"
 
 #: include/utils-interface.php:339 private/home.php:522
 msgid "Home"
 msgstr "صفحه خانگی"
 
 #: contacts/edit.php:157 contacts/new.php:167 contacts/one.php:432
-#, fuzzy
 msgid "Home Address"
-msgstr "آدرس جدید"
+msgstr "آدرس منزل"
 
 #: admin/import/import-companies-2.php:95
 #: admin/import/import-companies-3.php:137 companies/new.php:259
@@ -2382,7 +2342,7 @@ msgstr "شماره"
 
 #: plugins/idphoto/setup.php:28 plugins/idphoto/setup.php:33
 msgid "ID Photo"
-msgstr ""
+msgstr "تصویر شماره"
 
 #: admin/import/import-companies-2.php:272
 #: admin/import/import-companies.php:28 admin/import/import-companies.php:150
@@ -2398,18 +2358,16 @@ msgid "Import Companies/Contacts"
 msgstr "ورود شرکت‌ها/تماس‌ها"
 
 #: admin/import/import-companies-3.php:95
-#, fuzzy
 msgid "Import Data"
-msgstr "ورود"
+msgstr "ورود داده‌ها"
 
 #: admin/index.php:66
 msgid "Import/Export"
 msgstr "ورود/صدور"
 
 #: admin/import/import-companies-3.php:105
-#, fuzzy
 msgid "Imported Data"
-msgstr "ورود"
+msgstr "داده‌های وارد شده"
 
 #: locale/datastrings.php:57
 msgid "In Progress"
@@ -2451,9 +2409,8 @@ msgid "LDAP Version"
 msgstr "شمار نسخه LDAP"
 
 #: plugins/info/edit-definitions.php:255
-#, fuzzy
 msgid "Label"
-msgstr "جدول"
+msgstr "برچسب"
 
 #: admin/users/one.php:119 admin/users/some.php:109
 msgid "Language"
@@ -2473,9 +2430,8 @@ msgid "Last Name"
 msgstr "نام خانوادگی"
 
 #: activities/one.php:137
-#, fuzzy
 msgid "Last modified by"
-msgstr "آخرین ویرایش"
+msgstr "آخرین ویرایش توسط"
 
 #: locale/datastrings.php:60
 msgid "Lead"
@@ -2526,9 +2482,8 @@ msgid "Link Activity To Opportunity Status"
 msgstr "اتصال فعالیت به وضعیت فرصت"
 
 #: relationships/sidebar.php:106
-#, fuzzy
 msgid "Linked Relationships"
-msgstr "ارتباطات"
+msgstr "ارتباطات لینک شده"
 
 #: admin/activity-templates/some.php:64
 msgid "Linked Table"
@@ -2579,9 +2534,8 @@ msgid "Logout"
 msgstr "خروج"
 
 #: locale/datastrings.php:63
-#, fuzzy
 msgid "Long"
-msgstr "ورود به سیستم"
+msgstr "طولانی"
 
 #: admin/case-statuses/one.php:146 admin/opportunity-statuses/one.php:146
 msgid "Long Description"
@@ -2592,9 +2546,8 @@ msgid "Low"
 msgstr "پایین"
 
 #: plugins/cti/setup.php:109
-#, fuzzy
 msgid "MAC Address"
-msgstr "آدرس"
+msgstr "آدرس سخت‌افزاری"
 
 #: plugins/mrtg/setup.php:36
 msgid "MRTG"
@@ -2602,9 +2555,8 @@ msgstr "MRTG"
 
 #: admin/import/import-companies-2.php:105
 #: admin/import/import-companies-3.php:147
-#, fuzzy
 msgid "MSN"
-msgstr "MSN IM"
+msgstr "MSN"
 
 #: contacts/one.php:379 plugins/phone/contacts_one.php:399
 msgid "MSN IM"
@@ -2796,9 +2748,8 @@ msgid "Messages Sent"
 msgstr "پیام‌ها ارسال شد"
 
 #: plugins/dunfinder/dunfinder.php:61
-#, fuzzy
 msgid "Monitor"
-msgstr "ماه"
+msgstr "مانیتور"
 
 #: activities/some.php:729 private/home.php:542
 msgid "Month"
@@ -2906,9 +2857,8 @@ msgid "New"
 msgstr "جدید"
 
 #: contacts/one.php:503
-#, fuzzy
 msgid "New Activities"
-msgstr "هیچ فعالیتی"
+msgstr "فعالیت‌های جدید"
 
 #: companies/addresses.php:138
 msgid "New Address"
@@ -2929,9 +2879,8 @@ msgid "New Company"
 msgstr "شرکت جدید"
 
 #: contacts/some.php:327
-#, fuzzy
 msgid "New Contact"
-msgstr "تماس جدید برای"
+msgstr "تماس جدید"
 
 #: contacts/new.php:157
 msgid "New Contact for"
@@ -2982,9 +2931,8 @@ msgid "No Contacts"
 msgstr "هیچ تماسی"
 
 #: activities/participant_sidebar.php:34
-#, fuzzy
 msgid "No Participants"
-msgstr "هیچ فعالیتی"
+msgstr "هیچ شریکی یافت نشد"
 
 #: activities/some.php:707
 msgid "No Saved Searches"
@@ -2995,9 +2943,8 @@ msgid "No activities"
 msgstr "هیچ فعالیتی"
 
 #: plugins/phone/companies_one.php:431
-#, fuzzy
 msgid "No associated categories"
-msgstr "هیچ طبقه‌بندی"
+msgstr "هیچ طبقه‌بندی مربوطی یافت نشد"
 
 #: include/strings.php:33
 msgid "No attached companies"
@@ -3076,13 +3023,12 @@ msgid "No recently viewed opportunities"
 msgstr "هیچ فرصت به تازگی مشاهده شده‌ای وجود ندارد"
 
 #: admin/activity-types/one_activity_participant_position.php:35
-#, fuzzy
 msgid "No role specified"
-msgstr "هیچ فایل بازی وجود ندارد"
+msgstr "هیچ نقشی مشخص نشده است"
 
 #: contacts/new_contact_company_select.php:59
 msgid "No search results, please try a less restrictive search"
-msgstr ""
+msgstr "هیچ نتیجه‌ای یافت نشد. لطفا محدوده جستجو را کوچکتر کنید."
 
 #: admin/case-statuses/some.php:83
 msgid "No statuses defined for specified status type"
@@ -3090,9 +3036,8 @@ msgstr "هیچ وضعیتی برای نوع وضعیت مشخص شده تعری�
 
 #: admin/import/import-companies-2.php:139
 #: admin/import/import-companies-3.php:181
-#, fuzzy
 msgid "No. Employees"
-msgstr "کارمندان"
+msgstr "تعداد کارمندان"
 
 #: private/home.php:314
 msgid "Non Uploaded Files"
@@ -3119,7 +3064,7 @@ msgstr "تنظیم نشده"
 #: plugins/cti/screen_pop_redirect.php:48
 #: plugins/cti/screen_pop_redirect.php:53
 msgid "Not in Database"
-msgstr ""
+msgstr "در بانک اطلاعاتی وجود ندارد"
 
 #: notes/edit.php:43 notes/new.php:44
 msgid "Note Body"
@@ -3163,7 +3108,6 @@ msgid "OVERDUE ACTIVITIES for"
 msgstr "فعالیت‌های دیر شده برای"
 
 #: reports/overdue-email.php:67
-#, fuzzy
 msgid "OVERDUE ACTIVITY for"
 msgstr "فعالیت‌های دیر شده برای"
 
@@ -3181,7 +3125,7 @@ msgstr "فرصت‌های دیر شده برای"
 
 #: admin/acl/one_ControlledObjectRelationship.php:50
 msgid "Object/Child Object combination fails recursion check."
-msgstr ""
+msgstr "خطا در بررسی ترکیب شی/شی فرزند."
 
 #: activities/some.php:614 cases/one.php:392 opportunities/one.php:427
 #: plugins/phone/contacts_one.php:514
@@ -3198,7 +3142,7 @@ msgstr "در چه نامی"
 
 #: admin/users/self.php:79
 msgid "One User"
-msgstr "یک کاربر"
+msgstr "کاربر"
 
 #: reports/activitytimes.php:58
 msgid "Only show completed activities"
@@ -3315,7 +3259,6 @@ msgid "Options"
 msgstr "گزینه‌ها"
 
 #: plugins/info/edit-definitions.php:258
-#, fuzzy
 msgid "Order"
 msgstr "نحوه مرتب سازی"
 
@@ -3341,9 +3284,8 @@ msgid "Overdue Items"
 msgstr "آیتم‌های دیر کرده"
 
 #: reports/overdue-email.php:26
-#, fuzzy
 msgid "Overdue Items to Email"
-msgstr "آیتم‌های دیر کرده"
+msgstr "آیتم‌های دیر کرده به پست الکترونیکی"
 
 #: companies/addresses.php:177 companies/advanced-search.php:259
 #: companies/new.php:226 companies/some.php:458
@@ -3370,7 +3312,7 @@ msgstr "مالک"
 
 #: reports/companies-list.php:126
 msgid "PDF"
-msgstr "PDF"
+msgstr "فرمت PDF"
 
 #: admin/system-parameters/some.php:50
 msgid "Parameter"
@@ -3378,7 +3320,7 @@ msgstr "پارامتر"
 
 #: activities/new_activity_participant.php:55
 msgid "Participant"
-msgstr ""
+msgstr "شریک"
 
 #: locale/datastrings.php:77
 msgid "Partner"
@@ -3414,7 +3356,6 @@ msgid "Phone"
 msgstr "تلفن"
 
 #: companies/some.php:171
-#, fuzzy
 msgid "Phone 2"
 msgstr "تلفن"
 
@@ -3429,10 +3370,9 @@ msgstr "لطفا این خطا را تصحیح نمایید."
 
 #: admin/acl/one_ControlledObjectRelationship.php:45
 msgid "Please select a Parent/Child controlled object combination"
-msgstr ""
+msgstr "لطفا یک ترکیب شی کنترل شده والد/فرزند انتخاب کنید"
 
 #: contacts/new_contact_company_select.php:44
-#, fuzzy
 msgid "Please select a company to continue"
 msgstr "لطفا یک مورد را انتخاب نمایید:"
 
@@ -3448,7 +3388,7 @@ msgstr "لطفا یک مورد را انتخاب نمایید:"
 msgid ""
 "Please select either a User/Group/Role combination or a Group/Child Group "
 "combination"
-msgstr ""
+msgstr "لطفا یک ترکیب از کاربر/گروه/نقش یا گروه/گروه فرزند انتخاب کنید"
 
 #: include/utils-interface.php:80
 msgid "Please try again."
@@ -3475,13 +3415,12 @@ msgid "Poor"
 msgstr "ضعیف"
 
 #: activities/participant_sidebar.php:37
-#, fuzzy
 msgid "Position"
-msgstr "مذاکره"
+msgstr "موقعیت"
 
 #: plugins/info/edit-definitions.php:260
 msgid "Possible Values"
-msgstr ""
+msgstr "مقادیر ممکن"
 
 #: admin/relationship-types/one.php:82
 msgid "Post Formatting"
@@ -3522,7 +3461,6 @@ msgstr "مقدماتی"
 
 #: admin/import/import-companies-2.php:45
 #: admin/import/import-companies-2.php:65
-#, fuzzy
 msgid "Preview Data"
 msgstr "روز قبل"
 
@@ -3566,7 +3504,6 @@ msgstr "پروفایل"
 
 #: admin/import/import-companies-2.php:143
 #: admin/import/import-companies-3.php:185
-#, fuzzy
 msgid "Profile/Notes"
 msgstr "پروفایل"
 
@@ -3583,13 +3520,12 @@ msgid "Provide RSS Feeds.  y or n."
 msgstr "فعال شدن ورودی‌های RSS. بله یا خیر."
 
 #: companies/some.php:262
-#, fuzzy
 msgid "Province"
 msgstr "استان/منطقه"
 
 #: plugins/cti/setup.php:99
 msgid "Provision Cisco Phone"
-msgstr ""
+msgstr "تلفن Provision Cisco"
 
 #: locale/datastrings.php:85
 msgid "Qualified"
@@ -3644,8 +3580,11 @@ msgstr "اخیرا نمایش داده شده"
 msgid "Record Owners Changed"
 msgstr "مالکین رکورد تغییر داده شد"
 
+#: private/home.php:546
+msgid "Refresh"
+msgstr "بازنمایش"
+
 #: activities/one.php:326
-#, fuzzy
 msgid "Related Activities"
 msgstr "فعالیت‌های وابسته"
 
@@ -3672,7 +3611,7 @@ msgstr "ارتباطات"
 
 #: relationships/sidebar.php:77
 msgid "Relationships for "
-msgstr "ارتباط برای "
+msgstr "ارتباطات مربوط به "
 
 #: reports/audit-items.php:101
 msgid "Remote Addr"
@@ -3695,7 +3634,6 @@ msgid "Restaurant"
 msgstr "رستوران"
 
 #: companies/one.php:578
-#, fuzzy
 msgid "Restrict by Division"
 msgstr "ویرایش بخش"
 
@@ -3729,12 +3667,10 @@ msgstr "نقش‌ها"
 
 #: admin/import/import-companies-2.php:82
 #: admin/import/import-companies-3.php:123
-#, fuzzy
 msgid "Row Number"
 msgstr "شماره مورد"
 
 #: admin/import/import-companies-3.php:797
-#, fuzzy
 msgid "Run Data Cleanup"
 msgstr "پاک سازی بانک اطلاعاتی پس از ارتقاء"
 
@@ -3872,17 +3808,14 @@ msgid "Search for Contact"
 msgstr "جستجو برای تماس"
 
 #: contacts/new_contact_company_select.php:71
-#, fuzzy
 msgid "Search for a company"
 msgstr "جستجو برای شرکت"
 
 #: contacts/new_contact_company_select.php:66
-#, fuzzy
 msgid "Select"
 msgstr "پاک کردن"
 
 #: contacts/new_contact_company_select.php:53
-#, fuzzy
 msgid "Select a company or create a"
 msgstr "پاک کردن مرجع"
 
@@ -3955,7 +3888,6 @@ msgid "Sort Order"
 msgstr "نحوه مرتب سازی"
 
 #: reports/companies-list.php:106
-#, fuzzy
 msgid "Source"
 msgstr "مرجع"
 
@@ -4031,12 +3963,12 @@ msgstr "ارسال"
 
 #: admin/activity-types/one_activity_participant_position.php:43
 msgid "Successfully added participant position"
-msgstr ""
+msgstr "موقعیت شریک با موفقیت اضافه شد"
 
 #: admin/update.php:4779
 msgid ""
 "Successfully updated overly long activity participant record status field"
-msgstr ""
+msgstr "فیلد رکورد وضعیت فعالیت طولاتی شریک با موفقیت بروز شد"
 
 #: activities/one.php:306 activities/one.php:488 activities/some.php:562
 #: activities/some.php:759 admin/import/import-companies-2.php:100
@@ -4261,7 +4193,6 @@ msgstr ""
 "نیست."
 
 #: activities/export.php:111
-#, fuzzy
 msgid "Unable to create file"
 msgstr "امکان باز کردن فایل وجود ندارد"
 
@@ -4274,7 +4205,6 @@ msgid "Unable to get data from database"
 msgstr "امکان دریافت داده‌ها از بانک اطلاعاتی وجود ندارد"
 
 #: admin/import/import-companies-3.php:380
-#, fuzzy
 msgid "Unable to insert/update Company"
 msgstr "امکان دریافت داده‌ها از بانک اطلاعاتی وجود ندارد"
 
@@ -4305,7 +4235,6 @@ msgid "Update Template"
 msgstr "بروز رسانی الگو"
 
 #: admin/import/import-companies-3.php:281
-#, fuzzy
 msgid "Updated company "
 msgstr "اضافه کردن شرکت"
 
@@ -4328,7 +4257,6 @@ msgstr "استفاده از آدرس جایگزین"
 
 #: admin/import/import-companies-2.php:122
 #: admin/import/import-companies-3.php:164
-#, fuzzy
 msgid "Use Pretty Address"
 msgstr "استفاده از آدرس جایگزین"
 
@@ -4379,13 +4307,12 @@ msgid "Users"
 msgstr "کاربران"
 
 #: plugins/cti/setup.php:115
-#, fuzzy
 msgid "VM Password"
 msgstr "کلمه عبور"
 
 #: plugins/vcard/setup.php:18
 msgid "Vcard"
-msgstr ""
+msgstr "کارت مجازی"
 
 #: locale/datastrings.php:101
 msgid "Vendor"
@@ -4404,12 +4331,10 @@ msgid "Version of the LDAP server.  Will usually be 2 or 3."
 msgstr "شماره نسخه سرویس‌دهنده LDAP. نسخه ۲ یا ۳ مورد پشتیبانی است."
 
 #: plugins/info/sidebar.php:180
-#, fuzzy
 msgid "View"
 msgstr "نمایش/ویرایش"
 
 #: cases/case-status-view.php:35
-#, fuzzy
 msgid "View Case Statuses"
 msgstr "وضعیت مورد"
 
@@ -4430,7 +4355,6 @@ msgid "View/Edit"
 msgstr "نمایش/ویرایش"
 
 #: plugins/cti/setup.php:85
-#, fuzzy
 msgid "Voice Mail"
 msgstr "نامه مستقیم"
 
@@ -4460,7 +4384,6 @@ msgstr "راهنمای استفاده از WebCalendar"
 
 #: admin/import/import-companies-2.php:129
 #: admin/import/import-companies-3.php:171
-#, fuzzy
 msgid "Website"
 msgstr "سایت وب"
 
@@ -4473,7 +4396,6 @@ msgid "Weighted Size"
 msgstr "اندازه وزن شده"
 
 #: locale/datastrings.php:106
-#, fuzzy
 msgid "What level of audit logging should be performed.  0 - no logging"
 msgstr ""
 "سطح ثبتی که بر روی سیستم اعمال خواهد شد. ۰ - بدون ثبت، ۱- ورودها و "
@@ -4500,13 +4422,11 @@ msgid "XRMS: Overdue Items"
 msgstr "XRMS : آیتم‌های دیر کرده"
 
 #: reports/overdue-email.php:80
-#, fuzzy
 msgid "XRMS: Overdue Items for "
 msgstr "XRMS : آیتم‌های دیر کرده"
 
 #: admin/import/import-companies-2.php:104
 #: admin/import/import-companies-3.php:146
-#, fuzzy
 msgid "Yahoo"
 msgstr "Yahoo! IM"
 
@@ -4519,7 +4439,6 @@ msgid "Yahoo! IM"
 msgstr "Yahoo! IM"
 
 #: activities/some.php:731 private/home.php:544
-#, fuzzy
 msgid "Year"
 msgstr "جستجو"
 
@@ -4548,7 +4467,7 @@ msgstr "شما باید نام خانوادگی را وارد نمایید."
 msgid "You must enter a name to let the recipient know who the email is from."
 msgstr ""
 "شما باید نامی وارد کنید تا دریافت کننده بداند که این نامه الکترونیکی از "
-"کجاست."
+"کجاست. "
 
 #: admin/users/some.php:149
 msgid "You must enter a password."
@@ -4594,9 +4513,8 @@ msgstr ""
 
 #: activities/new-2.php:167 activities/new-2.php:175 companies/new-2.php:45
 #: include/utils-activities.php:73
-#, fuzzy
 msgid "[none]"
-msgstr "یک"
+msgstr "[هیچ]"
 
 #: admin/account-statuses/some.php:28
 msgid "account_status_pretty_name"
@@ -4611,7 +4529,6 @@ msgid "and"
 msgstr "و"
 
 #: activities/one.php:125 activities/one.php:138
-#, fuzzy
 msgid "at"
 msgstr "سریع"
 
@@ -4636,28 +4553,24 @@ msgid "calls to"
 msgstr "تماس‌ها به"
 
 #: admin/campaign-statuses/some.php:28
-#, fuzzy
 msgid "campaign_status_pretty_name"
 msgstr "نام مناسب وضعیت CRM"
 
 #: admin/campaign-types/some.php:26
-#, fuzzy
 msgid "campaign_type_pretty_name"
 msgstr "نام مناسب نوع شرکت"
 
 #: admin/case-priorities/some.php:28 cases/sidebar.php:57
-#, fuzzy
 msgid "case_priority_pretty_name"
 msgstr "نام مناسب نوع شرکت"
 
 #: admin/case-statuses/some.php:57
-#, fuzzy
 msgid "case_status_pretty_name"
 msgstr "نام مناسب وضعیت CRM"
 
 #: admin/categories/one.php:52 admin/categories/one.php:71
 msgid "category_scope_pretty_plural"
-msgstr ""
+msgstr "جمع مناسب حوزه نفوذ طبقه‌بندی"
 
 #: admin/import/import-companies.php:92
 msgid "comma"
@@ -4709,12 +4622,10 @@ msgid "e-mails to"
 msgstr "نامه‌های الکترونیکی به"
 
 #: companies/some.php:192
-#, fuzzy
 msgid "employees"
 msgstr "کارمندان"
 
 #: activities/one.php:124
-#, fuzzy
 msgid "entered by"
 msgstr "وارد شد"
 
@@ -4751,22 +4662,20 @@ msgid "letter to"
 msgstr "حرف تا"
 
 #: admin/opportunity-statuses/some.php:44
-#, fuzzy
 msgid "opportunity_status_pretty_html"
-msgstr "نام مناسب وضعیت حساب"
+msgstr "نام مناسب وضعیت فرصت"
 
 #: admin/opportunity-statuses/some.php:46
-#, fuzzy
 msgid "opportunity_status_pretty_name"
-msgstr "نام مناسب وضعیت حساب"
+msgstr "نام مناسب وضعیت فرصت"
 
 #: contacts/new_contact_company_select.php:78
 msgid "or create a"
-msgstr ""
+msgstr "یا ایجاد یک"
 
 #: admin/system-parameters/some.php:26
 msgid "param_id"
-msgstr ""
+msgstr "شماره شناسایی"
 
 #: admin/import/import-companies.php:94
 msgid "pipe"
@@ -4778,7 +4687,7 @@ msgstr "پروسه"
 
 #: reports/activitytimes.php:119
 msgid "seconds"
-msgstr ""
+msgstr "ثانیه"
 
 #: admin/import/import-companies.php:95
 msgid "semi-colon"
@@ -4796,220 +4705,217 @@ msgstr "بالا"
 #: contacts/edit.php:210 contacts/new.php:268 contacts/one.php:85
 #: contacts/sidebar.php:166
 msgid "x"
-msgstr ""
+msgstr "x"
 
-#, fuzzy
-#~ msgid "No Stale Opportunities for"
-#~ msgstr "هیچ فرصت در حال اجرایی وجود ندارد"
+ msgid "Lgin"
+ msgstr "ورود به سیستم"
 
-#~ msgid "Refresh"
-#~ msgstr "بازنمایش"
+ msgid "No Stale Opportunities for"
+ msgstr "هیچ فرصت در حال اجرایی وجود ندارد"
 
-#, fuzzy
-#~ msgid "Stale Opportunities"
-#~ msgstr "فرصت‌ها"
+ msgid "Stale Opportunities"
+ msgstr "فرصت‌ها"
 
-#, fuzzy
-#~ msgid "Stale Opportunities for"
-#~ msgstr "فرصت‌ها"
+ msgid "Stale Opportunities for"
+ msgstr "فرصت‌ها"
 
-#~ msgid " by that ID"
-#~ msgstr "با شماره ID"
+ msgid " by that ID"
+ msgstr "با شماره ID"
 
-#~ msgid " by that name"
-#~ msgstr "با نام"
+ msgid " by that name"
+ msgstr "با نام"
 
-#~ msgid "%"
-#~ msgstr "%"
+ msgid "%"
+ msgstr "%"
 
-#~ msgid "/"
-#~ msgstr "/"
+ msgid "/"
+ msgstr "/"
 
-#~ msgid "Active"
-#~ msgstr "فعال"
+ msgid "Active"
+ msgstr "فعال"
 
-#~ msgid "ACL Test Results"
-#~ msgstr "نتایج آزمایش کنترل‌های دسترسی"
+ msgid "ACL Test Results"
+ msgstr "نتایج آزمایش کنترل‌های دسترسی"
 
-#~ msgid "Add New Salutation"
-#~ msgstr "اضافه کردن پیشوند جدید"
+ msgid "Add New Salutation"
+ msgstr "اضافه کردن پیشوند جدید"
 
-#~ msgid "Add New Address Type"
-#~ msgstr "اضافه کردن نوع ادرس جدید"
+ msgid "Add New Address Type"
+ msgstr "اضافه کردن نوع ادرس جدید"
 
-#~ msgid "Allow Access"
-#~ msgstr "اجازه دسترسی داده شود"
+ msgid "Allow Access"
+ msgstr "اجازه دسترسی داده شود"
 
-#~ msgid "Allow Unassigned Activities"
-#~ msgstr "ارسال فعالیت‌های تخصیص داده نشده"
+ msgid "Allow Unassigned Activities"
+ msgstr "ارسال فعالیت‌های تخصیص داده نشده"
 
-#~ msgid "Cancel Changes"
-#~ msgstr "انصراف از تغییرات"
+ msgid "Cancel Changes"
+ msgstr "انصراف از تغییرات"
 
-#~ msgid "Color and Layout Theme for XRMS"
-#~ msgstr "انتخاب رنگ و جلوه"
+ msgid "Color and Layout Theme for XRMS"
+ msgstr "انتخاب رنگ و جلوه"
 
-#~ msgid "Controls custom logo display in the head of every page in XRMS."
-#~ msgstr "کنترل نمایش لوگوی سفارشی در بالای صفحات برنامه."
+ msgid "Controls custom logo display in the head of every page in XRMS."
+ msgstr "کنترل نمایش لوگوی سفارشی در بالای صفحات برنامه."
 
-#~ msgid "Delete Activity?"
-#~ msgstr "فعالیت پاک شود؟"
+ msgid "Delete Activity?"
+ msgstr "فعالیت پاک شود؟"
 
-#~ msgid "Delete Division"
-#~ msgstr "پاک کردن بخش"
+ msgid "Delete Division"
+ msgstr "پاک کردن بخش"
 
-#~ msgid "Delete Salutation"
-#~ msgstr "پاک کردن پیشوند"
+ msgid "Delete Salutation"
+ msgstr "پاک کردن پیشوند"
 
-#~ msgid "Displayed Columns"
-#~ msgstr "ستون‌های نمایش داده شده"
+ msgid "Displayed Columns"
+ msgstr "ستون‌های نمایش داده شده"
 
-#~ msgid "Download"
-#~ msgstr "دریافت"
+ msgid "Download"
+ msgstr "دریافت"
 
-#~ msgid "Dr."
-#~ msgstr "دکتر "
+ msgid "Dr."
+ msgstr "دکتر "
 
-#~ msgid ""
-#~ "Email address to use as the sender address when sending reports via email."
-#~ msgstr ""
-#~ "آدرس پست الکترونیکی که در هنگام ارسال گزارشات از آن استفاده خواهد شد."
+ msgid ""
+ "Email address to use as the sender address when sending reports via email."
+ msgstr ""
+ "آدرس پست الکترونیکی که در هنگام ارسال گزارشات از آن استفاده خواهد شد."
 
-#~ msgid "Edit Salutation"
-#~ msgstr "ویرایش پیشوند"
+ msgid "Edit Salutation"
+ msgstr "ویرایش پیشوند"
 
-#~ msgid "Ends/Due"
-#~ msgstr "پایان/سررسید"
+ msgid "Ends/Due"
+ msgstr "پایان/سررسید"
 
-#~ msgid ""
-#~ "Expose ID numbers and other technical tidbits on production screens. "
-#~ "Useful for developers tracking issues in production. Otherwise not "
-#~ "necessary."
-#~ msgstr ""
-#~ "نمایش شماره‌های ID و سایر اطلاعات فنی دیگر در صفحات برنامه. این گزینه "
-#~ "معمولا برای توسعه دهندگان برنامه که به دنبال خطاها هستند مفید می‌باشد."
+ msgid ""
+ "Expose ID numbers and other technical tidbits on production screens. "
+ "Useful for developers tracking issues in production. Otherwise not "
+ "necessary."
+ msgstr ""
+ "نمایش شماره‌های ID و سایر اطلاعات فنی دیگر در صفحات برنامه. این گزینه "
+ "معمولا برای توسعه دهندگان برنامه که به دنبال خطاها هستند مفید می‌باشد."
 
-#~ msgid "Manage Address Types"
-#~ msgstr "مدیریت انواع آدرس"
+ msgid "Manage Address Types"
+ msgstr "مدیریت انواع آدرس"
 
-#~ msgid "Manage Salutations"
-#~ msgstr "مدیریت پیشوندها"
+ msgid "Manage Salutations"
+ msgstr "مدیریت پیشوندها"
 
-#~ msgid "Miss"
-#~ msgstr "دوشیزه"
+ msgid "Miss"
+ msgstr "دوشیزه"
 
-#~ msgid "Mr."
-#~ msgstr "آقای"
+ msgid "Mr."
+ msgstr "آقای"
 
-#~ msgid "Mrs."
-#~ msgstr "خانم"
+ msgid "Mrs."
+ msgstr "خانم"
 
-#~ msgid "Ms."
-#~ msgstr "سرکار خانم"
+ msgid "Ms."
+ msgstr "سرکار خانم"
 
-#~ msgid "no export so let's get visible"
-#~ msgstr "هیچ فایل صادر شده‌ای برای نمایش وجود ندارد"
+ msgid "no export so let's get visible"
+ msgstr "هیچ فایل صادر شده‌ای برای نمایش وجود ندارد"
 
-#~ msgid "Next Day"
-#~ msgstr "روز بعد"
+ msgid "Next Day"
+ msgstr "روز بعد"
 
-#~ msgid "Next Week"
-#~ msgstr "هفته بعد"
+ msgid "Next Week"
+ msgstr "هفته بعد"
 
-#~ msgid "No results returned from database by query"
-#~ msgstr "هیچ نتیجه‌ای از جستجوی بانک اطلاعاتی باز گردانده نشد"
+ msgid "No results returned from database by query"
+ msgstr "هیچ نتیجه‌ای از جستجوی بانک اطلاعاتی باز گردانده نشد"
 
-#~ msgid "Not Coded Yet"
-#~ msgstr "هنوز کد نشده‌است"
+ msgid "Not Coded Yet"
+ msgstr "هنوز کد نشده‌است"
 
-#~ msgid "وضعیت فرصت"
-#~ msgstr "Statuts Opportunité"
+ msgid "وضعیت فرصت"
+ msgstr "Statuts Opportunité"
 
-#~ msgid "Other "
-#~ msgstr "سایر"
+ msgid "Other "
+ msgstr "سایر"
 
-#~ msgid "Planning"
-#~ msgstr "در حال برنامه‌ریزی"
+ msgid "Planning"
+ msgstr "در حال برنامه‌ریزی"
 
-#~ msgid "Previous Week"
-#~ msgstr "هفته قبل"
+ msgid "Previous Week"
+ msgstr "هفته قبل"
 
-#~ msgid "Relationships for Company"
-#~ msgstr "ارتباطات شرکت"
+ msgid "Relationships for Company"
+ msgstr "ارتباطات شرکت"
 
-#~ msgid "Remainder"
-#~ msgstr "باقیمانده"
+ msgid "Remainder"
+ msgstr "باقیمانده"
 
-#~ msgid "Reset View"
-#~ msgstr "بازنشانی نمایش"
+ msgid "Reset View"
+ msgstr "بازنشانی نمایش"
 
-#~ msgid "Rev."
-#~ msgstr "ویراست"
+ msgid "Rev."
+ msgstr "ویراست"
 
-#~ msgid "Role name"
-#~ msgstr "نام نقش"
+ msgid "Role name"
+ msgstr "نام نقش"
 
-#~ msgid "Salutation Details"
-#~ msgstr "جزئیات پیشوند"
+ msgid "Salutation Details"
+ msgstr "جزئیات پیشوند"
 
-#~ msgid "Salutation Sort Value"
-#~ msgstr "مقدار مرتب سازی"
+ msgid "Salutation Sort Value"
+ msgstr "مقدار مرتب سازی"
 
-#~ msgid "Select Column Layouts"
-#~ msgstr "انتخاب چیدمان ستونها"
+ msgid "Select Column Layouts"
+ msgstr "انتخاب چیدمان ستونها"
 
-#~ msgid "Select Columns"
-#~ msgstr "انتخاب ستون‌ها"
+ msgid "Select Columns"
+ msgstr "انتخاب ستون‌ها"
 
-#~ msgid "Select Format"
-#~ msgstr "انتخاب فرمت"
+ msgid "Select Format"
+ msgstr "انتخاب فرمت"
 
-#~ msgid "Sender Email Address"
-#~ msgstr "آدرس پست الکترونیکی سیستم"
+ msgid "Sender Email Address"
+ msgstr "آدرس پست الکترونیکی سیستم"
 
-#~ msgid "Server Status"
-#~ msgstr "وضعیت سرویس‌دهنده"
+ msgid "Server Status"
+ msgstr "وضعیت سرویس‌دهنده"
 
-#~ msgid "Show Logo"
-#~ msgstr "نمایش لوگو"
+ msgid "Show Logo"
+ msgstr "نمایش لوگو"
 
-#~ msgid "Show text for items with no result on reports."
-#~ msgstr "نمایش متن برای آیتم‌های بدون نتیجه و بدون گزارش."
+ msgid "Show text for items with no result on reports."
+ msgstr "نمایش متن برای آیتم‌های بدون نتیجه و بدون گزارش."
 
-#~ msgid "Sort Value"
-#~ msgstr "مقدار مرتب سازی"
+ msgid "Sort Value"
+ msgstr "مقدار مرتب سازی"
 
-#~ msgid "There is no "
-#~ msgstr "وجود ندارد"
+ msgid "There is no "
+ msgstr "وجود ندارد"
 
-#~ msgid "Theme"
-#~ msgstr "جلوه"
+ msgid "Theme"
+ msgstr "جلوه"
 
-#~ msgid ""
-#~ "Unassigned activities are useful when creating activity pools, but can "
-#~ "result in activities erroneously created without accountability."
-#~ msgstr ""
-#~ "فعالیت‌های تخصیص داده نشده برای ایجاد مجموعه فعالیت‌ها سودمند هستند، ولی "
-#~ "ممکن است باعث شوند فعالیت‌هایی را به اشتباه بدون تخصیص به افرادی ایجاد "
-#~ "کنید."
+ msgid ""
+ "Unassigned activities are useful when creating activity pools, but can "
+ "result in activities erroneously created without accountability."
+ msgstr ""
+ "فعالیت‌های تخصیص داده نشده برای ایجاد مجموعه فعالیت‌ها سودمند هستند، ولی "
+ "ممکن است باعث شوند فعالیت‌هایی را به اشتباه بدون تخصیص به افرادی ایجاد "
+ "کنید."
 
-#~ msgid "Update View"
-#~ msgstr "باز نمایش"
+ msgid "Update View"
+ msgstr "باز نمایش"
 
-#~ msgid "Use horizontal rule on reports."
-#~ msgstr "استفاده از خطکش افقی در گزارشات."
+ msgid "Use horizontal rule on reports."
+ msgstr "استفاده از خطکش افقی در گزارشات."
 
-#~ msgid "View Statuses"
-#~ msgstr "نمایش وضعیت‌ها"
+ msgid "View Statuses"
+ msgstr "نمایش وضعیت‌ها"
 
-#~ msgid "Weighted"
-#~ msgstr "وزن شده"
+ msgid "Weighted"
+ msgstr "وزن شده"
 
-#~ msgid "commercial"
-#~ msgstr "تجاری"
+ msgid "commercial"
+ msgstr "تجاری"
 
-#~ msgid "residential"
-#~ msgstr "اقامتی"
+ msgid "residential"
+ msgstr "اقامتی"
 
-#~ msgid "unknown"
-#~ msgstr "نا مشخص"
+ msgid "unknown"
+ msgstr "نا مشخص"
