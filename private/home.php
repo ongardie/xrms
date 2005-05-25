@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.50 2005/05/25 15:09:12 braverock Exp $
+ * $Id: home.php,v 1.51 2005/05/25 15:38:10 daturaarutad Exp $
  */
 
 // include the common files
@@ -81,7 +81,7 @@ $sidebar_rows = do_hook_function('private_sidebar_bottom', $sidebar_rows);
 $sql_activities = "SELECT " .
 $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/contacts/one.php%3Fcontact_id=$contact_id\">'", "activity_title", "'</a>'") .
 " AS activity_title_link, at.activity_type_pretty_name,
-a.scheduled_at, a.ends_at, a.entered_at, a.on_what_table, a.on_what_id, a.activity_status, a.activity_title,
+a.scheduled_at, a.ends_at, a.entered_at, a.on_what_table, a.on_what_id, a.activity_status, a.activity_title, a.activity_id,
   cont.contact_id,
 CASE
   WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
@@ -578,6 +578,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.51  2005/05/25 15:38:10  daturaarutad
+ * added activity_id to query for calendar to use
+ *
  * Revision 1.50  2005/05/25 15:09:12  braverock
  * - fix msg support to not stomp $_GET
  *
