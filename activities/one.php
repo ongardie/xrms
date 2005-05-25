@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.97 2005/05/25 05:35:51 daturaarutad Exp $
+ * $Id: one.php,v 1.98 2005/05/25 05:37:58 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -65,6 +65,9 @@ if ($rst) {
     $ends_at = date('Y-m-d H:i:s', strtotime($rst->fields['ends_at']));
     $local_time = calculate_time_zone_time($con, $rst->fields['daylight_savings_id'], $rst->fields['offset']);
     $activity_status = $rst->fields['activity_status'];
+    $completed_at = $rst->fields['completed_at'];
+    $completed_by = $rst->fields['completed_by'];
+    
     $thread_id = $rst->fields['thread_id'];
     $followup_from_id = $rst->fields['followup_from_id'];
     $on_what_table = $rst->fields['on_what_table'];
@@ -78,6 +81,12 @@ if(!$thread_id) {
 	$thread_id = $activity_id;
 }
 
+if ($completed_by) {
+    $sql = "SELECT " . $con->concat('first_names', "' '", 'last_name') . " as name FROM users WHERE user_id=$completed_by";
+    $completed_user_rst=$con->execute($sql);
+    if (!$completed_user_rst) { db_error_handler($con, $sql); }
+    $completed_by_user=$completed_user_rst->fields['name'];
+}
 
 if($on_what_table == 'opportunities') {
     $sql = "select o.probability
@@ -554,7 +563,9 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Completed?"); ?></td>
-                <td class=widget_content_form_element><input type=checkbox name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>></td>
+                <td class=widget_content_form_element><input type=checkbox name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
+                    <?php if ($completed_by) echo " by $completed_by_user"; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo " at $completed_at"; ?>
+                </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
@@ -643,6 +654,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.98  2005/05/25 05:37:58  vanmer
+ * - added output to display completed_by and completed_at when an activity is completed, next to the checked
+ * completed box.
+ *
  * Revision 1.97  2005/05/25 05:35:51  daturaarutad
  * added the activity recurrence sidebar
  *
