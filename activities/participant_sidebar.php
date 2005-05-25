@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.4 2005/05/19 13:20:43 maulani Exp $
+ * $Id: participant_sidebar.php,v 1.5 2005/05/25 05:49:24 vanmer Exp $
  */
 require_once($include_directory.'utils-activities.php');
 // add participant information block on sidebar
@@ -35,16 +35,26 @@ if (!$participants) {
 } else {
     $colspan=3;
     $participant_block.='<tr><td class=widget_label>'._("Name").'</td><td class=widget_label>'._("Position").'</td><td class=widget_label>'._("Action").'</td></tr>';
+    $contact_ids=array();
     foreach ($participants as $participant_info) {
+        $contact_ids[]=$participant_info['contact_id'];
         $remove_link="new_activity_participant.php?activity_participant_action=deleteActivityParticipant&activity_participant_id={$participant_info['activity_participant_id']}&return_url=".urlencode($participant_return_url);
         $participant_block.="<tr><td class=widget_content>{$participant_info['contact_name']}</td><td>{$participant_info['participant_position_name']}</td><td><a href=\"$remove_link\">Remove</a></td></tr>";    
     }
 }
-$participant_block.="<tr><td colspan=$colspan class=widget_content_form_element><input type=submit value=\""._("Add New Participant")."\" class=button name=btAddParticipant></td></tr>";
+if (count($contact_ids)>0) {
+    $contacts=implode(",",$contact_ids);
+} else $contacts=false;
+$participant_block.="<tr><td colspan=$colspan class=widget_content_form_element><input type=submit value=\""._("Add New Participant")."\" class=button name=btAddParticipant>";
+if ($contacts) { $participant_block .= "<input type=button class=button onclick=\"javascript:location.href='$http_site_root/email/email.php?scope=contact_list&contact_list=$contacts'\" value=\""._("Mail Merge") ."\">"; }
+$participant_block.= "</td></tr>";
 $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.5  2005/05/25 05:49:24  vanmer
+ * - added mail merge button to email all contacts on an activity
+ *
  * Revision 1.4  2005/05/19 13:20:43  maulani
  * - Remove trailing whitespace
  *
