@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.23 2005/05/25 17:18:26 vanmer Exp $
+ * $Id: login-2.php,v 1.24 2005/05/25 18:36:01 braverock Exp $
  */
 require_once('include-locations.inc');
 
@@ -57,7 +57,7 @@ if ($xrms_use_ldap) {
      $ds=ldap_connect($xrms_ldap["server"]);  // connect to the LDAP server!
      if ($ds) {
           $ldap_version = get_system_parameter($con, "LDAP Version");
-	      ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldap_version);
+          ldap_set_option($ds, LDAP_OPT_PROTOCOL_VERSION, $ldap_version);
 
           $r=ldap_bind($ds, $xrms_ldap["search_user"], $xrms_ldap["search_pw"]);  //authenticate as the search user specified
           //specify which attributes to fetch from ldap
@@ -94,7 +94,7 @@ if ($xrms_use_ldap) {
                    // if the user does not exist in the database but we were able to authenticate him, we create it automatically in the database
                 $error_msg='';
                 add_xrms_user($con, $info[0]['uid'][0], 'NOPASSWORD', $xrms_ldap['default_role_id'], $info[0]['givenname'][0], $info[0]['sn'][0], $info[0]['mail'][0], $xrms_ldap['default_gmt_offset'], true, false, $error_msg);
-               
+
                // and now pull the data we just inserted
                $sql = "select * from users where username = " . $con->qstr($username, get_magic_quotes_gpc());
                $rst = $con->execute($sql);
@@ -121,6 +121,7 @@ if ($rst && !$rst->EOF && $ldapok) {
     // get variables
     $session_user_id = $rst->fields['user_id'];
     $user_contact_id = $rst->fields['user_contact_id'];
+    if (!$user_contact_id) { $user_contact_id=0; };
     $username        = $rst->fields['username'];
     $language        = $rst->fields['language'];
     $gmt_offset      = $rst->fields['gmt_offset'];
@@ -148,6 +149,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.24  2005/05/25 18:36:01  braverock
+ * - add user_contact_id = 0 if it isn't set
+ *
  * Revision 1.23  2005/05/25 17:18:26  vanmer
  * - added lookup of user's contact_id when logging in
  *
