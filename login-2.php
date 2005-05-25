@@ -2,7 +2,7 @@
 /**
  * Check if login is valid
  *
- * $Id: login-2.php,v 1.22 2005/05/18 06:12:27 vanmer Exp $
+ * $Id: login-2.php,v 1.23 2005/05/25 17:18:26 vanmer Exp $
  */
 require_once('include-locations.inc');
 
@@ -120,6 +120,7 @@ if ($rst && !$rst->EOF && $ldapok) {
 
     // get variables
     $session_user_id = $rst->fields['user_id'];
+    $user_contact_id = $rst->fields['user_contact_id'];
     $username        = $rst->fields['username'];
     $language        = $rst->fields['language'];
     $gmt_offset      = $rst->fields['gmt_offset'];
@@ -130,6 +131,7 @@ if ($rst && !$rst->EOF && $ldapok) {
     // make sure we have a session, and place variables in it
     session_startup();
     $_SESSION['session_user_id'] = $session_user_id;
+    $_SESSION['user_contact_id']=$user_contact_id;
     $_SESSION['xrms_system_id']  = $xrms_system_id;
     $_SESSION['username']        = $username;
     $_SESSION['language']        = $language;
@@ -146,6 +148,9 @@ if ($rst && !$rst->EOF && $ldapok) {
 
 /**
  * $Log: login-2.php,v $
+ * Revision 1.23  2005/05/25 17:18:26  vanmer
+ * - added lookup of user's contact_id when logging in
+ *
  * Revision 1.22  2005/05/18 06:12:27  vanmer
  * - changed ldap new user code to use new user function
  * - changed to remove references to roles when logging in
