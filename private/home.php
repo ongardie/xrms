@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.49 2005/05/20 23:13:43 daturaarutad Exp $
+ * $Id: home.php,v 1.50 2005/05/25 15:09:12 braverock Exp $
  */
 
 // include the common files
@@ -26,8 +26,8 @@ require_once('../activities/activities-pager-functions.php');
 $session_user_id = session_check();
 
 // get call arguments
-$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $msg = isset($_POST['msg']) ? $_POST['msg'] : '';
+if (!$msg) {$msg = isset($_GET['msg']) ? $_GET['msg'] : ''; };
 $results_view_type = isset($_POST['results_view_type']) ? $_POST['results_view_type'] : 'list';
 getGlobalVar($calendar_start_date, 'calendar_start_date');
 
@@ -578,6 +578,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.50  2005/05/25 15:09:12  braverock
+ * - fix msg support to not stomp $_GET
+ *
  * Revision 1.49  2005/05/20 23:13:43  daturaarutad
  * updated to use GUP_Pager for activities; small change for calendar which is not quite perfect but better at starting on a reasonable date
  *
