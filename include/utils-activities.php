@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.5 2005/05/06 20:50:43 vanmer Exp $
+ * $Id: utils-activities.php,v 1.6 2005/05/25 05:35:53 vanmer Exp $
  
  */
 
@@ -186,7 +186,15 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
                 //new contact for activity is not blank, so add it as the new default participant
                 $activity_participant_id=add_activity_participant($con, $activity_id, $activity_data['contact_id'], 1);
             }
-        }       
+        }
+        if (($activity_data['activity_status']=='c') AND ($activity_rst->fields['activity_status']!='c')) {
+            $activity_data['completed_by']=$_SESSION['session_user_id'];
+            $activity_data['completed_at']=time();
+        }
+        if (($activity_data['activity_status']!='c') AND ($activity_rst->fields['activity_status']=='c')) {
+            $activity_data['completed_by']='NULL';
+            $activity_data['completed_at']='NULL';
+        }
 	$update_sql = $con->getUpdateSQL($activity_rst, $activity_data);
 	if ($update_sql) {
 		$update_rst=$con->execute($update_sql);
@@ -456,6 +464,9 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
  
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.6  2005/05/25 05:35:53  vanmer
+  * - added update so that if activity is completed, completed_by is automatically set
+  *
   * Revision 1.5  2005/05/06 20:50:43  vanmer
   * - added function for fetching activity types
   *
