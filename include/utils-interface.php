@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.62 2005/05/10 21:37:20 braverock Exp $
+ * $Id: utils-interface.php,v 1.63 2005/05/25 05:42:37 alanbach Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -12,6 +12,7 @@ if ( !defined('IN_XRMS') )
 }
 
 //include utils-misc if it isn't already defined, solves PHP 5 error
+require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-preferences.php');
 
@@ -206,10 +207,10 @@ function get_css_themes() {
  * @param boolean $show_navbar true/false whether to show the menu bar
  * @param string  $msg         error or other notification message
  */
-function start_page($page_title = '', $show_navbar = true, $msg = '', $direction='ltr') {
+function start_page($page_title = '', $show_navbar = true, $msg = '') {
     global $http_site_root;
     global $app_title;
-    global $css_theme;
+    global $css_theme;                  
 
     if (!$xcon) {
         global $xrms_db_dbtype;
@@ -276,7 +277,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $direction
 
 </head>
 
-  <body <?php do_hook('bodytags'); echo "DIR=".$direction; ?>>
+  <body <?php do_hook('bodytags'); echo "DIR=".$_SESSION['DIR']; ?>>
   <?php do_hook('topofpage'); ?>
   <div id="page_header"><?php echo $page_title; ?></div>
 <?php
@@ -739,6 +740,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.63  2005/05/25 05:42:37  alanbach
+ * Automatic RTL/LTR patch
+ *
  * Revision 1.62  2005/05/10 21:37:20  braverock
  * - improve IE stylesheet checks
  *

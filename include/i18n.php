@@ -19,7 +19,7 @@
  * Internally the output character set is used. Other characters are
  * encoded using Unicode entities according to HTML 4.0.
  *
- * @version $Id: i18n.php,v 1.9 2005/05/06 00:42:16 vanmer Exp $
+ * @version $Id: i18n.php,v 1.10 2005/05/25 05:42:37 alanbach Exp $
  * @package xrms
  * @subpackage i18n
  */
@@ -233,12 +233,13 @@ function set_up_language($xrms_language_param, $do_search = false, $default = fa
 
         // Set text direction/alignment variables
         if (isset($languages[$xrms_notAlias]['DIR']) &&
-            $languages[$xrms_notAlias]['DIR'] == 'rtl') {
+            $languages[$xrms_notAlias]['DIR'] == 'rtl') {            
             /**
             * Text direction
             * @global string $text_direction
             */
             $text_direction='rtl';
+            $_SESSION['DIR']= 'rtl';
             /**
             * Left alignment
             * @global string $left_align
@@ -248,9 +249,10 @@ function set_up_language($xrms_language_param, $do_search = false, $default = fa
             * Right alignment
             * @global string $right_align
             */
-            $right_align='left';
+            $right_align='left';                                   
         } else {
             $text_direction='ltr';
+            $_SESSION['DIR']= 'ltr';
             $left_align='left';
             $right_align='right';
         }
@@ -1009,6 +1011,9 @@ function tag_remove($s)
 
 /**
  * $Log: i18n.php,v $
+ * Revision 1.10  2005/05/25 05:42:37  alanbach
+ * Automatic RTL/LTR patch
+ *
  * Revision 1.9  2005/05/06 00:42:16  vanmer
  * - changed parameter passed into setup_language to allow it to override global language already set
  *
