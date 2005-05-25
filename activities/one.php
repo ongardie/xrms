@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.98 2005/05/25 05:37:58 vanmer Exp $
+ * $Id: one.php,v 1.99 2005/05/25 14:55:32 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -25,6 +25,9 @@ if (!$return_url) $return_url='/activities/some.php';
 $on_what_id=$activity_id;
 $session_user_id = session_check();
 
+if(!isset($activity_id){
+    header("Location: " . $http_site_root . $return_url.'?msg='._("Error: No Activity ID Specified"));
+};
 
 $save_and_next = isset($_GET['save_and_next']) ? true : false;
 
@@ -78,7 +81,7 @@ if ($rst) {
 
 // set thread_id to activity_id if it's not set already.
 if(!$thread_id) {
-	$thread_id = $activity_id;
+    $thread_id = $activity_id;
 }
 
 if ($completed_by) {
@@ -654,6 +657,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.99  2005/05/25 14:55:32  braverock
+ * - add error message and return if no activity_id is passed in
+ *
  * Revision 1.98  2005/05/25 05:37:58  vanmer
  * - added output to display completed_by and completed_at when an activity is completed, next to the checked
  * completed box.
