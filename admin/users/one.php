@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.20 2005/05/18 05:50:02 vanmer Exp $
+ * $Id: one.php,v 1.21 2005/05/25 17:05:03 vanmer Exp $
  */
 
 //include required files
@@ -40,10 +40,6 @@ if ($rst) {
     $rst->close();
 }
 
-$sql2 = "select role_pretty_name, role_id from roles where role_record_status = 'a' order by role_id";
-$rst = $con->execute($sql2);
-$role_menu = $rst->getmenu2('role_id', $role_id, false);
-$rst->close();
 //hack to show ACL roles
 $role_menu=get_role_list(false, true, 'role_id', $role_id); 
 
@@ -188,6 +184,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.21  2005/05/25 17:05:03  vanmer
+ * - removed roles table reference from users
+ *
  * Revision 1.20  2005/05/18 05:50:02  vanmer
  * - added sidebar to manage user roles from user edit page
  *
