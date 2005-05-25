@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.10 2004/08/26 22:55:26 niclowe Exp $
+ * $Id: email-3.php,v 1.11 2005/05/25 21:22:43 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -32,10 +32,10 @@ $_SESSION['email_template_body'] = serialize($email_template_body);
 $array_of_contacts = unserialize($_SESSION['array_of_contacts']);
 
 if (is_array($array_of_contacts))
-	$imploded_contacts = implode(',', $array_of_contacts);
+    $imploded_contacts = implode(',', $array_of_contacts);
 else
-	echo _("WARNING: No array of contacts!") . "<br>";
-	
+    echo _("WARNING: No array of contacts!") . "<br>";
+
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -53,7 +53,7 @@ $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $contact_rows .= "<tr>";
-        $contact_rows .= "<td class=widget_content_form_element><input type=checkbox name=array_of_contacts[] value=" . $rst->fields['contact_id'] . " checked></td>";
+        $contact_rows .= "<td class=widget_content_form_element><input type=checkbox name=array_of_contacts value=" . $rst->fields['contact_id'] . " checked></td>";
         $contact_rows .= "<td class=widget_content>" . $rst->fields['company_name'] . "</td>";
         $contact_rows .= "<td class=widget_content>" . $rst->fields['username'] . "</td>";
         $contact_rows .= "<td class=widget_content>" . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . "</td>";
@@ -76,7 +76,7 @@ start_page($page_title, true, $msg);
     <div id="Content">
 
         <form action=email-4.php method=post>
-		<table class=widget cellspacing=1>
+        <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=5><?php echo _("Confirm Recipients"); ?></td>
             </tr>
@@ -91,7 +91,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content_form_element colspan=5><input type=submit class=button value="<?php echo _("Continue"); ?>"></td>
             </tr>
-		</table>
+        </table>
         </form>
 
     </div>
@@ -99,7 +99,7 @@ start_page($page_title, true, $msg);
         <!-- right column //-->
     <div id="Sidebar">
 
-		&nbsp;
+        &nbsp;
 
     </div>
 
@@ -111,6 +111,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.11  2005/05/25 21:22:43  braverock
+ * - change name array_of_contacts[] to array_of_contacts to solve IE compatibility problem
+ *
  * Revision 1.10  2004/08/26 22:55:26  niclowe
  * Enabled mail merge functionality for companies/some.php
  * Sorted pre-sending email checkbox page by company then contact lastname
