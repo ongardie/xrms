@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.100 2005/05/25 15:10:52 braverock Exp $
+ * $Id: one.php,v 1.101 2005/05/25 21:35:53 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -300,7 +300,7 @@ if($on_what_table && $on_what_id) {
 }
 
 $sql = "SELECT
-    (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN ". $con->qstr(_("Yes"),get_magic_quotes_gpc()) ." ELSE '-' END) AS overdue, "
+    (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END) AS is_overdue, "
     ." at.activity_type_pretty_name AS type, "
     . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
     . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=/activities/some.php\">'", "activity_title", "'</a>'") . " AS title, "
@@ -309,7 +309,7 @@ $sql = "SELECT
     . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
     . "u.username AS owner, u.user_id, activity_id,"
     // these are to speed up the pager sorting
-    . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name "
+    . "cont.last_name, cont.first_names, activity_title, activity_status, a.scheduled_at, a.ends_at, c.company_name "
     . "FROM companies c, activity_types at, addresses addr, activities a
         LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
         LEFT OUTER JOIN users u ON a.user_id = u.user_id
@@ -321,7 +321,7 @@ $sql = "SELECT
 
 
 $columns = array();
-$columns[] = array('name' => _('Overdue'), 'index_sql' => 'overdue');
+$columns[] = array('name' => _('Overdue'), 'index_sql' => 'is_overdue');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
 $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
 $columns[] = array('name' => _('Summary'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
@@ -336,7 +336,7 @@ $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
 $default_columns = null;
 //$default_columns =  array('overdue','type','contact','title','scheduled','due','company','owner');
 
-$pager_columns = new Pager_Columns('SomeRelatedActivitiesPager', $columns, $default_columns, 'OneActivityForm');
+$pager_columns = new Pager_Columns('OneRelatedActivitiesPager', $columns, $default_columns, 'OneActivityForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
 $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
@@ -657,6 +657,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.101  2005/05/25 21:35:53  braverock
+ * - improve color CSS style rendering on related activities pager
+ *
  * Revision 1.100  2005/05/25 15:10:52  braverock
  * - changed to urlencode the string for localized error msg
  *
