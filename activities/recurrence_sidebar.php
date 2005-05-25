@@ -15,8 +15,21 @@ if ( !defined('IN_XRMS') )
  *
  * @author Justin Cooper
  *
- * $Id: recurrence_sidebar.php,v 1.1 2005/05/24 16:41:39 daturaarutad Exp $
+ *
+ * $Id: recurrence_sidebar.php,v 1.2 2005/05/25 05:18:34 daturaarutad Exp $
  */
+
+
+/*
+	@todo:  I'd like to change the UI so that there is a radio button to select which type of recurrence you're
+			selecting instead of trying to infer it based on the data, which doesn't work for the last yearly thingy...
+
+
+*/
+
+
+
+
 require_once($include_directory.'utils-activities.php');
 // add recurrence information block on sidebar
 if (!$activity_id) { $recurrence_block=''; return false; }
@@ -24,16 +37,85 @@ if (!$activity_id) { $recurrence_block=''; return false; }
 
 
 // try to locate the AR record and set the values from that
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-// if not:
-$end_datetime = date('Y-m-d', strtotime(date('Y-m-d') . ' +5 years'));
-$daily_frequency = 1;
-$weekly_frequency = 1;
-$monthly_frequency = 1;
-$yearly_frequency = 1;
+$sql = "SELECT * FROM activities_recurrence where activity_id=$activity_id";
+
+$rst = $con->execute($sql);
+
+if($rst) {
+	$rec = $rst->fetchrow();
+/*
+    [activity_recurrence_id] => 2
+    [activity_id] => 372
+    [start_datetime] => 2005-04-15 14:26:49
+    [end_datetime] => 
+    [end_count] => 23
+    [frequency] => 3
+    [period] => daily
+    [day_offset] => 0
+    [month_offset] => 
+    [week_offset] => 
+    [week_days] => 
+*/
+	$activity_recurrence_id	= $rec['activity_recurrence_id'];
+	$end_count 				= $rec['end_count'];
+	$end_datetime 			= $rec['end_datetime'];
+	$period					= $rec['period'];
+
+	// this block maps the DB fields to HTML form fields
+	switch($period) {
+
+		case 'daily':
+            $daily_frequency = $rec['frequency'];
+			break;
+
+        case 'weekly':
+            $weekly_frequency = $rec['frequency'];
+			$weekly_week_days = $rec['week_days'];
+            $day_offset = 0;
+            break;
+
+        case 'monthly':
+            $monthly_frequency = $rec['frequency'];
+
+			if($rec['week_offset']) {
+            	$monthly_week_offset = $rec['week_offset'];
+            	$monthly_week_days = $rec['week_days'];
+			} elseif($rec['day_offset']) {
+            	$monthly_day_offset = $rec['day_offset'];
+			}
+            break;
+
+        case 'yearly':
+            $yearly_frequency = $rec['frequency'];
+
+			if($rec['month_offset'] && $rec['day_offset']) {
+            	$yearly_month_offset = $rec['month_offset'];
+            	$yearly_day_offset = $rec['day_offset'];
+			} elseif($rec['week_offset']) {
+            	$yearly_week_offset = $rec['week_offset'];
+            	$yearly_week_days = $rec['week_days'];
+            	$yearly_month_offset2 = $rec['month_offset'];
+			} elseif($rec['day_offset']) {
+            	$yearly_day_offset2 = $rec['day_offset'];
+			}
+	}
 
 
-$weekly_checkboxes_weekdays = get_checkboxes_weekdays();
+} else {
+
+	// if not:
+	$end_datetime = date('Y-m-d', strtotime(date('Y-m-d') . ' +5 years'));
+	$daily_frequency = 1;
+	$weekly_frequency = 1;
+	$monthly_frequency = 1;
+	$yearly_frequency = 1;
+}
+
+
+$weekly_checkboxes_weekdays = get_checkboxes_weekdays($weekly_week_days);
 $monthly_options_weekdays = get_select_options_weekdays();
 $yearly_options_weekdays = get_select_options_weekdays();
 $yearly_options_months = get_select_options_months();
@@ -94,7 +176,6 @@ $recurrence_block = "
 <input type=hidden name=activity_id value=$activity_id>
 <input type=hidden name=activity_recurrence_id value=$activity_recurrence_id>
 <input type=hidden name=return_url value=\"$return_url\">
-<input type=hidden name=scheduled_at value=\"$scheduled_at\">
 
 <table class=widget cellspacing=1 width=\"100%\">
     <tr>
@@ -102,18 +183,19 @@ $recurrence_block = "
     </tr>
 	<!-- Daily -->
     <tr>
-        <td class=widget_label colspan=2>".('Frequency')."</td>
+        <td class=widget_label>".('Period')."</td>
+        <td class=widget_label>".('Frequency')."</td>
     </tr>
 	<tr>
 		<td>
-		<input type=radio name=frequency_type value=daily>"._('Daily')."</td>
-		<td>"._('Every ')."<input type=\"text\" size=\"2\" name=\"daily_frequency\" value=\"$daily_frequency\">"._(' day(s)')."</td>
+		"._('Daily')."</td>
+		<td><input type=radio name=frequency_type value=daily " . ('daily' == $period ? 'checked' : '') . "> "._('Every ')."<input type=\"text\" size=\"2\" name=\"daily_frequency\" value=\"$daily_frequency\">"._(' day(s)')."</td>
 	</tr>
 	<!-- Weekly -->
 	<tr>
 		<td rowspan=2>
-		<input type=radio name=frequency_type value=weekly>"._('Weekly')."</td>
-		<td>"._('Every ')."<input type=\"text\" size=\"2\" name=\"weekly_frequency\" value=\"$weekly_frequency\">"._(' week(s)')."</td>
+		"._('Weekly')."</td>
+		<td><input type=radio name=frequency_type value=weekly " . ('weekly' == $period ? 'checked' : '') . "> "._('Every ')."<input type=\"text\" size=\"2\" name=\"weekly_frequency\" value=\"$weekly_frequency\">"._(' week(s)')."</td>
 	</tr>
 	<tr>
 		<td> $weekly_checkboxes_weekdays </td>
@@ -121,8 +203,8 @@ $recurrence_block = "
 	<!-- Monthly -->
 	<tr>
 		<td rowspan=3>
-		<input type=radio name=frequency_type value=monthly>"._('Monthly')."</td>
-		<td>"._('Every ')."<input type=\"text\" size=\"2\" name=\"monthly_frequency\" value=\"$monthly_frequency\">"._(' month(s)')."</td>
+		"._('Monthly')."</td>
+		<td><input type=radio name=frequency_type value=monthly " . ('monthly' == $period ? 'checked' : '') . "> "._('Every ')."<input type=\"text\" size=\"2\" name=\"monthly_frequency\" value=\"$monthly_frequency\">"._(' month(s)')."</td>
 	</tr>
 	<tr>
 		<td>"._('Recur on the ')."<input type=\"text\" size=\"2\" name=\"monthly_day_offset\" value=\"$monthly_day_offset\">"._(' day of the  month')."</td>
@@ -134,8 +216,8 @@ $recurrence_block = "
 	<!-- Yearly -->
 	<tr>
 		<td rowspan=4>
-		<input type=radio name=frequency_type value=yearly>"._('Yearly')."</td>
-		<td>"._('Every ')."<input type=\"text\" size=\"2\" name=\"yearly_frequency\" value=\"$yearly_frequency\">"._(' year(s)')."</td>
+		"._('Yearly')."</td>
+		<td><input type=radio name=frequency_type value=yearly " . ('yearly' == $period ? 'checked' : '') . "> "._('Every ')."<input type=\"text\" size=\"2\" name=\"yearly_frequency\" value=\"$yearly_frequency\">"._(' year(s)')."</td>
 	</tr>
 	<tr>
 		<td>"._('Recur on day ')."<input type=\"text\" size=\"2\" name=\"yearly_day_offset\" value=\"$yearly_day_offset\">"._(' of ')."
@@ -158,22 +240,23 @@ $recurrence_block = "
 	<tr>
 		<td rowspan=2 class=widget>"._('Ends')."</td>
 		<td class=widget>
-			<input type=radio name=recurrence_range value=end_after>" . _('End After ') ."
+			<input type=radio name=recurrence_range value=end_after " . ($end_count ? 'checked' : '') . ">" . _('End After ') ."
 			<input type=text size=\"2\" name=\"end_count\" value=$end_count>" . _(' occurence(s)'). "
 		</td>
 	</tr>
 
 	<tr>
 		<td class=widget>
-			<input type=radio name=recurrence_range value=end_on checked>" . _('End on '). "
+			<input type=radio name=recurrence_range value=end_on " . ($end_datetime ? 'checked' : '') . ">" . _('End on '). "
 			<input type=text size=\"12\" name=\"end_datetime\" value=$end_datetime>
 		</td>
 	</tr>
 
 	<tr>
-		<td colspan=2 class=widget_content_form_element>
-			<input type=submit value=\""._("Add New Recurring Activity")."\" class=button name=btAddRecurring>
-			<input type=submit value=\""._("Update Recurring Activity")."\" class=button name=btEditRecurring>
+		<td colspan=2 class=widget_content_form_element>" . 
+			($activity_recurrence_id ? 
+			"<input type=submit value=\""._("Update Recurring Activity")."\" class=button name=btEditRecurring>" :
+			"<input type=submit value=\""._("Add New Recurring Activity")."\" class=button name=btAddRecurring>") . "
 		</td>
 	</tr>
 
@@ -184,21 +267,10 @@ $recurrence_block = "
 
 /**
  * $Log: recurrence_sidebar.php,v $
+ * Revision 1.2  2005/05/25 05:18:34  daturaarutad
+ * added update capability...still not working 100%
+ *
  * Revision 1.1  2005/05/24 16:41:39  daturaarutad
  * initial not-necessarily-working version
- *
- * Revision 1.4  2005/05/19 13:20:43  maulani
- * - Remove trailing whitespace
- *
- * Revision 1.3  2005/04/22 22:05:53  ycreddy
- * Added the missing .php extension for the Remove Participant Link
- *
- * Revision 1.2  2005/04/18 23:34:12  maulani
- * - recurrence sidebar include was stomping on $return_url variable.  Changed
- *   variable name to resolve conflict in activities/one.php
- *
- * Revision 1.1  2005/04/15 16:55:07  vanmer
- * -Initial revision of the sidebar for recurrence lists on an activity
- *
-**/
+ */
 ?>
