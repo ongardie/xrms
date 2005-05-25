@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.51 2005/05/25 15:38:10 daturaarutad Exp $
+ * $Id: home.php,v 1.52 2005/05/25 17:30:24 vanmer Exp $
  */
 
 // include the common files
@@ -76,10 +76,11 @@ $sidebar_rows = do_hook_function('private_sidebar_bottom', $sidebar_rows);
 //uncomment the debug line to see what's going on with the query
 //$con->debug = 1;
 
+$user_contact_id= $_SESSION['user_contact_id'];
 
 // most recent activities
 $sql_activities = "SELECT " .
-$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/contacts/one.php%3Fcontact_id=$contact_id\">'", "activity_title", "'</a>'") .
+$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/private/home.php\">'", "activity_title", "'</a>'") .
 " AS activity_title_link, at.activity_type_pretty_name,
 a.scheduled_at, a.ends_at, a.entered_at, a.on_what_table, a.on_what_id, a.activity_status, a.activity_title, a.activity_id,
   cont.contact_id,
@@ -92,11 +93,13 @@ $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?co
 FROM activities a, companies c
 LEFT OUTER JOIN activity_types at ON (at.activity_type_id = a.activity_type_id)
 LEFT OUTER JOIN contacts cont ON (a.contact_id = cont.contact_id)
-WHERE  a.user_id = $session_user_id
+LEFT OUTER JOIN activity_participants on a.activity_id=activity_participants.activity_id
+WHERE  ((a.user_id = $session_user_id) OR (activity_participants.contact_id=$user_contact_id))
   AND a.activity_type_id = at.activity_type_id
   AND a.company_id = c.company_id
   AND a.activity_status = 'o'
-  AND a.activity_record_status = 'a'";
+  AND a.activity_record_status = 'a'
+  GROUP BY a.activity_id";
 
 $list=acl_get_list($session_user_id, 'Read', false, 'activities');
 //print_r($list);
@@ -578,6 +581,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.52  2005/05/25 17:30:24  vanmer
+ * - added all activities for which user is a participant to activity list on home.php
+ *
  * Revision 1.51  2005/05/25 15:38:10  daturaarutad
  * added activity_id to query for calendar to use
  *
