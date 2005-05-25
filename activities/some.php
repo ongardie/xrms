@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.113 2005/05/20 22:18:01 daturaarutad Exp $
+ * $Id: some.php,v 1.114 2005/05/25 17:17:53 vanmer Exp $
  */
 
 // handle includes
@@ -266,7 +266,7 @@ $sql = "SELECT
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
   . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
-  . "u.username AS owner, u.user_id, activity_id, activity_status, "
+  . "u.username AS owner, u.user_id, a.activity_id, activity_status, "
   // these are to speed up the pager sorting
   . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name ";
 
@@ -289,7 +289,11 @@ if($opportunity_status_id || $sort_column == 9 || $campaign_id) {
 */
 $sql .= "
 LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
-LEFT OUTER JOIN users u ON a.user_id = u.user_id";
+LEFT OUTER JOIN users u ON a.user_id = u.user_id
+LEFT OUTER JOIN activity_participants ON a.activity_id=activity_participants.activity_id
+LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants.contact_id
+
+ ";
 
 $sql .= " WHERE a.company_id = c.company_id";
 
@@ -312,12 +316,12 @@ if (strlen($title) > 0) {
 
 if (strlen($contact) > 0) {
     $criteria_count++;
-    $sql .= " and cont.last_name like " . $con->qstr('%' . $contact . '%', get_magic_quotes_gpc());
+    $sql .= " and ((cont.last_name like " . $con->qstr('%' . $contact . '%', get_magic_quotes_gpc()) . ") OR (part_cont.last_name like " . $con->qstr('%' . $contact . '%', get_magic_quotes_gpc()) . "))";
 }
 
 if (strlen($contact_id)) {
     $criteria_count++;
-    $sql .= " and cont.contact_id = " . $contact_id;
+    $sql .= " and ((cont.contact_id = $contact_id) OR (activity_participants.contact_id=$contact_id))";
 }
 
 if (strlen($company) > 0) {
@@ -400,6 +404,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
         }
     } else { $sql .= ' AND 1 = 2 '; }
 }
+$sql .=" GROUP BY activity_id";
 
 //activities Pager table is rendered below by ADOdb pager
 //echo htmlspecialchars($sql);
@@ -841,7 +846,7 @@ if('list' == $results_view_type) {
 
 $con->close();
 ?>
-
+    
     </form>
 
     </div>
@@ -905,6 +910,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.114  2005/05/25 17:17:53  vanmer
+ * - added join to activity participants to link and search contacts who are participants on an activity
+ *
  * Revision 1.113  2005/05/20 22:18:01  daturaarutad
  * fixed broken coloring for overdue/closed activities
  *
