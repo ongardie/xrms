@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.80 2005/05/24 23:03:31 braverock Exp $
+ * $Id: update.php,v 1.81 2005/05/25 05:24:13 daturaarutad Exp $
  */
 
 // where do we include from
@@ -4832,6 +4832,27 @@ $con->execute($sql);
         }
     }
 
+    if (!in_array('activities_recurrence',$table_list)) {
+        $sql="CREATE TABLE activities_recurrence (
+  				activity_recurrence_id int(11) NOT NULL auto_increment,
+  				activity_id int(11) NOT NULL default '0',
+  				start_datetime datetime default NULL,
+  				end_datetime datetime default NULL,
+  				end_count int(11) default '0',
+  				frequency int(11) NOT NULL default '0',
+  				period varchar(100) NOT NULL default '',
+  				day_offset int(11) default '0',
+  				month_offset int(11) default '0',
+  				week_offset int(11) default '0',
+  				week_days varchar(100) default '',
+  				PRIMARY KEY  (activity_recurrence_id));";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+    
 install_upgrade_acl($con);
 
 $sql = "ALTER TABLE user_preferences ADD user_id INT( 11 ) UNSIGNED NOT NULL";
@@ -4892,6 +4913,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.81  2005/05/25 05:24:13  daturaarutad
+ * added activities_recurrence
+ *
  * Revision 1.80  2005/05/24 23:03:31  braverock
  * - add email_tepplate_type table in advance of support for email template types in core
  *

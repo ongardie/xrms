@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.42 2005/05/24 23:01:47 braverock Exp $
+ * $Id: database.php,v 1.43 2005/05/25 05:25:38 daturaarutad Exp $
  */
 
 /**
@@ -1161,6 +1161,29 @@ function activity_db_tables($con, $table_list) {
         }
     }
 
+    if (!in_array('activities_recurrence',$table_list)) {
+        $sql="CREATE TABLE activities_recurrence (
+                activity_recurrence_id int(11) NOT NULL auto_increment,
+                activity_id int(11) NOT NULL default '0',
+                start_datetime datetime default NULL,
+                end_datetime datetime default NULL,
+                end_count int(11) default '0',
+                frequency int(11) NOT NULL default '0',
+                period varchar(100) NOT NULL default '',
+                day_offset int(11) default '0',
+                month_offset int(11) default '0',
+                week_offset int(11) default '0',
+                week_days varchar(100) default '',
+                PRIMARY KEY  (activity_recurrence_id));";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
+	
+
 
 
 } // end activity_db_tables fn
@@ -1185,6 +1208,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.43  2005/05/25 05:25:38  daturaarutad
+ * added activities_recurrence
+ *
  * Revision 1.42  2005/05/24 23:01:47  braverock
  * - add email_template_type table in advance of email template type support in core
  *
