@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.52 2005/05/25 17:30:24 vanmer Exp $
+ * $Id: home.php,v 1.53 2005/05/27 22:33:03 ycreddy Exp $
  */
 
 // include the common files
@@ -90,7 +90,7 @@ CASE
 END AS is_overdue, " . 
 $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, " . 
 $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company
-FROM activities a, companies c
+FROM companies, activities a
 LEFT OUTER JOIN activity_types at ON (at.activity_type_id = a.activity_type_id)
 LEFT OUTER JOIN contacts cont ON (a.contact_id = cont.contact_id)
 LEFT OUTER JOIN activity_participants on a.activity_id=activity_participants.activity_id
@@ -581,6 +581,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.53  2005/05/27 22:33:03  ycreddy
+ * Fixed the LEFT OUTER to be compatible with SQL Server
+ *
  * Revision 1.52  2005/05/25 17:30:24  vanmer
  * - added all activities for which user is a participant to activity list on home.php
  *
