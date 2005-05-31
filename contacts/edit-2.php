@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.18 2005/05/16 21:30:22 vanmer Exp $
+ * $Id: edit-2.php,v 1.19 2005/05/31 16:47:34 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -56,6 +56,15 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug=1;
 
+$validationsPassed = do_hook_function('contact_custom_inline_edit_validate');
+if ($validationsPassed) {
+        if ($validationsPassed!= 1) {
+                $con->close();
+                header("Location: edit.php?msg=$validationsPassed&contact_id=$contact_id");
+                return;
+        }
+}
+
 $sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
 $rst = $con->execute($sql);
 
@@ -100,12 +109,17 @@ $con->execute($upd);
 
 do_hook_function('contact_accounting_inline_edit_2', $accounting_rows);
 
+do_hook_function('contact_custom_inline_edit_save');
+
 add_audit_item($con, $session_user_id, 'updated', 'contacts', $contact_id, 1);
 
 header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.19  2005/05/31 16:47:34  ycreddy
+ * Added plugin hooks for validate and save. Validate hook is used to make sure validation checks are satisified before doing a save
+ *
  * Revision 1.18  2005/05/16 21:30:22  vanmer
  * - added tax_id handling to contacts pages
  *
