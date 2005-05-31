@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.114 2005/05/25 17:17:53 vanmer Exp $
+ * $Id: some.php,v 1.115 2005/05/31 20:50:50 ycreddy Exp $
  */
 
 // handle includes
@@ -27,7 +27,7 @@ $session_user_id = session_check();
 
 // Start connection
 $con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con->pconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 // check for saved search
 $arr_vars = array ( // local var name       // session variable name
@@ -404,7 +404,8 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
         }
     } else { $sql .= ' AND 1 = 2 '; }
 }
-$sql .=" GROUP BY activity_id";
+$sql .=" GROUP BY a.activity_id, c.company_name,c.company_id, cont.first_names, 
+cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name";
 
 //activities Pager table is rendered below by ADOdb pager
 //echo htmlspecialchars($sql);
@@ -910,6 +911,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.115  2005/05/31 20:50:50  ycreddy
+ * Updated the activity GROUP BY clause to make it compatible with MS SQL Server
+ *
  * Revision 1.114  2005/05/25 17:17:53  vanmer
  * - added join to activity participants to link and search contacts who are participants on an activity
  *

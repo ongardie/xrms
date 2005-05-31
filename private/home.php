@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.54 2005/05/31 15:22:12 ycreddy Exp $
+ * $Id: home.php,v 1.55 2005/05/31 20:51:35 ycreddy Exp $
  */
 
 // include the common files
@@ -40,7 +40,7 @@ if (stristr($_SERVER['HTTP_USER_AGENT'], "MMP")) {
 
 //connect to the database
 $con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+$con->pconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug=1;
 
 /*********************************/
@@ -99,7 +99,10 @@ WHERE  ((a.user_id = $session_user_id) OR (activity_participants.contact_id=$use
   AND a.company_id = c.company_id
   AND a.activity_status = 'o'
   AND a.activity_record_status = 'a'
-  GROUP BY a.activity_id";
+  GROUP BY a.activity_id, c.company_name, c.company_id, cont.first_names,
+  cont.last_name, cont.contact_id, a.activity_title, a.ends_at, a.scheduled_at,
+  at.activity_type_pretty_name, a.on_what_table, a.on_what_id,
+  a.activity_status, a.entered_at";
 
 $list=acl_get_list($session_user_id, 'Read', false, 'activities');
 //print_r($list);
@@ -581,6 +584,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.55  2005/05/31 20:51:35  ycreddy
+ * Updated the activity GROUP BY clause to make it compatible with MS SQL Server
+ *
  * Revision 1.54  2005/05/31 15:22:12  ycreddy
  * Adding the missing alias for company
  *
