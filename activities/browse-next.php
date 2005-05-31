@@ -8,7 +8,7 @@
  *
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.20 2005/05/19 13:20:43 maulani Exp $
+ * $Id: browse-next.php,v 1.21 2005/05/31 16:58:08 daturaarutad Exp $
  */
 
 //include required files
@@ -55,7 +55,7 @@ if($saved_id) {
     elseif($rst->rowcount()) {
         $sql = unserialize($rst->fields['saved_data']);
         $sql = str_replace('CURRENT_USER', $session_user_id, $sql['sql']);
-        $sql = preg_replace("|^select|i", "select activity_id,", $sql);
+        $sql = preg_replace("|^select|i", "select a.activity_id,", $sql);
     }
     $rst = $con->execute($sql);
     if(!$rst) {
@@ -156,6 +156,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.21  2005/05/31 16:58:08  daturaarutad
+ * changed activity_id => a.activity_id in browse-next.php
+ *
  * Revision 1.20  2005/05/19 13:20:43  maulani
  * - Remove trailing whitespace
  *
