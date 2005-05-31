@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.9 2004/07/20 12:45:21 cpsource Exp $
+ * $Id: change-password-2.php,v 1.10 2005/05/31 20:28:59 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,10 +21,10 @@ $session_user_id = session_check();
 // become Admin aware - Don't accept the user to edit from the URL
 // or from POST for non-Admin types.
 //
-if ( 'Admin' != $_SESSION['role_short_name'] ) {
-  $edit_user_id = $session_user_id;
-} else {
+if (check_user_role(false, $session_user_id, 'Administrator')) {
   $edit_user_id = $_POST['edit_user_id'];
+} else {
+  $edit_user_id = $session_user_id;
 }
 
 $password = $_POST['password'];
@@ -37,6 +37,7 @@ if ($password == $confirm_password) {
     $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
     $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
+    
     $rst = $con->execute($sql);
 
     $rec = array();
@@ -56,6 +57,9 @@ if ($password == $confirm_password) {
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.10  2005/05/31 20:28:59  vanmer
+ *- changed to use new ACL role check instead of older deprecated role system
+ *
  *Revision 1.9  2004/07/20 12:45:21  cpsource
  *- Allow non-Admin users to change their passwords, but do so
  *  in a secure manner.
