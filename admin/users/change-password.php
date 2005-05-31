@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.8 2004/07/20 12:45:22 cpsource Exp $
+ * $Id: change-password.php,v 1.9 2005/05/31 20:28:29 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,10 +21,10 @@ $session_user_id = session_check();
 // become Admin aware - Don't accept the user to edit from the URL
 // for non-Admin types.
 //
-if ( 'Admin' != $_SESSION['role_short_name'] ) {
-  $edit_user_id = $session_user_id;
-} else {
+if (check_user_role(false, $session_user_id, 'Administrator')) {
   $edit_user_id = $_GET['edit_user_id'];
+} else {
+  $edit_user_id = $session_user_id;
 }
 
 $page_title = _("Change Password");
@@ -71,6 +71,9 @@ end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.9  2005/05/31 20:28:29  vanmer
+ *- altered to use ACL check instead of Admin role check to control password change
+ *
  *Revision 1.8  2004/07/20 12:45:22  cpsource
  *- Allow non-Admin users to change their passwords, but do so
  *  in a secure manner.
