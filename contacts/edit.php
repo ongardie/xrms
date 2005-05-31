@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.32 2005/05/16 21:30:22 vanmer Exp $
+ * $Id: edit.php,v 1.33 2005/05/31 15:50:51 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -115,6 +115,8 @@ if ($rst){
 } else {
     db_error_handler ($con, $sql);
 }
+
+$contact_custom_rows = do_hook_function('contact_custom_inline_edit_display', $contact_custom_rows);
 
 $accounting_rows = do_hook_function('contact_accounting_inline_edit', $accounting_rows);
 
@@ -241,6 +243,9 @@ confGoTo_includes();
             </tr>
             <!-- accounting plugin -->
             <?php echo $accounting_rows; ?>
+
+            <?php echo $contact_custom_rows; ?>
+
             <tr>
                 <td class=widget_label_right><?php echo _("Interests"); ?></td>
                 <td class=widget_content_form_element><input type=text name=interests size=35 value='<?php echo $interests; ?>'></td>
@@ -301,6 +306,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.33  2005/05/31 15:50:51  ycreddy
+ * Added a hook for Contact Custom Inline Edit
+ *
  * Revision 1.32  2005/05/16 21:30:22  vanmer
  * - added tax_id handling to contacts pages
  *
