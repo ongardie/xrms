@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.31 2005/04/29 17:52:37 daturaarutad Exp $
+ * $Id: some.php,v 1.32 2005/05/31 17:34:24 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -42,9 +42,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // $con->debug = 1;
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
-$sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS '" . _("Case") . "',
-c.company_name AS '" . _("Company") . "', u.username AS '" . _("Owner") . "', cat.case_type_pretty_name AS '" . _("Type") . "', cap.case_priority_pretty_name AS '" . _("Priority") . "',
-cas.case_status_pretty_name AS '" . _("Status") . "', " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS '" . _("Due") . "' ";
+$sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS case_name, c.company_name AS company, u.username AS owner, cat.case_type_pretty_name AS type, cap.case_priority_pretty_name AS priority, cas.case_status_pretty_name AS status, " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS due ";
 
 if ($case_category_id > 0) {
     $from = "from companies c, cases ca, case_types cat, case_priorities cap, case_statuses cas, users u, entity_category_map ecm ";
@@ -243,13 +241,13 @@ start_page($page_title, true, $msg);
 $_SESSION["search_sql"]=$sql;
 
 $columns = array();
-$columns[] = array('name' => _('Case'), 'index_sql' => 'Case', 'sql_sort_column' => 'ca.case_title', 'type' => 'url');
-$columns[] = array('name' => _('Company'), 'index_sql' => 'Company');
-$columns[] = array('name' => _('Owner'), 'index_sql' => 'Owner');
-$columns[] = array('name' => _('Type'), 'index_sql' => 'Type');
-$columns[] = array('name' => _('Priority'), 'index_sql' => 'Priority');
-$columns[] = array('name' => _('Status'), 'index_sql' => 'Status');
-$columns[] = array('name' => _('Due'), 'index_sql' => 'Due');
+$columns[] = array('name' => _('Case'), 'index_sql' => 'case_name', 'sql_sort_column' => 'ca.case_title', 'type' => 'url');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
+$columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'type');
+$columns[] = array('name' => _('Priority'), 'index_sql' => 'priority');
+$columns[] = array('name' => _('Status'), 'index_sql' => 'status');
+$columns[] = array('name' => _('Due'), 'index_sql' => 'due');
 
 
 // selects the columns this user is interested in
@@ -336,6 +334,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.32  2005/05/31 17:34:24  daturaarutad
+ * removed translation from query since it is happening in the pager columns
+ *
  * Revision 1.31  2005/04/29 17:52:37  daturaarutad
  * fixed printing of form/search results
  *
