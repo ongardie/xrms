@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.22 2005/05/04 14:37:24 braverock Exp $
+ * $Id: edit.php,v 1.23 2005/06/01 16:20:31 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -218,10 +218,13 @@ confGoTo_includes();
                 <td class=widget_content_form_element colspan=2>
                 <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
 <?php
-		confGoTo (
+		acl_confGoTo (
 			  _('Delete Opportunity?'),                      // question to ask operator
 			  _('Delete'),                                   // display this on button
-			  'delete.php?opportunity_id='.$opportunity_id   // do this if operator approves
+			  'delete.php?opportunity_id='.$opportunity_id,  // do this if operator approves
+			  'opportunities',				 // what table will be affected (for ACL)
+			  $opportunity_id,				 // which entity (for ACL)
+			  'Delete'					 // what action will be taken (for ACL)
 			  );
 ?>
                 </td>
@@ -285,6 +288,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.23  2005/06/01 16:20:31  vanmer
+ * - altered delete button to be controlled by ACL
+ *
  * Revision 1.22  2005/05/04 14:37:24  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *
