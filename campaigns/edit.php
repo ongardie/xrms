@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of campaigns
  *
- * $Id: edit.php,v 1.15 2005/05/04 14:35:25 braverock Exp $
+ * $Id: edit.php,v 1.16 2005/06/01 16:03:46 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,6 +61,7 @@ start_page($page_title, true, $msg);
 ?>
 
 <?php jscalendar_includes(); ?>
+<?php confGoTo_includes(); ?>
 
 <div id="Main">
     <div id="Content">
@@ -113,8 +114,9 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>">
 <?php
 		$quest = _("Delete Campaign?");
+		$button = _("Delete");
                 $to_url = 'delete.php?campaign_id='.$campaign_id;
-                echo render_delete_button($quest,'button',"javascript:location.href='$to_url'", false, false, 'campaigns',$campaign_id);
+                acl_confGoTo($quest,$button,$to_url,'campaigns',$campaign_id,'Delete');
 ?>
             </tr>
         </table>
@@ -186,6 +188,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.16  2005/06/01 16:03:46  vanmer
+ * - changed delete campaign button to use confGoTo again, using ACL control
+ *
  * Revision 1.15  2005/05/04 14:35:25  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *
