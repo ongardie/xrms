@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.28 2005/05/16 21:30:22 vanmer Exp $
+ * $Id: new.php,v 1.29 2005/06/01 21:14:48 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -141,7 +141,7 @@ $sql = "select country_name, country_id from countries where country_record_stat
 $rst = $con->execute($sql);
 if (!$country_id) {$country_id = $default_country_id;}
 
-$country_menu = $rst->getmenu2('address_country_id', $country_id, false);
+$country_menu = $rst->getmenu2('address_country_id', $country_id, false, false, 0, 'style="font-size: x-small; border: outset; width: 175px;"');
 $rst->close();
 
 $address_type_menu = build_address_type_menu($con, $address_type);
@@ -273,7 +273,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Profile"); ?></td>
-                <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile></textarea></td>
+                <td class=widget_content_form_element><textarea rows=8 cols=42 name=profile></textarea></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Edit Address"); ?></td>
@@ -324,7 +324,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php echo $address_type_menu; ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right_91px><?php echo _("Address Body"); ?></td>
+                <td class=widget_label_right><?php echo _("Address Body"); ?></td>
                 <td class=widget_content_form_element><textarea rows=5 cols=25 name=address_body><?php echo $address_body; ?></textarea><br> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>><?php echo _("Use"); ?></td>
             </tr>
         </table>
@@ -348,6 +348,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.29  2005/06/01 21:14:48  vanmer
+ * - changed country list for new home address to be smaller width than text insideit
+ * - changed width of profile box to be the same as other boxes
+ *
  * Revision 1.28  2005/05/16 21:30:22  vanmer
  * - added tax_id handling to contacts pages
  *
