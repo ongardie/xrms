@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.37 2005/05/19 20:28:13 daturaarutad Exp $
+ * $Id: new-2.php,v 1.38 2005/06/01 21:41:36 braverock Exp $
  */
 
 //where do we include from
@@ -86,7 +86,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities == true ) {
-    if (($on_what_table=='contacts') or ($on_what_table=='')) {
+    if (($on_what_table=='contacts') or ($on_what_table=='') or ($on_what_table=='companies')) {
         $opp_arr = array();
         $case_arr = array();
         $arr_count = 0;
@@ -161,7 +161,7 @@ $rec['ends_at']          = strtotime($ends_at);
 $rec['last_modified_at'] = time();
 $rec['last_modified_by'] = $session_user_id;
 $rec['opportunity_status_id'] = $opportunity_status_id;
-if($thread_id) $rec['thread_id'] 		 = $thread_id;
+if($thread_id) $rec['thread_id']         = $thread_id;
 if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
 
 if(empty($opportunity_status_id)) {
@@ -231,6 +231,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.38  2005/06/01 21:41:36  braverock
+ *- add $on_what_table='companies' as a target for associate_activities check
+ *
  *Revision 1.37  2005/05/19 20:28:13  daturaarutad
  *added support for followup activities
  *
