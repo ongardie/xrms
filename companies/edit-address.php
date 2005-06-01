@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: edit-address.php,v 1.10 2005/04/11 02:06:49 maulani Exp $
+ * $Id: edit-address.php,v 1.11 2005/06/01 16:08:10 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -116,7 +116,7 @@ confGoTo_includes();
         		  $quest = _("Delete Address?");
         		  $button = _("Delete Address");
 				  $to_url = "delete-address.php?company_id=$company_id&address_id=$address_id";
-				  confGoTo( $quest, $button, $to_url );
+				  acl_confGoTo( $quest, $button, $to_url, 'companies', $company_id, "Delete" );
 ?>
                 </td>
             </tr>
@@ -139,6 +139,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.11  2005/06/01 16:08:10  vanmer
+ * - added ACL control over whether delete button appears on address
+ *
  * Revision 1.10  2005/04/11 02:06:49  maulani
  * - Add address type.  RFE 862049 (maulani)
  *
