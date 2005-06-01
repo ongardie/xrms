@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.19 2005/05/04 14:34:55 braverock Exp $
+ * $Id: edit.php,v 1.20 2005/06/01 16:03:06 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -248,7 +248,7 @@ confGoTo_includes();
                 $quest  = _('Delete Case?');
                 $button = _('Delete');
                 $to_url = "delete.php?case_id=$case_id";
-                confGoTo( $quest, $button, $to_url );
+                acl_confGoTo( $quest, $button, $to_url, 'cases', $case_id, 'Delete' );
 ?>
                 </td>
             </tr>
@@ -311,6 +311,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.20  2005/06/01 16:03:06  vanmer
+ * - changed delete button for case to be controlled by the ACL
+ *
  * Revision 1.19  2005/05/04 14:34:55  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *
