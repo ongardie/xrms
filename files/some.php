@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.34 2005/05/23 01:59:35 maulani Exp $
+ * $Id: some.php,v 1.35 2005/06/01 16:40:55 ycreddy Exp $
  */
 
 //include required files
@@ -230,7 +230,7 @@ $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 if ($rst) {
     while (!$rst->EOF) {
         $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?file_id=' . $rst->fields['file_id'] . '">' . $rst->fields['file_pretty_name'] . '</a></td>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?file_id=' . $rst->fields['file_id'] . '" title="'. $rst->fields['file_pretty_name']. '">' . substr( $rst->fields['file_pretty_name'], 0, 20) . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['file_id'] . '</td>';
@@ -421,6 +421,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.35  2005/06/01 16:40:55  ycreddy
+ * Adding title attribute to the name html element in the pager and side bar for files
+ *
  * Revision 1.34  2005/05/23 01:59:35  maulani
  * - Access system parameters for Use Owl parameter
  *

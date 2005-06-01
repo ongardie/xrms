@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.15 2005/04/28 18:44:50 daturaarutad Exp $
+ * $Id: sidebar.php,v 1.16 2005/06/01 16:40:55 ycreddy Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -81,14 +81,14 @@ if(!$file_rows) {
 	             <tr>";
 	        if ($rst->fields['file_size'] == "0")
 	          {
-	          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() ."'>" . $rst->fields['file_pretty_name'] . '</a></b></td>';
+	          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() . "' title='". $rst->fields['file_pretty_name']. "'>" . substr( $rst->fields['file_pretty_name'], 0, 20) . '</a></b></td>';
 	          $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($rst->fields['file_size']) . '</b></td>';
 	          $file_rows .= '<td class=non_uploaded_file><b>' . $rst->fields['username'] . '</b></td>';
 	          $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($rst->fields['entered_at']) . '</b></td>';
 	          }
 	        else
 	          {
-	          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() ."'>" . $rst->fields['file_pretty_name'] . '</a></td>';
+	          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() . "' title='". $rst->fields['file_pretty_name']. "'>" . substr( $rst->fields['file_pretty_name'], 0, 20) .  '</a></td>';
 	          $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
 	          $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
 	          $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
@@ -124,6 +124,9 @@ if(!$file_rows) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.16  2005/06/01 16:40:55  ycreddy
+ * Adding title attribute to the name html element in the pager and side bar for files
+ *
  * Revision 1.15  2005/04/28 18:44:50  daturaarutad
  * added files plugin hook
  *
