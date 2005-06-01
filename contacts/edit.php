@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.33 2005/05/31 15:50:51 ycreddy Exp $
+ * $Id: edit.php,v 1.34 2005/06/01 16:02:09 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -279,7 +279,7 @@ confGoTo_includes();
           $quest = _("Delete Contact?");
           $button = _("Delete");
           $to_url = "delete.php?company_id=$company_id&contact_id=$contact_id";
-          confGoTo( $quest, $button, $to_url );
+          acl_confGoTo( $quest, $button, $to_url, 'contacts', $contact_id, 'Delete' );
         }
 ?>
                     <input class=button type=button value="<?php echo _("Transfer"); ?>" onclick="javascript: location.href='transfer.php?contact_id=<?php echo $contact_id; ?>';">
@@ -306,6 +306,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.34  2005/06/01 16:02:09  vanmer
+ * - altered delete button to be controlled by the ACL
+ *
  * Revision 1.33  2005/05/31 15:50:51  ycreddy
  * Added a hook for Contact Custom Inline Edit
  *
