@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.110 2005/05/10 23:44:59 vanmer Exp $
+ * $Id: one.php,v 1.111 2005/06/01 21:39:38 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -369,6 +369,7 @@ if ($rst) {
 /*** Include the sidebar boxes ***/
 
 //set up our substitution variables for use in the sidebars
+$ori_on_what_table = $on_what_table;
 $on_what_table = 'companies';
 $on_what_id = $company_id;
 
@@ -386,7 +387,9 @@ if ($division_id) { $opportunity_limit_sql .=" AND opportunities.division_id=$di
 require_once("../opportunities/sidebar.php");
 
 //include the contacts-companies sidebar
-$relationships = array('companies' => $company_id);
+$relationships = array('companies' => $company_id,
+                       'company_division' => $division_id );
+
 require_once("../relationships/sidebar.php");
 
 // include the files sidebar
@@ -415,6 +418,8 @@ if ( !isset($company_buttons) ) {
 }
 //call the copmany_buttons hook
 $company_buttons = do_hook_function('company_buttons', $company_buttons);
+
+$on_what_table=$ori_on_what_table;
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -733,7 +738,13 @@ function markComplete() {
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=activity_status value="o">
         <input type=hidden name=use_post_vars value="1">
-        <?php if ($division_id) { $on_what_table='company_division'; $on_what_id=$division_id; } ?>
+<?php //check to see if we need to set division_id
+    if ($division_id) {
+        $on_what_table='company_division';
+        $on_what_id=$division_id;
+    }
+    //end division_id check
+?>
         <input type=hidden name=on_what_table        value="<?php echo $on_what_table; ?>">
         <input type=hidden name=on_what_id           value="<?php echo $on_what_id; ?>">
         <input type=hidden name=activity_description value="">
@@ -836,6 +847,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.111  2005/06/01 21:39:38  braverock
+ * - fix reset of on_what_table so activities are not erroneously linked to each other
+ * - add division as a ligit option in relationships sidebar
+ *
  * Revision 1.110  2005/05/10 23:44:59  vanmer
  * - added needed parenthesis around trim statements
  *
