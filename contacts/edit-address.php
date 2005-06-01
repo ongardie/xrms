@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.9 2005/04/11 02:08:44 maulani Exp $
+ * $Id: edit-address.php,v 1.10 2005/06/01 16:14:11 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -232,7 +232,7 @@ confGoTo_includes();
         		  $quest = _("Delete Address?");
         		  $button = _("Delete Address");
 				  $to_url = "delete-address.php?contact_id=$contact_id&address_id=$address_id";
-				  confGoTo( $quest, $button, $to_url );
+				  acl_confGoTo( $quest, $button, $to_url, 'contacts', $contact_id, 'Delete' );
 ?>
                 </td>
             </tr>
@@ -255,6 +255,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.10  2005/06/01 16:14:11  vanmer
+ * - changed delete address button to be controlled by the ACL
+ *
  * Revision 1.9  2005/04/11 02:08:44  maulani
  * - Add address types.  RFE 862049 (maulani)
  *
