@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.58 2005/05/25 05:37:00 vanmer Exp $
+ * $Id: edit-2.php,v 1.59 2005/06/02 20:17:49 braverock Exp $
  */
 
 //include required files
@@ -196,9 +196,9 @@ $rec['activity_type_id']     = $activity_type_id;
 $rec['contact_id']           = $contact_id;
 $rec['activity_title']       = $activity_title;
 $rec['activity_description'] = $activity_description;
-if(empty($user_id) && strstr($return_url, 'fill_user')) {
-    //If the user ID was empty and we're returning to the same activity page
-    // then we're going to assume that the user has taken over the activity.
+if(empty($user_id)) {
+    // If the user ID was empty
+    // then we're going to assume that the current user has taken over the activity.
     $rec['user_id']          = $session_user_id;
 }
 else {
@@ -502,6 +502,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.59  2005/06/02 20:17:49  braverock
+ * - change user to current user if user/owner field is blank on submit
+ *
  * Revision 1.58  2005/05/25 05:37:00  vanmer
  * - added update of completed_by field when completing an activity
  *
