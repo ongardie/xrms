@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.29 2005/06/01 21:14:48 vanmer Exp $
+ * $Id: new.php,v 1.30 2005/06/02 20:51:21 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -160,10 +160,10 @@ start_page($page_title, true, $msg);
 ?>
 
 <form action=new-2.php method=post>
+        <input type=hidden name=company_id value="<?php echo $company_id; ?>">
 <div id="Main">
     <div id="Content">
 
-        <input type=hidden name=company_id value="<?php echo $company_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Contact Information"); ?></td>
@@ -325,7 +325,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Address Body"); ?></td>
-                <td class=widget_content_form_element><textarea rows=5 cols=25 name=address_body><?php echo $address_body; ?></textarea><br> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>><?php echo _("Use"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=23 name=address_body><?php echo $address_body; ?></textarea><br> <input type="checkbox" name="use_pretty_address"<?php if ($use_pretty_address == 't') {echo " checked";} ?>><?php echo _("Use"); ?></td>
             </tr>
         </table>
     </div>
@@ -348,6 +348,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.30  2005/06/02 20:51:21  ycreddy
+ * Fixes to the Alignment problems on IE 6.0
+ *
  * Revision 1.29  2005/06/01 21:14:48  vanmer
  * - changed country list for new home address to be smaller width than text insideit
  * - changed width of profile box to be the same as other boxes
