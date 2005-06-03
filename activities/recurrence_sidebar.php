@@ -1,11 +1,5 @@
 <?php
 
-if ( !defined('IN_XRMS') )
-{
-  die('Hacking attempt');
-  exit;
-}
-
 /**
  * Activity Recurrance Information Sidebar
  *
@@ -16,24 +10,33 @@ if ( !defined('IN_XRMS') )
  * @author Justin Cooper
  *
  *
- * $Id: recurrence_sidebar.php,v 1.3 2005/06/03 18:59:31 daturaarutad Exp $
+ * $Id: recurrence_sidebar.php,v 1.4 2005/06/03 20:59:09 daturaarutad Exp $
  */
 
 
-/*
-	@todo:  I'd like to change the UI so that there is a radio button to select which type of recurrence you're
-			selecting instead of trying to infer it based on the data, which doesn't work for the last yearly thingy...
+//include required files
+require_once('../include-locations.inc');
+    
+require_once($include_directory . 'vars.php');
+require_once($include_directory . 'utils-activities.php');
+require_once($include_directory . 'utils-interface.php');
+require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+require_once($include_directory . 'adodb-params.php');
+    
+getGlobalVar($activity_id, 'activity_id');
+getGlobalVar($msg, 'msg'); 
+getGlobalVar($return_url, 'return_url');
+if(!$return_url) $return_url='/activities/some.php';
 
+global $http_site_root;
+    
+$session_user_id = session_check();
 
-*/
-
-
-
-
-require_once($include_directory.'utils-activities.php');
 // add recurrence information block on sidebar
-if (!$activity_id) { $recurrence_block=''; return false; }
-
+if(!isset($activity_id)){
+    header("Location: " . $http_site_root . $return_url.'?msg='.urlencode(_("Error: No Activity ID Specified")));
+};
 
 
 // try to locate the AR record and set the values from that
@@ -278,8 +281,17 @@ $recurrence_block = "
 <!-- Begin Recurrence Widget -->
 ";
 
+start_page(_('Activity Recurrence'), true, $msg);
+
+echo $recurrence_block;
+
+end_page();
+
 /**
  * $Log: recurrence_sidebar.php,v $
+ * Revision 1.4  2005/06/03 20:59:09  daturaarutad
+ * made the recurrence config its own page...possibly should rename this file since it is no longer a sidebar
+ *
  * Revision 1.3  2005/06/03 18:59:31  daturaarutad
  * updated layout, using period to determine recurrence type
  *
