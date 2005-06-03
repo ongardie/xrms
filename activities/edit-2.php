@@ -2,11 +2,11 @@
 /**
  * Save the updated activity information to the database
  *
- * @todo: potential security risk in pulling some of these variables from the submit
+ * @todo  potential security risk in pulling some of these variables from the submit
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.59 2005/06/02 20:17:49 braverock Exp $
+ * $Id: edit-2.php,v 1.60 2005/06/03 12:54:23 braverock Exp $
  */
 
 //include required files
@@ -48,7 +48,6 @@ $arr_vars = array (
                    'probability' => arr_vars_POST_UNDEF ,
                    'followup' => arr_vars_POST_UNDEF ,
                    'saveandnext' => arr_vars_POST_UNDEF ,
-                   'switch_opportunity' => arr_vars_POST_UNDEF ,
                    );
 
 // get posted data
@@ -236,22 +235,6 @@ if (strlen($upd)>0) {
     $rst = $con->execute($upd);
     if (!$rst) {
         db_error_handler ($con, $upd);
-    }
-}
-
-if($switch_opportunity == "on") {
-    $sql = "SELECT * FROM opportunities WHERE opportunity_id = " . $on_what_id;
-    $rst = $con->execute($sql);
-
-    $rec = array();
-    $rec['contact_id'] = $contact_id;
-
-    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    if(strlen($upd)) {
-        $rst = $con->execute($upd);
-        if(!$rst) {
-            db_error_handler($con, $upd);
-        }
     }
 }
 
@@ -502,6 +485,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.60  2005/06/03 12:54:23  braverock
+ * - remove 'Switch Opportunity' contact switching, as this is confusing to users
+ *
  * Revision 1.59  2005/06/02 20:17:49  braverock
  * - change user to current user if user/owner field is blank on submit
  *
