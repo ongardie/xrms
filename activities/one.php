@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.102 2005/06/03 12:53:59 braverock Exp $
+ * $Id: one.php,v 1.103 2005/06/03 20:58:22 daturaarutad Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -70,7 +70,6 @@ if ($rst) {
     $activity_status = $rst->fields['activity_status'];
     $completed_at = $rst->fields['completed_at'];
     $completed_by = $rst->fields['completed_by'];
-
     $thread_id = $rst->fields['thread_id'];
     $followup_from_id = $rst->fields['followup_from_id'];
     $on_what_table = $rst->fields['on_what_table'];
@@ -83,6 +82,12 @@ if ($rst) {
 if(!$thread_id) {
     $thread_id = $activity_id;
 }
+
+$sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_id=$activity_id";
+$recurrence_rst=$con->execute($sql);
+if (!$recurrence_rst) { db_error_handler($con, $sql); }
+$activity_recurrence_id = $recurrence_rst->fields['activity_recurrence_id'];
+
 
 if ($completed_by) {
     $sql = "SELECT " . $con->concat('first_names', "' '", 'last_name') . " as name FROM users WHERE user_id=$completed_by";
@@ -365,7 +370,6 @@ $related_activites_widget = $pager->Render($system_rows_per_page);
 /*** Include the sidebar boxes ***/
 
 require_once('participant_sidebar.php');
-require_once('recurrence_sidebar.php');
 
 if ($contact_id) {
     // include the contact sidebar code
@@ -578,6 +582,12 @@ function logTime() {
 
                         echo render_create_button("Schedule Followup",'submit',false,'followup');
 
+						if($activity_recurrence_id) {
+                        	echo render_edit_button("Edit Recurrence",'submit',false,'recurrence');
+						} else {
+                        	echo render_edit_button("Create Recurrence",'submit',false,'recurrence');
+						}
+
                         echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
                     ?>
 
@@ -607,8 +617,6 @@ function logTime() {
     <div id="Sidebar">
         <!-- participant list block //-->
         <?php echo $participant_block; ?>
-        <!-- recurrence list block //-->
-        <?php echo $recurrence_block; ?>
         <!-- company information block //-->
         <?php echo $company_block; ?>
         <!-- contact information block //-->
@@ -652,6 +660,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.103  2005/06/03 20:58:22  daturaarutad
+ * moved recurrence configuration widget to its own page
+ *
  * Revision 1.102  2005/06/03 12:53:59  braverock
  * - remove 'Switch Opportunity' contact switching, as this is confusing to users
  * - take out nbsp; tags from inside strings that are better combined for i18n
