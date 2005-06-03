@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.5 2005/03/05 00:33:34 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.6 2005/06/03 16:18:13 daturaarutad Exp $
  */
 
 
@@ -395,6 +395,7 @@ END;
 
 	          			break;
 	        		case 'datetime':
+	        		case 'timestamp':
 							global $http_site_root;
 
 							$triggerName = "f_trigger_" . count($this->JSCodePost);
