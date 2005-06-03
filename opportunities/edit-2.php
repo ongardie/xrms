@@ -50,7 +50,6 @@ if ($old_status != $opportunity_status_id) {
         where on_what_status=$old_status
         and on_what_table='$on_what_table'
         and on_what_id=$on_what_id
-        and contact_id=$contact_id
         and company_id=$company_id
         and activity_status='o'
         and activity_record_status='a'";
