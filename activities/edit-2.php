@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.60 2005/06/03 12:54:23 braverock Exp $
+ * $Id: edit-2.php,v 1.61 2005/06/03 22:56:58 daturaarutad Exp $
  */
 
 //include required files
@@ -47,6 +47,7 @@ $arr_vars = array (
                    'opportunity_description' => arr_vars_POST_UNDEF ,
                    'probability' => arr_vars_POST_UNDEF ,
                    'followup' => arr_vars_POST_UNDEF ,
+                   'recurrence' => arr_vars_POST_UNDEF ,
                    'saveandnext' => arr_vars_POST_UNDEF ,
                    );
 
@@ -479,12 +480,17 @@ if ($followup) {
     header ('Location: '.$http_site_root."/activities/new-2.php?user_id=$session_user_id&activity_type_id=$activity_type_id&on_what_id=$on_what_id&contact_id=$contact_id&on_what_table=$on_what_table&company_id=$company_id&user_id=$user_id&activity_title=".htmlspecialchars( _("Follow-up") . ' ' . $activity_title ) .  "&company_id=$company_id&activity_status=o&on_what_status=$old_status&return_url=$return_url&thread_id=$thread_id&followup_from_id=$activity_id&followup=true" );
 } elseif($saveandnext) {
     header("Location: browse-next.php?activity_id=$activity_id");
+} elseif($recurrence) {
+    header("Location: recurrence_sidebar.php?activity_id=$activity_id");
 } else {
     header("Location: " . $http_site_root . $return_url);
 }
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.61  2005/06/03 22:56:58  daturaarutad
+ * added recurrence action handling
+ *
  * Revision 1.60  2005/06/03 12:54:23  braverock
  * - remove 'Switch Opportunity' contact switching, as this is confusing to users
  *
