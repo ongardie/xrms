@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.82 2005/05/25 05:39:19 vanmer Exp $
+ * $Id: update.php,v 1.83 2005/06/03 18:26:01 daturaarutad Exp $
  */
 
 // where do we include from
@@ -701,6 +701,10 @@ $rst = $con->execute($sql);
 //make activity_description a nullable field
 $sql="ALTER TABLE `activities` CHANGE `activity_description` `activity_description` TEXT";
 $con->execute($sql);
+
+//add activity_recurrence_id to activities
+$sql = "alter table activities add activity_recurrence_id int default 0";
+$rst = $con->execute($sql);
 
 //create the activity_templates table if we need it
 $sql = "create table activity_templates (
@@ -4923,6 +4927,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.83  2005/06/03 18:26:01  daturaarutad
+ * add activity_recurrence_id to activities
+ *
  * Revision 1.82  2005/05/25 05:39:19  vanmer
  * - added field to control user editability of activity types
  * - added field for determining which user completed an activity

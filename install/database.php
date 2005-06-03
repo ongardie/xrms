@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.44 2005/05/25 05:36:32 vanmer Exp $
+ * $Id: database.php,v 1.45 2005/06/03 18:27:10 daturaarutad Exp $
  */
 
 /**
@@ -1119,7 +1119,8 @@ function activity_db_tables($con, $table_list) {
                completed_at                    datetime,
                completed_by                    int,
                activity_status                 char(1) default 'o',
-               activity_record_status          char(1) default 'a'
+               activity_record_status          char(1) default 'a',
+			   activity_recurrence_id 		   int default 0
                )";
         //execute
         $rst = $con->execute($sql);
@@ -1210,6 +1211,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.45  2005/06/03 18:27:10  daturaarutad
+ * add activity_recurrence_id to activities
+ *
  * Revision 1.44  2005/05/25 05:36:32  vanmer
  * - added field to control user editing of activity types (defaults to 1, editable)
  * - added field to tell who completed an activity
