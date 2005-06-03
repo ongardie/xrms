@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.101 2005/05/25 21:35:53 braverock Exp $
+ * $Id: one.php,v 1.102 2005/06/03 12:53:59 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -467,16 +467,11 @@ function logTime() {
                 <td class=widget_content>
                     <?php
                         echo $contact_menu;
-                        if($on_what_table == "opportunities") {
-                            echo '&nbsp; '
-                                . _("Switch Opportunity")
-                                .'<input type="checkbox" name="switch_opportunity" value="off">';
-                        }
                     ?>
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Attached") . "&nbsp;" . _("To"); ?></td>
+                <td class=widget_label_right><?php echo _("Attached To"); ?></td>
                 <td class=widget_content>
                     <?php  echo $attached_to_link;
                         if ($table_name != "Attached To") {
@@ -487,7 +482,7 @@ function logTime() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Activity") . "&nbsp;" . _("Type"); ?></td>
+                <td class=widget_label_right><?php echo _("Activity Type"); ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
             </tr>
            <?php
@@ -657,6 +652,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.102  2005/06/03 12:53:59  braverock
+ * - remove 'Switch Opportunity' contact switching, as this is confusing to users
+ * - take out nbsp; tags from inside strings that are better combined for i18n
+ *
  * Revision 1.101  2005/05/25 21:35:53  braverock
  * - improve color CSS style rendering on related activities pager
  *
