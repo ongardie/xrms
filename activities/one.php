@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.103 2005/06/03 20:58:22 daturaarutad Exp $
+ * $Id: one.php,v 1.104 2005/06/03 22:55:45 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -298,10 +298,12 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once('activities-pager-functions.php');
 
+$on_what_where = "1 = 2";
 if($on_what_table && $on_what_id) {
-    $on_what_where = "a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id";
-} else {
-    $on_what_where = "1 = 2";
+    //don't do anything if this activity is on companies or contacts
+    if (($on_what_table != 'companies') && ($on_what_table != 'contacts')){
+        $on_what_where = "a.on_what_table = '$on_what_table' AND a.on_what_id = $on_what_id";
+    }
 }
 
 $sql = "SELECT
@@ -582,11 +584,11 @@ function logTime() {
 
                         echo render_create_button("Schedule Followup",'submit',false,'followup');
 
-						if($activity_recurrence_id) {
-                        	echo render_edit_button("Edit Recurrence",'submit',false,'recurrence');
-						} else {
-                        	echo render_edit_button("Create Recurrence",'submit',false,'recurrence');
-						}
+                        if($activity_recurrence_id) {
+                            echo render_edit_button("Edit Recurrence",'submit',false,'recurrence');
+                        } else {
+                            echo render_edit_button("Create Recurrence",'submit',false,'recurrence');
+                        }
 
                         echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
                     ?>
@@ -660,6 +662,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.104  2005/06/03 22:55:45  braverock
+ * - change the logic for recurring activities pager to exclude on_what_table of
+ *   companies or contacts
+ *
  * Revision 1.103  2005/06/03 20:58:22  daturaarutad
  * moved recurrence configuration widget to its own page
  *
