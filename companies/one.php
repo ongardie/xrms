@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.111 2005/06/01 21:39:38 braverock Exp $
+ * $Id: one.php,v 1.112 2005/06/03 22:57:17 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -369,7 +369,6 @@ if ($rst) {
 /*** Include the sidebar boxes ***/
 
 //set up our substitution variables for use in the sidebars
-$ori_on_what_table = $on_what_table;
 $on_what_table = 'companies';
 $on_what_id = $company_id;
 
@@ -418,8 +417,6 @@ if ( !isset($company_buttons) ) {
 }
 //call the copmany_buttons hook
 $company_buttons = do_hook_function('company_buttons', $company_buttons);
-
-$on_what_table=$ori_on_what_table;
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -847,6 +844,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.112  2005/06/03 22:57:17  braverock
+ * - revert previous on_what_table change, as it caused ACL problems
+ *   correction for related activities pager made in activities/one.php instead
+ *
  * Revision 1.111  2005/06/01 21:39:38  braverock
  * - fix reset of on_what_table so activities are not erroneously linked to each other
  * - add division as a ligit option in relationships sidebar
