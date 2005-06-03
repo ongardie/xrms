@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.6 2005/05/25 05:35:53 vanmer Exp $
+ * $Id: utils-activities.php,v 1.7 2005/06/03 16:40:09 daturaarutad Exp $
  
  */
 
@@ -223,6 +223,44 @@ function delete_activity($con, $activity_id=false, $delete_from_database=false, 
     } else {
         $update_array=array('activity_record_status'=>'d');
         $sql = "SELECT * FROM activities WHERE activity_id=$activity_id";
+        $update_rst=$con->execute($sql);
+        if (!$update_rst) {db_error_handler($con, $sql); return false; }
+        $sql = $con->GetUpdateSQL($update_rst, $update_array, true, get_magic_quotes_gpc());
+    }
+    if (!$sql) return false;        
+    
+    if ($delete_participants) {
+        $activity_participants=get_activity_participants($con, $activity_id);
+        if ($activity_participants) {
+            foreach ($activity_participants as $participant_info) {
+                $ret=delete_activity_participant($con, $participant_info['activity_participant_id'], $delete_from_database);
+            }
+        }
+    }
+    $rst=$con->execute($sql);
+    if (!$rst) {db_error_handler($con, $sql); return false; }
+    return true;
+}
+/**********************************************************************/
+/**
+ *
+ * Deletes 0 or more activities from XRMS, based on passed in where_clause
+ * Can delete activity from database or mark as removed using record status
+ *
+ * @param adodbconnection $con handle to the database
+ * @param string $where_clause identifying which activitie(s) to delete
+ * @param boolean $delete_from_database specifying if activity should be deleted from the database, or simply marked with a deleted flag (defaults to false, mark with deleted flag)
+ * @param boolean $delete_participants indicating if activity_participants should also be removed
+ * 
+ * @return array $activity_data with results of search or false if search finds no results/failed
+ */
+function delete_activities($con, $where_clause=false, $delete_from_database=false, $delete_participants=true) {
+    if (!$where_clause) return false;
+    if ($delete_from_database) {
+        $sql = "DELETE FROM activities WHERE $where_clause";
+    } else {
+        $update_array=array('activity_record_status'=>'d');
+        $sql = "SELECT * FROM activities WHERE $where_clause";
         $update_rst=$con->execute($sql);
         if (!$update_rst) {db_error_handler($con, $sql); return false; }
         $sql = $con->GetUpdateSQL($update_rst, $update_array, true, get_magic_quotes_gpc());
@@ -464,6 +502,9 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
  
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.7  2005/06/03 16:40:09  daturaarutad
+  * added delete_activities (plural)
+  *
   * Revision 1.6  2005/05/25 05:35:53  vanmer
   * - added update so that if activity is completed, completed_by is automatically set
   *
