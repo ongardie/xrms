@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.23 2005/05/06 22:07:49 vanmer Exp $
+ * $Id: new-2.php,v 1.24 2005/06/05 17:21:37 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -107,6 +107,9 @@ if (!$rst) {
 }
 
 $company_id = $con->insert_id();
+$rec['company_id']=$company_id;
+
+do_hook_function('company_new_2', $rec);
 
 // if no code was provided, set a default company code
 if (strlen($company_code) == 0) {
@@ -169,7 +172,7 @@ if($time_zone_offset = time_zone_offset($con, $address_id)) {
             db_error_handler($con, $sql);
         }
     }
-} 
+}
 
 $sql = "SELECT * FROM companies WHERE company_id = $company_id";
 $rst = $con->execute($sql);
@@ -244,6 +247,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.24  2005/06/05 17:21:37  braverock
+ * - add standard new/edit hooks
+ *
  * Revision 1.23  2005/05/06 22:07:49  vanmer
  * - added handling for new fields for a contact when creating a new company
  *

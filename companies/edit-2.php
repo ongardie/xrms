@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.16 2005/04/26 17:28:04 gpowers Exp $
+ * $Id: edit-2.php,v 1.17 2005/06/05 17:21:37 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -74,6 +74,9 @@ $rec['profile'] = $profile;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+$param = array($rst, $rec);
+do_hook_function('company_edit_2', $param);
+
 $accounting_rows = do_hook_function('company_accounting_inline_edit_2', $accounting_rows);
 
 add_audit_item($con, $session_user_id, 'updated', 'companies', $company_id, 1);
@@ -84,6 +87,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.17  2005/06/05 17:21:37  braverock
+ * - add standard new/edit hooks
+ *
  * Revision 1.16  2005/04/26 17:28:04  gpowers
  * - added Extension ("x") to contact work phone
  * - removed non-digits from phone numbers in edit-2's, new-2's
