@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.22 2005/05/16 21:30:22 vanmer Exp $
+ * $Id: new-2.php,v 1.23 2005/06/05 13:07:38 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -153,11 +153,14 @@ $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
 $contact_id = $con->Insert_ID();
+$rec['contact_id']=$contact_id;
 
 add_audit_item($con, $session_user_id, 'created', 'contacts', $contact_id, 1);
 
 //add to recently viewed list
 update_recent_items($con, $session_user_id, "contacts", $contact_id);
+
+do_hook_function('contact_new_2', $rec);
 
 $con->close();
 
@@ -169,6 +172,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.23  2005/06/05 13:07:38  braverock
+ * - added 'standardized' hooks to pass record data to plugins
+ *
  * Revision 1.22  2005/05/16 21:30:22  vanmer
  * - added tax_id handling to contacts pages
  *

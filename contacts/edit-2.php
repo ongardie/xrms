@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.19 2005/05/31 16:47:34 ycreddy Exp $
+ * $Id: edit-2.php,v 1.20 2005/06/05 13:07:38 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -107,6 +107,9 @@ if ($salutation != '0') {
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+$param = array($rst, $rec);
+do_hook_function('contact_edit_2', $param);
+
 do_hook_function('contact_accounting_inline_edit_2', $accounting_rows);
 
 do_hook_function('contact_custom_inline_edit_save');
@@ -117,6 +120,9 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.20  2005/06/05 13:07:38  braverock
+ * - added 'standardized' hooks to pass record data to plugins
+ *
  * Revision 1.19  2005/05/31 16:47:34  ycreddy
  * Added plugin hooks for validate and save. Validate hook is used to make sure validation checks are satisified before doing a save
  *
