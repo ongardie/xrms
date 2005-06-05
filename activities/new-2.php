@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.38 2005/06/01 21:41:36 braverock Exp $
+ * $Id: new-2.php,v 1.39 2005/06/05 17:18:59 braverock Exp $
  */
 
 //where do we include from
@@ -186,6 +186,9 @@ if(empty($opportunity_status_id)) {
     $con->execute($ins);
 
     $activity_id = $con->insert_id();
+    $rec['activity_id']=$activity_id;
+    do_hook_function('activity_new_2', $rec);
+
     add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
     if ($rec['contact_id']>0) {
         add_activity_participant($con, $activity_id, $contact_id, 1);
@@ -231,6 +234,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.39  2005/06/05 17:18:59  braverock
+ *- add standardized new/edit hooks
+ *
  *Revision 1.38  2005/06/01 21:41:36  braverock
  *- add $on_what_table='companies' as a target for associate_activities check
  *

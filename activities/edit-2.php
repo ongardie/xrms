@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.61 2005/06/03 22:56:58 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.62 2005/06/05 17:18:59 braverock Exp $
  */
 
 //include required files
@@ -238,6 +238,9 @@ if (strlen($upd)>0) {
         db_error_handler ($con, $upd);
     }
 }
+
+$param = array($rst, $rec);
+do_hook_function('activity_edit_2', $param);
 
 if($on_what_table == 'opportunities' and (strlen($opportunity_description)>0)) {
     //Update Opportunity Description
@@ -488,6 +491,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.62  2005/06/05 17:18:59  braverock
+ * - add standardized new/edit hooks
+ *
  * Revision 1.61  2005/06/03 22:56:58  daturaarutad
  * added recurrence action handling
  *
