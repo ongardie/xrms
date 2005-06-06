@@ -4,7 +4,7 @@
 *
 * @author Justin Cooper
 *
-* $Id: edit_activity_recurrence.php,v 1.3 2005/06/03 18:48:42 daturaarutad Exp $
+* $Id: edit_activity_recurrence.php,v 1.4 2005/06/06 23:23:27 daturaarutad Exp $
 */
 
 
@@ -14,6 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
+require_once($include_directory . 'utils-recurrence.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -109,17 +110,10 @@ if ($activity_id) {
 *	 yearly3		day_offset		yearly_day_offset2		Every D Day
 *	 
 */
-	// this array is used for strtotime, as in +1 days
+	// this array is used for strtotime, as in +1 days and is defined in utils-recurrence.php
 	global $period_to_span;
-	$period_to_span = array();
-
-	$period_to_span['daily1'] 	= 'days';
-	$period_to_span['weekly1'] 	= 'weeks';
-	$period_to_span['monthly1'] = 'months';
-	$period_to_span['monthly2'] = 'months';
-	$period_to_span['yearly1'] 	= 'years';
-	$period_to_span['yearly2'] 	= 'years';
-	$period_to_span['yearly3'] 	= 'years';
+    global $days_of_week_long;
+    global $months_of_year;
 
 	switch($period) {
 		case 'daily1':
@@ -157,8 +151,6 @@ if ($activity_id) {
 			break;
 	}
 
-    $days_of_week_long = array(_('Sunday'), _('Monday'), _('Tuesday'), _('Wednesday'), _('Thursday'), _('Friday'), _('Saturday'));
-    $months_of_year = array(_('January'), _('February'), _('March'), _('April'), _('May'), _('June'), _('July'), _('August'), _('September'), _('October'), _('November'), _('December'));
 
 
 	// Insert/Update the activities_recurrence record
@@ -231,7 +223,7 @@ if ($activity_id) {
 
 	//echo "working from " . date('Y-m-d', $start) . " to " . date('Y-m-d', $end) . " +1 $offset<br>";
 
-	$activities_to_add = build_activities_list($start, $end, $rec['period'], $frequency, $day_offset, $week_offset, $week_days, $month_offset);
+	$activities_to_add = build_recurring_activities_list($start, $end, $rec['period'], $frequency, $day_offset, $week_offset, $week_days, $month_offset);
 	
 
 
@@ -270,94 +262,12 @@ if ($activity_id) {
 $msg=urlencode(_($action_msg));
 Header("Location:{$http_site_root}$return_url&msg=$msg");
 
-	
-function build_activities_list($starttime, $endtime, $period, $frequency, $day_offset, $week_offset, $week_days, $month_offset, $only_future = false) {
-	global $period_to_span;
-
-	$activities_list = array();
-    $activities_count = 0;
-	$offset = $period_to_span[$period];
-
-	$now = time();
-	$first_activity = true;
-
-    for($current_time = $starttime; $current_time <= $endtime; $current_time = strtotime(date('Y-m-d H:i:s', $current_time). " +1 $offset")) {
-
-
-    //echo "($current_time = $starttime; $current_time < $endtime; $current_time = strtotime(date('Y-m-d H:i:s', $current_time). \" +1 $offset\"))";
-		$current_date = date('Y-m-d H:i:s', $current_time);
-        // every N (days/weeks/months)
-
-        if(0 == ($activities_count % $frequency)) {
-
-			// we skip the first one because that is the original activity and we don't want to duplicate it.
-			if($first_activity) {
-				$first_activity = false;
-				continue;
-			}
-
-			// skip the past
-			if($only_future) {
-				if($current_time < $now) {
-					continue;
-				}
-			}
-
-			$year = date('Y', $current_time);
-			$month = date('m', $current_time);
-			$hms = date('H:i:s', $current_time);
-
-			// this block maps the HTML form fields to DB fields
-            switch($period) {
-                case 'daily1':
-                    $activities_list[] = $current_time;
-                    break;
-
-                case 'weekly1':
-					foreach($week_days as $day) { 
-                    	$activities_list[] = strtotime($current_date . " +$day days");
-					}
-                    break;
-
-                case 'monthly1':
-					// Recur on the D day of the month (23rd)
-					$activities_list[] = strtotime("$year-$month-$day_offset $hms");
-                    break;
-
-                case 'monthly2':
-					// Recur on the O W of the month (4th monday)
-					// strtotime('+1 week Tuesday', strtotime('first May 2005'));"
-					$activities_list[] = strtotime('+' . ($week_offset-1)  . ' week ' . $days_of_week_long[$week_days], strtotime('first ' . date('F Y', $current_time)));
-                    break;
-
-                case 'yearly1':
-						// Recur on day D of M (31st of October)
-						$activities_list[] = strtotime("$year-" . ($month_offset+1) . "-$day_offset $hms");
-					break;
-                case 'yearly2':
-					// Recur on the O W of M (2nd Tuesday of February)
-					// "+N week Sunday", strtotime(first 2005)
-					$activities_list[] = strtotime('+' . ($week_offset-1)  . ' week ' . $days_of_week_long[$week_days], strtotime("$year-" . ($month_offset2+1) . "-01 $hms"));
-					break;
-					break;
-                case 'yearly3':
-					// Recur on the N day of the year
-					$activities_list[] = strtotime('+' . ($day_offset2-1)  . " days $year-01-01 $hms");
-                    break;
-				default:
-    				$msg=urlencode(_("Error: No period selected for recurring activity."));
-    				Header("Location:{$http_site_root}$return_url&msg=$msg");
-					break;
-			}
-        }
-		$activities_count++;
-    }
-	return $activities_list;
-}
-
 
 /*
  * $Log: edit_activity_recurrence.php,v $
+ * Revision 1.4  2005/06/06 23:23:27  daturaarutad
+ * moved globals and build_activities_list() to utils-recurrence.php in include/
+ *
  * Revision 1.3  2005/06/03 18:48:42  daturaarutad
  * too many changes to mention.  should be considered initially functional at this point.
  *
