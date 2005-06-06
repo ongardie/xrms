@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.20 2005/06/05 13:07:38 braverock Exp $
+ * $Id: edit-2.php,v 1.21 2005/06/06 18:12:26 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -112,7 +112,8 @@ do_hook_function('contact_edit_2', $param);
 
 do_hook_function('contact_accounting_inline_edit_2', $accounting_rows);
 
-do_hook_function('contact_custom_inline_edit_save');
+/** @todo this hook should be deprecated by the contact_edit_2 hook */
+do_hook('contact_custom_inline_edit_save');
 
 add_audit_item($con, $session_user_id, 'updated', 'contacts', $contact_id, 1);
 
@@ -120,6 +121,10 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.21  2005/06/06 18:12:26  braverock
+ * - change inline hook to use do_hook and not pass parameters
+ *   @todo this hook should be deprecated by the new contact_edit_2 hook
+ *
  * Revision 1.20  2005/06/05 13:07:38  braverock
  * - added 'standardized' hooks to pass record data to plugins
  *
