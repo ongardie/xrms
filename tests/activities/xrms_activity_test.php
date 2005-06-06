@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_activity_test.php,v 1.2 2005/05/06 20:51:13 vanmer Exp $
+ * $Id: xrms_activity_test.php,v 1.3 2005/06/06 16:57:09 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -139,6 +139,28 @@ Class XRMSActivityTest extends PHPUnit_TestCase {
         $this->assertTrue($activity_result, "Failed to delete activity $activity_id from database");
         return $activity_result;   
     }
+
+    function test_delete_activites($where_cluase=false, $delete_from_database=true) {
+        $con = $this->con;
+        $session_user_id=$this->session_user_id;
+
+        $activity_data=$this->test_activity_data;
+
+		$test_title = 'test_delete_activites test';
+
+	    $activity_data['activity_title'] = $test_title;
+
+        $activity_info1=$this->test_add_activity($activity_data);
+        $this->assertTrue($activity_info1,"Failed to add test activity 1 to delete.");
+        $activity_info2=$this->test_add_activity($activity_data);
+        $this->assertTrue($activity_info2,"Failed to add test activity 2 to delete.");
+
+        if($activity_info1 && $activity_info2) {
+			$delete_status = delete_activities($con, "activity_title='$test_title'", true, true);
+        } else return false;
+        $this->assertTrue($delete_status, "Failed to delete activities from database");
+        return $delete_status;   
+    }
     
     function test_activity_participants($activity_id=false, $contact_id=false, $activity_participant_position_id=1) {
         if (!$activity_id) {
@@ -201,6 +223,9 @@ $display->show();
  */
 /*
  * $Log: xrms_activity_test.php,v $
+ * Revision 1.3  2005/06/06 16:57:09  daturaarutad
+ * added delete_activities test
+ *
  * Revision 1.2  2005/05/06 20:51:13  vanmer
  * - new test for activity type retrieval
  *
