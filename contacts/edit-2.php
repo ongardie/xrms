@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.21 2005/06/06 18:12:26 braverock Exp $
+ * $Id: edit-2.php,v 1.22 2005/06/06 18:16:11 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -110,8 +110,6 @@ $con->execute($upd);
 $param = array($rst, $rec);
 do_hook_function('contact_edit_2', $param);
 
-do_hook_function('contact_accounting_inline_edit_2', $accounting_rows);
-
 /** @todo this hook should be deprecated by the contact_edit_2 hook */
 do_hook('contact_custom_inline_edit_save');
 
@@ -121,6 +119,11 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.22  2005/06/06 18:16:11  braverock
+ * - deprecate contact_accounting_inline_edit_2 hook in favor of contact_edit_2 hook
+ *   $accounting_rows wasn't defined in this page, causing parameter warnings
+ *   on do_hook_function
+ *
  * Revision 1.21  2005/06/06 18:12:26  braverock
  * - change inline hook to use do_hook and not pass parameters
  *   @todo this hook should be deprecated by the new contact_edit_2 hook
