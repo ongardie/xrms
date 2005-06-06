@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.22 2005/06/06 18:16:11 braverock Exp $
+ * $Id: edit-2.php,v 1.23 2005/06/06 18:18:22 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -56,7 +56,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 // $con->debug=1;
 
-$validationsPassed = do_hook_function('contact_custom_inline_edit_validate');
+$validationsPassed = do_hook('contact_custom_inline_edit_validate');
 if ($validationsPassed) {
         if ($validationsPassed!= 1) {
                 $con->close();
@@ -119,6 +119,10 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.23  2005/06/06 18:18:22  braverock
+ * - change contact_custom_inline_edit_validate hook to use do_hook
+ *   and not pass parameters
+ *
  * Revision 1.22  2005/06/06 18:16:11  braverock
  * - deprecate contact_accounting_inline_edit_2 hook in favor of contact_edit_2 hook
  *   $accounting_rows wasn't defined in this page, causing parameter warnings
