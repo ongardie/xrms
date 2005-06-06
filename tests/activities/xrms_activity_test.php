@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_activity_test.php,v 1.3 2005/06/06 16:57:09 daturaarutad Exp $
+ * $Id: xrms_activity_test.php,v 1.4 2005/06/06 23:22:54 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-preferences.php');
+require_once($include_directory . 'utils-recurrence.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -198,7 +199,58 @@ Class XRMSActivityTest extends PHPUnit_TestCase {
         
         return $ret;
     }
-    
+
+	function test_build_recurring_activities_list() {
+		// For now we just check the dates on the first two activities returned.
+
+		// build_recurring_activities_list($starttime, $endtime, $period, $frequency, $day_offset, $week_offset, $week_days, $month_offset, $only_future = false)
+
+		// Saturday, Jan 1, 2005 at 12AM 
+		$start_time = strtotime('2005-01-01 12:00:00 AM');
+		$end_time 	= strtotime('2006-01-01 12:00:00 AM');
+
+		// every 3 days 	
+		$activities = build_recurring_activities_list($start_time, $end_time, 'daily1', 3, 0, 0, 0, 0);
+        $this->assertTrue($activities[0] == strtotime('2005-01-04 12:00:00 AM'), "First daily activity should be 1/4/05 not " . date('j/d/Y H:i:s', $activities[0]));
+        $this->assertTrue($activities[1] == strtotime('2005-01-07 12:00:00 AM'), "Second daily activity should be 1/4/05 not " . date('j/d/Y H:i:s', $activities[1]));
+
+		// every Tuesday and Thursday
+		$activities = build_recurring_activities_list($start_time, $end_time, 'weekly1', 1, 0, 0, array(2,4), 0);
+        $this->assertTrue($activities[0] == strtotime('2005-01-04 12:00:00 AM'), "First weekly activity should be 1/4/05 not " . date('n/d/Y H:i:s', $activities[0]));
+        $this->assertTrue($activities[1] == strtotime('2005-01-06 12:00:00 AM'), "Second weekly activity should be 1/6/05 not " . date('n/d/Y H:i:s', $activities[1]));
+
+		// every 23rd day of the month
+		$activities = build_recurring_activities_list($start_time, $end_time, 'monthly1', 1, 23, 0, 0, 0);
+        $this->assertTrue($activities[0] == strtotime('2005-01-23 12:00:00 AM'), "First monthly1 activity should be 1/23/05 not " . date('n/d/Y H:i:s', $activities[0]));
+        $this->assertTrue($activities[1] == strtotime('2005-02-23 12:00:00 AM'), "Second monthly1 activity should be 2/23/05 not " . date('n/d/Y H:i:s', $activities[1]));
+
+		// every 2nd Wednesday of the month
+		$activities = build_recurring_activities_list($start_time, $end_time, 'monthly2', 1, 0, 2, 3, 0);
+        $this->assertTrue($activities[0] == strtotime('2005-01-12 12:00:00 AM'), "First monthly2 activity should be 1/12/05 not " . date('n/d/Y H:i:s', $activities[0]));
+        $this->assertTrue($activities[1] == strtotime('2005-02-09 12:00:00 AM'), "Second monthly2 activity should be 2/9/05 not " . date('n/d/Y H:i:s', $activities[1]));
+
+
+		// make a longer end date for yearly tests
+		$end_time 	= strtotime('2012-01-01 12:00:00 AM');
+
+
+		// Every 31st of October (october is passed in as 9th month)
+		$activities = build_recurring_activities_list($start_time, $end_time, 'yearly1', 1, 31, 0, 0, 9);
+        $this->assertTrue($activities[0] == strtotime('2005-10-31 12:00:00 AM'), "First yearly1 activity should be 10/31/05 not " . date('n/d/Y H:i:s', $activities[0]));
+        $this->assertTrue($activities[1] == strtotime('2006-10-31 12:00:00 AM'), "Second yearly1 activity should be 10/31/06 not " . date('n/d/Y H:i:s', $activities[1]));
+
+		// 3rd Sunday of June, every 2 years
+		$activities = build_recurring_activities_list($start_time, $end_time, 'yearly2', 2, 0, 3, 0, 5);
+        $this->assertTrue($activities[0] == strtotime('2005-06-19 12:00:00 AM'), "First yearly2 activity should be 6/19/05 not " . date('n/d/Y H:i:s', $activities[0]));
+        $this->assertTrue($activities[1] == strtotime('2007-06-17 12:00:00 AM'), "Second yearly2 activity should be 6/17/07 not " . date('n/d/Y H:i:s', $activities[1]));
+
+		// Every 100th day of the year
+		$activities = build_recurring_activities_list($start_time, $end_time, 'yearly3', 1, 100, 0, 0, 0);
+        $this->assertTrue($activities[0] == strtotime('2005-04-10 12:00:00 AM'), "First yearly3 activity should be 04/10/05 not " . date('n/d/Y H:i:s', $activities[0]));
+        $this->assertTrue($activities[1] == strtotime('2006-04-10 12:00:00 AM'), "Second yearly3 activity should be 04/10/06 not " . date('n/d/Y H:i:s', $activities[1]));
+
+	
+	}
 
 }
 
@@ -223,6 +275,9 @@ $display->show();
  */
 /*
  * $Log: xrms_activity_test.php,v $
+ * Revision 1.4  2005/06/06 23:22:54  daturaarutad
+ * added activity recurrence testing
+ *
  * Revision 1.3  2005/06/06 16:57:09  daturaarutad
  * added delete_activities test
  *
