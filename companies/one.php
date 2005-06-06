@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.112 2005/06/03 22:57:17 braverock Exp $
+ * $Id: one.php,v 1.113 2005/06/06 18:39:25 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -386,8 +386,9 @@ if ($division_id) { $opportunity_limit_sql .=" AND opportunities.division_id=$di
 require_once("../opportunities/sidebar.php");
 
 //include the contacts-companies sidebar
-$relationships = array('companies' => $company_id,
-                       'company_division' => $division_id );
+$relationships = array('companies' => $company_id);
+
+if ($division_id) { $relationships['company_division']=$division_id; }
 
 require_once("../relationships/sidebar.php");
 
@@ -844,6 +845,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.113  2005/06/06 18:39:25  vanmer
+ * - changed to only show division relationships when scoped to division
+ *
  * Revision 1.112  2005/06/03 22:57:17  braverock
  * - revert previous on_what_table change, as it caused ACL problems
  *   correction for related activities pager made in activities/one.php instead
