@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.11 2005/05/06 00:43:41 vanmer Exp $
+ * $Id: utils-database.php,v 1.12 2005/06/06 18:30:27 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -51,6 +51,11 @@ function confirm_no_records(&$con, $table) {
  * @param string $word to be singularized
  */
 function make_singular($word) {
+    switch ($word) {
+    	case 'company_division':
+		return 'division';
+	break;
+    }
     $word = preg_replace("|([^aeiou])s$|i", "\$1", $word);
     $word = preg_replace("|ies$|i", "y", $word);
     $word = preg_replace("|uses$|i", "us", $word);
@@ -82,7 +87,7 @@ function table_name($table) {
             return array(make_singular($table)."_pretty_name");
         break;
         case "company_division":
-            return array("division_id");
+            return array("division_name");
         break;    
         default:
             return array(make_singular($table) . "_name");
@@ -134,6 +139,10 @@ function get_xrms_dbconnection() {
 
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.12  2005/06/06 18:30:27  vanmer
+ * - added better handling for automagic table functions for divisions, to allow relationships on divisions
+ * to operate properly
+ *
  * Revision 1.11  2005/05/06 00:43:41  vanmer
  * - added a new function to instantiate an xrms db connection
  *
