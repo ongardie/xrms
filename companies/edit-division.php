@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.11 2005/04/07 18:10:04 vanmer Exp $
+ * $Id: edit-division.php,v 1.12 2005/06/06 18:39:48 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -42,6 +42,10 @@ $sql = "select address_name, address_id from addresses where company_id = $compa
 $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
+
+$relationships['company_division']=$division_id;
+
+require_once("../relationships/sidebar.php");
 
 $sidebar='';
 $sidebar=do_hook_function('division_sidebar_bottom',$sidebar);
@@ -98,7 +102,7 @@ start_page($page_title, true, $msg);
 
         <!-- right column //-->
     <div id="Sidebar">
-
+        <?php echo $relationship_link_rows ?>
        <?php echo $sidebar; ?>
 
     </div>
@@ -110,6 +114,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.12  2005/06/06 18:39:48  vanmer
+ * - added relationship sidebar to edit division page
+ *
  * Revision 1.11  2005/04/07 18:10:04  vanmer
  * - changed second parameter to do_hook_function to pass variable instead of passing reference (reference is now in function definition)
  *
