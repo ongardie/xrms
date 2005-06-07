@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.30 2005/06/02 20:51:21 ycreddy Exp $
+ * $Id: new.php,v 1.31 2005/06/07 20:44:42 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -23,7 +23,7 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 if ($clone_id > 0) {
-	
+
     $sql = "select * from contacts where contact_id = $clone_id";
     $rst = $con->execute($sql);
 
@@ -33,14 +33,14 @@ if ($clone_id > 0) {
       // was data found ???
       if ( !$rst->EOF ) {
       // yes - data found
-        $company_id 	= $rst->fields['company_id'];
-        $division_id 	= $rst->fields['division_id'];
-        $address_id 	= $rst->fields['address_id'];
+        $company_id     = $rst->fields['company_id'];
+        $division_id    = $rst->fields['division_id'];
+        $address_id     = $rst->fields['address_id'];
       } else {
-    	// no - data not found
-        $company_id 	= '';
-        $division_id 	= '';
-        $address_id 	= '';
+        // no - data not found
+        $company_id     = '';
+        $division_id    = '';
+        $address_id     = '';
       }
     } else {
       // yes - database error
@@ -50,26 +50,26 @@ if ($clone_id > 0) {
 
 } else {
 
-	//
-	// if $company_id is not passed in, get one for company 'Self' if the feature is set
-	// else, don't set $company_id
-	//
-	if ( isset($_GET['company_id']) ) {
-	  // was passed in
-	  $company_id = $_GET['company_id'];
-	  $division_id = $_GET['division_id'];
-	} elseif ( $use_self_contacts ) {
-	  // get from database
-	  $sql = "select company_id from companies where company_name = 'Self'";
-	  //$con->debug=1;
-	  $rst = $con->execute($sql);
-	  if ($rst) {
-	    $company_id = $rst->fields['company_id'];
-	    $rst->close();
-	  }
-	}
+    //
+    // if $company_id is not passed in, get one for company 'Self' if the feature is set
+    // else, don't set $company_id
+    //
+    if ( isset($_GET['company_id']) ) {
+      // was passed in
+      $company_id = $_GET['company_id'];
+      $division_id = $_GET['division_id'];
+    } elseif ( $use_self_contacts ) {
+      // get from database
+      $sql = "select company_id from companies where company_name = 'Self'";
+      //$con->debug=1;
+      $rst = $con->execute($sql);
+      if ($rst) {
+        $company_id = $rst->fields['company_id'];
+        $rst->close();
+      }
+    }
 }
-	
+
 // get $company_name, $phone, $fax
 if ( isset($company_id) ) {
   $sql = "select company_name, phone, fax from companies where company_id = $company_id";
@@ -116,7 +116,7 @@ $salutation_menu = build_salutation_menu($con, $salutation);
 
 // build address menu
 if ( isset($company_id) ) {
-  $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+  $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
   $rst = $con->execute($sql);
   if ($rst) {
     if ( !$rst->EOF ) {
@@ -125,6 +125,7 @@ if ( isset($company_id) ) {
       $address_id = '';
     }
     $address_menu = $rst->getmenu2('address_id', $address_id, false);
+    $home_address_menu = $rst->getmenu2('home_address_id', $home_address_id, true);
     $rst->close();
   }
 }
@@ -137,26 +138,19 @@ if ( !isset($gender) ) {
   $gender = '';
 }
 
+// get country menu
 $sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
 $rst = $con->execute($sql);
 if (!$country_id) {$country_id = $default_country_id;}
-
 $country_menu = $rst->getmenu2('address_country_id', $country_id, false, false, 0, 'style="font-size: x-small; border: outset; width: 175px;"');
 $rst->close();
 
 $address_type_menu = build_address_type_menu($con, $address_type);
 
-$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
-$rst = $con->execute($sql);
-$rst->close();
-
-$home_address_menu = $rst->getmenu2('home_address_id', $home_address_id, true);
-
 $con->close();
 
 $page_title = _("New Contact for") . ' ' . $company_name;
 start_page($page_title, true, $msg);
-
 ?>
 
 <form action=new-2.php method=post>
@@ -348,6 +342,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.31  2005/06/07 20:44:42  braverock
+ * - sort address drop-down list by address_name
+ *   @todo separate home addresses from company_id
+ *
  * Revision 1.30  2005/06/02 20:51:21  ycreddy
  * Fixes to the Alignment problems on IE 6.0
  *
