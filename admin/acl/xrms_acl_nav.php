@@ -7,6 +7,7 @@ echo '<div id=Sidebar>
 <tr><td class=widget_content><a href="ControlledObjectRelationship_list.php">'._("Manage Controlled Object Relationships").'</a><br></li></td></tr>
 <tr><td class=widget_content><a href="Groups_list.php">'._("Manage Groups").'</a><br></li></td></tr>
 <tr><td class=widget_content><a href="GroupUser_list.php">'._("Manage Group Users").'</a><br></li></td></tr>
+<tr><td class=widget_content><a href="GroupGroup_list.php">'._("Manage Group Groups").'</a><br></li></td></tr>
 <tr><td class=widget_content><a href="GroupMember_list.php">'._("Manage Group Members").'</a><br></li></td></tr>
 <tr><td class=widget_content><a href="Permission_list.php">'._("Manage Permissions").'</a><br></li></td></tr>
 <tr><td class=widget_content><a href="RolePermission_list.php">'._("Manage Role Permissions").'</a><br></li></td></tr>

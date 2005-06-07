@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupUser.php,v 1.5 2005/06/07 20:20:25 vanmer Exp $
+ * $Id: one_GroupGroup.php,v 1.1 2005/06/07 20:20:25 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -38,16 +38,17 @@ global $symbol_precendence;
         
         if ($form_action=='create' OR $form_action=='update') {
             getGlobalVar($Group_id, 'Group_id');
-            getGlobalVar($user_id, 'user_id');
-            getGlobalVar($Role_id,'Role_id');
             getGlobalVar($ChildGroup_id,'ChildGroup_id');
             
-            if (!$Group_id OR !$user_id OR !$Role_id OR ($Group_id=='NULL') OR ($user_id=='NULL') OR ($Role_id=='NULL')) {
-                $mymsg=_("Please select a User/Group/Role combination");
-            }
-            if ($user_id AND (!$Group_id OR !$Role_id)) {
-                $mymsg ="Please select a Group/Role for this user";
-            }
+            if ($ChildGroup_id AND $Group_id) {
+                if (!$ChildGroup_id OR !$Group_id OR ($ChildGroup_id=='NULL') OR ($Group_id=='NULL')) {
+                    $mymsg = "Please select a Group/Child Group combination";
+                } else {
+                    if (!check_acl_group_recursion($Group_id, $ChildGroup_id)) {
+                        $mymsg="Group/Child Group combination fails recursion check.";
+                    }
+                }
+            } else $mymsg = "Please select a Group/Child Group combination";
             if ($mymsg) {
                 $msg=$mymsg;
                 if ($form_action=='create') { $newaction='new'; }
@@ -57,7 +58,7 @@ global $symbol_precendence;
                 } else { $_GET['form_action']=$newaction;}
             }
         }
-	$page_title = 'Manage Group Users';
+	$page_title = 'Manage Group Groups';
         $css_theme='basic-left';
 	start_page($page_title, true, $msg);
 
@@ -67,13 +68,15 @@ global $symbol_precendence;
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'GroupUser');
   $model->SetPrimaryKeyName('GroupUser_id');
-  $model->removeField('ChildGroup_id');
   $model->SetDisplayNames(array('Group_name' => 'Group Name')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
-  $model->SetForeignKeyField('user_id', 'User', 'users', 'user_id', $xcon->CONCAT('last_name',"', '",'first_names'),$xcon,array('' => ' Select One'),'last_name, first_names');
+  $model->removeField('user_id');
+  $model->removeField('Role_id');
+//  $model->SetForeignKeyField('user_id', 'User', 'users', 'user_id', $xcon->CONCAT('last_name',"', '",'first_names'),$xcon,array('' => ' Select One'),'last_name, first_names');
   $model->SetForeignKeyField('Group_id', 'Group', 'Groups', 'Group_id', 'Group_name', null, array('' => ' Select One'));
-  $model->SetForeignKeyField('Role_id', 'Role', 'Role', 'Role_id', 'Role_name', null, array('' => ' Select One'));
+  $model->SetForeignKeyField('ChildGroup_id', 'Child Group', 'Groups', 'Group_id', 'Group_name', null, array('NULL' => ' Select One'));
+  //$model->SetForeignKeyField('Role_id', 'Role', 'Role', 'Role_id', 'Role_name', null, array('' => ' Select One'));
 
-  $view = new ADOdb_QuickForm_View($con, 'Group User');
+  $view = new ADOdb_QuickForm_View($con, 'Group Group');
   $view->SetReturnButton('Return to List', $return_url);
 
   $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
@@ -101,8 +104,8 @@ global $symbol_precendence;
 end_page();
 
 /**
- * $Log: one_GroupUser.php,v $
- * Revision 1.5  2005/06/07 20:20:25  vanmer
+ * $Log: one_GroupGroup.php,v $
+ * Revision 1.1  2005/06/07 20:20:25  vanmer
  * - added new interface to GroupUsers, splitting out child groups
  * - added new interface for adding child groups/managing them
  * - added handler for deleting users from roles in groups
