@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.134 2005/05/18 21:40:27 vanmer Exp $
+ * $Id: utils-misc.php,v 1.135 2005/06/07 23:48:51 braverock Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -73,7 +73,7 @@ function session_check($c_role='', $action='Read') {
     if ($user_language AND ($user_language!=$xrms_default_language)) {
         set_up_language($user_language, false, false, true);
     }
-    
+
     // make sure we've logged in
     if ( isset($_SESSION['session_user_id']) && 0 == strcmp($_SESSION['xrms_system_id'], $xrms_system_id) ) {
       if ($on_what_id)
@@ -87,7 +87,7 @@ function session_check($c_role='', $action='Read') {
         $action='Update';
         $role_ok = check_object_permission_bool($_SESSION['session_user_id'],  $admin_object, $action, false, false, $con);
     }
-      
+
       // we are logged in
       if ( !$role_ok ) {
         // we are logged in, go straight to logout.php
@@ -704,7 +704,7 @@ function get_country_from_address($con, $address_id) {
  function get_phone_format_from_country($con, $country_id) {
     if (!$country_id OR !$con) return false;
     $func_name='get_phone_format_from_country';
-    $params=array($country_id);  
+    $params=array($country_id);
     if (function_cache_bool($func_name, $params)) {
 //        echo "<pre>"; print_r($_SESSION); echo "</pre>";
         return function_cache_get($func_name, $params);
@@ -740,7 +740,7 @@ function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
         $country_id=get_country_from_address($con, $address_id);
     }
     $expression=get_phone_format_from_country($con, $country_id);
-    
+
     $phone_to_display = $phone;
     $pos = 0;
     $number_length = 0;
@@ -802,7 +802,7 @@ function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
  * @return string $address_to_display
  * @todo turn mapquest/whereis links into plugin hook
  */
-function get_formatted_address (&$con,$address_id=false, $company_id=false, $single_line=false) {
+function get_formatted_address (&$con,$address_id=false, $company_id=false, $single_line=false, $show_country=true, $strip_tags=false) {
     if (!$address_id) {
         if (!$company_id) return false;
         $address_id=fetch_default_address($con, $company_id);
@@ -825,7 +825,9 @@ function get_formatted_address (&$con,$address_id=false, $company_id=false, $sin
         $GLOBALS["postal_code"] = $postal_code = $rst->fields['postal_code'];
         $use_pretty_address = $rst->fields['use_pretty_address'];
         $address_format_string = $rst->fields['address_format_string'];
-        $GLOBALS["country_name"] = $country = $rst->fields['country_name'];
+        if ($show_country) {
+            $GLOBALS["country_name"] = $country = $rst->fields['country_name'];
+        }
         $GLOBALS["iso_code2"] = $iso_code2 = $rst->fields['iso_code2'];
 
         if (!$single_line) {
@@ -1680,7 +1682,7 @@ $this_request_only = true) {
 
 /**
  * Function to add to workflow history, used to track status changes in entities that have workflow
- * 
+ *
  * @param adodbconnection $con handle to the database
  * @param string $on_what_table with table of entity for which status changed
  * @param integer $on_what_id with db identifier for entity in table
@@ -1697,9 +1699,9 @@ function add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $n
     $ins['new_status']=$new_status;
     $ins['status_changed_by']=$_SESSION['session_user_id'];
     $ins['status_changed_timestamp']=time();
-    
+
     $table='workflow_history';
-    
+
     $sql=$con->GetInsertSQL($table, $ins);
     if ($sql) {
         $rst=$con->execute($sql);
@@ -1723,6 +1725,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.135  2005/06/07 23:48:51  braverock
+ * - add optional $show_country option to get_formatted_address fn
+ *
  * Revision 1.134  2005/05/18 21:40:27  vanmer
  * - added function for adding entries to workflow history, to track status changes on workflow elements
  *
