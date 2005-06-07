@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.13 2005/05/10 13:34:13 braverock Exp $
+ * $Id: self.php,v 1.14 2005/06/07 21:45:45 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -75,6 +75,8 @@ else {
     $user_preferences_table.="</table>";
 }
 
+require_once('user_roles_sidebar.php');
+$sidebar_rows = $user_role_sidebar . $sidebar_rows;
 
 $page_title = _("One User") . " : " . "$first_names $last_name";
 start_page($page_title, true, $msg);
@@ -133,7 +135,7 @@ start_page($page_title, true, $msg);
 
     <!-- right column //-->
     <div id="Sidebar">
-        &nbsp;
+        <?php echo $sidebar_rows; ?>
     </div>
 
 </div>
@@ -144,6 +146,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.14  2005/06/07 21:45:45  vanmer
+ *- included user roles sidebar for users self-administration, in read-only mode
+ *
  *Revision 1.13  2005/05/10 13:34:13  braverock
  *- localized string patches provided by Alan Baghumian (alanbach)
  *
