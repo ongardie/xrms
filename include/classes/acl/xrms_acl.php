@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.17 2005/05/13 21:21:12 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.18 2005/06/07 21:33:12 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -536,10 +536,14 @@ class xrms_acl {
       * @return array GroupUser containing Group_id, user_id, ChildGroup_id and Role_id
       * 
       */
-    function get_group_user ($Group_id=false,  $User_id=false, $Role_id=false, $ChildGroup_id=false, $GroupUser_id=false) {     
+    function get_group_user ($Group_id=false,  $User_id=false, $Role_id=false, $ChildGroup_id=false, $GroupUser_id=false, $include_group_name=false) {     
         if (!$Group_id AND (!$ChildGroup_id AND (!$User_id AND !$Role_id)) AND !$GroupUser_id) { 
             echo "Cannot get group user: bad input parameters<br>Group $Group_id Child $ChildGroup_id User $User_id Role $Role_id"; return false; }
-        $tblName = "GroupUser";
+        if (!$include_group_name) {
+            $tblName = "GroupUser";
+        } else {
+            $tblName="GroupUser JOIN Groups ON GroupUser.Group_id=Groups.Group_id ";
+        }
         $con = $this->DBConnection;
         
         $where=array();
@@ -560,8 +564,11 @@ class xrms_acl {
         }
         $wherestr = implode(" and ", $where);        
         //Search within group specified
-        $sql = "SELECT * FROM $tblName WHERE $wherestr";
-        
+        if ($include_group_name) {
+            $sql = "SELECT GroupUser.*, Groups.Group_name FROM $tblName WHERE $wherestr";
+        } else {
+            $sql = "SELECT * FROM $tblName WHERE $wherestr";
+        }
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
         if ($rs->numRows()>=1) {
@@ -2106,6 +2113,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.18  2005/06/07 21:33:12  vanmer
+ * - added parameter to include Group name when returning GroupUser record
+ *
  * Revision 1.17  2005/05/13 21:21:12  vanmer
  * - altered to make use of Inheritable flag to mark permissions assigned as inheritable
  *
