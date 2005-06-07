@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.87 2005/05/16 21:30:22 vanmer Exp $
+ * $Id: one.php,v 1.88 2005/06/07 20:12:45 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -205,7 +205,7 @@ if ($division_id != '') {
     $division_sql = "select division_id, division_name from company_division where division_id = $division_id";
     $div_rst = $con->execute($division_sql);
 
-    if ($div_rst) {
+    if ($div_rst->NumRows() > 0) {
         $division_row .= '<input type=hidden name=division_id value='.$div_rst->fields['division_id'].'>'
                        .  $div_rst->fields['division_name'];
     }
@@ -330,14 +330,20 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Description"); ?></td>
                                     <td class=clear><?php  echo $description; ?></td>
                                 </tr>
+                                <?php if (trim($date_of_birth)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Date of Birth"); ?></td>
                                     <td class=clear><?php  echo $date_of_birth; ?></td>
                                 </tr>
+                                <?php
+                                      };  //end if date_of_birth
+                                      if (trim($tax_id)) {
+                                ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Tax ID"); ?></td>
                                     <td class=clear><?php  echo $tax_id; ?></td>
                                 </tr>
+                                <?php }; ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("E-Mail"); ?></td>
 
@@ -358,44 +364,51 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Cell Phone"); ?></td>
                                     <td class=clear><?php  echo $cell_phone; ?></td>
                                 </tr>
+                                <?php if (trim($fax)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Fax"); ?></td>
                                     <td class=clear><?php  echo $fax; ?></td>
                                 </tr>
+                                <?php
+                                      }; //end if fax
+                                      if (trim($interests)) {
+                                ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Interests"); ?></td>
                                     <td class=clear><?php  echo $interests; ?></td>
                                 </tr>
-                                <tr>
-                                    <td class=sublabel>&nbsp;</td>
-                                    <td class=clear>&nbsp;</td>
-                                </tr>
-                                <?php if (trim($yahoo_name)) { ?>
+                                <?php
+                                      }; //end if interests
+                                      if (trim($yahoo_name)) {
+                                ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Yahoo! IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($yahoo_name) > 0) {echo("<a href='ymsgr:sendim?$yahoo_name'><img border=0 src='http://opi.yahoo.com/online?u=$yahoo_name&m=g&t=3'></a>");}; ?>
                                     </td>
                                 </tr>
-                                <?php }; ?>
-                                <?php if (trim($msn_name)) { ?>
+                                <?php
+                                      }; //end if yahoo_name
+                                      if (trim($msn_name)) {
+                                ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("MSN IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($msn_name) > 0) {echo("<a href=\"javascript: openMsnSession('$msn_name');\">$msn_name</a>");}; ?></td>
                                 </tr>
-                                <?php }; ?>
-                                <?php if (trim($aol_name)) { ?>
+                                <?php
+                                      }; // end if msn_name
+                                      if (trim($aol_name)) {
+                                ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("AOL IM"); ?></td>
                                     <td class=clear>
                                     <?php if (strlen($aol_name) > 0) {echo("<a href='aim:goim?screenname=$aol_name'>$aol_name</a>");}; ?>
                                     </td>
                                 </tr>
-                                <?php }; ?>
+                                <?php }; // end if aol_name ?>
                                 <?php do_hook('one_contact_left'); ?>
                                 </table>
-
                             </td>
 
                             <!-- Contact Details Right Column -->
@@ -406,16 +419,19 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Company"); ?></td>
                                     <td class=clear><a href="<?php  echo $http_site_root?>/companies/one.php?company_id=<?php echo $company_id;; ?>"><?php echo $company_name; ?></a> (<?php echo $company_code;?>)</td>
                                 </tr>
+                                <?php if (trim($division_row)) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Division"); ?></td>
                                     <td class=clear><?php  echo $division_row; ?></td>
                                 </tr>
-                                 <tr>
+                                <?php }; ?>
+                                <!-- accounting plugin -->
+                                <?php echo $accounting_rows; ?>
+                                <!-- // These rows should be either removed or moved into an accounting plugin
+                                <tr>
                                     <td class=sublabel><?php echo _("Account Owner"); ?></td>
                                     <td class=clear><?php  echo $account_owner; ?></td>
                                 </tr>
-                                <!-- accounting plugin -->
-                                <?php echo $accounting_rows; ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("CRM Status"); ?></td>
                                     <td class=clear><?php  echo $crm_status_display_html; ?></td>
@@ -424,6 +440,8 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Account Status"); ?></td>
                                     <td class=clear><?php  echo $account_status_display_html; ?></td>
                                 </tr>
+                                // end of accounting rows commented out
+                                -->
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
@@ -436,11 +454,11 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Home Address"); ?></td>
                                     <td class=clear><?php echo $home_address ?></td>
                                 </tr>
+                                <?php if (trim($custom1)) { ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
-                                <?php if (trim($custom1)) { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _($contact_custom1_label); ?></td>
                                     <td class=clear><?php  echo $custom1; ?></td>
@@ -464,6 +482,7 @@ function markComplete() {
                                     <td class=clear><?php  echo $custom4; ?></td>
                                 </tr>
                                 <?php }; ?>
+                                <?php do_hook('one_contact_right'); ?>
                                 <tr>
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
@@ -476,7 +495,6 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Last Modified"); ?></td>
                                     <td class=clear><?php  echo $last_modified_at; ?> by <?php echo $last_modified_by_username; ?></td>
                                 </tr>
-                                <?php do_hook('one_contact_right'); ?>
                             </table>
 
                             </td>
@@ -490,7 +508,7 @@ function markComplete() {
             <tr>
                 <td class=widget_content_form_element>
                     <?php echo render_edit_button("Edit", 'button', "javascript: location.href='edit.php?contact_id=$contact_id';"); ?>
- 					<input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $contact_id ?>';">
+                    <input class=button type=button value="<?php echo _("Clone"); ?>" onclick="javascript: location.href='new.php?clone_id=<?php echo $contact_id ?>';">
                     <?php echo $contact_buttons; ?>
                 </td>
             </tr>
@@ -605,6 +623,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.88  2005/06/07 20:12:45  braverock
+ * - added additional checks to not display seldom used fields
+ * - commented out accounting rows - should probably be moved to a plugin
+ * - moved right column hook to before created/updated data
+ *
  * Revision 1.87  2005/05/16 21:30:22  vanmer
  * - added tax_id handling to contacts pages
  *
