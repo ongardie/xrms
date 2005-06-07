@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.12 2005/04/07 17:49:14 vanmer Exp $
+ * $Id: divisions.php,v 1.13 2005/06/07 21:06:37 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -48,7 +48,7 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
 $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
@@ -62,47 +62,47 @@ start_page($page_title, true, $msg);
 ?>
 
 <div id="Main">
-	
-	<!-- new division //-->
-	<form action=add-division.php method=post>
-	<input type=hidden name=company_id value=<?php  echo $company_id; ?>>
-	<table class=widget cellspacing=1>
-		<tr>
-			<td class=widget_header colspan=2><?php echo _("New Division"); ?></td>
-		</tr>
-		<tr>
-			<td class=widget_label><?php echo _("Company"); ?></td>
-			<td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
-		</tr>
-		<tr>
-			<td class=widget_label><?php echo _("Division Name"); ?></td>
-			<td class=widget_content_form_element><input type=text name=division_name size=30></td>
-		</tr>
+
+    <!-- new division //-->
+    <form action=add-division.php method=post>
+    <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
+    <table class=widget cellspacing=1>
+        <tr>
+            <td class=widget_header colspan=2><?php echo _("New Division"); ?></td>
+        </tr>
+        <tr>
+            <td class=widget_label><?php echo _("Company"); ?></td>
+            <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
+        </tr>
+        <tr>
+            <td class=widget_label><?php echo _("Division Name"); ?></td>
+            <td class=widget_content_form_element><input type=text name=division_name size=30></td>
+        </tr>
             <tr>
                 <td class=widget_label><?php echo _("Address"); ?></td>
                 <td class=widget_content_form_element><?php echo $address_menu; ?><?php echo '<a href="addresses.php?company_id=' . $company_id .'">' . _("Add/Edit Addresses") . '</a>'; ?></td>
             </tr>
-		<tr>
-			<td class=widget_label><?php echo _("Division Description"); ?></td>
-			<td class=widget_content_form_element><textarea rows=8 cols=80 name=description></textarea></td>
-		</tr>
+        <tr>
+            <td class=widget_label><?php echo _("Division Description"); ?></td>
+            <td class=widget_content_form_element><textarea rows=8 cols=80 name=description></textarea></td>
+        </tr>
                 <?php echo $new_division_form_extra; ?>
-		<tr>
-			<td class=widget_content_form_element colspan=2><?php echo render_create_button('Add'); ?></td>
-		</tr>
-	</table>
-	</form>
-	
-	<table class=widget cellspacing=1>
-		<tr>
-			<td class=widget_header colspan=2><?php echo _("Divisions"); ?></td>
-		</tr>
-		<tr>
-			<td class=widget_label><?php echo _("Name"); ?></td>
-			<td class=widget_label><?php echo _("Description"); ?></td>
-		</tr>
-		<?php  echo $division_html; ?>
-	</table>
+        <tr>
+            <td class=widget_content_form_element colspan=2><?php echo render_create_button('Add'); ?></td>
+        </tr>
+    </table>
+    </form>
+
+    <table class=widget cellspacing=1>
+        <tr>
+            <td class=widget_header colspan=2><?php echo _("Divisions"); ?></td>
+        </tr>
+        <tr>
+            <td class=widget_label><?php echo _("Name"); ?></td>
+            <td class=widget_label><?php echo _("Description"); ?></td>
+        </tr>
+        <?php  echo $division_html; ?>
+    </table>
 
 </div>
 
@@ -112,6 +112,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.13  2005/06/07 21:06:37  braverock
+ * - sort address drop-down menu by address_name
+ *
  * Revision 1.12  2005/04/07 17:49:14  vanmer
  * - changed second parameter to do_hook_function to pass variable instead of passing reference (reference is now in function definition)
  *
@@ -150,6 +153,5 @@ end_page();
  * Revision 1.1  2004/01/26 19:18:02  braverock
  * - added company division pages and fields
  * - added phpdoc
- *
  */
 ?>
