@@ -11,7 +11,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: relationship_functions.php,v 1.2 2005/02/10 04:10:05 vanmer Exp $
+ * $Id: relationship_functions.php,v 1.3 2005/06/07 20:58:55 vanmer Exp $
  */
  
 /*****************************************************************************/
@@ -55,11 +55,12 @@ function get_relationships($con, $_on_what_table, $_on_what_id, $relationship_ty
                 FROM relationships as r, " . $relationship_type_data[$opposite_direction.'_what_table'] . " as c
                 WHERE 
                 r.relationship_type_id = $relationship_type_id 
-                AND r.relationship_status='a'
-                AND (({$working_direction}_what_id = $_on_what_id AND r." . $opposite_direction . "_what_id=" . $relationship_type_data[$opposite_direction.'_what_table_singular'] . "_id";
+                AND r.relationship_status='a'";
+        $sqlend =" AND (({$working_direction}_what_id = $_on_what_id AND r." . $opposite_direction . "_what_id=" . $relationship_type_data[$opposite_direction.'_what_table_singular'] . "_id";
                 if ($both==1) {
-                    $sql .= ") OR ({$opposite_direction}_what_id = $_on_what_id AND r." . $working_direction . "_what_id=" . $relationship_type_data[$working_direction.'_what_table_singular'] . "_id))";
-                } else $sql.="))";
+					$sql = $sql . $sqlend . ")) UNION " . $sql .
+                		"AND (({$opposite_direction}_what_id = $_on_what_id AND r." . $working_direction . "_what_id=" . $relationship_type_data[$working_direction.'_what_table_singular'] . "_id))";
+                } else $sql.= $sqlend . "))";
                 if ($exclude_relationships) {
                     $sql.=" AND r.relationship_id NOT IN ($exclude_relationships)";
                 }
@@ -164,6 +165,9 @@ function get_agent_count($con, $company_id) {
 }
  /**
   * $Log: relationship_functions.php,v $
+  * Revision 1.3  2005/06/07 20:58:55  vanmer
+  * - patch to speed relationship checks when both sides are active provided by matthew berardi
+  *
   * Revision 1.2  2005/02/10 04:10:05  vanmer
   * - modified to use a single query for each relationship type
   *
