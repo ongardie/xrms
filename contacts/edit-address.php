@@ -2,7 +2,7 @@
 /**
  * Edit address for a contact
  *
- * $Id: edit-address.php,v 1.10 2005/06/01 16:14:11 vanmer Exp $
+ * $Id: edit-address.php,v 1.11 2005/06/07 21:38:55 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -111,7 +111,8 @@ if ($rst) {
 
         if ($show_company) {
             $addresses .= '<tr>';
-            $addresses .= "<td class=widget_label_right><a href=../companies/edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['company_name'] . '</a><td class=widget_content>';
+            $addresses .= "<td class=widget_label_right><a href=../companies/one.php?company_id=$company_id" . '>'
+                           . $rst->fields['company_name'] . '</a><td class=widget_content>';
             $addresses .= $company_addresses . "</td>";
             $addresses .= '</tr>';
         }
@@ -227,12 +228,12 @@ confGoTo_includes();
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
-                  <input class=button type=submit value="<?php echo _("Save Changes"); ?>"> 
+                  <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
 <?php
-        		  $quest = _("Delete Address?");
-        		  $button = _("Delete Address");
-				  $to_url = "delete-address.php?contact_id=$contact_id&address_id=$address_id";
-				  acl_confGoTo( $quest, $button, $to_url, 'contacts', $contact_id, 'Delete' );
+                  $quest = _("Delete Address?");
+                  $button = _("Delete Address");
+                  $to_url = "delete-address.php?contact_id=$contact_id&address_id=$address_id";
+                  acl_confGoTo( $quest, $button, $to_url, 'contacts', $contact_id, 'Delete' );
 ?>
                 </td>
             </tr>
@@ -255,6 +256,9 @@ end_page();
 
 /**
  * $Log: edit-address.php,v $
+ * Revision 1.11  2005/06/07 21:38:55  braverock
+ * - fix company name link
+ *
  * Revision 1.10  2005/06/01 16:14:11  vanmer
  * - changed delete address button to be controlled by the ACL
  *
@@ -299,7 +303,5 @@ end_page();
  * Revision 1.4  2004/04/08 17:00:59  maulani
  * - Update javascript declaration
  * - Add phpdoc
- *
- *
  */
 ?>
