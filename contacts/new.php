@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.31 2005/06/07 20:44:42 braverock Exp $
+ * $Id: new.php,v 1.32 2005/06/07 21:38:19 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -124,8 +124,7 @@ if ( isset($company_id) ) {
     } else {
       $address_id = '';
     }
-    $address_menu = $rst->getmenu2('address_id', $address_id, false);
-    $home_address_menu = $rst->getmenu2('home_address_id', $home_address_id, true);
+    $address_menu = $rst->getmenu2('address_id', $address_id, true);
     $rst->close();
   }
 }
@@ -168,7 +167,13 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Business Address"); ?></td>
-                <td class=widget_content_form_element><?php echo $address_menu; ?></td>
+                <td class=widget_content_form_element>
+                    <?php
+                            echo $address_menu."\n";
+                            echo '&nbsp;'._("Enter New or Edit Existing Address")."\n";
+                    ?>
+                    <input type=checkbox name=edit_address>
+                </td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Salutation"); ?></td>
@@ -270,10 +275,6 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><textarea rows=8 cols=42 name=profile></textarea></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Edit Address"); ?></td>
-                <td class=widget_content_form_element><input type=checkbox name=edit_address></td>
-            </tr>
-            <tr>
                 <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add Contact"); ?>"></td>
             </tr>
         </table>
@@ -281,10 +282,6 @@ start_page($page_title, true, $msg);
     </div>
     <div id="Sidebar">
         <table class=widget><tr><td colspan=2 class=widget_header>Home Address</td></tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Home Address"); ?></td>
-                <td class=widget_content_form_element><?php echo $home_address_menu; ?></td>
-            </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Address Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"></td>
@@ -342,6 +339,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.32  2005/06/07 21:38:19  braverock
+ * - clean up home address association
+ * - move edit address link to a more logical place and change string
+ *
  * Revision 1.31  2005/06/07 20:44:42  braverock
  * - sort address drop-down list by address_name
  *   @todo separate home addresses from company_id
@@ -437,6 +438,5 @@ end_page();
  * Revision 1.6  2004/01/26 19:13:34  braverock
  * - added company division fields
  * - added phpdoc
- *
  */
 ?>
