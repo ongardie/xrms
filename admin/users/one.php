@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.21 2005/05/25 17:05:03 vanmer Exp $
+ * $Id: one.php,v 1.22 2005/06/07 21:35:15 vanmer Exp $
  */
 
 //include required files
@@ -40,9 +40,6 @@ if ($rst) {
     $rst->close();
 }
 
-//hack to show ACL roles
-$role_menu=get_role_list(false, true, 'role_id', $role_id); 
-
 if($my_company_id) {
     $sql = "select " . $con->Concat("last_name", "', '", "first_names") . " AS contact_name,
             contact_id
@@ -53,30 +50,7 @@ if($my_company_id) {
     $rst = $con->execute($sql);
     $contact_menu = $rst->getmenu2('user_contact_id', $user_contact_id, true);
 }
-
-$user_roles=get_user_roles(false, $edit_user_id);
-$role_rows=<<<TILLEND
-<script language=javascript>
-<!---
-    function deleteRole(role_id) {
-        location.href='edit-2.php?edit_user_id=$edit_user_id&userAction=deleteRole&role_id='+role_id;
-    };
-</script>
-TILLEND;
-foreach ($user_roles as $rkey=>$user_role) {
-    $role_rows.="<tr><td>$user_role</td><td><input type=button class=button onclick=\"deleteRole($rkey);\" value=\""._("Delete") . "\"></td></tr>";
-}
-$role_rows.="<tr><td>$role_menu</td><td><input type=submit class=button name=btAddRole value=\""._("Add Role") . "\"></td></tr>";
-
-$user_role_sidebar=<<<TILLEND
-    <form method=POST action='edit-2.php'>
-        <input type=hidden name=userAction value=addRole>
-        <input type=hidden name=edit_user_id value=$edit_user_id>
-    <table class=widget><tr><td class=widget_header colspan=2>User Roles</td></tr>
-        $role_rows
-    </table>
-   </form>
-TILLEND;
+require_once('user_roles_sidebar.php');
 
 // make sure $sidebar_rows is defined
 if ( !isset($sidebar_rows) ) {
@@ -184,6 +158,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.22  2005/06/07 21:35:15  vanmer
+ * - changed to use sidebar include file instead of inline sidebar
+ *
  * Revision 1.21  2005/05/25 17:05:03  vanmer
  * - removed roles table reference from users
  *
