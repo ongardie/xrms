@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.23 2005/06/05 13:07:38 braverock Exp $
+ * $Id: new-2.php,v 1.24 2005/06/07 21:39:34 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -172,6 +172,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.24  2005/06/07 21:39:34  braverock
+ * - remove EOF whitespace
+ *
  * Revision 1.23  2005/06/05 13:07:38  braverock
  * - added 'standardized' hooks to pass record data to plugins
  *
