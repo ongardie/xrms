@@ -2,7 +2,7 @@
 /**
  * Database updates for transfer contact
  *
- * $Id: transfer-3.php,v 1.2 2005/06/07 21:14:43 braverock Exp $
+ * $Id: transfer-3.php,v 1.3 2005/06/07 21:15:28 braverock Exp $
  */
 
 
@@ -28,7 +28,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 // set the business address for this contact to the primary address of the new company.
 // not perfect, but the user will have a chance to change it from the contacts/one.php page
 $new_address_id = 0;
-$new_address_id = fetch_default_address($con, $new_company_id)
+$new_address_id = fetch_default_address($con, $new_company_id);
 
 $sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
 $rst = $con->execute($sql);
@@ -74,6 +74,9 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: transfer-3.php,v $
+ * Revision 1.3  2005/06/07 21:15:28  braverock
+ * - syntax error
+ *
  * Revision 1.2  2005/06/07 21:14:43  braverock
  * - change to use fetch_default_address fn to set new business address for contact
  *
