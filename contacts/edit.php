@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.34 2005/06/01 16:02:09 vanmer Exp $
+ * $Id: edit.php,v 1.35 2005/06/07 20:16:25 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -105,7 +105,7 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
 $rst->close();
 
-$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
 $rst = $con->execute($sql);
 if ($rst){
     $address_menu = $rst->getmenu2('address_id', $address_id, true);
@@ -306,6 +306,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.35  2005/06/07 20:16:25  braverock
+ * - sort address drop-down list by address_name
+ *
  * Revision 1.34  2005/06/01 16:02:09  vanmer
  * - altered delete button to be controlled by the ACL
  *
@@ -400,6 +403,5 @@ end_page();
  * Revision 1.7  2004/01/26 19:13:34  braverock
  * - added company division fields
  * - added phpdoc
- *
  */
 ?>
