@@ -234,6 +234,22 @@ function get_user_roles($acl=false, $user_id, $group=false, $use_role_names=true
     return array();
 }
 
+function get_user_roles_with_groups($acl, $user_id, $use_role_names=true) {
+   global $acl_options;
+    
+    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$user_id) return array();
+    $RoleList = $acl->get_user_roles_by_array(false, $user_id);
+    if ($use_role_names) {
+        foreach ($RoleList['GroupRoles'] as $gkey=>$garray) {
+            foreach ($garray as $gid=>$role_id) {
+                $RoleList['GroupRoles'][$gkey][$gid]=get_role_name($acl, $role_id);
+            }
+        }
+    }
+    return $RoleList['GroupRoles']; 
+}
+
 function find_object_by_base($acl=false, $role=false) {
     global $acl_options;
     global $on_what_table;
@@ -329,7 +345,7 @@ function get_role_list($acl=false, $return_menu=true, $field_name='role_id', $ro
     if ($return_menu) {
         $list_rst=$acl->get_role_list(false);
         if ($list_rst) {
-            $role_menu=$list_rst->getmenu2('role_id', $role_id, $show_blank_first);
+            $role_menu=$list_rst->getmenu2('role_id', $role_id, $show_blank_first, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
             return $role_menu;
         } else return false;
     } else {
@@ -346,7 +362,13 @@ function delete_group($acl=false, $Group) {
     if (!$group_id) { echo "Failed to delete group $Group."; return false; }
     return $acl->delete_group($Group);
 }
-
+function get_acl_group($acl, $groupName, $group_id) {
+    global $acl_options;
+    
+    if (!$acl) $acl = new xrms_acl($acl_options);
+    $ret=$acl->get_group($groupName, $group_id);
+    return $ret;
+}
 function add_group($acl=false, $groupName, $object=false, $on_what_id=false) {
     global $acl_options;
     
@@ -455,7 +477,12 @@ function add_user_group($acl=false, $group, $user_id, $role, $silent=false) {
         } else { if (!$silent)  { echo "Failing user group lookup";  } return false; }
     }
 }
-
+function get_group_user($acl, $GroupUser_id) {
+    global $acl_options;
+    if (!$acl) $acl = new xrms_acl($acl_options);
+    $group_user = $acl->get_group_user(false, false, false, false, $GroupUser_id, true);
+    return $group_user;
+}
 function delete_user_group($acl, $GroupUser_id=false, $group=false, $user_id=false, $role=false) {
     global $acl_options;
         
