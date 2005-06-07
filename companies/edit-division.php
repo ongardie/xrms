@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.12 2005/06/06 18:39:48 vanmer Exp $
+ * $Id: edit-division.php,v 1.13 2005/06/07 20:35:48 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -38,7 +38,7 @@ if ($rst) {
     $rst->close();
 }
 
-$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_id";
+$sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
 $rst = $con->execute($sql);
 $address_menu = $rst->getmenu2('address_id', $address_id, true);
 $rst->close();
@@ -59,7 +59,6 @@ $con->close();
 
 $page_title = $company_name . ' - ' . $division_name . ' - ' . _("Edit Division");
 start_page($page_title, true, $msg);
-
 ?>
 
 <div id="Main">
@@ -92,7 +91,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <?php echo render_edit_button("Save Changes"); ?>
-                    <?php echo render_delete_button("Delete Division",'button',"javascript: location.href='delete-division.php?company_id=$company_id&division_id=$division_id';"); ?>                
+                    <?php echo render_delete_button("Delete Division",'button',"javascript: location.href='delete-division.php?company_id=$company_id&division_id=$division_id';"); ?>
                  </td>
             </tr>
         </table>
@@ -114,6 +113,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.13  2005/06/07 20:35:48  braverock
+ * - sort address drop-down menu by address_name
+ *
  * Revision 1.12  2005/06/06 18:39:48  vanmer
  * - added relationship sidebar to edit division page
  *
@@ -153,6 +155,5 @@ start_page($page_title, true, $msg);
  * Revision 1.1  2004/01/26 19:18:02  braverock
  * - added company division pages and fields
  * - added phpdoc
- *
  */
 ?>
