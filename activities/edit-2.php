@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.62 2005/06/05 17:18:59 braverock Exp $
+ * $Id: edit-2.php,v 1.63 2005/06/08 12:49:34 braverock Exp $
  */
 
 //include required files
@@ -68,6 +68,7 @@ $on_what_table=$activity_on_what_table;
 if (!$return_url) {
     $return_url='/activities/some.php';
 }
+
 // set the correct activity status flag
 if ($activity_status == 'on') {
     $activity_status = 'c';
@@ -97,11 +98,20 @@ if ($scheduled_at > $ends_at) {
    $ends_at = $scheduled_at;
 }
 
-$contact_id = ($contact_id > 0) ? $contact_id : 'NULL';
-
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
+
+//get the existing activity record for use later in the script
+$sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
+$activity = $con->execute($sql);
+
+$contact_id = ($contact_id > 0) ? $contact_id : '0';
+
+if (!$contact_id OR $contact_id='NULL') {
+    // set to the previous contact_id
+    $contact_id=$activity->fields['contact_id'];
+}
 
 // if it's closed but wasn't before, update the closed_at timestamp
 $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : 'NULL';
@@ -175,9 +185,7 @@ if ($associate_activities == true ) {
 
 $sql = "SELECT contact_id
         FROM contacts
-        WHERE contact_id=" . $contact_id . "
-        AND cell_phone=''
-        AND work_phone=''";
+        WHERE contact_id=" . $contact_id;
 $rst = $con->execute($sql);
 if(!$rst) {
     db_error_handler($con, $sql);
@@ -187,9 +195,6 @@ elseif($rst->rowcount()) {
         update_recent_items($con, $session_user_id, "activities", $company_id, "sidebar_view");
     }
 }
-
-$sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
-$rst = $con->execute($sql);
 
 $rec = array();
 $rec['activity_type_id']     = $activity_type_id;
@@ -214,10 +219,10 @@ $rec['on_what_table']        = $on_what_table;
 $rec['on_what_id']           = $on_what_id;
 $rec['completed_by']      = $completed_by;
 
-if ($rst->fields['contact_id']!=$contact_id) {
+if ($activity->fields['contact_id']!=$contact_id AND $contact_id AND $contact_id!='NULL') {
     //contact changed, change default participant
-    if ($rst->fields['contact_id']) {
-        $activity_participant=get_activity_participants($con, $activity_id, $rst->fields['contact_id'], 1);
+    if ($activity->fields['contact_id']) {
+        $activity_participant=get_activity_participants($con, $activity_id, $activity->fields['contact_id'], 1);
         if ($activity_participant) {
             //get existing default participant, mark it as removed
             $participant_data=current($activity_participant);
@@ -231,7 +236,7 @@ if ($rst->fields['contact_id']!=$contact_id) {
     }
 
 }
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+$upd = $con->GetUpdateSQL($activity, $rec, false, get_magic_quotes_gpc());
 if (strlen($upd)>0) {
     $rst = $con->execute($upd);
     if (!$rst) {
@@ -491,6 +496,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.63  2005/06/08 12:49:34  braverock
+ * - rearrange when we get the old activity details for update
+ * - fix bug where 'NULL' setting could cause problems with associate_activities functionality
+ *
  * Revision 1.62  2005/06/05 17:18:59  braverock
  * - add standardized new/edit hooks
  *
