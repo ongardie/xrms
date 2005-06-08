@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.35 2005/06/07 20:16:25 braverock Exp $
+ * $Id: edit.php,v 1.36 2005/06/08 23:07:53 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -193,7 +193,7 @@ confGoTo_includes();
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
-                <td class=widget_content_form_element><input type=text name=date_of_birth value="<?php echo $tax_id; ?>" size=32></td>
+                <td class=widget_content_form_element><input type=text name=tax_id value="<?php echo $tax_id; ?>" size=32></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Summary"); ?></td>
@@ -306,6 +306,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.36  2005/06/08 23:07:53  braverock
+ * - fix cut and paste error on date_of_birth/tax_id
+ *
  * Revision 1.35  2005/06/07 20:16:25  braverock
  * - sort address drop-down list by address_name
  *
