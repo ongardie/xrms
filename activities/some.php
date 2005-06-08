@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.116 2005/06/08 17:46:28 daturaarutad Exp $
+ * $Id: some.php,v 1.117 2005/06/08 18:21:42 daturaarutad Exp $
  */
 
 // handle includes
@@ -211,23 +211,33 @@ if('list' != $results_view_type) {
     if (strlen($search_date) > 0) {
         $criteria_count++;
 
-        $calendar_view_start =  (strtotime($calendar_start_date) - time()) / 86400;
+		// special case for month view...
+		if('month' == $results_view_type) {
+			$adjusted_start_date = CalendarView::GetWeekStart($calendar_start_date, 'Monday');
+
+        	$calendar_view_start =  (strtotime($adjusted_start_date) - time()) / 86400;
+        	$calendar_view_end = (strtotime("$adjusted_start_date +5 weeks") - time()) / 86400;
+
+		} else {
+        	$calendar_view_start =  (strtotime($calendar_start_date) - time()) / 86400;
+        	$calendar_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
+		}
+		
 
         $offset_start = $con->OffsetDate($calendar_view_start);
 		$offset_start = ereg_replace(",",".",$offset_start);
-        $calendar_view_end = (strtotime("$calendar_start_date +1 $results_view_type") - time()) / 86400;
         $offset_end = $con->OffsetDate($calendar_view_end);
 		$offset_end = ereg_replace(",",".",$offset_end);
         $offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
     }
-/*
+	/*
     echo "day_diff is $day_diff<br>";
     echo "calendar_view_start is $calendar_view_start aka " . date('Y-m-d H:i', time() + $calendar_view_start*24*3600)  . "<br>";
     echo "calendar_view_end is $calendar_view_end aka " . date('Y-m-d H:i', time() + $calendar_view_end*24*3600)  . "<br>";
     echo "query window is from " . date('Y-m-d H:i', time() + $calendar_view_start*24*3600) . " to " . date('Y-m-d H:i', time() + $calendar_view_end*24*3600) . '<br>';
     echo "calendar start date is $calendar_start_date<br>";
     echo "offset_sql is $offset_sql<br>";
-    */
+	*/
 
     // init the CalendarView object
     $calendar = new CalendarView($con, 'ActivitiesData', 'calendar_start_date', $results_view_type);
@@ -543,7 +553,7 @@ if ( !$rst ) {
 add_audit_item($con, $session_user_id, 'searched', 'activities', '', 4);
 
 //debug
-//echo $sql.'<br>';
+//echo htmlentities($sql).'<br>';
 
 $page_title = _("Open Activities");
 start_page($page_title, true, $msg);
@@ -911,6 +921,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.117  2005/06/08 18:21:42  daturaarutad
+ * adjusted the calendar query offset for monthly view
+ *
  * Revision 1.116  2005/06/08 17:46:28  daturaarutad
  * apply calendar query date limit even when start_end == all
  *
