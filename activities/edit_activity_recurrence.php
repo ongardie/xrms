@@ -4,7 +4,7 @@
 *
 * @author Justin Cooper
 *
-* $Id: edit_activity_recurrence.php,v 1.4 2005/06/06 23:23:27 daturaarutad Exp $
+* $Id: edit_activity_recurrence.php,v 1.5 2005/06/08 00:10:44 daturaarutad Exp $
 */
 
 
@@ -40,6 +40,8 @@ GetGlobalVar($monthly_day_offset, 'monthly_day_offset');
 // monthly (2)
 GetGlobalVar($monthly_week_offset, 'monthly_week_offset');
 GetGlobalVar($monthly_week_days, 'monthly_week_days');
+// monthly (3)
+GetGlobalVar($monthly_day_offset3, 'monthly_day_offset3');
 // yearly (1)
 GetGlobalVar($yearly_frequency, 'yearly_frequency');
 GetGlobalVar($yearly_day_offset, 'yearly_day_offset');
@@ -50,6 +52,9 @@ GetGlobalVar($yearly_week_days, 'yearly_week_days');
 GetGlobalVar($yearly_month_offset2, 'yearly_month_offset2');
 // yearly (3)
 GetGlobalVar($yearly_day_offset2, 'yearly_day_offset2');
+// yearly (4)
+GetGlobalVar($yearly_day_offset4, 'yearly_day_offset4');
+GetGlobalVar($yearly_month_offset4, 'yearly_month_offset4');
 
 GetGlobalVar($recurrence_range, 'recurrence_range');
 GetGlobalVar($end_count, 'end_count');
@@ -79,7 +84,8 @@ if ($activity_id) {
 * Guide to usage of activities_recurrence fields:
 *
 *	 Period   		SQL field		FORM field				Meaning
-*	 daily			frequency		daily_frequency			Every N day
+*	 daily1			frequency		daily_frequency			Every N day
+*	 daily2			frequency		daily_frequency			Every N business day
 *	
 *	 Recur on W days every N week
 *	 weekly			frequency		weekly_frequency		Every N week
@@ -87,12 +93,16 @@ if ($activity_id) {
 *	
 *	 Recur on the D day of the month (23rd)
 *	 monthly1		frequency		monthly_frequency		Every N month
-*	 monthly1		day_offset		monthly_day_offset		Every D month
+*	 monthly1		day_offset		monthly_day_offset		Every D day
 *	
 *	 Recur on the O W of the month (4th monday)
 *	 monthly2		frequency		monthly_frequency		Every N month
 *	 monthly2		week_offset		monthly_week_offset		Every O week
 *	 monthly2		week_days		monthly_week_days		Every W of the week (starts Sunday so 1,2,3,4,5,6 is M-F)
+*
+*	 Recur on the D business day of the month (23rd)
+*	 monthly1		frequency		monthly_frequency		Every N month
+*	 monthly1		day_offset		monthly_day_offset3		Every D business day
 *	
 *	 Recur on day D of M (31st of October)
 *	 yearly1		frequency		yearly_frequency		Every N year
@@ -109,6 +119,11 @@ if ($activity_id) {
 *	 yearly3		frequency		yearly_frequency		Every N year
 *	 yearly3		day_offset		yearly_day_offset2		Every D Day
 *	 
+*	 Recur on business day D of M (10th business day of October)
+*	 yearly4		frequency		yearly_frequency		Every N year
+*	 yearly4		day_offset		yearly_day_offset4		Every D businessDay
+*	 yearly4		month_offset	yearly_month_offset4 	Every M month
+*
 */
 	// this array is used for strtotime, as in +1 days and is defined in utils-recurrence.php
 	global $period_to_span;
@@ -117,6 +132,7 @@ if ($activity_id) {
 
 	switch($period) {
 		case 'daily1':
+		case 'daily2':
 			$frequency 		= $daily_frequency;
 			$day_offset 	= 0;
 			break;
@@ -134,6 +150,10 @@ if ($activity_id) {
 			$week_offset 	= $monthly_week_offset;
 			$week_days   	= $monthly_week_days;
 			break;
+		case 'monthly3':
+			$frequency 		= $monthly_frequency;
+			$day_offset 	= $monthly_day_offset3;
+			break;
 		case 'yearly1':
 			$frequency   	= $yearly_frequency;
 			$day_offset  	= $yearly_day_offset;
@@ -148,6 +168,11 @@ if ($activity_id) {
 		case 'yearly3':
 			$frequency 		= $yearly_frequency;
 			$day_offset 	= $yearly_day_offset2;
+			break;
+		case 'yearly4':
+			$frequency   	= $yearly_frequency;
+			$day_offset  	= $yearly_day_offset4;
+			$month_offset 	= $yearly_month_offset4;
 			break;
 	}
 
@@ -206,26 +231,9 @@ if ($activity_id) {
     	$activity_recurrence_id = $con->insert_id();
 	}
 
+	// generate the list of activity start times
+	$activities_to_add = build_recurring_activities_list($rec['start_datetime'], $rec['end_datetime'], $rec['end_count'], $rec['period'], $frequency, $day_offset, $week_offset, $week_days, $month_offset);
 	
-    // create activities from recurrence
-    $start_time = null;
-
-
-
-	// set up loop start and end time
-	$start = strtotime($rec['start_datetime']);
-
-	if('end_on' == $recurrence_range) {
-		$end = strtotime($rec['end_datetime']);
-	} else {
-		$end = strtotime($rec['start_datetime'] . " +{$rec['end_count']} {$period_to_span[$rec['period']]}");
-	}
-
-	//echo "working from " . date('Y-m-d', $start) . " to " . date('Y-m-d', $end) . " +1 $offset<br>";
-
-	$activities_to_add = build_recurring_activities_list($start, $end, $rec['period'], $frequency, $day_offset, $week_offset, $week_days, $month_offset);
-	
-
 
 
 	// now, insert all these activities...
@@ -265,6 +273,9 @@ Header("Location:{$http_site_root}$return_url&msg=$msg");
 
 /*
  * $Log: edit_activity_recurrence.php,v $
+ * Revision 1.5  2005/06/08 00:10:44  daturaarutad
+ * added new periods to specify business days, updated for new build_recurring_activities_list parameter list
+ *
  * Revision 1.4  2005/06/06 23:23:27  daturaarutad
  * moved globals and build_activities_list() to utils-recurrence.php in include/
  *
