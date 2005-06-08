@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.115 2005/05/31 20:50:50 ycreddy Exp $
+ * $Id: some.php,v 1.116 2005/06/08 17:46:28 daturaarutad Exp $
  */
 
 // handle includes
@@ -208,7 +208,7 @@ if('list' != $results_view_type) {
 
 
     // set up the query offsets for the calendar view
-    if (strlen($search_date) > 0 && $start_end != 'all') {
+    if (strlen($search_date) > 0) {
         $criteria_count++;
 
         $calendar_view_start =  (strtotime($calendar_start_date) - time()) / 86400;
@@ -911,6 +911,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.116  2005/06/08 17:46:28  daturaarutad
+ * apply calendar query date limit even when start_end == all
+ *
  * Revision 1.115  2005/05/31 20:50:50  ycreddy
  * Updated the activity GROUP BY clause to make it compatible with MS SQL Server
  *
