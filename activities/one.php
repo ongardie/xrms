@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.104 2005/06/03 22:55:45 braverock Exp $
+ * $Id: one.php,v 1.105 2005/06/08 15:31:24 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -46,9 +46,9 @@ and c.default_primary_address = addr.address_id
 and activity_id = $activity_id
 and activity_record_status='a'";
 
-$rst = $con->execute($sql);
+$activity_rst = $con->execute($sql);
 
-if ($rst) {
+if ($activity_rst) {
     $activity_type_id = $rst->fields['activity_type_id'];
     $current_activity_type_id = $rst->fields['activity_type_id'];
     $activity_title = $rst->fields['activity_title'];
@@ -73,7 +73,7 @@ if ($rst) {
     $thread_id = $rst->fields['thread_id'];
     $followup_from_id = $rst->fields['followup_from_id'];
     $on_what_table = $rst->fields['on_what_table'];
-    $rst->close();
+    $activity_rst->close();
 } else {
     db_error_handler($con, $sql);
 }
@@ -291,6 +291,8 @@ if ( !isset($activity_content_bottom) ) {
 $param=NULL;
 $activity_content_bottom = do_hook_function('activity_content_bottom',$param);
 
+//call activity inline hook, pass the activity_rst result set as parameter
+$activity_inline_rows    = do_hook_function('activity_inline_edit',$activity_rst);
 
 // related activities
 
@@ -571,6 +573,10 @@ function logTime() {
                     <?php if ($completed_by) echo " by $completed_by_user"; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo " at $completed_at"; ?>
                 </td>
             </tr>
+            <?php
+                //add the inline data added by plugin(s)
+                echo $activity_inline_rows;
+            ?>
             <tr>
                 <td class=widget_content_form_element colspan=2>
                     <?php
@@ -662,6 +668,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.105  2005/06/08 15:31:24  braverock
+ * - add activity_inline_edit hook
+ *
  * Revision 1.104  2005/06/03 22:55:45  braverock
  * - change the logic for recurring activities pager to exclude on_what_table of
  *   companies or contacts
