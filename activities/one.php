@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.105 2005/06/08 15:31:24 braverock Exp $
+ * $Id: one.php,v 1.106 2005/06/08 17:36:28 daturaarutad Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -49,30 +49,30 @@ and activity_record_status='a'";
 $activity_rst = $con->execute($sql);
 
 if ($activity_rst) {
-    $activity_type_id = $rst->fields['activity_type_id'];
-    $current_activity_type_id = $rst->fields['activity_type_id'];
-    $activity_title = $rst->fields['activity_title'];
-    $activity_description = $rst->fields['activity_description'];
-    $user_id = $rst->fields['user_id'];
-    $entered_by = $rst->fields['entered_by'];
-    $entered_at = date('Y-m-d H:i:s', strtotime($rst->fields['entered_at']));
-    $last_modified_by = $rst->fields['last_modified_by'];
-    $last_modified_at = date('Y-m-d H:i:s', strtotime($rst->fields['last_modified_at']));
-    $company_id = $rst->fields['company_id'];
-    $company_name = $rst->fields['company_name'];
-    $contact_id = $rst->fields['contact_id'];
-    $on_what_table = $rst->fields['on_what_table'];
-    $current_on_what_table = $rst->fields['on_what_table'];
-    $on_what_id = $rst->fields['on_what_id'];
-    $scheduled_at = date('Y-m-d H:i:s', strtotime($rst->fields['scheduled_at']));
-    $ends_at = date('Y-m-d H:i:s', strtotime($rst->fields['ends_at']));
-    $local_time = calculate_time_zone_time($con, $rst->fields['daylight_savings_id'], $rst->fields['offset']);
-    $activity_status = $rst->fields['activity_status'];
-    $completed_at = $rst->fields['completed_at'];
-    $completed_by = $rst->fields['completed_by'];
-    $thread_id = $rst->fields['thread_id'];
-    $followup_from_id = $rst->fields['followup_from_id'];
-    $on_what_table = $rst->fields['on_what_table'];
+    $activity_type_id = $activity_rst->fields['activity_type_id'];
+    $current_activity_type_id = $activity_rst->fields['activity_type_id'];
+    $activity_title = $activity_rst->fields['activity_title'];
+    $activity_description = $activity_rst->fields['activity_description'];
+    $user_id = $activity_rst->fields['user_id'];
+    $entered_by = $activity_rst->fields['entered_by'];
+    $entered_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['entered_at']));
+    $last_modified_by = $activity_rst->fields['last_modified_by'];
+    $last_modified_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['last_modified_at']));
+    $company_id = $activity_rst->fields['company_id'];
+    $company_name = $activity_rst->fields['company_name'];
+    $contact_id = $activity_rst->fields['contact_id'];
+    $on_what_table = $activity_rst->fields['on_what_table'];
+    $current_on_what_table = $activity_rst->fields['on_what_table'];
+    $on_what_id = $activity_rst->fields['on_what_id'];
+    $scheduled_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['scheduled_at']));
+    $ends_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['ends_at']));
+    $local_time = calculate_time_zone_time($con, $activity_rst->fields['daylight_savings_id'], $rst->fields['offset']);
+    $activity_status = $activity_rst->fields['activity_status'];
+    $completed_at = $activity_rst->fields['completed_at'];
+    $completed_by = $activity_rst->fields['completed_by'];
+    $thread_id = $activity_rst->fields['thread_id'];
+    $followup_from_id = $activity_rst->fields['followup_from_id'];
+    $on_what_table = $activity_rst->fields['on_what_table'];
     $activity_rst->close();
 } else {
     db_error_handler($con, $sql);
@@ -668,6 +668,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.106  2005/06/08 17:36:28  daturaarutad
+ * updated rst->activity_rst to fix broken page
+ *
  * Revision 1.105  2005/06/08 15:31:24  braverock
  * - add activity_inline_edit hook
  *
