@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.4 2005/05/20 17:39:15 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.5 2005/06/08 15:53:38 daturaarutad Exp $
  */
 
 
@@ -72,21 +72,6 @@ class CalendarView {
 		$this->display_mode = $display_mode;
 	}
 
-	/**
-	* Given the calendar's scope and a starting date, return upper and lower bounds of time in seconds
-	*
-	* not currently used by anything
-	*/
-	function GetQueryDates() {
-		switch($this->calendar_type) {
-			case 'day':
-			case 'week':
-			case 'month':
-			case 'year':
-				break;
-		}
-
-	}
 
 	/**
 	* Static Function, if we had them. ($this need not be available)
@@ -405,11 +390,11 @@ function Render($activity_data) {
 							if('text' == $this->display_mode) {
 
 								$widget .= "<td class=\"small {$this->user_style_prefix}{$this->td_user_class[$event['user_id']]}\" $rowspan_html>
-											<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}\">{$event['activity_title']}</a><br>" .
+											<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\">{$event['activity_title']}</a><br>" .
 											"(" . date('H:i', strtotime($event['scheduled_at'])) . '-' . date('H:i', strtotime($event['ends_at'])) . ")</td>";
 							} else {
 								$widget .= "<td class=\"small {$this->user_style_prefix}{$this->td_user_class[$event['user_id']]}\" $rowspan_html>
-											<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}\" onmouseover=\"return escape('" .
+											<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\" onmouseover=\"return escape('" .
 											addslashes("{$event['activity_title']} (" . date('H:i', strtotime($event['scheduled_at'])) . '-' . date('H:i', strtotime($event['ends_at'])) . ")") .
 
 											"')\"><img src=\"$http_site_root/img/calendar_time_icon.gif\"></a></td>";
@@ -536,9 +521,6 @@ function BuildDailyEvents($activity_data) {
 
 	$events = array();
 
-
-
-
 	$user_style_index = 1;
 
 	foreach($activity_data as $activity) {
@@ -549,11 +531,24 @@ function BuildDailyEvents($activity_data) {
 			$activity_end_unixtime = strtotime($activity['ends_at']);
 			$start_date_unixtime = strtotime($this->start_date);
 
-			$start_day_of_week = intval(($activity_start_unixtime - $start_date_unixtime) / 86400);
-			$end_day_of_week = intval(($activity_end_unixtime - $start_date_unixtime) / 86400);
+			
+			$start_day_of_week = ($activity_start_unixtime - $start_date_unixtime) / 86400;
+			$end_day_of_week = ($activity_end_unixtime - $start_date_unixtime) / 86400;
+
+			if($start_day_of_week < 0) {
+				$start_day_of_week = intval($start_day_of_week) - 1;
+			} else {
+				$start_day_of_week = intval($start_day_of_week);
+			}
+			if($end_day_of_week < 0) {
+				$end_day_of_week = intval($end_day_of_week) - 1;
+			} else {
+				$end_day_of_week = intval($end_day_of_week);
+			}
+			
+
 			for($i=$start_day_of_week; $i<($end_day_of_week+1); $i++) {
 				$events[$i][] = $activity;
-				//echo "adding event at day $i<br>";
 			}
 
 			if(!$this->td_user_class[$activity['user_id']]) {
@@ -630,6 +625,9 @@ function calendar_previous_month() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.5  2005/06/08 15:53:38  daturaarutad
+* fixed a bug with non-current-month activities being misplaced on the monthly calendar.  Also added return_url to the links to activities/one.php
+*
 * Revision 1.4  2005/05/20 17:39:15  daturaarutad
 * added missing </td>s
 *
