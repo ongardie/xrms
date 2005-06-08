@@ -10,7 +10,7 @@
  * @author Justin Cooper
  *
  *
- * $Id: recurrence_sidebar.php,v 1.4 2005/06/03 20:59:09 daturaarutad Exp $
+ * $Id: recurrence_sidebar.php,v 1.5 2005/06/08 00:11:48 daturaarutad Exp $
  */
 
 
@@ -61,6 +61,7 @@ if($rst) {
 		switch($period) {
 	
 			case 'daily1':
+			case 'daily2':
 	            $daily_frequency = $rec['frequency'];
 				break;
 	
@@ -71,34 +72,40 @@ if($rst) {
 	            break;
 	
 	        case 'monthly1':
+	            $monthly_frequency = $rec['frequency'];
+	           	$monthly_day_offset = $rec['day_offset'];
+	            break;
 	        case 'monthly2':
+	            $monthly_frequency = $rec['frequency'];
+	          	$monthly_week_offset = $rec['week_offset'];
+	           	$monthly_week_days = $rec['week_days'];
+	            break;
 	        case 'monthly3':
 	            $monthly_frequency = $rec['frequency'];
-	
-				if($rec['week_offset']) {
-	            	$monthly_week_offset = $rec['week_offset'];
-	            	$monthly_week_days = $rec['week_days'];
-				} elseif($rec['day_offset']) {
-	            	$monthly_day_offset = $rec['day_offset'];
-				}
+	           	$monthly_day_offset3 = $rec['day_offset'];
 	            break;
-	
+
 	        case 'yearly1':
-	        case 'yearly2':
-	        case 'yearly3':
-	        case 'yearly4':
 	            $yearly_frequency = $rec['frequency'];
-	
-				if($rec['month_offset'] && $rec['day_offset']) {
-	            	$yearly_month_offset = $rec['month_offset'];
-	            	$yearly_day_offset = $rec['day_offset'];
-				} elseif($rec['week_offset']) {
-	            	$yearly_week_offset = $rec['week_offset'];
-	            	$yearly_week_days = $rec['week_days'];
-	            	$yearly_month_offset2 = $rec['month_offset'];
-				} elseif($rec['day_offset']) {
-	            	$yearly_day_offset2 = $rec['day_offset'];
-				}
+	           	$yearly_month_offset = $rec['month_offset'];
+	           	$yearly_day_offset = $rec['day_offset'];
+				break;
+	        case 'yearly2':
+	            $yearly_frequency = $rec['frequency'];
+	           	$yearly_week_offset = $rec['week_offset'];
+	           	$yearly_week_days = $rec['week_days'];
+	           	$yearly_month_offset2 = $rec['month_offset'];
+				break;
+	        case 'yearly3':
+	            $yearly_frequency = $rec['frequency'];
+	           	$yearly_day_offset3 = $rec['day_offset'];
+				break;
+	        case 'yearly4':
+				$yearly_frequency = $rec['frequency'];
+	          	$yearly_day_offset4 = $rec['day_offset'];
+	           	$yearly_month_offset4 = $rec['month_offset'];
+				break;
+
 		}
 	
 	
@@ -121,6 +128,7 @@ $monthly_options_weekdays = get_select_options_weekdays($monthly_week_days);
 $yearly_options_weekdays = get_select_options_weekdays($yearly_week_days);
 $yearly_options_months = get_select_options_months($yearly_month_offset);
 $yearly_options_months2 = get_select_options_months($yearly_month_offset2);
+$yearly_options_months4 = get_select_options_months($yearly_month_offset4);
 
 
 function get_checkboxes_weekdays($week_days = null) {
@@ -178,6 +186,9 @@ $return_url="/activities/one.php?activity_id=$activity_id";
 
 $recurrence_block = "
 <!-- Begin Recurrence Widget -->
+<div id=\"Main\">
+
+<div id=\"Content\">
 <form action=edit_activity_recurrence.php name=ActivityRecurrence method=POST>
 
 <input type=hidden name=activity_id value=$activity_id>
@@ -194,12 +205,16 @@ $recurrence_block = "
         <td class=widget_label colspan=2>".('Frequency')."</td>
     </tr>
 	<tr>
-		<td rowspan=2> "._('Daily')."</td>
+		<td rowspan=3> "._('Daily')."</td>
 		<td colspan=2>" . _('Every ') . "<input type=\"text\" size=\"2\" name=\"daily_frequency\" value=\"$daily_frequency\">"._(' day(s)')."</td>
 	</tr>
 	<tr>
 		<td><input type=radio name=period value=daily1 " . ('daily1' == $period ? 'checked' : '') . "></td> 
 		<td>"._('all days of week')."</td>
+	</tr>
+	<tr>
+		<td><input type=radio name=period value=daily2 " . ('daily2' == $period ? 'checked' : '') . "></td> 
+		<td>"._('business days only')."</td>
 	</tr>
 	<!-- Weekly -->
 	<tr>
@@ -212,7 +227,7 @@ $recurrence_block = "
 	</tr>
 	<!-- Monthly -->
 	<tr>
-		<td rowspan=3> "._('Monthly')."</td> 
+		<td rowspan=4> "._('Monthly')."</td> 
 		<td colspan=2>"._('Every ')."<input type=\"text\" size=\"2\" name=\"monthly_frequency\" value=\"$monthly_frequency\">"._(' month(s)')."</td>
 	</tr>
 	<tr>
@@ -221,6 +236,12 @@ $recurrence_block = "
 		<td>"._('Recur on the ')."<input type=\"text\" size=\"2\" name=\"monthly_day_offset\" value=\"$monthly_day_offset\">"._(' day of the  month')."</td>
 	</tr>
 	<tr>
+		<td> <input type=radio name=period value=monthly3 " . ('monthly3' == $period ? 'checked' : '') . "> </td> 
+
+		<td>"._('Recur on the ')."<input type=\"text\" size=\"2\" name=\"monthly_day_offset3\" value=\"$monthly_day_offset3\">"._(' business day of the  month')."</td>
+	</tr>
+
+	<tr>
 		<td> <input type=radio name=period value=monthly2 " . ('monthly2' == $period ? 'checked' : '') . "> </td>
 
 		<td>"._('Recur on the ')."<input type=\"text\" size=\"2\" name=\"monthly_week_offset\" value=\"$monthly_week_offset\">
@@ -228,15 +249,22 @@ $recurrence_block = "
 	</tr>
 	<!-- Yearly -->
 	<tr>
-		<td rowspan=4> "._('Yearly')."</td>
+		<td rowspan=6> "._('Yearly')."</td>
 		<td colspan=2> "._('Every ')."<input type=\"text\" size=\"2\" name=\"yearly_frequency\" value=\"$yearly_frequency\">"._(' year(s)')."</td>
 	</tr>
 	<tr>
 		<td><input type=radio name=period value=yearly1 " . ('yearly1' == $period ? 'checked' : '') . "></td>
 
-		<td>"._('Recur on day ')."<input type=\"text\" size=\"2\" name=\"yearly_day_offset\" value=\"$yearly_day_offset\">"._(' of ')."
+		<td>"._('Recur on the ')."<input type=\"text\" size=\"2\" name=\"yearly_day_offset\" value=\"$yearly_day_offset\">"._(' day of ')."
 		<select name=yearly_month_offset>$yearly_options_months</select></td>
 	</tr>
+	<tr>
+		<td><input type=radio name=period value=yearly4 " . ('yearly4' == $period ? 'checked' : '') . "></td>
+
+		<td>"._('Recur on the ')."<input type=\"text\" size=\"2\" name=\"yearly_day_offset4\" value=\"$yearly_day_offset4\">"._(' business day of ')."
+		<select name=yearly_month_offset4>$yearly_options_months4</select></td>
+	</tr>
+
 	<tr>
 		<td><input type=radio name=period value=yearly2 " . ('yearly2' == $period ? 'checked' : '') . "></td>
 		<td> " .
@@ -246,7 +274,7 @@ $recurrence_block = "
 	</tr>
 	<tr>
 		<td><input type=radio name=period value=yearly3 " . ('yearly3' == $period ? 'checked' : '') . "></td>
-		<td>"._('Recur on the ')."<input type=\"text\" size=\"2\" name=\"yearly_day_offset2\" value=\"$yearly_day_offset2\">"._(' day of the  year')."</td>
+		<td>"._('Recur on the ')."<input type=\"text\" size=\"2\" name=\"yearly_day_offset3\" value=\"$yearly_day_offset3\">"._(' day of the  year')."</td>
 	</tr>
 
     <tr>
@@ -278,6 +306,8 @@ $recurrence_block = "
 
 </table>
 </form>
+</div>
+</div>
 <!-- Begin Recurrence Widget -->
 ";
 
@@ -289,6 +319,9 @@ end_page();
 
 /**
  * $Log: recurrence_sidebar.php,v $
+ * Revision 1.5  2005/06/08 00:11:48  daturaarutad
+ * added new periods to specify business days
+ *
  * Revision 1.4  2005/06/03 20:59:09  daturaarutad
  * made the recurrence config its own page...possibly should rename this file since it is no longer a sidebar
  *

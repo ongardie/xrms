@@ -4,7 +4,7 @@
  *
  * @author Justin Cooper
  *
- * $Id: utils-recurrence.php,v 1.2 2005/06/06 23:24:36 daturaarutad Exp $
+ * $Id: utils-recurrence.php,v 1.3 2005/06/08 00:09:25 daturaarutad Exp $
  */
 
 
@@ -13,12 +13,15 @@ global $period_to_span;
 $period_to_span = array();
 
 $period_to_span['daily1']   = 'days';
+$period_to_span['daily2']   = 'days';
 $period_to_span['weekly1']  = 'weeks';
 $period_to_span['monthly1'] = 'months';
 $period_to_span['monthly2'] = 'months';
+$period_to_span['monthly3'] = 'months';
 $period_to_span['yearly1']  = 'years';
 $period_to_span['yearly2']  = 'years';
 $period_to_span['yearly3']  = 'years';
+$period_to_span['yearly4']  = 'years';
 
 global $days_of_week_long;
 
@@ -45,37 +48,47 @@ $months_of_year = array(_('January'), _('February'), _('March'), _('April'), _('
 * @param integer month_offset see activities/edit_activity_recurrence.php for details.
 * @param boolean only_future will skip all dates that are before today.
 */
-function build_recurring_activities_list($starttime, $endtime, $period, $frequency, $day_offset, $week_offset, $week_days, $month_offset, $only_future = false) {
+function build_recurring_activities_list($start_datetime, $end_datetime, $end_count, $period, $frequency, $day_offset, $week_offset, $week_days, $month_offset) {
+
     global $period_to_span;
     global $days_of_week_long;
     global $months_of_year;
 
 
-    $activities_list = array();
-    $activities_count = -1;
-    $offset = $period_to_span[$period];
+    $activities_list 	= array();
+    $loop_count 		= -1;
+    $offset 			= $period_to_span[$period];
 
 	if(!$offset) return false;
 
-    $now = time();
+    $current_time 		= strtotime($start_datetime); 
+	$start_time			= strtotime($start_datetime);
+	$end_time			= strtotime($end_datetime);
+	$finished 			= false;
 
-    for($current_time = $starttime; $current_time <= $endtime; $current_time = strtotime(date('Y-m-d H:i:s', $current_time). " +1 $offset")) 
-	{
-		$activities_count++;
+    //for($current_time = $starttime; $current_time <= $endtime; $current_time = strtotime(date('Y-m-d H:i:s', $current_time). " +1 $offset")) 
+	while(!$finished) {
 
-
-    //echo "($current_time = $starttime; $current_time < $endtime; $current_time = strtotime(date('Y-m-d H:i:s', $current_time). \" +1 $offset\"))";
         $current_date = date('Y-m-d H:i:s', $current_time);
+
+		$loop_count++;
+
+		// skip weekends
+		if('daily2' == $period) {
+			$current_day = date('w', $current_time);
+			if($current_day == 0 || $current_day == 6) {
+				$loop_count--;
+				//echo "skipping $current_day $current_date setting loop to $loop_count<br>";
+				$current_time = strtotime(date('Y-m-d H:i:s', $current_time) . " +1 $offset");
+				continue;
+			}
+		}
+
+
+
         // every N (days/weeks/months)
 
-        if(0 == ($activities_count % $frequency)) {
-
-            // skip the past
-            if($only_future) {
-                if($current_time < $now) {
-                    continue;
-                }
-            }
+        if(0 == ($loop_count % $frequency)) {
 
             $year = date('Y', $current_time);
             $month = date('m', $current_time);
@@ -86,7 +99,9 @@ function build_recurring_activities_list($starttime, $endtime, $period, $frequen
                 case 'daily1':
                     $activities_list[] = $current_time;
                     break;
-
+                case 'daily2':
+                   	$activities_list[] = $current_time;
+                    break;
                 case 'weekly1':
                     foreach($week_days as $day) {
                         $activities_list[] = strtotime($days_of_week_long[$day], $current_time);
@@ -104,6 +119,29 @@ function build_recurring_activities_list($starttime, $endtime, $period, $frequen
                     $activities_list[] = strtotime('+' . ($week_offset-1)  . ' week ' . $days_of_week_long[$week_days], strtotime('first ' . date('F Y', $current_time)));
                     break;
 
+                case 'monthly3':
+                    // Recur on the D business day of the month 
+					// Note: highest value for D is 40 (8 weeks == 56 days)
+
+					$day_count = 0;
+					//echo "day offset is $day_offset<br>";
+
+					for($i=1; $i<57; $i++) {
+						$week_num = date('w', strtotime("$year-$month-$i"));
+						if(0 != $week_num && 6 != $week_num) {
+							$day_count++;
+						} else {
+							//echo "skipping this day: $week_num for $year-$month-$i<br>";
+						}
+						if($day_offset == $day_count) {
+						//echo "adding at $year-$month-$i";
+                    		$activities_list[] = strtotime("$year-$month-$i $hms");
+							break;
+						}
+
+					}
+                    break;
+
                 case 'yearly1':
                         // Recur on day D of M (31st of October)
                         $activities_list[] = strtotime("$year-" . ($month_offset+1) . "-$day_offset $hms");
@@ -117,23 +155,55 @@ function build_recurring_activities_list($starttime, $endtime, $period, $frequen
                     // Recur on the N day of the year
                     $activities_list[] = strtotime("$year-01-01 $hms +" . ($day_offset-1) . " days");
                     break;
+                case 'yearly4':
+                    // Recur on business day D of M (15th business day of October)
+					// Note: highest value for D is 40 (8 weeks == 56 days)
+					$day_count = 0;
+
+					$month = $month_offset + 1;
+					//echo "day offset is $day_offset, month offset is $month<br>";
+
+					for($i=1; $i<57; $i++) {
+						$week_num = date('w', strtotime("$year-$month-$i"));
+						if(0 != $week_num && 6 != $week_num) {
+							$day_count++;
+						} else {
+							//echo "skipping this day: $week_num for $year-$month-$i<br>";
+						}
+						if($day_offset == $day_count) {
+						//echo "adding at $year-$month-$i";
+                    		$activities_list[] = strtotime("$year-$month-$i $hms");
+							break;
+						}
+					}
+                    break;
+
                 default:
                     $msg=urlencode(_("Error: No period selected for recurring activity."));
                     Header("Location:{$http_site_root}$return_url&msg=$msg");
                     break;
             }
         }
-    }
 
+		// are we finished?
+		if($end_count) {
+			if(($loop_count / $frequency) > $end_count) {
+				$finished = true;
+			}
+		} else {
+			if($current_time >= $end_time) {
+				$finished = true;
+			}
+		}
+		$current_time = strtotime(date('Y-m-d H:i:s', $current_time) . " +1 $offset");
+    }
 
     // delete the first one (if it is the same time as starttime) because that is the original activity and we don't want to duplicate it.
 	if(count($activities_list)) {
-		if($activities_list[0] <= $starttime) {
+		if($activities_list[0] <= $start_time) {
 			array_shift($activities_list);
 		}
 	}
-
-
 
     return $activities_list;
 }
@@ -142,6 +212,9 @@ function build_recurring_activities_list($starttime, $endtime, $period, $frequen
  
  /**
   * $Log: utils-recurrence.php,v $
+  * Revision 1.3  2005/06/08 00:09:25  daturaarutad
+  * added new periods to specify business days
+  *
   * Revision 1.2  2005/06/06 23:24:36  daturaarutad
   * fixed deletion of first activity if same time as starttime issue
   * moved globals into this file for weekday and month names
