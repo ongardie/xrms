@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.39 2005/06/05 17:18:59 braverock Exp $
+ * $Id: new-2.php,v 1.40 2005/06/10 15:37:40 ycreddy Exp $
  */
 
 //where do we include from
@@ -216,6 +216,8 @@ if ($email) {
 
 $activities_default_behavior = get_system_parameter($con, 'Activities Default Behavior');
 
+do_hook_function('activity_custom_edit');
+
 //close the connection
 $con->close();
 
@@ -234,6 +236,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.40  2005/06/10 15:37:40  ycreddy
+ *A plugin hook to handle Custom Edits for Activities
+ *
  *Revision 1.39  2005/06/05 17:18:59  braverock
  *- add standardized new/edit hooks
  *
