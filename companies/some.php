@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.66 2005/05/09 05:01:53 daturaarutad Exp $
+ * $Id: some.php,v 1.67 2005/06/11 12:59:13 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -32,24 +32,24 @@ $arr_vars = array ( // local var name       // session variable name
                    'city'                => array('city',arr_vars_SESSION),
                    'state'               => array('state',arr_vars_SESSION),
                     'legal_name'         => array('companies_legal_name',arr_vars_SESSION),
-                    'phone' 			 => array ( 'companies_phone' , arr_vars_SESSION),
-                    'phone2' 			 => array ( 'companies_phone2' , arr_vars_SESSION),
-                    'fax' 			 	 => array ( 'companies_fax' , arr_vars_SESSION),
-                    'url' 			 	 => array ( 'companies_url' , arr_vars_SESSION),
-                    'employees'			 => array ( 'companies_employees' , arr_vars_SESSION),
-                    'revenue' 			 => array ( 'companies_revenue' , arr_vars_SESSION),
-                    'custom1' 			 => array ( 'companies_custom1' , arr_vars_SESSION),
-                    'custom2' 			 => array ( 'companies_custom2' , arr_vars_SESSION),
-                    'custom3' 			 => array ( 'companies_custom3' , arr_vars_SESSION),
-                    'custom4' 			 => array ( 'companies_custom4' , arr_vars_SESSION),
-                    'profile' 			 => array ( 'companies_profile' , arr_vars_SESSION),
-                    'address_name' 		 => array ( 'companies_address_name' , arr_vars_SESSION),
-                    'line1' 			 => array ( 'companies_line1' , arr_vars_SESSION),
-                    'line2' 			 => array ( 'companies_line2' , arr_vars_SESSION),
-                    'province' 			 => array ( 'companies_province' , arr_vars_SESSION),
-                    'postal_code' 		 => array ( 'companies_postal_code' , arr_vars_SESSION),
-                    'country_id' 		 => array ( 'companies_country_id' , arr_vars_SESSION),
-                    'address_body' 		 => array ( 'companies_address_body' , arr_vars_SESSION),
+                    'phone'              => array ( 'companies_phone' , arr_vars_SESSION),
+                    'phone2'             => array ( 'companies_phone2' , arr_vars_SESSION),
+                    'fax'                => array ( 'companies_fax' , arr_vars_SESSION),
+                    'url'                => array ( 'companies_url' , arr_vars_SESSION),
+                    'employees'          => array ( 'companies_employees' , arr_vars_SESSION),
+                    'revenue'            => array ( 'companies_revenue' , arr_vars_SESSION),
+                    'custom1'            => array ( 'companies_custom1' , arr_vars_SESSION),
+                    'custom2'            => array ( 'companies_custom2' , arr_vars_SESSION),
+                    'custom3'            => array ( 'companies_custom3' , arr_vars_SESSION),
+                    'custom4'            => array ( 'companies_custom4' , arr_vars_SESSION),
+                    'profile'            => array ( 'companies_profile' , arr_vars_SESSION),
+                    'address_name'       => array ( 'companies_address_name' , arr_vars_SESSION),
+                    'line1'              => array ( 'companies_line1' , arr_vars_SESSION),
+                    'line2'              => array ( 'companies_line2' , arr_vars_SESSION),
+                    'province'           => array ( 'companies_province' , arr_vars_SESSION),
+                    'postal_code'        => array ( 'companies_postal_code' , arr_vars_SESSION),
+                    'country_id'         => array ( 'companies_country_id' , arr_vars_SESSION),
+                    'address_body'       => array ( 'companies_address_body' , arr_vars_SESSION),
                    );
 
 $advanced_search = (!empty($_REQUEST['advanced_search'])) ? true : false;
@@ -67,14 +67,14 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //uncomment this line if you suspect a problem with the SQL query
 //$con->debug = 1;
 
-$sql = "
-SELECT " . $con->Concat("'<a id=\"'" , "c.company_name", "'\" href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . ' AS "name",
-c.company_code AS "code" ,
-u.username AS "user" ,
-industry_pretty_name as "industry" ,
-crm_status_pretty_name AS "crm_status" ,
-as1.account_status_display_html AS "account_status" ,
-r.rating_display_html AS "rating" ';
+$sql = "SELECT "
+        . $con->Concat("'<a id=\"'" , "c.company_name", "'\" href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . ' AS "name",
+        c.company_code AS "code" ,
+        u.username AS "user",
+        industry_pretty_name as "industry",
+        crm_status_pretty_name AS "crm_status",
+        as1.account_status_display_html AS "account_status",
+        r.rating_display_html AS "rating" ';
 
 $criteria_count = 0;
 
@@ -93,7 +93,7 @@ $where .= "and c.crm_status_id = crm.crm_status_id ";
 $where .= "and r.rating_id = c.rating_id ";
 $where .= "and as1.account_status_id = c.account_status_id ";
 $where .= "and c.user_id = u.user_id ";
-$where .= "and company_record_status = 'a'";
+$where .= "and company_record_status = 'a' \n";
 
 if ($company_category_id > 0) {
     $where .= " and ecm.on_what_table = 'companies' and ecm.on_what_id = c.company_id and ecm.category_id = $company_category_id ";
@@ -101,17 +101,17 @@ if ($company_category_id > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr('%'. $company_name . '%', get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr($company_name . '%', get_magic_quotes_gpc()) ." \n";
 }
 
 if (strlen($user_id) > 0) {
     $criteria_count++;
-    $where .= " and c.user_id = $user_id";
+    $where .= " and c.user_id = $user_id \n";
 }
 
 if (strlen($company_code) > 0) {
     $criteria_count++;
-    $where .= " and c.company_code = " . $con->qstr($company_code, get_magic_quotes_gpc());
+    $where .= " and c.company_code = " . $con->qstr($company_code, get_magic_quotes_gpc())." \n";
 }
 
 if (strlen($city) > 0) {
@@ -120,7 +120,7 @@ if (strlen($city) > 0) {
     if (!strlen($state) > 0) {
         $sql   .= ", addr.province as '"._("State")."' \n";
     }
-    $where .= " and addr.city LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc()) ;
+    $where .= " and addr.city LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc())." \n" ;
 }
 
 if (strlen($state) > 0) {
@@ -134,17 +134,17 @@ if (strlen($state) > 0) {
 
 if (strlen($crm_status_id) > 0) {
     $criteria_count++;
-    $where .= " and c.crm_status_id = $crm_status_id";
+    $where .= " and c.crm_status_id = $crm_status_id \n";
 }
 
 if (strlen($industry_id) > 0) {
     $criteria_count++;
-    $where .= " and c.industry_id = $industry_id";
+    $where .= " and c.industry_id = $industry_id \n";
 }
 
 if (strlen($company_source_id) > 0) {
     $criteria_count++;
-    $where .= " and c.company_source_id = $company_source_id";
+    $where .= " and c.company_source_id = $company_source_id \n";
 }
 
 // begin advanced-search query items
@@ -152,129 +152,129 @@ $advanced_search_columns = array();
 
 if ( $legal_name ) {
     $criteria_count++;
-	$sql .= ', c.legal_name ';
-    $where .= " and c.legal_name like " . $con->qstr($legal_name, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Legal Name"), 'index_sql' => 'legal_name');
+    $sql .= ', c.legal_name ';
+    $where .= " and c.legal_name like " . $con->qstr($legal_name, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Legal Name"), 'index_sql' => 'legal_name');
 }
 
 if ( $phone ) {
     $criteria_count++;
-	$sql .= ', c.phone ';
-    $where .= " and c.phone like " . $con->qstr($phone, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
+    $sql .= ', c.phone ';
+    $where .= " and c.phone like " . $con->qstr($phone, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
 }
 
 if ( $phone2 ) {
     $criteria_count++;
-	$sql .= ', c.phone2 ';
-    $where .= " and c.phone2 like " . $con->qstr($phone2, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Phone 2"), 'index_sql' => 'phone2');
+    $sql .= ', c.phone2 ';
+    $where .= " and c.phone2 like " . $con->qstr($phone2, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Phone 2"), 'index_sql' => 'phone2');
 }
 
 if ( $fax ) {
     $criteria_count++;
-	$sql .= ', c.fax ';
-    $where .= " and c.fax like " . $con->qstr($fax, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Fax"), 'index_sql' => 'fax');
+    $sql .= ', c.fax ';
+    $where .= " and c.fax like " . $con->qstr($fax, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Fax"), 'index_sql' => 'fax');
 }
 
 if (strlen($url) > 0) {
     $criteria_count++;
-	$sql .= ', c.url ';
-    $where .= " and c.url like " . $con->qstr($url, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("URL"), 'index_sql' => 'url');
+    $sql .= ', c.url ';
+    $where .= " and c.url like " . $con->qstr($url, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("URL"), 'index_sql' => 'url');
 }
 
 if ( $employees ) {
     $criteria_count++;
-	$sql .= ', c.employees ';
-    $where .= " and c.employees like " . $con->qstr($employees, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("employees"), 'index_sql' => 'employees');
+    $sql .= ', c.employees ';
+    $where .= " and c.employees like " . $con->qstr($employees, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("employees"), 'index_sql' => 'employees');
 }
 
 if ( $revenue ) {
     $criteria_count++;
-	$sql .= ', c.revenue ';
-    $where .= " and c.revenue like " . $con->qstr($revenue, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Revenue"), 'index_sql' => 'revenue');
+    $sql .= ', c.revenue ';
+    $where .= " and c.revenue like " . $con->qstr($revenue, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Revenue"), 'index_sql' => 'revenue');
 }
 
 if ( $custom1 ) {
     $criteria_count++;
-	$sql .= ', c.custom1 ';
-    $where .= " and c.custom1 like " . $con->qstr($custom1, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Custom 1"), 'index_sql' => 'custom1');
+    $sql .= ', c.custom1 ';
+    $where .= " and c.custom1 like " . $con->qstr($custom1, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Custom 1"), 'index_sql' => 'custom1');
 }
 
 if ( $custom2 ) {
     $criteria_count++;
-	$sql .= ', c.custom2 ';
-    $where .= " and c.custom2 like " . $con->qstr($custom2, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Custom 2"), 'index_sql' => 'custom2');
+    $sql .= ', c.custom2 ';
+    $where .= " and c.custom2 like " . $con->qstr($custom2, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Custom 2"), 'index_sql' => 'custom2');
 }
 
 if ( $custom3 ) {
     $criteria_count++;
-	$sql .= ', c.custom3 ';
-    $where .= " and c.custom3 like " . $con->qstr($custom3, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Custom 3"), 'index_sql' => 'custom3');
+    $sql .= ', c.custom3 ';
+    $where .= " and c.custom3 like " . $con->qstr($custom3, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Custom 3"), 'index_sql' => 'custom3');
 }
 
 if ( $custom4 ) {
     $criteria_count++;
-	$sql .= ', c.custom4 ';
-    $where .= " and c.custom4 like " . $con->qstr($custom4, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Custom 4"), 'index_sql' => 'custom4');
+    $sql .= ', c.custom4 ';
+    $where .= " and c.custom4 like " . $con->qstr($custom4, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Custom 4"), 'index_sql' => 'custom4');
 }
 
 if ( $profile ) {
     $criteria_count++;
-	$sql .= ', c.profile ';
-    $where .= " and c.profile like " . $con->qstr($profile, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Profile"), 'index_sql' => 'profile');
+    $sql .= ', c.profile ';
+    $where .= " and c.profile like " . $con->qstr($profile, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Profile"), 'index_sql' => 'profile');
 }
 
 if ( $address_name ) {
     $criteria_count++;
-	$sql .= ', addr.address_name ';
-    $where .= " and addr.address_name like " . $con->qstr($address_name, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Address"), 'index_sql' => 'address_name');
+    $sql .= ', addr.address_name ';
+    $where .= " and addr.address_name like " . $con->qstr($address_name, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Address"), 'index_sql' => 'address_name');
 }
 
 if ( $line1 ) {
     $criteria_count++;
-	$sql .= ', addr.line1 ';
-    $where .= " and addr.line1 like " . $con->qstr($line1, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Line 1"), 'index_sql' => 'line1');
+    $sql .= ', addr.line1 ';
+    $where .= " and addr.line1 like " . $con->qstr($line1, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Line 1"), 'index_sql' => 'line1');
 }
 
 if ( $line2 ) {
     $criteria_count++;
-	$sql .= ', addr.line2 ';
-    $where .= " and addr.line2 like " . $con->qstr($line2, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Line 2"), 'index_sql' => 'line2');
+    $sql .= ', addr.line2 ';
+    $where .= " and addr.line2 like " . $con->qstr($line2, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Line 2"), 'index_sql' => 'line2');
 }
 
 if ( $province ) {
     $criteria_count++;
-	$sql .= ', addr.province ';
-    $where .= " and addr.province like " . $con->qstr($province, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Province"), 'index_sql' => 'province');
+    $sql .= ', addr.province ';
+    $where .= " and addr.province like " . $con->qstr($province, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Province"), 'index_sql' => 'province');
 }
 
 if ( $postal_code ) {
     $criteria_count++;
-	$sql .= ', addr.postal_code ';
-    $where .= " and addr.postal_code like " . $con->qstr($postal_code, get_magic_quotes_gpc());
-	$advanced_search_columns[] = array('name' => _("Postal Code"), 'index_sql' => 'postal_code');
+    $sql .= ', addr.postal_code ';
+    $where .= " and addr.postal_code like " . $con->qstr($postal_code, get_magic_quotes_gpc())." \n";
+    $advanced_search_columns[] = array('name' => _("Postal Code"), 'index_sql' => 'postal_code');
 }
 
-if ( $country_id ) {
+if ( $country_id and is_numeric($country_id)) {
     $criteria_count++;
-	$from .= ', countries country ';
-	$sql .= ', country.country_name ';
-    $where .= " and addr.country_id = $country_id and country.country_id = addr.country_id ";
-	$advanced_search_columns[] = array('name' => _("Country"), 'index_sql' => 'country_name');
+    $from .= ', countries country ';
+    $sql .= ', country.country_name ';
+    $where .= " and addr.country_id = $country_id and country.country_id = addr.country_id \n";
+    $advanced_search_columns[] = array('name' => _("Country"), 'index_sql' => 'country_name');
 }
 // end advanced-search query items
 
@@ -285,7 +285,7 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
     if ($list) {
         if ($list!==true) {
             $list=implode(",",$list);
-            $where .= " and c.company_id IN ($list) ";
+            $where .= " and c.company_id IN ($list) \n";
         }
     } else { $where .= ' AND 1 = 2 '; }
 }
@@ -295,18 +295,18 @@ $sql .= $from . $where;
 //echo htmlentities($sql);
 
 $sql_recently_viewed = "select
-c.company_id,
-c.company_name,
-max(r.recent_item_timestamp) as lasttime
-from recent_items r, companies c
-where r.user_id = $session_user_id
-and r.on_what_table = 'companies'
-and r.recent_action = ''
-and r.on_what_id = c.company_id
-and c.company_record_status = 'a'
-group by company_id,
-c.company_name
-order by lasttime desc";
+ c.company_id,
+ c.company_name,
+ max(r.recent_item_timestamp) as lasttime
+ from recent_items r, companies c
+ where r.user_id = $session_user_id
+ and r.on_what_table = 'companies'
+ and r.recent_action = ''
+ and r.on_what_id = c.company_id
+ and c.company_record_status = 'a'
+ group by company_id,
+ c.company_name
+ order by lasttime desc";
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
@@ -329,12 +329,12 @@ if (strlen($recently_viewed_table_rows) == 0) {
 $user_menu = get_user_menu($con, $user_id, true);
 
 $sql2 = "select category_pretty_name, c.category_id
-from categories c, category_scopes cs, category_category_scope_map ccsm
-where c.category_id = ccsm.category_id
-and cs.on_what_table =  'companies'
-and ccsm.category_scope_id = cs.category_scope_id
-and category_record_status =  'a'
-order by category_pretty_name";
+ from categories c, category_scopes cs, category_category_scope_map ccsm
+ where c.category_id = ccsm.category_id
+ and cs.on_what_table =  'companies'
+ and ccsm.category_scope_id = cs.category_scope_id
+ and category_record_status =  'a'
+ order by category_pretty_name";
 $rst = $con->execute($sql2);
 $company_category_menu = $rst->getmenu2('company_category_id', $company_category_id, true);
 $rst->close();
@@ -350,21 +350,21 @@ $rst->close();
 // secondary queries and menus for advanced-search
 if($advanced_search) {
 
-	// crm_status_menu
-	$sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_pretty_name";
-	$rst = $con->execute($sql2);
-	$crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', $crm_status_id, true));
-	$rst->close();
+    // crm_status_menu
+    $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_pretty_name";
+    $rst = $con->execute($sql2);
+    $crm_status_menu = translate_menu($rst->getmenu2('crm_status_id', $crm_status_id, true));
+    $rst->close();
 
-	// company_source_menu
-	$sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
-	$company_source_menu = check_and_get($con,$sql2,'company_source_id',$company_source_id);
-	//$company_source_menu = check_and_get($con,$sql2,'');
+    // company_source_menu
+    $sql2 = "select company_source_pretty_name, company_source_id from company_sources where company_source_record_status = 'a' order by company_source_pretty_name";
+    $company_source_menu = check_and_get($con,$sql2,'company_source_id',$company_source_id);
+    //$company_source_menu = check_and_get($con,$sql2,'');
 
-	// country_menu
-	$sql2 = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
-	$country_menu = check_and_get($con,$sql2,'country_id',$country_id);
-	//$country_menu = check_and_get($con,$sql2,'');
+    // country_menu
+    $sql2 = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
+    $country_menu = check_and_get($con,$sql2,'country_id',$country_id);
+    //$country_menu = check_and_get($con,$sql2,'');
 
 
 }
@@ -437,8 +437,8 @@ start_page($page_title, true, $msg);
         </tr>
 
         <?php
-           	if($advanced_search) {
-           		echo "
+            if($advanced_search) {
+                echo "
 
             <tr>
                 <td class=widget_label>" .   _("Address Name") . "</td>
@@ -509,14 +509,14 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label colspan=6>" .   _("Profile") . "</td>
-			<tr>
-			</tr>
+            <tr>
+            </tr>
                 <td class=widget_content_form_element colspan=6><textarea rows=10 cols=70 name=profile>" .   $profile  . "</textarea></td>
             </tr>
 
 ";
 
-			}
+            }
         ?>
         <tr>
             <td class=widget_content_form_element colspan=6>
@@ -524,7 +524,7 @@ start_page($page_title, true, $msg);
                 <input name="clear_search" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php
                         if(!$advanced_search) {
-							echo '<input name="advanced_search" type=button class=button onclick="javascript: location.href=\'some.php?advanced_search=true\';" value="' . _("Advanced Search") . '">';
+                            echo '<input name="advanced_search" type=button class=button onclick="javascript: location.href=\'some.php?advanced_search=true\';" value="' . _("Advanced Search") . '">';
                         }
                     ?>
             </td>
@@ -567,7 +567,7 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CompanyForm', 'Co
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-			" . $pager->GetAndUseExportButton() .  "
+            " . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
 
 $pager->AddEndRows($endrows);
@@ -577,14 +577,14 @@ $con->close();
 
 ?>
 
-  	</form>
+    </form>
     </div>
 
         <!-- right column //-->
     <div id="Sidebar">
 
         <!-- new company //-->
-		<div class="noprint">
+        <div class="noprint">
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Company Options"); ?></td>
@@ -593,7 +593,7 @@ $con->close();
                 <td class=widget_content><a href="new.php"><?php echo _("New Company"); ?></a></td>
             </tr>
         </table>
-		</div>
+        </div>
 
         <!-- recently viewed companies //-->
         <table class=widget cellspacing=1 width="100%">
@@ -668,6 +668,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.67  2005/06/11 12:59:13  braverock
+ * - clean up SQL formatting (add spaces) to fix adodb pager 'single page' bugs
+ *
  * Revision 1.66  2005/05/09 05:01:53  daturaarutad
  * fixed missing space after query
  *
