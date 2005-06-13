@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.18 2005/06/07 21:33:12 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.19 2005/06/13 22:10:24 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -736,9 +736,6 @@ class xrms_acl {
       */
     function get_user_roles_by_array ($Groups,  $User_id) {
         if (!$User_id) { return false; }
-        if (!is_array($Groups)) {
-            $Groups = array( $Groups );
-        }
         $retRoles=array();
         foreach ($Groups as $Group_id) {
             $roles = $this->get_user_roles($Group_id, $User_id);
@@ -1732,7 +1729,7 @@ class xrms_acl {
             }
         }
         
-        $UserRoleList = $this->get_user_roles_by_array(false, $User_id);
+        $UserRoleList = $this->get_user_roles_by_array(array(false), $User_id);
         if (!$UserRoleList) { return false; }
         $UserRoleList=$UserRoleList['Roles'];
         if (count($UserRoleList)==0) return false;
@@ -1853,7 +1850,7 @@ class xrms_acl {
         $SearchUser=true;
                       
         //Get all roles for user
-        $UserRoleList = $this->get_user_roles_by_array(false, $User_id);
+        $UserRoleList = $this->get_user_roles_by_array(array(false), $User_id);
         if (!$UserRoleList) { $SearchLevel=false; }
         $UserRoleList=$UserRoleList['Roles'];
             
@@ -2113,6 +2110,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.19  2005/06/13 22:10:24  vanmer
+ * - removed unneeded is_array check for get_roles function calls, now assumes array is passed in
+ * - added explict array for callers to the get_roles_by_array
+ *
  * Revision 1.18  2005/06/07 21:33:12  vanmer
  * - added parameter to include Group name when returning GroupUser record
  *
