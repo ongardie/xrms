@@ -239,7 +239,7 @@ function get_user_roles_with_groups($acl, $user_id, $use_role_names=true) {
     
     if (!$acl) $acl = new xrms_acl($acl_options);
     if (!$user_id) return array();
-    $RoleList = $acl->get_user_roles_by_array(false, $user_id);
+    $RoleList = $acl->get_user_roles_by_array(array(false), $user_id);
     if ($use_role_names) {
         foreach ($RoleList['GroupRoles'] as $gkey=>$garray) {
             foreach ($garray as $gid=>$role_id) {
