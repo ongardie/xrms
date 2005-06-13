@@ -219,7 +219,7 @@ function get_user_roles($acl=false, $user_id, $group=false, $use_role_names=true
         foreach ($group as $gkey=>$gid) {
             $group[$gkey]=get_group_id($gid);
         }
-    }
+    } else { $group=array(false); }
     
     $RoleList = $acl->get_user_roles_by_array($group, $user_id);
     $UserRoleList=$RoleList['Roles'];
