@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.6 2005/06/03 16:18:13 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.7 2005/06/14 18:25:26 daturaarutad Exp $
  */
 
 
@@ -464,6 +464,9 @@ END;
 		// This is not this->SetConstants!
 		$form->SetConstants(array('form_action' => $this->next_form_action));
  		$form->addElement('hidden', 'form_action', $form_action);
+
+		getGlobalVar($return_url, 'return_url');
+
  		$form->addElement('hidden', 'return_url', $return_url);
 
 		// form action is the one that brought us here (the action we just handled)
