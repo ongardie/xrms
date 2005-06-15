@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a company
  *
- * $Id: edit-address-2.php,v 1.8 2005/04/11 02:06:48 maulani Exp $
+ * $Id: edit-address-2.php,v 1.9 2005/06/15 18:37:53 ycreddy Exp $
  */
 
 
@@ -53,12 +53,18 @@ $rec['use_pretty_address'] = $use_pretty_address;
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
+$param = array( $_POST, $rst, $rec);
+do_hook_function('company_edit_address_2', $param);
+
 $con->close();
 
 header("Location: addresses.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.9  2005/06/15 18:37:53  ycreddy
+ * Added a plugin hook 'company_edit_address_2'
+ *
  * Revision 1.8  2005/04/11 02:06:48  maulani
  * - Add address type.  RFE 862049 (maulani)
  *
