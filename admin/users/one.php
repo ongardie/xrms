@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.22 2005/06/07 21:35:15 vanmer Exp $
+ * $Id: one.php,v 1.23 2005/06/15 18:25:40 vanmer Exp $
  */
 
 //include required files
@@ -14,6 +14,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check( 'Admin' );
+
+getGlobalVar($msg, 'msg');
 
 $edit_user_id = $_GET['edit_user_id'];
 
@@ -63,7 +65,7 @@ $sidebar_rows = $user_role_sidebar . $sidebar_rows;
 $con->close();
 
 $page_title = _("User Details") . ': ' . $first_names . ' ' . $last_name;
-start_page($page_title);
+start_page($page_title, true, $msg);
 
 ?>
 
@@ -158,6 +160,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.23  2005/06/15 18:25:40  vanmer
+ * - added output of msg string on users/one.php page
+ *
  * Revision 1.22  2005/06/07 21:35:15  vanmer
  * - changed to use sidebar include file instead of inline sidebar
  *
