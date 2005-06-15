@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.19 2005/06/13 22:10:24 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.20 2005/06/15 16:57:16 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -542,7 +542,7 @@ class xrms_acl {
         if (!$include_group_name) {
             $tblName = "GroupUser";
         } else {
-            $tblName="GroupUser JOIN Groups ON GroupUser.Group_id=Groups.Group_id ";
+            $tblName="GroupUser INNER JOIN Groups ON GroupUser.Group_id=Groups.Group_id ";
         }
         $con = $this->DBConnection;
         
@@ -2110,6 +2110,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.20  2005/06/15 16:57:16  vanmer
+ * - updated JOIN to use INNER JOIN to be more compatible with older mysql
+ *
  * Revision 1.19  2005/06/13 22:10:24  vanmer
  * - removed unneeded is_array check for get_roles function calls, now assumes array is passed in
  * - added explict array for callers to the get_roles_by_array
