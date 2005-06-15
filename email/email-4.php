@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.12 2005/03/17 22:07:33 braverock Exp $
+* $Id: email-4.php,v 1.13 2005/06/15 14:21:15 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -29,9 +29,15 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-// loop through the contacts and send each one a copy of the message with a personalised "Dear contact"
-
-$sql = "select * from contacts where contact_id in (" . implode(',', $array_of_contacts) . ")";
+if (is_array($array_of_contacts)) {
+    $imploded_contacts = implode(',', $array_of_contacts);
+} elseif (is_numeric($array_of_contacts)) {
+    $imploded_contacts= $array_of_contacts;
+}else {
+    echo _("WARNING: No array of contacts!") . "<br>";
+}
+// loop through the contacts and send each one a copy of the message
+$sql = "select * from contacts where contact_id in (" . $imploded_contacts . ")";
 $rst = $con->execute($sql);
 
 if ($rst) {
@@ -163,6 +169,10 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.13  2005/06/15 14:21:15  braverock
+* - add more compliant quoting of HTML and checkbox options
+* - add better input validation for checking array from $_POST
+*
 * Revision 1.12  2005/03/17 22:07:33  braverock
 *
 * - modified to store subject of email as activity title

@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.11 2005/05/25 21:22:43 braverock Exp $
+ * $Id: email-3.php,v 1.12 2005/06/15 14:21:14 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -52,12 +52,12 @@ and contact_record_status = 'a' order by c.company_name,cont.last_name asc";
 $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
-        $contact_rows .= "<tr>";
-        $contact_rows .= "<td class=widget_content_form_element><input type=checkbox name=array_of_contacts value=" . $rst->fields['contact_id'] . " checked></td>";
-        $contact_rows .= "<td class=widget_content>" . $rst->fields['company_name'] . "</td>";
-        $contact_rows .= "<td class=widget_content>" . $rst->fields['username'] . "</td>";
-        $contact_rows .= "<td class=widget_content>" . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . "</td>";
-        $contact_rows .= "<td class=widget_content>" . $rst->fields['email'] . "</td>";
+        $contact_rows .= '<tr>';
+        $contact_rows .= '<td class="widget_content_form_element"><input type="checkbox" name="array_of_contacts" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
+        $contact_rows .= '<td class="widget_content">' . $rst->fields['company_name'] . '</td>';
+        $contact_rows .= '<td class="widget_content">' . $rst->fields['username'] . '</td>';
+        $contact_rows .= '<td class="widget_content">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</td>';
+        $contact_rows .= '<td class="widget_content">' . $rst->fields['email'] . '</td>';
         $contact_rows .= "</tr>\n";
         $rst->movenext();
     }
@@ -111,6 +111,10 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.12  2005/06/15 14:21:14  braverock
+ * - add more compliant quoting of HTML and checkbox options
+ * - add better input validation for checking array from $_POST
+ *
  * Revision 1.11  2005/05/25 21:22:43  braverock
  * - change name array_of_contacts[] to array_of_contacts to solve IE compatibility problem
  *
