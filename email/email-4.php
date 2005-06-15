@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.13 2005/06/15 14:21:15 braverock Exp $
+* $Id: email-4.php,v 1.14 2005/06/15 14:24:08 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -121,6 +121,8 @@ if ($rst) {
     $feedback .= "<hr />Dear [first] [lastname],<p>";
     $feedback .= nl2br(htmlspecialchars($msg_body));
     $rst->close();
+} else {
+    db_error_handler($con, $sql);
 }
 
 $con->close();
@@ -169,6 +171,9 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.14  2005/06/15 14:24:08  braverock
+* - add db_error_handler to result set check
+*
 * Revision 1.13  2005/06/15 14:21:15  braverock
 * - add more compliant quoting of HTML and checkbox options
 * - add better input validation for checking array from $_POST
