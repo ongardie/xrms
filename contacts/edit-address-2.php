@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.10 2005/04/11 02:08:44 maulani Exp $
+ * $Id: edit-address-2.php,v 1.11 2005/06/15 17:12:30 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -133,6 +133,9 @@ if ($alt_address) {
     add_audit_item($con, $session_user_id, 'changed address', 'contacts', $contact_id, 1);
 }
 
+$param = array($_POST, $rst, $rec);
+do_hook_function('contact_edit_address_2', $param);
+
 $con->close();
 
 
@@ -141,6 +144,9 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.11  2005/06/15 17:12:30  ycreddy
+ * Added a plugin hook contact_edit_address_2
+ *
  * Revision 1.10  2005/04/11 02:08:44  maulani
  * - Add address types.  RFE 862049 (maulani)
  *
@@ -169,7 +175,7 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.10 2005/04/11 02:08:44 maulani Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.11 2005/06/15 17:12:30 ycreddy Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
