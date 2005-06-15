@@ -2,7 +2,7 @@
 /**
  * Database updates for transfer contact
  *
- * $Id: transfer-3.php,v 1.3 2005/06/07 21:15:28 braverock Exp $
+ * $Id: transfer-3.php,v 1.4 2005/06/15 18:29:50 ycreddy Exp $
  */
 
 
@@ -67,6 +67,8 @@ if($everywhere) {
     $con->execute($upd);
 }
 
+do_hook('contact_transfer_3');
+
 $con->close();
 
 //now go to the Contact Details page the user can make additional changes if they need to
@@ -74,6 +76,9 @@ header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: transfer-3.php,v $
+ * Revision 1.4  2005/06/15 18:29:50  ycreddy
+ * Added a plugin hook contact_transfer_3
+ *
  * Revision 1.3  2005/06/07 21:15:28  braverock
  * - syntax error
  *
