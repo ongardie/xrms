@@ -2,7 +2,7 @@
 /**
  * Commit the new Activity Type to the database
  *
- * $Id: add-2.php,v 1.8 2005/01/06 23:18:55 introspectshun Exp $
+ * $Id: add-2.php,v 1.9 2005/06/16 23:54:12 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -44,6 +44,7 @@ $rec['activity_type_pretty_name'] = $activity_type_pretty_name;
 $rec['activity_type_pretty_plural'] = $activity_type_pretty_plural;
 $rec['activity_type_display_html'] = $activity_type_display_html;
 $rec['activity_type_score_adjustment'] = $activity_type_score_adjustment;
+$rec['user_editable_flag']=1;
 
 //commit it
 $tbl = "activity_types";
@@ -59,6 +60,9 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.9  2005/06/16 23:54:12  vanmer
+ * - set default user_editable flag to 1, so that custom types can be edited after creation
+ *
  * Revision 1.8  2005/01/06 23:18:55  introspectshun
  * - Removed escape chars from query
  *
