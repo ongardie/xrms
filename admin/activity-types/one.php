@@ -4,7 +4,7 @@
  *
  * Edit account-types
  *
- * $Id: one.php,v 1.10 2005/04/15 07:42:43 vanmer Exp $
+ * $Id: one.php,v 1.11 2005/06/16 23:54:59 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -32,6 +32,7 @@ if ($rst) {
     $activity_type_pretty_name = $rst->fields['activity_type_pretty_name'];
     $activity_type_pretty_plural = $rst->fields['activity_type_pretty_plural'];
     $activity_type_display_html = $rst->fields['activity_type_display_html'];
+    $user_editable_flag = $rst->fields['user_editable_flag'];
     $activity_type_score_adjustment = $rst->fields['activity_type_score_adjustment'];
     
     $rst->close();
@@ -47,7 +48,9 @@ require_once('participant_positions_sidebar.php');
         
     <div id="Content">
 
+<?php if ($user_editable_flag) { ?>
         <form action="edit-2.php" method=post>
+<?php } ?>                
         <input type=hidden name=activity_type_id value="<?php  echo $activity_type_id; ?>">
         <table class=widget cellspacing=1>
             <tr>
@@ -74,11 +77,16 @@ require_once('participant_positions_sidebar.php');
                 <td class=widget_content_form_element><input type=text size=5 name=activity_type_score_adjustment value="<?php  echo $activity_type_score_adjustment; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
+                <td class=widget_content_form_element colspan=2>
+                <?php if ($user_editable_flag) { ?>
+                    <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
+                <? } ?>
+                    <input type=button class=button value="<?php echo _("Cancel"); ?>" onclick="javascript: location.href='some.php'">
+                </td>
             </tr>
         </table>
         </form>
-
+<?php if ($user_editable_flag) { ?>
         <form action="delete.php" method=post onsubmit="javascript: return confirm('<?php echo _("Delete Activity Type?"); ?>');">
         <input type=hidden name=activity_type_id value="<?php  echo $activity_type_id; ?>">
         <table class=widget cellspacing=1>
@@ -97,7 +105,7 @@ require_once('participant_positions_sidebar.php');
             </tr>
         </table>
         </form>
-
+<?php } ?>
     </div>
 
         <!-- right column //-->
@@ -114,6 +122,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.11  2005/06/16 23:54:59  vanmer
+ * - changed to only allow edit button and output to appear if user_editable_flag is set to 1
+ *
  * Revision 1.10  2005/04/15 07:42:43  vanmer
  * - added a new sidebar for managing positions for contacts on activities
  *
