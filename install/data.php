@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.26 2005/05/24 23:01:46 braverock Exp $
+ * $Id: data.php,v 1.27 2005/06/16 23:48:55 vanmer Exp $
  */
 
 /**
@@ -2842,14 +2842,17 @@ function activity_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('FFR', 'fax from', 'faxes from', 'fax from',6, 0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('LTT', 'letter to', 'letter to', 'letter to',7, 1)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('LTT', 'letter to', 'letter to', 'letter to',7, 0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('LTF', 'letter from', 'letter from', 'letter from',8, 1)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('LTF', 'letter from', 'letter from', 'letter from',8, 0)";
         $rst = $con->execute($sql);
         $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('INT', 'internal', 'internal', 'internal',9,0)";
         $rst = $con->execute($sql);
         $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('PRO', 'process', 'process', 'process',10,0)";
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('SYS', 'system, 'system', 'system',9,0)";
+        $rst = $con->execute($sql);
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('SYS', 'system, 'system', 'system',11,0)";
+        $rst = $con->execute($sql);
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('MTG', 'meeting, 'meetings', 'meeting',12,0)";
         $rst = $con->execute($sql);
     }
 
@@ -2882,6 +2885,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.27  2005/06/16 23:48:55  vanmer
+ * - changed default activity types to install as non-user-editable
+ *
  * Revision 1.26  2005/05/24 23:01:46  braverock
  * - add email_template_type table in advance of email template type support in core
  *
