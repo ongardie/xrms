@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.7 2005/06/03 16:40:09 daturaarutad Exp $
+ * $Id: utils-activities.php,v 1.8 2005/06/17 00:04:23 vanmer Exp $
  
  */
 
@@ -500,8 +500,53 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
     return false;
 }
  
+function install_default_activity_participant_positions($con) {
+    //set these variables in order to allow localization of these strings.  New positions should also be added in this manner
+    $s=_("Caller");
+    $s=_("To");
+    $s=_("From");
+    $s=_("CC");
+    $s=_("BCC");
+    $s=_("Organizer");
+    
+    $default_activity_positions=array(
+                                                        'CTO' => array( 'Caller' ),
+                                                        'CFR' => array('Caller' ),
+                                                        'ETO' => array('To','From','CC','BCC'),
+                                                        'EFR' => array('To','From','CC','BCC'),
+                                                        'FTO' => array ('To','From'),
+                                                        'FFR' => array ('To','From'),
+                                                        'LTT' => array ('To','From'),
+                                                        'LTF' => array ('To','From'),
+                                                        'MTG' => array('Organizer')
+                                                        );
+    foreach($default_activity_positions as $type_short_name=>$default_positions) {
+        $activity_type=get_activity_type($con, $type_short_name);
+        if ($activity_type) {
+            $activity_type_id=$activity_type['activity_type_id'];
+            $positions = get_activity_participant_positions($con, false, $activity_type_id);
+            if ($positions) {
+                $existing_positions=array();
+                foreach ($positions as $pos_data) {
+                    if ($pos_data['global_flag']!=1) {
+                        $existing_positions[]=$pos_data['participant_position_name'];                    
+                    }
+                }
+                $new_positions=array_diff($default_positions, $existing_positions);
+                foreach ($new_positions as $position_name) {
+                    add_participant_position($con, $activity_type_id, $position_name);
+                }
+            }
+        }
+    }
+
+}
+
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.8  2005/06/17 00:04:23  vanmer
+  * - added new function to install the default participant positions for the default activity types
+  *
   * Revision 1.7  2005/06/03 16:40:09  daturaarutad
   * added delete_activities (plural)
   *
