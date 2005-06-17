@@ -4,7 +4,7 @@
 *
 * @author Justin Cooper
 *
-* $Id: edit_activity_recurrence.php,v 1.5 2005/06/08 00:10:44 daturaarutad Exp $
+* $Id: edit_activity_recurrence.php,v 1.6 2005/06/17 16:41:30 ycreddy Exp $
 */
 
 
@@ -242,7 +242,8 @@ if ($activity_id) {
 
 	foreach($activities_to_add as $add_datetime) {
 
-		$activity['activity_id'] = null;
+		//$activity['activity_id'] = null;
+		unset($activity['activity_id']);
 		$activity['scheduled_at'] = date('Y-m-d H:i:s', $add_datetime);
 		$activity['activity_recurrence_id'] = $activity_recurrence_id;
 
@@ -273,6 +274,9 @@ Header("Location:{$http_site_root}$return_url&msg=$msg");
 
 /*
  * $Log: edit_activity_recurrence.php,v $
+ * Revision 1.6  2005/06/17 16:41:30  ycreddy
+ * Using a portable unset of activity_id when inserting Activity
+ *
  * Revision 1.5  2005/06/08 00:10:44  daturaarutad
  * added new periods to specify business days, updated for new build_recurring_activities_list parameter list
  *
