@@ -4,7 +4,7 @@
 *
 * @author Justin Cooper
 *
-* $Id: edit_activity_recurrence.php,v 1.6 2005/06/17 16:41:30 ycreddy Exp $
+* $Id: edit_activity_recurrence.php,v 1.7 2005/06/17 20:33:06 daturaarutad Exp $
 */
 
 
@@ -74,7 +74,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 if ($activity_id) {
     $activity_info=get_activity($con, array('activity_id'=>$activity_id));
     $activity=current($activity_info);
-} else if ($activity_participant_action!='deleteActivityParticipant') {
+	$activity_participants = get_activity_participants($con, $activity_id);
+} else {
     $msg=urlencode(_("Failed to find activity"));
     Header("Location:some.php?msg=$msg");
     exit;
@@ -217,7 +218,9 @@ if ($activity_id) {
 
 			// delete the previously created activities that have not yet happened
 			$where_clause = "activity_recurrence_id=$activity_recurrence_id and scheduled_at > " . $con->OffsetDate(0);
-			delete_activities($con, $where_clause, false, false, true);
+
+			// delete activities, including participants	
+			delete_activities($con, $where_clause, false, true);
 
     	}
 		$action_msg = _("Recurring Activities successfully updated");
@@ -235,8 +238,7 @@ if ($activity_id) {
 	$activities_to_add = build_recurring_activities_list($rec['start_datetime'], $rec['end_datetime'], $rec['end_count'], $rec['period'], $frequency, $day_offset, $week_offset, $week_days, $month_offset);
 	
 
-
-	// now, insert all these activities...
+	// now, insert all the activities and their participants
 	
 	$activity_length = strtotime($activity['ends_at']) - strtotime($activity['scheduled_at']);
 
@@ -255,15 +257,7 @@ if ($activity_id) {
 			$activity['ends_at'] = $activity['scheduled_at'];
 		}
 
-		$tbl = 'activities';
-
-    	$ins = $con->GetInsertSQL($tbl, $activity, get_magic_quotes_gpc());
-
-    	$rst = $con->execute($ins);
-		if(!$rst) {
-			db_error_handler($con, $ins);
-		}
-
+		add_activity($con, $activity, $activity_participants);
 
 	}
 
@@ -274,6 +268,9 @@ Header("Location:{$http_site_root}$return_url&msg=$msg");
 
 /*
  * $Log: edit_activity_recurrence.php,v $
+ * Revision 1.7  2005/06/17 20:33:06  daturaarutad
+ * now using add_activity function when inserting activities;  now aware of particpants as well
+ *
  * Revision 1.6  2005/06/17 16:41:30  ycreddy
  * Using a portable unset of activity_id when inserting Activity
  *
