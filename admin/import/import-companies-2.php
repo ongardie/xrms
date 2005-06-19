@@ -17,7 +17,7 @@
  * @author Brian Peterson
  *
  *
- * $Id: import-companies-2.php,v 1.9 2005/04/15 18:30:20 introspectshun Exp $
+ * $Id: import-companies-2.php,v 1.10 2005/06/19 13:30:10 braverock Exp $
  */
 require_once('../../include-locations.inc');
 
@@ -70,7 +70,7 @@ start_page($page_title, true, $msg);
            <td class=widget_header colspan=4><?php echo _("Company"); ?></td>
 
             <!-- contact info //-->
-           <td class=widget_header colspan=22><?php echo _("Contact Info"); ?></td>
+           <td class=widget_header colspan=23><?php echo _("Contact Info"); ?></td>
 
             <!-- address info //-->
            <td class=widget_header colspan=9><?php echo _("Address"); ?></td>
@@ -87,6 +87,7 @@ start_page($page_title, true, $msg);
            <td class=widget_content><?php echo _("Division Name"); ?></td>
 
            <!-- contact info //-->
+           <td class=widget_content><?php echo _("Contact ID"); ?></td>
            <td class=widget_content><?php echo _("First Names"); ?></td>
            <td class=widget_content><?php echo _("Last Name"); ?></td>
            <td class=widget_content><?php echo _("Email"); ?></td>
@@ -177,21 +178,58 @@ $filearray = CSVtoArray($tmp_upload_directory . 'companies-to-import.txt', true 
 foreach ($filearray as $row) {
     //debug line to view the array
     //echo "\n<br><pre>". print_r ($row). "\n</pre>";
+   $company_id = 0;
+   $contact_id = 0;
 
     //assign array values to variables
 
     require($template);
 
-    // does this company exist,
-    $company_id  = fetch_company_id($con, $company_name);
-    if (!$company_id) { $company_id=''; };
+    $sql_fetch_company_id = "select comp.company_id,cont.contact_id from companies comp, contacts cont where
+                            cont.company_id =  comp.company_id and
+                            comp.company_name = '" . addslashes($company_name) ."' and ";
+    if ( $contact_first_name = '' )
+    {
+        $sql_fetch_company_id .= "cont.first_names = '" . addslashes($contact_first_names) . "' and";
+    }
+    $sql_fetch_company_id .= " cont.last_name = '" . addslashes($contact_last_name) . "' and
+                            cont.contact_record_status='a' and
+                            comp.company_record_status='a' " ;
 
-    // and if so what is its default address...?
-    $default_address_id  = fetch_default_address($con, $company_id);
+    //echo "\n<br><pre> "._("Search Complete").' '. $sql_fetch_company_id . "\n</pre>" ;
 
-    //does this division exist?
-    $division_id = fetch_division_id($con, $division_name, $company_id);
+    $rst_company_id = $con->execute($sql_fetch_company_id);
 
+    if ( $rst_company_id )
+    {
+        $company_id = $rst_company_id->fields['company_id'];
+        $contact_id = $rst_company_id->fields['contact_id'];
+
+        $rst_company_id->close();
+    }
+    else
+    {
+      $company_id = 0;
+      $contact_id = 0;
+          $sql_fetch_company_id = "select comp.company_id from companies comp where
+                                  comp.company_name =  '" . addslashes($company_name) ."' and
+                                  comp.company_record_status='a' " ;
+    //echo "\n<br><pre> "._("Only Searching for Company") .' '. $sql_fetch_company_id . "\n</pre>" ;
+
+          $rst_company_id = $con->execute($sql_fetch_company_id);
+
+          if ($rst_company_id)
+          {
+              $company_id = $rst_company_id->fields['company_id'];
+              $contact_id = 0;
+              $rst_company_id->close();
+          }
+          else
+          {
+              $company_id = 0;
+              $contact_id = 0;
+          }
+    }
 
     //now show the row
     echo <<<TILLEND
@@ -204,6 +242,7 @@ foreach ($filearray as $row) {
            <td class=widget_content>$division_name</td>
 
            <!-- contact info //-->
+           <td class=widget_content>$contact_id</td>
            <td class=widget_content>$contact_first_names</td>
            <td class=widget_content>$contact_last_name</td>
            <td class=widget_content>$contact_email</td>
@@ -291,6 +330,11 @@ end_page();
 
 /**
  * $Log: import-companies-2.php,v $
+ * Revision 1.10  2005/06/19 13:30:10  braverock
+ * - improved localization and multi-line handling w/ addslashes
+ * - improved duplicate checking
+ * - patches provided by XRMS french translator Jean-Noël Hayart (SF:jnhayart)
+ *
  * Revision 1.9  2005/04/15 18:30:20  introspectshun
  * - i18n compliance
  *

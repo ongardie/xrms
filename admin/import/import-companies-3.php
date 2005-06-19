@@ -23,7 +23,7 @@
  * @todo put more feedback into the company import process
  * @todo add numeric checks for some of the category import id's
  *
- * $Id: import-companies-3.php,v 1.29 2005/04/15 18:32:21 introspectshun Exp $
+ * $Id: import-companies-3.php,v 1.30 2005/06/19 13:30:10 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -56,7 +56,7 @@ function importFailedMessage($str) {
  * @param string  $sql
  */
 function debugSql($sql) {
-    return; // comment out this line for debuging
+//    return; // comment out this line for debuging
     echo "<code><pre>";
     print_r($sql);
     echo "</pre></code>\n";
@@ -71,7 +71,7 @@ function debugSql($sql) {
  * @param optional boolean $success default=true
  */
 function importMessage($str, $success=true) {
-    return; // comment out this line for debuging
+//    return; // comment out this line for debuging
     $color="#ffb0b0"; // red
     if($success) $color="#b0ffb0"; // green
     echo "<div style=\"background-color: $color\">$str</div>\n";
@@ -110,7 +110,7 @@ start_page($page_title, true, $msg);
            <td class=widget_header colspan=4><?php echo _("Company"); ?></td>
 
            <!-- contact info //-->
-           <td class=widget_header colspan=22><?php echo _("Contact Info"); ?></td>
+           <td class=widget_header colspan=23><?php echo _("Contact Info"); ?></td>
 
            <!-- address info //-->
            <td class=widget_header colspan=9><?php echo _("Address"); ?></td>
@@ -128,6 +128,7 @@ start_page($page_title, true, $msg);
            <td class=widget_content><?php echo _("Division Name"); ?></td>
 
            <!-- contact info //-->
+           <td class=widget_content><?php echo _("Contact ID"); ?></td>
            <td class=widget_content><?php echo _("Contact ID"); ?></td>
            <td class=widget_content><?php echo _("First Names"); ?></td>
            <td class=widget_content><?php echo _("Last Name"); ?></td>
@@ -239,8 +240,53 @@ foreach ($filearray as $row) {
     require($template);
 
     // does this company exist,
-    $company_id  = fetch_company_id($con, $company_name);
-    if (!$company_id) { $company_id=''; };
+
+    $sql_fetch_company_id = "select comp.company_id,cont.contact_id from companies comp, contacts cont where
+                            cont.company_id =  comp.company_id and
+                            comp.company_name = '" . addslashes($company_name) ."' and ";
+    if ( $contact_first_name = '' )
+    {
+        $sql_fetch_company_id .= "cont.first_names = '" . addslashes($contact_first_names) . "' and";
+    }
+    $sql_fetch_company_id .= " cont.last_name = '" . addslashes($contact_last_name) . "' and
+                            cont.contact_record_status='a' and
+                            comp.company_record_status='a' " ;
+    debugSql($sql_fetch_company_id);
+    //echo "\n<br><pre> "._("Search Complete").' '. $sql_fetch_company_id . "\n</pre>" ;
+
+    $rst_company_id = $con->execute($sql_fetch_company_id);
+
+    if ( $rst_company_id )
+    {
+        $company_id = $rst_company_id->fields['company_id'];
+        $contact_id = $rst_company_id->fields['contact_id'];
+
+        $rst_company_id->close();
+    }
+    else
+    {
+        $company_id = 0;
+          $sql_fetch_company_id = "select comp.company_id from companies comp where
+                                  comp.company_name =  '" . addslashes($company_name) ."' and
+                                  comp.company_record_status='a' " ;
+   //echo "\n<br><pre> "._("Only Searching for Company") .' '. $sql_fetch_company_id . "\n</pre>" ;
+
+          debugSql($sql_fetch_company_id);
+
+          $rst_company_id = $con->execute($sql_fetch_company_id);
+
+          if ($rst_company_id)
+          {
+              $company_id = $rst_company_id->fields['company_id'];
+              $contact_id = 0;
+              $rst_company_id->close();
+          }
+          else
+          {
+              $company_id = 0;
+            $contact_id = 0;
+          }
+    }
 
     // and if so what is its default address...?
     if ($company_id) {
@@ -272,7 +318,7 @@ foreach ($filearray as $row) {
             $rec['rating_id'] = $rating_id;
             $rec['entered_at'] = $entered_at;
             $rec['entered_by'] = $entered_by;
-            $rec['company_name'] = $company_name;
+            $rec['company_name'] = addslashes($company_name);
 
             importMessage(_("Created company ") + $company_name);
         } else {
@@ -328,7 +374,7 @@ foreach ($filearray as $row) {
             $rec['terms'] = $terms;
         }
         if ($company_profile) {
-            $rec['profile'] = $company_profile;
+            $rec['profile'] = addslashes($company_profile);
         }
         if ($company_code) {
             $rec['company_code'] = $company_code;
@@ -435,16 +481,16 @@ foreach ($filearray as $row) {
             if (!$address_name) {$address_name = $address_city;}
 
             // now check to see if we already have an address that matches line1 and city
-            $sql_check_address = 'select address_id from addresses where
-                                  line1 = '. $con->qstr($address_line1) .' and
-                                  city = '. $con->qstr($address_city) ." and
+            $sql_check_address = "select address_id from addresses where
+                                  line1 = '". addslashes($address_line1) ."' and
+                                  city = '". addslashes($address_city) ."' and
                                   company_id = $company_id";
             debugSql($sql_check_address);
             $rst = $con->execute($sql_check_address);
             if ($rst) {
                 $address_id = $rst->fields['address_id'];
                 //should probably echo here to indicate that we didn't import this address
-		// The following line was added by cgg
+        // The following line was added by cgg
                 importMessage(_("Duplicate address. Using address id: ") . $address_id);
             }
             if (!$address_id and $company_id) {
@@ -481,33 +527,33 @@ foreach ($filearray as $row) {
                     $address_country = $default_country_id;
                     importFailedMessage(_("Country not specified. Using default country"));
                 }
-		// added by cgg
-		if (!isset($address_line2)) {
-			$address_line2 = "";
-		}
+        // added by cgg
+        if (!isset($address_line2)) {
+            $address_line2 = " ";
+        }
 
-		if (!isset($address_body)) {
-			$address_body = " ";
-		}
+        if (!isset($address_body)) {
+            $address_body = " ";
+        }
 
-		if (!isset($address_use_pretty_address)) {
-			$address_use_pretty_address = "f";
-		}
+        if (!isset($address_use_pretty_address)) {
+            $address_use_pretty_address = "f";
+        }
 
                 //insert the new address
                 $rec = array();
                 $rec['company_id'] = $company_id;
                 $rec['address_name'] = $address_name;
-                $rec['line1'] = trim($address_line1);
-                $rec['line2'] = trim($address_line2);
-                $rec['city'] = trim($address_city);
-                $rec['province'] = $address_state;
-                $rec['address_body'] = $address_body;
+                $rec['line1'] = trim(addslashes($address_line1));
+                $rec['line2'] = trim(addslashes($address_line2));
+                $rec['city'] = trim(addslashes($address_city));
+                // $rec['province'] = $address_state;
+                $rec['address_body'] = addslashes($address_body);
                 $rec['use_pretty_address'] = $address_use_pretty_address;
                 $rec['postal_code'] = $address_postal_code;
                 $rec['country_id'] = $address_country;
 
-		        $tbl = 'addresses';
+                $tbl = 'addresses';
                 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 
                 debugSql($ins);
@@ -540,55 +586,65 @@ foreach ($filearray as $row) {
                             }
                         }
                     }
-                } 
+                }
 
                 importMessage("Imported address '$address_line1'");
                 $address_id = $con->insert_id();
             }
-        else {
+        else
+        {
             importFailedMessage("Did not import address '$address_line1'");
         }
-            // if we don't have a default address, set them now
-            // this is kind of naive first through the post choosing, but oh well
-            if (!$default_address_id  && $address_id) {
-                $sql = "SELECT * FROM companies WHERE company_id = $company_id";
-                $rst = $con->execute($sql);
+         // if we don't have a default address, set them now
+         // this is kind of naive first through the post choosing, but oh well
+         if ( $address_id )
+         {
+             $sql = "SELECT * FROM companies WHERE company_id = $company_id";
+             $rst = $con->execute($sql);
 
-                $rec = array();
-                $rec['default_primary_address'] = $address_id;
-                $rec['default_billing_address'] = $address_id;
-                $rec['default_shipping_address'] = $address_id;
-                $rec['default_payment_address'] = $address_id;
+             $rec = array();
+             $rec['default_primary_address'] = $address_id;
+             $rec['default_billing_address'] = $address_id;
+             $rec['default_shipping_address'] = $address_id;
+             $rec['default_payment_address'] = $address_id;
 
-                $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-                debugSql($upd);
-                if (strlen($upd)>0) {
-                    $rst = $con->execute($upd);
-                    if (!$rst) {
-                        db_error_handler($con, $upd);
-                    }
-                }
-                $default_address_id = $address_id;
-            }
-        } // end address insert
+             $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+             debugSql($upd);
+             if (strlen($upd)>0)
+             {
+                 $rst = $con->execute($upd);
+                 if (!$rst)
+                 {
+                     db_error_handler($con, $upd);
+                 }
+             }
+             $default_address_id = $address_id;
+         }
+     } // end address insert
 
         //check to see if we should insert a contact
-        $sql_check_contact = 'select contact_id, first_names, last_name from contacts where
-                              first_names = '. $con->qstr($contact_first_names) . ' and
-                              last_name   = '. $con->qstr($contact_last_name) . ' and
-                              company_id  = '. $company_id;
+        $sql_check_contact = "select contact_id, first_names, last_name from contacts where ";
+    if ( $contact_first_name = '' )
+    {
+        $sql_check_contact .= " first_names = '". addslashes($contact_first_names) . "' and ";
+    }
+
+    $sql_check_contact .= " last_name   = '". addslashes($contact_last_name) . "' and company_id  = ". $company_id;
+
         debugSql($sql_check_contact);
         $rst = $con->execute($sql_check_contact);
-        if ($rst) {
+        if ($rst)
+        {
             $contact_id = $rst->fields['contact_id'];
             //should probably echo here to indicate that we didn't import this contact
         }
-        if (!$contact_id and $company_id) {
+        if (!$contact_id and $company_id)
+        {
         // doesn't exist, create new one
             $rec = array();
             $rec['company_id'] = $company_id;
-            $rec['first_names'] = $contact_first_names;
-            $rec['last_name'] = $contact_last_name;
+            $rec['first_names'] = addslashes($contact_first_names);
+            $rec['last_name'] = addslashes($contact_last_name);
             $rec['entered_at'] = $entered_at;
             $rec['entered_by'] = $entered_by;
             $rec['last_modified_at'] = $last_modified_at;
@@ -621,13 +677,13 @@ foreach ($filearray as $row) {
                 $rec['date_of_birth'] = $contact_date_of_birth;
             }
             if ($contact_summary){
-                $rec['summary'] = $contact_summary;
+                $rec['summary'] = addslashes($contact_summary);
             }
             if ($contact_title){
-                $rec['title'] = $contact_title;
+                $rec['title'] = addslashes($contact_title);
             }
             if ($contact_description){
-                $rec['description'] = $contact_description;
+                $rec['description'] = addslashes($contact_description);
             }
             if ($contact_cell_phone){
                 $rec['cell_phone'] = $contact_cell_phone;
@@ -657,7 +713,7 @@ foreach ($filearray as $row) {
                 $rec['custom4'] = $contact_custom4;
             }
             if ($contact_profile){
-                $rec['profile'] = $contact_profile;
+                $rec['profile'] = addslashes($contact_profile);
             }
             if ($gender){
                 $rec['gender'] = $gender;
@@ -676,26 +732,46 @@ foreach ($filearray as $row) {
             importMessage("Imported contact '$contact_first_names $contact_last_name'");
 
         } //end insert contact
-    else {
-        importFailedMessage("Did not update contact '$contact_first_names $contact_last_name'");
-    }
+        else
+        {
+           importFailedMessage("Did not update contact '$contact_first_names $contact_last_name'");
+        }
 
         //set the category if we got one
-        if ($category_id) {
-            //should add an is_numeric check and other logic here
-            $rec = array();
-            $rec['category_id'] = $category_id;
-            $rec['on_what_table'] = 'companies';
-            $rec['on_what_id'] = $company_id;
+        if ($category_id)
+        {
+/// a controler
+           $sql = 'SELECT * FROM entity_category_map
+                   WHERE category_id = ' . $category_id . ' and on_what_table = \'companies\' and on_what_id = '. $company_id;
+            debugsql( $sql);
+           $rst = $con->execute($sql);
+           if(!$rst)
+           {
+               db_error_handler($con, $sql);
+           }
+           elseif($rst->EOF)
+           {
+               importMessage("Imported Category");
+               //should add an is_numeric check and other logic here
+               $rec = array();
+               $rec['category_id'] = $category_id;
+               $rec['on_what_table'] = 'companies';
+               $rec['on_what_id'] = $company_id;
 
-            $tbl = 'entity_category_map';
-            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-            debugSql($ins);
-            if (strlen($ins)>0) {
-                $rst = $con->execute($ins);
-                if (!$rst) {
-                    db_error_handler($con, $ins);
-                }
+               $tbl = 'entity_category_map';
+               $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+               debugSql($ins);
+               if (strlen($ins)>0) {
+                   $rst = $con->execute($ins);
+                   if (!$rst) {
+                       db_error_handler($con, $ins);
+                   }
+               }
+            }
+            else
+            {
+               importMessage("Not imported Category : already exist");
+
             }
         }
 
@@ -802,6 +878,11 @@ end_page();
 
 /**
  * $Log: import-companies-3.php,v $
+ * Revision 1.30  2005/06/19 13:30:10  braverock
+ * - improved localization and multi-line handling w/ addslashes
+ * - improved duplicate checking
+ * - patches provided by XRMS french translator Jean-Noël Hayart (SF:jnhayart)
+ *
  * Revision 1.29  2005/04/15 18:32:21  introspectshun
  * - i18n compliance
  * - Added db_error_handler to ins and upd statments
