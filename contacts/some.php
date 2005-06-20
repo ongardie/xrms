@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.57 2005/05/11 16:28:46 braverock Exp $
+ * $Id: some.php,v 1.58 2005/06/20 18:48:04 niclowe Exp $
  */
 
 //include the standard files
@@ -303,7 +303,9 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'ContactForm', 'Co
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\">
+            <input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">
+</td></tr>";
 
 echo $pager_columns_selects;
 
@@ -364,7 +366,10 @@ function bulkEmail() {
     document.forms[0].action = "../email/email.php";
     document.forms[0].submit();
 }
-
+function bulkSnailMail() {
+    document.forms[0].action = "../snailmail/snailmail-1.php?scope=contacts";
+    document.forms[0].submit();
+}
 function clearSearchCriteria() {
     location.href = "some.php?clear=1";
 }
@@ -395,6 +400,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.58  2005/06/20 18:48:04  niclowe
+ * added snail mail merge functionality
+ *
  * Revision 1.57  2005/05/11 16:28:46  braverock
  * - explicitly set contact_id and company_id in recently viewed list for cti integration
  *

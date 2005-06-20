@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.67 2005/06/11 12:59:13 braverock Exp $
+ * $Id: some.php,v 1.68 2005/06/20 18:48:09 niclowe Exp $
  */
 
 require_once('../include-locations.inc');
@@ -74,7 +74,7 @@ $sql = "SELECT "
         industry_pretty_name as "industry",
         crm_status_pretty_name AS "crm_status",
         as1.account_status_display_html AS "account_status",
-        r.rating_display_html AS "rating" ';
+        r.rating_display_html AS "rating", addr.address_body as "primary_address" ';
 
 $criteria_count = 0;
 
@@ -546,6 +546,7 @@ $columns[] = array('name' => _("Industry"), 'index_sql' => 'industry');
 $columns[] = array('name' => _("CRM Status"), 'index_sql' => 'crm_status');
 $columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status', 'type' => 'html');
 $columns[] = array('name' => _("Rating"), 'index_sql' => 'rating', 'type' => 'html');
+$columns[] = array('name' => _("Primary Address"), 'index_sql' => 'primary_address');
 
 $columns = array_merge($columns, $advanced_search_columns);
 
@@ -568,7 +569,9 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CompanyForm', 'Co
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
             " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
+            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\">
+<input type=button class=button onclick=\"javascript: bulkSnailMail();\" value=\""._("Snail Mail Merge")."\">
+</td></tr>";
 
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
@@ -636,7 +639,10 @@ function bulkEmail() {
     document.forms[0].submit();
     //alert('Mail Merge functionality hasnt been implemented yet for multiple companies')
 }
-
+function bulkSnailMail() {
+    document.forms[0].action = "../snailmail/snailmail-1.php?scope=companies";
+    document.forms[0].submit();
+}
 function clearSearchCriteria() {
     location.href = "some.php?clear=1";
 }
@@ -668,6 +674,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.68  2005/06/20 18:48:09  niclowe
+ * added snail mail merge functionality
+ *
  * Revision 1.67  2005/06/11 12:59:13  braverock
  * - clean up SQL formatting (add spaces) to fix adodb pager 'single page' bugs
  *
