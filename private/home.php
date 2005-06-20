@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.55 2005/05/31 20:51:35 ycreddy Exp $
+ * $Id: home.php,v 1.56 2005/06/20 07:03:04 alanbach Exp $
  */
 
 // include the common files
@@ -117,6 +117,8 @@ if ($list) {
 
 $activity_rows = '';
 
+echo $sql_activities;
+
 if('list' == $results_view_type) {
 
 	$_SESSION['browse_start']=time();
@@ -150,6 +152,7 @@ if('list' == $results_view_type) {
     $endrows = "<tr><td class=widget_content_form_element colspan=10>
                 $pager_columns_button
                 </td></tr>";
+                               
 
     // this is the callback function that the pager uses to fill in the calculated data.
     $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Open Activities'), $form_name, 'Home_ActivitiesPager', $columns, false, true);
@@ -531,7 +534,7 @@ start_page($page_title,true,$msg);
 <!--
                     <?php echo _("Year"); ?> <input type="radio" name="results_view_type" value="year"<?php if('year' == $results_view_type) echo ' checked="true" ' ?> > &nbsp;
 -->
-					<input type=button class=button value="Refresh" onclick="document.ActivitiesView.submit();">
+					     <?php echo "<input type=button class=button value="._('Refresh')." onclick='document.ActivitiesView.submit();'>"; ?>
                 
                 </td>
 			</tr>
@@ -548,8 +551,6 @@ start_page($page_title,true,$msg);
 
         <!-- right column //-->
     <div id="Sidebar">
-
-
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header><?php echo _("Documentation"); ?></td>
@@ -584,6 +585,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.56  2005/06/20 07:03:04  alanbach
+ * Some translation & gettext corrections.
+ *
  * Revision 1.55  2005/05/31 20:51:35  ycreddy
  * Updated the activity GROUP BY clause to make it compatible with MS SQL Server
  *

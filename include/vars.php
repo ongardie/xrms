@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.35 2005/05/23 02:01:33 maulani Exp $
+ * $Id: vars.php,v 1.36 2005/06/20 07:03:01 alanbach Exp $
  */
 
 /**
@@ -32,15 +32,18 @@ if ( !defined('IN_XRMS') )
  */
 $xrms_db_dbtype = 'mysql';
 $xrms_db_server = 'localhost';
-$xrms_db_username = 'your_mysql_username';
-$xrms_db_password = 'your_mysql_password';
-$xrms_db_dbname = 'your_mysql_database';
+$xrms_db_username = 'xrms';
+$xrms_db_password = 'xrms';
+$xrms_db_dbname = 'xrms';
 
 // where is this application, web-wise? (no trailing slash)
-$http_site_root = "http://www.example.com/xrms";
+$http_site_root = "http://debian/xrms";
+
+// what domain should we use for cookies? (no trailing slash)
+$http_cookie_site = "www.talareweb.com";
 
 //where is the appliation in the filesystem (no trailing slash)
-$xrms_file_root = "/full/path/to/xrms";
+$xrms_file_root = "/var/www/xrms";
 
 
 /***  File Upload controls ***/
@@ -88,17 +91,20 @@ $accounting_system = ''; // no integration
 $xrms_system_id = "XRMS";
 
 // what should this application be called?
-$app_title = 'XRMS';
+$app_title = 'سیستم CRM تالاروب';
 
 // set the default country
 // 218 is usually the United States, for example
 $default_country_id = 218;
 
 // replace this with your organization's name
-$system_company_name = 'XRMS';
+$system_company_name = 'تالاروب';
 
 // replace this with the xrms company id
 $my_company_id = 0;
+
+// so that order numbers can be continuous with whatever you're using now
+$order_number_seed = 1000;
 
 // a few user-definable settings (there should be lots more)
 
@@ -108,6 +114,7 @@ $display_how_many_activities_on_company_page = 20;
 $display_how_many_activities_on_contact_page = 30;
 $display_how_many_activities_on_home_page = 30;
 $display_how_many_audit_items_on_dashboard = 20;
+$how_many_rows_to_import_per_page = 10;
 
 /* STYLE OPTIONS */
 
@@ -116,6 +123,7 @@ $required_indicator = "<img height=12 width=12 alt=required src=$http_site_root/
 
 // if vertical space is tight, shrink this down and change the font size in the stylesheet
 // these shouldn't even be here, though... all style info should be set in the stylesheet
+$page_title_height = 70;
 $report_graph_height = 400;
 $report_graph_width = 600;
 
@@ -135,6 +143,12 @@ $company_custom1_label = "(Custom 1)";
 $company_custom2_label = "(Custom 2)";
 $company_custom3_label = "(Custom 3)";
 $company_custom4_label = "(Custom 4)";
+
+// Activities default creation behavior.  Change to long if your users always need
+//  to enter more detail for activities
+//  Options are "Fast" or "Long"
+
+$activities_default_behavior = "Fast";
 
 // Activities Association Behavior
 // Often, staff are sloppy about associateting Activities with 
@@ -207,7 +221,8 @@ $xrms_use_ldap = false; //set to true if you want ldap authenthication
  *   symbol and country code
  * @global string $xrms_default_language
  */
-$xrms_default_language = 'en_US';
+//$xrms_default_language = 'en_US';
+$xrms_default_language = 'fa_IR';
 
 /**
  * Default Charset
@@ -221,7 +236,7 @@ $xrms_default_language = 'en_US';
  * making mistakes with incorrect language and charset combinations.
  * @global string $default_charset
  */
-$default_charset = 'iso-8859-1';
+$default_charset = 'UTF-8';
 
 /**
  * Available Languages
@@ -291,5 +306,29 @@ $use_php_iconv = false;
  *
  */
 $use_self_contacts = false;
+
+/**
+ * Define the meaning of a newline
+ */
+$NEWLINE = "\n\r";
+
+/**
+ * use_owl - provide an experimental link to OWL, a file
+ * management system.
+ *
+ * OWL is a file management system that supports more features,
+ * including revisions, than xrms.
+ *
+ * To use, install OWL from http://sourceforge.net/projects/owl in xrms/owl, then
+ * set the following variable to true. You'll get a link
+ * from the 'files' menu (xrms/files/some.php) in xrms to OWL.
+ */
+$use_owl = false;
+
+/**
+ * xrms_sql_limit - Defines the number of records to return while
+ * using SelectLimit statements.
+ */
+$xrms_sql_limit = 1;
 
 ?>
