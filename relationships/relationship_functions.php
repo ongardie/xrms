@@ -11,7 +11,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: relationship_functions.php,v 1.3 2005/06/07 20:58:55 vanmer Exp $
+ * $Id: relationship_functions.php,v 1.4 2005/06/20 16:19:08 vanmer Exp $
  */
  
 /*****************************************************************************/
@@ -64,6 +64,7 @@ function get_relationships($con, $_on_what_table, $_on_what_id, $relationship_ty
                 if ($exclude_relationships) {
                     $sql.=" AND r.relationship_id NOT IN ($exclude_relationships)";
                 }
+                $sql .= " ORDER BY name";
         //echo "<br>$sql<br>";
         $rst2 = $con->execute($sql);
         if(!$rst2) {
@@ -165,6 +166,9 @@ function get_agent_count($con, $company_id) {
 }
  /**
   * $Log: relationship_functions.php,v $
+  * Revision 1.4  2005/06/20 16:19:08  vanmer
+  * - added order by clause to allow relationships to appear in alphabetical order by the name of the entity
+  *
   * Revision 1.3  2005/06/07 20:58:55  vanmer
   * - patch to speed relationship checks when both sides are active provided by matthew berardi
   *
