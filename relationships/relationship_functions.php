@@ -11,7 +11,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: relationship_functions.php,v 1.4 2005/06/20 16:19:08 vanmer Exp $
+ * $Id: relationship_functions.php,v 1.5 2005/06/20 16:37:06 vanmer Exp $
  */
  
 /*****************************************************************************/
@@ -48,10 +48,20 @@ function get_relationships($con, $_on_what_table, $_on_what_id, $relationship_ty
             $working_direction = 'to';
             $opposite_direction = 'from';
         }
-                                                    
-        $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($relationship_type_data[$opposite_direction.'_what_table'])));
+        
+        //get array of fields which make up the name in a table
+        $rel_table_name=table_name($relationship_type_data[$opposite_direction.'_what_table']);        
+        
+        //order by the last field in the array (hack to make last name sort for contacts, company_name sort for companies, etc)
+        end($rel_table_name);
+        $order_by_name="c.".current($rel_table_name);
+        
+        //reset array point on name fields back to first element
+        reset($rel_table_name);
+        
+        $name_to_get = $con->Concat("c." . implode(", ' ' , c.", $rel_table_name));
         $sql = "SELECT r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status,
-                    c." . $relationship_type_data[$opposite_direction.'_what_table_singular'] . "_id, " . $name_to_get . " as name, r.relationship_type_id 
+                    c." . $relationship_type_data[$opposite_direction.'_what_table_singular'] . "_id, " . $name_to_get . " as name, $order_by_name as order_by_name, r.relationship_type_id 
                 FROM relationships as r, " . $relationship_type_data[$opposite_direction.'_what_table'] . " as c
                 WHERE 
                 r.relationship_type_id = $relationship_type_id 
@@ -64,7 +74,7 @@ function get_relationships($con, $_on_what_table, $_on_what_id, $relationship_ty
                 if ($exclude_relationships) {
                     $sql.=" AND r.relationship_id NOT IN ($exclude_relationships)";
                 }
-                $sql .= " ORDER BY name";
+                $sql .= " ORDER BY order_by_name";
         //echo "<br>$sql<br>";
         $rst2 = $con->execute($sql);
         if(!$rst2) {
@@ -166,6 +176,10 @@ function get_agent_count($con, $company_id) {
 }
  /**
   * $Log: relationship_functions.php,v $
+  * Revision 1.5  2005/06/20 16:37:06  vanmer
+  * - added new code which does a better job sorting relationships within a relationship type by name, either contact
+  * last name or company name
+  *
   * Revision 1.4  2005/06/20 16:19:08  vanmer
   * - added order by clause to allow relationships to appear in alphabetical order by the name of the entity
   *
