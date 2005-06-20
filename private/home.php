@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.56 2005/06/20 07:03:04 alanbach Exp $
+ * $Id: home.php,v 1.57 2005/06/20 07:08:44 alanbach Exp $
  */
 
 // include the common files
@@ -116,8 +116,6 @@ if ($list) {
 //echo htmlentities($sql_activities);
 
 $activity_rows = '';
-
-echo $sql_activities;
 
 if('list' == $results_view_type) {
 
@@ -585,7 +583,7 @@ end_page();
 
 /**
  * $Log: home.php,v $
- * Revision 1.56  2005/06/20 07:03:04  alanbach
+ * Revision 1.57  2005/06/20 07:08:44  alanbach
  * Some translation & gettext corrections.
  *
  * Revision 1.55  2005/05/31 20:51:35  ycreddy
