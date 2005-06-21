@@ -2,7 +2,7 @@
 /**
  * Roles sidebar, used to display/edit roles for a user
  *
- * $Id: user_roles_sidebar.php,v 1.2 2005/06/07 21:45:21 vanmer Exp $
+ * $Id: user_roles_sidebar.php,v 1.3 2005/06/21 14:23:56 vanmer Exp $
 **/
 
 if (!$edit_user_id) {
@@ -29,19 +29,20 @@ $role_rows=<<<TILLEND
 TILLEND;
 }
 
-foreach ($user_roles as $gkey=>$user_role_array) {
-    foreach ($user_role_array as $guser_id=>$user_role) {
-        $group_user_info=get_group_user(false, $guser_id);
-        $group_user_info=current($group_user_info);
-        $group_info=$group_user_info['Group_name'];
-        $role_rows.="<tr><td>$group_info</td><td>$user_role</td>";
-        if ($action=='edit') {
-            $role_rows.="<td><input type=button class=button onclick=\"deleteRole($guser_id);\" value=\""._("Delete") . "\"></td>";
+if ($user_roles) {
+    foreach ($user_roles as $gkey=>$user_role_array) {
+        foreach ($user_role_array as $guser_id=>$user_role) {
+            $group_user_info=get_group_user(false, $guser_id);
+            $group_user_info=current($group_user_info);
+            $group_info=$group_user_info['Group_name'];
+            $role_rows.="<tr><td>$group_info</td><td>$user_role</td>";
+            if ($action=='edit') {
+                $role_rows.="<td><input type=button class=button onclick=\"deleteRole($guser_id);\" value=\""._("Delete") . "\"></td>";
+            }
+            $role_rows.="</tr>";
         }
-        $role_rows.="</tr>";
     }
 }
-
 if ($action=='edit') {
 $role_rows.="<tr><td>$group_menu</td><td>$role_menu</td><td><input type=submit class=button name=btAddRole value=\""._("Add Role") . "\"></td></tr>";
 $user_role_sidebar=<<<TILLEND
@@ -63,6 +64,9 @@ $user_role_sidebar.=<<<TILLEND
 TILLEND;
 /**
  * $Log: user_roles_sidebar.php,v $
+ * Revision 1.3  2005/06/21 14:23:56  vanmer
+ * - added check to ensure that any roles have been provided by the wrapper functions
+ *
  * Revision 1.2  2005/06/07 21:45:21  vanmer
  * - altered to allow sidebar to be included from self, and be readonly
  *
