@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: participant_sidebar.php,v 1.5 2005/05/25 05:49:24 vanmer Exp $
+ * $Id: participant_sidebar.php,v 1.6 2005/06/21 15:31:55 vanmer Exp $
  */
 require_once($include_directory.'utils-activities.php');
 // add participant information block on sidebar
@@ -39,7 +39,7 @@ if (!$participants) {
     foreach ($participants as $participant_info) {
         $contact_ids[]=$participant_info['contact_id'];
         $remove_link="new_activity_participant.php?activity_participant_action=deleteActivityParticipant&activity_participant_id={$participant_info['activity_participant_id']}&return_url=".urlencode($participant_return_url);
-        $participant_block.="<tr><td class=widget_content>{$participant_info['contact_name']}</td><td>{$participant_info['participant_position_name']}</td><td><a href=\"$remove_link\">Remove</a></td></tr>";    
+        $participant_block.="<tr><td class=widget_content>{$participant_info['contact_name']}</td><td>"._($participant_info['participant_position_name'])."</td><td><a href=\"$remove_link\">"._("Remove")."</a></td></tr>";    
     }
 }
 if (count($contact_ids)>0) {
@@ -52,6 +52,9 @@ $participant_block .= "\n</table></form>";
 
 /**
  * $Log: participant_sidebar.php,v $
+ * Revision 1.6  2005/06/21 15:31:55  vanmer
+ * - added needed translations for displaying participants on activities
+ *
  * Revision 1.5  2005/05/25 05:49:24  vanmer
  * - added mail merge button to email all contacts on an activity
  *
