@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.83 2005/06/03 18:26:01 daturaarutad Exp $
+ * $Id: update.php,v 1.84 2005/06/21 15:27:57 vanmer Exp $
  */
 
 // where do we include from
@@ -18,6 +18,7 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -4880,6 +4881,11 @@ $con->execute($sql);
 $sql="ALTER TABLE `user_preference_types` ADD form_element_type varchar(32) NOT NULL default 'text'";
 $con->execute($sql);
 
+//adding strings for user preference types in order to allow them to be translated while still stored as English in the database
+$s=_("Language");
+$s=_("Theme");
+$s=_("Color and Layout Theme for XRMS");
+
 add_user_preference_type($con, 'user_language', 'Language', false, false, true, 'select');
 add_user_preference_type($con, 'css_theme', 'Theme', 'Color and Layout Theme for XRMS', false, true, 'select');
 
@@ -4895,11 +4901,10 @@ $con->execute($sql);
 $sql = "ALTER TABLE activity_types ADD user_editable_flag tinyint not null default '1'";
 $con->execute($sql);
 
-/*
-* commented until further workflow additions occur
-$sql = "UPDATE activity_types SET user_editable_flag=0 WHERE ((activity_type_short_name='CTO') OR (activity_type_short_name='CFR') OR (activity_type_short_name='ETO') OR (activity_type_short_name='EFR') OR (activity_type_short_name='PRO') OR (activity_type_short_name='INT') OR (activity_type_short_name='SYS'))";
+install_default_activity_participant_positions($con);
+
+$sql = "UPDATE activity_types SET user_editable_flag=0 WHERE ((activity_type_short_name='CTO') OR (activity_type_short_name='CFR') OR (activity_type_short_name='ETO') OR (activity_type_short_name='EFR') OR (activity_type_short_name='PRO') OR (activity_type_short_name='INT') OR (activity_type_short_name='SYS') OR (activity_type_short_name='FFR') OR (activity_type_short_name='FTO') OR (activity_type_short_name='LTT') OR (activity_type_short_name='LTF') OR (activity_type_short_name='MTG'))";
 $con->execute($sql);
-*/
 
 $sql = "ALTER TABLE activities ADD completed_by INT( 11 )";
 $con->execute($sql);
@@ -4925,8 +4930,13 @@ echo $msg;
 
 end_page();
 
+
 /**
  * $Log: update.php,v $
+ * Revision 1.84  2005/06/21 15:27:57  vanmer
+ * - added strings to translate user preference information
+ * - added section to make default activity types non-user editable
+ *
  * Revision 1.83  2005/06/03 18:26:01  daturaarutad
  * add activity_recurrence_id to activities
  *
