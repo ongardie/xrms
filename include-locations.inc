@@ -18,7 +18,7 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.17 2005/06/20 07:02:59 alanbach Exp $
+ * $Id: include-locations.inc,v 1.18 2005/06/21 15:47:09 vanmer Exp $
  */
 
 //
@@ -30,7 +30,7 @@ if (!defined('IN_XRMS')) {
 }
 
 // include trailing slash in path
-$include_directory = "/var/www/xrms/include/";
+$include_directory = "/full/path/to/xrms/";
 
 // Report all errors except E_NOTICE
 // This is the default value set in php.ini
@@ -41,8 +41,8 @@ error_reporting(E_ALL ^E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
- * Revision 1.17  2005/06/20 07:02:59  alanbach
- * Some translation & gettext corrections.
+ * Revision 1.18  2005/06/21 15:47:09  vanmer
+ * - rolling back another errant commit
  *
  * Revision 1.16  2004/12/21 19:38:57  braverock
  * roll back errant commit
