@@ -55,18 +55,19 @@ switch($activity_participant_action) {
         if (!$positions) $position_array[1]=_("Participant");
         else {
             foreach ($positions as $position_id=>$position_data) {
-                $position_array[$position_id]=$position_data['participant_position_name'];
+                $position_array[$position_id]=_($position_data['participant_position_name']);
             }
          }
         $position_menu=create_select_from_array($position_array, 'participant_position_id', $participant_position_id); //, '', $show_blank_first=true) 
-        $header_text="Activity Participant";
+        $header_text=_("Activity Participant");
         $body_content=<<<TILLEND
         <form method=POST action=new_activity_participant.php>
         <input type=hidden name=activity_participant_action value=selectContactParticipant>
         <input type=hidden name=activity_id value=$activity_id>
         <input type=hidden name=return_url value="$return_url">
-        <table class=widget><tr><td class=widget_label>Contact Search</td><td class=widget_label>Position</td<td class=widget_label>Activity</td></tr>
+        <table class=widget><tr><td class=widget_label>
 TILLEND;
+        $body_content.= "\n"._("Contact Search")."</td><td class=widget_label>"._("Position")."</td><td class=widget_label>"._("Activity")."</td></tr>";
         $body_content .= "<tr><td class=widget_content_form_element><input type=text name=search_text></td>";
         $body_content .= "<td class=widget_content_form_element>$position_menu</td>";
         $body_content .= "<td class=widget_content>$activity_name</td></tr>";
@@ -78,7 +79,7 @@ TILLEND;
         getGlobalVar($search_text, 'search_text');
         $positions=get_activity_participant_positions($con, false, false, $participant_position_id);
         $position=current($positions);
-        $position_name=$position['participant_position_name'];
+        $position_name=_($position['participant_position_name']);
         if ($search_text) { $search_text=$con->qstr("%$search_text%",get_magic_quotes_gpc()); }
         $name_concat = $con->Concat(implode(", ' ', ", table_name('contacts'))) . ' as name';
         $search_name = 'last_name';
@@ -102,15 +103,16 @@ TILLEND;
         //get select list of contacts
         $contact_list=$contact_rst->getmenu2('contact_id','',false);
         
-        $header_text='Activity Participant Contact';
+        $header_text=_("Activity Participant Contact");
         $body_content=<<<TILLEND
         <form method=POST action=new_activity_participant.php>
         <input type=hidden name=activity_participant_action value=addActivityParticipant>
         <input type=hidden name=activity_id value=$activity_id>
         <input type=hidden name=return_url value="$return_url">
         <input type=hidden name=participant_position_id value=$participant_position_id>
-        <table class=widget><tr><td class=widget_label>Contact Search</td><td class=widget_label>Position</td<td class=widget_label>Activity</td></tr>
+        <table class=widget><tr><td class=widget_label>
 TILLEND;
+        $body_content.= "\n"._("Contact Search")."</td><td class=widget_label>"._("Position")."</td><td class=widget_label>"._("Activity")."</td></tr>";
         
         
         $body_content .= "<tr><td class=widget_content_form_element>$contact_list</td>";
@@ -169,6 +171,9 @@ end_page();
 
 /*
  * $Log: new_activity_participant.php,v $
+ * Revision 1.2  2005/06/21 15:29:09  vanmer
+ * - caused strings that needed translation to be translated, including participant positions
+ *
  * Revision 1.1  2005/04/15 07:35:14  vanmer
  * -Initial Revision of an application for adding and removing contacts from activities
  *
