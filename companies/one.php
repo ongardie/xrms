@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.113 2005/06/06 18:39:25 vanmer Exp $
+ * $Id: one.php,v 1.114 2005/06/21 12:37:56 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -482,8 +482,8 @@ start_page($page_title, true, $msg);
 <script language="JavaScript" type="text/javascript">
 <!--
 function markComplete() {
-    document.forms[0].activity_status.value = "c";
-    document.forms[0].submit();
+    document.forms[1].activity_status.value = "c";
+    document.forms[1].submit();
 }
 
 //-->
@@ -845,6 +845,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.114  2005/06/21 12:37:56  braverock
+ * - fix activities 'Done' button
+ *   patch provided by Jean-Noël Hayart
+ *
  * Revision 1.113  2005/06/06 18:39:25  vanmer
  * - changed to only show division relationships when scoped to division
  *
