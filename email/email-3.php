@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.12 2005/06/15 14:21:14 braverock Exp $
+ * $Id: email-3.php,v 1.13 2005/06/22 22:30:14 jswalter Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -36,7 +36,6 @@ if (is_array($array_of_contacts))
 else
     echo _("WARNING: No array of contacts!") . "<br>";
 
-
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
@@ -49,11 +48,14 @@ and cont.contact_id in ($imploded_contacts)
 and length(cont.email) > 0
 and contact_record_status = 'a' order by c.company_name,cont.last_name asc";
 
+$_x = 1;
+
 $rst = $con->execute($sql);
 if ($rst) {
     while (!$rst->EOF) {
         $contact_rows .= '<tr>';
-        $contact_rows .= '<td class="widget_content_form_element"><input type="checkbox" name="array_of_contacts" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
+        $contact_rows .= '<td class="widget_content_form_element">';
+        $contact_rows .= '<input type="checkbox" name="array_of_contacts[]" id="array_of_contacts_' . $_x++ . '" value="' . $rst->fields['contact_id'] . '" checked="checked"></td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['company_name'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['username'] . '</td>';
         $contact_rows .= '<td class="widget_content">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</td>';
@@ -111,6 +113,10 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.13  2005/06/22 22:30:14  jswalter
+ *  - added ID attribute to the person checkbox objects
+ *  - checkbox ID attribute will increment for each checkbox created
+ *
  * Revision 1.12  2005/06/15 14:21:14  braverock
  * - add more compliant quoting of HTML and checkbox options
  * - add better input validation for checking array from $_POST
