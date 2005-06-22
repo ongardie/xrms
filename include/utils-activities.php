@@ -2,99 +2,138 @@
 /**
  * Utility functions for manipulating activities
  *
- * These functions create, retrieve, delete and modify activities, activity participants, 
+ * These functions create, retrieve, delete and modify activities, activity participants,
  * and the possibly positions a participant can serve within an activity type
  * This file should be included anywhere activities need to be created or modified
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.8 2005/06/17 00:04:23 vanmer Exp $
- 
+ * $Id: utils-activities.php,v 1.9 2005/06/22 17:43:46 jswalter Exp $
+
  */
 
 /**********************************************************************/
+
 /**
  *
- * Adds an activity to XRMS based on data in the associative array, 
+ * Adds an activity to XRMS based on data in the associative array,
  * returning the id of the newly created activity if successful
- * participants may optionally be passed in through the participants array of associative array records specifying
- * contact_id and activity_participant_position_id
+ * participants may optionally be passed in through the participants array of associative
+ * array records specifying contact_id and activity_participant_position_id
+ *
+ * These 'activities' tables fields are required.
+ * This method will fail without them.
+ * - activity_type_id        - is pulled from activity_type table
+ * - company_id              - which company is this activity related to
+ * - activity_title          - Activity title, ie: SUBJECT of email
+ *
+ * These fields are optional, some may be derived from other fields if not defined.
+ * - user_id                 - sets ownership, defaults to session_user_id
+ * - contact_id              - who is this activity related to
+ * - on_what_table           - what the activity is attached or related to
+ * - on_what_id              - which ID to use for this relationship
+ * - on_what_status          - workflow status
+ * - activity_description    - A short description of the activity
+ * - scheduled_at            - this might be a future activity/event, defaults to 'entered_at'
+ * - ends_at                 - this activity may have duration, ie: phone call. If not defined, defaults to 'scheduled_at'
+ * - activity_status         - [o] Open [c] Completed, defaults to [o]
+ * - completed_bol           - is this activity finsished?
+ * - completed_at            - when was the activity finshed. Uses NOW()
+ * - completed_by            - who finshed it, uses session_user_id
+ *
+ * Do not define these fields, they are auto-defined
+ * - activity_id             - auto increment field
+ * - entered_at              - when was record created
+ * - entered_by              - who created the record
+ * - last_modified_at        - when was record modified - this will be the same as 'entered_at'
+ * - last_modified_by        - who modified the record  - this will be the same as 'entered_by'
+ * - activity_record_status  - the database defaults this to [a] Active
+
  *
  * @param adodbconnection $con handle to the database
  * @param array $activity_data with associative array defining activity data (extract()'d inside function)
  * @param array $participants with participants and positions (contacts who participated in the activity)
- * 
+ *
  * @return integer $activity_id identifying newly created activity or false for failure
  */
-function add_activity($con, $activity_data, $participants=false) {
+function add_activity($con, $activity_data, $participants=false)
+{
+
+    // Right off the bat, if these are not set, we can't do anything!
+    if ( (! $con)  ||  (! $activity_data ) )
+        return false;
+
     //save to database
     global $session_user_id;
-    
+
     //Turn activity_data array into variables
     extract($activity_data);
-    
-    if ($email) { $activity_status = 'c'; };
-    
-    if (!$scheduled_at) {
-        $scheduled_at = date('Y-m-d H:i:s');
-    }
-    
-    if ($followup) {
-        //set the time for the new activity if it isn't already set
-        if (isset($default_followup_time) && $default_followup_time) {
-            $scheduled_at = date('Y-m-d', strtotime($default_followup_time) ) ;
-        } else {
-            $scheduled_at = date('Y-m-d', strtotime('+1 week') );
-        }
-    }
-    
-    if (!$ends_at) {
-        $ends_at = $scheduled_at;
-    }
-    
-    // make sure ends_at is later than scheduled at
-    if ($scheduled_at > $ends_at) {
-    //set $ends_at to = $scheduled_at
-    $ends_at = $scheduled_at;
-    }
-            
-    $rec['user_id']          = (strlen($user_id) > 0) ? $user_id : $session_user_id;
-    $rec['company_id']       = ($company_id > 0) ? $company_id : 0;
-    $rec['contact_id']       = ($contact_id > 0) ? $contact_id : 0;
+
+    // Now check these, we need these as well
+    if ( (! $activity_type_id) || (! $company_id) )
+        return false;
+
+    // Create new RECORD array '$rec' for SQL INSERT
+
+    // This var was already checked, if it wasn't valid, we wouldn't be here
+    $rec['activity_type_id'] = $activity_type_id;
+
+    // These values are auto set, thay can not be modified via API
     $rec['entered_at']       = time();
     $rec['entered_by']       = $session_user_id;
-    $rec['ends_at']          = strtotime($ends_at);
-    $rec['last_modified_at'] = time();
-    $rec['last_modified_by'] = $session_user_id;
-    $rec['opportunity_status_id'] = $opportunity_status_id;
-    $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
-    $rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
-    $rec['on_what_status']   = ($on_what_status > 0) ? $on_what_status : 0;
-    $rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
-    $rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
-    $rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
-    $rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
-    $rec['scheduled_at']     = strtotime($scheduled_at);
+
+    // Because this is a "create" method, these values are derived from the above values
+    // and can not be modified via API
+    $rec['last_modified_at'] = $rec['entered_at'];
+    $rec['last_modified_by'] = $rec['entered_by'];
+
+    // If this is not defined, then derive it from current time
+    $rec['scheduled_at']     = ($scheduled_at)   ? strtotime($scheduled_at) : $rec['entered_at'];
+
+    // This does 2 things:
+    //  * Checks to make sure that '$ends_at' is defined
+    //  * Checks that '$ends_at' is defined as a date *after* '$scheduled_at'
+    $rec['ends_at']          = ($scheduled_at > $ends_at) ? $rec['scheduled_at'] : strtotime($ends_at);
+
+    // If this is not defined, then pull it from $session_user_id
+    $rec['user_id']          = ($user_id)        ? $user_id        : $session_user_id;
+
+    // A 'title' for this activity for future reference and review
+    $rec['activity_title']   = ($activity_title) ? $activity_title : _("[none]");
+
+    // A brief description of the activity for future reference and review
+    $rec['activity_description']  = ($activity_description) ? $activity_description : '';
+
+    // These values, if not defined, will be set by default values defined within the Database
+    // Therefore they do not need to be created within this array for RECORD insertion
+    if ($activity_status)      { $rec['activity_status']      = $activity_status; }
+    if ($on_what_status > 0)   { $rec['on_what_status']       = $on_what_status; }
+    if ($completed_at)         { $rec['completed_at']         = $completed_at; }
+    if ($on_what_table)        { $rec['on_what_table']        = $on_what_table; }
+    if ($on_what_id > 0)       { $rec['on_what_id']           = $on_what_id; }
+    if ($company_id > 0)       { $rec['company_id']           = $company_id; }
+    if ($contact_id > 0)       { $rec['contact_id']           = $contact_id; }
 
     $tbl = 'activities';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $rst=$con->execute($ins);
+
     if (!$rst) { db_error_handler($con, $ins); return false; }
     $activity_id = $con->insert_id();
+
     add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
-    
+
     if (!$participants) {
         $participants=array(array('contact_id'=>$contact_id, 'activity_participant_position_id'=>1));
     }
-    
+
    foreach ($participants as $pdata) {
         add_activity_participant($con, $activity_id, $pdata['contact_id'], $pdata['activity_participant_position_id']);
     }
-    
-    
+
     return $activity_id;
 
-} 
+}
 
 /**********************************************************************/
 /**
@@ -106,11 +145,11 @@ function add_activity($con, $activity_data, $participants=false) {
  * @param array $activity_data with associative array defining activity data to search for
  * @param boolean $show_deleted specifying if deleted activities should be included in the search (defaults to false, only active activities)
  * @param boolean $return_recordset specifying if the function should return a recordset or associative array with the results of the search (defaults to false, return associative array)
- * 
+ *
  * @return array $activity_data with results of search or false if search finds no results/failed
  */
 function get_activity($con, $activity_data, $show_deleted=false, $return_recordset=false) {
-            
+
         $sql = "select a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name
         from activities a
         left join contacts cont on a.contact_id = cont.contact_id
@@ -127,19 +166,19 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
         $wherestr=make_where_string($con, $activity_data, $tablename);
     }
     if ($wherestr) $sql.=" WHERE $wherestr";
-    
+
     $rst = $con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
     if ($rst->EOF) return false;
     else {
- 	if ($return_recordset) return $rst;
+    if ($return_recordset) return $rst;
         while (!$rst->EOF) {
             $ret[]=$rst->fields;
             $rst->movenext();
         }
     }
     if (count($ret)>0) return $ret;
-    else return false;    
+    else return false;
 }
 
 /**********************************************************************/
@@ -154,19 +193,19 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
  * @param integer $activity_id optionally identifying activity in the database (required if not passing in a ecordset to $activity_rst)
  * @param adodbrecordset $activity_rst optionally providing a recordset to use for the update (required if not passing in an integer for $activity_id)
  * @param boolean $update_default_participant specifying if default participant for activity should be updated, if contact_id is updated (defaults to true, will update default participant)
- * 
+ *
  * @return boolean specifying if update succeeded
  */
 function update_activity($con, $activity_data, $activity_id=false, $activity_rst=false, $update_default_participant=true) {
-	if (!$activity_id AND !$activity_rst) return false;
-	if (!$activity_data) return false;
-	if (!$activity_rst) { 
-		$sql = "SELECT * FROM activities WHERE activity_id=$activity_id";
-		$activity_rst=$con->execute($sql);
-		if (!$activity_rst) { db_error_handler($con, $activity_sql); return false; }
-	}
+    if (!$activity_id AND !$activity_rst) return false;
+    if (!$activity_data) return false;
+    if (!$activity_rst) {
+        $sql = "SELECT * FROM activities WHERE activity_id=$activity_id";
+        $activity_rst=$con->execute($sql);
+        if (!$activity_rst) { db_error_handler($con, $activity_sql); return false; }
+    }
         if (!$activity_id) $activity_id=$activity_rst->fields['activity_id'];
-        
+
         if ($update_default_participant) {
             if ($activity_data['contact_id']) {
                 if ($activity_data['contact_id']!=$activity_rst->fields['contact_id']) {
@@ -195,12 +234,12 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
             $activity_data['completed_by']='NULL';
             $activity_data['completed_at']='NULL';
         }
-	$update_sql = $con->getUpdateSQL($activity_rst, $activity_data);
-	if ($update_sql) {
-		$update_rst=$con->execute($update_sql);
-		if (!$update_rst) { db_error_handler($con, $update_sql); return false; }
-		return true;
-	} else return true;
+    $update_sql = $con->getUpdateSQL($activity_rst, $activity_data);
+    if ($update_sql) {
+        $update_rst=$con->execute($update_sql);
+        if (!$update_rst) { db_error_handler($con, $update_sql); return false; }
+        return true;
+    } else return true;
 }
 
 /**********************************************************************/
@@ -213,7 +252,7 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
  * @param integer $activity_id identifying which activity to delete
  * @param boolean $delete_from_database specifying if activity should be deleted from the database, or simply marked with a deleted flag (defaults to false, mark with deleted flag)
  * @param boolean $delete_participants indicating if activity_participants should also be removed
- * 
+ *
  * @return array $activity_data with results of search or false if search finds no results/failed
  */
 function delete_activity($con, $activity_id=false, $delete_from_database=false, $delete_participants=true) {
@@ -227,8 +266,8 @@ function delete_activity($con, $activity_id=false, $delete_from_database=false, 
         if (!$update_rst) {db_error_handler($con, $sql); return false; }
         $sql = $con->GetUpdateSQL($update_rst, $update_array, true, get_magic_quotes_gpc());
     }
-    if (!$sql) return false;        
-    
+    if (!$sql) return false;
+
     if ($delete_participants) {
         $activity_participants=get_activity_participants($con, $activity_id);
         if ($activity_participants) {
@@ -251,7 +290,7 @@ function delete_activity($con, $activity_id=false, $delete_from_database=false, 
  * @param string $where_clause identifying which activitie(s) to delete
  * @param boolean $delete_from_database specifying if activity should be deleted from the database, or simply marked with a deleted flag (defaults to false, mark with deleted flag)
  * @param boolean $delete_participants indicating if activity_participants should also be removed
- * 
+ *
  * @return array $activity_data with results of search or false if search finds no results/failed
  */
 function delete_activities($con, $where_clause=false, $delete_from_database=false, $delete_participants=true) {
@@ -265,8 +304,8 @@ function delete_activities($con, $where_clause=false, $delete_from_database=fals
         if (!$update_rst) {db_error_handler($con, $sql); return false; }
         $sql = $con->GetUpdateSQL($update_rst, $update_array, true, get_magic_quotes_gpc());
     }
-    if (!$sql) return false;        
-    
+    if (!$sql) return false;
+
     if ($delete_participants) {
         $activity_participants=get_activity_participants($con, $activity_id);
         if ($activity_participants) {
@@ -289,7 +328,7 @@ function delete_activities($con, $where_clause=false, $delete_from_database=fals
  * @param adodbconnection $con handle to the database
  * @param integer $activity_type_id with integer of activity type to add a participant position for or 'null' for global
  * @param string $activity_participant_position_name with name of new activity participant position
- * 
+ *
  * @return integer $participant_position_id with ID of newly created activity participant position
  */
 function add_participant_position($con, $activity_type_id=false, $activity_participant_position_name=false) {
@@ -324,14 +363,14 @@ function add_participant_position($con, $activity_type_id=false, $activity_parti
  * @param integer $activity_type_id optionally specifying the type of activity to find positions for
  * @param integer $activity_participant_position_id optionally specifying the database identifier for the desired position
  * @param boolean $show_globals indicating whether or not to include global positions in search (defaults to true, include them)
- * 
+ *
  * @return array of participant position records, associative arrays keyed by fieldname
  */
-function get_activity_participant_positions($con, $activity_participant_position_name=false, $activity_type_id=false, $activity_participant_position_id=false, $show_globals=true) {        
+function get_activity_participant_positions($con, $activity_participant_position_name=false, $activity_type_id=false, $activity_participant_position_id=false, $show_globals=true) {
     $sql = "SELECT * from activity_participant_positions";
     $where=array();
     if ($activity_participant_position_name) {$where[]= "activity_participant_position_name=".$con->qstr($activity_participant_position_name, get_magic_quotes_gpc()); }
-    if ($activity_type_id) { 
+    if ($activity_type_id) {
         if ($show_globals) { $where[]= "((activity_type_id=$activity_type_id) OR global_flag=1)"; }
         else {$where[]= "(activity_type_id=$activity_type_id)";}
     }
@@ -342,9 +381,9 @@ function get_activity_participant_positions($con, $activity_participant_position
     if ($wherestr) $sql.=" WHERE $wherestr";
 
     $rst = $con->execute($sql);
-    
+
     if (!$rst) { db_error_handler($con, $sql);  return false; }
-    
+
     $ret=array();
     while (!$rst->EOF) {
         $ret[$rst->fields['activity_participant_position_id']]=$rst->fields;
@@ -353,7 +392,7 @@ function get_activity_participant_positions($con, $activity_participant_position
     if (count($ret)>0) {
         return $ret;
     } else return false;
-        
+
 }
 
 /**********************************************************************/
@@ -365,14 +404,14 @@ function get_activity_participant_positions($con, $activity_participant_position
  * @param integer $activity_id with database identifier of activity to add participant to
  * @param integer $contact_id with database identifier of contact to add to activity
  * @param integer $activity_participant_position_id optionally providing position of contact in activity (defaults to 1, Participant)
- * 
+ *
  * @return integer $activity_participant_id with ID of newly created activity participant
  */
 function add_activity_participant($con, $activity_id, $contact_id, $activity_participant_position_id=false) {
-	if (!$activity_participant_position_id) $activity_participant_position_id=1;
+    if (!$activity_participant_position_id) $activity_participant_position_id=1;
         if (!$contact_id) {  return false; }
         if (!$activity_id) { return false; }
-        
+
         $current_participants=get_activity_participants($con, $activity_id, $contact_id, $activity_participant_position_id, false);
         if ($current_participants) {
             $participant=current($current_participants);
@@ -385,23 +424,23 @@ function add_activity_participant($con, $activity_id, $contact_id, $activity_par
             } else {
                 //participant already exists and is active, fail
                 return false;
-            }            
+            }
         }
         //no activity participant found matching, so add new one
-        
-	$activity_participant['activity_id']=$activity_id;
-	$activity_participant['contact_id']=$contact_id;
-	$activity_participant['activity_participant_position_id']=$activity_participant_position_id;
-	
+
+    $activity_participant['activity_id']=$activity_id;
+    $activity_participant['contact_id']=$contact_id;
+    $activity_participant['activity_participant_position_id']=$activity_participant_position_id;
+
         $table="activity_participants";
-	$insert_sql = $con->getInsertSQL($table, $activity_participant);
-	if ($insert_sql) {
-		$insert_rst=$con->execute($insert_sql);
-		if (!$insert_rst) { db_error_handler($con, $insert_sql); return false; }
-		$activity_participant_id=$con->Insert_ID();
-		return $activity_participant_id;
-	}
-	return false;	
+    $insert_sql = $con->getInsertSQL($table, $activity_participant);
+    if ($insert_sql) {
+        $insert_rst=$con->execute($insert_sql);
+        if (!$insert_rst) { db_error_handler($con, $insert_sql); return false; }
+        $activity_participant_id=$con->Insert_ID();
+        return $activity_participant_id;
+    }
+    return false;
 }
 
 /**********************************************************************/
@@ -414,7 +453,7 @@ function add_activity_participant($con, $activity_id, $contact_id, $activity_par
  * @param integer $contact_id optionally specifying database identifier of contact
  * @param integer $activity_participant_position_id optionally providing position of contact in activity
  * @param boolean $show_active specifying if search should be limited to active records (defaults to true)
- * 
+ *
  * @return array of activity participant records, associative array keyed by fieldname
  */
 function get_activity_participants($con, $activity_id, $contact_id=false, $activity_participant_position_id=false, $show_active=true) {
@@ -429,7 +468,7 @@ function get_activity_participants($con, $activity_id, $contact_id=false, $activ
     if ($show_active) {
         $where['ap_record_status']='a';
     }
-    
+
     $tablename="activity_participants";
     $wherestr=make_where_string($con, $where, $tablename);
     $name_to_get = $con->Concat(implode(", ' ' , ", table_name('contacts')));
@@ -460,7 +499,7 @@ function get_activity_participants($con, $activity_id, $contact_id=false, $activ
  * @param adodbconnection $con handle to the database
  * @param integer $activity_participant_id with database identifier of activity participant
  * @param boolean $delete_from_database specifying if record should be deleted or simply marked as removed
- * 
+ *
  * @return boolean indicating success of delete operation
  */
 function delete_activity_participant($con, $activity_participant_id, $delete_from_database=false) {
@@ -494,12 +533,12 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
     $sql .=" WHERE $wherestr";
     $rst=$con->execute($sql);
     if (!$rst) { db_error_handler($con, $sql); return false; }
-    
+
     if (!$rst->EOF) return $rst->fields;
-    
+
     return false;
 }
- 
+
 function install_default_activity_participant_positions($con) {
     //set these variables in order to allow localization of these strings.  New positions should also be added in this manner
     $s=_("Caller");
@@ -508,7 +547,7 @@ function install_default_activity_participant_positions($con) {
     $s=_("CC");
     $s=_("BCC");
     $s=_("Organizer");
-    
+
     $default_activity_positions=array(
                                                         'CTO' => array( 'Caller' ),
                                                         'CFR' => array('Caller' ),
@@ -529,7 +568,7 @@ function install_default_activity_participant_positions($con) {
                 $existing_positions=array();
                 foreach ($positions as $pos_data) {
                     if ($pos_data['global_flag']!=1) {
-                        $existing_positions[]=$pos_data['participant_position_name'];                    
+                        $existing_positions[]=$pos_data['participant_position_name'];
                     }
                 }
                 $new_positions=array_diff($default_positions, $existing_positions);
@@ -544,6 +583,9 @@ function install_default_activity_participant_positions($con) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.9  2005/06/22 17:43:46  jswalter
+  *  - heavly modified 'add_activity()' to make it more "encapsulated"
+  *
   * Revision 1.8  2005/06/17 00:04:23  vanmer
   * - added new function to install the default participant positions for the default activity types
   *
