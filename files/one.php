@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.15 2005/05/04 14:36:53 braverock Exp $
+ * $Id: one.php,v 1.16 2005/06/22 20:39:31 vanmer Exp $
  */
 
 //include required files
@@ -98,7 +98,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2> <?php echo render_edit_button("Save Changes", 'submit'); ?>
- <?php echo render_read_button("Download",'button',"javascript: location.href='download.php?file_id=$file_id';") ?> 
+ <?php echo render_read_button("Download",'button',"javascript: window.open('download.php?file_id=$file_id');") ?> 
  <?php echo render_delete_button("Delete",'button',"javascript: location.href='delete.php?return_url=$return_url&file_id=$file_id';") ?></td>
             </tr>
         </table>
@@ -160,6 +160,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.16  2005/06/22 20:39:31  vanmer
+ *- now downloads occur in a new window
+ *
  *Revision 1.15  2005/05/04 14:36:53  braverock
  *- removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *
