@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.14 2005/06/15 14:24:08 braverock Exp $
+* $Id: email-4.php,v 1.15 2005/06/22 22:26:19 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -11,6 +11,7 @@ require_once('include-locations-location.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -40,7 +41,19 @@ if (is_array($array_of_contacts)) {
 $sql = "select * from contacts where contact_id in (" . $imploded_contacts . ")";
 $rst = $con->execute($sql);
 
+//$user_contact_id = $_SESSION['user_contact_id'];
+
+
 if ($rst) {
+
+    // activity Type
+    $activity_type_id = get_activity_type($con, 'ETO');
+    $activity_type_id = $activity_type_id['activity_type_id'];
+
+    $activity_participant_position_id = get_activity_participant_positions($con, 'To', $activity_type_id);
+    $activity_participant_position_id = current ( $activity_participant_position_id );
+    $activity_participant_position_id = $activity_participant_position_id['activity_participant_position_id'];
+
 
     require_once ( $include_directory . 'classes/SMTPs/SMTPs.php' );
 
@@ -48,7 +61,6 @@ if ($rst) {
 
     while (!$rst->EOF)
     {
-
         $_email_addr = $rst->fields['email'];
 
         $_full_name = '';
@@ -81,7 +93,7 @@ if ($rst) {
         $objSMTP->setTo ( $_email_full );
         $objSMTP->setSensitivity(1);
 
-        $output = $_sal . $msg_body;
+        $output = $msg_body;
 
         $objSMTP->setBodyContent ( $output );
 
@@ -95,7 +107,11 @@ if ($rst) {
         } else{
 */
         $feedback .= "<li>" . $rst->fields['email'] ."</li>";
+
         //add activity
+        if ( ! $company_id )
+            $company_id = $rst->fields['company_id'];
+/*
         $sql_insert_activity = "insert into activities set
                         activity_type_id = 3,
                         user_id = $session_user_id,
@@ -115,12 +131,37 @@ if ($rst) {
                         {
                             db_error_handler( $con, $sql_insert_activity );
                         }
+*/
+
+        $participants[] = array( 'contact_id' => $rst->fields['contact_id'],
+                                'activity_participant_position_id' => $activity_participant_position_id);
+
         //}
         $rst->movenext();
-    }
+    }   // WHILE email addesses
+
     $feedback .= "<hr />Dear [first] [lastname],<p>";
     $feedback .= nl2br(htmlspecialchars($msg_body));
     $rst->close();
+
+    // Create "activity" log
+    $activity_data['activity_type_id']     = $activity_type_id;  // is pulled from activity_type table
+    $activity_data['company_id']           = $company_id; // which company is this activity related to
+    $activity_data['activity_title']       = 'eMail: ' . $email_template_title;
+    $activity_data['activity_description'] = $output;
+    $activity_data['activity_status']      = 'c';         // Closed status
+    $activity_data['completed_bol']        = true;           // activity is completed
+
+/*
+ * - on_what_table           - what the activity is attached or related to
+ * - on_what_id              - which ID to use for this relationship
+ * - on_what_status          - workflow status
+*/
+    if ( ! add_activity($con, $activity_data, $participants ) )
+    {
+        echo '$activity_data error!';
+        exit;
+    }
 } else {
     db_error_handler($con, $sql);
 }
@@ -171,6 +212,10 @@ end_page();
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.15  2005/06/22 22:26:19  jswalter
+*  - MAIL MERGE will add an "activity record"
+* Bug 442
+*
 * Revision 1.14  2005/06/15 14:24:08  braverock
 * - add db_error_handler to result set check
 *
