@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to 
  * the user's default location.
  * 
- * $Id: download.php,v 1.9 2005/05/19 13:14:55 maulani Exp $
+ * $Id: download.php,v 1.10 2005/06/22 20:38:48 vanmer Exp $
  */ 
 
 require_once('../include-locations.inc');
@@ -74,7 +74,7 @@ $file_original_name = str_replace($file_id . '_', '', $file_filesystem_name);
 $mime_type_array=explode('/',$file_type);
 
 //send download headers, force pop-up download dialog on browser
-SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name, true, filesize($file_to_open));
+SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name, false, filesize($file_to_open));
 //open and output file contents
 $fp = fopen($file_to_open, 'rb');
 fpassthru($fp);
@@ -82,6 +82,9 @@ exit();
 
 /** 
  * $Log: download.php,v $
+ * Revision 1.10  2005/06/22 20:38:48  vanmer
+ * - no longer force download query, instead allow inline download, and provide correct mime type when downloading
+ *
  * Revision 1.9  2005/05/19 13:14:55  maulani
  * - Remove trailing whitespace
  *
