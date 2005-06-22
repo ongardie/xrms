@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.9 2005/06/22 17:43:46 jswalter Exp $
+ * $Id: utils-activities.php,v 1.10 2005/06/22 19:44:18 vanmer Exp $
 
  */
 
@@ -369,7 +369,7 @@ function add_participant_position($con, $activity_type_id=false, $activity_parti
 function get_activity_participant_positions($con, $activity_participant_position_name=false, $activity_type_id=false, $activity_participant_position_id=false, $show_globals=true) {
     $sql = "SELECT * from activity_participant_positions";
     $where=array();
-    if ($activity_participant_position_name) {$where[]= "activity_participant_position_name=".$con->qstr($activity_participant_position_name, get_magic_quotes_gpc()); }
+    if ($activity_participant_position_name) {$where[]= "participant_position_name=".$con->qstr($activity_participant_position_name, get_magic_quotes_gpc()); }
     if ($activity_type_id) {
         if ($show_globals) { $where[]= "((activity_type_id=$activity_type_id) OR global_flag=1)"; }
         else {$where[]= "(activity_type_id=$activity_type_id)";}
@@ -583,6 +583,9 @@ function install_default_activity_participant_positions($con) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.10  2005/06/22 19:44:18  vanmer
+  * - fixed incorrect fieldname in participant position lookup
+  *
   * Revision 1.9  2005/06/22 17:43:46  jswalter
   *  - heavly modified 'add_activity()' to make it more "encapsulated"
   *
