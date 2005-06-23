@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.32 2005/04/11 00:43:51 maulani Exp $
+ * $Id: index.php,v 1.33 2005/06/23 16:55:19 vanmer Exp $
  */
 
 //include required stuff
@@ -100,6 +100,11 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content>
                     <a href="activity-templates/some.php"><?php echo _("Activity Templates"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
+                    <a href="email-templates/email_template_list.php"><?php echo _("Email Templates"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -239,6 +244,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.33  2005/06/23 16:55:19  vanmer
+ * - added link to newly created email template system
+ *
  * Revision 1.32  2005/04/11 00:43:51  maulani
  * - Add address-types
  *
