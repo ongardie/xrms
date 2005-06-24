@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_email_template_type.php,v 1.1 2005/06/23 16:54:38 vanmer Exp $
+ * $Id: one_email_template_type.php,v 1.2 2005/06/24 23:52:31 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -68,7 +68,9 @@ start_page($page_title);
 
 
 <div id="Main">
+<div id='Sidebar'>
 <?php include('email_template_nav.php'); ?>
+</div>
 <div id="Content">
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
@@ -86,6 +88,9 @@ start_page($page_title);
 
 /**
  * $Log: one_email_template_type.php,v $
+ * Revision 1.2  2005/06/24 23:52:31  vanmer
+ * - added sidebar wrapper
+ *
  * Revision 1.1  2005/06/23 16:54:38  vanmer
  * - new interface for managing email templates and their types
  *

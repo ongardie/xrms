@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: email_template_type_list.php,v 1.1 2005/06/23 16:54:38 vanmer Exp $
+ * $Id: email_template_type_list.php,v 1.2 2005/06/24 23:52:18 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -69,7 +69,9 @@ start_page($page_title);
 <?php
 
 echo "<div id='Main'>";
+echo "<div id='Sidebar'>";
 require_once('email_template_nav.php');
+echo "</div>";
 echo '<div id=Content>';
 echo $pager_columns_selects;
 $pager->Render();
@@ -83,6 +85,9 @@ end_page();
 
 /**
  * $Log: email_template_type_list.php,v $
+ * Revision 1.2  2005/06/24 23:52:18  vanmer
+ * - added sidebar wrapper
+ *
  * Revision 1.1  2005/06/23 16:54:38  vanmer
  * - new interface for managing email templates and their types
  *
