@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.10 2005/06/22 19:44:18 vanmer Exp $
+ * $Id: utils-activities.php,v 1.11 2005/06/24 18:46:08 daturaarutad Exp $
 
  */
 
@@ -113,11 +113,11 @@ function add_activity($con, $activity_data, $participants=false)
     if ($on_what_id > 0)       { $rec['on_what_id']           = $on_what_id; }
     if ($company_id > 0)       { $rec['company_id']           = $company_id; }
     if ($contact_id > 0)       { $rec['contact_id']           = $contact_id; }
+    if ($activity_recurrence_id > 0) { $rec['activity_recurrence_id']           = $activity_recurrence_id; }
 
     $tbl = 'activities';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $rst=$con->execute($ins);
-
     if (!$rst) { db_error_handler($con, $ins); return false; }
     $activity_id = $con->insert_id();
 
@@ -539,6 +539,8 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
     return false;
 }
 
+
+ 
 function install_default_activity_participant_positions($con) {
     //set these variables in order to allow localization of these strings.  New positions should also be added in this manner
     $s=_("Caller");
@@ -583,6 +585,9 @@ function install_default_activity_participant_positions($con) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.11  2005/06/24 18:46:08  daturaarutad
+  * add activity_recurrence_id to list of activity fields in add_activity
+  *
   * Revision 1.10  2005/06/22 19:44:18  vanmer
   * - fixed incorrect fieldname in participant position lookup
   *
