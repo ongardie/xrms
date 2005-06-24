@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.15 2005/06/22 22:26:19 jswalter Exp $
+* $Id: email-4.php,v 1.16 2005/06/24 16:58:20 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -25,6 +25,27 @@ $sender_address = unserialize($_SESSION['sender_address']);
 $bcc_address = unserialize($_SESSION['bcc_address']);
 $email_template_title = unserialize($_SESSION['email_template_title']);
 $email_template_body = unserialize($_SESSION['email_template_body']);
+
+$uploadDir = unserialize($_SESSION['uploadDir']);
+$attachment_list = explode ( '|', unserialize($_SESSION['attachment_list']) );
+
+foreach ( $attachment_list as $_file )
+{
+    if ( $_file == '' )
+        continue;
+
+    // Create array to store file data
+    $_fileData[$_file] = array();
+
+    // Full path
+    $_fileData[$_file]['path'] = $uploadDir . '/' . $_file;
+
+    // we need its MIME type
+    $_fileData[$_file]['mime'] = mime_content_type ( $_fileData[$_file]['path'] );
+
+    // we need the file itself
+    $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
+}
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -93,6 +114,17 @@ if ($rst) {
         $objSMTP->setTo ( $_email_full );
         $objSMTP->setSensitivity(1);
 
+        // If we have any attachements, attach them
+        if ( $_fileData )
+        {
+            // Attach each file in turn
+            foreach ( $_fileData as $_file => $_data )
+            {
+                // Add the attachments
+                $objSMTP->setAttachement ( $_data['content'], $_file, $_data['mime'] );
+            }
+        }
+
         $output = $msg_body;
 
         $objSMTP->setBodyContent ( $output );
@@ -111,27 +143,6 @@ if ($rst) {
         //add activity
         if ( ! $company_id )
             $company_id = $rst->fields['company_id'];
-/*
-        $sql_insert_activity = "insert into activities set
-                        activity_type_id = 3,
-                        user_id = $session_user_id,
-                        company_id = ".$rst->fields['company_id'].",
-                        contact_id = ".$rst->fields['contact_id'].",
-                        activity_title = '".addslashes($email_template_title)."',
-                        activity_description = '".addslashes($output)."',
-                        entered_at = ".$con->dbtimestamp(mktime()).",
-                        last_modified_at = ".$con->dbtimestamp(mktime()).",
-                        last_modified_by = $session_user_id,
-                        scheduled_at=".$con->dbtimestamp(mktime()).",
-                        ends_at=".$con->dbtimestamp(mktime()).",
-                        activity_status ='c',
-                        entered_by = $session_user_id;";
-                        $act_rst = $con->execute($sql_insert_activity);
-                        if ( ! $act_rst )
-                        {
-                            db_error_handler( $con, $sql_insert_activity );
-                        }
-*/
 
         $participants[] = array( 'contact_id' => $rst->fields['contact_id'],
                                 'activity_participant_position_id' => $activity_participant_position_id);
@@ -210,8 +221,36 @@ start_page($page_title, true, $msg);
 
 end_page();
 
+// =============================================================
+// =============================================================
+/**
+* This function will read a file in
+* from a supplied filename and return it.
+*/
+function getFile($filename)
+{
+    $return = '';
+    if ($fp = fopen($filename, 'rb')) {
+        while (!feof($fp)) {
+            $return .= fread($fp, 1024);
+        }
+        fclose($fp);
+        return $return;
+
+    } else {
+        return false;
+    }
+
+};
+
 /**
 * $Log: email-4.php,v $
+* Revision 1.16  2005/06/24 16:58:20  jswalter
+*  - made HTML more XHTML comliant
+*  - added FILE attachement processing
+*  - @TODO; Current version of SMTPs.php does not allow multiple attachements. Need to correct this, soon.
+* Bug 310
+*
 * Revision 1.15  2005/06/22 22:26:19  jswalter
 *  - MAIL MERGE will add an "activity record"
 * Bug 442
