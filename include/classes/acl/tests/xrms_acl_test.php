@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.4 2005/05/13 21:22:37 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.5 2005/06/24 23:51:57 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -122,7 +122,17 @@ Class ACLTest extends PHPUnit_TestCase {
        $this->assertTrue($result!==false, "ControlledObject addition of $name failed");
        return $result;
     }
-
+    function test_add_controlled_object_again($name=false, $table=false, $field=false, $user_field=false, $data_source=false) {
+       if (!$name) { $name = $this->controlled_objectName; }
+       if (!$table) { $table = $this->controlled_objectTable; }
+       if (!$field) { $field = $this->controlled_objectField; }
+       if (!$data_source) { $data_source = $this->controlled_objectDataSource; }       
+        $result=$this->acl->add_controlled_object($name, $table, $field, $user_field, $data_source);
+        $this->assertTrue($result, "Failed to add controlled object of $name for duplicate test");
+        $result2=$this->acl->add_controlled_object($name, $table, $field, $user_field, $data_source);
+        $this->assertTrue($result==$result2, "Failed to get already added controlled object of $name when adding duplicate");        
+        return $result;
+    }      
     function test_get_controlled_object($search=false) {
         if (!$search) { $search = $this->controlled_objectName; }
        $result = $this->acl->get_controlled_object($search);
@@ -370,6 +380,15 @@ Class ACLTest extends PHPUnit_TestCase {
         $this->assertTrue($result,"Adding controlled object $childObject to parent $parentObject failed.");
         return $result;
     }
+    
+    function test_add_controlled_object_relationship_again($_parentObject=false,$_childObject=false, $_childField=false) {
+        $return1=$this->test_add_controlled_object_relationship($_parentObject, $_childObject, $_childField);
+        $return2=$this->test_add_controlled_object_relationship($_parentObject, $_childObject, $_childField);
+        $this->assertTrue($return1, "Failed to add initial relationship for duplicates");
+        $this->assertTrue($return2, "Failed to add second relationship for duplicates");        
+        $this->assertTrue($return1==$return2, "Failed to allow duplicate calls to add_controlled_object_relationship with same return ID");
+        return $return1;
+    }
         
     function test_get_controlled_object_relationship($parentObject=false,$childObject=false) {
         if ($parentObject===false) { $parentObject=$this->controlled_objectName."Parent"; }
@@ -434,15 +453,17 @@ Class ACLTest extends PHPUnit_TestCase {
     function test_get_role_permission($Role=false, $ControlledObjectRelationship=false,$Scope=false,$Permission=false, $RolePermission_id=false) {
             $Role = $this->test_get_role($Role);
             $Role_id=$Role['Role_id'];
+            $Role_name=$Role['Role_name'];
         if (!$ControlledObjectRelationship) { 
             $ControlledObjectRelationship = $this->test_get_controlled_object_relationship(); 
             $CORelationship_id=$ControlledObjectRelationship['CORelationship_id'];
+            $ControlledObjectRelationship_name= $CORelationship_id;
         }
         if (!$Scope) { $Scope = $this->scope; }
         if (!$Permission) { $Permission = $this->permission; }
         
         $result=$this->acl->get_role_permission($Role_id, $CORelationship_id, $Scope, $Permission, $RolePermission_id);
-        $this->assertTrue($result,"Unable to find role permission with role $Role, obj $ControlledObjectRelationship scope $Scope perm $Permission id $RolePermission_id");
+        $this->assertTrue($result,"Unable to find role permission with role $Role_name, obj $ControlledObjectRelationship_name scope $Scope perm $Permission id $RolePermission_id");
         $this->assertTrue(is_array($result), "Role Permission should be an array");
         return $result;
     }
@@ -951,11 +972,12 @@ Class ACLTest extends PHPUnit_TestCase {
         $this->assertTrue($result, "Failed to get correct permission on object");
 
         $this->assertTrue(is_array($result), "Failed to get a list of permissions");
-        $this->assertTrue(array_search($Permission, $result)!==false,"Failed to find searched for permission in list");
-
-        //finds second permissions even though it is not searched for, since all permissions available are returned
-        $this->assertTrue(array_search($Permission2, $result)!==false,"Failed to find searched for permission2 in list");
-                
+        if ($result) {
+            $this->assertTrue(array_search($Permission, $result)!==false,"Failed to find searched for permission in list");
+    
+            //finds second permissions even though it is not searched for, since all permissions available are returned
+            $this->assertTrue(array_search($Permission2, $result)!==false,"Failed to find searched for permission2 in list");
+        }                
         $this->test_delete_group_user($Group, $Role, $User_id);        
         $this->test_delete_role_permission($Role, $CORelationship_id, $Scope, $Permission);
         $this->test_delete_role_permission($Role, $CORelationship_id, $Scope, $Permission2);
@@ -1106,6 +1128,11 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.5  2005/06/24 23:51:57  vanmer
+ * - added tests to add objects and relationships twice to ensure that second addition returns same
+ * object/relationship
+ * - added checks before running tests which will result in PHP errors
+ *
  * Revision 1.4  2005/05/13 21:22:37  vanmer
  * - added checks in tests to ensure that some code/subtests only get run when initial test succeeds
  *
