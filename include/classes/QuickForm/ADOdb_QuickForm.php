@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.7 2005/06/14 18:25:26 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.8 2005/06/24 22:36:45 vanmer Exp $
  */
 
 
@@ -483,13 +483,14 @@ END;
 
 	    if(!empty($this->ReturnButtonCaption) && !empty($this->ReturnButtonURL)) {
  			$form->addElement('button', 'returnURL', $this->ReturnButtonCaption, array('id' => 'returnURL', 'class' => 'button'));
+			$form_name = ($this->DisplayTitle ? "\"$this->DisplayTitle\"" : '0');
 
-			$this->JSCodePost[] = <<<END
-				<script language="JavaScript" type="text/javascript">
-					document.forms[0].returnURL.onclick = function() {
-						location.href='{$this->ReturnButtonURL}';
-					}
-				</script>
+            		$this->JSCodePost[] = <<<END
+                		<script language="JavaScript" type="text/javascript">
+                    			document.forms[$form_name].returnURL.onclick = function() {
+                       				location.href='{$this->ReturnButtonURL}';
+                    			} 
+                		</script>
 END;
 		}
 	}
