@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_email_template.php,v 1.1 2005/06/23 16:54:38 vanmer Exp $
+ * $Id: one_email_template.php,v 1.2 2005/06/24 22:37:45 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,9 +27,9 @@ $session_user_id = session_check();
 
 
 getGlobalVar($return_url, 'return_url');
+getGlobalVar($email_template_id, 'email_template_id');
 
 $page_title = 'Manage Email Template';
-
 
 start_page($page_title);
 
@@ -49,33 +49,47 @@ start_page($page_title);
   $view->SetReturnButton('Return to List', $return_url);
 
   $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
-  $form_html = $controller->ProcessAndRenderForm();
+  $template_form_html = $controller->ProcessAndRenderForm();
 
 
-	$con->close();
 
+if ($_GET['form_action']=='edit') {
+    $on_what_table='email_templates';
+    $on_what_id=$email_template_id;
+    $template_return_url=$return_url;
+    $return_url=current_page();
+    require_once($include_directory.'../files/sidebar.php');
+    $return_url=$template_return_url;
+} else {
+    $file_rows='';
+}
 ?>
 
-
 <div id="Main">
+<div id="Sidebar">
 <?php include('email_template_nav.php'); ?>
+<?php echo $file_rows; ?>
+</div>
 <div id="Content">
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
     <tr>
         <td class=lcol width=30% valign=top>
-					<?php echo $form_html ?>
+					<?php echo $template_form_html; ?>
         </td>
     </tr>
 </table>
 </div>
-
 <?php
 
+   $con->close();
 
   end_page();
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.2  2005/06/24 22:37:45  vanmer
+ * - added files sidebar when editing an email template
+ *
  * Revision 1.1  2005/06/23 16:54:38  vanmer
  * - new interface for managing email templates and their types
  *
