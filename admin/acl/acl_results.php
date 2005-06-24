@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.7 2005/05/10 13:28:14 braverock Exp $
+ * $Id: acl_results.php,v 1.8 2005/06/24 22:00:47 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -146,8 +146,7 @@ echo '<table class=widget>
                 <a href="acl_results.php?aclAction=showParamSelect&aclTest=Permission">'._("Check Permission on an object for a user").'</a><p>
                 <a href="acl_results.php?aclAction=showParamSelect&aclTest=List">'._("Get list of objects for a user").'</a>
             </td></tr>
-        </table>
-TILLEND;
+        </table>';
         break;
 }
 echo "</div></div>";
@@ -201,7 +200,7 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false) {
                 $sql .= " order by $order_by";
             }
             if ($extrafield) {
-                $radiofield=$ret['con']->CONCAT($ret['con']->qstr("<input type=radio name=on_what_id value=\""),$on_what_field,$ret['con']->qstr("\">")) ." as on_what_id";
+                $radiofield=$ret['con']->CONCAT($ret['con']->qstr("<input type=radio name=on_what_id value=\""),$on_what_field,$ret['con']->qstr("\">")) ." as select_on_what_id";
                 if(preg_match("|SELECT([^\e]*)FROM([^\e]*)|", $sql, $matched)) {
                     $fields = trim($matched[1]);
                     if ($fields=='*') {
@@ -244,6 +243,10 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.8  2005/06/24 22:00:47  vanmer
+  * - fixed parse error introduced by translations
+  * - fixed on_what_id field to be called select_on_what_id so that it does not collide with existing on_what_id fields
+  *
   * Revision 1.7  2005/05/10 13:28:14  braverock
   * - localized strings patches provided by Alan Baghumian (alanbach)
   *
