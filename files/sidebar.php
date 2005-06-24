@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.16 2005/06/01 16:40:55 ycreddy Exp $
+ * $Id: sidebar.php,v 1.17 2005/06/24 23:26:09 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
 }
 /*
 COMMENTED until ACL is integrated
-$fileList=get_list($session_user_id, 'Read', false, 'files');
+$fileList=acl_get_list($session_user_id, 'Read', false, 'files');
 if (!$fileList) { $file_rows=''; return false; }
 else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN ($fileList) "; }
 */
@@ -32,7 +32,7 @@ if (strlen($on_what_table)>0){
             and file_record_status = 'a'
             $file_limit_sql           
             order by entered_at";
-    $rst = $con->execute($file_sql);
+    $file_sidebar_rst = $con->execute($file_sql);
 } else {
     $file_sql = "select * from files, users where
             files.entered_by = '$session_user_id'
@@ -40,23 +40,23 @@ if (strlen($on_what_table)>0){
             and file_record_status = 'a'
             $file_limit_sql
             order by entered_at";
-    $rst = $con->SelectLimit($file_sql, 5, 0);
+    $file_sidebar_rst = $con->SelectLimit($file_sql, 5, 0);
 }
-
 // any errors ???
-if ( !$rst ) {
+if (!$file_sidebar_rst) {
   // yep - report it
+  print_r($con);
   db_error_handler($con, $file_sql);
 }
 
-
 // files plugin hook
-$plugin_params = array($rst);
+$plugin_params = array($file_sidebar_rst);
 do_hook_function('file_browse_files', $plugin_params);
 $file_rows = $plugin_params['file_rows'];
-
 if(!$file_rows) {
-
+        if (!$return_url) {
+            $return_url="/$on_what_table/one.php?".make_singular($on_what_table)."_id=".$on_what_id;
+        }
 	$file_rows = "<div id='file_sidebar'>
         			<table class=widget cellspacing=1 width=\"100%\">
             			<tr>
@@ -71,33 +71,33 @@ if(!$file_rows) {
 
 
 
-	if (strlen($rst->fields['username']) > 0) {
-	    while (!$rst->EOF) {
+	if (strlen($file_sidebar_rst->fields['username']) > 0) {
+	    while (!$file_sidebar_rst->EOF) {
 	
 	      // get contact id
-	      $user_contact_id = $rst->fields['user_contact_id'];
+	      $user_contact_id = $file_sidebar_rst->fields['user_contact_id'];
 	
 	        $file_rows .= "
 	             <tr>";
-	        if ($rst->fields['file_size'] == "0")
+	        if ($file_sidebar_rst->fields['file_size'] == "0")
 	          {
-	          $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() . "' title='". $rst->fields['file_pretty_name']. "'>" . substr( $rst->fields['file_pretty_name'], 0, 20) . '</a></b></td>';
-	          $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($rst->fields['file_size']) . '</b></td>';
-	          $file_rows .= '<td class=non_uploaded_file><b>' . $rst->fields['username'] . '</b></td>';
-	          $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($rst->fields['entered_at']) . '</b></td>';
+                    $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) . '</a></b></td>';
+                    $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($file_sidebar_rst->fields['file_size']) . '</b></td>';
+                    $file_rows .= '<td class=non_uploaded_file><b>' . $file_sidebar_rst->fields['username'] . '</b></td>';
+                    $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($file_sidebar_rst->fields['entered_at']) . '</b></td>';
 	          }
 	        else
 	          {
-	          $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$rst->fields['file_id']}&return_url=". current_page() . "' title='". $rst->fields['file_pretty_name']. "'>" . substr( $rst->fields['file_pretty_name'], 0, 20) .  '</a></td>';
-	          $file_rows .= '<td class=widget_content>' . pretty_filesize($rst->fields['file_size']) . '</td>';
-	          $file_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-	          $file_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['entered_at']) . '</td>';
+                    $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) .  '</a></td>';
+                    $file_rows .= '<td class=widget_content>' . pretty_filesize($file_sidebar_rst->fields['file_size']) . '</td>';
+                    $file_rows .= '<td class=widget_content>' . $file_sidebar_rst->fields['username'] . '</td>';
+                    $file_rows .= '<td class=widget_content>' . $con->userdate($file_sidebar_rst->fields['entered_at']) . '</td>';
 	          }
 	        $file_rows .= "
 	             </tr>";
-	        $rst->movenext();
+	        $file_sidebar_rst->movenext();
 	    }
-	    $rst->close();
+	    $file_sidebar_rst->close();
 	} else {
 	    $file_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached files")." </td> </tr>\n";
 	}
@@ -111,7 +111,7 @@ if(!$file_rows) {
 	                <td class=widget_content_form_element colspan=4>
 	                        <input type=hidden name=on_what_table value='$on_what_table'>
 	                        <input type=hidden name=on_what_id value='$on_what_id'>
-	                        <input type=hidden name=return_url value='/".$on_what_table."/one.php?".make_singular($on_what_table)."_id=".$on_what_id."'>
+	                        <input type=hidden name=return_url value='$return_url'>
 	                        $new_file_button
 	                </td>
 	            </form>
@@ -124,6 +124,10 @@ if(!$file_rows) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.17  2005/06/24 23:26:09  vanmer
+ * - changed rst to differ from other rsts
+ * - changed to use existing return_url if available
+ *
  * Revision 1.16  2005/06/01 16:40:55  ycreddy
  * Adding title attribute to the name html element in the pager and side bar for files
  *
