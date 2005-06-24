@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.20 2005/06/15 16:57:16 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.21 2005/06/24 23:49:38 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -986,7 +986,6 @@ class xrms_acl {
         $whereclause = implode (" and ", $where);
         //Search within group specified
         $sql = "SELECT * FROM $tblName WHERE $whereclause ORDER BY Permission_id";
-//        echo $sql;
          
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
@@ -1031,12 +1030,8 @@ class xrms_acl {
         
         $RolePermissionRow['Role_id']=$Role_id;
         $RolePermissionRow['CORelationship_id']=$CORelationship_id;
-	if ($xrms_db_dbtype=='mssql') {
-	    $RolePermissionRow['Scope']=$Scope;
-	}
-	else {
-	    $RolePermissionRow['Scope']=$con->qstr($Scope, get_magic_quotes_gpc());
-	}
+        $RolePermissionRow['Scope']=$Scope;
+        
         $RolePermissionRow['Permission_id']=$Permission_id;
         if ($inheritable) {
             $RolePermissionRow['Inheritable_flag']=1;
@@ -1046,6 +1041,7 @@ class xrms_acl {
         $sql = $con->getInsertSQL($tblName, $RolePermissionRow, false);
         //Execute insert
         $rs=$con->execute($sql);
+        
         if (!$rs) { db_error_handler($con, $sql); return false; }
         //Find and return newly added ID
         $controlled_objectID = $con->Insert_ID();
@@ -1204,12 +1200,13 @@ class xrms_acl {
        * @return integer ControlledObject_id with identifier for newly added ControlledObject, or false if duplicate/failed
        *
        */
-    function add_controlled_object($ControlledObject_name, $on_what_table, $on_what_field, $user_field=false, $data_source_id=false) {
+    function add_controlled_object($ControlledObject_name, $on_what_table, $on_what_field, $user_field=false, $data_source_id=false, $display_errors=true) {
         $tblName="ControlledObject";
         $con = $this->DBConnection;
         
-        //Find role, if already defined
-        if ($this->get_controlled_object($ControlledObject_name,false,false)!==false) { return false; }
+        //Find controlled object, if already defined
+        $existing=$this->get_controlled_object($ControlledObject_name,false,false);
+        if ($existing!==false) { return $existing['ControlledObject_id']; }
         else {
             //Create array to insert
             $ControlledObjectRow['ControlledObject_name']=$ControlledObject_name;
@@ -1323,8 +1320,14 @@ class xrms_acl {
         $con=$this->DBConnection;
         $tblName = "ControlledObjectRelationship";
         
-        //ensure no duplicates
-        if ($this->get_controlled_object_relationship($parentControlledObject_id, $childControlledObject_id) !== false) { return false; }
+            //ensure no duplicates
+            $existing=$this->get_controlled_object_relationship($parentControlledObject_id, $childControlledObject_id);
+            if ( $existing!== false) { 
+                if (is_array(current($existing))) { 
+                    $existing=current($existing); 
+                } 
+                return $existing['CORelationship_id'];
+            }
             //Create array to insert
             $ControlledObjectRow['ParentControlledObject_id']=$parentControlledObject_id;
             $ControlledObjectRow['ChildControlledObject_id']=$childControlledObject_id;
@@ -2005,7 +2008,7 @@ class xrms_acl {
      *
      **/
     function get_permissions_list() {
-        return array (1,2,3,4);
+        return array (1,2,3,4,5);
     }
     
     /*****************************************************************************/
@@ -2110,6 +2113,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.21  2005/06/24 23:49:38  vanmer
+ * - changed add_controlled_object and relationships to return existing ID if found, instead of returning false
+ * - added export permission support
+ *
  * Revision 1.20  2005/06/15 16:57:16  vanmer
  * - updated JOIN to use INNER JOIN to be more compatible with older mysql
  *
