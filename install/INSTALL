@@ -1,7 +1,7 @@
 XRMS Installation READ_ME
 
 Author: Beth Macknik (maulani)
-$Id: INSTALL,v 1.7 2004/09/21 17:48:44 braverock Exp $
+$Id: INSTALL,v 1.8 2005/06/24 13:29:24 braverock Exp $
 
 INSTALLATION
 ============
@@ -51,6 +51,12 @@ Administration -> Database Structure Update
 Administration -> Data Cleanup
 to avoid possible errors when using features.
 
+If you wish to have a more secure installation, you should consider changing the
+xrms database user to have only INSERT and UPDATE privileges.  If you want to 
+continue to use the upgrade scripts without problems, you will also need ALTER TABLE
+privileges.  The xrms database user should not need DROP or DELETE privileges, as 
+these SQL commands are not used in the XRMS code.
+ 
 If no errors are detected, it will then ask if you wish to create some sample data.
 This is optional, and you can move directly to using xrms if you wish.
 
@@ -127,6 +133,9 @@ several pages of information about your php installation.
 /**
  * Change Log for INSTALL file
  * $Log: INSTALL,v $
+ * Revision 1.8  2005/06/24 13:29:24  braverock
+ * - add paragraph about INSERT, UPDATE, ALTER TABLE privs for a 'tighter' installation
+ *
  * Revision 1.7  2004/09/21 17:48:44  braverock
  * - make Database Structure Update and Data Cleanup recommendations explicit on install
  *   credit Walt Pennington for the suggestion
