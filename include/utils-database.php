@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.13 2005/06/24 20:02:01 braverock Exp $
+ * $Id: utils-database.php,v 1.14 2005/06/24 22:39:34 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -77,6 +77,7 @@ function table_name($table) {
         case "contacts":
             return array("first_names", "last_name");
         break;
+        case "email_templates":
         case "activities":
         case "cases":
         case "campaigns":
@@ -166,6 +167,9 @@ register_shutdown_function('db_con_cleanup');
 /*****************************************************************************/
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.14  2005/06/24 22:39:34  vanmer
+ * - added case for handing email templates in table_name function
+ *
  * Revision 1.13  2005/06/24 20:02:01  braverock
  * - add shutdown function to kill any wayward database connection when the script is done
  *   not perfect, but better than leaving open connections
