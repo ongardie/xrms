@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.7 2005/05/19 21:12:34 braverock Exp $
+// $Id: SMTPs.php,v 1.8 2005/06/24 21:00:20 jswalter Exp $
 
   /**
    * Class SMTPs
@@ -37,7 +37,7 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.7 $
+   * @version $Revision: 1.8 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -86,8 +86,8 @@
   /**
    * Class SMTPs
    *
-   * Class to construct and send SMTP compliant email, even to
-   * a secure SMTP server, regardless of platform.
+   * Class to construct and send SMTP compliant email, even
+   * to a secure SMTP server, regardless of platform.
    *
    * @package SMTPs
    *
@@ -269,7 +269,10 @@ class SMTPs
     * @since 1.0
     *
     */
-    var $_arySensitivity = array (false, 'Personal', 'Private', 'Company Confidential' );
+    var $_arySensitivity = array ( false,
+                                  'Personal',
+                                  'Private',
+                                  'Company Confidential' );
 
    /**
     * Property private int var $_msgPriority
@@ -300,7 +303,12 @@ class SMTPs
     * @since 1.0
     *
     */
-    var $_aryPriority = array ('Bulk', 'Highest', 'High', 'Normal', 'Low', 'Lowest' );
+    var $_aryPriority = array ( 'Bulk',
+                                'Highest',
+                                'High',
+                                'Normal',
+                                'Low',
+                                'Lowest' );
 
    /**
     * Property private string var $_msgXheader
@@ -562,13 +570,13 @@ class SMTPs
             $this->socket_send_str('RCPT TO: <' . $_address . '>', '250');
         }
 
-        // Ok now we tell the server we are ready to start sending data
+        // Ok, now we tell the server we are ready to start sending data
         // with any custom headers...
         // This is the last response code we look for until the end of the message.
         $this->socket_send_str('DATA' . "\r\n" . $this->getHeader(), '354', '');
 
         // Now we are ready for the message...
-        // Ok the all the ingredients are mixed in let's cook this puppy...
+        // Ok, all the ingredients are mixed in let's cook this puppy...
         $this->socket_send_str($this->getBodyContent() . "\r\n" . '.', '250');
 
         // Now tell the server we are done and close the socket...
@@ -703,6 +711,8 @@ class SMTPs
     *
     * Path to the sendmail execuable
     *
+    * NOTE: Not yet implemented
+    *
     * @name setMailPath()
     *
     * @uses Class property $_mailPath
@@ -717,6 +727,9 @@ class SMTPs
     */
     function setMailPath ( $_path )
     {
+        // This feature is not yet implemented
+        return true;
+
         if ( $_path )
             $this->_mailPath = $_path;
     }
@@ -1622,13 +1635,18 @@ class SMTPs
             {
                 if ( $type == 'attachement' )
                 {
-                    $content .= "\r\n--" . $this->_getBoundry() . "\r\n"
-                             .  'Content-Disposition: attachment; filename="' . $_content['fileName'] . '"' . "\r\n"
-                             .  'Content-Type: ' . $_content['mimeType'] . '; name="' . $_content['fileName'] . '"' . "\r\n"
-                             .  'Content-Transfer-Encoding: base64' . "\r\n"
-                             . 'Content-Description: File Attachment' . "\r\n"
-                             . "\r\n"
-                             . $_content['data'] . "\r\n";
+                    // loop through all attachements
+                    foreach ( $_content as $_file => $_data )
+                    {
+
+                        $content .= "\r\n--" . $this->_getBoundry() . "\r\n"
+                                 .  'Content-Disposition: attachment; filename="' . $_data['fileName'] . '"' . "\r\n"
+                                 .  'Content-Type: ' . $_data['mimeType'] . '; name="' . $_data['fileName'] . '"' . "\r\n"
+                                 .  'Content-Transfer-Encoding: base64' . "\r\n"
+                                 .  'Content-Description: File Attachment' . "\r\n"
+                                 .  "\r\n"
+                                 .  $_data['data'] . "\r\n";
+                    }
                 }
                 else
                 {
@@ -1657,11 +1675,11 @@ class SMTPs
    /**
     * Method public void setAttachement( string, string, string )
     *
-    * Message Content
+    * File attachements are added to the content array as sub-arrays,
+    * allowing for multiple attachements for each outbound email
     *
     * @name setBodyContent()
     *
-    * @uses Class property $_msgContent
     * @final
     * @access public
     *
@@ -1673,15 +1691,17 @@ class SMTPs
     * @return void
     *
     */
-    function setAttachement ( $strContent, $strFileName = '', $strMimeType = 'unknown' )
+    function setAttachement ( $strContent, $strFileName = 'unknown', $strMimeType = 'unknown' )
     {
-        $strContent = rtrim(chunk_split(base64_encode($strContent), 76, "\r\n"));
+        if ( $strContent )
+        {
+            $strContent = rtrim(chunk_split(base64_encode($strContent), 76, "\r\n"));
 
-        $this->_msgContent['attachement'] = array();
+            $this->_msgContent['attachement'][$strFileName]['mimeType'] = $strMimeType;
+            $this->_msgContent['attachement'][$strFileName]['fileName'] = $strFileName;
+            $this->_msgContent['attachement'][$strFileName]['data']     = $strContent;
+        }
 
-        $this->_msgContent['attachement']['mimeType'] = $strMimeType;
-        $this->_msgContent['attachement']['fileName'] = $strFileName;
-        $this->_msgContent['attachement']['data']     = $strContent;
     }
 
    /**
@@ -1763,7 +1783,7 @@ class SMTPs
     * @return void
     *
     */
-    function setPriority ( $_value = 0 )
+    function setPriority ( $_value = 3 )
     {
         $this->_msgPriority = $_value;
     }
@@ -1911,8 +1931,6 @@ function server_parse($socket, $response)
       }
    }
 
-//do_print_r ( $server_response );
-
    if( !( substr($server_response, 0, 3) == $response ) )
    {
       die("Ran into problems sending Mail. Response: $server_response");
@@ -1922,8 +1940,6 @@ function server_parse($socket, $response)
 
 function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
 {
-//do_print_r ( $_strSend );
-
     fputs($this->socket, $_strSend . $CRLF);
 
     if ( $_returnCode )
@@ -1990,7 +2006,9 @@ function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
         return $_errMsg;
     }
 
-};
+
+// =============================================================
+};  // end of Class
 
 // =============================================================
 // =============================================================
@@ -1998,6 +2016,13 @@ function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.8  2005/06/24 21:00:20  jswalter
+  *   - corrected comments
+  *   - corrected the defualt value for 'setPriority()'
+  *   - modified 'setAttachement()' to process multiple attachments correctly
+  *   - modified 'getBodyContent()' to handle multiple attachments
+  * Bug 310
+  *
   * Revision 1.7  2005/05/19 21:12:34  braverock
   * - replace chunk_split() with wordwrap() to fix funky wrapping of templates
   *
