@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.14 2005/05/04 14:36:53 braverock Exp $
+ * $Id: new.php,v 1.15 2005/06/24 22:55:29 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -34,6 +34,14 @@ if ($on_what_table == 'opportunities') {
     $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS attached_to_name FROM contacts WHERE contact_id = $on_what_id";
 } elseif ($on_what_table == 'campaigns') {
     $sql = "select campaign_title as attached_to_name from campaigns where campaign_id = $on_what_id";
+} else {
+    $table_name=table_name($on_what_table);
+    $table_name = $con->Concat(implode(", ' ', ", table_name($on_what_table)));
+    $table_singular = make_singular($on_what_table);
+    
+    if ($table_singular AND $table_name) {
+        $sql = "select $table_name as attached_to_name from $on_what_table where {$table_singular}_id=$on_what_id";
+    }
 }
 
 $rst = $con->execute($sql);
@@ -136,6 +144,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.15  2005/06/24 22:55:29  vanmer
+ * - added link for arbitrary file link
+ *
  * Revision 1.14  2005/05/04 14:36:53  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *
