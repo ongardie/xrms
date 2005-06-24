@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.12 2005/03/17 20:02:10 jswalter Exp $
+* $Id: email-2.php,v 1.13 2005/06/24 16:52:47 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -17,30 +17,123 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
-$email_template_id = (strlen($_POST['email_template_id']) > 0) ? $_POST['email_template_id'] : $_GET['email_template_id'];
+    //Turn $_POST array into variables
+    extract($_POST);
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-//$con->debug=true;
-$sql = "SELECT * FROM users WHERE user_id = '".$session_user_id."'";
-$rst = $con->execute($sql);
-$default_user=$rst->fields['email'];
+if ( $_POST['act'] == 'add' )
+{
+    require_once 'File/file_upload.php';
 
-$rec = array();
-$rec['last_hit'] = Time();
+    // Create new Class
+    $objUpFile = new file_upload( 'attach' );
+
+    if ( $objUpFile->getErrorCode() )
+    {
+        echo 'Could not create Upload Object: ';
+        echo $objUpFile->getErrorMsg();
+        exit;
+    }
+
+    // Where do we want this file sent to
+    $objUpFile->setDestDir ( $xrms_file_root . '/upload' );
+
+    $_SESSION['uploadPath'] = serialize($xrms_file_root . '/upload');
+
+    if ( $objUpFile->getErrorCode() )
+    {
+        echo 'Could not set Upload Directory: ';
+        echo $objUpFile->getErrorMsg();
+        exit;
+    }
+
+    // Now process uploaded file
+    $objUpFile->processUpload();
+
+    if ( $objUpFile->getErrorCode() )
+    {
+        echo 'Could not process upload file: ';
+        echo $objUpFile->getErrorMsg();
+        exit;
+    }
+
+    // We only need to create an array if one was passed
+    if ( $_POST['attachment_list'] )
+        $attach_list = explode ( '|', $_POST['attachment_list'] );
+
+    // place new upload into the array
+    $attach_list[] =  $objUpFile->getFilename();
+
+    // Make names keys, which will remove dups
+    $attach_list = array_flip(array_flip($attach_list));
+
+    // now prep array for passing around
+    $attachment_list = implode ( '|', $attach_list );
+
+}
+else if ( $_POST['act'] == 'del' )
+{
+    // get attached files list to remove
+    $attachedFile = $_POST['attachedFile'];
+
+    // We only need to create an array if one was passed
+    $attach_list = explode ( '|', $_POST['attachment_list'] );
+
+    // Make names keys
+    $attach_list = array_flip ( $attach_list );
+
+    // remove files
+    foreach ( $attachedFile as $_kilFile )
+        unset ( $attach_list[$_kilFile] );
+
+    // Put names back as values
+    $attach_list = array_flip ( $attach_list );
+
+    // now prep array for passing around
+    $attachment_list = implode ( '|', $attach_list );
+}
+else
+{
+
+    $email_template_id = (strlen($_POST['email_template_id']) > 0) ? $_POST['email_template_id'] : $_GET['email_template_id'];
+
+    $con = &adonewconnection($xrms_db_dbtype);
+    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    //$con->debug=true;
+    $sql = "SELECT * FROM users WHERE user_id = '".$session_user_id."'";
+    $rst = $con->execute($sql);
+    $sender_name=$rst->fields['email'];
+
+    $rec = array();
+    $rec['last_hit'] = Time();
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    $sql = "select * from email_templates where email_template_id = $email_template_id";
+
+    $rst = $con->execute($sql);
+    $email_template_title = $rst->fields['email_template_title'];
+    $email_template_body = $rst->fields['email_template_body'];
+    $rst->close();
+}
 
 
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+function createFileList ()
+{
+    global $attach_list;
 
-$sql = "select * from email_templates where email_template_id = $email_template_id";
+    // Build HTML code to display uploads
+    $i = 0;
+    $attach_file_list = '';
+    foreach ( $attach_list as $_file)
+    {
+        $attach_file_list .= '<input type="checkbox" name="attachedFile[]" id="attachedFile_' . $i . '" value="' . $_file . '" /> ';
+        $attach_file_list .= $_file . '<br />';
+    }
 
-$rst = $con->execute($sql);
-$email_template_title = $rst->fields['email_template_title'];
-$email_template_body = $rst->fields['email_template_body'];
-$rst->close();
+    return $attach_file_list;
+}
 
-$con->close();
 
 $page_title = _("Edit Message");
 start_page($page_title, true, $msg);
@@ -49,37 +142,58 @@ start_page($page_title, true, $msg);
 
 <script language="javascript">
 
-function updateTemplate() {
-document.forms[1].email_template_title.value = document.forms[0].email_template_title.value;
-document.forms[1].email_template_body.value = document.forms[0].email_template_body.value;
-document.forms[1].submit();
+
+function nextPage( $_where, $_what )
+{
+    if ( $_what == 'add' )
+        document.mainForm.act.value = 'add';
+
+    if ( $_what == 'del' )
+        document.mainForm.act.value = 'del';
+
+    document.mainForm.action = $_where;
+    document.mainForm.submit();
+    return false;
 }
 
-function saveAsNewTemplate() {
-document.forms[2].email_template_title.value = document.forms[0].email_template_title.value;
-document.forms[2].email_template_body.value = document.forms[0].email_template_body.value;
-document.forms[2].submit();
-}
 
 </script>
+
 
 <div id="Main">
 <div id="Content">
 
-<form action=email-3.php onsubmit="javascript: return validate();" method=post>
-<table class=widget cellspacing=1>
-<tr>
-<td class=widget_header colspan=2><?php echo _("Edit Message"); ?> - <?php echo $email_template_title ?></td>
-</tr>
-<tr>
-<td class=widget_label_right width="1%" nowrap><?php echo _("From"); ?>:</td>
-<td class=widget_content_form_element><input type=text name="sender_name" id="sender_name" size=50 value="<?php echo $default_user ?>"><?php echo $required_indicator; ?></td>
-</tr>
+<form action="email-2.php"
+      method="POST"
+      enctype="multipart/form-data"
+      name="mainForm"
+      id="mainForm"
+      onsubmit="javascript: return validate();" method="post">
+
+<table class="widget" cellspacing="1">
+    <tr>
+        <td class="widget_header" colspan="2">
+            <?php echo _("Edit Message"); ?> - <?php echo $email_template_title ?>
+        </td>
+    </tr>
+    <tr>
+        <td class="widget_label_right" width="1%" nowrap>
+            <?php echo _("From"); ?>:
+        </td>
+        <td class="widget_content_form_element">
+            <input type="text"
+                   name="sender_name"
+                   id="sender_name"
+                   size="50"
+                   value="<?php echo $sender_name ?>" />
+            <?php echo $required_indicator; ?>
+        </td>
+    </tr>
 
 <!--
 <tr>
 <td class=widget_label_right width="1%" nowrap><?php echo _("Reply to"); ?>:</td>
-<td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<?php echo $default_user ?>"><?php echo $required_indicator; ?></td>
+<td class=widget_content_form_element><input type=text name="sender_address" size=50 value="<?php echo $sender_name ?>"><?php echo $required_indicator; ?></td>
 </tr>
 <tr>
 <td class=widget_label_right width="1%" nowrap><?php echo _("Bcc"); ?>:</td>
@@ -87,17 +201,117 @@ document.forms[2].submit();
 </tr>
 -->
 
-<tr>
-<td class=widget_label_right width="1%" nowrap><?php echo _("Subject"); ?>:</td>
-<td class=widget_content_form_element><input type=text name=email_template_title id=email_template_title size=50 value="<?php echo $email_template_title ?>"></td>
-</tr>
-<tr>
-<td class=widget_content_form_element colspan=2><textarea class=monospace rows=20 cols=80 name=email_template_body><?php echo $email_template_body ?></textarea></td>
-</tr>
-<tr>
-<td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"> <input class=button onclick="javascript: updateTemplate();" type=button value="<?php echo _("Update Template"); ?>"> <input class=button type=button onclick="javascript: saveAsNewTemplate();" value="<?php echo _("Save as New Template"); ?>"></td>
-</tr>
+    <tr>
+        <td class="widget_label_right" width="1%" nowrap>
+            <?php echo _("Subject"); ?>:
+        </td>
+        <td class="widget_content_form_element">
+            <input type=text
+                   name="email_template_title"
+                   id="email_template_title"
+                   size="50"
+                   value="<?php echo $email_template_title ?>" />
+        </td>
+    </tr>
+    <tr>
+        <td class="widget_content_form_element" colspan="2">
+            <textarea class="monospace"
+                      name="email_template_body"
+                      id="email_template_body"rows="20"
+                      cols="80"><?php echo $email_template_body ?></textarea></td>
+    </tr>
+    <tr>
+        <td class="widget_label_right" width="1%" nowrap>
+            <?php echo _("Attachements"); ?>:
+        </td>
+        <td class="widget_content_form_element">
+            <input type="file"
+                   name="attach"
+                   id="attach"
+                   size="50" />
+
+            &nbsp;&nbsp;
+            <input type="button"
+                   class="button"
+                   name="go"
+                   id="go"
+                   value="<?php echo _("Add"); ?>"
+                   onclick="javascript: nextPage( 'email-2.php', 'add' );" />
+        </td>
+    </tr>
+
+<?php
+if ( $attach_list )
+{ ?>
+    <tr>
+        <td class="widget_label_right" width="1%" nowrap>
+        </td>
+        <td class="widget_content_form_element">
+            <?php
+                echo createFileList();
+            ?>
+
+            <input type="button"
+                   class="button"
+                   name="go"
+                   id="go"
+                   value="<?php echo _("Delete Selected"); ?>"
+                   onclick="javascript: nextPage( 'email-2.php', 'del' );" />
+        </td>
+    </tr>
+<?php } ?>
+
+    <tr>
+        <td class="widget_content_form_element" colspan="2">
+
+            <input type="hidden"
+                   name="act"
+                   id="act" />
+
+            <input type="hidden"
+                   name="attachment_list"
+                   id="attachment_list"
+                   value="<?php echo $attachment_list ?>" />
+
+            <input type="hidden"
+                   name="email_template_id"
+                   id="email_template_id"
+                   value="<?php echo $email_template_id ?>" />
+
+            <input type="button"
+                   class="button"
+                   value="<?php echo _("Continue"); ?>"
+                   onclick="javascript: nextPage( 'email-3.php' );" />
+
+            <input type="button"
+                   class="button"
+                   value="<?php echo _("Update Template"); ?>"
+                   onclick="javascript: nextPage( 'update-template.php' );" />
+
+            <input type="button"
+                   class="button"
+                   value="<?php echo _("Save as New Template"); ?>"
+                   onclick="javascript: nextPage( 'save-as-new-template.php' );" />
+        </td>
+    </tr>
+    <tr>
+        <td class="widget_content_form_element" colspan="2">
+            <?php
+                echo '<pre>';
+                print_r ( $_POST );
+                echo '<hr />';
+                print_r ( $_FILES );
+                echo '<hr />';
+                print_r ( $attach_list );
+
+                echo '</pre>';
+            ?>
+        </td>
+
+    </tr>
+
 </table>
+
 </form>
 
 </div>
@@ -111,18 +325,7 @@ document.forms[2].submit();
 
 </div>
 
-<form action=update-template.php method=post>
-<input type=hidden name=email_template_id value="<?php echo $email_template_id ?>">
-<input type=hidden name=email_template_title>
-<input type=hidden name=email_template_body>
-</form>
-
-<form action=save-as-new-template.php method=post>
-<input type=hidden name=email_template_title>
-<input type=hidden name=email_template_body>
-</form>
-
-<script language=javascript type="text/javascript" >
+<script language="javascript" type="text/javascript" >
 
 function initialize() {
 document.forms[0].sender_name.select();
@@ -165,6 +368,17 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.13  2005/06/24 16:52:47  jswalter
+*  - drastic modification to JS on how page is "submitted" (simplified)
+*  - made HTML more XHTML comliant
+*  - changed default ACTION to 'email-2.php' (itself)
+*  - removed "extra" Forms for "Replace" and "new" templates
+*  - created central JS to handle different Form processing
+*  - added FILE object to Form
+*  - added multi File Attachment "Add" capability
+*  - added "Remove" File Attachment capability
+* Bug 310
+*
 * Revision 1.12  2005/03/17 20:02:10  jswalter
 *  - commented out:
 *    * REPLY_TO
