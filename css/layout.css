@@ -26,7 +26,7 @@
  *      #login-box - centered login form
  *      #ContentFullWidth large container, no sidebar
  *
- * $Id: layout.css,v 1.4 2005/01/03 04:24:42 ebullient Exp $
+ * $Id: layout.css,v 1.5 2005/06/24 20:40:13 daturaarutad Exp $
  */
 body {
     margin: 0px;
@@ -66,6 +66,28 @@ body {
     z-index: 3;         /* Content above Sidebar */
     /* Match sidebar width for right (by default) margin */
     margin: 0em 30.5% 0em 0em;
+}
+#xrms_calendar{
+/*    position: relative;*/
+	float: left;
+    width: 69.5%;
+    min-width: 12em;
+    z-index: 4;         /* Content above Sidebar */
+    margin: 0px;
+    /* Match sidebar width for right (by default) margin */
+	/*
+    margin: 0em 30.5% 0em 0em;
+	*/
+}
+#xrms_calendar_legend {
+    /*position: absolute;*/
+    z-index: 4;         /* Sidebar below Content */
+    top: 0px;
+    right: 0px;
+    margin: 0px;
+    /* Width needs to match right margin in #Main #Content */
+    width: 30%;
+    min-width: 16em;
 }
 #Main #Sidebar {
     position: absolute;
@@ -107,3 +129,5 @@ div.calendar {
     left: 50%;
     margin-left: -8em;
 }
+
+
