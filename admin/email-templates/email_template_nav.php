@@ -1,6 +1,6 @@
 <?php
-echo <<<TILLEND
-<div id=Sidebar>
+//$email_template_nav='<div id=Sidebar>';
+$email_template_nav.=<<<TILLEND
 <table class=widget>
     <tr><td class=widget_header>Manage Templates</td></tr>
     <tr><td class=widget_content>
@@ -8,7 +8,7 @@ echo <<<TILLEND
         <a href="email_template_type_list.php">Manage Email Template Types</a>
     </td></tr>
 </table>
-</div>
 TILLEND;
-
+//$email_template_nav.='</div>';
+echo $email_template_nav;
 ?>
