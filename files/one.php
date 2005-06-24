@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.16 2005/06/22 20:39:31 vanmer Exp $
+ * $Id: one.php,v 1.17 2005/06/24 23:27:00 vanmer Exp $
  */
 
 //include required files
@@ -20,14 +20,15 @@ $on_what_id=$file_id;
 $session_user_id = session_check();
 // get call arguments
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
-
+getGlobalVar($return_url, 'return_url');
+$out_return_url=urlencode($return_url);
+/*
 if ( isset($_GET['return_url']) ) {
     $return_url = $_GET['return_url'];
 } else {
     $return_url = '';
 }
-
-
+*/
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
@@ -99,7 +100,7 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content_form_element colspan=2> <?php echo render_edit_button("Save Changes", 'submit'); ?>
  <?php echo render_read_button("Download",'button',"javascript: window.open('download.php?file_id=$file_id');") ?> 
- <?php echo render_delete_button("Delete",'button',"javascript: location.href='delete.php?return_url=$return_url&file_id=$file_id';") ?></td>
+ <?php echo render_delete_button("Delete",'button',"javascript: location.href='delete.php?return_url=$out_return_url&file_id=$file_id';") ?></td>
             </tr>
         </table>
         </form>
@@ -160,6 +161,10 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.17  2005/06/24 23:27:00  vanmer
+ *- return url is now accepted from either post or get
+ *- return url is now urlencoded when passed to delete
+ *
  *Revision 1.16  2005/06/22 20:39:31  vanmer
  *- now downloads occur in a new window
  *
