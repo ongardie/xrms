@@ -13,7 +13,7 @@ $file_id = $_GET['file_id'];
 $on_what_id=$file_id;
 $session_user_id = session_check('','Delete');
 
-$return_url = $_GET['return_url'];
+getGlobalVar($return_url, 'return_url');
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
