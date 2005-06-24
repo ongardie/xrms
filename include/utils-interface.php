@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.63 2005/05/25 05:42:37 alanbach Exp $
+ * $Id: utils-interface.php,v 1.64 2005/06/24 13:48:40 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -210,7 +210,7 @@ function get_css_themes() {
 function start_page($page_title = '', $show_navbar = true, $msg = '') {
     global $http_site_root;
     global $app_title;
-    global $css_theme;                  
+    global $css_theme;
 
     if (!$xcon) {
         global $xrms_db_dbtype;
@@ -378,6 +378,9 @@ function end_page($use_hook = true) {
   if ( $use_hook )
     do_hook ('end_page');
 ?>
+<A href="http://sourceforge.net/projects/xrms/">
+        <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0" height="0" width="0" alt="XRMS SourceForge Project Page" />
+</A>
 </body>
 </html>
 <?php
@@ -740,6 +743,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.64  2005/06/24 13:48:40  braverock
+ * - add SF logo link to XRMS project page to end_page fn
+ *
  * Revision 1.63  2005/05/25 05:42:37  alanbach
  * Automatic RTL/LTR patch
  *
