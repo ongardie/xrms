@@ -3,8 +3,9 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.13 2005/06/22 22:30:14 jswalter Exp $
+ * $Id: email-3.php,v 1.14 2005/06/24 16:55:48 jswalter Exp $
  */
+
 
 require_once('include-locations-location.inc');
 
@@ -17,17 +18,56 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 $msg = $_GET['msg'];
 
-$sender_name = $_POST['sender_name'];
-$sender_address = $_POST['sender_address'];
-$bcc_address = $_POST['bcc_address'];
-$email_template_title = $_POST['email_template_title'];
-$email_template_body = $_POST['email_template_body'];
+    //Turn $_POST array into variables
+    extract($_POST);
+
+// see if a file was sent "piggy-back"
+if ( $_FILES['attach']['error'] == 0 )
+{
+    require_once 'File/file_upload.php';
+
+    // Create new Class
+    $objUpFile = new file_upload( 'attach' );
+
+    if ( $objUpFile->getErrorCode() )
+    {
+        echo 'Could not create Upload Object: ';
+        echo $objUpFile->getErrorMsg();
+        exit;
+    }
+
+    // Where do we want this file sent to
+    $objUpFile->setDestDir ( $xrms_file_root . '/upload' );
+
+    if ( $objUpFile->getErrorCode() )
+    {
+        echo 'Could not set Upload Directory: ';
+        echo $objUpFile->getErrorMsg();
+        exit;
+    }
+
+    // Now process uploaded file
+    $objUpFile->processUpload();
+
+    if ( $objUpFile->getErrorCode() )
+    {
+        echo 'Could not process upload file: ';
+        echo $objUpFile->getErrorMsg();
+        exit;
+    }
+
+    // place new upload into the array
+    $attachment_list .= '|' . $objUpFile->getFilename();
+}
 
 $_SESSION['sender_name'] = serialize($sender_name);
 $_SESSION['sender_address'] = serialize($sender_address);
 $_SESSION['bcc_address'] = serialize($bcc_address);
 $_SESSION['email_template_title'] = serialize($email_template_title);
 $_SESSION['email_template_body'] = serialize($email_template_body);
+$_SESSION['attachment_list'] = serialize( $attachment_list );
+$_SESSION['uploadDir'] = serialize( $xrms_file_root . '/upload' );
+
 
 $array_of_contacts = unserialize($_SESSION['array_of_contacts']);
 
@@ -77,21 +117,23 @@ start_page($page_title, true, $msg);
 <div id="Main">
     <div id="Content">
 
-        <form action=email-4.php method=post>
-        <table class=widget cellspacing=1>
+        <form action="email-4.php" method="post">
+        <table class="widget" cellspacing="1">
             <tr>
                 <td class=widget_header colspan=5><?php echo _("Confirm Recipients"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label>&nbsp;</td>
-                <td class=widget_label><?php echo _("Company"); ?></td>
-                <td class=widget_label><?php echo _("Owner"); ?></td>
-                <td class=widget_label><?php echo _("Contact"); ?></td>
-                <td class=widget_label><?php echo _("E-Mail"); ?></td>
+                <td class="widget_label">&nbsp;</td>
+                <td class="widget_label"><?php echo _("Company"); ?></td>
+                <td class="widget_label"><?php echo _("Owner"); ?></td>
+                <td class="widget_label"><?php echo _("Contact"); ?></td>
+                <td class="widget_label"><?php echo _("E-Mail"); ?></td>
             </tr>
             <?php  echo $contact_rows ?>
             <tr>
-                <td class=widget_content_form_element colspan=5><input type=submit class=button value="<?php echo _("Continue"); ?>"></td>
+                <td class="widget_content_form_element" colspan="5">
+                    <input type="submit" class="button" value="<?php echo _("Continue"); ?>">
+                </td>
             </tr>
         </table>
         </form>
@@ -113,6 +155,11 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.14  2005/06/24 16:55:48  jswalter
+ *  - made HTML more XHTML comliant
+ *  - added FILE submit processing
+ * Bug 310
+ *
  * Revision 1.13  2005/06/22 22:30:14  jswalter
  *  - added ID attribute to the person checkbox objects
  *  - checkbox ID attribute will increment for each checkbox created
