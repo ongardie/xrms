@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.12 2005/06/06 18:30:27 vanmer Exp $
+ * $Id: utils-database.php,v 1.13 2005/06/24 20:02:01 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -52,9 +52,9 @@ function confirm_no_records(&$con, $table) {
  */
 function make_singular($word) {
     switch ($word) {
-    	case 'company_division':
-		return 'division';
-	break;
+        case 'company_division':
+        return 'division';
+    break;
     }
     $word = preg_replace("|([^aeiou])s$|i", "\$1", $word);
     $word = preg_replace("|ies$|i", "y", $word);
@@ -88,12 +88,12 @@ function table_name($table) {
         break;
         case "company_division":
             return array("division_name");
-        break;    
+        break;
         default:
             return array(make_singular($table) . "_name");
         break;
     }
-} 
+}
 
 function execute_batch_sql_file($con, $file_path) {
     if (file_exists($file_path)) {
@@ -137,8 +137,39 @@ function get_xrms_dbconnection() {
     return $xcon;
 }
 
+/*****************************************************************************/
+/**
+ * function db_con_cleanup - check for likely database connection objects and clear them
+ *
+ * @param void
+ * @return void
+ */
+function db_con_cleanup() {
+
+    global $con;
+    global $_objDB;
+
+    if (isset($con) and is_object($con)) {
+        $con->close();
+        unset($con);
+    }
+    if (isset($_objDB) and is_object($_objDB)) {
+        $_objDB->close();
+        $unset($_objDB);
+    }
+}
+
+//make sure the db connection cleanup gets run at the end of the script execution
+register_shutdown_function('db_con_cleanup');
+
+
+/*****************************************************************************/
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.13  2005/06/24 20:02:01  braverock
+ * - add shutdown function to kill any wayward database connection when the script is done
+ *   not perfect, but better than leaving open connections
+ *
  * Revision 1.12  2005/06/06 18:30:27  vanmer
  * - added better handling for automagic table functions for divisions, to allow relationships on divisions
  * to operate properly
