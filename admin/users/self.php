@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.14 2005/06/07 21:45:45 vanmer Exp $
+ * $Id: self.php,v 1.15 2005/06/24 23:55:19 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -51,9 +51,9 @@ else {
     foreach ($types as $type_info) {
         if ($type_info['allow_user_edit_flag']==0) next;
         $user_preference_type_id=$type_info['user_preference_type_id'];
-        $type_desc=$type_info['user_preference_description'];
-        $type_pretty_name=$type_info['user_preference_pretty_name'];
-        if (!$type_pretty_name) $type_pretty_name=$type_info['user_preference_name'];
+        $type_desc=_($type_info['user_preference_description']);
+        $type_pretty_name=_($type_info['user_preference_pretty_name']);
+        if (!$type_pretty_name) $type_pretty_name=_($type_info['user_preference_name']);
         
         if ($type_info['allow_multiple_flag']==1) {
             //branch for showing multiple options, fetch all user set options   
@@ -146,6 +146,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.15  2005/06/24 23:55:19  vanmer
+ *- added translation to output of title and descrption of preferences
+ *
  *Revision 1.14  2005/06/07 21:45:45  vanmer
  *- included user roles sidebar for users self-administration, in read-only mode
  *
