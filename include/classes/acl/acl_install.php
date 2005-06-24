@@ -36,6 +36,8 @@ function install_upgrade_acl($con=false) {
     if (!$rst) $inst_ret=install_acl($con);
     else $inst_ret=true;
     
+    update_acl($con);
+    
     if (!$inst_ret) { echo "ACL Install Failed<br>"; return false; }
     
     $sql = "SELECT * from GroupUser";
@@ -99,6 +101,46 @@ function install_acl($con) {
     return ($return1 AND $return2 AND $return3 AND $return4 AND $return5 AND $return6 AND $return7 AND $return8 AND $return9);
 }
 
+function update_acl($con) {
+    global $acl_options;
+    global $include_directory;
+    require_once($include_directory.'classes/acl/acl_wrapper.php');
+    if (!$acl) $acl = new xrms_acl($acl_options);
+    $data_source=$acl->get_data_source('XRMS');
+    $data_source_id=$data_source['data_source_id'];
+    $admin_object_id=get_object_id($acl, 'Administration');
+    $file_object_id=get_object_id($acl, 'File');
+    $email_template_id=$acl->add_controlled_object("Email Template", 'email_templates','email_template_id', false, $data_source_id);
+    $ret2=$acl->add_controlled_object_relationship($admin_object_id, $email_template_id);
+    $ret3=$acl->add_controlled_object_relationship($email_template_id, $file_object_id, false, false, false, true);
+    
+        $csql = "SELECT * FROM Permission";
+        $crst=$con->execute($csql);
+        if ($crst->numRows()==4) {
+            $sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (5, 'Export', 'E')";
+            $sql .=";\n";
+            $export_add=$con->execute($sql);
+            $Role_id=get_role_id($acl, 'Administrator');
+            $Scope='World';
+            $Permission_id=5;
+            
+            $company_object_id=get_object_id($acl, 'Company');
+            $CORelationship=$acl->get_controlled_object_relationship(NULL, $company_object_id);
+            $CORelationship_id=$CORelationship['CORelationship_id'];
+            $ret4=$acl->add_role_permission ($Role_id, $CORelationship_id, $Scope, $Permission_id, true);
+            
+            $CORelationship=$acl->get_controlled_object_relationship(NULL, $admin_object_id);
+            $CORelationship_id=$CORelationship['CORelationship_id'];
+            $ret5=$acl->add_role_permission ($Role_id, $CORelationship_id, $Scope, $Permission_id, true);
+            
+            $campaign_object_id=get_object_id($acl, 'Campaign');
+            $CORelationship=$acl->get_controlled_object_relationship(NULL, $campaign_object_id);
+            $CORelationship_id=$CORelationship['CORelationship_id'];
+            $ret6=$acl->add_role_permission ($Role_id, $CORelationship_id, $Scope, $Permission_id, true);
+        }
+    
+    return ($email_template_id AND $ret2 AND $ret3 AND $ret4 AND$ret5 AND $ret6 AND $export_add);
+}
 
 function install_role_permissions($con) {
     $csql = "SELECT * FROM RolePermission";
@@ -130,6 +172,7 @@ insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (2, 2, 1, 'World', 2);
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (3, 2, 1, 'World', 3);
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (4, 2, 1, 'World', 4);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (4, 2, 1, 'World', 5);
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (5, 1, 1, 'World', 1);
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (6, 1, 1, 'World', 2);
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (7, 1, 1, 'World', 3);
@@ -140,10 +183,12 @@ insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (12, 2, 2, 'World', 2);
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (13, 2, 2, 'World', 3);
 insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (14, 2, 2, 'World', 4);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (15, 2, 21, 'World', 1);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (16, 2, 21, 'World', 2);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (17, 2, 21, 'World', 3);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (18, 2, 21, 'World', 4);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (15, 2, 2, 'World', 5);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (16, 2, 21, 'World', 1);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (17, 2, 21, 'World', 2);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (18, 2, 21, 'World', 3);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (19, 2, 21, 'World', 4);
+insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (20, 2, 21, 'World', 5);
 TILLEND;
         $return=execute_batch_sql($con, $sql);
     }
@@ -265,6 +310,8 @@ $sql .=";\n";
 $sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (3, 'Update', 'U')";
 $sql .=";\n";
 $sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (4, 'Delete', 'D')";
+$sql .=";\n";
+$sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (5, 'Export', 'E')";
 $sql .=";\n";
         $return=execute_batch_sql($con, $sql);
     }
