@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.14 2005/06/24 22:39:34 vanmer Exp $
+ * $Id: utils-database.php,v 1.15 2005/06/25 12:49:45 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -156,7 +156,7 @@ function db_con_cleanup() {
     }
     if (isset($_objDB) and is_object($_objDB)) {
         $_objDB->close();
-        $unset($_objDB);
+        unset($_objDB);
     }
 }
 
@@ -167,6 +167,9 @@ register_shutdown_function('db_con_cleanup');
 /*****************************************************************************/
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.15  2005/06/25 12:49:45  braverock
+ * - fix variable typo in cleanup fn
+ *
  * Revision 1.14  2005/06/24 22:39:34  vanmer
  * - added case for handing email templates in table_name function
  *
