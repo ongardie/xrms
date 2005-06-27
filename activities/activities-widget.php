@@ -365,7 +365,7 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
     // set calendar_start_date from search_date if it's not set already
     if($var_watcher->VarsChanged()) {
 
-		echo "vars changed or new...setting up initial calendar start date<br>";
+		//echo "vars changed or new...setting up initial calendar start date<br>";
 
 		// before_after is only relevant if there is a search date.
         if($search_date && !$before_after) {
@@ -390,7 +390,6 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
                 }
                 break;
             case 'month':
-			echo "hi";
                 //$initial_calendar_date = date("Y-m-", strtotime($date_modifier . $search_date));
                 $initial_calendar_date = date("Y-m-", strtotime($search_date));
                 $initial_calendar_date .= '01';
@@ -400,7 +399,7 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
                 $initial_calendar_date .= '01-01';
                 break;
         }
-        echo "initial_calendar_date not set, setting to $initial_calendar_date (search date is $search_date)<br>";
+        //echo "initial_calendar_date not set, setting to $initial_calendar_date (search date is $search_date)<br>";
 
         // this is for the calendar widget
         $_POST['initial_calendar_date'] = $initial_calendar_date;
@@ -411,6 +410,9 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.2  2005/06/27 16:30:10  daturaarutad
+* removed debug msgs
+*
 * Revision 1.1  2005/06/27 16:24:36  daturaarutad
 * new file
 *
