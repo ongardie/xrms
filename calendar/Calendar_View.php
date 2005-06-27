@@ -5,8 +5,10 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.5 2005/06/08 15:53:38 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.6 2005/06/27 16:32:53 daturaarutad Exp $
  */
+
+global $include_directory;
 
 
 require_once($include_directory . 'vars.php');
@@ -16,8 +18,7 @@ require_once($include_directory . 'utils-users.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
 
 
 /**
@@ -28,7 +29,7 @@ class CalendarView {
 
 	var $start_date;
 	var $calendar_date_field;
-	var $form_id;
+	var $form_name;
 	var $calendar_type;
 
 	var $display_mode = 'text'; // or iconic
@@ -48,20 +49,42 @@ class CalendarView {
 	* @param string calendar type ('week','month')
 	*
 	*/
-	function CalendarView($con, $form_id, $calendar_date_field, $calendar_type) {
+	function CalendarView($con, $form_name, $initial_calendar_date, $calendar_date_field, $calendar_type) {
 
-		getGlobalVar($calendar_start_date, $calendar_date_field);
+		/* Calendar object:
+        	-if a date is passed in as a param, use that
+        	-elseif the session/cgi var is set, use that....
+        	-else use today's date.                               */
 
-		if(empty($calendar_start_date)) {
-			$calendar_start_date = date('Y-m-d', time());
+
+		getGlobalVar($calendar_CGI_date, $calendar_date_field);
+		// 'text' or 'iconic'
+		getGlobalVar($calendar_display_mode, 'calendar_display_mode');
+		if(!$calendar_display_mode) {
+			$calendar_display_mode = 'text';
+		}
+
+
+
+		if($initial_calendar_date) {
+			$calendar_start_date = $initial_calendar_date;
+		} else {
+
+			if($calendar_CGI_date) {
+				$calendar_start_date = $calendar_CGI_date;
+			} else {
+				$calendar_start_date = date('Y-m-d', time());
+			}
 		}
 
 		//echo "calendar date is $calendar_start_date";
 		$this->con					= $con;
-		$this->form_id 				= $form_id;
+		$this->form_name 				= $form_name;
 		$this->calendar_date_field 	= $calendar_date_field;
 		$this->start_date 			= $calendar_start_date;
 		$this->calendar_type 		= $calendar_type;
+		$this->display_mode 		= $calendar_display_mode;
+
 	}
 
 	/**
@@ -99,8 +122,8 @@ class CalendarView {
 * Render the calendar widgets
 * @param array array of assoc arrays of activity values.
 * expected fields are: activity_id, scheduled_at, ends_at, contact_id, activity_title, activity_description, user_id
-* @return array assoc. array containing 'calendar' and 'user_legend' values which contain the calendar widgets
 *
+* @return array assoc. array containing 'content' and 'sidebar' values which contain the calendar widgets
 */
 function Render($activity_data) {
 
@@ -124,6 +147,21 @@ function Render($activity_data) {
     global $xrms_plugin_hooks;
     $xrms_plugin_hooks['end_page']['calendar'] = 'javascript_tooltips_include';
 
+	$view_mode_buttons = "
+            <tr>
+                <td class=widget_label colspan=\"8\">
+					<input type=\"button\" class=\"button\" onclick=\"javascript:document.{$this->form_name}.activities_widget_type.value='list'; document.{$this->form_name}.submit();\" value=\""._('List View ')."\">
+					<input type=\"button\" class=\"button\" onclick=\"javascript:document.{$this->form_name}.calendar_range.value='week'; document.{$this->form_name}.submit();\" value=\""._('Week View ')."\">
+					<input type=\"button\" class=\"button\" onclick=\"javascript:document.{$this->form_name}.calendar_range.value='month'; document.{$this->form_name}.submit();\" value=\""._('Month View ')."\">" . 
+
+					('text' == $this->display_mode ? 
+						"<input type=\"button\" class=\"button\" onclick=\"javascript:document.{$this->form_name}.calendar_display_mode.value='iconic'; document.{$this->form_name}.submit();\" value=\""._('Iconic View ')."\">"
+					:
+						"<input type=\"button\" class=\"button\" onclick=\"javascript:document.{$this->form_name}.calendar_display_mode.value='text'; document.{$this->form_name}.submit();\" value=\""._('Normal View ')."\">"
+					) .  "
+                </td>
+            </tr>
+			";
 
 
 	switch($this->calendar_type) {
@@ -217,23 +255,18 @@ function Render($activity_data) {
 
 			$display_date = date('F Y', strtotime($this->start_date));
 
+	       	$days_header = "<tr>";
 	    	for ($i=0; $i<7; $i++) {
 	        	$day = date('D',  strtotime("+$i days  $visible_start_date "));
 
-	        	$days_of_week .= "<td width=\"105\" class=\"center widget_content\">$day</td>";
+	        	$days_header .= "<td width=\"105\" class=\"center widget_content\">$day</td>";
 	    	}
+	       	$days_header .= "</tr>";
 
 		    $next_month_display = date("M Y", strtotime($this->start_date . ' +1 month'));
 		    $prev_month_display = date( "M Y", strtotime($this->start_date . ' -1 month'));
 
-			$block = "
-			<!-- Calendar Begins -->\n
-			<div id=\"xrms_calendar\">
-			<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">
-		   <table class=\"widget\" cellspacing=\"1\">
-		    <tr>
-		        <td colspan=30 class='widget_header'>Calendar</td>
-		    </tr>
+			$calendar_nav = "
 		    <tr>
 		     <td colspan=30 class=widget_content>
 		      <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
@@ -256,17 +289,9 @@ function Render($activity_data) {
 		       </tr>
 		      </table>
 			</td>
-		 	</tr>
-			<tr> $days_of_week </tr>
-			$days_header
+		 	</tr>";
+			$calendar_nav .= $days_header;
 
-			$widget
-			</table>
-			</div>
-			<!-- Calendar Ends -->
-			";
-
-			$return['calendar'] = $block;
 			break;
 
 
@@ -337,6 +362,8 @@ function Render($activity_data) {
 				$days_header .= "<td width=13% class=\"widget_content_alt center\" $colspan>" . date('D d', $start_time + $day_of_week*86400) . "</td>\n";
 			}
 			$days_header .= "</tr>\n";
+
+			$widget .= $days_header;
 
 			// render the week
 			for($i=0; $i<(($end_time - $start_time)/($slice_length_minutes * 60)); $i++) {
@@ -437,15 +464,7 @@ function Render($activity_data) {
 
 			$display_date = date('M d', strtotime($this->start_date)) . ' - ' . date('M d', strtotime($this->start_date) + 6 * 86400);
 
-
-			$block = "
-			<!-- Calendar Begins -->\n
-			<div id=\"xrms_calendar\">
-			<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">
-		   <table class=\"widget\" cellspacing=\"1\">
-		    <tr>
-		        <td colspan=30 class='widget_header'>Calendar</td>
-		    </tr>
+			$calendar_nav = "
 		    <tr>
 		     <td colspan=30 class=widget_content>
 		      <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
@@ -468,27 +487,36 @@ function Render($activity_data) {
 		       </tr>
 		      </table>
 			</td>
-		 	</tr>
-			$days_header
-
-			$widget
-			</table>
-			</div>
-			<!-- Calendar Ends -->
-
-
-			";
-
-			$return['calendar'] = $block;
-			$return['user_legend'] = '';
+		 	</tr>";
+	
 
 		break;
 
 
 	}
 
+	$return['content'] = "
+		<!-- Calendar Begins -->\n
+		<div id=\"xrms_calendar\">
+			<input type=hidden name=\"{$this->calendar_date_field}\" value=\"{$this->start_date}\">
+			<input type=hidden name=\"calendar_display_mode\" value=\"{$this->display_mode}\">
+	   		<table class=\"widget\" cellspacing=\"1\">
+	    		<tr>
+	        		<td colspan=30 class='widget_header'>Calendar</td>
+	    		</tr>
+				$view_mode_buttons
+				$calendar_nav
+				$widget
+			</table>
+		</div>
+		<!-- Calendar Ends -->
+	";
 
-	// Build the user_legend sub-widget
+	$return['sidebar'] = '';
+
+
+
+	// Build the user_legend sidebar
 	$legend = '';
 	if(count($this->td_user_class)) {
 		$legend .= '<div id="xrms_calendar_legend">';
@@ -506,7 +534,8 @@ function Render($activity_data) {
 		$legend .= '</div>';
 	}
 
-	$return['user_legend'] = $legend;
+	$return['sidebar'] = $legend;
+	$return['js'] = $this->GetCalendarJS();
 
 	return $return;
 }
@@ -592,39 +621,74 @@ function GetCalendarJS() {
 <script language=\"JavaScript\" type=\"text/javascript\">
 
 function calendar_next_day() {
-    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' +1 days')) . "';
-    document.{$this->form_id}.submit();
+    document.{$this->form_name}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' +1 days')) . "';
+    document.{$this->form_name}.submit();
 }
 function calendar_next_week() {
-    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' +7 days')) . "';
-    document.{$this->form_id}.submit();
+    document.{$this->form_name}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' +7 days')) . "';
+    document.{$this->form_name}.submit();
 }
 function calendar_next_month() {
-    document.{$this->form_id}.$date_field_name.value = '$next_month';
-    document.{$this->form_id}.submit();
+    document.{$this->form_name}.$date_field_name.value = '$next_month';
+    document.{$this->form_name}.submit();
 }
 
 function calendar_previous_week() {
-    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' -7 days')) . "';
-    document.{$this->form_id}.submit();
+    document.{$this->form_name}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' -7 days')) . "';
+    document.{$this->form_name}.submit();
 }
 function calendar_previous_day() {
-    document.{$this->form_id}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' -1 days')) . "';
-    document.{$this->form_id}.submit();
+    document.{$this->form_name}.$date_field_name.value = '" .  date('Y-m-d', strtotime($calendar_start_date . ' -1 days')) . "';
+    document.{$this->form_name}.submit();
 }
 function calendar_previous_month() {
-    document.{$this->form_id}.$date_field_name.value = '$prev_month';
-    document.{$this->form_id}.submit();
+    document.{$this->form_name}.$date_field_name.value = '$prev_month';
+    document.{$this->form_name}.submit();
 }
 </script>
 	";
 }
 
+/**
+*
+* Create an ADOdb query WHERE string to limit activities returned to only those visible.
+*
+* @return string Query WHERE clause
+*/
+function GetCalendarSQLOffset() {
+
+    // set up the query offsets for the calendar view
+
+    // special case for month view...
+    if('month' == $this->calendar_type) {
+        $adjusted_start_date = CalendarView::GetWeekStart($this->start_date, 'Monday');
+
+        $calendar_view_start =  (strtotime($adjusted_start_date) - time()) / 86400;
+        $calendar_view_end = (strtotime("$adjusted_start_date +6 weeks") - time()) / 86400;
+
+    } else {
+        $calendar_view_start =  (strtotime($this->start_date) - time()) / 86400;
+        $calendar_view_end = (strtotime("$this->start_date +1 $this->calendar_type") - time()) / 86400;
+    }
+
+    $offset_start = $this->con->OffsetDate($calendar_view_start);
+    $offset_start = ereg_replace(",",".",$offset_start);
+    $offset_end = $this->con->OffsetDate($calendar_view_end);
+    $offset_end = ereg_replace(",",".",$offset_end);
+    $offset_sql = "\nAND a.ends_at > $offset_start AND a.scheduled_at < $offset_end";
+
+ 	//echo "GetCalendarSQLOffset $this->calendar_type, $this->start_date range is $calendar_view_start-$calendar_view_end<br>";
+
+    return $offset_sql;
+}
 
 
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.6  2005/06/27 16:32:53  daturaarutad
+* updated to work with GetActivitiesWidget and improved Initial date set
+*
 * Revision 1.5  2005/06/08 15:53:38  daturaarutad
 * fixed a bug with non-current-month activities being misplaced on the monthly calendar.  Also added return_url to the links to activities/one.php
 *
