@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.6 2005/03/05 00:31:58 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.7 2005/06/27 18:08:01 daturaarutad Exp $
 */
 
 
@@ -75,6 +75,18 @@ class ADOdb_QuickForm_Model {
 			} else {
 
 				$struct['fields'][$i]['type'] = $column->type;
+				if('enum' == $column->type) {
+					// set up enum choices and strip ' characters
+					foreach($column->enums as $k => $v) {
+						if("'" == substr($v, 0, 1)) {
+							$v = substr($v, 1);
+						}
+						if("'" == substr($v, -1, 1)) {
+							$v = substr($v, 0, -1);
+						}
+						$struct['fields'][$i]['enums'][$v] = $v;
+					}
+				}
 
 			}
 			$struct['fields'][$i]['displayOrder'] = $i;
@@ -406,12 +418,15 @@ class ADOdb_QuickForm_Model {
 			$i = $this->GetFieldIndex($k);
 			if(false !== $i) {
 
+				$quoted_values[$k] = $v;
+				/*
 				// use stripos if php5
 				if(false !== strpos($this->DBStructure['fields'][$i]['type'], 'enum')) {
 					$quoted_values[$k] =  $this->DBStructure['dbh']->qstr($v, get_magic_quotes_gpc());
 				} else {
 					$quoted_values[$k] = $v;
 				}
+				*/
 			}
 		}
 		return $quoted_values;

@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.9 2005/06/27 17:18:40 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.10 2005/06/27 18:08:02 daturaarutad Exp $
  */
 
 
@@ -421,15 +421,8 @@ END;
 END;
 	          				break;
 
-						case ((0 != preg_match("/enum\((.*)\)/", $field['type'], $matches)) ? $field['type'] : ''):
-
-							$enum = array();
-							$match_splinters = explode(',', $matches[1]);
-							for($i=0; $i<count($match_splinters); $i++) {
-							  $item = substr($match_splinters[$i], 1, -1);
-								$enum[$item] = $item;
-							}
-							$form->addElement('select', $field_name, $field['displayName'], $enum, $field['attributes']);
+						case 'enum':
+							$form->addElement('select', $field_name, $field['displayName'], $field['enums'], $field['attributes']);
 							break;
 
 						case 'html':
@@ -612,6 +605,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.10  2005/06/27 18:08:02  daturaarutad
+* Updated for new enum handling in ADOdb
+*
 * Revision 1.9  2005/06/27 17:18:40  daturaarutad
 * added cvs log: to bottom of file
 *
