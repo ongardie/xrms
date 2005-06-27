@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.106 2005/06/08 17:36:28 daturaarutad Exp $
+ * $Id: one.php,v 1.107 2005/06/27 16:31:46 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -137,22 +137,25 @@ $user_menu = get_user_menu($con, $user_id, $show_blank);
 
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
 
-if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
-    $history_text = '<tr> <td class=widget_content colspan=2>';
-
-    //get user info for who entered the activity
+   //get user info for who entered the activity
     $sql = "select first_names, last_name from users where user_id = $entered_by";
     $rst = $con->execute($sql);
     if ($rst) {
         $entered_by_firstname = $rst->fields['first_names'];
         $entered_by_lastname = $rst->fields['last_name'];
-        $history_text .= _("ID") . ' ' . $activity_id . ' ' .
-                         _("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' .
-                         _("at") . ' ' . $entered_at . '. ';
+
         $rst->close();
     } else {
         db_error_handler($con, $sql);
     }
+
+if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
+    $history_text = '<tr> <td class=widget_content colspan=2>';
+
+    //display user info for who entered the activity
+    $history_text .= _("ID") . ' ' . $activity_id . ' ' .
+                     _("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' .
+                     _("at") . ' ' . $entered_at . '. ';
 
     //get user info for who modified the activity
     $sql = "select first_names, last_name from users where user_id = $last_modified_by";
@@ -169,7 +172,7 @@ if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
 
     $history_text .= '</td> </tr>';
 } else {
-$history_text = '';
+    $history_text = '';
 }
 
 //get activity type menu
@@ -549,6 +552,10 @@ function logTime() {
             </tr>
             <?php } ?>
             <tr>
+                <td class=widget_label_right><?php echo _("Entered By"); ?></td>
+                <td class=widget_content_form_element><?php echo $entered_by_firstname.' '.$entered_by_lastname.' '._("on").' '.$entered_at; ?></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Scheduled Start"); ?></td>
                 <td class=widget_content_form_element>
                     <?php jscalendar_includes(); ?>
@@ -562,7 +569,7 @@ function logTime() {
                     <input type=text ID="f_date_d" name=ends_at value="<?php  echo $ends_at; ?>">
                     <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
                 </td>
-           </tr>
+            </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Email This To"); ?></td>
                 <td class=widget_content_form_element><input type=text name=email_to></td>
@@ -570,7 +577,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Completed?"); ?></td>
                 <td class=widget_content_form_element><input type=checkbox name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
-                    <?php if ($completed_by) echo " by $completed_by_user"; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo " at $completed_at"; ?>
+                    <?php if ($completed_by) echo _("by").' '.$completed_by_user; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at; ?>
                 </td>
             </tr>
             <?php
@@ -668,6 +675,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.107  2005/06/27 16:31:46  braverock
+ * - add Entered By into main screen after many requests
+ * - fix localization of several strings
+ *
  * Revision 1.106  2005/06/08 17:36:28  daturaarutad
  * updated rst->activity_rst to fix broken page
  *
