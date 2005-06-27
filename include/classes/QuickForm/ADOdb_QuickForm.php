@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.8 2005/06/24 22:36:45 vanmer Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.9 2005/06/27 17:18:40 daturaarutad Exp $
  */
 
 
@@ -611,7 +611,10 @@ END;
 }
 
 /**
-* $log $
+* $Log: ADOdb_QuickForm.php,v $
+* Revision 1.9  2005/06/27 17:18:40  daturaarutad
+* added cvs log: to bottom of file
+*
 */
 
 ?>
