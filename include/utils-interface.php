@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.64 2005/06/24 13:48:40 braverock Exp $
+ * $Id: utils-interface.php,v 1.65 2005/06/28 13:58:30 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -379,7 +379,9 @@ function end_page($use_hook = true) {
     do_hook ('end_page');
 ?>
 <A href="http://sourceforge.net/projects/xrms/">
-        <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0" height="0" width="0" alt="XRMS SourceForge Project Page" />
+        <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0"
+             height="0" width="0"
+             alt="<?php echo _("XRMS SourceForge Project Page"); ?>" />
 </A>
 </body>
 </html>
@@ -743,6 +745,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.65  2005/06/28 13:58:30  braverock
+ * - change line formatting of SF logo in advance of adding system parameters to control
+ *
  * Revision 1.64  2005/06/24 13:48:40  braverock
  * - add SF logo link to XRMS project page to end_page fn
  *
