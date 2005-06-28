@@ -26,7 +26,7 @@
  *
  * @example Pager_Columns.doc.1.php check out 
  *
- * $Id: Pager_Columns.php,v 1.7 2005/03/25 20:05:26 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.8 2005/06/28 18:43:34 daturaarutad Exp $
  */
 
 class Pager_Columns {
@@ -137,6 +137,7 @@ class Pager_Columns {
 		// add available columns
   		foreach($this->pager_columns as $pager_column_index => $pager_column) {
 
+
 			if(!in_array($pager_column_index, $user_columns)) {
 				$avail_columns_options .= "<option value=\"$pager_column_index\">{$pager_column['name']}</option>\n";
 			} 
@@ -179,8 +180,7 @@ class Pager_Columns {
 
 				$reset_columns_rows;
 
-				document.{$this->form_id}.submit();
-
+				{$this->pager_name}_columns_change(obj);
 			}
 		</script>
 		
@@ -258,6 +258,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.8  2005/06/28 18:43:34  daturaarutad
+ * fixed reset button issue
+ *
  * Revision 1.7  2005/03/25 20:05:26  daturaarutad
  * enhancement to the Update/Reset/Cancel columns buttons and their behavior
  *
