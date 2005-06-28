@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.114 2005/06/21 12:37:56 braverock Exp $
+ * $Id: one.php,v 1.115 2005/06/28 22:19:07 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -21,7 +21,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'utils-accounting.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
-require_once('../activities/activities-pager-functions.php');
+require_once('../activities/activities-widget.php');
 
 
 global $company_id;
@@ -213,72 +213,25 @@ TILLEND;
     }
 } else { $division_select=false; }
 
-//
-//  list of most recent activities (note that the order of sql fields is important for the GUP_Pager)
-//
-$sql_activities = "SELECT " .
-$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/companies/one.php%3Fcompany_id=$company_id\">'", "activity_title", "'</a>'") .  " AS  activity_title_link," .
-"u.username, at.activity_type_pretty_name, " .
-$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' .
-"a.scheduled_at, a.on_what_table, a.on_what_id, a.entered_at, a.activity_status, a.activity_title, cont.last_name, cont.first_names,
-(CASE WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1 ELSE 0 END) AS is_overdue
-FROM activity_types at, users u, activities a
-LEFT JOIN contacts cont ON cont.contact_id = a.contact_id
-LEFT JOIN opportunities o ON o.opportunity_id=a.on_what_id
-LEFT JOIN cases cas ON cas.case_id=a.on_what_id
-WHERE a.company_id = $company_id
-  AND a.user_id = u.user_id
-  AND a.activity_type_id = at.activity_type_id
-  AND a.activity_record_status = 'a'";
 
-    $list=acl_get_list($session_user_id, 'Read', false, 'activities');
+// Activities Widget
 
-    if ($list) {
-        if ($list!==true) {
-            $list=implode(",",$list);
-            $sql_activities .= " and a.activity_id IN ($list) ";
-        }
-    } else { $sql_activities .= ' AND 1 = 2 '; }
+// Pass search terms to GetActivitiesWidget
+$search_terms = array( 'company_id'            => $company_id);
+
+$return_url = "/companies/one.php%3Fcompany_id=$company_id";
+
+$extra_where ="";
 
 if ($division_id) {
-    $sql_activities.=" AND (a.on_what_table='company_division' AND a.on_what_id=$division_id";
-    $sql_activities.=" OR a.on_what_table='opportunities' AND o.division_id=$division_id";
-    $sql_activities.=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
-
+   	$extra_where .=" AND (a.on_what_table='company_division' AND a.on_what_id=$division_id";
+   	$extra_where .=" OR a.on_what_table='opportunities' AND o.division_id=$division_id";
+   	$extra_where .=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
+	
 }
+$default_columns = array('title', 'username', 'type', 'contact', 'activity_about', 'scheduled_at');
 
-// begin Activities Pager
-$columns = array();
-$columns[] = array('name' => _('Summary'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'a.activity_title');
-$columns[] = array('name' => _('User'), 'index_sql' => 'username');
-$columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-$columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'cont.last_name,cont.first_names');
-$columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
-$columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
-
-// no reason to set this if you don't want all by default
-$default_columns = null;
-// $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','activity_about','scheduled_at');
-
-// selects the columns this user is interested in
-$pager_columns = new Pager_Columns('CompanyActivitiesPager', $columns, $default_columns, $activities_form_name);
-$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-$activities_pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-
-$columns = $pager_columns->GetUserColumns('default');
-
-// This is for email/email.php and the mail merge button
-$_SESSION["search_sql"] = $sql_activities;
-
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
-
-$pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $activities_form_name, 'CompanyActivitiesPager', $columns, false, true);
-$pager->AddEndRows($endrows);
-
-$activity_rows = $pager->Render($system_rows_per_page);
-// end Activities Pager
+$activities_widget =  GetActivitiesWidget($con, $search_terms, $activities_form_name, _('Activities'), $session_user_id, $return_url, $extra_where, null, $default_columns);
 
 
 // contacts query
@@ -781,8 +734,9 @@ function markComplete() {
         <form name="<?php echo $activities_form_name; ?>" method=post>
             <?php
                 // activities pager
-                echo $activities_pager_columns_selects;
-                echo $activity_rows;
+                echo $activities_widget['content'];
+                echo $activities_widget['sidebar'];
+                echo $activities_widget['js'];
             ?>
         </form>
 
@@ -845,6 +799,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.115  2005/06/28 22:19:07  daturaarutad
+ * updated to use consolidated GetActivitiesWidget function
+ *
  * Revision 1.114  2005/06/21 12:37:56  braverock
  * - fix activities 'Done' button
  *   patch provided by Jean-Noël Hayart
