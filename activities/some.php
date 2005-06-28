@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.118 2005/06/27 16:39:25 daturaarutad Exp $
+ * $Id: some.php,v 1.119 2005/06/28 20:11:38 daturaarutad Exp $
  */
 
 // handle includes
@@ -129,8 +129,6 @@ $arr_vars = array ( // local var name       // session variable name
                    'time_zone_between'   => array ( 'time_zone_between', arr_vars_SESSION ) ,
                    'time_zone_between2'  => array ( 'time_zone_between2', arr_vars_SESSION ) ,
                    'opportunity_status_id' => array ( 'opportunity_status_id', arr_vars_SESSION ) ,
-//                  'results_view_type'   => array ( 'results_view_type', arr_vars_SESSION ) ,
-//                  'calendar_display_type'   => array ( 'calendar_display_type', arr_vars_SESSION ) ,
                    );
 
 // get all passed in variables
@@ -560,7 +558,7 @@ $_SESSION["search_sql"]=$sql;
 							'campaign_id' 			=> $campaign_id
 						);
 	
-	$activities_widget =  GetActivitiesWidget($con, $results_view_type, $search_terms, 'ActivitiesData', _('Search Results'), $session_user_id, $return_url);	
+	$activities_widget =  GetActivitiesWidget($con, $search_terms, 'ActivitiesData', _('Search Results'), $session_user_id, $return_url);	
 
 	echo $activities_widget['content'];
 	echo $activities_widget['sidebar'];
@@ -634,6 +632,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.119  2005/06/28 20:11:38  daturaarutad
+ * removed results_view_type; update GetActivitiesWidget param list
+ *
  * Revision 1.118  2005/06/27 16:39:25  daturaarutad
  * updated to use GetActivitiesWidget() for pager and calendar
  *
