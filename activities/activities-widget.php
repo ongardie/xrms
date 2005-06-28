@@ -49,44 +49,44 @@ if(!$activities_widget_type) $activities_widget_type = 'list';
 if('list' != $activities_widget_type) {
 
 /*  -if this is the first pass, the calendar date should be set based on the search date
-	-if the user pressed 'next month' or whatever, calendar date should not be affected
-	-if a search field has changed, the date should be reset based on search date
+    -if the user pressed 'next month' or whatever, calendar date should not be affected
+    -if a search field has changed, the date should be reset based on search date
 
-	so it sounds like we need to pass in a (recommended) search date, and a flag on whether or not
-	to use it...
+    so it sounds like we need to pass in a (recommended) search date, and a flag on whether or not
+    to use it...
 
-	GetActivitiesWidget:
-		-use VarWatcher to determine whether or not to pass in a date to constructor
-		(this date should be the actual date).
+    GetActivitiesWidget:
+        -use VarWatcher to determine whether or not to pass in a date to constructor
+        (this date should be the actual date).
 
-	Calendar object:
-		-if a date is passed in as a param, use that
-		-elseif the session/cgi var is set, use that....
-		-else use today's date.
+    Calendar object:
+        -if a date is passed in as a param, use that
+        -elseif the session/cgi var is set, use that....
+        -else use today's date.
 
-	GetActivitiesWidget:
-		-use Calendar object to create sql_offset
+    GetActivitiesWidget:
+        -use Calendar object to create sql_offset
 */
-	if(!$calendar_range) {
-		$calendar_range = 'month';
-		// This is so that Session_Var_Watcher will see a calendar range as being set even if it wasn't set the first time.
-		$_POST['calendar_range'] = $calendar_range;
-	}
+    if(!$calendar_range) {
+        $calendar_range = 'month';
+        // This is so that Session_Var_Watcher will see a calendar range as being set even if it wasn't set the first time.
+        $_POST['calendar_range'] = $calendar_range;
+    }
 
-	$initial_calendar_date = GetInitialCalendarDate($calendar_range, $before_after, $search_date, $start_end);
+    $initial_calendar_date = GetInitialCalendarDate($calendar_range, $before_after, $search_date, $start_end);
 
-	//echo "init date is $initial_calendar_date<br>";
+    //echo "init date is $initial_calendar_date<br>";
 
-	// actually, let's create the Calendar object here, then we can let it do the thing with the stuff.
+    // actually, let's create the Calendar object here, then we can let it do the thing with the stuff.
     $calendar = new CalendarView($con, $form_name, $initial_calendar_date, 'calendar_start_date', $calendar_range);
 
-	// Add Calendar date filtering (only query for visible date range)
-	$calendar_offset_sql = $calendar->GetCalendarSQLOffset($con, $calendar_range, $calendar_start_date); 
+    // Add Calendar date filtering (only query for visible date range)
+    $calendar_offset_sql = $calendar->GetCalendarSQLOffset($con, $calendar_range, $calendar_start_date);
 }
 
 
 if(!$activities_widget_type) {
-	$activities_widget_type = 'list';
+    $activities_widget_type = 'list';
 }
 
 $widget = '';
@@ -97,7 +97,7 @@ $widget = '';
 $sql = "SELECT (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END) AS is_overdue, "
   ." at.activity_type_pretty_name AS type, "
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
-  . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"one.php?activity_id='", "a.activity_id", "'&amp;return_url=$return_url\">'", "activity_title", "'</a>'") . " AS title, "
+  . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"../activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=$return_url\">'", "activity_title", "'</a>'") . " AS title, "
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
   . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
@@ -116,9 +116,9 @@ LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants
 $sql .= " WHERE a.company_id = c.company_id $extra_where ";
 
 
-/* 
+/*
 
-	vestigal code from activities/some.php...should be replaced with a generic on_what_table handler!
+    vestigal code from activities/some.php...should be replaced with a generic on_what_table handler!
 
 
 if($sort_column == 9 || $campaign_id) {
@@ -235,8 +235,8 @@ if ($list) {
         $list=implode(",",$list);
         $sql .= " and a.activity_id IN ($list) ";
     }
-} else { 
-	$sql .= ' AND 1 = 2 '; 
+} else {
+    $sql .= ' AND 1 = 2 ';
 }
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
@@ -275,8 +275,8 @@ if('list' != $activities_widget_type) {
         }
 
     } else {
-		db_error_handler($con, $sql);
-	}
+        db_error_handler($con, $sql);
+    }
 
     $search_date = date('Y-m-d');
 
@@ -301,9 +301,9 @@ if('list' != $activities_widget_type) {
     // end calendar code
 
 } else {
-	global $system_rows_per_page;
+    global $system_rows_per_page;
 
-	$columns = array();
+    $columns = array();
     $columns[] = array('name' => _('Overdue'), 'index_sql' => 'is_overdue');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
@@ -313,28 +313,28 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
     $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
 
-	$columns[] = array('name' => _('User'), 'index_sql' => 'username');
-	
-	
-	// selects the columns this user is interested in
-	$pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
-	$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-	$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-	
-	$columns = $pager_columns->GetUserColumns('default');
-	
-	
-	
-	$endrows = $end_rows . 
-				"<tr><td class=widget_content_form_element colspan=10>
-            	$pager_columns_button
-            	<input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _('Calendar View') ."\">
-            	<input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-            	<input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
-	
-	$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
-	$pager->AddEndRows($endrows);
-	$widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
+    $columns[] = array('name' => _('User'), 'index_sql' => 'username');
+
+
+    // selects the columns this user is interested in
+    $pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
+    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+    $columns = $pager_columns->GetUserColumns('default');
+
+
+
+    $endrows = $end_rows .
+                "<tr><td class=widget_content_form_element colspan=10>
+                $pager_columns_button
+                <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _('Calendar View') ."\">
+                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
+                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+
+    $pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
+    $pager->AddEndRows($endrows);
+    $widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
 }
 
 $widget['content'] .= "<input type=hidden name=activities_widget_type value=\"$activities_widget_type\">\n";
@@ -351,23 +351,23 @@ return $widget;
 * GetInitialCalendarDate
 * Based on search
 * -use GetInitialCalendarDate to determine whether or not to pass in a date to constructor
-*		(this date should be the actual date).
+*       (this date should be the actual date).
 *
 */
 function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 
 //echo" GetInitialCalendarDate($calendar_range, $before_after, $search_date) ";
 
-	// watch CGI vars to see if we should reset the calendar date
-	$var_watcher = new SessionVarWatcher('Activities');
-	$var_watcher->RegisterCGIVars(array('activities_widget_type', 'calendar_range', 'search_date', 'before_after'));
+    // watch CGI vars to see if we should reset the calendar date
+    $var_watcher = new SessionVarWatcher('Activities');
+    $var_watcher->RegisterCGIVars(array('activities_widget_type', 'calendar_range', 'search_date', 'before_after'));
 
     // set calendar_start_date from search_date if it's not set already
     if($var_watcher->VarsChanged()) {
 
-		//echo "vars changed or new...setting up initial calendar start date<br>";
+        //echo "vars changed or new...setting up initial calendar start date<br>";
 
-		// before_after is only relevant if there is a search date.
+        // before_after is only relevant if there is a search date.
         if($search_date && !$before_after) {
             // before
             $date_modifier = '-1 ' . $calendar_range . ' ';
@@ -375,7 +375,7 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
             $date_modifier = '';
         }
 
-		if(!$search_date) $search_date=date('Y-m-d', time());
+        if(!$search_date) $search_date=date('Y-m-d', time());
 
         switch($calendar_range) {
             case 'day':
@@ -404,12 +404,15 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
         // this is for the calendar widget
         $_POST['initial_calendar_date'] = $initial_calendar_date;
     }
-	return $initial_calendar_date;
+    return $initial_calendar_date;
 }
 
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.3  2005/06/28 14:03:25  braverock
+* - fix activity summary link
+*
 * Revision 1.2  2005/06/27 16:30:10  daturaarutad
 * removed debug msgs
 *
