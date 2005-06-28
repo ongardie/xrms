@@ -19,6 +19,7 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once($include_directory . 'classes/Pager/Session_Var_Watcher.php');
 
+require_once('../activities/activities-pager-functions.php');
 require_once('../calendar/Calendar_View.php');
 
 /**
@@ -33,7 +34,7 @@ require_once('../calendar/Calendar_View.php');
 * @param array List of default columns (used as default for selectable columns)
 * @return string The pager widget.  must be placed inside a form to be active!
 */
-function GetActivitiesWidget($con, $type, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null) {
+function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null) {
 
 $calendar_date_field = 'calendar_start_date';
 
@@ -244,6 +245,8 @@ $sql .=" GROUP BY a.activity_id, c.company_name,c.company_id, cont.first_names, 
 
 // end build query
 
+$_SESSION["search_sql"] = $sql;
+
 
 
 
@@ -312,29 +315,29 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
     $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
     $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-
-    $columns[] = array('name' => _('User'), 'index_sql' => 'username');
-
-
-    // selects the columns this user is interested in
-    $pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
-    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-
-    $columns = $pager_columns->GetUserColumns('default');
-
-
-
-    $endrows = $end_rows .
-                "<tr><td class=widget_content_form_element colspan=10>
-                $pager_columns_button
-                <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _('Calendar View') ."\">
-                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
-
-    $pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
-    $pager->AddEndRows($endrows);
-    $widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
+	$columns[] = array('name' => _('About'), 'index_calc' => 'activity_about'); 
+	$columns[] = array('name' => _('User'), 'index_sql' => 'username');
+	
+	
+	// selects the columns this user is interested in
+	$pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
+	$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+	$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+	
+	$columns = $pager_columns->GetUserColumns('default');
+	
+	
+	
+	$endrows = $end_rows . 
+				"<tr><td class=widget_content_form_element colspan=10>
+            	$pager_columns_button
+            	<input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _('Calendar View') ."\">
+            	<input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
+            	<input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+	
+	$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
+	$pager->AddEndRows($endrows);
+	$widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
 }
 
 $widget['content'] .= "<input type=hidden name=activities_widget_type value=\"$activities_widget_type\">\n";
@@ -410,6 +413,9 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.4  2005/06/28 20:10:35  daturaarutad
+* removed results_view_type from param list; set $_SESSION[search_sql]
+*
 * Revision 1.3  2005/06/28 14:03:25  braverock
 * - fix activity summary link
 *
