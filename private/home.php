@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.58 2005/06/27 16:34:47 daturaarutad Exp $
+ * $Id: home.php,v 1.59 2005/06/28 20:10:59 daturaarutad Exp $
  */
 
 // include the common files
@@ -84,8 +84,11 @@ $extra_where = "AND ((a.user_id = $session_user_id) OR (activity_participants.co
 $form_name = 'ActivitiesView';
 
 $search_terms = array('activity_status'                 => "'o'");
+
+$default_columns = array('username', 'type', 'contact', 'activity_about', 'scheduled_at');
+
     
-$activities_widget =  GetActivitiesWidget($con, $results_view_type, $search_terms, $form_name, _('Search Results'), $session_user_id, $return_url, $extra_where);
+$activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Search Results'), $session_user_id, $return_url, $extra_where, null, $default_columns);
 
 
 
@@ -439,6 +442,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.59  2005/06/28 20:10:59  daturaarutad
+ * set default columns in pager widget, updated for new GetActivitiesWidget param list
+ *
  * Revision 1.58  2005/06/27 16:34:47  daturaarutad
  * updated to use GetActivitiesWidget() for pager and calendar
  *
