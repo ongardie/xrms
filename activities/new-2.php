@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.41 2005/06/10 16:44:24 ycreddy Exp $
+ * $Id: new-2.php,v 1.42 2005/06/29 18:50:55 vanmer Exp $
  */
 
 //where do we include from
@@ -157,9 +157,7 @@ $rec['company_id']       = ($company_id > 0) ? $company_id : 0;
 $rec['contact_id']       = ($contact_id > 0) ? $contact_id : 0;
 $rec['entered_at']       = time();
 $rec['entered_by']       = $session_user_id;
-$rec['ends_at']          = strtotime($ends_at);
-$rec['last_modified_at'] = time();
-$rec['last_modified_by'] = $session_user_id;
+$rec['ends_at']          = $ends_at;
 $rec['opportunity_status_id'] = $opportunity_status_id;
 if($thread_id) $rec['thread_id']         = $thread_id;
 if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
@@ -172,7 +170,7 @@ if(empty($opportunity_status_id)) {
     $rec['activity_description'] = (strlen($activity_description) > 0) ? $activity_description : "";
     $rec['on_what_table']    = (strlen($on_what_table) > 0) ? $on_what_table : '';
     $rec['on_what_id']       = ($on_what_id > 0) ? $on_what_id : 0;
-    $rec['scheduled_at']     = strtotime($scheduled_at);
+    $rec['scheduled_at']     = $scheduled_at;
 }
 else {
     $rec['opportunity_status']  = "o";
@@ -180,12 +178,13 @@ else {
 }
 
 if(empty($opportunity_status_id)) {
-    $tbl = 'activities';
-    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-
-    $con->execute($ins);
-
-    $activity_id = $con->insert_id();
+    //add activity using API
+    $activity_id = add_activity($con, $rec);    
+    if (!$activity_id) {
+        $msg=urlencode(_("Failed to add activity"));
+        header("Location: " . $http_site_root . $return_url."&msg=$msg");
+        exit();
+    }
     $rec['activity_id']=$activity_id;
     do_hook_function('activity_new_2', $rec);
 
@@ -234,6 +233,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.42  2005/06/29 18:50:55  vanmer
+ *- changed to use API instead of getInsertSQL directly when creating an activity
+ *
  *Revision 1.41  2005/06/10 16:44:24  ycreddy
  *undoing the 'activity_custom_edit' hook and using 'activity_new-2' instead
  *
