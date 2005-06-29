@@ -7,7 +7,7 @@
  * max = maximum number of entries.  Overridden by system parameter if necessary
  * status = new or modified.  Default new.
  *
- * $Id: companies.php,v 1.3 2005/05/09 13:06:15 maulani Exp $
+ * $Id: companies.php,v 1.4 2005/06/29 16:07:10 maulani Exp $
  */
 
 //include required files
@@ -58,9 +58,11 @@ default:
 	break;
 }
 
-$sql = "SELECT c.company_id, c.company_name, c.entered_at, c.last_modified_at
-        FROM companies c
-        WHERE c.company_record_status = 'a' ";
+$sql = "SELECT c.company_id, c.company_name, c.entered_at, 
+        c.last_modified_at, CONCAT(u.email, ' (', u.first_names, ' ', u.last_name, ')') as author
+        FROM companies c, users u
+        WHERE c.company_record_status = 'a' 
+        AND c.entered_by = u.user_id ";
 
 switch ($status) {
 case "new":
@@ -79,8 +81,10 @@ if ($rst) {
 	while (!$rst->EOF) {
 		$company_id = $rst->fields['company_id'];
 		$company_name = str_replace("&", "&amp;", htmlentities($rst->fields['company_name'], ENT_COMPAT, 'UTF-8'));
+		$author = $rst->fields['author'];
 		$entered_at = $rst->fields['entered_at'];
 		$last_modified_at = $rst->fields['last_modified_at'];		
+		$last_modified_f = date("r", strtotime($last_modified_at));
 		if ($status == 'modified') {
 			$pub_date = date("r", strtotime($last_modified_at));
 		} else {
@@ -90,8 +94,9 @@ if ($rst) {
 		$items_text .= '         <title>' . $company_name . '</title>' . "\n";
 		$items_text .= '         <link>' . $http_site_root . '/companies/one.php?company_id=' .$company_id . '</link>' . "\n";
 		$items_text .= '         <description>' . $company_name . '</description>' . "\n";
+		$items_text .= '         <author>' . $author . '</author>' . "\n";
 		$items_text .= '         <pubDate>' . $pub_date . '</pubDate>' . "\n";
-		$items_text .= '         <guid isPermaLink="true">' . $http_site_root . '/companies/one.php?company_id=' .$company_id . '</guid>' . "\n";
+		$items_text .= '         <guid isPermaLink="false">' . $http_site_root . '/companies/one.php?company_id=' .$company_id . '?mod=' . $last_modified_f . '</guid>' . "\n";
 		$items_text .= "      </item>\n\n";
 		$rst->movenext();
 	}
@@ -104,6 +109,9 @@ $con->close();
 $feed_location = $http_site_root . '/rss/companies.php';
 $now = date("r");
 
+//this needs to be changed to reflect the last actual change in the feed
+$last_date = date("r");
+
 header("Content-Type: text/xml");
 
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
@@ -113,8 +121,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
       <title><?php echo $feed_name; ?></title>
       <link><?php echo $feed_location; ?></link>
       <description>A list of companies from XRMS</description>
-      <language>en-us</language>
-      <lastBuildDate>$now</lastBuildDate>
+      <language>en-US</language>
+      <pubDate>$now</pubDate>
+      <lastBuildDate>$last_date</lastBuildDate>
       <docs>http://blogs.law.harvard.edu/tech/rss</docs>
       <generator>XRMS</generator>
       <ttl>30</ttl>
@@ -127,6 +136,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: companies.php,v $
+ * Revision 1.4  2005/06/29 16:07:10  maulani
+ * - Add author tag to feeds
+ *
  * Revision 1.3  2005/05/09 13:06:15  maulani
  * - Correct SQL to use correct publication date
  *

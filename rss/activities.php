@@ -11,7 +11,7 @@
  * status = open or scheduled or overdue or closed or current (open or closed).  Default all.
  * type = limit activity type.  Default all.
  *
- * $Id: activities.php,v 1.5 2005/05/09 13:05:21 maulani Exp $
+ * $Id: activities.php,v 1.6 2005/06/29 16:06:55 maulani Exp $
  */
 
 //include required files
@@ -154,10 +154,18 @@ if ($type != '') {
 	$type='all';
 }
 
-$sql = "SELECT a.activity_id, a.activity_title, a.activity_description, a.activity_status, 
-a.ends_at, a.last_modified_at , c.company_name 
-FROM activities a, companies c
-WHERE a.company_id=c.company_id AND a.activity_record_status = 'a' ";
+$sql = "SELECT a.activity_id, 
+               a.activity_title, 
+               a.activity_description, 
+               a.activity_status, 
+               a.ends_at, 
+               a.last_modified_at, 
+               c.company_name, 
+               CONCAT(u.email, ' (', u.first_names, ' ', u.last_name, ')') as author
+        FROM activities a, companies c, users u
+        WHERE a.company_id=c.company_id 
+        AND a.activity_record_status = 'a'
+        AND u.user_id=a.entered_by ";
 
 if ($user != '') {
 	$feed_name .= " User is $user";
@@ -216,15 +224,18 @@ if ($rst) {
 		$activity_status = $rst->fields['activity_status'];
 		$ends_at = $rst->fields['ends_at'];
 		$last_modified_at = $rst->fields['last_modified_at'];
+		$last_modified_f = date("r", strtotime($last_modified_at));
 		$pub_date = date("r", strtotime($last_modified_at));
 		$company_name = $rst->fields['company_name'];
+		$author = $rst->fields['author'];
 		$description = "&lt;p&gt;&lt;b&gt;$company_name&lt;/b&gt;&lt;/p&gt;" . $activity_description;
 		$items_text .= "      <item>\n";
 		$items_text .= '         <title>' . $activity_title . '</title>' . "\n";
 		$items_text .= '         <link>' . $http_site_root . '/activities/one.php?activity_id=' .$activity_id . '</link>' . "\n";
 		$items_text .= '         <description>' . $description . '</description>' . "\n";
+		$items_text .= '         <author>' . $author . '</author>' . "\n";
 		$items_text .= '         <pubDate>' . $pub_date . '</pubDate>' . "\n";
-		$items_text .= '         <guid isPermaLink="true">' . $http_site_root . '/activities/one.php?activity_id=' .$activity_id . '</guid>' . "\n";
+		$items_text .= '         <guid isPermaLink="false">' . $http_site_root . '/activities/one.php?activity_id=' .$activity_id . '?mod=' . $last_modified_f . '</guid>' . "\n";
 		$items_text .= "      </item>\n\n";
 		$rst->movenext();
 	}
@@ -237,6 +248,9 @@ $con->close();
 $feed_location = $http_site_root . '/rss/activities.php';
 $now = date("r");
 
+//this needs to be changed to reflect the last actual change in the feed
+$last_date = date("r");
+
 header("Content-Type: text/xml");
 
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
@@ -246,8 +260,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
       <title><?php echo $feed_name; ?></title>
       <link><?php echo $feed_location; ?></link>
       <description>A list of activities from XRMS</description>
-      <language>en-us</language>
-      <lastBuildDate>$now</lastBuildDate>
+      <language>en-US</language>
+      <pubDate>$now</pubDate>
+      <lastBuildDate>$last_date</lastBuildDate>
       <docs>http://blogs.law.harvard.edu/tech/rss</docs>
       <generator>XRMS</generator>
       <ttl>30</ttl>
@@ -260,6 +275,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: activities.php,v $
+ * Revision 1.6  2005/06/29 16:06:55  maulani
+ * - Add author tag to feeds
+ *
  * Revision 1.5  2005/05/09 13:05:21  maulani
  * - Correct SQL for All Activities case
  *

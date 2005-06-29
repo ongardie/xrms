@@ -7,7 +7,7 @@
  * max = maximum number of entries.  Overridden by system parameter if necessary
  * status = new or modified.  Default new.
  *
- * $Id: contacts.php,v 1.3 2005/05/09 13:06:15 maulani Exp $
+ * $Id: contacts.php,v 1.4 2005/06/29 16:07:10 maulani Exp $
  */
 
 //include required files
@@ -58,10 +58,15 @@ default:
 	break;
 }
 
-$sql = "SELECT c.contact_id, b.company_name, CONCAT(c.first_names, ' ', c.last_name) as contact_name,
-               c.entered_at, c.last_modified_at
-        FROM contacts c, companies b
-        WHERE c.contact_record_status = 'a' and c.company_id=b.company_id ";
+$sql = "SELECT c.contact_id, b.company_name, 
+               CONCAT(c.first_names, ' ', c.last_name) as contact_name,
+               c.entered_at, 
+               c.last_modified_at, 
+               CONCAT(u.email, ' (', u.first_names, ' ', u.last_name, ')') as author
+        FROM contacts c, companies b, users u
+        WHERE c.contact_record_status = 'a' 
+        AND c.company_id=b.company_id 
+        AND u.user_id=c.entered_by ";
 
 switch ($status) {
 case "new":
@@ -83,6 +88,8 @@ if ($rst) {
 		$company_name = str_replace("&", "&amp;", htmlentities($rst->fields['company_name'], ENT_COMPAT, 'UTF-8'));
 		$entered_at = $rst->fields['entered_at'];
 		$last_modified_at = $rst->fields['last_modified_at'];
+		$last_modified_f = date("r", strtotime($last_modified_at));
+		$author = $rst->fields['author'];
 		if ($status == 'modified') {
 			$pub_date = date("r", strtotime($last_modified_at));
 		} else {
@@ -92,8 +99,9 @@ if ($rst) {
 		$items_text .= '         <title>' . $contact_name . '</title>' . "\n";
 		$items_text .= '         <link>' . $http_site_root . '/contacts/one.php?contact_id=' .$contact_id . '</link>' . "\n";
 		$items_text .= '         <description>' . $company_name . '</description>' . "\n";
+		$items_text .= '         <author>' . $author . '</author>' . "\n";
 		$items_text .= '         <pubDate>' . $pub_date . '</pubDate>' . "\n";
-		$items_text .= '         <guid isPermaLink="true">' . $http_site_root . '/contacts/one.php?contact_id=' .$contact_id . '</guid>' . "\n";
+		$items_text .= '         <guid isPermaLink="false">' . $http_site_root . '/contacts/one.php?contact_id=' .$contact_id . '?mod=' . $last_modified_f .'</guid>' . "\n";
 		$items_text .= "      </item>\n\n";
 		$rst->movenext();
 	}
@@ -106,6 +114,9 @@ $con->close();
 $feed_location = $http_site_root . '/rss/contacts.php';
 $now = date("r");
 
+//this needs to be changed to reflect the last actual change in the feed
+$last_date = date("r");
+
 header("Content-Type: text/xml");
 
 echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
@@ -115,8 +126,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
       <title><?php echo $feed_name; ?></title>
       <link><?php echo $feed_location; ?></link>
       <description>A list of contacts from XRMS</description>
-      <language>en-us</language>
-      <lastBuildDate>$now</lastBuildDate>
+      <language>en-US</language>
+      <pubDate>$now</pubDate>
+      <lastBuildDate>$last_date</lastBuildDate>
       <docs>http://blogs.law.harvard.edu/tech/rss</docs>
       <generator>XRMS</generator>
       <ttl>30</ttl>
@@ -129,6 +141,9 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\n\n";
 
 /**
  * $Log: contacts.php,v $
+ * Revision 1.4  2005/06/29 16:07:10  maulani
+ * - Add author tag to feeds
+ *
  * Revision 1.3  2005/05/09 13:06:15  maulani
  * - Correct SQL to use correct publication date
  *
