@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.63 2005/06/08 12:49:34 braverock Exp $
+ * $Id: edit-2.php,v 1.64 2005/06/29 18:49:21 vanmer Exp $
  */
 
 //include required files
@@ -236,15 +236,10 @@ if ($activity->fields['contact_id']!=$contact_id AND $contact_id AND $contact_id
     }
 
 }
-$upd = $con->GetUpdateSQL($activity, $rec, false, get_magic_quotes_gpc());
-if (strlen($upd)>0) {
-    $rst = $con->execute($upd);
-    if (!$rst) {
-        db_error_handler ($con, $upd);
-    }
-}
 
-$param = array($rst, $rec);
+$upd=update_activity($con, $rec, false, $activity);
+
+$param = array($activity, $rec);
 do_hook_function('activity_edit_2', $param);
 
 if($on_what_table == 'opportunities' and (strlen($opportunity_description)>0)) {
@@ -496,6 +491,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.64  2005/06/29 18:49:21  vanmer
+ * - changed to use API for updating record instead of using getUpdateSQL directly
+ * - changed param passed to hook function to pass the old record and the new array of records, instead of result of
+ * update statement and new array of records
+ *
  * Revision 1.63  2005/06/08 12:49:34  braverock
  * - rearrange when we get the old activity details for update
  * - fix bug where 'NULL' setting could cause problems with associate_activities functionality
