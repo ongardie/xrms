@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.6 2005/06/27 16:32:53 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.7 2005/06/29 15:39:00 daturaarutad Exp $
  */
 
 global $include_directory;
@@ -504,9 +504,9 @@ function Render($activity_data) {
 	    		<tr>
 	        		<td colspan=30 class='widget_header'>Calendar</td>
 	    		</tr>
-				$view_mode_buttons
 				$calendar_nav
 				$widget
+				$view_mode_buttons
 			</table>
 		</div>
 		<!-- Calendar Ends -->
@@ -686,6 +686,9 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.7  2005/06/29 15:39:00  daturaarutad
+* moved view mode buttons to bottom of widget
+*
 * Revision 1.6  2005/06/27 16:32:53  daturaarutad
 * updated to work with GetActivitiesWidget and improved Initial date set
 *
