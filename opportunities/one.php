@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.48 2005/06/29 17:42:04 daturaarutad Exp $
+ * $Id: one.php,v 1.49 2005/06/29 20:54:45 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -142,7 +142,7 @@ $search_terms = array(	'on_what_table'	=> 'opportunities',
 
 $return_url = "/opportunities/one.php%3Fopportunity_id=$opportunity_id";
 
-$default_columns = array('title', 'owner', 'type', 'activity_about', 'scheduled');
+$default_columns = array('title', 'owner', 'type', 'activity_about', 'scheduled', 'due');
 
 $activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Activities'), $session_user_id, $return_url, $extra_where, null, $default_columns);
 
@@ -426,6 +426,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.49  2005/06/29 20:54:45  daturaarutad
+ * add default column "due" to activities widget
+ *
  * Revision 1.48  2005/06/29 17:42:04  daturaarutad
  * updated activities widget to use GetActivitiesWidget()
  *

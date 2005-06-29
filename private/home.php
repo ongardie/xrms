@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.60 2005/06/29 17:20:25 daturaarutad Exp $
+ * $Id: home.php,v 1.61 2005/06/29 20:55:57 daturaarutad Exp $
  */
 
 // include the common files
@@ -85,7 +85,7 @@ $form_name = 'ActivitiesView';
 
 $search_terms = array('activity_status'                 => "'o'");
 
-$default_columns = array('title', 'type', 'contact', 'activity_about', 'scheduled');
+$default_columns = array('title', 'type', 'contact', 'activity_about', 'scheduled', 'due');
 
     
 $activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Search Results'), $session_user_id, $return_url, $extra_where, null, $default_columns);
@@ -442,6 +442,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.61  2005/06/29 20:55:57  daturaarutad
+ * add default column "due" to activities widget
+ *
  * Revision 1.60  2005/06/29 17:20:25  daturaarutad
  * fixed default columns list for activities pager
  *

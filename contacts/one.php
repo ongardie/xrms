@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.89 2005/06/29 17:21:06 daturaarutad Exp $
+ * $Id: one.php,v 1.90 2005/06/29 20:55:33 daturaarutad Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -141,7 +141,7 @@ $return_url = "/contacts/one.php?contact_id=$contact_id";
 
 $extra_where =" AND ((a.contact_id = $contact_id) OR ((activity_participants.contact_id = $contact_id) AND (activity_participants.ap_record_status = 'a'))) AND a.activity_record_status = 'a'";
 
-$default_columns = array('title', 'owner', 'type', 'activity_about', 'scheduled');
+$default_columns = array('title', 'owner', 'type', 'activity_about', 'scheduled', 'due');
 
 $activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Activities'), $session_user_id, $return_url, $extra_where, null, $default_columns);
 
@@ -574,6 +574,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.90  2005/06/29 20:55:33  daturaarutad
+ * add default column "due" to activities widget
+ *
  * Revision 1.89  2005/06/29 17:21:06  daturaarutad
  * updated activities widget to use GetActivitiesWidget()
  *
