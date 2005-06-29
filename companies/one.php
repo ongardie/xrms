@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.115 2005/06/28 22:19:07 daturaarutad Exp $
+ * $Id: one.php,v 1.116 2005/06/29 17:14:57 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -229,7 +229,7 @@ if ($division_id) {
    	$extra_where .=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
 	
 }
-$default_columns = array('title', 'username', 'type', 'contact', 'activity_about', 'scheduled_at');
+$default_columns = array('title', 'owner', 'type', 'contact', 'activity_about', 'scheduled_at');
 
 $activities_widget =  GetActivitiesWidget($con, $search_terms, $activities_form_name, _('Activities'), $session_user_id, $return_url, $extra_where, null, $default_columns);
 
@@ -799,6 +799,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.116  2005/06/29 17:14:57  daturaarutad
+ * change username->owner in activities widget
+ *
  * Revision 1.115  2005/06/28 22:19:07  daturaarutad
  * updated to use consolidated GetActivitiesWidget function
  *
