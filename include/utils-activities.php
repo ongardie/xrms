@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.11 2005/06/24 18:46:08 daturaarutad Exp $
+ * $Id: utils-activities.php,v 1.12 2005/06/29 18:41:39 vanmer Exp $
 
  */
 
@@ -234,7 +234,9 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
             $activity_data['completed_by']='NULL';
             $activity_data['completed_at']='NULL';
         }
-    $update_sql = $con->getUpdateSQL($activity_rst, $activity_data);
+    
+    $update_sql = $con->getUpdateSQL($activity_rst, $activity_data,false,  get_magic_quotes_gpc());
+    
     if ($update_sql) {
         $update_rst=$con->execute($update_sql);
         if (!$update_rst) { db_error_handler($con, $update_sql); return false; }
@@ -585,6 +587,9 @@ function install_default_activity_participant_positions($con) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.12  2005/06/29 18:41:39  vanmer
+  * - added get_magic_quotes_gpc call to update sql to allow for single quotes within strings
+  *
   * Revision 1.11  2005/06/24 18:46:08  daturaarutad
   * add activity_recurrence_id to list of activity fields in add_activity
   *
