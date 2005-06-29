@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.47 2005/05/04 14:27:30 braverock Exp $
+ * $Id: one.php,v 1.48 2005/06/29 17:42:04 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -14,7 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
-require_once('../activities/activities-pager-functions.php');
+require_once('../activities/activities-widget.php');
 
 
 
@@ -134,73 +134,19 @@ if ($rst) {
   db_error_handler ($con, $sql);
 }
 
-// most recent activities
+// Begin Activities Widget
 
-$sql_activities = "SELECT " .
-$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/opportunities/one.php%3Fopportunity_id=$opportunity_id\">'", "activity_title", "'</a>'") .
-"
-  AS activity_title_link, a.scheduled_at, a.on_what_table, a.on_what_id,
-  a.entered_at, a.activity_status, at.activity_type_pretty_name, " .
-$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' .
-" cont.contact_id, cont.first_names AS contact_first_names,
-  cont.last_name AS contact_last_name, u.username, activity_title,
-CASE
-  WHEN ((a.activity_status = 'o') AND (a.scheduled_at < " . $con->SQLDate('Y-m-d') . ")) THEN 1
-  ELSE 0
-END AS is_overdue
-FROM activity_types at, activities a
-LEFT JOIN contacts cont ON a.contact_id = cont.contact_id
-LEFT JOIN users u ON a.user_id = u.user_id
-WHERE a.on_what_table = 'opportunities'
-  AND a.on_what_id = $opportunity_id
-  AND a.activity_type_id = at.activity_type_id
-  AND a.activity_record_status = 'a'";
+// Pass search terms to GetActivitiesWidget
+$search_terms = array(	'on_what_table'	=> 'opportunities',
+						'on_what_id'	=> $opportunity_id);
 
-    $list=acl_get_list($session_user_id, 'Read', false, 'activities');
-    //print_r($list);
-    if ($list) {
-        if ($list!==true) {
-            $list=implode(",",$list);
-            $sql_activities .= " and a.activity_id IN ($list) ";
-        }
-    } else { $sql_activities .= ' AND 1 = 2 '; }
+$return_url = "/opportunities/one.php%3Fopportunity_id=$opportunity_id";
 
-    // Save the search for Mail Merge in activities pager
-    $_SESSION["search_sql"]=$sql_activities;
+$default_columns = array('title', 'owner', 'type', 'activity_about', 'scheduled');
 
+$activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Activities'), $session_user_id, $return_url, $extra_where, null, $default_columns);
 
-
-    // begin Activities Pager
-    $columns = array();
-    $columns[] = array('name' => _('Summary'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title', 'type' => 'url');
-    $columns[] = array('name' => _('User'), 'index_sql' => 'username', 'sql_sort_column' => 'u.username');
-    $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names', 'type' => 'url');
-    $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
-
-    // no reason to set this if you don't want all by default
-    $default_columns = null;
-    // $default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
-
-
-    // selects the columns this user is interested in
-    $pager_columns = new Pager_Columns('OpportunityActivitiesPager', $columns, $default_columns, $form_name);
-    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-
-    $columns = $pager_columns->GetUserColumns('default');
-
-    $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'OpportunityActivitiesPager', $columns, false, true);
-
-    $endrows = "<tr><td class=widget_content_form_element colspan=10>
-                $pager_columns_button
-                " . $pager->GetAndUseExportButton() .  "
-                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
-
-    $pager->AddEndRows($endrows);
-
-    $activity_rows = $pager->Render($system_rows_per_page);
-    // end Activities Pager
+// End Activities Widget
 
 
 /*********************************/
@@ -255,10 +201,6 @@ if ($rst) {
 }
 
 $con->close();
-
-if (strlen($activity_rows) == 0) {
-    $activity_rows = "<tr><td class=widget_content colspan=6>" . _("No activities") . "</td></tr>";
-}
 
 $page_title = _("Opportunity Details") . " : " . $opportunity_title;
 start_page($page_title, true, $msg);
@@ -442,7 +384,9 @@ function markComplete() {
             <?php
                 // activity pager
                 echo $pager_columns_selects;
-                echo $activity_rows;
+                echo $activities_widget['content'];
+                echo $activities_widget['sidebar'];
+                echo $activities_widget['js'];
             ?>
         </form>
 
@@ -482,6 +426,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.48  2005/06/29 17:42:04  daturaarutad
+ * updated activities widget to use GetActivitiesWidget()
+ *
  * Revision 1.47  2005/05/04 14:27:30  braverock
  * - change Activity 'Title' to 'Summary' for consistency
  *
