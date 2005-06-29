@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.24 2005/05/04 19:17:14 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.25 2005/06/29 22:36:34 daturaarutad Exp $
  */
 
 
@@ -281,6 +281,7 @@ class GUP_Pager {
         } else {
         	$page_nav = "&nbsp;";
         	$page_count = "&nbsp;";
+        	$page_count = $this->RenderPageCount();
 		}
 
         $grid = $this->RenderGrid();
@@ -375,6 +376,8 @@ class GUP_Pager {
 				if($this->get_only_visible) {
 					if($this->debug) echo "Running SQL query for a page of the data<br>";
 
+					global $ADODB_COUNTRECS;
+
         			$savec = $ADODB_COUNTRECS;
         			if ($this->db->pageExecuteCountRows) $ADODB_COUNTRECS = true;
         			if ($this->cache)
@@ -382,7 +385,10 @@ class GUP_Pager {
         			else
         				$rs = &$this->db->PageExecute($this->sql,$this->rows,$this->curr_page);
         			$ADODB_COUNTRECS = $savec;
-		
+						
+
+
+	
 				} else {
 					if($this->debug) echo "Running SQL query for all data<br>";
 					$rs = &$this->db->Execute($this->sql);
@@ -876,10 +882,27 @@ END;
       // *** updated to return an empty string if there's an empty rs
       if ($lastPage == -1) {
         $lastPage = 1;
-        return 'aaa';
+        return '&nbsp;';
       } // check for empty rs.
-      if ($this->curr_page > $lastPage) $this->curr_page = 1;
-        return "$this->page ".$this->curr_page."/" . $lastPage;
+      if ($this->curr_page > $lastPage) $this->curr_page = 1; {
+
+        $return  = "$this->page ".$this->curr_page."/" . $lastPage;
+
+		// note: -1 is also returned from MaxRecordCount in DBs that don't support the record counting.
+		$count = -1;
+
+		if($this->rs) {
+	    	$count = $this->rs->MaxRecordCount();
+		} elseif($this->data) {
+			$count = count($this->data);
+		}
+
+		if($count > -1) {
+			$return .= ' (' . $count . _(' records found') . ')';
+		}
+
+		return $return;
+	  }
     }
 	
 
@@ -936,7 +959,7 @@ END;
 				</td></tr>\n";
 		}
 
-        if ($page_nav != '&nbsp;') {
+        if ($page_count != '&nbsp;') {
             echo "<tr><td colspan=$colspan>".
             			"<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
             			"<tr><td class=widget_label align=left>$page_count </td><td align=right class=widget_label>$page_nav </td></tr>".
@@ -1077,6 +1100,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.25  2005/06/29 22:36:34  daturaarutad
+ * show record count in pager
+ *
  * Revision 1.24  2005/05/04 19:17:14  daturaarutad
  * added HideCaptionBar() so that caption can be hidden
  *
