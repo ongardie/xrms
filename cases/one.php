@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.43 2005/05/10 16:19:01 braverock Exp $
+ * $Id: one.php,v 1.44 2005/06/29 17:18:16 maulani Exp $
  */
 
 //include required files
@@ -35,7 +35,7 @@ update_recent_items($con, $session_user_id, "cases", $case_id);
 $sql = "SELECT
         ca.*, c.company_id, c.company_name, c.company_code,
         d.division_name, cont.first_names, cont.last_name, cont.work_phone, cont.email,
-        cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_display_html,
+        cas.case_status_display_html, cap.case_priority_display_html, cat.case_type_id, cat.case_type_display_html,
         u1.username as entered_by_username, u2.username as last_modified_by_username,
         u3.username as case_owner_username, u4.username as account_owner_username,
         as1.account_status_display_html, r.rating_display_html, crm_status_display_html
@@ -77,6 +77,7 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $case_status_display_html = $rst->fields['case_status_display_html'];
     $case_priority_display_html = $rst->fields['case_priority_display_html'];
+    $case_type_id = $rst->fields['case_type_id'];
     $case_type_display_html = $rst->fields['case_type_display_html'];
     $account_owner_username = $rst->fields['account_owner_username'];
     $case_title = $rst->fields['case_title'];
@@ -288,7 +289,7 @@ start_page($page_title, true, $msg);
                                     <td class=sublabel><?php echo _("Status"); ?></td>
                                     <td class=clear>
                                         <?php  echo $case_status_display_html; ?>
-                                        <a href="#" onclick="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                                        <a href="#" onclick="javascript:window.open('case-status-view.php?case_type_id=<?php  echo $case_type_id; ?>');"><?php echo _("Status Definitions"); ?></a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -443,6 +444,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.44  2005/06/29 17:18:16  maulani
+ * - Correctly display case status definitions
+ *
  * Revision 1.43  2005/05/10 16:19:01  braverock
  * - change Activity 'Title' to 'Summary' for consistency
  *

@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of cases
  *
- * $Id: edit.php,v 1.20 2005/06/01 16:03:06 vanmer Exp $
+ * $Id: edit.php,v 1.21 2005/06/29 17:18:16 maulani Exp $
  */
 
 require_once('../include-locations.inc');
@@ -217,7 +217,7 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element>
                     <?php  echo $case_status_menu; ?>
-                    <a href="#" onclick="javascript:window.open('case-status-view.php');"><?php echo _("Status Definitions"); ?></a>
+                    <a href="#" onclick="javascript:window.open('case-status-view.php?case_type_id=<?php  echo $case_type_id; ?>');"><?php echo _("Status Definitions"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -311,6 +311,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.21  2005/06/29 17:18:16  maulani
+ * - Correctly display case status definitions
+ *
  * Revision 1.20  2005/06/01 16:03:06  vanmer
  * - changed delete button for case to be controlled by the ACL
  *
