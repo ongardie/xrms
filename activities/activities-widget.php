@@ -316,7 +316,6 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
     $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
 	$columns[] = array('name' => _('About'), 'index_calc' => 'activity_about'); 
-	$columns[] = array('name' => _('User'), 'index_sql' => 'username');
 	
 	
 	// selects the columns this user is interested in
@@ -413,6 +412,9 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.5  2005/06/29 17:14:38  daturaarutad
+* remove User field (duplicate of owner)
+*
 * Revision 1.4  2005/06/28 20:10:35  daturaarutad
 * removed results_view_type from param list; set $_SESSION[search_sql]
 *
