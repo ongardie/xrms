@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.33 2005/06/23 16:55:19 vanmer Exp $
+ * $Id: index.php,v 1.34 2005/06/30 04:37:03 vanmer Exp $
  */
 
 //include required stuff
@@ -146,6 +146,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
+                    <a href="activity-resolution-types/some.php"><?php echo _("Activity Resolution Types"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
                     <a href="address-types/some.php"><?php echo _("Address Types"); ?></a>
                 </td>
             </tr>
@@ -244,6 +249,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.34  2005/06/30 04:37:03  vanmer
+ * - added link to activity resolution types admin interface
+ *
  * Revision 1.33  2005/06/23 16:55:19  vanmer
  * - added link to newly created email template system
  *
