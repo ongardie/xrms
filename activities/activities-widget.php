@@ -104,7 +104,7 @@ $sql = "SELECT (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTim
   . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
   . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
   // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
-  . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name ";
+  . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name, cp.case_priority_pretty_name, rt.resolution_short_name ";
 
 $sql .= "FROM companies c, activity_types at, addresses addr, activities a ";
 
@@ -112,8 +112,9 @@ $sql .= "
 LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
 LEFT OUTER JOIN users u ON a.user_id = u.user_id
 LEFT OUTER JOIN activity_participants ON a.activity_id=activity_participants.activity_id
-LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants.contact_id";
-
+LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants.contact_id 
+LEFT OUTER JOIN case_priorities cp ON a.activity_priority_id=cp.case_priority_id
+LEFT OUTER JOIN activity_resolution_types rt ON a.activity_resolution_type_id=rt.activity_resolution_type_id";
 $sql .= " WHERE a.company_id = c.company_id $extra_where ";
 
 
@@ -311,11 +312,13 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
     $columns[] = array('name' => _('Summary'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
+    $columns[] = array('name' => _('Priority'), 'index_sql' => 'case_priority_pretty_name', 'sql_sort_column'=>'a.activity_priority_id'); 
     $columns[] = array('name' => _('Scheduled Start'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
     $columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
     $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
     $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-	$columns[] = array('name' => _('About'), 'index_calc' => 'activity_about'); 
+    $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about'); 
+    $columns[] = array('name' => _('Resolution'), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id'); 
 	
 	
 	// selects the columns this user is interested in
@@ -412,6 +415,9 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.6  2005/06/30 04:40:23  vanmer
+* - added extra joins and fields to display resolution type and activity priority on activities widget
+*
 * Revision 1.5  2005/06/29 17:14:38  daturaarutad
 * remove User field (duplicate of owner)
 *
