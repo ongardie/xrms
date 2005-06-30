@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.42 2005/06/29 18:50:55 vanmer Exp $
+ * $Id: new-2.php,v 1.43 2005/06/30 04:38:57 vanmer Exp $
  */
 
 //where do we include from
@@ -32,6 +32,9 @@ $session_user_id = session_check('','Create');
 $arr_vars = array ( // local var name       // session variable name
                    'return_url'       => array ( 'return_url' , arr_vars_REQUEST_SESSION ),
                    'activity_type_id' => array ( 'activity_type_id' , arr_vars_REQUEST_SESSION ),
+                   'activity_priority_id' => array ( 'activity_priority_id' , arr_vars_REQUEST_SESSION ),
+                   'activity_resolution_type_id' => array ( 'activity_resolution_type_id' , arr_vars_REQUEST_SESSION ),
+                   'resolution_description' => array ( 'resolution_description' , arr_vars_REQUEST_SESSION ),
                    'on_what_table'    => array ( 'on_what_table' , arr_vars_REQUEST_SESSION ),
                    'on_what_id'       => array ( 'on_what_id' , arr_vars_REQUEST_SESSION ),
                    'on_what_status'   => array ( 'on_what_status' , arr_vars_REQUEST_SESSION ),
@@ -164,6 +167,9 @@ if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
 
 if(empty($opportunity_status_id)) {
     $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
+    $rec['activity_priority_id'] = ($activity_priority_id > 0) ? $activity_priority_id : 0;
+    $rec['activity_resolution_type_id'] = ($activity_resolution_type_id > 0) ? $activity_resolution_type_id : 0;
+    $rec['resolution_description'] = ($resolution_description > 0) ? $resolution_description : 0;
     $rec['activity_status']  = (strlen($activity_status) > 0) ? $activity_status : "o";
     $rec['on_what_status']   = ($on_what_status > 0) ? $on_what_status : 0;
     $rec['activity_title']   = (strlen($activity_title) > 0) ? $activity_title : _("[none]");
@@ -188,10 +194,6 @@ if(empty($opportunity_status_id)) {
     $rec['activity_id']=$activity_id;
     do_hook_function('activity_new_2', $rec);
 
-    add_audit_item($con, $session_user_id, 'created', 'activities', $activity_id, 1);
-    if ($rec['contact_id']>0) {
-        add_activity_participant($con, $activity_id, $contact_id, 1);
-    }
 }
 else {
     $tbl = 'opportunities';
@@ -233,6 +235,10 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.43  2005/06/30 04:38:57  vanmer
+ *- added needed fields for resolution, and priority for activities
+ *- removed participant handling, API handles all participant calls
+ *
  *Revision 1.42  2005/06/29 18:50:55  vanmer
  *- changed to use API instead of getInsertSQL directly when creating an activity
  *
