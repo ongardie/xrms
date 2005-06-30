@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.108 2005/06/30 04:39:44 vanmer Exp $
+ * $Id: one.php,v 1.109 2005/06/30 17:32:27 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -206,7 +206,7 @@ $sql = "SELECT resolution_pretty_name, activity_resolution_type_id
         ORDER BY sort_order, resolution_pretty_name";
 $rst = $con->execute($sql);
 if (!$rst) { db_error_handler($con, $sql); }
-$activity_resolution_type_menu = $rst->getmenu2('activity_resolution_type_id', $activity_resolution_type_id, true);
+$activity_resolution_type_menu = $rst->getmenu2('activity_resolution_type_id', $activity_resolution_type_id, true, false, 0, 'id=activity_resolution_type_id');
 $rst->close();
 
 if ($company_id) {
@@ -605,7 +605,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Completed?"); ?></td>
-                <td class=widget_content_form_element><input type=checkbox name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
+                <td class=widget_content_form_element><input type=checkbox id=activity_completed name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
                     <?php if ($completed_by) echo _("by").' '.$completed_by_user; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at; ?>
                 </td>
             </tr>
@@ -618,7 +618,7 @@ function logTime() {
             <tr id='resolution_reason' >
                 <td class=widget_label_right><?php echo _("Resolution Description"); ?></td>
                 <td class=widget_content_form_element> 
-                    <textarea name=resolution_description><?php echo $resolution_description; ?></textarea>
+                    <textarea id=resolution_description name=resolution_description><?php echo $resolution_description; ?></textarea>
                 </td>
             </tr>
             <?php
@@ -687,6 +687,34 @@ function logTime() {
 </div>
 
 <script type="text/javascript">
+    var old_description='';
+    var old_type='';
+    function HideResolutionFields() {
+        old_type=document.getElementById('activity_resolution_type_id').value;
+        old_description=document.getElementById('resolution_description').value;
+        
+        document.getElementById('resolution_type').style.display='none';
+        document.getElementById('resolution_reason').style.display='none';
+        document.getElementById('activity_resolution_type_id').value='';
+        document.getElementById('resolution_description').value='';
+        
+        document.getElementById('activity_completed').onclick=ShowResolutionFields;
+    }
+    function ShowResolutionFields() {
+        document.getElementById('resolution_type').style.display='';
+        document.getElementById('resolution_reason').style.display='';
+        document.getElementById('activity_resolution_type_id').value=old_type;
+        document.getElementById('resolution_description').value=old_description;
+        
+        document.getElementById('activity_completed').onclick=HideResolutionFields;
+    }
+    
+    if (!document.getElementById('activity_completed').checked) {
+        HideResolutionFields();
+    } else {
+        document.getElementById('activity_completed').onclick=HideResolutionFields;
+    }
+    
     Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
         ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
@@ -716,6 +744,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.109  2005/06/30 17:32:27  vanmer
+ * - added javascript and needed ID's to form elements to allow resolution fields to be hidden before activity is
+ * completed
+ *
  * Revision 1.108  2005/06/30 04:39:44  vanmer
  * - added UI for resolution description, resolution types and activity priority
  *
