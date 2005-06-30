@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.44 2005/06/29 17:18:16 maulani Exp $
+ * $Id: one.php,v 1.45 2005/06/30 04:42:28 vanmer Exp $
  */
 
 //include required files
@@ -77,6 +77,7 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $case_status_display_html = $rst->fields['case_status_display_html'];
     $case_priority_display_html = $rst->fields['case_priority_display_html'];
+    $case_priority_id = $rst->fields['case_priority_id'];
     $case_type_id = $rst->fields['case_type_id'];
     $case_type_display_html = $rst->fields['case_type_display_html'];
     $account_owner_username = $rst->fields['account_owner_username'];
@@ -258,7 +259,6 @@ $page_title = _("Case #") . $case_id . ": " . $case_title;
 start_page($page_title, true, $msg);
 
 ?>
-
 <div id="Main">
     <div id="Content">
 
@@ -380,6 +380,7 @@ start_page($page_title, true, $msg);
         <input type=hidden name=company_id value="<?php echo $company_id ?>">
         <input type=hidden name=on_what_table value="cases">
         <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
+        <input type=hidden name=activity_priority_id value="<?php echo $case_priority_id; ?>">
         <input type=hidden name=activity_status value="o">
         <table class=widget cellspacing=1>
             <tr>
@@ -444,6 +445,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.45  2005/06/30 04:42:28  vanmer
+ * - automatically set newly created activities on cases to the same priority as the case, if available
+ *
  * Revision 1.44  2005/06/29 17:18:16  maulani
  * - Correctly display case status definitions
  *
