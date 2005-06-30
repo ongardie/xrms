@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.25 2005/06/29 22:36:34 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.26 2005/06/30 05:03:14 vanmer Exp $
  */
 
 
@@ -1088,8 +1088,9 @@ END;
 	*/
 	function GetAndUseExportButton() {
 		$this->show_export = true;
-
-		return "<input type=button class=button value=\"" . _('Export') . "\" onclick=\"document.{$this->form_id}.{$this->pager_id}_export.value='set'; document.{$this->form_id}.submit();\">";
+		$button_value=_("Export");
+		$onclick="document.{$this->form_id}.{$this->pager_id}_export.value='set'; document.{$this->form_id}.submit();";
+		return render_export_button($button_value, 'button', $onclick);
 	}
 	/**
 	*  Public function to enable debugging output for this pager
@@ -1100,6 +1101,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.26  2005/06/30 05:03:14  vanmer
+ * - altered to use render_export_button ACL function instead of simply displaying the export button
+ *
  * Revision 1.25  2005/06/29 22:36:34  daturaarutad
  * show record count in pager
  *
