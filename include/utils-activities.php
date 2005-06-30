@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.12 2005/06/29 18:41:39 vanmer Exp $
+ * $Id: utils-activities.php,v 1.13 2005/06/30 04:37:57 vanmer Exp $
 
  */
 
@@ -114,6 +114,10 @@ function add_activity($con, $activity_data, $participants=false)
     if ($company_id > 0)       { $rec['company_id']           = $company_id; }
     if ($contact_id > 0)       { $rec['contact_id']           = $contact_id; }
     if ($activity_recurrence_id > 0) { $rec['activity_recurrence_id']           = $activity_recurrence_id; }
+    if ($activity_resolution_type_id > 0) { $rec['activity_resolution_type_id'] = $activity_resolution_type_id; }
+    if ($activity_priority_id > 0) { $rec['activity_priority_id']           = $activity_priority_id; }
+    if ($resolution_description > 0) { $rec['resolution_description']           = $resolution_description; }
+    
 
     $tbl = 'activities';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -197,6 +201,7 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
  * @return boolean specifying if update succeeded
  */
 function update_activity($con, $activity_data, $activity_id=false, $activity_rst=false, $update_default_participant=true) {
+    global $session_user_id;
     if (!$activity_id AND !$activity_rst) return false;
     if (!$activity_data) return false;
     if (!$activity_rst) {
@@ -207,7 +212,8 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
         if (!$activity_id) $activity_id=$activity_rst->fields['activity_id'];
 
         if ($update_default_participant) {
-            if ($activity_data['contact_id']) {
+            if (array_key_exists('contact_id',$activity_data)) {
+//                echo '<pre>'; print_r($activity_data); print_r($activity_rst->fields);
                 if ($activity_data['contact_id']!=$activity_rst->fields['contact_id']) {
                 //contact changed, change default participant
                 if ($activity_rst->fields['contact_id']) {
@@ -217,6 +223,7 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
                         $participant_data=current($activity_participant);
                         $activity_participant_id=$participant_data['activity_participant_id'];
                         $ret=delete_activity_participant($con, $activity_participant_id);
+                        $updated_participant=true;
                     }
                 }
                }
@@ -224,6 +231,7 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
             if ($activity_data['contact_id'] AND $activity_data['contact_id']!='NULL') {
                 //new contact for activity is not blank, so add it as the new default participant
                 $activity_participant_id=add_activity_participant($con, $activity_id, $activity_data['contact_id'], 1);
+                $updated_participant=true;
             }
         }
         if (($activity_data['activity_status']=='c') AND ($activity_rst->fields['activity_status']!='c')) {
@@ -240,8 +248,12 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
     if ($update_sql) {
         $update_rst=$con->execute($update_sql);
         if (!$update_rst) { db_error_handler($con, $update_sql); return false; }
-        return true;
-    } else return true;
+        $updated_sql=true;
+    }
+    if ($updated_sql OR $updated_participants) {
+         add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
+     }
+     return true;
 }
 
 /**********************************************************************/
@@ -587,6 +599,10 @@ function install_default_activity_participant_positions($con) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.13  2005/06/30 04:37:57  vanmer
+  * - altered to properly handle changes in contact_id => change in activity_participant
+  * - altered to audit on update, when either activity or participant changes
+  *
   * Revision 1.12  2005/06/29 18:41:39  vanmer
   * - added get_magic_quotes_gpc call to update sql to allow for single quotes within strings
   *
