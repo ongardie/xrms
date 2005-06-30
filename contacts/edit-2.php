@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.24 2005/06/06 18:20:45 braverock Exp $
+ * $Id: edit-2.php,v 1.25 2005/06/30 15:52:44 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -110,15 +110,15 @@ $con->execute($upd);
 $param = array($rst, $rec);
 do_hook_function('contact_edit_2', $param);
 
-/** @todo this hook should be deprecated by the contact_edit_2 hook */
-do_hook('contact_custom_inline_edit_save');
-
 add_audit_item($con, $session_user_id, 'updated', 'contacts', $contact_id, 1);
 
 header("Location: one.php?msg=saved&contact_id=$contact_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.25  2005/06/30 15:52:44  ycreddy
+ * Removing the depracated hook for save
+ *
  * Revision 1.24  2005/06/06 18:20:45  braverock
  * - change contact_custom_inline_edit_validate hook to pass $_POST as parameter
  *   to avoid second parameter warning.
