@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.135 2005/06/07 23:48:51 braverock Exp $
+ * $Id: utils-misc.php,v 1.136 2005/06/30 18:00:30 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1476,7 +1476,7 @@ function arr_vars_show_ses_vars ( $ary )
 
      $get= 'HTTP_USER_AGENT';
      $HTTP_USER_AGENT = '';
-     getGlobalVar($get, $HTTP_USER_AGENT);
+     getGlobalVar($HTTP_USER_AGENT, $get);
 
      if (strstr($HTTP_USER_AGENT, 'compatible; MSIE ') !== false &&
          strstr($HTTP_USER_AGENT, 'Opera') === false) {
@@ -1725,6 +1725,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.136  2005/06/30 18:00:30  vanmer
+ * - fixed getGlobalVar to use proper order when fetching HTTP_USER_AGENT parameter
+ *
  * Revision 1.135  2005/06/07 23:48:51  braverock
  * - add optional $show_country option to get_formatted_address fn
  *
