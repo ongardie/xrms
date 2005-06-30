@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.45 2005/06/03 18:27:10 daturaarutad Exp $
+ * $Id: database.php,v 1.46 2005/06/30 04:50:02 vanmer Exp $
  */
 
 /**
@@ -1120,8 +1120,11 @@ function activity_db_tables($con, $table_list) {
                completed_by                    int,
                activity_status                 char(1) default 'o',
                activity_record_status          char(1) default 'a',
-			   activity_recurrence_id 		   int default 0
-               )";
+			   activity_recurrence_id 		   int default 0,
+                activity_resolution_type_id INT ( 11 ),
+                activity_priority_id INT( 11 ),
+                resolution_description TEXT
+                )";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -1185,7 +1188,21 @@ function activity_db_tables($con, $table_list) {
         }
     }
 
-	
+    if (!in_array('activity_resolution_types',$table_list)) {
+            $sql = "CREATE TABLE `activity_resolution_types` (
+            `activity_resolution_type_id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+            `resolution_short_name` VARCHAR( 10 ) NOT NULL ,
+            `resolution_pretty_name` VARCHAR( 100 ) NOT NULL ,
+            `resolution_type_record_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
+            `sort_order` TINYINT( 4 ) DEFAULT '0' NOT NULL ,
+            PRIMARY KEY ( `activity_resolution_type_id` )
+            )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
 
 
 
@@ -1211,6 +1228,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.46  2005/06/30 04:50:02  vanmer
+ * - added fields and tables for resolution and priority on activities
+ *
  * Revision 1.45  2005/06/03 18:27:10  daturaarutad
  * add activity_recurrence_id to activities
  *
