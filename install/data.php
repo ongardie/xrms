@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.27 2005/06/16 23:48:55 vanmer Exp $
+ * $Id: data.php,v 1.28 2005/06/30 04:50:27 vanmer Exp $
  */
 
 /**
@@ -2863,6 +2863,21 @@ function activity_db_data($con) {
             db_error_handler ($con, $sql);
         }
     }
+     if (confirm_no_records($con, 'activity_resolution_types')) {
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Resolved' , 'Closed/Resolved', 1)";
+        $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Unresolved' , 'Closed/Unresolved', 2)";
+        $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Obsolete' , 'Obsolete/Out of Date', 3)";
+        $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Cancel' , 'Cancelled', 4)";
+        $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Complete' , 'Completed', 5)";
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
 
 } // end activity_db_data fn
 
@@ -2885,6 +2900,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.28  2005/06/30 04:50:27  vanmer
+ * - added standard types for activity resolution types
+ *
  * Revision 1.27  2005/06/16 23:48:55  vanmer
  * - changed default activity types to install as non-user-editable
  *
