@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.84 2005/06/21 15:27:57 vanmer Exp $
+ * $Id: update.php,v 1.85 2005/06/30 04:34:47 vanmer Exp $
  */
 
 // where do we include from
@@ -4857,6 +4857,22 @@ $con->execute($sql);
             db_error_handler ($con, $sql);
         }
     }
+    if (!in_array('activity_resolution_types',$table_list)) {
+            $sql = "CREATE TABLE `activity_resolution_types` (
+            `activity_resolution_type_id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+            `resolution_short_name` VARCHAR( 10 ) NOT NULL ,
+            `resolution_pretty_name` VARCHAR( 100 ) NOT NULL ,
+            `resolution_type_record_status` CHAR( 1 ) DEFAULT 'a' NOT NULL ,
+            `sort_order` TINYINT( 4 ) DEFAULT '0' NOT NULL ,
+            PRIMARY KEY ( `activity_resolution_type_id` )
+            )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }        
+        if ($rst) $msg .= _("Successfully added activity resolution types table.").'<BR><BR>';
+    }
     
 install_upgrade_acl($con);
 
@@ -4909,6 +4925,31 @@ $con->execute($sql);
 $sql = "ALTER TABLE activities ADD completed_by INT( 11 )";
 $con->execute($sql);
 
+$sql = "ALTER TABLE activities ADD `activity_resolution_type_id` INT ( 11 )";
+$con->execute($sql);
+
+$sql = "ALTER TABLE `activities` ADD `activity_priority_id` INT( 11 )";
+$con->execute($sql);
+
+$sql = "ALTER TABLE `activities` ADD `resolution_description` TEXT";
+$con->execute($sql);
+
+     if (confirm_no_records($con, 'activity_resolution_types')) {
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Resolved' , 'Closed/Resolved', 1)";
+        $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Unresolved' , 'Closed/Unresolved', 2)";
+        $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Obsolete' , 'Obsolete/Out of Date', 3)";
+        $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Cancel' , 'Cancelled', 4)";
+        $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Complete' , 'Completed', 5)";
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+
 do_hook_function('xrms_update', $con);
 
 //close the database connection, because we don't need it anymore
@@ -4933,6 +4974,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.85  2005/06/30 04:34:47  vanmer
+ * - added handling of activity resolution types and activity fields for resolution handling
+ * - added priority field to activities
+ *
  * Revision 1.84  2005/06/21 15:27:57  vanmer
  * - added strings to translate user preference information
  * - added section to make default activity types non-user editable
