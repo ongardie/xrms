@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.64 2005/06/29 18:49:21 vanmer Exp $
+ * $Id: edit-2.php,v 1.65 2005/06/30 04:41:13 vanmer Exp $
  */
 
 //include required files
@@ -26,6 +26,9 @@ $arr_vars = array (
                    'return_url' => arr_vars_POST ,
                    'activity_id' => arr_vars_POST ,
                    'activity_type_id' => arr_vars_POST ,
+                   'activity_priority_id' => arr_vars_POST ,
+                   'activity_resolution_type_id' => arr_vars_POST ,
+                   'resolution_description' => arr_vars_POST ,
                    'contact_id' => arr_vars_POST ,
                    'activity_title' => arr_vars_POST ,
                    'activity_description' => arr_vars_POST ,
@@ -106,9 +109,9 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
 $activity = $con->execute($sql);
 
-$contact_id = ($contact_id > 0) ? $contact_id : '0';
+$new_contact_id = ($contact_id > 0) ? $contact_id : 0;
 
-if (!$contact_id OR $contact_id='NULL') {
+if (!$contact_id OR $contact_id==0) {
     // set to the previous contact_id
     $contact_id=$activity->fields['contact_id'];
 }
@@ -198,7 +201,8 @@ elseif($rst->rowcount()) {
 
 $rec = array();
 $rec['activity_type_id']     = $activity_type_id;
-$rec['contact_id']           = $contact_id;
+//use new contact ID here to update contact with newly set ID
+$rec['contact_id']           = $new_contact_id;
 $rec['activity_title']       = $activity_title;
 $rec['activity_description'] = $activity_description;
 if(empty($user_id)) {
@@ -218,24 +222,10 @@ $rec['activity_status']      = $activity_status;
 $rec['on_what_table']        = $on_what_table;
 $rec['on_what_id']           = $on_what_id;
 $rec['completed_by']      = $completed_by;
+$rec['activity_priority_id'] = $activity_priority_id;
+$rec['resolution_description'] = $resolution_description;
+$rec['activity_resolution_type_id'] = $activity_resolution_type_id;
 
-if ($activity->fields['contact_id']!=$contact_id AND $contact_id AND $contact_id!='NULL') {
-    //contact changed, change default participant
-    if ($activity->fields['contact_id']) {
-        $activity_participant=get_activity_participants($con, $activity_id, $activity->fields['contact_id'], 1);
-        if ($activity_participant) {
-            //get existing default participant, mark it as removed
-            $participant_data=current($activity_participant);
-            $activity_participant_id=$participant_data['activity_participant_id'];
-            $ret=delete_activity_participant($con, $activity_participant_id);
-        }
-    }
-    if ($contact_id AND $contact_id!='NULL') {
-        //new contact for activity is not blank, so add it as the new default participant
-        $activity_participant_id=add_activity_participant($con, $activity_id, $contact_id, 1);
-    }
-
-}
 
 $upd=update_activity($con, $rec, false, $activity);
 
@@ -277,8 +267,6 @@ if($on_what_table == 'opportunities' and (strlen($probability)>0)) {
         }
     }
 }
-
-add_audit_item($con, $session_user_id, 'updated', 'activities', $activity_id, 1);
 
 // if it's closed but wasn't before, allow the computer to perform an action if it wants to
 if($activity_status == 'c' && $current_activity_status != 'c') {
@@ -491,6 +479,12 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.65  2005/06/30 04:41:13  vanmer
+ * - changed to allow contact_id to be switched within API
+ * - changed to allow API to handle participants
+ * - changed to allow API to handle the audit_item
+ * - added needed fields for resolutions and priorities on activities
+ *
  * Revision 1.64  2005/06/29 18:49:21  vanmer
  * - changed to use API for updating record instead of using getUpdateSQL directly
  * - changed param passed to hook function to pass the old record and the new array of records, instead of result of
