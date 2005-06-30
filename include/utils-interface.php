@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.66 2005/06/30 05:02:46 vanmer Exp $
+ * $Id: utils-interface.php,v 1.67 2005/06/30 23:44:35 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -562,18 +562,20 @@ EOQ;
 
 } //end jscalendar_includes fn
 
-function javascript_tooltips_include() {
+function javascript_tooltips_include($output=true) {
     global $javascript_tooltips_included;
-
+    $ret=false;
     if(!isset($javascript_tooltips_included)) {
         global $http_site_root;
-        echo <<<EOQ
+        $ret = <<<EOQ
             <!-- TOOLTIP SCRIPT INCLUDES -->
             <script type="text/javascript" src="$http_site_root/js/wz_tooltip.js"></script>
             <!-- TOOLTIP SCRIPT INCLUDES -->
 EOQ;
+	if ($output) echo $ret;
         $javascript_tooltips_included = true;
     }
+    return $ret;
 }
 
 function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
@@ -749,6 +751,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.67  2005/06/30 23:44:35  vanmer
+ * - added parameter to optionally return output instead of echoing it directly
+ *
  * Revision 1.66  2005/06/30 05:02:46  vanmer
  * - added handling for export permission as render button ACL function
  *
