@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.65 2005/06/28 13:58:30 braverock Exp $
+ * $Id: utils-interface.php,v 1.66 2005/06/30 05:02:46 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -580,6 +580,10 @@ function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=
     return render_ACL_button('Update', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
 
+function render_export_button($text='Export', $type='button', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
+    return render_ACL_button('Export', $text, $type, $onclick, $name, $id, $_table, $_id);
+}
+
 function render_delete_button($text='Delete', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     return render_ACL_button('Delete', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
@@ -745,6 +749,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.66  2005/06/30 05:02:46  vanmer
+ * - added handling for export permission as render button ACL function
+ *
  * Revision 1.65  2005/06/28 13:58:30  braverock
  * - change line formatting of SF logo in advance of adding system parameters to control
  *
