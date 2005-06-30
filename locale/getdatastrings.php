@@ -14,6 +14,7 @@ $output_filename = $xrms_file_root.'/locale/datastrings.php';
 
 $tables_to_extract = array("account_statuses",
                            "activity_types",
+			   "activity_resolution_types",
                            "campaign_types",
                            "case_priorities",
                            "case_statuses",
@@ -70,7 +71,7 @@ fwrite($fp, '/**
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: getdatastrings.php,v 1.5 2005/05/18 22:50:27 vanmer Exp $
+ * $Id: getdatastrings.php,v 1.6 2005/06/30 04:47:18 vanmer Exp $
  */'."\n");
 foreach ($output_strings as $s)
 {
