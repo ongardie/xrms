@@ -2,7 +2,7 @@
 /**
  * Insert Updated File information into the database
  *
- * $Id: edit-2.php,v 1.4 2005/01/13 18:51:23 vanmer Exp $
+ * $Id: edit-2.php,v 1.5 2005/06/30 22:12:52 vanmer Exp $
  */
 
 //include required files
@@ -15,6 +15,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $file_id = $_POST['file_id'];
+getGlobalVar($return_url, 'return_url');
 $session_user_id = session_check('','Update');
 
 $file_pretty_name = $_POST['file_pretty_name'];
@@ -69,10 +70,16 @@ if ($file_name != "") {
 
 $con->close();
 
-header("Location: one.php?msg=saved&file_id=$file_id");
+if (!$return_url) {
+    $return_url="one.php?msg=saved&file_id=$file_id";
+}
+header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.5  2005/06/30 22:12:52  vanmer
+ * - changed to allow saved files to return to passed in return URL instead of always back to files/one.php
+ *
  * Revision 1.4  2005/01/13 18:51:23  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *
