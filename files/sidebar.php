@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.17 2005/06/24 23:26:09 vanmer Exp $
+ * $Id: sidebar.php,v 1.18 2005/06/30 23:42:46 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -45,7 +45,6 @@ if (strlen($on_what_table)>0){
 // any errors ???
 if (!$file_sidebar_rst) {
   // yep - report it
-  print_r($con);
   db_error_handler($con, $file_sql);
 }
 
@@ -57,16 +56,18 @@ if(!$file_rows) {
         if (!$return_url) {
             $return_url="/$on_what_table/one.php?".make_singular($on_what_table)."_id=".$on_what_id;
         }
-	$file_rows = "<div id='file_sidebar'>
+	$file_rows .= "<div id='file_sidebar'>
         			<table class=widget cellspacing=1 width=\"100%\">
             			<tr>
-                			<td class=widget_header colspan=4>"._("Files")."</td>
+                			<td class=widget_header colspan=5>"._("Files")."</td>
             			</tr>
             			<tr>
                 			<td class=widget_label>"._("Name")."</td>
                 			<td class=widget_label>"._("Size")."</td>
                 			<td class=widget_label>"._("Owner")."</td>
                 			<td class=widget_label>"._("Date")."</td>
+                			<td class=widget_label>"._("Action")."</td>
+                                        
             			</tr>\n";
 
 
@@ -76,22 +77,24 @@ if(!$file_rows) {
 	
 	      // get contact id
 	      $user_contact_id = $file_sidebar_rst->fields['user_contact_id'];
-	
+	       $edit_file_button=render_edit_button(_("Edit"),'button',"location.href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "'",false, false, 'files',$file_sidebar_rst->fields['file_id']);
 	        $file_rows .= "
 	             <tr>";
 	        if ($file_sidebar_rst->fields['file_size'] == "0")
 	          {
-                    $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) . '</a></b></td>';
+                    $file_rows .= "<td class=non_uploaded_file><a href=\"#\" onclick=\"javascript: window.open('$http_site_root/files/download.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "')\" onmouseover=\"return escape('{$file_sidebar_rst->fields['file_description']}');\">" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) . '</a></b></td>';
                     $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($file_sidebar_rst->fields['file_size']) . '</b></td>';
                     $file_rows .= '<td class=non_uploaded_file><b>' . $file_sidebar_rst->fields['username'] . '</b></td>';
                     $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($file_sidebar_rst->fields['entered_at']) . '</b></td>';
+                    $file_rows .= '<td class=widget_content>' . $edit_file_button . '</td>';
 	          }
 	        else
 	          {
-                    $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) .  '</a></td>';
+                    $file_rows .= "<td class=widget_content><a href=\"#\" onclick=\"javascript: window.open('$http_site_root/files/download.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "')\" onmouseover=\"return escape('{$file_sidebar_rst->fields['file_description']}');\">" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) . '</a></td>';
                     $file_rows .= '<td class=widget_content>' . pretty_filesize($file_sidebar_rst->fields['file_size']) . '</td>';
                     $file_rows .= '<td class=widget_content>' . $file_sidebar_rst->fields['username'] . '</td>';
                     $file_rows .= '<td class=widget_content>' . $con->userdate($file_sidebar_rst->fields['entered_at']) . '</td>';
+                    $file_rows .= '<td class=widget_content>' . $edit_file_button . '</td>';
 	          }
 	        $file_rows .= "
 	             </tr>";
@@ -99,7 +102,7 @@ if(!$file_rows) {
 	    }
 	    $file_sidebar_rst->close();
 	} else {
-	    $file_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached files")." </td> </tr>\n";
+	    $file_rows .= "            <tr> <td class=widget_content colspan=5> "._("No attached files")." </td> </tr>\n";
 	}
 	
 	//put in the new button
@@ -108,7 +111,7 @@ if(!$file_rows) {
 	    $file_rows .= "
 	            <tr>
 	            <form action='".$http_site_root."/files/new.php' method='post'>
-	                <td class=widget_content_form_element colspan=4>
+	                <td class=widget_content_form_element colspan=5>
 	                        <input type=hidden name=on_what_table value='$on_what_table'>
 	                        <input type=hidden name=on_what_id value='$on_what_id'>
 	                        <input type=hidden name=return_url value='$return_url'>
@@ -120,10 +123,16 @@ if(!$file_rows) {
 	
 	//now close the table, we're done
 	$file_rows .= "        </table>\n</div>";
+        $file_rows.=javascript_tooltips_include(false);
 }
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.18  2005/06/30 23:42:46  vanmer
+ * - added edit button so files can have edit controlled by ACL
+ * - added download link from filename
+ * - added tooltip of file description to download link
+ *
  * Revision 1.17  2005/06/24 23:26:09  vanmer
  * - changed rst to differ from other rsts
  * - changed to use existing return_url if available
