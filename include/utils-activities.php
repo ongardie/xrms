@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.13 2005/06/30 04:37:57 vanmer Exp $
+ * $Id: utils-activities.php,v 1.14 2005/06/30 21:40:32 daturaarutad Exp $
 
  */
 
@@ -40,6 +40,8 @@
  * - completed_bol           - is this activity finsished?
  * - completed_at            - when was the activity finshed. Uses NOW()
  * - completed_by            - who finshed it, uses session_user_id
+ * - thread_id               - activity_id of the root of the thread
+ * - followup_from_id        - activity_id of the parent of this activity
  *
  * Do not define these fields, they are auto-defined
  * - activity_id             - auto increment field
@@ -109,6 +111,8 @@ function add_activity($con, $activity_data, $participants=false)
     if ($activity_status)      { $rec['activity_status']      = $activity_status; }
     if ($on_what_status > 0)   { $rec['on_what_status']       = $on_what_status; }
     if ($completed_at)         { $rec['completed_at']         = $completed_at; }
+    if ($thread_id)            { $rec['thread_id']            = $thread_id; }
+    if ($followup_from_id)     { $rec['followup_from_id']     = $followup_from_id; }
     if ($on_what_table)        { $rec['on_what_table']        = $on_what_table; }
     if ($on_what_id > 0)       { $rec['on_what_id']           = $on_what_id; }
     if ($company_id > 0)       { $rec['company_id']           = $company_id; }
@@ -118,7 +122,6 @@ function add_activity($con, $activity_data, $participants=false)
     if ($activity_priority_id > 0) { $rec['activity_priority_id']           = $activity_priority_id; }
     if ($resolution_description > 0) { $rec['resolution_description']           = $resolution_description; }
     
-
     $tbl = 'activities';
     $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
     $rst=$con->execute($ins);
@@ -599,6 +602,9 @@ function install_default_activity_participant_positions($con) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.14  2005/06/30 21:40:32  daturaarutad
+  * add thread_id and followup_from_id to add_activity
+  *
   * Revision 1.13  2005/06/30 04:37:57  vanmer
   * - altered to properly handle changes in contact_id => change in activity_participant
   * - altered to audit on update, when either activity or participant changes
