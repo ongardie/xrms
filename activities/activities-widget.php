@@ -36,6 +36,9 @@ require_once('../calendar/Calendar_View.php');
 */
 function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null) {
 
+// This should probably be a system preference.
+$description_substring_length = 80;
+
 $calendar_date_field = 'calendar_start_date';
 
 getGlobalVar($activities_widget_type, 'activities_widget_type');
@@ -78,13 +81,12 @@ if('list' != $activities_widget_type) {
 
     //echo "init date is $initial_calendar_date<br>";
 
-    // actually, let's create the Calendar object here, then we can let it do the thing with the stuff.
+    //create the Calendar object here, so that we can use it to generate the SQL offset
     $calendar = new CalendarView($con, $form_name, $initial_calendar_date, 'calendar_start_date', $calendar_range);
 
     // Add Calendar date filtering (only query for visible date range)
     $calendar_offset_sql = $calendar->GetCalendarSQLOffset($con, $calendar_range, $calendar_start_date);
 }
-
 
 if(!$activities_widget_type) {
     $activities_widget_type = 'list';
@@ -98,7 +100,11 @@ $widget = '';
 $sql = "SELECT (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END) AS is_overdue, "
   ." at.activity_type_pretty_name AS type, "
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
-  . $con->Concat("'<a id=\"'", "activity_title", "'\" href=\"../activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=$return_url\">'", "activity_title", "'</a>'") . " AS title, "
+
+  . "'$return_url' as return_url, "
+
+  .	$con->substr."(activity_description, 1, $description_substring_length) AS description_brief, " 
+
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
   . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
@@ -117,17 +123,6 @@ LEFT OUTER JOIN case_priorities cp ON a.activity_priority_id=cp.case_priority_id
 LEFT OUTER JOIN activity_resolution_types rt ON a.activity_resolution_type_id=rt.activity_resolution_type_id";
 $sql .= " WHERE a.company_id = c.company_id $extra_where ";
 
-
-/*
-
-    vestigal code from activities/some.php...should be replaced with a generic on_what_table handler!
-
-
-if($sort_column == 9 || $campaign_id) {
-    $sql .= " AND a.on_what_table='opportunities'
-  AND a.on_what_id=o.opportunity_id ";
-}
-*/
 $sql .= " AND a.activity_record_status = 'a'
   AND at.activity_type_id = a.activity_type_id
   AND c.default_primary_address=addr.address_id";
@@ -225,6 +220,11 @@ if($search_terms['opportunity_status_id']) {
     $sql .= " and a.on_what_table='opportunities' and a.on_what_id=o.opportunity_id and o.opportunity_status_id=" . $search_terms['opportunity_status_id'];
 }
 
+
+if($search_terms['on_what_table']) {
+    $sql .= " AND a.on_what_table='{$search_terms['on_what_table']}' and a.on_what_id={$search_terms['on_what_id']}";
+}
+
 if($search_terms['campaign_id']) {
     $sql .= " AND o.campaign_id = " . $search_terms['campaign_id'];
 }
@@ -246,6 +246,7 @@ $sql .=" GROUP BY a.activity_id, c.company_name,c.company_id, cont.first_names, 
 
 // end build query
 
+// save query for mail merge
 $_SESSION["search_sql"] = $sql;
 
 
@@ -312,6 +313,7 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
     $columns[] = array('name' => _('Summary'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
+    $columns[] = array('name' => _('Description'), 'index_calc' => 'description_brief', 'sql_sort_column' => 'activity_description', 'type' => 'url');
     $columns[] = array('name' => _('Priority'), 'index_sql' => 'case_priority_pretty_name', 'sql_sort_column'=>'a.activity_priority_id'); 
     $columns[] = array('name' => _('Scheduled Start'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
     $columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
@@ -319,7 +321,6 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about'); 
     $columns[] = array('name' => _('Resolution'), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id'); 
-	
 	
 	// selects the columns this user is interested in
 	$pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
@@ -415,6 +416,9 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.7  2005/06/30 18:00:23  daturaarutad
+* moved creation of title html link to GetActivitiesPagerData and added popup/tooltip containing activity description; add on_what_table criteria to query; add description as available column in pager
+*
 * Revision 1.6  2005/06/30 04:40:23  vanmer
 * - added extra joins and fields to display resolution type and activity priority on activities widget
 *
