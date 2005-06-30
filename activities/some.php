@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.119 2005/06/28 20:11:38 daturaarutad Exp $
+ * $Id: some.php,v 1.120 2005/06/30 18:34:57 daturaarutad Exp $
  */
 
 // handle includes
@@ -557,6 +557,8 @@ $_SESSION["search_sql"]=$sql;
 							'opportunity_status_id' => $opportunity_status_id,
 							'campaign_id' 			=> $campaign_id
 						);
+	$return_url = '/activities/some.php';
+
 	
 	$activities_widget =  GetActivitiesWidget($con, $search_terms, 'ActivitiesData', _('Search Results'), $session_user_id, $return_url);	
 
@@ -632,6 +634,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.120  2005/06/30 18:34:57  daturaarutad
+ * set return_url
+ *
  * Revision 1.119  2005/06/28 20:11:38  daturaarutad
  * removed results_view_type; update GetActivitiesWidget param list
  *
