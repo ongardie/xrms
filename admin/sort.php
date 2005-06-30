@@ -5,7 +5,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: sort.php,v 1.5 2005/01/11 22:22:26 vanmer Exp $
+ * $Id: sort.php,v 1.6 2005/06/30 04:41:54 vanmer Exp $
  */
 
 
@@ -80,11 +80,16 @@ if ($type_id) {
     $sql .= "and ($type_name=$type_id) ";
 }
 
-
-$sql .= "and (" . $table_name . "_record_status='a')";
+if ($table_name=='activity_resolution_type') {
+    $record_status_field='resolution_type_record_status';
+} else {
+    $record_status_field=$table_name."_record_status";
+}
+$sql .= "and ($record_status_field='a')";
 
 //echo $sql;
 $rst = $con->execute($currentsql.$sql);
+if (!$rst) { db_error_handler($con, $currentsql); }
 
     //get field data for the first row
     $source_id = $rst->fields[$table_name . '_id'];
@@ -138,6 +143,9 @@ header ('Location: ' . $http_site_root . $return_url);
 
 /**
  *$Log: sort.php,v $
+ *Revision 1.6  2005/06/30 04:41:54  vanmer
+ *- added special handling for shortened record_status name on activity resolutions
+ *
  *Revision 1.5  2005/01/11 22:22:26  vanmer
  *- altered sort to properly sort lists with multiple entities with the same sort_order
  *- added flag for allowMultiple to engage this functionality
