@@ -2,7 +2,7 @@
 /**
  * Shared activity pager functions
  *
- * $Id: activities-pager-functions.php,v 1.5 2005/05/20 22:18:55 daturaarutad Exp $
+ * $Id: activities-pager-functions.php,v 1.6 2005/06/30 17:07:53 daturaarutad Exp $
  */
 
 /**
@@ -29,6 +29,14 @@ function GetActivitiesPagerData($row) {
         $row['activity_status'] = _('Closed');
         $row['Pager_TD_CSS_All_Rows'] = 'closed_activity';
     }
+	if($row['description_brief']) {
+		// for some reason, if the first char of description is a newline, the JS breaks...
+		$row['description_brief'] = str_replace("\n", "", $row['description_brief']);
+		$row['description_brief'] = str_replace("\r", "", $row['description_brief']);
+   		$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\" onmouseover=\"return escape('" . htmlentities(addslashes($row['description_brief'])) . "')\" >{$row['activity_title']}</a>";
+	} else {
+	 	$row['title'] = "<a href=\"../activities/one.php?activity_id={$row['activity_id']}&amp;return_url={$row['return_url']}\">{$row['activity_title']}</a>";
+	}
 
 	// Query for the About field
     if ($row['on_what_table'] == 'opportunities') {
@@ -57,6 +65,9 @@ function GetActivitiesPagerData($row) {
 
 /**
  * $Log: activities-pager-functions.php,v $
+ * Revision 1.6  2005/06/30 17:07:53  daturaarutad
+ * moved creation of title html link to GetActivitiesPagerData and added popup/tooltip containing activity description
+ *
  * Revision 1.5  2005/05/20 22:18:55  daturaarutad
  * homogenized is_overdue behavior for all pagers
  *
