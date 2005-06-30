@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.107 2005/06/27 16:31:46 braverock Exp $
+ * $Id: one.php,v 1.108 2005/06/30 04:39:44 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -50,6 +50,9 @@ $activity_rst = $con->execute($sql);
 
 if ($activity_rst) {
     $activity_type_id = $activity_rst->fields['activity_type_id'];
+    $activity_priority_id = $activity_rst->fields['activity_priority_id'];
+    $activity_resolution_type_id = $activity_rst->fields['activity_resolution_type_id'];
+    $resolution_description = $activity_rst->fields['resolution_description'];
     $current_activity_type_id = $activity_rst->fields['activity_type_id'];
     $activity_title = $activity_rst->fields['activity_title'];
     $activity_description = $activity_rst->fields['activity_description'];
@@ -181,7 +184,29 @@ $sql = "SELECT activity_type_pretty_name, activity_type_id
         WHERE activity_type_record_status = 'a'
         ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql);
+if (!$rst) { db_error_handler($con, $sql); }
 $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
+$rst->close();
+
+//get priority type menu
+$sql = "SELECT case_priority_pretty_name,case_priority_id
+        FROM case_priorities
+        WHERE case_priority_record_status = 'a'
+        ORDER BY case_priority_pretty_name";
+$rst = $con->execute($sql);
+if (!$rst) { db_error_handler($con, $sql); }
+$activity_priority_menu = $rst->getmenu2('activity_priority_id', $activity_priority_id,true);
+$rst->close();
+
+
+//get activity type menu
+$sql = "SELECT resolution_pretty_name, activity_resolution_type_id
+        FROM activity_resolution_types
+        WHERE resolution_type_record_status = 'a'
+        ORDER BY sort_order, resolution_pretty_name";
+$rst = $con->execute($sql);
+if (!$rst) { db_error_handler($con, $sql); }
+$activity_resolution_type_menu = $rst->getmenu2('activity_resolution_type_id', $activity_resolution_type_id, true);
 $rst->close();
 
 if ($company_id) {
@@ -496,6 +521,10 @@ function logTime() {
                 <td class=widget_label_right><?php echo _("Activity Type"); ?></td>
                 <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
             </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Activity Priority"); ?></td>
+                <td class=widget_content_form_element><?php  echo $activity_priority_menu; ?></td>
+            </tr>
            <?php
                 if($on_what_table == 'opportunities') {
            ?>
@@ -578,6 +607,18 @@ function logTime() {
                 <td class=widget_label_right><?php echo _("Completed?"); ?></td>
                 <td class=widget_content_form_element><input type=checkbox name=activity_status value='on' <?php if ($activity_status == 'c') {print "checked";}; ?>>
                     <?php if ($completed_by) echo _("by").' '.$completed_by_user; if ($completed_at AND ($completed_at!='0000-00-00 00:00:00')) echo ' '._("on").' '. $completed_at; ?>
+                </td>
+            </tr>
+            <tr id='resolution_type' >
+                <td class=widget_label_right><?php echo _("Resolution Type"); ?></td>
+                <td class=widget_content_form_element> 
+                    <?php echo $activity_resolution_type_menu; ?>
+                </td>
+            </tr>
+            <tr id='resolution_reason' >
+                <td class=widget_label_right><?php echo _("Resolution Description"); ?></td>
+                <td class=widget_content_form_element> 
+                    <textarea name=resolution_description><?php echo $resolution_description; ?></textarea>
                 </td>
             </tr>
             <?php
@@ -675,6 +716,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.108  2005/06/30 04:39:44  vanmer
+ * - added UI for resolution description, resolution types and activity priority
+ *
  * Revision 1.107  2005/06/27 16:31:46  braverock
  * - add Entered By into main screen after many requests
  * - fix localization of several strings
