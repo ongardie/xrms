@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.65 2005/06/30 04:41:13 vanmer Exp $
+ * $Id: edit-2.php,v 1.66 2005/07/01 20:54:52 daturaarutad Exp $
  */
 
 //include required files
@@ -221,7 +221,9 @@ $rec['completed_at']         = $completed_at;
 $rec['activity_status']      = $activity_status;
 $rec['on_what_table']        = $on_what_table;
 $rec['on_what_id']           = $on_what_id;
-$rec['completed_by']      = $completed_by;
+$rec['completed_by']         = $completed_by;
+$rec['thread_id']            = $thread_id;
+$rec['followup_from_id']     = $followup_from_id;
 $rec['activity_priority_id'] = $activity_priority_id;
 $rec['resolution_description'] = $resolution_description;
 $rec['activity_resolution_type_id'] = $activity_resolution_type_id;
@@ -479,6 +481,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.66  2005/07/01 20:54:52  daturaarutad
+ * add thread_id and followup_from_id to record before saving
+ *
  * Revision 1.65  2005/06/30 04:41:13  vanmer
  * - changed to allow contact_id to be switched within API
  * - changed to allow API to handle participants
