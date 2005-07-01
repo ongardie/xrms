@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.18 2005/06/30 23:42:46 vanmer Exp $
+ * $Id: sidebar.php,v 1.19 2005/07/01 16:16:24 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -53,13 +53,16 @@ $plugin_params = array($file_sidebar_rst);
 do_hook_function('file_browse_files', $plugin_params);
 $file_rows = $plugin_params['file_rows'];
 if(!$file_rows) {
+	if (!$file_sidebar_label) {
+		$file_sidebar_label=_("Files");
+	}
         if (!$return_url) {
             $return_url="/$on_what_table/one.php?".make_singular($on_what_table)."_id=".$on_what_id;
         }
 	$file_rows .= "<div id='file_sidebar'>
         			<table class=widget cellspacing=1 width=\"100%\">
             			<tr>
-                			<td class=widget_header colspan=5>"._("Files")."</td>
+                			<td class=widget_header colspan=5>$file_sidebar_label</td>
             			</tr>
             			<tr>
                 			<td class=widget_label>"._("Name")."</td>
@@ -128,6 +131,9 @@ if(!$file_rows) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.19  2005/07/01 16:16:24  vanmer
+ * - added parameter to explicitly set sidebar label from outside of sidebar
+ *
  * Revision 1.18  2005/06/30 23:42:46  vanmer
  * - added edit button so files can have edit controlled by ACL
  * - added download link from filename
