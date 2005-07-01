@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.66 2005/07/01 20:54:52 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.67 2005/07/01 21:17:56 daturaarutad Exp $
  */
 
 //include required files
@@ -81,7 +81,12 @@ if ($activity_status == 'on') {
 }
 
 //mark this activity as completed if follow up is to be scheduled
-if ($followup) { $activity_status = 'c'; }
+if ($followup) { 
+	$activity_status = 'c'; 
+	if(!$thread_id) {
+		$thread_id = $activity_id;
+	}
+}
 
 $scheduled_at = strtotime($scheduled_at);
 //set scheduled_at to today if it is empty
@@ -481,6 +486,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.67  2005/07/01 21:17:56  daturaarutad
+ * set the thread_id to activity_id if this activity is the parent of another
+ *
  * Revision 1.66  2005/07/01 20:54:52  daturaarutad
  * add thread_id and followup_from_id to record before saving
  *
