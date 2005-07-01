@@ -7,7 +7,7 @@
  *
  *
  * @author Aaron van Meerten
- * $Id: one_email_template.php,v 1.2 2005/06/24 22:37:45 vanmer Exp $
+ * $Id: one_email_template.php,v 1.3 2005/07/01 16:15:08 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -58,6 +58,7 @@ if ($_GET['form_action']=='edit') {
     $on_what_id=$email_template_id;
     $template_return_url=$return_url;
     $return_url=current_page();
+    $file_sidebar_label=_("Attached Files");
     require_once($include_directory.'../files/sidebar.php');
     $return_url=$template_return_url;
 } else {
@@ -87,6 +88,9 @@ if ($_GET['form_action']=='edit') {
 
 /**
  * $Log: one_email_template.php,v $
+ * Revision 1.3  2005/07/01 16:15:08  vanmer
+ * - explicitly set file sidebar title
+ *
  * Revision 1.2  2005/06/24 22:37:45  vanmer
  * - added files sidebar when editing an email template
  *
