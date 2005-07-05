@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.7 2005/06/27 18:08:01 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.8 2005/07/05 23:24:20 vanmer Exp $
 */
 
 
@@ -135,7 +135,7 @@ class ADOdb_QuickForm_Model {
 	* @param string displayName Name to use for caption
 	* @param string customElement HTML containing the custom element
 	*/
-	function AddCustomField($name, $index, $customElement, $attributes = null) {
+	function AddCustomField($name, $index, $customElement, $attributes = null, $displayName=null, $displayOrder = null) {
 
 		$index = $index - 0.5;
 
@@ -282,6 +282,29 @@ class ADOdb_QuickForm_Model {
 			return false;
 		}
 	}
+        /**
+        * Inform the model that a field should be used as a checkbox field
+        *
+        * This functionality is very specific to the advcheckbox type in QuickForms
+	* It allows a value to be set if a checkbox is checked, and another value to be set if the checkbox is not checked
+        *
+        * @param string Fieldname of the field which will have a checkbox associated with it
+        * @param string checkedValue which will be set when checkbox is checked
+        * @param string uncheckedValue which will be set when the checkbox is unchecked
+        */
+        function SetCheckboxField($cbField, $checkedValue, $uncheckedValue) {
+               $i = $this->GetFieldIndex($cbField);
+
+                if(false !== $i) {
+                        $this->DBStructure['fields'][$i]['type']= 'advcheckbox';
+                        $this->DBStructure['fields'][$i]['checkedValue']= $checkedValue;
+			$this->DBStructure['fields'][$i]['uncheckedValue']= $uncheckedValue;
+			return true;
+		} else {
+			return false;
+		}
+
+	}
 
 
 	/**
@@ -381,6 +404,12 @@ class ADOdb_QuickForm_Model {
 		}
 	}
 
+	function SetDisplayOrders($displayOrders) {
+		foreach ($displayOrders as $displayOrder => $name) {
+			$this->SetDisplayOrder($name, $displayOrder);
+		}
+	}
+
   /**
   * function SetDisplayName
   * 
@@ -396,6 +425,16 @@ class ADOdb_QuickForm_Model {
 		$i = $this->GetFieldIndex($name);
 		if(false !== $i) {
 			$this->DBStructure['fields'][$i]['displayName'] = $displayName;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function SetDisplayOrder($name, $displayOrder) {
+		$i = $this->GetFieldIndex($name);
+		if ($false !== $i) {
+			$this->DBStructure['fields'][$i]['displayOrder'] = $displayOrder;
 			return true;
 		} else {
 			return false;
