@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.2.3\n"
+"Project-Id-Version: 1.2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-05-11 10:27+0430\n"
-"PO-Revision-Date: 2005-06-20 12:45+0330\n"
+"PO-Revision-Date: 2005-07-05 12:45+0330\n"
 "Last-Translator: Alan Baghumian <alan@lugir.org>\n"
 "Language-Team: Persian language team <alan@lugir.org>\n"
 "MIME-Version: 1.0\n"
@@ -174,6 +174,9 @@ msgstr "یادداشت‌های فعالیت‌ها"
 #: reports/index.php:132
 msgid "Activity Report for"
 msgstr "گزارش فعالیت برای"
+
+msgid "Activity Resolution Types"
+msgstr "انواع تحلیل فعالیت"
 
 #: reports/user-activity.php:68 reports/user-activity.php:80
 #: reports/user-activity.php:83
@@ -526,7 +529,7 @@ msgstr "مجاز است"
 
 #: locale/datastrings.php:17
 msgid "Architecture"
-msgstr "ساختار"
+msgstr "آرشیتکت"
 
 #: activities/associate-activities.php:29
 msgid "Associate Activities"
@@ -864,6 +867,10 @@ msgstr "بررسی موجوزهای روی یک آیتم برای یک کارب�
 #: locale/datastrings.php:21
 msgid "Chemicals"
 msgstr "شیمیایی"
+
+#: include/utils-interface.php:82
+msgid "ChildGroup"
+msgstr "زیر گروه"
 
 #: contacts/edit.php:152 contacts/edit.php:161
 msgid "Choose New Address"
@@ -1896,6 +1903,9 @@ msgstr "تعاریف عناصر"
 msgid "Email"
 msgstr "پست الکترونیکی"
 
+msgid "Email Templates"
+msgstr "الگوهای پست الکترونیکی"
+
 #: activities/one.php:540
 msgid "Email This To"
 msgstr "ارسال به"
@@ -2454,7 +2464,7 @@ msgstr "قانونی"
 #: companies/some.php:157 companies/some.php:477
 #: plugins/phone/companies_one.php:473
 msgid "Legal Name"
-msgstr "نام قانونی"
+msgstr "نام ثبت شده"
 
 #: reports/audit-items.php:91
 msgid "Line"
@@ -2531,6 +2541,10 @@ msgstr "زمان محلی بین"
 #: include/utils-interface.php:331
 msgid "Logged in as"
 msgstr "کاربر حاضر"
+
+#: include/utils-interface.php:331
+msgid "Login"
+msgstr "ورود به سیستم"
 
 #: include/utils-interface.php:332
 msgid "Logout"
@@ -2669,6 +2683,10 @@ msgstr "مدیریت اعضای گروه"
 msgid "Manage Group Users"
 msgstr "مدیریت کاربران گروه"
 
+#: admin/acl/GroupUser_list.php:29 admin/acl/xrms_acl_nav.php:9
+msgid "Manage Group Groups"
+msgstr "مدیریت گروه گروه‌ها"
+
 #: admin/acl/Groups_list.php:29 admin/acl/xrms_acl_nav.php:8
 msgid "Manage Groups"
 msgstr "مدیریت گروه‌ها"
@@ -2717,6 +2735,15 @@ msgstr "مدیریت نقش‌ها"
 #: admin/system-parameters/some.php:37
 msgid "Manage System Parameters"
 msgstr "مدیریت پارامترهای سیستمی"
+
+msgid "Manage Templates"
+msgstr "مدیریت الگوها"
+
+msgid "Manage Email Templates"
+msgstr "مدیریت الگوهای پست الکترونیکی"
+
+msgid "Manage Email Template Types"
+msgstr "مدیریت انواع الگوهای پست الکترونیکی"
 
 #: admin/users/some.php:52
 msgid "Manage Users"

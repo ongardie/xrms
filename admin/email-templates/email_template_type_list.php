@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: email_template_type_list.php,v 1.2 2005/06/24 23:52:18 vanmer Exp $
+ * $Id: email_template_type_list.php,v 1.3 2005/07/05 05:28:18 alanbach Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -54,7 +54,7 @@ $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Ed
                 </td>
             </tr>";
 
-   $pager = new GUP_Pager($con, $sql,false, 'Email Templates', $form_name, 'EmailTemplateType', $columns);
+   $pager = new GUP_Pager($con, $sql,false, _("Email Templates"), $form_name, 'EmailTemplateType', $columns);
 
     $pager->AddEndRows($endrows);
 
@@ -85,6 +85,9 @@ end_page();
 
 /**
  * $Log: email_template_type_list.php,v $
+ * Revision 1.3  2005/07/05 05:28:18  alanbach
+ * fa_IR translation update + some gettext corrections.
+ *
  * Revision 1.2  2005/06/24 23:52:18  vanmer
  * - added sidebar wrapper
  *
