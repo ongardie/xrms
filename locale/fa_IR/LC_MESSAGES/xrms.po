@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.2.4\n"
+"Project-Id-Version: 1.2.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-05-11 10:27+0430\n"
 "PO-Revision-Date: 2005-07-05 12:45+0330\n"
@@ -309,6 +309,9 @@ msgstr "اضافه کردن امتیاز بندی جدید"
 #: admin/relationship-types/some.php:68 admin/roles/some.php:63
 msgid "Add New Role"
 msgstr "اضافه کردن نقش جدید"
+
+msgid "Add New Type"
+msgstr "اضافه کردن نوع جدید"
 
 #: admin/users/some.php:82
 msgid "Add New User"
@@ -2622,6 +2625,9 @@ msgstr "مدیریت الگوهای فعالیت"
 msgid "Manage Activity Types"
 msgstr "مدیریت نوع فعالیت"
 
+msgid "Manage Activity Resolution Types"
+msgstr "مدیریت انواع تحلیل فعالیت"
+
 #: admin/crm-statuses/some.php:40
 msgid "Manage CRM Statuses"
 msgstr "مدیریت وضعیت CRM"
@@ -4782,6 +4788,9 @@ msgstr "x"
  msgid "Cancel Changes"
  msgstr "انصراف از تغییرات"
 
+msgid "Calendar View"
+msgstr "نمایش تقویم"
+
  msgid "Color and Layout Theme for XRMS"
  msgstr "انتخاب رنگ و جلوه"
 
@@ -4879,11 +4888,23 @@ msgstr "x"
  msgid "Reset View"
  msgstr "بازنشانی نمایش"
 
+msgid "Refresh Pager"
+ msgstr "باز نمایش صفحه انداز"
+
+msgid "Page"
+msgstr "صفحه"
+
+msgid "Restore Page"
+msgstr "بازگرداندن صفحه انداز به حالت اولیه"
+
  msgid "Rev."
  msgstr "ویراست"
 
  msgid "Role name"
  msgstr "نام نقش"
+
+msgid " records found"
+msgstr "رکورد یافت شد "
 
  msgid "Salutation Details"
  msgstr "جزئیات پیشوند"
