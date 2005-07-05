@@ -2,7 +2,7 @@
 /**
  * Sidebar box for info
  *
- * $Id: sidebar.php,v 1.17 2005/03/18 20:54:37 gpowers Exp $
+ * $Id: sidebar.php,v 1.18 2005/07/05 16:04:43 gpowers Exp $
  */
 
 //$con->debug = 1;
@@ -128,6 +128,17 @@ while (!$toprst->EOF) {
 
       # If we should show fields under link, generate them now
       #echo "count=".count($el
+        if (!$division_id) {
+	    $sqldiv = "select division_name from company_division LEFT JOIN info_map on company_division.division_id = info_map.division_id where info_id= '" . $info_id  . "' ";
+	    $rstdiv = $con->execute($sqldiv);
+	    if (!$rstdiv->EOF) {
+                $info_rows .= '<tr><td class="sublabel"><strong>' . _("Division") . '</strong></td>';
+                $info_rows .= '<td><strong>' . $rstdiv->fields['division_name'] . '</strong></td></tr>';
+	    }
+        }
+
+
+
       if (!empty($element)) {
           $fields = array();
           $values = array();
@@ -151,7 +162,7 @@ while (!$toprst->EOF) {
 		  	if ($element_types[$value] == 'checkbox' && $rst2->fields['value'] == '1' ) {
 		  		$info_rows = $info_rows . "yes</td></tr>";
 			} else {
-                        	$info_rows = $info_rows . $rst2->fields['value'] . "</td></tr>";
+                        	$info_rows = $info_rows . nl2br($rst2->fields['value']) . "</td></tr>";
 		  	}
 		  }
 		  $rst2->movenext();
