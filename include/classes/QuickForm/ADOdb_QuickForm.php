@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.10 2005/06/27 18:08:02 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.11 2005/07/05 23:21:39 vanmer Exp $
  */
 
 
@@ -362,6 +362,12 @@
 					case 'textarea':
 	          			$form->addElement('textarea', $field_name, $field['displayName'], $field['attributes']);
 	          			break;
+					case 'checkbox':
+					$form->addElement('checkbox', $field_name, $field['displayName'], $field['attributes']);
+					break;
+					case 'advcheckbox':
+					$form->addElement('advcheckbox', $field_name, $field['displayName'],null, $field['attributes'], array($field['uncheckedValue'], $field['checkedValue']));
+					break;
 	        		case 'primarykey':
 	        		case 'hidden':
 	          			$form->addElement('hidden', $field_name, $field['attributes']);
@@ -605,6 +611,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.11  2005/07/05 23:21:39  vanmer
+* - added handling for checkbox and advcheckbox types for QF
+*
 * Revision 1.10  2005/06/27 18:08:02  daturaarutad
 * Updated for new enum handling in ADOdb
 *
