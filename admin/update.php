@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.89 2005/07/06 21:28:50 braverock Exp $
+ * $Id: update.php,v 1.90 2005/07/06 21:49:14 vanmer Exp $
  */
 
 // where do we include from
@@ -4985,6 +4985,10 @@ $con->execute($sql);
 $sql = "ALTER TABLE `activities` ADD `resolution_description` TEXT";
 $con->execute($sql);
 
+$sql = "ALTER TABLE activities ADD activity_template_id int not null default 0";
+$con->execute($sql);
+
+
 $sql = "ALTER TABLE `user_preference_type_options` ADD `option_display` VARCHAR( 255 ) ";
 $con->execute($sql);
 
@@ -5041,6 +5045,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.90  2005/07/06 21:49:14  vanmer
+ * - added field to track which template an activity was spawned from
+ *
  * Revision 1.89  2005/07/06 21:28:50  braverock
  * - add opportunity types
  *
