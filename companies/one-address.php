@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.3 2005/07/06 01:25:32 vanmer Exp $
+ * $Id: one-address.php,v 1.4 2005/07/06 03:20:04 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -23,22 +23,37 @@ getGlobalVar($return_url, 'return_url');
 getGlobalVar($form_action, 'form_action');
 getGlobalVar($address_id, 'address_id');
 getGlobalVar($company_id, 'company_id');
+getGlobalVar($contact_id, 'contact_id');
 getGlobalVar($address_type, 'address_type');
 getGlobalVar($use_pretty_address, 'use_pretty_address');
 
 $company_name = fetch_company_name($con, $company_id);
 
-switch ($form_action) {
-    case 'new':
-        $page_title = _("New Address");
-    break;
-    case 'edit':
-        $page_title=_("Edit Address");
-    break;
-    case 'view':
-        $page_title=_("View Address");
-    break;
-}
+    if ($company_id) {
+        switch ($form_action) {
+            case 'new':
+                $page_title = _("New Business Address");
+            break;
+            case 'edit':
+                $page_title=_("Edit Business Address");
+            break;
+            case 'view':
+                $page_title=_("View Business Address");
+            break;
+        }
+    } else if ($contact_id) {
+        switch ($form_action) {
+            case 'new':
+                $page_title = _("New Home Address");
+            break;
+            case 'edit':
+                $page_title=_("Edit Home Address");
+            break;
+            case 'view':
+                $page_title=_("View Home Address");
+            break;
+        }    
+    }
 
 start_page($page_title);
 
@@ -69,10 +84,18 @@ start_page($page_title);
         $model->SetFieldType('daylight_savings_id', 'db_only');
         
         $model->SetCheckboxField('use_pretty_address', 't','f');
-        $model->SetHiddenLinkField('company_id', "$http_site_root/companies/one.php?company_id=$company_id",$company_name, $company_id);
-        
+        if ($company_id) {
+            $model->SetHiddenLinkField('company_id', "$http_site_root/companies/one.php?company_id=$company_id",$company_name, $company_id);
+        } else {
+            $model->SetFieldType('company_id','hidden');
+            $model->SetFieldValue('company_id',0);
+        }
         $model->SetFieldType('address_body', 'textarea','cols=50 rows=10');
-        
+
+        if ($contact_id) {
+            $model->AddField('contact_id','hidden', 1);
+            $model->SetFormOnlyField('contact_id',$contact_id);
+        }
         $fields=$model->GetFields();
         $sorter = new array_sorter($fields, 'displayOrder', false);
         $model->DBStructure['fields']=$sorter->sortit();
@@ -108,7 +131,18 @@ switch ($form_action) {
         $values=$model->GetValues();
         $address_id=$values['address_id'];
         add_audit_item($con, $session_user_id, 'created', 'addresses', $address_id, 1);
+        if ($contact_id) {
+            $sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
+            $rst = $con->execute($sql);
         
+            $rec = array();
+            $rec['home_address_id'] = $address_id;
+        
+            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            $con->execute($upd);
+        
+            add_audit_item($con, $session_user_id, 'changed home address', 'contacts', $contact_id, 1);
+        }
         if($time_zone_offset = time_zone_offset($con, $address_id)) {
             $sql = 'SELECT *
                     FROM addresses
@@ -144,6 +178,10 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.4  2005/07/06 03:20:04  vanmer
+ * - allow company id to be ignored for an address, if the address is a home address
+ * - change page title to act differently on a business vs. home address
+ *
  * Revision 1.3  2005/07/06 01:25:32  vanmer
  * - added link to company at the top of the edit address page
  * - changed address body and checkbox to be called Non-Standard Address
