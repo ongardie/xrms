@@ -2,148 +2,206 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.15 2005/06/24 22:55:29 vanmer Exp $
+ * $Id: new.php,v 1.16 2005/07/06 17:58:17 jswalter Exp $
  */
 
 require_once('../include-locations.inc');
 
+include_once $include_directory . 'classes/debug.php';
+
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-files.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+
+// Pull SESSION data
 $session_user_id = session_check('','Create');
 
-$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+    // See if we have an error message from anywhere
+    // $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+    if ( isset($_GET['msg']) )
+        $msg = $_GET['msg'];
 
-$on_what_table = $_POST['on_what_table'];
-$on_what_id    = $_POST['on_what_id'];
-$return_url    = $_POST['return_url'];
+    else if ( isset($_POST['msg']) )
+        $msg = $_POST['msg'];
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+    else
+        $msg = null;
 
-if ($on_what_table == 'opportunities') {
-    $sql = "select opportunity_title as attached_to_name from opportunities where opportunity_id = $on_what_id";
-} elseif ($on_what_table == 'cases') {
-    $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-} elseif ($on_what_table == 'companies') {
-    $sql = "select company_name as attached_to_name from companies where company_id = $on_what_id";
-} elseif ($on_what_table == 'contacts') {
-    $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS attached_to_name FROM contacts WHERE contact_id = $on_what_id";
-} elseif ($on_what_table == 'campaigns') {
-    $sql = "select campaign_title as attached_to_name from campaigns where campaign_id = $on_what_id";
-} else {
-    $table_name=table_name($on_what_table);
-    $table_name = $con->Concat(implode(", ' ', ", table_name($on_what_table)));
-    $table_singular = make_singular($on_what_table);
-    
-    if ($table_singular AND $table_name) {
-        $sql = "select $table_name as attached_to_name from $on_what_table where {$table_singular}_id=$on_what_id";
+// if 'act' is not defeined, this is our first time through
+if ( $_POST['act'] == 'up' )
+{
+
+    // Make sure we have what we need
+    if ( empty ($_POST['file_pretty_name']) )
+    {
+        $msg .= _("Please give a Display Name for this File") . '. ';
+        $msg .= '<br />';
     }
+
+    // Process Uploaded File
+    else if ( $objUpFile = getFileUpLoad ( 'file1' ) )
+    {
+        // Pull File info
+        $file_pretty_name = (strlen(trim($_POST['file_pretty_name'])) > 0) ? $_POST['file_pretty_name'] : $file_name;
+        $file_name        = $objUpFile->getFilename();
+        $file_type        = $objUpFile->getFileMimeType();
+        $file_size        = $objUpFile->getFileSize();
+
+        //save to database
+        $rec = array();
+        $rec['file_pretty_name']     = $file_pretty_name;
+        $rec['file_description']     = $_POST['file_description'];
+        $rec['file_name']            = $file_name;
+        $rec['file_size']            = $objUpFile->getFileSize();
+        $rec['file_type']            = $objUpFile->getFileMimeType();
+        $rec['on_what_table']        = $_POST['on_what_table'];
+        $rec['on_what_id']           = $_POST['on_what_id'];
+        $rec['entered_at']           = time();
+        $rec['entered_by']           = $session_user_id;
+        $rec['modified_on']          = $rec['entered_at'];
+        $rec['modified_by']          = $rec['entered_by'];
+
+        // files plugin hook allows external storage of files.  see plugins/owl/README for example
+        // params: (file_field_name, record associative array)
+        $file_plugin_params = array('file1', $rec);
+        do_hook_function('file_add_file', &$file_plugin_params);
+
+        if($file_plugin_params['external_id']) {
+            $rec['external_id'] = $file_plugin_params['external_id'];
+        }
+
+        // Make DB connection
+        $con = &adonewconnection($xrms_db_dbtype);
+        $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+        // $con->debug = 1;
+
+        // INSERT values into table
+        $tbl = 'files';
+        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
+
+        // What ID where we given
+        $file_id = $con->insert_id();
+
+        // Now we need to UPDATE that same record
+        // update the file record
+        $sql = "SELECT * FROM files WHERE file_id = $file_id";
+        $rst = $con->execute($sql);
+
+        // We need to RENAME the 'file_filesystem_name' name with the record ID
+        $rec = array();
+        $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
+
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
+        $con->close();
+
+        // The file needs to be renamed to add the record index to it
+        rename_file ( $file_name, $rec['file_filesystem_name'] );
+    }   // if ( $objUpFile = getFileUpLoad ( 'file1' ) )
+
+    if (! $msg)
+    {
+        // go back to our orginal page
+        header("Location: " . $http_site_root . $_POST['return_url']);
+
+        // Just to make sure we stop here
+        exit;
+    }
+
 }
 
-$rst = $con->execute($sql);
+// First time through here, or we have an error to fix
 
-if ($rst) {
-  if ( !$rst->EOF ) {
-    $attached_to_name = $rst->fields['attached_to_name'];
-  } else {
-    $attached_to_name = '';
-  }
-  $rst->close();
-}
+    // Inbound DB info
+    $on_what_table = $_POST['on_what_table'];
+    $on_what_id    = $_POST['on_what_id'];
+    $return_url    = $_POST['return_url'];
 
-$con->close();
+    $con = &adonewconnection($xrms_db_dbtype);
+    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$page_title = _("Attach File");
-start_page($page_title, true, $msg);
+    if ($on_what_table == 'opportunities')
+    {
+        $sql = "SELECT opportunity_title
+                    AS attached_to_name
+                FROM opportunities
+                WHERE opportunity_id = $on_what_id";
+    }
+    elseif ($on_what_table == 'cases')
+    {
+        $sql = "SELECT case_title
+                    AS attached_to_name
+                FROM cases
+                WHERE case_id = $on_what_id";
+    }
+    elseif ($on_what_table == 'companies')
+    {
+        $sql = "SELECT company_name
+                    AS attached_to_name
+                FROM companies
+                WHERE company_id = $on_what_id";
+    }
+    elseif ($on_what_table == 'contacts')
+    {
+        $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . "
+                    AS attached_to_name
+                FROM contacts
+                WHERE contact_id = $on_what_id";
+    }
+    elseif ($on_what_table == 'campaigns')
+    {
+        $sql = "SELECT campaign_title
+                    AS attached_to_name
+                FROM campaigns
+                WHERE campaign_id = $on_what_id";
+    }
+    else
+    {
+        $table_name = table_name($on_what_table);
+        $table_name = $con->Concat(implode(", ' ', ", table_name($on_what_table)));
+        $table_singular = make_singular($on_what_table);
 
-$file_entered_at = '';
+        if ($table_singular AND $table_name)
+        {
+            $sql = "SELECT $table_name
+                        AS attached_to_name from $on_what_table
+                    WHERE {$table_singular}_id=$on_what_id";
+        }
+    }
 
-?>
+    $rst = $con->execute($sql);
 
-<?php jscalendar_includes(); ?>
+    if ($rst) {
+    if ( !$rst->EOF ) {
+        $attached_to_name = $rst->fields['attached_to_name'];
+    } else {
+        $attached_to_name = '';
+    }
+    $rst->close();
+    }
 
-<div id="Main">
-    <div id="Content">
+    $con->close();
 
-        <form enctype="multipart/form-data" action=new-2.php method=post>
-        <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_file_size; ?>">
-        <input type=hidden name=on_what_table value="<?php  echo $on_what_table ?>">
-        <input type=hidden name=on_what_id value="<?php  echo $on_what_id ?>">
-        <input type=hidden name=return_url value="<?php  echo $return_url ?>">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=2><?php echo _("File Information"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Attached To"); ?></td>
-                <td class=widget_content_form_element><?php echo $attached_to_name; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("File Name"); ?></td>
-                <td class=widget_content_form_element><input type=text size=40 name=file_pretty_name></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Description"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=100 name=file_description></textarea></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Date"); ?></td>
-                <td class=widget_content_form_element>
-                    <input type=text ID="f_date_c" name=file_entered_at value="<?php  echo $file_entered_at; ?>">
-                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Upload"); ?></td>
-                <td class=widget_content_form_element><input type=file name=file1></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Upload");?>"></td>
-            </tr>
-        </table>
-        </form>
+    // Get actual FORM
+    include_once 'edit-form.php';
 
-    </div>
 
-        <!-- right column //-->
-    <div id="Sidebar">
-
-        &nbsp;
-
-    </div>
-
-</div>
-
-<script language="JavaScript" type="text/javascript">
-
-function initialize() {
-    document.forms[0].file_pretty_name.focus();
-}
-
-initialize();
-
-Calendar.setup({
-        inputField     :    "f_date_c",      // id of the input field
-        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
-        showsTime      :    true,            // will display a time selector
-        button         :    "f_trigger_c",   // trigger for the calendar (button ID)
-        singleClick    :    false,           // double-click mode
-        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-        align          :    "Bl"           // alignment (defaults to "Bl")
-    });
-
-</script>
-
-<?php
-
-end_page();
+// ========================================================================
+// ========================================================================
 
 /**
  * $Log: new.php,v $
+ * Revision 1.16  2005/07/06 17:58:17  jswalter
+ *  - pulled HTML form out to external file: 'edit-form.php'
+ *  - looking for '$msg' in POST as well as GET
+ *  - added file upload processing to this file, don't need 'new-2.php' anymore
+ *  Bug 311
+ *
  * Revision 1.15  2005/06/24 22:55:29  vanmer
  * - added link for arbitrary file link
  *
