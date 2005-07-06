@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.1 2005/07/06 00:22:57 vanmer Exp $
+ * $Id: one-address.php,v 1.2 2005/07/06 00:24:25 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -75,7 +75,6 @@ start_page($page_title);
         $fields=$model->GetFields();
         
         
-//        echo '<pre>'; print_r($fields); echo "</pre>";
   $view = new ADOdb_QuickForm_View($con, $page_title, 'post');
   $view->SetReturnButton('Return to List', $return_url);
 
@@ -131,9 +130,6 @@ switch ($form_action) {
         $rst=$model->GetRecordset();
         $rec=$model->GetValues();
         $param = array( $_POST, $rst, $rec);
-        echo '<pre>';
-        print_r($param);
-        echo '</pre>';
         do_hook_function('company_edit_address_2', $param);
     break;
 }
@@ -144,6 +140,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.2  2005/07/06 00:24:25  vanmer
+ * - removed debug output
+ *
  * Revision 1.1  2005/07/06 00:22:57  vanmer
  * - Initial commit of a QuickForm page to replace edit-address.php, edit-address-2.php, add-address.php and the new
  * form on addresses.php
