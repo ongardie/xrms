@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.14 2005/07/06 15:09:50 braverock Exp $
+ * $Id: download.php,v 1.15 2005/07/06 16:25:32 ycreddy Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,7 +61,7 @@ $con->close();
 
 // make sure we have a proper mime type
 if ( !$file_type ) {
-    if (!function_exists('mime_content_type') {
+    if (!function_exists('mime_content_type') ) {
         // this version of PHP doesn't have the mime functions
         // compiled in, so load our drop-in replacement function
         // instead
@@ -85,7 +85,7 @@ SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name
 $chunksize=1*(1024*1024);
 
 //open and output file contents
-if (is_file($file_to_open){
+if (is_file($file_to_open) ) {
     $fp = fopen($file_to_open, 'rb');
     if ($fp) {
         while (!feof($fp)) {
@@ -103,6 +103,9 @@ exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.15  2005/07/06 16:25:32  ycreddy
+ * Fixed the syntax errors - missing closing ) in if statements
+ *
  * Revision 1.14  2005/07/06 15:09:50  braverock
  * - add is_file and opened file tests to file handling
  *   @todo need more error handling to report to the user
