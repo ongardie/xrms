@@ -6,9 +6,19 @@ require_once(ACL_PATH.'xrms_acl_config.php');
 require_once(ACL_PATH.'acl_install.php');
 $acl_options=$options;
 
-function get_group_users($acl_group, $acl_role = false) {
+function get_user_in_role($con, $role) {
+    global $session_user_id;
     global $acl_options;
-    $acl = new xrms_acl($acl_options);
+    $acl = new xrms_acl($acl_options, $con);
+    $role_id=get_role_id($acl, $role);
+    return $session_user_id;
+}
+
+function get_group_users($acl_group, $acl_role = false, $acl=false) {
+    global $acl_options;
+    if (!$acl) {
+        $acl = new xrms_acl($acl_options);
+    }
     $group_id=get_group_id($acl, $acl_group);
     if (!$group_id) {
         echo "Failed to find group $acl_group in security system<br>"; return false;
