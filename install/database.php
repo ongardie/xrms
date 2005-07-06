@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.46 2005/06/30 04:50:02 vanmer Exp $
+ * $Id: database.php,v 1.47 2005/07/06 19:54:09 vanmer Exp $
  */
 
 /**
@@ -91,6 +91,7 @@ function misc_db_tables($con, $table_list) {
     if (!in_array('files',$table_list)) {
         $sql ="create table files (
                file_id                                 int not null primary key auto_increment,
+               file_name VARCHAR( 100 ) NOT NULL,
                file_pretty_name                        varchar(100) not null default '',
                file_description                        text not null default '',
                file_filesystem_name                    varchar(100) not null default '',
@@ -100,6 +101,8 @@ function misc_db_tables($con, $table_list) {
                on_what_id                              int not null default 0,
                entered_at                              datetime,
                entered_by                              int not null default 0,
+               modified_on DATETIME NOT NULL,
+               modified_by VARCHAR( 11 ) NOT NULL,               
                file_record_status                      char(1) default 'a'
                )";
         //execute
@@ -1228,6 +1231,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.47  2005/07/06 19:54:09  vanmer
+ * - added needed fields for the files table
+ *
  * Revision 1.46  2005/06/30 04:50:02  vanmer
  * - added fields and tables for resolution and priority on activities
  *
