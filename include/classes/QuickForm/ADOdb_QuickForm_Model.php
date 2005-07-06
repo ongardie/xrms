@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.10 2005/07/06 00:55:18 vanmer Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.11 2005/07/06 03:12:07 vanmer Exp $
 */
 
 
@@ -309,6 +309,29 @@ class ADOdb_QuickForm_Model {
 
 	}
         /**
+        * Inform the model that a field is not a database field 
+        *
+        * This functionality is intended to allow hidden form variables that never end up in the database
+	* and never queried on edit 
+        *
+        * @param string Fieldname of the link
+        * @param string formValue which will be included a hidden variable
+        */
+        function SetFormOnlyField($formField, $formValue) {
+               $i = $this->GetFieldIndex($formField);
+
+                if(false !== $i) {
+                        $this->DBStructure['fields'][$i]['type']= 'hidden';
+			$this->DBStructure['fields'][$i]['formOnly'] = true;
+                        $this->Values[$formField]=$formValue;
+                        return true;
+                } else {
+                        return false;
+                }
+
+        }
+
+        /**
         * Inform the model that a field should be used to display a link with a hidden variable
         *
         * This functionality adds a link to the quickform with name fieldname_link, with the specified URL and text
@@ -602,7 +625,9 @@ class ADOdb_QuickForm_Model {
 			if(isset($this->DBStructure['fields'][$i]) && 
 				'blob' != $this->DBStructure['fields'][$i]['type'] && 
 				'longblob' != $this->DBStructure['fields'][$i]['type'] &&
-				$omit_column != $this->DBStructure['fields'][$i]['name']) 
+				$omit_column != $this->DBStructure['fields'][$i]['name'] &&
+				!$this->DBStructure['fields'][$i]['formOnly']
+				) 
 				{
 					$columns .= $this->DBStructure['fields'][$i]['name'] . ',';
 				}
