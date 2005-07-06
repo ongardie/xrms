@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.11 2005/06/15 17:12:30 ycreddy Exp $
+ * $Id: edit-address-2.php,v 1.12 2005/07/06 02:07:29 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -14,6 +14,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
+
+getGlobalVar($return_url, 'return_url');
 
 // declare passed in variables
 $arr_vars = array ( // local var name             // session variable name, flag
@@ -138,12 +140,17 @@ do_hook_function('contact_edit_address_2', $param);
 
 $con->close();
 
-
-header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
+if (!$return_url) {
+    $return_url="edit-address.php?msg=saved&contact_id=$contact_id";
+}
+header("Location: $return_url");
 
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.12  2005/07/06 02:07:29  vanmer
+ * - changed to handle arbitrary return_url
+ *
  * Revision 1.11  2005/06/15 17:12:30  ycreddy
  * Added a plugin hook contact_edit_address_2
  *
@@ -175,7 +182,7 @@ header("Location: edit-address.php?msg=saved&contact_id=$contact_id");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.11 2005/06/15 17:12:30 ycreddy Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.12 2005/07/06 02:07:29 vanmer Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
