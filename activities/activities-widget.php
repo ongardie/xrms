@@ -103,7 +103,7 @@ $sql = "SELECT (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTim
 
   . "'$return_url' as return_url, "
 
-  .	$con->substr."(activity_description, 1, $description_substring_length) AS description_brief, " 
+  //.	$con->substr."(activity_description, 1, $description_substring_length) AS description_brief, " 
 
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
@@ -242,7 +242,7 @@ if ($list) {
 }
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
-$sql .=" GROUP BY a.activity_id, c.company_name,c.company_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name";
+$sql .=" GROUP BY a.activity_id, a.on_what_id, a.on_what_table, c.company_name,c.company_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, rt.resolution_short_name, cp.case_priority_pretty_name";
 
 // end build query
 
@@ -416,6 +416,9 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.8  2005/07/06 21:39:00  ycreddy
+* Changes to SQL Query for SQL Server portability
+*
 * Revision 1.7  2005/06/30 18:00:23  daturaarutad
 * moved creation of title html link to GetActivitiesPagerData and added popup/tooltip containing activity description; add on_what_table criteria to query; add description as available column in pager
 *
