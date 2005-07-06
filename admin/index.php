@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.34 2005/06/30 04:37:03 vanmer Exp $
+ * $Id: index.php,v 1.35 2005/07/06 17:27:14 vanmer Exp $
  */
 
 //include required stuff
@@ -119,7 +119,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
-                    <a href="system-parameters/some.php"><?php echo _("System Parameters"); ?></a>
+                    <a href="system-parameters/admin-prefs.php"><?php echo _("System Preferences"); ?></a>
                 </td>
             </tr>
             <tr>
@@ -249,6 +249,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.35  2005/07/06 17:27:14  vanmer
+ * - changed to use system preferences interface instead of system parameter interface
+ *
  * Revision 1.34  2005/06/30 04:37:03  vanmer
  * - added link to activity resolution types admin interface
  *
