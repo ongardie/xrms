@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.88 2005/07/06 20:02:38 vanmer Exp $
+ * $Id: update.php,v 1.89 2005/07/06 21:28:50 braverock Exp $
  */
 
 // where do we include from
@@ -4840,18 +4840,18 @@ $con->execute($sql);
 
     if (!in_array('activities_recurrence',$table_list)) {
         $sql="CREATE TABLE activities_recurrence (
-  				activity_recurrence_id int(11) NOT NULL auto_increment,
-  				activity_id int(11) NOT NULL default '0',
-  				start_datetime datetime default NULL,
-  				end_datetime datetime default NULL,
-  				end_count int(11) default '0',
-  				frequency int(11) NOT NULL default '0',
-  				period varchar(100) NOT NULL default '',
-  				day_offset int(11) default '0',
-  				month_offset int(11) default '0',
-  				week_offset int(11) default '0',
-  				week_days varchar(100) default '',
-  				PRIMARY KEY  (activity_recurrence_id));";
+                activity_recurrence_id int(11) NOT NULL auto_increment,
+                activity_id int(11) NOT NULL default '0',
+                start_datetime datetime default NULL,
+                end_datetime datetime default NULL,
+                end_count int(11) default '0',
+                frequency int(11) NOT NULL default '0',
+                period varchar(100) NOT NULL default '',
+                day_offset int(11) default '0',
+                month_offset int(11) default '0',
+                week_offset int(11) default '0',
+                week_days varchar(100) default '',
+                PRIMARY KEY  (activity_recurrence_id));";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -4871,10 +4871,60 @@ $con->execute($sql);
         $rst = $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
-        }        
+        }
         if ($rst) $msg .= _("Successfully added activity resolution types table.").'<BR><BR>';
     }
-    
+
+   // opportunity_types
+   if (!in_array('opportunity_types',$table_list)) {
+        $sql="create table opportunity_types (
+              opportunity_type_id int(11) not null auto_increment,
+              opportunity_type_short_name varchar(10) not null default '',
+              opportunity_type_pretty_name varchar(100) not null default '',
+              opportunity_type_pretty_plural varchar(100) not null default '',
+              opportunity_type_display_html varchar(100) not null default '',
+              opportunity_type_record_status char(1) not null default 'a',
+              primary key  (opportunity_type_id)
+              )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+        if ($rst) $msg .= _("Successfully added opportunity types table.").'<BR><BR>';
+    }
+    if (confirm_no_records($con, 'opportunity_types')) {
+        $sql = "INSERT INTO `opportunity_types`
+                ( `opportunity_type_id` , `opportunity_type_short_name` , `opportunity_type_pretty_name` , `opportunity_type_pretty_plural` , `opportunity_type_display_html` , `opportunity_type_record_status` )
+                VALUES
+                ('', 'sale', 'Sales Opportunity', 'Sales Opportunity', 'Sales Opportunity', 'a');";
+       //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+        if ($rst) {
+            $msg .= _("Successfully added default opportunity type record.").'<BR><BR>';
+            $type_id = $con->insert_id();
+            $sql = "ALTER TABLE `opportunity_statuses` ADD `opportunity_type_id` INT DEFAULT '$type_id' NOT NULL AFTER `opportunity_status_id`";
+            $rst = $con->execute($sql);
+            if (!$rst) {
+                db_error_handler ($con, $sql);
+            }
+            if ($rst) {
+                $msg .= _("Successfully added opportunity type to opportunity status table.").'<BR><BR>';
+            }
+            $sql="ALTER TABLE `opportunities` ADD `opportunity_type_id` INT DEFAULT '1' NOT NULL AFTER `opportunity_id`";
+            $rst = $con->execute($sql);
+            if (!$rst) {
+                db_error_handler ($con, $sql);
+            }
+            if ($rst) {
+                $msg .= _("Successfully added opportunity type to opportunity table.").'<BR><BR>';
+            }
+        }
+    }
+
 install_upgrade_acl($con);
 
 $sql = "ALTER TABLE user_preferences ADD user_id INT( 11 ) UNSIGNED NOT NULL";
@@ -4991,6 +5041,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.89  2005/07/06 21:28:50  braverock
+ * - add opportunity types
+ *
  * Revision 1.88  2005/07/06 20:02:38  vanmer
  * - updated to reflect more standard fieldname
  *

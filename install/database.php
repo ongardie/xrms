@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.48 2005/07/06 20:04:51 vanmer Exp $
+ * $Id: database.php,v 1.49 2005/07/06 21:26:35 braverock Exp $
  */
 
 /**
@@ -855,6 +855,55 @@ function opportunity_db_tables($con, $table_list) {
         }
     }
 
+   // opportunity_types
+   if (!in_array('opportunity_types',$table_list)) {
+        $sql="create table opportunity_types (
+              opportunity_type_id int(11) not null auto_increment,
+              opportunity_type_short_name varchar(10) not null default '',
+              opportunity_type_pretty_name varchar(100) not null default '',
+              opportunity_type_pretty_plural varchar(100) not null default '',
+              opportunity_type_display_html varchar(100) not null default '',
+              opportunity_type_record_status char(1) not null default 'a',
+              primary key  (opportunity_type_id)
+              )";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+    if (confirm_no_records($con, 'opportunity_types')) {
+        $sql = "INSERT INTO `opportunity_types`
+                ( `opportunity_type_id` , `opportunity_type_short_name` , `opportunity_type_pretty_name` , `opportunity_type_pretty_plural` , `opportunity_type_display_html` , `opportunity_type_record_status` )
+                VALUES
+                ('', 'sale', 'Sales Opportunity', 'Sales Opportunity', 'Sales Opportunity', 'a');";
+       //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+        if ($rst) {
+            $msg .= _("Successfully added default opportunity type record.").'<BR><BR>';
+            $type_id = $con->insert_id();
+            $sql = "ALTER TABLE `opportunity_statuses` ADD `opportunity_type_id` INT DEFAULT '$type_id' NOT NULL AFTER `opportunity_status_id`";
+            $rst = $con->execute($sql);
+            if (!$rst) {
+                db_error_handler ($con, $sql);
+            }
+            if ($rst) {
+                $msg .= _("Successfully added opportunity type to opportunity status table.").'<BR><BR>';
+            }
+            $sql="ALTER TABLE `opportunities` ADD `opportunity_type_id` INT DEFAULT '1' NOT NULL AFTER `opportunity_id`";
+            $rst = $con->execute($sql);
+            if (!$rst) {
+                db_error_handler ($con, $sql);
+            }
+            if ($rst) {
+                $msg .= _("Successfully added opportunity type to opportunity table.").'<BR><BR>';
+            }
+        }
+    }
+
     if (!in_array('time_daylight_savings',$table_list)) {
     // create the time_daylight_savings table if we need it
         $sql ="CREATE TABLE time_daylight_savings (
@@ -1123,7 +1172,7 @@ function activity_db_tables($con, $table_list) {
                completed_by                    int,
                activity_status                 char(1) default 'o',
                activity_record_status          char(1) default 'a',
-			   activity_recurrence_id 		   int default 0,
+               activity_recurrence_id          int default 0,
                 activity_resolution_type_id INT ( 11 ),
                 activity_priority_id INT( 11 ),
                 resolution_description TEXT
@@ -1231,6 +1280,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.49  2005/07/06 21:26:35  braverock
+ * - add opportunity types
+ *
  * Revision 1.48  2005/07/06 20:04:51  vanmer
  * - changed to reflect standard fieldnames
  *
