@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.2 2005/07/06 00:24:25 vanmer Exp $
+ * $Id: one-address.php,v 1.3 2005/07/06 01:25:32 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -26,6 +26,8 @@ getGlobalVar($company_id, 'company_id');
 getGlobalVar($address_type, 'address_type');
 getGlobalVar($use_pretty_address, 'use_pretty_address');
 
+$company_name = fetch_company_name($con, $company_id);
+
 switch ($form_action) {
     case 'new':
         $page_title = _("New Address");
@@ -34,7 +36,7 @@ switch ($form_action) {
         $page_title=_("Edit Address");
     break;
     case 'view':
-        $page_title=_("Edit Address");
+        $page_title=_("View Address");
     break;
 }
 
@@ -50,25 +52,27 @@ start_page($page_title);
                                                                                                                 'province' => _("State/Province"), 
                                                                                                                 'postal_code' => _("Postal Code"),
                                                                                                                 'country_id' => _("Country"),
+                                                                                                                'company_id' => _("Company"),
                                                                                                                 'address_type' => _("Address Type"),
-                                                                                                                'address_body' => _("Address Body"),
-                                                                                                                'use_pretty_address' => _("Use Pretty Address"),
+                                                                                                                'address_body' => _("Non-Standard Address"),
+                                                                                                                'use_pretty_address' => _("Use Non-Standard Address"),
                                                                                                                 'sort_order' => _("Sort Order")));
-        $display_order=array('address_name','line1','line2','city','province','postal_code','country_id','address_type', 'use_pretty_address','address_body');
+        $display_order=array('company_id','address_name','line1','line2','city','province','postal_code','country_id','address_type', 'use_pretty_address','address_body');
         
         $model->SetDisplayOrders($display_order);
-	$model->SetForeignKeyField('country_id', _("Country"), 'countries', 'country_id', 'country_name', $con, null, 'country_name');
+	
+        $model->SetForeignKeyField('country_id', _("Country"), 'countries', 'country_id', 'country_name', $con, null, 'country_name');
 	$model->SetForeignKeyField('address_type', _("Address Type"), 'address_types', 'address_type', 'address_type', $con, null, 'address_type_sort_value');
+        
         $model->SetFieldType('address_record_status', 'db_only');
         $model->SetFieldType('offset', 'db_only');
         $model->SetFieldType('daylight_savings_id', 'db_only');
-//        $model->SetFieldType('use_pretty_address', 'db_only');
+        
         $model->SetCheckboxField('use_pretty_address', 't','f');
-        $model->SetFieldType('company_id','hidden');
-        $model->SetFieldValue('company_id',$company_id);
+        $model->SetHiddenLinkField('company_id', "$http_site_root/companies/one.php?company_id=$company_id",$company_name, $company_id);
+        
         $model->SetFieldType('address_body', 'textarea','cols=50 rows=10');
-//        $model->AddCustomField('use_pretty_address',12, $use_pretty_address_box, null, _("Use Pretty Address"), count($display_order)-1.5  );
-//        $model->RemoveField('use_pretty_address');
+        
         $fields=$model->GetFields();
         $sorter = new array_sorter($fields, 'displayOrder', false);
         $model->DBStructure['fields']=$sorter->sortit();
@@ -140,6 +144,10 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.3  2005/07/06 01:25:32  vanmer
+ * - added link to company at the top of the edit address page
+ * - changed address body and checkbox to be called Non-Standard Address
+ *
  * Revision 1.2  2005/07/06 00:24:25  vanmer
  * - removed debug output
  *
