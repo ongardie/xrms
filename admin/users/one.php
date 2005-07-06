@@ -2,7 +2,7 @@
 /**
  * Edit the details for one user
  *
- * $Id: one.php,v 1.23 2005/06/15 18:25:40 vanmer Exp $
+ * $Id: one.php,v 1.24 2005/07/06 17:22:14 vanmer Exp $
  */
 
 //include required files
@@ -16,6 +16,11 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check( 'Admin' );
 
 getGlobalVar($msg, 'msg');
+getGlobalVar($return_url, 'return_url');
+
+if (!$return_url) {
+    $return_url="some.php";
+}
 
 $edit_user_id = $_GET['edit_user_id'];
 
@@ -52,7 +57,9 @@ if($my_company_id) {
     $rst = $con->execute($sql);
     $contact_menu = $rst->getmenu2('user_contact_id', $user_contact_id, true);
 }
+$current_return_url=$return_url;
 require_once('user_roles_sidebar.php');
+$return_url=$current_return_url;
 
 // make sure $sidebar_rows is defined
 if ( !isset($sidebar_rows) ) {
@@ -73,6 +80,7 @@ start_page($page_title, true, $msg);
     <div id="Content">
 
         <form action=edit-2.php method=post>
+        <input type=hidden name=return_url value="<?php echo $return_url; ?>">
         <input type=hidden name=edit_user_id value="<?php  echo $edit_user_id; ?>">
 
         <input type=hidden name=user_contact_id value="<?php  echo $user_contact_id; ?>">
@@ -160,6 +168,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.24  2005/07/06 17:22:14  vanmer
+ * - added return url when editing user data
+ *
  * Revision 1.23  2005/06/15 18:25:40  vanmer
  * - added output of msg string on users/one.php page
  *
