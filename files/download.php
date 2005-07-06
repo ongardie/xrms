@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.12 2005/07/06 14:59:31 braverock Exp $
+ * $Id: download.php,v 1.13 2005/07/06 15:04:15 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -87,7 +87,7 @@ $chunksize=1*(1024*1024);
 //open and output file contents
 $fp = fopen($file_to_open, 'rb');
 while (!feof($fp)) {
-    $buffer = fread($fp, $chunk_size);
+    $buffer = fread($fp, $chunksize);
     print $buffer;
 }
 fclose ($fp);
@@ -95,6 +95,9 @@ exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.13  2005/07/06 15:04:15  braverock
+ * - fix $chunksize in fread loop
+ *
  * Revision 1.12  2005/07/06 14:59:31  braverock
  * - change to use php standard mime_content_type fn or fall back to our replacement fn
  *
