@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.11 2005/07/05 23:21:39 vanmer Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.12 2005/07/06 00:56:06 vanmer Exp $
  */
 
 
@@ -368,6 +368,13 @@
 					case 'advcheckbox':
 					$form->addElement('advcheckbox', $field_name, $field['displayName'],null, $field['attributes'], array($field['uncheckedValue'], $field['checkedValue']));
 					break;
+					case 'link':
+					$form->addElement('link', $field_name, $field['displayName'], $field['linkUrl'], $field['linkText']);
+					break;
+					case 'hiddenlink':
+						$form->addElement('hidden', $field_name, $field['attributes']);
+						$form->addElement('link', $field_name.'_link', $field['displayName'], $field['linkUrl'], $field['linkText']);
+					break;
 	        		case 'primarykey':
 	        		case 'hidden':
 	          			$form->addElement('hidden', $field_name, $field['attributes']);
@@ -611,6 +618,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.12  2005/07/06 00:56:06  vanmer
+* - added handling for link and hiddenlink types, to display a link or a link with a hidden variable, respectively
+*
 * Revision 1.11  2005/07/05 23:21:39  vanmer
 * - added handling for checkbox and advcheckbox types for QF
 *
