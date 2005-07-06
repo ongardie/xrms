@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit-2.php,v 1.15 2005/05/18 05:51:11 vanmer Exp $
+ * $Id: edit-2.php,v 1.16 2005/07/06 17:19:53 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,6 +25,7 @@ $first_names     = $_POST['first_names'];
 $email           = $_POST['email'];
 $gmt_offset      = $_POST['gmt_offset'];
 
+getGlobalVar($return_url, 'return_url');
 getGlobalVar($userAction,'userAction');
 
 if (!$userAction) { $userAction='editUser'; }
@@ -42,7 +43,8 @@ switch ($userAction) {
             } else {
                 $msg="Failed to delete role $role_id for user $edit_user_id in group $group";
             }
-            Header("Location: one.php?edit_user_id=$edit_user_id&msg=$msg");
+            if (!$return_url) { $return_url="one.php?edit_user_id=$edit_user_id&msg=$msg"; }
+            Header("Location: $return_url");
             exit();       
     break;
     case 'addRole':
@@ -58,7 +60,8 @@ switch ($userAction) {
             } else {
                 $msg = _("Added user to role in group successfully");
             }
-            Header("Location: one.php?edit_user_id=$edit_user_id&msg=$msg");
+            if (!$return_url) { $return_url="one.php?edit_user_id=$edit_user_id&msg=$msg"; }
+            Header("Location: $return_url");
             exit();       
     default:
            return false;
@@ -105,17 +108,19 @@ switch ($userAction) {
         }
         
         $con->close();
-        
-        if ( $_SESSION['role_short_name'] == 'Admin' ) {
-            header("Location: some.php");
-        }else{
-            header("Location: self.php?msg=saved");
-        }
+       
+       if (!$return_url) { $return_url="self.php?msg=saved"; }
+        header("Location: $return_url");
         exit;
+        
     break;
 }    
 /**
  *$Log: edit-2.php,v $
+ *Revision 1.16  2005/07/06 17:19:53  vanmer
+ *- allow edit of user data to return to $return_url instead of always going to self.php
+ *- removed reference to short_role in session
+ *
  *Revision 1.15  2005/05/18 05:51:11  vanmer
  *- altered to change behavior based on userAction parameter
  *- defaults to basic (change user information)
