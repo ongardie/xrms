@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.8 2005/07/05 23:24:20 vanmer Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.9 2005/07/06 00:19:10 vanmer Exp $
 */
 
 
@@ -29,6 +29,9 @@ class ADOdb_QuickForm_Model {
 
 	/** @var array the current values of the model */
 	var $Values;
+
+	/** @var Recordset Object with the current value selected from the database */
+	var $rst;
 
 	/**
 	* Constructor
@@ -444,6 +447,9 @@ class ADOdb_QuickForm_Model {
 	function GetValues() {
 		return $this->Values;
 	}
+	function GetRecordset() {
+		return $this->rst;
+	}
 	function SetValues($Values) {
 		$this->Values = $Values;
 	}
@@ -494,12 +500,12 @@ class ADOdb_QuickForm_Model {
    			$sql="select $columns from $tablename where $primarykeyname = $id";
 	
 			$dbh = $this->DBStructure['dbh']; 
-   			$rst = $dbh->execute($sql);
+   			$this->rst = $dbh->execute($sql);
 	
-   			if (!$rst) { db_error_handler($dbh,$sql); return false; }
+   			if (!$this->rst) { db_error_handler($dbh,$sql); return false; }
 	
    			// override GET/POST vars
-   			$this->Values = $rst->fields;
+   			$this->Values = $this->rst->fields;
 		}
 		return true;
 	}
@@ -524,11 +530,11 @@ class ADOdb_QuickForm_Model {
 	
     	$sql="select $columns from $tablename where $primarykeyname = $id";
 	
-    	$rst=$dbh->execute($sql);
+    	$this->rst=$dbh->execute($sql);
 	
-    	if (!$rst) { db_error_handler($dbh,$sql); return false; }
+    	if (!$this->rst) { db_error_handler($dbh,$sql); return false; }
 	
-    	$sql = $dbh->GetUpdateSQL($rst, $this->Values, true, false, ADODB_FORCE_NULL);
+    	$sql = $dbh->GetUpdateSQL($this->rst, $this->Values, true, false, ADODB_FORCE_NULL);
 	
     	if($sql) {
       		$rst=$dbh->execute($sql);
