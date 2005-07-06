@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.13 2005/07/06 15:04:15 braverock Exp $
+ * $Id: download.php,v 1.14 2005/07/06 15:09:50 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -85,16 +85,28 @@ SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name
 $chunksize=1*(1024*1024);
 
 //open and output file contents
-$fp = fopen($file_to_open, 'rb');
-while (!feof($fp)) {
-    $buffer = fread($fp, $chunksize);
-    print $buffer;
-}
-fclose ($fp);
+if (is_file($file_to_open){
+    $fp = fopen($file_to_open, 'rb');
+    if ($fp) {
+        while (!feof($fp)) {
+            $buffer = fread($fp, $chunksize);
+            print $buffer;
+        } //end while
+        fclose ($fp);
+    } else {
+        //file open failed
+        //should put an error here
+    }
+} //end is_file test, should error if this isn't a file
+
 exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.14  2005/07/06 15:09:50  braverock
+ * - add is_file and opened file tests to file handling
+ *   @todo need more error handling to report to the user
+ *
  * Revision 1.13  2005/07/06 15:04:15  braverock
  * - fix $chunksize in fread loop
  *
