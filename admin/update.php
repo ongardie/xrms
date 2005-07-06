@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.85 2005/06/30 04:34:47 vanmer Exp $
+ * $Id: update.php,v 1.86 2005/07/06 17:26:19 vanmer Exp $
  */
 
 // where do we include from
@@ -4723,6 +4723,7 @@ $con->execute($sql);
         `option_value` VARCHAR(255) NOT NULL,
         `sort_order` INT UNSIGNED DEFAULT 1 NOT NULL,
         `option_record_status` CHAR(1) DEFAULT 'a' NOT NULL,
+        `option_display` VARCHAR(255) NOT NULL,
         PRIMARY KEY (`up_option_id`)
         );";
         //execute
@@ -4934,6 +4935,9 @@ $con->execute($sql);
 $sql = "ALTER TABLE `activities` ADD `resolution_description` TEXT";
 $con->execute($sql);
 
+$sql = "ALTER TABLE `user_preference_type_options` ADD `option_display` VARCHAR( 255 ) ";
+$con->execute($sql);
+
      if (confirm_no_records($con, 'activity_resolution_types')) {
        $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Resolved' , 'Closed/Resolved', 1)";
         $rst = $con->execute($sql);
@@ -4945,10 +4949,16 @@ $con->execute($sql);
         $rst = $con->execute($sql);
        $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Complete' , 'Completed', 5)";
         $rst = $con->execute($sql);
+        if ($rst) $msg .= _("Successfully added activity resolution types to activity resolution types table.").'<BR><BR>';
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
     }
+
+$count=upgrade_system_parameter_user_preferences($con);
+if ($count) {
+    $msg.=_("Successfully converted $count system parameters into system preferences.").'<BR>';
+}
 
 do_hook_function('xrms_update', $con);
 
@@ -4974,6 +4984,11 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.86  2005/07/06 17:26:19  vanmer
+ * - added message when activity resolution types are added
+ * - added option display field if not available for user preferences
+ * - added upgrade of system parameters into system preferences
+ *
  * Revision 1.85  2005/06/30 04:34:47  vanmer
  * - added handling of activity resolution types and activity fields for resolution handling
  * - added priority field to activities
