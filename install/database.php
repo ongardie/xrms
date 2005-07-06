@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.47 2005/07/06 19:54:09 vanmer Exp $
+ * $Id: database.php,v 1.48 2005/07/06 20:04:51 vanmer Exp $
  */
 
 /**
@@ -101,8 +101,8 @@ function misc_db_tables($con, $table_list) {
                on_what_id                              int not null default 0,
                entered_at                              datetime,
                entered_by                              int not null default 0,
-               modified_on DATETIME NOT NULL,
-               modified_by VARCHAR( 11 ) NOT NULL,               
+               last_modified_on DATETIME NOT NULL,
+               last_modified_by VARCHAR( 11 ) NOT NULL,               
                file_record_status                      char(1) default 'a'
                )";
         //execute
@@ -1231,6 +1231,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.48  2005/07/06 20:04:51  vanmer
+ * - changed to reflect standard fieldnames
+ *
  * Revision 1.47  2005/07/06 19:54:09  vanmer
  * - added needed fields for the files table
  *
