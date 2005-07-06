@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.67 2005/07/01 21:17:56 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.68 2005/07/06 23:40:36 vanmer Exp $
  */
 
 //include required files
@@ -113,6 +113,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //get the existing activity record for use later in the script
 $sql = "SELECT * FROM activities WHERE activity_id = " . $activity_id;
 $activity = $con->execute($sql);
+$activity_template_id = $activity->fields['activity_template_id'];
 
 $new_contact_id = ($contact_id > 0) ? $contact_id : 0;
 
@@ -277,6 +278,7 @@ if($on_what_table == 'opportunities' and (strlen($probability)>0)) {
 
 // if it's closed but wasn't before, allow the computer to perform an action if it wants to
 if($activity_status == 'c' && $current_activity_status != 'c') {
+    $completed_activity=true;
     do_hook_function("run_on_completed", $activity_id);
 }
 
@@ -320,7 +322,37 @@ if ($rst) {
     $activity_type = $rst->fields['activity_type_pretty_name'];
     $rst->close();
 }
-
+    if ($completed_activity) {
+        $sql="SELECT * FROM activity_templates WHERE activity_template_id=$activity_template_id";
+        $template_rst= $con->execute($sql);
+        if (!$template_rst) { db_error_handler($con, $sql); }
+        $template_sort_order=$template_rst->fields['sort_order'];
+        if ($template_sort_order!==false) {
+            $sql = "SELECT * from activities JOIN activity_templates ON activities.activity_template_id = activity_templates.activity_template_id WHERE activity_templates.on_what_table=" . $con->qstr($table_name.'_statuses') . " AND activity_templates.on_what_id=$table_status_id AND  activity_templates.sort_order = $template_sort_order AND activities.activity_status='o' AND activities.activity_record_status='a'
+             and activities.on_what_status='$old_status'
+             and activities.on_what_table='$on_what_table'
+             and activities.on_what_id=$on_what_id";
+            $activity_sort_open=$con->execute($sql);
+            if (!$activity_sort_open) { db_error_handler($con, $sql); }
+            else {
+                if ($activity_sort_open->EOF) $next_activities_sort=true;
+            }
+        } 
+        if ($next_activities_sort) {
+            if ($template_sort_order>0) { $template_sort_order+=1; }
+            $sql = "SELECT MAX(sort_order) as max_sort_order FROM activity_templates WHERE activity_templates.on_what_table=" . $con->qstr($table_name.'_statuses') . " AND activity_templates.on_what_id=$table_status_id";
+            $max_sort=$con->execute($sql);
+//            echo $sql;
+            if (!$max_sort) { db_error_handler($con, $sql); }
+            $max_sort_id=$max_sort->fields['max_sort_order'];
+            if ($template_sort_order <= $max_sort_id) {
+                $on_what_table_template = $table_name .  "_statuses";
+                $on_what_id_template = $table_status_id;
+                //include the workflow-activities.php page to actually make the update
+                require ("workflow-activities.php");
+            }
+        }
+    }
 
 // null out old_status
 $old_status = '';
@@ -398,7 +430,7 @@ if ($table_name !== "attached to") {
              else
                 $return_url="/private/home.php?msg=no_change";
         }
-
+    
         //update if there are no open activities
         if (!$no_update) {
             $sql = "SELECT * FROM " . $on_what_table . " WHERE " . $table_name . "_id = " . $on_what_id;
@@ -421,11 +453,14 @@ if ($table_name !== "attached to") {
             }
             $on_what_table_template = $table_name .  "_statuses";
             $on_what_id_template = $table_status_id;
-
+            $template_sort_order=1;
+            
             //include the workflow-activities.php page to actually make the update
-            require_once("workflow-activities.php");
+            require ("workflow-activities.php");
         }
-    } //end if to check for status change
+    }
+    
+    
 
 }
 
@@ -486,6 +521,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.68  2005/07/06 23:40:36  vanmer
+ * - updated to check for activities at the same sort order, and add new activities if there are none left at htis
+ * sort order
+ * - only run above check when current activity has been completed
+ *
  * Revision 1.67  2005/07/01 21:17:56  daturaarutad
  * set the thread_id to activity_id if this activity is the parent of another
  *
