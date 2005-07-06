@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.86 2005/07/06 17:26:19 vanmer Exp $
+ * $Id: update.php,v 1.87 2005/07/06 19:55:09 vanmer Exp $
  */
 
 // where do we include from
@@ -4955,6 +4955,13 @@ $con->execute($sql);
         }
     }
 
+$sql = "ALTER TABLE files  ADD file_name VARCHAR( 100 ) NOT NULL";
+$rst = $con->execute($sql);
+
+$sql = "ALTER TABLE files ADD modified_on DATETIME NOT NULL, ADD modified_by VARCHAR( 11 ) NOT NULL";
+$rst = $con->execute($sql);
+    
+    
 $count=upgrade_system_parameter_user_preferences($con);
 if ($count) {
     $msg.=_("Successfully converted $count system parameters into system preferences.").'<BR>';
@@ -4984,6 +4991,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.87  2005/07/06 19:55:09  vanmer
+ * - added needed fields to the files table
+ *
  * Revision 1.86  2005/07/06 17:26:19  vanmer
  * - added message when activity resolution types are added
  * - added option display field if not available for user preferences
