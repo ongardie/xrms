@@ -1,12 +1,12 @@
 <?php
-/** 
- * files/download.php - This file downloads files from server 
- * 
- * Files that have been stored on the server are downloaded to 
+/**
+ * files/download.php - This file downloads files from server
+ *
+ * Files that have been stored on the server are downloaded to
  * the user's default location.
- * 
- * $Id: download.php,v 1.10 2005/06/22 20:38:48 vanmer Exp $
- */ 
+ *
+ * $Id: download.php,v 1.11 2005/07/06 14:57:58 braverock Exp $
+ */
 
 require_once('../include-locations.inc');
 
@@ -73,15 +73,26 @@ $file_original_name = str_replace($file_id . '_', '', $file_filesystem_name);
 //split up mimetype into greater/less mimetypes for use in SendDownloadHeaders
 $mime_type_array=explode('/',$file_type);
 
-//send download headers, force pop-up download dialog on browser
+//send download headers, don't force pop-up download dialog on browser
 SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name, false, filesize($file_to_open));
+
+$chunksize=1*(1024*1024);
+
 //open and output file contents
 $fp = fopen($file_to_open, 'rb');
-fpassthru($fp);
+while (!feof($fp)) {
+    $buffer = fread($fp, $chunk_size);
+    print $buffer;
+}
+fclose ($fp);
 exit();
 
-/** 
+/**
  * $Log: download.php,v $
+ * Revision 1.11  2005/07/06 14:57:58  braverock
+ * - use an fread loop instead of fpassthru to get around
+ *   problem with large files on windows server
+ *
  * Revision 1.10  2005/06/22 20:38:48  vanmer
  * - no longer force download query, instead allow inline download, and provide correct mime type when downloading
  *
@@ -116,6 +127,6 @@ exit();
  * - Usestype when downloading file
  * - add phpdoc
  *
- * 
- */ 
+ *
+ */
 ?>
