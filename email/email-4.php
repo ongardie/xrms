@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.16 2005/06/24 16:58:20 jswalter Exp $
+* $Id: email-4.php,v 1.17 2005/07/06 14:23:52 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -40,7 +40,13 @@ foreach ( $attachment_list as $_file )
     // Full path
     $_fileData[$_file]['path'] = $uploadDir . '/' . $_file;
 
-    // we need its MIME type
+    if (!function_exists('mime_content_type') {
+        // this version of PHP doesn't have the mime functions
+        // compiled in, so load our drop-in replacement function
+        // instead
+        include($include_directory.'mime/mime-array.php');
+    }
+    // we need the file's MIME type
     $_fileData[$_file]['mime'] = mime_content_type ( $_fileData[$_file]['path'] );
 
     // we need the file itself
@@ -245,6 +251,10 @@ function getFile($filename)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.17  2005/07/06 14:23:52  braverock
+* - add check to make sure that mime_content_type fn exists
+* - load our replacement mime_content_type fn if needed
+*
 * Revision 1.16  2005/06/24 16:58:20  jswalter
 *  - made HTML more XHTML comliant
 *  - added FILE attachement processing
