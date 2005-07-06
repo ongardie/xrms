@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.36 2005/06/08 23:07:53 braverock Exp $
+ * $Id: edit.php,v 1.37 2005/07/06 02:08:58 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -17,8 +17,12 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 
 $contact_id = $_GET['contact_id'];
+getGlobalVar($return_url, 'return_url');
 $on_what_id=$contact_id;
 
+if (!$return_url) {
+    $return_url=$http_site_root.current_page();
+}
 $session_user_id = session_check('','Update');
 
 $msg        = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -151,9 +155,9 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Business Address"); ?></td>
                 <td class=widget_content_form_element>
                     <?php echo $address; ?>
-                    <br />
-                        <?php echo _("Choose New Address"). $address_menu ."&nbsp;". _("OR") ."&nbsp;"; ?>
-                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+                    <br />                    
+                        <input type=button value="<?php echo _("Choose New Address") ?>" onclick="javascript: location.href='../companies/addresses.php?company_id=<?php echo $company_id; ?>&edit_contact_id=<?php echo $contact_id; ?>'" class=button>&nbsp;<?php echo _("OR"); ?>&nbsp;
+                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='../companies/one-address.php?form_action=edit&return_url=<?php echo $return_url; ?>&company_id=<?php echo $company_id; ?>&address_id=<?php echo $address_id; ?>';">
                 </td>
             </tr>
             <tr>
@@ -306,6 +310,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.37  2005/07/06 02:08:58  vanmer
+ * - changed to use select functionality from addresses.php in companies
+ * - changed to allow direct edit of business address from edit contact
+ *
  * Revision 1.36  2005/06/08 23:07:53  braverock
  * - fix cut and paste error on date_of_birth/tax_id
  *
