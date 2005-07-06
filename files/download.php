@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.11 2005/07/06 14:57:58 braverock Exp $
+ * $Id: download.php,v 1.12 2005/07/06 14:59:31 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,7 +61,13 @@ $con->close();
 
 // make sure we have a proper mime type
 if ( !$file_type ) {
-  $file_type = mime_get_type ( $file_filesystem_name );
+    if (!function_exists('mime_content_type') {
+        // this version of PHP doesn't have the mime functions
+        // compiled in, so load our drop-in replacement function
+        // instead
+        include($include_directory.'mime/mime-array.php');
+    }
+    $file_type = mime_content_type ( $file_filesystem_name );
 }
 
 $disposition = "attachment"; // "inline" to view file in browser or "attachment" to download to hard disk
@@ -89,6 +95,9 @@ exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.12  2005/07/06 14:59:31  braverock
+ * - change to use php standard mime_content_type fn or fall back to our replacement fn
+ *
  * Revision 1.11  2005/07/06 14:57:58  braverock
  * - use an fread loop instead of fpassthru to get around
  *   problem with large files on windows server
