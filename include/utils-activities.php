@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.14 2005/06/30 21:40:32 daturaarutad Exp $
+ * $Id: utils-activities.php,v 1.15 2005/07/06 16:00:44 daturaarutad Exp $
 
  */
 
@@ -71,8 +71,8 @@ function add_activity($con, $activity_data, $participants=false)
     //Turn activity_data array into variables
     extract($activity_data);
 
-    // Now check these, we need these as well
-    if ( (! $activity_type_id) || (! $company_id) )
+    // We need an activity type and a company_id OR an on_what relationship
+    if ((!$activity_type_id) || !($company_id || ($on_what_table && $on_what_id)))
         return false;
 
     // Create new RECORD array '$rec' for SQL INSERT
@@ -602,6 +602,9 @@ function install_default_activity_participant_positions($con) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.15  2005/07/06 16:00:44  daturaarutad
+  * change add_activity requirements to need an activity type and a company_id OR an on_what relationship
+  *
   * Revision 1.14  2005/06/30 21:40:32  daturaarutad
   * add thread_id and followup_from_id to add_activity
   *
