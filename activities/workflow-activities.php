@@ -6,7 +6,7 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * $Id: workflow-activities.php,v 1.11 2005/02/10 14:40:03 maulani Exp $
+ * $Id: workflow-activities.php,v 1.12 2005/07/06 23:42:01 vanmer Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -17,11 +17,17 @@
  *       the substitution result set.
  */
 
+ require_once($include_directory.'utils-activities.php');
+
+ if (!$template_sort_order) { $template_sort_order=1; }
+  
 $sql = "select * from activity_templates
     where on_what_table='$on_what_table_template'
-    and on_what_id=$on_what_id_template
-    and activity_template_record_status='a'
-    order by sort_order";
+    and on_what_id=$on_what_id_template";
+
+if ($template_sort_order) $sql.=" and sort_order=$template_sort_order";
+
+$sql .=" and activity_template_record_status='a' order by sort_order";
 
 $rst = $con->execute($sql);
 
@@ -32,7 +38,7 @@ if(empty($activity_record_status)) {
 }
 if ($rst) {
     while (!$rst->EOF) {
-
+    
         //get the field values from the next record in the query
         $activity_template_id = $rst->fields['activity_template_id'];
         $activity_type_id = $rst->fields['activity_type_id'];
@@ -40,7 +46,29 @@ if ($rst) {
         $default_text = $rst->fields['default_text'];
         $activity_description = $rst->fields['activity_description'];
         $duration = $rst->fields['duration'];
-
+        $activity_template_role_id = $rst->fields['role_id'];
+        
+        $activity_type_data=get_activity_type($con, false, false, $activity_type_id);
+        if ($activity_type_data) {
+            $activity_type_name=$activity_type_data['activity_type_short_name'];
+            switch ($activity_type_name) {
+                //handle internal activity type
+                case 'INT':
+                break;
+                
+                //handle process activity type (instantiate new entity)
+                case 'PRO':
+                break;
+                
+                //process system activities here
+                case 'SYS':
+                break;
+                
+                default:
+                break;
+            }
+        }
+        
         //calculate ends_at, based on duration and current date
         if ( is_numeric("$duration") ) {
             $duration = $duration.' days';
@@ -78,32 +106,37 @@ if ($rst) {
                 db_error_handler ($con, $contact_sql);
             }
         }
+        
+        $user_id=get_user_in_role($con, $activity_template_role_id);
         //save to database
         $rec = array();
         $rec['activity_type_id'] = $activity_type_id;
-        $rec['activity_description'] = $default_text;
-        $rec['ends_at'] = strtotime($ends_at);
+        $rec['activity_description'] = addslashes($default_text);
+        $rec['ends_at'] = $ends_at;
         $rec['user_id'] = $user_id;
+        $rec['activity_template_id']=$activity_template_id;
         $rec['company_id'] = $company_id;
         $rec['contact_id'] = $contact_id;
         $rec['on_what_table'] = $on_what_table;
         $rec['on_what_id'] = $on_what_id;
         $rec['on_what_status'] = $on_what_id_template;
-        $rec['activity_title'] = $activity_title;
+        $rec['activity_title'] = addslashes($activity_title);
         $rec['entered_at'] = time();
         $rec['entered_by'] = $user_id;
         $rec['last_modified_at'] = time();
         $rec['last_modified_by'] = $user_id;
-        $rec['scheduled_at'] = time();
+        //$rec['scheduled_at'] = time();
         $rec['activity_status'] = 'o';
         $rec['activity_record_status'] = $activity_record_status;
-
+//    $con->debug=true;        
+        add_activity($con, $rec);
+/*
         $tbl = 'activities';
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $ins_rst=$con->execute($ins);
         if (!$ins_rst) { db_error_handler($con, $sql); }
 //        echo "INSERTED ". $con->Insert_ID();
-        
+*/        
         do_hook_function('workflow_addition', $activity_template_id);
 
         $rst->movenext();
@@ -113,6 +146,11 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.12  2005/07/06 23:42:01  vanmer
+ * - added initial handling of actions on workflow templates
+ * - changed to use add_activity API when instantiating workflow activities
+ * - added sort order to activity template query, so that only activities at a certain sort order get instantiated
+ *
  * Revision 1.11  2005/02/10 14:40:03  maulani
  * - Set last modified info when creating activities
  *
