@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.136 2005/06/30 18:00:30 vanmer Exp $
+ * $Id: utils-misc.php,v 1.137 2005/07/06 17:17:29 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -515,55 +515,58 @@ exit;
  * @param string $param System Parameter to be retrieved
  */
 function get_system_parameter(&$con, $param) {
-    $func_name='get_system_parameter';
-    $params=array($param);
-    if (function_cache_bool($func_name, $params)) {
-        return function_cache_get($func_name, $params);
-    }
-    $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
-    $sysst = $con->execute($sql);
-    if ($sysst) {
-
-      // is the requested record in the database ???
-      if ( $sysst->RecordCount() == 1 ) {
-        // yes - it was found
-
-        $string_val   = $sysst->fields['string_val'];
-        $int_val      = $sysst->fields['int_val'];
-        $float_val    = $sysst->fields['float_val'];
-        $datetime_val = $sysst->fields['datetime_val'];
-
-        if (!is_null($string_val)) {
-            $my_val=$string_val;
-        } elseif (!is_null($int_val)) {
-            $my_val=$int_val;
-        } elseif (!is_null($float_val)) {
-            $my_val=$float_val;
-        } elseif (!is_null($datetime_val)) {
-            $my_val=$datetime_val;
+    $ret=get_admin_preference($con, $param);
+    if ($ret===false) {
+        $func_name='get_system_parameter';
+        $params=array($param);
+        if (function_cache_bool($func_name, $params)) {
+            return function_cache_get($func_name, $params);
+        }
+        $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
+        $sysst = $con->execute($sql);
+        if ($sysst) {
+    
+        // is the requested record in the database ???
+        if ( $sysst->RecordCount() == 1 ) {
+            // yes - it was found
+    
+            $string_val   = $sysst->fields['string_val'];
+            $int_val      = $sysst->fields['int_val'];
+            $float_val    = $sysst->fields['float_val'];
+            $datetime_val = $sysst->fields['datetime_val'];
+    
+            if (!is_null($string_val)) {
+                $my_val=$string_val;
+            } elseif (!is_null($int_val)) {
+                $my_val=$int_val;
+            } elseif (!is_null($float_val)) {
+                $my_val=$float_val;
+            } elseif (!is_null($datetime_val)) {
+                $my_val=$datetime_val;
+            } else {
+                echo _('Failure to get system parameter ') . $param . _('.  The data entry appears to be corrupted.');
+                return false;
+            }
+    
         } else {
-            echo _('Failure to get system parameter ') . $param . _('.  The data entry appears to be corrupted.');
+            // no - it was not found
+    
+            echo _('Failure to get system parameter ') . $param . _('.  Make sure you have run the administration update.');
+            return false;
+    
+        } // if ( $sysst->RecordCount() > 0 ) ...
+    
+        // close the recordset
+        $sysst->close();
+    
+        } else {
+            //there was a problem, notify the user
+            db_error_handler ($con, $sql);
             return false;
         }
-
-      } else {
-        // no - it was not found
-
-        echo _('Failure to get system parameter ') . $param . _('.  Make sure you have run the administration update.');
-        return false;
-
-      } // if ( $sysst->RecordCount() > 0 ) ...
-
-      // close the recordset
-      $sysst->close();
-
-    } else {
-        //there was a problem, notify the user
-        db_error_handler ($con, $sql);
-        return false;
-    }
-    function_cache_set($func_name, $params, $my_val, false);
-    return $my_val;
+        function_cache_set($func_name, $params, $my_val, false);
+        return $my_val;
+    } else return $ret;
 } //end fn get_system_parameter
 
 /**
@@ -1725,6 +1728,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.137  2005/07/06 17:17:29  vanmer
+ * - added caching to system parameters
+ * - added query of system preferences before resorting to system parameters
+ *
  * Revision 1.136  2005/06/30 18:00:30  vanmer
  * - fixed getGlobalVar to use proper order when fetching HTTP_USER_AGENT parameter
  *
