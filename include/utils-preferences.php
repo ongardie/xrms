@@ -18,7 +18,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.6 2005/05/16 22:00:57 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.7 2005/07/06 17:10:45 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -39,7 +39,7 @@ if ( !defined('IN_XRMS') )
  * @return boolean indication success of setting user preference
  */
 function set_user_preference(&$con, $user_id, $preference_type, $preference_value, $preference_name=false, $set_default=false) {
-    if (!$user_id) return false;
+    if (!$user_id AND $user_id!==0) return false;
     if (!$preference_type) return false;
     if (!is_numeric($preference_type)) {
         $preference_type_data=get_user_preference_type($con, $preference_type);
@@ -161,7 +161,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     if (!$user_id AND $user_id!==0) {
         return false;
     }
-    
+
 //    echo "IN get_user_preference<br>";
     if (is_numeric($preference_type)) {
 //        echo "NUMERIC";
@@ -320,7 +320,6 @@ function render_preference_form_element($con, $user_preference_type_id, $element
             if (!$element_type) $element_type='text';
         break;
     }
-    
     $element=create_form_element($element_type, $element_name, $element_value, $element_extra_attributes, $element_length, $element_height, $possible_values, $show_blank_first);
 
     return $element;    
@@ -606,8 +605,131 @@ function list_user_preference_types($con, $show_only_active=true){
     } else return false;    
 }
 
+function get_admin_preferences_table($con) {
+    return get_user_preferences_table($con, 0);
+}
+
+function get_admin_preference($con, $preference_type, $preference_name=false, $show_all=false) {
+    echo $preference_name;
+    return get_user_preference($con, 0, $preference_type, $preference_name, $show_all);
+}
+
+function set_admin_preference($con, $preference_type, $preference_value, $preference_name=false, $set_default=false) {
+    return set_user_preference($con, 0, $preference_type, $preference_value, $preference_name, $set_default);
+}
+
+function get_user_preferences_table($con, $user_id=false) {
+    global $session_user_id;
+    global $msg;
+    if (!$user_id AND $user_id!==0) {
+        $user_id=$session_user_id;
+    }
+    
+    if ($user_id==0) {
+        $admin=true;
+    } else $admin=false;
+    
+    if ($admin) {
+        $table_title=_("System Preferences");
+    } else {
+        $table_title=_("User Preferences");
+   }
+    //get all user preference types
+    $types=get_user_preference_type($con, false, false, true);
+    if (!$types) { $msg="Failed to load an user preference types, no user preferences available"; $user_preferences_table='';}
+    else {
+        $user_preferences_table="<table class=widget>";
+        $user_preferences_table.="<tr><td colspan=2 class=widget_header>$table_title</td></tr>";
+        foreach ($types as $type_info) {
+            if ((!$type_info['allow_user_edit_flag']) AND (!$admin)) continue;
+            $user_preference_type_id=$type_info['user_preference_type_id'];
+            if ($type_info['user_preference_description']) {
+                $type_desc=_($type_info['user_preference_description']);
+            } else $type_desc='';
+            $type_pretty_name=_($type_info['user_preference_pretty_name']);
+            if (!$type_pretty_name) $type_pretty_name=_($type_info['user_preference_name']);
+            
+            if ($type_info['allow_multiple_flag']==1) {
+                //branch for showing multiple options, fetch all user set options   
+                $element_field=render_preference_form_multi_element($con, $user_id, $user_preference_type_id, $type_info);
+            } else {
+            //branch for showing single option
+                $preference_value=get_user_preference($con, $user_id, $user_preference_type_id);
+                $element_field=render_preference_form_element($con, $user_preference_type_id, $preference_value, $type_info);
+            }
+            
+            //this is to avoid printing translation file header instead of type description! 
+            if($type_desc != NULL){
+                    $user_preferences_table.="<tr><td class=widget_content_label><b>"._($type_pretty_name)."</b><br>"._($type_desc)."</td><td class=widget_content_form_element>$element_field</td></tr>";
+                }else{
+                    $user_preferences_table.="<tr><td class=widget_content_label><b>"._($type_pretty_name)."</b><br>$type_desc</td><td class=widget_content_form_element>$element_field</td></tr>";
+                }   
+        }
+        $user_preferences_table.="<tr><td colspan=2 class=widget_content_form_element><input type=hidden name=preference_action value=savePrefs><input class=button type=submit value=\""._("Save Preferences") . "\"></tr></td>";
+        $user_preferences_table.="</table>";
+    }
+    return $user_preferences_table;
+}
+
+function upgrade_system_parameter_user_preferences($con) {
+    $sql = "SELECT * FROM system_parameters";
+    $rst=$con->execute($sql);
+    $count=0;
+    if (!$rst) { db_error_handler($con, $sql);  return false; }
+    while (!$rst->EOF) {
+        $param = $rst->fields['param_id'];
+        $type=get_user_preference_type($con, $param);
+        if (!$type) {
+            $count++;
+            move_system_parameters($con, $rst->fields);
+        }
+        $rst->movenext();
+    }
+    return $count;
+}
+
+function move_system_parameters($con, $fields) {
+    $param = $fields['param_id'];
+    $description = $fields['description'];
+    $value = get_system_parameter($con, $param);
+
+    $sql = "SELECT * from system_parameters_options WHERE param_id=".$con->qstr($param, get_magic_quotes_gpc()) . " ORDER BY sort_order";
+    $rst = $con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql); return false; }
+    //if options existed, use these options, otherwise just use text field
+    if (!$rst->EOF) {
+        $element_type='select';
+    } else { $element_type='text'; }
+    
+    $type_id=add_user_preference_type($con, $param, $param, $description,  false, false,$element_type);
+    set_admin_preference($con, $type_id, $value);
+    
+    while (!$rst->EOF) {
+        $fields=$rst->fields;
+        $sort_order=$fields['sort_order'];
+        $option_value = (($fields['string_val']) ? $fields['string_val'] : (($fields['int_val']) ? $fields['int_val'] : (($fields['float_val']) ? $fields['float_val'] : (($fields['datetime']) ? $fields['datetime'] : false) ) ) );
+                
+        $option_display=false;
+        switch ($option_value) {
+            case 'y':
+                $option_display='Yes';
+            break;
+            case 'n':
+                $option_display='No';
+            break;
+        }
+        
+        add_preference_option($con, $type_id, $option_value, $option_display, $sort_order); 
+        $rst->movenext();
+    }
+    
+}
+
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.7  2005/07/06 17:10:45  vanmer
+ * - added function to upgrade system parameters into system preferences
+ *
  * Revision 1.6  2005/05/16 22:00:57  vanmer
  * - altered to cache user preference value only after preference type number is found
  * - changed set preference to recache newly set value
