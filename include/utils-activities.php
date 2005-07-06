@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.15 2005/07/06 16:00:44 daturaarutad Exp $
+ * $Id: utils-activities.php,v 1.16 2005/07/06 21:49:29 vanmer Exp $
 
  */
 
@@ -109,6 +109,7 @@ function add_activity($con, $activity_data, $participants=false)
     // These values, if not defined, will be set by default values defined within the Database
     // Therefore they do not need to be created within this array for RECORD insertion
     if ($activity_status)      { $rec['activity_status']      = $activity_status; }
+    if ($activity_template_id > 0)       { $rec['activity_template_id']           = $activity_template_id; }
     if ($on_what_status > 0)   { $rec['on_what_status']       = $on_what_status; }
     if ($completed_at)         { $rec['completed_at']         = $completed_at; }
     if ($thread_id)            { $rec['thread_id']            = $thread_id; }
@@ -602,6 +603,9 @@ function install_default_activity_participant_positions($con) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.16  2005/07/06 21:49:29  vanmer
+  * - now track which template an activity was spawned from
+  *
   * Revision 1.15  2005/07/06 16:00:44  daturaarutad
   * change add_activity requirements to need an activity type and a company_id OR an on_what relationship
   *
