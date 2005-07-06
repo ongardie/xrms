@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.21 2005/04/11 02:06:48 maulani Exp $
+ * $Id: addresses.php,v 1.22 2005/07/06 01:27:54 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -21,6 +21,13 @@ $session_user_id = session_check();
 getGlobalVar($msg, 'msg');
 getGlobalVar($company_id, 'company_id');
 
+getGlobalVar($address_street, 'address_street');
+getGlobalVar($address_city, 'address_city');
+getGlobalVar($address_province, 'address_province');
+getGlobalVar($address_country, 'address_country');
+
+$return_url=$http_site_root.current_page();
+$url_return_url=urlencode($return_url);
 global $con;
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -28,15 +35,27 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 $company_name = fetch_company_name($con, $company_id);
 
- $addresses .= "<td class=widget_label_right_91px><a href=edit-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a></td>';
+// $addresses .= "<td class=widget_label_right_91px><a href=one-address.php?company_id=$company_id&address_id=" . $rst->fields['address_id'] . '>' . $rst->fields['address_name'] . '</a></td>';
 
 $sql = "select " . 
-$con->Concat($con->qstr('<a href="edit-address.php?company_id=' . $company_id . '&address_id='), 'a.address_id', $con->qstr('">'), 'a.address_name', $con->qstr('</a>')) . " as address_link,
+$con->Concat($con->qstr('<a href="one-address.php?form_action=edit&return_url='.$url_return_url.'&company_id=' . $company_id . '&address_id='), 'a.address_id', $con->qstr('">'), 'a.address_name', $con->qstr('</a>')) . " as address_link,
 a.address_name, a.address_id, c.default_primary_address, c.default_billing_address, c.default_shipping_address, c.default_payment_address from companies c, addresses a
 where a.address_record_status = 'a'
 and c.company_id = a.company_id
 and c.company_id = $company_id";
 
+if ($address_street) {
+    $sql .= " and (line1 LIKE '%$address_street%' OR line2 LIKE '%$address_street%') ";
+}
+if ($address_city) {
+    $sql .= " and city LIKE '%$address_city%'";
+}
+if ($address_province) {
+    $sql .= " and province LIKE '%$address_province%'";
+}
+if ($address_country) {
+    $sql .= " and country_id=$address_country";
+}
 
 $columns=array();
 $columns[] = array('name' => _('Address Name'), 'index_sql' => 'address_link', 'sql_sort_column' => 'a.address_name');
@@ -111,7 +130,8 @@ $address_type_menu = build_address_type_menu($con, 'unknown');
 
 $sql = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
 $rst = $con->execute($sql);
-$country_menu = $rst->getmenu2('country_id', $default_country_id, false);
+//$country_menu = $rst->getmenu2('country_id', $default_country_id, false);
+$search_country_menu = $rst->getmenu2('address_country', $address_country,true);
 $rst->close();
 
 $con->close();
@@ -122,63 +142,37 @@ start_page($page_title, true, $msg);
 ?>
 
 <div id="Main">
-    <div id="ContentFullWidth">
+    <div id="Content">
 
         <!-- existing addresses //-->
         <form action=addresses.php method=post name="AddressPagerForm">
+        <table class=widget>
+            <tr><td class=widget_header colspan=4><?php echo _("Search Addresses"); ?></td></tr>
+            <tr><td class=widget_label><?php echo _("Street"); ?></td><td class=widget_content_form_element><input type=text size=15 name=address_street value="<?php echo $address_street; ?>"></td>
+            <td class=widget_label><?php echo _("City"); ?></td><td class=widget_content_form_element><input type=text size=15 name=address_city value="<?php echo $address_city; ?>"></td></tr>
+            <tr><td class=widget_label><?php echo _("State/Province"); ?></td><td class=widget_content_form_element><input type=text size=15 name=address_province value="<?php echo $address_province; ?>"></td>
+            <td class=widget_label><?php echo _("Country"); ?></td><td class=widget_content_form_element><?php echo $search_country_menu; ?></td></tr>
+            <tr><td class=widget_content_form_element colspan=4><input type=submit class=button value="<?php echo _("Search Addresses"); ?>"></td></tr>
+            
+        </table>
+            
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
 		<?php echo $address_pager; ?>
          </form>
 
         <!-- new address //-->
-        <form action=add-address.php method=post>
+        <form action=one-address.php method=post>
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
+        <input type=hidden name=form_action value=new>
+        <input type=hidden name=return_url value=<?php echo "$http_site_root/companies/addresses.php?msg=saved&company_id=$company_id"; ?>>
+    </div>
+    <div id="Sidebar">
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=2><?php echo _("New Address"); ?></td>
+                <td class=widget_header colspan=2><?php echo _("Add New Address"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Company"); ?></td>
-                <td class=widget_content><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php  echo $company_name; ?></a></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Address Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=address_name size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Line 1"); ?></td>
-                <td class=widget_content_form_element><input type=text name=line1 size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Line 2"); ?></td>
-                <td class=widget_content_form_element><input type=text name=line2 size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("City"); ?></td>
-                <td class=widget_content_form_element><input type=text name=city size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("State/Province"); ?></td>
-                <td class=widget_content_form_element><input type=text name=province size=20></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
-                <td class=widget_content_form_element><input type=text name=postal_code size=10></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Country"); ?></td>
-                <td class=widget_content_form_element><?php echo $country_menu ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Address Type"); ?></td>
-                <td class=widget_content_form_element><?php echo $address_type_menu ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right_91px><?php echo _("Override Address"); ?></td>
-                <td class=widget_content_form_element><textarea rows=5 cols=60 name=address_body></textarea> <input type="checkbox" name="use_pretty_address"> <?php echo _("Use"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Add"); ?>"></td>
+                <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("New Address"); ?>"></td>
             </tr>
         </table>
         </form>
@@ -192,6 +186,11 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.22  2005/07/06 01:27:54  vanmer
+ * - added search to top of addresses page
+ * - added links to one-address.php instead of new address code
+ * - added links to one-address.php instead of edit address pages
+ *
  * Revision 1.21  2005/04/11 02:06:48  maulani
  * - Add address type.  RFE 862049 (maulani)
  *
