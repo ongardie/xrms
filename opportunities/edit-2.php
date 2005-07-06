@@ -13,6 +13,7 @@ $on_what_id=$opportunity_id;
 $session_user_id = session_check('','Update');
 
 $opportunity_status_id = $_POST['opportunity_status_id'];
+$opportunity_type_id = $_POST['opportunity_type_id'];
 $contact_id = $_POST['contact_id'];
 $division_id = $_POST['division_id'];
 $campaign_id = $_POST['campaign_id'];
@@ -80,6 +81,7 @@ if (!$no_update) {
 
     $rec = array();
     $rec['opportunity_status_id'] = $opportunity_status_id;
+    $rec['opportunity_type_id'] = $opportunity_type_id;
     $rec['contact_id'] = $contact_id;
     $rec['division_id'] = $division_id;
     $rec['campaign_id'] = $campaign_id;

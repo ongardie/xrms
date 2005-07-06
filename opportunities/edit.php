@@ -2,7 +2,7 @@
 /**
  * This file allows the editing of opportunities
  *
- * $Id: edit.php,v 1.23 2005/06/01 16:20:31 vanmer Exp $
+ * $Id: edit.php,v 1.24 2005/07/06 22:50:32 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,7 +18,12 @@ $opportunity_id = isset($_GET['opportunity_id']) ? $_GET['opportunity_id'] : '';
 $on_what_id=$opportunity_id;
 $session_user_id = session_check('','Update');
 
-$msg            = isset($_GET['msg'])            ? $_GET['msg'] : '';
+$msg            = isset($_GET['msg'])  ? $_GET['msg'] : '';
+
+$division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : '' );
+$contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : '' );
+$opportunity_type_id = (array_key_exists('opportunity_type_id',$_GET) ? $_GET['opportunity_type_id'] : '' );
+$opportunity_title = (array_key_exists('opportunity_title',$_GET) ? $_GET['opportunity_title'] : '' );
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -40,6 +45,7 @@ if ($rst) {
     $contact_id = $rst->fields['contact_id'];
     $campaign_id = $rst->fields['campaign_id'];
     $opportunity_status_id = $rst->fields['opportunity_status_id'];
+    if (!$opportunity_type_id) $opportunity_type_id = $rst->fields['opportunity_type_id'];
     $user_id = $rst->fields['user_id'];
     $opportunity_title = $rst->fields['opportunity_title'];
     $opportunity_description = $rst->fields['opportunity_description'];
@@ -120,6 +126,12 @@ $rst = $con->execute($sql2);
 $division_menu = $rst->getmenu2('division_id', $division_id, true);
 $rst->close();
 
+//opportunity type list
+$sql2 = "select opportunity_type_pretty_name, opportunity_type_id from opportunity_types where opportunity_type_record_status = 'a' order by opportunity_type_id";
+$rst = $con->execute($sql2);
+$opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, false, false, 1, "id=opportunity_type_id onchange=javascript:restrictByOpportunityType();");
+$rst->close();
+
 //opportunity status menu
 $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
@@ -137,6 +149,18 @@ confGoTo_includes();
 ?>
 
 <?php jscalendar_includes(); ?>
+
+    <script language=JavaScript>
+    <!--
+        function restrictByOpportunityType() {
+            opportunity_title=document.getElementById('opportunity_title');
+            division=document.getElementById('division_id');
+            contact=document.getElementById('contact_id');
+            select=document.getElementById('opportunity_type_id');
+            location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ opportunity_title.value +'&division_id='+division.value + '&contact_id=' + contact.value + '&opportunity_type_id=' + select.value;
+        }
+     //-->
+    </script>
 
 <div id="Main">
     <div id="Content">
@@ -171,10 +195,14 @@ confGoTo_includes();
                 <td class=widget_content_form_element><?php  echo $campaign_menu; ?></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Type"); ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_type_menu ?></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
                 <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?>
                 &nbsp;
-                <a href="#" onclick="javascript:window.open('opportunity-view.php');"><?php echo _("Status Definitions"); ?></a>
+                <a href="#" onclick="javascript:window.open('opportunity-view.php?opportunity_type_id=<?php echo $opportunity_type_id; ?>');"><?php echo _("Status Definitions"); ?></a>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Owner"); ?></td>
@@ -218,14 +246,14 @@ confGoTo_includes();
                 <td class=widget_content_form_element colspan=2>
                 <input class=button type=submit value="<?php echo _("Save Changes"); ?>">
 <?php
-		acl_confGoTo (
-			  _('Delete Opportunity?'),                      // question to ask operator
-			  _('Delete'),                                   // display this on button
-			  'delete.php?opportunity_id='.$opportunity_id,  // do this if operator approves
-			  'opportunities',				 // what table will be affected (for ACL)
-			  $opportunity_id,				 // which entity (for ACL)
-			  'Delete'					 // what action will be taken (for ACL)
-			  );
+        acl_confGoTo (
+              _('Delete Opportunity?'),                      // question to ask operator
+              _('Delete'),                                   // display this on button
+              'delete.php?opportunity_id='.$opportunity_id,  // do this if operator approves
+              'opportunities',               // what table will be affected (for ACL)
+              $opportunity_id,               // which entity (for ACL)
+              'Delete'                   // what action will be taken (for ACL)
+              );
 ?>
                 </td>
             </tr>
@@ -288,6 +316,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.24  2005/07/06 22:50:32  braverock
+ * - add opportunity types
+ *
  * Revision 1.23  2005/06/01 16:20:31  vanmer
  * - altered delete button to be controlled by ACL
  *

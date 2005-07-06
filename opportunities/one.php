@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.49 2005/06/29 20:54:45 daturaarutad Exp $
+ * $Id: one.php,v 1.50 2005/07/06 22:50:32 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -39,11 +39,12 @@ d.division_name,
 cont.first_names, cont.last_name, cont.work_phone, cont.email, cont.address_id,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
 u3.username as opportunity_owner_username, u4.username as account_owner_username,
-as1.account_status_display_html, r.rating_display_html, crm_status_display_html, os.opportunity_status_display_html, cam.campaign_title
+as1.account_status_display_html, r.rating_display_html, crm_status_display_html,
+os.opportunity_status_display_html, ot.opportunity_type_id, ot.opportunity_type_display_html, cam.campaign_title
 FROM
 companies AS c, contacts AS cont,
 users AS u1, users AS u2, users AS u3, users AS u4,
-account_statuses AS as1, ratings AS r, crm_statuses AS crm, opportunity_statuses AS os,
+account_statuses AS as1, ratings AS r, crm_statuses AS crm, opportunity_types ot,opportunity_statuses AS os,
 opportunities AS o LEFT JOIN campaigns AS cam on o.campaign_id = cam.campaign_id
 LEFT JOIN company_division AS d on o.division_id=d.division_id
 WHERE o.company_id = c.company_id
@@ -55,6 +56,7 @@ and c.user_id = u4.user_id
 and c.account_status_id = as1.account_status_id
 and c.rating_id = r.rating_id
 and c.crm_status_id = crm.crm_status_id
+and o.opportunity_type_id = ot.opportunity_type_id
 and o.opportunity_status_id = os.opportunity_status_id
 and opportunity_id = $opportunity_id";
 
@@ -88,6 +90,8 @@ if ($rst) {
     $account_owner_username = $rst->fields['account_owner_username'];
     $opportunity_title = htmlspecialchars($rst->fields['opportunity_title']);
     $opportunity_description = $rst->fields['opportunity_description'];
+    $opportunity_type_id = $rst->fields['opportunity_type_id'];
+    $opportunity_type_display_html = $rst->fields['opportunity_type_display_html'];
     $size = $rst->fields['size'];
     $probability = $rst->fields['probability'];
     $close_at = $con->userdate($rst->fields['close_at']);
@@ -137,8 +141,8 @@ if ($rst) {
 // Begin Activities Widget
 
 // Pass search terms to GetActivitiesWidget
-$search_terms = array(	'on_what_table'	=> 'opportunities',
-						'on_what_id'	=> $opportunity_id);
+$search_terms = array(  'on_what_table' => 'opportunities',
+                        'on_what_id'    => $opportunity_id);
 
 $return_url = "/opportunities/one.php%3Fopportunity_id=$opportunity_id";
 
@@ -236,6 +240,10 @@ function markComplete() {
                                     <td class=clear><?php  echo $opportunity_title; ?></td>
                                 </tr>
                                 <tr>
+                                    <td class=sublabel><?php echo _("Type"); ?></td>
+                                    <td class=clear><?php  echo $opportunity_type_display_html; ?></td>
+                                </tr>
+                                <tr>
                                     <td class=sublabel><?php echo _("Owner"); ?></td>
                                     <td class=clear><?php  echo $opportunity_owner_username; ?></td>
                                 </tr>
@@ -259,7 +267,7 @@ function markComplete() {
                                     <td class=sublabel><?php echo _("Status"); ?></td>
                                     <td class=clear>
                                         <?php  echo $opportunity_status_display_html; ?>
-                                        <a href="#" onclick="javascript:window.open('opportunity-view.php');"><?php echo _("Status Definitions"); ?></a>
+                                        <a href="#" onclick="javascript:window.open('opportunity-view.php?opportunity_type_id=<?php  echo $opportunity_type_id; ?>');"><?php echo _("Status Definitions"); ?></a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -426,6 +434,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.50  2005/07/06 22:50:32  braverock
+ * - add opportunity types
+ *
  * Revision 1.49  2005/06/29 20:54:45  daturaarutad
  * add default column "due" to activities widget
  *

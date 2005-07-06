@@ -2,7 +2,7 @@
 /**
  * Insert a new opportunity into the database
  *
- * $Id: new-2.php,v 1.9 2005/01/13 19:08:56 vanmer Exp $
+ * $Id: new-2.php,v 1.10 2005/07/06 22:50:32 braverock Exp $
  */
 
 //include common files
@@ -18,6 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check('','Create');
 
 $opportunity_status_id = $_POST['opportunity_status_id'];
+$opportunity_type_id = $_POST['opportunity_type_id'];
 $size = $_POST['size'];
 $probability = $_POST['probability'];
 $user_id = $_POST['user_id'];
@@ -38,6 +39,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //save to database
 $rec = array();
 $rec['opportunity_status_id'] = $opportunity_status_id;
+$rec['opportunity_type_id'] = $opportunity_type_id;
 $rec['user_id'] = $user_id;
 $rec['company_id'] =  $company_id;
 $rec['division_id'] =  $division_id;
@@ -74,6 +76,9 @@ header("Location: one.php?msg=opportunity_added&opportunity_id=$opportunity_id")
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.10  2005/07/06 22:50:32  braverock
+ * - add opportunity types
+ *
  * Revision 1.9  2005/01/13 19:08:56  vanmer
  * - Basic ACL changes to allow create/delete/update functionality to be restricted
  *

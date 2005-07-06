@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.53 2005/05/13 13:47:09 braverock Exp $
+ * $Id: some.php,v 1.54 2005/07/06 22:50:31 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -26,9 +26,10 @@ $arr_vars = array ( // local var name       // session variable name
            'opportunity_title'       => array ( 'opportunities_opportunity_title', arr_vars_SESSION ),
            'company_name'            => array ( 'opportunities_company_name', arr_vars_GET_SESSION ),
            'user_id'                 => array ( 'opportunities_user_id', arr_vars_SESSION ),
+           'opportunity_type_id'     => array ( 'opportunity_type_id', arr_vars_SESSION ),
            'opportunity_status_id'   => array ( 'opportunities_opportunity_status_id', arr_vars_GET_SESSION ),
            'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
-           'campaign_id'          => array ( 'opportunities_campaign_id', arr_vars_SESSION ) ,
+           'campaign_id'             => array ( 'opportunities_campaign_id', arr_vars_SESSION ) ,
            'industry_id'             => array ( 'industry_id', arr_vars_GET_SESSION ),
            );
 
@@ -48,6 +49,7 @@ $sql = "SELECT "
 . $con->Concat("'<a id=\"'", "opp.opportunity_title",  "'\" href=\"one.php?opportunity_id='", "opp.opportunity_id", "'\">'", "opp.opportunity_title","'</a>'")
 . " AS opportunity" . ",
   c.company_name AS 'company', u.username AS owner " . ",
+  ot.opportunity_type_pretty_name AS type,
   CASE
     WHEN (opp.size > 0) THEN opp.size
     ELSE 0
@@ -61,15 +63,16 @@ $sql = "SELECT "
 
 
 if ($opportunity_category_id > 0) {
-    $from = "FROM companies c, opportunities opp, opportunity_statuses os, users u, entity_category_map ecm ";
+    $from = "FROM companies c, opportunities opp, opportunity_statuses os, opportunity_types ot, users u, entity_category_map ecm ";
 } else {
-    $from = "FROM companies c, opportunities opp, opportunity_statuses os, users u ";
+    $from = "FROM companies c, opportunities opp, opportunity_statuses os, opportunity_types ot, users u ";
 }
 
 //added by Nic to be able to create mail merge to contacts
 $from.=",contacts cont ";
 
 $where  = "where opp.opportunity_status_id = os.opportunity_status_id ";
+$where .= "and opp.opportunity_type_id = ot.opportunity_type_id ";
 $where .= "and opp.company_id = c.company_id ";
 $where .= "and opp.user_id = u.user_id ";
 $where .= "and opportunity_record_status = 'a' ";
@@ -106,6 +109,10 @@ if (strlen($opportunity_status_id) > 0) {
     $where .= " and opp.opportunity_status_id = $opportunity_status_id";
 }
 
+if (strlen($opportunity_type_id) > 0) {
+    $criteria_count++;
+    $where .= " and ot.opportunity_type_id = $opportunity_type_id";
+}
 if (strlen($industry_id) > 0) {
     $criteria_count++;
     $where .= " and c.industry_id = $industry_id";
@@ -157,6 +164,11 @@ if ($rst) {
     }
     $rst->close();
 }
+
+$sql2 = "select opportunity_type_pretty_name, opportunity_type_id from opportunity_types where opportunity_type_record_status = 'a' order by opportunity_type_pretty_name";
+$rst = $con->execute($sql2);
+$opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, true);
+$rst->close();
 
 //get campaign titles
 $sql2 = "SELECT campaign_title, campaign_id
@@ -232,28 +244,30 @@ start_page($page_title, true, $msg);
         <input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=3><?php echo _("Search Criteria"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Opportunity Name"); ?></td>
                 <td class=widget_label><?php echo _("Company"); ?></td>
                 <td class=widget_label><?php echo _("Campaigns"); ?></td>
+                <td class=widget_label colspan=2><?php echo _("Type"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name="opportunity_title" size=20 value="<?php  echo $opportunity_title; ?>"></td>
                 <td class=widget_content_form_element><input type=text name="company_name" size=20 value="<?php  echo $company_name; ?>"></td>
                 <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
+                <td class=widget_content_form_element colspan=2><?php  echo $opportunity_type_menu; ?></td>
             </tr>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
                 <td class=widget_label><?php echo _("Category"); ?></td>
-                <td class=widget_label><?php echo _("Status"); ?></td>
+                <td class=widget_label colspan=2><?php echo _("Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $opportunity_category_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?></td>
+                <td class=widget_content_form_element colspan=2><?php  echo $opportunity_status_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> </td>
@@ -278,6 +292,7 @@ $columns[] = array('name' => _('Company'), 'index_sql' => 'company');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
 $columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'type');
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
 
@@ -302,7 +317,7 @@ $pager = new GUP_Pager($con, $sql, null,  _('Search Results'), 'OpportunityData'
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-			" . $pager->GetAndUseExportButton() .  "
+            " . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
 $pager->AddEndRows($endrows);
 $pager->Render($system_rows_per_page);
@@ -317,7 +332,7 @@ $con->close();
     <div id="Sidebar">
 
         <!-- recently viewed companies //-->
-	<div id="Recent" class="noprint">
+    <div id="Recent" class="noprint">
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=4><?php echo _("Recently Viewed"); ?></td>
@@ -330,7 +345,7 @@ $con->close();
             </tr>
             <?php  echo $recently_viewed_table_rows; ?>
         </table>
-	</div>
+    </div>
     </div>
 </div>
 
@@ -369,6 +384,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.54  2005/07/06 22:50:31  braverock
+ * - add opportunity types
+ *
  * Revision 1.53  2005/05/13 13:47:09  braverock
  * - make Recently Viewed Items not print
  *

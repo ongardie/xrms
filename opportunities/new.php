@@ -2,7 +2,7 @@
 /**
  * This file allows the creation of opportunities
  *
- * $Id: new.php,v 1.15 2005/05/04 14:37:24 braverock Exp $
+ * $Id: new.php,v 1.16 2005/07/06 22:50:32 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -16,9 +16,11 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check('','Create');
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$company_id = $_POST['company_id'];
-$division_id = $_POST['division_id'];
-$contact_id = $_POST['contact_id'];
+$company_id = (array_key_exists('company_id',$_GET) ? $_GET['company_id'] : $_POST['company_id']);
+$division_id = (array_key_exists('division_id',$_GET) ? $_GET['division_id'] : $_POST['division_id']);
+$contact_id = (array_key_exists('contact_id',$_GET) ? $_GET['contact_id'] : $_POST['contact_id']);
+$opportunity_type_id = (array_key_exists('opportunity_type_id',$_GET) ? $_GET['opportunity_type_id'] : $_POST['opportunity_type_id']);
+$opportunity_title = (array_key_exists('opportunity_title',$_GET) ? $_GET['opportunity_title'] : $_POST['opportunity_title']);
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -50,6 +52,23 @@ $rst->close();
 
 $user_menu = get_user_menu($con, $session_user_id);
 
+//get opportunity type menu
+$sql2 = "select opportunity_type_pretty_name, opportunity_type_id from opportunity_types where opportunity_type_record_status = 'a' order by opportunity_type_id";
+$rst = $con->execute($sql2);
+
+// defining opportunity_type_id before the call to getmenu2 means that this
+// option will be selected when the menu is generated.
+if (!$opportunity_type_id) {
+    if ( $rst && !$rst->EOF ) {
+    $opportunity_type_id = $rst->fields['opportunity_type_id'];
+    } else {
+    $opportunity_type_id = 0;
+    }
+}
+
+$opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, false, false, 1, "id=opportunity_type_id onchange=javascript:restrictByOpportunityType();");
+$rst->close();
+
 //get the opportunity status menu
 $sql2 = "select opportunity_status_pretty_name, opportunity_status_id from opportunity_statuses where opportunity_status_record_status = 'a' order by sort_order";
 $rst = $con->execute($sql2);
@@ -69,6 +88,18 @@ start_page($page_title, true, $msg);
 ?>
 
 <?php jscalendar_includes(); ?>
+
+    <script language=JavaScript>
+    <!--
+        function restrictByOpportunityType() {
+            opportunity_title=document.getElementById('opportunity_title');
+            division=document.getElementById('division_id');
+            contact=document.getElementById('contact_id');
+            select=document.getElementById('opportunity_type_id');
+            location.href = 'new.php?company_id=<?php echo $company_id; ?>&opportunity_title='+ opportunity_title.value +'&division_id='+division.value + '&contact_id=' + contact.value + '&opportunity_type_id=' + select.value;
+        }
+     //-->
+    </script>
 
 <div id="Main">
     <div id="Content">
@@ -94,6 +125,10 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_label_right><?php echo _("Campaign"); ?></td>
                 <td class=widget_content_form_element><?php echo $campaign_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Type"); ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_type_menu ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Status"); ?></td>
@@ -199,6 +234,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.16  2005/07/06 22:50:32  braverock
+ * - add opportunity types
+ *
  * Revision 1.15  2005/05/04 14:37:24  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *
