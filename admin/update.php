@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.87 2005/07/06 19:55:09 vanmer Exp $
+ * $Id: update.php,v 1.88 2005/07/06 20:02:38 vanmer Exp $
  */
 
 // where do we include from
@@ -4958,7 +4958,7 @@ $con->execute($sql);
 $sql = "ALTER TABLE files  ADD file_name VARCHAR( 100 ) NOT NULL";
 $rst = $con->execute($sql);
 
-$sql = "ALTER TABLE files ADD modified_on DATETIME NOT NULL, ADD modified_by VARCHAR( 11 ) NOT NULL";
+$sql = "ALTER TABLE files ADD last_modified_on DATETIME NOT NULL, ADD last_modified_by VARCHAR( 11 ) NOT NULL";
 $rst = $con->execute($sql);
     
     
@@ -4991,6 +4991,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.88  2005/07/06 20:02:38  vanmer
+ * - updated to reflect more standard fieldname
+ *
  * Revision 1.87  2005/07/06 19:55:09  vanmer
  * - added needed fields to the files table
  *
