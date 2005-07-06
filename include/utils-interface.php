@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.67 2005/06/30 23:44:35 vanmer Exp $
+ * $Id: utils-interface.php,v 1.68 2005/07/06 17:06:39 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -227,8 +227,8 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     $msg = status_msg($msg);
     if ($user_id) {
         $user_css_theme = get_user_preference($xcon, $user_id, 'css_theme');
+    } else $user_css_theme = get_admin_preference($xcon, 'css_theme');
     if ($user_css_theme) $css_theme=$user_css_theme;
-    }
 //    echo "    $css_theme = get_user_preference($con, $user_id, 'css_theme');";
     $curtheme = empty($css_theme) ? 'basic' : $css_theme;
     // Array containing list of named styles.
@@ -751,6 +751,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.68  2005/07/06 17:06:39  vanmer
+ * - added check for admin preference on CSS style if user_id is not set (login page)
+ *
  * Revision 1.67  2005/06/30 23:44:35  vanmer
  * - added parameter to optionally return output instead of echoing it directly
  *
