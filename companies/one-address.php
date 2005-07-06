@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.5 2005/07/06 16:00:22 vanmer Exp $
+ * $Id: one-address.php,v 1.6 2005/07/06 21:25:51 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -61,6 +61,7 @@ start_page($page_title);
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'addresses');
+  $model->SetPrimaryKeyName('address_id');
 
 	$model->SetDisplayNames(array('address_name' => _("Address Name"), 
                                                                                                                 'line1' => _("Line 1"),
@@ -180,6 +181,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.6  2005/07/06 21:25:51  vanmer
+ * - setting primary key explicitly to attempt to fix issue on sql server
+ *
  * Revision 1.5  2005/07/06 16:00:22  vanmer
  * - added sensible defaults for address type (commerical or residential) when initially entering an address
  *
