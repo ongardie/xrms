@@ -5,7 +5,7 @@
  * Users who do not have admin privileges can update their own
  * user record and password.
  *
- * $Id: self.php,v 1.15 2005/06/24 23:55:19 vanmer Exp $
+ * $Id: self.php,v 1.16 2005/07/06 17:20:36 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -42,39 +42,7 @@ if ($rst) {
 }
 //show_test_values($username, $last_name, $first_names, $session_user_id, $user_id);
 
-//get all user preference types
-$types=get_user_preference_type($con, false, false, true);
-if (!$types) { $msg="Failed to load an user preference types, no user preferences available"; $user_preferences_table='';}
-else {
-    $user_preferences_table="<table class=widget>";
-    $user_preferences_table.="<tr><td colspan=2 class=widget_header>"._("User Preferences")."</td></tr>";
-    foreach ($types as $type_info) {
-        if ($type_info['allow_user_edit_flag']==0) next;
-        $user_preference_type_id=$type_info['user_preference_type_id'];
-        $type_desc=_($type_info['user_preference_description']);
-        $type_pretty_name=_($type_info['user_preference_pretty_name']);
-        if (!$type_pretty_name) $type_pretty_name=_($type_info['user_preference_name']);
-        
-        if ($type_info['allow_multiple_flag']==1) {
-            //branch for showing multiple options, fetch all user set options   
-            $element_field=render_preference_form_multi_element($con, $user_id, $user_preference_type_id, $type_info);
-        } else {
-        //branch for showing single option
-            $preference_value=get_user_preference($con, $user_id, $user_preference_type_id);
-            $element_field=render_preference_form_element($con, $user_preference_type_id, $preference_value, $type_info);
-        }
-        
-        //this is to avoid printing translation file header instead of type description! 
-        if($type_desc != NULL){
-	        $user_preferences_table.="<tr><td class=widget_content_label><b>"._($type_pretty_name)."</b><br>"._($type_desc)."</td><td class=widget_content_form_element>$element_field</td></tr>";
-	     }else{
-	     	  $user_preferences_table.="<tr><td class=widget_content_label><b>"._($type_pretty_name)."</b><br>$type_desc</td><td class=widget_content_form_element>$element_field</td></tr>";
-	     }   
-    }
-    $user_preferences_table.="<tr><td colspan=2 class=widget_content_form_element><input type=hidden name=preference_action value=savePrefs><input class=button type=submit value=\""._("Save Preferences") . "\"></tr></td>";
-    $user_preferences_table.="</table>";
-}
-
+$user_preferences_table=get_user_preferences_table($con);
 require_once('user_roles_sidebar.php');
 $sidebar_rows = $user_role_sidebar . $sidebar_rows;
 
@@ -146,6 +114,9 @@ end_page();
 
 /**
  *$Log: self.php,v $
+ *Revision 1.16  2005/07/06 17:20:36  vanmer
+ *- changed to use function to get user preferences table
+ *
  *Revision 1.15  2005/06/24 23:55:19  vanmer
  *- added translation to output of title and descrption of preferences
  *
