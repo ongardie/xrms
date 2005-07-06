@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.22 2005/07/06 01:27:54 vanmer Exp $
+ * $Id: addresses.php,v 1.23 2005/07/06 02:08:29 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,13 +20,15 @@ $session_user_id = session_check();
 
 getGlobalVar($msg, 'msg');
 getGlobalVar($company_id, 'company_id');
+getGlobalVar($edit_contact_id, 'edit_contact_id');
 
 getGlobalVar($address_street, 'address_street');
 getGlobalVar($address_city, 'address_city');
 getGlobalVar($address_province, 'address_province');
 getGlobalVar($address_country, 'address_country');
 
-$return_url=$http_site_root.current_page();
+$return_url="addresses.php?company_id=$company_id&edit_contact_id=$edit_contact_id";
+
 $url_return_url=urlencode($return_url);
 global $con;
 $con = &adonewconnection($xrms_db_dbtype);
@@ -61,15 +63,18 @@ $columns=array();
 $columns[] = array('name' => _('Address Name'), 'index_sql' => 'address_link', 'sql_sort_column' => 'a.address_name');
 $columns[] = array('name' => _('Used By Contacts'), 'index_calc' => 'used_by_contacts');
 $columns[] = array('name' => _('Formatted Address'), 'index_calc' => 'formatted_address');
-$columns[] = array('name' => _('Primary Default'), 'index_calc' => 'primary_default', 'not_sortable' => 'true', 'css_classname' => 'center');
-$columns[] = array('name' => _('Billing Default'), 'index_calc' => 'billing_default', 'not_sortable' => 'true', 'css_classname' => 'center');
-$columns[] = array('name' => _('Shipping Default'), 'index_calc' => 'shipping_default', 'not_sortable' => 'true', 'css_classname' => 'center');
-$columns[] = array('name' => _('Payment Default'), 'index_calc' => 'payment_default', 'not_sortable' => 'true', 'css_classname' => 'center');
-
-
+if (!$edit_contact_id) {
+    $columns[] = array('name' => _('Primary Default'), 'index_calc' => 'primary_default', 'not_sortable' => 'true', 'css_classname' => 'center');
+    $columns[] = array('name' => _('Billing Default'), 'index_calc' => 'billing_default', 'not_sortable' => 'true', 'css_classname' => 'center');
+    $columns[] = array('name' => _('Shipping Default'), 'index_calc' => 'shipping_default', 'not_sortable' => 'true', 'css_classname' => 'center');
+    $columns[] = array('name' => _('Payment Default'), 'index_calc' => 'payment_default', 'not_sortable' => 'true', 'css_classname' => 'center');
+} else {
+    $columns[] = array('name' => _('Business Address'), 'index_calc' => 'business_address', 'not_sortable' => 'true', 'css_classname' => 'center');
+}
 function GetAddressesPagerData($row) {
 	global $con;
-
+        global $edit_contact_id;
+        
 	// formatted_address
 	$row['formatted_address'] = get_formatted_address($con, $row['address_id']);
 
@@ -80,6 +85,9 @@ function GetAddressesPagerData($row) {
     $row['used_by_contacts'] = '';
 	if($rst2) {
     	while(!$rst2->EOF) {
+                if ($rst2->fields['contact_id']==$edit_contact_id) {
+                    $business_address=' checked';                    
+                }
         	$row['used_by_contacts'] .= "<a href='../contacts/one.php?contact_id="
                     	. $rst2->fields['contact_id'] . "'>"
                     	. $rst2->fields['first_names'] . " "
@@ -88,38 +96,45 @@ function GetAddressesPagerData($row) {
     	}
 	}
 
-	// form elements
-	$row['primary_default'] = "<input type=radio name=default_primary_address value=" . $row['address_id'];
-	if($row['default_primary_address'] == $row['address_id']) {
-		$row['primary_default'] .= ' checked';
-	}
-	$row['primary_default'] .= '>';
-
-	$row['billing_default'] = "<input type=radio name=default_billing_address value=" . $row['address_id'];
-	if($row['default_billing_address'] == $row['address_id']) {
-		$row['billing_default'] .= ' checked';
-	}
-	$row['billing_default'] .= '>';
-
-	$row['shipping_default'] = "<input type=radio name=default_shipping_address value=" . $row['address_id'];
-	if($row['default_shipping_address'] == $row['address_id']) {
-		$row['shipping_default'] .= ' checked';
-	}
-	$row['shipping_default'] .= '>';
-
-	$row['payment_default'] = "<input type=radio name=default_payment_address value=" . $row['address_id'];
-	if($row['default_payment_address'] == $row['address_id']) {
-		$row['payment_default'] .= ' checked';
-	}
-	$row['payment_default'] .= '>';
-
+        if (!$edit_contact_id) {
+            // form elements
+            $row['primary_default'] = "<input type=radio name=default_primary_address value=" . $row['address_id'];
+            if($row['default_primary_address'] == $row['address_id']) {
+                    $row['primary_default'] .= ' checked';
+            }
+            $row['primary_default'] .= '>';
+    
+            $row['billing_default'] = "<input type=radio name=default_billing_address value=" . $row['address_id'];
+            if($row['default_billing_address'] == $row['address_id']) {
+                    $row['billing_default'] .= ' checked';
+            }
+            $row['billing_default'] .= '>';
+    
+            $row['shipping_default'] = "<input type=radio name=default_shipping_address value=" . $row['address_id'];
+            if($row['default_shipping_address'] == $row['address_id']) {
+                    $row['shipping_default'] .= ' checked';
+            }
+            $row['shipping_default'] .= '>';
+    
+            $row['payment_default'] = "<input type=radio name=default_payment_address value=" . $row['address_id'];
+            if($row['default_payment_address'] == $row['address_id']) {
+                    $row['payment_default'] .= ' checked';
+            }
+            $row['payment_default'] .= '>';
+        } else {
+            $row['business_address'] = "<input type=radio name=alt_address value=\"{$row['address_id']}\" $business_address";
+        }
 	return $row;
 }
 
 $pager = new GUP_Pager($con, $sql, 'GetAddressesPagerData', _('Addresses'), 'AddressPagerForm', 'AddressesPager', $columns, false, true);
 
 // Save Defaults button posts to set-address-defaults.php
-$endrows = "<tr><td class=widget_content_form_element colspan=10><input class=button type=button onclick=\"document.AddressPagerForm.action='set-address-defaults.php'; document.AddressPagerForm.submit();\" value=\"" . _("Save Defaults") . "\"></td></tr>";
+if (!$edit_contact_id) {
+    $endrows = "<tr><td class=widget_content_form_element colspan=10><input class=button type=button onclick=\"document.AddressPagerForm.action='set-address-defaults.php'; document.AddressPagerForm.submit();\" value=\"" . _("Save Defaults") . "\"></td></tr>";
+} else {
+    $endrows = "<tr><td class=widget_content_form_element colspan=10><input type=hidden name=return_url value=\"$http_site_root/contacts/one.php?contact_id=$edit_contact_id\"><input class=button type=button onclick=\"document.AddressPagerForm.action='../contacts/edit-address-2.php'; document.AddressPagerForm.submit();\" value=\"" . _("Update Contact") . "\"></td></tr>";
+}    
 $pager->AddEndRows($endrows);
 
 global $system_rows_per_page;
@@ -138,14 +153,15 @@ $con->close();
 
 $page_title = $company_name . " - " . _("Addresses");
 start_page($page_title, true, $msg);
-
+$address_action="addresses.php";
 ?>
 
 <div id="Main">
     <div id="Content">
 
         <!-- existing addresses //-->
-        <form action=addresses.php method=post name="AddressPagerForm">
+        <form action="<?php echo $address_action; ?>" method=post name="AddressPagerForm">
+        
         <table class=widget>
             <tr><td class=widget_header colspan=4><?php echo _("Search Addresses"); ?></td></tr>
             <tr><td class=widget_label><?php echo _("Street"); ?></td><td class=widget_content_form_element><input type=text size=15 name=address_street value="<?php echo $address_street; ?>"></td>
@@ -157,14 +173,17 @@ start_page($page_title, true, $msg);
         </table>
             
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
+        <input type=hidden name=edit_contact_id value=<?php  echo $edit_contact_id; ?>>
+        <input type=hidden name=contact_id value=<?php  echo $edit_contact_id; ?>>
 		<?php echo $address_pager; ?>
          </form>
 
         <!-- new address //-->
         <form action=one-address.php method=post>
+        
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <input type=hidden name=form_action value=new>
-        <input type=hidden name=return_url value=<?php echo "$http_site_root/companies/addresses.php?msg=saved&company_id=$company_id"; ?>>
+        <input type=hidden name=return_url value=<?php echo "$http_site_root/companies/addresses.php?msg=saved&company_id=$company_id&edit_contact_id=$edit_contact_id"; ?>>
     </div>
     <div id="Sidebar">
         <table class=widget cellspacing=1>
@@ -186,6 +205,9 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.23  2005/07/06 02:08:29  vanmer
+ * - added support for selecting a business address for a contact using addresses pager
+ *
  * Revision 1.22  2005/07/06 01:27:54  vanmer
  * - added search to top of addresses page
  * - added links to one-address.php instead of new address code
