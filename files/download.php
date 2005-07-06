@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.15 2005/07/06 16:25:32 ycreddy Exp $
+ * $Id: download.php,v 1.16 2005/07/06 18:17:36 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -60,15 +60,15 @@ if ($rst) {
 $con->close();
 
 // make sure we have a proper mime type
-if ( !$file_type ) {
-    if (!function_exists('mime_content_type') ) {
+//if ( !$file_type ) {
+    //if (!function_exists('mime_content_type') ) {
         // this version of PHP doesn't have the mime functions
         // compiled in, so load our drop-in replacement function
         // instead
-        include($include_directory.'mime/mime-array.php');
-    }
-    $file_type = mime_content_type ( $file_filesystem_name );
-}
+        require_once($include_directory.'mime/mime-array.php');
+    //}
+    $file_type = mime_content_type_ ( $file_filesystem_name );
+//}
 
 $disposition = "attachment"; // "inline" to view file in browser or "attachment" to download to hard disk
 
@@ -85,7 +85,7 @@ SendDownloadHeaders($mime_type_array[0],$mime_type_array[1], $file_original_name
 $chunksize=1*(1024*1024);
 
 //open and output file contents
-if (is_file($file_to_open) ) {
+if (is_file($file_to_open)){
     $fp = fopen($file_to_open, 'rb');
     if ($fp) {
         while (!feof($fp)) {
@@ -103,6 +103,10 @@ exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.16  2005/07/06 18:17:36  braverock
+ * - change back to custom function as php std mime_content_type fn
+ *   causes problems on several configs
+ *
  * Revision 1.15  2005/07/06 16:25:32  ycreddy
  * Fixed the syntax errors - missing closing ) in if statements
  *

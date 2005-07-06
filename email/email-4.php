@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.18 2005/07/06 16:44:42 braverock Exp $
+* $Id: email-4.php,v 1.19 2005/07/06 18:17:16 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -40,14 +40,14 @@ foreach ( $attachment_list as $_file )
     // Full path
     $_fileData[$_file]['path'] = $uploadDir . '/' . $_file;
 
-    if (!function_exists('mime_content_type')) {
+    //if (!function_exists('mime_content_type')) {
         // this version of PHP doesn't have the mime functions
         // compiled in, so load our drop-in replacement function
         // instead
-        include($include_directory.'mime/mime-array.php');
-    }
+        require_once($include_directory.'mime/mime-array.php');
+    //}
     // we need the file's MIME type
-    $_fileData[$_file]['mime'] = mime_content_type ( $_fileData[$_file]['path'] );
+    $_fileData[$_file]['mime'] = mime_content_type_ ( $_fileData[$_file]['path'] );
 
     // we need the file itself
     $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
@@ -251,6 +251,10 @@ function getFile($filename)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.19  2005/07/06 18:17:16  braverock
+* - change back to custom function as php std mime_content_type fn
+*   causes problems on several configs
+*
 * Revision 1.18  2005/07/06 16:44:42  braverock
 * - fix syntax error in if check
 *
