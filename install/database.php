@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.49 2005/07/06 21:26:35 braverock Exp $
+ * $Id: database.php,v 1.50 2005/07/06 21:49:00 vanmer Exp $
  */
 
 /**
@@ -1158,6 +1158,7 @@ function activity_db_tables($con, $table_list) {
                on_what_table                   varchar(100) not null default '',
                on_what_id                      int not null default 0,
                on_what_status                  int not null default 0,
+               activity_template_id        int not null default 0,
                activity_title                  varchar(100) not null default '',
                activity_description            text not null default '',
                entered_at                      datetime,
@@ -1280,6 +1281,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.50  2005/07/06 21:49:00  vanmer
+ * - added activity_template_id to track which template an activity was spawned from
+ *
  * Revision 1.49  2005/07/06 21:26:35  braverock
  * - add opportunity types
  *
