@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.17 2005/07/06 14:23:52 braverock Exp $
+* $Id: email-4.php,v 1.18 2005/07/06 16:44:42 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -40,7 +40,7 @@ foreach ( $attachment_list as $_file )
     // Full path
     $_fileData[$_file]['path'] = $uploadDir . '/' . $_file;
 
-    if (!function_exists('mime_content_type') {
+    if (!function_exists('mime_content_type')) {
         // this version of PHP doesn't have the mime functions
         // compiled in, so load our drop-in replacement function
         // instead
@@ -251,6 +251,9 @@ function getFile($filename)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.18  2005/07/06 16:44:42  braverock
+* - fix syntax error in if check
+*
 * Revision 1.17  2005/07/06 14:23:52  braverock
 * - add check to make sure that mime_content_type fn exists
 * - load our replacement mime_content_type fn if needed
