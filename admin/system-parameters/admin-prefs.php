@@ -5,7 +5,7 @@
  * Administration screen for managing default system preferences
  *
  *
- * $Id: admin-prefs.php,v 1.1 2005/07/06 17:08:32 vanmer Exp $
+ * $Id: admin-prefs.php,v 1.2 2005/07/06 17:21:47 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -45,7 +45,7 @@ switch ($prefs_action) {
                 $user_preference_type_id= $type_info['user_preference_type_id'];
                 $fetch_name=str_replace(' ','_',$user_preference_name);
                getGlobalVar($preference_value, $fetch_name);
-                if ($preference_value) {
+                if ($preference_value OR ($preference_value!=get_admin_preference($con, $user_preference_type_id))) {
                     $ret=set_admin_preference($con, $user_preference_type_id, $preference_value);
                     if (!$ret) $msg.=_("Failed to set preference value for preference") . ' ' .$user_preference_name;
                 }
@@ -71,4 +71,12 @@ $content =<<<TILLEND
 TILLEND;
 echo $content;
 end_page();
+
+/**
+  * $Log: admin-prefs.php,v $
+  * Revision 1.2  2005/07/06 17:21:47  vanmer
+  * - added check to allow preference to be reset to nothing
+  * - added log at end of file
+  *
+**/
 ?>
