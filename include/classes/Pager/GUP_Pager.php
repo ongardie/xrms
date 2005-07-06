@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.27 2005/06/30 16:46:21 vanmer Exp $
+ * $Id: GUP_Pager.php,v 1.28 2005/07/06 20:36:59 daturaarutad Exp $
  */
 
 
@@ -379,7 +379,11 @@ class GUP_Pager {
 					global $ADODB_COUNTRECS;
 
         			$savec = $ADODB_COUNTRECS;
-        			if ($this->db->pageExecuteCountRows) $ADODB_COUNTRECS = true;
+        			if ($this->db->pageExecuteCountRows) {
+						$ADODB_COUNTRECS = true;
+					} else {
+						$ADODB_COUNTRECS = false;
+					}
         			if ($this->cache)
         				$rs = &$this->db->CachePageExecute($this->cache,$this->sql,$this->rows,$this->curr_page);
         			else
@@ -1101,6 +1105,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.28  2005/07/06 20:36:59  daturaarutad
+ * set $ADODB_COUNTRECS = false before using for CountRecs()
+ *
  * Revision 1.27  2005/06/30 16:46:21  vanmer
  * - added parameters to allow on_what_table and on_what_id to be passed into ACL to determine which permissions to
  * use for export button
