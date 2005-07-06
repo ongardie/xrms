@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.4 2005/07/06 03:20:04 vanmer Exp $
+ * $Id: one-address.php,v 1.5 2005/07/06 16:00:22 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -33,6 +33,7 @@ $company_name = fetch_company_name($con, $company_id);
         switch ($form_action) {
             case 'new':
                 $page_title = _("New Business Address");
+                $_POST['address_type']='commercial';
             break;
             case 'edit':
                 $page_title=_("Edit Business Address");
@@ -45,6 +46,7 @@ $company_name = fetch_company_name($con, $company_id);
         switch ($form_action) {
             case 'new':
                 $page_title = _("New Home Address");
+                $_POST['address_type']='residential';
             break;
             case 'edit':
                 $page_title=_("Edit Home Address");
@@ -178,6 +180,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.5  2005/07/06 16:00:22  vanmer
+ * - added sensible defaults for address type (commerical or residential) when initially entering an address
+ *
  * Revision 1.4  2005/07/06 03:20:04  vanmer
  * - allow company id to be ignored for an address, if the address is a home address
  * - change page title to act differently on a business vs. home address
