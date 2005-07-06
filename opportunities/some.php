@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.54 2005/07/06 22:50:31 braverock Exp $
+ * $Id: some.php,v 1.55 2005/07/06 23:04:16 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -282,9 +282,13 @@ $owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user
 $owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
 
 
-$status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name", "' ('", "count(os.opportunity_status_id)", "')'") . ", os.opportunity_status_id $from $where group by os.opportunity_status_id order by os.opportunity_status_pretty_name";
+$status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name", "' ('", "count(os.opportunity_status_id)", "')'") . ", os.opportunity_status_id $from $where group by os.opportunity_status_id order by os.sort_order";
 
 $status_query_select = $sql . ' AND os.opportunity_status_id = XXX-value-XXX';
+
+$type_query_list = "select " . $con->Concat("ot.opportunity_type_pretty_name", "' ('", "count(ot.opportunity_type_id)", "')'") . ", ot.opportunity_type_id $from $where group by ot.opportunity_type_id order by ot.opportunity_type_pretty_name";
+
+$type_query_select = $sql . ' AND ot.opportunity_type_id = XXX-value-XXX';
 
 $columns = array();
 $columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title', 'type' => 'url');
@@ -292,7 +296,7 @@ $columns[] = array('name' => _('Company'), 'index_sql' => 'company');
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
 $columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
-$columns[] = array('name' => _('Type'), 'index_sql' => 'type');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
 
@@ -384,6 +388,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.55  2005/07/06 23:04:16  braverock
+ * - make opportunity type a groupable column
+ * - order statuses list by sort_order
+ *
  * Revision 1.54  2005/07/06 22:50:31  braverock
  * - add opportunity types
  *
