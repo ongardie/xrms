@@ -2,7 +2,7 @@
 /**
  * Main page for the administration screens.
  *
- * $Id: index.php,v 1.35 2005/07/06 17:27:14 vanmer Exp $
+ * $Id: index.php,v 1.36 2005/07/06 21:10:46 braverock Exp $
  */
 
 //include required stuff
@@ -96,7 +96,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content>
                     <a href="acl/index.php"><?php echo _("ACL"); ?></a>
                 </td>
-            </tr>            
+            </tr>
             <tr>
                 <td class=widget_content>
                     <a href="activity-templates/some.php"><?php echo _("Activity Templates"); ?></a>
@@ -211,6 +211,11 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_content>
+                    <a href="opportunity-types/some.php"><?php echo _("Opportunity Types"); ?></a>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content>
                     <a href="ratings/some.php"><?php echo _("Ratings"); ?></a>
                 </td>
             </tr>
@@ -249,6 +254,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.36  2005/07/06 21:10:46  braverock
+ * - add opportunity types
+ *
  * Revision 1.35  2005/07/06 17:27:14  vanmer
  * - changed to use system preferences interface instead of system parameter interface
  *
