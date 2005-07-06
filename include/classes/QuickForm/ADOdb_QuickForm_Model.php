@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.9 2005/07/06 00:19:10 vanmer Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.10 2005/07/06 00:55:18 vanmer Exp $
 */
 
 
@@ -308,6 +308,30 @@ class ADOdb_QuickForm_Model {
 		}
 
 	}
+        /**
+        * Inform the model that a field should be used to display a link with a hidden variable
+        *
+        * This functionality adds a link to the quickform with name fieldname_link, with the specified URL and text
+	* This is in addition to a hidden variable with the same field name 
+        *
+        * @param string Fieldname of the link 
+        * @param string linkUrl which will be the url to link to
+        * @param string linkText which will be the hyperlinked text
+        */
+        function SetHiddenLinkField($linkField, $linkUrl, $linkText, $hiddenValue) {
+               $i = $this->GetFieldIndex($linkField);
+
+                if(false !== $i) {
+                        $this->DBStructure['fields'][$i]['type']= 'hiddenlink';
+                        $this->DBStructure['fields'][$i]['linkUrl']= $linkUrl;
+                        $this->DBStructure['fields'][$i]['linkText']= $linkText;
+			$this->Values[$linkField]=$hiddenValue;
+                        return true;
+                } else {
+                        return false;
+                }
+
+        }
 
 
 	/**
