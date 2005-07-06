@@ -2,7 +2,7 @@
 /**
  * Drop-in replacement for PHP core function mime_content_type
  *
- * $Id: mime-array.php,v 1.4 2005/07/06 14:21:39 braverock Exp $
+ * $Id: mime-array.php,v 1.5 2005/07/06 18:16:20 braverock Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -10,7 +10,7 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
-if (!function_exists('mime_content_type')){
+//if (!function_exists('mime_content_type')){
 /**
  * find and return the mime type
  *
@@ -23,7 +23,7 @@ if (!function_exists('mime_content_type')){
  * @param string $file_system_name
  * @return string of mime type
  */
-function mime_content_type ( $file_system_name )
+function mime_content_type_ ( $file_system_name )
 {
     global $mime_array;
 
@@ -634,10 +634,14 @@ function mime_content_type ( $file_system_name )
     }
     return $res;
 } // end fn mime_content_type
-} //end function_exists check
+//} //end function_exists check
 
 /*
  * $Log: mime-array.php,v $
+ * Revision 1.5  2005/07/06 18:16:20  braverock
+ * - change back to custom function name as php mime_content_type fn
+ *   causes problems on several configs
+ *
  * Revision 1.4  2005/07/06 14:21:39  braverock
  * - change name of function to mime_content_type
  * - add phpdoc
