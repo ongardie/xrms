@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.37 2005/07/06 02:08:58 vanmer Exp $
+ * $Id: edit.php,v 1.38 2005/07/06 03:21:01 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -23,6 +23,8 @@ $on_what_id=$contact_id;
 if (!$return_url) {
     $return_url=$http_site_root.current_page();
 }
+$url_return_url=urlencode($return_url);
+
 $session_user_id = session_check('','Update');
 
 $msg        = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -53,8 +55,16 @@ if ($rst) {
     $company_id = $rst->fields['company_id'];
     $division_id = $rst->fields['division_id'];
     $address_id = $rst->fields['address_id'];
+    $edit_address=true;
+    if ($address_id==1) {
+        $edit_address=false;
+    }
     $address= get_formatted_address($con,$address_id);
     $home_address_id = $rst->fields['home_address_id'];
+    $edit_home_address=true;
+    if ($home_address_id==1) {
+        $edit_home_address=false;
+    }
     $home_address= get_formatted_address($con,$home_address_id);
     $company_name = $rst->fields['company_name'];
     $last_name = $rst->fields['last_name'];
@@ -155,9 +165,12 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Business Address"); ?></td>
                 <td class=widget_content_form_element>
                     <?php echo $address; ?>
+                    <input type=hidden name=address_id value="<?php echo $address_id; ?>">
                     <br />                    
-                        <input type=button value="<?php echo _("Choose New Address") ?>" onclick="javascript: location.href='../companies/addresses.php?company_id=<?php echo $company_id; ?>&edit_contact_id=<?php echo $contact_id; ?>'" class=button>&nbsp;<?php echo _("OR"); ?>&nbsp;
-                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='../companies/one-address.php?form_action=edit&return_url=<?php echo $return_url; ?>&company_id=<?php echo $company_id; ?>&address_id=<?php echo $address_id; ?>';">
+                        <input type=button value="<?php echo _("Choose New Address") ?>" onclick="javascript: location.href='../companies/addresses.php?company_id=<?php echo $company_id; ?>&edit_contact_id=<?php echo $contact_id; ?>'" class=button><?php if ($edit_address) { ?>&nbsp;<?php echo _("OR"); ?>&nbsp;
+                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='../companies/one-address.php?form_action=edit&return_url=<?php echo $return_url; ?>&company_id=0<?php echo $company_id; ?>&address_id=<?php echo $address_id; ?>';">
+                        <?php } ?>
+
                 </td>
             </tr>
             <tr>
@@ -165,8 +178,10 @@ confGoTo_includes();
                 <td class=widget_content_form_element>
                     <?php echo $home_address; ?>
                     <br />
-                        <?php echo _("Choose New Address"). $home_address_menu ."&nbsp;". _("OR") ."&nbsp;"; ?>
-                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='edit-address.php?contact_id=<?php echo $contact_id; ?>';">
+                    <input type=hidden name=home_address_id value="<?php echo $home_address_id; ?>">
+                    <input class=button type=button value="<?php echo _("Add New Address"); ?>" onclick="javascript: location.href='../companies/one-address.php?form_action=new&return_url=<?php echo $url_return_url; ?>&company_id=0&contact_id=<?php echo $contact_id; ?>';"><?php if ($edit_home_address) { ?>&nbsp;<?php echo  _("OR")?>&nbsp;
+                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='../companies/one-address.php?form_action=edit&address_id=<?php echo $home_address_id; ?>&return_url=<?php echo $url_return_url; ?>&company_id=0&contact_id=<?php echo $contact_id; ?>';">
+                    <?php } ?>
                 </td>
             </tr>
             <tr>
@@ -310,6 +325,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.38  2005/07/06 03:21:01  vanmer
+ * - changed to use one-address.php to edit contact addresses, as well as add new ones
+ * - added logic to hide edit address when address is the default of 1
+ *
  * Revision 1.37  2005/07/06 02:08:58  vanmer
  * - changed to use select functionality from addresses.php in companies
  * - changed to allow direct edit of business address from edit contact
