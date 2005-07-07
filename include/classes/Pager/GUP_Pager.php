@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.28 2005/07/06 20:36:59 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.29 2005/07/07 03:25:11 daturaarutad Exp $
  */
 
 
@@ -95,6 +95,7 @@ class GUP_Pager {
 
 	var $modify_data_functions = array();
 	var $debug					= false;
+	var $count_sql				= '';
 
 
     /**
@@ -385,9 +386,9 @@ class GUP_Pager {
 						$ADODB_COUNTRECS = false;
 					}
         			if ($this->cache)
-        				$rs = &$this->db->CachePageExecute($this->cache,$this->sql,$this->rows,$this->curr_page);
+        				$rs = &$this->db->CachePageExecute($this->cache,$this->sql,$this->rows,$this->curr_page,false,$this->count_sql);
         			else
-        				$rs = &$this->db->PageExecute($this->sql,$this->rows,$this->curr_page);
+        				$rs = &$this->db->PageExecute($this->sql,$this->rows,$this->curr_page,false,0,$this->count_sql);
         			$ADODB_COUNTRECS = $savec;
 						
 
@@ -1101,10 +1102,17 @@ END;
 	*/
 	function SetDebug($debug = true) { $this->debug = $debug; }
 
+	/**
+	*  Public function to enable debugging output for this pager
+	*/
+	function SetCountSQL($count_sql) { $this->count_sql = $count_sql; }
 }
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.29  2005/07/07 03:25:11  daturaarutad
+ * patched to allow $count_sql to be passed in to _adodb_getcount()
+ *
  * Revision 1.28  2005/07/06 20:36:59  daturaarutad
  * set $ADODB_COUNTRECS = false before using for CountRecs()
  *
