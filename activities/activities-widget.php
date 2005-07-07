@@ -52,7 +52,7 @@ if(!$activities_widget_type) $activities_widget_type = 'list';
 if('list' != $activities_widget_type) {
 
 /*  Calendar:
-	-if this is the first pass, the calendar date should be set based on the search date
+    -if this is the first pass, the calendar date should be set based on the search date
     -if the user pressed 'next month' or whatever, calendar date should not be affected
     -if a search field has changed, the date should be reset based on search date
 
@@ -144,7 +144,7 @@ if (strlen($search_terms['company']) > 0 || strlen($search_terms['company_id']) 
 
     $select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
     $extra_group_by = ", c.company_name,c.company_id";
-	array_unshift($from, 'companies c', 'addresses addr');
+    array_unshift($from, 'companies c', 'addresses addr');
 
     $where .= " AND a.company_id = c.company_id ";
     $where .= "AND c.default_primary_address=addr.address_id ";
@@ -467,7 +467,7 @@ $sql = "SELECT activity_type_pretty_name, activity_type_id
         ORDER BY sort_order, activity_type_pretty_name";
 $rst = $con->execute($sql);
 if ($rst) {
-    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false,false,0, 'style="font-size: x-small; border: outset; width: 80px;"');
     $rst->close();
 }
 
@@ -531,10 +531,10 @@ function markComplete() {
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
-                <td class=widget_content_form_element>$user_menu</td>
-                <td class=widget_content_form_element>$activity_type_menu</td>" .
-                ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
-                <td colspan=2 class=widget_content_form_element>
+                <td class=widget_content_form_element size=10>$user_menu</td>
+                <td class=widget_content_form_element size=10 >$activity_type_menu</td>" .
+                ($contact_menu ? "<td class=widget_content_form_element size=10>$contact_menu</td>" : "") ."
+                <td colspan=2 class=widget_content_form_element size=20>
                     <input type=text ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d H:i:s') . "\">
                     <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" .
                     render_create_button(_("Add")) .
@@ -561,6 +561,9 @@ return $ret;
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.16  2005/07/07 20:15:54  braverock
+* - trim widths of drop-down menus in new activities widget for better screen formatting
+*
 * Revision 1.15  2005/07/07 19:47:59  daturaarutad
 * re-add activity_description field
 *
