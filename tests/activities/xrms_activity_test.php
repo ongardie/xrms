@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_activity_test.php,v 1.5 2005/06/08 00:09:55 daturaarutad Exp $
+ * $Id: xrms_activity_test.php,v 1.6 2005/07/07 20:59:48 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -280,6 +280,12 @@ Class XRMSActivityTest extends PHPUnit_TestCase {
 
 
 	}
+        
+        function test_get_least_busy_user_in_role($role='Administrator', $duedate=false) {
+            if (!$duedate) $duedate=time();
+            $ret = get_least_busy_user_in_role($this->con, $role, $duedate);
+            return $ret;
+        }
 
 }
 
@@ -304,6 +310,9 @@ $display->show();
  */
 /*
  * $Log: xrms_activity_test.php,v $
+ * Revision 1.6  2005/07/07 20:59:48  vanmer
+ * - added test for least busy user function
+ *
  * Revision 1.5  2005/06/08 00:09:55  daturaarutad
  * added business-day tests and updated build_recurring_activities_list param count
  *
