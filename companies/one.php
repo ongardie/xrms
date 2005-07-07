@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.119 2005/07/07 16:34:54 daturaarutad Exp $
+ * $Id: one.php,v 1.120 2005/07/07 18:51:50 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -30,6 +30,14 @@ if (isset($_GET['division_id'])) {
     $division_id = $_GET['division_id'];
 } else $division_id=false;
 
+$con = get_xrms_dbconnection();
+
+if ($division_id AND !$company_id) {
+    $company_id=fetch_company_id_for_division($con, $division_id);
+}
+
+if (!$company_id) { echo _("Failed to provide a company identifier, failing"); exit; }
+
 global $on_what_id;
 $on_what_id=$company_id;
 global $session_user_id;
@@ -37,10 +45,6 @@ $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$company_id = $_GET['company_id'];
-
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
 $activities_form_name = 'Company_Activities';
@@ -752,6 +756,11 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.120  2005/07/07 18:51:50  vanmer
+ * - added lookup of company_id if division_id is not specified
+ * - moved database connection to occur in time to make this lookup
+ * - added error message is company_id is not provided
+ *
  * Revision 1.119  2005/07/07 16:34:54  daturaarutad
  * removed Calendar.setup code (it moved to activities-widget.php)
  *
