@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.69 2005/07/07 17:37:31 braverock Exp $
+ * $Id: utils-interface.php,v 1.70 2005/07/07 20:16:32 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -653,7 +653,7 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
     if (!$rst) {
         db_error_handler($con, $sql);
     }
-    $user_menu = $rst->getmenu2('user_id', $user_id, $blank_user);
+    $user_menu = $rst->getmenu2('user_id', $user_id, $blank_user, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
     $rst->close();
 
     return $user_menu;
@@ -748,6 +748,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.70  2005/07/07 20:16:32  braverock
+ * - trim width of user menu for better screen formatting
+ *
  * Revision 1.69  2005/07/07 17:37:31  braverock
  * - move jscalendar_includes to inside start_page
  * - use function to get database connection
