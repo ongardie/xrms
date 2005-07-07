@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.68 2005/07/06 17:06:39 vanmer Exp $
+ * $Id: utils-interface.php,v 1.69 2005/07/07 17:37:31 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -212,17 +212,12 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     global $app_title;
     global $css_theme;
 
+    //get the database connection
     if (!$xcon) {
-        global $xrms_db_dbtype;
-        global $xrms_db_server;
-        global $xrms_db_username;
-        global $xrms_db_password;
-        global $xrms_db_dbname;
-        $xcon = &adonewconnection($xrms_db_dbtype);
-        $xcon->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+        $xcon=get_xrms_dbconnection();
     }
-    $user_id=$_SESSION['session_user_id'];
 
+    $user_id=$_SESSION['session_user_id'];
 
     $msg = status_msg($msg);
     if ($user_id) {
@@ -245,6 +240,8 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 <head>
   <title><?php echo "$app_title : $page_title"; ?></title>
 <?php
+    // include the jscalendar scripts
+    jscalendar_includes();
     // CSS styles that apply to all media: basic layout and font/size attributes
     echo css_link($cssroot.'layout.css', null, false, 'all');
     echo css_link($cssroot.'style.css', null, false, 'all');
@@ -572,7 +569,7 @@ function javascript_tooltips_include($output=true) {
             <script type="text/javascript" src="$http_site_root/js/wz_tooltip.js"></script>
             <!-- TOOLTIP SCRIPT INCLUDES -->
 EOQ;
-	if ($output) echo $ret;
+    if ($output) echo $ret;
         $javascript_tooltips_included = true;
     }
     return $ret;
@@ -751,6 +748,10 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.69  2005/07/07 17:37:31  braverock
+ * - move jscalendar_includes to inside start_page
+ * - use function to get database connection
+ *
  * Revision 1.68  2005/07/06 17:06:39  vanmer
  * - added check for admin preference on CSS style if user_id is not set (login page)
  *
