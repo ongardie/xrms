@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.25 2005/06/30 15:52:44 ycreddy Exp $
+ * $Id: edit-2.php,v 1.26 2005/07/07 23:15:42 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -47,14 +47,36 @@ $custom1 = $_POST['custom1'];
 $custom2 = $_POST['custom2'];
 $custom3 = $_POST['custom3'];
 $custom4 = $_POST['custom4'];
+//$return_url=$_POST['return_url'];
+
+getGlobalVar($address_return_url, 'address_return_url');
+
+$url_return_url=urlencode($address_return_url);
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+// $con->debug=1;
+
+$sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
+$rst = $con->execute($sql);
+$company_id=$rst->fields['company_id'];
+
+if ($_POST['btChangeAddress']) {
+    $return_url="../companies/addresses.php?company_id=$company_id&edit_contact_id=$contact_id"; 
+}
+if ($_POST['btEditBusinessAddress']) {
+    $return_url="../companies/one-address.php?form_action=edit&return_url=$url_return_url&company_id=$company_id&address_id=$address_id";
+}
+if ($_POST['btEditHomeAddress']) {
+    $return_url="../companies/one-address.php?form_action=edit&return_url=$url_return_url&company_id=0&address_id=$home_address_id";
+}
+if ($_POST['btNewHomeAddress']) {
+    $return_url="../companies/one-address.php?form_action=new&return_url=$url_return_url&company_id=0&contact_id=$contact_id";
+}
 
 if ($salutation == '0') {
     $salutation = '';
 }
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug=1;
 
 $validationsPassed = do_hook_function('contact_custom_inline_edit_validate',$_POST);
 if ($validationsPassed) {
@@ -64,9 +86,6 @@ if ($validationsPassed) {
                 return;
         }
 }
-
-$sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
-$rst = $con->execute($sql);
 
 $rec = array();
 $rec['address_id'] = $address_id;
@@ -112,10 +131,17 @@ do_hook_function('contact_edit_2', $param);
 
 add_audit_item($con, $session_user_id, 'updated', 'contacts', $contact_id, 1);
 
-header("Location: one.php?msg=saved&contact_id=$contact_id");
+if (!$return_url) {
+    $return_url="one.php?msg=saved&contact_id=$contact_id";
+}
+header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.26  2005/07/07 23:15:42  vanmer
+ * - changed to take a return_rul
+ * - changed to redirect to edit address pages based on submit button pressed
+ *
  * Revision 1.25  2005/06/30 15:52:44  ycreddy
  * Removing the depracated hook for save
  *
