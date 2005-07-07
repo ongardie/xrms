@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.51 2005/07/07 16:30:48 daturaarutad Exp $
+ * $Id: one.php,v 1.52 2005/07/07 20:23:14 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -185,31 +185,6 @@ require("../relationships/sidebar.php");
 /** End of the sidebar includes **/
 /*********************************/
 
-$user_menu = get_user_menu($con, $session_user_id);
-
-//get activity type menu
-$sql = "SELECT activity_type_pretty_name, activity_type_id
-        FROM activity_types
-        WHERE activity_type_record_status = 'a'
-        ORDER BY sort_order, activity_type_pretty_name";
-$rst = $con->execute($sql);
-if ($rst) {
-    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
-}
-
-// get contact names
-$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . ", contact_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a' ORDER BY last_name";
-$rst = $con->execute($sql);
-if ($rst) {
-    $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
-}
-
 $con->close();
 
 $page_title = _("Opportunity Details") . " : " . $opportunity_title;
@@ -367,7 +342,7 @@ function markComplete() {
 
 
         <!-- activities //-->
-		<?php echo $new_activity_widget; ?>
+        <?php echo $new_activity_widget; ?>
 
         <form name="<?php echo $form_name; ?>" method=post>
             <?php
@@ -415,6 +390,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.52  2005/07/07 20:23:14  braverock
+ * - remove obsolete menu queries replaced by new activities-widget code
+ *
  * Revision 1.51  2005/07/07 16:30:48  daturaarutad
  * now using activities-widget for new activity widget
  *

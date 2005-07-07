@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.121 2005/07/07 18:55:45 daturaarutad Exp $
+ * $Id: one.php,v 1.122 2005/07/07 20:19:29 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -239,10 +239,10 @@ $search_terms = array( 'company_id'            => $company_id,
 $extra_where ="";
 
 if ($division_id) {
-   	$extra_where .=" AND (a.on_what_table='company_division' AND a.on_what_id=$division_id";
-   	$extra_where .=" OR a.on_what_table='opportunities' AND o.division_id=$division_id";
-   	$extra_where .=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
-	
+    $extra_where .=" AND (a.on_what_table='company_division' AND a.on_what_id=$division_id";
+    $extra_where .=" OR a.on_what_table='opportunities' AND o.division_id=$division_id";
+    $extra_where .=" OR a.on_what_table='cases' AND cas.division_id=$division_id)";
+
 }
 $default_columns = array('title', 'owner', 'type', 'contact', 'activity_about', 'scheduled', 'due');
 
@@ -389,41 +389,6 @@ $company_buttons = do_hook_function('company_buttons', $company_buttons);
 
 /** End of the sidebar includes **/
 /*********************************/
-
-$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id
-        FROM contacts
-        WHERE company_id = $company_id
-        AND contact_record_status = 'a'
-        ORDER BY last_name";
-
-$rst = $con->execute($sql);
-if ($rst) {
-    $contact_menu = $rst->getmenu2('contact_id', '', true, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
-}
-
-$sql = "select username, user_id from users where user_record_status = 'a' order by username";
-$rst = $con->execute($sql);
-if ($rst) {
-    $user_menu = $rst->getmenu2('user_id', $session_user_id, false, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
-}
-
-$sql = "SELECT activity_type_pretty_name, activity_type_id
-        FROM activity_types
-        WHERE activity_type_record_status = 'a'
-        ORDER BY sort_order, activity_type_pretty_name";
-$rst = $con->execute($sql);
-if ($rst) {
-    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
-    $rst->close();
-} else {
-    db_error_handler ($con, $sql);
-}
 
 add_audit_item($con, $session_user_id, 'viewed', 'companies', $company_id, 3);
 
@@ -697,7 +662,7 @@ function markComplete() {
 
 ?>
 
-		<?php echo $new_activity_widget; ?>
+        <?php echo $new_activity_widget; ?>
 
         <!-- activities list //-->
         <form name="<?php echo $activities_form_name; ?>" method=post>
@@ -757,6 +722,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.122  2005/07/07 20:19:29  braverock
+ * - remove obsolete menu queries replaced by new activities-widget code
+ *
  * Revision 1.121  2005/07/07 18:55:45  daturaarutad
  * add division_id to search_terms for GetActivitiesWidget
  *
