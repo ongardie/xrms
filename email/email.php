@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.13 2005/06/29 20:53:43 niclowe Exp $
+  * $Id: email.php,v 1.14 2005/07/07 23:35:53 braverock Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -29,8 +29,10 @@
   //activities
   $activity_id = $_POST['activity_id'];
 
-  $con = &adonewconnection($xrms_db_dbtype);
-  $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+  //get the database connection
+  if (!$xcon) {
+      $con=get_xrms_dbconnection();
+  }
   //$con->debug = 1;
 
   //hack to not show continue button if no templates are found
@@ -55,8 +57,8 @@
         }
       }
 
-    	break;
-			
+        break;
+
     case "companies":
       //Nic: DO SOMETHING DIFFERENT FOR COMPANIES BECAUSE YOU HAVE TO GET THE CONTACT IDS FROM WITHIN THE COMPANY
       //I only pass companies the end of the sql, ie the from and the where.
@@ -75,21 +77,21 @@
           $rst->movenext();
         }
       }
-			break;
-			
+            break;
+
     case 'contact_list':
       getGlobalVar($contact_list, 'contact_list');
       if ($contact_list) {
         $array_of_contacts=explode(",",$contact_list);
       }
-    	break;
-			
+        break;
+
     default:
       $search_sql=$_SESSION["search_sql"];
       list($select, $from) = spliti("FROM", $search_sql,2);//need limit otherwise from_unixtime functions get captured
       list($from, $orderby) = spliti("order by", $from);
       list($from, $groupby) = spliti("group by", $from);
-  
+
       $sql= "SELECT cont.contact_id FROM ".$from;
       //added the null statement as a null record ruins email-3.php
       $sql.=" AND cont.contact_id IS NOT NULL ";
@@ -97,7 +99,7 @@
       if($groupby)$sql.="GROUP BY ".$groupby;
       if($orderby)$sql.=" ORDER BY ".$orderby;
       $rst = $con->execute($sql);
-  
+
       if ($rst) {
         while (!$rst->EOF) {
           array_push($array_of_contacts, $rst->fields['contact_id']);
@@ -106,7 +108,7 @@
       }
       break;
   }
-	//END CASE
+    //END CASE
 
   $_SESSION['array_of_contacts'] = serialize($array_of_contacts);
 
@@ -144,16 +146,16 @@
     <div id="Content">
 
         <form action=email-2.php method=post>
-		<table class=widget cellspacing=1>
-			<tr>
-				<td class=widget_header colspan=20><?php echo _("E-Mail Templates"); ?></td>
-			</tr>
-			<tr>
-				<td class=widget_label width=1%>&nbsp;</td>
-				<td class=widget_label><?php echo _("Template"); ?></td>
-			</tr>
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=20><?php echo _("E-Mail Templates"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label width=1%>&nbsp;</td>
+                <td class=widget_label><?php echo _("Template"); ?></td>
+            </tr>
             <?php  echo $tablerows ?>
-			<tr>
+            <tr>
 <?php if ($show_continue) { ?> <td class=widget_content_form_element colspan=2><input class=button type=submit value="<?php echo _("Continue"); ?>"></td> <?php } ?>
   </tr>
   </table>
@@ -176,6 +178,9 @@
 
   /**
   * $Log: email.php,v $
+  * Revision 1.14  2005/07/07 23:35:53  braverock
+  * - change to use common database connection function
+  *
   * Revision 1.13  2005/06/29 20:53:43  niclowe
   * fixed bug where if you try to send from the company page you cannot send to the contacts of the company (scope=company was broken)
   *
