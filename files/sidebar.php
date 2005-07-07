@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.19 2005/07/01 16:16:24 vanmer Exp $
+ * $Id: sidebar.php,v 1.20 2005/07/07 16:55:28 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -10,6 +10,10 @@ if ( !defined('IN_XRMS') )
   die(_('Hacking attempt'));
   exit;
 }
+
+require_once($include_directory . 'utils-files.php');
+
+
 /*
 COMMENTED until ACL is integrated
 $fileList=acl_get_list($session_user_id, 'Read', false, 'files');
@@ -20,117 +24,96 @@ else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN
 // Avoid undefined errors until ACL is integrated
 $file_limit_sql = '';
 
-//uncomment the debug line to see what's going on with the query
-//$con->debug=1;
+    // Build data setup
+    $files_data['file_limit_sql']   = $file_limit_sql;
+    $files_data['entered_by']       = $session_user_id;
+    $files_data['on_what_table']    = $on_what_table;
+    $files_data['on_what_id']       = $on_what_id;
 
-//build the files sql query
-if (strlen($on_what_table)>0){
-    $file_sql = "select * from files, users where
-            files.entered_by = users.user_id
-            and on_what_table = '$on_what_table'
-            and on_what_id = '$on_what_id'
-            and file_record_status = 'a'
-            $file_limit_sql           
-            order by entered_at";
-    $file_sidebar_rst = $con->execute($file_sql);
-} else {
-    $file_sql = "select * from files, users where
-            files.entered_by = '$session_user_id'
-            and files.entered_by = users.user_id
-            and file_record_status = 'a'
-            $file_limit_sql
-            order by entered_at";
-    $file_sidebar_rst = $con->SelectLimit($file_sql, 5, 0);
-}
-// any errors ???
-if (!$file_sidebar_rst) {
-  // yep - report it
-  db_error_handler($con, $file_sql);
-}
+    $file_sidebar_rst = get_file_records( $con, $files_data );
+
 
 // files plugin hook
 $plugin_params = array($file_sidebar_rst);
 do_hook_function('file_browse_files', $plugin_params);
 $file_rows = $plugin_params['file_rows'];
 if(!$file_rows) {
-	if (!$file_sidebar_label) {
-		$file_sidebar_label=_("Files");
-	}
+    if (!$file_sidebar_label) {
+        $file_sidebar_label=_("Files");
+    }
         if (!$return_url) {
             $return_url="/$on_what_table/one.php?".make_singular($on_what_table)."_id=".$on_what_id;
         }
-	$file_rows .= "<div id='file_sidebar'>
-        			<table class=widget cellspacing=1 width=\"100%\">
-            			<tr>
-                			<td class=widget_header colspan=5>$file_sidebar_label</td>
-            			</tr>
-            			<tr>
-                			<td class=widget_label>"._("Name")."</td>
-                			<td class=widget_label>"._("Size")."</td>
-                			<td class=widget_label>"._("Owner")."</td>
-                			<td class=widget_label>"._("Date")."</td>
-                			<td class=widget_label>"._("Action")."</td>
-                                        
-            			</tr>\n";
+    $file_rows = "<div id='file_sidebar'>
+                    <table class=widget cellspacing=1 width=\"100%\">
+                        <tr>
+                            <td class=widget_header colspan=4>"._("Files")."</td>
+                        </tr>
+                        <tr>
+                            <td class=widget_label>"._("Name")."</td>
+                            <td class=widget_label>"._("Size")."</td>
+                            <td class=widget_label>"._("Owner")."</td>
+                            <td class=widget_label>"._("Date")."</td>
+                        </tr>\n";
 
+    if (strlen($file_sidebar_rst->fields['username']) > 0) {
+        while (!$file_sidebar_rst->EOF) {
 
+          // get contact id
+          $user_contact_id = $file_sidebar_rst->fields['user_contact_id'];
 
-	if (strlen($file_sidebar_rst->fields['username']) > 0) {
-	    while (!$file_sidebar_rst->EOF) {
-	
-	      // get contact id
-	      $user_contact_id = $file_sidebar_rst->fields['user_contact_id'];
-	       $edit_file_button=render_edit_button(_("Edit"),'button',"location.href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "'",false, false, 'files',$file_sidebar_rst->fields['file_id']);
-	        $file_rows .= "
-	             <tr>";
-	        if ($file_sidebar_rst->fields['file_size'] == "0")
-	          {
-                    $file_rows .= "<td class=non_uploaded_file><a href=\"#\" onclick=\"javascript: window.open('$http_site_root/files/download.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "')\" onmouseover=\"return escape('{$file_sidebar_rst->fields['file_description']}');\">" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) . '</a></b></td>';
+            $file_rows .= "
+                 <tr>";
+            if ($file_sidebar_rst->fields['file_size'] == "0")
+              {
+                    $file_rows .= "<td class=non_uploaded_file><a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) . '</a></b></td>';
                     $file_rows .= '<td class=non_uploaded_file><b>' . pretty_filesize($file_sidebar_rst->fields['file_size']) . '</b></td>';
                     $file_rows .= '<td class=non_uploaded_file><b>' . $file_sidebar_rst->fields['username'] . '</b></td>';
                     $file_rows .= '<td class=non_uploaded_file><b>' . $con->userdate($file_sidebar_rst->fields['entered_at']) . '</b></td>';
-                    $file_rows .= '<td class=widget_content>' . $edit_file_button . '</td>';
-	          }
-	        else
-	          {
-                    $file_rows .= "<td class=widget_content><a href=\"#\" onclick=\"javascript: window.open('$http_site_root/files/download.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "')\" onmouseover=\"return escape('{$file_sidebar_rst->fields['file_description']}');\">" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) . '</a></td>';
+              }
+            else
+              {
+                    $file_rows .= "<td class=widget_content><a href='$http_site_root/files/one.php?file_id={$file_sidebar_rst->fields['file_id']}&return_url=". urlencode($return_url) . "' title='". $file_sidebar_rst->fields['file_pretty_name']. "'>" . substr( $file_sidebar_rst->fields['file_pretty_name'], 0, 20) .  '</a></td>';
                     $file_rows .= '<td class=widget_content>' . pretty_filesize($file_sidebar_rst->fields['file_size']) . '</td>';
                     $file_rows .= '<td class=widget_content>' . $file_sidebar_rst->fields['username'] . '</td>';
                     $file_rows .= '<td class=widget_content>' . $con->userdate($file_sidebar_rst->fields['entered_at']) . '</td>';
-                    $file_rows .= '<td class=widget_content>' . $edit_file_button . '</td>';
-	          }
-	        $file_rows .= "
-	             </tr>";
-	        $file_sidebar_rst->movenext();
-	    }
-	    $file_sidebar_rst->close();
-	} else {
-	    $file_rows .= "            <tr> <td class=widget_content colspan=5> "._("No attached files")." </td> </tr>\n";
-	}
-	
-	//put in the new button
-	if (strlen($on_what_table)>0){
-	    $new_file_button=render_create_button('New', 'submit');
-	    $file_rows .= "
-	            <tr>
-	            <form action='".$http_site_root."/files/new.php' method='post'>
-	                <td class=widget_content_form_element colspan=5>
-	                        <input type=hidden name=on_what_table value='$on_what_table'>
-	                        <input type=hidden name=on_what_id value='$on_what_id'>
-	                        <input type=hidden name=return_url value='$return_url'>
-	                        $new_file_button
-	                </td>
-	            </form>
-	            </tr>";
-	}
-	
-	//now close the table, we're done
-	$file_rows .= "        </table>\n</div>";
-        $file_rows.=javascript_tooltips_include(false);
+              }
+            $file_rows .= "
+                 </tr>";
+            $file_sidebar_rst->movenext();
+        }
+        $file_sidebar_rst->close();
+    } else {
+        $file_rows .= "            <tr> <td class=widget_content colspan=4> "._("No attached files")." </td> </tr>\n";
+    }
+
+    //put in the new button
+    if (strlen($on_what_table)>0){
+        $new_file_button=render_create_button('New', 'submit');
+        $file_rows .= "
+                <tr>
+                <form action='".$http_site_root."/files/new.php' method='post'>
+                    <td class=widget_content_form_element colspan=4>
+                            <input type=hidden name=on_what_table value='$on_what_table'>
+                            <input type=hidden name=on_what_id value='$on_what_id'>
+                            <input type=hidden name=return_url value='$return_url'>
+                            $new_file_button
+                    </td>
+                </form>
+                </tr>";
+    }
+
+    //now close the table, we're done
+    $file_rows .= "        </table>\n</div>";
 }
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.20  2005/07/07 16:55:28  jswalter
+ *  - added 'ultils-files.php' to use new FILES API
+ *  - removed file retrieval SQL
+ *  - added 'get_file_records()' call to retrieve FILES list
+ *
  * Revision 1.19  2005/07/01 16:16:24  vanmer
  * - added parameter to explicitly set sidebar label from outside of sidebar
  *
