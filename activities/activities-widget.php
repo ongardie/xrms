@@ -537,14 +537,25 @@ function markComplete() {
                 <td class=widget_content_form_element>$activity_type_menu</td>" . 
 				($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
                 <td colspan=2 class=widget_content_form_element>
-                    <input type=text ID=\"f_date_c\" name=ends_at value=\"" . date('Y-m-d H:i:s') . "\">
-                    <img ID=\"f_trigger_c\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . 
+                    <input type=text ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d H:i:s') . "\">
+                    <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . 
                     render_create_button("Add") . 
                     render_create_button("Done",'button',"javascript: markComplete();") . "
                 </td>
             </tr>
         </table>
         </form>
+		<script language=\"JavaScript\" type=\"text/javascript\">
+			Calendar.setup({
+        			inputField     :    \"f_date_new_activity\",      // id of the input field
+        			ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
+        			showsTime      :    true,            // will display a time selector
+        			button         :    \"f_trigger_new_activity\",   // trigger for the calendar (button ID)
+        			singleClick    :    false,           // double-click mode
+        			step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        			align          :    \"Bl\"           // alignment (defaults to \"Bl\")
+    		});
+		</script>
 ";	
 
 return $ret;
@@ -552,6 +563,9 @@ return $ret;
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.11  2005/07/07 16:31:06  daturaarutad
+* add Calendar.setup code to new activity widget
+*
 * Revision 1.10  2005/07/07 03:37:38  daturaarutad
 * temporarily disable thread_id column
 *
