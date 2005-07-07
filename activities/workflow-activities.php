@@ -6,7 +6,7 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * $Id: workflow-activities.php,v 1.12 2005/07/06 23:42:01 vanmer Exp $
+ * $Id: workflow-activities.php,v 1.13 2005/07/07 20:57:41 vanmer Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -107,7 +107,7 @@ if ($rst) {
             }
         }
         
-        $user_id=get_user_in_role($con, $activity_template_role_id);
+        $user_id=get_least_busy_user_in_role($con, $activity_template_role_id, strtotime($ends_at));
         //save to database
         $rec = array();
         $rec['activity_type_id'] = $activity_type_id;
@@ -146,6 +146,9 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.13  2005/07/07 20:57:41  vanmer
+ * - changed to use newly created least busy user function
+ *
  * Revision 1.12  2005/07/06 23:42:01  vanmer
  * - added initial handling of actions on workflow templates
  * - changed to use add_activity API when instantiating workflow activities
