@@ -103,7 +103,7 @@ $select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->
 
   . "'$return_url' as return_url, "
 
-  //.	$con->substr."(activity_description, 1, $description_substring_length) AS description_brief, " 
+  //.   $con->substr."(activity_description, 1, $description_substring_length) AS description_brief, "
 
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
@@ -117,7 +117,7 @@ $joins = "
 LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
 LEFT OUTER JOIN users u ON a.user_id = u.user_id
 LEFT OUTER JOIN activity_participants ON a.activity_id=activity_participants.activity_id
-LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants.contact_id 
+LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants.contact_id
 LEFT OUTER JOIN case_priorities cp ON a.activity_priority_id=cp.case_priority_id
 LEFT OUTER JOIN activity_resolution_types rt ON a.activity_resolution_type_id=rt.activity_resolution_type_id";
 
@@ -148,14 +148,14 @@ if (strlen($search_terms['contact_id'])) {
 
 // join companies if any company-related search terms are enabled.
 if (strlen($search_terms['company']) > 0 || strlen($search_terms['company_id']) ||
-	(strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zone_between2']))) {
+    (strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zone_between2']))) {
 
-	$select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
-	$extra_group_by = ", c.company_name,c.company_id";
-	$from .= ", companies c, addresses addr ";
+    $select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
+    $extra_group_by = ", c.company_name,c.company_id";
+    $from .= ", companies c, addresses addr ";
 
-	$where .= " AND a.company_id = c.company_id ";
-  	$where .= "AND c.default_primary_address=addr.address_id ";
+    $where .= " AND a.company_id = c.company_id ";
+    $where .= "AND c.default_primary_address=addr.address_id ";
 
 }
 
@@ -223,7 +223,7 @@ if(strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zon
     $now = time();
     $now_array=localtime($now, true);
     $hour=$now_array['tm_hour'];
-	$from .= ", time_daylight_savings tds ";
+    $from .= ", time_daylight_savings tds ";
     $where .= " and addr.daylight_savings_id = tds.daylight_savings_id";
 
     $where .= " and ($hour + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") >= " . $search_terms['time_zone_between'];
@@ -231,7 +231,7 @@ if(strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zon
 }
 
 if($search_terms['opportunity_status_id']) {
-	$from .= ', opportunities o';
+    $from .= ', opportunities o';
     $where .= " and a.on_what_table='opportunities' and a.on_what_id=o.opportunity_id and o.opportunity_status_id=" . $search_terms['opportunity_status_id'];
 }
 
@@ -241,9 +241,9 @@ if($search_terms['on_what_table']) {
 }
 
 if($search_terms['campaign_id']) {
-	//$from .= ', campaigns camp';
-	
-	$where .= " AND a.on_what_table='campaigns' AND a.on_what_id=" . $search_terms['campaign_id'];
+    //$from .= ', campaigns camp';
+
+    $where .= " AND a.on_what_table='campaigns' AND a.on_what_id=" . $search_terms['campaign_id'];
 
 }
 
@@ -330,9 +330,9 @@ if('list' != $activities_widget_type) {
 } else {
     global $system_rows_per_page;
 
-	$thread_query_list = "select activity_title, activity_id from activities where thread_id is not null group by thread_id order by activity_id";
+    $thread_query_list = "select activity_title, activity_id from activities where thread_id is not null group by thread_id order by activity_id";
 
-	$thread_query_select = $sql . 'AND thread_id = XXX-value-XXX';
+    $thread_query_select = $sql . 'AND thread_id = XXX-value-XXX';
 
 
     $columns = array();
@@ -341,39 +341,39 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
     $columns[] = array('name' => _('Summary'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
     $columns[] = array('name' => _('Description'), 'index_calc' => 'description_brief', 'sql_sort_column' => 'activity_description', 'type' => 'url');
-    $columns[] = array('name' => _('Priority'), 'index_sql' => 'case_priority_pretty_name', 'sql_sort_column'=>'a.activity_priority_id'); 
+    $columns[] = array('name' => _('Priority'), 'index_sql' => 'case_priority_pretty_name', 'sql_sort_column'=>'a.activity_priority_id');
     $columns[] = array('name' => _('Scheduled Start'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
     $columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
     $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
     $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
     //$columns[] = array('name' => _('Thread'), 'index_sql' => 'thread', 'group_query_list' => $thread_query_list, 'group_query_select' => $thread_query_select);
-    $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about'); 
-    $columns[] = array('name' => _('Resolution'), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id'); 
-	
-	// selects the columns this user is interested in
-	$pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
-	$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-	$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-	
-	$columns = $pager_columns->GetUserColumns('default');
+    $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
+    $columns[] = array('name' => _('Resolution'), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id');
 
-	global $activity_column_names;
-	$activity_column_names = $pager_columns->GetUserColumnNames();
+    // selects the columns this user is interested in
+    $pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
+    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 
-	
-	
-	
-	$endrows = $end_rows . 
-				"<tr><td class=widget_content_form_element colspan=10>
-            	$pager_columns_button
-            	<input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _('Calendar View') ."\">
-            	<input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-            	<input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+    $columns = $pager_columns->GetUserColumns('default');
 
-	$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
-	$pager->AddEndRows($endrows);
-	$pager->SetCountSQL($count_sql);
-	$widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
+    global $activity_column_names;
+    $activity_column_names = $pager_columns->GetUserColumnNames();
+
+
+
+
+    $endrows = $end_rows .
+                "<tr><td class=widget_content_form_element colspan=10>
+                $pager_columns_button
+                <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _('Calendar View') ."\">
+                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
+                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+
+    $pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
+    $pager->AddEndRows($endrows);
+    $pager->SetCountSQL($count_sql);
+    $widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
 }
 
 $widget['content'] .= "<input type=hidden name=activities_widget_type value=\"$activities_widget_type\">\n";
@@ -474,37 +474,35 @@ if ($rst) {
 
 // create menu of contacts
 if($company_id) {
-	$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id
-        	FROM contacts
-        	WHERE company_id = $company_id
-        	AND contact_record_status = 'a'
-        	ORDER BY last_name";
-	
-	$rst = $con->execute($sql);
-	if ($rst) {
-    	$contact_menu = $rst->getmenu2('contact_id', $contact_id, true, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
-    	$rst->close();
-	} else {
-    	db_error_handler ($con, $sql);
-	}
+    $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id
+            FROM contacts
+            WHERE company_id = $company_id
+            AND contact_record_status = 'a'
+            ORDER BY last_name";
+
+    $rst = $con->execute($sql);
+    if ($rst) {
+        $contact_menu = $rst->getmenu2('contact_id', $contact_id, true, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
+        $rst->close();
+    } else {
+        db_error_handler ($con, $sql);
+    }
 }
 
 $hidden = '';
 
 if($on_what_table && $on_what_id) {
-	$hidden .= "<input type=hidden name=on_what_table value=\"$on_what_table\">";
-	$hidden .= "<input type=hidden name=on_what_id value=\"$on_what_id\">";
+    $hidden .= "<input type=hidden name=on_what_table value=\"$on_what_table\">";
+    $hidden .= "<input type=hidden name=on_what_id value=\"$on_what_id\">";
 }
 
 $hidden .= "<input type=hidden name=company_id value=\"$company_id\">";
 
 if($contact_id) {
-	$hidden .= "<input type=hidden name=contact_id value=\"$contact_id\">";
+    $hidden .= "<input type=hidden name=contact_id value=\"$contact_id\">";
 }
 
-$ret = jscalendar_includes(false) .
-"
-
+$ret = "
 <script language=\"JavaScript\" type=\"text/javascript\">
 <!--
 function markComplete() {
@@ -518,7 +516,7 @@ function markComplete() {
         <!-- activities //-->
         <form name=\"$form_name\" action=\"$http_site_root/activities/new-2.php\" method=post>
         <input type=hidden name=return_url value=\"$return_url\">
-		$hidden
+        $hidden
         <input type=hidden name=activity_status value=\"o\">
         <table class=widget cellspacing=1>
             <tr>
@@ -527,42 +525,45 @@ function markComplete() {
             <tr>
                 <td class=widget_label>" . _("Summary") . "</td>
                 <td class=widget_label>" . _("User") . "</td>
-                <td class=widget_label>" . _("Type") . "</td> ". 
-				($contact_menu ? "<td class=widget_label>" . _("Contact") . "</td>" : "") ."
+                <td class=widget_label>" . _("Type") . "</td> ".
+                ($contact_menu ? "<td class=widget_label>" . _("Contact") . "</td>" : "") ."
                 <td colspan=2 class=widget_label>" . _("Scheduled End") . "</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
                 <td class=widget_content_form_element>$user_menu</td>
-                <td class=widget_content_form_element>$activity_type_menu</td>" . 
-				($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
+                <td class=widget_content_form_element>$activity_type_menu</td>" .
+                ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
                 <td colspan=2 class=widget_content_form_element>
                     <input type=text ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d H:i:s') . "\">
-                    <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . 
-                    render_create_button("Add") . 
-                    render_create_button("Done",'button',"javascript: markComplete();") . "
+                    <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" .
+                    render_create_button(_("Add")) .
+                    render_create_button(_("Done"),'button',"javascript: markComplete();") . "
                 </td>
             </tr>
         </table>
         </form>
-		<script language=\"JavaScript\" type=\"text/javascript\">
-			Calendar.setup({
-        			inputField     :    \"f_date_new_activity\",      // id of the input field
-        			ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
-        			showsTime      :    true,            // will display a time selector
-        			button         :    \"f_trigger_new_activity\",   // trigger for the calendar (button ID)
-        			singleClick    :    false,           // double-click mode
-        			step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-        			align          :    \"Bl\"           // alignment (defaults to \"Bl\")
-    		});
-		</script>
-";	
+        <script language=\"JavaScript\" type=\"text/javascript\">
+            Calendar.setup({
+                    inputField     :    \"f_date_new_activity\",      // id of the input field
+                    ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
+                    showsTime      :    true,            // will display a time selector
+                    button         :    \"f_trigger_new_activity\",   // trigger for the calendar (button ID)
+                    singleClick    :    false,           // double-click mode
+                    step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+                    align          :    \"Bl\"           // alignment (defaults to \"Bl\")
+            });
+        </script>
+";
 
 return $ret;
 }
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.12  2005/07/07 17:33:32  braverock
+* - move jscalendar_includes to start_page fn
+*
 * Revision 1.11  2005/07/07 16:31:06  daturaarutad
 * add Calendar.setup code to new activity widget
 *
