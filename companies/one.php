@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.120 2005/07/07 18:51:50 vanmer Exp $
+ * $Id: one.php,v 1.121 2005/07/07 18:55:45 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -232,7 +232,8 @@ $new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url,
 // Activities Widget
 
 // Pass search terms to GetActivitiesWidget
-$search_terms = array( 'company_id'            => $company_id);
+$search_terms = array( 'company_id'            => $company_id,
+                       'division_id'           => $division_id);
 
 
 $extra_where ="";
@@ -756,6 +757,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.121  2005/07/07 18:55:45  daturaarutad
+ * add division_id to search_terms for GetActivitiesWidget
+ *
  * Revision 1.120  2005/07/07 18:51:50  vanmer
  * - added lookup of company_id if division_id is not specified
  * - moved database connection to occur in time to make this lookup
