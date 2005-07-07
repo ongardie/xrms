@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.21 2005/06/24 23:49:38 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.22 2005/07/07 19:38:16 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -682,7 +682,39 @@ class xrms_acl {
         else return true;
         
     }
-
+    /*****************************************************************************/
+    /** function get_role_users
+      *
+      * Returns all users that exist in a particular role, optionally limited by Groups
+      *
+      *
+      * @param integer Role_id identifying which role to find users for
+      * @param integer Group_id optionally specify group to limit search with
+      * @return array of arrays containing User_id and $Group_id for which this user has this role
+      * 
+      */
+    function get_role_users($Role_id, $Groups=false) {
+        if (!$Role_id) { return false; }
+        $tblName = "GroupUser";
+        $con = $this->DBConnection;
+        if ($Groups) {
+            $GroupList=implode(",", $Groups);
+            $GroupWhere ="AND Group_id IN ($GroupList)";
+        } else $GroupWhere ='';
+        
+        $RoleWhere="Role_id=$Role_id";
+        $sql = "SELECT * FROM $tblName WHERE $RoleWhere $GroupWhere";
+        $rst = $con->execute($sql);
+        if (!$rst) { db_error_handler($con, $sql); return false; }
+        if (!$rst->EOF) {
+            $ret=array();
+            while (!$rst->EOF) {
+                $ret[]=$rst->fields;
+                $rst->movenext();
+            }
+        }       
+        return $ret;
+    }
     /*****************************************************************************/
     /** function get_user_roles
       *
@@ -2113,6 +2145,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.22  2005/07/07 19:38:16  vanmer
+ * - added method for querying for all users with a specified role
+ *
  * Revision 1.21  2005/06/24 23:49:38  vanmer
  * - changed add_controlled_object and relationships to return existing ID if found, instead of returning false
  * - added export permission support
