@@ -2,7 +2,7 @@
 /**
  * View a single Service Case
  *
- * $Id: one.php,v 1.45 2005/06/30 04:42:28 vanmer Exp $
+ * $Id: one.php,v 1.46 2005/07/07 03:38:54 daturaarutad Exp $
  */
 
 //include required files
@@ -15,7 +15,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
-require_once('../activities/activities-pager-functions.php');
+require_once('../activities/activities-widget.php');
 
 
 $case_id = $_GET['case_id'];
@@ -93,119 +93,26 @@ if ($rst) {
     db_error_handler ($con, $sql);
 }
 
-// most recent activities
+// get the new activities widget
+$return_url = "/cases/one.php?case_id=$case_id"; 
 
-$sql_activities = "SELECT " .
-$con->Concat("'<a id=\"'", "activity_title", "'\" href=\"$http_site_root/activities/one.php?activity_id='", "a.activity_id", "'&amp;return_url=/cases/one.php%3Fcase_id=$case_id\">'", "activity_title", "'</a>'") .
-" AS  activity_title_link,
-u.username,
-at.activity_type_pretty_name," .
-$con->Concat($con->qstr('<a id="'), 'cont.last_name', $con->qstr('_'), 'cont.first_names', $con->qstr('" href="../contacts/one.php?contact_id='), 'cont.contact_id', $con->qstr('">'), 'cont.first_names', $con->qstr(' '), 'cont.last_name', $con->qstr('</a>')) . ' AS contact_name, ' .
-"scheduled_at,
-a.entered_at,
-a.on_what_table,
-a.on_what_id,
-activity_status,
-activity_title,
-cont.contact_id,
-cont.first_names as contact_first_names,
-cont.last_name as contact_last_name,
-(CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->SQLDate('Y-m-d') . ") THEN 1 ELSE 0 END) AS is_overdue, activity_title
-from activity_types at, users u, activities a left join contacts cont on a.contact_id = cont.contact_id
-where a.on_what_table = 'cases'
-and a.on_what_id = $case_id
-and a.user_id = u.user_id
-and a.activity_type_id = at.activity_type_id
-and a.activity_record_status = 'a'";
-
-    $list=acl_get_list($session_user_id, 'Read', false, 'activities');
-    //print_r($list);
-    if ($list) {
-        if ($list!==true) {
-            $list=implode(",",$list);
-            $sql_activities .= " and a.activity_id IN ($list) ";
-        }
-    } else { $sql_activities .= ' AND 1 = 2 '; }
-
-    // begin Activities Pager
-
-    // Save this for email/email.php is activities Mail Merge
-    $_SESSION["search_sql"]=$sql;
+$new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url, 'cases', $case_id, $company_id, $contact_id);
 
 
-    $columns = array();
-    $columns[] = array('name' => _('Summary'), 'index_sql' => 'activity_title_link', 'sql_sort_column' => 'activity_title');
-    $columns[] = array('name' => _('User'), 'index_sql' => 'username');
-    $columns[] = array('name' => _('Type'), 'index_sql' => 'activity_type_pretty_name');
-    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact_name', 'sql_sort_column' => 'contact_last_name,contact_first_names');
-    $columns[] = array('name' => _('Scheduled'), 'index_sql' => 'scheduled_at', 'default_sort' => 'desc');
+// Begin Activities Widget
+$form_name = 'OneCase';
 
-    // no reason to set this if you don't want all by default
-    $default_columns = null;
-    //$default_columns = array('activity_title_link', 'username','activity_type_pretty_name','contact_name','scheduled_at');
-
-    // selects the columns this user is interested in
-    $pager_columns = new Pager_Columns('CasesActivitiesPager', $columns, $default_columns, $form_name);
-    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
-
-    $columns = $pager_columns->GetUserColumns('default');
-
-    $endrows = "<tr><td class=widget_content_form_element colspan=10>
-                $pager_columns_button
-                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
-
-    $pager = new GUP_Pager($con, $sql_activities, 'GetActivitiesPagerData', _('Activities'), $form_name, 'CasesActivitiesPager', $columns, false, true);
-    $pager->AddEndRows($endrows);
-
-    $activity_rows = $pager->Render($system_rows_per_page);
-    // end Activities Pager
+$search_terms = array();
+$search_terms['on_what_table'] = 'cases';
+$search_terms['on_what_id'] = $case_id;
 
 
-/*
-$sql_activities.="
-order by is_overdue desc, a.scheduled_at desc, a.entered_at desc";
+$default_columns = array('title', 'owner', 'type', 'scheduled', 'due');
 
-$rst = $con->selectlimit($sql_activities, $display_how_many_activities_on_contact_page);
+$activities_widget = GetActivitiesWidget($con, $search_terms, $form_name, _('Activities'), $session_user_id, $return_url, '', '', $default_columns);
 
-$activity_rows = '';
+// End Activities Widget
 
-if ($rst) {
-    while (!$rst->EOF) {
-
-        $open_p = $rst->fields['activity_status'];
-        $scheduled_at = $rst->unixtimestamp($rst->fields['scheduled_at']);
-        $is_overdue = $rst->fields['is_overdue'];
-        $on_what_table = $rst->fields['on_what_table'];
-        $on_what_id = $rst->fields['on_what_id'];
-        $activity_contact_id = $rst->fields['contact_id'];
-
-
-        if ($open_p == 'o') {
-            if ($is_overdue) {
-                $classname = 'overdue_activity';
-            } else {
-                $classname = 'open_activity';
-            }
-        } else {
-            $classname = 'closed_activity';
-        }
-
-        $activity_rows .= '<tr>';
-        $activity_rows .= "<td class='$classname'><a href='$http_site_root/activities/one.php?return_url=/cases/one.php?case_id=$case_id&activity_id=" . $rst->fields['activity_id'] . "'>" . $rst->fields['activity_title'] . '</a></td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['username'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
-        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['contact_first_names'] . ' ' . $rst->fields['contact_last_name'] . "</td>";
-        $activity_rows .= '<td colspan=2 class=' . $classname . '>' . $con->userdate($rst->fields['scheduled_at']) . '</td>';
-        $activity_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-   db_error_handler($con,$sql_activities);
-}
-*/
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -226,24 +133,9 @@ require_once("../notes/sidebar.php");
 /** End of the sidebar includes **/
 /*********************************/
 
-$user_menu = get_user_menu($con, $session_user_id);
-
-$sql = "SELECT activity_type_pretty_name, activity_type_id
-        FROM activity_types
-        WHERE activity_type_record_status = 'a'
-        ORDER BY sort_order, activity_type_pretty_name";
-$rst = $con->execute($sql);
-if ($rst) {
-   $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
-   $rst->close();
-} else {
-   db_error_handler ($con,$sql);
-}
-
 $sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . ", contact_id, address_id FROM contacts WHERE company_id = $company_id AND contact_record_status = 'a' ORDER BY last_name";
 $rst = $con->execute($sql);
 if ($rst) {
-    $contact_menu = $rst->getmenu2('contact_id', $contact_id, true);
     $address_id = $rst->fields['address_id'];
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $work_phone);
     $rst->close();
@@ -365,52 +257,13 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 
-        <script language="JavaScript" type="text/javascript">
-        <!--
-        function markComplete() {
-            document.forms[0].activity_status.value = "c";
-            document.forms[0].submit();
-        }
-        //-->
-        </script>
-
-        <!-- activities //-->
-        <form action="../activities/new-2.php" method="POST">
-        <input type=hidden name=return_url value="/cases/one.php?case_id=<?php  echo $case_id; ?>">
-        <input type=hidden name=company_id value="<?php echo $company_id ?>">
-        <input type=hidden name=on_what_table value="cases">
-        <input type=hidden name=on_what_id value="<?php  echo $case_id; ?>">
-        <input type=hidden name=activity_priority_id value="<?php echo $case_priority_id; ?>">
-        <input type=hidden name=activity_status value="o">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Summary"); ?></td>
-                <td class=widget_label><?php echo _("User"); ?></td>
-                <td class=widget_label><?php echo _("Type"); ?></td>
-                <td class=widget_label><?php echo _("Contact"); ?></td>
-                <td colspan=2 class=widget_label><?php echo _("On"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title ></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>">
-                    <?php echo render_create_button("Add"); ?>
-                    <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
-                 </td>
-            </tr>
-        </table>
-        </form>
-
+        <?php echo $new_activity_widget; ?>
         <form name="<?php echo $form_name; ?>" method=post>
             <?php
                 // activity pager
-                echo $pager_columns_selects;
-                echo $activity_rows;
+                echo $activities_widget['content'];
+                echo $activities_widget['sidebar'];
+                echo $activities_widget['js'];
             ?>
         </form>
 
@@ -445,6 +298,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.46  2005/07/07 03:38:54  daturaarutad
+ * updated to use new activities-widget functions
+ *
  * Revision 1.45  2005/06/30 04:42:28  vanmer
  * - automatically set newly created activities on cases to the same priority as the case, if available
  *

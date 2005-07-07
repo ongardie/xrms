@@ -2,7 +2,7 @@
 /**
  * View Campaign Details
  *
- * $Id: one.php,v 1.19 2005/01/13 19:05:15 vanmer Exp $
+ * $Id: one.php,v 1.20 2005/07/07 03:41:54 daturaarutad Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -12,6 +12,7 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once('../activities/activities-widget.php');
 
 $campaign_id = $_GET['campaign_id'];
 $on_what_id=$campaign_id;
@@ -72,6 +73,28 @@ require_once($include_locations_location . 'notes/sidebar.php');
 
 //include the files sidebar
 require_once($include_locations_location . 'files/sidebar.php');
+
+// get the new activities widget
+$new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_table, $on_what_id, $company_id, $contact_id); 
+
+
+// Begin Activities Widget
+$form_name = 'OneCampaign';
+
+$search_terms = array();
+$search_terms['on_what_table'] = 'campaigns';
+$search_terms['on_what_id'] = $campaign_id;
+
+$return_url = "/campaigns/one.php?campaign_id=$campaign_id";
+
+$default_columns = array('title', 'owner', 'type', 'activity_about', 'scheduled', 'due');
+
+$activities_widget = GetActivitiesWidget($con, $search_terms, $form_name, _('Activities'), $session_user_id, $return_url, '', '', $default_columns);
+
+// End Activities Widget
+
+
+
 
 $con->close();
 
@@ -151,6 +174,14 @@ start_page($page_title, true, $msg);
             </tr>
         </table>
 
+		<?php 
+			echo $new_activity_widget; 
+			echo "<form name=$form_name method=POST>\n";
+			echo $activities_widget['content']; 
+			echo $activities_widget['sidebar']; 
+			echo $activities_widget['js']; 
+			echo "</form>\n";
+			?>
     </div>
 
         <!-- right column //-->
@@ -177,6 +208,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.20  2005/07/07 03:41:54  daturaarutad
+ * updated to use new activities-widget functions
+ *
  * Revision 1.19  2005/01/13 19:05:15  vanmer
  * - removed unneeded ACL restriction
  *

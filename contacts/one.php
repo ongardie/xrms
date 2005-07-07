@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.90 2005/06/29 20:55:33 daturaarutad Exp $
+ * $Id: one.php,v 1.91 2005/07/07 03:43:38 daturaarutad Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -132,12 +132,17 @@ ORDER by sort_order
 $rst = $con->execute($sql_opportunity_types);
 $opportunity_status_rows = $rst->GetMenu2('opportunity_status_id', null, true);
 
+// New Activities Widget
+$return_url = "/contacts/one.php?contact_id=$contact_id";
+
+$new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url, null, null, $company_id, $contact_id);
+
+
 // Begin Activities Widget
 
 // Pass search terms to GetActivitiesWidget
 $search_terms = array();
 
-$return_url = "/contacts/one.php?contact_id=$contact_id";
 
 $extra_where =" AND ((a.contact_id = $contact_id) OR ((activity_participants.contact_id = $contact_id) AND (activity_participants.ap_record_status = 'a'))) AND a.activity_record_status = 'a'";
 
@@ -207,23 +212,13 @@ $sidebar_rows_bottom = do_hook_function('contact_sidebar_bottom', $sidebar_rows_
 /** End of the sidebar includes **/
 /*********************************/
 
-$user_menu = get_user_menu($con, $session_user_id);
-
-$sql = "SELECT activity_type_pretty_name, activity_type_id
-        FROM activity_types
-        WHERE activity_type_record_status = 'a'
-        ORDER BY sort_order, activity_type_pretty_name";
-$rst = $con->execute($sql);
-if ($rst) {
-    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
-    $rst->close();
-}
-
 add_audit_item($con, $session_user_id, 'viewed', 'contacts', $contact_id, 3);
 
 
 $page_title = _("Contact Details").': '.$salutation.' '.$first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
+
+
 
 ?>
 
@@ -234,11 +229,6 @@ start_page($page_title, true, $msg);
 
 function openMsnSession(strIMAddress) {
     objMessengerApp.LaunchIMUI(strIMAddress);
-}
-
-function markComplete() {
-    document.forms[0].activity_status.value = "c";
-    document.forms[0].submit();
 }
 
 //-->
@@ -462,47 +452,8 @@ function markComplete() {
                 </td>
             </tr>
         </table>
-        <?php jscalendar_includes(); ?>
-        <!-- activities //-->
-        <form action="<?php  echo $http_site_root; ?>/activities/new-2.php" method=post>
-        <input type=hidden name=return_url value="/contacts/one.php?contact_id=<?php  echo $contact_id; ?>">
-        <input type=hidden name=company_id value="<?php echo $company_id; ?>">
-        <input type=hidden name=contact_id value="<?php echo $contact_id; ?>">
-        <input type=hidden name=activity_status value="o">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=5><?php echo _("New Activities"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Summary"); ?></td>
-                <td class=widget_label><?php echo _("User"); ?></td>
-                <td class=widget_label><?php echo _("Type"); ?></td>
-                <td colspan=2 class=widget_label><?php echo _("Scheduled"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element>
-                    <input type=text ID="f_date_c" name=scheduled_at value="<?php  echo date('Y-m-d H:i:s'); ?>">
-                    <img ID="f_trigger_c" style="CURSOR: hand" border=0 src="../img/cal.gif">
-                    <?php echo render_create_button("Add"); ?>
-                    <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
-                </td>
-            </tr>
-<?php /* removed this functionality because it *breaks* the auto-association code.
-            <tr>
-                <td colspan=4 class=widget_content_form_element>
-                  <?php echo $opportunity_status_rows; ?>
-                </td>
-                <td class=widget_content>
-                </td>
-            </tr>
-*/
-?>
+		<?php echo $new_activity_widget; ?>
 
-        </table>
-        </form>
         <form name="<?php echo $form_name; ?>" method=post>
             <?php
                 // activity pager
@@ -574,6 +525,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.91  2005/07/07 03:43:38  daturaarutad
+ * updated to use new activities-widget functions
+ *
  * Revision 1.90  2005/06/29 20:55:33  daturaarutad
  * add default column "due" to activities widget
  *
