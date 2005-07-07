@@ -229,7 +229,7 @@ if($search_terms['opportunity_status_id']) {
 
 if($search_terms['division_id']) {
     array_unshift($from, 'opportunities o', 'cases cas');
-	// extra_where is passed in for the division where clause.
+    // extra_where is passed in for the division where clause.
 }
 
 
@@ -336,19 +336,19 @@ if('list' != $activities_widget_type) {
 
 
     $columns = array();
-    $columns[] = array('name' => _('Overdue'), 'index_sql' => 'is_overdue');
-    $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
-    $columns[] = array('name' => _('Contact'), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
-    $columns[] = array('name' => _('Summary'), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
-    $columns[] = array('name' => _('Description'), 'index_calc' => 'description_brief', 'sql_sort_column' => 'activity_description', 'type' => 'url');
-    $columns[] = array('name' => _('Priority'), 'index_sql' => 'case_priority_pretty_name', 'sql_sort_column'=>'a.activity_priority_id');
-    $columns[] = array('name' => _('Scheduled Start'), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
-    $columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
-    $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
-    $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-    //$columns[] = array('name' => _('Thread'), 'index_sql' => 'thread', 'group_query_list' => $thread_query_list, 'group_query_select' => $thread_query_select);
-    $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about');
-    $columns[] = array('name' => _('Resolution'), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id');
+    $columns[] = array('name' => _("Overdue"), 'index_sql' => 'is_overdue');
+    $columns[] = array('name' => _("Type"), 'index_sql' => 'type');
+    $columns[] = array('name' => _("Contact"), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
+    $columns[] = array('name' => _("Summary"), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
+    $columns[] = array('name' => _("Description"), 'index_calc' => 'description_brief', 'sql_sort_column' => 'activity_description', 'type' => 'url');
+    $columns[] = array('name' => _("Priority"), 'index_sql' => 'case_priority_pretty_name', 'sql_sort_column'=>'a.activity_priority_id');
+    $columns[] = array('name' => _("Scheduled Start"), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
+    $columns[] = array('name' => _("Scheduled End"), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
+    $columns[] = array('name' => _("Company"), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
+    $columns[] = array('name' => _("Owner"), 'index_sql' => 'owner');
+    //$columns[] = array('name' => _("Thread"), 'index_sql' => 'thread', 'group_query_list' => $thread_query_list, 'group_query_select' => $thread_query_select);
+    $columns[] = array('name' => _("About"), 'index_calc' => 'activity_about');
+    $columns[] = array('name' => _("Resolution"), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id');
 
     // selects the columns this user is interested in
     $pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
@@ -366,9 +366,9 @@ if('list' != $activities_widget_type) {
     $endrows = $end_rows .
                 "<tr><td class=widget_content_form_element colspan=10>
                 $pager_columns_button
-                <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _('Calendar View') ."\">
-                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
-                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
+                <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">
+                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _("Export") .">
+                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _("Mail Merge") . "></td></tr>";
 
     $pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
     $pager->AddEndRows($endrows);
@@ -561,6 +561,9 @@ return $ret;
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.17  2005/07/07 23:47:12  braverock
+* - fix localized strings
+*
 * Revision 1.16  2005/07/07 20:15:54  braverock
 * - trim widths of drop-down menus in new activities widget for better screen formatting
 *
