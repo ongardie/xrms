@@ -49,27 +49,26 @@ getGlobalVar($start_end, 'start_end');
 
 if(!$activities_widget_type) $activities_widget_type = 'list';
 
-
 if('list' != $activities_widget_type) {
 
-/*  -if this is the first pass, the calendar date should be set based on the search date
+/*  Calendar:
+	-if this is the first pass, the calendar date should be set based on the search date
     -if the user pressed 'next month' or whatever, calendar date should not be affected
     -if a search field has changed, the date should be reset based on search date
 
-    so it sounds like we need to pass in a (recommended) search date, and a flag on whether or not
-    to use it...
+    Pass in a (recommended) search date to the calendar, and a flag on whether or not to use it...
 
     GetActivitiesWidget:
         -use VarWatcher to determine whether or not to pass in a date to constructor
-        (this date should be the actual date).
+        (this date should be the actual (monday) date).
 
     Calendar object:
         -if a date is passed in as a param, use that
-        -elseif the session/cgi var is set, use that....
+        -elseif the session/cgi var is set, use that....(user is actively viewing a calendar with hidden date field)
         -else use today's date.
 
     GetActivitiesWidget:
-        -use Calendar object to create sql_offset
+        -use Calendar object to create sql_offset for query
 */
     if(!$calendar_range) {
         $calendar_range = 'month';
@@ -79,8 +78,6 @@ if('list' != $activities_widget_type) {
 
     $initial_calendar_date = GetInitialCalendarDate($calendar_range, $before_after, $search_date, $start_end);
 
-    //echo "init date is $initial_calendar_date<br>";
-
     //create the Calendar object here, so that we can use it to generate the SQL offset
     $calendar = new CalendarView($con, $form_name, $initial_calendar_date, 'calendar_start_date', $calendar_range);
 
@@ -88,9 +85,6 @@ if('list' != $activities_widget_type) {
     $calendar_offset_sql = $calendar->GetCalendarSQLOffset($con, $calendar_range, $calendar_start_date);
 }
 
-if(!$activities_widget_type) {
-    $activities_widget_type = 'list';
-}
 
 $widget = '';
 
@@ -111,7 +105,7 @@ $select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->
   // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
   . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
 
-$from = "FROM activity_types at, activities a ";
+$from = array('activity_types at', 'activities a');
 
 $joins = "
 LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
@@ -152,7 +146,7 @@ if (strlen($search_terms['company']) > 0 || strlen($search_terms['company_id']) 
 
     $select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
     $extra_group_by = ", c.company_name,c.company_id";
-    $from .= ", companies c, addresses addr ";
+	array_unshift($from, 'companies c', 'addresses addr');
 
     $where .= " AND a.company_id = c.company_id ";
     $where .= "AND c.default_primary_address=addr.address_id ";
@@ -223,7 +217,7 @@ if(strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zon
     $now = time();
     $now_array=localtime($now, true);
     $hour=$now_array['tm_hour'];
-    $from .= ", time_daylight_savings tds ";
+    array_unshift($from, 'time_daylight_savings tds');
     $where .= " and addr.daylight_savings_id = tds.daylight_savings_id";
 
     $where .= " and ($hour + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") >= " . $search_terms['time_zone_between'];
@@ -231,7 +225,7 @@ if(strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zon
 }
 
 if($search_terms['opportunity_status_id']) {
-    $from .= ', opportunities o';
+    array_unshift($from, 'opportunities o');
     $where .= " and a.on_what_table='opportunities' and a.on_what_id=o.opportunity_id and o.opportunity_status_id=" . $search_terms['opportunity_status_id'];
 }
 
@@ -241,10 +235,7 @@ if($search_terms['on_what_table']) {
 }
 
 if($search_terms['campaign_id']) {
-    //$from .= ', campaigns camp';
-
     $where .= " AND a.on_what_table='campaigns' AND a.on_what_id=" . $search_terms['campaign_id'];
-
 }
 
 // acl filtering
@@ -263,7 +254,12 @@ if ($list) {
 $group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name $extra_group_by";
 
 
-$sql = "$select $from $joins $where $group_by";
+$from_list = join(', ', $from);
+
+
+
+$sql = "$select FROM $from_list $joins $where $group_by";
+
 $count_sql = "SELECT count(distinct a.activity_id) $from $joins $where";
 
 // end build query
@@ -561,6 +557,9 @@ return $ret;
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.13  2005/07/07 18:14:26  daturaarutad
+* fix FROM list order to keep MSSQL happy; tidy up comments
+*
 * Revision 1.12  2005/07/07 17:33:32  braverock
 * - move jscalendar_includes to start_page fn
 *
