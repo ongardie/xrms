@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.12 2005/07/06 00:56:06 vanmer Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.13 2005/07/07 23:17:01 vanmer Exp $
  */
 
 
@@ -54,6 +54,9 @@
 		var $ReturnButtonCaption;
 		/** @var string URL to set for the return button */
 		var $ReturnButtonURL;
+                
+		/** @var string URL to set for the immediate redirection to after update (instead of returning form, actually set location and quit) */
+                var $ReturnAfterUpdateURL;
 
 		/** @var array Array of QuickForm_Model objects */
 		var $Models; 
@@ -98,7 +101,6 @@
 
 		$this->form_method = $form_method;
 
-		jscalendar_includes();
 	}
 
 	/**
@@ -172,8 +174,31 @@
 		$this->ReturnButtonCaption = $caption; 
 		$this->ReturnButtonURL = $url; 
 	}
+	/**
+	* Sets the URL to redirect to after update is complete
+	*
+	* @param string url URL to redirect to after update step
+	*/
+	function SetReturnAfterUpdate( $url) {
+		$this->ReturnAfterUpdateURL = $url; 
+	}
 
-
+	/**
+	* Checks the URL to redirect (run directly after update step), and redirects if set
+        * If succesful, this function will run exit() to avoid output after the Location: header
+	*
+	* @param string url URL to redirect to after update step
+	*/
+        function CheckReturnAfterUpdate() {
+            if (!empty($this->ReturnAfterUpdateURL)) {
+                Header("Location: {$this->ReturnAfterUpdateURL}");
+                //exit to avoid output after this
+                exit();
+                return true;
+            }
+            return false;
+        }
+        
 	/**
 	* Do this immediately after View->AddModels()
 	*
@@ -618,6 +643,10 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.13  2005/07/07 23:17:01  vanmer
+* - removed jscalendar_includes, now used in start_page
+* - added functions to redirect immediately after update instead of showing read only page
+*
 * Revision 1.12  2005/07/06 00:56:06  vanmer
 * - added handling for link and hiddenlink types, to display a link or a link with a hidden variable, respectively
 *
