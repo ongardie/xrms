@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.117 2005/06/29 20:58:56 daturaarutad Exp $
+ * $Id: one.php,v 1.118 2005/07/07 03:58:03 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -41,7 +41,7 @@ $company_id = $_GET['company_id'];
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 
 $activities_form_name = 'Company_Activities';
 $contacts_form_name = 'Company_Contacts';
@@ -213,13 +213,23 @@ TILLEND;
     }
 } else { $division_select=false; }
 
+// New Activities Widget
+$return_url = "/companies/one.php?company_id=$company_id" .  ($division_id ? "&division_id=" . $division_id : '');
+
+
+if ($division_id) {
+    $on_what_table='company_division';
+    $on_what_id=$division_id;
+}
+
+$new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_table, $on_what_id, $company_id, $contact_id);
+
 
 // Activities Widget
 
 // Pass search terms to GetActivitiesWidget
 $search_terms = array( 'company_id'            => $company_id);
 
-$return_url = "/companies/one.php%3Fcompany_id=$company_id";
 
 $extra_where ="";
 
@@ -682,53 +692,7 @@ function markComplete() {
 
 ?>
 
-        <!-- new activity //-->
-        <form action="<?php echo $http_site_root; ?>/activities/new-2.php" method=post>
-
-        <input type=hidden name=return_url value="/companies/one.php?company_id=<?php echo $company_id; ?><?php echo ($division_id) ? "%26division_id=" . $division_id : ''; ?>">
-        <input type=hidden name=company_id value="<?php echo $company_id ?>">
-        <input type=hidden name=activity_status value="o">
-        <input type=hidden name=use_post_vars value="1">
-<?php //check to see if we need to set division_id
-    if ($division_id) {
-        $on_what_table='company_division';
-        $on_what_id=$division_id;
-    }
-    //end division_id check
-?>
-        <input type=hidden name=on_what_table        value="<?php echo $on_what_table; ?>">
-        <input type=hidden name=on_what_id           value="<?php echo $on_what_id; ?>">
-        <input type=hidden name=activity_description value="">
-        <input type=hidden name=email                value="">
-        <input type=hidden name=followup             value="">
-        <input type=hidden name=on_what_status       value="">
-        <input type=hidden name=ends_at              value="">
-
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=5><?php echo _("Add New Activity"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Summary"); ?></td>
-                <td class=widget_label><?php echo _("User"); ?></td>
-                <td class=widget_label><?php echo _("Type"); ?></td>
-                <td class=widget_label><?php echo _("Contact"); ?></td>
-                <td class=widget_label><?php echo _("Scheduled"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title></td>
-                <td class=widget_content_form_element><?php echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
-                <td class=widget_content_form_element><?php echo $contact_menu; ?></td>
-                <td class=widget_content_form_element>
-                    <input type=text size=10 ID="f_date_d" name=scheduled_at value="<?php echo date('Y-m-d H:i:s'); ?>">
-                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif">
-                    <?php echo render_create_button("Add"); ?>
-                    <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
-                </td>
-            </tr>
-        </table>
-        </form>
+		<?php echo $new_activity_widget; ?>
 
         <!-- activities list //-->
         <form name="<?php echo $activities_form_name; ?>" method=post>
@@ -776,10 +740,10 @@ function markComplete() {
 
 <script>
 Calendar.setup({
-        inputField     :    "f_date_d",      // id of the input field
+        inputField     :    "f_date_c",      // id of the input field
         ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
         showsTime      :    true,            // will display a time selector
-        button         :    "f_trigger_d",   // trigger for the calendar (button ID)
+        button         :    "f_trigger_c",   // trigger for the calendar (button ID)
         singleClick    :    false,           // double-click mode
         step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
         align          :    "Bl"           // alignment (defaults to "Bl")
@@ -799,6 +763,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.118  2005/07/07 03:58:03  daturaarutad
+ * updated to use activities-widget for New Activity widget
+ *
  * Revision 1.117  2005/06/29 20:58:56  daturaarutad
  * add default column "due" to activities widget
  *
