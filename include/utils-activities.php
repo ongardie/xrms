@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.16 2005/07/06 21:49:29 vanmer Exp $
+ * $Id: utils-activities.php,v 1.17 2005/07/07 20:56:57 vanmer Exp $
 
  */
 
@@ -171,7 +171,18 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
         $where['activity_id'] = $activity_data['activity_id'];
         $wherestr=make_where_string($con, $where, $tablename);
     } else {
-        $wherestr=make_where_string($con, $activity_data, $tablename);
+        
+        $extra_where=array();
+        foreach ($activity_data as $akey=>$aval) {
+            switch ($akey) {
+                case 'due_before':
+                    unset($activity_data[$akey]);
+                    $extra_where[]="ends_at<=".$con->DBTimestamp($aval);
+                break;
+            }
+        }
+        if (count($extra_where)==0) $extra_where=false;
+        $wherestr=make_where_string($con, $activity_data, $tablename, $extra_where);
     }
     if ($wherestr) $sql.=" WHERE $wherestr";
 
@@ -601,8 +612,33 @@ function install_default_activity_participant_positions($con) {
 
 }
 
+function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
+    global $session_user_id;
+    //hack to return the current user if no role was specified
+    if (!$role_id) return $session_user_id;
+    if (!$due_date) $due_date=time();        
+    $users_in_role = get_users_in_role($con, $role_id);
+    $user_counts=array();
+    
+    foreach ($users_in_role as $user_id) {
+        $rec['user_id']=$user_id;
+        $rec['activity_status']='o';
+        $rec['due_before']=$due_date;
+        $activity_list=get_activity($con, $rec);
+        $user_counts[$user_id]=count($activity_list);    
+    }
+    asort($user_counts);
+    $users=array_keys($user_counts);
+    $lower_user=current($users);
+    return $lower_user;
+}
+
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.17  2005/07/07 20:56:57  vanmer
+  * - added extra search when building activity where clause, to include extra parameters that are not fields
+  * - added function to determine which user in a role is the least busy
+  *
   * Revision 1.16  2005/07/06 21:49:29  vanmer
   * - now track which template an activity was spawned from
   *
