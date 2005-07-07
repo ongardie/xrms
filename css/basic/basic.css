@@ -63,6 +63,9 @@ table.widget .widget_content_alt,
 table.widget .widget_content_market2 {
     background-color: #ffe;
 }
+table.widget .widget_content_alt2 {
+    background-color: #eef;
+}
 table.widget .widget_content_graph {
     background-color: #fff;
 }
@@ -121,6 +124,77 @@ table.widget .widget_label_right_166px {
     background-repeat: no-repeat;
     background-position: top right;
 }
+
+#xrms_calendar .calendar_user1, 
+#xrms_calendar_legend .calendar_user1   {
+    background-color:   #fffba4;
+    vertical-align:     top;
+    border :            1px solid #cc6600;
+}
+
+#xrms_calendar .calendar_user2, 
+#xrms_calendar_legend .calendar_user2   {
+    background-color:   #f8d049;
+    vertical-align:     top;
+    border :            1px solid #cc3300;
+}
+
+#xrms_calendar .calendar_user3, 
+#xrms_calendar_legend .calendar_user3   {
+    background-color:   #cfe5f6;
+    vertical-align:     top;
+    border :            1px solid #336699;
+}
+
+#xrms_calendar .calendar_user4, 
+#xrms_calendar_legend .calendar_user4   {
+    background-color:   #84a8d7;
+    vertical-align:     top;
+    border :            1px solid #333366;
+}
+
+#xrms_calendar .calendar_user5, 
+#xrms_calendar_legend .calendar_user5   {
+    background-color:   #d8f0b8;
+    vertical-align:     top;
+    border :            1px solid #669900;
+}
+
+#xrms_calendar .calendar_user6, 
+#xrms_calendar_legend .calendar_user6   {
+    background-color:   #86c860;
+    vertical-align:     top;
+    border :            1px solid #336600;
+}
+
+#xrms_calendar .calendar_user7, 
+#xrms_calendar_legend .calendar_user7   {
+    background-color:   #d8b8f0;
+    vertical-align:     top;
+    border :            1px solid #660099;
+}
+
+#xrms_calendar .calendar_user8, 
+#xrms_calendar_legend .calendar_user8   {
+    background-color:   #8660c8;
+    vertical-align:     top;
+    border :            1px solid #330066;
+}
+
+#xrms_calendar .calendar_user9, 
+#xrms_calendar_legend .calendar_user9   {
+    background-color:   #f6cfe5;
+    vertical-align:     top;
+    border :            1px solid #993366;
+}
+
+#xrms_calendar .calendar_user10, 
+#xrms_calendar_legend .calendar_user10   {
+    background-color:   #d784a8;
+    vertical-align:     top;
+    border :            1px solid #663333;
+}
+
 /**
  * PADDING
  */
