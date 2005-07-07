@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.1 2005/01/10 14:34:14 daturaarutad Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.2 2005/07/07 23:17:29 vanmer Exp $
 	*/
 
 
@@ -115,7 +115,10 @@
 					}
 
 					$this->View->SetConstants();
-		
+                                        
+                               $die=$this->View->CheckReturnAfterUpdate();
+		              if ($die) return false;
+                              
 	    			$this->View->SetNextFormAction();
 					$this->View->SetReadOnly();
 	    			return $this->View->GetForm($form_action, $show_submit);
