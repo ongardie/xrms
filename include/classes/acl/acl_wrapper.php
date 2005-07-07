@@ -6,12 +6,18 @@ require_once(ACL_PATH.'xrms_acl_config.php');
 require_once(ACL_PATH.'acl_install.php');
 $acl_options=$options;
 
-function get_user_in_role($con, $role) {
+function get_users_in_role($con, $role) {
     global $session_user_id;
     global $acl_options;
     $acl = new xrms_acl($acl_options, $con);
     $role_id=get_role_id($acl, $role);
-    return $session_user_id;
+    $ret = $acl->get_role_users($role_id);
+    if (!$ret) return false;
+    $users=array();
+    foreach ($ret as $cur) {
+        $users[]=$cur['user_id'];
+    }
+    return $users;
 }
 
 function get_group_users($acl_group, $acl_role = false, $acl=false) {
