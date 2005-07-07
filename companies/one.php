@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.118 2005/07/07 03:58:03 daturaarutad Exp $
+ * $Id: one.php,v 1.119 2005/07/07 16:34:54 daturaarutad Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -739,17 +739,6 @@ function markComplete() {
 </div>
 
 <script>
-Calendar.setup({
-        inputField     :    "f_date_c",      // id of the input field
-        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
-        showsTime      :    true,            // will display a time selector
-        button         :    "f_trigger_c",   // trigger for the calendar (button ID)
-        singleClick    :    false,           // double-click mode
-        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-        align          :    "Bl"           // alignment (defaults to "Bl")
-    });
-
-
 function bulkEmail() {
     document.forms[0].action = "../email/email.php";
     document.forms[0].submit();
@@ -763,6 +752,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.119  2005/07/07 16:34:54  daturaarutad
+ * removed Calendar.setup code (it moved to activities-widget.php)
+ *
  * Revision 1.118  2005/07/07 03:58:03  daturaarutad
  * updated to use activities-widget for New Activity widget
  *

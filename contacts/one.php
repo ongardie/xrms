@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.91 2005/07/07 03:43:38 daturaarutad Exp $
+ * $Id: one.php,v 1.92 2005/07/07 16:33:12 daturaarutad Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -503,18 +503,6 @@ function bulkEmail() {
     document.forms[0].action = "../email/email.php";
     document.forms[0].submit();
 }
-
-
-Calendar.setup({
-        inputField     :    "f_date_c",      // id of the input field
-        ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
-        showsTime      :    true,            // will display a time selector
-        button         :    "f_trigger_c",   // trigger for the calendar (button ID)
-        singleClick    :    false,           // double-click mode
-        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
-        align          :    "Bl"           // alignment (defaults to "Bl")
-    });
-
 </script>
 
 <?php
@@ -525,6 +513,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.92  2005/07/07 16:33:12  daturaarutad
+ * removed Calendar.setup code (it moved to activities-widget.php)
+ *
  * Revision 1.91  2005/07/07 03:43:38  daturaarutad
  * updated to use new activities-widget functions
  *
