@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.6 2005/07/06 21:25:51 vanmer Exp $
+ * $Id: one-address.php,v 1.7 2005/07/07 23:18:18 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -15,6 +15,7 @@ require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 require_once $include_directory."classes/QuickForm/ADOdb_QuickForm.php";
 require_once($include_directory."classes/Pager/Array_Sorter.php");
+
 $session_user_id = session_check();
     
 $con=get_xrms_dbconnection();
@@ -57,7 +58,6 @@ $company_name = fetch_company_name($con, $company_id);
         }    
     }
 
-start_page($page_title);
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'addresses');
@@ -104,15 +104,14 @@ start_page($page_title);
         $model->DBStructure['fields']=$sorter->sortit();
         $fields=$model->GetFields();
         
-        
   $view = new ADOdb_QuickForm_View($con, $page_title, 'post');
   $view->SetReturnButton('Return to List', $return_url);
-
+  $view->SetReturnAfterUpdate($return_url);
   $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
   $template_form_html = $controller->ProcessAndRenderForm();
+    if (!$template_form_html) return false;
 
-
-
+start_page($page_title);
 ?>
 
 <div id="Main">
@@ -181,6 +180,10 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.7  2005/07/07 23:18:18  vanmer
+ * - moved start_page to after all quickform processes complete
+ * - added returnAfterUpdateURL to allow immediate return after update of address record
+ *
  * Revision 1.6  2005/07/06 21:25:51  vanmer
  * - setting primary key explicitly to attempt to fix issue on sql server
  *
