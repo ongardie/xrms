@@ -2,6 +2,7 @@
  * XRMS font, margin, and padding adjustments for
  * better display on screen
  */
+
 #page_header {
     font-size: large;
 }
@@ -35,6 +36,7 @@ table.widget input.button {
 #Sidebar table.widget .widget_header {
     font-size: medium;
 }
+#xrms_calendar .small,
 #Sidebar input,
 #Sidebar input.button,
 #Sidebar table.widget .small,
