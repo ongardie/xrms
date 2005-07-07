@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.137 2005/07/06 17:17:29 vanmer Exp $
+ * $Id: utils-misc.php,v 1.138 2005/07/07 18:47:55 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -209,6 +209,26 @@ function fetch_company_name($con, $company_id) {
     }
 
     return $company_name;
+}
+
+
+/**
+ * Fetch the company for a division from the database
+ *
+ * @param  handle  $con adodb database connection handle
+ * @param  integer $division_id
+ * @return integer  $company_id
+ */
+function fetch_company_id_for_division($con, $division_id) {
+    if (!$con OR !$division_id) return false;
+    
+    $sql = "SELECT company_id FROM company_division WHERE division_id=$division_id";
+    $rst = $con->execute($sql);
+    
+    if (!$rst) { db_error_handler($con, $sql); }
+    if (!$rst->EOF) {
+        return $rst->fields['company_id'];
+    } else return false;
 }
 
 /**
@@ -1728,6 +1748,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.138  2005/07/07 18:47:55  vanmer
+ * - added function to look up company id from a division id
+ *
  * Revision 1.137  2005/07/06 17:17:29  vanmer
  * - added caching to system parameters
  * - added query of system preferences before resorting to system parameters
