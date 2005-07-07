@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.138 2005/07/07 18:47:55 vanmer Exp $
+ * $Id: utils-misc.php,v 1.139 2005/07/07 20:54:25 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1599,9 +1599,10 @@ function arr_vars_show_ses_vars ( $ary )
  *
  * @return string which can be used after the WHERE in a sql statement or false if no criteria are found
  */
-function make_where_string($con, $criteria_array, $tablename=false) {
+function make_where_string($con, $criteria_array, $tablename=false, $extra_where=false) {
     $magic_quotes_gpc=get_magic_quotes_gpc();
     if (!$criteria_array) return '';
+    $where=array();
     foreach ($criteria_array as $akey=>$aval) {
         if ($aval!==false) {
             if ($tablename) $akey="$tablename.$akey";
@@ -1610,6 +1611,7 @@ function make_where_string($con, $criteria_array, $tablename=false) {
             } else $where[]="$akey=".$con->qstr($aval, $magic_quotes_gpc);
         }
     }
+    if ($extra_where) { $where=array_merge($where,$extra_where); }
     if (count($where)>0) {
         $wherestr=implode(" AND ", $where);
     } else $wherestr=false;
@@ -1748,6 +1750,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.139  2005/07/07 20:54:25  vanmer
+ * - added parameter to where string creator to take a seperate array of criteria
+ *
  * Revision 1.138  2005/07/07 18:47:55  vanmer
  * - added function to look up company id from a division id
  *
