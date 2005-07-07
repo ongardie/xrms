@@ -229,6 +229,12 @@ if($search_terms['opportunity_status_id']) {
     $where .= " and a.on_what_table='opportunities' and a.on_what_id=o.opportunity_id and o.opportunity_status_id=" . $search_terms['opportunity_status_id'];
 }
 
+if($search_terms['division_id']) {
+    array_unshift($from, 'opportunities o', 'cases cas');
+	// extra_where is passed in for the division where clause.
+}
+
+
 
 if($search_terms['on_what_table']) {
     $where .= " AND a.on_what_table='{$search_terms['on_what_table']}' and a.on_what_id={$search_terms['on_what_id']}";
@@ -557,6 +563,9 @@ return $ret;
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.14  2005/07/07 18:54:18  daturaarutad
+* add handler for division_id (join opportunities and cases)
+*
 * Revision 1.13  2005/07/07 18:14:26  daturaarutad
 * fix FROM list order to keep MSSQL happy; tidy up comments
 *
