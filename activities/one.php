@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.110 2005/07/07 03:38:46 daturaarutad Exp $
+ * $Id: one.php,v 1.111 2005/07/07 20:54:49 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -380,9 +380,12 @@ require("../relationships/sidebar.php");
 //include the files sidebar
 $ori_on_what_id=$on_what_id;
 $ori_on_what_table=$on_what_table;
+$ori_return_url=$return_url;
 $on_what_table='activities';
 $on_what_id=$activity_id;
+$return_url=current_page();
 require_once( '../files/sidebar.php');
+$return_url=$ori_return_url;
 $on_what_table=$ori_on_what_table;
 $on_what_id=$ori_on_what_id;
 
@@ -701,6 +704,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.111  2005/07/07 20:54:49  vanmer
+ * - changed return_url path from activities into sidebars
+ *
  * Revision 1.110  2005/07/07 03:38:46  daturaarutad
  * updated to use new activities-widget functions
  *
