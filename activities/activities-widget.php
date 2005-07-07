@@ -96,9 +96,7 @@ $select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
 
   . "'$return_url' as return_url, "
-
-  //.   $con->substr."(activity_description, 1, $description_substring_length) AS description_brief, "
-
+  .   $con->substr."(activity_description, 1, $description_substring_length) AS description_brief, "
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
   . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
@@ -257,7 +255,7 @@ if ($list) {
 }
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
-$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name $extra_group_by";
+$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, description_brief $extra_group_by";
 
 
 $from_list = join(', ', $from);
@@ -563,6 +561,9 @@ return $ret;
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.15  2005/07/07 19:47:59  daturaarutad
+* re-add activity_description field
+*
 * Revision 1.14  2005/07/07 18:54:18  daturaarutad
 * add handler for division_id (join opportunities and cases)
 *
