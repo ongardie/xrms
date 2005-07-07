@@ -346,7 +346,7 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
     $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
     $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-    $columns[] = array('name' => _('Thread'), 'index_sql' => 'thread', 'group_query_list' => $thread_query_list, 'group_query_select' => $thread_query_select);
+    //$columns[] = array('name' => _('Thread'), 'index_sql' => 'thread', 'group_query_list' => $thread_query_list, 'group_query_select' => $thread_query_select);
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about'); 
     $columns[] = array('name' => _('Resolution'), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id'); 
 	
@@ -552,6 +552,9 @@ return $ret;
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.10  2005/07/07 03:37:38  daturaarutad
+* temporarily disable thread_id column
+*
 * Revision 1.9  2005/07/07 03:33:09  daturaarutad
 * added GetNewActivityWidget(); broke up query into pieces; now using $count_sql to speed up pagination
 *
