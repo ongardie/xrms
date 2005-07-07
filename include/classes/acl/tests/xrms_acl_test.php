@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.5 2005/06/24 23:51:57 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.6 2005/07/07 19:38:57 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -716,7 +716,41 @@ Class ACLTest extends PHPUnit_TestCase {
         
     }
     
+    function test_get_role_users() {
+        $user1 = $this->user;
+        $user2 = $this->user+1;
+        $role = $this->roleName;
+        $group = $this->groupName;
+        $roleresult = $this->test_add_role($role);
+        $groupresult = $this->test_add_group($group);
+        $add1 = $this->test_add_group_user($group, $role, $user1);
+        $add2 = $this->test_add_group_user($group, $role, $user2);
         
+        $result = $this->acl->get_role_users($roleresult, false);
+        $this->assertTrue($result, "failed to find users for role $role");
+        $this->assertTrue(is_array($result),"user list is not an array, should be");
+        if (is_array($result)) {
+            $ret=false;
+            $ret2=false;
+            foreach ($result as $cur) {
+                if (!$ret)
+                    $ret = ($cur['user_id']==$user1);
+                if (!$ret2)
+                    $ret2 = ($cur['user_id']==$user2);
+             }
+             $this->assertTrue($ret, "Failed to find user $user1 in role $role");
+             $this->assertTrue($ret2, "Failed to find user $user2 in role $role");
+        }
+            
+        $this->test_delete_group_user($group, $role, $user1);
+        $this->test_delete_group_user($group, $role, $user2);
+    
+        $this->test_delete_role($role);
+        
+        $this->test_delete_group($group);
+        return $result;
+    }   
+     
     function test_get_user_roles() {
         $user = $this->user;
         $role1 = $this->roleName . "Manager";
@@ -1128,6 +1162,9 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.6  2005/07/07 19:38:57  vanmer
+ * - added test for newly created function to query for users in a role
+ *
  * Revision 1.5  2005/06/24 23:51:57  vanmer
  * - added tests to add objects and relationships twice to ensure that second addition returns same
  * object/relationship
