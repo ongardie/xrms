@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.38 2005/07/06 03:21:01 vanmer Exp $
+ * $Id: edit.php,v 1.39 2005/07/07 23:16:12 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -24,6 +24,7 @@ if (!$return_url) {
     $return_url=$http_site_root.current_page();
 }
 $url_return_url=urlencode($return_url);
+$address_return_url=$http_site_root.current_page();
 
 $session_user_id = session_check('','Update');
 
@@ -165,10 +166,12 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Business Address"); ?></td>
                 <td class=widget_content_form_element>
                     <?php echo $address; ?>
+                    <input type=hidden name=address_return_url value="<?php echo $address_return_url; ?>">
                     <input type=hidden name=address_id value="<?php echo $address_id; ?>">
                     <br />                    
-                        <input type=button value="<?php echo _("Choose New Address") ?>" onclick="javascript: location.href='../companies/addresses.php?company_id=<?php echo $company_id; ?>&edit_contact_id=<?php echo $contact_id; ?>'" class=button><?php if ($edit_address) { ?>&nbsp;<?php echo _("OR"); ?>&nbsp;
-                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='../companies/one-address.php?form_action=edit&return_url=<?php echo $return_url; ?>&company_id=0<?php echo $company_id; ?>&address_id=<?php echo $address_id; ?>';">
+                        <input type=submit name=btChangeAddress value="<?php echo _("Choose New Address") ?>" class=button>
+                        <?php if ($edit_address) { ?>&nbsp;<?php echo _("OR"); ?>&nbsp;
+                            <input class=button type=submit name=btEditBusinessAddress value="<?php echo _("Edit Address"); ?>">
                         <?php } ?>
 
                 </td>
@@ -179,8 +182,9 @@ confGoTo_includes();
                     <?php echo $home_address; ?>
                     <br />
                     <input type=hidden name=home_address_id value="<?php echo $home_address_id; ?>">
-                    <input class=button type=button value="<?php echo _("Add New Address"); ?>" onclick="javascript: location.href='../companies/one-address.php?form_action=new&return_url=<?php echo $url_return_url; ?>&company_id=0&contact_id=<?php echo $contact_id; ?>';"><?php if ($edit_home_address) { ?>&nbsp;<?php echo  _("OR")?>&nbsp;
-                        <input class=button type=button value="<?php echo _("Edit Address"); ?>" onclick="javascript: location.href='../companies/one-address.php?form_action=edit&address_id=<?php echo $home_address_id; ?>&return_url=<?php echo $url_return_url; ?>&company_id=0&contact_id=<?php echo $contact_id; ?>';">
+                    <input class=button type=submit name="btNewHomeAddress"  value="<?php echo _("Add New Address"); ?>">
+                    <?php if ($edit_home_address) { ?>&nbsp;<?php echo  _("OR")?>&nbsp;
+                        <input class=button type=submit name="btEditHomeAddress" value="<?php echo _("Edit Address"); ?>">
                     <?php } ?>
                 </td>
             </tr>
@@ -325,6 +329,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.39  2005/07/07 23:16:12  vanmer
+ * - changed front end to simply identify which button is pressed in order to submit changes to contact before
+ * changing address
+ *
  * Revision 1.38  2005/07/06 03:21:01  vanmer
  * - changed to use one-address.php to edit contact addresses, as well as add new ones
  * - added logic to hide edit address when address is the default of 1
