@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.50 2005/07/06 22:50:32 braverock Exp $
+ * $Id: one.php,v 1.51 2005/07/07 16:30:48 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -138,13 +138,19 @@ if ($rst) {
   db_error_handler ($con, $sql);
 }
 
+// New Activities Widget
+$return_url = "/opportunities/one.php?opportunity_id=$opportunity_id";
+
+$new_activity_widget = GetNewActivityWidget($con, $session_user_id, $return_url, 'opportunities', $opportunity_id, $company_id, $contact_id);
+
+
+
 // Begin Activities Widget
 
 // Pass search terms to GetActivitiesWidget
 $search_terms = array(  'on_what_table' => 'opportunities',
                         'on_what_id'    => $opportunity_id);
 
-$return_url = "/opportunities/one.php%3Fopportunity_id=$opportunity_id";
 
 $default_columns = array('title', 'owner', 'type', 'activity_about', 'scheduled', 'due');
 
@@ -358,36 +364,11 @@ function markComplete() {
     do_hook ('opportunity_detail');
 ?>
 
+
+
         <!-- activities //-->
-        <form action="../activities/new-2.php" method=post>
-        <input type=hidden name=return_url value="/opportunities/one.php?opportunity_id=<?php  echo $opportunity_id; ?>">
-        <input type=hidden name=company_id value="<?php echo $company_id ?>">
-        <input type=hidden name=on_what_table value="opportunities">
-        <input type=hidden name=on_what_id value="<?php  echo $opportunity_id; ?>">
-        <input type=hidden name=activity_status value="o">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=6><?php echo _("Activities"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Summary"); ?></td>
-                <td class=widget_label><?php echo _("User"); ?></td>
-                <td class=widget_label><?php echo _("Type"); ?></td>
-                <td class=widget_label><?php echo _("Contact"); ?></td>
-                <td colspan=2 class=widget_label><?php echo _("On"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name=activity_title></td>
-                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $activity_type_menu; ?></td>
-                <td class=widget_content_form_element><?php  echo $contact_menu; ?></td>
-                <td colspan=2 class=widget_content_form_element><input type=text size=12 name=scheduled_at value="<?php  echo date('Y-m-d'); ?>">
-                    <?php echo render_create_button("Add"); ?>
-                    <?php echo render_create_button("Done",'button',"javascript: markComplete();"); ?>
-                </td>
-            </tr>
-        </table>
-        </form>
+		<?php echo $new_activity_widget; ?>
+
         <form name="<?php echo $form_name; ?>" method=post>
             <?php
                 // activity pager
@@ -434,6 +415,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.51  2005/07/07 16:30:48  daturaarutad
+ * now using activities-widget for new activity widget
+ *
  * Revision 1.50  2005/07/06 22:50:32  braverock
  * - add opportunity types
  *
