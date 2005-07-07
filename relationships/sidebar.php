@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.33 2005/05/23 22:05:06 vanmer Exp $
+ * $Id: sidebar.php,v 1.34 2005/07/07 18:53:05 vanmer Exp $
  */
 
 require_once('relationship_functions.php');
@@ -157,8 +157,17 @@ $relationship_link_rows = '';
                     if($opportunity_id) {
                         $relationship_link_rows .= "*";
                     }
-                    $relationship_link_rows .= "<a href='$http_site_root/{$relationship_type_data[$opposite_direction.'_what_table']}/one.php?{$relationship_type_data[$opposite_direction.'_what_table_singular']}_id="
-                        . $current_id . "'>" 
+                    
+                    //hack to set link to the right URL for divisions
+                    if ($relationship_type_data[$opposite_direction.'_what_table']=='company_division') {
+                        $href="$http_site_root/companies/one.php?{$relationship_type_data[$opposite_direction.'_what_table_singular']}_id="
+                        . $current_id;
+                    } else {
+                        //otherwise go to standard URL
+                        $href="$http_site_root/{$relationship_type_data[$opposite_direction.'_what_table']}/one.php?{$relationship_type_data[$opposite_direction.'_what_table_singular']}_id="
+                        . $current_id;
+                    }
+                    $relationship_link_rows .= "<a href='$href'>" 
                         . $relationship_details['name']
                         . "</a> ";
                     if($agent_count) {
@@ -330,6 +339,9 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.34  2005/07/07 18:53:05  vanmer
+ * - added case to handle URLs for relationships involving company divisions
+ *
  * Revision 1.33  2005/05/23 22:05:06  vanmer
  * - added check for contact relationships, add to contact list used for mail merge on relationships
  * - added mail merge button which calls email for a mail merge for all contacts in a relationship in the
