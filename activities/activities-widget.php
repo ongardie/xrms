@@ -97,7 +97,7 @@ $widget = '';
 
 // build the query based upon $search_terms
 
-$sql = "SELECT (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END) AS is_overdue, "
+$select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END) AS is_overdue, "
   ." at.activity_type_pretty_name AS type, "
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
 
@@ -107,25 +107,25 @@ $sql = "SELECT (CASE WHEN (activity_status = 'o') AND (ends_at < " . $con->DBTim
 
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
-  . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, "
   . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
   // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
-  . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, c.company_name, cp.case_priority_pretty_name, rt.resolution_short_name ";
+  . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
 
-$sql .= "FROM companies c, activity_types at, addresses addr, activities a ";
+$from = "FROM activity_types at, activities a ";
 
-$sql .= "
+$joins = "
 LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
 LEFT OUTER JOIN users u ON a.user_id = u.user_id
 LEFT OUTER JOIN activity_participants ON a.activity_id=activity_participants.activity_id
 LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants.contact_id 
 LEFT OUTER JOIN case_priorities cp ON a.activity_priority_id=cp.case_priority_id
 LEFT OUTER JOIN activity_resolution_types rt ON a.activity_resolution_type_id=rt.activity_resolution_type_id";
-$sql .= " WHERE a.company_id = c.company_id $extra_where ";
 
-$sql .= " AND a.activity_record_status = 'a'
+//$where = " WHERE $extra_where ";
+
+$where = " WHERE a.activity_record_status = 'a'
   AND at.activity_type_id = a.activity_type_id
-  AND c.default_primary_address=addr.address_id";
+  $extra_where";
 
 
 // search criteria filtering
@@ -133,74 +133,87 @@ $criteria_count = 0;
 
 if (strlen($search_terms['title']) > 0) {
     $criteria_count++;
-    $sql .= " and a.activity_title like " . $con->qstr('%' . $search_terms['title'] . '%', get_magic_quotes_gpc());
+    $where .= " and a.activity_title like " . $con->qstr('%' . $search_terms['title'] . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($search_terms['contact']) > 0) {
     $criteria_count++;
-    $sql .= " and ((cont.last_name like " . $con->qstr('%' . $search_terms['contact'] . '%', get_magic_quotes_gpc()) . ") OR (part_cont.last_name like " . $con->qstr('%' . $search_terms['contact'] . '%', get_magic_quotes_gpc()) . "))";
+    $where .= " and ((cont.last_name like " . $con->qstr('%' . $search_terms['contact'] . '%', get_magic_quotes_gpc()) . ") OR (part_cont.last_name like " . $con->qstr('%' . $search_terms['contact'] . '%', get_magic_quotes_gpc()) . "))";
 }
 
 if (strlen($search_terms['contact_id'])) {
     $criteria_count++;
-    $sql .= " and ((cont.contact_id = {$search_terms['contact_id']}) OR (activity_participants.contact_id={$search_terms['contact_id']}))";
+    $where .= " and ((cont.contact_id = {$search_terms['contact_id']}) OR (activity_participants.contact_id={$search_terms['contact_id']}))";
+}
+
+// join companies if any company-related search terms are enabled.
+if (strlen($search_terms['company']) > 0 || strlen($search_terms['company_id']) ||
+	(strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zone_between2']))) {
+
+	$select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
+	$extra_group_by = ", c.company_name,c.company_id";
+	$from .= ", companies c, addresses addr ";
+
+	$where .= " AND a.company_id = c.company_id ";
+  	$where .= "AND c.default_primary_address=addr.address_id ";
+
 }
 
 if (strlen($search_terms['company']) > 0) {
     $criteria_count++;
-    $sql .= " and c.company_name like " . $con->qstr('%' . $search_terms['company'] . '%', get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr('%' . $search_terms['company'] . '%', get_magic_quotes_gpc());
 }
 
 if (strlen($search_terms['company_id'])) {
     $criteria_count++;
-    $sql .= " and c.company_id = " . $search_terms['company_id'];
+    $where .= " and c.company_id = " . $search_terms['company_id'];
 }
 if (strlen($search_terms['user_id']) > 0) {
     $criteria_count++;
     if($search_terms['user_id'] == '-2') {
         //Not Set
-        $sql .= " and a.user_id = 0";
+        $where .= " and a.user_id = 0";
     }
     elseif($search_terms['user_id'] == '-1') {
         //Current User
-        $sql .= " and a.user_id = $session_user_id ";
+        $where .= " and a.user_id = $session_user_id ";
     }
     elseif($search_terms['user_id'] == 'no') {
         //Not Set
-        $sql .= " and a.user_id = 0";
+        $where .= " and a.user_id = 0";
     }
     elseif($search_terms['user_id'] == 'cu') {
         //Current User
-        $sql .= " and a.user_id = $session_user_id ";
+        $where .= " and a.user_id = $session_user_id ";
     }
     else {
-        $sql .= " and a.user_id = {$search_terms['user_id']} ";
+        $where .= " and a.user_id = {$search_terms['user_id']} ";
     }
 }
 
 if (strlen($search_terms['activity_type_id']) > 0) {
     $criteria_count++;
-    $sql .= " and a.activity_type_id = " . $search_terms['activity_type_id'] . " ";
+    $where .= " and a.activity_type_id = " . $search_terms['activity_type_id'] . " ";
 }
 
 if (strlen($search_terms['activity_status']) > 0) {
     $criteria_count++;
-    $sql .= " and a.activity_status = " . $search_terms['activity_status'] . " ";
+    $where .= " and a.activity_status = " . $search_terms['activity_status'] . " ";
 
 }
 
 if (strlen($search_terms['completed']) > 0 and $search_terms['completed'] != "all") {
     $criteria_count++;
-    $sql .= " and a.activity_status = " . $con->qstr($search_terms['completed'], get_magic_quotes_gpc());
+    $where .= " and a.activity_status = " . $con->qstr($search_terms['completed'], get_magic_quotes_gpc());
 }
 
 if (strlen($search_terms['offset_sql']) > 0) {
     $criteria_count++;
-    $sql .= $search_terms['offset_sql'];
+    $where .= $search_terms['offset_sql'];
 }
 if (strlen($calendar_offset_sql) > 0) {
     $criteria_count++;
-    $sql .= $calendar_offset_sql;
+    $where .= $calendar_offset_sql;
 }
 
 
@@ -210,23 +223,28 @@ if(strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zon
     $now = time();
     $now_array=localtime($now, true);
     $hour=$now_array['tm_hour'];
-    $sql .= " and addr.daylight_savings_id = tds.daylight_savings_id";
+	$from .= ", time_daylight_savings tds ";
+    $where .= " and addr.daylight_savings_id = tds.daylight_savings_id";
 
-    $sql .= " and ($hour + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") >= " . $search_terms['time_zone_between'];
-    $sql .= " and ($hour + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") <= " . $search_terms['time_zone_between2'];
+    $where .= " and ($hour + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") >= " . $search_terms['time_zone_between'];
+    $where .= " and ($hour + tds.current_hour_shift + addr.offset - " . date('Z')/3600 . ") <= " . $search_terms['time_zone_between2'];
 }
 
 if($search_terms['opportunity_status_id']) {
-    $sql .= " and a.on_what_table='opportunities' and a.on_what_id=o.opportunity_id and o.opportunity_status_id=" . $search_terms['opportunity_status_id'];
+	$from .= ', opportunities o';
+    $where .= " and a.on_what_table='opportunities' and a.on_what_id=o.opportunity_id and o.opportunity_status_id=" . $search_terms['opportunity_status_id'];
 }
 
 
 if($search_terms['on_what_table']) {
-    $sql .= " AND a.on_what_table='{$search_terms['on_what_table']}' and a.on_what_id={$search_terms['on_what_id']}";
+    $where .= " AND a.on_what_table='{$search_terms['on_what_table']}' and a.on_what_id={$search_terms['on_what_id']}";
 }
 
 if($search_terms['campaign_id']) {
-    $sql .= " AND o.campaign_id = " . $search_terms['campaign_id'];
+	//$from .= ', campaigns camp';
+	
+	$where .= " AND a.on_what_table='campaigns' AND a.on_what_id=" . $search_terms['campaign_id'];
+
 }
 
 // acl filtering
@@ -235,14 +253,18 @@ $list=acl_get_list($session_user_id, 'Read', false, 'activities');
 if ($list) {
     if ($list!==true) {
         $list=implode(",",$list);
-        $sql .= " and a.activity_id IN ($list) ";
+        $where .= " and a.activity_id IN ($list) ";
     }
 } else {
-    $sql .= ' AND 1 = 2 ';
+    $where .= ' AND 1 = 2 ';
 }
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
-$sql .=" GROUP BY a.activity_id, a.on_what_id, a.on_what_table, c.company_name,c.company_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, rt.resolution_short_name, cp.case_priority_pretty_name";
+$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name $extra_group_by";
+
+
+$sql = "$select $from $joins $where $group_by";
+$count_sql = "SELECT count(distinct a.activity_id) $from $joins $where";
 
 // end build query
 
@@ -308,6 +330,11 @@ if('list' != $activities_widget_type) {
 } else {
     global $system_rows_per_page;
 
+	$thread_query_list = "select activity_title, activity_id from activities where thread_id is not null group by thread_id order by activity_id";
+
+	$thread_query_select = $sql . 'AND thread_id = XXX-value-XXX';
+
+
     $columns = array();
     $columns[] = array('name' => _('Overdue'), 'index_sql' => 'is_overdue');
     $columns[] = array('name' => _('Type'), 'index_sql' => 'type');
@@ -319,6 +346,7 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _('Scheduled End'), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
     $columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
     $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
+    $columns[] = array('name' => _('Thread'), 'index_sql' => 'thread', 'group_query_list' => $thread_query_list, 'group_query_select' => $thread_query_select);
     $columns[] = array('name' => _('About'), 'index_calc' => 'activity_about'); 
     $columns[] = array('name' => _('Resolution'), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id'); 
 	
@@ -328,6 +356,10 @@ if('list' != $activities_widget_type) {
 	$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 	
 	$columns = $pager_columns->GetUserColumns('default');
+
+	global $activity_column_names;
+	$activity_column_names = $pager_columns->GetUserColumnNames();
+
 	
 	
 	
@@ -337,9 +369,10 @@ if('list' != $activities_widget_type) {
             	<input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _('Calendar View') ."\">
             	<input type=button class=button onclick=\"javascript: exportIt();\" value=" . _('Export') .">
             	<input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _('Mail Merge') . "></td></tr>";
-	
+
 	$pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
 	$pager->AddEndRows($endrows);
+	$pager->SetCountSQL($count_sql);
 	$widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
 }
 
@@ -414,8 +447,114 @@ function GetInitialCalendarDate($calendar_range, $before_after, $search_date) {
 }
 
 
+function GetNewActivityWidget($con, $session_user_id, $return_url, $on_what_table, $on_what_id, $company_id, $contact_id) {
+
+global $http_site_root;
+
+$form_name = 'NewActivity';
+
+if(!$company_id) $company_id = 0;
+
+
+
+// create menu of users
+$user_menu = get_user_menu($con, $session_user_id);
+
+// create menu of activity types
+$sql = "SELECT activity_type_pretty_name, activity_type_id
+        FROM activity_types
+        WHERE activity_type_record_status = 'a'
+        ORDER BY sort_order, activity_type_pretty_name";
+$rst = $con->execute($sql);
+if ($rst) {
+    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false);
+    $rst->close();
+}
+
+
+// create menu of contacts
+if($company_id) {
+	$sql = "SELECT " . $con->Concat("first_names", "' '", "last_name") . " AS contact_name, contact_id
+        	FROM contacts
+        	WHERE company_id = $company_id
+        	AND contact_record_status = 'a'
+        	ORDER BY last_name";
+	
+	$rst = $con->execute($sql);
+	if ($rst) {
+    	$contact_menu = $rst->getmenu2('contact_id', $contact_id, true, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
+    	$rst->close();
+	} else {
+    	db_error_handler ($con, $sql);
+	}
+}
+
+$hidden = '';
+
+if($on_what_table && $on_what_id) {
+	$hidden .= "<input type=hidden name=on_what_table value=\"$on_what_table\">";
+	$hidden .= "<input type=hidden name=on_what_id value=\"$on_what_id\">";
+}
+
+$hidden .= "<input type=hidden name=company_id value=\"$company_id\">";
+
+if($contact_id) {
+	$hidden .= "<input type=hidden name=contact_id value=\"$contact_id\">";
+}
+
+$ret = jscalendar_includes(false) .
+"
+
+<script language=\"JavaScript\" type=\"text/javascript\">
+<!--
+function markComplete() {
+    document.$form_name.activity_status.value = \"c\";
+    document.$form_name.submit();
+}
+//-->
+</script>
+
+
+        <!-- activities //-->
+        <form name=\"$form_name\" action=\"$http_site_root/activities/new-2.php\" method=post>
+        <input type=hidden name=return_url value=\"$return_url\">
+		$hidden
+        <input type=hidden name=activity_status value=\"o\">
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=5>". _("New Activity") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_label>" . _("Summary") . "</td>
+                <td class=widget_label>" . _("User") . "</td>
+                <td class=widget_label>" . _("Type") . "</td> ". 
+				($contact_menu ? "<td class=widget_label>" . _("Contact") . "</td>" : "") ."
+                <td colspan=2 class=widget_label>" . _("Scheduled End") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text name=activity_title></td>
+                <td class=widget_content_form_element>$user_menu</td>
+                <td class=widget_content_form_element>$activity_type_menu</td>" . 
+				($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
+                <td colspan=2 class=widget_content_form_element>
+                    <input type=text ID=\"f_date_c\" name=ends_at value=\"" . date('Y-m-d H:i:s') . "\">
+                    <img ID=\"f_trigger_c\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" . 
+                    render_create_button("Add") . 
+                    render_create_button("Done",'button',"javascript: markComplete();") . "
+                </td>
+            </tr>
+        </table>
+        </form>
+";	
+
+return $ret;
+}
+
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.9  2005/07/07 03:33:09  daturaarutad
+* added GetNewActivityWidget(); broke up query into pieces; now using $count_sql to speed up pagination
+*
 * Revision 1.8  2005/07/06 21:39:00  ycreddy
 * Changes to SQL Query for SQL Server portability
 *
