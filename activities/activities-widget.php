@@ -39,6 +39,9 @@ function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session
 // This should probably be a system preference.
 $description_substring_length = 80;
 
+
+
+// This is the name of the CGI field that will be used for storing the calendar's view date
 $calendar_date_field = 'calendar_start_date';
 
 getGlobalVar($activities_widget_type, 'activities_widget_type');
@@ -48,6 +51,15 @@ getGlobalVar($search_date, 'search_date');
 getGlobalVar($start_end, 'start_end');
 
 if(!$activities_widget_type) $activities_widget_type = 'list';
+
+$show_mini_search = false;
+$mini_search_widget_name = 'activities_widget_mini_search';
+
+if($show_mini_search) {
+	$caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\'; location.href=\'#' . $this->pager_name . '_select_columns\';" value="' . _('Filter Activities') . '">';
+}
+//(the way you know if you should use mini-search terms is simply if they exist or not)
+
 
 if('list' != $activities_widget_type) {
 
@@ -89,6 +101,9 @@ if('list' != $activities_widget_type) {
 $widget = '';
 
 
+$search_terms = GetMiniSearchTerms($search_terms, $form_name);
+
+
 // build the query based upon $search_terms
 
 $select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END) AS is_overdue, "
@@ -96,7 +111,7 @@ $select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
 
   . "'$return_url' as return_url, "
-  .   $con->substr."(activity_description, 1, $description_substring_length) AS description_brief, "
+  . $con->Concat($con->substr."(activity_description, 1, $description_substring_length)") ."  AS description_brief, "
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
   . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
@@ -255,7 +270,7 @@ if ($list) {
 }
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
-$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, description_brief $extra_group_by";
+$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, a.on_what_table, a.on_what_id $extra_group_by";
 
 
 $from_list = join(', ', $from);
@@ -294,7 +309,7 @@ if('list' != $activities_widget_type) {
             $activity_calendar_data[$i]['ends_at'] = $activity_calendar_rst->fields['ends_at'];
             $activity_calendar_data[$i]['contact_id'] = $activity_calendar_rst->fields['contact_id'];
             $activity_calendar_data[$i]['activity_title'] = $activity_calendar_rst->fields['activity_title'];
-            $activity_calendar_data[$i]['activity_description'] = $activity_calendar_rst->fields['activity_description'];
+            $activity_calendar_data[$i]['description_brief'] = $activity_calendar_rst->fields['description_brief'];
             $activity_calendar_data[$i]['user_id'] = $activity_calendar_rst->fields['user_id'];
 
             $activity_calendar_rst->movenext();
@@ -364,7 +379,7 @@ if('list' != $activities_widget_type) {
 
 
     $endrows = $end_rows .
-                "<tr><td class=widget_content_form_element colspan=10>
+                "<tr><td class=widget_content_form_element colspan=20>
                 $pager_columns_button
                 <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">
                 <input type=button class=button onclick=\"javascript: exportIt();\" value=\"" . _("Export") ."\">
@@ -378,6 +393,9 @@ if('list' != $activities_widget_type) {
 
 $widget['content'] .= "<input type=hidden name=activities_widget_type value=\"$activities_widget_type\">\n";
 $widget['content'] .= "<input type=hidden name=calendar_range value=\"$calendar_range\">\n";
+
+if($show_mini_search) 
+	$widget['content'] = GetMiniSearchWidget($mini_search_widget_name) . $widget['content'];
 
 $widget['content'] .= '
 <script language="JavaScript" type="text/javascript">
@@ -569,8 +587,66 @@ function markComplete() {
 return $ret;
 }
 
+function GetMiniSearchTerms($search_terms, $form_name) {
+	return $search_terms;
+}
+
+function GetMiniSearchWidget($widget_name) {
+
+
+	$ret =  
+	"<div id=$widget_name>
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=5>". _("Filter Activities") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_label>" . _("Summary") . "</td>
+                <td class=widget_label>" . _("Description") . "</td>
+                <td class=widget_label>" . _("Contact") . "</td> 
+                <td class=widget_label>" . _("Scheduled Begin") . "</td> 
+                <td class=widget_label>" . _("Scheduled End") . "</td> 
+            </tr>
+            <tr>
+                <td class=widget_content_form_element><input type=text name={$widget_name}_activity_title></td>
+                <td class=widget_content_form_element><input type=text name={$widget_name}_activity_description></td>
+                <td class=widget_content_form_element><input type=text name={$widget_name}_activity_contact></td>
+                <td class=widget_content_form_element><input type=text name={$widget_name}_activity_begin></td>
+                <td colspan=2 class=widget_content_form_element size=20>
+                    <input type=text ID=\"f_date_activity_end\" name={$widget_name}_activity_end value=\"" . date('Y-m-d H:i:s') . "\">
+                    <img ID=\"f_trigger_activity_end\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
+                </td>
+            </tr>
+        </table>
+
+	</div>
+
+	<script language=\"JavaScript\" type=\"text/javascript\">
+		// hide the widget to start with
+	    document.getElementById('{$widget_name}').style.display = 'none';
+
+        Calendar.setup({
+                inputField     :    \"f_date_activity_end\",      // id of the input field
+                ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
+                showsTime      :    true,            // will display a time selector
+                button         :    \"f_trigger_activity_end\",   // trigger for the calendar (button ID)
+                singleClick    :    false,           // double-click mode
+                step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+                align          :    \"Bl\"           // alignment (defaults to \"Bl\")
+            });
+
+	</script>
+
+	";
+
+	return $ret;
+}
+
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.19  2005/07/08 17:20:57  daturaarutad
+* hopefully fixed query for MSSQL server; added not-yet-functional mini-search code
+*
 * Revision 1.18  2005/07/08 01:14:11  braverock
 * - fix 'Mail Merge' quoting
 * - fix BulkEmailActivity javascript
