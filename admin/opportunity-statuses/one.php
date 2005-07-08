@@ -4,10 +4,10 @@
  *
  * Called from admin/opportunity-status/some.php
  *
- * $Id: one.php,v 1.14 2005/05/10 13:31:52 braverock Exp $
+ * $Id: one.php,v 1.15 2005/07/08 17:29:29 braverock Exp $
  */
 
-//uinclude required common files
+//include required common files
 require_once('../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -47,29 +47,29 @@ $table_name = "opportunity_statuses";
 
 // list of all activity templates connected to this opportunity
 $sql_activity_templates="select activity_title,
-        duration,
-        activity_template_id,
-        activity_type_pretty_name, activity_templates.sort_order
-        from activity_templates, activity_types
-        where on_what_id=$opportunity_status_id
-        and on_what_table='$table_name'
-        and activity_templates.activity_type_id=activity_types.activity_type_id
-        and activity_template_record_status='a'
-        order by activity_templates.sort_order";
+                                duration,
+                                activity_template_id,
+                                activity_type_pretty_name, activity_templates.sort_order, role_name
+                         from activity_types,
+                              activity_templates LEFT OUTER JOIN Role on Role.role_id = activity_templates.role_id
+                         where on_what_id=$opportunity_status_id
+                                and on_what_table='$table_name'
+                                and activity_templates.activity_type_id=activity_types.activity_type_id
+                                and activity_template_record_status='a'
+                                order by activity_templates.sort_order";
 
 $classname = 'open_activity';
 
 
 $rst = $con->execute($sql_activity_templates);
-//get first record count and last record count
-$cnt = 1;
-$maxcnt = $rst->rowcount();
 //make activity_templates table in HTML
 if ($rst) {
+    //get first record count and last record count
+    $cnt = 1;
+    $maxcnt = $rst->rowcount();
     while (!$rst->EOF) {
         $sort_order = $rst->fields['sort_order'];
         $activity_rows .= '<tr>';
-//        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_title'] . '</td>';
         $activity_rows .= "<td class='$classname'>"
             . "<a href='$http_site_root/admin/activity-templates/edit.php?activity_template_id="
             . $rst->fields['activity_template_id'] . "&on_what_table=opportunity_statuses&on_what_id="
@@ -78,6 +78,7 @@ if ($rst) {
             . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['duration'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_type_pretty_name'] . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>'. $rst->fields['role_name'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>'
                 . '<table width=100% cellpadding=0 border=0 cellspacing=0>'
                 . '<tr><td>' . $sort_order . '</td>'
@@ -100,6 +101,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler($con,$sql_activity_templates);
 }
 
 
@@ -111,6 +114,8 @@ $rst->close();
 
 $con->close();
 
+//get role menu
+$role_menu = get_role_list(false, true, 'role_id', $role_id, true);
 
 $page_title = _("Opportunity Status Details").': '.$opportunity_status_pretty_name;
 start_page($page_title);
@@ -171,21 +176,27 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Link Activity To Opportunity Status"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Link Workflow Activity To Opportunity Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
-                <td class=widget_label><?php echo _("Duration"); ?><br><?php echo _("(defaults to days)"); ?></td>
+                <td class=widget_label><?php echo _("Duration"); ?><br> <?php echo _("(defaults to days)"); ?></td>
                 <td class=widget_label><?php echo _("Type"); ?></td>
-                <td class=widget_label><?php echo _("Sort Order"); ?></td>
+                <td class=widget_label><?php echo _("Role"); ?></td>
+                <td class=widget_label colspan=2 width="20%"><?php echo _("Sort Order"); ?></td>
             <tr>
-                <td class=widget_content_form_element><input type=text size=40 name="title"></td>
+                <td class=widget_content_form_element><input type=text size=30 name="title"></td>
                 <td class=widget_content_form_element><input type=text name="duration"></td>
-                <td class=widget_content_form_element colspan=2>
+                <td class=widget_content_form_element>
                     <?php
                         echo $activity_type_menu;
                     ?>
-                    &nbsp; <input class=button type=submit value="<?php echo _("Add"); ?>">
+                </td>
+                <td class=widget_content_form_element><?php echo $role_menu; ?></td>
+                <td class=widget_content_form_element colspan=2>
+                    <input type=text size=2 name="sort_order">
+                    &nbsp;
+                    <input class=button type=submit value="<?php echo _("Add"); ?>">
                 </td>
             </tr>
             <?php
@@ -193,10 +204,11 @@ start_page($page_title);
                     echo $activity_rows;
                 } else {
                     echo "<tr>\n";
-                    echo "\t\t<td class=widget_content_form_element colspan=3>"._("No linked activities")."</td>\n";
+                    echo "\t\t".'<td class=widget_content_form_element colspan=6>'._("No linked activities")."</td>\n";
                     echo "\t</tr>\n";
                 }
             ?>
+
         </table>
         </form>
 
@@ -234,6 +246,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.15  2005/07/08 17:29:29  braverock
+ * - add role_id and sort_order to display/new
+ * - properly localize strings
+ * - add db_error_handler
+ * - move variables inside if rst conditional
+ *
  * Revision 1.14  2005/05/10 13:31:52  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *
