@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.71 2005/07/08 18:48:48 vanmer Exp $
+ * $Id: utils-interface.php,v 1.72 2005/07/08 20:33:20 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -373,13 +373,15 @@ function end_page($use_hook = true) {
      * hook writer would need to add thier own structure.
      */
 global $session_user_id;
+if (!$session_user_id) { $user_id=0; }
+else { $user_id=$session_user_id; }
 global $con;
 if (!$con) $con=get_xrms_dbconnection();
   if ( $use_hook )
     do_hook ('end_page');
 
-    $block_sf_page =  get_user_preference($con, $session_user_id, 'block_sf_link' );
-    $hide_sf_image = get_user_preference($con,  $session_user_id, 'hide_sf_img');
+    $block_sf_page =  get_user_preference($con, $user_id, 'block_sf_link' );
+    $hide_sf_image = get_user_preference($con, $user_id, 'hide_sf_img');
     
     if ($hide_sf_image=='y') { $sf_image_attributes=' height="0" width="0"'; }
     else { $sf_image_attributes=''; }
@@ -761,6 +763,10 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.72  2005/07/08 20:33:20  vanmer
+ * - changed to not pass false user_id to get_user_preferences, allows non-logged-in system to retrieve system
+ * preferences
+ *
  * Revision 1.71  2005/07/08 18:48:48  vanmer
  * - added use of preferences to add and disable sourceforge logo at the bottom of every page
  *
