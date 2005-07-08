@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.34 2005/07/07 18:53:05 vanmer Exp $
+ * $Id: sidebar.php,v 1.35 2005/07/08 01:29:43 vanmer Exp $
  */
 
 require_once('relationship_functions.php');
@@ -158,15 +158,8 @@ $relationship_link_rows = '';
                         $relationship_link_rows .= "*";
                     }
                     
-                    //hack to set link to the right URL for divisions
-                    if ($relationship_type_data[$opposite_direction.'_what_table']=='company_division') {
-                        $href="$http_site_root/companies/one.php?{$relationship_type_data[$opposite_direction.'_what_table_singular']}_id="
-                        . $current_id;
-                    } else {
-                        //otherwise go to standard URL
-                        $href="$http_site_root/{$relationship_type_data[$opposite_direction.'_what_table']}/one.php?{$relationship_type_data[$opposite_direction.'_what_table_singular']}_id="
-                        . $current_id;
-                    }
+                    //hack to set link to the right URL from centralized url creator
+                    $href="$http_site_root".table_one_url($relationship_type_data[$opposite_direction.'_what_table'], $current_id);
                     $relationship_link_rows .= "<a href='$href'>" 
                         . $relationship_details['name']
                         . "</a> ";
@@ -339,6 +332,9 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.35  2005/07/08 01:29:43  vanmer
+ * - centralized hack to allow link to company_division to link properly automagically into utils-database.php
+ *
  * Revision 1.34  2005/07/07 18:53:05  vanmer
  * - added case to handle URLs for relationships involving company divisions
  *
