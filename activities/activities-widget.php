@@ -269,7 +269,7 @@ $count_sql = "SELECT count(distinct a.activity_id) $from $joins $where";
 // end build query
 
 // save query for mail merge
-$_SESSION["search_sql"] = $sql;
+$_SESSION["search_sql"] = "$select FROM $from_list $joins $where";
 
 
 
@@ -367,8 +367,8 @@ if('list' != $activities_widget_type) {
                 "<tr><td class=widget_content_form_element colspan=10>
                 $pager_columns_button
                 <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">
-                <input type=button class=button onclick=\"javascript: exportIt();\" value=" . _("Export") .">
-                <input type=button class=button onclick=\"javascript: bulkEmail();\" value=" . _("Mail Merge") . "></td></tr>";
+                <input type=button class=button onclick=\"javascript: exportIt();\" value=\"" . _("Export") ."\">
+                <input type=button class=button onclick=\"javascript: bulkEmailActivity();\" value=\"" . _("Mail Merge") . "\"></td></tr>\n";
 
     $pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
     $pager->AddEndRows($endrows);
@@ -378,6 +378,16 @@ if('list' != $activities_widget_type) {
 
 $widget['content'] .= "<input type=hidden name=activities_widget_type value=\"$activities_widget_type\">\n";
 $widget['content'] .= "<input type=hidden name=calendar_range value=\"$calendar_range\">\n";
+
+$widget['content'] .= '
+<script language="JavaScript" type="text/javascript">
+<!--
+    function bulkEmailActivity() {
+        document.'.$form_name.'.action = "../email/email.php";
+        document.'.$form_name.'.submit();
+    }
+//-->
+</script>'."\n";
 
 return $widget;
 
@@ -561,8 +571,10 @@ return $ret;
 
 /**
 * $Log: activities-widget.php,v $
-* Revision 1.17  2005/07/07 23:47:12  braverock
-* - fix localized strings
+* Revision 1.18  2005/07/08 01:14:11  braverock
+* - fix 'Mail Merge' quoting
+* - fix BulkEmailActivity javascript
+* - fix search_sql for mail merge
 *
 * Revision 1.16  2005/07/07 20:15:54  braverock
 * - trim widths of drop-down menus in new activities widget for better screen formatting
