@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.114 2005/07/08 01:18:56 braverock Exp $
+ * $Id: one.php,v 1.115 2005/07/08 01:30:09 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -125,6 +125,7 @@ if ($on_what_table == 'opportunities') {
     $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
     $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
 } elseif ($on_what_table) {
+    $attached_to_link = "<a href='$http_site_root" . table_one_url($on_what_table, $on_what_id) . "'>";
     $singular=make_singular($on_what_table);
     $name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
     $on_what_field=$singular.'_id';
@@ -477,8 +478,8 @@ function logTime() {
                             echo " &nbsp; " . _("Status") . " &nbsp; ";
                             echo $table_menu;
                         }
-                    ?>
-                    <input type=button class=button onclick="javascript: location.href='activity-reconnect.php?activity_id=<?php echo $activity_id; ?>'" value="<?php echo _("Change"); ?>">
+                    ?><br>
+                    <input type=submit class=button name=change_attachment value="<?php echo _("Change Attachment"); ?>">
                 </td>
             </tr>
             <tr>
@@ -710,6 +711,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.115  2005/07/08 01:30:09  vanmer
+ * - changed Change button into Change Attachment button
+ * - changed to redirect and save instead of going immediately to change the attachment
+ *
  * Revision 1.114  2005/07/08 01:18:56  braverock
  * - localize button strings
  *
