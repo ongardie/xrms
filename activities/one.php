@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.115 2005/07/08 01:30:09 vanmer Exp $
+ * $Id: one.php,v 1.116 2005/07/08 14:40:25 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -129,8 +129,8 @@ if ($on_what_table == 'opportunities') {
     $singular=make_singular($on_what_table);
     $name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
     $on_what_field=$singular.'_id';
-    $sql = "select $name_field as attached_to_name from $on_what_table WHERE $on_what_field = $on_what_id";    
-} else {    
+    $sql = "select $name_field as attached_to_name from $on_what_table WHERE $on_what_field = $on_what_id";
+} else {
     $attached_to_link = "N/A";
     $sql = "select * from companies where 1 = 2";
 }
@@ -583,7 +583,9 @@ function logTime() {
             <tr id='resolution_reason' >
                 <td class=widget_label_right><?php echo _("Resolution Description"); ?></td>
                 <td class=widget_content_form_element>
-                    <textarea id=resolution_description name=resolution_description><?php echo $resolution_description; ?></textarea>
+                    <textarea rows=10 cols=70 id=resolution_description name=resolution_description>
+                        <?php echo $resolution_description; ?>
+                    </textarea>
                 </td>
             </tr>
             <?php
@@ -711,6 +713,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.116  2005/07/08 14:40:25  braverock
+ * - set textarea for resolution to be the same size as the other textarea's on the page
+ *
  * Revision 1.115  2005/07/08 01:30:09  vanmer
  * - changed Change button into Change Attachment button
  * - changed to redirect and save instead of going immediately to change the attachment
