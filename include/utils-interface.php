@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.70 2005/07/07 20:16:32 braverock Exp $
+ * $Id: utils-interface.php,v 1.71 2005/07/08 18:48:48 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -372,14 +372,27 @@ function end_page($use_hook = true) {
      * I don't think any of the tables should still be open, so a
      * hook writer would need to add thier own structure.
      */
+global $session_user_id;
+global $con;
+if (!$con) $con=get_xrms_dbconnection();
   if ( $use_hook )
     do_hook ('end_page');
+
+    $block_sf_page =  get_user_preference($con, $session_user_id, 'block_sf_link' );
+    $hide_sf_image = get_user_preference($con,  $session_user_id, 'hide_sf_img');
+    
+    if ($hide_sf_image=='y') { $sf_image_attributes=' height="0" width="0"'; }
+    else { $sf_image_attributes=''; }
+    $con->close();
+    if ($block_sf_page!='y') {
 ?>
 <A href="http://sourceforge.net/projects/xrms/">
-        <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0"
-             height="0" width="0"
+        <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0" 
+             <?php echo $sf_image_attributes; ?>
              alt="<?php echo _("XRMS SourceForge Project Page"); ?>" />
 </A>
+    <?php } ?>
+
 </body>
 </html>
 <?php
@@ -748,6 +761,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.71  2005/07/08 18:48:48  vanmer
+ * - added use of preferences to add and disable sourceforge logo at the bottom of every page
+ *
  * Revision 1.70  2005/07/07 20:16:32  braverock
  * - trim width of user menu for better screen formatting
  *
