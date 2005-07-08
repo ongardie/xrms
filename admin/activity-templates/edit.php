@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.8 2005/07/08 02:33:32 vanmer Exp $
+ * $Id: edit.php,v 1.9 2005/07/08 17:17:12 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -27,16 +27,16 @@ $sql = "select * from activity_templates where activity_template_id = $activity_
 $rst = $con->execute($sql);
 
 if ($rst) {
-	
-	$activity_title = $rst->fields['activity_title'];
-	$activity_description = $rst->fields['activity_description'];
+
+    $activity_title = $rst->fields['activity_title'];
+    $activity_description = $rst->fields['activity_description'];
         $default_text = $rst->fields['default_text'];
-	$activity_type_id = $rst->fields['activity_type_id'];
-	$duration = $rst->fields['duration'];	
-	$role_id = $rst->fields['role_id'];	
-	$sort_order = $rst->fields['sort_order'];	
-	
-	$rst->close();
+    $activity_type_id = $rst->fields['activity_type_id'];
+    $duration = $rst->fields['duration'];
+    $role_id = $rst->fields['role_id'];
+    $sort_order = $rst->fields['sort_order'];
+
+    $rst->close();
 }
 
 //get activity type menu
@@ -58,32 +58,32 @@ start_page($page_title);
 <div id="Main">
     <div id="Content">
 
-		<form action=edit-2.php method=post>
-		<input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>">
-		<input type=hidden name=return_url value="<?php echo $return_url; ?>">
-		<table class=widget cellspacing=1>
-			<tr>
-				<td class=widget_header colspan=4><?php echo _("Edit Activity Template Information"); ?></td>
-			</tr>
+        <form action=edit-2.php method=post>
+        <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>">
+        <input type=hidden name=return_url value="<?php echo $return_url; ?>">
+        <table class=widget cellspacing=1>
+            <tr>
+                <td class=widget_header colspan=4><?php echo _("Edit Activity Template Information"); ?></td>
+            </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Title"); ?></td>
-				<td class=widget_content_form_element><input type=text size=40 name="activity_title" value="<?php echo $activity_title; ?>"></td>
-			</tr>
-			<tr>
+                <td class=widget_content_form_element><input type=text size=40 name="activity_title" value="<?php echo $activity_title; ?>"></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Duration"); ?></td>
-				<td class=widget_content_form_element><input type=text size=10 name="duration" value="<?php echo $duration; ?>"></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right><?php echo _("Type"); ?></td>
-				<td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
-			</tr>
-			<tr>
-				<td class=widget_label_right><?php echo _("Role"); ?></td>
-				<td class=widget_content_form_element><?php echo $role_menu; ?></td>
-			</tr>
+                <td class=widget_content_form_element><input type=text size=10 name="duration" value="<?php echo $duration; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Type"); ?></td>
+                <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Role"); ?></td>
+                <td class=widget_content_form_element><?php echo $role_menu; ?></td>
+            </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
-				<td class=widget_content_form_element><textarea rows=8 cols=100 name="activity_description"><?php echo $activity_description ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=8 cols=100 name="activity_description"><?php echo $activity_description ?></textarea></td>
             </tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Default Text"); ?></td>
@@ -93,22 +93,22 @@ start_page($page_title);
                 <td class=widget_label_right><?php echo _("Sort Order"); ?></td>
                 <td class=widget_content_form_element><input type=text size=2 name="sort_order" value='<?php echo $sort_order; ?>'></td>
             </tr>
-			<tr>
-				<td class=widget_content colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
-			</tr>
-		</table>
-		</form>
+            <tr>
+                <td class=widget_content colspan=2><input class=button type=submit value="<?php echo _("Save Changes"); ?>"></td>
+            </tr>
+        </table>
+        </form>
 
     </div>
 
         <!-- right column //-->
     <div id="Sidebar">
 
-	<form action=delete.php method=post>
+    <form action=delete.php method=post>
         <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>" onsubmit="javascript: return confirm('<?php echo _("Delete Activity Template?"); ?>');">
-	<input type=hidden name=on_what_table value="<?php echo $on_what_table; ?>">
-	<input type=hidden name=on_what_id value="<?php echo $on_what_id; ?>">
-	<input type=hidden name=return_url value="<?php echo $return_url; ?>">
+    <input type=hidden name=on_what_table value="<?php echo $on_what_table; ?>">
+    <input type=hidden name=on_what_id value="<?php echo $on_what_id; ?>">
+    <input type=hidden name=return_url value="<?php echo $return_url; ?>">
         <table class=widget cellspacing=1>
              <tr>
                 <td class=widget_header colspan=4><?php echo _("Delete Activity Template"); ?></td>
@@ -120,7 +120,7 @@ start_page($page_title);
                             . _("Note: This action CANNOT be undone!")
                             . '</p>';
                    ?>
-					<p><input class=button type=submit value="<?php echo _("Delete"); ?>">
+                    <p><input class=button type=submit value="<?php echo _("Delete"); ?>">
                    </td>
              </tr>
         </table>
@@ -135,6 +135,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.9  2005/07/08 17:17:12  braverock
+ * - clean up formatting
+ *
  * Revision 1.8  2005/07/08 02:33:32  vanmer
  * - added role menu to activity template edit screen
  *
