@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.19 2005/07/06 18:17:16 braverock Exp $
+* $Id: email-4.php,v 1.20 2005/07/08 01:43:29 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -27,9 +27,9 @@ $email_template_title = unserialize($_SESSION['email_template_title']);
 $email_template_body = unserialize($_SESSION['email_template_body']);
 
 $uploadDir = unserialize($_SESSION['uploadDir']);
-$attachment_list = explode ( '|', unserialize($_SESSION['attachment_list']) );
+$attachment_list = $_SESSION['attachment_list'];
 
-foreach ( $attachment_list as $_file )
+foreach ( $attachment_list as $_ugly => $_file )
 {
     if ( $_file == '' )
         continue;
@@ -38,14 +38,14 @@ foreach ( $attachment_list as $_file )
     $_fileData[$_file] = array();
 
     // Full path
-    $_fileData[$_file]['path'] = $uploadDir . '/' . $_file;
+    $_fileData[$_file]['path'] = $GLOBALS['file_storage_directory'] . '/' . $_file;
 
-    //if (!function_exists('mime_content_type')) {
+    if (!function_exists('mime_content_type')) {
         // this version of PHP doesn't have the mime functions
         // compiled in, so load our drop-in replacement function
         // instead
         require_once($include_directory.'mime/mime-array.php');
-    //}
+    }
     // we need the file's MIME type
     $_fileData[$_file]['mime'] = mime_content_type_ ( $_fileData[$_file]['path'] );
 
@@ -169,11 +169,6 @@ if ($rst) {
     $activity_data['activity_status']      = 'c';         // Closed status
     $activity_data['completed_bol']        = true;           // activity is completed
 
-/*
- * - on_what_table           - what the activity is attached or related to
- * - on_what_id              - which ID to use for this relationship
- * - on_what_status          - workflow status
-*/
     if ( ! add_activity($con, $activity_data, $participants ) )
     {
         echo '$activity_data error!';
@@ -251,6 +246,11 @@ function getFile($filename)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.20  2005/07/08 01:43:29  jswalter
+*   - added note about commented-out 'mime_content_type()' check
+*   - modified file attachement processing to handle new method
+* Bug 311
+*
 * Revision 1.19  2005/07/06 18:17:16  braverock
 * - change back to custom function as php std mime_content_type fn
 *   causes problems on several configs
