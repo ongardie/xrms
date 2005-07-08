@@ -5,7 +5,7 @@
  * Files that have been stored on the server are downloaded to
  * the user's default location.
  *
- * $Id: download.php,v 1.16 2005/07/06 18:17:36 braverock Exp $
+ * $Id: download.php,v 1.17 2005/07/08 15:14:25 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -60,7 +60,7 @@ if ($rst) {
 $con->close();
 
 // make sure we have a proper mime type
-//if ( !$file_type ) {
+if ( !$file_type ) {
     //if (!function_exists('mime_content_type') ) {
         // this version of PHP doesn't have the mime functions
         // compiled in, so load our drop-in replacement function
@@ -68,7 +68,7 @@ $con->close();
         require_once($include_directory.'mime/mime-array.php');
     //}
     $file_type = mime_content_type_ ( $file_filesystem_name );
-//}
+}
 
 $disposition = "attachment"; // "inline" to view file in browser or "attachment" to download to hard disk
 
@@ -103,6 +103,9 @@ exit();
 
 /**
  * $Log: download.php,v $
+ * Revision 1.17  2005/07/08 15:14:25  braverock
+ * - only recheck mime type if it isn't already set
+ *
  * Revision 1.16  2005/07/06 18:17:36  braverock
  * - change back to custom function as php std mime_content_type fn
  *   causes problems on several configs
