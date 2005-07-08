@@ -111,7 +111,7 @@ $select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
 
   . "'$return_url' as return_url, "
-  . $con->Concat($con->substr."(activity_description, 1, $description_substring_length)") ."  AS description_brief, "
+  . $con->substr."(activity_description, 1, $description_substring_length)"."AS description_brief, "
   . $con->SQLDate('Y-m-d','a.scheduled_at') . " AS scheduled, "
   . $con->SQLDate('Y-m-d','a.ends_at') . " AS due, "
   . "u.username AS owner, u.user_id, a.activity_id, activity_status, a.on_what_table, a.on_what_id, "
@@ -270,7 +270,7 @@ if ($list) {
 }
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
-$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, a.on_what_table, a.on_what_id $extra_group_by";
+$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, a.on_what_table, a.on_what_id, resolution_short_name, case_priority_pretty_name $extra_group_by";
 
 
 $from_list = join(', ', $from);
@@ -644,6 +644,9 @@ function GetMiniSearchWidget($widget_name) {
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.21  2005/07/08 19:40:34  braverock
+* - remove unecessary Concat fn, as it didn't help MS SQL Server anyway
+*
 * Revision 1.20  2005/07/08 19:08:42  braverock
 * - add explicit join on activity_types rather than implicit equijoin from the where clause
 *
@@ -705,5 +708,4 @@ function GetMiniSearchWidget($widget_name) {
 *
 *
 */
-
 ?>
