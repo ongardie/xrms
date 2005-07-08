@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.21 2005/07/08 02:14:00 jswalter Exp $
+* $Id: email-4.php,v 1.22 2005/07/08 15:15:24 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -48,7 +48,7 @@ foreach ( $attachment_list as $_ugly => $_file )
         require_once($include_directory . 'mime/mime-array.php');
 //    }
     // we need the file's MIME type
-    $_fileData[$_file]['mime'] = mime_content_type ( $_fileData[$_file]['path'] );
+    $_fileData[$_file]['mime'] = mime_content_type_ ( $_fileData[$_file]['path'] );
 
     // we need the file itself
     $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
@@ -229,24 +229,35 @@ end_page();
 * This function will read a file in
 * from a supplied filename and return it.
 */
-function getFile($filename)
+function getFile($file_to_open)
 {
-    $return = '';
-    if ($fp = fopen($filename, 'rb')) {
-        while (!feof($fp)) {
-            $return .= fread($fp, 1024);
-        }
-        fclose($fp);
-        return $return;
+    $chunksize=1*(1024*1024);
 
-    } else {
+    $return = '';
+    //open and output file contents
+    if (is_file($file_to_open)){
+        $fp = fopen($file_to_open, 'rb');
+        if ($fp) {
+            while (!feof($fp)) {
+                $return = fread($fp, $chunksize);
+            } //end while
+            fclose ($fp);
+        } else {
+            //file open failed
+            //should put an error here
+        }
+        return $return;
+    } else { //end is_file test, should error if this isn't a file
         return false;
     }
-
 };
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.22  2005/07/08 15:15:24  braverock
+* - use custom mime_content_type_ fn to avoid problems w/ php std fn
+* - change getfile fn to do better tests and read bigger blocks at a time
+*
 * Revision 1.21  2005/07/08 02:14:00  jswalter
 *  - corrected typo in mime_type call
 *
