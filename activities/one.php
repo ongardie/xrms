@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.112 2005/07/08 00:53:25 vanmer Exp $
+ * $Id: one.php,v 1.113 2005/07/08 01:07:24 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -124,7 +124,12 @@ if ($on_what_table == 'opportunities') {
 } elseif ($on_what_table == 'cases') {
     $attached_to_link = "<a href='$http_site_root/cases/one.php?case_id=$on_what_id'>";
     $sql = "select case_title as attached_to_name from cases where case_id = $on_what_id";
-} else {
+} elseif ($on_what_table) {
+    $singular=make_singular($on_what_table);
+    $name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
+    $on_what_field=$singular.'_id';
+    $sql = "select $name_field as attached_to_name from $on_what_table WHERE $on_what_field = $on_what_id";    
+} else {    
     $attached_to_link = "N/A";
     $sql = "select * from companies where 1 = 2";
 }
@@ -705,6 +710,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.113  2005/07/08 01:07:24  vanmer
+ * - changed to try to show attached entity if possible
+ *
  * Revision 1.112  2005/07/08 00:53:25  vanmer
  * - added change button to reconnect activity to another entity
  *
