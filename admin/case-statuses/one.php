@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.13 2005/07/08 17:09:41 braverock Exp $
+ * $Id: one.php,v 1.14 2005/07/08 17:21:38 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -55,8 +55,6 @@ $sql_activity_templates="select activity_title,
         order by activity_templates.sort_order";
 
 $rst = $con->execute($sql_activity_templates);
-
-echo '<p><pre>'. print_r($rst).'</pre></p>';
 
 $classname = 'open_activity';
 
@@ -245,6 +243,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.14  2005/07/08 17:21:38  braverock
+ * - remove debug line
+ *
  * Revision 1.13  2005/07/08 17:09:41  braverock
  * - add role to new/display of activity templates
  * - properly localize strings
