@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.91 2005/07/08 18:48:38 vanmer Exp $
+ * $Id: update.php,v 1.92 2005/07/08 20:29:51 vanmer Exp $
  */
 
 // where do we include from
@@ -4948,6 +4948,9 @@ $con->execute($sql);
 $sql="ALTER TABLE `user_preference_types` ADD form_element_type varchar(32) NOT NULL default 'text'";
 $con->execute($sql);
 
+$sql = "ALTER TABLE `user_preference_type_options` ADD `option_display` VARCHAR( 255 ) ";
+$con->execute($sql);
+
 //adding strings for user preference types in order to allow them to be translated while still stored as English in the database
 $s=_("Language");
 $s=_("Theme");
@@ -5013,8 +5016,6 @@ $sql = "ALTER TABLE activities ADD activity_template_id int not null default 0";
 $con->execute($sql);
 
 
-$sql = "ALTER TABLE `user_preference_type_options` ADD `option_display` VARCHAR( 255 ) ";
-$con->execute($sql);
 
      if (confirm_no_records($con, 'activity_resolution_types')) {
        $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Resolved' , 'Closed/Resolved', 1)";
@@ -5069,6 +5070,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.92  2005/07/08 20:29:51  vanmer
+ * - moved display field addition to before addition of new options
+ *
  * Revision 1.91  2005/07/08 18:48:38  vanmer
  * - added new preferences to hide and disable the sourceforge logo at the bottom of every page
  *
