@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.16 2005/07/08 19:00:46 jswalter Exp $
+ * $Id: email-3.php,v 1.17 2005/07/08 19:56:16 jswalter Exp $
  */
 
 
@@ -17,6 +17,9 @@ require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
 $msg = $_GET['msg'];
+
+    // Set our flag to indiate this message has not been sent yet
+    $_SESSION['email_sent'] = false;
 
     //Turn $_POST array into variables
     extract($_POST);
@@ -156,6 +159,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.17  2005/07/08 19:56:16  jswalter
+ *  - added 'email_sent' flag to stop users for sending messages multiple times
+ *
  * Revision 1.16  2005/07/08 19:00:46  jswalter
  *  - modified upload path to use $GLOBALS['file_storage_directory']
  *
