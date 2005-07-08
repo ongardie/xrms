@@ -18,7 +18,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.7 2005/07/06 17:10:45 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.8 2005/07/08 18:46:57 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -161,7 +161,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     if (!$user_id AND $user_id!==0) {
         return false;
     }
-
+    
 //    echo "IN get_user_preference<br>";
     if (is_numeric($preference_type)) {
 //        echo "NUMERIC";
@@ -174,6 +174,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     $preference_type=$preference_type_data['user_preference_type_id'];
     $func_name='get_user_preference';
     $params=array($user_id,$preference_type, $show_all);
+    
     if (function_cache_bool($func_name, $params)) {
         return function_cache_get($func_name, $params);
     }
@@ -203,6 +204,7 @@ function get_user_preference($con, $user_id, $preference_type, $preference_name=
     else $sql.=" DESC";
     
     $pref_rst=$con->execute($sql);
+    
     if (!$pref_rst) { db_error_handler( $con, $sql); return false; }
     
     if ($allow_multiple AND $show_all) {
@@ -610,7 +612,6 @@ function get_admin_preferences_table($con) {
 }
 
 function get_admin_preference($con, $preference_type, $preference_name=false, $show_all=false) {
-    echo $preference_name;
     return get_user_preference($con, 0, $preference_type, $preference_name, $show_all);
 }
 
@@ -727,6 +728,10 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.8  2005/07/08 18:46:57  vanmer
+ * - removed echo of preference name on admin preference retrieval
+ * - added unneeded whitespace
+ *
  * Revision 1.7  2005/07/06 17:10:45  vanmer
  * - added function to upgrade system parameters into system preferences
  *
