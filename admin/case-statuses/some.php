@@ -2,11 +2,7 @@
 /**
 * Manage Case Statuses
 *
-* $Id: some.php,v 1.14 2005/05/13 22:50:10 braverock Exp $
-*
-* @todo manage case statuses by type
-*       will require working on creating the rows by type,
-*       and adding up/down links by each type
+* $Id: some.php,v 1.15 2005/07/08 17:10:34 braverock Exp $
 */
 
 require_once('../../include-locations.inc');
@@ -80,10 +76,10 @@ if ($acase_type_id) {
         }
         $rst->close();
         if (!$table_rows) {
-            $table_rows='<tr><td colspan=3 class=widget_content>'._("No statuses defined for specified status type") . '</td></tr>';
+            $table_rows='<tr><td colspan=3 class=widget_content>'._("No statuses defined for specified case type") . '</td></tr>';
         }
     }
-} else { $table_rows='<tr><td colspan=3 class=widget_content>'._("Select a status type") . '</td></tr>'; }
+} else { $table_rows='<tr><td colspan=3 class=widget_content>'._("Select a case type") . '</td></tr>'; }
 $con->close();
 
 $page_title = _("Manage Case Statuses");
@@ -194,6 +190,9 @@ end_page();
 
 /**
 * $Log: some.php,v $
+* Revision 1.15  2005/07/08 17:10:34  braverock
+* - remove obsolete todo item
+*
 * Revision 1.14  2005/05/13 22:50:10  braverock
 * - change 'Status Type' to 'Case Type'
 *
