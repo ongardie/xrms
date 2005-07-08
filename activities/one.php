@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.113 2005/07/08 01:07:24 vanmer Exp $
+ * $Id: one.php,v 1.114 2005/07/08 01:18:56 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -340,13 +340,13 @@ if($on_what_table && $on_what_id) {
     }
 }
 if($thread_id) {
-	$ra_extra_where[] = "a.thread_id = $thread_id";
+    $ra_extra_where[] = "a.thread_id = $thread_id";
 }
 
 if(count($ra_extra_where)) {
-	$extra_where = "AND " . join(" OR ", $ra_extra_where);
+    $extra_where = "AND " . join(" OR ", $ra_extra_where);
 } else {
-	$extra_where = "AND 1 = 2";
+    $extra_where = "AND 1 = 2";
 }
 
 
@@ -575,13 +575,13 @@ function logTime() {
             </tr>
             <tr id='resolution_type' >
                 <td class=widget_label_right><?php echo _("Resolution Type"); ?></td>
-                <td class=widget_content_form_element> 
+                <td class=widget_content_form_element>
                     <?php echo $activity_resolution_type_menu; ?>
                 </td>
             </tr>
             <tr id='resolution_reason' >
                 <td class=widget_label_right><?php echo _("Resolution Description"); ?></td>
-                <td class=widget_content_form_element> 
+                <td class=widget_content_form_element>
                     <textarea id=resolution_description name=resolution_description><?php echo $resolution_description; ?></textarea>
                 </td>
             </tr>
@@ -593,22 +593,22 @@ function logTime() {
                 <td class=widget_content_form_element colspan=2>
                     <?php
 
-                        echo render_edit_button("Save Changes",'submit',false,'save');
+                        echo render_edit_button(_("Save Changes"),'submit',false,'save');
 
                         if($save_and_next) {
                             echo '<input class=button type=submit name="saveandnext" value="'._("Save and Next").'"';
                             $save_and_next="&save_and_next=true";
                         }
 
-                        echo render_create_button("Schedule Followup",'submit',false,'followup');
+                        echo render_create_button(_("Schedule Followup"),'submit',false,'followup');
 
                         if($activity_recurrence_id) {
-                            echo render_edit_button("Edit Recurrence",'submit',false,'recurrence');
+                            echo render_edit_button(_("Edit Recurrence"),'submit',false,'recurrence');
                         } else {
-                            echo render_edit_button("Create Recurrence",'submit',false,'recurrence');
+                            echo render_edit_button(_("Create Recurrence"),'submit',false,'recurrence');
                         }
 
-                        echo render_delete_button("Delete",'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
+                        echo render_delete_button(_("Delete"),'button',"javascript:location.href='delete.php?activity_id=$activity_id$save_and_next&return_url=".urlencode($return_url)."'", false, false, 'activities',$activity_id);
                     ?>
 
                 </td>
@@ -658,12 +658,12 @@ function logTime() {
     function HideResolutionFields() {
         old_type=document.getElementById('activity_resolution_type_id').value;
         old_description=document.getElementById('resolution_description').value;
-        
+
         document.getElementById('resolution_type').style.display='none';
         document.getElementById('resolution_reason').style.display='none';
         document.getElementById('activity_resolution_type_id').value='';
         document.getElementById('resolution_description').value='';
-        
+
         document.getElementById('activity_completed').onclick=ShowResolutionFields;
     }
     function ShowResolutionFields() {
@@ -671,16 +671,16 @@ function logTime() {
         document.getElementById('resolution_reason').style.display='';
         document.getElementById('activity_resolution_type_id').value=old_type;
         document.getElementById('resolution_description').value=old_description;
-        
+
         document.getElementById('activity_completed').onclick=HideResolutionFields;
     }
-    
+
     if (!document.getElementById('activity_completed').checked) {
         HideResolutionFields();
     } else {
         document.getElementById('activity_completed').onclick=HideResolutionFields;
     }
-    
+
     Calendar.setup({
         inputField     :    "f_date_c",      // id of the input field
         ifFormat       :    "%Y-%m-%d %H:%M:%S",       // format of the input field
@@ -710,6 +710,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.114  2005/07/08 01:18:56  braverock
+ * - localize button strings
+ *
  * Revision 1.113  2005/07/08 01:07:24  vanmer
  * - changed to try to show attached entity if possible
  *
