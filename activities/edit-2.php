@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.68 2005/07/06 23:40:36 vanmer Exp $
+ * $Id: edit-2.php,v 1.69 2005/07/08 01:28:26 vanmer Exp $
  */
 
 //include required files
@@ -51,11 +51,13 @@ $arr_vars = array (
                    'probability' => arr_vars_POST_UNDEF ,
                    'followup' => arr_vars_POST_UNDEF ,
                    'recurrence' => arr_vars_POST_UNDEF ,
+                   'change_attachment' => arr_vars_POST_UNDEF ,
                    'saveandnext' => arr_vars_POST_UNDEF ,
                    );
 
 // get posted data
 arr_vars_post_with_cmd ( $arr_vars );
+
 
 $activity_on_what_id=$on_what_id;
 $activity_on_what_table=$on_what_table;
@@ -72,6 +74,9 @@ if (!$return_url) {
     $return_url='/activities/some.php';
 }
 
+if ($change_attachment) {
+    $return_url="/activities/activity-reconnect.php?activity_id=$activity_id";
+}
 // set the correct activity status flag
 if ($activity_status == 'on') {
     $activity_status = 'c';
@@ -521,6 +526,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.69  2005/07/08 01:28:26  vanmer
+ * - changed action to redirect to change attachment after saving all other settings
+ *
  * Revision 1.68  2005/07/06 23:40:36  vanmer
  * - updated to check for activities at the same sort order, and add new activities if there are none left at htis
  * sort order
