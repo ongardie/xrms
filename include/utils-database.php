@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.15 2005/06/25 12:49:45 braverock Exp $
+ * $Id: utils-database.php,v 1.16 2005/07/08 01:29:03 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -96,6 +96,25 @@ function table_name($table) {
     }
 }
 
+function table_one_url($table, $id) {
+    $singular=make_singular($table);
+    $field_name=$singular.'_id';
+    switch ($table) {
+        case 'company_division':
+            $return_url="/companies/one.php?division_id=$id";
+        break;
+        default:
+            $return_url="/$table/one.php?$field_name=$id";
+        break;
+    }
+    return $return_url;
+}
+
+function table_some_url($table) {
+    $singular=make_singular($table);
+    $return_url="/$singular/some.php";
+}
+
 function execute_batch_sql_file($con, $file_path) {
     if (file_exists($file_path)) {
         $fh = fopen($file_path, 'r');
@@ -167,6 +186,10 @@ register_shutdown_function('db_con_cleanup');
 /*****************************************************************************/
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.16  2005/07/08 01:29:03  vanmer
+ * - added new function to make a URL out of a table and id combination
+ * - added new function to make a URL of a table combination to redirect to some.php
+ *
  * Revision 1.15  2005/06/25 12:49:45  braverock
  * - fix variable typo in cleanup fn
  *
