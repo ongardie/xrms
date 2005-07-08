@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.5 2004/07/16 23:51:34 cpsource Exp $
+ * $Id: new.php,v 1.6 2005/07/08 17:16:07 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,6 +18,8 @@ $session_user_id = session_check( 'Admin' );
 
 $activity_title = $_POST['title'];
 $duration = $_POST['duration'];
+$role_id = $_POST['role_id'];
+$sort_order = $_POST['sort_order'];
 $activity_type_id = $_POST['activity_type_id'];
 $on_what_id = $_POST['on_what_id'];
 $on_what_table = $_POST['on_what_table'];
@@ -52,6 +54,7 @@ $rec['on_what_table'] = $on_what_table;
 $rec['activity_type_id'] = $activity_type_id;
 $rec['duration'] = $duration;
 $rec['sort_order'] = $sort_order;
+$rec['role_id'] = $role_id;
 
 $tbl = "activity_templates";
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
@@ -67,6 +70,9 @@ header("Location: ".$http_site_root.'/admin/'.$on_what_table.'/one.php?'.$table_
 
 /**
  * $Log: new.php,v $
+ * Revision 1.6  2005/07/08 17:16:07  braverock
+ * - add sort_order and role_id
+ *
  * Revision 1.5  2004/07/16 23:51:34  cpsource
  * - require session_check ( 'Admin' )
  *
