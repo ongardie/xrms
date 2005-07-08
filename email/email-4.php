@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.22 2005/07/08 15:15:24 braverock Exp $
+* $Id: email-4.php,v 1.23 2005/07/08 19:29:45 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -11,6 +11,7 @@ require_once('include-locations-location.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-files.php');
 require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
@@ -26,9 +27,10 @@ $bcc_address = unserialize($_SESSION['bcc_address']);
 $email_template_title = unserialize($_SESSION['email_template_title']);
 $email_template_body = unserialize($_SESSION['email_template_body']);
 
-$uploadDir = unserialize($_SESSION['uploadDir']);
+$uploadDir = $GLOBALS['file_storage_directory'];
 $attachment_list = $_SESSION['attachment_list'];
 
+// Loop through entire FILES list and atache them to the message
 foreach ( $attachment_list as $_ugly => $_file )
 {
     if ( $_file == '' )
@@ -38,9 +40,9 @@ foreach ( $attachment_list as $_ugly => $_file )
     $_fileData[$_file] = array();
 
     // Full path
-    $_fileData[$_file]['path'] = $GLOBALS['file_storage_directory'] . '/' . $_file;
+    $_fileData[$_file]['path'] = $GLOBALS['file_storage_directory'] . $_ugly;
 
-// NOTE: comented this out until we figur out why PHP method barfs
+// NOTE: comented this out until we figure out why PHP method barfs
 //    if (!function_exists('mime_content_type')) {
         // this version of PHP doesn't have the mime functions
         // compiled in, so load our drop-in replacement function
@@ -48,10 +50,15 @@ foreach ( $attachment_list as $_ugly => $_file )
         require_once($include_directory . 'mime/mime-array.php');
 //    }
     // we need the file's MIME type
-    $_fileData[$_file]['mime'] = mime_content_type_ ( $_fileData[$_file]['path'] );
+    $_fileData[$_file]['mime'] = mime_content_type_ ( $_file );
 
     // we need the file itself
     $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
+
+    // We need the these later
+    $_fileData[$_file]['file_filesystem_name'] = $_ugly;
+    $_fileData[$_file]['size']                 = strlen($_fileData[$_file]['content']);
+
 }
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -158,9 +165,9 @@ if ($rst) {
         $rst->movenext();
     }   // WHILE email addesses
 
-    $feedback .= "<hr />Dear [first] [lastname],<p>";
-    $feedback .= nl2br(htmlspecialchars($msg_body));
     $rst->close();
+
+    $feedback .= nl2br(htmlspecialchars($msg_body));
 
     // Create "activity" log
     $activity_data['activity_type_id']     = $activity_type_id;  // is pulled from activity_type table
@@ -170,12 +177,54 @@ if ($rst) {
     $activity_data['activity_status']      = 'c';         // Closed status
     $activity_data['completed_bol']        = true;           // activity is completed
 
-    if ( ! add_activity($con, $activity_data, $participants ) )
+    if ( $activity_id = add_activity($con, $activity_data, $participants ) )
     {
-        echo '$activity_data error!';
-        exit;
+        // Loop through the attched files, if any
+        // and add them to the FILES table
+        if ( $_fileData )
+        {
+            foreach ( $_fileData as $_file => $data )
+            {
+                // Create new RECORD array '$rec' for SQL INSERT
+                $rec = array();
+
+                // File data
+                $rec['file_filesystem_name']   = $_file;
+                $rec['file_name']              = $_file;
+                $rec['file_size']              = $_fileData[$_file]['size'];
+                $rec['file_type']              = $_fileData[$_file]['mime'];
+
+                // These values, if not defined, will be set by default values defined within the Database
+                // Therefore they do not need to be created within this array for RECORD insertion
+                $rec['on_what_table'] = 'activities';
+                $rec['on_what_id']    = $activity_id;
+
+                // Add record to FILES table
+                if ( $file_id = add_file_record ( $con, $rec ) )
+                {
+                    // Now we need to UPDATE that same record
+                    // We need to RENAME the 'file_filesystem_name' name with the record ID
+                    // and a random string for a "secure" file name
+                    $rec = array();
+                    $rec['file_id']              = $file_id;
+                    $rec['file_filesystem_name'] = $file_id . '_' . random_string ( 24 );
+
+                    if ( $_results = modify_file_record( $con, $rec ) )
+                    {
+                        // Write the contents out to disk
+                        $_fullPath = $GLOBALS['file_storage_directory'] . $rec['file_filesystem_name'];
+                        $fp = fopen  ($_fullPath, 'w+b');
+                              fputs  ($fp, $_fileData[$_file]['content'] );
+                              fclose ($fp);
+                    }
+                }
+            }
+        }
     }
-} else {
+}
+// Failed to create contact list
+else
+{
     db_error_handler($con, $sql);
 }
 
@@ -254,6 +303,15 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.23  2005/07/08 19:29:45  jswalter
+*  - added access to 'utils-files.php'
+*  - added properties to the attachment array
+*  - Attached files, ad-hoc and pre-defined, are added to FILES table
+*  - attached files are now written to disk with secure names
+* Bug 309
+* Bug 310
+* Bug 311
+*
 * Revision 1.22  2005/07/08 15:15:24  braverock
 * - use custom mime_content_type_ fn to avoid problems w/ php std fn
 * - change getfile fn to do better tests and read bigger blocks at a time
