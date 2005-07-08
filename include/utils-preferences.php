@@ -18,7 +18,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.8 2005/07/08 18:46:57 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.9 2005/07/08 20:30:29 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -394,10 +394,14 @@ function get_preference_options($con, $user_preference_type_id, $show_all=false,
         if ($rst->EOF) return false;
         $options=array();
         while (!$rst->EOF) {
+            
+            $display=$rst->fields['option_display'];
+            if (!$display) { $display=$rst->fields['option_value']; }
+            
             if (!$return_possible_values) {
                 $options[$rst->fields['up_option_id']]=$rst->fields['option_value'];
             } else {
-                $options[$rst->fields['option_value']]=$rst->fields['option_display'];
+                $options[$rst->fields['option_value']]=$display;
             }
             $rst->movenext();
         }
@@ -728,6 +732,9 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.9  2005/07/08 20:30:29  vanmer
+ * - changed to display option value if option display is not available
+ *
  * Revision 1.8  2005/07/08 18:46:57  vanmer
  * - removed echo of preference name on admin preference retrieval
  * - added unneeded whitespace
