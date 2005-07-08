@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.13 2005/06/24 16:52:47 jswalter Exp $
+* $Id: email-2.php,v 1.14 2005/07/08 02:15:27 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -11,6 +11,7 @@ require_once('include-locations-location.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-files.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
@@ -22,7 +23,7 @@ $msg = $_GET['msg'];
 
 if ( $_POST['act'] == 'add' )
 {
-    require_once 'File/file_upload.php';
+    require_once $include_directory . 'classes/File/file_upload.php';
 
     // Create new Class
     $objUpFile = new file_upload( 'attach' );
@@ -35,9 +36,9 @@ if ( $_POST['act'] == 'add' )
     }
 
     // Where do we want this file sent to
-    $objUpFile->setDestDir ( $xrms_file_root . '/upload' );
+    $objUpFile->setDestDir ( $GLOBALS['file_storage_directory'] );
 
-    $_SESSION['uploadPath'] = serialize($xrms_file_root . '/upload');
+    $_SESSION['uploadPath'] = serialize($GLOBALS['file_storage_directory']);
 
     if ( $objUpFile->getErrorCode() )
     {
@@ -57,17 +58,17 @@ if ( $_POST['act'] == 'add' )
     }
 
     // We only need to create an array if one was passed
-    if ( $_POST['attachment_list'] )
-        $attach_list = explode ( '|', $_POST['attachment_list'] );
+    if ( $_SESSION['attachment_list'] )
+        $attach_list = $_SESSION['attachment_list'];
 
     // place new upload into the array
-    $attach_list[] =  $objUpFile->getFilename();
+    $attach_list[$objUpFile->getFilename()] =  $objUpFile->getFilename();
 
     // Make names keys, which will remove dups
     $attach_list = array_flip(array_flip($attach_list));
 
     // now prep array for passing around
-    $attachment_list = implode ( '|', $attach_list );
+    $_SESSION['attachment_list'] = $attach_list;
 
 }
 else if ( $_POST['act'] == 'del' )
@@ -76,24 +77,19 @@ else if ( $_POST['act'] == 'del' )
     $attachedFile = $_POST['attachedFile'];
 
     // We only need to create an array if one was passed
-    $attach_list = explode ( '|', $_POST['attachment_list'] );
-
-    // Make names keys
-    $attach_list = array_flip ( $attach_list );
+    $attach_list = $_SESSION['attachment_list'];
 
     // remove files
-    foreach ( $attachedFile as $_kilFile )
-        unset ( $attach_list[$_kilFile] );
-
-    // Put names back as values
-    $attach_list = array_flip ( $attach_list );
+    foreach ( $attachedFile as $_killFile )
+    {
+        unset ( $attach_list[$_killFile] );
+    }
 
     // now prep array for passing around
-    $attachment_list = implode ( '|', $attach_list );
+    $_SESSION['attachment_list'] = $attach_list;
 }
 else
 {
-
     $email_template_id = (strlen($_POST['email_template_id']) > 0) ? $_POST['email_template_id'] : $_GET['email_template_id'];
 
     $con = &adonewconnection($xrms_db_dbtype);
@@ -114,6 +110,27 @@ else
     $rst = $con->execute($sql);
     $email_template_title = $rst->fields['email_template_title'];
     $email_template_body = $rst->fields['email_template_body'];
+
+    // Build data setup
+    $files_data['file_limit_sql']   = '';
+    $files_data['on_what_table']    = 'email_templates';
+    $files_data['on_what_id']       = $email_template_id;
+
+    // Get pre-attached files for this template
+    if ( $file_sidebar_rst = get_file_records( $con, $files_data ) )
+    {
+        while (!$file_sidebar_rst->EOF)
+        {
+            $attach_list[$file_sidebar_rst->fields['file_filesystem_name']] = $file_sidebar_rst->fields['file_name'];
+
+            $file_sidebar_rst->movenext();
+        }
+
+    // now prep array for passing around
+    $_SESSION['attachment_list'] = $attach_list;
+
+    }
+
     $rst->close();
 }
 
@@ -125,10 +142,13 @@ function createFileList ()
     // Build HTML code to display uploads
     $i = 0;
     $attach_file_list = '';
-    foreach ( $attach_list as $_file)
+    foreach ( $attach_list as $_fileName => $_displayName )
     {
-        $attach_file_list .= '<input type="checkbox" name="attachedFile[]" id="attachedFile_' . $i . '" value="' . $_file . '" /> ';
-        $attach_file_list .= $_file . '<br />';
+        $attach_file_list .= '<input type="checkbox"
+                                     name="attachedFile[]"
+                                     id="attachedFile_' . $i . '"
+                                     value="' . $_fileName . '" /> ';
+        $attach_file_list .= $_displayName . '<br />';
     }
 
     return $attach_file_list;
@@ -269,11 +289,6 @@ if ( $attach_list )
                    id="act" />
 
             <input type="hidden"
-                   name="attachment_list"
-                   id="attachment_list"
-                   value="<?php echo $attachment_list ?>" />
-
-            <input type="hidden"
                    name="email_template_id"
                    id="email_template_id"
                    value="<?php echo $email_template_id ?>" />
@@ -294,22 +309,6 @@ if ( $attach_list )
                    onclick="javascript: nextPage( 'save-as-new-template.php' );" />
         </td>
     </tr>
-    <tr>
-        <td class="widget_content_form_element" colspan="2">
-            <?php
-                echo '<pre>';
-                print_r ( $_POST );
-                echo '<hr />';
-                print_r ( $_FILES );
-                echo '<hr />';
-                print_r ( $attach_list );
-
-                echo '</pre>';
-            ?>
-        </td>
-
-    </tr>
-
 </table>
 
 </form>
@@ -368,6 +367,12 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.14  2005/07/08 02:15:27  jswalter
+*  - added pre-defined FILES handling
+*  - modified how attached files are passed
+*  - removed debug code
+* Bug 311
+*
 * Revision 1.13  2005/06/24 16:52:47  jswalter
 *  - drastic modification to JS on how page is "submitted" (simplified)
 *  - made HTML more XHTML comliant
