@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.7 2005/01/11 22:28:29 vanmer Exp $
+ * $Id: edit.php,v 1.8 2005/07/08 02:33:32 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,6 +33,7 @@ if ($rst) {
         $default_text = $rst->fields['default_text'];
 	$activity_type_id = $rst->fields['activity_type_id'];
 	$duration = $rst->fields['duration'];	
+	$role_id = $rst->fields['role_id'];	
 	$sort_order = $rst->fields['sort_order'];	
 	
 	$rst->close();
@@ -43,7 +44,11 @@ $sql = "select activity_type_pretty_name, activity_type_id from activity_types w
 $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
 $rst->close();
+$role_menu = get_role_list(false, true, 'role_id', $role_id, true);
+
 $con->close();
+
+
 
 $page_title = _("Activity Template Details") .': ' .ucwords($activity_title);
 start_page($page_title);
@@ -62,15 +67,19 @@ start_page($page_title);
 			</tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Title"); ?></td>
-				<td class=widget_content_form_element><input type=text size=40 name="activity_title" value='<?php echo $activity_title; ?>'></td>
+				<td class=widget_content_form_element><input type=text size=40 name="activity_title" value="<?php echo $activity_title; ?>"></td>
 			</tr>
 			<tr>
                 <td class=widget_label_right><?php echo _("Duration"); ?></td>
-				<td class=widget_content_form_element><input type=text size=10 name="duration" value='<?php echo $duration; ?>'></td>
+				<td class=widget_content_form_element><input type=text size=10 name="duration" value="<?php echo $duration; ?>"></td>
 			</tr>
 			<tr>
 				<td class=widget_label_right><?php echo _("Type"); ?></td>
 				<td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
+			</tr>
+			<tr>
+				<td class=widget_label_right><?php echo _("Role"); ?></td>
+				<td class=widget_content_form_element><?php echo $role_menu; ?></td>
 			</tr>
             <tr>
                 <td class=widget_label_right_166px><?php echo _("Description"); ?></td>
@@ -126,6 +135,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.8  2005/07/08 02:33:32  vanmer
+ * - added role menu to activity template edit screen
+ *
  * Revision 1.7  2005/01/11 22:28:29  vanmer
  * - added option to explicitly set sort order on activity template
  *
