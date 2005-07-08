@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: email.php,v 1.14 2005/07/07 23:35:53 braverock Exp $
+  * $Id: email.php,v 1.15 2005/07/08 01:13:05 braverock Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -55,6 +55,8 @@
           array_push($array_of_contacts, $rst->fields['contact_id']);
           $rst->movenext();
         }
+      } else {
+        db_error_handler ($con, $sql);
       }
 
         break;
@@ -76,6 +78,8 @@
           array_push($array_of_contacts, $rst->fields['contact_id']);
           $rst->movenext();
         }
+      } else {
+        db_error_handler ($con, $sql);
       }
             break;
 
@@ -83,6 +87,8 @@
       getGlobalVar($contact_list, 'contact_list');
       if ($contact_list) {
         $array_of_contacts=explode(",",$contact_list);
+      } else {
+        db_error_handler ($con, $sql);
       }
         break;
 
@@ -102,13 +108,19 @@
 
       if ($rst) {
         while (!$rst->EOF) {
-          array_push($array_of_contacts, $rst->fields['contact_id']);
+          //make sure contact_id isn't null, negative, or false before adding it
+          if ($rst->fields['contact_id']){
+              array_push($array_of_contacts, $rst->fields['contact_id']);
+          }
           $rst->movenext();
         }
+        array_unique($array_of_contacts);
+        //print_r($array_of_contacts);
+      } else {
+        db_error_handler ($con, $sql);
       }
       break;
-  }
-    //END CASE
+  } //END switch/CASE
 
   $_SESSION['array_of_contacts'] = serialize($array_of_contacts);
 
@@ -128,6 +140,8 @@
       $rst->movenext();
     }
     $rst->close();
+  } else {
+      db_error_handler ($con, $sql);
   }
 
   if (strlen($tablerows) == 0) {
@@ -178,6 +192,9 @@
 
   /**
   * $Log: email.php,v $
+  * Revision 1.15  2005/07/08 01:13:05  braverock
+  * - fixes to array_of_contacts functionality for mail merge
+  *
   * Revision 1.14  2005/07/07 23:35:53  braverock
   * - change to use common database connection function
   *
