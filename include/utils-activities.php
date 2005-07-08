@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.17 2005/07/07 20:56:57 vanmer Exp $
+ * $Id: utils-activities.php,v 1.18 2005/07/08 02:35:39 vanmer Exp $
 
  */
 
@@ -615,9 +615,10 @@ function install_default_activity_participant_positions($con) {
 function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
     global $session_user_id;
     //hack to return the current user if no role was specified
-    if (!$role_id) return $session_user_id;
+    if (!$role_id) return false;
     if (!$due_date) $due_date=time();        
     $users_in_role = get_users_in_role($con, $role_id);
+    if (!$users_in_role) return false;
     $user_counts=array();
     
     foreach ($users_in_role as $user_id) {
@@ -635,6 +636,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.18  2005/07/08 02:35:39  vanmer
+  * - changed to return false instead of session_user_id when failed to find least available user for a role
+  *
   * Revision 1.17  2005/07/07 20:56:57  vanmer
   * - added extra search when building activity where clause, to include extra parameters that are not fields
   * - added function to determine which user in a role is the least busy
