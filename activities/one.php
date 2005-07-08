@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.111 2005/07/07 20:54:49 vanmer Exp $
+ * $Id: one.php,v 1.112 2005/07/08 00:53:25 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -473,6 +473,7 @@ function logTime() {
                             echo $table_menu;
                         }
                     ?>
+                    <input type=button class=button onclick="javascript: location.href='activity-reconnect.php?activity_id=<?php echo $activity_id; ?>'" value="<?php echo _("Change"); ?>">
                 </td>
             </tr>
             <tr>
@@ -704,6 +705,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.112  2005/07/08 00:53:25  vanmer
+ * - added change button to reconnect activity to another entity
+ *
  * Revision 1.111  2005/07/07 20:54:49  vanmer
  * - changed return_url path from activities into sidebars
  *
