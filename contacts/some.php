@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.58 2005/06/20 18:48:04 niclowe Exp $
+ * $Id: some.php,v 1.59 2005/07/08 20:14:19 vanmer Exp $
  */
 
 //include the standard files
@@ -20,6 +20,53 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 $on_what_table='contacts';
 $session_user_id = session_check();
+
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+//$con->debug = 1;
+// $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
+
+/*********** SAVED SEARCH BEGIN **********************/
+
+// check for saved search
+$arr_vars = array ( // local var name       // session variable name
+           'saved_id'           => arr_vars_POST_UNDEF,
+           'saved_title'        => arr_vars_POST_UNDEF,
+           'group_item'         => arr_vars_POST_UNDEF,
+           'delete_saved'       => arr_vars_POST_UNDEF,
+           'browse'             => arr_vars_POST_UNDEF,
+           );
+
+// get all passed in variables
+arr_vars_post_with_cmd ( $arr_vars );
+
+if($saved_id) {
+    $sql = "SELECT saved_data, saved_status, user_id
+            FROM saved_actions
+            WHERE saved_id=" . $saved_id . "
+            AND (user_id=" . $session_user_id . "
+              OR group_item = 1)
+            AND saved_status='a'";
+    $rst = $con->execute($sql);
+    if(!$rst) {
+        db_error_handler($con, $sql);
+    }
+    elseif($rst->rowcount()) {
+        if($delete_saved && (check_user_role(false, $_SESSION['session_user_id'], 'Administrator') || $rst->fields['user_id'] == $session_user_id)) {
+            $rec = array();
+            $rec['saved_status'] = 'd';
+
+            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+            $con->execute($upd);
+        }
+        else {
+            $_POST = unserialize($rst->fields['saved_data']);
+            $day_diff = $_POST['day_diff'];
+        }
+    }
+}
+
+/*********** SAVED SEARCH END **********************/
 
 // declare passed in variables
 $arr_vars = array ( // local var name             // session variable name, flag
@@ -39,11 +86,6 @@ arr_vars_get_all ( $arr_vars );
 
 // set all session variables
 arr_vars_session_set ( $arr_vars );
-
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-//$con->debug = 1;
-// $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 
 // Note: last_name and first_names are used by GUP_Pager to speed up the sorting.
@@ -194,6 +236,72 @@ if ($criteria_count > 0) {
 }
 
 $page_title = _("Contacts");
+
+/******* SAVED SEARCH BEGINS *****/
+
+$saved_data = $_POST;
+$saved_data["sql"] = $sql;
+$saved_data["day_diff"] = $day_diff;
+
+if(!$saved_title) {
+    $saved_title = "Current";
+    $group_item = 0;
+}
+
+$rec = array();
+$rec['saved_title'] = $saved_title;
+$rec['group_item'] = round($group_item);
+$rec['on_what_table'] = "contacts";
+$rec['saved_action'] = "search";
+$rec['user_id'] = $session_user_id;
+$rec['saved_data'] = addslashes(serialize($saved_data));
+
+if($saved_title or $browse) {
+    $sql_saved = "SELECT *
+            FROM saved_actions
+            WHERE (user_id=" . $session_user_id . "
+            OR group_item=1)
+            AND saved_title='" . $saved_title . "'
+            AND saved_status='a'";
+    $rst = $con->execute($sql_saved);
+    if(!$rst) {
+        db_error_handler($con, $sql_saved);
+    }
+    elseif($rst->rowcount()) {
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        $con->execute($upd);
+        $saved_id = $rst->fields['saved_id'];
+    }
+    else {
+        $tbl = "saved_actions";
+        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+        $con->execute($ins);
+        $saved_id = $con->Insert_ID();
+    }
+}
+
+//get saved searches
+$sql_saved = "SELECT saved_title, saved_id
+        FROM saved_actions
+        WHERE (user_id=$session_user_id
+        OR group_item=1)
+        AND on_what_table='contacts'
+        AND saved_action='search'
+        AND saved_status='a'
+        AND saved_title!='Current'";
+$rst = $con->execute($sql_saved);
+if ( !$rst ) {
+  db_error_handler($con, $sql_saved);
+} elseif( $rst->RowCount() ) {
+    $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
+} else {
+  $saved_menu = '';
+}
+
+/********** SAVED SEARCH ENDS ****/
+
+
+
 start_page($page_title, true, $msg);
 if(!isset($contacts_next_page)) {
     $contacts_next_page = '';
@@ -253,6 +361,23 @@ if(!isset($contacts_next_page)) {
                 </td>
                 <td width="15%" class=widget_content_form_element>
                     <?php  echo $user_menu; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
+                <td class=widget_label colspan="3"><?php echo _("Search Title"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan="2">
+                    <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
+                </td>
+                <td class=widget_content_form_element colspan="3">
+                    <input type=text name="saved_title" size=24>
+                    <?php
+                        if(check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
+                            echo _("Add to Everyone").' <input type=checkbox name="group_item" value=1>';
+                        }
+                    ?>
                 </td>
             </tr>
             <tr>
@@ -400,6 +525,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.59  2005/07/08 20:14:19  vanmer
+ * - added saved search capability to contacts search page
+ *
  * Revision 1.58  2005/06/20 18:48:04  niclowe
  * added snail mail merge functionality
  *
