@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.120 2005/06/30 18:34:57 daturaarutad Exp $
+ * $Id: some.php,v 1.121 2005/07/08 20:15:03 vanmer Exp $
  */
 
 // handle includes
@@ -92,7 +92,7 @@ if($saved_id) {
         db_error_handler($con, $sql);
     }
     elseif($rst->rowcount()) {
-        if($delete_saved && ($_SESSION['role_short_name'] === 'Admin' || $rst->fields['user_id'] == $session_user_id)) {
+        if($delete_saved && (check_user_role(false, $_SESSION['session_user_id'], 'Administrator') || $rst->fields['user_id'] == $session_user_id)) {
             $rec = array();
             $rec['saved_status'] = 'd';
 
@@ -514,7 +514,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element colspan="2">
                     <input type=text name="saved_title" size=24>
                     <?php
-                        if($_SESSION['role_short_name'] === 'Admin') {
+                        if(check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
                             echo _("Add to Everyone").' <input type=checkbox name="group_item" value=1>';
                         }
                     ?>
@@ -634,6 +634,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.121  2005/07/08 20:15:03  vanmer
+ * - changed to use new ACL functions to check for administrator access
+ *
  * Revision 1.120  2005/06/30 18:34:57  daturaarutad
  * set return_url
  *
