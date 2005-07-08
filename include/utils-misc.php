@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.139 2005/07/07 20:54:25 vanmer Exp $
+ * $Id: utils-misc.php,v 1.140 2005/07/08 19:25:22 jswalter Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -357,6 +357,26 @@ function getGlobalVar( &$value, $name ) {
     }
     return FALSE;
 }
+
+/**
+ * function random_string
+ *
+ * Function to create random lowercase strings of a given length.
+ *
+ * @param integer $length  The length of the random string to generate
+ * @return string $ret     The Random String generated.
+ *
+ */
+function random_string ($length = 20)
+ {
+    $nps = '';
+    for( $i = 0; $i < $length; $i++ )
+    {
+        $nps .= chr( mt_rand(97, 122) );
+    }
+    return $nps;
+ }
+
 
 /**
  * Add a variable to the session.
@@ -1750,6 +1770,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.140  2005/07/08 19:25:22  jswalter
+ *  - added 'random_string()' for central method to create secure  passwords and file names
+ *
  * Revision 1.139  2005/07/07 20:54:25  vanmer
  * - added parameter to where string creator to take a seperate array of criteria
  *
