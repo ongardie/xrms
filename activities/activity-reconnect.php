@@ -30,13 +30,16 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 
-$possible_types=array( 'companies' => 'Companies',
-                                            'opportunities' => 'Opportunities',
-                                            'cases' => 'Cases',
-                                            'campaigns' => 'Campaigns',
-                                            'company_division' => 'Divisions'
+$possible_types=array( 'companies' => _("Companies"),
+                                            'opportunities' => _("Opportunities"),
+                                            'contacts'=>_("Contacts"),
+                                            'cases' => _("Cases"),
+                                            'campaigns' => _("Campaigns"),
+                                            'company_division' => _("Divisions")
                                            );
-
+        
+        asort($possible_types);
+        
         $search_button=_("Search");
         $search_title=_("Search Entities");
         $for_label=_("Search For");
@@ -73,7 +76,7 @@ switch ($reconnect_action) {
         $page_title=_("Select Entity");
         $entity_singular= make_singular($on_what_table);
         $on_what_field = $entity_singular.'_id';
-        $on_what_name_field=$name_to_get = $con->Concat(implode(", ' ' , ", table_name($on_what_table)));
+        $on_what_name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
         $sql = "SELECT *, $on_what_name_field as on_what_name FROM $on_what_table WHERE $on_what_name_field LIKE ". $con->qstr("%$restrict_string%");
         $columns=array();
         $columns[] = array('name' => _("Select"), 'index_sql' => 'on_what_id', 'sql_sort_column' => $on_what_field);
@@ -144,6 +147,11 @@ function GetEntityPagerData($row) {
 
 /**
   * $Log: activity-reconnect.php,v $
+  * Revision 1.2  2005/07/08 01:08:05  vanmer
+  * - added contacts as possibly type to connect to
+  * - sorting list alphabetically
+  * - added translations for types
+  *
   * Revision 1.1  2005/07/08 00:51:41  vanmer
   * -Initial revision of subapplication to reconnect activities to new entity
   *
