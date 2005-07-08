@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.90 2005/07/06 21:49:14 vanmer Exp $
+ * $Id: update.php,v 1.91 2005/07/08 18:48:38 vanmer Exp $
  */
 
 // where do we include from
@@ -4956,6 +4956,30 @@ $s=_("Color and Layout Theme for XRMS");
 add_user_preference_type($con, 'user_language', 'Language', false, false, true, 'select');
 add_user_preference_type($con, 'css_theme', 'Theme', 'Color and Layout Theme for XRMS', false, true, 'select');
 
+$s=_("Hide Sourceforge Image");
+$s=_("Block Sourceforge Link");
+$s=_("Disables the SourceForge image and link which appears at the bottom of every page");
+$s=_("Hides the SourceForge Image which appears at the bottom of every page");
+
+$hide_type=add_user_preference_type($con, 'hide_sf_img',  'Hide SourceForge Image', 'Hides the SourceForge Image which appears at the bottom of every page', false, false, 'select');
+$block_type=add_user_preference_type($con, 'block_sf_link', 'Block SourceForge Link', 'Disables the SourceForge image and link which appears at the bottom of every page', false, false, 'select');
+
+add_preference_option($con, $hide_type, 'y', 'Yes', 1);
+add_preference_option($con, $hide_type, 'n', 'No', 2);
+
+add_preference_option($con, $block_type, 'y', 'Yes', 1);
+add_preference_option($con, $block_type, 'n', 'No', 2);
+
+$ret=get_admin_preference($con, $hide_type);
+if (!$ret) {
+    set_admin_preference($con, $hide_type, 'y');
+}
+
+$ret=get_admin_preference($con, $block_type);
+if (!$ret) {
+    set_admin_preference($con, $block_type, 'n');
+}
+
 $sql = "ALTER TABLE `contacts` ADD `tax_id` VARCHAR( 32 )";
 $con->execute($sql);
 
@@ -5045,6 +5069,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.91  2005/07/08 18:48:38  vanmer
+ * - added new preferences to hide and disable the sourceforge logo at the bottom of every page
+ *
  * Revision 1.90  2005/07/06 21:49:14  vanmer
  * - added field to track which template an activity was spawned from
  *
