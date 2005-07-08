@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.116 2005/07/08 14:40:25 braverock Exp $
+ * $Id: one.php,v 1.117 2005/07/08 14:49:57 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -511,7 +511,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Summary"); ?></td>
                 <td class=widget_content_form_element>
-                    <input type=text size=50 name=activity_title value="<?php  echo htmlspecialchars($activity_title); ?>">
+                    <input type=text size=50 name=activity_title value="<?php  echo htmlspecialchars(trim($activity_title)); ?>">
                 </td>
             </tr>
             <tr>
@@ -520,7 +520,7 @@ function logTime() {
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Activity Notes"); ?></td>
-                <td class=widget_content_form_element><textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars($activity_description); ?></textarea></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=70 name=activity_description><?php  echo htmlspecialchars(trim($activity_description)); ?></textarea></td>
             </tr>
             <?php
             if($on_what_table == 'opportunities') {
@@ -528,7 +528,7 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Opportunity Notes"); ?></td>
                 <td class=widget_content_form_element>
-                    <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars($opportunity_description); ?></textarea><br>
+                    <textarea rows=10 cols=70 name=opportunity_description><?php  echo htmlspecialchars(trim($opportunity_description)); ?></textarea><br>
                     <input class=button value="<?php echo _("Insert Log"); ?>" type=button onclick="var new_message = prompt('Enter note', ''); document.forms[0].opportunity_description.value =
                         logTime() + ' by <?php echo $_SESSION['username']; ?>: ' + new_message + '\n' + document.forms[0].opportunity_description.value; document.forms[0].return_url.value = '<?php echo current_page() . '&fill_user'; ?>'; document.forms[0].submit();">
                     <?php do_hook('opportunity_notes_buttons'); ?>
@@ -584,7 +584,7 @@ function logTime() {
                 <td class=widget_label_right><?php echo _("Resolution Description"); ?></td>
                 <td class=widget_content_form_element>
                     <textarea rows=10 cols=70 id=resolution_description name=resolution_description>
-                        <?php echo $resolution_description; ?>
+                        <?php echo htmlspecialchars(trim($resolution_description)); ?>
                     </textarea>
                 </td>
             </tr>
@@ -713,6 +713,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.117  2005/07/08 14:49:57  braverock
+ * - fix to properly handle saving activities that are not part of workflow activity templates
+ * - trim description fields
+ *
  * Revision 1.116  2005/07/08 14:40:25  braverock
  * - set textarea for resolution to be the same size as the other textarea's on the page
  *

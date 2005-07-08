@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.69 2005/07/08 01:28:26 vanmer Exp $
+ * $Id: edit-2.php,v 1.70 2005/07/08 14:49:57 braverock Exp $
  */
 
 //include required files
@@ -86,11 +86,11 @@ if ($activity_status == 'on') {
 }
 
 //mark this activity as completed if follow up is to be scheduled
-if ($followup) { 
-	$activity_status = 'c'; 
-	if(!$thread_id) {
-		$thread_id = $activity_id;
-	}
+if ($followup) {
+    $activity_status = 'c';
+    if(!$thread_id) {
+        $thread_id = $activity_id;
+    }
 }
 
 $scheduled_at = strtotime($scheduled_at);
@@ -214,8 +214,8 @@ $rec = array();
 $rec['activity_type_id']     = $activity_type_id;
 //use new contact ID here to update contact with newly set ID
 $rec['contact_id']           = $new_contact_id;
-$rec['activity_title']       = $activity_title;
-$rec['activity_description'] = $activity_description;
+$rec['activity_title']       = trim($activity_title);
+$rec['activity_description'] = trim($activity_description);
 if(empty($user_id)) {
     // If the user ID was empty
     // then we're going to assume that the current user has taken over the activity.
@@ -236,7 +236,7 @@ $rec['completed_by']         = $completed_by;
 $rec['thread_id']            = $thread_id;
 $rec['followup_from_id']     = $followup_from_id;
 $rec['activity_priority_id'] = $activity_priority_id;
-$rec['resolution_description'] = $resolution_description;
+$rec['resolution_description'] = trim($resolution_description);
 $rec['activity_resolution_type_id'] = $activity_resolution_type_id;
 
 
@@ -251,7 +251,7 @@ if($on_what_table == 'opportunities' and (strlen($opportunity_description)>0)) {
     $rst = $con->execute($sql);
 
     $rec = array();
-    $rec['opportunity_description'] = $opportunity_description;
+    $rec['opportunity_description'] = trim($opportunity_description);
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     if (strlen($upd)>0) {
@@ -327,7 +327,7 @@ if ($rst) {
     $activity_type = $rst->fields['activity_type_pretty_name'];
     $rst->close();
 }
-    if ($completed_activity) {
+    if ($completed_activity && $activity_template_id) {
         $sql="SELECT * FROM activity_templates WHERE activity_template_id=$activity_template_id";
         $template_rst= $con->execute($sql);
         if (!$template_rst) { db_error_handler($con, $sql); }
@@ -342,7 +342,7 @@ if ($rst) {
             else {
                 if ($activity_sort_open->EOF) $next_activities_sort=true;
             }
-        } 
+        }
         if ($next_activities_sort) {
             if ($template_sort_order>0) { $template_sort_order+=1; }
             $sql = "SELECT MAX(sort_order) as max_sort_order FROM activity_templates WHERE activity_templates.on_what_table=" . $con->qstr($table_name.'_statuses') . " AND activity_templates.on_what_id=$table_status_id";
@@ -435,7 +435,7 @@ if ($table_name !== "attached to") {
              else
                 $return_url="/private/home.php?msg=no_change";
         }
-    
+
         //update if there are no open activities
         if (!$no_update) {
             $sql = "SELECT * FROM " . $on_what_table . " WHERE " . $table_name . "_id = " . $on_what_id;
@@ -459,13 +459,13 @@ if ($table_name !== "attached to") {
             $on_what_table_template = $table_name .  "_statuses";
             $on_what_id_template = $table_status_id;
             $template_sort_order=1;
-            
+
             //include the workflow-activities.php page to actually make the update
             require ("workflow-activities.php");
         }
     }
-    
-    
+
+
 
 }
 
@@ -526,6 +526,10 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.70  2005/07/08 14:49:57  braverock
+ * - fix to properly handle saving activities that are not part of workflow activity templates
+ * - trim description fields
+ *
  * Revision 1.69  2005/07/08 01:28:26  vanmer
  * - changed action to redirect to change attachment after saving all other settings
  *
