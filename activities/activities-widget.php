@@ -56,7 +56,7 @@ $show_mini_search = false;
 $mini_search_widget_name = 'activities_widget_mini_search';
 
 if($show_mini_search) {
-	$caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\'; location.href=\'#' . $this->pager_name . '_select_columns\';" value="' . _('Filter Activities') . '">';
+    $caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\'; location.href=\'#' . $this->pager_name . '_select_columns\';" value="' . _('Filter Activities') . '">';
 }
 //(the way you know if you should use mini-search terms is simply if they exist or not)
 
@@ -118,10 +118,11 @@ $select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->
   // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
   . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
 
-$from = array('activity_types at', 'activities a');
+$from = array('activities a');
 
 $joins = "
-LEFT OUTER JOIN contacts cont ON cont.contact_id = a.contact_id
+INNER JOIN activity_types at ON a.activity_type_id = at.activity_type_id
+LEFT OUTER JOIN contacts cont ON a.contact_id = cont.contact_id
 LEFT OUTER JOIN users u ON a.user_id = u.user_id
 LEFT OUTER JOIN activity_participants ON a.activity_id=activity_participants.activity_id
 LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants.contact_id
@@ -131,7 +132,6 @@ LEFT OUTER JOIN activity_resolution_types rt ON a.activity_resolution_type_id=rt
 //$where = " WHERE $extra_where ";
 
 $where = " WHERE a.activity_record_status = 'a'
-  AND at.activity_type_id = a.activity_type_id
   $extra_where";
 
 
@@ -277,7 +277,7 @@ $from_list = join(', ', $from);
 
 
 
-$sql = "$select FROM $from_list $joins $where $group_by";
+$activity_sql = "$select FROM $from_list $joins $where $group_by";
 
 $count_sql = "SELECT count(distinct a.activity_id) $from $joins $where";
 
@@ -385,7 +385,7 @@ if('list' != $activities_widget_type) {
                 <input type=button class=button onclick=\"javascript: exportIt();\" value=\"" . _("Export") ."\">
                 <input type=button class=button onclick=\"javascript: bulkEmailActivity();\" value=\"" . _("Mail Merge") . "\"></td></tr>\n";
 
-    $pager = new GUP_Pager($con, $sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
+    $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
     $pager->AddEndRows($endrows);
     $pager->SetCountSQL($count_sql);
     $widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
@@ -394,8 +394,8 @@ if('list' != $activities_widget_type) {
 $widget['content'] .= "<input type=hidden name=activities_widget_type value=\"$activities_widget_type\">\n";
 $widget['content'] .= "<input type=hidden name=calendar_range value=\"$calendar_range\">\n";
 
-if($show_mini_search) 
-	$widget['content'] = GetMiniSearchWidget($mini_search_widget_name) . $widget['content'];
+if($show_mini_search)
+    $widget['content'] = GetMiniSearchWidget($mini_search_widget_name) . $widget['content'];
 
 $widget['content'] .= '
 <script language="JavaScript" type="text/javascript">
@@ -588,14 +588,14 @@ return $ret;
 }
 
 function GetMiniSearchTerms($search_terms, $form_name) {
-	return $search_terms;
+    return $search_terms;
 }
 
 function GetMiniSearchWidget($widget_name) {
 
 
-	$ret =  
-	"<div id=$widget_name>
+    $ret =
+    "<div id=$widget_name>
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=5>". _("Filter Activities") . "</td>
@@ -603,9 +603,9 @@ function GetMiniSearchWidget($widget_name) {
             <tr>
                 <td class=widget_label>" . _("Summary") . "</td>
                 <td class=widget_label>" . _("Description") . "</td>
-                <td class=widget_label>" . _("Contact") . "</td> 
-                <td class=widget_label>" . _("Scheduled Begin") . "</td> 
-                <td class=widget_label>" . _("Scheduled End") . "</td> 
+                <td class=widget_label>" . _("Contact") . "</td>
+                <td class=widget_label>" . _("Scheduled Begin") . "</td>
+                <td class=widget_label>" . _("Scheduled End") . "</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name={$widget_name}_activity_title></td>
@@ -619,11 +619,11 @@ function GetMiniSearchWidget($widget_name) {
             </tr>
         </table>
 
-	</div>
+    </div>
 
-	<script language=\"JavaScript\" type=\"text/javascript\">
-		// hide the widget to start with
-	    document.getElementById('{$widget_name}').style.display = 'none';
+    <script language=\"JavaScript\" type=\"text/javascript\">
+        // hide the widget to start with
+        document.getElementById('{$widget_name}').style.display = 'none';
 
         Calendar.setup({
                 inputField     :    \"f_date_activity_end\",      // id of the input field
@@ -635,15 +635,18 @@ function GetMiniSearchWidget($widget_name) {
                 align          :    \"Bl\"           // alignment (defaults to \"Bl\")
             });
 
-	</script>
+    </script>
 
-	";
+    ";
 
-	return $ret;
+    return $ret;
 }
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.20  2005/07/08 19:08:42  braverock
+* - add explicit join on activity_types rather than implicit equijoin from the where clause
+*
 * Revision 1.19  2005/07/08 17:20:57  daturaarutad
 * hopefully fixed query for MSSQL server; added not-yet-functional mini-search code
 *
