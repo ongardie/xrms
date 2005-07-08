@@ -7,7 +7,7 @@
  *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.3 2005/07/07 16:49:39 jswalter Exp $
+ * $Id: utils-files.php,v 1.4 2005/07/08 19:21:37 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -25,8 +25,8 @@ if ( !defined('IN_XRMS') )
   * This will return a boolean indicating success or failure
   *
   * @name fileRename()
-  * @access public
   * @category file_methods
+  * @access public
   *
   * @static
   * @final
@@ -63,7 +63,6 @@ function rename_file ( $_orgName = null, $_newName = null )
   *
   * @param  string  $_upload_name   Name of $_FILES sub-array to process
   * @return mixed   $_retVal        Data Array found item, or FALSE upon failure of some kind
-  *
   */
 function getFileUpLoad ( $_upload_name = null )
 {
@@ -151,41 +150,46 @@ function getFileUpLoad ( $_upload_name = null )
 // ************************************************************************
 // File DB access methods
 
-/**
- *
- * Adds a File and file record XRMS based on data in the associative array,
- * returning the id of the newly created activity if successful.
- *
- * These 'files' table fields are required.
- * This method will fail without them.
- * - file_name              - Orignal File Name from users system
- *
- * These fields are optional, some may be derived from other fields if not defined.
- * - file_pretty_name       - if not defined, derived from 'file_name'
- * - file_description       - A short description of the file
- * - on_what_table          - what the file is attached or related to
- * - on_what_id             - which ID to use for this relationship
- *
- * Do not define these fields, they are auto-defined
- * - file_id                - auto increment field
- * - file_size              - derived from uploaded file
- * - file_type              - derived from uploaded file
- * - entered_at             - when was record created
- * - entered_by             - who created the record
- * - last_modified_at       - when was record modified - this will be the same as 'entered_at'
- * - last_modified_by       - who modified the record  - this will be the same as 'entered_by'
- * - file_record_status     - indicates record status; 'a' Active - 'd' Deleted
- *
- * This field is updated after the record is created, since we need to new record ID
- * - file_filesystem_name   - created name [file_id]_[random string]
- *
- *
- * @param adodbconnection $con handle to the database
- * @param array  $files_data  with associative array defining file data (extract()'d inside function)
- * @param string $file_array  name of $_FILES sub-array to use
- *
- * @return integer $activity_id identifying newly created activity or false for failure
- */
+ /**
+  *
+  * Adds a File and file record XRMS based on data in the associative array,
+  * returning the id of the newly created activity if successful.
+  *
+  * These 'files' table fields are required.
+  * This method will fail without them.
+  * - file_name              - Orignal File Name from users system
+  *
+  * These fields are optional, some may be derived from other fields if not defined.
+  * - file_pretty_name       - if not defined, derived from 'file_name'
+  * - file_description       - A short description of the file
+  * - on_what_table          - what the file is attached or related to
+  * - on_what_id             - which ID to use for this relationship
+  *
+  * Do not define these fields, they are auto-defined
+  * - file_id                - auto increment field
+  * - file_size              - derived from uploaded file
+  * - file_type              - derived from uploaded file
+  * - entered_at             - when was record created
+  * - entered_by             - who created the record
+  * - last_modified_on       - when was record modified - this will be the same as 'entered_at'
+  * - last_modified_by       - who modified the record  - this will be the same as 'entered_by'
+  * - file_record_status     - indicates record status; 'a' Active - 'd' Deleted
+  *
+  * This field is updated after the record is created, since we need to new record ID
+  * - file_filesystem_name   - created name [file_id]_[random string]
+  *
+  * @name add_file()
+  * @category file_table_methods
+  * @access public
+  *
+  * @static
+  * @final
+  *
+  * @param  adodbconnection $con handle to the database
+  * @param  array  $files_data  with associative array defining file data (extract()'d inside function)
+  * @param  string $file_array  name of $_FILES sub-array to use
+  * @return int    $activity_id identifying newly created activity or false for failure
+  */
 function add_file($con, $files_data, $file_array = null )
 {
    /**
@@ -218,14 +222,11 @@ function add_file($con, $files_data, $file_array = null )
         // Create new RECORD array '$rec' for SQL INSERT
         $rec = array();
 
-        // These values are auto set, thay can not be modified via API
-        $rec['entered_at']       = time();
-        $rec['entered_by']       = $session_user_id;
-
-        // Because this is a "create" method, these values are derived from the
-        // above values and can not be modified via API
-        $rec['last_modified_at'] = $rec['entered_at'];
-        $rec['last_modified_by'] = $rec['entered_by'];
+        // File data
+        $rec['file_filesystem_name'] = $objUpFile->getFilename();
+        $rec['file_name']            = $objUpFile->getFilename();
+        $rec['file_size']            = $objUpFile->getFileSize();
+        $rec['file_type']            = $objUpFile->getFileMimeType();
 
         // A 'pretty name' for this file for display reference and review
         $rec['file_pretty_name']   = ($file_pretty_name) ? $file_pretty_name : $objUpFile->getFilename();
@@ -233,18 +234,137 @@ function add_file($con, $files_data, $file_array = null )
         // A brief description of the file for future reference and review
         $rec['file_description']   = ($file_description) ? $file_description : '';
 
+        // These values, if not defined, will be set by default values defined within the Database
+        // Therefore they do not need to be created within this array for RECORD insertion
+        $rec['on_what_table'] = ($on_what_table)  ? $on_what_table : '';
+        $rec['on_what_id']    = ($on_what_id > 0) ? $on_what_id    : '';
+
+
+        // Add record to FILES table
+        if ( $file_id = add_file_record ( $con, $rec ) )
+        {
+            // Now we need to UPDATE that same record
+            // We need to RENAME the 'file_filesystem_name' name with the record ID
+            // and a random string for a "secure" file name
+            $rec = array();
+            $rec['file_id']              = $file_id;
+            $rec['file_filesystem_name'] = $file_id . '_' . random_string ( 24 );
+
+            if ( $_results = modify_file_record( $con, $rec ) )
+            {
+                // The file needs to be renamed to reflect "secure" file name
+                rename_file ( $objUpFile->getFilename(), $rec['file_filesystem_name'] );
+            }
+        }
+    }   // if ( $objUpFile = getFileUpLoad ( 'file1' ) )
+
+    // Send back what we have
+    return $_results;
+};
+
+
+// ************************************************************************
+
+ /**
+  * Add a new record to the FILES table
+  * This will return a new record ID or a FALSE.
+  *
+  * These 'files' table fields are required.
+  * This method will fail without them.
+  * - file_filesystem_name   - What is the name of the file on the file system (disk)
+  * - file_name              - Orignal File Name from users system
+  * - file_size              - Size of Orignal File
+  * NOTE: 'size' can not be derived since 'name' is not a full path name
+  *
+  * These fields are optional
+  * - on_what_table          - what the file is attached or related to, must define 'on_what_id'
+  * - on_what_id             - which ID to use for this relationship
+  * - file_type              - File Type of Orignal File
+  * NOTE: 'type' can not be derived since 'name' is not a full path name
+  *
+  * These fields are optional, they will be derived from other fields if not defined.
+  * - file_pretty_name       - if not defined, derived from 'file_name'
+  * - file_description       - A short description of the file
+  *
+  * Do not define these fields, they are auto-defined
+  * - file_id                - auto increment field
+  * - entered_at             - when was record created, now
+  * - entered_by             - who created the record, session_id
+  * - last_modified_on       - when was record modified - this will be the same as 'entered_at'
+  * - last_modified_by       - who modified the record  - this will be the same as 'entered_by'
+  * - file_record_status     - indicates record status; 'a' Active - 'd' Deleted
+  *
+  * @name add_file_record()
+  * @category file_table_methods
+  * @access public
+  *
+  * @static
+  * @final
+  *
+  * @param  adodbconnection $con handle to the database
+  * @param  array  $files_data  with associative array defining file data (extract()'d inside function)
+  * @return mixed  $_results    int      Created Record ID
+  *                             boolean  Indicating success or failure
+  */
+function add_file_record( $con, $files_data )
+{
+    // Right off the bat, if these are not set, we can't do anything!
+    if ( (! $con)  ||  (! $files_data) )
+        return false;
+
+   /**
+    * Variable local $_results
+    *
+    * Indicates if we succedded or not
+    * Default value: FALSE
+    *
+    * @var bool $_results indicates success or failure
+    *
+    * @access private
+    * @static
+    */
+    $_results = false;
+
+    // Turn activity_data array into variables
+    extract($files_data);
+
+    // We need these to work
+    if ( ($file_name) && ($file_size) && ($file_filesystem_name) )
+    {
+        //save to database
+        global $session_user_id;
+
+        // Create new RECORD array '$rec' for SQL INSERT
+        $rec = array();
+
         // File data
-        $rec['file_name']            = $objUpFile->getFilename();
-        $rec['file_size']            = $objUpFile->getFileSize();
-        $rec['file_type']            = $objUpFile->getFileMimeType();
+        $rec['file_filesystem_name'] = $file_filesystem_name;
+        $rec['file_name']            = $file_name;
+        $rec['file_size']            = $file_size;
+        $rec['file_type']            = $file_type;
+
+        // These values are auto set, thay can not be modified via API
+        $rec['entered_at']       = time();
+        $rec['entered_by']       = $session_user_id;
+
+        // Because this is a "create" method, these values are derived from the
+        // above values and can not be modified via API
+        $rec['last_modified_on'] = $rec['entered_at'];
+        $rec['last_modified_by'] = $rec['entered_by'];
+
+        // And we need to se tthis record to "Active" - 'a'
+        $rec['file_record_status'] = 'a';
+
+        // A 'pretty name' for this file for display reference and review
+        $rec['file_pretty_name'] = ($file_pretty_name) ? $file_pretty_name : $file_name;
+
+        // A brief description of the file for future reference and review
+        $rec['file_description'] = ($file_description) ? $file_description : '';
 
         // These values, if not defined, will be set by default values defined within the Database
         // Therefore they do not need to be created within this array for RECORD insertion
-        if ($on_what_table)        { $rec['on_what_table']        = $on_what_table; }
-        if ($on_what_id > 0)       { $rec['on_what_id']           = $on_what_id; }
-
-        // Since this a Add, we will default this field to 'a'
-        $rec['file_record_status'] = 'a';
+        $rec['on_what_table'] = ($on_what_table)  ? $on_what_table : '';
+        $rec['on_what_id']    = ($on_what_id > 0) ? $on_what_id    : '';
 
         // files plugin hook allows external storage of files.  see plugins/owl/README for example
         // params: (file_field_name, record associative array)
@@ -258,80 +378,143 @@ function add_file($con, $files_data, $file_array = null )
         // INSERT values into table
         $tbl = 'files';
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-        $rst=$con->execute($ins);
 
         // Was there a problem?
-        if (!$rst) { db_error_handler($con, $ins); return false; }
+        if ( $rst = $con->execute($ins) )
+        {
+            // What ID where we given
+            $_results = $con->insert_id();
 
-        // What ID where we given
-        $file_id = $con->insert_id();
+            // Let big brother know what we did
+            add_audit_item($con, $session_user_id, 'created', $tbl, $_results, 1);
+        }
+        else
+        {
+            db_error_handler($con, $ins);
+        }
+    }
 
-        // Let big brother know what we did
-        add_audit_item($con, $session_user_id, 'created', 'files', $file_id, 1);
+    // Return what we have
+    return $_results;
+};
 
-        // Now we need to UPDATE that same record
+ /**
+  * Modifiy a record in the FILES table
+  * This will return a new record ID or a FALSE.
+  *
+  * These 'files' table fields are required.
+  * This method will fail without them.
+  * - file_id            - which record to modify
+  *
+  * Do not define these fields, they are auto-defined
+  * - last_modified_on   - when was record modified - this will be the same as 'entered_at'
+  * - last_modified_by   - who modified the record  - this will be the same as 'entered_by'
+  *
+  * All other fields are optional.
+  * include only firlds that need to be UPDATEd
+  *
+  * @name modify_file_record()
+  * @category file_table_methods
+  * @access public
+  *
+  * @static
+  * @final
+  *
+  * @param  adodbconnection $con handle to the database
+  * @param  array    $files_data  with associative array defining file data (extract()'d inside function)
+  * @return boolean  $_results  T on success, F on failure
+  */
+function modify_file_record( $con, $files_data )
+{
+    // Right off the bat, if these are not set, we can't do anything!
+    if ( (! $con)  ||  (! $files_data) )
+        return false;
+
+   /**
+    * Variable local $_results
+    *
+    * Indicates if we succedded or not
+    * Default value: FALSE
+    *
+    * @var bool $_results indicates success or failure
+    *
+    * @access private
+    * @static
+    */
+    $_results = false;
+
+    // Make sure we have an ID to work with
+    if ( $files_data['file_id'] )
+    {
+        //save to database
+        global $session_user_id;
+
         // update the file record
-        $sql = "SELECT * FROM files WHERE file_id = $file_id";
+        $tbl = 'files';
+        $sql = 'SELECT * FROM ' . $tbl . ' WHERE file_id = ' . $files_data['file_id'];
         $rst = $con->execute($sql);
 
-        // create a random string for a "secure" file name
-        $_secure_name = random_string ( 24 );
+        // Track who and when this record was modified
+        $files_data['last_modified_on'] = time();
+        $files_data['last_modified_by'] = $session_user_id;
 
-        // We need to RENAME the 'file_filesystem_name' name with the record ID
-        $rec = array();
-        $rec['file_filesystem_name'] = $file_id . '_' . $_secure_name;
+        $upd = $con->GetUpdateSQL($rst, $files_data, false, get_magic_quotes_gpc());
 
-        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-        $con->execute($upd);
-        $con->close();
+        if ( $_results = $con->execute($upd) )
+        {
+            // Let big brother know what we did
+            add_audit_item($con, $session_user_id, 'updated', $tbl, $files_data['file_id'], 1);
+        }
+        else
+        {
+            db_error_handler($con, $ins);
+        }
+    }
 
-        // The file needs to be renamed to add the record index to it
-        rename_file ( $objUpFile->getFilename(), $rec['file_filesystem_name'] );
-
-        // We succedded
-        $_results = true;
-
-    }   // if ( $objUpFile = getFileUpLoad ( 'file1' ) )
-
-    // Send back what we have
+    // Return what we have
     return $_results;
 };
 
 
-/**
- *
- * Retrieves a Found Files records
- * This will return a recordset or a FALSE.
- *
- * These 'files' table fields are required.
- * This method will fail without them.
- * - file_name              - Orignal File Name from users system
- *
- * These fields are conditioanlly required
- * - entered_at             - when was record created, thi smust be defined if 'on_what_table' is not
- * - on_what_table          - what the file is attached or related to, must define 'on_what_id'
- * - on_what_id             - which ID to use for this relationship
- *
- * These fields are optional, some may be derived from other fields if not defined.
- * - file_pretty_name       - if not defined, derived from 'file_name'
- * - file_description       - A short description of the file
- *
- * These fields not used, they will be ignored
- * - file_id                - auto increment field
- * - file_size              - derived from uploaded file
- * - file_type              - derived from uploaded file
- * - entered_by             - who created the record
- * - last_modified_at       - when was record modified - this will be the same as 'entered_at'
- * - last_modified_by       - who modified the record  - this will be the same as 'entered_by'
- * - file_record_status     - indicates record status; 'a' Active - 'd' Deleted
- *
- * @param adodbconnection $con handle to the database
- * @param array  $files_data  with associative array defining file data (extract()'d inside function)
- * @param string $file_array  name of $_FILES sub-array to use
- *
- * @return mixed $_results  recordset Found Records
-                            boolean   Indicating success or failure
- */
+ /**
+  * Retrieves Found Files records
+  * This will return a recordset or a FALSE.
+  *
+  * These 'files' table fields are required.
+  * This method will fail without them.
+  * - file_name              - Orignal File Name from users system
+  *
+  * These fields are conditionally required
+  * - entered_at             - when was record created, this must be defined if 'on_what_table' is not
+  * - on_what_table          - what the file is attached or related to, must define 'on_what_id'
+  * - on_what_id             - which ID to use for this relationship
+  *
+  * These fields are optional, some may be derived from other fields if not defined.
+  * - file_pretty_name       - if not defined, derived from 'file_name'
+  * - file_description       - A short description of the file
+  *
+  * Do not define these fields, they are auto-defined
+  * - file_id                - auto increment field
+  * - file_size              - derived from uploaded file
+  * - file_type              - derived from uploaded file
+  * - entered_by             - who created the record
+  * - last_modified_on       - when was record modified - this will be the same as 'entered_at'
+  * - last_modified_by       - who modified the record  - this will be the same as 'entered_by'
+  * - file_record_status     - indicates record status; 'a' Active - 'd' Deleted
+  *
+  * @name get_file_records()
+  * @category file_table_methods
+  * @access public
+  *
+  * @static
+  * @final
+  *
+  * @param adodbconnection $con handle to the database
+  * @param  array  $files_data  with associative array defining file data (extract()'d inside function)
+  * @param  string $file_array  name of $_FILES sub-array to use
+  * @return mixed  $_results    recordset Found Records
+  *                             boolean   Indicating success or failure
+  */
 function get_file_records( $con, $files_data )
 {
     // Right off the bat, if these are not set, we can't do anything!
@@ -392,17 +575,12 @@ function get_file_records( $con, $files_data )
         if ( ! $_results )
         {
             // yep - report it
-            echo '<pre>';
-            print_r($con);
-            echo '</pre>';
             db_error_handler($con, $file_sql);
         }
-
     }
 
     // Return what we have
     return $_results;
-
 };
 
 
@@ -416,6 +594,16 @@ function get_file_records( $con, $files_data )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.4  2005/07/08 19:21:37  jswalter
+ *  - clarified comments in 'add_file()'
+ *  - removed the DB INSERT from 'add_file()', now uses new external method
+ *  - removed the DB MODIFY from 'add_file()', now uses new external method
+ *  - created 'add_file_record()' to handle File Table INSERT
+ *  - created 'modify_file_record()' to handle File Table MODIFIY
+ *  - corrected modified data field name
+ *  - added 'a' to record status definition
+ *  - added paramater comments to 'get_file_records()'
+ *
  * Revision 1.3  2005/07/07 16:49:39  jswalter
  *  - added 'add_file()' API method
  *  - added 'get_file_records()' method
