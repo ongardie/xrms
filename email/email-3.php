@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.14 2005/06/24 16:55:48 jswalter Exp $
+ * $Id: email-3.php,v 1.15 2005/07/08 01:33:15 jswalter Exp $
  */
 
 
@@ -57,7 +57,9 @@ if ( $_FILES['attach']['error'] == 0 )
     }
 
     // place new upload into the array
-    $attachment_list .= '|' . $objUpFile->getFilename();
+    $attachment_list = $_SESSION['attachment_list'];
+    $attachment_list[$objUpFile->getFilename()] = $objUpFile->getFilename();
+    $_SESSION['attachment_list'] = $attachment_list;
 }
 
 $_SESSION['sender_name'] = serialize($sender_name);
@@ -65,7 +67,6 @@ $_SESSION['sender_address'] = serialize($sender_address);
 $_SESSION['bcc_address'] = serialize($bcc_address);
 $_SESSION['email_template_title'] = serialize($email_template_title);
 $_SESSION['email_template_body'] = serialize($email_template_body);
-$_SESSION['attachment_list'] = serialize( $attachment_list );
 $_SESSION['uploadDir'] = serialize( $xrms_file_root . '/upload' );
 
 
@@ -155,6 +156,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.15  2005/07/08 01:33:15  jswalter
+ *  - modified $_SESSION['attachment_list'] handling
+ *
  * Revision 1.14  2005/06/24 16:55:48  jswalter
  *  - made HTML more XHTML comliant
  *  - added FILE submit processing
