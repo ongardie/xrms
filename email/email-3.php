@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.15 2005/07/08 01:33:15 jswalter Exp $
+ * $Id: email-3.php,v 1.16 2005/07/08 19:00:46 jswalter Exp $
  */
 
 
@@ -37,7 +37,7 @@ if ( $_FILES['attach']['error'] == 0 )
     }
 
     // Where do we want this file sent to
-    $objUpFile->setDestDir ( $xrms_file_root . '/upload' );
+    $objUpFile->setDestDir ( $GLOBALS['file_storage_directory'] );
 
     if ( $objUpFile->getErrorCode() )
     {
@@ -156,6 +156,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.16  2005/07/08 19:00:46  jswalter
+ *  - modified upload path to use $GLOBALS['file_storage_directory']
+ *
  * Revision 1.15  2005/07/08 01:33:15  jswalter
  *  - modified $_SESSION['attachment_list'] handling
  *
