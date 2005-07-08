@@ -2,7 +2,7 @@
 /**
  * Shared activity pager functions
  *
- * $Id: activities-pager-functions.php,v 1.6 2005/06/30 17:07:53 daturaarutad Exp $
+ * $Id: activities-pager-functions.php,v 1.7 2005/07/08 17:51:28 vanmer Exp $
  */
 
 /**
@@ -47,7 +47,12 @@ function GetActivitiesPagerData($row) {
     } elseif ($row['on_what_table'] == 'cases') {
         $row['activity_about'] = "<a href='$http_site_root/cases/one.php?case_id={$row['on_what_id']}'>";
         $sql2 = "select case_title as attached_to_name from cases where case_id = {$row['on_what_id']}";
-    } else {
+    } elseif ($row['on_what_table']) {
+        $row['activity_about'] = "<a href='$http_site_root" . table_one_url($row['on_what_table'], $row['on_what_id']) . "'>";
+        $on_what_field=make_singular($row['on_what_table']).'_id';
+        $name_field=$con->Concat(implode(", ' ' , ", table_name($row['on_what_table'])));
+        $sql2 = "select $name_field as attached_to_name from {$row['on_what_table']} WHERE $on_what_field = {$row['on_what_id']}";
+    } else{
         $row['activity_about'] = _('N/A');
         $sql2 = null;
     }
@@ -65,6 +70,9 @@ function GetActivitiesPagerData($row) {
 
 /**
  * $Log: activities-pager-functions.php,v $
+ * Revision 1.7  2005/07/08 17:51:28  vanmer
+ * - added extra case to show ABOUT link for most entities
+ *
  * Revision 1.6  2005/06/30 17:07:53  daturaarutad
  * moved creation of title html link to GetActivitiesPagerData and added popup/tooltip containing activity description
  *
