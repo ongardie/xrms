@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.20 2005/07/08 01:43:29 jswalter Exp $
+* $Id: email-4.php,v 1.21 2005/07/08 02:14:00 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -40,14 +40,15 @@ foreach ( $attachment_list as $_ugly => $_file )
     // Full path
     $_fileData[$_file]['path'] = $GLOBALS['file_storage_directory'] . '/' . $_file;
 
-    if (!function_exists('mime_content_type')) {
+// NOTE: comented this out until we figur out why PHP method barfs
+//    if (!function_exists('mime_content_type')) {
         // this version of PHP doesn't have the mime functions
         // compiled in, so load our drop-in replacement function
         // instead
-        require_once($include_directory.'mime/mime-array.php');
-    }
+        require_once($include_directory . 'mime/mime-array.php');
+//    }
     // we need the file's MIME type
-    $_fileData[$_file]['mime'] = mime_content_type_ ( $_fileData[$_file]['path'] );
+    $_fileData[$_file]['mime'] = mime_content_type ( $_fileData[$_file]['path'] );
 
     // we need the file itself
     $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
@@ -246,6 +247,9 @@ function getFile($filename)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.21  2005/07/08 02:14:00  jswalter
+*  - corrected typo in mime_type call
+*
 * Revision 1.20  2005/07/08 01:43:29  jswalter
 *   - added note about commented-out 'mime_content_type()' check
 *   - modified file attachement processing to handle new method
