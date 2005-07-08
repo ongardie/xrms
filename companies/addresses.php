@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.23 2005/07/06 02:08:29 vanmer Exp $
+ * $Id: addresses.php,v 1.24 2005/07/08 02:30:06 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -131,9 +131,9 @@ $pager = new GUP_Pager($con, $sql, 'GetAddressesPagerData', _('Addresses'), 'Add
 
 // Save Defaults button posts to set-address-defaults.php
 if (!$edit_contact_id) {
-    $endrows = "<tr><td class=widget_content_form_element colspan=10><input class=button type=button onclick=\"document.AddressPagerForm.action='set-address-defaults.php'; document.AddressPagerForm.submit();\" value=\"" . _("Save Defaults") . "\"></td></tr>";
+    $endrows = "<tr><td class=widget_content_form_element colspan=10><input class=button type=button onclick=\"document.AddressPagerForm.action='set-address-defaults.php'; document.AddressPagerForm.submit();\" value=\"" . _("Save Defaults") . "\"><input type=button class=button name=btBackToCompany onclick=\"javascript: location.href='one.php?company_id=$company_id'\" value=\""._("Back To Company")."\"></td></tr>";
 } else {
-    $endrows = "<tr><td class=widget_content_form_element colspan=10><input type=hidden name=return_url value=\"$http_site_root/contacts/one.php?contact_id=$edit_contact_id\"><input class=button type=button onclick=\"document.AddressPagerForm.action='../contacts/edit-address-2.php'; document.AddressPagerForm.submit();\" value=\"" . _("Update Contact") . "\"></td></tr>";
+    $endrows = "<tr><td class=widget_content_form_element colspan=10><input type=hidden name=return_url value=\"$http_site_root/contacts/edit.php?contact_id=$edit_contact_id\"><input class=button type=button onclick=\"document.AddressPagerForm.action='../contacts/edit-address-2.php'; document.AddressPagerForm.submit();\" value=\"" . _("Update Contact") . "\"></td></tr>";
 }    
 $pager->AddEndRows($endrows);
 
@@ -205,6 +205,10 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.24  2005/07/08 02:30:06  vanmer
+ * - added link back to company when editing company addresses
+ * - added refresh back to contact edit page when done selecting address
+ *
  * Revision 1.23  2005/07/06 02:08:29  vanmer
  * - added support for selecting a business address for a contact using addresses pager
  *
