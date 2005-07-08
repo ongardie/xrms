@@ -5,7 +5,7 @@
  * Administration screen for managing default system preferences
  *
  *
- * $Id: admin-prefs.php,v 1.2 2005/07/06 17:21:47 vanmer Exp $
+ * $Id: admin-prefs.php,v 1.3 2005/07/08 18:49:39 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -51,6 +51,7 @@ switch ($prefs_action) {
                 }
             }
         }
+        unset($_SESSION['XRMS_function_cache']['get_user_preference']);
         if (!$msg) $msg=_("Preferences successfully saved");
         Header("Location: admin-prefs.php?msg=$msg");
     break;
@@ -74,6 +75,9 @@ end_page();
 
 /**
   * $Log: admin-prefs.php,v $
+  * Revision 1.3  2005/07/08 18:49:39  vanmer
+  * - ensure proper unsetting of parameters after save of preferences occurs
+  *
   * Revision 1.2  2005/07/06 17:21:47  vanmer
   * - added check to allow preference to be reset to nothing
   * - added log at end of file
