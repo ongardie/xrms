@@ -2,7 +2,7 @@
 /**
  * Manage Case Statuses
  *
- * $Id: one.php,v 1.12 2005/01/11 22:25:11 vanmer Exp $
+ * $Id: one.php,v 1.13 2005/07/08 17:09:41 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,7 +25,6 @@ $sql = "select * from case_statuses where case_status_id = $case_status_id";
 $rst = $con->execute($sql);
 
 if ($rst) {
-
         $case_status_short_name = $rst->fields['case_status_short_name'];
         $case_status_pretty_name = $rst->fields['case_status_pretty_name'];
         $case_status_pretty_plural = $rst->fields['case_status_pretty_plural'];
@@ -46,8 +45,9 @@ $table_name = "case_statuses";
 $sql_activity_templates="select activity_title,
         duration,
         activity_template_id,
-        activity_type_pretty_name, activity_templates.sort_order
-        from activity_templates, activity_types
+        activity_type_pretty_name, activity_templates.sort_order, role_name
+        from activity_types,
+        activity_templates LEFT OUTER JOIN Role on Role.role_id = activity_templates.role_id
         where on_what_id=$case_status_id
         and on_what_table='$table_name'
         and activity_templates.activity_type_id=activity_types.activity_type_id
@@ -56,27 +56,30 @@ $sql_activity_templates="select activity_title,
 
 $rst = $con->execute($sql_activity_templates);
 
-$classname = 'open_activity';
+echo '<p><pre>'. print_r($rst).'</pre></p>';
 
-//get first record count and last record count
-$cnt = 1;
-$maxcnt = $rst->rowcount();
+$classname = 'open_activity';
 
 //make activity_templates table in HTML
 if ($rst) {
+    //set first record count
+    $cnt = 1;
+    //get last record count
+    $maxcnt = $rst->rowcount();
     while (!$rst->EOF) {
         $sort_order = $rst->fields['sort_order'];
         $activity_template_id=$rst->fields['activity_template_id'];
         $activity_rows .= '<tr>';
 //        $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['activity_title'] . '</td>';
         $activity_rows .= "<td class='$classname'>"
-	     . "<a href='$http_site_root/admin/activity-templates/edit.php?activity_template_id="
+         . "<a href='$http_site_root/admin/activity-templates/edit.php?activity_template_id="
              . $rst->fields['activity_template_id'] . "&on_what_table=case_statuses&on_what_id="
              . $case_status_id . "&return_url=/admin/case-statuses/one.php?case_status_id="
-	     . $case_status_id . "'>" 
-	     . $rst->fields['activity_title'] . '</a></td>';
+         . $case_status_id . "'>"
+         . $rst->fields['activity_title'] . '</a></td>';
         $activity_rows .= '<td class=' . $classname . '>' . $rst->fields['duration'] . '</td>';
         $activity_rows .= '<td class=' . $classname . '>'. $rst->fields['activity_type_pretty_name'] . '</td>';
+        $activity_rows .= '<td class=' . $classname . '>'. $rst->fields['role_name'] . '</td>';
         $activity_rows .= '<td class='. $classname .' align=left>'
                 . '<table width=100% cellpadding=0 border=0 cellspacing=0>'
                 . '<tr><td>' . $sort_order . '</td>'
@@ -100,6 +103,8 @@ if ($rst) {
         $rst->movenext();
     }
     $rst->close();
+} else {
+    db_error_handler($con, $sql_activity_templates);
 }
 
 //get activity type menu
@@ -108,6 +113,8 @@ $rst = $con->execute($sql);
 $activity_type_menu = $rst->getmenu2('activity_type_id', '', true);
 $rst->close();
 
+//get role menu
+$role_menu = get_role_list(false, true, 'role_id', $role_id, true);
 
 $con->close();
 
@@ -170,21 +177,27 @@ start_page($page_title);
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=4><?php echo _("Link Activity To Case Status"); ?></td>
+                <td class=widget_header colspan=6><?php echo _("Link Workflow Activity To Case Status"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Duration"); ?><br> <?php echo _("(defaults to days)"); ?></td>
-                <td class=widget_label>Type</td>
-                <td class=widget_label>Sort Order</td>
+                <td class=widget_label><?php echo _("Type"); ?></td>
+                <td class=widget_label><?php echo _("Role"); ?></td>
+                <td class=widget_label colspan=2 width="20%"><?php echo _("Sort Order"); ?></td>
             <tr>
-                <td class=widget_content_form_element><input type=text size=40 name="title"></td>
+                <td class=widget_content_form_element><input type=text size=30 name="title"></td>
                 <td class=widget_content_form_element><input type=text name="duration"></td>
-                <td class=widget_content_form_element colspan=2>
+                <td class=widget_content_form_element>
                     <?php
                         echo $activity_type_menu;
                     ?>
-                    &nbsp; <input class=button type=submit value="<?php echo _("Add"); ?>">
+                </td>
+                <td class=widget_content_form_element><?php echo $role_menu; ?></td>
+                <td class=widget_content_form_element colspan=2>
+                    <input type=text size=2 name="sort_order">
+                    &nbsp;
+                    <input class=button type=submit value="<?php echo _("Add"); ?>">
                 </td>
             </tr>
             <?php
@@ -192,7 +205,7 @@ start_page($page_title);
                     echo $activity_rows;
                 } else {
                     echo "<tr>\n";
-                    echo "\t\t".'<td class=widget_content_form_element colspan=4>'._("No linked activities")."</td>\n";
+                    echo "\t\t".'<td class=widget_content_form_element colspan=6>'._("No linked activities")."</td>\n";
                     echo "\t</tr>\n";
                 }
             ?>
@@ -232,6 +245,12 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.13  2005/07/08 17:09:41  braverock
+ * - add role to new/display of activity templates
+ * - properly localize strings
+ * - add db_error_handler
+ * - move count inside rst loop
+ *
  * Revision 1.12  2005/01/11 22:25:11  vanmer
  * - altered to allow activities to exist at the same sort_order in case-statuses
  *
