@@ -7,7 +7,7 @@
  * php ./getdatastrings.php
  * from the locale directory
  *
- * $Id: datastrings.php,v 1.6 2005/06/30 04:46:58 vanmer Exp $
+ * $Id: datastrings.php,v 1.7 2005/07/10 12:56:30 braverock Exp $
  */
 $s=_("Activities Default Behavior");
 $s=_("Activity");
