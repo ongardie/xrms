@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.121 2005/07/08 20:15:03 vanmer Exp $
+ * $Id: some.php,v 1.122 2005/07/10 20:21:30 daturaarutad Exp $
  */
 
 // handle includes
@@ -20,39 +20,6 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 require_once ($include_directory . 'classes/Pager/Session_Var_Watcher.php');
 require_once('../activities/activities-widget.php');
 require_once('../activities/activities-pager-functions.php');
-
-
-/* ToDo:
-
-Move fields entirely to Calendar object, much like the pager does
-
-GetActivitesWidget()
-
-	-use activities_widget_type (list/calendar) to determine that Calendar obj should be created
-		Calendar constructor
-			-need to know the start date and date type
-			-default to today (or monday-adjusted today)
-			-default to 'month'
-			-store these in session
-
-	-build sql query for activities
-
-	-if calendar, add sql_offset from Calendar object (requires date and range to be known)
-
-
-sql_offset: can't be gotten without knowing the type week/list/etc, and so the GetActivitiesWidget() needs to know it.
-
-calendar_start_date: OK to use internally...just need to know when to reset it.
-
-
-make buttons set _activities_view_type (list, week, month, etc)
-change to two seperate fields pager vs. calendar
-and calendar_view_type 
-
-
-so you can store calendar_view_type in the session
-*/
-
 
 
 // create session
@@ -134,6 +101,7 @@ $arr_vars = array ( // local var name       // session variable name
 // get all passed in variables
 arr_vars_get_all ( $arr_vars );
 
+/*
 
 // (introspectshun) Updated to use portable database code; removed MySQL-centric date functions
 // This will work for positive and negative intervals automatically, so no need for conditional assignment of offset
@@ -154,7 +122,6 @@ if(isset($day_diff) and $day_diff) {
 
 //echo "search date is $search_date<br>";
 //echo "calendar start date is $calendar_start_date<br>";
-
 if($start_end == 'start') {
     $field = 'scheduled_at';
 } else {
@@ -183,6 +150,7 @@ if (strlen($search_date) > 0 && $start_end != 'all') {
         $offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
     }
 }
+*/
 
 
 if (!strlen($completed) > 0) {
@@ -550,7 +518,10 @@ $_SESSION["search_sql"]=$sql;
 							'user_id' 				=> $user_id,
 							'activity_type_id' 		=> $activity_type_id,
 							'completed' 			=> $completed,
-							'offset_sql' 			=> $offset_sql,
+							//'offset_sql' 			=> $offset_sql,
+                            'day_diff'              => $day_diff,
+                            'start_end'              => $start_end,
+                            'before_after'              => $before_after,
 							'search_date' 			=> $search_date,
 							'time_zone_between' 	=> $time_zone_between,
 							'time_zone_between2' 	=> $time_zone_between2,
@@ -560,7 +531,7 @@ $_SESSION["search_sql"]=$sql;
 	$return_url = '/activities/some.php';
 
 	
-	$activities_widget =  GetActivitiesWidget($con, $search_terms, 'ActivitiesData', _('Search Results'), $session_user_id, $return_url);	
+	$activities_widget =  GetActivitiesWidget($con, $search_terms, 'ActivitiesData', _('Search Results'), $session_user_id, $return_url, null, null, null, false);	
 
 	echo $activities_widget['content'];
 	echo $activities_widget['sidebar'];
@@ -634,6 +605,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.122  2005/07/10 20:21:30  daturaarutad
+ * moved sql_offset to activities-widget.php
+ *
  * Revision 1.121  2005/07/08 20:15:03  vanmer
  * - changed to use new ACL functions to check for administrator access
  *
