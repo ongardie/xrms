@@ -34,31 +34,37 @@ require_once('../calendar/Calendar_View.php');
 * @param array List of default columns (used as default for selectable columns)
 * @return string The pager widget.  must be placed inside a form to be active!
 */
-function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null) {
+function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null, $show_mini_search = true) {
 
 // This should probably be a system preference.
 $description_substring_length = 80;
-
 
 
 // This is the name of the CGI field that will be used for storing the calendar's view date
 $calendar_date_field = 'calendar_start_date';
 
 getGlobalVar($activities_widget_type, 'activities_widget_type');
+if(!$activities_widget_type) $activities_widget_type = 'list';
 getGlobalVar($calendar_range, 'calendar_range');
 getGlobalVar($before_after, 'before_after');
 getGlobalVar($search_date, 'search_date');
 getGlobalVar($start_end, 'start_end');
 
-if(!$activities_widget_type) $activities_widget_type = 'list';
 
-$show_mini_search = false;
 $mini_search_widget_name = 'activities_widget_mini_search';
 
 if($show_mini_search) {
-    $caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\'; location.href=\'#' . $this->pager_name . '_select_columns\';" value="' . _('Filter Activities') . '">';
+    getGlobalVar($search_enabled, $mini_search_widget_name.'_status');
+
+    if('enable' == $search_enabled) {
+        $search_terms = GetMiniSearchTerms($mini_search_widget_name, $search_terms);
+    } else {
+        $caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\';" value="' . _('Filter Activities') . '">';
+    }
+
+    $mini_search_widget = GetMiniSearchWidget($mini_search_widget_name, $search_terms, $search_enabled, $form_name);
+
 }
-//(the way you know if you should use mini-search terms is simply if they exist or not)
 
 
 if('list' != $activities_widget_type) {
@@ -101,7 +107,6 @@ if('list' != $activities_widget_type) {
 $widget = '';
 
 
-$search_terms = GetMiniSearchTerms($search_terms, $form_name);
 
 
 // build the query based upon $search_terms
@@ -214,15 +219,60 @@ if (strlen($search_terms['completed']) > 0 and $search_terms['completed'] != "al
     $where .= " and a.activity_status = " . $con->qstr($search_terms['completed'], get_magic_quotes_gpc());
 }
 
-if (strlen($search_terms['offset_sql']) > 0) {
-    $criteria_count++;
-    $where .= $search_terms['offset_sql'];
+
+
+
+// date filter code.  dates can come in via start_end + search_date or day_diff (from a saved search)
+if($search_terms['start_end'] == 'start') {
+    $field = 'scheduled_at';
+} else {
+    $field = 'ends_at';
 }
+
+$offset_sql = '';
+
+// (introspectshun) Updated to use portable database code; removed MySQL-centric date functions
+// This will work for positive and negative intervals automatically, so no need for conditional assignment of offset
+// (a search for today will add an interval of '0 days')
+// Warning: if a user wants to save a search for a particular date, this won't allow it, as it defaults to recurring search
+if(isset($search_terms['day_diff']) and $search_terms['day_diff']) {
+    $search_terms['search_date'] = date('Y-m-d', time() + ($search_terms['day_diff'] * 86400));
+} else {
+    if ( !$search_terms['search_date'] ) {
+        $search_terms['search_date'] = date('Y-m-d', time());
+    }
+    $search_terms['day_diff'] = round((strtotime($search_terms['search_date']) - strtotime(date('Y-m-d', time()))) / 86400);
+}
+
+
+// first set up $offset_sql for before/after search_terms['search_date']
+if (strlen($search_terms['search_date']) > 0 && $search_terms['start_end'] != 'all') {
+    $criteria_count++;
+
+    if (!$search_terms['before_after']) {
+        // before
+        $offset_end = $con->OffsetDate($search_terms['day_diff']);
+        $offset_sql .= " and a.$field < $offset_end";
+    } elseif ($search_terms['before_after'] === 'after') {
+        // after
+        $offset_start = $con->OffsetDate($search_terms['day_diff']);
+        $offset_sql .= " and a.$field > $offset_start";
+    } elseif ($search_terms['before_after'] === 'on') {
+        // same query for list and calendar views
+        $offset_start = $con->OffsetDate($search_terms['day_diff']);
+        $offset_end = $con->OffsetDate($search_terms['day_diff']+1);
+        // midnight to midnight
+        $offset_sql .= " and a.$field > $offset_start and a.$field < $offset_end";
+    }
+
+    $where .= $offset_sql;
+}
+
+
 if (strlen($calendar_offset_sql) > 0) {
     $criteria_count++;
     $where .= $calendar_offset_sql;
 }
-
 
 
 if(strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zone_between2'])) {
@@ -289,7 +339,7 @@ $_SESSION["search_sql"] = "$select FROM $from_list $joins $where";
 
 
 
-//echo '<pre>' . htmlentities($sql) . '</pre>';
+//echo '<pre>' . htmlentities($activity_sql) . '</pre>';
 
 
 
@@ -395,7 +445,7 @@ $widget['content'] .= "<input type=hidden name=activities_widget_type value=\"$a
 $widget['content'] .= "<input type=hidden name=calendar_range value=\"$calendar_range\">\n";
 
 if($show_mini_search)
-    $widget['content'] = GetMiniSearchWidget($mini_search_widget_name) . $widget['content'];
+    $widget['content'] = $mini_search_widget . $widget['content'];
 
 $widget['content'] .= '
 <script language="JavaScript" type="text/javascript">
@@ -587,34 +637,69 @@ function markComplete() {
 return $ret;
 }
 
-function GetMiniSearchTerms($search_terms, $form_name) {
+/**
+* This function processes the form data from the Mini Search Widget and packs it into search_terms,
+* similar to what is done in activities/some.php
+*/
+function GetMiniSearchTerms($widget_name, $search_terms) {
+
+    getGlobalVar($search_terms['title'], $widget_name.'_activity_title');
+    getGlobalVar($search_terms['contact'], $widget_name.'_activity_contact');
+    getGlobalVar($search_terms['start_end'], $widget_name.'_start_end');
+    getGlobalVar($search_terms['before_after'], $widget_name.'_before_after');
+    getGlobalVar($search_terms['search_date'], $widget_name.'_search_date');
+
     return $search_terms;
 }
 
-function GetMiniSearchWidget($widget_name) {
+function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form_name) {
 
+    if('enable' == $search_enabled) {
+        $title          = $search_terms['title'];
+        $contact        = $search_terms['contact'];
+        $start_end      = $search_terms['start_end'];
+        $before_after   = $search_terms['before_after'];
+        $search_date    = $search_terms['search_date'];
+    }
 
     $ret =
     "<div id=$widget_name>
+
+        <input type=hidden name={$widget_name}_status value='$search_enabled'>
+
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=5>". _("Filter Activities") . "</td>
             </tr>
             <tr>
                 <td class=widget_label>" . _("Summary") . "</td>
-                <td class=widget_label>" . _("Description") . "</td>
                 <td class=widget_label>" . _("Contact") . "</td>
-                <td class=widget_label>" . _("Scheduled Begin") . "</td>
-                <td class=widget_label>" . _("Scheduled End") . "</td>
+                <td class=widget_label>" . _("Search By Date") . "</td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name={$widget_name}_activity_title></td>
-                <td class=widget_content_form_element><input type=text name={$widget_name}_activity_description></td>
-                <td class=widget_content_form_element><input type=text name={$widget_name}_activity_contact></td>
-                <td class=widget_content_form_element><input type=text name={$widget_name}_activity_begin></td>
-                <td colspan=2 class=widget_content_form_element size=20>
-                    <input type=text ID=\"f_date_activity_end\" name={$widget_name}_activity_end value=\"" . date('Y-m-d H:i:s') . "\">
-                    <img ID=\"f_trigger_activity_end\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
+                <td class=widget_content_form_element><input type=text size=12 name={$widget_name}_activity_title value=\"$title\"></td>
+                <td class=widget_content_form_element><input type=text size=12 name={$widget_name}_activity_contact value=\"$contact\"></td>
+                <td class=widget_content_form_element>
+                <select name=\"{$widget_name}_start_end\">
+                    <option value=\"end\"" . ($start_end == 'end' ?  ' selected' : '' ). '>' . _("Scheduled End") . "</option>
+                    <option value=\"start\"" . ($start_end == 'start' ?  ' selected' : '' ). '>' . _("Scheduled Start") . "</option>
+                    <option value=\"all\"" . ($start_end == 'all' ?  ' selected' : '' ). '>' . _("All Dates") . "</option>
+                </select>
+
+                <select name=\"{$widget_name}_before_after\">
+                    <option value=\"\"" . (!$before_after ?  ' selected' : '' ). '>' . _("Before") . "</option>
+                    <option value=\"after\"" . ($before_after == 'after' ?  ' selected' : '' ). '>' . _("After") . "</option>
+                    <option value=\"on\"" . ($before_after == 'on' ?  ' selected' : '' ). '>' . _("On") . "</option>
+                </select>
+
+                    <input type=text ID=\"f_date_{$widget_name}_search_date\" name={$widget_name}_search_date value=\"$search_date\">
+                    <img ID=\"f_trigger_{$widget_name}_search_date\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan=5>
+                    <input type=button class=button onclick=\"document.$form_name.{$widget_name}_status.value='enable'; document.$form_name.submit();\" value=\"" . _('Filter Activities') . "\">
+                    <input type=button class=button onclick=\"ClearActivitiesFilter()\" value=\"" . _('Clear Filter') . "\">
                 </td>
             </tr>
         </table>
@@ -622,21 +707,26 @@ function GetMiniSearchWidget($widget_name) {
     </div>
 
     <script language=\"JavaScript\" type=\"text/javascript\">
+
         // hide the widget to start with
-        document.getElementById('{$widget_name}').style.display = 'none';
+        document.getElementById('{$widget_name}').style.display = \"" . ('enable' == $search_enabled ? 'block' : 'none') . "\";
+
+        function ClearActivitiesFilter() {
+            document.$form_name.{$widget_name}_status.value='disable';
+            document.$form_name.submit();
+        }
 
         Calendar.setup({
-                inputField     :    \"f_date_activity_end\",      // id of the input field
-                ifFormat       :    \"%Y-%m-%d %H:%M:%S\",       // format of the input field
+                inputField     :    \"f_date_{$widget_name}_search_date\",      // id of the input field
+                ifFormat       :    \"%Y-%m-%d\",       // format of the input field
                 showsTime      :    true,            // will display a time selector
-                button         :    \"f_trigger_activity_end\",   // trigger for the calendar (button ID)
+                button         :    \"f_trigger_{$widget_name}_search_date\",   // trigger for the calendar (button ID)
                 singleClick    :    false,           // double-click mode
                 step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
                 align          :    \"Bl\"           // alignment (defaults to \"Bl\")
             });
 
     </script>
-
     ";
 
     return $ret;
@@ -644,6 +734,9 @@ function GetMiniSearchWidget($widget_name) {
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.22  2005/07/10 20:22:13  daturaarutad
+* implemented Mini Search for pager
+*
 * Revision 1.21  2005/07/08 19:40:34  braverock
 * - remove unecessary Concat fn, as it didn't help MS SQL Server anyway
 *
