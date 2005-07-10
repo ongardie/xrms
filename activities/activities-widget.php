@@ -346,7 +346,7 @@ $_SESSION["search_sql"] = "$select FROM $from_list $joins $where";
 if('list' != $activities_widget_type) {
 
     // begin calendar stuff
-    $activity_calendar_rst = $con->execute($sql);
+    $activity_calendar_rst = $con->execute($activity_sql);
 
     if($activity_calendar_rst) {
 
@@ -367,7 +367,7 @@ if('list' != $activities_widget_type) {
         }
 
     } else {
-        db_error_handler($con, $sql);
+        db_error_handler($con, $activity_sql);
     }
 
     $search_date = date('Y-m-d');
@@ -397,7 +397,7 @@ if('list' != $activities_widget_type) {
 
     $thread_query_list = "select activity_title, activity_id from activities where thread_id is not null group by thread_id order by activity_id";
 
-    $thread_query_select = $sql . 'AND thread_id = XXX-value-XXX';
+    $thread_query_select = $activity_sql . 'AND thread_id = XXX-value-XXX';
 
 
     $columns = array();
@@ -734,6 +734,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.23  2005/07/10 20:24:45  daturaarutad
+* changed $sql => $activity_sql in calendar code
+*
 * Revision 1.22  2005/07/10 20:22:13  daturaarutad
 * implemented Mini Search for pager
 *
