@@ -320,7 +320,7 @@ if ($list) {
 }
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
-$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, a.on_what_table, a.on_what_id, resolution_short_name, case_priority_pretty_name $extra_group_by";
+$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, a.on_what_table, a.on_what_id, a.activity_description, rt.resolution_short_name, cp.case_priority_pretty_name $extra_group_by";
 
 
 $from_list = join(', ', $from);
@@ -734,6 +734,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.25  2005/07/11 14:57:34  ycreddy
+* Added missing columns to the Group By clause
+*
 * Revision 1.24  2005/07/11 13:47:07  braverock
 * - change 'Contact' search to use either first name or last name
 * @todo fix so a search for 'First Last' will work as well, probably using split() php fn
