@@ -15,6 +15,7 @@ xgettext ${XGETTEXT_OPTIONS} activities/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/acl/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/account-statuses/*.php
+xgettext ${XGETTEXT_OPTIONS} -j admin/activity-resolution-types/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/activity-templates/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/activity-types/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/campaign-statuses/*.php
@@ -35,10 +36,11 @@ xgettext ${XGETTEXT_OPTIONS} -j admin/plugin/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/ratings/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/relationship-types/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/reports/*.php
-xgettext ${XGETTEXT_OPTIONS} -j admin/roles/*.php
+xgettext ${XGETTEXT_OPTIONS} -j admin/salutations/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/system-parameters/*.php
 xgettext ${XGETTEXT_OPTIONS} -j admin/users/*.php
 xgettext ${XGETTEXT_OPTIONS} -j campaigns/*.php
+xgettext ${XGETTEXT_OPTIONS} -j calendar/*.php
 xgettext ${XGETTEXT_OPTIONS} -j cases/*.php
 xgettext ${XGETTEXT_OPTIONS} -j companies/*.php
 xgettext ${XGETTEXT_OPTIONS} -j contacts/*.php
@@ -51,6 +53,11 @@ xgettext ${XGETTEXT_OPTIONS} -j files/storage/*.php
 #xgettext ${XGETTEXT_OPTIONS} -j img/*.php
 xgettext ${XGETTEXT_OPTIONS} -j include/*.php
 xgettext ${XGETTEXT_OPTIONS} -j include/adodb/*.php
+xgettext ${XGETTEXT_OPTIONS} -j include/classes/*.php
+xgettext ${XGETTEXT_OPTIONS} -j include/classes/SMTPs/*.php
+xgettext ${XGETTEXT_OPTIONS} -j include/classes/Pager/*.php
+xgettext ${XGETTEXT_OPTIONS} -j include/classes/QuickForm/*.php
+xgettext ${XGETTEXT_OPTIONS} -j include/classes/acl/*.php
 
 # these directories shouldn't need to be scanned
 #xgettext ${XGETTEXT_OPTIONS} -j include/adodb/contrib/*.php
@@ -81,20 +88,20 @@ xgettext ${XGETTEXT_OPTIONS} -j locale/*.php
 xgettext ${XGETTEXT_OPTIONS} -j notes/*.php
 xgettext ${XGETTEXT_OPTIONS} -j opportunities/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/*.php
-xgettext ${XGETTEXT_OPTIONS} -j plugins/censusfactsheet/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j plugins/censusfactsheet/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/cti/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/demo/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/dunfinder/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/idphoto/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/info/*.php
-xgettext ${XGETTEXT_OPTIONS} -j plugins/journal/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j plugins/journal/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/mapquest/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/mrtg/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/opportunitynotes/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/phone/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/radtest/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/vcard/*.php
-xgettext ${XGETTEXT_OPTIONS} -j plugins/webcalendar/*.php
+#xgettext ${XGETTEXT_OPTIONS} -j plugins/webcalendar/*.php
 xgettext ${XGETTEXT_OPTIONS} -j plugins/webform/*.php
 xgettext ${XGETTEXT_OPTIONS} -j private/*.php
 xgettext ${XGETTEXT_OPTIONS} -j relationships/*.php
