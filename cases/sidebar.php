@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.13 2005/02/24 12:46:42 braverock Exp $
+ * $Id: sidebar.php,v 1.14 2005/07/11 22:48:19 vanmer Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -66,7 +66,7 @@ if (strlen($rst->fields['username'])>0) {
 
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0))) {
-    $new_case_button=render_create_button("New",'submit');
+    $new_case_button=render_create_button("New",'submit', false, false, false, 'cases');
     if ($new_case_button) {
         $case_type_sql = "SELECT case_type_pretty_name,case_type_id
                           FROM case_types
@@ -102,6 +102,9 @@ $case_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.14  2005/07/11 22:48:19  vanmer
+ * - added table name to explicitly check permissions on cases instead of on parent (company)
+ *
  * Revision 1.13  2005/02/24 12:46:42  braverock
  * - improve SQL formatting
  * - only show case types that have an 'a'ctive status
