@@ -223,6 +223,9 @@ if (strlen($search_terms['completed']) > 0 and $search_terms['completed'] != "al
 
 
 // date filter code.  dates can come in via start_end + search_date or day_diff (from a saved search)
+
+if ($search_terms['day_diff'] ) {
+
 if($search_terms['start_end'] == 'start') {
     $field = 'scheduled_at';
 } else {
@@ -266,6 +269,7 @@ if (strlen($search_terms['search_date']) > 0 && $search_terms['start_end'] != 'a
     }
 
     $where .= $offset_sql;
+}
 }
 
 
@@ -329,7 +333,7 @@ $from_list = join(', ', $from);
 
 $activity_sql = "$select FROM $from_list $joins $where $group_by";
 
-$count_sql = "SELECT count(distinct a.activity_id) $from $joins $where";
+$count_sql = "SELECT count(distinct a.activity_id) FROM $from_list $joins $where";
 
 // end build query
 
@@ -734,8 +738,8 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
-* Revision 1.25  2005/07/11 14:57:34  ycreddy
-* Added missing columns to the Group By clause
+* Revision 1.26  2005/07/11 15:50:23  ycreddy
+* Fixes to date in the where clause and the Count Query
 *
 * Revision 1.24  2005/07/11 13:47:07  braverock
 * - change 'Contact' search to use either first name or last name
