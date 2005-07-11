@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.35 2005/07/08 01:29:43 vanmer Exp $
+ * $Id: sidebar.php,v 1.36 2005/07/11 13:52:35 braverock Exp $
  */
 
 require_once('relationship_functions.php');
@@ -47,7 +47,7 @@ $relationship_link_rows = '';
 // $con->debug=1;
 
 
-    //check relationships to ensure value before loading relationships    
+    //check relationships to ensure value before loading relationships
     foreach($relationships as $key => $value) {
         if(empty($value)) {
             unset($relationships[$key]);
@@ -56,7 +56,7 @@ $relationship_link_rows = '';
     //loop through each type of relationship requested to display
     foreach ($relationships as $_on_what_table => $_on_what_id) {
         $relationship_title='';
-        
+
         //get possible relationship types for this table
         $relationship_types=get_relationship_types($con, $_on_what_table);
         if (!$relationship_types) continue;
@@ -65,47 +65,47 @@ $relationship_link_rows = '';
         $relationship_type_ids=array_keys($relationship_types);
         //make string out of possible ids
         $relationship_type_ids_str=implode(",",$relationship_type_ids);
-        
+
         //get relationships based on relationship types from above, plus id
         $relationship_data=get_relationships($con, $_on_what_table, $_on_what_id, $relationship_types);
-               
+
         //write table and header for relationships on this entity
-        $on_what_table_singular=ucfirst(make_singular($_on_what_table));        
+        $on_what_table_singular=ucfirst(make_singular($_on_what_table));
         $relationship_link_rows .= '
                         <table class=widget cellspacing=1 width="100%">
                             <tr>
-                                <td class=widget_header colspan=4>' . _("Relationships for ") ."$on_what_table_singular</td>
+                                <td class=widget_header colspan=4>' . _("Relationships for") .' '. _($on_what_table_singular) ."</td>
                             </tr>
                             <!-- Content Start -->";
-        
+
         //loop on each relationship that this entity exists in
         //if we get no results, skip to the next type
         $contacts=array();
-	if ($relationship_data) {
-            foreach ($relationship_data as $relationship_id=>$relationship_details) {            
+    if ($relationship_data) {
+            foreach ($relationship_data as $relationship_id=>$relationship_details) {
                 //retrieve needed relationship information from relationship details
                 $relationship_type_data=$relationship_details['relationship_type_data'];
                 $relationship_type_id=$relationship_details['relationship_type_id'];
-                
+
                 $working_direction=$relationship_details['working_direction'];
                 $opposite_direction=$relationship_details['opposite_direction'];
-                
-                
+
+
                 $display_name = ucfirst($relationship_type_data[$working_direction.'_what_table']);
                 $display_singular = ucfirst($relationship_type_data[$working_direction.'_what_table_singular']);
                 $opposite_name = ucfirst($relationship_type_data[$opposite_direction.'_what_table']);
-                        
+
                 //check to see if the relationship name is the same as the last, if not, write a new row for the new relationship name
                 if ($relationship_title!=$relationship_type_data['relationship_name']) {
                     $relationship_title=$relationship_type_data['relationship_name'];
                     $relationship_link_rows .= "<tr>
                     <td class=widget_label>" . _($relationship_title) . "</td>";
-                    
+
                     //if enabled, show link for linked relationships
                     if ($show_other_relationships) {
-                        $relationship_link_rows .= "<td align=right class=widget_label><a href=\"$http_site_root" . current_page("other={$relationship_type_id}") . "\">" . _("Linked Relationships") . "</a></td>";                            
+                        $relationship_link_rows .= "<td align=right class=widget_label><a href=\"$http_site_root" . current_page("other={$relationship_type_id}") . "\">" . _("Linked Relationships") . "</a></td>";
                     }
-                    
+
                     //end title row
                     $relationship_link_rows .= "
                 </tr>";
@@ -123,7 +123,7 @@ $relationship_link_rows = '';
                     $relationship_ids[] = $relationship_details['relationship_id'];
                     $agent_count = 0;
                     $address = '';
-    
+
                     if($relationship_type_data[$opposite_direction.'_what_table'] == "companies") {
                         if ($show_agent_count) {
                             $agent_count=get_agent_count($con, $current_id);
@@ -132,7 +132,7 @@ $relationship_link_rows = '';
                             $address=get_formatted_address($con, false, $current_id, true);
                         }
                     }
-                    if ($show_opportunity_indicator) {   
+                    if ($show_opportunity_indicator) {
                         $opportunity_id = '';
                         if(($relationship_type_data[$opposite_direction.'_what_table'] == "companies") || ($relationship_type_data[$opposite_direction.'_what_table'] == "contacts")) {
                             $sql = "SELECT opportunity_id
@@ -148,7 +148,7 @@ $relationship_link_rows = '';
                             }
                         }
                     }
-                    
+
                     /* NEW ROW FOR RELATIONSHIP */
                     $relationship_link_rows .= "
                     <tr><td class=widget_content colspan=2 align=left>
@@ -157,10 +157,10 @@ $relationship_link_rows = '';
                     if($opportunity_id) {
                         $relationship_link_rows .= "*";
                     }
-                    
+
                     //hack to set link to the right URL from centralized url creator
                     $href="$http_site_root".table_one_url($relationship_type_data[$opposite_direction.'_what_table'], $current_id);
-                    $relationship_link_rows .= "<a href='$href'>" 
+                    $relationship_link_rows .= "<a href='$href'>"
                         . $relationship_details['name']
                         . "</a> ";
                     if($agent_count) {
@@ -173,7 +173,7 @@ $relationship_link_rows = '';
                         . "&relationship_id=" . $relationship_id
                         . "&return_url=" . urlencode(current_page())
                         . "'>" . _("Edit") . "</a>";
-                
+
                     if($address) {
                         $relationship_link_rows .= "<br>" . $address;
                     }
@@ -181,29 +181,29 @@ $relationship_link_rows = '';
                     </td>
                     </tr>\n";
                 /* END NEW ROW FOR RELATIONSHIP */
-    
+
                     if ($show_other_relationships) {
                         if($j == 0 && in_array($_GET['other'], $relationship_type_ids)) {
                             $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($relationship_type_data[$working_direction.'_what_table'])));
-                
+
                             // Create the shared association entries
                             $sql = "SELECT r.*, " . $name_to_get . " as name, c." . $relationship_type_data[$working_direction.'_what_table_singular'] . "_id
                                     FROM relationships as r, " . $relationship_type_data[$working_direction.'_what_table'] . " as c
-                                    WHERE r.relationship_type_id IN ($relationship_type_ids_str) 
+                                    WHERE r.relationship_type_id IN ($relationship_type_ids_str)
                                     AND r.{$opposite_direction}_what_id = {$current_id}
                                     AND r.{$working_direction}_what_id != {$relationships[$relationship_type_data[$working_direction.'_what_table']]}
                                     AND r." . $working_direction . "_what_id=" . $relationship_type_data[$working_direction.'_what_table_singular'] . "_id
                                     AND r.relationship_status='a'";
-        
+
                             $rst3 = $con->execute($sql);
-    
+
                             if(!$rst3) {
                                 db_error_handler($con, $sql);
                             }
-                            elseif(!$rst3->EOF) {                    
+                            elseif(!$rst3->EOF) {
                                 while(!$rst3->EOF) {
                                     $current_id2 = $rst3->fields[$working_direction . '_what_id'];
-    
+
                                     $agent_count = 0;
                                     $address = '';
                                     if($relationship_type_data[$working_direction.'_what_table']== "companies") {
@@ -214,7 +214,7 @@ $relationship_link_rows = '';
                                             $address = get_formatted_address($con, false, $current_id2, true);
                                         }
                                     }
-                
+
                                     $opportunity_id = 0;
                                     if(($relationship_type_data[$working_direction.'_what_table']== "companies") || ($relationship_type_data[$working_direction.'_what_table'] == "contacts")) {
                                         $sql = "SELECT opportunity_id
@@ -229,8 +229,8 @@ $relationship_link_rows = '';
                                             $opportunity_id = $rst4->fields['opportunity_id'];
                                             $rst4->close();
                                         }
-                                    } 
-                
+                                    }
+
                                     $relationship_link_rows .= "<tr><td class=widget_content colspan=2 align=right>\n"
                                         . $relationship_types[$rst3->fields['relationship_type_id']][$opposite_direction . '_what_text'].":<br>"
                                         . $relationship_types[$rst3->fields['relationship_type_id']]['pre_formatting'];
@@ -238,16 +238,16 @@ $relationship_link_rows = '';
                                         $relationship_link_rows .= "*";
                                     }
                                     $relationship_link_rows .= "<a href='$http_site_root/{$relationship_type_data[$working_direction.'_what_table']}/one.php?{$relationship_types[$rst3->fields['relationship_type_id']][$working_direction.'_what_table_singular']}_id="
-                                        . $current_id2 . "'>" 
-                                        . $rst3->fields['name'] 
+                                        . $current_id2 . "'>"
+                                        . $rst3->fields['name']
                                         . "</a>";
                                     if($agent_count) {
                                         $relationship_link_rows .= " (" . $agent_count . ") ";
                                     }
                                     $relationship_link_rows .= $relationship_type_data['post_formatting'] . "\n";
-                                    
+
                                     $name_to_get = $con->Concat("c." . implode(", ' ' , c.", table_name($relationship_type_data[$opposite_direction.'_what_table'])));
-                                    
+
                                     if ($show_related_relationships) {
                                         $sql = "SELECT rt.relationship_type_id, rt.relationship_name, rt.from_what_table, rt.to_what_table, rt.from_what_text,
                                                     rt.to_what_text, rt.relationship_status, rt.pre_formatting, rt.post_formatting,
@@ -264,7 +264,7 @@ $relationship_link_rows = '';
                                                 . ", rt.relationship_type_id, rt.relationship_name, rt.from_what_table, rt.to_what_table, rt.from_what_text,
                                                 rt.to_what_text, rt.relationship_status, rt.pre_formatting, rt.post_formatting,
                                                 r.relationship_id, r.from_what_id, r.to_what_id, r.relationship_type_id, r.established_at, r.ended_on, r.relationship_status";
-    
+
                                         $rst4 = $con->execute($sql);
                                         if(!$rst4) {
                                             db_error_handler($con, $sql);
@@ -288,9 +288,9 @@ $relationship_link_rows = '';
                                 $rst3->close();
                             }
                         }
-                    }                                              
+                    }
                 }
-	    }
+        }
             if(empty($relationship_link_rows)) {
                 $relationship_link_rows .= "
                     <div id='expanded_associated_by_sidebar'>
@@ -304,7 +304,7 @@ $relationship_link_rows = '';
                         <tr>
                             <td class=widget_label colspan=2 align=center>" . _("Add Relationship") . "</td></tr>";
             }
-	    $relationship_link_rows .= "
+        $relationship_link_rows .= "
                         <tr>
                         <form action='" . $http_site_root . "/relationships/new-relationship.php' method='post'>
                             <input type=hidden name=on_what_id>
@@ -324,14 +324,17 @@ $relationship_link_rows = '';
                 $relationship_link_rows .= "<tr><td class=widget_content_form_element colspan=2><input type=button class=button value=\""._("Mail Merge")."\" onclick=\"javascript:location.href='$http_site_root/email/email.php?scope=contact_list&contact_list=$contact_list'\"></td></tr>";
                 $contacts=array();
             }
-	}
-            
+    }
+
             $relationship_link_rows .= "        <!-- Content End --></table>\n";
 
 // $con->debug=0;
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.36  2005/07/11 13:52:35  braverock
+ * - Localize table name (on what relationship)
+ *
  * Revision 1.35  2005/07/08 01:29:43  vanmer
  * - centralized hack to allow link to company_division to link properly automagically into utils-database.php
  *
