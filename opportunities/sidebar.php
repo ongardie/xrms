@@ -9,11 +9,11 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.12 2005/01/06 20:46:58 vanmer Exp $
+ * $Id: sidebar.php,v 1.13 2005/07/11 22:43:56 vanmer Exp $
  */
 /*
 Commented until ACL system is implemented
-$opList=get_list($session_user_id, 'Read', false, 'opportunities');
+$opList=acl_get_list($session_user_id, 'Read', false, 'opportunities');
 if (!$opList) { $opportunity_rows=''; return false; }
 else { $opList=implode(",",$opList); $opportunity_limit_sql.=" AND opportunities.opportunity_id IN ($opList) "; }
 */
@@ -62,7 +62,7 @@ if (strlen($rst->fields['username'])>0) {
 
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0)) ) {
-    $new_button=render_create_button('New','submit');
+    $new_button=render_create_button('New','submit', false, false, false, 'opportunities');
     $opportunity_rows .= "
             <tr>
                 <form action='".$http_site_root."/opportunities/new.php' method='post'>
@@ -89,6 +89,9 @@ $opportunity_rows .= "        </table>\n</div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.13  2005/07/11 22:43:56  vanmer
+ * - changed to reflect correct table for permissions for create button
+ *
  * Revision 1.12  2005/01/06 20:46:58  vanmer
  * - added division_id to new opportunity sidebar button
  * - added commented ACL authentication to top of sidebar
