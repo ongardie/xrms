@@ -2,7 +2,7 @@
 /**
  * Edit the information for a single case
  *
- * $Id: one.php,v 1.9 2005/05/10 13:30:52 braverock Exp $
+ * $Id: one.php,v 1.10 2005/07/11 13:55:45 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -72,29 +72,26 @@ start_page($page_title);
             </tr>
         </table>
         </form>
-
-        <form action=delete.php method=post  onsubmit="javascript: return confirm('<?php echo _("Delete Case Type?"); ?>');">
-        <input type=hidden name=case_type_id value="<?php  echo $case_type_id; ?>">
-        <table class=widget cellspacing=1>
-            <tr>
-                <td class=widget_header colspan=4><?php echo _("Delete Case Type"); ?></td>
-            </tr>
-            <tr>
-                <td class=widget_content>
-                <?php echo _("Click the button below to permanently remove this item."); ?>
-                <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
-                <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
-                </td>
-            </tr>
-        </table>
-        </form>
-
     </div>
 
         <!-- right column //-->
     <div id="Sidebar">
 
-        &nbsp;
+        <form action=delete.php method=post  onsubmit="javascript: return confirm('<?php echo _("Delete Case Type?"); ?>');">
+            <input type=hidden name=case_type_id value="<?php  echo $case_type_id; ?>">
+            <table class=widget cellspacing=1>
+                <tr>
+                    <td class=widget_header colspan=4><?php echo _("Delete Case Type"); ?></td>
+                </tr>
+                <tr>
+                    <td class=widget_content>
+                    <?php echo _("Click the button below to permanently remove this item."); ?>
+                    <p><?php echo _("Note: This action CANNOT be undone!"); ?></p>
+                    <p><input class=button type=submit value="<?php echo _("Delete"); ?>"></p>
+                    </td>
+                </tr>
+            </table>
+        </form>
 
     </div>
 </div>
@@ -105,6 +102,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.10  2005/07/11 13:55:45  braverock
+ * - remove trainling whitespace
+ *
  * Revision 1.9  2005/05/10 13:30:52  braverock
  * - localized string patches provided by Alan Baghumian (alanbach)
  *
