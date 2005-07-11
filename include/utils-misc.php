@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.140 2005/07/08 19:25:22 jswalter Exp $
+ * $Id: utils-misc.php,v 1.141 2005/07/11 16:00:09 braverock Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -221,10 +221,10 @@ function fetch_company_name($con, $company_id) {
  */
 function fetch_company_id_for_division($con, $division_id) {
     if (!$con OR !$division_id) return false;
-    
+
     $sql = "SELECT company_id FROM company_division WHERE division_id=$division_id";
     $rst = $con->execute($sql);
-    
+
     if (!$rst) { db_error_handler($con, $sql); }
     if (!$rst->EOF) {
         return $rst->fields['company_id'];
@@ -565,16 +565,16 @@ function get_system_parameter(&$con, $param) {
         $sql ="select string_val, int_val, float_val, datetime_val from system_parameters where param_id='$param'";
         $sysst = $con->execute($sql);
         if ($sysst) {
-    
+
         // is the requested record in the database ???
         if ( $sysst->RecordCount() == 1 ) {
             // yes - it was found
-    
+
             $string_val   = $sysst->fields['string_val'];
             $int_val      = $sysst->fields['int_val'];
             $float_val    = $sysst->fields['float_val'];
             $datetime_val = $sysst->fields['datetime_val'];
-    
+
             if (!is_null($string_val)) {
                 $my_val=$string_val;
             } elseif (!is_null($int_val)) {
@@ -587,18 +587,18 @@ function get_system_parameter(&$con, $param) {
                 echo _('Failure to get system parameter ') . $param . _('.  The data entry appears to be corrupted.');
                 return false;
             }
-    
+
         } else {
             // no - it was not found
-    
+
             echo _('Failure to get system parameter ') . $param . _('.  Make sure you have run the administration update.');
             return false;
-    
+
         } // if ( $sysst->RecordCount() > 0 ) ...
-    
+
         // close the recordset
         $sysst->close();
-    
+
         } else {
             //there was a problem, notify the user
             db_error_handler ($con, $sql);
@@ -1721,7 +1721,7 @@ $this_request_only = true) {
     } else {
         //echo("setting $params value for duration of session<br>\n");
         $_SESSION['XRMS_function_cache'][$func_name][$key] = $ret;
-        unset($function_cache[$func_name][$key]);
+        unset($xrms_function_cache[$func_name][$key]);
     }
 }
 
@@ -1770,6 +1770,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.141  2005/07/11 16:00:09  braverock
+ * - update session cache unset to resolve hang bug in some environments
+ *   credit miguel Gonçalves (mig77) for the problem report and resolution
+ *
  * Revision 1.140  2005/07/08 19:25:22  jswalter
  *  - added 'random_string()' for central method to create secure  passwords and file names
  *
