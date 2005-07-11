@@ -123,10 +123,10 @@ function OpenTag($tag,$attr)
     switch($tag){
 
         case 'SUP':
-            if($attr['SUP'] != '') {    
-                //Set current font to: Bold, 6pt     
+            if($attr['SUP'] != '') {
+                //Set current font to: Bold, 6pt
                 $this->SetFont('','',6);
-                //Start 125cm plus width of cell to the right of left margin         
+                //Start 125cm plus width of cell to the right of left margin
                 //Superscript "1"
                 $this->Cell(2,2,$attr['SUP'],0,0,'L');
             }
@@ -137,7 +137,7 @@ function OpenTag($tag,$attr)
             else $this->tableborder=0;
             break;
         case 'TR': //TR-BEGIN
-	   $this->celllines=5;
+       $this->celllines=5;
             break;
         case 'TD': // TD-BEGIN
         case 'TH': // TH-BEGIN
@@ -147,7 +147,7 @@ function OpenTag($tag,$attr)
             if( $attr['HEIGHT'] != '') $this->tdheight=($attr['HEIGHT']/6);
             else $this->tdheight=6; // SET to your own height if you need bigger fixed cells
             if( $attr['ALIGN'] != '' ) {
-                $align=$attr['ALIGN'];        
+                $align=$attr['ALIGN'];
                 if($align=="LEFT") $this->tdalign="L";
                 if($align=="CENTER") $this->tdalign="C";
                 if($align=="RIGHT") $this->tdalign="R";
@@ -286,101 +286,101 @@ function PutLink($URL,$txt)
 
 function OutputMaxChars($s,&$lcount,$x,$p,$width,$height,$border,$align,$fill,$link)
 {
-	$swidth = 0;
-	$space = $this->GetStringWidth(' ');
-	$chars = preg_split('//', $s.' ', -1, PREG_SPLIT_NO_EMPTY);
-	foreach ($chars as $c)
-	{
-		$charwidth = $this->GetStringWidth($c);
-		if ($swidth + $charwidth <= $width)
-		{
-			$swidth += $charwidth;
-			$text .= $c;
-		}
-		else
-		{
-			if (rtrim($text) != '')
-			{
-				$this->Cell($width,$height,rtrim($text),$border,0,$align,$fill,$link);
-				$this->Ln(4);
-				$this->SetX($x);
-				if ($this->PageNo() == $p)
-				{
-					$lcount++;
-				}
-				else
-				{
-					$lcount = 0;
-				}
-			}
-			$text = $c;
-			$swidth = $charwidth;
-		}
-	}
-	return rtrim($text);
+    $swidth = 0;
+    $space = $this->GetStringWidth(' ');
+    $chars = preg_split('//', $s.' ', -1, PREG_SPLIT_NO_EMPTY);
+    foreach ($chars as $c)
+    {
+        $charwidth = $this->GetStringWidth($c);
+        if ($swidth + $charwidth <= $width)
+        {
+            $swidth += $charwidth;
+            $text .= $c;
+        }
+        else
+        {
+            if (rtrim($text) != '')
+            {
+                $this->Cell($width,$height,rtrim($text),$border,0,$align,$fill,$link);
+                $this->Ln(4);
+                $this->SetX($x);
+                if ($this->PageNo() == $p)
+                {
+                    $lcount++;
+                }
+                else
+                {
+                    $lcount = 0;
+                }
+            }
+            $text = $c;
+            $swidth = $charwidth;
+        }
+    }
+    return rtrim($text);
 }
 
 function CellWrap($width, $height=0, $s='', $border=0, $ln=0, $align='L', $fill=0, $link='')
 {
-	$swidth = 0;
-	$lcount = 0;
-	$need_reset_y = 0;
-	$space = $this->GetStringWidth(' ');
-	$words = preg_split('/ +/', $s);
-	$x=$this->GetX();
-	$y=$this->GetY();
-	$p=$this->PageNo();
-	foreach ($words as $word)
-	{
-		$wordwidth = $this->GetStringWidth($word);
-		if ($swidth + $wordwidth + $space <= $width)
-		{
-			$swidth += $wordwidth + $space;
-			$text .= $word.' ';
-		}
-		else
-		{
-			if (rtrim($text) != '')
-			{
-				$this->Cell($width,$height,rtrim($text),$border,0,$align,$fill,$link);
-				$this->Ln(4);
-				$this->SetX($x);
-				$need_reset_y = 1;
-				if ($this->PageNo() == $p)
-				{
-					$lcount++;
-				}
-				else
-				{
-					$lcount = 0;
-				}
-			}
-			$text = $word.' ';
-			$swidth = $wordwidth + $space;
-			if ($swidth > $width )
-			{
-				$text = $this->OutputMaxChars
-					($text,$lcount,$x,$p,$width,$height,$border,$align,$fill,$link);
-				$swidth = $this->GetStringWidth($text);
-				$need_reset_y = 1;
-			}
-		}
-	}
-	$this->Cell($width,$height,rtrim($text),$border,$ln,$align,$fill,$link);
-	$x=$this->GetX();
-	if($need_reset_y)
-	{
-		if ($this->PageNo() == $p)
-		{
-			$this->SetXY($x,$y);
-		}
-		else
-		{
-			$lcount = 0;
-		}
-	}
-	if (rtrim($text) != '') $lcount++;
-	$this->celllines=max($lcount*5,$this->celllines);
+    $swidth = 0;
+    $lcount = 0;
+    $need_reset_y = 0;
+    $space = $this->GetStringWidth(' ');
+    $words = preg_split('/ +/', $s);
+    $x=$this->GetX();
+    $y=$this->GetY();
+    $p=$this->PageNo();
+    foreach ($words as $word)
+    {
+        $wordwidth = $this->GetStringWidth($word);
+        if ($swidth + $wordwidth + $space <= $width)
+        {
+            $swidth += $wordwidth + $space;
+            $text .= $word.' ';
+        }
+        else
+        {
+            if (rtrim($text) != '')
+            {
+                $this->Cell($width,$height,rtrim($text),$border,0,$align,$fill,$link);
+                $this->Ln(4);
+                $this->SetX($x);
+                $need_reset_y = 1;
+                if ($this->PageNo() == $p)
+                {
+                    $lcount++;
+                }
+                else
+                {
+                    $lcount = 0;
+                }
+            }
+            $text = $word.' ';
+            $swidth = $wordwidth + $space;
+            if ($swidth > $width )
+            {
+                $text = $this->OutputMaxChars
+                    ($text,$lcount,$x,$p,$width,$height,$border,$align,$fill,$link);
+                $swidth = $this->GetStringWidth($text);
+                $need_reset_y = 1;
+            }
+        }
+    }
+    $this->Cell($width,$height,rtrim($text),$border,$ln,$align,$fill,$link);
+    $x=$this->GetX();
+    if($need_reset_y)
+    {
+        if ($this->PageNo() == $p)
+        {
+            $this->SetXY($x,$y);
+        }
+        else
+        {
+            $lcount = 0;
+        }
+    }
+    if (rtrim($text) != '') $lcount++;
+    $this->celllines=max($lcount*5,$this->celllines);
 }
 
 
