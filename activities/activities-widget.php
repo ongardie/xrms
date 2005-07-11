@@ -150,7 +150,7 @@ if (strlen($search_terms['title']) > 0) {
 
 if (strlen($search_terms['contact']) > 0) {
     $criteria_count++;
-    $where .= " and ((cont.last_name like " . $con->qstr('%' . $search_terms['contact'] . '%', get_magic_quotes_gpc()) . ") OR (part_cont.last_name like " . $con->qstr('%' . $search_terms['contact'] . '%', get_magic_quotes_gpc()) . "))";
+    $where .= " and ((cont.last_name like " . $con->qstr('%' . $search_terms['contact'] . '%', get_magic_quotes_gpc()) . ") OR (cont.first_names like " . $con->qstr('%' . $search_terms['contact'] . '%', get_magic_quotes_gpc()) . "))";
 }
 
 if (strlen($search_terms['contact_id'])) {
@@ -734,6 +734,10 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.24  2005/07/11 13:47:07  braverock
+* - change 'Contact' search to use either first name or last name
+* @todo fix so a search for 'First Last' will work as well, probably using split() php fn
+*
 * Revision 1.23  2005/07/10 20:24:45  daturaarutad
 * changed $sql => $activity_sql in calendar code
 *
