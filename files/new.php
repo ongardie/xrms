@@ -2,12 +2,10 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.16 2005/07/06 17:58:17 jswalter Exp $
+ * $Id: new.php,v 1.17 2005/07/12 16:38:19 braverock Exp $
  */
 
 require_once('../include-locations.inc');
-
-include_once $include_directory . 'classes/debug.php';
 
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
@@ -196,6 +194,9 @@ if ( $_POST['act'] == 'up' )
 
 /**
  * $Log: new.php,v $
+ * Revision 1.17  2005/07/12 16:38:19  braverock
+ * - remove spurious debug.php include
+ *
  * Revision 1.16  2005/07/06 17:58:17  jswalter
  *  - pulled HTML form out to external file: 'edit-form.php'
  *  - looking for '$msg' in POST as well as GET
