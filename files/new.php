@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.17 2005/07/12 16:38:19 braverock Exp $
+ * $Id: new.php,v 1.18 2005/07/12 17:47:25 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,7 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-files.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-
+require_once($include_directory . 'mime/mime-array.php');
 
 // Pull SESSION data
 $session_user_id = session_check('','Create');
@@ -194,6 +194,9 @@ if ( $_POST['act'] == 'up' )
 
 /**
  * $Log: new.php,v $
+ * Revision 1.18  2005/07/12 17:47:25  braverock
+ * - add include for custom mime fn to replace php std fn
+ *
  * Revision 1.17  2005/07/12 16:38:19  braverock
  * - remove spurious debug.php include
  *
