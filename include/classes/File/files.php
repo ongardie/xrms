@@ -8,7 +8,7 @@
 // | Email         walter@torres.ws                                         |
 // | Web           http://web.php-yacs.org                                  |
 // | Mirror        http://php-yacs.sourceforge.net/                         |
-// | $Id: files.php,v 1.1 2005/07/06 18:12:39 jswalter Exp $                 |
+// | $Id: files.php,v 1.2 2005/07/12 17:42:58 braverock Exp $                 |
 // +------------------------------------------------------------------------+
 // | This source file is subject to version 3.00 of the PHP License,        |
 // | that is available at http://www.php.net/license/3_0.txt.               |
@@ -39,8 +39,8 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Id: files.php,v 1.1 2005/07/06 18:12:39 jswalter Exp $
- * @date      $Date: 2005/07/06 18:12:39 $
+ * @version   $Id: files.php,v 1.2 2005/07/12 17:42:58 braverock Exp $
+ * @date      $Date: 2005/07/12 17:42:58 $
  *
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -287,7 +287,7 @@
  *
  * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  *
  */
 class File
@@ -909,7 +909,7 @@ function getFullOrgPath()
             $this->_mimeType = $_mimeType;
 
         else
-            $this->_mimeType = mime_content_type( $this->getFullOrgPath() );
+            $this->_mimeType = mime_content_type_( $this->getFullOrgPath() );
     }
 // }}}
 // {{{ getFileMimeType
@@ -1403,11 +1403,14 @@ function getFullOrgPath()
 
 /**
  * $RCSfile: files.php,v $
- * $Revision: 1.1 $
- * $Date: 2005/07/06 18:12:39 $
- * $Author: jswalter $
+ * $Revision: 1.2 $
+ * $Date: 2005/07/12 17:42:58 $
+ * $Author: braverock $
  *
  * $Log: files.php,v $
+ * Revision 1.2  2005/07/12 17:42:58  braverock
+ * - change to use custom mime function because the PHP core fn isn't reliable
+ *
  * Revision 1.1  2005/07/06 18:12:39  jswalter
  *  - initial commit to sourceforge
  *  - these files come from php-yacs.org
