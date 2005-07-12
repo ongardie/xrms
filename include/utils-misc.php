@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.141 2005/07/11 16:00:09 braverock Exp $
+ * $Id: utils-misc.php,v 1.142 2005/07/12 17:36:47 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -91,7 +91,7 @@ function session_check($c_role='', $action='Read') {
       // we are logged in
       if ( !$role_ok ) {
         // we are logged in, go straight to logout.php
-        header("Location: $http_site_root" . "/private/home.php?msg=noauth");
+        header("Location: $http_site_root" . "/private/home.php?msg=noperm");
         exit;
       }
       // just return our current session id
@@ -1770,6 +1770,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.142  2005/07/12 17:36:47  vanmer
+ * - changed to throw noperm message when no authorization is allow for a user, instead of noauth
+ *
  * Revision 1.141  2005/07/11 16:00:09  braverock
  * - update session cache unset to resolve hang bug in some environments
  *   credit miguel Gonçalves (mig77) for the problem report and resolution
