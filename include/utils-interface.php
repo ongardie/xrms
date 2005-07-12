@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.77 2005/07/12 17:36:12 vanmer Exp $
+ * $Id: utils-interface.php,v 1.78 2005/07/12 19:09:40 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -373,7 +373,6 @@ function end_page($use_hook = true) {
     if (!$session_user_id) { $user_id=0; }
     else { $user_id=$session_user_id; }
     global $con;
-    $econ = $con;
     if (!$econ) $econ=get_xrms_dbconnection();
 
     echo "\n".'<div id="footer">'."\n";
@@ -777,6 +776,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.78  2005/07/12 19:09:40  vanmer
+ * - removed erroneous assumption that $con will always be connected to an XRMS db
+ *
  * Revision 1.77  2005/07/12 17:36:12  vanmer
  * - added message when user has no permission to an object in the system
  *
