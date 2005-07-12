@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.76 2005/07/12 16:47:46 vanmer Exp $
+ * $Id: utils-interface.php,v 1.77 2005/07/12 17:36:12 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -79,6 +79,8 @@ function status_msg($msg) {
       return _("Password Does Not Match.");
     case 'noauth':
       return _("We could not authenticate you.") . ' ' . _("Please try again.");
+    case 'noperm':
+      return _("You are not authorized to perform this function.");
     case 'saved':
       return _("Changes saved.");
     case 'no_change':
@@ -775,6 +777,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.77  2005/07/12 17:36:12  vanmer
+ * - added message when user has no permission to an object in the system
+ *
  * Revision 1.76  2005/07/12 16:47:46  vanmer
  * - changed to use econ connection instead of $con in end_page
  *
