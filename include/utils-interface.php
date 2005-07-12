@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.74 2005/07/12 14:53:53 braverock Exp $
+ * $Id: utils-interface.php,v 1.75 2005/07/12 15:00:19 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -390,7 +390,7 @@ function end_page($use_hook = true) {
     if ($hide_sf_image=='y') {
         $sf_image_attributes=' height="0" width="0"';
     } else { $sf_image_attributes=''; }
-    $con->close();
+    $econ->close();
 
 
     if ($block_sf_page!='y') {
@@ -774,6 +774,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.75  2005/07/12 15:00:19  braverock
+ * - change end_page connection close
+ *
  * Revision 1.74  2005/07/12 14:53:53  braverock
  * - change connection var to not collide with plugin connections
  *
