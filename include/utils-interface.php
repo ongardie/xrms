@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.72 2005/07/08 20:33:20 vanmer Exp $
+ * $Id: utils-interface.php,v 1.73 2005/07/12 14:44:36 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -367,38 +367,49 @@ function render_nav_line() {
  */
 function end_page($use_hook = true) {
 
-    /**
-     * place the end_page hook before we close the body and html
-     * I don't think any of the tables should still be open, so a
-     * hook writer would need to add thier own structure.
-     */
-global $session_user_id;
-if (!$session_user_id) { $user_id=0; }
-else { $user_id=$session_user_id; }
-global $con;
-if (!$con) $con=get_xrms_dbconnection();
-  if ( $use_hook )
-    do_hook ('end_page');
+    global $session_user_id;
+    if (!$session_user_id) { $user_id=0; }
+    else { $user_id=$session_user_id; }
+    global $con;
+    if (!$con) $con=get_xrms_dbconnection();
 
-    $block_sf_page =  get_user_preference($con, $user_id, 'block_sf_link' );
+    echo "\n".'<div id="footer">'."\n";
+
+    if ( $use_hook ){
+        /**
+        * place the end_page hook before we close the body and html
+        * I don't think any of the tables should still be open, so a
+        * hook writer would need to add thier own structure.
+        */
+        do_hook ('end_page');
+    }
+
+    $block_sf_page = get_user_preference($con, $user_id, 'block_sf_link' );
     $hide_sf_image = get_user_preference($con, $user_id, 'hide_sf_img');
-    
-    if ($hide_sf_image=='y') { $sf_image_attributes=' height="0" width="0"'; }
-    else { $sf_image_attributes=''; }
-    $con->close();
-    if ($block_sf_page!='y') {
-?>
-<A href="http://sourceforge.net/projects/xrms/">
-        <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0" 
-             <?php echo $sf_image_attributes; ?>
-             alt="<?php echo _("XRMS SourceForge Project Page"); ?>" />
-</A>
-    <?php } ?>
 
-</body>
-</html>
-<?php
-} //end end_page fn
+    if ($hide_sf_image=='y') {
+        $sf_image_attributes=' height="0" width="0"';
+    } else { $sf_image_attributes=''; }
+    $con->close();
+
+
+    if ($block_sf_page!='y') {
+        $alt_string=_("XRMS SourceForge Project Page");
+        echo <<<TILLEND
+        <A href="http://sourceforge.net/projects/xrms/">
+                <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0"
+                    $sf_image_attributes
+                    alt="$alt_string" />
+        </A>
+TILLEND;
+    }
+    echo <<<TILLEND
+
+    </div>
+    </body>
+    </html>
+TILLEND;
+}
 
 /**
  * Retrieve menu of Salutations
@@ -763,6 +774,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.73  2005/07/12 14:44:36  braverock
+ * - clean up end page options around loading/displaying SF link
+ *
  * Revision 1.72  2005/07/08 20:33:20  vanmer
  * - changed to not pass false user_id to get_user_preferences, allows non-logged-in system to retrieve system
  * preferences
