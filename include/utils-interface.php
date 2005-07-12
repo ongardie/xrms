@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.73 2005/07/12 14:44:36 braverock Exp $
+ * $Id: utils-interface.php,v 1.74 2005/07/12 14:53:53 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -371,7 +371,7 @@ function end_page($use_hook = true) {
     if (!$session_user_id) { $user_id=0; }
     else { $user_id=$session_user_id; }
     global $con;
-    if (!$con) $con=get_xrms_dbconnection();
+    if (!$econ) $econ=get_xrms_dbconnection();
 
     echo "\n".'<div id="footer">'."\n";
 
@@ -394,7 +394,7 @@ function end_page($use_hook = true) {
 
 
     if ($block_sf_page!='y') {
-        $alt_string=_("XRMS SourceForge Project Page");
+        $alt_string=htmlspecialchars(_("XRMS SourceForge Project Page"));
         echo <<<TILLEND
         <A href="http://sourceforge.net/projects/xrms/">
                 <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0"
@@ -774,6 +774,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.74  2005/07/12 14:53:53  braverock
+ * - change connection var to not collide with plugin connections
+ *
  * Revision 1.73  2005/07/12 14:44:36  braverock
  * - clean up end page options around loading/displaying SF link
  *
