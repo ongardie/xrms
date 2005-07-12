@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.75 2005/07/12 15:00:19 braverock Exp $
+ * $Id: utils-interface.php,v 1.76 2005/07/12 16:47:46 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -371,6 +371,7 @@ function end_page($use_hook = true) {
     if (!$session_user_id) { $user_id=0; }
     else { $user_id=$session_user_id; }
     global $con;
+    $econ = $con;
     if (!$econ) $econ=get_xrms_dbconnection();
 
     echo "\n".'<div id="footer">'."\n";
@@ -384,8 +385,8 @@ function end_page($use_hook = true) {
         do_hook ('end_page');
     }
 
-    $block_sf_page = get_user_preference($con, $user_id, 'block_sf_link' );
-    $hide_sf_image = get_user_preference($con, $user_id, 'hide_sf_img');
+    $block_sf_page = get_user_preference($econ, $user_id, 'block_sf_link' );
+    $hide_sf_image = get_user_preference($econ, $user_id, 'hide_sf_img');
 
     if ($hide_sf_image=='y') {
         $sf_image_attributes=' height="0" width="0"';
@@ -774,6 +775,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.76  2005/07/12 16:47:46  vanmer
+ * - changed to use econ connection instead of $con in end_page
+ *
  * Revision 1.75  2005/07/12 15:00:19  braverock
  * - change end_page connection close
  *
