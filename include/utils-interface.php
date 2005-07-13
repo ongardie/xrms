@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.78 2005/07/12 19:09:40 vanmer Exp $
+ * $Id: utils-interface.php,v 1.79 2005/07/13 15:59:15 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -630,7 +630,7 @@ function render_ACL_button($action, $text='Create', $type='submit', $onclick=fal
     if ($_table) $table=$_table;
     else $table=$on_what_table;
     if ($_id) $cid=$_id;
-    else $cid=$on_what_id;
+    else { if (!$_table) $cid=$on_what_id; }
 
     if (!$cid) {
         if (!check_object_permission_bool($session_user_id, false, $action, $table))
@@ -776,6 +776,10 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.79  2005/07/13 15:59:15  vanmer
+ * - cause render_button function to only check global $on_what_id if no parameters were passed in for table
+ * - allows object permission to be checked instead of particular instance of object
+ *
  * Revision 1.78  2005/07/12 19:09:40  vanmer
  * - removed erroneous assumption that $con will always be connected to an XRMS db
  *
