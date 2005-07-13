@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.79 2005/07/13 15:59:15 vanmer Exp $
+ * $Id: utils-interface.php,v 1.80 2005/07/13 23:25:44 ycreddy Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -672,7 +672,7 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 function get_user_menu(&$con, $user_id='', $blank_user=false) {
 
     $sql = '
-    SELECT ' . $con->Concat("first_names","' '","last_name") . " AS name, user_id
+    SELECT ' . $con->Concat("last_name","', '","first_names") . " AS name, user_id
     FROM users
     WHERE user_record_status = 'a'
     ORDER BY last_name, first_names
@@ -776,6 +776,9 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.80  2005/07/13 23:25:44  ycreddy
+ * Update to the way the name is presented in a user menu - lastname, firstname instead of firstname lastname
+ *
  * Revision 1.79  2005/07/13 15:59:15  vanmer
  * - cause render_button function to only check global $on_what_id if no parameters were passed in for table
  * - allows object permission to be checked instead of particular instance of object
