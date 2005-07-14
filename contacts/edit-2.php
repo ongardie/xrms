@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.26 2005/07/07 23:15:42 vanmer Exp $
+ * $Id: edit-2.php,v 1.27 2005/07/14 21:06:08 daturaarutad Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -67,7 +67,7 @@ if ($_POST['btEditBusinessAddress']) {
     $return_url="../companies/one-address.php?form_action=edit&return_url=$url_return_url&company_id=$company_id&address_id=$address_id";
 }
 if ($_POST['btEditHomeAddress']) {
-    $return_url="../companies/one-address.php?form_action=edit&return_url=$url_return_url&company_id=0&address_id=$home_address_id";
+    $return_url="../companies/one-address.php?form_action=edit&return_url=$url_return_url&company_id=0&contact_id=$contact_id&address_id=$home_address_id";
 }
 if ($_POST['btNewHomeAddress']) {
     $return_url="../companies/one-address.php?form_action=new&return_url=$url_return_url&company_id=0&contact_id=$contact_id";
@@ -138,6 +138,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.27  2005/07/14 21:06:08  daturaarutad
+ * add contact_id to btnEditHomeAddress handler
+ *
  * Revision 1.26  2005/07/07 23:15:42  vanmer
  * - changed to take a return_rul
  * - changed to redirect to edit address pages based on submit button pressed
