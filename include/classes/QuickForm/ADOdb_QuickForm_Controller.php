@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.2 2005/07/07 23:17:29 vanmer Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.3 2005/07/14 21:18:19 daturaarutad Exp $
 	*/
 
 
@@ -66,6 +66,10 @@
 		function ProcessAndRenderForm($show_submit = true) {
 			getGlobalVar($form_action, 'form_action');
 
+            if(!$form_action) {
+                $form_action = 'new';
+            }
+
 			//echo "Controller's form_action: $form_action<br/>";
 
 			switch($form_action) {
@@ -112,8 +116,8 @@
 					for($j=0; $j<count($this->Models); $j++) {
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
 						$this->Models[$j]->Write($object_id);
+						$this->Models[$j]->Read($object_id);
 					}
-
 					$this->View->SetConstants();
                                         
                                $die=$this->View->CheckReturnAfterUpdate();
@@ -138,13 +142,7 @@
 
 					for($j=0; $j<count($this->Models); $j++) {
 						$model_id = $this->Models[$j]->Create();
-
-						// store the primary key
-						if($model_id) {
-							$values = $this->Models[$j]->GetValues();
-							$values[$this->Models[$j]->GetPrimaryKeyName()] = $model_id;
-							$this->Models[$j]->SetValues($values);
-						}
+						$this->Models[$j]->Read($model_id);
 					}
 					$this->View->SetConstants();
 
