@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.7 2005/07/07 23:18:18 vanmer Exp $
+ * $Id: one-address.php,v 1.8 2005/07/14 19:42:24 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -96,8 +96,7 @@ $company_name = fetch_company_name($con, $company_id);
         $model->SetFieldType('address_body', 'textarea','cols=50 rows=10');
 
         if ($contact_id) {
-            $model->AddField('contact_id','hidden', 1);
-            $model->SetFormOnlyField('contact_id',$contact_id);
+            $model->AddField("<input type=hidden name=contact_id value=$contact_id>", 'html',0);
         }
         $fields=$model->GetFields();
         $sorter = new array_sorter($fields, 'displayOrder', false);
@@ -180,6 +179,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.8  2005/07/14 19:42:24  daturaarutad
+ * changed to use QuickForms "html" type
+ *
  * Revision 1.7  2005/07/07 23:18:18  vanmer
  * - moved start_page to after all quickform processes complete
  * - added returnAfterUpdateURL to allow immediate return after update of address record
