@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.11 2005/07/06 03:12:07 vanmer Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.12 2005/07/14 20:17:28 daturaarutad Exp $
 */
 
 
@@ -625,6 +625,7 @@ class ADOdb_QuickForm_Model {
 			if(isset($this->DBStructure['fields'][$i]) && 
 				'blob' != $this->DBStructure['fields'][$i]['type'] && 
 				'longblob' != $this->DBStructure['fields'][$i]['type'] &&
+				'html' != $this->DBStructure['fields'][$i]['type'] &&
 				$omit_column != $this->DBStructure['fields'][$i]['name'] &&
 				!$this->DBStructure['fields'][$i]['formOnly']
 				) 
@@ -638,6 +639,13 @@ class ADOdb_QuickForm_Model {
 			return $columns;
 		}
 	} // ADOdb_QuickForm_Model class
+
+/**
+* $Log: ADOdb_QuickForm_Model.php,v $
+* Revision 1.12  2005/07/14 20:17:28  daturaarutad
+* do not return a column name in GetColumns if type is html
+*
+*/
 
 
 ?>
