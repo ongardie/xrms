@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.70 2005/07/08 14:49:57 braverock Exp $
+ * $Id: edit-2.php,v 1.71 2005/07/15 22:49:58 vanmer Exp $
  */
 
 //include required files
@@ -133,7 +133,7 @@ $completed_by= ($activity_status == 'c') && ($current_activity_status != 'c') ? 
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities == true ) {
-    if (($on_what_table=='contacts') or ($on_what_table=='')) {
+    if ((($on_what_table=='contacts') or ($on_what_table=='')) AND $company_id) {
         $opp_arr = array();
         $case_arr = array();
         $arr_count = 0;
@@ -288,6 +288,7 @@ if($activity_status == 'c' && $current_activity_status != 'c') {
 }
 
 //get sort_order field
+
 $sql = "select * from " . strtolower($table_name) . "_statuses where " . strtolower($table_name) ."_status_id=$table_status_id";
 $rst = $con->SelectLimit($sql, 1, 0);
 $rst = $con->execute($sql);
@@ -312,13 +313,15 @@ if($user_id) {
     $rst->close();
 }
 
-//get current company name and phone
-$sql = "select company_name, phone from companies where company_id = $company_id";
-$rst = $con->SelectLimit($sql, 1, 0);
-if ($rst) {
-    $company_name = $rst->fields['company_name'];
-    $company_phone = $rst->fields['phone'];
-    $rst->close();
+if ($company_id) {
+    //get current company name and phone
+    $sql = "select company_name, phone from companies where company_id = $company_id";
+    $rst = $con->SelectLimit($sql, 1, 0);
+    if ($rst) {
+        $company_name = $rst->fields['company_name'];
+        $company_phone = $rst->fields['phone'];
+        $rst->close();
+    }
 }
 
 $sql = "select activity_type_pretty_name from activity_types where activity_type_id = $activity_type_id";
@@ -370,15 +373,19 @@ if ($table_name !== "attached to") {
 
     $old_status = $rst->fields[$table_name . '_status_id'];
 
+    
     //check if there are open activities left
-    $sql = "select * from activities
-             where on_what_status='$old_status'
-             and on_what_table='$on_what_table'
-             and on_what_id=$on_what_id
-             and contact_id=$contact_id
-             and company_id=$company_id
-             and activity_status='o'
-             and activity_record_status='a'";
+    $where=array();
+    $where[]="on_what_status='$old_status'";
+    $where[]="on_what_table='$on_what_table'";
+    $where[]="on_what_id=$on_what_id";
+    $where[]="activity_status='o'";
+    $where[]="activity_record_status='a'";
+    if ($contact_id) { $where[]="contact_id=$contact_id"; }
+    if ($company_id) { $where[]="company_id=$company_id"; }
+    
+    $wherestr=implode(" and ", $where);
+    $sql = "select * from activities where $wherestr";
 
     $rst = $con->execute($sql);
     if ($rst) {
@@ -484,11 +491,16 @@ if ($activity_status == 'o') {
 } elseif ($activity_status == 'c') {
     $activity_status_long = "Closed";
 }
+if ($company_id) {
+    $email_return=urlencode('/companies/one.php?company_id='.$company_id);
+} else { 
+    $email_return=urlencode('/activities/some.php');
+}
 
 $email_message="
 This is an UPDATED $app_title activity:
 
-$http_site_root/activities/one.php?return_url=/companies/one.php?company_id=$company_id&activity_id=$activity_id
+$http_site_root/activities/one.php?return_url=$email_return&activity_id=$activity_id
 
 Title: $activity_title
 Description: $activity_description
@@ -526,6 +538,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.71  2005/07/15 22:49:58  vanmer
+ * - changed to allow activities without a company_id to be saved
+ *
  * Revision 1.70  2005/07/08 14:49:57  braverock
  * - fix to properly handle saving activities that are not part of workflow activity templates
  * - trim description fields
