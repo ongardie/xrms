@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.13 2005/07/07 23:17:01 vanmer Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.14 2005/07/15 04:12:53 daturaarutad Exp $
  */
 
 
@@ -463,6 +463,10 @@ END;
 							$form->addElement('select', $field_name, $field['displayName'], $field['enums'], $field['attributes']);
 							break;
 
+						case 'select':
+							$form->addElement('select', $field_name, $field['displayName'], $field['values'], $field['attributes']);
+							break;
+
 						case 'html':
 							$form->addElement('html', $field_name);
 							break;
@@ -643,6 +647,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.14  2005/07/15 04:12:53  daturaarutad
+* added select type
+*
 * Revision 1.13  2005/07/07 23:17:01  vanmer
 * - removed jscalendar_includes, now used in start_page
 * - added functions to redirect immediately after update instead of showing read only page
