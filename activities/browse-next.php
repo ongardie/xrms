@@ -6,9 +6,10 @@
  *
  * @params int $saved_id or $activity_id
  *
+ * @author Aaron van Meerten
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.21 2005/05/31 16:58:08 daturaarutad Exp $
+ * $Id: browse-next.php,v 1.22 2005/07/15 22:47:24 vanmer Exp $
  */
 
 //include required files
@@ -27,36 +28,30 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 // An array of activity IDs within activity type. Allows changes to be made without activities repeating.
 $next_to_check = isset($_SESSION['next_to_check']) ? $_SESSION['next_to_check'] : array();
+
 // The current activity ID that was being viewed through activities/one.php.
 $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
-// The saved ID used if using "Saved Search Browse"
-$saved_id = isset($_GET['saved_id']) ? $_GET['saved_id'] : '';
+
+// If the browse button was pressed from a page (starts new browse of activities)
+getGlobalVar($new_browse, 'browse');
+
 // The last position in the activity IDs
 $pos = isset($_SESSION['pos']) ? $_SESSION['pos']: '';
 $pos = isset($_GET['pos']) ? $_GET['pos'] - 1: $pos;
-if(isset($_GET['pos']) and !$pos) {
+
+
+if(isset($_GET['pos']) and !$pos and $pos!==0) {
     $pos = 1;
 }
 
-if($saved_id) {
+if($new_browse) {
     $next_to_check = array();
     $pos = 0;
     $_SESSION['browse_start'] = time(); 
-    $sql = "SELECT saved_data
-            FROM saved_actions
-            WHERE saved_id=" . $saved_id . "
-            AND (user_id=" . $session_user_id . "
-            OR group_item=1)
-            AND saved_status='a'";
-    $rst = $con->execute($sql);
-    if(!$rst) {
-        db_error_handler($con, $sql);
-    }
-    elseif($rst->rowcount()) {
-        $sql = unserialize($rst->fields['saved_data']);
-        $sql = str_replace('CURRENT_USER', $session_user_id, $sql['sql']);
-        $sql = preg_replace("|^select|i", "select a.activity_id,", $sql);
-    }
+
+    //code to fetch the sql from a saved_search snipped, now uses session variable
+     
+    $sql = $_SESSION['search_sql'];
     $rst = $con->execute($sql);
     if(!$rst) {
         db_error_handler($con, $sql);
@@ -66,77 +61,23 @@ if($saved_id) {
             $next_to_check[] = $rst->fields['activity_id'];
             $rst->movenext();
         }
+        //ensure that any duplicates get removed
+        $next_to_check=array_unique($next_to_check);
     }
 }
 
-while($next_to_check[$pos]) {
-    $time_sql = "SELECT recent_item_id
-                 FROM recent_items
-                 WHERE on_what_table = 'activities'
-                 AND on_what_id = {$next_to_check[$pos]}
-                 AND recent_item_timestamp > " . $con->DBTimeStamp($_SESSION['browse_start']);
-    $time_rst = $con->execute($time_sql); 
-    if(!$time_rst->rowCount()) {
-        break;
-    }
-    ++$pos;
-}
+//broken code to rearrange list of next_to_check activities removed
 
 //If we've created the next_to_check array from outside (ie the saved query)
 if($pos >= count($next_to_check)) {
     header("Location: some.php");
 }
 // If the activity is part of the array, ie if they have already obtained an array, use the array.   
-elseif($saved_id or ($next_to_check[$pos] and is_array($next_to_check) and in_array($activity_id, $next_to_check) and ($pos > 0) and ($pos < count($next_to_check)))) {
-
-    // If they try to traverse it out of order, simply move the array around
-    if(isset($activity_id) and ($activity_id)) {
-        $input = array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
-        array_splice($next_to_check, $pos-1, 0, $input[0]);
-    }
-
-    for($i = $pos; $i < count($next_to_check); $i++) {
-        $activity_id=$next_to_check[$i];
-        
-        //Check for old items
-        $sql = "SELECT a.activity_id, r.recent_item_timestamp
-                FROM activities as a, recent_items as r, contacts as c
-                WHERE r.user_id=" . $session_user_id . " 
-                AND a.activity_id=" . $activity_id . "
-                AND r.on_what_table='activities_companies' 
-                AND r.recent_action='sidebar_view'
-                AND a.company_id=r.on_what_id 
-                AND a.contact_id=c.contact_id
-                AND c.work_phone=''
-                AND c.cell_phone=''";
-        $rst = $con->execute($sql);
-        if(!$rst) {
-            db_error_handler($con, $sql);
-        }
-        elseif($rst->rowcount()) {
-            $recent_timestamp = $rst->fields['recent_item_timestamp'];
-        }
-        else {
-            $recent_timestamp = 0;
-        }
-
-        if($recent_timestamp) {
-            $recent_timestamp .= strtotime(substr($recent_timestamp, 0, 4) . "-"
-                                         . substr($recent_timestamp, 4, 2) . "-"
-                                         . substr($recent_timestamp, 6, 2) . " "
-                                         . substr($recent_timestamp, 8, 2) . ":"
-                                         . substr($recent_timestamp, 10, 2) . ":"
-                                         . substr($recent_timestamp, 12, 2));
-        }
-        
-        if($recent_timestamp < time() - 900) {
-            $input = array_splice($next_to_check, array_search($activity_id, $next_to_check), 1);
-            array_splice($next_to_check, $pos, 0, $input[0]);
-            break;
-        }
-            
-    }
-
+//This moves the activities around based on their recently viewed status.  This is confusing
+elseif($new_browse or ($next_to_check[$pos] and is_array($next_to_check) and in_array($activity_id, $next_to_check) and ($pos >= 0) and ($pos < count($next_to_check)))) {
+    
+    // totally broken code trying to keep multiple users browsing same list from colliding removed
+    
     if($i == count($next_to_check)) {
         header("Location: some.php");
     }
@@ -156,6 +97,12 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.22  2005/07/15 22:47:24  vanmer
+ * - changed browse-next functionality to no longer use saved searches, instead uses sql from last pager view, if
+ * specified
+ * - removed broken code to move order of activities based on recently viewed timestamps, originally intended to
+ * ensure that users do not edit the same activities at the same time
+ *
  * Revision 1.21  2005/05/31 16:58:08  daturaarutad
  * changed activity_id => a.activity_id in browse-next.php
  *
