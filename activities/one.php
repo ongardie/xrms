@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.117 2005/07/08 14:49:57 braverock Exp $
+ * $Id: one.php,v 1.118 2005/07/15 22:52:53 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -22,6 +22,7 @@ require_once('../activities/activities-widget.php');
 getGlobalVar($activity_id, 'activity_id');
 getGlobalVar($msg, 'msg');
 getGlobalVar($return_url, 'return_url');
+
 if (!$return_url) $return_url='/activities/some.php';
 
 $on_what_id=$activity_id;
@@ -41,11 +42,9 @@ update_recent_items($con, $session_user_id, "activities", $activity_id);
 update_daylight_savings($con);
 
 $sql = "select a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name
-from companies c, addresses addr, activities a
+from activities a left join companies c on a.company_id=c.company_id left join addresses addr ON c.default_primary_address=addr.address_id
 left join contacts cont on a.contact_id = cont.contact_id
-where a.company_id = c.company_id
-and c.default_primary_address = addr.address_id
-and activity_id = $activity_id
+where activity_id = $activity_id
 and activity_record_status='a'";
 
 $activity_rst = $con->execute($sql);
@@ -92,7 +91,6 @@ $sql = "SELECT activity_recurrence_id FROM activities_recurrence where activity_
 $recurrence_rst=$con->execute($sql);
 if (!$recurrence_rst) { db_error_handler($con, $sql); }
 $activity_recurrence_id = $recurrence_rst->fields['activity_recurrence_id'];
-
 
 if ($completed_by) {
     $sql = "SELECT " . $con->concat('first_names', "' '", 'last_name') . " as name FROM users WHERE user_id=$completed_by";
@@ -515,7 +513,7 @@ function logTime() {
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("User"); ?></td>
+                <td class=widget_label_right><?php echo _("Owner"); ?></td>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
             </tr>
             <tr>
@@ -713,6 +711,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.118  2005/07/15 22:52:53  vanmer
+ * - changed join to reflect activities without a company
+ * - changed User field to be listed as Owner instead, to reflect standard field labels
+ *
  * Revision 1.117  2005/07/08 14:49:57  braverock
  * - fix to properly handle saving activities that are not part of workflow activity templates
  * - trim description fields
