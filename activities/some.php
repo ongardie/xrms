@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.122 2005/07/10 20:21:30 daturaarutad Exp $
+ * $Id: some.php,v 1.123 2005/07/15 22:51:35 vanmer Exp $
  */
 
 // handle includes
@@ -71,9 +71,10 @@ if($saved_id) {
             $day_diff = $_POST['day_diff'];
         }
     }
-    if($browse) {
-        header("Location: " . $http_site_root . "/activities/browse-next.php?saved_id=" . $saved_id);
-    }
+}
+if($browse) {
+    header("Location: " . $http_site_root . "/activities/browse-next.php?browse=true");
+    exit();
 }
 
 // declare passed in variables
@@ -263,7 +264,7 @@ $rec['saved_action'] = "search";
 $rec['user_id'] = $session_user_id;
 $rec['saved_data'] = str_replace("'", "\\'", serialize($saved_data));
 
-if($saved_title or $browse) {
+if($saved_title) {
     $sql_saved = "SELECT *
             FROM saved_actions
             WHERE (user_id=" . $session_user_id . "
@@ -284,9 +285,6 @@ if($saved_title or $browse) {
         $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
         $con->execute($ins);
         $saved_id = $con->Insert_ID();
-    }
-    if($browse) {
-        header("Location: " . $http_site_root . "/activities/browse-next.php?saved_id=" . $saved_id);
     }
 }
 
@@ -605,6 +603,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.123  2005/07/15 22:51:35  vanmer
+ * - changed to use new method of calling browse-next, relies on the search-sql session variable instead of saved
+ * search
+ *
  * Revision 1.122  2005/07/10 20:21:30  daturaarutad
  * moved sql_offset to activities-widget.php
  *
