@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.22 2005/07/15 22:47:24 vanmer Exp $
+ * $Id: browse-next.php,v 1.23 2005/07/15 23:31:10 vanmer Exp $
  */
 
 //include required files
@@ -34,6 +34,8 @@ $activity_id = isset($_GET['activity_id']) ? $_GET['activity_id'] : '';
 
 // If the browse button was pressed from a page (starts new browse of activities)
 getGlobalVar($new_browse, 'browse');
+getGlobalVar($sql_session_var, 'sql_session_var');
+if (!$sql_session_var) { $sql_session_var='search_sql'; }
 
 // The last position in the activity IDs
 $pos = isset($_SESSION['pos']) ? $_SESSION['pos']: '';
@@ -51,7 +53,7 @@ if($new_browse) {
 
     //code to fetch the sql from a saved_search snipped, now uses session variable
      
-    $sql = $_SESSION['search_sql'];
+    $sql = $_SESSION[$sql_session_var];
     $rst = $con->execute($sql);
     if(!$rst) {
         db_error_handler($con, $sql);
@@ -97,6 +99,10 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.23  2005/07/15 23:31:10  vanmer
+ * - allow arbitrary session variable to be used to store new browse list sql
+ * - defaults to search_sql, set by all activity widgets
+ *
  * Revision 1.22  2005/07/15 22:47:24  vanmer
  * - changed browse-next functionality to no longer use saved searches, instead uses sql from last pager view, if
  * specified
