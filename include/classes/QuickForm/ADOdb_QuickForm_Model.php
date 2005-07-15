@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.12 2005/07/14 20:17:28 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.13 2005/07/15 04:07:20 daturaarutad Exp $
 */
 
 
@@ -312,7 +312,7 @@ class ADOdb_QuickForm_Model {
         * Inform the model that a field is not a database field 
         *
         * This functionality is intended to allow hidden form variables that never end up in the database
-	* and never queried on edit 
+	    * and never queried on edit 
         *
         * @param string Fieldname of the link
         * @param string formValue which will be included a hidden variable
@@ -356,6 +356,29 @@ class ADOdb_QuickForm_Model {
 
         }
 
+    /**
+    * Display this field as a <select> 
+    *
+   	* @param string Name of the field
+	* @param string Name to use for caption
+	* @param array Assoc array of id-display_name to use in select
+	* @param array An array containing additional attributes that will be used in the <select>
+    */
+	function SetSelectField($name, $displayName, $values, $attributes = null) {
+		  
+		$i = $this->GetFieldIndex($name);
+		if(false !== $i) {
+
+   			$this->DBStructure['fields'][$i]['type']= 'select';
+			$this->DBStructure['fields'][$i]['displayName'] = $displayName;
+	    	$this->DBStructure['fields'][$i]['values'] = $values;
+    		$this->DBStructure['fields'][$i]['attributes'] = $attributes;
+	
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	/**
 	* Inform the model that a field should be used as a file field
@@ -642,6 +665,9 @@ class ADOdb_QuickForm_Model {
 
 /**
 * $Log: ADOdb_QuickForm_Model.php,v $
+* Revision 1.13  2005/07/15 04:07:20  daturaarutad
+* added SetSelectField
+*
 * Revision 1.12  2005/07/14 20:17:28  daturaarutad
 * do not return a column name in GetColumns if type is html
 *
