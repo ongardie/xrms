@@ -9,7 +9,7 @@
  * @author Aaron van Meerten
  * @author Neil Roberts
  *
- * $Id: browse-next.php,v 1.23 2005/07/15 23:31:10 vanmer Exp $
+ * $Id: browse-next.php,v 1.24 2005/07/15 23:56:57 daturaarutad Exp $
  */
 
 //include required files
@@ -64,7 +64,7 @@ if($new_browse) {
             $rst->movenext();
         }
         //ensure that any duplicates get removed
-        $next_to_check=array_unique($next_to_check);
+        $next_to_check=array_merge(array_unique($next_to_check), array());
     }
 }
 
@@ -99,6 +99,9 @@ $con->close();
 
 /**
  * $Log: browse-next.php,v $
+ * Revision 1.24  2005/07/15 23:56:57  daturaarutad
+ * fix next_to_check array
+ *
  * Revision 1.23  2005/07/15 23:31:10  vanmer
  * - allow arbitrary session variable to be used to store new browse list sql
  * - defaults to search_sql, set by all activity widgets
