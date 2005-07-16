@@ -36,6 +36,7 @@ require_once('../calendar/Calendar_View.php');
 */
 function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null, $show_mini_search = true) {
 
+global $http_site_root;
 
 // This should probably be a system preference.
 $description_substring_length = 80;
@@ -441,7 +442,7 @@ if('list' != $activities_widget_type) {
                 <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">
                 <input type=button class=button onclick=\"javascript: exportIt();\" value=\"" . _("Export") ."\">
                 <input type=button class=button onclick=\"javascript: bulkEmailActivity();\" value=\"" . _("Mail Merge") . "\">
-                <input type=button class=button onclick=\"javascript: location.href='browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\"></td>
+                <input type=button class=button onclick=\"javascript: location.href='$http_site_root/activities/browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\"></td>
                 </tr>\n";
 
     $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
@@ -743,6 +744,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.28  2005/07/16 00:19:25  daturaarutad
+* add http_site_root to browse link
+*
 * Revision 1.27  2005/07/16 00:13:51  daturaarutad
 * save activities_sql for browse button
 *
