@@ -4,7 +4,7 @@
  *
  * Search for and View a list of activities
  *
- * $Id: some.php,v 1.123 2005/07/15 22:51:35 vanmer Exp $
+ * $Id: some.php,v 1.124 2005/07/16 00:17:14 daturaarutad Exp $
  */
 
 // handle includes
@@ -36,7 +36,6 @@ $arr_vars = array ( // local var name       // session variable name
            'saved_title'        => arr_vars_POST_UNDEF,
            'group_item'         => arr_vars_POST_UNDEF,
            'delete_saved'       => arr_vars_POST_UNDEF,
-           'browse'             => arr_vars_POST_UNDEF,
            );
 
 $advanced_search = (!empty($_REQUEST['advanced_search'])) ? true : false;
@@ -71,10 +70,6 @@ if($saved_id) {
             $day_diff = $_POST['day_diff'];
         }
     }
-}
-if($browse) {
-    header("Location: " . $http_site_root . "/activities/browse-next.php?browse=true");
-    exit();
 }
 
 // declare passed in variables
@@ -492,7 +487,6 @@ start_page($page_title, true, $msg);
             <tr>
                 <td class=widget_content_form_element colspan=4>
                     <input name="submitted" type=submit class=button value="<?php echo _("Search"); ?>">
-                    <input name="browse" type=submit class=button value="<?php echo _("Browse"); ?>">
                     <input name="button" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php
                         if(!$advanced_search) {
@@ -603,6 +597,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.124  2005/07/16 00:17:14  daturaarutad
+ * moved browse button to activities_widget.php
+ *
  * Revision 1.123  2005/07/15 22:51:35  vanmer
  * - changed to use new method of calling browse-next, relies on the search-sql session variable instead of saved
  * search
