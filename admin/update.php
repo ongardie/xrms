@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.92 2005/07/08 20:29:51 vanmer Exp $
+ * $Id: update.php,v 1.93 2005/07/16 00:01:13 vanmer Exp $
  */
 
 // where do we include from
@@ -5039,6 +5039,10 @@ $rst = $con->execute($sql);
 
 $sql = "ALTER TABLE files ADD last_modified_on DATETIME NOT NULL, ADD last_modified_by VARCHAR( 11 ) NOT NULL";
 $rst = $con->execute($sql);
+
+//add needed sort_order field to make campaigns better able to handle workflow (eventually)
+$sql = "ALTER TABLE `campaign_statuses` ADD `sort_order` TINYINT DEFAULT '1' NOT NULL ";
+$rst = $con->execute($sql);
     
     
 $count=upgrade_system_parameter_user_preferences($con);
@@ -5070,6 +5074,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.93  2005/07/16 00:01:13  vanmer
+ * - added needed sort_order, unused as of yet, needed for workflow
+ *
  * Revision 1.92  2005/07/08 20:29:51  vanmer
  * - moved display field addition to before addition of new options
  *
