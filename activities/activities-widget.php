@@ -36,6 +36,7 @@ require_once('../calendar/Calendar_View.php');
 */
 function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null, $show_mini_search = true) {
 
+
 // This should probably be a system preference.
 $description_substring_length = 80;
 
@@ -429,7 +430,9 @@ if('list' != $activities_widget_type) {
     global $activity_column_names;
     $activity_column_names = $pager_columns->GetUserColumnNames();
 
-
+    // save sql for browse button
+    $sql_session_var = $form_name . '_activities_sql';
+    $_SESSION[$sql_session_var] = $activity_sql;
 
 
     $endrows = $end_rows .
@@ -437,7 +440,9 @@ if('list' != $activities_widget_type) {
                 $pager_columns_button
                 <input type=button class=button onclick=\"javascript: document.$form_name.activities_widget_type.value='calendar'; document.$form_name.submit();\" name=\"calendar_view\" value=\"" . _("Calendar View") ."\">
                 <input type=button class=button onclick=\"javascript: exportIt();\" value=\"" . _("Export") ."\">
-                <input type=button class=button onclick=\"javascript: bulkEmailActivity();\" value=\"" . _("Mail Merge") . "\"></td></tr>\n";
+                <input type=button class=button onclick=\"javascript: bulkEmailActivity();\" value=\"" . _("Mail Merge") . "\">
+                <input type=button class=button onclick=\"javascript: location.href='browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\"></td>
+                </tr>\n";
 
     $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
     $pager->AddEndRows($endrows);
@@ -738,6 +743,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.27  2005/07/16 00:13:51  daturaarutad
+* save activities_sql for browse button
+*
 * Revision 1.26  2005/07/11 15:50:23  ycreddy
 * Fixes to date in the where clause and the Count Query
 *
