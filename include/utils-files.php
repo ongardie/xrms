@@ -7,7 +7,7 @@
  *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.4 2005/07/08 19:21:37 jswalter Exp $
+ * $Id: utils-files.php,v 1.5 2005/07/17 16:02:57 maulani Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -369,7 +369,7 @@ function add_file_record( $con, $files_data )
         // files plugin hook allows external storage of files.  see plugins/owl/README for example
         // params: (file_field_name, record associative array)
         $file_plugin_params = array('file1', $rec);
-        do_hook_function('file_add_file', &$file_plugin_params);
+        do_hook_function('file_add_file', $file_plugin_params);
 
         if($file_plugin_params['external_id']) {
             $rec['external_id'] = $file_plugin_params['external_id'];
@@ -594,6 +594,9 @@ function get_file_records( $con, $files_data )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.5  2005/07/17 16:02:57  maulani
+ * - Remove runtime pass-by-reference.  Function is defined as pass-by-reference
+ *
  * Revision 1.4  2005/07/08 19:21:37  jswalter
  *  - clarified comments in 'add_file()'
  *  - removed the DB INSERT from 'add_file()', now uses new external method
