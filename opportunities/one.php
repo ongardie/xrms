@@ -2,7 +2,7 @@
 /**
  * View a single Sales Opportunity
  *
- * $Id: one.php,v 1.52 2005/07/07 20:23:14 braverock Exp $
+ * $Id: one.php,v 1.53 2005/07/19 16:06:06 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -36,7 +36,7 @@ $sql = "SELECT
 o.*,
 c.company_id, c.company_name, c.company_code,
 d.division_name,
-cont.first_names, cont.last_name, cont.work_phone, cont.email, cont.address_id,
+cont.first_names, cont.last_name, cont.work_phone, cont.work_phone_ext, cont.email, cont.address_id,
 u1.username as entered_by_username, u2.username as last_modified_by_username,
 u3.username as opportunity_owner_username, u4.username as account_owner_username,
 as1.account_status_display_html, r.rating_display_html, crm_status_display_html,
@@ -78,6 +78,10 @@ if ($rst) {
     $first_names = $rst->fields['first_names'];
     $last_name = $rst->fields['last_name'];
     $work_phone = get_formatted_phone($con, $rst->fields['address_id'], $rst->fields['work_phone']);
+    $work_phone_ext = $rst->fields['work_phone_ext'];
+    if (trim($work_phone_ext)) {
+            $work_phone = $work_phone . '&nbsp;' . _("x") . $work_phone_ext;
+    }
     $email = $rst->fields['email'];
     $crm_status_display_html = $rst->fields['crm_status_display_html'];
     $account_status_display_html = $rst->fields['account_status_display_html'];
@@ -390,6 +394,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.53  2005/07/19 16:06:06  braverock
+ * - add work phone extension to display, if it exists
+ *
  * Revision 1.52  2005/07/07 20:23:14  braverock
  * - remove obsolete menu queries replaced by new activities-widget code
  *
