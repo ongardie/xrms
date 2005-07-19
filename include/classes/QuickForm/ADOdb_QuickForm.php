@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.14 2005/07/15 04:12:53 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.15 2005/07/19 19:36:10 daturaarutad Exp $
  */
 
 
@@ -384,6 +384,7 @@
 					case 'time':
  						$form->addElement('text', $field_name, $field['displayName'], $field['attributes']);
  						break;
+					case 'longtext':
 					case 'textarea':
 	          			$form->addElement('textarea', $field_name, $field['displayName'], $field['attributes']);
 	          			break;
@@ -647,6 +648,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.15  2005/07/19 19:36:10  daturaarutad
+* added longtext type handling
+*
 * Revision 1.14  2005/07/15 04:12:53  daturaarutad
 * added select type
 *
