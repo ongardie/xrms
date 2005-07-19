@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.122 2005/07/07 20:19:29 braverock Exp $
+ * $Id: one.php,v 1.123 2005/07/19 16:11:49 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -98,7 +98,7 @@ if ($rst) {
     $phone2 = get_formatted_phone($con, $address_id, $rst->fields['phone2']);
     $fax = get_formatted_phone($con, $address_id, $rst->fields['fax']);
     $url = $rst->fields['url'];
-    if ((substr($url, 0, 4)!=='http') and (strlen($url) >0)) {
+    if ((substr($url, 0, 4)!=='http') and (strlen(trim($url)) >0)) {
         $url = 'http://'.$url;
     }
     $employees = $rst->fields['employees'];
@@ -722,6 +722,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.123  2005/07/19 16:11:49  braverock
+ * - properly trim URL before displaying an empty URL
+ *
  * Revision 1.122  2005/07/07 20:19:29  braverock
  * - remove obsolete menu queries replaced by new activities-widget code
  *
