@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.24 2005/07/08 21:18:52 jswalter Exp $
+* $Id: email-4.php,v 1.25 2005/07/20 22:15:30 jswalter Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -35,34 +35,36 @@ if ( $_SESSION['email_sent'] === false )
     $attachment_list = $_SESSION['attachment_list'];
 
     // Loop through entire FILES list and atache them to the message
-    foreach ( $attachment_list as $_ugly => $_file )
+    if ( $attachment_list )
     {
-        if ( $_file == '' )
-            continue;
+        foreach ( $attachment_list as $_ugly => $_file )
+        {
+            if ( $_file == '' )
+                continue;
 
-        // Create array to store file data
-        $_fileData[$_file] = array();
+            // Create array to store file data
+            $_fileData[$_file] = array();
 
-        // Full path
-        $_fileData[$_file]['path'] = $GLOBALS['file_storage_directory'] . $_ugly;
+            // Full path
+            $_fileData[$_file]['path'] = $GLOBALS['file_storage_directory'] . $_ugly;
 
-    // NOTE: comented this out until we figure out why PHP method barfs
-    //    if (!function_exists('mime_content_type')) {
-            // this version of PHP doesn't have the mime functions
-            // compiled in, so load our drop-in replacement function
-            // instead
-            require_once($include_directory . 'mime/mime-array.php');
-    //    }
-        // we need the file's MIME type
-        $_fileData[$_file]['mime'] = mime_content_type_ ( $_file );
+        // NOTE: comented this out until we figure out why PHP method barfs
+        //    if (!function_exists('mime_content_type')) {
+                // this version of PHP doesn't have the mime functions
+                // compiled in, so load our drop-in replacement function
+                // instead
+                require_once($include_directory . 'mime/mime-array.php');
+        //    }
+            // we need the file's MIME type
+            $_fileData[$_file]['mime'] = mime_content_type_ ( $_file );
 
-        // we need the file itself
-        $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
+            // we need the file itself
+            $_fileData[$_file]['content'] = getFile($_fileData[$_file]['path']);
 
-        // We need the these later
-        $_fileData[$_file]['file_filesystem_name'] = $_ugly;
-        $_fileData[$_file]['size']                 = strlen($_fileData[$_file]['content']);
-
+            // We need the these later
+            $_fileData[$_file]['file_filesystem_name'] = $_ugly;
+            $_fileData[$_file]['size']                 = strlen($_fileData[$_file]['content']);
+        }
     }
 
     $con = &adonewconnection($xrms_db_dbtype);
@@ -329,6 +331,9 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.25  2005/07/20 22:15:30  jswalter
+*  - corrected issue around an empty "$attachment_list'
+*
 * Revision 1.24  2005/07/08 21:18:52  jswalter
 *  - added conditional check so message is not sent more than once
 *
