@@ -8,7 +8,7 @@
 // | Email         walter@torres.ws                                         |
 // | Web           http://web.php-yacs.org                                  |
 // | Mirror        http://php-yacs.sourceforge.net/                         |
-// | $Id: files.php,v 1.3 2005/07/19 18:38:07 vanmer Exp $                 |
+// | $Id: files.php,v 1.4 2005/07/20 18:44:32 jswalter Exp $                 |
 // +------------------------------------------------------------------------+
 // | This source file is subject to version 3.00 of the PHP License,        |
 // | that is available at http://www.php.net/license/3_0.txt.               |
@@ -39,8 +39,8 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Id: files.php,v 1.3 2005/07/19 18:38:07 vanmer Exp $
- * @date      $Date: 2005/07/19 18:38:07 $
+ * @version   $Id: files.php,v 1.4 2005/07/20 18:44:32 jswalter Exp $
+ * @date      $Date: 2005/07/20 18:44:32 $
  *
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -287,7 +287,7 @@
  *
  * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  *
  */
 class File
@@ -897,11 +897,11 @@ class File
     }
 // }}}
 // {{{ $this->getFullOrgPath
-function getFullOrgPath()
-{
-    return $this->_fileOrgPath . $this->_fileOrgName;
-}
-// }}}
+    function getFullOrgPath()
+    {
+        return $this->_fileOrgPath . $this->_fileOrgName;
+    }
+    // }}}
 // {{{ setFileMimeType
     function setFileMimeType($_mimeType = null)
     {
@@ -909,7 +909,13 @@ function getFullOrgPath()
             $this->_mimeType = $_mimeType;
 
         else
+        {
+            if (!function_exists('mime_content_type_')) {
+                include_once(dirname(__FILE__) . '/mime-array.php');
+            }
+
             $this->_mimeType = mime_content_type_( $this->getFullOrgPath() );
+        }
     }
 // }}}
 // {{{ getFileMimeType
@@ -1403,11 +1409,14 @@ function getFullOrgPath()
 
 /**
  * $RCSfile: files.php,v $
- * $Revision: 1.3 $
- * $Date: 2005/07/19 18:38:07 $
- * $Author: vanmer $
+ * $Revision: 1.4 $
+ * $Date: 2005/07/20 18:44:32 $
+ * $Author: jswalter $
  *
  * $Log: files.php,v $
+ * Revision 1.4  2005/07/20 18:44:32  jswalter
+ *  - corrected include mime_type.php problem
+ *
  * Revision 1.3  2005/07/19 18:38:07  vanmer
  * - this file requires that the mime type function be available for it to use, so adding a require_once at the top of
  * the file
