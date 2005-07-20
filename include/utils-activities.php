@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.18 2005/07/08 02:35:39 vanmer Exp $
+ * $Id: utils-activities.php,v 1.19 2005/07/20 22:20:17 jswalter Exp $
 
  */
 
@@ -122,9 +122,9 @@ function add_activity($con, $activity_data, $participants=false)
     if ($activity_resolution_type_id > 0) { $rec['activity_resolution_type_id'] = $activity_resolution_type_id; }
     if ($activity_priority_id > 0) { $rec['activity_priority_id']           = $activity_priority_id; }
     if ($resolution_description > 0) { $rec['resolution_description']           = $resolution_description; }
-    
+
     $tbl = 'activities';
-    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $ins = $con->GetInsertSQL($tbl, $rec, false);
     $rst=$con->execute($ins);
     if (!$rst) { db_error_handler($con, $ins); return false; }
     $activity_id = $con->insert_id();
@@ -171,7 +171,7 @@ function get_activity($con, $activity_data, $show_deleted=false, $return_records
         $where['activity_id'] = $activity_data['activity_id'];
         $wherestr=make_where_string($con, $where, $tablename);
     } else {
-        
+
         $extra_where=array();
         foreach ($activity_data as $akey=>$aval) {
             switch ($akey) {
@@ -257,9 +257,9 @@ function update_activity($con, $activity_data, $activity_id=false, $activity_rst
             $activity_data['completed_by']='NULL';
             $activity_data['completed_at']='NULL';
         }
-    
+
     $update_sql = $con->getUpdateSQL($activity_rst, $activity_data,false,  get_magic_quotes_gpc());
-    
+
     if ($update_sql) {
         $update_rst=$con->execute($update_sql);
         if (!$update_rst) { db_error_handler($con, $update_sql); return false; }
@@ -569,7 +569,7 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
 }
 
 
- 
+
 function install_default_activity_participant_positions($con) {
     //set these variables in order to allow localization of these strings.  New positions should also be added in this manner
     $s=_("Caller");
@@ -616,17 +616,17 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
     global $session_user_id;
     //hack to return the current user if no role was specified
     if (!$role_id) return false;
-    if (!$due_date) $due_date=time();        
+    if (!$due_date) $due_date=time();
     $users_in_role = get_users_in_role($con, $role_id);
     if (!$users_in_role) return false;
     $user_counts=array();
-    
+
     foreach ($users_in_role as $user_id) {
         $rec['user_id']=$user_id;
         $rec['activity_status']='o';
         $rec['due_before']=$due_date;
         $activity_list=get_activity($con, $rec);
-        $user_counts[$user_id]=count($activity_list);    
+        $user_counts[$user_id]=count($activity_list);
     }
     asort($user_counts);
     $users=array_keys($user_counts);
@@ -636,6 +636,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.19  2005/07/20 22:20:17  jswalter
+  *  - seems that the "GetInsertSQL" was not behaving properly. It nw handles quotes properly
+  *
   * Revision 1.18  2005/07/08 02:35:39  vanmer
   * - changed to return false instead of session_user_id when failed to find least available user for a role
   *
