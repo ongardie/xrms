@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.10 2005/01/28 22:58:22 braverock Exp $
+ * $Id: add-division.php,v 1.11 2005/07/21 22:13:27 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -18,6 +18,9 @@ $session_user_id = session_check('','Create');
 
 $company_id = $_POST['company_id'];
 $division_name = $_POST['division_name'];
+if (!strlen($division_name)) {
+    $division_name = _("[none]");
+}
 $address_id = $_POST['address_id'];
 $description = $_POST['description'];
 
@@ -54,6 +57,9 @@ header("Location: one.php?msg=division_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.11  2005/07/21 22:13:27  braverock
+ * - set a default name for division if no name specified
+ *
  * Revision 1.10  2005/01/28 22:58:22  braverock
  * - change return_url to companies/one.php with the correct message
  *

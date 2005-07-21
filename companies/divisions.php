@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: divisions.php,v 1.13 2005/06/07 21:06:37 braverock Exp $
+ * $Id: divisions.php,v 1.14 2005/07/21 22:13:27 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -37,6 +37,9 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     while (!$rst->EOF) {
+        if (!strlen($rst->fields['division_name'])){
+            $rst->fields['division_name'] = _("[none]");
+        }
         $division_html .= '<tr>';
         $division_html .= "<td class=widget_label><a href=edit-division.php?company_id=$company_id&division_id=" . $rst->fields['division_id'] . '>' . $rst->fields['division_name'] . '</a></td>';
         $division_html .=   '<td class=widget_content>'
@@ -112,6 +115,9 @@ end_page();
 
 /**
  * $Log: divisions.php,v $
+ * Revision 1.14  2005/07/21 22:13:27  braverock
+ * - set a default name for division if no name specified
+ *
  * Revision 1.13  2005/06/07 21:06:37  braverock
  * - sort address drop-down menu by address_name
  *
