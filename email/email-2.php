@@ -3,7 +3,7 @@
 *
 * Email 2.
 *
-* $Id: email-2.php,v 1.14 2005/07/08 02:15:27 jswalter Exp $
+* $Id: email-2.php,v 1.15 2005/07/22 17:30:11 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -242,7 +242,7 @@ function nextPage( $_where, $_what )
     </tr>
     <tr>
         <td class="widget_label_right" width="1%" nowrap>
-            <?php echo _("Attachements"); ?>:
+            <?php echo _("Attachments"); ?>:
         </td>
         <td class="widget_content_form_element">
             <input type="file"
@@ -367,6 +367,9 @@ end_page();
 
 /**
 * $Log: email-2.php,v $
+* Revision 1.15  2005/07/22 17:30:11  braverock
+* - fix spelling of Attachment
+*
 * Revision 1.14  2005/07/08 02:15:27  jswalter
 *  - added pre-defined FILES handling
 *  - modified how attached files are passed
