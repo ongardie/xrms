@@ -6,10 +6,18 @@ require_once(ACL_PATH.'xrms_acl_config.php');
 require_once(ACL_PATH.'acl_install.php');
 $acl_options=$options;
 
+function get_acl_object($access_info=false, $con=false, $callbacks=false, $context='default') {
+    if (!$callbacks) {
+        $callbacks='xrms_acl_auth_callback';
+    }
+      $acl = new xrms_acl($access_info, $con, $callbacks, $context );
+      return $acl;
+}
+
 function get_users_in_role($con, $role) {
     global $session_user_id;
     global $acl_options;
-    $acl = new xrms_acl($acl_options, $con);
+    $acl = get_acl_object($acl_options, $con);
     $role_id=get_role_id($acl, $role);
     $ret = $acl->get_role_users($role_id);
     if (!$ret) return false;
@@ -23,7 +31,7 @@ function get_users_in_role($con, $role) {
 function get_group_users($acl_group, $acl_role = false, $acl=false) {
     global $acl_options;
     if (!$acl) {
-        $acl = new xrms_acl($acl_options);
+        $acl = get_acl_object($acl_options);
     }
     $group_id=get_group_id($acl, $acl_group);
     if (!$group_id) {
@@ -52,7 +60,7 @@ function get_group_users($acl_group, $acl_role = false, $acl=false) {
 
 function check_acl_object_recursion($con, $ParentControlledObject_id, $ChildControlledObject_id) {
     global $acl_options;
-    $acl = new xrms_acl($acl_options, $con);
+    $acl = get_acl_object($acl_options, $con);
     //get list of objects above the parent
     $ControlledObjectRelationships = $acl->get_controlled_object_relationship(false, $ParentControlledObject_id, false, true);
     if ($ControlledObjectRelationships) {
@@ -74,7 +82,7 @@ function check_acl_object_recursion($con, $ParentControlledObject_id, $ChildCont
 }
 function check_acl_group_recursion($Group_id, $ChildGroup_id) {
     global $acl_options;
-    $acl = new xrms_acl($acl_options);
+    $acl = get_acl_object($acl_options);
     
     $groupList = $acl->get_group_user(false, false, false, $Group_id);
     if ($Group_id==$ChildGroup_id) return false;
@@ -91,7 +99,7 @@ function check_acl_group_recursion($Group_id, $ChildGroup_id) {
 function check_user_role($acl, $user_id, $role) {
     global $acl_options;
     if (!$acl)
-        $acl = new xrms_acl($acl_options);
+        $acl = get_acl_object($acl_options);
         
     if (!$user_id) return false;
     if (!$role) return false;
@@ -110,10 +118,10 @@ function check_role_access($acl=false, $user_id) {
     global $on_what_table;
     if (!$user_id) return false;
     
-    $acl = new xrms_acl($acl_options);
+    $acl = get_acl_object($acl_options);
     
     $roles=get_user_roles($acl, $user_id);
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
         
     
     $path=$_SERVER["SCRIPT_FILENAME"];
@@ -133,9 +141,9 @@ function check_role_access($acl=false, $user_id) {
 function check_permission($user_id, $action=false, $object=false,  $on_what_id, $table=false, $role=false, $db_connection=false) {
     global $acl_options;
     if ($db_connection) {
-        $acl=new xrms_acl($acl_options, $db_connection);
+        $acl=get_acl_object($acl_options, $db_connection);
     } else {
-        $acl = new xrms_acl($acl_options);
+        $acl = get_acl_object($acl_options);
     }
     
     $object_id=get_object_id($acl, $object, $table, $role);
@@ -164,9 +172,9 @@ function check_permission_bool($user_id, $object=false, $on_what_id, $action='Re
 function check_object_permission($user_id, $object, $action, $table, $role=false, $db_connection=false) {
     global $acl_options;
     if ($db_connection) {
-        $acl = new xrms_acl($acl_options, $db_connection);
+        $acl = get_acl_object($acl_options, $db_connection);
     } else {
-        $acl = new xrms_acl($acl_options);
+        $acl = get_acl_object($acl_options);
     }
     $object_id=get_object_id($acl, $object, $table, $role);
     //no object id, returning true to allow access to uncontrolled area
@@ -197,7 +205,7 @@ function acl_get_list($user_id, $action='Read', $object=false, $table=false) {
 //    echo "Getting list<br>";
     if (!$user_id) return false;
     
-    $acl = new xrms_acl($acl_options);
+    $acl = get_acl_object($acl_options);
     $object_id=get_object_id($acl, $object, $table);
 //    echo "Getting object<br>";
     if (!$object_id) return false;
@@ -215,7 +223,7 @@ function acl_get_list($user_id, $action='Read', $object=false, $table=false) {
 function get_role_name($acl=false, $role) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     if (is_numeric($role)) {
         $roleData=$acl->get_role(false, $role);
         if ($roleData) {
@@ -227,7 +235,7 @@ function get_role_name($acl=false, $role) {
 function get_user_roles($acl=false, $user_id, $group=false, $use_role_names=true) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     if (!$user_id) return array();
     
     if ($group) {
@@ -253,7 +261,7 @@ function get_user_roles($acl=false, $user_id, $group=false, $use_role_names=true
 function get_user_roles_with_groups($acl, $user_id, $use_role_names=true) {
    global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     if (!$user_id) return array();
     $RoleList = $acl->get_user_roles_by_array(array(false), $user_id);
     if ($RoleList) {
@@ -271,7 +279,7 @@ function get_user_roles_with_groups($acl, $user_id, $use_role_names=true) {
 function find_object_by_base($acl=false, $role=false) {
     global $acl_options;
     global $on_what_table;
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     
     if ($on_what_table) {
         $object_id=get_object_id($acl, false, $on_what_table);
@@ -315,7 +323,7 @@ function find_object_by_base($acl=false, $role=false) {
 function get_object_id($acl=false, $object=false, $table=false, $role=false) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     if (!$object AND !$table) {
         $object_id=find_object_by_base($acl, $role);
     } else {
@@ -333,7 +341,7 @@ function get_object_id($acl=false, $object=false, $table=false, $role=false) {
 function get_group_id($acl=false, $group=false) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     if (!$group) return false;
     if (!is_numeric($group)) {
             $group_data = $acl->get_group($group);
@@ -346,7 +354,7 @@ function get_group_id($acl=false, $group=false) {
 function get_role_id($acl=false, $role=false) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     if (!$role) return false;
     if (!is_numeric($role)) {
             $role_data = $acl->get_role($role);
@@ -358,7 +366,7 @@ function get_role_id($acl=false, $role=false) {
 
 function get_role_list($acl=false, $return_menu=true, $field_name='role_id', $role_id=false, $show_blank_first=true) {
     global $acl_options;
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
 
     if ($return_menu) {
         $list_rst=$acl->get_role_list(false);
@@ -375,7 +383,7 @@ function get_role_list($acl=false, $return_menu=true, $field_name='role_id', $ro
 function delete_group($acl=false, $Group) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     $group_id= get_group_id($acl, $Group);
     if (!$group_id) { echo "Failed to delete group $Group."; return false; }
     return $acl->delete_group($Group);
@@ -383,14 +391,14 @@ function delete_group($acl=false, $Group) {
 function get_acl_group($acl, $groupName, $group_id) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     $ret=$acl->get_group($groupName, $group_id);
     return $ret;
 }
 function add_group($acl=false, $groupName, $object=false, $on_what_id=false) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
 
     //if we can't add the group, check to see if it already exists
     if (!$ret = $acl->add_group($groupName)) {
@@ -414,7 +422,7 @@ function add_group_object($acl=false, $group, $object, $on_what_id) {
     global $acl_options;
     if (!$on_what_id) return false;    
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
         
     $group_id=get_group_id($acl, $group);
     if (!$group_id) return false;
@@ -438,7 +446,7 @@ function add_group_object($acl=false, $group, $object, $on_what_id) {
 function delete_group_object($acl, $GroupMember_id=false, $group=false, $object=false, $on_what_id=false) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
         
     if ($group) {
         $group_id=get_group_id($acl, $group);
@@ -469,7 +477,7 @@ function delete_group_object($acl, $GroupMember_id=false, $group=false, $object=
 function add_user_group($acl=false, $group, $user_id, $role, $silent=false) {
     global $acl_options;
     
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     
     $group_id=get_group_id($acl, $group);
     if (!$group_id) return false;
@@ -497,14 +505,14 @@ function add_user_group($acl=false, $group, $user_id, $role, $silent=false) {
 }
 function get_group_user($acl, $GroupUser_id) {
     global $acl_options;
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     $group_user = $acl->get_group_user(false, false, false, false, $GroupUser_id, true);
     return $group_user;
 }
 function delete_user_group($acl, $GroupUser_id=false, $group=false, $user_id=false, $role=false) {
     global $acl_options;
         
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     if ($group) {
         $group_id=get_group_id($acl, $group);
         if (!$group_id) { echo "No Group Specified"; return false; }
