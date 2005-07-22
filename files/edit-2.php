@@ -2,7 +2,7 @@
 /**
  * Insert Updated File information into the database
  *
- * $Id: edit-2.php,v 1.5 2005/06/30 22:12:52 vanmer Exp $
+ * $Id: edit-2.php,v 1.6 2005/07/22 15:55:37 ycreddy Exp $
  */
 
 //include required files
@@ -73,10 +73,13 @@ $con->close();
 if (!$return_url) {
     $return_url="one.php?msg=saved&file_id=$file_id";
 }
-header("Location: $return_url");
+header("Location: " . $http_site_root . $return_url);
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.6  2005/07/22 15:55:37  ycreddy
+ * Added missing  for return url
+ *
  * Revision 1.5  2005/06/30 22:12:52  vanmer
  * - changed to allow saved files to return to passed in return URL instead of always back to files/one.php
  *
