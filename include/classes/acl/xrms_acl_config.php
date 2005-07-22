@@ -5,7 +5,7 @@
  * Design copyright 2004 Explorer Fund Advisors
  * All Rights Reserved
  *
- * $Id: xrms_acl_config.php,v 1.4 2005/04/07 18:14:30 vanmer Exp $
+ * $Id: xrms_acl_config.php,v 1.5 2005/07/22 23:14:43 vanmer Exp $
  */
 
 /**
@@ -49,8 +49,38 @@
      $options['XRMS'] = $options['default'];
      $options['XRMS']['db_dbname'] = $xrms_db_dbname;
  }
+ 
+function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
+    global $options;
+    if ($data_source_name=='default' OR $data_source_name=='XRMS') {
+        $mycon=get_xrms_dbconnection();
+        if ($mycon AND (strpos(get_class($mycon),'adodb')==0)) {
+            return $mycon;
+        } else {
+            $authInfo=$options;
+        }
+    }
+    
+    //add key to pluginInfo so plugins know they should try to make a connection or provide auth info for this data_source_name
+    $pluginInfo[$data_source_name]=array();
+    
+    //try to get back a return (adodbconnection) or pluginInfo populated with $pluginInfo[$data_source_name]  
+    $option_value=do_hook_function('xrms_acl_auth', $pluginInfo);
+    if ($option_value AND (get_class($option_value)=='adodbconnection')) {
+        return $option_value;
+    } else {
+        if (count($pluginInfo[$data_source_name])>0) {
+           $authInfo[$data_source_name]=$pluginInfo[$data_source_name];
+        }
+        return false;
+    }
+}
+ 
 /**
  * $Log: xrms_acl_config.php,v $
+ * Revision 1.5  2005/07/22 23:14:43  vanmer
+ * - added callback function to provide the ACL with authentication information
+ *
  * Revision 1.4  2005/04/07 18:14:30  vanmer
  * - changed second parameter to do_hook_function to pass variable instead of passing reference (reference is now in function definition)
  *
