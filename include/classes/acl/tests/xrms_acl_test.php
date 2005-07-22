@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.6 2005/07/07 19:38:57 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.7 2005/07/22 23:14:14 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -30,7 +30,8 @@ Class ACLTest extends PHPUnit_TestCase {
    function setUp() {
        global $options;
        $this->options = $options;
-       $this->acl = new xrms_acl ($this->options );
+//       $this->acl = new xrms_acl ($this->options );
+        $this->acl = new xrms_acl (false, false, 'xrms_acl_auth_callback' );
         $this->user = 1;
         $this->scope = "World";
         $this->permission=1;
@@ -1137,7 +1138,31 @@ Class ACLTest extends PHPUnit_TestCase {
         $this->test_delete_controlled_object($ControlledObject);
     
     }
+     
+    
+    function test_acl_callback_setup($authCallbacks=false, $secondCallback=false) {
+        if ($authCallbacks) {
+            $authCallbacks=array('test_xrms_acl_auth');
+            $secondCallback='second_test_xrms_acl';
+        }
+        $test_acl=new xrms_acl(false, false, false, $authCallbacks);
+        $ret=$test_acl->add_authCallback($secondCallback);
+        $authCallbacks[]=$secondCallback;
+        $this->assertTrue($ret, "Failed to add $secondCallback auth callback to ACL object");
         
+        $callbacks=$test_acl->get_authCallbacks();
+        foreach ($authCallbacks as $ac) {
+            $ck=array_search($ac, $callbacks);
+            $this->assertTrue($ck!==false, "Failed to find callback $ac in ACL authCallbacks collection");
+            if ($ck!==false) {
+                unset($callbacks[$ck]);
+            }
+            $ret=$test_acl->remove_authCallback($ac);
+            $this->assertTrue($ret, "Failed to remove auth callback from ACL object");
+        }
+        $this->assertTrue(count($callbacks)==0, "Found more callback options than passed in");
+        unset($test_acl);
+    }
     
  }
 $suite = new PHPUnit_TestSuite( "ACLTest" );
@@ -1162,6 +1187,9 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.7  2005/07/22 23:14:14  vanmer
+ * - added tests for new method of passing database connections to the ACl
+ *
  * Revision 1.6  2005/07/07 19:38:57  vanmer
  * - added test for newly created function to query for users in a role
  *
