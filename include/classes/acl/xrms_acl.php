@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.22 2005/07/07 19:38:16 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.23 2005/07/22 23:35:33 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -22,6 +22,8 @@ class xrms_acl {
     var $DBConnection=false;
     //Options for connection, used to instantiate the DB connection
     var $DBOptions=array();
+    var $authCallbacks=array();
+    var $context_data_source_name='default';
 
     /*****************************************************************************/
     /** function xrms_acl
@@ -32,14 +34,118 @@ class xrms_acl {
      * @return Object of type xrms_acl
      *
      **/
-    function xrms_acl($DBOptionSet=false, $con=false) {
+    function xrms_acl($DBOptionSet=false, $con=false, $authCallbacks=false, $context_data_source_name='default') {
         if ($DBOptionSet) {
             $this->DBOptions=$DBOptionSet;
         }
+        
+        if ($context_data_source_name) {
+            $this->context_data_source_name=$context_data_source_name;
+        }
+        
+        if ($authCallbacks) {
+            if (!is_array($authCallbacks)) { $authCallbacks=array($authCallbacks); }
+            $this->authCallbacks=$authCallbacks;
+        }
+        
         if (!$con) {
             $this->DBConnection = $this->get_object_adodbconnection();
         } else $this->DBConnection=$con;        
     }
+    
+    
+    /*****************************************************************************/
+    /** function get_context_data_source_name
+     *
+     * Returns the string used to identify the context within which objects without a data source will be referenced
+     *
+     * @return string with data_source_name
+     *
+     **/
+    function get_context_data_source_name() {
+        return $this->context_data_source_name;    
+    }
+
+    /*****************************************************************************/
+    /** function set_context_data_source_name
+     *
+     * Sets the string used to identify the context within which objects without a data source will be referenced
+     *
+     * @param string $data_source_name with name of data source to use as context
+     * @return string with data_source_name
+     *
+     **/
+    function set_context_data_source_name($data_source_name=false) {
+        if ($data_source_name) {
+            $this->context_data_source_name=$data_source_name; 
+            return true;
+        }
+        else return false;
+    }
+    
+    /*****************************************************************************/
+    /** function get_context_data_source_name
+     *
+     * Returns the string used to identify the data source for a controlled object and id
+     * Currently simply returns the context from which the ACL was set
+     *
+     * @return string with data_source_name
+     *
+     **/
+    function get_data_source_from_context($ControlledObject_id=false, $on_what_id=false) {
+        return $this->get_context_data_source_name();
+    }
+    
+    
+        
+    /*****************************************************************************/
+    /** function get_authCallbacks()
+     *
+     * Returns the list of authCallbacks provided by parent application for access to databases
+     *
+     * @return Array of callback function names
+     *
+     **/
+    function get_authCallbacks() {
+        return $this->authCallbacks;
+    }
+
+    /*****************************************************************************/
+    /** function get_authCallbacks()
+     *
+     * Returns the list of authCallbacks provided by parent application for access to databases
+     *
+     * @param string $callback with name of callback function to add
+     * @return boolean reflecting success of adding new callback, false means the callback already existed in the list
+     *
+     **/
+    function add_authCallback($callback) {
+        if (array_search($callback, $this->authCallbacks)===false) {
+            $this->authCallbacks[]=$callback;
+            return true;
+        }
+        return false;
+    }
+    
+    /*****************************************************************************/
+    /** function remove_authCallbacks()
+     *
+     * Removes a callback from the authCallback list
+     *
+     * @param string $callback with name of callback function to remove
+     * @return boolean reflecting success of removing callback, false means the callback did not exist in the list
+     *
+     **/
+    function remove_authCallback($callback) {
+        $ckey=array_search($callback, $this->authCallbacks);
+        if ($ckey===false) {
+            return false;
+        } else {
+            unset($this->authCallbacks[$ckey]);
+            return true;
+        }
+    }
+    
     
     /*****************************************************************************/
     /** function get_group_data
@@ -244,13 +350,25 @@ class xrms_acl {
      * @param string $data_source_name specifying which data source to look for data in
      * @return adodbconnection to correct data source to access object data
      *
-     **/        
+     **/
     function get_object_adodbconnection($data_source_name='default') {
+        $authInfo=array();
+        foreach ($this->authCallbacks as $ac) {
+            if (function_exists($ac)) {
+//                echo "EXECUTING $ac($authInfo, $data_source_name)";
+                $ret=$ac($authInfo, $data_source_name);
+                if ($ret) return $ret;
+            }
+        }
+        if (array_key_exists($data_source_name, $authInfo)) {
+            $this->DBOptions[$data_source_name]=$authInfo[$data_source_name];
+        }
        $xcon = &adonewconnection($this->DBOptions[$data_source_name]['db_dbtype']);
        $xcon->nconnect($this->DBOptions[$data_source_name]['db_server'], $this->DBOptions[$data_source_name]['db_username'], $this->DBOptions[$data_source_name]['db_password'], $this->DBOptions[$data_source_name]['db_dbname']);
        //$xcon->debug=1;
        return $xcon;
     }
+    
     /*****************************************************************************/
     /** function get_controlled_object_data
      *
@@ -277,6 +395,10 @@ class xrms_acl {
             } else { $on_what_table=$_on_what_table; }
             $on_what_field = $rs->fields['on_what_field'];
             $data_source_name=$rs->fields['data_source_name'];
+            if (!$data_source_name) {
+                //retrieve data source name from the context that we're currently in, for this controlled object and on_what_id
+                $data_source_name=$this->get_data_source_from_context($ControlledObject_id, $on_what_id); 
+            }
             
             $xcon=$this->get_object_adodbconnection($data_source_name);
             
@@ -2145,6 +2267,12 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.23  2005/07/22 23:35:33  vanmer
+ * - added functionality to use callback functions provided by parent application to access database connections
+ * - added functionality to add/remove callbacks
+ * - added functionality to set the context that the ACL is being called in, for controlled objects without a
+ * datasource specified.
+ *
  * Revision 1.22  2005/07/07 19:38:16  vanmer
  * - added method for querying for all users with a specified role
  *
