@@ -8,7 +8,7 @@
 // | Email         walter@torres.ws                                         |
 // | Web           http://web.php-yacs.org                                  |
 // | Mirror        http://php-yacs.sourceforge.net/                         |
-// | $Id: files.php,v 1.4 2005/07/20 18:44:32 jswalter Exp $                 |
+// | $Id: files.php,v 1.5 2005/07/22 17:42:46 braverock Exp $                 |
 // +------------------------------------------------------------------------+
 // | This source file is subject to version 3.00 of the PHP License,        |
 // | that is available at http://www.php.net/license/3_0.txt.               |
@@ -39,8 +39,8 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Id: files.php,v 1.4 2005/07/20 18:44:32 jswalter Exp $
- * @date      $Date: 2005/07/20 18:44:32 $
+ * @version   $Id: files.php,v 1.5 2005/07/22 17:42:46 braverock Exp $
+ * @date      $Date: 2005/07/22 17:42:46 $
  *
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -50,7 +50,7 @@
  *
  * @filesource
  */
-  require_once($include_directory.'mime/mime-array.php');
+
   // ==========================================================
   // Class Constants
 
@@ -287,7 +287,7 @@
  *
  * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  *
  */
 class File
@@ -911,7 +911,8 @@ class File
         else
         {
             if (!function_exists('mime_content_type_')) {
-                include_once(dirname(__FILE__) . '/mime-array.php');
+                global $include_directory;
+                require_once($include_directory.'mime/mime-array.php');
             }
 
             $this->_mimeType = mime_content_type_( $this->getFullOrgPath() );
@@ -1409,11 +1410,15 @@ class File
 
 /**
  * $RCSfile: files.php,v $
- * $Revision: 1.4 $
- * $Date: 2005/07/20 18:44:32 $
- * $Author: jswalter $
+ * $Revision: 1.5 $
+ * $Date: 2005/07/22 17:42:46 $
+ * $Author: braverock $
  *
  * $Log: files.php,v $
+ * Revision 1.5  2005/07/22 17:42:46  braverock
+ * - move include of mime-array.php to inside the function that needs it
+ * - only include if function not already defined
+ *
  * Revision 1.4  2005/07/20 18:44:32  jswalter
  *  - corrected include mime_type.php problem
  *
