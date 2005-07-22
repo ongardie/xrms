@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.10 2005/05/31 20:28:59 vanmer Exp $
+ * $Id: change-password-2.php,v 1.11 2005/07/22 15:45:24 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -37,26 +37,45 @@ if ($password == $confirm_password) {
     $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
     $sql = "SELECT * FROM users WHERE user_id = $edit_user_id";
-    
+
     $rst = $con->execute($sql);
+    if ($rst) {
+        $rec = array();
+        $rec['password'] = $password;
 
-    $rec = array();
-    $rec['password'] = $password;
-    
-    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-    $con->execute($upd);
+        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+        if (strlen($upd)){
+            $upd_rst= $con->execute($upd);
 
-    add_audit_item($con, $session_user_id, 'change password', 'users', $edit_user_id, 1);
+            if (!$upd_rst) { db_error_handler($con, $upd); }
 
-    $con->close();
+            add_audit_item($con, $session_user_id, 'change password', 'users', $edit_user_id, 1);
 
-    header("Location: " . $http_site_root . "/admin/routing.php?msg=saved");
+            $con->close();
+
+            header("Location: " . $http_site_root . "/admin/routing.php?msg=saved");
+        } else {
+            $con->close();
+
+            $msg = urlencode(_("There was a problem with the user ID. Password not Changed."));
+            header("Location: change-password.php?msg=$msg");
+        }
+    } else { // no result set on finding the user
+        db_error_handler ($con, $sql);
+
+        $con->close();
+    }
+
 } else {
     header("Location: change-password.php?msg=password_no_match");
 }
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.11  2005/07/22 15:45:24  braverock
+ *- add additional result set error handling and more informative error msgs
+ *- remove trailing whitespace
+ *
  *Revision 1.10  2005/05/31 20:28:59  vanmer
  *- changed to use new ACL role check instead of older deprecated role system
  *

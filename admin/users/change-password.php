@@ -5,7 +5,7 @@
  * Form to enter a new password for a user
  * @todo - add javascript validation on the save.
  *
- * $Id: change-password.php,v 1.9 2005/05/31 20:28:29 vanmer Exp $
+ * $Id: change-password.php,v 1.10 2005/07/22 15:45:24 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -71,6 +71,10 @@ end_page();
 
 /**
  *$Log: change-password.php,v $
+ *Revision 1.10  2005/07/22 15:45:24  braverock
+ *- add additional result set error handling and more informative error msgs
+ *- remove trailing whitespace
+ *
  *Revision 1.9  2005/05/31 20:28:29  vanmer
  *- altered to use ACL check instead of Admin role check to control password change
  *
