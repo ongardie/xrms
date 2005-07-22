@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.80 2005/07/13 23:25:44 ycreddy Exp $
+ * $Id: utils-interface.php,v 1.81 2005/07/22 06:51:33 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -209,7 +209,7 @@ function get_css_themes() {
  * @param boolean $show_navbar true/false whether to show the menu bar
  * @param string  $msg         error or other notification message
  */
-function start_page($page_title = '', $show_navbar = true, $msg = '') {
+function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topnav=true) {
     global $http_site_root;
     global $app_title;
     global $css_theme;
@@ -255,7 +255,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
     echo css_link($cssroot.'xrmsstyle-ie.css');
     //quick and dirty hack to include and force logo style before the theme styles have been applied
     //should also check system parameters to see if logo should be displayed
-    if (get_system_parameter($xcon, 'Show Logo') == 'y') {
+    if ((get_system_parameter($xcon, 'Show Logo') == 'y') AND $show_topnav) {
         echo css_link($cssroot.'logo.css', $curtheme, false);
     }
 
@@ -275,7 +275,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
 ?>
 
 </head>
-
+<?php if ($show_topnav) { ?>
   <body <?php do_hook('bodytags'); echo "DIR=".$_SESSION['DIR']; ?>>
   <?php do_hook('topofpage'); ?>
   <div id="page_header"><?php echo $page_title; ?></div>
@@ -289,6 +289,7 @@ function start_page($page_title = '', $show_navbar = true, $msg = '') {
   if (strlen($msg) > 0) {
     echo '  <div id="msg">'. $msg ."</div>\n";
   }
+  } //end check for topnav variable
 } // end start_page fn
 
 
@@ -776,6 +777,11 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.81  2005/07/22 06:51:33  vanmer
+ * - added parameter controlling if start_page displays the top navigation, including everything after the head tag,
+ * and the logo.css file
+ * - above feature is primarily intended for mini-search, and other pages to inherit stylesheets
+ *
  * Revision 1.80  2005/07/13 23:25:44  ycreddy
  * Update to the way the name is presented in a user menu - lastname, firstname instead of firstname lastname
  *
