@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.7 2005/07/22 23:14:14 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.8 2005/07/22 23:37:56 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -553,8 +553,8 @@ Class ACLTest extends PHPUnit_TestCase {
 
         $ChildField = $field1;
                 
-        $on_what_parent_id=4;
-        $on_what_child_id = 3;
+        $on_what_parent_id=1;
+        $on_what_child_id = 1;
 
         $controlled_objectresult1 = $this->test_add_controlled_object($ControlledObject1,$table1,$field1,false, $data_source1);
         $this->assertTrue($controlled_objectresult1,"Failed to add controlled object $ControlledObject1 for group assignment");
@@ -1187,6 +1187,9 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.8  2005/07/22 23:37:56  vanmer
+ * - altered tests to assume activity_id 1 is attached to company_id 1
+ *
  * Revision 1.7  2005/07/22 23:14:14  vanmer
  * - added tests for new method of passing database connections to the ACl
  *
