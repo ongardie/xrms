@@ -105,7 +105,7 @@ function update_acl($con) {
     global $acl_options;
     global $include_directory;
     require_once($include_directory.'classes/acl/acl_wrapper.php');
-    if (!$acl) $acl = new xrms_acl($acl_options);
+    $acl = new xrms_acl($acl_options);
     $data_source=$acl->get_data_source('XRMS');
     $data_source_id=$data_source['data_source_id'];
     $admin_object_id=get_object_id($acl, 'Administration');
@@ -168,27 +168,27 @@ TILLEND;
     }
     if ($crst->numRows()==0) {
         $sql=<<<TILLEND
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (1, 2, 1, 'World', 1);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (2, 2, 1, 'World', 2);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (3, 2, 1, 'World', 3);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (4, 2, 1, 'World', 4);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (4, 2, 1, 'World', 5);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (5, 1, 1, 'World', 1);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (6, 1, 1, 'World', 2);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (7, 1, 1, 'World', 3);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (8, 1, 2, 'World', 1);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (9, 1, 2, 'World', 2);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (10, 1, 2, 'World', 3);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (11, 2, 2, 'World', 1);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (12, 2, 2, 'World', 2);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (13, 2, 2, 'World', 3);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (14, 2, 2, 'World', 4);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (15, 2, 2, 'World', 5);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (16, 2, 21, 'World', 1);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (17, 2, 21, 'World', 2);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (18, 2, 21, 'World', 3);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (19, 2, 21, 'World', 4);
-insert into RolePermission (RolePermission_id, Role_id, CORelationship_id, Scope, Permission_id) values (20, 2, 21, 'World', 5);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 1, 'World', 1);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 1, 'World', 2);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 1, 'World', 3);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 1, 'World', 4);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 1, 'World', 5);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (1, 1, 'World', 1);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (1, 1, 'World', 2);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (1, 1, 'World', 3);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (1, 2, 'World', 1);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (1, 2, 'World', 2);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (1, 2, 'World', 3);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 2, 'World', 1);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 2, 'World', 2);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 2, 'World', 3);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 2, 'World', 4);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 2, 'World', 5);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 21, 'World', 1);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 21, 'World', 2);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 21, 'World', 3);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 21, 'World', 4);
+insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 21, 'World', 5);
 TILLEND;
         $return=execute_batch_sql($con, $sql);
     }
