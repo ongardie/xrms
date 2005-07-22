@@ -7,7 +7,7 @@
  *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.5 2005/07/17 16:02:57 maulani Exp $
+ * $Id: utils-files.php,v 1.6 2005/07/22 18:09:51 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -98,9 +98,9 @@ function getFileUpLoad ( $_upload_name = null )
             return false;
         }
 
-        global $class_directory;
+        global $include_directory;
 
-        require_once $class_directory . 'classes/File/file_upload.php';
+        require_once $include_directory . 'classes/File/file_upload.php';
 
         // Create new Class
         $objUpFile = new file_upload( $_upload_name );
@@ -594,6 +594,9 @@ function get_file_records( $con, $files_data )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.6  2005/07/22 18:09:51  braverock
+ * - remove $class_directory and replace with $include_directory
+ *
  * Revision 1.5  2005/07/17 16:02:57  maulani
  * - Remove runtime pass-by-reference.  Function is defined as pass-by-reference
  *
