@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.7 2005/06/29 15:39:00 daturaarutad Exp $
+ * $Id: Calendar_View.php,v 1.8 2005/07/23 00:16:11 vanmer Exp $
  */
 
 global $include_directory;
@@ -552,6 +552,7 @@ function BuildDailyEvents($activity_data) {
 
 	$user_style_index = 1;
 
+	if ($activity_data)
 	foreach($activity_data as $activity) {
 
 		if($activity['scheduled_at']) {
@@ -686,6 +687,9 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.8  2005/07/23 00:16:11  vanmer
+* - ensure activity data is available before adding anything to the event list
+*
 * Revision 1.7  2005/06/29 15:39:00  daturaarutad
 * moved view mode buttons to bottom of widget
 *
