@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.92 2005/07/07 16:33:12 daturaarutad Exp $
+ * $Id: one.php,v 1.93 2005/07/24 20:40:08 maulani Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -164,6 +164,14 @@ if ($division_id != '') {
                        .  $div_rst->fields['division_name'];
     }
 } //end division select
+
+if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
+    $history_text = '<tr> <td class=widget_content colspan=2>';
+    $history_text .= _("Contact ID:") . '  ' . $contact_id ;
+    $history_text .= '</td> </tr>';
+} else {
+$history_text = '';
+}
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -451,6 +459,7 @@ function openMsnSession(strIMAddress) {
                     <?php echo $contact_buttons; ?>
                 </td>
             </tr>
+           <?php  echo $history_text; ?>
         </table>
 		<?php echo $new_activity_widget; ?>
 
@@ -513,6 +522,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.93  2005/07/24 20:40:08  maulani
+ * - Add display of contact_id in production for troubleshooting purposes
+ *
  * Revision 1.92  2005/07/07 16:33:12  daturaarutad
  * removed Calendar.setup code (it moved to activities-widget.php)
  *
