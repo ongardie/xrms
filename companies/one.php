@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.123 2005/07/19 16:11:49 braverock Exp $
+ * $Id: one.php,v 1.124 2005/07/24 20:39:10 maulani Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -217,9 +217,16 @@ TILLEND;
     }
 } else { $division_select=false; }
 
+if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
+    $history_text = '<tr> <td class=widget_content colspan=2>';
+    $history_text .= _("Company ID:") . '  ' . $company_id ;
+    $history_text .= '</td> </tr>';
+} else {
+$history_text = '';
+}
+
 // New Activities Widget
 $return_url = "/companies/one.php?company_id=$company_id" .  ($division_id ? "&division_id=" . $division_id : '');
-
 
 if ($division_id) {
     $on_what_table='company_division';
@@ -642,6 +649,7 @@ function markComplete() {
                 <?php echo $company_buttons; ?>
                 </td>
             </tr>
+            <?php  echo $history_text; ?>
         </table>
 
         <!-- contacts //-->
@@ -722,6 +730,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.124  2005/07/24 20:39:10  maulani
+ * - Add display of item id for development troubleshooting in production
+ *
  * Revision 1.123  2005/07/19 16:11:49  braverock
  * - properly trim URL before displaying an empty URL
  *
