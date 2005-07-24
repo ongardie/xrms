@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.17 2005/06/05 17:21:37 braverock Exp $
+ * $Id: edit-2.php,v 1.18 2005/07/24 20:37:55 maulani Exp $
  */
 require_once('../include-locations.inc');
 
@@ -72,7 +72,11 @@ $rec['custom4'] = $custom4;
 $rec['profile'] = $profile;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+$sysst = $con->execute($upd);
+if (!$sysst){
+	//there was a problem, notify the user
+	db_error_handler ($con, $upd);
+}
 
 $param = array($rst, $rec);
 do_hook_function('company_edit_2', $param);
@@ -87,6 +91,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.18  2005/07/24 20:37:55  maulani
+ * - Add db_error_handler call after database call
+ *
  * Revision 1.17  2005/06/05 17:21:37  braverock
  * - add standard new/edit hooks
  *
