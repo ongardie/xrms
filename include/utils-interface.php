@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.81 2005/07/22 06:51:33 vanmer Exp $
+ * $Id: utils-interface.php,v 1.82 2005/07/25 20:02:22 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -775,8 +775,48 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
     return $html_element;
 }
 
+
+/**
+ *
+ * Creates an HTML SELECT list to display contents of an array
+ *
+ * Uses array with array of $element
+ * $element['text'] is text/html to display as list item
+ * $element['link'] is used as an href if provided
+ * $element['children'] is an array of children elements, defined the same as $element
+ *
+ * @param array $data with elements to turn into an HTML list
+ * @param string $topclass with CSS classname for top level unordered list
+ * @return string with HTML of list corresponding to data, or false if no elements were ofund
+ *
+**/
+function render_tree_list($data, $topclass='') {
+    if (!$data OR !is_array($data) OR (count($data)==0)) return false;
+    if ($topclass) { $class="class=\"$topclass\""; } else $class='';
+    $ret="<ul $class>";
+    foreach ($data as $element) {
+        $ret.='<li>';
+        if ($element['link']) {
+            $ret.="<a href=\"{$element['link']}\">";
+        }
+        $ret.=$element['text'];
+        
+        if ($element['link']) {
+            $ret.='</a>';
+        }
+        if ($element['children']) $ret.=render_tree_list($element['children']);
+        $ret.='</li>';
+    }
+    $ret.="</ul>";
+    return $ret;
+}
+
+
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.82  2005/07/25 20:02:22  vanmer
+ * - added function for rendering an array into an unordered list, with recursion
+ *
  * Revision 1.81  2005/07/22 06:51:33  vanmer
  * - added parameter controlling if start_page displays the top navigation, including everything after the head tag,
  * and the logo.css file
