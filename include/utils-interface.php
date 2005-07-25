@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.82 2005/07/25 20:02:22 vanmer Exp $
+ * $Id: utils-interface.php,v 1.83 2005/07/25 20:55:34 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -247,6 +247,8 @@ function start_page($page_title = '', $show_navbar = true, $msg = '', $show_topn
     // CSS styles that apply to all media: basic layout and font/size attributes
     echo css_link($cssroot.'layout.css', null, false, 'all');
     echo css_link($cssroot.'style.css', null, false, 'all');
+    // CSS style for treeview widget mktree.js
+    echo css_link($cssroot.'mktree.css');
     // CSS styles that apply only to printed page - should after any 'all' media
     echo css_link($cssroot.'print.css');
     // CSS styles that apply only to screen rendering
@@ -604,6 +606,22 @@ EOQ;
     return $ret;
 }
 
+function javascript_mktree_include($output=true) {
+    global $javascript_mktree_included;
+    $ret=false;
+    if (!isset($javascript_mktree_included)) {
+    	global $http_site_root;
+	$ret = <<<EOQ
+<!-- MKTREE SCRIPT INCLUDES -->
+<script type="text/javascript" src="$http_site_root/js/mktree.js"></script>
+<!-- MKTREE SCRIPT INCLUDES -->
+EOQ;
+        if ($output) echo $ret;
+        $javascript_mktree_included=true;
+    }
+    return $ret;
+}
+
 function render_edit_button($text='Edit', $type='submit', $onclick=false, $name=false, $id=false, $_table=false, $_id=false) {
     return render_ACL_button('Update', $text, $type, $onclick, $name, $id, $_table, $_id);
 }
@@ -790,10 +808,11 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
  * @return string with HTML of list corresponding to data, or false if no elements were ofund
  *
 **/
-function render_tree_list($data, $topclass='') {
+function render_tree_list($data, $topclass='', $id=false) {
     if (!$data OR !is_array($data) OR (count($data)==0)) return false;
     if ($topclass) { $class="class=\"$topclass\""; } else $class='';
-    $ret="<ul $class>";
+    if ($id) { $id="id=\"$id\""; } else $id='';
+    $ret="<ul $class$id>";
     foreach ($data as $element) {
         $ret.='<li>';
         if ($element['link']) {
@@ -814,6 +833,11 @@ function render_tree_list($data, $topclass='') {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.83  2005/07/25 20:55:34  vanmer
+ * - added mktree to default included css for XRMS
+ * - added function to include mktree javascript file only once
+ * - added html id parameter to render_tree_view function, to allow id to be set on initial UL
+ *
  * Revision 1.82  2005/07/25 20:02:22  vanmer
  * - added function for rendering an array into an unordered list, with recursion
  *
