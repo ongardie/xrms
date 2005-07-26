@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.29 2005/07/07 03:25:11 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.30 2005/07/26 22:46:22 vanmer Exp $
  */
 
 
@@ -351,10 +351,12 @@ class GUP_Pager {
 					$this->group_select_widget =  $group_values->GetMenu2($this->pager_id . '_group_id', $this->group_id, false, false, 0, "onchange='javascript:{$this->pager_id}_group(" . $this->group_mode . ");'");
 				}
 
-				// change the sql query to the group select
-				$this->sql = str_replace('XXX-value-XXX', $this->group_id, $this->column_info[$this->group_mode]['group_query_select']);
-				if($this->column_info[$this->sort_column-1]['index_sql']) {
-					$this->SetUpSQLOrderByClause();
+				// change the sql query to the group select, if group id has a value
+				if (!empty($this->group_id)) {
+					$this->sql = str_replace('XXX-value-XXX', $this->group_id, $this->column_info[$this->group_mode]['group_query_select']); 
+					if($this->column_info[$this->sort_column-1]['index_sql']) {
+						$this->SetUpSQLOrderByClause();
+					}
 				}
 			}
 		}
@@ -1110,6 +1112,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.30  2005/07/26 22:46:22  vanmer
+ * - changed to only use group sql if group_id contains a value, otherwise use original sql
+ *
  * Revision 1.29  2005/07/07 03:25:11  daturaarutad
  * patched to allow $count_sql to be passed in to _adodb_getcount()
  *
