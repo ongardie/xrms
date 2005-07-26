@@ -12,7 +12,7 @@
  * This file has been modified from the Squirrelmail plugin.php file
  * by Brian Peterson for use in XRMS
  *
- * $Id: plugin.php,v 1.9 2005/04/07 18:15:08 vanmer Exp $
+ * $Id: plugin.php,v 1.10 2005/07/26 18:57:57 vanmer Exp $
  * @package xrms
  */
 
@@ -42,9 +42,9 @@ function use_plugin ($name) {
 
     // uncomment the following debug line to trace
     // echo "<br> Looking for: ".$xrms_file_root."/plugins/".$name."/setup.php \n";
-
-    if (file_exists($xrms_file_root . '/plugins/'.$name.'/setup.php')) {
-        include_once($xrms_file_root . "/plugins/".$name."/setup.php");
+    $setup_filename=$xrms_file_root . DIRECTORY_SEPARATOR . 'plugins'. DIRECTORY_SEPARATOR .$name. DIRECTORY_SEPARATOR .'setup.php';
+    if (file_exists($setup_filename)) {
+        include_once($setup_filename);
         $function = "xrms_plugin_init_$name";
 
         // uncomment the following debug line to trace
@@ -213,6 +213,10 @@ if (isset($plugins) && is_array($plugins)) {
 /*************************************/
 /**
  * $Log: plugin.php,v $
+ * Revision 1.10  2005/07/26 18:57:57  vanmer
+ * - changed to define variable for setup.php path
+ * - changed setup.php path to use DIRECTORY_SEPARATOR between directories and files
+ *
  * Revision 1.9  2005/04/07 18:15:08  vanmer
  * - changed second parameter to do_hook_function to take reference
  *
