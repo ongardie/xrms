@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.84 2005/07/26 01:02:16 vanmer Exp $
+ * $Id: utils-interface.php,v 1.85 2005/07/26 23:30:14 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -391,10 +391,12 @@ function end_page($use_hook = true) {
 
     $block_sf_page = get_user_preference($econ, $user_id, 'block_sf_link' );
     $hide_sf_image = get_user_preference($econ, $user_id, 'hide_sf_img');
+    
+    $alt_string=htmlspecialchars(_("XRMS SourceForge Project Page"));
 
     if ($hide_sf_image=='y') {
         $sf_image_attributes=' height="0" width="0"';
-    } else { $sf_image_attributes=''; }
+    } else { $sf_image_attributes="alt=\"$alt_string\""; }
     $econ->close();
 
 
@@ -404,7 +406,7 @@ function end_page($use_hook = true) {
         <A href="http://sourceforge.net/projects/xrms/">
                 <IMG src="http://sourceforge.net/sflogo.php?group_id=88850&amp;type=1" border="0"
                     $sf_image_attributes
-                    alt="$alt_string" />
+                 />
         </A>
 TILLEND;
     }
@@ -681,14 +683,38 @@ function render_button($text='Edit', $type='submit', $onclick=false, $name=false
 }
 
 /**
+ * Retrieve menu of XRMS activity types
+ *
+ * @param  handle  $con database connection
+ * @param  integer $activity_type_id to set the menu to
+ * @param string $fieldname to change the default html fieldname of 'user_id'
+ * @param  boolean $blank_user include a blank area
+ * @return string  $activity_type_menu the html menu to display
+ */
+function get_activity_type_menu($con, $activity_type_id='', $fieldname='activity_type_id', $blank_type=false) {
+    // create menu of activity types
+    $sql = "SELECT activity_type_pretty_name, activity_type_id
+            FROM activity_types
+            WHERE activity_type_record_status = 'a'
+            ORDER BY sort_order, activity_type_pretty_name";
+    $rst = $con->execute($sql);
+    if ($rst) {
+        $activity_type_menu = $rst->getmenu2($fieldname, $activity_type_id, $blank_type, false,0, 'style="font-size: x-small; border: outset; width: 80px;"');
+        $rst->close();
+    }
+    return $activity_type_menu;
+}
+
+/**
  * Retrieve menu of XRMS users
  *
  * @param  handle  $con database connection
  * @param  integer $user_id to set the menu to
  * @param  boolean $blank_user include a blank area
+ * @param string $fieldname to change the default html fieldname of 'user_id'
  * @return string  $user_menu the html menu to display
  */
-function get_user_menu(&$con, $user_id='', $blank_user=false) {
+function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_id') {
 
     $sql = '
     SELECT ' . $con->Concat("last_name","', '","first_names") . " AS name, user_id
@@ -700,7 +726,7 @@ function get_user_menu(&$con, $user_id='', $blank_user=false) {
     if (!$rst) {
         db_error_handler($con, $sql);
     }
-    $user_menu = $rst->getmenu2('user_id', $user_id, $blank_user, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
+    $user_menu = $rst->getmenu2($fieldname, $user_id, $blank_user, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
     $rst->close();
 
     return $user_menu;
@@ -844,6 +870,10 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.85  2005/07/26 23:30:14  vanmer
+ * - added function to list activity types
+ * - added extra parameters to user list to change fieldname
+ *
  * Revision 1.84  2005/07/26 01:02:16  vanmer
  * - altered to allow definitions of id for the element, as well as CSS classes for both the element and the link
  * - altered to allow extra parameters to be passed along with the link and link class
