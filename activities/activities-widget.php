@@ -64,7 +64,7 @@ if($show_mini_search) {
         $caption .= ' &nbsp;<input type="button" class="button" onclick="document.getElementById(\'' . $mini_search_widget_name . '\').style.display=\'block\';" value="' . _('Filter Activities') . '">';
     }
 
-    $mini_search_widget = GetMiniSearchWidget($mini_search_widget_name, $search_terms, $search_enabled, $form_name);
+    $mini_search_widget = GetMiniSearchWidget($mini_search_widget_name, $search_terms, $search_enabled, $form_name, $con);
 
 }
 
@@ -112,8 +112,9 @@ $widget = '';
 
 
 // build the query based upon $search_terms
-
-$select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END) AS is_overdue, "
+$is_overdue_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END)";
+$is_overdue_text_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN ".$con->qstr(_("Yes"))." ELSE " . $con->qstr(_(""))." END)";
+$select = "SELECT $is_overdue_field AS is_overdue, "
   ." at.activity_type_pretty_name AS type, "
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
 
@@ -125,11 +126,15 @@ $select = "SELECT (CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->
   // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
   . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
 
+  
+$select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
+  
 $from = array('activities a');
 
 $joins = "
 INNER JOIN activity_types at ON a.activity_type_id = at.activity_type_id
 LEFT OUTER JOIN contacts cont ON a.contact_id = cont.contact_id
+LEFT OUTER JOIN companies c ON a.company_id = c.company_id
 LEFT OUTER JOIN users u ON a.user_id = u.user_id
 LEFT OUTER JOIN activity_participants ON a.activity_id=activity_participants.activity_id
 LEFT OUTER JOIN contacts part_cont ON part_cont.contact_id=activity_participants.contact_id
@@ -164,11 +169,9 @@ if (strlen($search_terms['contact_id'])) {
 if (strlen($search_terms['company']) > 0 || strlen($search_terms['company_id']) ||
     (strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zone_between2']))) {
 
-    $select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
     $extra_group_by = ", c.company_name,c.company_id";
-    array_unshift($from, 'companies c', 'addresses addr');
-
-    $where .= " AND a.company_id = c.company_id ";
+    array_unshift($from, 'addresses addr');
+    
     $where .= "AND c.default_primary_address=addr.address_id ";
 
 }
@@ -205,9 +208,19 @@ if (strlen($search_terms['user_id']) > 0) {
     }
 }
 
+if (strlen($search_terms['owner']) > 0) {
+    $criteria_count++;
+    $where .= " and a.user_id = {$search_terms['owner']} ";    
+}
+
 if (strlen($search_terms['activity_type_id']) > 0) {
     $criteria_count++;
     $where .= " and a.activity_type_id = " . $search_terms['activity_type_id'] . " ";
+}
+
+if (strlen($search_terms['type']) > 0) {
+    $criteria_count++;
+    $where .= " and a.activity_type_id = " . $search_terms['type'] . " ";
 }
 
 if (strlen($search_terms['activity_status']) > 0) {
@@ -403,20 +416,43 @@ if('list' != $activities_widget_type) {
 
     $thread_query_list = "select activity_title, activity_id from activities where thread_id is not null group by thread_id order by activity_id";
 
-    $thread_query_select = $activity_sql . 'AND thread_id = XXX-value-XXX';
+    $thread_query_select = "$select FROM $from_list $joins $where " . ' AND thread_id = XXX-value-XXX ' . $group_by;
+    
+    $overdue_query_list = "select DISTINCT $is_overdue_text_field AS is_overdue, $is_overdue_field FROM $from_list $joins $where $group_by";
+    
+    $overdue_query_select = "$select FROM $from_list $joins $where $group_by HAVING $is_overdue_field = XXX-value-XXX";
+    
+    $type_query_list = "SELECT DISTINCT at.activity_type_pretty_name, a.activity_type_id FROM $from_list $joins $where $group_by ORDER BY at.sort_order, at.activity_type_pretty_name";
 
+    $type_query_select = "$select FROM $from_list $joins $where " . ' AND a.activity_type_id = XXX-value-XXX ' . $group_by;
 
+    $owner_query_list = "SELECT DISTINCT ". $con->Concat('u.last_name',"', '",'u.first_names') . ", a.user_id FROM $from_list $joins $where $group_by ORDER BY u.last_name, u.first_names";
+    
+    $owner_query_select = "$select FROM $from_list $joins $where " . ' AND a.user_id = XXX-value-XXX ' . $group_by;
+    
+    $contact_query_list = "SELECT DISTINCT ". $con->Concat('part_cont.first_names',"' '",'part_cont.last_name') . ", part_cont.contact_id FROM $from_list $joins $where ORDER BY part_cont.last_name, part_cont.first_names";
+    
+    $contact_query_select = "$select FROM $from_list $joins $where " . ' AND ( cont.contact_id = XXX-value-XXX OR part_cont.contact_id = XXX-value-XXX) ' . $group_by;
+    
+    $priority_query_list = "SELECT DISTINCT cp.case_priority_pretty_name, a.activity_priority_id FROM $from_list $joins $where $group_by";
+    
+    $priority_query_select = "$select FROM $from_list $joins $where " . ' AND ( a.activity_priority_id = XXX-value-XXX ) ' . $group_by;
+    
+    $company_query_list = "SELECT DISTINCT c.company_name, a.company_id FROM $from_list $joins $where $group_by ORDER BY c.company_name";
+    
+    $company_query_select = "$select FROM $from_list $joins $where " . ' AND ( a.company_id = XXX-value-XXX ) ' . $group_by;
+    
     $columns = array();
-    $columns[] = array('name' => _("Overdue"), 'index_sql' => 'is_overdue');
-    $columns[] = array('name' => _("Type"), 'index_sql' => 'type');
-    $columns[] = array('name' => _("Contact"), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url');
+    $columns[] = array('name' => _("Overdue"), 'index_sql' => 'is_overdue', 'group_query_list'=>$overdue_query_list, 'group_query_select'=>$overdue_query_select);
+    $columns[] = array('name' => _("Type"), 'index_sql' => 'type', 'group_query_list'=>$type_query_list, 'group_query_select'=>$type_query_select);
+    $columns[] = array('name' => _("Contact"), 'index_sql' => 'contact', 'sql_sort_column' => 'cont.last_name,cont.first_names', 'type' => 'url', 'group_query_list'=>$contact_query_list, 'group_query_select'=>$contact_query_select);
     $columns[] = array('name' => _("Summary"), 'index_sql' => 'title', 'sql_sort_column' => 'activity_title', 'type' => 'url');
     $columns[] = array('name' => _("Description"), 'index_calc' => 'description_brief', 'sql_sort_column' => 'activity_description', 'type' => 'url');
-    $columns[] = array('name' => _("Priority"), 'index_sql' => 'case_priority_pretty_name', 'sql_sort_column'=>'a.activity_priority_id');
+    $columns[] = array('name' => _("Priority"), 'index_sql' => 'case_priority_pretty_name', 'sql_sort_column'=>'a.activity_priority_id','group_query_list'=>$priority_query_list, 'group_query_select'=>$priority_query_select);
     $columns[] = array('name' => _("Scheduled Start"), 'index_sql' => 'scheduled', 'sql_sort_column' => 'a.scheduled_at');
     $columns[] = array('name' => _("Scheduled End"), 'index_sql' => 'due', 'default_sort' => 'desc', 'sql_sort_column' => 'a.ends_at');
-    $columns[] = array('name' => _("Company"), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url');
-    $columns[] = array('name' => _("Owner"), 'index_sql' => 'owner');
+    $columns[] = array('name' => _("Company"), 'index_sql' => 'company', 'sql_sort_column' => 'c.company_name', 'type' => 'url', 'group_query_list'=>$company_query_list, 'group_query_select'=>$company_query_select);
+    $columns[] = array('name' => _("Owner"), 'index_sql' => 'owner', 'group_query_list'=>$owner_query_list, 'group_query_select'=>$owner_query_select);
     //$columns[] = array('name' => _("Thread"), 'index_sql' => 'thread', 'group_query_list' => $thread_query_list, 'group_query_select' => $thread_query_select);
     $columns[] = array('name' => _("About"), 'index_calc' => 'activity_about');
     $columns[] = array('name' => _("Resolution"), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id');
@@ -548,17 +584,7 @@ if(!$company_id) $company_id = 0;
 // create menu of users
 $user_menu = get_user_menu($con, $session_user_id);
 
-// create menu of activity types
-$sql = "SELECT activity_type_pretty_name, activity_type_id
-        FROM activity_types
-        WHERE activity_type_record_status = 'a'
-        ORDER BY sort_order, activity_type_pretty_name";
-$rst = $con->execute($sql);
-if ($rst) {
-    $activity_type_menu = $rst->getmenu2('activity_type_id', '', false,false,0, 'style="font-size: x-small; border: outset; width: 80px;"');
-    $rst->close();
-}
-
+$activity_type_menu=get_activity_type_menu($con);
 
 // create menu of contacts
 if($company_id) {
@@ -654,7 +680,11 @@ return $ret;
 function GetMiniSearchTerms($widget_name, $search_terms) {
 
     getGlobalVar($search_terms['title'], $widget_name.'_activity_title');
+//    getGlobalVar($search_terms['about'], $widget_name.'_activity_about');
+    getGlobalVar($search_terms['owner'], $widget_name.'_activity_owner');
+    getGlobalVar($search_terms['type'], $widget_name.'_activity_type');
     getGlobalVar($search_terms['contact'], $widget_name.'_activity_contact');
+    getGlobalVar($search_terms['company'], $widget_name.'_activity_company');
     getGlobalVar($search_terms['start_end'], $widget_name.'_start_end');
     getGlobalVar($search_terms['before_after'], $widget_name.'_before_after');
     getGlobalVar($search_terms['search_date'], $widget_name.'_search_date');
@@ -662,16 +692,24 @@ function GetMiniSearchTerms($widget_name, $search_terms) {
     return $search_terms;
 }
 
-function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form_name) {
+function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form_name, $con=false) {
 
     if('enable' == $search_enabled) {
         $title          = $search_terms['title'];
+        $type          = $search_terms['type'];
+//        $about          = $search_terms['about'];
+        $owner          = $search_terms['owner'];
         $contact        = $search_terms['contact'];
+        $company        = $search_terms['company'];
         $start_end      = $search_terms['start_end'];
         $before_after   = $search_terms['before_after'];
         $search_date    = $search_terms['search_date'];
+        
     }
-
+    if (!$con) $con=get_xrms_dbconnection();
+    $activity_type_menu=get_activity_type_menu($con, $type, $widget_name.'_activity_type',true);
+    $activity_owner_menu = get_user_menu($con, $owner, true, $widget_name.'_activity_owner');
+    
     $ret =
     "<div id=$widget_name>
 
@@ -704,7 +742,17 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
                     <input type=text ID=\"f_date_{$widget_name}_search_date\" name={$widget_name}_search_date value=\"$search_date\">
                     <img ID=\"f_trigger_{$widget_name}_search_date\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
-                </td>
+                </td>                
+            </tr>
+            <tr>
+                <td class=widget_label>" . _("Type") . "</td>
+                <td class=widget_label>" . _("Owner") . "</td>
+                <td class=widget_label>" . _("Company") . "</td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element>$activity_type_menu</td>
+                <td class=widget_content_form_element>$activity_owner_menu</td>
+                <td class=widget_content_form_element><input type=text size=12 name={$widget_name}_activity_company value=\"$company\"></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=5>
@@ -744,6 +792,11 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.29  2005/07/26 23:22:09  vanmer
+* - added grouping on many fields
+* - added company to list of fields that are always included in the sql join
+* - added mini search on type, owner and company
+*
 * Revision 1.28  2005/07/16 00:19:25  daturaarutad
 * add http_site_root to browse link
 *
