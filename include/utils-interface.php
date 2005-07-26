@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.83 2005/07/25 20:55:34 vanmer Exp $
+ * $Id: utils-interface.php,v 1.84 2005/07/26 01:02:16 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -800,7 +800,11 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
  *
  * Uses array with array of $element
  * $element['text'] is text/html to display as list item
- * $element['link'] is used as an href if provided
+ * $element['class'] provies the CSS class name of the element
+ * $element['id'] provies the html id of the element
+ * $element['link_href'] is used as an href if provided
+ * $element['link_class'] provides a CSS class name for the link
+ * $element['link_extra'] is used as an href if provided
  * $element['children'] is an array of children elements, defined the same as $element
  *
  * @param array $data with elements to turn into an HTML list
@@ -814,13 +818,20 @@ function render_tree_list($data, $topclass='', $id=false) {
     if ($id) { $id="id=\"$id\""; } else $id='';
     $ret="<ul $class$id>";
     foreach ($data as $element) {
-        $ret.='<li>';
-        if ($element['link']) {
-            $ret.="<a href=\"{$element['link']}\">";
+        if ($element['class']) { $liextra="class={$element['class']}"; }
+        else {$liextra=''; }
+        if ($element['id']) { $liextra.=' id="'.$element['id'].'"'; }
+        $ret.="<li $liextra>";
+        if ($element['link_href']) {
+            if ($element['link_class']) {
+                $link_extra="class=\"{$element['link_class']}\"";
+            } else $link_extra='';
+            if ($element['link_extra']) $link_extra.=' '.$element['link_extra'];
+            $ret.="<a href=\"{$element['link_href']}\" $link_extra>";
         }
         $ret.=$element['text'];
         
-        if ($element['link']) {
+        if ($element['link_href']) {
             $ret.='</a>';
         }
         if ($element['children']) $ret.=render_tree_list($element['children']);
@@ -833,6 +844,10 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.84  2005/07/26 01:02:16  vanmer
+ * - altered to allow definitions of id for the element, as well as CSS classes for both the element and the link
+ * - altered to allow extra parameters to be passed along with the link and link class
+ *
  * Revision 1.83  2005/07/25 20:55:34  vanmer
  * - added mktree to default included css for XRMS
  * - added function to include mktree javascript file only once
