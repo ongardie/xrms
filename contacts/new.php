@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.32 2005/06/07 21:38:19 braverock Exp $
+ * $Id: new.php,v 1.33 2005/07/27 23:10:28 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -144,6 +144,8 @@ if (!$country_id) {$country_id = $default_country_id;}
 $country_menu = $rst->getmenu2('address_country_id', $country_id, false, false, 0, 'style="font-size: x-small; border: outset; width: 175px;"');
 $rst->close();
 
+//set default of residential for address type
+$address_type='residential';
 $address_type_menu = build_address_type_menu($con, $address_type);
 
 $con->close();
@@ -339,6 +341,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.33  2005/07/27 23:10:28  vanmer
+ * - added default type of residential to dropdown on address type for home address
+ *
  * Revision 1.32  2005/06/07 21:38:19  braverock
  * - clean up home address association
  * - move edit address link to a more logical place and change string
