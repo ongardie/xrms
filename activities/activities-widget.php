@@ -426,6 +426,10 @@ if('list' != $activities_widget_type) {
 
     $type_query_select = "$select FROM $from_list $joins $where " . ' AND a.activity_type_id = XXX-value-XXX ' . $group_by;
 
+    $resolution_query_list = "SELECT DISTINCT rt.resolution_short_name, a.activity_resolution_type_id FROM $from_list $joins $where $group_by ORDER BY rt.sort_order, rt.resolution_short_name";
+
+    $resolution_query_select = "$select FROM $from_list $joins $where " . ' AND a.activity_resolution_type_id = XXX-value-XXX ' . $group_by;    
+    
     $owner_query_list = "SELECT DISTINCT ". $con->Concat('u.last_name',"', '",'u.first_names') . ", a.user_id FROM $from_list $joins $where $group_by ORDER BY u.last_name, u.first_names";
     
     $owner_query_select = "$select FROM $from_list $joins $where " . ' AND a.user_id = XXX-value-XXX ' . $group_by;
@@ -455,7 +459,7 @@ if('list' != $activities_widget_type) {
     $columns[] = array('name' => _("Owner"), 'index_sql' => 'owner', 'group_query_list'=>$owner_query_list, 'group_query_select'=>$owner_query_select);
     //$columns[] = array('name' => _("Thread"), 'index_sql' => 'thread', 'group_query_list' => $thread_query_list, 'group_query_select' => $thread_query_select);
     $columns[] = array('name' => _("About"), 'index_calc' => 'activity_about');
-    $columns[] = array('name' => _("Resolution"), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id');
+    $columns[] = array('name' => _("Resolution"), 'index_sql' => 'resolution_short_name', 'sql_sort_column'=>'a.activity_resolution_type_id', 'group_query_list'=>$resolution_query_list, 'group_query_select'=>$resolution_query_select);
 
     // selects the columns this user is interested in
     $pager_columns = new Pager_Columns('ActivitiesPager'.$form_name, $columns, $default_columns, $form_name);
@@ -792,6 +796,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.30  2005/07/27 00:07:11  vanmer
+* - added grouping on resolutions on activities
+*
 * Revision 1.29  2005/07/26 23:22:09  vanmer
 * - added grouping on many fields
 * - added company to list of fields that are always included in the sql join
