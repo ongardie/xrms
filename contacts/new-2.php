@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.24 2005/06/07 21:39:34 braverock Exp $
+ * $Id: new-2.php,v 1.25 2005/07/27 23:11:28 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -57,54 +57,49 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 getGlobalVar($home_address_id, 'home_address_id');
 if (!$home_address_id) {
+
     getGlobalVar($address_name, 'address_name');
+    getGlobalVar($address_country_id, 'address_country_id');
+    getGlobalVar($line1, 'line1');
+    getGlobalVar($line2, 'line2');
+    getGlobalVar($city, 'city');
+    getGlobalVar($province, 'province');
+    getGlobalVar($postal_code, 'postal_code');
+    getGlobalVar($address_type, 'address_type');
+    getGlobalVar($address_body, 'address_body');
+    getGlobalVar($use_pretty_address, 'use_pretty_address');
 
-    if ($address_name) {
-        $sql = "SELECT address_id FROM addresses WHERE company_id=$company_id AND address_name=".$con->qstr($address_name, get_magic_quotes_gpc());
-        $address_rst=$con->execute($sql);
-        if (!$address_rst) { db_error_handler($con, sql); exit; }
-        if (!$address_rst->EOF) {
-            $home_address_id=$address_rst->fields['address_id'];
-        } else {
-            getGlobalVar($address_country_id, 'address_country_id');
-            getGlobalVar($line1, 'line1');
-            getGlobalVar($line2, 'line2');
-            getGlobalVar($city, 'city');
-            getGlobalVar($province, 'province');
-            getGlobalVar($postal_code, 'postal_code');
-            getGlobalVar($address_type, 'address_type');
-            getGlobalVar($address_body, 'address_body');
-            getGlobalVar($use_pretty_address, 'use_pretty_address');
+    if (!$city AND $_POST['city']) $city=$_POST['city'];
 
-            if (!$city AND $_POST['city']) $city=$_POST['city'];
+    if ($line1 AND $city AND $address_country_id) {
+        $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
 
-            $use_pretty_address = ($use_pretty_address == 'on') ? "t" : "f";
+        $rec = array();
+        $rec['country_id'] = $address_country_id;
+//Do not set company ID for a contact's home address
+//            $rec['company_id']=$company_id;
+        $rec['line1'] = $line1;
+        $rec['line2'] = $line2;
+        $rec['city'] = $city;
+        $rec['province'] = $province;
+        $rec['postal_code'] = $postal_code;
+        $rec['address_type'] = $address_type;
+        $rec['address_name'] = $address_name;
+        $rec['address_body'] = $address_body;
+        $rec['use_pretty_address'] = $use_pretty_address;
+        $tbl = 'addresses';
+        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+        $rst=$con->execute($ins);
 
-            $rec = array();
-            $rec['country_id'] = $address_country_id;
-            $rec['company_id']=$company_id;
-            $rec['line1'] = $line1;
-            $rec['line2'] = $line2;
-            $rec['city'] = $city;
-            $rec['province'] = $province;
-            $rec['postal_code'] = $postal_code;
-            $rec['address_type'] = $address_type;
-            $rec['address_name'] = $address_name;
-            $rec['address_body'] = $address_body;
-            $rec['use_pretty_address'] = $use_pretty_address;
-            $tbl = 'addresses';
-            $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-            $rst=$con->execute($ins);
-
-            if (!$rst) { db_error_handler( $con, $ins); }
-            $home_address_id = $con->insert_id();
-            if ($home_address_id!=0) {
-                add_audit_item($con, $session_user_id, 'created', 'addresses', $home_address_id, 1);
-            } else $home_address_id=1;
-        }
-    }
-    else $home_address_id=1;
+        if (!$rst) { db_error_handler( $con, $ins); }
+        $home_address_id = $con->insert_id();
+        if ($home_address_id!=0) {
+            add_audit_item($con, $session_user_id, 'created', 'addresses', $home_address_id, 1);
+        } else $home_address_id=1;
+    } else $home_address=1;
 }
+else $home_address_id=1;
+
 $last_name = (strlen($last_name) > 0) ? $last_name : "[last name]";
 $first_names = (strlen($first_names) > 0) ? $first_names : "[first names]";
 // If salutation is 0, make sure you replace it with an empty string
@@ -172,6 +167,11 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.25  2005/07/27 23:11:28  vanmer
+ * - changed to simply add new address for the contact, instead of searching company for existing addresses with this
+ * name
+ * - removed company_id from address, since addresses for contacts are no longer linked to the company
+ *
  * Revision 1.24  2005/06/07 21:39:34  braverock
  * - remove EOF whitespace
  *
