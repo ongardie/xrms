@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: Groups_list.php,v 1.4 2005/05/10 13:28:14 braverock Exp $
+ * $Id: Groups_list.php,v 1.5 2005/07/28 18:47:13 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
 
@@ -23,92 +24,46 @@ $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
-$con = &adonewconnection($xrms_acl_db_dbtype);
-$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+$con = get_acl_dbconnection();
 
 $page_title = _("Manage Groups");
 
-// begin sorted columns stuff
-getGlobalVar($sort_column, 'sort_column'); 
-getGlobalVar($current_sort_column, 'current_sort_column'); 
-getGlobalVar($sort_order, 'sort_order'); 
-getGlobalVar($current_sort_order, 'current_sort_order'); 
-getGlobalVar($Groups_next_page, 'Groups_next_page'); 
-getGlobalVar($resort, 'resort'); 
-
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-		$current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-    
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
-
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
-$order_by = $sort_column;
-
-
-
-$order_by .= " $sort_order";
-// end sorted columns stuff
-
-
-$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_Groups.php?form_action=edit&return_url=Groups_list.php&Group_id="), 'Group_id', $con->qstr("'\">")) . "AS LINK, Groups.* FROM Groups order by $order_by";
-
-$css_theme='basic-left';
+$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_Groups.php?form_action=edit&return_url=Groups_list.php&Group_id="), 'Group_id', $con->qstr("'\">")) . "AS LINK, Groups.* FROM Groups";
+$form_id='GroupPagerForm';
 start_page($page_title);
 ?>
-
-<script language="JavaScript" type="text/javascript">
-<!--
-
-function submitForm(nextPage) {
-    document.forms[0].Groups_next_page.value = nextPage;
-    document.forms[0].submit();
-}
-
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].Groups_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
-
-//-->
-</script>
-
-
-<form method="POST">
-<input type=hidden name=use_post_vars value=1>
-<input type=hidden name=Groups_next_page value="<?php  echo $Groups_next_page; ?>">
-<input type=hidden name=resort value="0">
-<input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-<input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-
-
-
+<form method="POST" name="<?php echo $form_id; ?>">
 <?php
 
 echo "<div id='Main'>";
 require_once('xrms_acl_nav.php');
 echo '<div id=Content>';
 
-$pager = new ADODB_Pager($con, $sql, 'Groups', false, $sort_column-1, $pretty_sort_order);
+$columns = array();
+$columns[] = array('name' => _("Action"), 'index_sql' => 'LINK', 'sql_sort_column' => 'Groups.Group_name', 'type' => 'url');
+$columns[] = array('name' => _("Name"), 'index_sql' => 'Group_name');
+$columns[] = array('name' => _("ID"), 'index_sql' => 'Group_id');
+
+$default_columns = array('LINK','Group_name');
+
+$pager_columns = new Pager_Columns('GroupsPager', $columns, $default_columns, $form_id);
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+$colspan=count($columns);
+
+echo $pager_columns_selects;
+
+$pager = new GUP_Pager($con, $sql, null,_("Groups"), $form_id, 'GroupsPager', $columns, false);
+
+$endrows="<tr><td colspan=$colspan>$pager_columns_button<input type=\"button\" class=\"button\" value=\""._("Add New"). "\" onclick=\"javascript: location.href='one_Groups.php?form_action=new&return_url=Groups_list.php'\"></tr></td>";
+$pager->AddEndRows($endrows);
+
 $pager->Render();
 
+
 ?>
-<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_Groups.php?form_action=new&return_url=Groups_list.php'">
 </div></div></form>
 
 <?php
@@ -116,6 +71,10 @@ end_page();
 
 /**
  * $Log: Groups_list.php,v $
+ * Revision 1.5  2005/07/28 18:47:13  vanmer
+ * - changed to use acl dbconnection code from wrapper
+ * - changed to use GUP_Pager instead of adodb pager
+ *
  * Revision 1.4  2005/05/10 13:28:14  braverock
  * - localized strings patches provided by Alan Baghumian (alanbach)
  *
