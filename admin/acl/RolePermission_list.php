@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: RolePermission_list.php,v 1.5 2005/05/18 06:24:51 vanmer Exp $
+ * $Id: RolePermission_list.php,v 1.6 2005/07/28 19:55:48 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
 
@@ -23,99 +24,94 @@ $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
-$con = &adonewconnection($xrms_acl_db_dbtype);
-$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+$con = get_acl_dbconnection();
+
 
 $page_title = _("Manage Role Permissions");
 
-// begin sorted columns stuff
-getGlobalVar($sort_column, 'sort_column'); 
-getGlobalVar($current_sort_column, 'current_sort_column'); 
-getGlobalVar($sort_order, 'sort_order'); 
-getGlobalVar($current_sort_order, 'current_sort_order'); 
-getGlobalVar($RolePermission_next_page, 'RolePermission_next_page'); 
-getGlobalVar($resort, 'resort'); 
+$select_sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_RolePermission.php?form_action=edit&return_url=RolePermission_list.php&RolePermission_id="), 'RolePermission_id', $con->qstr("'\">")) . "AS LINK,
+Role_name as 'Role', Child.ControlledObject_name as 'ChildObject', Parent.ControlledObject_name as 'ParentObject', Scope, Permission_name as 'Permission', RolePermission.*, ControlledObjectRelationship.ChildControlledObject_id, ControlledObjectRelationship.ParentControlledObject_id";
 
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-		$current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-    
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
+$inheritance_select="CASE WHEN (Inheritable_flag=1) THEN " .$con->qstr(_("Yes")). " ELSE " . $con->qstr(_("No")) . " END";
+$CORelationship_select="CASE WHEN (Parent.ControlledObject_id IS NOT NULL) THEN " . $con->Concat('Child.ControlledObject_name',$con->qstr(' -> '), 'Parent.ControlledObject_name') . " ELSE " . $con->Concat('Child.ControlledObject_name',$con->qstr(' -> '._("TOP"))). " END";
+$select_sql .=", $inheritance_select as Inheritable, $CORelationship_select as CORelationship";
 
-
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
-
-$ascending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
-$order_by = $sort_column;
-
-
-
-$order_by .= " $sort_order";
-// end sorted columns stuff
-
-
-$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_RolePermission.php?form_action=edit&return_url=RolePermission_list.php&RolePermission_id="), 'RolePermission_id', $con->qstr("'\">")) . "AS LINK,
-Role_name as 'Role', Child.ControlledObject_name as 'Child Object', Parent.ControlledObject_name as 'Parent Object', Scope, Permission_name as 'Permission', Inheritable_flag as Inheritable 
-FROM RolePermission JOIN Permission ON Permission.Permission_id=RolePermission.Permission_id 
+$from_sql="FROM RolePermission JOIN Permission ON Permission.Permission_id=RolePermission.Permission_id 
 JOIN Role on Role.Role_id=RolePermission.Role_id
 JOIN ControlledObjectRelationship ON ControlledObjectRelationship.CORelationship_id=RolePermission.CORelationship_id
 JOIN ControlledObject as Child ON Child.ControlledObject_id=ControlledObjectRelationship.ChildControlledObject_id
-LEFT OUTER JOIN ControlledObject as Parent ON Parent.ControlledObject_id=ControlledObjectRelationship.ParentControlledObject_id
-order by $order_by";
+LEFT OUTER JOIN ControlledObject as Parent ON Parent.ControlledObject_id=ControlledObjectRelationship.ParentControlledObject_id";
 
-$css_theme='basic-left';
+$sql = "$select_sql $from_sql";
+$form_name="RolePermissionForm";
+
+
+$role_list="SELECT " . $con->Concat('Role.Role_name', $con->qstr(' ('), 'count(RolePermission.Role_id)',$con->qstr(')')) . " AS 'RoleName', RolePermission.Role_id $from_sql GROUP BY RolePermission.Role_id ";
+$role_select=$sql . " WHERE RolePermission.Role_id= XXX-value-XXX";
+
+$permission_list="SELECT " . $con->Concat('Permission.Permission_name', $con->qstr(' ('), 'count(RolePermission.Permission_id)',$con->qstr(')')) . " AS 'PermissionName', RolePermission.Permission_id $from_sql GROUP BY RolePermission.Permission_id ";
+$permission_select=$sql . " WHERE RolePermission.Permission_id= XXX-value-XXX";
+
+$scope_list="SELECT " . $con->Concat('RolePermission.Scope', $con->qstr(' ('), 'count(RolePermission.Scope)',$con->qstr(')')) . " AS 'ScopeName', RolePermission.Scope $from_sql GROUP BY RolePermission.Scope ";
+$scope_select=$sql . " WHERE RolePermission.Scope= ".$con->qstr('XXX-value-XXX');
+
+$child_list="SELECT " . $con->Concat('Child.ControlledObject_name', $con->qstr(' ('), 'count(ControlledObjectRelationship.ChildControlledObject_id)',$con->qstr(')')) . " AS 'RoleName', ControlledObjectRelationship.ChildControlledObject_id $from_sql GROUP BY ControlledObjectRelationship.ChildControlledObject_id ";
+$child_select=$sql . " WHERE ControlledObjectRelationship.ChildControlledObject_id= XXX-value-XXX";
+
+$cor_list="SELECT " . $con->Concat($CORelationship_select,$con->qstr(' ('),'count(RolePermission.CORelationship_id)',$con->qstr(')')). ", RolePermission.CORelationship_id $from_sql GROUP BY RolePermission.CORelationship_id ";
+$cor_select=$sql . " WHERE RolePermission.CORelationship_id= XXX-value-XXX";
+
+$inherit_list="SELECT ".$con->Concat($inheritance_select,"' ('",'count(Inheritable_flag)',"')'").", Inheritable_flag $from_sql GROUP BY RolePermission.Inheritable_flag ";
+$inherit_select=$sql . " WHERE Inheritable_flag = XXX-value-XXX";
+
+    $columns = array();
+    $columns[] = array('name' => _("Action"), 'index_sql' => 'LINK');
+    $columns[] = array('name' => _("Role"), 'index_sql' => 'Role','group_query_list'=>$role_list, 'group_query_select'=>$role_select);
+    $columns[] = array('name' => _("Relationship"), 'index_sql' => 'CORelationship', 'group_query_list'=>$cor_list, 'group_query_select'=>$cor_select);
+    $columns[] = array('name' => _("Child Object"), 'index_sql' => 'ChildObject', 'group_query_list'=>$child_list, 'group_query_select'=>$child_select);
+    $columns[] = array('name' => _("Parent Object"), 'index_sql' => 'ParentObject', 'group_query_list'=>$parent_list, 'group_query_select'=>$parent_select);    
+    $columns[] = array('name' => _("Permission"), 'index_sql' => 'Permission', 'group_query_list'=>$permission_list, 'group_query_select'=>$permission_select );
+    $columns[] = array('name' => _("Scope"), 'index_sql' => 'Scope','group_query_list'=>$scope_list, 'group_query_select'=>$scope_select);
+    $columns[] = array('name' => _("Inheritable"), 'index_sql' => 'Inheritable','group_query_list'=>$inherit_list, 'group_query_select'=>$inherit_select);
+    $columns[] = array('name' => _("Child Object ID"), 'index_sql' => 'ChildControlledObject_id');
+    $columns[] = array('name' => _("Parent Object ID"), 'index_sql' => 'ParentControlledObject_id');
+    $columns[] = array('name' => _("Permission ID"), 'index_sql' => 'Permission_id');
+    $columns[] = array('name' => _("Relationship ID"), 'index_sql' => 'CORelationship_id');
+    $columns[] = array('name' => _("Role ID"), 'index_sql' => 'Role_id');
+
+
+    $default_columns=array('LINK','Role', 'ChildObject','ParentObject', 'Permission','Scope');
+    
+    $pager_columns = new Pager_Columns('RolePermissionPager', $columns, $default_columns, $form_name);
+    $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+    $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+    $columns = $pager_columns->GetUserColumns('default');
+    $colspan = count($columns);
+
+        $endrows =  "
+            <tr>
+                <td colspan=$colspan class=widget_content_form_element>
+                    $pager_columns_button<input type=\"button\" class=\"button\" value=\"". _("Add New"). "\" onclick=\"javascript: location.href='one_RolePermission.php?form_action=new&return_url=RolePermission_list.php'\">
+                </td>
+            </tr>";
+
+   $pager = new GUP_Pager($con, $sql,null, _("Role Permissions"), $form_name, 'RolePermission', $columns, false);
+
+    $pager->AddEndRows($endrows);
+
 start_page($page_title);
-?>
 
-<script language="JavaScript" type="text/javascript">
-<!--
-
-function submitForm(nextPage) {
-    document.forms[0].RolePermission_next_page.value = nextPage;
-    document.forms[0].submit();
-}
-
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].RolePermission_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
-
-//-->
-</script>
-
-
-<form method="POST">
-<input type=hidden name=use_post_vars value=1>
-<input type=hidden name=RolePermission_next_page value="<?php  echo $RolePermission_next_page; ?>">
-<input type=hidden name=resort value="0">
-<input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-<input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-
-
-
-<?php
 
 echo "<div id='Main'>";
 require_once('xrms_acl_nav.php');
 echo '<div id=Content>';
-
-$pager = new ADODB_Pager($con, $sql, 'RolePermission', false, $sort_column-1, $pretty_sort_order);
+echo "<form method=\"POST\" name=\"$form_name\">";
+echo $pager_columns_selects;
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_RolePermission.php?form_action=new&return_url=RolePermission_list.php'">
+
 </div></div></form>
 
 <?php
@@ -123,6 +119,10 @@ end_page();
 
 /**
  * $Log: RolePermission_list.php,v $
+ * Revision 1.6  2005/07/28 19:55:48  vanmer
+ * - changed to use new GUP_Pager for role permission list
+ * - added grouping functionality on all applicable fields
+ *
  * Revision 1.5  2005/05/18 06:24:51  vanmer
  * - added Inheritable flag to list of role permissions
  *
