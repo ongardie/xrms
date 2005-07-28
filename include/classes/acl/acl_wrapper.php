@@ -14,6 +14,15 @@ function get_acl_object($access_info=false, $con=false, $callbacks=false, $conte
       return $acl;
 }
 
+function get_acl_dbconnection($datasource=false) {
+    getGlobalVar($acl_datasource_name,'acl_datasource_name');
+    if (!$datasource) $datasource=$acl_datasource_name;
+    if (!$datasource) $datasource='default';
+    
+    $acl=get_acl_object();
+    return $acl->get_object_adodbconnection($datasource);
+}
+
 function get_users_in_role($con, $role) {
     global $session_user_id;
     global $acl_options;
