@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.16 2005/07/28 16:44:03 vanmer Exp $
+ * $Id: sidebar.php,v 1.17 2005/07/28 17:11:49 vanmer Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -65,13 +65,21 @@ $type_query_list = "select " . $con->Concat("case_types.case_type_pretty_name", 
 
 $type_query_select = $cases_sql . ' AND case_types.case_type_id = XXX-value-XXX';
 
+$company_query_list = "select " . $con->Concat("c.company_name", "' ('", "count(c.company_id)", "')'") . ", c.company_id $cases_sql_from $cases_sql_where group by c.company_id order by c.company_name";
+
+$company_query_select = $cases_sql . ' AND c.company_id = XXX-value-XXX';
+
+$priority_query_list = "select " . $con->Concat("case_priorities.case_priority_pretty_name", "' ('", "count(case_priorities.case_priority_id)", "')'") . ", case_priorities.case_priority_id $cases_sql_from $cases_sql_where group by case_priorities.case_priority_id order by case_priorities.case_priority_pretty_name";
+
+$priority_query_select = $cases_sql . ' AND case_priorities.case_priority_id = XXX-value-XXX';
+
 $columns = array();
 $columns[] = array('name' => _('Case'), 'index_sql' => 'case_name', 'sql_sort_column' => 'cases.case_title', 'type' => 'url');
-$columns[] = array('name' => _('Priority'), 'index_sql' => 'priority');
+$columns[] = array('name' => _('Priority'), 'index_sql' => 'priority', 'group_query_list' => $priority_query_list, 'group_query_select' => $priority_query_select);
 $columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 $columns[] = array('name' => _('Due'), 'index_sql' => 'due');
-$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'group_query_list' => $company_query_list, 'group_query_select' => $company_query_select);
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'username', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 
 // no reason to set this if you don't want all by default
@@ -176,6 +184,9 @@ $case_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.17  2005/07/28 17:11:49  vanmer
+ * - added grouping on company and priority columns in cases sidebar
+ *
  * Revision 1.16  2005/07/28 16:44:03  vanmer
  * - split cases sidebar sql into seperate select, from and where pieces
  * - added grouping by owner, type and status in the pager
