@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.55 2005/07/06 23:04:16 braverock Exp $
+ * $Id: some.php,v 1.56 2005/07/28 17:15:04 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -290,9 +290,13 @@ $type_query_list = "select " . $con->Concat("ot.opportunity_type_pretty_name", "
 
 $type_query_select = $sql . ' AND ot.opportunity_type_id = XXX-value-XXX';
 
+$company_query_list = "select " . $con->Concat("c.company_name", "' ('", "count(c.company_id)", "')'") . ", c.company_id $from $where group by c.company_id order by c.company_name";
+
+$company_query_select = $sql . 'AND c.company_id = XXX-value-XXX';
+
 $columns = array();
 $columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title', 'type' => 'url');
-$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'group_query_list' => $company_query_list, 'group_query_select' => $company_query_select);
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 $columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
 $columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
@@ -388,6 +392,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.56  2005/07/28 17:15:04  vanmer
+ * - added grouping on company column in opportunity results pager
+ *
  * Revision 1.55  2005/07/06 23:04:16  braverock
  * - make opportunity type a groupable column
  * - order statuses list by sort_order
