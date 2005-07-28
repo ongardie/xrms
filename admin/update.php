@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.93 2005/07/16 00:01:13 vanmer Exp $
+ * $Id: update.php,v 1.94 2005/07/28 20:27:35 vanmer Exp $
  */
 
 // where do we include from
@@ -5028,6 +5028,8 @@ $con->execute($sql);
         $rst = $con->execute($sql);
        $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Complete' , 'Completed', 5)";
         $rst = $con->execute($sql);
+      $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Duplicate' , 'Closed/Duplicate', 2)";
+	$rst = $con->execute($sql);
         if ($rst) $msg .= _("Successfully added activity resolution types to activity resolution types table.").'<BR><BR>';
         if (!$rst) {
             db_error_handler ($con, $sql);
@@ -5074,6 +5076,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.94  2005/07/28 20:27:35  vanmer
+ * - added new Closed/Duplicate resolution to list of standard activity resolutions
+ *
  * Revision 1.93  2005/07/16 00:01:13  vanmer
  * - added needed sort_order, unused as of yet, needed for workflow
  *
