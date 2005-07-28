@@ -11,7 +11,7 @@ require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.14 2005/07/28 16:45:30 vanmer Exp $
+ * $Id: sidebar.php,v 1.15 2005/07/28 17:14:30 vanmer Exp $
  */
 /*
 Commented until ACL system is implemented
@@ -76,12 +76,16 @@ $type_query_list = "select " . $con->Concat("ot.opportunity_type_pretty_name", "
 
 $type_query_select = $opportunity_sql . ' AND ot.opportunity_type_id = XXX-value-XXX';
 
+$company_query_list = "select " . $con->Concat("c.company_name", "' ('", "count(c.company_id)", "')'") . ", c.company_id FROM $opportunity_sql_from $opportunity_sql_where group by c.company_id order by c.company_name";
+
+$company_query_select = $opportunity_sql . ' AND c.company_id = XXX-value-XXX';
+
 $columns = array();
 $columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title', 'type' => 'url');
-$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'group_query_list' => $company_query_list, 'group_query_select' => $company_query_select);
 $columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
-$columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
-$columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
+$columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'css_classname' => 'right');
+$columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size',  'css_classname' => 'right');
 $columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
@@ -134,6 +138,10 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.15  2005/07/28 17:14:30  vanmer
+ * - added grouping on company column in opportunity sidebar pager
+ * - removed subtotals from opportunity sidebar pager
+ *
  * Revision 1.14  2005/07/28 16:45:30  vanmer
  * - changed to use GUP_Pager instead of rendering table directly
  * - added grouping on type, status and owner
