@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.28 2005/06/30 04:50:27 vanmer Exp $
+ * $Id: data.php,v 1.29 2005/07/28 20:29:10 vanmer Exp $
  */
 
 /**
@@ -2874,6 +2874,8 @@ function activity_db_data($con) {
         $rst = $con->execute($sql);
        $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Complete' , 'Completed', 5)";
         $rst = $con->execute($sql);
+       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Duplicate' , 'Closed/Duplicate', 2)";
+        $rst = $con->execute($sql);
         if (!$rst) {
             db_error_handler ($con, $sql);
         }
@@ -2900,6 +2902,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.29  2005/07/28 20:29:10  vanmer
+ * - added new activity resolution to list of standard activity resolutions
+ *
  * Revision 1.28  2005/06/30 04:50:27  vanmer
  * - added standard types for activity resolution types
  *
