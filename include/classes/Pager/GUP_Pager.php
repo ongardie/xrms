@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.31 2005/07/26 23:17:34 vanmer Exp $
+ * $Id: GUP_Pager.php,v 1.32 2005/07/28 15:41:49 vanmer Exp $
  */
 
 
@@ -76,6 +76,10 @@ class GUP_Pager {
     var $pager_id;
     var $EndRows;
     var $maximize;
+    var $show_hide;
+    var $showCaption;
+    var $hideCaption;
+
 
 	var $get_only_visible 		= false; // used internally; whether or not to get the whole sql dataset
 	var $use_cached 			= true; 	// whether or not to use the cache
@@ -131,6 +135,8 @@ class GUP_Pager {
       	$this->sql 			= $sql;
         $this->data 		= $data;
         $this->caption 		= $caption;
+	$this->showCaption	= (($showCaption) ? $showCaption : _("Show"));
+	$this->hideCaption	= (($hideCaption) ? $hideCaption : _("Hide"));
         $this->form_id 		= $form_id;
         $this->pager_id		= $pager_id;
         $this->column_info 	= $column_info;
@@ -146,6 +152,9 @@ class GUP_Pager {
         getGlobalVar($this->next_page, $pager_id . '_next_page');
         getGlobalVar($this->resort, $pager_id . '_resort');
         getGlobalVar($this->maximize, $pager_id . '_maximize');
+	getGlobalVar($this->show_hide, $pager_id . '_show_hide');
+	if (!$this->show_hide) $this->show_hide='show';
+
 		getGlobalVar($this->group_mode, $this->pager_id . '_group_mode');
 		getGlobalVar($this->group_id, $this->pager_id . '_group_id');
 		getGlobalVar($refresh, $this->pager_id . '_refresh');
@@ -534,7 +543,6 @@ class GUP_Pager {
 			// exporting works in two passes...on this pass we output this part which will cause a reload to pager-export.php
 	        $cache_name = $this->pager_id . '_data';
 			$pager_id = $this->pager_id;
-
         	echo <<<END
 
 				<!-- used by pager-export.php -->
@@ -560,11 +568,15 @@ class GUP_Pager {
 				</script>
 END;
 		}
-
+        if ($this->show_hide=='hide') {
+            $js_show_hide="
+\nvar oldEvt = window.onload;\nwindow.onload = function() {\nif (oldEvt) oldEvt();\n{$this->pager_id}_Hide();\n}\n";
+        } else $js_show_hide='';
 
         echo <<<END
             <script language="JavaScript" type="text/javascript">
             <!--
+		$js_show_hide
 	        function {$this->pager_id}_refresh() {
                 document.{$this->form_id}.{$this->pager_id}_refresh.value = 'true';
 				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
@@ -590,6 +602,28 @@ END;
 				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
 			}
+	    function {$this->pager_id}_Hide() {
+	    	pager=document.getElementById('{$this->pager_id}_contents');
+		hlink=document.getElementById('{$this->pager_id}_showhideLink');
+		document.{$this->form_id}.{$this->pager_id}_show_hide.value='hide';
+		hlink.innerHTML='{$this->showCaption}';
+		hlink.onclick={$this->pager_id}_Show;
+		if (pager) {
+		    for (var r=1; r< pager.rows.length; r++)
+		        pager.rows[r].style.display='none';
+		}
+	    }
+	    function {$this->pager_id}_Show() {
+		pager=document.getElementById('{$this->pager_id}_contents');
+		hlink=document.getElementById('{$this->pager_id}_showhideLink');
+		hlink.innerHTML='{$this->hideCaption}';
+		document.{$this->form_id}.{$this->pager_id}_show_hide.value='show';
+		hlink.onclick={$this->pager_id}_Hide;
+		if (pager) {
+			for (var r=1; r< pager.rows.length; r++)
+			    pager.rows[r].style.display='';
+	        }
+	    }
 	        function {$this->pager_id}_unmaximize() {
                 document.{$this->form_id}.{$this->pager_id}_maximize.value = null;
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
@@ -609,7 +643,7 @@ END;
 				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
                 document.{$this->form_id}.submit();
 			}
-
+			
             //-->
             </script>
 
@@ -622,6 +656,7 @@ END;
             <input type=hidden name={$this->pager_id}_current_sort_order value="{$this->sort_order}">
             <input type=hidden name={$this->pager_id}_sort_order value="{$this->sort_order}">
             <input type=hidden name={$this->pager_id}_maximize value="{$this->maximize}">
+	    <input type=hidden name={$this->pager_id}_show_hide value="{$this->show_hide}">
             <input type=hidden name={$this->pager_id}_refresh value="">
             <input type=hidden name={$this->pager_id}_export value="">
 
@@ -950,9 +985,10 @@ END;
 				}
 			}
 		}
+		$showhide_link="<a href=\"#\" id=\"{$this->pager_id}_showhideLink\" onclick=\"javascript:{$this->pager_id}_Hide();\">{$this->hideCaption}</a>";
 
        	echo "<!-- Begin Pager -->\n
-				<table class=widget cellspacing=1 width=\"100%\">
+				<table class=widget cellspacing=1 width=\"100%\" id=\"{$this->pager_id}_contents\">
 			";
 
 		if($this->show_caption_bar) {
@@ -960,12 +996,11 @@ END;
 				<tr><td colspan=$colspan class=widget_header align=left>
 					<table width=\"100%\" cellspacing=0 cellpadding=0 border=0>
 						<tr><td class=widget_header align=left>{$this->caption}</td>
-							<td class=widget_header align=right>{$cache_indicator}{$size_buttons}</td>
+							<td class=widget_header align=right>{$showhide_link}{$cache_indicator}{$size_buttons}</td>
 						</tr>
 					</table>
 				</td></tr>\n";
 		}
-
         if ($page_count != '&nbsp;') {
             echo "<tr><td colspan=$colspan>".
             			"<table border=0 cellpadding=0 cellspacing=0 width=\"100%\">".
@@ -977,7 +1012,6 @@ END;
         echo $grid;
 
 		if($this->EndRows) { echo $this->EndRows; }
-
         echo "</table>\n<!-- End Pager -->";
     }
 
@@ -1112,6 +1146,11 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.32  2005/07/28 15:41:49  vanmer
+ * - added Hide and Show javascript functions to collapse view of pager down to only caption
+ * - pass hide/show value in form variables
+ * - added event to onload of window, if initial condition of pager should be hidden
+ *
  * Revision 1.31  2005/07/26 23:17:34  vanmer
  * - changed to only assign default Group value when group_id not set
  * - changed to only use grouping SQL if group_id value is not blank (allows 0 as a value now)
