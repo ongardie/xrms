@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.8 2005/06/07 20:20:25 vanmer Exp $
+ * $Id: GroupUser_list.php,v 1.9 2005/07/28 18:46:06 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,8 +25,8 @@ $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
-$con = &adonewconnection($xrms_acl_db_dbtype);
-$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+$con = get_acl_dbconnection();
+
 
 $page_title = _("Manage Group Users");
 
@@ -35,16 +35,25 @@ $form_name = 'GroupUserPager';
 $sql="SELECT " . 
 $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\""._("Edit")."\" onclick=\"javascript: location.href='one_GroupUser.php?form_action=edit&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">"),$con->qstr("<input type=\"button\" class=\"button\" value=\""._("Delete") . "\" onclick=\"javascript: location.href='edit_GroupUser.php?userAction=deleteRole&return_url=GroupUser_list.php&GroupUser_id="), 'GroupUser_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'UserGroup', " . 
 $con->Concat('users.last_name', $con->qstr(', '), 'users.first_names') . " AS 'User', " .  
-"Role_name as Role FROM GroupUser LEFT OUTER JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Role on Role.Role_id=GroupUser.Role_id LEFT OUTER JOIN users on users.user_id=GroupUser.user_id WHERE GroupUser.user_id IS NOT NULL";
+"Role_name as Role, GroupUser.* FROM GroupUser LEFT OUTER JOIN Groups on Groups.Group_id=GroupUser.Group_id LEFT OUTER JOIN Role on Role.Role_id=GroupUser.Role_id LEFT OUTER JOIN users on users.user_id=GroupUser.user_id WHERE GroupUser.user_id IS NOT NULL";
 
 $user_list = "SELECT " . $con->Concat('users.last_name', $con->qstr(', '), 'users.first_names', $con->qstr(' ('), 'count(GroupUser.GroupUser_id)',$con->qstr(')')) . " AS 'User', GroupUser.user_id FROM GroupUser JOIN users ON users.user_id=GroupUser.user_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.user_id";
 $user_select=$sql . " AND GroupUser.user_id= XXX-value-XXX";
 
+$group_list="SELECT " . $con->Concat('Groups.Group_name', $con->qstr(' ('), 'count(GroupUser.Group_id)',$con->qstr(')')) . " AS 'GroupName', GroupUser.Group_id FROM GroupUser JOIN Groups ON Groups.Group_id=GroupUser.Group_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.Group_id";
+$group_select=$sql . " AND GroupUser.Group_id= XXX-value-XXX";
+
+$role_list="SELECT " . $con->Concat('Role.Role_name', $con->qstr(' ('), 'count(GroupUser.Role_id)',$con->qstr(')')) . " AS 'RoleName', GroupUser.Role_id FROM GroupUser JOIN Role ON GroupUser.Role_id=Role.Role_id WHERE GroupUser.user_id IS NOT NULL GROUP BY GroupUser.Role_id";
+$role_select=$sql . " AND GroupUser.Role_id= XXX-value-XXX";
+
     $columns = array();
-    $columns[] = array('name' => 'Edit', 'index_sql' => 'LINK');
-    $columns[] = array('name' => 'User', 'index_sql' => 'User', 'group_query_list'=>$user_list, 'group_query_select'=>$user_select, 'sql_sort_column'=>'GroupUser.user_id');
-    $columns[] = array('name' => 'Group', 'index_sql' => 'UserGroup','group_calc'=>true);
-    $columns[] = array('name' => 'Role', 'index_sql' => 'Role','group_calc'=>true);
+    $columns[] = array('name' => _("Action"), 'index_sql' => 'LINK');
+    $columns[] = array('name' => _("User"), 'index_sql' => 'User', 'group_query_list'=>$user_list, 'group_query_select'=>$user_select);
+    $columns[] = array('name' => _("Group"), 'index_sql' => 'UserGroup', 'group_query_list'=>$group_list, 'group_query_select'=>$group_select );
+    $columns[] = array('name' => _("Role"), 'index_sql' => 'Role','group_query_list'=>$role_list, 'group_query_select'=>$role_select);
+    $columns[] = array('name' => _("User ID"), 'index_sql' => 'user_id');
+    $columns[] = array('name' => _("Group ID"), 'index_sql' => 'Group_id');
+    $columns[] = array('name' => _("Role ID"), 'index_sql' => 'Role_id');
 
 
     $default_columns=array('LINK','UserGroup', 'User','Role');
@@ -92,6 +101,11 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.9  2005/07/28 18:46:06  vanmer
+ * - added SQL grouping on Groups and Roles in User Groups interface
+ * - added extra SQL columns for IDs of each of the entities
+ * - changed to translate all field names
+ *
  * Revision 1.8  2005/06/07 20:20:25  vanmer
  * - added new interface to GroupUsers, splitting out child groups
  * - added new interface for adding child groups/managing them
