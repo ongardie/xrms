@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.61 2005/06/29 20:55:57 daturaarutad Exp $
+ * $Id: home.php,v 1.62 2005/07/28 15:50:32 vanmer Exp $
  */
 
 // include the common files
@@ -47,6 +47,7 @@ $con->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_d
 /*********************************/
 /*** Include the sidebar boxes ***/
 //include the Cases sidebar
+$case_sidebar_default_columns= array('case_name', 'company', 'priority','due');
 $case_limit_sql = "and cases.user_id = $session_user_id";
 require_once("../cases/sidebar.php");
 
@@ -442,6 +443,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.62  2005/07/28 15:50:32  vanmer
+ * - changed to show the company in the cases sidebar by default
+ *
  * Revision 1.61  2005/06/29 20:55:57  daturaarutad
  * add default column "due" to activities widget
  *
