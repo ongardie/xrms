@@ -5,11 +5,13 @@ if ( !defined('IN_XRMS') )
   die('Hacking attempt');
   exit;
 }
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.13 2005/07/11 22:43:56 vanmer Exp $
+ * $Id: sidebar.php,v 1.14 2005/07/28 16:45:30 vanmer Exp $
  */
 /*
 Commented until ACL system is implemented
@@ -18,77 +20,125 @@ if (!$opList) { $opportunity_rows=''; return false; }
 else { $opList=implode(",",$opList); $opportunity_limit_sql.=" AND opportunities.opportunity_id IN ($opList) "; }
 */
 
-$opportunity_rows = "<div id='opportunity_sidebar'>
-        <table class=widget cellspacing=1 width=\"100%\">
-            <tr>
-                <td class=widget_header colspan=4>" . _("Opportunities") . "</td>
-            </tr>
-            <tr>
-                <td class=widget_label>" . _("Name") . "</td>
-                <td class=widget_label>" . _("Owner") . "</td>
-                <td class=widget_label>" . _("Status") . "</td>
-                <td class=widget_label>" . _("Due") . "</td>
-            </tr>\n";
+$opp_sidebar_form_id='SidebarOpportunities';
+$opp_sidebar_header=_("Opportunities");
+$target=$http_site_root.current_page();
+
+
+$opportunity_rows = "<div id='opportunity_sidebar'>";
+
+$opportunity_rows.="<form action=\"$target\" name=\"$opp_sidebar_form_id\" method=GET><input type=hidden name=contact_id value=$contact_id><input type=hidden name=company_id value=$company_id><input type=hidden name=division_id value=$division_id>";
+
+
+if (!$opportunity_sidebar_rows_per_page) {
+    $opportunity_sidebar_rows_per_page=5;
+}
 
 //build the cases sql query
-$opportunity_sql = "select * from opportunities, opportunity_statuses, users
-where opportunities.opportunity_status_id = opportunity_statuses.opportunity_status_id
-and opportunities.user_id = users.user_id
-and opportunity_record_status = 'a'
-and opportunity_statuses.status_open_indicator = 'o'
+$close_at = $con->SQLDate('Y-m-D', 'close_at');
+$opportunity_sql_select = "select "
+. $con->Concat("'<a id=\"'", "opportunities.opportunity_title",  "'\" href=\"one.php?opportunity_id='", "opportunities.opportunity_id", "'\">'", "opportunities.opportunity_title","'</a>'")
+. " AS opportunity" . ",
+  c.company_name AS 'company', u.username AS owner " . ",
+  ot.opportunity_type_pretty_name AS type,
+  CASE
+    WHEN (opportunities.size > 0) THEN opportunities.size
+    ELSE 0
+  END AS opportunity_size" . ",
+  CASE
+    WHEN (opportunities.size > 0) THEN ((opportunities.size * opportunities.probability) / 100)
+    ELSE 0
+  END AS weighted_size" . ",
+  os.opportunity_status_pretty_name AS status " . ","
+  . " $close_at AS close_date, close_at, opportunities.opportunity_title";
+  $opportunity_sql_from="opportunities, opportunity_statuses os, opportunity_types ot, users u, companies c";
+$opportunity_sql_where="
+where opportunities.opportunity_status_id = os.opportunity_status_id
+and opportunities.user_id = u.user_id
+and opportunities.opportunity_type_id = ot.opportunity_type_id
+and opportunities.company_id = c.company_id
+and opportunities.opportunity_record_status = 'a'
+and os.status_open_indicator = 'o'
 $opportunity_limit_sql
-order by close_at, sort_order";
+";
 
-//uncomment the debug line to see what's going on with the query
-//$con->debug=1;
+$opportunity_sql="$opportunity_sql_select FROM $opportunity_sql_from $opportunity_sql_where";
 
-//execute our query
-$rst = $con->SelectLimit($opportunity_sql, 5, 0);
+$owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user_id)", "')'") . ", u.user_id FROM $opportunity_sql_from $opportunity_sql_where group by u.username order by u.username";
 
-if (strlen($rst->fields['username'])>0) {
-    while (!$rst->EOF) {
-        $opportunity_rows .= '<tr>';
-        $opportunity_rows .= "<td class=widget_content><a href='$http_site_root/opportunities/one.php?opportunity_id=" . $rst->fields['opportunity_id'] . "'>" . $rst->fields['opportunity_title'] . '</a></td>';
-        $opportunity_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $opportunity_rows .= '<td class=widget_content>' . $rst->fields['opportunity_status_pretty_name'] . '</td>';
-        $opportunity_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['close_at']) . '</td>';
-        $opportunity_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-    $opportunity_rows .= "<tr> <td class=widget_content colspan=4>" . _("No open opportunities") . "</td> </tr>";
-}
+$owner_query_select = $opportunity_sql . 'AND u.user_id = XXX-value-XXX';
+
+$status_query_list = "select " . $con->Concat("os.opportunity_status_pretty_name", "' ('", "count(os.opportunity_status_id)", "')'") . ", os.opportunity_status_id FROM $opportunity_sql_from $opportunity_sql_where group by os.opportunity_status_id order by os.sort_order";
+
+$status_query_select = $opportunity_sql . ' AND os.opportunity_status_id = XXX-value-XXX';
+
+$type_query_list = "select " . $con->Concat("ot.opportunity_type_pretty_name", "' ('", "count(ot.opportunity_type_id)", "')'") . ", ot.opportunity_type_id FROM $opportunity_sql_from $opportunity_sql_where group by ot.opportunity_type_id order by ot.opportunity_type_pretty_name";
+
+$type_query_select = $opportunity_sql . ' AND ot.opportunity_type_id = XXX-value-XXX';
+
+$columns = array();
+$columns[] = array('name' => _('Opportunity'), 'index_sql' => 'opportunity', 'sql_sort_column' => 'opportunity_title', 'type' => 'url');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
+$columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
+$columns[] = array('name' => _('Opportunity Size'), 'index_sql' => 'opportunity_size', 'subtotal' => true, 'css_classname' => 'right');
+$columns[] = array('name' => _('Weighted Size'), 'index_sql' => 'weighted_size', 'subtotal' => true, 'css_classname' => 'right');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
+$columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
+$columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
+
+
+if (!$opportunity_sidebar_default_columns) $opportunity_sidebar_default_columns = array('opportunity', 'type','status', 'close_date');
+
+$pager_columns = new Pager_Columns('OpportunitiesSidebarPager', $columns, $opportunity_sidebar_default_columns, $opp_sidebar_form_id);
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+$colspan = count($columns);
+
+// output the selectable columns widget
+$opportunity_rows.= $pager_columns_selects;
+
+// caching is disabled for this pager (since it's all sql)
+$pager = new GUP_Pager($con, $opportunity_sql, null,$opp_sidebar_header, $opp_sidebar_form_id, 'OpportunitiesSidebarPager', $columns, false, true);
 
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0)) ) {
-    $new_button=render_create_button('New','submit', false, false, false, 'opportunities');
-    $opportunity_rows .= "
+    $new_button=render_create_button('New','button', "javascript:location.href='$http_site_root/opportunities/new.php?company_id=$company_id&division_id=$division_id&contact_id=$contact_id';", false, false, 'opportunities');
+    $endrows = "
             <tr>
-                <form action='".$http_site_root."/opportunities/new.php' method='post'>
-                <input type='hidden' name='company_id' value='$company_id'>
-                <input type='hidden' name='division_id' value='$division_id'>
-                <input type='hidden' name='contact_id' value='$contact_id'>
-                <td class=widget_content_form_element colspan=4>
+                <td class=widget_content_form_element colspan=$colspan>
+                    $pager_columns_button
                     $new_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
                 </form>
             </tr>\n";
 } else {
-    $opportunity_rows .="
+    $endrows ="
             <tr>
-                <td class=widget_content_form_element colspan=4>
+                <td class=widget_content_form_element colspan=$colspan>
+                    $pager_columns_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
             </tr>\n";
 }
 
+$pager->AddEndRows($endrows);
+
+$opportunity_rows.=$pager->Render($opportunity_sidebar_rows_per_page);
+
+
 //now close the table, we're done
-$opportunity_rows .= "        </table>\n</div>";
+$opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.14  2005/07/28 16:45:30  vanmer
+ * - changed to use GUP_Pager instead of rendering table directly
+ * - added grouping on type, status and owner
+ * - changed output of new opportunity button on sidebar from form submit to javascript button with onclick
+ *
  * Revision 1.13  2005/07/11 22:43:56  vanmer
  * - changed to reflect correct table for permissions for create button
  *
