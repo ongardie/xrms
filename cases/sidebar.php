@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.15 2005/07/28 15:44:40 vanmer Exp $
+ * $Id: sidebar.php,v 1.16 2005/07/28 16:44:03 vanmer Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -37,11 +37,11 @@ if (!$cases_sidebar_rows_per_page) {
 }
 
 //build the cases sql query
-$cases_sql = "SELECT " . $con->Concat("'<a href=\"$http_site_root/cases/one.php?case_id='", "cases.case_id", "'\">'", "cases.case_title", "'</a>'") . " AS case_name, cases.*, " .$con->SQLDate('Y-m-d', 'cases.due_at') . " AS due, case_types.case_type_pretty_name as type,
+$cases_sql_select = "SELECT " . $con->Concat("'<a href=\"$http_site_root/cases/one.php?case_id='", "cases.case_id", "'\">'", "cases.case_title", "'</a>'") . " AS case_name, cases.*, " .$con->SQLDate('Y-m-d', 'cases.due_at') . " AS due, case_types.case_type_pretty_name as type,
 case_statuses.case_status_pretty_name as status,
-c.company_name as company, users.username as username, case_priorities.case_priority_pretty_name as priority
-              FROM cases, case_priorities, users, case_statuses, companies c, case_types
-              WHERE cases.case_priority_id = case_priorities.case_priority_id
+c.company_name as company, users.username as username, case_priorities.case_priority_pretty_name as priority";
+$cases_sql_from= "FROM cases, case_priorities, users, case_statuses, companies c, case_types";
+$cases_sql_where="WHERE cases.case_priority_id = case_priorities.case_priority_id
                 and cases.user_id = users.user_id
                 and case_record_status = 'a'
                 and cases.company_id = c.company_id
@@ -50,14 +50,29 @@ c.company_name as company, users.username as username, case_priorities.case_prio
                 and case_statuses.status_open_indicator = 'o'
                 $case_limit_sql";
 
+$cases_sql="$cases_sql_select $cases_sql_from $cases_sql_where";
+ 
+$owner_query_list = "select " . $con->Concat("users.username", "' ('", "count(users.user_id)", "')'") . ", users.user_id $cases_sql_from $cases_sql_where group by users.username order by users.username";
+
+$owner_query_select = $cases_sql . ' AND users.user_id = XXX-value-XXX';
+
+
+$status_query_list = "select " . $con->Concat("case_statuses.case_status_pretty_name", "' ('", "count(case_statuses.case_status_id)", "')'") . ", case_statuses.case_status_id $cases_sql_from $cases_sql_where group by case_statuses.case_status_id order by case_statuses.sort_order";
+
+$status_query_select = $cases_sql . ' AND case_statuses.case_status_id = XXX-value-XXX';
+
+$type_query_list = "select " . $con->Concat("case_types.case_type_pretty_name", "' ('", "count(case_types.case_type_id)", "')'") . ", case_types.case_type_id $cases_sql_from $cases_sql_where group by case_types.case_type_id order by case_types.case_type_pretty_name";
+
+$type_query_select = $cases_sql . ' AND case_types.case_type_id = XXX-value-XXX';
+
 $columns = array();
 $columns[] = array('name' => _('Case'), 'index_sql' => 'case_name', 'sql_sort_column' => 'cases.case_title', 'type' => 'url');
 $columns[] = array('name' => _('Priority'), 'index_sql' => 'priority');
-$columns[] = array('name' => _('Type'), 'index_sql' => 'type');
-$columns[] = array('name' => _('Status'), 'index_sql' => 'status');
+$columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
+$columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 $columns[] = array('name' => _('Due'), 'index_sql' => 'due');
 $columns[] = array('name' => _('Company'), 'index_sql' => 'company');
-$columns[] = array('name' => _('Owner'), 'index_sql' => 'username');
+$columns[] = array('name' => _('Owner'), 'index_sql' => 'username', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
 
 // no reason to set this if you don't want all by default
 if (!$case_sidebar_default_columns) $case_sidebar_default_columns = array('case_name', 'priority','type', 'due');
@@ -161,6 +176,10 @@ $case_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.16  2005/07/28 16:44:03  vanmer
+ * - split cases sidebar sql into seperate select, from and where pieces
+ * - added grouping by owner, type and status in the pager
+ *
  * Revision 1.15  2005/07/28 15:44:40  vanmer
  * - changed sidebar to use GUP_Pager instead of direct HTML
  * - changed from form submit for new case from sidebar to use javascript button with onclick
