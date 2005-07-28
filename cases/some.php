@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.32 2005/05/31 17:34:24 daturaarutad Exp $
+ * $Id: some.php,v 1.33 2005/07/28 17:12:50 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -240,13 +240,33 @@ start_page($page_title, true, $msg);
 <?php
 $_SESSION["search_sql"]=$sql;
 
+$owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user_id)", "')'") . ", u.user_id $from $where group by u.username order by u.username";
+
+$owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
+
+$status_query_list = "select " . $con->Concat("cas.case_status_pretty_name", "' ('", "count(cas.case_status_id)", "')'") . ", cas.case_status_id $from $where group by cas.case_status_id order by cas.sort_order";
+
+$status_query_select = $sql . ' AND cas.case_status_id = XXX-value-XXX';
+
+$type_query_list = "select " . $con->Concat("cat.case_type_pretty_name", "' ('", "count(cat.case_type_id)", "')'") . ", cat.case_type_id $from $where group by cat.case_type_id order by cat.case_type_pretty_name";
+
+$type_query_select = $sql . ' AND cat.case_type_id = XXX-value-XXX';
+
+$company_query_list = "select " . $con->Concat("c.company_name", "' ('", "count(c.company_id)", "')'") . ", c.company_id $from $where group by c.company_id order by c.company_name";
+
+$company_query_select = $sql . 'AND c.company_id = XXX-value-XXX';
+
+$priority_query_list = "select " . $con->Concat("cap.case_priority_pretty_name", "' ('", "count(cap.case_priority_id)", "')'") . ", cap.case_priority_id $from $where group by cap.case_priority_id order by cap.case_priority_pretty_name";
+
+$priority_query_select = $sql . ' AND cap.case_priority_id = XXX-value-XXX';
+
 $columns = array();
 $columns[] = array('name' => _('Case'), 'index_sql' => 'case_name', 'sql_sort_column' => 'ca.case_title', 'type' => 'url');
-$columns[] = array('name' => _('Company'), 'index_sql' => 'company');
-$columns[] = array('name' => _('Owner'), 'index_sql' => 'owner');
-$columns[] = array('name' => _('Type'), 'index_sql' => 'type');
-$columns[] = array('name' => _('Priority'), 'index_sql' => 'priority');
-$columns[] = array('name' => _('Status'), 'index_sql' => 'status');
+$columns[] = array('name' => _('Company'), 'index_sql' => 'company', 'group_query_list' => $company_query_list, 'group_query_select' => $company_query_select);
+$columns[] = array('name' => _('Owner'), 'index_sql' => 'owner', 'group_query_list' => $owner_query_list, 'group_query_select' => $owner_query_select);
+$columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list' => $type_query_list, 'group_query_select' => $type_query_select);
+$columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
+$columns[] = array('name' => _('Priority'), 'index_sql' => 'priority', 'group_query_list' => $priority_query_list, 'group_query_select' => $priority_query_select);
 $columns[] = array('name' => _('Due'), 'index_sql' => 'due');
 
 
@@ -334,6 +354,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.33  2005/07/28 17:12:50  vanmer
+ * - added grouping on company, owner, type, status and priority fields for results pager
+ *
  * Revision 1.32  2005/05/31 17:34:24  daturaarutad
  * removed translation from query since it is happening in the pager columns
  *
