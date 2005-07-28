@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_RolePermission.php,v 1.3 2005/03/05 00:52:34 daturaarutad Exp $
+ * $Id: one_RolePermission.php,v 1.4 2005/07/28 20:09:02 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,8 +23,8 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
 global $symbol_precendence;
 
-	$con = &adonewconnection($xrms_acl_db_dbtype);
-	$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+	$con = get_acl_dbconnection();
+	
 	// $con->debug=1;
 	
 	// we need this for the companies foreign key lookup
@@ -58,11 +58,15 @@ global $symbol_precendence;
   $model->ReadSchemaFromDB($con, 'RolePermission');
   $model->SetPrimaryKeyName('RolePermission_id');
 
-  $model->SetDisplayNames(array('Group_name' => 'Group Name')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
+  $model->SetDisplayNames(array('Inheritable_flag' => 'Inheritable Flag')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
 
   $model->SetForeignKeyField('CORelationship_id', 'Controlled Object Relationship', null, null, null, null, $relationships);
   $model->SetForeignKeyField('Role_id', 'Role', 'Role', 'Role_id', 'Role_name');
   $model->SetForeignKeyField('Permission_id', 'Permission', 'Permission', 'Permission_id', 'Permission_name');
+  
+  $inherit_values[1]=_("Yes");
+  $inherit_values[0]=_("No");
+  $model->SetSelectField('Inheritable_flag', _("Inheritable Flag"), $inherit_values);
   
   $view = new ADOdb_QuickForm_View($con, 'Group User');
   $view->SetReturnButton('Return to List', $return_url);
@@ -93,6 +97,10 @@ end_page();
 
 /**
  * $Log: one_RolePermission.php,v $
+ * Revision 1.4  2005/07/28 20:09:02  vanmer
+ * - changed to use new acl dataconnection
+ * - changed to use select box for inheritable flag
+ *
  * Revision 1.3  2005/03/05 00:52:34  daturaarutad
  * manually setting primary keys until mssql driver supports metacolumns fully
  *
