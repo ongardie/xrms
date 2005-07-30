@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.24 2005/07/30 00:52:38 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.25 2005/07/30 01:30:35 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -552,6 +552,13 @@ class xrms_acl {
                 $rs->movenext();
             }
         }
+        
+        //find groups which match the criteria in the GroupMember criteria table
+        $criteriagroupList=$this->get_object_groups_by_criteria($ControlledObject_id, $on_what_id);
+        if ($criteriagroupList) {
+            $groupList=array_merge($groupList, $criteriagroupList);
+        }
+        
         //find groups which have this group as the child
         foreach ($groupList as $Group_id) {
             $parentList = $this->get_group_parents($Group_id);
@@ -594,6 +601,43 @@ class xrms_acl {
         }    
     }
     
+    /*****************************************************************************/
+    /**
+     *
+     * Returns a list of groups that contain a specific Controlled Object, through the criteria on the groups
+     *
+     * @param integer ControlledObject_id identifying which object to retrieve a list of groups
+     * @param integer on_what_id identifying which particular object ID to search for
+     * @return Array containing a collection of groups
+     *
+     **/
+    function get_object_groups_by_criteria($ControlledObject_id, $on_what_id) {
+        $con = $this->DBConnection;
+        $groupList=array();
+        if (!$ControlledObject_id OR ($on_what_id===false)) { return false; }
+        $sql = "SELECT * FROM GroupMember WHERE ControlledObject_id=$ControlledObject_id AND on_what_id<=0";
+        $rst = $con->execute($sql);
+        if (!$rst) { db_error_handler($con, $sql); return false; }
+        while (!$rst->EOF) {
+            $gkey=array_search($rst->fields['Group_id'], $groupList);
+            //make sure this group isn't already found in the list
+            if ($gkey===false) {
+                $objects=$this->get_group_members_by_criteria($rst->fields['GroupMember_id'],$rst->fields);
+                if ($objects) {
+                    foreach ($objects as $data) {
+                        if ($data['on_what_id']==$on_what_id) {
+                            $groupList[]=$rst->fields['Group_id'];
+                            break;
+                        }
+                    }
+                }
+            }
+            $rst->movenext();
+        }
+        if (count($groupList)>0) {
+            return $groupList;
+        } else return false;
+    }
     /*****************************************************************************/
     /** function get_object_groups_recursive
      *
@@ -2501,6 +2545,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.25  2005/07/30 01:30:35  vanmer
+ * - added function to get list of groups from GroupMemberCriteria data
+ * - added group list addition to retrieval of groups list used in permissions
+ *
  * Revision 1.24  2005/07/30 00:52:38  vanmer
  * - part of initial implementation of ACL's Group Member by Criteria functionality
  * - added API to add/get/delete group member criteria
