@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.9 2005/07/30 00:53:32 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.10 2005/07/30 01:31:04 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -404,11 +404,29 @@ Class ACLTest extends PHPUnit_TestCase {
                 if ($ckey!==false) unset($expected_results[$ckey]);
             }
             $this->assertTrue(count($expected_results)==0, "Failed to find expected results: " . implode(", ",$expected_results));
-        }
-        
+        }        
         return $ret;
    
    }
+   
+    function test_get_object_groups_by_criteria($ControlledObject=false, $on_what_id=false, $searchGroup=false) {
+        $controlled_objectData = $this->test_get_controlled_object($ControlledObject); 
+        $controlled_object=$controlled_objectData['ControlledObject_id'];
+        $this->assertTrue($controlled_object, "Failed to get controlled object $ControlledObject for object groups test");
+        
+        $group = $this->test_get_group($searchGroup);
+        $group = $group['Group_id'];
+        $this->assertTrue($group!==false, "Group member group locate failed");
+        $on_what_id=1;
+        
+        $ret=$this->acl->get_object_groups_by_criteria($controlled_object, $on_what_id);
+        $this->assertTrue($ret, "Failed to get group list for object $ControlledObject id $on_what_id");
+        if ($ret) {
+            $ckey=array_search($group, $ret);
+            $this->assertTrue($ckey!==false, "Failed to find group $group in criteria return list");
+        }
+        return $ret;         
+    }
     
     function test_delete_group_member_criteria($Group=false, $ControlledObject=false, $criteria_table=false, $criteria_resultfield=false, $criteria_fieldname=false, $criteria_value=false, $criteria_operator=false) {
         if (!$criteria_table AND !$criteria_fieldname and !$criteria_value) { 
@@ -1243,6 +1261,9 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.10  2005/07/30 01:31:04  vanmer
+ * - added test for list of groups on group member criteria search
+ *
  * Revision 1.9  2005/07/30 00:53:32  vanmer
  * - part of addition of ACL's Group Member by Criteria functionality
  * - added tests for new ACL group member by criteria add/retrieve/query
