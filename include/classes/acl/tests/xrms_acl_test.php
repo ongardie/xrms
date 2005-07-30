@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.8 2005/07/22 23:37:56 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.9 2005/07/30 00:53:32 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -302,8 +302,7 @@ Class ACLTest extends PHPUnit_TestCase {
 
     }
     
-
-    function test_add_group_object($Group=false, $ControlledObject=false, $on_what_id=false) {
+    function test_add_group_object($Group=false, $ControlledObject=false, $on_what_id=false, $criteria_table=false, $criteria_resultfield=false) {
         if ($ControlledObject){ $controlled_objectData = $this->test_get_controlled_object($ControlledObject); $controlled_object=$controlled_objectData['ControlledObject_id']; } else { $controlled_object=false; }
         if (!$controlled_object)
             $controlled_object = $this->test_add_controlled_object($ControlledObject);
@@ -312,18 +311,18 @@ Class ACLTest extends PHPUnit_TestCase {
         if (!$groupid)
             $groupid = $this->test_add_group($ControlledObject);
             
-        if (!$on_what_id)
+        if (!$on_what_id AND !$criteria_table AND !$criteria_resultfield)
             $on_what_id = $this->on_what_id;
         
-        $result = $this->acl->add_group_object($groupid, $controlled_object, $on_what_id);
-        $this->assertTrue($result,"Adding controlled object ID $on_what_id of type $controlled_object to group $groupid failed.");
+        $result = $this->acl->add_group_member($groupid, $controlled_object, $on_what_id, $criteria_table, $criteria_resultfield);
+        $this->assertTrue($result,"Adding controlled object ID $on_what_id table $criteria_table resultfield $criteria_resultfield of type $controlled_object to group $groupid failed.");
         return $result;
     }
     
-    function test_get_group_object($searchGroup=false,$searchObject=false,$on_what_id=false) {
+    function test_get_group_member($searchGroup=false,$searchObject=false,$on_what_id=false, $criteria_table=false, $criteria_resultfield=false) {
         if (!$searchGroup) { $searchGroup = $this->groupName; }
         if (!$searchObject) { $searchObject = $this->controlled_objectName; }
-        if (!$on_what_id) { $on_what_id = $this->on_what_id; }
+        if (!$on_what_id AND !$criteria_table AND !$criteria_resultfield) { $on_what_id = $this->on_what_id; }
         
         $group = $this->test_get_group($searchGroup);
         $group = $group['Group_id'];
@@ -333,33 +332,90 @@ Class ACLTest extends PHPUnit_TestCase {
         $object = $object['ControlledObject_id'];
        $this->assertTrue($object!==false, "Group member object locate failed");
        
-       $result = $this->acl->get_group_member($group, $object, $on_what_id);
-       $this->assertTrue($result!==false, "Group member locate failed");
+       $result = $this->acl->get_group_member($group, $object, $on_what_id, $criteria_table, $criteria_resultfield);
+       $this->assertTrue($result!==false, "Group member locate failed looking for group $group object $object id $on_what_id table $criteria_table field $criteria_resultfield");
        $this->assertTrue(is_array($result),"Group member return should be an array (failed)");
-       $GroupMember=$result;
-       $GroupMember=array_shift($GroupMember);
-       $this->assertTrue(is_array($GroupMember),"Group Member record should be an array (failed)");
-       
+       if ($result) {
+            $GroupMember=$result;
+            $GroupMember=array_shift($GroupMember);
+            $this->assertTrue(is_array($GroupMember),"Group Member record should be an array (failed)");
+        }
        return $result;
     }
     
-    function test_delete_group_object($isearchGroup=false,$isearchObject=false,$on_what_id=false) {
+    function test_delete_group_object($isearchGroup=false,$isearchObject=false,$on_what_id=false, $criteria_table=false, $criteria_resultfield=false) {
         if (!$isearchGroup) { $searchGroup = $this->groupName; } else { $searchGroup = $isearchGroup; }
         if (!$isearchObject) { $searchObject = $this->groupName; } else { $searchObject  = $isearchObject; }
-        if (!$on_what_id) { $on_what_id = $this->on_what_id; }
+        if (!$on_what_id AND !$criteria_table AND !$criteria_resultfield) { $on_what_id = $this->on_what_id; }
 //        $group = $this->test_get_group($searchGroup);
 //        $object = $this->test_get_controlled_object($searchObject);
         
-        $GroupMember = $this->test_get_group_object($searchGroup, $searchObject, $on_what_id);
-        $GroupMember = array_shift($GroupMember);
-        $GroupMember_id = $GroupMember['GroupMember_id'];
-        $this->assertTrue($GroupMember_id,"Failed to identify group object for delete");
+        $GroupMember = $this->test_get_group_member($searchGroup, $searchObject, $on_what_id, $criteria_table, $criteria_resultfield);
+        if ($GroupMember) {
+            $GroupMember = array_shift($GroupMember);
+            $GroupMember_id = $GroupMember['GroupMember_id'];
+            $this->assertTrue($GroupMember_id,"Failed to identify group object for delete");
         
-        $result=$this->acl->delete_group_object($GroupMember_id);
-        $this->assertTrue($result,"Failed to delete group object $searchObject in $searchGroup on $on_what_id id");
-        
+            $result=$this->acl->delete_group_object($GroupMember_id);
+            $this->assertTrue($result,"Failed to delete group object $searchObject in $searchGroup on $on_what_id id");
+        }
+                
         if (!$isearchGroup) $this->test_delete_group($searchGroup);
         if (!$isearchObject) $this->test_delete_controlled_object($searchObject);
+    }
+
+    function test_add_group_member_criteria($Group=false, $ControlledObject=false, $criteria_table=false, $criteria_resultfield=false, $criteria_fieldname=false, $criteria_value=false, $criteria_operator=false) {
+        if (!$criteria_table AND !$criteria_fieldname and !$criteria_value) { 
+            $criteria_table='activities';
+            $criteria_resultfield='activity_id';
+            $criteria_fieldname='company_id';
+            $criteria_value=1;
+            $criteria_operator='=';
+        }
+        $groupMember=$this->test_add_group_object(false, false, false, $criteria_table, $criteria_resultfield);
+        $this->assertTrue($groupMember, "Failed to add group member with table $criteria_table resultfield $criteria_resultfield");
+        $crit=$this->acl->add_group_member_criteria($groupMember, $criteria_fieldname, $criteria_value, $criteria_operator);
+        $this->assertTrue($crit, "Failed to add criteria for group member $groupMember field $criteria_fieldname value $criteria_value operator $criteria_operator");
+        return $crit;
+    }
+
+   function test_get_group_members_by_criteria($GroupMember_id=false, $GroupMember_data=false, $expected_results=false) {
+      if (!$GroupMember_id AND !$GroupMember_data) {
+            $criteria_table='activities';
+            $criteria_resultfield='activity_id';
+            $expected_results=array(1);
+            $GroupMember_data=$this->test_get_group_member(false, false, false, $criteria_table, $criteria_resultfield);
+            $this->assertTrue($GroupMember_data, "Failed to find group member for group member by criteria test, with table $criteria_table field $criteria_resultfield");
+            if ($GroupMember_data) {
+                $GroupMember_data=current($GroupMember_data);
+                $GroupMember_id=$GroupMember_data['GroupMember_id'];
+                $this->assertTrue($GroupMember_id, 'Failed to get Group Member ID from Group Member data');                
+            }
+      }
+        $ret=$this->acl->get_group_members_by_criteria($GroupMember_id, $GroupMember_data);
+        
+        $this->assertTrue($ret, "Failed to retrieve group members by criteria with id $GroupMember_id data $GroupMember_data");
+        $this->assertTrue(is_array($ret), "Group members criteria is_array test failed");
+        if (is_array($ret)) {
+            foreach ($ret as $data) {
+                $this->assertTrue($data['ControlledObject_id'], "Failed to find controlled object ID for group member data");
+                $this->assertTrue($data['on_what_id'], "Failed to find on_what_id for group member data");
+                $ckey=array_search($data['on_what_id'], $expected_results);
+                if ($ckey!==false) unset($expected_results[$ckey]);
+            }
+            $this->assertTrue(count($expected_results)==0, "Failed to find expected results: " . implode(", ",$expected_results));
+        }
+        
+        return $ret;
+   
+   }
+    
+    function test_delete_group_member_criteria($Group=false, $ControlledObject=false, $criteria_table=false, $criteria_resultfield=false, $criteria_fieldname=false, $criteria_value=false, $criteria_operator=false) {
+        if (!$criteria_table AND !$criteria_fieldname and !$criteria_value) { 
+            $criteria_table='activities';
+            $criteria_resultfield='activity_id';
+        }    
+        return $this->test_delete_group_object($Group, $ControlledObject, false, $criteria_table, $criteria_resultfield);    
     }
     
     function test_add_controlled_object_relationship($_parentObject=false,$_childObject=false, $_childField=false) {
@@ -1187,6 +1243,11 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.9  2005/07/30 00:53:32  vanmer
+ * - part of addition of ACL's Group Member by Criteria functionality
+ * - added tests for new ACL group member by criteria add/retrieve/query
+ * - changed group member addition to allow new group member fields
+ *
  * Revision 1.8  2005/07/22 23:37:56  vanmer
  * - altered tests to assume activity_id 1 is attached to company_id 1
  *
