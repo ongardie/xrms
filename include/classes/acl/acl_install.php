@@ -68,6 +68,16 @@ function install_upgrade_acl($con=false) {
         $sql = "ALTER TABLE RolePermission ADD Inheritable_flag TINYINT DEFAULT '1' NOT NULL ";
         $rst=$con->execute($sql);
     }
+    
+    $sql = "SELECT * FROM GroupMember";
+    $rst = $con->SelectLimit($sql,1);
+    if (!$rst) db_error_handler($con, $sql);
+    if ($rst->EOF OR (!array_key_exists('criteria_table',$rst->fields))) {
+        $sql = "ALTER TABLE GroupMember ADD criteria_table VARCHAR(50)";
+        $rst=$con->execute($sql);
+        $sql = "ALTER TABLE GroupMember ADD criteria_resultfield VARCHAR(50)";
+        $rst=$con->execute($sql);
+    }
     return true;   
 }
 
@@ -98,7 +108,8 @@ function install_acl($con) {
     $return6=install_role_permissions($con);
     $return7=install_group_users($con);
     $return8=install_group_members($con);
-    return ($return1 AND $return2 AND $return3 AND $return4 AND $return5 AND $return6 AND $return7 AND $return8 AND $return9);
+    $return10=install_group_member_criteria($con);
+    return ($return1 AND $return2 AND $return3 AND $return4 AND $return5 AND $return6 AND $return7 AND $return8 AND $return9 AND $return10);
 }
 
 function update_acl($con) {
@@ -138,8 +149,8 @@ function update_acl($con) {
             $CORelationship_id=$CORelationship['CORelationship_id'];
             $ret6=$acl->add_role_permission ($Role_id, $CORelationship_id, $Scope, $Permission_id, true);
         }
-    
-    return ($email_template_id AND $ret2 AND $ret3 AND $ret4 AND$ret5 AND $ret6 AND $export_add);
+    $ret7=install_group_member_criteria($con);
+    return ($email_template_id AND $ret2 AND $ret3 AND $ret4 AND$ret5 AND $ret6 AND $ret7 AND $export_add);
 }
 
 function install_role_permissions($con) {
@@ -210,6 +221,36 @@ CREATE TABLE GroupMember (
   PRIMARY KEY  (GroupMember_id),
   KEY Group_id (Group_id),
   KEY ControlledObject_id (ControlledObject_id)
+)
+TILLEND;
+    
+        $rst=$con->execute($sql);
+        if (!$rst) { db_error_handler($con, $sql); return false;}
+        $crst=$con->execute($csql);
+    }
+    if ($crst->numRows()==0) {
+        $sql=<<<TILLEND
+
+TILLEND;
+        $return=execute_batch_sql($con, $sql);
+    }
+    return $return;
+}
+
+function install_group_member_criteria($con) {
+    $csql = "SELECT * FROM GroupMemberCriteria";
+    $crst=$con->execute($csql);
+    $return=true;
+    if (!$crst) {
+        $sql=<<<TILLEND
+CREATE TABLE GroupMemberCriteria (
+  GroupMemberCriteria_id int(10) unsigned NOT NULL auto_increment,
+  GroupMember_id int(10) unsigned NOT NULL,
+  criteria_fieldname VARCHAR(60) NOT NULL,
+  criteria_value VARCHAR(50) NOT NULL,
+  criteria_operator VARCHAR(8) NOT NULL default '=',
+  PRIMARY KEY  (GroupMemberCriteria_id),
+  KEY GroupMember_id (GroupMember_id)
 )
 TILLEND;
     
