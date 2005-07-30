@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.15 2005/07/19 19:36:10 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.16 2005/07/30 17:44:15 daturaarutad Exp $
  */
 
 
@@ -56,7 +56,7 @@
 		var $ReturnButtonURL;
                 
 		/** @var string URL to set for the immediate redirection to after update (instead of returning form, actually set location and quit) */
-                var $ReturnAfterUpdateURL;
+        var $ReturnAfterUpdateURL;
 
 		/** @var array Array of QuickForm_Model objects */
 		var $Models; 
@@ -74,6 +74,8 @@
 		/** @var boolean Whether or not the model's tablename should be prepended to all elements for that model */
 		var $prepend_tablename;
 
+		/** @var boolean Whether or not to display the Delete button */
+        var $DeleteButtonEnabled = false;
 
 	/**
 	* ADOdb_QuickForm_View Constructor
@@ -189,16 +191,24 @@
 	*
 	* @param string url URL to redirect to after update step
 	*/
-        function CheckReturnAfterUpdate() {
-            if (!empty($this->ReturnAfterUpdateURL)) {
-                Header("Location: {$this->ReturnAfterUpdateURL}");
-                //exit to avoid output after this
-                exit();
-                return true;
-            }
-            return false;
+    function CheckReturnAfterUpdate() {
+        if (!empty($this->ReturnAfterUpdateURL)) {
+            Header("Location: {$this->ReturnAfterUpdateURL}");
+            //exit to avoid output after this
+            exit();
+            return true;
         }
-        
+        return false;
+    }
+
+   	/**
+	* Enables the Delete Button
+	*/
+    function EnableDeleteButton() {
+        $this->DeleteButtonEnabled = true;
+    }
+
+
 	/**
 	* Do this immediately after View->AddModels()
 	*
@@ -511,22 +521,37 @@ END;
 				break;
 			case 'edit':
  				$form->addElement('submit', 'btnSubmit', 'Update', array('id' => 'btnSubmit', 'class' => 'button'));
+                if($this->DeleteButtonEnabled) {
+ 				    $form->addElement('submit', 'btnDelete', 'Delete', array('id' => 'btnDelete', 'class' => 'button'));
+                }
 				break;
-		case 'new':
+		    case 'new':
  				$form->addElement('submit', 'btnSubmit', 'Create', array('id' => 'btnSubmit', 'class' => 'button'));
 				break;
 		}
 
+		$form_name = ($this->DisplayTitle ? "\"$this->DisplayTitle\"" : '0');
+
+   		$this->JSCodePost[] = <<<END
+       		<script language="JavaScript" type="text/javascript">
+           			document.forms[$form_name].btnDelete.onclick = function() {
+           			    document.forms[$form_name].form_action.value = 'delete';
+           			    document.forms[$form_name].submit();
+           			} 
+       		</script>
+END;
+
+
+
 	    if(!empty($this->ReturnButtonCaption) && !empty($this->ReturnButtonURL)) {
  			$form->addElement('button', 'returnURL', $this->ReturnButtonCaption, array('id' => 'returnURL', 'class' => 'button'));
-			$form_name = ($this->DisplayTitle ? "\"$this->DisplayTitle\"" : '0');
 
-            		$this->JSCodePost[] = <<<END
-                		<script language="JavaScript" type="text/javascript">
-                    			document.forms[$form_name].returnURL.onclick = function() {
-                       				location.href='{$this->ReturnButtonURL}';
-                    			} 
-                		</script>
+       		$this->JSCodePost[] = <<<END
+           		<script language="JavaScript" type="text/javascript">
+               			document.forms[$form_name].returnURL.onclick = function() {
+               				location.href='{$this->ReturnButtonURL}';
+               			} 
+           		</script>
 END;
 		}
 	}
@@ -643,11 +668,13 @@ END;
 			return $field;
 		}
 	}
-
 }
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.16  2005/07/30 17:44:15  daturaarutad
+* added Delete functionality
+*
 * Revision 1.15  2005/07/19 19:36:10  daturaarutad
 * added longtext type handling
 *
