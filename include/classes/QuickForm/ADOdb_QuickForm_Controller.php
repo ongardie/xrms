@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.3 2005/07/14 21:18:19 daturaarutad Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.4 2005/07/30 17:45:11 daturaarutad Exp $
 	*/
 
 
@@ -46,6 +46,18 @@
 		var $Models = array();
 		var $View = null;
 
+        // status message
+        var $msg = '';
+
+		/**
+		* Returns the status of the last operation as a string.
+		*
+        * @return string the status message
+		*/
+		function GetStatusMessage() {
+            return $this->msg;
+		}
+
 		/**
 		* You must pass in at least one model and only one view to initialize the Controller.  
 		*
@@ -54,6 +66,7 @@
 			$this->Models = $models;
 			$this->View = $view;
 		}
+
 
 
 		/**
@@ -77,9 +90,12 @@
 					for($j=0; $j<count($this->Models); $j++) {
 
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
-						$this->Models[$j]->Read($object_id);
+						if(!$this->Models[$j]->Read($object_id)) {
+                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName());
+                        }
 						$this->View->AddModel($this->Models[$j]);
 					}
+
 					$this->View->InitForm();
 					
 					$this->View->SetNextFormAction(null);
@@ -92,7 +108,9 @@
 					for($j=0; $j<count($this->Models); $j++) {
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
 
-						$this->Models[$j]->Read($object_id);
+						if(!$this->Models[$j]->Read($object_id)) {
+                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName());
+                        }
 						$this->View->AddModel($this->Models[$j]);
 					}
 					$this->View->InitForm();
@@ -105,7 +123,9 @@
 	  			case 'update':
 					for($j=0; $j<count($this->Models); $j++) {
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
-						$this->Models[$j]->Read($object_id);
+						if(!$this->Models[$j]->Read($object_id)) {
+                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName());
+                        }
 						$this->View->AddModel($this->Models[$j]);
 					}
 					$this->View->InitForm();
@@ -115,13 +135,22 @@
 
 					for($j=0; $j<count($this->Models); $j++) {
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
-						$this->Models[$j]->Write($object_id);
-						$this->Models[$j]->Read($object_id);
+						if(!$this->Models[$j]->Write($object_id)) {
+                            $this->msg .= _("QuickForm Write Failed for " . $this->Models[$j]->GetTableName());
+                            break;
+                        }
+						if(!$this->Models[$j]->Read($object_id)) {
+                            $this->msg .= _("QuickForm Re-Read Failed for " . $this->Models[$j]->GetTableName());
+                            break;
+                        }
 					}
+                    if(!$this->msg) {
+                        $this->msg .= _("Update Successful");
+                    }
 					$this->View->SetConstants();
                                         
-                               $die=$this->View->CheckReturnAfterUpdate();
-		              if ($die) return false;
+                    $die = $this->View->CheckReturnAfterUpdate();
+                    if ($die) return false;
                               
 	    			$this->View->SetNextFormAction();
 					$this->View->SetReadOnly();
@@ -142,8 +171,16 @@
 
 					for($j=0; $j<count($this->Models); $j++) {
 						$model_id = $this->Models[$j]->Create();
-						$this->Models[$j]->Read($model_id);
+                        if(!$model_id) {
+                            $this->msg .= _("QuickForm Create Failed for " . $this->Models[$j]->GetTableName());
+                        }
+						if(!$this->Models[$j]->Read($model_id)) {
+                            $this->msg .= _("QuickForm Read Failed for " . $this->Models[$j]->GetTableName());
+                        }
 					}
+                    if(!$this->msg) {
+                        $this->msg .= _("Create Successful");
+                    }
 					$this->View->SetConstants();
 
 		
@@ -152,6 +189,27 @@
 	    			return $this->View->GetForm($form_action, $show_submit);
 
 	    		break;
+
+                case 'delete':
+                    $status = true;
+					for($j=0; $j<count($this->Models); $j++) {
+						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
+
+						$status &= $this->Models[$j]->Delete($object_id);
+                        $this->Models[$j]->SetValues(array());
+						$this->View->AddModel($this->Models[$j]);
+					}
+                    if($status) {
+                        $this->msg = _("Delete Successful");
+                    } else {
+                        $this->msg = _("Delete Failed");
+                    }
+
+					$this->View->InitForm();
+
+	    			$this->View->SetNextFormAction('create');
+	    			return $this->View->GetForm($form_action, $show_submit);
+                break;
 
 
 	   			case 'new':

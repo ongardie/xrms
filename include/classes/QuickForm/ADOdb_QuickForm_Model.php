@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.13 2005/07/15 04:07:20 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.14 2005/07/30 17:44:44 daturaarutad Exp $
 */
 
 
@@ -573,6 +573,9 @@ class ADOdb_QuickForm_Model {
    			$this->rst = $dbh->execute($sql);
 	
    			if (!$this->rst) { db_error_handler($dbh,$sql); return false; }
+            if(0 == $this->rst->RecordCount()) {
+                return false;
+            }
 	
    			// override GET/POST vars
    			$this->Values = $this->rst->fields;
@@ -637,6 +640,27 @@ class ADOdb_QuickForm_Model {
 	}
 
 	/**
+	* Delete the record from the Database
+	*
+	* @param string ID value of the primary key
+	*/
+	function Delete($id) {
+	
+		$tablename = $this->DBStructure['tablename'];
+		$primarykeyname = $this->DBStructure['primarykey'];
+	
+		$dbh = $this->DBStructure['dbh']; 
+	
+    	$sql="delete from $tablename where $primarykeyname = $id";
+	
+    	$this->rst=$dbh->execute($sql);
+	
+    	if (!$this->rst) { db_error_handler($dbh,$sql); return false; }
+	
+		return true;
+	}
+
+	/**
 	* Used internally to skip over blob fields when performing a Read
 	*/
 	function GetColumns($omit_column = '') {
@@ -665,6 +689,9 @@ class ADOdb_QuickForm_Model {
 
 /**
 * $Log: ADOdb_QuickForm_Model.php,v $
+* Revision 1.14  2005/07/30 17:44:44  daturaarutad
+* added Delete functionality; added Error Handling
+*
 * Revision 1.13  2005/07/15 04:07:20  daturaarutad
 * added SetSelectField
 *
