@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.23 2005/07/22 23:35:33 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.24 2005/07/30 00:52:38 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -209,7 +209,14 @@ class xrms_acl {
         if (!$rs) { db_error_handler($con, $sql); return false; }
         if ($rs->numRows()>0) {
             while (!$rs->EOF) {
-                $objectList[$rs->fields['GroupMember_id']]=$rs->fields;
+                if ($rs->fields['on_what_id']) {
+                    $objectList[$rs->fields['GroupMember_id']]=$rs->fields;
+                } else {
+                    $criteria_objects=$this->get_group_members_by_criteria($rs->fields['GroupMember_id'],$rs->fields);
+                    if ($criteria_objects) {
+                        $objectList=array_merge($objectList, $criteria_objects);
+                    }
+                }
                 $rs->movenext();
             }
         }
@@ -239,7 +246,7 @@ class xrms_acl {
                                 $parentIDs[] = $result['on_what_id'];
                             }
                             $parentIDs=array_unique($parentIDs);
-                            //echo "<pre>\n";print_r($parentIDs); echo "\n</pre>";                    
+                            //echo "<pre>\n";print_r($parentIDs); echo "\n</pre>";
                             if ($Relationship['singular']==1) {
                                     $on_what_child_field='on_what_id';
                                     $fieldRestriction['on_what_table']=$con->qstr($Relationship['parent_table']);
@@ -282,7 +289,78 @@ class xrms_acl {
         }
         return false;
     }
-    
+
+    /*****************************************************************************/
+    /**
+     *
+     * Returns a list of controlled objects and IDs that match the criteria given by a particular GroupMember_id
+     *
+     * @param integer GroupMember_id identifying group member entry to find criteria for
+     * @param array GroupMember_id optionally providing data on the group member
+     * @return Array containing a collection of Controlled Objects and their possible values
+     *
+     **/
+    function get_group_members_by_criteria($GroupMember_id=false, $GroupMember_data=false) {
+        $con = $this->DBConnection;
+        //no parameters, can't do anything
+        if (!$GroupMember_id AND !$GroupMember_data) return false;
+        //no data retrieved yet, retrieve data on group member
+        if (!$GroupMember_data) {
+            $GroupMember_data=$this->get_group_member(false, false, false, false, false, $GroupMember_id);
+            if ($GroupMember_data) { $GroupMember_data=current($GroupMember_data); }
+            //no group member, fail
+            else return false;
+        }
+        //get GroupMember_id, if not set along with data
+        if (!$GroupMember_id) { $GroupMember_id=$GroupMember_data['GroupMember_id']; }        
+        
+        $ControlledObject_id=$GroupMember_data['ControlledObject_id'];
+        
+        //retrieve criteria, if any
+        $criteria=$this->get_group_member_criteria($GroupMember_id);
+        
+        //no criteria, so fail
+        if (!$criteria) { return false; }
+        
+        $table=$GroupMember_data['criteria_table'];
+        $result_field=$GroupMember_data['criteria_resultfield'];
+        if (!$table OR !$result_field) {
+            //if table and result field are not set, user controlled object identifier fieldname
+            $co=$this->get_controlled_object(false, $ControlledObject_id);
+            if (!$table) { $table=$co['on_what_table']; }
+            if (!$result_field) { $result_field=$co['on_what_field']; }
+        }
+        
+        $where=array();
+        foreach ($criteria as $ckey=>$cdata) {
+            //only set criteria as where expression if both value and fieldname are provided
+            if ($cdata['criteria_fieldname'] AND $cdata['criteria_value']) {
+                $operator=( $cdata['criteria_operator'] ? $cdata['criteria_operator'] : '=');
+                $where[]="{$cdata['criteria_fieldname']} $operator {$cdata['criteria_value']}";
+            }
+            if (count($where)>0) {
+                $wherestr=implode(" AND ", $where);
+            } else return false; //no useable criteria, so fail
+        }
+        
+        $sql = "SELECT $result_field FROM $table WHERE $wherestr";
+        $rst = $con->execute($sql);
+        if (!$rst) { db_error_handler($con, $sql); return false; }
+
+        if ($rst->EOF) return false;
+        
+        $ret=array();
+        while (!$rst->EOF) {
+            //look for fieldname, retrieve it as on_what_id value
+            if (array_key_exists($result_field, $rst->fields)) {
+                $ret[]=array('ControlledObject_id'=>$ControlledObject_id, 'on_what_id'=>$rst->fields[$result_field]);
+            }
+            $rst->movenext();
+        }
+        //return list of controlled object and ids found in table
+        return $ret;
+    }
+        
     /*****************************************************************************/
     /** function get_object_relationship_parent
      *
@@ -902,17 +980,19 @@ class xrms_acl {
     }
     
      /*****************************************************************************/
-     /** function get_group_member_id
+     /**
        *
        * Searches for a particular group_member_id or a set of group_member_id's based on parameters
        *
        * @param integer Group_id to specify which group to search within
        * @param integer ControlledObject_id identifying what class of ControlledObject is being searched for
        * @param integer on_what_id identifying what value identifies the unique ControlledObject (if left false returns array of member_ids
+       * @param string criteria_table identifying what table to look into for criteria
+       * @param string critiera_resultfield identifying what field will contain the IDs of the controlled object to include in the group
        * @return integer GroupMember_id with new identifier for new entry in the group or false if duplicate/failed (or array if no on_what_id is specified)
        *
        */
-    function get_group_member($Group_id=false, $ControlledObject_id=false, $on_what_id=false,$GroupMember_id=false) {
+    function get_group_member($Group_id=false, $ControlledObject_id=false, $on_what_id=false, $criteria_table=false, $criteria_resultfield=false, $GroupMember_id=false) {
         if (!$Group_id or !$ControlledObject_id) { return false; }
         $tblName = "GroupMember";
         $con = $this->DBConnection;
@@ -921,6 +1001,8 @@ class xrms_acl {
         else { 
             $where = " Group_id=$Group_id and ControlledObject_id=$ControlledObject_id"; 
             if ($on_what_id) { $where .= " AND on_what_id=$on_what_id"; }
+            if ($criteria_table) { $where.=" AND criteria_table=" . $con->qstr($criteria_table); }
+            if ($criteria_resultfield) { $where.=" AND criteria_resultfield=" . $con->qstr($criteria_resultfield); }
         }
         
         //Search within group specified
@@ -941,10 +1023,11 @@ class xrms_acl {
         }        
     }
 
+    
      /*****************************************************************************/
-     /** function add_group_object
+     /**
        *
-       * Adds a particular ControlledObject to a group, based on the ControlledObject type and the value used to identify the specify ControlledObject
+       * Wrapper to add_group_member for adding a particular ControlledObject to a group, based on the ControlledObject type and id
        *
        * @param integer Group_id to specify which group to add into
        * @param integer ControlledObject_id identifying what class of ControlledObject is being added
@@ -953,20 +1036,42 @@ class xrms_acl {
        *
        */
     function add_group_object($Group_id, $ControlledObject_id, $on_what_id) {
-        if (!$Group_id OR !$ControlledObject_id or !$on_what_id) { return false; }
+        return add_group_member($Group_id, $ControlledObject_id, $on_what_id);
+    }
+    
+     /*****************************************************************************/
+     /**
+       *
+       * Adds a particular ControlledObject to a group, based on the ControlledObject type and the value or criteria used to identify the specify ControlledObjects
+       *
+       * @param integer Group_id to specify which group to add into
+       * @param integer ControlledObject_id identifying what class of ControlledObject is being added
+       * @param integer on_what_id identifying what value identifies the unique ControlledObject
+       * @param string criteria_table identifying what table to look into for criteria
+       * @param string critiera_resultfield identifying what field will contain the IDs of the controlled object to include in the group
+       * @return integer GroupMember_id with new identifier for new entry in the group or false if duplicate/failed
+       *
+       */
+    function add_group_member($Group_id, $ControlledObject_id, $on_what_id, $criteria_table=false, $criteria_resultfield=false) {
+        if (!$Group_id OR !$ControlledObject_id or (!$on_what_id AND !$criteria_table AND !$criteria_resultfield)) { return false; }
 
         $con = $this->DBConnection;
         $tblName = "GroupMember";
  
         //look for existing relationship of this nature, return false if there it already exists
-        if ($this->get_group_member($Group_id, $ControlledObject_id, $on_what_id)!== false ) {
+        if ($this->get_group_member($Group_id, $ControlledObject_id, $on_what_id, $criteria_table, $criteria_resultfield)!== false ) {
             return false;
         }
                 
         //set of array for insert
         $GroupRow['Group_id']=$Group_id;
         $GroupRow['ControlledObject_id']=$ControlledObject_id;
-        $GroupRow['on_what_id']=$on_what_id;
+        if ($on_what_id)
+            $GroupRow['on_what_id']=$on_what_id;
+        if ($criteria_table)
+            $GroupRow['criteria_table']=$criteria_table;
+        if ($criteria_resultfield)
+            $GroupRow['criteria_resultfield']=$criteria_resultfield;
         
         //create and execute insert SQL
         
@@ -996,6 +1101,7 @@ class xrms_acl {
         $tblName="GroupMember";
         $con = $this->DBConnection;
         
+        $this->delete_group_member_criteria($GroupMember_id);
         $sql = "Delete from $tblName WHERE GroupMember_id=$GroupMember_id";
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
@@ -1003,7 +1109,135 @@ class xrms_acl {
         
     }
     
-    
+     /*****************************************************************************/
+     /**
+        *
+       * Searches for criteria on a group member, based on GroupMember_ld and fieldname/value/operator, or on the GroupMemberCriteria_id
+       *
+       * @param integer GroupMember_id to specify which group to search within
+       * @param integer criteria_fieldname identifying what field in the table should be examined
+       * @param string criteria_value identifying what value to compare fieldname against.  Must include quotes if fieldname is a string field
+       * @param string criteria_operator to be used in the comparison, defaults to '=', should be 'LIKE' for case insensitive string compare, IS for null/not null, or >,<,>=,<=
+       * @return array GroupMemberCriteria with criteria items matching passed in parameters
+       *
+       */
+    function get_group_member_criteria($GroupMember_id=false, $criteria_fieldname=false, $criteria_value=false,$criteria_operator=false, $GroupMemberCriteria_id=false) {
+        if (!$GroupMember_id AND !$GroupMemberCriteria_id) { return false; }
+        $tblName = "GroupMemberCriteria";
+        $con = $this->DBConnection;
+        
+        if ($GroupMemberCriteria_id) { $where = " GroupMemberCriteria_id=$GroupMemberCriteria_id"; }
+        else {
+            $where = " GroupMember_id=$GroupMember_id"; 
+            if ($criteria_fieldname) { $where .= " AND criteria_fieldname=" . $con->qstr($criteria_fieldname); }
+            if ($criteria_value) { $where .= " AND criteria_value=" . $con->qstr($criteria_value); }
+            if ($criteria_operator) { $where .= " AND criteria_operator=" . $con->qstr($criteria_operator); }
+        }
+        
+        //Search within group specified
+        $sql = "SELECT * FROM $tblName WHERE $where";
+        $rs = $con->execute($sql);
+        if (!$rs) { db_error_handler($con, $sql); return false; }
+        if (($rs->numRows()>1) and ($on_what_id===false)) {
+            while (!$rs->EOF) {
+                $ret[$rs->fields['GroupMemberCriteria_id']] = $rs->fields;
+                $rs->movenext();
+            }
+            return $ret;
+        } elseif ($rs->numRows()==1) {
+            return array($rs->fields['GroupMemberCriteria_id'] => $rs->fields);
+        } else {
+            return false;
+        }        
+    }
+     
+     /*****************************************************************************/
+     /** 
+       *
+       * Adds criteria on a group object entry, to give group ownership based on values in a table
+       *
+       * @param integer GroupMember_id to specify which Group Member entry to add criteria to
+       * @param string criteria_fieldname identifying what field in the table should be examined
+       * @param string criteria_value identifying what value to compare fieldname against.  Must include quotes if fieldname is a string field
+       * @param string criteria_operator to be used in the comparison, defaults to '=', should be 'LIKE' for case insensitive string compare, IS for null/not null, or >,<,>=,<=
+       * @return integer GroupMemberCriteria_id with new identifier for new entry in database or false if duplicate/failed
+       *
+       */
+    function add_group_member_criteria($GroupMember_id, $criteria_fieldname, $criteria_value, $criteria_operator='=') {
+        if (!$GroupMember_id OR !$criteria_fieldname or !$criteria_value OR !$criteria_operator) { return false; }
+
+        $con = $this->DBConnection;
+        $tblName = "GroupMemberCriteria";
+ 
+        //look for existing relationship of this nature, return false if there it already exists
+        if ($this->get_group_member_criteria($GroupMember_id, $criteria_fieldname, $criteria_value, $criteria_operator)!== false ) {
+            return false;
+        }
+                
+        //set of array for insert
+        $CriteriaRow=array();
+        $CriteriaRow['GroupMember_id']=$GroupMember_id;
+        $CriteriaRow['criteria_fieldname']=$criteria_fieldname;
+        $CriteriaRow['criteria_value']=$criteria_value;
+        $CriteriaRow['criteria_operator']=$criteria_operator;
+        
+        //create and execute insert SQL
+        
+        $sql = $con->getInsertSQL($tblName, $CriteriaRow,false);
+        if ($sql) {
+            $rs = $con->execute($sql);
+            
+            //handle error if it happens
+            if (!$rs) { db_error_handler($con,$sql); return false; }
+            //get last insert ID, to return
+            $ID = $con->Insert_ID();
+            return $ID;
+        } else return false;                
+    }
+     
+     /*****************************************************************************/
+     /**
+       *
+       * Deletes criteria from a group member, by GroupMember_id, and optional criteria
+       *
+       * @param integer GroupMember_id to specify which specific group member criteria to delete
+       * @param array optionally providing an associative array specifying the parameters to match for deletion
+       * @param integer GroupMemberCriteria_id to specify a particular GroupMemberCriteria item by ID
+       * @return bool indicating success (true) or failure (false) for the delete
+       *
+       */
+    function delete_group_member_criteria($GroupMember_id=false, $criteriaArray=false, $GroupMemberCriteria_id=false) {
+        if (!$GroupMember_id AND !$GroupMemberCriteria_id) { return false; }
+        $tblName="GroupMemberCriteria";
+        $con = $this->DBConnection;
+        $where=array();
+        if ($GroupMember_id) {
+            $where[]="GroupMember_id=$GroupMember_id";
+        }
+        if ($GroupMemberCriteria_id) {
+            $where[]="GroupMemberCriteria_id=$GroupMemberCriteria_id";
+        }
+        
+        if ($criteriaArray AND is_array($criteriaArray)) {
+            if ($criteriaArray['criteria_fieldname']) {
+                $where[]="criteria_fieldname=".$con->qstr($criteriaArray['criteria_fieldname']);
+            }
+            if ($criteriaArray['criteria_value']) {
+                $where[]="criteria_value=".$con->qstr($criteriaArray['criteria_value']);
+            }
+            if ($criteriaArray['criteria_operator']) {
+                $where[]="criteria_operator=".$con->qstr($criteriaArray['criteria_operator']);
+            }
+        }
+        
+        $wherestr = implode(" AND ", $where);
+        $sql = "Delete from $tblName WHERE $wherestr";
+        $rs = $con->execute($sql);
+        if (!$rs) { db_error_handler($con, $sql); return false; }
+        else return true;
+        
+    }
+
     /*****************************************************************************/
     /** function get_role
       *
@@ -2267,6 +2501,12 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.24  2005/07/30 00:52:38  vanmer
+ * - part of initial implementation of ACL's Group Member by Criteria functionality
+ * - added API to add/get/delete group member criteria
+ * - added table and result field to Group Member API
+ * - added addition of objects found through criteria search to get_group_objects call
+ *
  * Revision 1.23  2005/07/22 23:35:33  vanmer
  * - added functionality to use callback functions provided by parent application to access database connections
  * - added functionality to add/remove callbacks
