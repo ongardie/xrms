@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.85 2005/07/26 23:30:14 vanmer Exp $
+ * $Id: utils-interface.php,v 1.86 2005/07/31 17:40:57 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -391,7 +391,7 @@ function end_page($use_hook = true) {
 
     $block_sf_page = get_user_preference($econ, $user_id, 'block_sf_link' );
     $hide_sf_image = get_user_preference($econ, $user_id, 'hide_sf_img');
-    
+
     $alt_string=htmlspecialchars(_("XRMS SourceForge Project Page"));
 
     if ($hide_sf_image=='y') {
@@ -612,8 +612,8 @@ function javascript_mktree_include($output=true) {
     global $javascript_mktree_included;
     $ret=false;
     if (!isset($javascript_mktree_included)) {
-    	global $http_site_root;
-	$ret = <<<EOQ
+        global $http_site_root;
+    $ret = <<<EOQ
 <!-- MKTREE SCRIPT INCLUDES -->
 <script type="text/javascript" src="$http_site_root/js/mktree.js"></script>
 <!-- MKTREE SCRIPT INCLUDES -->
@@ -708,13 +708,14 @@ function get_activity_type_menu($con, $activity_type_id='', $fieldname='activity
 /**
  * Retrieve menu of XRMS users
  *
- * @param  handle  $con database connection
- * @param  integer $user_id to set the menu to
- * @param  boolean $blank_user include a blank area
- * @param string $fieldname to change the default html fieldname of 'user_id'
+ * @param handle  $con database connection
+ * @param integer $user_id to set the menu to
+ * @param boolean $blank_user include a blank area
+ * @param string  $fieldname to change the default html fieldname of 'user_id'
+ * @param boolean $truncate whether to force the drop-down to be narrow
  * @return string  $user_menu the html menu to display
  */
-function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_id') {
+function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_id', $truncate=true) {
 
     $sql = '
     SELECT ' . $con->Concat("last_name","', '","first_names") . " AS name, user_id
@@ -726,7 +727,12 @@ function get_user_menu(&$con, $user_id='', $blank_user=false, $fieldname='user_i
     if (!$rst) {
         db_error_handler($con, $sql);
     }
-    $user_menu = $rst->getmenu2($fieldname, $user_id, $blank_user, false, 0, 'style="font-size: x-small; border: outset; width: 80px;"');
+    if ($truncate) {
+        $width_style = ' width: 80px; ';
+    } else {
+        $width_style = '';
+    }
+    $user_menu = $rst->getmenu2($fieldname, $user_id, $blank_user, false, 0, 'style="font-size: x-small; border: outset;'.$width_style.'"');
     $rst->close();
 
     return $user_menu;
@@ -856,7 +862,7 @@ function render_tree_list($data, $topclass='', $id=false) {
             $ret.="<a href=\"{$element['link_href']}\" $link_extra>";
         }
         $ret.=$element['text'];
-        
+
         if ($element['link_href']) {
             $ret.='</a>';
         }
@@ -870,6 +876,10 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.86  2005/07/31 17:40:57  braverock
+ * - add truncate option to get_user_menu function for use in forms
+ *   where we don't need to restrict the width of the drop-down
+ *
  * Revision 1.85  2005/07/26 23:30:14  vanmer
  * - added function to list activity types
  * - added extra parameters to user list to change fieldname
