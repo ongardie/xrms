@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.118 2005/07/15 22:52:53 vanmer Exp $
+ * $Id: one.php,v 1.119 2005/07/31 17:41:32 braverock Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -57,7 +57,7 @@ if ($activity_rst) {
     $current_activity_type_id = $activity_rst->fields['activity_type_id'];
     $activity_title = $activity_rst->fields['activity_title'];
     $activity_description = $activity_rst->fields['activity_description'];
-    $user_id = $activity_rst->fields['user_id'];
+    $activity_user_id = $activity_rst->fields['user_id'];
     $entered_by = $activity_rst->fields['entered_by'];
     $entered_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['entered_at']));
     $last_modified_by = $activity_rst->fields['last_modified_by'];
@@ -142,7 +142,7 @@ if ($rst) {
 }
 
 $show_blank = (get_system_parameter($con, 'Allow Unassigned Activities') == "y" ? true : false);
-$user_menu = get_user_menu($con, $user_id, $show_blank);
+$user_menu = get_user_menu($con, $activity_user_id, $show_blank, 'user_id', false);
 
 $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
 
@@ -711,6 +711,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.119  2005/07/31 17:41:32  braverock
+ * - make changes to improve functioning even if register_globals is 'on'
+ *
  * Revision 1.118  2005/07/15 22:52:53  vanmer
  * - changed join to reflect activities without a company
  * - changed User field to be listed as Owner instead, to reflect standard field labels
