@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.4 2005/07/30 17:45:11 daturaarutad Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.5 2005/08/01 14:59:20 daturaarutad Exp $
 	*/
 
 
@@ -191,11 +191,16 @@
 	    		break;
 
                 case 'delete':
+                    if(!$this->View->DeleteButtonEnabled) { 
+                        $this->msg = _("Delete Not Allowed");
+                        return false;
+                    }
+
                     $status = true;
 					for($j=0; $j<count($this->Models); $j++) {
 						$object_id = $this->View->GetPrimaryKeyValue($this->Models[$j]);
-
 						$status &= $this->Models[$j]->Delete($object_id);
+                        $this->Models[$j]->GetValues();
                         $this->Models[$j]->SetValues(array());
 						$this->View->AddModel($this->Models[$j]);
 					}
@@ -205,10 +210,11 @@
                         $this->msg = _("Delete Failed");
                     }
 
-					$this->View->InitForm();
+                    // don't display form after delete.
+					//$this->View->InitForm();
 
-	    			$this->View->SetNextFormAction('create');
-	    			return $this->View->GetForm($form_action, $show_submit);
+	    			//$this->View->SetNextFormAction('create');
+	    			//return $this->View->GetForm($form_action, $show_submit);
                 break;
 
 
