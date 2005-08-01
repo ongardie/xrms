@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.17 2005/07/28 17:11:49 vanmer Exp $
+ * $Id: sidebar.php,v 1.18 2005/08/01 22:09:13 vanmer Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -108,7 +108,7 @@ $endrows = "<tr><td class=widget_content_form_element colspan=10>
 
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0))) {
-    $new_case_button=render_create_button("New",'button',"javascript:location.href='$http_site_root/cases/new.php?company_id=$company_id&division_id=$division_id&contact_id=$contact_id';", false, false, 'cases');
+    $new_case_button=render_create_button("New",'button',"javascript:location.href='$http_site_root/cases/new.php?company_id=$company_id&division_id=$division_id&contact_id=$contact_id&case_type_id=' + document.$case_sidebar_form_id.case_type_id.value;", false, false, 'cases');
     if ($new_case_button) {
         $case_type_sql = "SELECT case_type_pretty_name,case_type_id
                           FROM case_types
@@ -184,6 +184,9 @@ $case_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.18  2005/08/01 22:09:13  vanmer
+ * - added javascript to ensure that the proper case type id is set when creating a new case from the sidebar
+ *
  * Revision 1.17  2005/07/28 17:11:49  vanmer
  * - added grouping on company and priority columns in cases sidebar
  *
