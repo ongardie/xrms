@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.15 2005/08/01 15:00:43 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.16 2005/08/01 20:29:16 daturaarutad Exp $
 */
 
 
@@ -175,13 +175,33 @@ class ADOdb_QuickForm_Model {
 		}
 		return false;
 	}
+
+	/**
+	* Resort the DBStructure fields based on displayOrder key
+    *
+    * Also reindexes the array starting at 0
+    *
+	*/
 	function ReSort() {
 
-		$fields = array();
-		ksort($this->DBStructure['fields']);
-		$i=0;
+        // sort function
+        if(!function_exists('model_cmp')) {
+            function model_cmp($a, $b)
+            {
+            if ($a['displayOrder'] == $b['displayOrder']) {
+                return 0;
+            }
+            return ($a['displayOrder'] < $b['displayOrder']) ? -1 : 1;
+            }
+        }
 
+        usort($this->DBStructure['fields'], "model_cmp");
+
+        // reindex the array
+		$i=0;
+		$fields = array();
 		foreach($this->DBStructure['fields'] as $k => $field) {
+            $field['displayOrder'] = $i;
 			$fields[$i++] = $field;
 		}
 		$this->DBStructure['fields'] = $fields;
@@ -466,28 +486,50 @@ class ADOdb_QuickForm_Model {
 
 	function GetPrimaryKeyValue() { return $this->Values[$this->GetPrimaryKeyName()]; }
 
-  /**
-  * function SetDisplayNames
-  * 
-  * Sets the Display Names for a form.  By default the labels next to each form 
-  * field are the same as the database field name.  Pass this function an assoc.
-  * array of fieldname = displayname to override the display names.
-  *
-  * Note: this function must be called before Process()
-  *
-  * @param array Associative array of display names
-  * 
-  */
+    /**
+    * function SetDisplayNames
+    * 
+    * Sets the Display Names for a form.  By default the labels next to each form 
+    * field are the same as the database field name.  Pass this function an assoc.
+    * array of fieldname = displayname to override the display names.
+    *
+    * Note: this function must be called before Process()
+    *
+    * @param array Associative array of display names
+    * 
+    */
 	function SetDisplayNames($displayNames) { 
 		foreach($displayNames as $name => $displayName) {
 			$this->SetDisplayName($name, $displayName);
 		}
 	}
 
+    /**
+    * function SetDisplayOrders
+    * 
+    * Used to specify the order the fields will appear in the form
+    *
+    * Works by ReSort() initially which will normalize the array keys (start at 0)
+    * Then, changes displayOrder = a negative number
+    * Then call ReSort again to repack the array
+    *
+    * @param array array of field names
+    */
 	function SetDisplayOrders($displayOrders) {
+
+        $this->ReSort();
+
+        $low_count = 0-count($this->DBStructure['fields']);
+
 		foreach ($displayOrders as $displayOrder => $name) {
-			$this->SetDisplayOrder($name, $displayOrder);
+
+            $index = $this->GetFieldIndex($name);
+            
+            if($index) {
+                $this->DBStructure['fields'][$index]['displayOrder'] = $low_count++;
+            } 
 		}
+        $this->ReSort();
 	}
 
   /**
@@ -732,6 +774,9 @@ class ADOdb_QuickForm_Model {
 
 /**
 * $Log: ADOdb_QuickForm_Model.php,v $
+* Revision 1.16  2005/08/01 20:29:16  daturaarutad
+* changed SetDisplayOrders to work with new ReSort function
+*
 * Revision 1.15  2005/08/01 15:00:43  daturaarutad
 * new code to perform Logical Delete function
 *
