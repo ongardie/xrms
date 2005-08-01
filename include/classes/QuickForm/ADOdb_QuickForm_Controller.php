@@ -10,7 +10,7 @@
 	* @author Justin Cooper <justin@braverock.com>
 	* @todo
 	*
-	* $Id: ADOdb_QuickForm_Controller.php,v 1.5 2005/08/01 14:59:20 daturaarutad Exp $
+	* $Id: ADOdb_QuickForm_Controller.php,v 1.6 2005/08/01 20:32:53 daturaarutad Exp $
 	*/
 
 
@@ -82,6 +82,11 @@
             if(!$form_action) {
                 $form_action = 'new';
             }
+
+			for($j=0; $j<count($this->Models); $j++) {
+
+				$this->Models[$j]->ReSort();
+			}
 
 			//echo "Controller's form_action: $form_action<br/>";
 
