@@ -9,7 +9,7 @@
 * @author Justin Cooper <justin@braverock.com>
 * @todo
 *
-* $Id: ADOdb_QuickForm_Model.php,v 1.14 2005/07/30 17:44:44 daturaarutad Exp $
+* $Id: ADOdb_QuickForm_Model.php,v 1.15 2005/08/01 15:00:43 daturaarutad Exp $
 */
 
 
@@ -32,6 +32,13 @@ class ADOdb_QuickForm_Model {
 
 	/** @var Recordset Object with the current value selected from the database */
 	var $rst;
+
+	/** @var string column to use for logical delete */
+    var $logical_delete_column;
+
+	/** @var string value to set when record is deleted */
+    var $logical_delete_value;
+
 
 	/**
 	* Constructor
@@ -640,6 +647,22 @@ class ADOdb_QuickForm_Model {
 	}
 
 	/**
+	* Set up parameters for Logical Delete
+	*
+	* @param string column to use for logical delete 
+	* @param string value to set when record is deleted 
+	*/
+    function SetLogicalDeleteParams($logical_delete_column='', $logical_delete_value='d') {
+
+        if(!$logical_delete_column) {
+            $this->logical_delete_column = $this->DBStructure['tablename'] . '_record_status';
+        } else {
+            $this->logical_delete_column = $logical_delete_column;
+        }
+        $this->logical_delete_value = $logical_delete_value;
+    }
+
+	/**
 	* Delete the record from the Database
 	*
 	* @param string ID value of the primary key
@@ -650,8 +673,28 @@ class ADOdb_QuickForm_Model {
 		$primarykeyname = $this->DBStructure['primarykey'];
 	
 		$dbh = $this->DBStructure['dbh']; 
+
+        if($this->logical_delete_column) {
+
+    	    $sql = "select {$this->logical_delete_column} from $tablename where $primarykeyname = $id";
 	
-    	$sql="delete from $tablename where $primarykeyname = $id";
+    	    $this->rst = $dbh->execute($sql);
+	
+    	    if (!$this->rst) { db_error_handler($dbh,$sql); return false; }
+
+            $a = array($this->logical_delete_column => $this->logical_delete_value);
+
+            $sql = $dbh->GetUpdateSQL($this->rst, $a, true, false, ADODB_FORCE_NULL);
+
+    	    $this->rst = $dbh->execute($sql);
+	
+    	    if (!$this->rst) { db_error_handler($dbh,$sql); return false; }
+
+        } else {
+	
+    	    $sql="delete from $tablename where $primarykeyname = $id";
+
+        }
 	
     	$this->rst=$dbh->execute($sql);
 	
@@ -689,6 +732,9 @@ class ADOdb_QuickForm_Model {
 
 /**
 * $Log: ADOdb_QuickForm_Model.php,v $
+* Revision 1.15  2005/08/01 15:00:43  daturaarutad
+* new code to perform Logical Delete function
+*
 * Revision 1.14  2005/07/30 17:44:44  daturaarutad
 * added Delete functionality; added Error Handling
 *
