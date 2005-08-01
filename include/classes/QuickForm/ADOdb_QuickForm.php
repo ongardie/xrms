@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.16 2005/07/30 17:44:15 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.17 2005/08/01 15:22:49 daturaarutad Exp $
  */
 
 
@@ -77,6 +77,13 @@
 		/** @var boolean Whether or not to display the Delete button */
         var $DeleteButtonEnabled = false;
 
+		/** @var string Text for Create button */
+        var $CREATE;
+		/** @var string Text for Update button */
+        var $UPDATE;
+		/** @var string Text for Delete button */
+        var $DELETE;
+
 	/**
 	* ADOdb_QuickForm_View Constructor
 	* 
@@ -103,6 +110,9 @@
 
 		$this->form_method = $form_method;
 
+        $this->CREATE = _('Create');
+        $this->UPDATE = _('Update');
+        $this->DELETE = _('Delete');
 	}
 
 	/**
@@ -203,6 +213,7 @@
 
    	/**
 	* Enables the Delete Button
+    *
 	*/
     function EnableDeleteButton() {
         $this->DeleteButtonEnabled = true;
@@ -520,13 +531,13 @@ END;
 			case 'view':
 				break;
 			case 'edit':
- 				$form->addElement('submit', 'btnSubmit', 'Update', array('id' => 'btnSubmit', 'class' => 'button'));
+ 				$form->addElement('submit', 'btnSubmit', $this->UPDATE, array('id' => 'btnSubmit', 'class' => 'button'));
                 if($this->DeleteButtonEnabled) {
- 				    $form->addElement('submit', 'btnDelete', 'Delete', array('id' => 'btnDelete', 'class' => 'button'));
+ 				    $form->addElement('submit', 'btnDelete', $this->DELETE, array('id' => 'btnDelete', 'class' => 'button'));
                 }
 				break;
 		    case 'new':
- 				$form->addElement('submit', 'btnSubmit', 'Create', array('id' => 'btnSubmit', 'class' => 'button'));
+ 				$form->addElement('submit', 'btnSubmit', $this->CREATE, array('id' => 'btnSubmit', 'class' => 'button'));
 				break;
 		}
 
@@ -668,10 +679,21 @@ END;
 			return $field;
 		}
 	}
+
+    function SetButtonText($create, $update, $delete) {
+
+        $this->CREATE = $create;
+        $this->UPDATE = $update;
+        $this->DELETE = $delete;
+    }
+
 }
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.17  2005/08/01 15:22:49  daturaarutad
+* added SetButtonText function for overwriting Create, Update, Delete text
+*
 * Revision 1.16  2005/07/30 17:44:15  daturaarutad
 * added Delete functionality
 *
