@@ -5,13 +5,10 @@ if ( !defined('IN_XRMS') )
   die('Hacking attempt');
   exit;
 }
-require_once($include_directory . 'classes/Pager/GUP_Pager.php');
-require_once($include_directory . 'classes/Pager/Pager_Columns.php');
-
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.15 2005/07/28 17:14:30 vanmer Exp $
+ * $Id: sidebar.php,v 1.16 2005/08/01 22:09:33 vanmer Exp $
  */
 /*
 Commented until ACL system is implemented
@@ -19,6 +16,10 @@ $opList=acl_get_list($session_user_id, 'Read', false, 'opportunities');
 if (!$opList) { $opportunity_rows=''; return false; }
 else { $opList=implode(",",$opList); $opportunity_limit_sql.=" AND opportunities.opportunity_id IN ($opList) "; }
 */
+
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
+
 
 $opp_sidebar_form_id='SidebarOpportunities';
 $opp_sidebar_header=_("Opportunities");
@@ -108,12 +109,23 @@ $pager = new GUP_Pager($con, $opportunity_sql, null,$opp_sidebar_header, $opp_si
 
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0)) ) {
-    $new_button=render_create_button('New','button', "javascript:location.href='$http_site_root/opportunities/new.php?company_id=$company_id&division_id=$division_id&contact_id=$contact_id';", false, false, 'opportunities');
+    $new_opp_button=render_create_button('New','button', "javascript:location.href='$http_site_root/opportunities/new.php?company_id=$company_id&division_id=$division_id&contact_id=$contact_id&opportunity_type_id='+document.$opp_sidebar_form_id.opportunity_type_id.value;", false, false, 'opportunities');
+    if ($new_opp_button) {
+        $opp_type_sql = "SELECT opportunity_type_pretty_name,opportunity_type_id
+                          FROM opportunity_types
+                          WHERE opportunity_type_record_status = 'a'
+                          ORDER BY opportunity_type_pretty_name";
+        $type_rst=$con->execute($opp_type_sql);
+        $new_opp_types=$type_rst->getmenu2('opportunity_type_id', '', false);
+        $new_opp_button=$new_opp_types.$new_opp_button; 
+    }
+    
+    
     $endrows = "
             <tr>
                 <td class=widget_content_form_element colspan=$colspan>
                     $pager_columns_button
-                    $new_button
+                    $new_opp_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
                 </form>
@@ -138,6 +150,9 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.16  2005/08/01 22:09:33  vanmer
+ * - added ability to set the opportunity type for a new activity from the sidebar
+ *
  * Revision 1.15  2005/07/28 17:14:30  vanmer
  * - added grouping on company column in opportunity sidebar pager
  * - removed subtotals from opportunity sidebar pager
