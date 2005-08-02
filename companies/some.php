@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.68 2005/06/20 18:48:09 niclowe Exp $
+ * $Id: some.php,v 1.69 2005/08/02 22:05:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -291,8 +291,6 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 }
 
 $sql .= $from . $where;
-
-//echo htmlentities($sql);
 
 $sql_recently_viewed = "select
  c.company_id,
@@ -593,7 +591,7 @@ $con->close();
                 <td class=widget_header colspan=2><?php echo _("Company Options"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content><a href="new.php"><?php echo _("New Company"); ?></a></td>
+                <td class=widget_content><?php echo render_create_button(_("New Company"), 'button', "javascript: location.href='new.php';", false, false, 'companies'); ?></td>
             </tr>
         </table>
         </div>
@@ -674,6 +672,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.69  2005/08/02 22:05:52  vanmer
+ * - changed to use new company button instead of company link, wrapped in ACL check
+ *
  * Revision 1.68  2005/06/20 18:48:09  niclowe
  * added snail mail merge functionality
  *
