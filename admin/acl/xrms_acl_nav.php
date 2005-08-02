@@ -1,6 +1,7 @@
 <?php
-echo '<div id=Sidebar>
-<table  name=mainNav class=widget>
+echo '<div id=Sidebar>';
+if ($xrms_acl_nav_extra) echo $xrms_acl_nav_extra;
+echo '<table  name=mainNav class=widget>
 <tr><td class=widget_header>'._("ACL Administration").'</td></tr>
 <tr><td class=widget_content><a href="Role_list.php">'._("Manage Roles").'</a><br></li></td></tr>
 <tr><td class=widget_content><a href="ControlledObject_list.php">'._("Manage Controlled Objects").'</a><br></li></td></tr>
@@ -14,6 +15,5 @@ echo '<div id=Sidebar>
 <tr><td class=widget_content><a href="role_permission_grid.php">'._("Manage Role Permissions in Grid").'</a><br></li></td></tr>
 <tr><td class=widget_content><a href="data_source_list.php">'._("Manage Data Sources").'</a><br></li></td></tr>
 <tr><td class=widget_content><a href="acl_results.php">'._("Test ACL Results").'</a><br></li></td></tr>
-</table>
-</div>';
+</table></div>';
 ?>
