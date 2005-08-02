@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupMember.php,v 1.2 2005/03/05 00:52:34 daturaarutad Exp $
+ * $Id: one_GroupMember.php,v 1.3 2005/08/02 00:47:58 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -16,15 +16,15 @@ require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
-$session_user_id = session_check();
+$session_user_id = session_check('','Admin');
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
 
 global $symbol_precendence;
 
-	$con = &adonewconnection($xrms_acl_db_dbtype);
-	$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+	$con = get_acl_dbconnection();
+	
 	// $con->debug=1;
 	
 	// we need this for the companies foreign key lookup
@@ -32,21 +32,22 @@ global $symbol_precendence;
 	$xcon->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 
-	getGlobalVar($return_url, 'return_url');
-
+    getGlobalVar($return_url, 'return_url');
+    getGlobalVar($msg, 'msg');
+    getGlobalVar($form_action, 'form_action');
+    getGlobalVar($GroupMember_id, 'GroupMember_id');
+    if (!$return_url) { $return_url='GroupMember_list.php'; }
 
 	$page_title = 'Manage GroupMember';
         
         $css_theme='basic-left';
-	start_page($page_title);
 
   require_once($include_directory ."classes/QuickForm/ADOdb_QuickForm.php");
-
 
   $model = new ADOdb_QuickForm_Model();
   $model->ReadSchemaFromDB($con, 'GroupMember');
   $model->SetPrimaryKeyName('GroupMember_id');
-  $model->SetDisplayNames(array('Group_name' => 'Group Name', 'on_what_id'=>'Object ID')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
+  $model->SetDisplayNames(array('Group_name' => _("Group Name"), 'on_what_id'=>_("Object ID"), 'criteria_table'=>_("Table"), 'criteria_resultfield'=>_("Result Field")));
   $model->SetForeignKeyField('ControlledObject_id', 'Controlled Object', 'ControlledObject', 'ControlledObject_id', 'ControlledObject_name');
   $model->SetForeignKeyField('Group_id', 'Group', 'Groups', 'Group_id', 'Group_name');
 
@@ -56,8 +57,41 @@ global $symbol_precendence;
   $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
   $form_html = $controller->ProcessAndRenderForm();
 
-	$con->close();
 
+if ($form_action=='edit') {
+    $criteria=get_acl_group_member_criteria($con, $GroupMember_id);
+    $colspan=4;    
+    $xrms_acl_nav_extra="<form method=POST action='edit_GroupMemberCriteria.php'><input type=hidden name=criteria_action value='addCriteria'><input type=hidden name=GroupMember_id value=$GroupMember_id>";
+    $xrms_acl_nav_extra .="<table class=widget><tr><td class=widget_header colspan=$colspan>". _("Group Member Criteria") .'</td></tr>';
+    $xrms_acl_nav_extra.='<tr><td class=widget_label>'._("Field") . '</td><td class=widget_label>' . _("Operator"). '</td><td class=widget_label>' ._("Value") .'</td><td class=widget_label>' ._("Action") .'</td></tr>';
+    if ($criteria) {
+        foreach ($criteria as $crit) {
+            $xrms_acl_nav_extra.='<tr>';
+            $xrms_acl_nav_extra.="<td class=widet_content_form_element>{$crit['criteria_fieldname']}</td>";
+            $xrms_acl_nav_extra.="<td class=widet_content_form_element>{$crit['criteria_operator']}</td>";
+            $xrms_acl_nav_extra.="<td class=widet_content_form_element>{$crit['criteria_value']}</td>";
+            $xrms_acl_nav_extra.="<td class=widet_content_form_element><input type=button value=". _("Delete") ." class=button onclick=\"javascript: location.href='edit_GroupMemberCriteria.php?criteria_action=deleteCriteria&GroupMember_id=$GroupMember_id&GroupMemberCriteria_id={$crit['GroupMemberCriteria_id']}'\"></td>";
+            $xrms_acl_nav_extra.="</tr>\n";
+        }
+    } else {
+        $xrms_acl_nav_extra.="<tr><td class=widget_content_form_element colspan=$colspan>"._("No Criteria Defined") ."</td></tr>\n";
+    }
+    $operators=array('='=>'=','IS'=>'IS','LIKE'=>'LIKE','>'=>'>','>='=>'>=','<'=> '<','<=' =>'<=');
+    $operator_list=create_select_from_array($operators, 'criteria_operator',$criteria_operator, false, false);
+    $xrms_acl_nav_extra.='<tr>';
+    $xrms_acl_nav_extra.="<td class=widet_content_form_element><input size=5 type=text value=\"$criteria_fieldname\" name=criteria_fieldname></td>";
+    $xrms_acl_nav_extra.="<td class=widet_content_form_element>$operator_list</td>";
+    $xrms_acl_nav_extra.="<td class=widet_content_form_element><input size=5 type=text value=\"$criteria_value\" name=criteria_value></td>";
+    $xrms_acl_nav_extra.="<td class=widet_content_form_element><input type=submit class=button value=\""._("Add") ."\"></td>";
+    $xrms_acl_nav_extra.="</tr>\n";
+
+//    $xrms_acl_nav_extra.="<tr><td class=widget_content_form_element colspan=$colspan><input type=submit class=button value=\""._("Add") ."\"></td></tr>\n";
+    $xrms_acl_nav_extra.="</table></form>";
+}
+
+$con->close();
+
+start_page($page_title, true, $msg);
 ?>
 
 
@@ -79,6 +113,10 @@ end_page();
 
 /**
  * $Log: one_GroupMember.php,v $
+ * Revision 1.3  2005/08/02 00:47:58  vanmer
+ * - added sidebar for managing criteria on a group member, when editing
+ * - added translated fieldnames for new table and result fieldname fields
+ *
  * Revision 1.2  2005/03/05 00:52:34  daturaarutad
  * manually setting primary keys until mssql driver supports metacolumns fully
  *
