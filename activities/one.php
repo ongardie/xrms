@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.119 2005/07/31 17:41:32 braverock Exp $
+ * $Id: one.php,v 1.120 2005/08/02 22:00:43 ycreddy Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -158,6 +158,20 @@ $activity_id_text = _("Activity ID:") . ' ' . $activity_id;
         db_error_handler($con, $sql);
     }
 
+if ($last_modified_by) {
+    //get user info for who modified the activity
+    $sql = "select first_names, last_name from users where user_id = $last_modified_by";
+    $rst = $con->execute($sql);
+    if ($rst) {
+        $last_modified_by_firstname = $rst->fields['first_names'];
+        $last_modified_by_lastname = $rst->fields['last_name'];
+        $rst->close();
+    } else {
+        db_error_handler($con, $sql);
+    }
+}
+
+
 if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
     $history_text = '<tr> <td class=widget_content colspan=2>';
 
@@ -166,19 +180,8 @@ if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
                      _("entered by") . ' ' . $entered_by_firstname . ' ' . $entered_by_lastname . ' ' .
                      _("at") . ' ' . $entered_at . '. ';
 
-    //get user info for who modified the activity
-    $sql = "select first_names, last_name from users where user_id = $last_modified_by";
-    $rst = $con->execute($sql);
-    if ($rst) {
-        $last_modified_by_firstname = $rst->fields['first_names'];
-        $last_modified_by_lastname = $rst->fields['last_name'];
-        $history_text .= _("Last modified by") . ' ' . $last_modified_by_firstname . ' ' . $last_modified_by_lastname . ' ' .
+    $history_text .= _("Last modified by") . ' ' . $last_modified_by_firstname . ' ' . $last_modified_by_lastname . ' ' .
                          _("at") . ' ' . $last_modified_at . '.';
-        $rst->close();
-    } else {
-        db_error_handler($con, $sql);
-    }
-
     $history_text .= '</td> </tr>';
 } else {
     $history_text = '';
@@ -547,6 +550,12 @@ function logTime() {
                 <td class=widget_label_right><?php echo _("Entered By"); ?></td>
                 <td class=widget_content_form_element><?php echo $entered_by_firstname.' '.$entered_by_lastname.' '._("on").' '.$entered_at; ?></td>
             </tr>
+      	    <?php if ($last_modified_by) { ?>
+            <tr>
+                <td class=widget_label_right><?php echo _("Last Modified By"); ?></td>
+                <td class=widget_content_form_element><?php echo $last_modified_by_firstname.' '.$last_modified_by_lastname.' '._("on").' '.$last_modified_at; ?></td>
+            </tr>
+           <?php } ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Scheduled Start"); ?></td>
                 <td class=widget_content_form_element>
@@ -711,6 +720,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.120  2005/08/02 22:00:43  ycreddy
+ * Added Last Modified By and Last Modified At fields to the details
+ *
  * Revision 1.119  2005/07/31 17:41:32  braverock
  * - make changes to improve functioning even if register_globals is 'on'
  *
