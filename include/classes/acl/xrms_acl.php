@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.25 2005/07/30 01:30:35 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.26 2005/08/02 00:43:57 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -1182,14 +1182,13 @@ class xrms_acl {
         $sql = "SELECT * FROM $tblName WHERE $where";
         $rs = $con->execute($sql);
         if (!$rs) { db_error_handler($con, $sql); return false; }
-        if (($rs->numRows()>1) and ($on_what_id===false)) {
+        
+        if (!$rs->EOF) {
             while (!$rs->EOF) {
-                $ret[$rs->fields['GroupMemberCriteria_id']] = $rs->fields;
+                $ret[] = $rs->fields;
                 $rs->movenext();
             }
             return $ret;
-        } elseif ($rs->numRows()==1) {
-            return array($rs->fields['GroupMemberCriteria_id'] => $rs->fields);
         } else {
             return false;
         }        
@@ -1225,9 +1224,8 @@ class xrms_acl {
         $CriteriaRow['criteria_value']=$criteria_value;
         $CriteriaRow['criteria_operator']=$criteria_operator;
         
-        //create and execute insert SQL
-        
-        $sql = $con->getInsertSQL($tblName, $CriteriaRow,false);
+        //create and execute insert SQL        
+        $sql = $con->getInsertSQL($tblName, $CriteriaRow, get_magic_quotes_gpc());
         if ($sql) {
             $rs = $con->execute($sql);
             
@@ -2545,6 +2543,10 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.26  2005/08/02 00:43:57  vanmer
+ * - changed group member criteria retrieval to use simpler logic for creating array
+ * - changed to also check get_magic_quotes_gpc to allow quoted values to be inserted properly
+ *
  * Revision 1.25  2005/07/30 01:30:35  vanmer
  * - added function to get list of groups from GroupMemberCriteria data
  * - added group list addition to retrieval of groups list used in permissions
