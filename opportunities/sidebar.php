@@ -8,7 +8,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.16 2005/08/01 22:09:33 vanmer Exp $
+ * $Id: sidebar.php,v 1.17 2005/08/02 17:33:04 vanmer Exp $
  */
 /*
 Commented until ACL system is implemented
@@ -38,7 +38,7 @@ if (!$opportunity_sidebar_rows_per_page) {
 //build the cases sql query
 $close_at = $con->SQLDate('Y-m-D', 'close_at');
 $opportunity_sql_select = "select "
-. $con->Concat("'<a id=\"'", "opportunities.opportunity_title",  "'\" href=\"one.php?opportunity_id='", "opportunities.opportunity_id", "'\">'", "opportunities.opportunity_title","'</a>'")
+. $con->Concat("'<a id=\"'", "opportunities.opportunity_title",  "'\" href=\"$http_site_root/opportunities/one.php?opportunity_id='", "opportunities.opportunity_id", "'\">'", "opportunities.opportunity_title","'</a>'")
 . " AS opportunity" . ",
   c.company_name AS 'company', u.username AS owner " . ",
   ot.opportunity_type_pretty_name AS type,
@@ -150,6 +150,9 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.17  2005/08/02 17:33:04  vanmer
+ * - added full link to opportunity from the sidebar
+ *
  * Revision 1.16  2005/08/01 22:09:33  vanmer
  * - added ability to set the opportunity type for a new activity from the sidebar
  *
