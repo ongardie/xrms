@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.8 2005/07/14 19:42:24 daturaarutad Exp $
+ * $Id: one-address.php,v 1.9 2005/08/02 22:41:32 ycreddy Exp $
  */
 
 require_once('../include-locations.inc');
@@ -95,6 +95,9 @@ $company_name = fetch_company_name($con, $company_id);
         }
         $model->SetFieldType('address_body', 'textarea','cols=50 rows=10');
 
+	global $default_country_id;
+	$model->SetFieldValue('country_id', $default_country_id);
+
         if ($contact_id) {
             $model->AddField("<input type=hidden name=contact_id value=$contact_id>", 'html',0);
         }
@@ -179,6 +182,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.9  2005/08/02 22:41:32  ycreddy
+ * Defaulted the country to the default_address_id defined in vars.php
+ *
  * Revision 1.8  2005/07/14 19:42:24  daturaarutad
  * changed to use QuickForms "html" type
  *
