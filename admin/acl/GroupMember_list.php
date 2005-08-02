@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupMember_list.php,v 1.3 2005/05/10 13:28:14 braverock Exp $
+ * $Id: GroupMember_list.php,v 1.4 2005/08/02 00:46:41 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -15,7 +15,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
-require_once($include_directory . 'adodb/adodb-pager.inc.php');
+require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
 
@@ -23,92 +24,70 @@ $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
-$con = &adonewconnection($xrms_acl_db_dbtype);
-$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+$con = get_acl_dbconnection();
+
 
 $page_title = _("Manage Group Members");
+$form_id="GroupMemberList";
 
-// begin sorted columns stuff
-getGlobalVar($sort_column, 'sort_column'); 
-getGlobalVar($current_sort_column, 'current_sort_column'); 
-getGlobalVar($sort_order, 'sort_order'); 
-getGlobalVar($current_sort_order, 'current_sort_order'); 
-getGlobalVar($GroupMember_next_page, 'GroupMember_next_page'); 
-getGlobalVar($resort, 'resort'); 
+$select_sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_GroupMember.php?form_action=edit&return_url=GroupMember_list.php&GroupMember_id="), 'GroupMember_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'GroupName', ControlledObject.ControlledObject_name as 'ControlledObject', GroupMember.*";
+ 
+ $from_sql="FROM GroupMember JOIN Groups ON Groups.Group_id=GroupMember.Group_id JOIN ControlledObject ON ControlledObject.ControlledObject_id=GroupMember.ControlledObject_id";
 
-if (!strlen($sort_column) > 0) {
-    $sort_column = 1;
-		$current_sort_column = $sort_column;
-    $sort_order = "asc";
-}
-    
-if (!($sort_column == $current_sort_column)) {
-    $sort_order = "asc";
-}
+$sql = "$select_sql $from_sql";
+
+$group_list="SELECT " . $con->Concat('Groups.Group_name', $con->qstr(' ('), 'count(GroupMember.Group_id)',$con->qstr(')')) . " AS 'GroupName', GroupMember.Group_id $from_sql GROUP BY GroupMember.Group_id ORDER BY Groups.Group_name";
+$group_select=$sql . " WHERE GroupMember.Group_id= XXX-value-XXX";
+
+$object_list="SELECT " . $con->Concat('ControlledObject.ControlledObject_name', $con->qstr(' ('), 'count(GroupMember.ControlledObject_id)',$con->qstr(')')) . " AS 'COName', GroupMember.ControlledObject_id $from_sql GROUP BY GroupMember.ControlledObject_id ORDER BY ControlledObject.ControlledObject_name";
+$object_select=$sql . " WHERE GroupMember.ControlledObject_id= XXX-value-XXX";
+
+$columns = array();
+$columns[] = array('name' => _("Action"), 'index_sql' => 'LINK', 'sql_sort_column' => 'GroupMember_id', 'type' => 'url');
+$columns[] = array('name' => _("Controlled Object"), 'index_sql' => 'ControlledObject','group_query_list'=>$object_list, 'group_query_select'=>$object_select);
+$columns[] = array('name' => _("Group"), 'index_sql' => 'GroupName','group_query_list'=>$group_list, 'group_query_select'=>$group_select);
+$columns[] = array('name' => _("Object ID"), 'index_sql' => 'on_what_id');
+$columns[] = array('name' => _("Criteria Table"), 'index_sql' => 'criteria_table');
+$columns[] = array('name' => _("Criteria Result Field"), 'index_sql' => 'criteria_resultfield');
+$columns[] = array('name' => _("Group Member ID"), 'index_sql' => 'GroupMember_id');
+$columns[] = array('name' => _("Controlled Object ID"), 'index_sql' => 'ControlledObject_id');
+$columns[] = array('name' => _("Group ID"), 'index_sql' => 'Group_id');
+
+$default_columns = array('LINK','GroupName','ControlledObject','on_what_id','criteria_table','criteria_resultfield');
+
+$pager_columns = new Pager_Columns('GroupMembersPager', $columns, $default_columns, $form_id);
+$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
+$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+
+$columns = $pager_columns->GetUserColumns('default');
+$colspan=count($columns);
 
 
-$opposite_sort_order = ($sort_order == "asc") ? "desc" : "asc";
-$sort_order = (($resort) && ($current_sort_column == $sort_column)) ? $opposite_sort_order : $sort_order;
+$pager = new GUP_Pager($con, $sql, null,_("Group Members"), $form_id, 'GroupMembers', $columns, false);
 
-$ascending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">';
-$descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
-$pretty_sort_order = ($sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
-$order_by = $sort_column;
-
-
-
-$order_by .= " $sort_order";
-// end sorted columns stuff
-
-
-$sql="SELECT " . $con->Concat($con->qstr("<input type=\"button\" class=\"button\" value=\"Edit\" onclick=\"javascript: location.href='one_GroupMember.php?form_action=edit&return_url=GroupMember_list.php&GroupMember_id="), 'GroupMember_id', $con->qstr("'\">")) . "AS LINK, Groups.Group_name as 'Group', ControlledObject.ControlledObject_name as 'Controlled Object', on_what_id as 'Object ID' FROM GroupMember JOIN Groups ON Groups.Group_id=GroupMember.Group_id JOIN ControlledObject ON ControlledObject.ControlledObject_id=GroupMember.ControlledObject_id order by $order_by";
-
-$css_theme='basic-left';
 start_page($page_title);
 ?>
-
-<script language="JavaScript" type="text/javascript">
-<!--
-
-function submitForm(nextPage) {
-    document.forms[0].GroupMember_next_page.value = nextPage;
-    document.forms[0].submit();
-}
-
-function resort(sortColumn) {
-    document.forms[0].sort_column.value = sortColumn + 1;
-    document.forms[0].GroupMember_next_page.value = '';
-    document.forms[0].resort.value = 1;
-    document.forms[0].submit();
-}
-
-//-->
-</script>
-
-
-<form method="POST">
-<input type=hidden name=use_post_vars value=1>
-<input type=hidden name=GroupMember_next_page value="<?php  echo $GroupMember_next_page; ?>">
-<input type=hidden name=resort value="0">
-<input type=hidden name=current_sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=sort_column value="<?php  echo $sort_column; ?>">
-<input type=hidden name=current_sort_order value="<?php  echo $sort_order; ?>">
-<input type=hidden name=sort_order value="<?php  echo $sort_order; ?>">
-
+<form method="POST" name="<?php echo $form_id; ?>">
 
 
 <?php
+
 
 echo "<div id='Main'>";
 require_once('xrms_acl_nav.php');
 echo '<div id=Content>';
 
-$pager = new ADODB_Pager($con, $sql, 'GroupMember', false, $sort_column-1, $pretty_sort_order);
+
+echo $pager_columns_selects;
+
+$endrows="<tr><td colspan=$colspan class=widget_class_form_element>$pager_columns_button
+<input type=\"button\" class=\"button\" value=\"".  _("Add New") ."\" onclick=\"javascript: location.href='one_GroupMember.php?form_action=new&return_url=GroupMember_list.php'\"></td></tr>";
+
+$pager->AddEndRows($endrows);
+
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_GroupMember.php?form_action=new&return_url=GroupMember_list.php'">
 </div></div></form>
 
 <?php
@@ -116,6 +95,10 @@ end_page();
 
 /**
  * $Log: GroupMember_list.php,v $
+ * Revision 1.4  2005/08/02 00:46:41  vanmer
+ * - changed to use new acl wrapper call for database connection
+ * - changed to use new GUP_Pager with grouping on objects and groups
+ *
  * Revision 1.3  2005/05/10 13:28:14  braverock
  * - localized strings patches provided by Alan Baghumian (alanbach)
  *
