@@ -23,6 +23,31 @@ function get_acl_dbconnection($datasource=false) {
     return $acl->get_object_adodbconnection($datasource);
 }
 
+function get_acl_group_member_criteria($con=false, $GroupMember_id) {
+    global $acl_options;
+    if (!$GroupMember_id) return false;
+    $acl = get_acl_object($acl_options, $con);
+    $ret=$acl->get_group_member_criteria($GroupMember_id);
+    return $ret;
+}
+
+function remove_group_member_criteria($con=false, $GroupMemberCriteria_id) {
+    global $acl_options;
+    if (!$GroupMemberCriteria_id) return false;
+    $acl = get_acl_object($acl_options, $con);
+    $ret=$acl->delete_group_member_criteria(false, false, $GroupMemberCriteria_id);
+    return $ret;
+}
+
+function add_group_member_criteria($con, $GroupMember_id, $criteria_fieldname, $criteria_value, $criteria_operator='=') {
+    global $acl_options;
+    $acl = get_acl_object($acl_options, $con);
+    if ($GroupMember_id AND $criteria_fieldname AND $criteria_value AND $criteria_operator) {
+        $ret = $acl->add_group_member_criteria($GroupMember_id, $criteria_fieldname, $criteria_value, $criteria_operator);   
+        return $ret;
+    }  else return false;
+}
+
 function get_users_in_role($con, $role) {
     global $session_user_id;
     global $acl_options;
