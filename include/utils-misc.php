@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.142 2005/07/12 17:36:47 vanmer Exp $
+ * $Id: utils-misc.php,v 1.143 2005/08/02 22:25:24 ycreddy Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -779,9 +779,15 @@ function get_country_from_address($con, $address_id) {
 function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
     global $company_id;
     global $contact_id;
+    global $default_country_id;   
+
     if (!$country_id) {
         $country_id=get_country_from_address($con, $address_id);
     }
+    if (!$country_id) {
+	$country_id = $default_country_id;
+    }
+
     $expression=get_phone_format_from_country($con, $country_id);
 
     $phone_to_display = $phone;
@@ -1770,6 +1776,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.143  2005/08/02 22:25:24  ycreddy
+ * added code to use the default_country_id if the country_id is not available in get_formatted_phone
+ *
  * Revision 1.142  2005/07/12 17:36:47  vanmer
  * - changed to throw noperm message when no authorization is allow for a user, instead of noauth
  *
