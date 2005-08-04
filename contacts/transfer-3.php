@@ -2,7 +2,7 @@
 /**
  * Database updates for transfer contact
  *
- * $Id: transfer-3.php,v 1.4 2005/06/15 18:29:50 ycreddy Exp $
+ * $Id: transfer-3.php,v 1.5 2005/08/04 18:59:22 vanmer Exp $
  */
 
 
@@ -17,6 +17,7 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check();
 
 $new_company_id = $_POST['company_id'];
+$old_company_id = $_POST['old_company_id'];
 $contact_id = $_POST['contact_id'];
 
 $everywhere = (isset($_POST['everywhere'])) ? $_POST['everywhere'] : '';
@@ -40,6 +41,7 @@ $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
 $con->execute($upd);
 
 add_audit_item($con, $session_user_id, 'transferred', 'contacts', $contact_id, 1);
+add_contact_company_history($con, $contact_id, $old_company_id);
 
 if($everywhere) {
     $sql = "SELECT * FROM activities WHERE contact_id = $contact_id";
@@ -74,8 +76,23 @@ $con->close();
 //now go to the Contact Details page the user can make additional changes if they need to
 header("Location: one.php?msg=saved&contact_id=$contact_id");
 
+function add_contact_company_history($con, $contact_id, $company_id) {
+    //save to database
+    $rec = array();
+    $rec['contact_id'] = $contact_id;
+    $rec['companychange_at'] = time();
+    $rec['former_company_id'] = $company_id;
+    
+    $tbl = 'contact_former_companies';
+    $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
+    $con->execute($ins);
+    return $con->Insert_ID();
+}
 /**
  * $Log: transfer-3.php,v $
+ * Revision 1.5  2005/08/04 18:59:22  vanmer
+ * - added history function to track former companies for a contact
+ *
  * Revision 1.4  2005/06/15 18:29:50  ycreddy
  * Added a plugin hook contact_transfer_3
  *
