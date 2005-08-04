@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer.php,v 1.8 2004/07/30 11:32:01 cpsource Exp $
+ * $Id: transfer.php,v 1.9 2005/08/04 20:59:10 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -14,6 +14,7 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
 $session_user_id = session_check();
+getGlobalVar($company_name, 'company_name');
 $msg = isset($_GET['msg']) ? $_GET['msg']: '';
 $contact_id = $_GET['contact_id'];
 
@@ -39,7 +40,6 @@ start_page($page_title, true, $msg);
     <div id="Content">
 
         <form action=transfer-2.php method=post>
-        <input type=hidden name=msg value="<?php echo $msg; ?>">
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
@@ -49,7 +49,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_label><?php echo _("Name or ID"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="company_name"> <?php  echo $required_indicator ?></td>
+                <td class=widget_content_form_element><input type=text size=18 maxlength=100 name="company_name" value="<?php echo $company_name; ?>"> <?php  echo $required_indicator ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=2>
@@ -76,6 +76,10 @@ end_page();
 
 /**
  * $Log: transfer.php,v $
+ * Revision 1.9  2005/08/04 20:59:10  vanmer
+ * - removed msg from hidden variables, not needed to pass on every msg found
+ * - added extra parameter to display company_name if provided
+ *
  * Revision 1.8  2004/07/30 11:32:01  cpsource
  * - Define msg properly
  *   Fix bug with new.php wereby division_id and address_id were
