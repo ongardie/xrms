@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.10 2005/08/04 18:58:38 vanmer Exp $
+ * $Id: transfer-2.php,v 1.11 2005/08/04 20:58:28 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -38,13 +38,17 @@ else {
 $rst = $con->execute($sql);
 
 if($rst->rowcount()) {
-    $company_menu = $rst->getmenu2('company_id', $company_id, false);
+    $company_menu = $rst->getmenu2('company_id', false, false);
     $company_menu .= "&nbsp; <input type=button class=button value='More Info' onclick='document.forms[0].company_id.value=document.forms[1].company_id.options[document.forms[1].company_id.selectedIndex].value; document.forms[0].submit();'>";
 }
 $rst->close();
 
 $con->close();
-
+if (!$company_menu) {
+    $company_name=urlencode($company_name);
+    Header("Location: transfer.php?company_name=$company_name&contact_id=$contact_id&msg=".urlencode("No Companies Found, please try another search"));
+    exit;
+}
 $page_title = $contact_name . " - " . _("Transfer to Another Company");
 start_page($page_title, true, $msg);
 
@@ -94,6 +98,10 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.11  2005/08/04 20:58:28  vanmer
+ * - added check for results, return to last page if none are found
+ * - changed dropdown to not contain blanks, default to first entry
+ *
  * Revision 1.10  2005/08/04 18:58:38  vanmer
  * - added passthrough of contact's old company
  *
