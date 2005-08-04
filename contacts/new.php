@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.34 2005/08/04 19:41:36 vanmer Exp $
+ * $Id: new.php,v 1.35 2005/08/04 21:02:56 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -17,7 +17,7 @@ $session_user_id = session_check('','Create');
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 $clone_id = isset($_GET['clone_id']) ? $_GET['clone_id'] : 0;
-
+getGlobalVar($return_url, 'return_url');
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -156,6 +156,7 @@ start_page($page_title, true, $msg);
 
 <form action=new-2.php method=post>
         <input type=hidden name=company_id value="<?php echo $company_id; ?>">
+        <input type=hidden name=return_url value="<?php echo $return_url; ?>">
 <div id="Main">
     <div id="Content">
 
@@ -341,6 +342,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.35  2005/08/04 21:02:56  vanmer
+ * - added passthrough for return_url through new.php
+ *
  * Revision 1.34  2005/08/04 19:41:36  vanmer
  * - added cellspacing to sidebar
  * - added translation of home address header to sidebar
