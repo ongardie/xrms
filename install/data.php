@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.29 2005/07/28 20:29:10 vanmer Exp $
+ * $Id: data.php,v 1.30 2005/08/04 22:56:17 vanmer Exp $
  */
 
 /**
@@ -2883,7 +2883,40 @@ function activity_db_data($con) {
 
 } // end activity_db_data fn
 
+function user_preferences_db_data($con) {
+    //adding strings for user preference types in order to allow them to be translated while still stored as English in the database
+    $s=_("Language");
+    $s=_("Theme");
+    $s=_("Color and Layout Theme for XRMS");
 
+
+    add_user_preference_type($con, 'user_language', 'Language', false, false, true, 'select');
+    add_user_preference_type($con, 'css_theme', 'Theme', 'Color and Layout Theme for XRMS', false, true, 'select');
+
+    $hide_type=add_user_preference_type($con, 'hide_sf_img',  'Hide SourceForge Image', 'Hides the SourceForge Image which appears at the bottom of every page', false, false, 'select');
+    $block_type=add_user_preference_type($con, 'block_sf_link', 'Block SourceForge Link', 'Disables the SourceForge image and link which appears at the bottom of every page', false, false, 'select');
+
+    $s=_("Hide Sourceforge Image");
+    $s=_("Block Sourceforge Link");
+    $s=_("Disables the SourceForge image and link which appears at the bottom of every page");
+    $s=_("Hides the SourceForge Image which appears at the bottom of every page");
+
+    add_preference_option($con, $hide_type, 'y', 'Yes', 1);
+    add_preference_option($con, $hide_type, 'n', 'No', 2);
+
+    add_preference_option($con, $block_type, 'y', 'Yes', 1);
+    add_preference_option($con, $block_type, 'n', 'No', 2);
+
+    $ret=get_admin_preference($con, $hide_type);
+    if (!$ret) {
+        set_admin_preference($con, $hide_type, 'y');
+    }
+
+    $ret=get_admin_preference($con, $block_type);
+    if (!$ret) {
+        set_admin_preference($con, $block_type, 'n');
+    }
+}
 
 /**
  * Create the inital dataset.
@@ -2897,11 +2930,15 @@ function create_db_data($con) {
     case_db_data($con);
     campaign_db_data($con);
     activity_db_data($con);
+    user_preferences_db_data($con);
 } // end create_db_data fn
 
 
 /**
  * $Log: data.php,v $
+ * Revision 1.30  2005/08/04 22:56:17  vanmer
+ * - added function to install user preferences data upon initial install
+ *
  * Revision 1.29  2005/07/28 20:29:10  vanmer
  * - added new activity resolution to list of standard activity resolutions
  *
