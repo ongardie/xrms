@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.50 2005/07/06 21:49:00 vanmer Exp $
+ * $Id: database.php,v 1.51 2005/08/04 18:58:08 vanmer Exp $
  */
 
 /**
@@ -639,6 +639,22 @@ function company_db_tables($con, $table_list) {
         }
     }
 
+   if (!in_array('contact_former_companies',$table_list)) {
+        $sql ="CREATE TABLE contact_former_companies (
+        cfc_id INT unsigned NOT NULL auto_increment,
+        contact_id int(11) NOT NULL default '0',
+        companychange_at datetime NOT NULL default '0000-00-00 00:00:00',
+        former_company_id int(11) NOT NULL,
+        PRIMARY KEY cfc_id (cfc_id),
+        KEY (contact_id),
+        KEY (former_company_id)
+        )";
+        $rst=$con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+   }  
+    
     // email_templates
     // for the bulk e-mail stuff, where you can store things like "Dear ##CONTACT_FIRST_NAMES## - " and the system will
     // replace the ##CONTACT_FIRST_NAMES## token with the contact's actual first names
@@ -1281,6 +1297,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.51  2005/08/04 18:58:08  vanmer
+ * - added table to track former contact's companies
+ *
  * Revision 1.50  2005/07/06 21:49:00  vanmer
  * - added activity_template_id to track which template an activity was spawned from
  *
