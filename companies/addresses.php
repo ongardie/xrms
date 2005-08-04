@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.24 2005/07/08 02:30:06 vanmer Exp $
+ * $Id: addresses.php,v 1.25 2005/08/04 20:08:39 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -21,6 +21,7 @@ $session_user_id = session_check();
 getGlobalVar($msg, 'msg');
 getGlobalVar($company_id, 'company_id');
 getGlobalVar($edit_contact_id, 'edit_contact_id');
+getGlobalVar($final_return_url, 'final_return_url');
 
 getGlobalVar($address_street, 'address_street');
 getGlobalVar($address_city, 'address_city');
@@ -133,7 +134,9 @@ $pager = new GUP_Pager($con, $sql, 'GetAddressesPagerData', _('Addresses'), 'Add
 if (!$edit_contact_id) {
     $endrows = "<tr><td class=widget_content_form_element colspan=10><input class=button type=button onclick=\"document.AddressPagerForm.action='set-address-defaults.php'; document.AddressPagerForm.submit();\" value=\"" . _("Save Defaults") . "\"><input type=button class=button name=btBackToCompany onclick=\"javascript: location.href='one.php?company_id=$company_id'\" value=\""._("Back To Company")."\"></td></tr>";
 } else {
-    $endrows = "<tr><td class=widget_content_form_element colspan=10><input type=hidden name=return_url value=\"$http_site_root/contacts/edit.php?contact_id=$edit_contact_id\"><input class=button type=button onclick=\"document.AddressPagerForm.action='../contacts/edit-address-2.php'; document.AddressPagerForm.submit();\" value=\"" . _("Update Contact") . "\"></td></tr>";
+    if (!$final_return_url) $contact_return_url="$http_site_root/contacts/edit.php?contact_id=$edit_contact_id";
+    else $contact_return_url=$final_return_url;
+    $endrows = "<tr><td class=widget_content_form_element colspan=10><input type=hidden name=return_url value=\"$contact_return_url\"><input class=button type=button onclick=\"document.AddressPagerForm.action='../contacts/edit-address-2.php'; document.AddressPagerForm.submit();\" value=\"" . _("Update Contact") . "\"></td></tr>";
 }    
 $pager->AddEndRows($endrows);
 
@@ -174,6 +177,7 @@ $address_action="addresses.php";
             
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <input type=hidden name=edit_contact_id value=<?php  echo $edit_contact_id; ?>>
+        <input type=hidden name=final_return_url value="<?php  echo $final_return_url; ?>">
         <input type=hidden name=contact_id value=<?php  echo $edit_contact_id; ?>>
 		<?php echo $address_pager; ?>
          </form>
@@ -183,7 +187,8 @@ $address_action="addresses.php";
         
         <input type=hidden name=company_id value=<?php  echo $company_id; ?>>
         <input type=hidden name=form_action value=new>
-        <input type=hidden name=return_url value=<?php echo "$http_site_root/companies/addresses.php?msg=saved&company_id=$company_id&edit_contact_id=$edit_contact_id"; ?>>
+        <input type=hidden name=return_url value=<?php echo "$http_site_root/companies/addresses.php?msg=saved&company_id=$company_id&edit_contact_id=$edit_contact_id&final_return_url=".urlencode($final_return_url); ?>>
+        <input type=hidden name=final_return_url value="<?php echo $final_return_url; ?>">
     </div>
     <div id="Sidebar">
         <table class=widget cellspacing=1>
@@ -205,6 +210,10 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.25  2005/08/04 20:08:39  vanmer
+ * - added a parameter to allow a final redirection after address has been selected, instead of automatically
+ * redirecting to contact edit page
+ *
  * Revision 1.24  2005/07/08 02:30:06  vanmer
  * - added link back to company when editing company addresses
  * - added refresh back to contact edit page when done selecting address
