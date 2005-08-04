@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division.php,v 1.13 2005/06/07 20:35:48 braverock Exp $
+ * $Id: edit-division.php,v 1.14 2005/08/04 19:30:48 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,6 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+getGlobalVar($return_url, 'return_url');
 $on_what_table='company_division';
 $division_id = $_GET['division_id'];
 $on_what_id=$division_id;
@@ -67,6 +68,7 @@ start_page($page_title, true, $msg);
         <form action=edit-division-2.php method=post>
         <input type=hidden name=company_id value=<?php echo $company_id; ?>>
         <input type=hidden name=division_id value=<?php echo $division_id; ?>>
+        <input type=hidden name=return_url value="<?php echo $return_url; ?>">
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Edit Division"); ?></td>
@@ -113,6 +115,9 @@ start_page($page_title, true, $msg);
 
 /**
  * $Log: edit-division.php,v $
+ * Revision 1.14  2005/08/04 19:30:48  vanmer
+ * - added passthrough for return_url, if provided
+ *
  * Revision 1.13  2005/06/07 20:35:48  braverock
  * - sort address drop-down menu by address_name
  *
