@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.56 2005/07/28 17:15:04 vanmer Exp $
+ * $Id: some.php,v 1.57 2005/08/04 18:05:46 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -31,6 +31,8 @@ $arr_vars = array ( // local var name       // session variable name
            'opportunity_category_id' => array ( 'opportunities_opportunity_category_id', arr_vars_SESSION ),
            'campaign_id'             => array ( 'opportunities_campaign_id', arr_vars_SESSION ) ,
            'industry_id'             => array ( 'industry_id', arr_vars_GET_SESSION ),
+           'before_after'            => array ( 'before_after', arr_vars_GET_SESSION ),
+           'search_date'            => array ( 'search_date', arr_vars_GET_SESSION ),
            );
 
 // get all passed in variables
@@ -117,6 +119,29 @@ if (strlen($industry_id) > 0) {
     $criteria_count++;
     $where .= " and c.industry_id = $industry_id";
 }
+
+    if ($search_date) {
+        $field='close_at';
+        $day_diff = round((strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400);
+    
+        if (!$before_after) {
+            // before
+            $offset_end = $con->OffsetDate($day_diff);
+            $offset_sql .= " and opp.$field < $offset_end";
+        } elseif ($before_after === 'after') {
+            // after
+            $offset_start = $con->OffsetDate($day_diff);
+            $offset_sql .= " and opp.$field > $offset_start";
+        } elseif ($before_after === 'on') {
+            // same query for list and calendar views
+            $offset_start = $con->OffsetDate($day_diff);
+            $offset_end = $con->OffsetDate($day_diff+1);
+            // midnight to midnight
+            $offset_sql .= " and opp.$field > $offset_start and opp.$field < $offset_end";
+        }
+    
+        $where .= $offset_sql;
+    }
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
@@ -261,13 +286,23 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Owner"); ?></td>
+                <td class=widget_label><?php echo _("Status"); ?></td>
                 <td class=widget_label><?php echo _("Category"); ?></td>
-                <td class=widget_label colspan=2><?php echo _("Status"); ?></td>
+                <td class=widget_label><?php echo _("Close Date"); ?></td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+                <td class=widget_content_form_element><?php  echo $opportunity_status_menu; ?></td>
                 <td class=widget_content_form_element><?php  echo $opportunity_category_menu; ?></td>
-                <td class=widget_content_form_element colspan=2><?php  echo $opportunity_status_menu; ?></td>
+                <td class=widget_content_form_element>
+                    <select name="before_after">
+                        <option value=""<?php if (!$before_after) { print " selected"; } ?>><?php echo _("Before"); ?></option>
+                        <option value="after"<?php if ($before_after == "after") { print " selected"; } ?>><?php echo _("After"); ?></option>
+                        <option value="on"<?php if ($before_after == "on") { print " selected"; } ?>><?php echo _("On"); ?></option>
+                    </select>
+                    <input type=text ID="f_date_d" name="search_date" size=12 value="<?php  echo $search_date; ?>">
+                    <img ID="f_trigger_d" style="CURSOR: hand" border=0 src="../img/cal.gif" alt="">
+                </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> </td>
@@ -382,6 +417,16 @@ function clearSearchCriteria() {
     location.href = "some.php?clear=1";
 }
 
+Calendar.setup({
+        inputField     :    "f_date_d",      // id of the input field
+        ifFormat       :    "%Y-%m-%d",       // format of the input field
+        showsTime      :    false,            // will display a time selector
+        button         :    "f_trigger_d",   // trigger for the calendar (button ID)
+        singleClick    :    false,           // double-click mode
+        step           :    1,                // show all years in drop-down boxes (instead of every other year as default)
+        align          :    "Bl"           // alignment (defaults to "Bl")
+    });
+
 //-->
 </script>
 
@@ -392,6 +437,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.57  2005/08/04 18:05:46  vanmer
+ * - added search on close date to opportunities search
+ * - moved status and category search around to allow better formatting of page
+ *
  * Revision 1.56  2005/07/28 17:15:04  vanmer
  * - added grouping on company column in opportunity results pager
  *
