@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.51 2005/08/04 18:58:08 vanmer Exp $
+ * $Id: database.php,v 1.52 2005/08/04 22:55:51 vanmer Exp $
  */
 
 /**
@@ -319,6 +319,22 @@ function user_db_tables($con, $table_list) {
         `user_preference_modified_by` INT NOT NULL ,
         PRIMARY KEY ( `user_preference_id` ) ,
         INDEX ( `user_preference_type_id` )
+        );";
+        //execute
+        $rst = $con->execute($sql);
+        if (!$rst) {
+            db_error_handler ($con, $sql);
+        }
+    }
+    if (!in_array('user_preference_type_options',$table_list)) {
+        $sql = "CREATE TABLE `user_preference_type_options` (
+        `up_option_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        `user_preference_type_id` INT UNSIGNED NOT NULL,
+        `option_value` VARCHAR(255) NOT NULL,
+        `sort_order` INT UNSIGNED DEFAULT 1 NOT NULL,
+        `option_record_status` CHAR(1) DEFAULT 'a' NOT NULL,
+        `option_display` VARCHAR(255) NOT NULL,
+        PRIMARY KEY (`up_option_id`)
         );";
         //execute
         $rst = $con->execute($sql);
@@ -1297,6 +1313,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.52  2005/08/04 22:55:51  vanmer
+ * - added missing user preference type options table, needed for install to complete successfully
+ *
  * Revision 1.51  2005/08/04 18:58:08  vanmer
  * - added table to track former contact's companies
  *
