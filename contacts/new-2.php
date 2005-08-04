@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.25 2005/07/27 23:11:28 vanmer Exp $
+ * $Id: new-2.php,v 1.26 2005/08/04 21:03:38 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -46,6 +46,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
            'custom3' => array ( 'custom3' , arr_vars_SESSION ),
            'custom4' => array ( 'custom4' , arr_vars_SESSION ),
            'edit_address' => array ( 'edit_address' , arr_vars_SESSION ),
+           'return_url' => array ( 'return_url' , arr_vars_SESSION ),
            );
 
 // get all posted in variables
@@ -162,11 +163,20 @@ $con->close();
 if ($edit_address == "on") {
     header("Location: edit-address.php?msg=contact_added&contact_id=$contact_id");
     } else {
-    header("Location: ../companies/one.php?msg=contact_added&company_id=$company_id");
+    if (!$return_url) {
+        $return_url="../companies/one.php?msg=contact_added&company_id=$company_id";
+    }
+    $return_url=str_replace('XXX-contact_id-XXX',$contact_id, $return_url);
+    header("Location: $return_url");
 }
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.26  2005/08/04 21:03:38  vanmer
+ * - uses return_url, if provided
+ * - added replacement in return_url to allow new contact_id to be inserted, if XXX-contact_id-XXX is provided in the
+ * return_url
+ *
  * Revision 1.25  2005/07/27 23:11:28  vanmer
  * - changed to simply add new address for the contact, instead of searching company for existing addresses with this
  * name
