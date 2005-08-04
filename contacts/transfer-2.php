@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.9 2005/01/25 03:50:48 braverock Exp $
+ * $Id: transfer-2.php,v 1.10 2005/08/04 18:58:38 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -58,6 +58,7 @@ start_page($page_title, true, $msg);
         </form>
         <form action=transfer-3.php method=post>
         <input type=hidden name=contact_id value=<?php echo $contact_id; ?>>
+        <input type=hidden name=old_company_id value=<?php echo $company_id; ?>>
         <table class=widget cellspacing=1>
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Transfer to Another Company"); ?></td>
@@ -93,6 +94,9 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.10  2005/08/04 18:58:38  vanmer
+ * - added passthrough of contact's old company
+ *
  * Revision 1.9  2005/01/25 03:50:48  braverock
  * - removed errant short tag
  *
