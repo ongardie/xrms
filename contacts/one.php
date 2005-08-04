@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.93 2005/07/24 20:40:08 maulani Exp $
+ * $Id: one.php,v 1.94 2005/08/04 19:19:20 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -172,6 +172,24 @@ if (get_system_parameter($con, 'Display Item Technical Details') == 'y') {
 } else {
 $history_text = '';
 }
+
+
+/**** BUILD THE FORMER COMPANIES SIDEBAR ****/
+$former_sidebar_form_id='FormerContactCompany';
+$former_sidebar_header=_("Former Companies");
+$former_sql = "SELECT ".$con->concat($con->qstr("<a href=\"$http_site_root/companies/one.php?company_id="),'former_company_id',"'\">'",'company_name',"'</a>'")." as LINK, companychange_at FROM contact_former_companies JOIN companies ON companies.company_id=former_company_id WHERE contact_id=$contact_id";
+$columns = array();
+$columns[] = array('name' => _("Company"), 'index_sql' => 'LINK');
+$columns[] = array('name' => _("Date"), 'index_sql' => 'companychange_at', 'default_sort'=>'desc');
+
+$colspan = count($columns);
+$pager = new GUP_Pager($con, $former_sql, null,$former_sidebar_header, $former_sidebar_form_id, 'FormerCompaniesSidebarPager', $columns, false, true);
+$former_action=$http_site_root.current_page();
+$former_rows.="<div id=FormerCompanies><form name=\"$former_sidebar_form_id\" action=\"$former_action\" method=POST><input type=hidden name=contact_id value=$contact_id>";
+$former_rows.=$pager->Render($cases_sidebar_rows_per_page);
+$former_rows.="</form></div>";
+/**** END FORMER COMPANIES SIDEBAR ****/
+
 
 /*********************************/
 /*** Include the sidebar boxes ***/
@@ -500,6 +518,9 @@ function openMsnSession(strIMAddress) {
         <!-- files //-->
         <?php echo $file_rows; ?>
 
+        <!-- former companies sidebar //-->
+        <?php echo $former_rows; ?>
+        
         <!-- bottom sidebar plugins //-->
         <?php echo $sidebar_rows_bottom; ?>
 
@@ -522,6 +543,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.94  2005/08/04 19:19:20  vanmer
+ * - added sidebar to track contact's former companies
+ *
  * Revision 1.93  2005/07/24 20:40:08  maulani
  * - Add display of contact_id in production for troubleshooting purposes
  *
