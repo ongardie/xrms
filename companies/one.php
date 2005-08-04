@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.124 2005/07/24 20:39:10 maulani Exp $
+ * $Id: one.php,v 1.125 2005/08/04 19:32:09 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -213,7 +213,8 @@ TILLEND;
 
     $division_select.=$division_rst->getmenu2('division_id',$division_id, true, false, 1, "id=division_id onchange=javascript:restrictByDivision();");
     if ($division_id) {
-        $division_select.="&nbsp; <input class=button type=button value=\"". _("Administer Division")."\" onclick=\"javascript:location.href='".$http_site_root."/companies/edit-division.php?company_id=$company_id&division_id=$division_id';\">";
+        $div_return_url=urlencode("one.php?company_id=$company_id&division_id=$division_id");
+        $division_select.="&nbsp; <input class=button type=button value=\"". _("Administer Division")."\" onclick=\"javascript:location.href='".$http_site_root."/companies/edit-division.php?company_id=$company_id&division_id=$division_id&return_url=$div_return_url';\">";
     }
 } else { $division_select=false; }
 
@@ -730,6 +731,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.125  2005/08/04 19:32:09  vanmer
+ * - changed administer division button to redirect to companies/one after editing or managing division page
+ *
  * Revision 1.124  2005/07/24 20:39:10  maulani
  * - Add display of item id for development troubleshooting in production
  *
