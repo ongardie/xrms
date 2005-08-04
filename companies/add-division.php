@@ -2,7 +2,7 @@
 /**
  * Add a division to a company
  *
- * $Id: add-division.php,v 1.11 2005/07/21 22:13:27 braverock Exp $
+ * $Id: add-division.php,v 1.12 2005/08/04 19:29:50 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -53,10 +53,13 @@ add_audit_item($con, $session_user_id, 'created', 'company_division', $division_
 
 $con->close();
 
-header("Location: one.php?msg=division_added&company_id=$company_id");
+header("Location: divisions.php?msg=division_added&company_id=$company_id");
 
 /**
  * $Log: add-division.php,v $
+ * Revision 1.12  2005/08/04 19:29:50  vanmer
+ * - altered to return to divisions list after new division is added to a company
+ *
  * Revision 1.11  2005/07/21 22:13:27  braverock
  * - set a default name for division if no name specified
  *
