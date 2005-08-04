@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.94 2005/07/28 20:27:35 vanmer Exp $
+ * $Id: update.php,v 1.95 2005/08/04 18:57:38 vanmer Exp $
  */
 
 // where do we include from
@@ -4925,6 +4925,20 @@ $con->execute($sql);
         }
     }
 
+    
+   if (!in_array('contact_former_companies',$table_list)) {
+    $sql ="CREATE TABLE contact_former_companies (
+    cfc_id INT unsigned NOT NULL auto_increment,
+    contact_id int(11) NOT NULL default '0',
+    companychange_at datetime NOT NULL default '0000-00-00 00:00:00',
+    former_company_id int(11) NOT NULL,
+    PRIMARY KEY cfc_id (cfc_id),
+    KEY (contact_id),
+    KEY (former_company_id)
+    )";
+    $rst=$con->execute($sql);
+   }  
+    
 install_upgrade_acl($con);
 
 $sql = "ALTER TABLE user_preferences ADD user_id INT( 11 ) UNSIGNED NOT NULL";
@@ -5076,6 +5090,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.95  2005/08/04 18:57:38  vanmer
+ * - added table to track contact company changes
+ *
  * Revision 1.94  2005/07/28 20:27:35  vanmer
  * - added new Closed/Duplicate resolution to list of standard activity resolutions
  *
