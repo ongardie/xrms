@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.33 2005/07/27 23:10:28 vanmer Exp $
+ * $Id: new.php,v 1.34 2005/08/04 19:41:36 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -283,7 +283,7 @@ start_page($page_title, true, $msg);
 
     </div>
     <div id="Sidebar">
-        <table class=widget><tr><td colspan=2 class=widget_header>Home Address</td></tr>
+        <table class=widget cellspacing=1><tr><td colspan=2 class=widget_header><?php echo _("Home Address"); ?></td></tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Address Name"); ?></td>
                 <td class=widget_content_form_element><input type=text size=30 name=address_name value="<?php echo $address_name; ?>"></td>
@@ -341,6 +341,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.34  2005/08/04 19:41:36  vanmer
+ * - added cellspacing to sidebar
+ * - added translation of home address header to sidebar
+ *
  * Revision 1.33  2005/07/27 23:10:28  vanmer
  * - added default type of residential to dropdown on address type for home address
  *
