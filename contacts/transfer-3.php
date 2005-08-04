@@ -2,7 +2,7 @@
 /**
  * Database updates for transfer contact
  *
- * $Id: transfer-3.php,v 1.5 2005/08/04 18:59:22 vanmer Exp $
+ * $Id: transfer-3.php,v 1.6 2005/08/04 20:08:08 vanmer Exp $
  */
 
 
@@ -73,9 +73,11 @@ do_hook('contact_transfer_3');
 
 $con->close();
 
-//now go to the Contact Details page the user can make additional changes if they need to
-header("Location: one.php?msg=saved&contact_id=$contact_id");
-
+//now go to the Contact Address select  page so the user can make address changes
+$final_return_url="one.php?msg=saved&contact_id=$contact_id";
+$return_url="$http_site_root/companies/addresses.php?company_id=$new_company_id&edit_contact_id=$contact_id&final_return_url=".urlencode($final_return_url);
+header("Location: $return_url");
+exit;
 function add_contact_company_history($con, $contact_id, $company_id) {
     //save to database
     $rec = array();
@@ -90,6 +92,9 @@ function add_contact_company_history($con, $contact_id, $company_id) {
 }
 /**
  * $Log: transfer-3.php,v $
+ * Revision 1.6  2005/08/04 20:08:08  vanmer
+ * - changed final transfer step to redirect to address selection to select new address for the new contact
+ *
  * Revision 1.5  2005/08/04 18:59:22  vanmer
  * - added history function to track former companies for a contact
  *
