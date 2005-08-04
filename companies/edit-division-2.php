@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.9 2005/02/08 17:16:10 vanmer Exp $
+ * $Id: edit-division-2.php,v 1.10 2005/08/04 19:30:24 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -13,6 +13,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+getGlobalVar($return_url, 'return_url');
 $on_what_table='company_division';
 $division_id = $_POST['division_id'];
 $on_what_id=$division_id;
@@ -48,11 +49,18 @@ $con->execute($upd);
 
 do_hook_function('edit_division_process', $rec);
 
+if (!$return_url) {
+    $return_url="divisions.php?company_id=$company_id&msg=saved";
+}
 
-header("Location: one.php?msg=saved&company_id=$company_id");
+header("Location: $return_url");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.10  2005/08/04 19:30:24  vanmer
+ * - changed to use return_url for return
+ * - changed default return from company one page to company divisions page
+ *
  * Revision 1.9  2005/02/08 17:16:10  vanmer
  * - added company id to edit division collection
  *
