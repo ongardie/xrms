@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.87 2005/08/05 18:57:54 vanmer Exp $
+ * $Id: utils-interface.php,v 1.88 2005/08/05 19:55:52 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -838,7 +838,7 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
  *
  * @return string containing html widget for list
  */
-function render_tree_widget($list_data, $tree_id, $selected=false, $show_button=true) {
+function render_tree_widget($list_data, $tree_id, $selected=false, $show_button=true, $include_mktree=true) {
     $treewidget_selected='';
     if ($selected) {
         if (!is_array($selected)) { $selected=array($selected); }
@@ -846,7 +846,7 @@ function render_tree_widget($list_data, $tree_id, $selected=false, $show_button=
           $treewidget_selected.="expandToItem('$tree_id','$select_value');\n";
         }
     }
-    $treewidget_rows.=javascript_mktree_include(false);
+    if ($include_mktree) $treewidget_rows.=javascript_mktree_include(false);
     $treewidget_expand=_("Expand");
     $treewidget_collapse=_("Collapse");
     $treewidget_rows.=<<<TILLEND
@@ -932,6 +932,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.88  2005/08/05 19:55:52  vanmer
+ * - added parameter to control if widget should include mktree javascript and stylesheet links
+ *
  * Revision 1.87  2005/08/05 18:57:54  vanmer
  * - added function to render a tree list widget from data and selected items
  *
