@@ -2,7 +2,7 @@
 /**
  * Show search results for advanced company search
  *
- * $Id: some-advanced.php,v 1.21 2005/05/03 16:44:28 daturaarutad Exp $
+ * $Id: some-advanced.php,v 1.22 2005/08/05 21:39:09 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -144,7 +144,7 @@ if ($company_category_id > 0) {
 
 if ( $company_name ) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr($company_name, get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc());
 }
 
 if ( $legal_name ) {
@@ -431,6 +431,9 @@ end_page();
 
 /**
  * $Log: some-advanced.php,v $
+ * Revision 1.22  2005/08/05 21:39:09  vanmer
+ * - changed to use centralized company search name function
+ *
  * Revision 1.21  2005/05/03 16:44:28  daturaarutad
  * updated to use GUP_Pager
  *

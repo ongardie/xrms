@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.70 2005/08/05 01:33:21 vanmer Exp $
+ * $Id: some.php,v 1.71 2005/08/05 21:39:09 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -117,7 +117,7 @@ if ($company_category_id > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr($company_name . '%', get_magic_quotes_gpc()) ." \n";
+    $where .= " and c.company_name like " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc()) ." \n";
 }
 
 if (strlen($user_id) > 0) {
@@ -732,6 +732,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.71  2005/08/05 21:39:09  vanmer
+ * - changed to use centralized company search name function
+ *
  * Revision 1.70  2005/08/05 01:33:21  vanmer
  * - added saved search functionality to companies search page
  *
