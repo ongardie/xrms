@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.95 2005/08/04 18:57:38 vanmer Exp $
+ * $Id: update.php,v 1.96 2005/08/05 21:32:47 vanmer Exp $
  */
 
 // where do we include from
@@ -21,6 +21,7 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
+require_once($include_directory . '../install/data.php');
 
 
 $session_user_id = session_check( 'Admin' );
@@ -4965,37 +4966,7 @@ $con->execute($sql);
 $sql = "ALTER TABLE `user_preference_type_options` ADD `option_display` VARCHAR( 255 ) ";
 $con->execute($sql);
 
-//adding strings for user preference types in order to allow them to be translated while still stored as English in the database
-$s=_("Language");
-$s=_("Theme");
-$s=_("Color and Layout Theme for XRMS");
-
-add_user_preference_type($con, 'user_language', 'Language', false, false, true, 'select');
-add_user_preference_type($con, 'css_theme', 'Theme', 'Color and Layout Theme for XRMS', false, true, 'select');
-
-$s=_("Hide Sourceforge Image");
-$s=_("Block Sourceforge Link");
-$s=_("Disables the SourceForge image and link which appears at the bottom of every page");
-$s=_("Hides the SourceForge Image which appears at the bottom of every page");
-
-$hide_type=add_user_preference_type($con, 'hide_sf_img',  'Hide SourceForge Image', 'Hides the SourceForge Image which appears at the bottom of every page', false, false, 'select');
-$block_type=add_user_preference_type($con, 'block_sf_link', 'Block SourceForge Link', 'Disables the SourceForge image and link which appears at the bottom of every page', false, false, 'select');
-
-add_preference_option($con, $hide_type, 'y', 'Yes', 1);
-add_preference_option($con, $hide_type, 'n', 'No', 2);
-
-add_preference_option($con, $block_type, 'y', 'Yes', 1);
-add_preference_option($con, $block_type, 'n', 'No', 2);
-
-$ret=get_admin_preference($con, $hide_type);
-if (!$ret) {
-    set_admin_preference($con, $hide_type, 'y');
-}
-
-$ret=get_admin_preference($con, $block_type);
-if (!$ret) {
-    set_admin_preference($con, $block_type, 'n');
-}
+user_preferences_db_data($con);
 
 $sql = "ALTER TABLE `contacts` ADD `tax_id` VARCHAR( 32 )";
 $con->execute($sql);
@@ -5090,6 +5061,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.96  2005/08/05 21:32:47  vanmer
+ * - moved all user preference initialization functions to same place, used for upgrade and install
+ *
  * Revision 1.95  2005/08/04 18:57:38  vanmer
  * - added table to track contact company changes
  *
