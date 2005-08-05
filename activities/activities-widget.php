@@ -172,7 +172,7 @@ if (strlen($search_terms['company']) > 0 || strlen($search_terms['company_id']) 
     $extra_group_by = ", c.company_name,c.company_id";
     array_unshift($from, 'addresses addr');
     
-    $where .= "AND c.default_primary_address=addr.address_id ";
+    $where .= " AND c.default_primary_address=addr.address_id ";
 
 }
 
@@ -796,6 +796,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.31  2005/08/05 16:08:43  vanmer
+* - added missing space to where clause in activities widget
+*
 * Revision 1.30  2005/07/27 00:07:11  vanmer
 * - added grouping on resolutions on activities
 *
