@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.59 2005/07/08 20:14:19 vanmer Exp $
+ * $Id: some.php,v 1.60 2005/08/05 01:22:10 vanmer Exp $
  */
 
 //include the standard files
@@ -13,6 +13,7 @@ require_once('include-locations-location.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-saved-search.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
@@ -26,45 +27,16 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 //$con->debug = 1;
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
+
+getGlobalVar($browse,'browse');
+getGlobalVar($saved_id, 'saved_id');
+getGlobalVar($saved_title, 'saved_title');
+getGlobalVar($group_item, 'group_item');
+getGlobalVar($delete_saved, 'delete_saved');
+    
+
 /*********** SAVED SEARCH BEGIN **********************/
-
-// check for saved search
-$arr_vars = array ( // local var name       // session variable name
-           'saved_id'           => arr_vars_POST_UNDEF,
-           'saved_title'        => arr_vars_POST_UNDEF,
-           'group_item'         => arr_vars_POST_UNDEF,
-           'delete_saved'       => arr_vars_POST_UNDEF,
-           'browse'             => arr_vars_POST_UNDEF,
-           );
-
-// get all passed in variables
-arr_vars_post_with_cmd ( $arr_vars );
-
-if($saved_id) {
-    $sql = "SELECT saved_data, saved_status, user_id
-            FROM saved_actions
-            WHERE saved_id=" . $saved_id . "
-            AND (user_id=" . $session_user_id . "
-              OR group_item = 1)
-            AND saved_status='a'";
-    $rst = $con->execute($sql);
-    if(!$rst) {
-        db_error_handler($con, $sql);
-    }
-    elseif($rst->rowcount()) {
-        if($delete_saved && (check_user_role(false, $_SESSION['session_user_id'], 'Administrator') || $rst->fields['user_id'] == $session_user_id)) {
-            $rec = array();
-            $rec['saved_status'] = 'd';
-
-            $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-            $con->execute($upd);
-        }
-        else {
-            $_POST = unserialize($rst->fields['saved_data']);
-            $day_diff = $_POST['day_diff'];
-        }
-    }
-}
+load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
 
 /*********** SAVED SEARCH END **********************/
 
@@ -238,61 +210,23 @@ if ($criteria_count > 0) {
 $page_title = _("Contacts");
 
 /******* SAVED SEARCH BEGINS *****/
-
-$saved_data = $_POST;
-$saved_data["sql"] = $sql;
-$saved_data["day_diff"] = $day_diff;
-
-if(!$saved_title) {
-    $saved_title = "Current";
-    $group_item = 0;
-}
-
-$rec = array();
-$rec['saved_title'] = $saved_title;
-$rec['group_item'] = round($group_item);
-$rec['on_what_table'] = "contacts";
-$rec['saved_action'] = "search";
-$rec['user_id'] = $session_user_id;
-$rec['saved_data'] = addslashes(serialize($saved_data));
-
-if($saved_title or $browse) {
-    $sql_saved = "SELECT *
-            FROM saved_actions
-            WHERE (user_id=" . $session_user_id . "
-            OR group_item=1)
-            AND saved_title='" . $saved_title . "'
-            AND saved_status='a'";
-    $rst = $con->execute($sql_saved);
-    if(!$rst) {
-        db_error_handler($con, $sql_saved);
+    $saved_data = $_POST;
+    $saved_data["sql"] = $sql;
+    $saved_data["day_diff"] = $day_diff;
+    
+    if(!$saved_title) {
+        $saved_title = "Current";
+        $group_item = 0;
     }
-    elseif($rst->rowcount()) {
-        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-        $con->execute($upd);
-        $saved_id = $rst->fields['saved_id'];
-    }
-    else {
-        $tbl = "saved_actions";
-        $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-        $con->execute($ins);
-        $saved_id = $con->Insert_ID();
-    }
-}
+    if ($saved_title OR $browse) {
+//        echo "adding saved search";
+        $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
+//        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
+    }    
 
 //get saved searches
-$sql_saved = "SELECT saved_title, saved_id
-        FROM saved_actions
-        WHERE (user_id=$session_user_id
-        OR group_item=1)
-        AND on_what_table='contacts'
-        AND saved_action='search'
-        AND saved_status='a'
-        AND saved_title!='Current'";
-$rst = $con->execute($sql_saved);
-if ( !$rst ) {
-  db_error_handler($con, $sql_saved);
-} elseif( $rst->RowCount() ) {
+$rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
+if( $rst AND $rst->RowCount() ) {
     $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
 } else {
   $saved_menu = '';
@@ -523,8 +457,12 @@ function setNewContact_company_name() {
 
 end_page();
 
+
 /**
  * $Log: some.php,v $
+ * Revision 1.60  2005/08/05 01:22:10  vanmer
+ * - changed to use centralized functions for saved searches
+ *
  * Revision 1.59  2005/07/08 20:14:19  vanmer
  * - added saved search capability to contacts search page
  *
