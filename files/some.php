@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.36 2005/08/05 01:50:50 vanmer Exp $
+ * $Id: some.php,v 1.37 2005/08/05 21:48:17 vanmer Exp $
  */
 
 //include required files
@@ -175,13 +175,13 @@ switch ($file_on_what) {
 
     case "contacts_of_companies" : {
             $criteria_count++;
-            $where .= " and c.company_name like " . $con->qstr('%' . $file_on_what_name . '%', get_magic_quotes_gpc());
+            $where .= " and c.company_name like " . $con->qstr(company_search_string($file_on_what_name), get_magic_quotes_gpc());
             break;
         }
 
     case "companies" : {
             $criteria_count++;
-            $where .= " and c.company_name like " . $con->qstr('%' . $file_on_what_name . '%', get_magic_quotes_gpc());
+            $where .= " and c.company_name like " . $con->qstr(company_search_string($file_on_what_name), get_magic_quotes_gpc());
             break;
         }
 
@@ -479,6 +479,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.37  2005/08/05 21:48:17  vanmer
+ * - changed files to use centralized company name search function
+ *
  * Revision 1.36  2005/08/05 01:50:50  vanmer
  * - added saved search functionality to files
  *
