@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.57 2005/08/04 18:05:46 vanmer Exp $
+ * $Id: some.php,v 1.58 2005/08/05 01:41:26 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,14 +12,32 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-saved-search.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+// $con->debug = 1;
+
 $on_what_table='opportunities';
 $session_user_id = session_check();
+
+getGlobalVar($browse,'browse');
+getGlobalVar($saved_id, 'saved_id');
+getGlobalVar($saved_title, 'saved_title');
+getGlobalVar($group_item, 'group_item');
+getGlobalVar($delete_saved, 'delete_saved');
+    
+
+/*********** SAVED SEARCH BEGIN **********************/
+load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
+
+/*********** SAVED SEARCH END **********************/
+
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -41,9 +59,6 @@ arr_vars_get_all ( $arr_vars );
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
 
 $close_at = $con->SQLDate('Y-M-D', 'close_at');
 
@@ -162,6 +177,32 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 $sql .= $from . $where;
 
 //echo $sql;
+
+/******* SAVED SEARCH BEGINS *****/
+    $saved_data = $_POST;
+    $saved_data["sql"] = $sql;
+    $saved_data["day_diff"] = $day_diff;
+    
+    if(!$saved_title) {
+        $saved_title = "Current";
+        $group_item = 0;
+    }
+    if ($saved_title OR $browse) {
+//        echo "adding saved search";
+        $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
+//        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
+    }    
+
+//get saved searches
+$rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
+if( $rst AND $rst->RowCount() ) {
+    $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
+} else {
+  $saved_menu = '';
+}
+
+/********** SAVED SEARCH ENDS ****/
+
 
 $sql_recently_viewed = "select * from recent_items r, companies c, opportunities opp, opportunity_statuses os
 where r.user_id = $session_user_id
@@ -305,6 +346,23 @@ start_page($page_title, true, $msg);
                 </td>
             </tr>
             <tr>
+                <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
+                <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan="2">
+                    <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
+                </td>
+                <td class=widget_content_form_element colspan="2">
+                    <input type=text name="saved_title" size=24>
+                    <?php
+                        if(check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
+                            echo _("Add to Everyone").' <input type=checkbox name="group_item" value=1>';
+                        }
+                    ?>
+                </td>
+            </tr>            
+            <tr>
                 <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> </td>
             </tr>
         </table>
@@ -437,6 +495,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.58  2005/08/05 01:41:26  vanmer
+ * - added saved search functionality to list of opportunities
+ *
  * Revision 1.57  2005/08/04 18:05:46  vanmer
  * - added search on close date to opportunities search
  * - moved status and category search around to allow better formatting of page
