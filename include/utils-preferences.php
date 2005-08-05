@@ -18,7 +18,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-preferences.php,v 1.9 2005/07/08 20:30:29 vanmer Exp $
+ * $Id: utils-preferences.php,v 1.10 2005/08/05 22:13:23 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -158,6 +158,7 @@ function delete_default_user_preference($con, $user_id, $preference_type, $delet
  * @return string specifying value of preference requested (or false for failure)
  */
 function get_user_preference($con, $user_id, $preference_type, $preference_name=false, $show_all=false) {
+    if (!$con) $con=get_xrms_dbconnection();
     if (!$user_id AND $user_id!==0) {
         return false;
     }
@@ -732,6 +733,9 @@ function move_system_parameters($con, $fields) {
 
 /**
  * $Log: utils-preferences.php,v $
+ * Revision 1.10  2005/08/05 22:13:23  vanmer
+ * - added check to ensure that db connection is avaible when loading preferences
+ *
  * Revision 1.9  2005/07/08 20:30:29  vanmer
  * - changed to display option value if option display is not available
  *
