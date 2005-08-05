@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.34 2005/08/05 01:45:31 vanmer Exp $
+ * $Id: some.php,v 1.35 2005/08/05 21:54:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -90,7 +90,7 @@ if (strlen($case_title) > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name = " . $con->qstr($company_name, get_magic_quotes_gpc());
+    $where .= " and c.company_name = " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc());
 }
 
 if (strlen($user_id) > 0) {
@@ -412,6 +412,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.35  2005/08/05 21:54:52  vanmer
+ * - changed to use centralized function for company search
+ *
  * Revision 1.34  2005/08/05 01:45:31  vanmer
  * - added saved search functionality to cases
  *
