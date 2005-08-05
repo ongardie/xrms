@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.30 2005/08/04 22:56:17 vanmer Exp $
+ * $Id: data.php,v 1.31 2005/08/05 21:32:07 vanmer Exp $
  */
 
 /**
@@ -2916,6 +2916,19 @@ function user_preferences_db_data($con) {
     if (!$ret) {
         set_admin_preference($con, $block_type, 'n');
     }
+
+    $s=_("Company Search Type");
+    $s=_("Search method used when searching company names");
+
+    $company_search_type=add_user_preference_type($con, 'company_search_type', "Company Search Type", "Search method used when searching company names", false, false, 'select');
+    add_preference_option($con, $company_search_type, 'contains', 'Name Contains');
+    add_preference_option($con, $company_search_type, 'starts', 'Name Starts With');
+    add_preference_option($con, $company_search_type, 'ends', 'Name Ends With');
+    add_preference_option($con, $company_search_type, 'matches', 'Name Exactly Matches');
+    $ret=get_admin_preference($con, $company_search_type);
+    if (!$ret) {
+        set_admin_preference($con, $company_search_type, 'matches');
+    }
 }
 
 /**
@@ -2936,6 +2949,10 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.31  2005/08/05 21:32:07  vanmer
+ * - added user preference to control search method used when searching company name (not entirely implemented
+ * everywhere)
+ *
  * Revision 1.30  2005/08/04 22:56:17  vanmer
  * - added function to install user preferences data upon initial install
  *
