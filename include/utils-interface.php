@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.86 2005/07/31 17:40:57 braverock Exp $
+ * $Id: utils-interface.php,v 1.87 2005/08/05 18:57:54 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -200,6 +200,7 @@ function get_css_themes() {
    $_SESSION['xrms_css_themes']=$css_themes;
    return $css_themes;
 }
+
 /**
  * function start_page
  *
@@ -828,7 +829,62 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
 
 /**
  *
- * Creates an HTML SELECT list to display contents of an array
+ * Creates an expandable widget from data passed in, open to selected items
+ *
+ * @param array $list_data with data to render as list
+ * @param string $tree_id with HTML ID for tree widget
+ * @param array $selected identifying what element IDs should be expanded at load of page
+ * @param bool $show_button controls display of expand/collapse button
+ *
+ * @return string containing html widget for list
+ */
+function render_tree_widget($list_data, $tree_id, $selected=false, $show_button=true) {
+    $treewidget_selected='';
+    if ($selected) {
+        if (!is_array($selected)) { $selected=array($selected); }
+        foreach($selected as $select_value) {
+          $treewidget_selected.="expandToItem('$tree_id','$select_value');\n";
+        }
+    }
+    $treewidget_rows.=javascript_mktree_include(false);
+    $treewidget_expand=_("Expand");
+    $treewidget_collapse=_("Collapse");
+    $treewidget_rows.=<<<TILLEND
+        <script language='javascript'>
+        <!--
+        function {$tree_id}_expandWidget() {
+            var btControl;
+            btControl=document.getElementById('bt_{$tree_id}_TreeControl');
+            btControl.value='$treewidget_collapse';
+            btControl.onclick={$tree_id}_collapseWidget; 
+            expandTree('$tree_id');
+        }
+        function {$tree_id}_collapseWidget() {
+            var btControl;
+            btControl=document.getElementById('bt_{$tree_id}_TreeControl');
+            btControl.value='$treewidget_expand';
+            btControl.onclick={$tree_id}_expandWidget;
+            collapseTree('$tree_id');            
+        {$tree_id}_widgetDefaults();
+        }
+        function {$tree_id}_widgetDefaults() {
+        $treewidget_selected
+        }
+        addEvent(window,"load",{$tree_id}_widgetDefaults);
+        //-->
+        </script>        
+TILLEND;
+    $treewidget_rows.=render_tree_list($list_data, 'mktree', $tree_id);
+    if ($show_button) {
+        $treewidget_rows.="<input id=\"bt_{$tree_id}_TreeControl\" type=button class=button onclick=\"javascript:{$tree_id}_expandWidget()\" value=\"$treewidget_expand\">";
+    }
+   return $treewidget_rows;
+}
+
+
+/**
+ *
+ * Creates an expandable list to display contents of an array
  *
  * Uses array with array of $element
  * $element['text'] is text/html to display as list item
@@ -841,7 +897,7 @@ function create_select_from_array($array, $fieldname, $selected_value=false, $ex
  *
  * @param array $data with elements to turn into an HTML list
  * @param string $topclass with CSS classname for top level unordered list
- * @return string with HTML of list corresponding to data, or false if no elements were ofund
+ * @return string with HTML of list corresponding to data, or false if no elements were found
  *
 **/
 function render_tree_list($data, $topclass='', $id=false) {
@@ -876,6 +932,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.87  2005/08/05 18:57:54  vanmer
+ * - added function to render a tree list widget from data and selected items
+ *
  * Revision 1.86  2005/07/31 17:40:57  braverock
  * - add truncate option to get_user_menu function for use in forms
  *   where we don't need to restrict the width of the drop-down
