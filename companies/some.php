@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.69 2005/08/02 22:05:52 vanmer Exp $
+ * $Id: some.php,v 1.70 2005/08/05 01:33:21 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -12,12 +12,33 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-saved-search.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+//uncomment this line if you suspect a problem with the SQL query
+//$con->debug = 1;
+
+$on_what_table='companies';
 $session_user_id = session_check();
+
+
+getGlobalVar($browse,'browse');
+getGlobalVar($saved_id, 'saved_id');
+getGlobalVar($saved_title, 'saved_title');
+getGlobalVar($group_item, 'group_item');
+getGlobalVar($delete_saved, 'delete_saved');
+    
+/*********** SAVED SEARCH BEGIN **********************/
+load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
+
+/*********** SAVED SEARCH END **********************/
+
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -61,11 +82,6 @@ arr_vars_get_all ( $arr_vars );
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-
-//uncomment this line if you suspect a problem with the SQL query
-//$con->debug = 1;
 
 $sql = "SELECT "
         . $con->Concat("'<a id=\"'" , "c.company_name", "'\" href=\"one.php?company_id='","c.company_id","'\">'","c.company_name","'</a>'") . ' AS "name",
@@ -308,6 +324,33 @@ $sql_recently_viewed = "select
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
+/******* SAVED SEARCH BEGINS *****/
+    $saved_data = $_POST;
+    $saved_data["sql"] = $sql;
+    $saved_data["day_diff"] = $day_diff;
+    
+    if(!$saved_title) {
+        $saved_title = "Current";
+        $group_item = 0;
+    }
+    if ($saved_title OR $browse) {
+//        echo "adding saved search";
+        $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
+//        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
+    }    
+
+//get saved searches
+$rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
+if( $rst AND $rst->RowCount() ) {
+    $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
+} else {
+  $saved_menu = '';
+}
+
+/********** SAVED SEARCH ENDS ****/
+
+
+
 $recently_viewed_table_rows = '';
 
 if ($rst) {
@@ -517,6 +560,23 @@ start_page($page_title, true, $msg);
             }
         ?>
         <tr>
+            <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
+            <td class=widget_label colspan="4"><?php echo _("Search Title"); ?></td>
+        </tr>
+        <tr>
+            <td class=widget_content_form_element colspan="2">
+                <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
+            </td>
+            <td class=widget_content_form_element colspan="4">
+                <input type=text name="saved_title" size=24>
+                <?php
+                    if(check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
+                        echo _("Add to Everyone").' <input type=checkbox name="group_item" value=1>';
+                    }
+                ?>
+            </td>
+        </tr>
+        <tr>
             <td class=widget_content_form_element colspan=6>
                 <input name="submit_form" type=submit class=button value="<?php echo _("Search"); ?>">
                 <input name="clear_search" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
@@ -672,6 +732,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.70  2005/08/05 01:33:21  vanmer
+ * - added saved search functionality to companies search page
+ *
  * Revision 1.69  2005/08/02 22:05:52  vanmer
  * - changed to use new company button instead of company link, wrapped in ACL check
  *
