@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.33 2005/07/28 17:12:50 vanmer Exp $
+ * $Id: some.php,v 1.34 2005/08/05 01:45:31 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -10,14 +10,31 @@ require_once('../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-saved-search.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
+$con = &adonewconnection($xrms_db_dbtype);
+$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+// $con->debug = 1;
 
 $on_what_table='cases';
 $session_user_id = session_check();
+
+getGlobalVar($browse,'browse');
+getGlobalVar($saved_id, 'saved_id');
+getGlobalVar($saved_title, 'saved_title');
+getGlobalVar($group_item, 'group_item');
+getGlobalVar($delete_saved, 'delete_saved');
+    
+
+/*********** SAVED SEARCH BEGIN **********************/
+load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
+
+/*********** SAVED SEARCH END **********************/
+
 
 // declare passed in variables
 $arr_vars = array ( // local var name       // session variable name
@@ -37,10 +54,6 @@ arr_vars_get_all ( $arr_vars );
 // set all session variables
 arr_vars_session_set ( $arr_vars );
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
-// $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
 $sql = "SELECT " . $con->Concat("'<a href=\"one.php?case_id='", "ca.case_id", "'\">'", "ca.case_title", "'</a>'") . " AS case_name, c.company_name AS company, u.username AS owner, cat.case_type_pretty_name AS type, cap.case_priority_pretty_name AS priority, cas.case_status_pretty_name AS status, " . $con->SQLDate('Y-m-d', 'ca.due_at') . " AS due ";
 
@@ -114,6 +127,34 @@ if (!$use_post_vars && (!$criteria_count > 0)) {
 }
 
 $sql .= $from . $where;
+
+
+/******* SAVED SEARCH BEGINS *****/
+    $saved_data = $_POST;
+    $saved_data["sql"] = $sql;
+    $saved_data["day_diff"] = $day_diff;
+    
+    if(!$saved_title) {
+        $saved_title = "Current";
+        $group_item = 0;
+    }
+    if ($saved_title OR $browse) {
+//        echo "adding saved search";
+        $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
+//        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
+    }    
+
+//get saved searches
+$rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
+if( $rst AND $rst->RowCount() ) {
+    $saved_menu = $rst->getmenu2('saved_id', 0, true) . ' <input name="delete_saved" type=submit class=button value="' . _("Delete") . '">';
+} else {
+  $saved_menu = '';
+}
+
+/********** SAVED SEARCH ENDS ****/
+
+
 
 $sql_recently_viewed = "select * from recent_items r, companies c, cases ca, case_statuses cas
 where r.user_id = $session_user_id
@@ -231,6 +272,23 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><?php  echo $case_category_menu ?></td>
                 <td class=widget_content_form_element><?php  echo $case_type_menu ?></td>
                 <td class=widget_content_form_element><?php  echo $case_status_menu ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
+                <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_content_form_element colspan="2">
+                    <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
+                </td>
+                <td class=widget_content_form_element colspan="2">
+                    <input type=text name="saved_title" size=24>
+                    <?php
+                        if(check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
+                            echo _("Add to Everyone").' <input type=checkbox name="group_item" value=1>';
+                        }
+                    ?>
+                </td>
             </tr>
             <tr>
                 <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> <?php if ($company_count > 0) {print "<input class=button type=button onclick='javascript: bulkEmail()' value='" . _("Bulk E-Mail") . "'>";} ?> </td>
@@ -354,6 +412,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.34  2005/08/05 01:45:31  vanmer
+ * - added saved search functionality to cases
+ *
  * Revision 1.33  2005/07/28 17:12:50  vanmer
  * - added grouping on company, owner, type, status and priority fields for results pager
  *
