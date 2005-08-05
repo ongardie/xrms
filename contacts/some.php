@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.60 2005/08/05 01:22:10 vanmer Exp $
+ * $Id: some.php,v 1.61 2005/08/05 21:44:50 vanmer Exp $
  */
 
 //include the standard files
@@ -96,7 +96,7 @@ if (strlen($description) > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr($company_name . '%', get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc());
 }
 
 if (strlen($email) > 0) {
@@ -460,6 +460,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.61  2005/08/05 21:44:50  vanmer
+ * - changed contact company searches to use centralized company search string function
+ *
  * Revision 1.60  2005/08/05 01:22:10  vanmer
  * - changed to use centralized functions for saved searches
  *

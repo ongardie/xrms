@@ -52,7 +52,7 @@ switch ($company_select_action) {
             Header("Location: new_contact_company_select.php?company_select_action=newCompanySearch&msg=$msg&return_url=$return_url");
         }
         $header_text=_("Select a company or create a").'&nbsp;<a href="../companies/new.php">'._("New Company").'</a>';
-        $company_search = $con->qstr("%$company_name%");
+        $company_search = $con->qstr(company_search_string($company_name));
         $sql = "SELECT company_name, company_id FROM companies WHERE company_name LIKE $company_search";
         $rst=$con->execute($sql);
         if (!$rst) { db_error_handler($con, $sql); exit; }
@@ -105,6 +105,9 @@ end_page();
 
 /*
  * $Log: new_contact_company_select.php,v $
+ * Revision 1.5  2005/08/05 21:44:51  vanmer
+ * - changed contact company searches to use centralized company search string function
+ *
  * Revision 1.4  2005/08/04 21:04:46  vanmer
  * - changed list of companies to not include a blank row
  * - altered to set return_url to contacts/one for new contact when created through new_contact_company select

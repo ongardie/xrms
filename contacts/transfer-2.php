@@ -2,7 +2,7 @@
 /**
  * Transfer a Contact to Another Company
  *
- * $Id: transfer-2.php,v 1.11 2005/08/04 20:58:28 vanmer Exp $
+ * $Id: transfer-2.php,v 1.12 2005/08/05 21:44:51 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -30,10 +30,10 @@ $contact_name = $rst->fields['first_names'] . ' ' . $rst->fields['last_name'];
 $company_id =  $rst->fields['company_id'];
 
 if(eregi("[a-zA-Z]", $company_name)) {
-    $sql = "select company_name, company_id from companies where company_name like '%" . $company_name . "%' and company_record_status = 'a' order by company_name";
+    $sql = "select company_name, company_id from companies where company_name like ". $con->qstr(company_search_string($company_name),get_magic_quotes_gpc()) . " and company_record_status = 'a' order by company_name";
 }
 else {
-    $sql = "select company_name, company_id from companies where company_id = '" . $company_name . "' and company_record_status = 'a'";
+    $sql = "select company_name, company_id from companies where company_id = " . $company_name . " and company_record_status = 'a'";
 }
 $rst = $con->execute($sql);
 
@@ -98,6 +98,9 @@ end_page();
 
 /**
  * $Log: transfer-2.php,v $
+ * Revision 1.12  2005/08/05 21:44:51  vanmer
+ * - changed contact company searches to use centralized company search string function
+ *
  * Revision 1.11  2005/08/04 20:58:28  vanmer
  * - added check for results, return to last page if none are found
  * - changed dropdown to not contain blanks, default to first entry
