@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.31 2005/08/05 21:32:07 vanmer Exp $
+ * $Id: data.php,v 1.32 2005/08/05 21:35:50 vanmer Exp $
  */
 
 /**
@@ -2919,6 +2919,10 @@ function user_preferences_db_data($con) {
 
     $s=_("Company Search Type");
     $s=_("Search method used when searching company names");
+    $s=_("Name Contains");
+    $s=_("Name Starts With");
+    $s=_("Name Ends With");
+    $s=_("Name Exactly Matches");
 
     $company_search_type=add_user_preference_type($con, 'company_search_type', "Company Search Type", "Search method used when searching company names", false, false, 'select');
     add_preference_option($con, $company_search_type, 'contains', 'Name Contains');
@@ -2927,7 +2931,7 @@ function user_preferences_db_data($con) {
     add_preference_option($con, $company_search_type, 'matches', 'Name Exactly Matches');
     $ret=get_admin_preference($con, $company_search_type);
     if (!$ret) {
-        set_admin_preference($con, $company_search_type, 'matches');
+        set_admin_preference($con, $company_search_type, 'contains');
     }
 }
 
@@ -2949,6 +2953,10 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.32  2005/08/05 21:35:50  vanmer
+ * - added translations for options text
+ * - changed default search to contains instead of matches
+ *
  * Revision 1.31  2005/08/05 21:32:07  vanmer
  * - added user preference to control search method used when searching company name (not entirely implemented
  * everywhere)
