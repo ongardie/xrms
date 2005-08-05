@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: index.php,v 1.2 2005/03/21 13:40:57 maulani Exp $
+ * $Id: index.php,v 1.3 2005/08/05 21:59:19 vanmer Exp $
  */
 
 //include the standard files
@@ -168,7 +168,7 @@ if (strlen($description) > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr($company_name . '%', get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc());
 }
 
 if (strlen($company_code) > 0) {
@@ -390,6 +390,9 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.3  2005/08/05 21:59:19  vanmer
+ * - added search string function for companies search
+ *
  * Revision 1.2  2005/03/21 13:40:57  maulani
  * - Remove redundant code by centralizing common user menu call
  *
