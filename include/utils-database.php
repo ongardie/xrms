@@ -7,7 +7,7 @@
  *
  * @author Beth Macknik
  *
- * $Id: utils-database.php,v 1.16 2005/07/08 01:29:03 vanmer Exp $
+ * $Id: utils-database.php,v 1.17 2005/08/05 21:33:56 vanmer Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -16,6 +16,32 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
+/**
+  * Create the string to use for a company name search
+  *
+  * @param string $company_name with partial name of company to search for
+  * @param string $search_type with string of 'starts','ends','contains', 'matches'
+**/
+function company_search_string($company_name, $search_type=false) {
+
+    if (!$search_type) $search_type=get_admin_preference($con, 'company_search_type');
+    if (!$search_type) $search_type='contains';
+    switch ($search_type) {
+	case 'starts':
+	    return "$company_name%";
+	break;
+	case 'ends':
+	    return "%$company_name";
+	break;
+	case 'contains':
+	    return "%$company_name%";
+        break;
+	case 'matches':
+	    return $company_name;
+	break;
+    }
+    return false;
+}
 /**
  * Create the array of existing tables.
  *
@@ -186,6 +212,10 @@ register_shutdown_function('db_con_cleanup');
 /*****************************************************************************/
 /**
  * $Log: utils-database.php,v $
+ * Revision 1.17  2005/08/05 21:33:56  vanmer
+ * - added function to create string for company name search.  Queries system preferences and adds % to the string
+ * according the preference
+ *
  * Revision 1.16  2005/07/08 01:29:03  vanmer
  * - added new function to make a URL out of a table and id combination
  * - added new function to make a URL of a table combination to redirect to some.php
