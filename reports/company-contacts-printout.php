@@ -4,7 +4,7 @@
  *
  * @author Brian Peterson
  *
- * $Id: company-contacts-printout.php,v 1.11 2005/03/21 13:40:58 maulani Exp $
+ * $Id: company-contacts-printout.php,v 1.12 2005/08/05 21:58:02 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -113,7 +113,7 @@ if ($company_category_id > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr('%'. $company_name . '%', get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc());
 }
 
 if (strlen($user_id) > 0) {
@@ -336,6 +336,9 @@ end_page();
 
 /**
  * $Log: company-contacts-printout.php,v $
+ * Revision 1.12  2005/08/05 21:58:02  vanmer
+ * - changed to use centralized company search function
+ *
  * Revision 1.11  2005/03/21 13:40:58  maulani
  * - Remove redundant code by centralizing common user menu call
  *
