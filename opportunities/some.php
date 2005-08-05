@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.58 2005/08/05 01:41:26 vanmer Exp $
+ * $Id: some.php,v 1.59 2005/08/05 21:53:54 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -113,7 +113,7 @@ if (strlen($opportunity_title) > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name like " . $con->qstr('%' . $company_name . '%', get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc());
 }
 
 if (strlen($user_id) > 0) {
@@ -495,6 +495,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.59  2005/08/05 21:53:54  vanmer
+ * - changed to use centralized company search
+ *
  * Revision 1.58  2005/08/05 01:41:26  vanmer
  * - added saved search functionality to list of opportunities
  *
