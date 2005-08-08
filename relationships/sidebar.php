@@ -17,7 +17,7 @@ if ( !defined('IN_XRMS') )
  * @author Neil Roberts
  * @author Aaron van Meerten
  *
- * $Id: sidebar.php,v 1.36 2005/07/11 13:52:35 braverock Exp $
+ * $Id: sidebar.php,v 1.37 2005/08/08 16:15:52 vanmer Exp $
  */
 
 require_once('relationship_functions.php');
@@ -29,6 +29,7 @@ $show_address=false;
 $show_agent_count=false;
 $show_related_relationships=false;
 $show_opportunity_indicator=false;
+$show_contact_company=true;
 
 if(empty($relationships)) {
     $relationships = array();
@@ -166,6 +167,7 @@ $relationship_link_rows = '';
                     if($agent_count) {
                         $relationship_link_rows .= " (" . $agent_count . ") ";
                     }
+                    
                     $relationship_link_rows .= $relationship_type_data['post_formatting'] . "\n"
                         . "                &bull;"
                         . " <a href='$http_site_root/relationships/edit.php?working_direction=$opposite_direction"
@@ -174,6 +176,18 @@ $relationship_link_rows = '';
                         . "&return_url=" . urlencode(current_page())
                         . "'>" . _("Edit") . "</a>";
 
+                    if ($show_contact_company AND ($relationship_type_data[$opposite_direction.'_what_table']=='contacts')) {
+                        $contact_company_sql="SELECT company_name, contacts.company_id FROM contacts JOIN companies ON contacts.company_id=companies.company_id WHERE contact_id=$current_id";
+                        $cc_rst=$con->execute($contact_company_sql);
+                        if (!$cc_rst) db_error_handler($con, $contact_company_sql);
+                        if (!$cc_rst->EOF) {
+                            $company_name=$cc_rst->fields['company_name'];
+                            $contact_company_id=$cc_rst->fields['company_id'];
+                            $href="$http_site_root".table_one_url('companies', $contact_company_id);
+                            $relationship_link_rows.="<br>@ <a href='$href'>$company_name</a>";
+                        }
+                    }
+                    
                     if($address) {
                         $relationship_link_rows .= "<br>" . $address;
                     }
@@ -332,6 +346,10 @@ $relationship_link_rows = '';
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.37  2005/08/08 16:15:52  vanmer
+ * - added ability to display company name for relationships on contacts
+ * - added control of this display using variable defined at the top of the sidebar
+ *
  * Revision 1.36  2005/07/11 13:52:35  braverock
  * - Localize table name (on what relationship)
  *
