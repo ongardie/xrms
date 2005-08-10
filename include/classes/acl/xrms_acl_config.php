@@ -5,7 +5,7 @@
  * Design copyright 2004 Explorer Fund Advisors
  * All Rights Reserved
  *
- * $Id: xrms_acl_config.php,v 1.5 2005/07/22 23:14:43 vanmer Exp $
+ * $Id: xrms_acl_config.php,v 1.6 2005/08/10 22:56:00 vanmer Exp $
  */
 
 /**
@@ -49,7 +49,7 @@
      $options['XRMS'] = $options['default'];
      $options['XRMS']['db_dbname'] = $xrms_db_dbname;
  }
- 
+
 function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
     global $options;
     if ($data_source_name=='default' OR $data_source_name=='XRMS') {
@@ -59,7 +59,7 @@ function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
         } else {
             $authInfo=$options;
         }
-    }
+    } else $authInfo=$options;
     
     //add key to pluginInfo so plugins know they should try to make a connection or provide auth info for this data_source_name
     $pluginInfo[$data_source_name]=array();
@@ -78,6 +78,9 @@ function xrms_acl_auth_callback(&$authInfo, $data_source_name) {
  
 /**
  * $Log: xrms_acl_config.php,v $
+ * Revision 1.6  2005/08/10 22:56:00  vanmer
+ * - added case for plugin data source to pass back authInfo to ACL
+ *
  * Revision 1.5  2005/07/22 23:14:43  vanmer
  * - added callback function to provide the ACL with authentication information
  *
