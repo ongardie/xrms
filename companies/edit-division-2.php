@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.10 2005/08/04 19:30:24 vanmer Exp $
+ * $Id: edit-division-2.php,v 1.11 2005/08/10 19:47:00 jswalter Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,27 +27,32 @@ $description = $_POST['description'];
 
 $use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
 
-$con = &adonewconnection($xrms_db_dbtype);
-$con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+if ( $_POST['add_fund'] == 'on' )
+{
+    do_hook_function('new_division_process', $rec);
+}
 
-//$con->debug=1;
+    $con = &adonewconnection($xrms_db_dbtype);
+    $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-$sql = "SELECT * FROM company_division WHERE division_id = $division_id";
-$rst = $con->execute($sql);
+    $con->debug=1;
 
-$rec = array();
-$rec['division_id'] = $division_id;
-$rec['company_id'] = $company_id;
-$rec['address_id'] = $address_id;
-$rec['division_name'] = $division_name;
-$rec['description'] = $description;
-$rec['last_modified_at'] = time();
-$rec['last_modified_by'] = $session_user_id;
+    $sql = "SELECT * FROM company_division WHERE division_id = $division_id";
+    $rst = $con->execute($sql);
 
-$upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-$con->execute($upd);
+    $rec = array();
+    $rec['division_id'] = $division_id;
+    $rec['company_id'] = $company_id;
+    $rec['address_id'] = $address_id;
+    $rec['division_name'] = $division_name;
+    $rec['description'] = $description;
+    $rec['last_modified_at'] = time();
+    $rec['last_modified_by'] = $session_user_id;
 
-do_hook_function('edit_division_process', $rec);
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+//    do_hook_function('edit_division_process', $rec);
 
 if (!$return_url) {
     $return_url="divisions.php?company_id=$company_id&msg=saved";
@@ -57,6 +62,10 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.11  2005/08/10 19:47:00  jswalter
+ *  - added 'add_fund' conditional to handle attempts to 'add' an existing fund
+ * Bug 386
+ *
  * Revision 1.10  2005/08/04 19:30:24  vanmer
  * - changed to use return_url for return
  * - changed default return from company one page to company divisions page
