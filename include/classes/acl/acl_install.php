@@ -98,17 +98,17 @@ function upgrade_acl_users($con) {
     return $install_status;
 }
 
-function install_acl($con) {
-    $return9=install_data_sources($con);
-    $return1=install_controlled_objects($con);
-    $return2=install_controlled_object_relationships($con);
-    $return3=install_groups($con);
-    $return4=install_roles($con);
-    $return5=install_permissions($con);
-    $return6=install_role_permissions($con);
-    $return7=install_group_users($con);
-    $return8=install_group_members($con);
-    $return10=install_group_member_criteria($con);
+function install_acl($con, $insert_objects=true) {
+    $return9=install_data_sources($con, $insert_objects);
+    $return1=install_controlled_objects($con, $insert_objects);
+    $return2=install_controlled_object_relationships($con, $insert_objects);
+    $return3=install_groups($con, $insert_objects);
+    $return4=install_roles($con, $insert_objects);
+    $return5=install_permissions($con, $insert_objects);
+    $return6=install_role_permissions($con, $insert_objects);
+    $return7=install_group_users($con, $insert_objects);
+    $return8=install_group_members($con, $insert_objects);
+    $return10=install_group_member_criteria($con, $insert_objects);
     return ($return1 AND $return2 AND $return3 AND $return4 AND $return5 AND $return6 AND $return7 AND $return8 AND $return9 AND $return10);
 }
 
@@ -153,7 +153,7 @@ function update_acl($con) {
     return ($email_template_id AND $ret2 AND $ret3 AND $ret4 AND$ret5 AND $ret6 AND $ret7 AND $export_add);
 }
 
-function install_role_permissions($con) {
+function install_role_permissions($con, $insert_objects=true) {
     $csql = "SELECT * FROM RolePermission";
     $crst=$con->execute($csql);
     $return=true;
@@ -177,7 +177,7 @@ TILLEND;
         if (!$rst) { db_error_handler($con, $sql); return false;}
         $crst=$con->execute($csql);
     }
-    if ($crst->numRows()==0) {
+    if ($crst->numRows()==0 AND $insert_objects) {
         $sql=<<<TILLEND
 insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 1, 'World', 1);
 insert into RolePermission (Role_id, CORelationship_id, Scope, Permission_id) values (2, 1, 'World', 2);
@@ -207,7 +207,7 @@ TILLEND;
 }
 
 
-function install_group_members($con) {
+function install_group_members($con, $insert_objects=true) {
     $csql = "SELECT * FROM GroupMember";
     $crst=$con->execute($csql);
     $return=true;
@@ -237,7 +237,7 @@ TILLEND;
     return $return;
 }
 
-function install_group_member_criteria($con) {
+function install_group_member_criteria($con, $insert_objects=true) {
     $csql = "SELECT * FROM GroupMemberCriteria";
     $crst=$con->execute($csql);
     $return=true;
@@ -267,7 +267,7 @@ TILLEND;
     return $return;
 }
 
-function install_data_sources($con) {
+function install_data_sources($con, $insert_objects=true) {
     $csql = "SELECT * FROM data_source";
     $crst=$con->execute($csql);
     $return=true;
@@ -293,7 +293,7 @@ TILLEND;
     return $return;
 }
 
-function install_group_users($con) {
+function install_group_users($con, $insert_objects=true) {
     $csql = "SELECT * FROM GroupUser";
     $crst=$con->execute($csql);
     $return=true;
@@ -324,7 +324,7 @@ TILLEND;
     return $return;
 }
 
-function install_permissions($con) {
+function install_permissions($con, $insert_objects=true) {
     $csql = "SELECT * FROM Permission";
     $crst=$con->execute($csql);
     $return=true;
@@ -342,7 +342,7 @@ TILLEND;
         if (!$rst) { db_error_handler($con, $sql); return false;}
         $crst=$con->execute($csql);
     }
-    if ($crst->numRows()==0) {
+    if ($crst->numRows()==0 AND $insert_objects) {
         $sql='';
 $sql.="insert into Permission (Permission_id, Permission_name, Permission_abbr) values (1, 'Create', 'C')";
 $sql .=";\n";
@@ -359,7 +359,7 @@ $sql .=";\n";
     return $return;
 }
 
-function install_roles($con) {
+function install_roles($con, $insert_objects=true) {
     $csql = "SELECT * FROM Role";
     $crst=$con->execute($csql);
     $return=true;
@@ -376,7 +376,7 @@ TILLEND;
         if (!$rst) { db_error_handler($con, $sql); return false;}
         $crst=$con->execute($csql);
     }
-    if ($crst->numRows()==0) {
+    if ($crst->numRows()==0 AND $insert_objects) {
         $sql='';
         $sql.=
 "insert into Role (Role_id, Role_name) values (1, 'User')";
@@ -390,7 +390,7 @@ $sql .=";\n";
 }
 
 
-function install_groups($con) {
+function install_groups($con, $insert_objects=true) {
     $gsql = "SELECT * FROM Groups";
     $grst=$con->execute($gsql);
     if (!$grst) {
@@ -408,7 +408,7 @@ TILLEND;
         $grst=$con->execute($gsql);
     }
     $return=true;
-    if ($grst->numRows()==0) {
+    if ($grst->numRows()==0 AND $insert_objects) {
         $sql="insert into Groups (Group_id, Group_name) values (1, 'Users');";
         
         $rst=$con->execute($sql);
@@ -417,7 +417,7 @@ TILLEND;
     return $return;
 }
 
-function install_controlled_object_relationships($con) {
+function install_controlled_object_relationships($con, $insert_objects=true) {
     $csql = "SELECT * FROM ControlledObjectRelationship";
     $crst=$con->execute($csql);
     $return=true;
@@ -441,7 +441,7 @@ TILLEND;
         if (!$rst) { db_error_handler($con, $sql); return false;}
         $crst=$con->execute($csql);
     }
-    if ($crst->numRows()==0) {
+    if ($crst->numRows()==0 AND $insert_objects) {
         $sql=<<<TILLEND
 insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (1, 1, NULL, '', '', '', 0);
 insert into ControlledObjectRelationship (CORelationship_id, ChildControlledObject_id, ParentControlledObject_id, on_what_child_field, on_what_parent_field, cross_table, singular) values (2, 3, NULL, '', '', '', 0);
@@ -469,7 +469,7 @@ TILLEND;
     return $return;
 }
 
-function install_controlled_objects($con) {
+function install_controlled_objects($con, $insert_objects=true) {
     $csql = "SELECT * FROM ControlledObject";
     $crst=$con->execute($csql);
     $return=true;
@@ -491,7 +491,7 @@ TILLEND;
         if (!$rst) { db_error_handler($con, $sql); return false;}
         $crst=$con->execute($csql);
     }
-    if ($crst->numRows()==0) {
+    if ($crst->numRows()==0 AND $insert_objects) {
     $sql='';
 $sql.="insert into ControlledObject (ControlledObject_id, ControlledObject_name, on_what_table, on_what_field, user_field, data_source_id) values (1, 'Company', 'companies', 'company_id', '', 1)";
 $sql.=";\n";
