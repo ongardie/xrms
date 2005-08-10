@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.52 2005/08/04 22:55:51 vanmer Exp $
+ * $Id: database.php,v 1.53 2005/08/10 22:44:55 vanmer Exp $
  */
 
 /**
@@ -838,6 +838,7 @@ function opportunity_db_tables($con, $table_list) {
     if (!in_array('opportunities',$table_list)) {
         $sql ="create table opportunities (
                opportunity_id               int not null primary key auto_increment,
+               opportunity_type_id int not null default '1',
                opportunity_status_id        int not null default 0,
                campaign_id                  int,
                company_id                   int not null default 0,
@@ -924,14 +925,6 @@ function opportunity_db_tables($con, $table_list) {
             }
             if ($rst) {
                 $msg .= _("Successfully added opportunity type to opportunity status table.").'<BR><BR>';
-            }
-            $sql="ALTER TABLE `opportunities` ADD `opportunity_type_id` INT DEFAULT '1' NOT NULL AFTER `opportunity_id`";
-            $rst = $con->execute($sql);
-            if (!$rst) {
-                db_error_handler ($con, $sql);
-            }
-            if ($rst) {
-                $msg .= _("Successfully added opportunity type to opportunity table.").'<BR><BR>';
             }
         }
     }
@@ -1313,6 +1306,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.53  2005/08/10 22:44:55  vanmer
+ * - added opportunity type id as default field in opportunity table
+ *
  * Revision 1.52  2005/08/04 22:55:51  vanmer
  * - added missing user preference type options table, needed for install to complete successfully
  *
