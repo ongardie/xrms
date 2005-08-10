@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.96 2005/08/05 21:32:47 vanmer Exp $
+ * $Id: update.php,v 1.97 2005/08/10 22:42:48 vanmer Exp $
  */
 
 // where do we include from
@@ -4915,15 +4915,16 @@ $con->execute($sql);
             if ($rst) {
                 $msg .= _("Successfully added opportunity type to opportunity status table.").'<BR><BR>';
             }
-            $sql="ALTER TABLE `opportunities` ADD `opportunity_type_id` INT DEFAULT '1' NOT NULL AFTER `opportunity_id`";
-            $rst = $con->execute($sql);
-            if (!$rst) {
-                db_error_handler ($con, $sql);
-            }
-            if ($rst) {
-                $msg .= _("Successfully added opportunity type to opportunity table.").'<BR><BR>';
-            }
         }
+    }
+    
+    $sql="ALTER TABLE `opportunities` ADD `opportunity_type_id` INT DEFAULT '1' NOT NULL AFTER `opportunity_id`";
+    $rst = $con->execute($sql);
+    if (!$rst) {
+//        db_error_handler ($con, $sql);
+    }
+    if ($rst) {
+        $msg .= _("Successfully added opportunity type to opportunity table.").'<BR><BR>';
     }
 
     
@@ -5061,6 +5062,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.97  2005/08/10 22:42:48  vanmer
+ * - moved opportunity type addition outside of conditionals
+ *
  * Revision 1.96  2005/08/05 21:32:47  vanmer
  * - moved all user preference initialization functions to same place, used for upgrade and install
  *
