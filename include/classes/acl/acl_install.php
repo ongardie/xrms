@@ -218,6 +218,8 @@ CREATE TABLE GroupMember (
   Group_id int(10) unsigned NOT NULL default '0',
   ControlledObject_id int(10) unsigned NOT NULL default '0',
   on_what_id int(11) NOT NULL default '0',
+  criteria_table VARCHAR(50),
+  criteria_resultfield VARCHAR(50),
   PRIMARY KEY  (GroupMember_id),
   KEY Group_id (Group_id),
   KEY ControlledObject_id (ControlledObject_id)
