@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.35 2005/08/05 21:54:52 vanmer Exp $
+ * $Id: some.php,v 1.36 2005/08/11 21:46:07 ycreddy Exp $
  */
 
 require_once('../include-locations.inc');
@@ -298,23 +298,23 @@ start_page($page_title, true, $msg);
 <?php
 $_SESSION["search_sql"]=$sql;
 
-$owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user_id)", "')'") . ", u.user_id $from $where group by u.username order by u.username";
+$owner_query_list = "select " . $con->Concat("u.username", "' ('", "count(u.user_id)", "')'") . ", u.user_id $from $where group by u.username, u.user_id order by u.username";
 
 $owner_query_select = $sql . 'AND u.user_id = XXX-value-XXX';
 
-$status_query_list = "select " . $con->Concat("cas.case_status_pretty_name", "' ('", "count(cas.case_status_id)", "')'") . ", cas.case_status_id $from $where group by cas.case_status_id order by cas.sort_order";
+$status_query_list = "select " . $con->Concat("cas.case_status_pretty_name", "' ('", "count(cas.case_status_id)", "')'") . ", cas.case_status_id $from $where group by cas.case_status_id, case_status_pretty_name order by cas.case_status_pretty_name";
 
 $status_query_select = $sql . ' AND cas.case_status_id = XXX-value-XXX';
 
-$type_query_list = "select " . $con->Concat("cat.case_type_pretty_name", "' ('", "count(cat.case_type_id)", "')'") . ", cat.case_type_id $from $where group by cat.case_type_id order by cat.case_type_pretty_name";
+$type_query_list = "select " . $con->Concat("cat.case_type_pretty_name", "' ('", "count(cat.case_type_id)", "')'") . ", cat.case_type_id $from $where group by cat.case_type_id, case_type_pretty_name order by cat.case_type_pretty_name";
 
 $type_query_select = $sql . ' AND cat.case_type_id = XXX-value-XXX';
 
-$company_query_list = "select " . $con->Concat("c.company_name", "' ('", "count(c.company_id)", "')'") . ", c.company_id $from $where group by c.company_id order by c.company_name";
+$company_query_list = "select " . $con->Concat("c.company_name", "' ('", "count(c.company_id)", "')'") . ", c.company_id $from $where group by c.company_id, c.company_name order by c.company_name";
 
 $company_query_select = $sql . 'AND c.company_id = XXX-value-XXX';
 
-$priority_query_list = "select " . $con->Concat("cap.case_priority_pretty_name", "' ('", "count(cap.case_priority_id)", "')'") . ", cap.case_priority_id $from $where group by cap.case_priority_id order by cap.case_priority_pretty_name";
+$priority_query_list = "select " . $con->Concat("cap.case_priority_pretty_name", "' ('", "count(cap.case_priority_id)", "')'") . ", cap.case_priority_id $from $where group by cap.case_priority_id, case_priority_pretty_name order by cap.case_priority_pretty_name";
 
 $priority_query_select = $sql . ' AND cap.case_priority_id = XXX-value-XXX';
 
@@ -412,6 +412,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.36  2005/08/11 21:46:07  ycreddy
+ * Fixed the GROUP BY query issues in the Cases Pager for SQL Server
+ *
  * Revision 1.35  2005/08/05 21:54:52  vanmer
  * - changed to use centralized function for company search
  *
