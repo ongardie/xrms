@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: Role_list.php,v 1.5 2005/05/10 13:28:14 braverock Exp $
+ * $Id: Role_list.php,v 1.6 2005/08/11 22:10:38 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,8 +23,8 @@ $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
-$con = &adonewconnection($xrms_acl_db_dbtype);
-$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+$con = get_acl_dbconnection();
+
 
 $page_title = _("Manage Roles");
 
@@ -116,6 +116,9 @@ end_page();
 
 /**
  * $Log: Role_list.php,v $
+ * Revision 1.6  2005/08/11 22:10:38  vanmer
+ * - changed to use acl dbconnection
+ *
  * Revision 1.5  2005/05/10 13:28:14  braverock
  * - localized strings patches provided by Alan Baghumian (alanbach)
  *
