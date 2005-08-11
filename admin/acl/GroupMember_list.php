@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupMember_list.php,v 1.4 2005/08/02 00:46:41 vanmer Exp $
+ * $Id: GroupMember_list.php,v 1.5 2005/08/11 22:54:29 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -19,6 +19,8 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
 global $http_site_root;
+
+getGlobalVar($msg, 'msg');
 
 $session_user_id = session_check();
 
@@ -65,7 +67,7 @@ $colspan=count($columns);
 
 $pager = new GUP_Pager($con, $sql, null,_("Group Members"), $form_id, 'GroupMembers', $columns, false);
 
-start_page($page_title);
+start_page($page_title, true, $msg);
 ?>
 <form method="POST" name="<?php echo $form_id; ?>">
 
@@ -95,6 +97,9 @@ end_page();
 
 /**
  * $Log: GroupMember_list.php,v $
+ * Revision 1.5  2005/08/11 22:54:29  vanmer
+ * - added msg output to Group Member list
+ *
  * Revision 1.4  2005/08/02 00:46:41  vanmer
  * - changed to use new acl wrapper call for database connection
  * - changed to use new GUP_Pager with grouping on objects and groups
