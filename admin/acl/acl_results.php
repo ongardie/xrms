@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.9 2005/08/11 22:53:53 vanmer Exp $
+ * $Id: acl_results.php,v 1.10 2005/08/11 23:12:42 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -22,10 +22,10 @@ $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
-$acl = new xrms_acl ($options );
-
 
 $con = get_acl_dbconnection();
+
+$acl = get_acl_object($acl_options, $con);
 
 // $con->debug=1;
 
@@ -62,9 +62,9 @@ switch ($aclAction) {
         $rst=$con->execute($sql);
         if (!$rst) db_error_handler($con, $sql);
         $permissionMenu=$rst->getmenu2('Permission',$Permission,false);
-        $sql = "Select " . $xcon->CONCAT('first_names',"' '",'last_name')." as Name, user_id  FROM users";
-        $rst=$xcon->execute($sql);
-        if (!$rst) db_error_handler($xcon, $sql);
+        $sql = "Select " . $con->CONCAT('first_names',"' '",'last_name')." as Name, user_id  FROM users";
+        $rst=$con->execute($sql);
+        if (!$rst) db_error_handler($con, $sql);
         $userMenu=$rst->getmenu2('aclUser',$object,false);
 echo<<<TILLEND
         <form method=POST action="acl_results.php">
@@ -243,6 +243,9 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.10  2005/08/11 23:12:42  vanmer
+  * - changed to user users table from ACL db connection
+  *
   * Revision 1.9  2005/08/11 22:53:53  vanmer
   * - changed to use ACL dbconnection
   *
