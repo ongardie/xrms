@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.120 2005/08/02 22:00:43 ycreddy Exp $
+ * $Id: one.php,v 1.121 2005/08/11 02:36:52 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -365,6 +365,11 @@ $related_activities_widget = GetActivitiesWidget($con, $search_terms, 'OneActivi
 
 require_once('participant_sidebar.php');
 
+
+$related_block='';
+require_once('attachment_sidebar.php');
+
+
 if ($contact_id) {
     // include the contact sidebar code
     require_once ('../contacts/sidebar.php');
@@ -416,6 +421,11 @@ confGoTo_includes();
 
 <script language="JavaScript" type="text/javascript">
 
+function changeAttachment() {
+   document.forms[0].change_attachment.value='true';
+   document.forms[0].submit();
+}
+
 function logTime() {
     var date = new Date();
     var d = date.getDate();
@@ -440,7 +450,7 @@ function logTime() {
     <div id="Content">
 
 
-        <form action=edit-2.php method=post>
+        <form action=edit-2.php method=post name=activity_data>
         <input type=hidden name=return_url value="<?php  echo $return_url; ?>">
         <input type=hidden name=current_activity_status value="<?php  echo $activity_status; ?>">
         <input type=hidden name=activity_status value="<?php  echo $activity_status; ?>">
@@ -474,13 +484,13 @@ function logTime() {
             <tr>
                 <td class=widget_label_right><?php echo _("Attached To"); ?></td>
                 <td class=widget_content>
+                    <input type=hidden name=change_attachment>
                     <?php  echo $attached_to_link;
                         if ($table_name != "Attached To") {
                             echo " &nbsp; " . _("Status") . " &nbsp; ";
                             echo $table_menu;
                         }
                     ?><br>
-                    <input type=submit class=button name=change_attachment value="<?php echo _("Change Attachment"); ?>">
                 </td>
             </tr>
             <tr>
@@ -649,6 +659,8 @@ function logTime() {
     <div id="Sidebar">
         <!-- participant list block //-->
         <?php echo $participant_block; ?>
+        <!-- attachment list block //-->
+        <?php echo $related_block; ?>
         <!-- company information block //-->
         <?php echo $company_block; ?>
         <!-- contact information block //-->
@@ -720,6 +732,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.121  2005/08/11 02:36:52  vanmer
+ * - Added sidebar to control activity association
+ * - moved button from main form to sidebar
+ *
  * Revision 1.120  2005/08/02 22:00:43  ycreddy
  * Added Last Modified By and Last Modified At fields to the details
  *
