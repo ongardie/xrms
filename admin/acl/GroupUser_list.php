@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupUser_list.php,v 1.9 2005/07/28 18:46:06 vanmer Exp $
+ * $Id: GroupUser_list.php,v 1.10 2005/08/11 23:37:47 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -69,10 +69,11 @@ $role_select=$sql . " AND GroupUser.Role_id= XXX-value-XXX";
             <tr>
                 <td colspan=$colspan class=widget_content_form_element>
                     $pager_columns_button
-                </td>
+<input type=\"button\" class=\"button\" value=\""._("Add New") . "\" onclick=\"javascript: location.href='one_GroupUser.php?form_action=new&return_url=GroupUser_list.php'\">
+		</td>
             </tr>";
-
-   $pager = new GUP_Pager($con, $sql,false, 'Group Users', $form_name, 'GroupUsers', $columns);
+   
+    $pager = new GUP_Pager($con, $sql,false, 'Group Users', $form_name, 'GroupUsers', $columns);
 
     $pager->AddEndRows($endrows);
 
@@ -93,7 +94,6 @@ echo $pager_columns_selects;
 $pager->Render();
 
 ?>
-<input type="button" class="button" value="<?php echo _("Add New"); ?>" onclick="javascript: location.href='one_GroupUser.php?form_action=new&return_url=GroupUser_list.php'">
 </div></div></form>
 
 <?php
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: GroupUser_list.php,v $
+ * Revision 1.10  2005/08/11 23:37:47  vanmer
+ * - moved add new button into Group User pager
+ *
  * Revision 1.9  2005/07/28 18:46:06  vanmer
  * - added SQL grouping on Groups and Roles in User Groups interface
  * - added extra SQL columns for IDs of each of the entities
