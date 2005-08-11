@@ -2,7 +2,7 @@
 /**
  * Set addresses for a company
  *
- * $Id: addresses.php,v 1.25 2005/08/04 20:08:39 vanmer Exp $
+ * $Id: addresses.php,v 1.26 2005/08/11 02:46:19 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,6 +27,7 @@ getGlobalVar($address_street, 'address_street');
 getGlobalVar($address_city, 'address_city');
 getGlobalVar($address_province, 'address_province');
 getGlobalVar($address_country, 'address_country');
+getGlobalVar($address_postal_code,'address_postal_code');
 
 $return_url="addresses.php?company_id=$company_id&edit_contact_id=$edit_contact_id";
 
@@ -48,16 +49,19 @@ and c.company_id = a.company_id
 and c.company_id = $company_id";
 
 if ($address_street) {
-    $sql .= " and (line1 LIKE '%$address_street%' OR line2 LIKE '%$address_street%') ";
+    $sql .= " and (line1 LIKE " . $con->qstr("%$address_street%") . " OR line2 LIKE " . $con->qstr("%$address_street%"). ") ";
 }
 if ($address_city) {
-    $sql .= " and city LIKE '%$address_city%'";
+    $sql .= " and city LIKE " . $con->qstr("%$address_city%");
 }
 if ($address_province) {
-    $sql .= " and province LIKE '%$address_province%'";
+    $sql .= " and province LIKE " .$con->qstr("%$address_province%");
 }
 if ($address_country) {
     $sql .= " and country_id=$address_country";
+}
+if ($address_postal_code) {
+    $sql .= " and postal_code LIKE " . $con->qstr("%$address_postal_code%");
 }
 
 $columns=array();
@@ -166,12 +170,12 @@ $address_action="addresses.php";
         <form action="<?php echo $address_action; ?>" method=post name="AddressPagerForm">
         
         <table class=widget>
-            <tr><td class=widget_header colspan=4><?php echo _("Search Addresses"); ?></td></tr>
+            <tr><td class=widget_header colspan=6><?php echo _("Search Addresses"); ?></td></tr>
             <tr><td class=widget_label><?php echo _("Street"); ?></td><td class=widget_content_form_element><input type=text size=15 name=address_street value="<?php echo $address_street; ?>"></td>
-            <td class=widget_label><?php echo _("City"); ?></td><td class=widget_content_form_element><input type=text size=15 name=address_city value="<?php echo $address_city; ?>"></td></tr>
+            <td class=widget_label><?php echo _("City"); ?></td><td class=widget_content_form_element><input type=text size=15 name=address_city value="<?php echo $address_city; ?>"></td><td class=widget_label><?php echo _("Postcode"); ?></td><td class=widget_content_form_element><input type=text size=7 name=address_postal_code value="<?php echo $address_postal_code; ?>"></td></tr>
             <tr><td class=widget_label><?php echo _("State/Province"); ?></td><td class=widget_content_form_element><input type=text size=15 name=address_province value="<?php echo $address_province; ?>"></td>
-            <td class=widget_label><?php echo _("Country"); ?></td><td class=widget_content_form_element><?php echo $search_country_menu; ?></td></tr>
-            <tr><td class=widget_content_form_element colspan=4><input type=submit class=button value="<?php echo _("Search Addresses"); ?>"></td></tr>
+            <td class=widget_label><?php echo _("Country"); ?></td><td class=widget_content_form_element colspan=3><?php echo $search_country_menu; ?></td></tr>
+            <tr><td class=widget_content_form_element colspan=6><input type=submit class=button value="<?php echo _("Search Addresses"); ?>"></td></tr>
             
         </table>
             
@@ -210,6 +214,10 @@ end_page();
 
 /**
  * $Log: addresses.php,v $
+ * Revision 1.26  2005/08/11 02:46:19  vanmer
+ * - added postal code to mini search on addresses
+ * - added qstr over all input'd variables
+ *
  * Revision 1.25  2005/08/04 20:08:39  vanmer
  * - added a parameter to allow a final redirection after address has been selected, instead of automatically
  * redirecting to contact edit page
