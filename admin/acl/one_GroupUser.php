@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Aaron van Meerten
- * $Id: one_GroupUser.php,v 1.5 2005/06/07 20:20:25 vanmer Exp $
+ * $Id: one_GroupUser.php,v 1.6 2005/08/11 22:53:53 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,13 +23,11 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
 global $symbol_precendence;
 
-	$con = &adonewconnection($xrms_acl_db_dbtype);
-	$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+	$con = get_acl_dbconnection();
+	
 //	$con->debug=1;
 	
 	// we need this for the companies foreign key lookup
-	$xcon = &adonewconnection($xrms_db_dbtype);
-	$xcon->nconnect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
 
 	getGlobalVar($return_url, 'return_url');
@@ -69,7 +67,7 @@ global $symbol_precendence;
   $model->SetPrimaryKeyName('GroupUser_id');
   $model->removeField('ChildGroup_id');
   $model->SetDisplayNames(array('Group_name' => 'Group Name')); //, 'on_what_table' => 'Table', 'on_what_field' => 'Field', 'data_source_id' => 'Data Source'));
-  $model->SetForeignKeyField('user_id', 'User', 'users', 'user_id', $xcon->CONCAT('last_name',"', '",'first_names'),$xcon,array('' => ' Select One'),'last_name, first_names');
+  $model->SetForeignKeyField('user_id', 'User', 'users', 'user_id', $con->CONCAT('last_name',"', '",'first_names'),$con,array('' => ' Select One'),'last_name, first_names');
   $model->SetForeignKeyField('Group_id', 'Group', 'Groups', 'Group_id', 'Group_name', null, array('' => ' Select One'));
   $model->SetForeignKeyField('Role_id', 'Role', 'Role', 'Role_id', 'Role_name', null, array('' => ' Select One'));
 
@@ -102,6 +100,9 @@ end_page();
 
 /**
  * $Log: one_GroupUser.php,v $
+ * Revision 1.6  2005/08/11 22:53:53  vanmer
+ * - changed to use ACL dbconnection
+ *
  * Revision 1.5  2005/06/07 20:20:25  vanmer
  * - added new interface to GroupUsers, splitting out child groups
  * - added new interface for adding child groups/managing them

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.8 2005/06/24 22:00:47 vanmer Exp $
+ * $Id: acl_results.php,v 1.9 2005/08/11 22:53:53 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -25,8 +25,8 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 $acl = new xrms_acl ($options );
 
 
-$con = &adonewconnection($xrms_acl_db_dbtype);
-$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+$con = get_acl_dbconnection();
+
 // $con->debug=1;
 
 // we need this for the companies foreign key lookup
@@ -243,6 +243,9 @@ TILLEND;
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.9  2005/08/11 22:53:53  vanmer
+  * - changed to use ACL dbconnection
+  *
   * Revision 1.8  2005/06/24 22:00:47  vanmer
   * - fixed parse error introduced by translations
   * - fixed on_what_id field to be called select_on_what_id so that it does not collide with existing on_what_id fields

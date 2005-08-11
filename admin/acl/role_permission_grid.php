@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.3 2005/05/10 13:28:39 braverock Exp $
+ * $Id: role_permission_grid.php,v 1.4 2005/08/11 22:53:53 vanmer Exp $
  *
  */
 
@@ -20,8 +20,8 @@ $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
-$con = &adonewconnection($xrms_acl_db_dbtype);
-$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+$con = get_acl_dbconnection();
+
 
 
 getGlobalVar($gridrole_id,'gridrole_id');

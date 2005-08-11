@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_ControlledObjectRelationship.php,v 1.4 2005/03/24 22:25:23 vanmer Exp $
+ * $Id: one_ControlledObjectRelationship.php,v 1.5 2005/08/11 22:53:53 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -24,8 +24,8 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
 global $symbol_precendence;
 
-	$con = &adonewconnection($xrms_acl_db_dbtype);
-	$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+	$con = get_acl_dbconnection();
+	
 	// $con->debug=1;
 	
 	// we need this for the companies foreign key lookup
@@ -101,6 +101,9 @@ end_page();
 
 /**
  * $Log: one_ControlledObjectRelationship.php,v $
+ * Revision 1.5  2005/08/11 22:53:53  vanmer
+ * - changed to use ACL dbconnection
+ *
  * Revision 1.4  2005/03/24 22:25:23  vanmer
  * - altered to reflect new acl wrapper recursion function db connection parameter
  *

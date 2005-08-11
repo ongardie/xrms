@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: GroupGroup_list.php,v 1.1 2005/06/07 20:20:25 vanmer Exp $
+ * $Id: GroupGroup_list.php,v 1.2 2005/08/11 22:52:15 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,8 +25,8 @@ $session_user_id = session_check();
 
 require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
-$con = &adonewconnection($xrms_acl_db_dbtype);
-$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+$con = get_acl_dbconnection();
+
 
 $page_title = _("Manage Group Groups");
 
@@ -86,6 +86,9 @@ end_page();
 
 /**
  * $Log: GroupGroup_list.php,v $
+ * Revision 1.2  2005/08/11 22:52:15  vanmer
+ * - changed to use ACL dbconnection
+ *
  * Revision 1.1  2005/06/07 20:20:25  vanmer
  * - added new interface to GroupUsers, splitting out child groups
  * - added new interface for adding child groups/managing them

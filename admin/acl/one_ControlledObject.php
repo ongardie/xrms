@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @author Justin Cooper
- * $Id: one_ControlledObject.php,v 1.2 2005/03/05 00:52:34 daturaarutad Exp $
+ * $Id: one_ControlledObject.php,v 1.3 2005/08/11 22:53:53 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -23,8 +23,8 @@ require_once ($include_directory.'classes/acl/xrms_acl_config.php');
 
 global $symbol_precendence;
 
-	$con = &adonewconnection($xrms_acl_db_dbtype);
-	$con->connect($xrms_acl_db_server, $xrms_acl_db_username, $xrms_acl_db_password, $xrms_acl_db_dbname);
+	$con = get_acl_dbconnection();
+	
 	// $con->debug=1;
 	
 	// we need this for the companies foreign key lookup
@@ -78,6 +78,9 @@ end_page();
 
 /**
  * $Log: one_ControlledObject.php,v $
+ * Revision 1.3  2005/08/11 22:53:53  vanmer
+ * - changed to use ACL dbconnection
+ *
  * Revision 1.2  2005/03/05 00:52:34  daturaarutad
  * manually setting primary keys until mssql driver supports metacolumns fully
  *
