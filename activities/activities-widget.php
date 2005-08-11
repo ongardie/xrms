@@ -169,7 +169,7 @@ if (strlen($search_terms['contact_id'])) {
 if (strlen($search_terms['company']) > 0 || strlen($search_terms['company_id']) ||
     (strlen($search_terms['time_zone_between']) and strlen($search_terms['time_zone_between2']))) {
 
-    $extra_group_by = ", c.company_name,c.company_id";
+    //$extra_group_by = ", c.company_name,c.company_id";
     array_unshift($from, 'addresses addr');
     
     $where .= " AND c.default_primary_address=addr.address_id ";
@@ -339,8 +339,7 @@ if ($list) {
 }
 
 // MS-SQL server requires that when using GROUP BY, all fields in select clause must be mentioned
-$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, a.on_what_table, a.on_what_id, a.activity_description, rt.resolution_short_name, cp.case_priority_pretty_name $extra_group_by";
-
+$group_by .=" GROUP BY a.activity_id, cont.first_names, cont.last_name, cont.contact_id, a.ends_at, a.scheduled_at, a.activity_status, a.activity_title, u.username, u.user_id, at.activity_type_pretty_name, a.on_what_table, a.on_what_id, a.activity_description, rt.resolution_short_name, cp.case_priority_pretty_name, c.company_name,c.company_id $extra_group_by";
 
 $from_list = join(', ', $from);
 
@@ -796,6 +795,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.32  2005/08/11 16:58:59  ycreddy
+* Added company_name and company_id as default columns to GROUP BY column list
+*
 * Revision 1.31  2005/08/05 16:08:43  vanmer
 * - added missing space to where clause in activities widget
 *
