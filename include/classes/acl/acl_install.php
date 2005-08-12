@@ -98,13 +98,13 @@ function upgrade_acl_users($con) {
     return $install_status;
 }
 
-function install_acl($con, $insert_objects=true) {
+function install_acl($con, $insert_objects=true, $insert_permissions=true) {
     $return9=install_data_sources($con, $insert_objects);
     $return1=install_controlled_objects($con, $insert_objects);
     $return2=install_controlled_object_relationships($con, $insert_objects);
     $return3=install_groups($con, $insert_objects);
     $return4=install_roles($con, $insert_objects);
-    $return5=install_permissions($con, $insert_objects);
+    $return5=install_permissions($con, $insert_permissions);
     $return6=install_role_permissions($con, $insert_objects);
     $return7=install_group_users($con, $insert_objects);
     $return8=install_group_members($con, $insert_objects);
