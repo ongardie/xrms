@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.32 2005/07/28 15:41:49 vanmer Exp $
+ * $Id: GUP_Pager.php,v 1.33 2005/08/12 20:10:34 daturaarutad Exp $
  */
 
 
@@ -85,6 +85,7 @@ class GUP_Pager {
 	var $use_cached 			= true; 	// whether or not to use the cache
 	var $using_cached 			= false;	// whether or not we are currently using cached data
 	var $group_mode 			= false;
+	var $last_group_mode 		= false;
 	var $buffer_output;
 	var $rows_displayed 		= 0;
 
@@ -135,8 +136,8 @@ class GUP_Pager {
       	$this->sql 			= $sql;
         $this->data 		= $data;
         $this->caption 		= $caption;
-	$this->showCaption	= (($showCaption) ? $showCaption : _("Show"));
-	$this->hideCaption	= (($hideCaption) ? $hideCaption : _("Hide"));
+	    $this->showCaption	= (($showCaption) ? $showCaption : _("Show"));
+	    $this->hideCaption	= (($hideCaption) ? $hideCaption : _("Hide"));
         $this->form_id 		= $form_id;
         $this->pager_id		= $pager_id;
         $this->column_info 	= $column_info;
@@ -152,10 +153,11 @@ class GUP_Pager {
         getGlobalVar($this->next_page, $pager_id . '_next_page');
         getGlobalVar($this->resort, $pager_id . '_resort');
         getGlobalVar($this->maximize, $pager_id . '_maximize');
-	getGlobalVar($this->show_hide, $pager_id . '_show_hide');
-	if (!$this->show_hide) $this->show_hide='show';
+	    getGlobalVar($this->show_hide, $pager_id . '_show_hide');
+	    if (!$this->show_hide) $this->show_hide='show';
 
 		getGlobalVar($this->group_mode, $this->pager_id . '_group_mode');
+		getGlobalVar($this->last_group_mode, $this->pager_id . '_last_group_mode');
 		getGlobalVar($this->group_id, $this->pager_id . '_group_id');
 		getGlobalVar($refresh, $this->pager_id . '_refresh');
 		getGlobalVar($this->do_export, $this->pager_id . '_export');
@@ -353,8 +355,8 @@ class GUP_Pager {
 				if(!$group_values) {
 					db_error_handler($this->db, $this->column_info[$this->group_mode]['group_query_list']);
 				} else {
-					// set group id to first item if none is selected
-					if(!isset($this->group_id)) {
+					// set group id to first item if none is selected or group column has changed
+					if(!isset($this->group_id) || $this->group_mode != $this->last_group_mode) {
 						$this->group_id = $group_values->fields[1];
 					}
 					$this->group_select_widget =  $group_values->GetMenu2($this->pager_id . '_group_id', $this->group_id, false, false, 0, "onchange='javascript:{$this->pager_id}_group(" . $this->group_mode . ");'");
@@ -631,6 +633,7 @@ END;
                 document.{$this->form_id}.submit();
 			}
 	        function {$this->pager_id}_group(groupColumn) {
+                document.{$this->form_id}.{$this->pager_id}_last_group_mode.value = document.{$this->form_id}.{$this->pager_id}_group_mode.value;
                 document.{$this->form_id}.{$this->pager_id}_group_mode.value = groupColumn;
                 document.{$this->form_id}.{$this->pager_id}_next_page.value = '';
 				document.{$this->form_id}.action = document.{$this->form_id}.action + "#" + "{$this->pager_id}";
@@ -651,6 +654,7 @@ END;
             <input type=hidden name={$this->pager_id}_next_page value="{$this->next_page}">
             <input type=hidden name={$this->pager_id}_resort value="0">
             <input type=hidden name={$this->pager_id}_group_mode value="{$this->group_mode}">
+            <input type=hidden name={$this->pager_id}_last_group_mode value="{$this->group_mode}">
             <input type=hidden name={$this->pager_id}_current_sort_column value="{$this->sort_column}">
             <input type=hidden name={$this->pager_id}_sort_column value="{$this->sort_column}">
             <input type=hidden name={$this->pager_id}_current_sort_order value="{$this->sort_order}">
@@ -1146,6 +1150,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.33  2005/08/12 20:10:34  daturaarutad
+ * add last_group_mode to traack if group column has changed and therefor we need to reset group_id
+ *
  * Revision 1.32  2005/07/28 15:41:49  vanmer
  * - added Hide and Show javascript functions to collapse view of pager down to only caption
  * - pass hide/show value in form variables
