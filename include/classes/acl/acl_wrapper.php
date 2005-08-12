@@ -48,6 +48,14 @@ function add_group_member_criteria($con, $GroupMember_id, $criteria_fieldname, $
     }  else return false;
 }
 
+function delete_group_member($con, $GroupMember_id) {
+   global $acl_options;
+    if (!$GroupMember_id) return false;
+    $acl = get_acl_object($acl_options, $con);
+    $ret=$acl->delete_group_object($GroupMember_id);
+    return $ret;
+}
+
 function get_users_in_role($con, $role) {
     global $session_user_id;
     global $acl_options;
