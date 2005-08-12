@@ -16,6 +16,7 @@ function get_acl_object($access_info=false, $con=false, $callbacks=false, $conte
 
 function get_acl_dbconnection($datasource=false) {
     getGlobalVar($acl_datasource_name,'acl_datasource_name');
+    $_SESSION['acl_datasource_name']=$acl_datasource_name;
     if (!$datasource) $datasource=$acl_datasource_name;
     if (!$datasource) $datasource='default';
     
@@ -155,19 +156,26 @@ function check_user_role($acl, $user_id, $role) {
     return false;
 }
 
-function check_role_access($acl=false, $user_id) {
+function check_role_access($acl=false, $user_id, $check_callback='xrms_role_access_check_bool') {
     global $acl_options;
     global $on_what_table;
+    
     if (!$user_id) return false;
     
-    $acl = get_acl_object($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     
     $roles=get_user_roles($acl, $user_id);
-    if (!$acl) $acl = get_acl_object($acl_options);
-        
+    $eval_str="\$ret=$check_callback(\$acl, \$user_id, \$roles);";
     
+    eval($eval_str);
+    return $ret;    
+}
+
+function xrms_role_access_check_bool($acl=false, $user_id, $roles) {
+    global $on_what_table;
+    global $acl_options;
     $path=$_SERVER["SCRIPT_FILENAME"];
-    
+    if (!$acl) $acl = get_acl_object($acl_options);
     if (!$on_what_table) {
         $dir = dirname($path);
         $dir_array=explode(DIRECTORY_SEPARATOR,$dir);
@@ -177,7 +185,6 @@ function check_role_access($acl=false, $user_id) {
     }
     $object_data = $acl->get_controlled_object(false, false, false, $on_what_table);
     return true;
-
 }
 
 function check_permission($user_id, $action=false, $object=false,  $on_what_id, $table=false, $role=false, $db_connection=false) {
@@ -242,12 +249,12 @@ function check_object_permission_bool($user_id, $object=false, $action='Read',$t
     else return true;
 }
 
-function acl_get_list($user_id, $action='Read', $object=false, $table=false) {
+function acl_get_list($user_id, $action='Read', $object=false, $table=false, $acl=false) {
     global $acl_options;
 //    echo "Getting list<br>";
     if (!$user_id) return false;
     
-    $acl = get_acl_object($acl_options);
+    if (!$acl) $acl = get_acl_object($acl_options);
     $object_id=get_object_id($acl, $object, $table);
 //    echo "Getting object<br>";
     if (!$object_id) return false;
