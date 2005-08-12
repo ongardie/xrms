@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.26 2005/08/02 00:43:57 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.27 2005/08/12 01:18:05 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -482,11 +482,11 @@ class xrms_acl {
             
             $ret=array();
             $ret['acl_on_what_field']=$on_what_field;
-            if (trim($on_what_id)!==false) {
+            if ((trim($on_what_id)!==false) AND (trim($on_what_id)!=='')) {
                 $restrictionFields[$on_what_field]=$on_what_id;
             }
             
-            $where=array();
+	    $where=array();
             if ($restrictionFields AND count($restrictionFields)>0) {
                 foreach ($restrictionFields as $key=>$value) {
                     if (is_array($value) AND (count($value)>0)) {
@@ -2036,7 +2036,7 @@ class xrms_acl {
                         //If not, next scope
                         if ($FoundGroupList) {
                             $objectsFound=array_merge($objectsFound, $FoundGroupList);
-                        }
+                        } 
                     }
 //                } // end CORelationship loop
             }
@@ -2109,7 +2109,7 @@ class xrms_acl {
             } //end check for parent object 
         } //end loop on parent controlled objects
 //        print_r($objectsFound);
-        if (count($objectsFound)>0) {        
+        if (count($objectsFound)>0) {
             $ret=array();
             $ret['controlled_objects']=$objectsFound;
             $ret['groups']=$GroupList;
@@ -2543,6 +2543,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.27  2005/08/12 01:18:05  vanmer
+ * - added case to ensure that id is not overwritten if not set
+ *
  * Revision 1.26  2005/08/02 00:43:57  vanmer
  * - changed group member criteria retrieval to use simpler logic for creating array
  * - changed to also check get_magic_quotes_gpc to allow quoted values to be inserted properly
