@@ -189,12 +189,14 @@ function xrms_role_access_check_bool($acl=false, $user_id, $roles) {
     return true;
 }
 
-function check_permission($user_id, $action=false, $object=false,  $on_what_id, $table=false, $role=false, $db_connection=false) {
+function check_permission($user_id, $action=false, $object=false,  $on_what_id, $table=false, $role=false, $db_connection=false, $acl=false) {
     global $acl_options;
+    if (!$acl) { 
     if ($db_connection) {
         $acl=get_acl_object($acl_options, $db_connection);
     } else {
         $acl = get_acl_object($acl_options);
+    }
     }
     
     $object_id=get_object_id($acl, $object, $table, $role);
@@ -212,20 +214,22 @@ function check_permission($user_id, $action=false, $object=false,  $on_what_id, 
     return $ret;
 }
 
-function check_permission_bool($user_id, $object=false, $on_what_id, $action='Read',$table=false, $role=false, $db_connection=false) {
-    $permissions=check_permission($user_id, $action, $object, $on_what_id, $table, $role, $db_connection);
+function check_permission_bool($user_id, $object=false, $on_what_id, $action='Read',$table=false, $role=false, $db_connection=false, $acl=false) {
+    $permissions=check_permission($user_id, $action, $object, $on_what_id, $table, $role, $db_connection, $acl);
     if (!$permissions) return false;
     if (!is_array($permissions)) return false;
     if (array_search($action,$permissions)===false) return false;
     else return true;
 }
 
-function check_object_permission($user_id, $object, $action, $table, $role=false, $db_connection=false) {
+function check_object_permission($user_id, $object, $action, $table, $role=false, $db_connection=false, $acl=false) {
     global $acl_options;
+    if (!$acl) {
     if ($db_connection) {
         $acl = get_acl_object($acl_options, $db_connection);
     } else {
         $acl = get_acl_object($acl_options);
+    }
     }
     $object_id=get_object_id($acl, $object, $table, $role);
     //no object id, returning true to allow access to uncontrolled area
@@ -243,8 +247,8 @@ function check_object_permission($user_id, $object, $action, $table, $role=false
     return $ret;
 }
 
-function check_object_permission_bool($user_id, $object=false, $action='Read',$table=false, $role=false, $db_connection=false) {
-    $permissions=check_object_permission($user_id, $object, $action, $table, $role, $db_connection);
+function check_object_permission_bool($user_id, $object=false, $action='Read',$table=false, $role=false, $db_connection=false, $acl=false) {
+    $permissions=check_object_permission($user_id, $object, $action, $table, $role, $db_connection, $acl);
     if (!$permissions) return false;
     if (!is_array($permissions)) return false;
     if (array_search($action,$permissions)===false) return false;
