@@ -2,7 +2,7 @@
 /**
  * Shared activity pager functions
  *
- * $Id: activities-pager-functions.php,v 1.7 2005/07/08 17:51:28 vanmer Exp $
+ * $Id: activities-pager-functions.php,v 1.8 2005/08/12 16:41:20 ycreddy Exp $
  */
 
 /**
@@ -47,7 +47,7 @@ function GetActivitiesPagerData($row) {
     } elseif ($row['on_what_table'] == 'cases') {
         $row['activity_about'] = "<a href='$http_site_root/cases/one.php?case_id={$row['on_what_id']}'>";
         $sql2 = "select case_title as attached_to_name from cases where case_id = {$row['on_what_id']}";
-    } elseif ($row['on_what_table']) {
+    } elseif (trim($row['on_what_table'])) {
         $row['activity_about'] = "<a href='$http_site_root" . table_one_url($row['on_what_table'], $row['on_what_id']) . "'>";
         $on_what_field=make_singular($row['on_what_table']).'_id';
         $name_field=$con->Concat(implode(", ' ' , ", table_name($row['on_what_table'])));
@@ -70,6 +70,9 @@ function GetActivitiesPagerData($row) {
 
 /**
  * $Log: activities-pager-functions.php,v $
+ * Revision 1.8  2005/08/12 16:41:20  ycreddy
+ * Added trim when checking whether on_what_table is empty
+ *
  * Revision 1.7  2005/07/08 17:51:28  vanmer
  * - added extra case to show ABOUT link for most entities
  *
