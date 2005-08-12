@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.72 2005/08/12 16:31:42 ycreddy Exp $
+ * $Id: some.php,v 1.73 2005/08/12 20:42:52 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -73,7 +73,7 @@ $arr_vars = array ( // local var name       // session variable name
                     'address_body'       => array ( 'companies_address_body' , arr_vars_SESSION),
                    );
 
-$advanced_search = (!empty($_REQUEST['advanced_search'])) ? true : false;
+getGlobalVar($advanced_search, 'advanced_search'); // = (!empty($_REQUEST['advanced_search'])) ? true : false;
 
 
 // get all passed in variables
@@ -418,6 +418,11 @@ if ($criteria_count > 0) {
 $page_title = _("Search Companies");
 start_page($page_title, true, $msg);
 
+if ($advanced_search) $field_columns=1;
+else ($field_columns=2);
+$search_colspan=$field_columns+1;
+$total_colspan=2*$search_colspan
+
 ?>
 
 <div id="Main">
@@ -432,11 +437,17 @@ start_page($page_title, true, $msg);
 
         <input type=hidden name=companies_next_page>
         <table class=widget cellspacing=1 width="100%">
-            <tr>
-          <td class=widget_header colspan=6>
+        <tr>
+          <td class=widget_header colspan="<?php echo $total_colspan; ?>">
             <?php  echo _("Search Criteria"); ?>
           </td>
         </tr>
+
+<?php
+
+if (!$advanced_search) {
+//BASIC SEARCH
+?>
         <tr>
           <td class=widget_label>
             <?php  echo _("Company Name"); ?>
@@ -479,96 +490,171 @@ start_page($page_title, true, $msg);
         </tr>
 
         <?php
-            if($advanced_search) {
-                echo "
+            //END BASIC SEARCH
+            } else {
+            //ADVANCED SEARCH
+        ?>
+    <tr>
+        <td class=lcol width="55%" valign=top>
 
+
+        <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_label>" .   _("Address Name") . "</td>
-                <td class=widget_label>" .   _("Line 1") . "</td>
-                <td class=widget_label>" .   _("Line 2") . "</td>
-                <td class=widget_label>" .   _("Postal Code") . "</td>
-                <td class=widget_label colspan=2>" .   _("Country") . "</td>
+                <td class=widget_header colspan=2><?php echo _("Company Information")." - "._("Advanced Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element><input type=text name=address_name size=30 value=\"" .   $address_name  . "\"></td>
-                <td class=widget_content_form_element><input type=text name=line1 size=30 value=\"" .   $line1  . "\"></td>
-                <td class=widget_content_form_element><input type=text name=line2 size=30 value=\"" .   $line2  . "\"></td>
-                <td class=widget_content_form_element><input type=text name=postal_code size=10 value=\"" .   $postal_code  . "\"></td>
-                <td class=widget_content_form_element colspan=2>" .   $country_menu  . "</td>
+                <td class=widget_label_right><?php echo _("Company Name"); ?></td>
+		<td class=widget_content_form_element><input type=text size=50 name=company_name value="<?php echo $company_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_label colspan=2>" .   _("Override Address") . "</td>
-                <td class=widget_label>" .   _("Phone") . "</td>
-                <td class=widget_label>" .   _("Alt. Phone") . "</td>
-                <td class=widget_label colspan=2>" .   _("Fax") . "</td>
+                <td class=widget_label_right><?php echo _("Legal Name"); ?></td>
+                <td class=widget_content_form_element><input type=text size=50 name=legal_name value="<?php echo $legal_name; ?>"></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=2 rowspan=3><textarea rows=5 cols=40 name=address_body value=\"" .   $address_body  . "\"></textarea></td>
-                <td class=widget_content_form_element><input type=text name=phone value=\"" .   $phone  . "\"></td>
-                <td class=widget_content_form_element><input type=text name=phone2 value=\"" .   $phone2  . "\"></td>
-                <td class=widget_content_form_element colspan=2><input type=text name=fax value=\"" .   $fax  . "\"></td>
+                <td class=widget_label_right><?php echo _("Company Code"); ?></td>
+                <td class=widget_content_form_element><input type=text size=10 name=company_code value ="<?php echo $company_code; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("CRM Status"); ?></td>
+                <td class=widget_content_form_element><?php  echo $crm_status_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Company Source"); ?></td>
+                
+          <td class=widget_content_form_element>
+            <?php  echo $company_source_menu; ?>
+          </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Industry"); ?></td>
+                
+          <td class=widget_content_form_element>
+            <?php  echo $industry_menu; ?>
+          </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Owner"); ?></td>
+                <td class=widget_content_form_element><?php  echo $user_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Phone"); ?></td>
+                <td class=widget_content_form_element><input type=text name=phone value="<?php echo $phone; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Alt. Phone"); ?></td>
+                <td class=widget_content_form_element><input type=text name=phone2 value="<?php echo $phone2; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Fax"); ?></td>
+                <td class=widget_content_form_element><input type=text name=fax value="<?php echo $fax; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("URL"); ?></td>
+                <td class=widget_content_form_element><input type=text name=url size=50 value="<?php echo $url; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Employees"); ?></td>
+                <td class=widget_content_form_element><input type=text name=employees size=10 value="<?php echo $employees; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Revenue"); ?></td>
+                <td class=widget_content_form_element><input type=text name=revenue size=10 value="<?php echo $revenue; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo $company_custom1_label ?></td>
+                <td class=widget_content_form_element><input type=text name=custom1 size=30 value="<?php echo $custom1; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo $company_custom2_label ?></td>
+                <td class=widget_content_form_element><input type=text name=custom2 size=30  value="<?php echo $custom2; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo $company_custom3_label ?></td>
+                <td class=widget_content_form_element><input type=text name=custom3 size=30  value="<?php echo $custom3; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo $company_custom4_label ?></td>
+                <td class=widget_content_form_element><input type=text name=custom4 size=30  value="<?php echo $custom4; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Profile"); ?></td>
+                <td class=widget_content_form_element><textarea rows=10 cols=70 name=profile><?php echo $profile; ?></textarea></td>
             </tr>
              <tr>
-                <td class=widget_label colspan=4>" .   _("URL") . "</td>
+                
+          <td class=widget_content_form_element colspan=2>&nbsp;</td>
             </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=4><input type=text name=url size=50 value=\"" .   $url  . "\"></td>
-            </tr>
+        </table>
 
-            <tr>
-                <td class=widget_label colspan=2>" .   _("Legal Name") . "</td>
-                <td class=widget_label>" .   _("Company Code") . "</td>
-                <td class=widget_label>" .   _("CRM Status") . "</td>
-                <td class=widget_label>" .   _("Company Source") . "</td>
-                <td class=widget_label>" .   _("Industry") . "</td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element colspan=2><input type=text size=50 name=legal_name value=\"" .   $legal_name  . "\"></td>
-                <td class=widget_content_form_element><input type=text size=10 name=company_code value=\"" .   $company_code  . "\"></td>
-                <td class=widget_content_form_element>" .    $crm_status_menu  . "</td>
-                <td class=widget_content_form_element>" .    $company_source_menu  . "</td>
-                <td class=widget_content_form_element>" .    $industry_menu  . "</td>
-            </tr>
-           <tr>
-                <td class=widget_label>" .   _("Employees") . "</td>
-                <td class=widget_label colspan=5>" .   _("Revenue") . "</td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name=employees size=10 value=\"" .   $employees  . "\"></td>
-                <td class=widget_content_form_element colspan=5><input type=text name=revenue size=10 value=\"" .   $revenue  . "\"></td>
-            </tr>
-            <tr>
-                <td class=widget_label>" .   $company_custom1_label  . "</td>
-                <td class=widget_label>" .   $company_custom2_label  . "</td>
-                <td class=widget_label>" .   $company_custom3_label  . "</td>
-                <td class=widget_label colspan=3>" .   $company_custom4_label  . "</td>
-            </tr>
-            <tr>
-                <td class=widget_content_form_element><input type=text name=custom1 size=30 value=\"" .   $custom1  . "\"></td>
-                <td class=widget_content_form_element><input type=text name=custom2 size=30 value=\"" .   $custom2  . "\"></td>
-                <td class=widget_content_form_element><input type=text name=custom3 size=30 value=\"" .   $custom3  . "\"></td>
-                <td class=widget_content_form_element colspan=3><input type=text name=custom4 size=30 value=\"" .   $custom4  . "\"></td>
-            </tr>
-            <tr>
-                <td class=widget_label colspan=6>" .   _("Profile") . "</td>
-            <tr>
-            </tr>
-                <td class=widget_content_form_element colspan=6><textarea rows=10 cols=70 name=profile>" .   $profile  . "</textarea></td>
-            </tr>
+        </td>
+        <!-- gutter //-->
+        <td class=gutter width="1%">&nbsp;
+        
+        </td>
+        <!-- right column //-->
+        <td class=rcol width="44%" valign=top>
 
-";
+        <!-- Address Entry //-->
+        <table class=widget cellspacing=1 width="100%">
+            <tr>
+                <td class=widget_header colspan=2><?php echo _("Address")." - "._("Advanced Search Criteria"); ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Address Name"); ?></td>
+                <td class=widget_content_form_element><input type=text name=address_name size=30 value="<?php echo $address_name; ?>">
+          </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Line 1"); ?></td>
+                <td class=widget_content_form_element><input type=text name=line1 size=30 value="<?php echo $line1; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Line 2"); ?></td>
+                <td class=widget_content_form_element><input type=text name=line2 size=30 value="<?php echo $line2; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("City"); ?></td>
+                <td class=widget_content_form_element><input type=text name=city size=30 value="<?php echo $city; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("State/Province"); ?></td>
+                <td class=widget_content_form_element><input type=text name=province size=20 value="<?php echo $province; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Postal Code"); ?></td>
+                <td class=widget_content_form_element><input type=text name=postal_code size=10 value="<?php echo $postal_code; ?>"></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Country"); ?></td>
+                
+          <td class=widget_content_form_element>
+            <?php echo $country_menu ?>
+          </td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Override Address"); ?></td>
+                <td class=widget_content_form_element><textarea rows=5 cols=40 name=address_body><?php echo $address_body; ?></textarea><br>
+          </td>
+            </tr>
+        </table>
 
+    </td>
+    </tr>
+<?php
+    //END ADVANCED SEARCH
             }
+    //START SAVED SEARCH MENU
         ?>
+
         <tr>
-            <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
-            <td class=widget_label colspan="4"><?php echo _("Search Title"); ?></td>
+            <td class=widget_label colspan="<?php echo $search_colspan; ?>"><?php echo _("Saved Searches"); ?></td>
+            <td class=widget_label colspan="<?php echo $search_colspan; ?>"><?php echo _("Search Title"); ?></td>
         </tr>
         <tr>
-            <td class=widget_content_form_element colspan="2">
+            <td class=widget_content_form_element colspan="<?php echo $search_colspan; ?>">
                 <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
             </td>
-            <td class=widget_content_form_element colspan="4">
+            <td class=widget_content_form_element colspan="<?php echo $search_colspan; ?>">
                 <input type=text name="saved_title" size=24>
                 <?php
                     if(check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
@@ -578,7 +664,7 @@ start_page($page_title, true, $msg);
             </td>
         </tr>
         <tr>
-            <td class=widget_content_form_element colspan=6>
+            <td class=widget_content_form_element colspan=<?php echo $total_colspan; ?>>
                 <input name="submit_form" type=submit class=button value="<?php echo _("Search"); ?>">
                 <input name="clear_search" type=button class=button onClick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
                     <?php
@@ -621,7 +707,6 @@ $pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
 $columns = $pager_columns->GetUserColumns('default');
 
 echo $pager_columns_selects;
-
 
 $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CompanyForm', 'CompanyPager', $columns);
 
@@ -733,6 +818,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.73  2005/08/12 20:42:52  vanmer
+ * - added Advanced Search interface (patch from niclowe)
+ * - added advanced search as parameter instead of hardcoded into _REQUEST
+ * - changed column counts in table to reflect change between advanced/basic search
+ *
  * Revision 1.72  2005/08/12 16:31:42  ycreddy
  * Moved the code for populating Recently Viewed Companies before the query for Saved Search - fixes the bug around not showing Recently Viewed Companies
  *
