@@ -16,6 +16,8 @@ function get_acl_object($access_info=false, $con=false, $callbacks=false, $conte
 
 function get_acl_dbconnection($datasource=false) {
     getGlobalVar($acl_datasource_name,'acl_datasource_name');
+    if ($_GET['acl_datasource_name']) $acl_datasource_name=$_GET['acl_datasource_name'];
+    if ($_POST['acl_datasource_name']) $acl_datasource_name=$_POST['acl_datasource_name'];
     $_SESSION['acl_datasource_name']=$acl_datasource_name;
     if (!$datasource) $datasource=$acl_datasource_name;
     if (!$datasource) $datasource='default';
