@@ -2,7 +2,7 @@
 /**
  * Administration interface for managing permissions for one role
  *
- * $Id: role_permission_grid.php,v 1.4 2005/08/11 22:53:53 vanmer Exp $
+ * $Id: role_permission_grid.php,v 1.5 2005/08/12 00:25:40 vanmer Exp $
  *
  */
 
@@ -51,7 +51,7 @@ if ($gridrole_id) {
         $role_name=$rst->fields['Role_name'];
     }
     $acl_options=$options;
-    $acl = new xrms_acl($acl_options);
+    $acl = get_acl_object($acl_options, $con);
     $relationships = $acl->get_controlled_object_relationship(false, false, false,true);
     if (!is_array($relationships)) { $msg="Error, relationships failed";} else {
         if (!is_array(current($relationships))) { $relationships=array($relationships); }
@@ -76,6 +76,7 @@ if ($gridrole_id) {
     }
 
 }
+if ($grid_action=='assignPerms') { $msg.=_("Permissions Assigned"); }
 $css_theme='basic-left';
 start_page($page_title, true, $msg);
  echo '<div id="Main">';
