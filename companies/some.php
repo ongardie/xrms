@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.71 2005/08/05 21:39:09 vanmer Exp $
+ * $Id: some.php,v 1.72 2005/08/12 16:31:42 ycreddy Exp $
  */
 
 require_once('../include-locations.inc');
@@ -324,6 +324,23 @@ $sql_recently_viewed = "select
 
 $rst = $con->selectlimit($sql_recently_viewed, $recent_items_limit);
 
+
+$recently_viewed_table_rows = '';
+
+if ($rst) {
+    while (!$rst->EOF) {
+        $recently_viewed_table_rows .= '<tr>';
+        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?company_id=' . $rst->fields['company_id'] . '">' . $rst->fields['company_name'] . '</a></td>';
+        $recently_viewed_table_rows .= '</tr>';
+        $rst->movenext();
+    }
+    $rst->close();
+}
+
+if (strlen($recently_viewed_table_rows) == 0) {
+    $recently_viewed_table_rows = "<tr><td class=widget_content colspan=3>"._("No recently viewed companies")."</td></tr>";
+}
+
 /******* SAVED SEARCH BEGINS *****/
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
@@ -350,22 +367,6 @@ if( $rst AND $rst->RowCount() ) {
 /********** SAVED SEARCH ENDS ****/
 
 
-
-$recently_viewed_table_rows = '';
-
-if ($rst) {
-    while (!$rst->EOF) {
-        $recently_viewed_table_rows .= '<tr>';
-        $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?company_id=' . $rst->fields['company_id'] . '">' . $rst->fields['company_name'] . '</a></td>';
-        $recently_viewed_table_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-}
-
-if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = "<tr><td class=widget_content colspan=3>"._("No recently viewed companies")."</td></tr>";
-}
 
 $user_menu = get_user_menu($con, $user_id, true);
 
@@ -732,6 +733,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.72  2005/08/12 16:31:42  ycreddy
+ * Moved the code for populating Recently Viewed Companies before the query for Saved Search - fixes the bug around not showing Recently Viewed Companies
+ *
  * Revision 1.71  2005/08/05 21:39:09  vanmer
  * - changed to use centralized company search name function
  *
