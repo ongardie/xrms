@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.73 2005/08/12 20:42:52 vanmer Exp $
+ * $Id: some.php,v 1.74 2005/08/13 22:43:51 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -53,6 +53,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'city'                => array('city',arr_vars_SESSION),
                    'state'               => array('state',arr_vars_SESSION),
                     'legal_name'         => array('companies_legal_name',arr_vars_SESSION),
+                    'phone_search'              => array ( 'phone_search' , arr_vars_SESSION),
                     'phone'              => array ( 'companies_phone' , arr_vars_SESSION),
                     'phone2'             => array ( 'companies_phone2' , arr_vars_SESSION),
                     'fax'                => array ( 'companies_fax' , arr_vars_SESSION),
@@ -92,6 +93,9 @@ $sql = "SELECT "
         as1.account_status_display_html AS "account_status",
         r.rating_display_html AS "rating", addr.address_body as "primary_address" ';
 
+$sql   .= ", addr.city\n";
+$sql   .= ", addr.province\n";
+
 $criteria_count = 0;
 
 if ($company_category_id > 0) {
@@ -100,6 +104,8 @@ if ($company_category_id > 0) {
 } else {
     $from = "from industries i, crm_statuses crm, ratings r, account_statuses as1, users u, companies c ";
 }
+
+$extra_defaults=array();
 
 $from  .= "LEFT JOIN addresses addr on addr.address_id = c.default_primary_address ";
 $where = "where c.industry_id = i.industry_id ";
@@ -132,20 +138,14 @@ if (strlen($company_code) > 0) {
 
 if (strlen($city) > 0) {
     $criteria_count++;
-    $sql   .= ", addr.city as '"._("City")."' \n";
-    if (!strlen($state) > 0) {
-        $sql   .= ", addr.province as '"._("State")."' \n";
-    }
     $where .= " and addr.city LIKE " . $con->qstr($city . '%' , get_magic_quotes_gpc())." \n" ;
+    $extra_defaults[]='city';
 }
 
 if (strlen($state) > 0) {
     $criteria_count++;
-    if (!strlen($city) > 0) {
-        $sql   .= ", addr.city as '"._("City")."' \n";
-    }
-    $sql   .= ", addr.province as '"._("State")."' \n";
     $where .= " and addr.province LIKE " . $con->qstr($state, get_magic_quotes_gpc());
+    $extra_defaults[]='province';
 }
 
 if (strlen($crm_status_id) > 0) {
@@ -171,12 +171,14 @@ if ( $legal_name ) {
     $sql .= ', c.legal_name ';
     $where .= " and c.legal_name like " . $con->qstr($legal_name, get_magic_quotes_gpc())." \n";
     $advanced_search_columns[] = array('name' => _("Legal Name"), 'index_sql' => 'legal_name');
+    $extra_defaults[]='legal_name';
 }
 
 if ( $phone ) {
     $criteria_count++;
     $sql .= ', c.phone ';
     $where .= " and c.phone like " . $con->qstr($phone, get_magic_quotes_gpc())." \n";
+    $extra_defaults[]='phone';
     $advanced_search_columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
 }
 
@@ -184,6 +186,7 @@ if ( $phone2 ) {
     $criteria_count++;
     $sql .= ', c.phone2 ';
     $where .= " and c.phone2 like " . $con->qstr($phone2, get_magic_quotes_gpc())." \n";
+    $extra_defaults[]='phone2';
     $advanced_search_columns[] = array('name' => _("Phone 2"), 'index_sql' => 'phone2');
 }
 
@@ -191,7 +194,23 @@ if ( $fax ) {
     $criteria_count++;
     $sql .= ', c.fax ';
     $where .= " and c.fax like " . $con->qstr($fax, get_magic_quotes_gpc())." \n";
+    $extra_defaults[]='fax';
     $advanced_search_columns[] = array('name' => _("Fax"), 'index_sql' => 'fax');
+}
+
+$phone_fields=array('phone'=>_("Phone"),'phone2'=>_("Phone 2"),'fax'=>_("Fax"));
+if ($phone_search) {
+    $phonewhere=array();
+    foreach ($phone_fields as $phonefield => $phonelabel) {
+        $criteria_count++;
+        $sql .= ", $phonefield ";
+        $phonewhere[] = "($phonefield LIKE " . $con->qstr($phone_search.'%'). ")";
+        $extra_defaults[]=$phonefield;
+        $advanced_search_columns[] = array('name' => $phonelabel, 'index_sql' => $phonefield);
+    }
+    if (count($phonewhere)>0) {
+        $where .= " AND (" . implode(' OR ', $phonewhere) . ")";
+    }
 }
 
 if (strlen($url) > 0) {
@@ -291,6 +310,7 @@ if ( $country_id and is_numeric($country_id)) {
     $sql .= ', country.country_name ';
     $where .= " and addr.country_id = $country_id and country.country_id = addr.country_id \n";
     $advanced_search_columns[] = array('name' => _("Country"), 'index_sql' => 'country_name');
+    $extra_defaults[]='country_name';
 }
 // end advanced-search query items
 
@@ -403,13 +423,13 @@ if($advanced_search) {
     $company_source_menu = check_and_get($con,$sql2,'company_source_id',$company_source_id);
     //$company_source_menu = check_and_get($con,$sql2,'');
 
-    // country_menu
-    $sql2 = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
-    $country_menu = check_and_get($con,$sql2,'country_id',$country_id);
-    //$country_menu = check_and_get($con,$sql2,'');
-
 
 }
+// country_menu
+$sql2 = "select country_name, country_id from countries where country_record_status = 'a' order by country_name";
+$country_menu = check_and_get($con,$sql2,'country_id',$country_id);
+//$country_menu = check_and_get($con,$sql2,'');
+
 
 if ($criteria_count > 0) {
     add_audit_item($con, $session_user_id, 'searched', 'companies', '', 4);
@@ -461,12 +481,6 @@ if (!$advanced_search) {
           <td class=widget_label>
             <?php  echo _("Industry"); ?>
           </td>
-          <td class=widget_label>
-            <?php  echo _("City"); ?>
-          </td>
-          <td class=widget_label>
-            <?php  echo _("State"); ?>
-          </td>
         </tr>
         <tr>
             <td class=widget_content_form_element>
@@ -481,11 +495,32 @@ if (!$advanced_search) {
             <td class=widget_content_form_element>
                 <?php  echo $industry_menu; ?>
             </td>
+        </tr>
+        <tr>
+          <td class=widget_label>
+            <?php  echo _("Phone"); ?>
+          </td>
+          <td class=widget_label>
+            <?php  echo _("City"); ?>
+          </td>
+          <td class=widget_label>
+            <?php  echo _("State"); ?>
+          </td>
+                <td class=widget_label><?php echo _("Country"); ?></td>
+                
+        </tr>
+        <tr>
+            <td class=widget_content_form_element>
+                <input type=text name="phone_search" size=10 value="<?php  echo $phone_search; ?>">
+            </td>
             <td class=widget_content_form_element>
                 <input type=text name="city" size=10 value="<?php  echo $city; ?>">
             </td>
             <td class=widget_content_form_element>
                 <input type=text name="state" size=5 value="<?php echo $state; ?>">
+            </td>
+            <td class=widget_content_form_element>
+                <?php echo $country_menu ?>
             </td>
         </tr>
 
@@ -647,14 +682,14 @@ if (!$advanced_search) {
         ?>
 
         <tr>
-            <td class=widget_label colspan="<?php echo $search_colspan; ?>"><?php echo _("Saved Searches"); ?></td>
-            <td class=widget_label colspan="<?php echo $search_colspan; ?>"><?php echo _("Search Title"); ?></td>
+            <td class=widget_label colspan="<?php echo $search_colspan-1; ?>"><?php echo _("Saved Searches"); ?></td>
+            <td class=widget_label colspan="<?php echo $search_colspan+1; ?>"><?php echo _("Search Title"); ?></td>
         </tr>
         <tr>
-            <td class=widget_content_form_element colspan="<?php echo $search_colspan; ?>">
+            <td class=widget_content_form_element colspan="<?php echo $search_colspan-1; ?>">
                 <?php echo ($saved_menu) ? $saved_menu : _("No Saved Searches"); ?>
             </td>
-            <td class=widget_content_form_element colspan="<?php echo $search_colspan; ?>">
+            <td class=widget_content_form_element colspan="<?php echo $search_colspan+1; ?>">
                 <input type=text name="saved_title" size=24>
                 <?php
                     if(check_user_role(false, $_SESSION['session_user_id'], 'Administrator')) {
@@ -693,11 +728,17 @@ $columns[] = array('name' => _("Account Status"), 'index_sql' => 'account_status
 $columns[] = array('name' => _("Rating"), 'index_sql' => 'rating', 'type' => 'html');
 $columns[] = array('name' => _("Primary Address"), 'index_sql' => 'primary_address');
 
+$advanced_search_columns[] = array('name' => _("City"), 'index_sql' => 'city');
+$advanced_search_columns[] = array('name' => _("State"), 'index_sql' => 'province');
+
 $columns = array_merge($columns, $advanced_search_columns);
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
 $default_columns = null;
+$default_columns = array('name','code','user','industry','crm_status','account_status','rating','primary_address');
+$default_columns=array_merge($default_columns, $extra_defaults);
+
 // $default_columns =  array("name","code","user","industry","crm_status","account_status","rating");
 
 $pager_columns = new Pager_Columns('CompanyPager', $columns, $default_columns, 'CompanyForm');
@@ -818,6 +859,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.74  2005/08/13 22:43:51  vanmer
+ * - added phone search to basic company search
+ * - added searched for fields into outputted results by default
+ * - added country search to basic company search
+ *
  * Revision 1.73  2005/08/12 20:42:52  vanmer
  * - added Advanced Search interface (patch from niclowe)
  * - added advanced search as parameter instead of hardcoded into _REQUEST
