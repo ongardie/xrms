@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.17 2005/05/04 14:35:51 braverock Exp $
+ * $Id: edit.php,v 1.18 2005/08/13 22:57:00 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -157,22 +157,27 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Rating"); ?></td>
                 <td class=widget_content_form_element><?php echo $rating_menu; ?></td>
             </tr>
+	    <?php if ($company_custom1_label!='(Custom 1)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom1_label ?></td>
                 <td class=widget_content_form_element><input type=text name=custom1 size=30 value="<?php echo $custom1; ?>"></td>
             </tr>
+	    <?php } if ($company_custom2_label!='(Custom 2)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom2_label ?></td>
                 <td class=widget_content_form_element><input type=text name=custom2 size=30 value="<?php echo $custom2; ?>"></td>
             </tr>
+	    <?php } if ($company_custom3_label!='(Custom 3)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom3_label ?></td>
                 <td class=widget_content_form_element><input type=text name=custom3 size=30 value="<?php echo $custom3; ?>"></td>
             </tr>
+	    <?php } if ($company_custom4_label!='(Custom 4)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $company_custom4_label ?></td>
                 <td class=widget_content_form_element><input type=text name=custom4 size=30 value="<?php echo $custom4; ?>"></td>
             </tr>
+	    <?php } ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
@@ -226,6 +231,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.18  2005/08/13 22:57:00  vanmer
+ * - altered to hide custom company fields unless their labels have been changed in vars.php
+ *
  * Revision 1.17  2005/05/04 14:35:51  braverock
  * - removed obsolete CSS widget_label_right_166px, replaced with widget_label_right
  *

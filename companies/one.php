@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.125 2005/08/04 19:32:09 vanmer Exp $
+ * $Id: one.php,v 1.126 2005/08/13 22:57:00 vanmer Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -588,25 +588,25 @@ function markComplete() {
                                     <td class=sublabel>&nbsp;</td>
                                     <td class=clear>&nbsp;</td>
                                 </tr>
-                                <?php if (trim($custom1)) { ?>
+                                <?php if (trim($custom1) AND $company_custom1_label!='(Custom 1)') { ?>
                                 <tr>
                                     <td width=1% class=sublabel><?php echo _($company_custom1_label); ?></td>
                                     <td class=clear><?php echo $custom1; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if (trim($custom2)) { ?>
+                                <?php if (trim($custom2) AND $company_custom2_label!='(Custom 2)') { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom2_label); ?></td>
                                     <td class=clear><?php echo $custom2; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if (trim($custom3)) { ?>
+                                <?php if (trim($custom3) AND $company_custom3_label!='(Custom 3)') { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom3_label); ?></td>
                                     <td class=clear><?php echo $custom3; ?></td>
                                 </tr>
                                 <?php }; ?>
-                                <?php if (trim($custom4)) { ?>
+                                <?php if (trim($custom4) AND $company_custom4_label!='(Custom 4)') { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _($company_custom4_label); ?></td>
                                     <td class=clear><?php echo $custom4; ?></td>
@@ -731,6 +731,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.126  2005/08/13 22:57:00  vanmer
+ * - altered to hide custom company fields unless their labels have been changed in vars.php
+ *
  * Revision 1.125  2005/08/04 19:32:09  vanmer
  * - changed administer division button to redirect to companies/one after editing or managing division page
  *
