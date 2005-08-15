@@ -8,7 +8,7 @@ if ( !defined('IN_XRMS') )
 /**
  * Sidebar box for Opportunities
  *
- * $Id: sidebar.php,v 1.17 2005/08/02 17:33:04 vanmer Exp $
+ * $Id: sidebar.php,v 1.18 2005/08/15 23:55:05 vanmer Exp $
  */
 /*
 Commented until ACL system is implemented
@@ -91,18 +91,17 @@ $columns[] = array('name' => _('Type'), 'index_sql' => 'type', 'group_query_list
 $columns[] = array('name' => _('Status'), 'index_sql' => 'status', 'group_query_list' => $status_query_list, 'group_query_select' => $status_query_select);
 $columns[] = array('name' => _('Close Date'), 'index_sql' => 'close_date', 'sql_sort_column' => 'close_at');
 
-
 if (!$opportunity_sidebar_default_columns) $opportunity_sidebar_default_columns = array('opportunity', 'type','status', 'close_date');
 
-$pager_columns = new Pager_Columns('OpportunitiesSidebarPager', $columns, $opportunity_sidebar_default_columns, $opp_sidebar_form_id);
-$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+$opp_pager_columns = new Pager_Columns('OpportunitiesSidebarPager', $columns, $opportunity_sidebar_default_columns, $opp_sidebar_form_id);
+$opp_pager_columns_button = $opp_pager_columns->GetSelectableColumnsButton();
+$opp_pager_columns_selects = $opp_pager_columns->GetSelectableColumnsWidget();
 
-$columns = $pager_columns->GetUserColumns('default');
+$columns = $opp_pager_columns->GetUserColumns('default');
 $colspan = count($columns);
 
 // output the selectable columns widget
-$opportunity_rows.= $pager_columns_selects;
+$opportunity_rows.= $opp_pager_columns_selects;
 
 // caching is disabled for this pager (since it's all sql)
 $pager = new GUP_Pager($con, $opportunity_sql, null,$opp_sidebar_header, $opp_sidebar_form_id, 'OpportunitiesSidebarPager', $columns, false, true);
@@ -124,7 +123,7 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
     $endrows = "
             <tr>
                 <td class=widget_content_form_element colspan=$colspan>
-                    $pager_columns_button
+                    $opp_pager_columns_button
                     $new_opp_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
@@ -134,7 +133,7 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
     $endrows ="
             <tr>
                 <td class=widget_content_form_element colspan=$colspan>
-                    $pager_columns_button
+                    $opp_pager_columns_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
             </tr>\n";
@@ -150,6 +149,10 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.18  2005/08/15 23:55:05  vanmer
+ * - changed column variables to be unique within the sidebar
+ * - fixes problem when included before output on page where other pager column selects use same variables
+ *
  * Revision 1.17  2005/08/02 17:33:04  vanmer
  * - added full link to opportunity from the sidebar
  *

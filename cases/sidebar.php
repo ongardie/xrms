@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.18 2005/08/01 22:09:13 vanmer Exp $
+ * $Id: sidebar.php,v 1.19 2005/08/15 23:55:05 vanmer Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -85,15 +85,15 @@ $columns[] = array('name' => _('Owner'), 'index_sql' => 'username', 'group_query
 // no reason to set this if you don't want all by default
 if (!$case_sidebar_default_columns) $case_sidebar_default_columns = array('case_name', 'priority','type', 'due');
 
-$pager_columns = new Pager_Columns('CasesSidebarPager', $columns, $case_sidebar_default_columns, $case_sidebar_form_id);
-$pager_columns_button = $pager_columns->GetSelectableColumnsButton();
-$pager_columns_selects = $pager_columns->GetSelectableColumnsWidget();
+$case_pager_columns = new Pager_Columns('CasesSidebarPager', $columns, $case_sidebar_default_columns, $case_sidebar_form_id);
+$case_pager_columns_button = $case_pager_columns->GetSelectableColumnsButton();
+$case_pager_columns_selects = $case_pager_columns->GetSelectableColumnsWidget();
 
-$columns = $pager_columns->GetUserColumns('default');
+$columns = $case_pager_columns->GetUserColumns('default');
 $colspan = count($columns);
 
 // output the selectable columns widget
-$case_rows.= $pager_columns_selects;
+$case_rows.= $case_pager_columns_selects;
 
 // caching is disabled for this pager (since it's all sql)
 $pager = new GUP_Pager($con, $cases_sql, null,$case_sidebar_header, $case_sidebar_form_id, 'CasesSidebarPager', $columns, false, true);
@@ -122,7 +122,7 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
     $endrows = "
             <tr>
                 <td class=widget_content_form_element colspan=$colspan>
-                    $pager_columns_button<br>
+                    $case_pager_columns_button<br>
                     $new_case_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/cases/some.php';\" value='" . _("Search") . "'>
                 </td>
@@ -132,7 +132,7 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
     $endrows ="
             <tr>
                 <td class=widget_content_form_element colspan=$colspan>
-                    $pager_columns_button
+                    $case_pager_columns_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/cases/some.php';\" value='" . _("Search") . "'>
                 </td>
             </tr>\n";
@@ -184,6 +184,10 @@ $case_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.19  2005/08/15 23:55:05  vanmer
+ * - changed column variables to be unique within the sidebar
+ * - fixes problem when included before output on page where other pager column selects use same variables
+ *
  * Revision 1.18  2005/08/01 22:09:13  vanmer
  * - added javascript to ensure that the proper case type id is set when creating a new case from the sidebar
  *
