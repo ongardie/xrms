@@ -49,6 +49,8 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
                                   'entered_by' => _('Entered By'),
                                   'note_record_status' => _('Status')));
 
+    $model->SetDisplayOrders(array('note_description','entered_by'));
+
 
 
 
@@ -58,6 +60,11 @@ if(check_user_role(false, $session_user_id, 'Administrator')) {
     if($rst) {
 
         $users = $rst->GetAssoc();
+
+        // add a blank item to the top of the generated <select>
+        $users[0] = '';
+        ksort($users);
+
         $model->SetSelectField('entered_by', _('Entered By'), $users); 
 
     } else {
