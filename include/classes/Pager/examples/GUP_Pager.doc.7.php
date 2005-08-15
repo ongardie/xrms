@@ -14,6 +14,8 @@ require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Session_Var_Watcher.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
+
 
 $session_user_id = session_check();
 
