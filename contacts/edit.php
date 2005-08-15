@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.40 2005/08/15 19:01:11 braverock Exp $
+ * $Id: edit.php,v 1.41 2005/08/15 19:10:51 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -276,22 +276,27 @@ confGoTo_includes();
 
             <?php echo $contact_custom_rows; ?>
 
+        <?php if ($contact_custom1_label!='(Custom 1)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $contact_custom1_label; ?></td>
                 <td class=widget_content_form_element><input type=text name=custom1 size=35 value="<?php echo $custom1; ?>"></td>
             </tr>
+        <?php } if ($contact_custom2_label!='(Custom 2)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $contact_custom2_label; ?></td>
                 <td class=widget_content_form_element><input type=text name=custom2 size=35 value="<?php echo $custom2; ?>"></td>
             </tr>
+        <?php } if ($contact_custom3_label!='(Custom 3)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $contact_custom3_label; ?></td>
                 <td class=widget_content_form_element><input type=text name=custom3 size=35 value="<?php echo $custom3; ?>"></td>
             </tr>
+        <?php } if ($contact_custom4_label!='(Custom 4)') { ?>
             <tr>
                 <td class=widget_label_right><?php echo $contact_custom4_label; ?></td>
                 <td class=widget_content_form_element><input type=text name=custom4 size=35 value="<?php  echo $custom4; ?>"></td>
             </tr>
+        <?php } //end custom field processing ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=80 name=profile><?php echo $profile; ?></textarea></td>
@@ -332,6 +337,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.41  2005/08/15 19:10:51  braverock
+ * - don't show custom1-4 if the labels haven't changed in vars.php
+ *
  * Revision 1.40  2005/08/15 19:01:11  braverock
  * - rearrange order of fields to speed entry in a phone environment
  * - comment IM fields pending moving them to a plugin
