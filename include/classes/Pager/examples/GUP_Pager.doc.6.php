@@ -12,6 +12,7 @@ require_once('../../../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
+require_once($include_directory . 'adodb/adodb.inc.php');
 
 $session_user_id = session_check();
 
@@ -40,10 +41,11 @@ $group_query_list = 'SELECT ' . $con->Concat("u.username", "' ('", "count(u.user
 
 // and one to perform the actual query.
 $group_query_select = $sql . ' AND u.user_id = XXX-value-XXX';
+$group_query_count = 'SELECT count(u.username) FROM users u, activities a WHERE u.user_id = a.user_id AND u.user_id = XXX-value-XXX GROUP BY u.username';
 
 // Set up the column_info array describing the data
 $colums = array();
-$columns[] = array('name' => 'User Name', 'index_sql' => 'username', 'group_query_list' => $group_query_list, 'group_query_select' => $group_query_select);
+$columns[] = array('name' => 'User Name', 'index_sql' => 'username', 'group_query_list' => $group_query_list, 'group_query_select' => $group_query_select, 'group_query_count' => $group_query_count);
 $columns[] = array('name' => 'User ID', 'index_sql' => 'user_id');
 
 // This column doesn't exist in the SQL, we will be setting it in get_calculated_row
@@ -57,7 +59,7 @@ echo "Note: you may need to hit the pager's refresh button if you are wondering 
 
 
 // constructor: GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true)
-$pager = new GUP_Pager($con, $sql, 'get_calculated_row', 'List of Activities', 'activities_form', 'example6_ActivitiesPager', $columns, true);
+$pager = new GUP_Pager($con, $sql, 'get_calculated_row', 'List of Activities', 'activities_form', 'example6_ActivitiesPager', $columns, true, false, true);
 
 echo '<form name="activities_form" method=post>';
 // output the html that is the pager.
