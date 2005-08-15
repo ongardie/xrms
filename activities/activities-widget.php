@@ -239,7 +239,6 @@ if (strlen($search_terms['completed']) > 0 and $search_terms['completed'] != "al
 
 // date filter code.  dates can come in via start_end + search_date or day_diff (from a saved search)
 
-if ($search_terms['day_diff'] ) {
 
 if($search_terms['start_end'] == 'start') {
     $field = 'scheduled_at';
@@ -284,7 +283,6 @@ if (strlen($search_terms['search_date']) > 0 && $search_terms['start_end'] != 'a
     }
 
     $where .= $offset_sql;
-}
 }
 
 
@@ -795,6 +793,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.34  2005/08/15 21:35:12  daturaarutad
+* removed if ($search_terms["day_diff"]) conditional around date filter handling
+*
 * Revision 1.33  2005/08/15 00:48:30  daturaarutad
 * enable group_mode_paging
 *
