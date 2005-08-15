@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.33 2005/08/12 20:10:34 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.34 2005/08/15 00:46:37 daturaarutad Exp $
  */
 
 
@@ -85,6 +85,7 @@ class GUP_Pager {
 	var $use_cached 			= true; 	// whether or not to use the cache
 	var $using_cached 			= false;	// whether or not we are currently using cached data
 	var $group_mode 			= false;
+	var $group_mode_paging		= false;
 	var $last_group_mode 		= false;
 	var $buffer_output;
 	var $rows_displayed 		= 0;
@@ -122,7 +123,7 @@ class GUP_Pager {
     *   total = true will total all columns 
 	*
     */
-    function GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true, $buffer_output = false)
+    function GUP_Pager(&$db, $sql, $data, $caption, $form_id, $pager_id='gup_pager', $column_info, $use_cached = true, $buffer_output = false, $group_mode_paging = false)
     {
         global $http_site_root;
 
@@ -144,6 +145,7 @@ class GUP_Pager {
 		$this->use_cached	= $use_cached;
  		$this->page			= _('Page');
 		$this->buffer_output=$buffer_output;
+		$this->group_mode_paging=$group_mode_paging;
 
         // get CGI vars
         getGlobalVar($this->sort_column, $pager_id . '_sort_column');
@@ -179,7 +181,7 @@ class GUP_Pager {
 
 		if($this->do_export) { unset($this->group_mode); }  // group mode doesn't make sense for export
 		if(!is_numeric($this->group_mode)) { unset($this->group_mode); }
-		if(isset($this->group_mode)) { $this->maximize = true; }
+		if(isset($this->group_mode) && !$this->group_mode_paging) { $this->maximize = true; }
 
 		// begin sort stuff
         if (!strlen($this->sort_column) > 0) {
@@ -287,13 +289,14 @@ class GUP_Pager {
         	$page_nav .= $this->group_select_widget;
         	$page_nav .= "<input type=button class=button onclick=\"javascript:{$this->pager_id}_ungroup({$this->group_mode});\" value=\"" . _('Ungroup') . '">';
 
-		} elseif($this->data && (!$this->AtFirstPage || !$this->AtLastPage)) {
-        	$page_nav = $this->RenderNav();
+		} 
+        if($this->data && (!$this->AtFirstPage || !$this->AtLastPage)) {
         	$page_count = $this->RenderPageCount();
+        	$page_nav .= $this->RenderNav();
         } else {
-        	$page_nav = "&nbsp;";
         	$page_count = "&nbsp;";
-        	$page_count = $this->RenderPageCount();
+        	$page_count .= $this->RenderPageCount();
+        	$page_nav .= "&nbsp;";
 		}
 
         $grid = $this->RenderGrid();
@@ -344,6 +347,16 @@ class GUP_Pager {
 			*/
 				
 			if($this->column_info[$this->group_mode]['group_query_list']) {
+
+                // can't use $count_sql in group mode because it is for the whole dataset, not our grouped copy.
+                if($this->column_info[$this->group_mode]['group_query_count']) {
+                    //$this->count_sql = $this->column_info[$this->group_mode]['group_query_count'];
+					$this->count_sql = str_replace('XXX-value-XXX', $this->group_id, $this->column_info[$this->group_mode]['group_query_count']); 
+                    if($this->debug) echo "setting custom count_sql for group mode:<br>{$this->count_sql}<br>";
+                } else {
+                    $this->count_sql = '';
+                    if($this->debug) echo "disabling count_sql for group mode";
+                }
 
 				$old_fetch_mode = $this->db->fetchMode;
 				$this->db->SetFetchMode(ADODB_FETCH_NUM);
@@ -398,6 +411,7 @@ class GUP_Pager {
 					} else {
 						$ADODB_COUNTRECS = false;
 					}
+
         			if ($this->cache)
         				$rs = &$this->db->CachePageExecute($this->cache,$this->sql,$this->rows,$this->curr_page,false,$this->count_sql);
         			else
@@ -978,7 +992,7 @@ END;
 			$cache_indicator = "";
 		}
 
-		if(isset($this->group_mode)) {
+		if(!$this->group_mode_paging) {
 			$size_buttons = '';
 		} else {
 			if($this->maximize) {
@@ -1150,6 +1164,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.34  2005/08/15 00:46:37  daturaarutad
+ * added group_mode_paging parameter to constructor to allow paging in group mode; see examples/ for an example
+ *
  * Revision 1.33  2005/08/12 20:10:34  daturaarutad
  * add last_group_mode to traack if group column has changed and therefor we need to reset group_id
  *
