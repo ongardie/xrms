@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.94 2005/08/04 19:19:20 vanmer Exp $
+ * $Id: one.php,v 1.95 2005/08/15 19:58:15 braverock Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -240,11 +240,8 @@ $sidebar_rows_bottom = do_hook_function('contact_sidebar_bottom', $sidebar_rows_
 
 add_audit_item($con, $session_user_id, 'viewed', 'contacts', $contact_id, 3);
 
-
 $page_title = _("Contact Details").': '.$salutation.' '.$first_names . ' ' . $last_name;
 start_page($page_title, true, $msg);
-
-
 
 ?>
 
@@ -479,7 +476,7 @@ function openMsnSession(strIMAddress) {
             </tr>
            <?php  echo $history_text; ?>
         </table>
-		<?php echo $new_activity_widget; ?>
+        <?php echo $new_activity_widget; ?>
 
         <form name="<?php echo $form_name; ?>" method=post>
             <?php
@@ -543,6 +540,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.95  2005/08/15 19:58:15  braverock
+ * - clean up minor whitespace issues
+ *
  * Revision 1.94  2005/08/04 19:19:20  vanmer
  * - added sidebar to track contact's former companies
  *
