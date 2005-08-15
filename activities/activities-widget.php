@@ -484,7 +484,7 @@ if('list' != $activities_widget_type) {
                 <input type=button class=button onclick=\"javascript: location.href='$http_site_root/activities/browse-next.php?browse=true&sql_session_var=$sql_session_var';\" value=\"" . _("Browse") . "\"></td>
                 </tr>\n";
 
-    $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true);
+    $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true, true);
     $pager->AddEndRows($endrows);
     $pager->SetCountSQL($count_sql);
     $widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
@@ -795,6 +795,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.33  2005/08/15 00:48:30  daturaarutad
+* enable group_mode_paging
+*
 * Revision 1.32  2005/08/11 16:58:59  ycreddy
 * Added company_name and company_id as default columns to GROUP BY column list
 *
