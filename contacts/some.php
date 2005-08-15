@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.61 2005/08/05 21:44:50 vanmer Exp $
+ * $Id: some.php,v 1.62 2005/08/15 18:13:00 vanmer Exp $
  */
 
 //include the standard files
@@ -50,6 +50,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
                     'user_id'            => array ( 'contacts_user_id', arr_vars_SESSION ),
                     'company_name'       => array ( 'contacts_company_name', arr_vars_GET_SESSION ),
                     'company_code'       => array ( 'contacts_company_code', arr_vars_GET_SESSION ),
+                    'phone_search'       => array ( 'phone_search', arr_vars_GET_SESSION ),
                     'email'              => array ( 'contacts_email', arr_vars_GET_SESSION )
                    );
 
@@ -73,6 +74,8 @@ $where .= "and c.user_id = u.user_id ";
 $where .= "and contact_record_status = 'a'";
 
 $criteria_count = 0;
+$extra_defaults=array();
+$advanced_search_columns=array();
 
 if (strlen($last_name) > 0) {
     $criteria_count++;
@@ -102,6 +105,7 @@ if (strlen($company_name) > 0) {
 if (strlen($email) > 0) {
     $criteria_count++;
     $where .= " and cont.email like " . $con->qstr('%' . $email . '%', get_magic_quotes_gpc());
+    $extra_defaults[]='email';
 }
 
 if (strlen($company_code) > 0) {
@@ -113,13 +117,29 @@ if (strlen($category_id) > 0) {
     $criteria_count++;
     $from .= ", entity_category_map ecm ";
     $where .= " and ecm.on_what_table = 'contacts' and cont.contact_id = ecm.on_what_id and ecm.category_id = $category_id ";
-
 }
 
 if (strlen($user_id) > 0) {
     $criteria_count++;
     $where .= " and c.user_id = $user_id";
 }
+
+$phone_fields=array('work_phone'=>_("Work Phone"),'cell_phone'=>_("Cell Phone"),'home_phone'=>_("Home Phone"));
+if ($phone_search) {
+    $phonewhere=array();
+    foreach ($phone_fields as $phonefield => $phonelabel) {
+        $criteria_count++;
+        $sql .= ", $phonefield ";
+        $phonewhere[] = "($phonefield LIKE " . $con->qstr($phone_search.'%'). ")";
+        $extra_defaults[]=$phonefield;
+        $advanced_search_columns[] = array('name' => $phonelabel, 'index_sql' => $phonefield);
+    }
+    if (count($phonewhere)>0) {
+        $where .= " AND (" . implode(' OR ', $phonewhere) . ")";
+    }
+}
+
+
 
 if (!$use_post_vars && (!$criteria_count > 0)) {
     $where .= " and 1 = 2";
@@ -251,50 +271,50 @@ if(!isset($contacts_next_page)) {
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=8><?php echo _("Search Criteria"); ?></td>
+                <td class=widget_header colspan=5><?php echo _("Search Criteria"); ?></td>
             </tr>
             <tr>
-                <td class=widget_label colspan="2"><?php echo _("Last Name"); ?></td>
+                <td class=widget_label><?php echo _("Last Name"); ?></td>
                 <td class=widget_label><?php echo _("First Names"); ?></td>
-                <td class=widget_label><?php echo _("Title"); ?></td>
                 <td class=widget_label><?php echo _("Company"); ?></td>
+                <td class=widget_label><?php echo _("Email"); ?></td>
+                <td class=widget_label><?php echo _("Phone"); ?></td>
             </tr>
             <tr>
-                <td width="25%" class=widget_content_form_element colspan="2">
+                <td width="25%" class=widget_content_form_element>
                     <input type=text name="last_name" size=18 maxlength=100 value="<?php  echo $last_name; ?>">
                 </td>
                 <td width="25%" class=widget_content_form_element>
                     <input type=text name="first_names" size=12 maxlength=100 value="<?php  echo $first_names; ?>">
                 </td>
                 <td width="25%" class=widget_content_form_element>
-                    <input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>">
-                </td>
-                <td width="25%" class=widget_content_form_element>
                     <input type=text name="company_name" id="contactForm_company_name" size=18 maxlength=100 value="<?php  echo $company_name; ?>">
                 </td>
-            </tr>
-            <tr>
-                <td class=widget_label><?php echo _("Email"); ?></td>
-                <td class=widget_label><?php echo _("Code"); ?></td>
-                <td class=widget_label><?php echo _("Description"); ?></td>
-                <td class=widget_label><?php echo _("Category"); ?></td>
-                <td class=widget_label><?php echo _("Owner"); ?></td>
-            </tr>
-            <tr>
                 <td width="25%" class=widget_content_form_element>
                     <input type=text name="email" size=12 maxlength=40 value="<?php  echo $email; ?>">
                 </td>
                 <td width="10%" class=widget_content_form_element>
-                    <input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>">
+                    <input type=text name="phone_search" size=10 maxlength=40 value="<?php  echo $phone_search; ?>">
+                </td>
+            </tr>
+            <tr>
+                <td class=widget_label><?php echo _("Title"); ?></td>
+                <td class=widget_label><?php echo _("Description"); ?></td>
+                <td class=widget_label><?php echo _("Owner"); ?></td>
+                <td class=widget_label colspan=2><?php echo _("Category"); ?></td>
+            </tr>
+            <tr>
+                <td width="25%" class=widget_content_form_element>
+                    <input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>">
                 </td>
                 <td width="25%" class=widget_content_form_element>
                     <input type=text name="description" size=12 maxlength=50 value="<?php  echo $description; ?>">
                 </td>
-                <td width="25%" class=widget_content_form_element>
-                    <?php  echo $contact_category_menu; ?>
-                </td>
                 <td width="15%" class=widget_content_form_element>
                     <?php  echo $user_menu; ?>
+                </td>
+                <td width="25%" class=widget_content_form_element colspan=2>
+                    <?php  echo $contact_category_menu; ?>
                 </td>
             </tr>
             <tr>
@@ -342,13 +362,15 @@ $columns[] = array('name' => _("Code"), 'index_sql' => 'company_code');
 $columns[] = array('name' => _("Title"), 'index_sql' => 'title');
 $columns[] = array('name' => _("Description"), 'index_sql' => 'description');
 $columns[] = array('name' => _("Owner"), 'index_sql' => 'username');
-
+$columns[] = array('name' => _("Email"), 'index_sql' => 'email');
+$columns=array_merge($columns, $advanced_search_columns);
 
 
 // selects the columns this user is interested in
 // no reason to set this if you don't want all by default
 $default_columns = null;
-// $default_columns =  array('name','company','company_code','title','description','username');
+$default_columns =  array('name','company','company_code','title','description','username');
+$default_columns=array_merge($default_columns, $extra_defaults);
 
 $pager_columns = new Pager_Columns('ContactPager', $columns, $default_columns, 'ContactForm');
 $pager_columns_button = $pager_columns->GetSelectableColumnsButton();
@@ -460,6 +482,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.62  2005/08/15 18:13:00  vanmer
+ * - added phone to contacts search
+ * - added ability to show extra columns when searching on those fields
+ *
  * Revision 1.61  2005/08/05 21:44:50  vanmer
  * - changed contact company searches to use centralized company search string function
  *
