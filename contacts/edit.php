@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.39 2005/07/07 23:16:12 vanmer Exp $
+ * $Id: edit.php,v 1.40 2005/08/15 19:01:11 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -155,6 +155,22 @@ confGoTo_includes();
                 <td class=widget_header colspan=2><?php echo _("Contact Information"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Salutation"); ?></td>
+                <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("First Names"); ?></td>
+                <td class=widget_content_form_element><input type=text name=first_names value="<?php echo $first_names; ?>" size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
+                <td class=widget_content_form_element><input type=text name=last_name value="<?php echo $last_name; ?>" size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Title"); ?></td>
+                <td class=widget_content_form_element><input type=text name=title value="<?php echo $title; ?>" size=30></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Company"); ?></td>
                 <td class=widget_content_form_element><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a></td>
             </tr>
@@ -168,7 +184,7 @@ confGoTo_includes();
                     <?php echo $address; ?>
                     <input type=hidden name=address_return_url value="<?php echo $address_return_url; ?>">
                     <input type=hidden name=address_id value="<?php echo $address_id; ?>">
-                    <br />                    
+                    <br />
                         <input type=submit name=btChangeAddress value="<?php echo _("Choose New Address") ?>" class=button>
                         <?php if ($edit_address) { ?>&nbsp;<?php echo _("OR"); ?>&nbsp;
                             <input class=button type=submit name=btEditBusinessAddress value="<?php echo _("Edit Address"); ?>">
@@ -189,17 +205,49 @@ confGoTo_includes();
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Salutation"); ?></td>
-                <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
+                <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
+                <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("First Names"); ?></td>
-                <td class=widget_content_form_element><input type=text name=first_names value="<?php echo $first_names; ?>" size=30></td>
+                <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
+                <td class=widget_content_form_element><input type=text name=work_phone value='<?php echo $work_phone; ?>' size=30>&nbsp;
+                <?php echo _("x"); ?>&nbsp;<input type=text name=work_phone_ext size=5 value='<?php if ($work_phone_ext) {echo $work_phone_ext; } ?>'></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=last_name value="<?php echo $last_name; ?>" size=30></td>
+                <td class=widget_label_right><?php echo _("Cell Phone"); ?></td>
+                <td class=widget_content_form_element><input type=text name=cell_phone value='<?php echo $cell_phone; ?>' size=30></td>
             </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Home Phone"); ?></td>
+                <td class=widget_content_form_element><input type=text name=home_phone value='<?php echo $home_phone; ?>' size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Fax"); ?></td>
+                <td class=widget_content_form_element><input type=text name=fax value='<?php echo $fax; ?>' size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Summary"); ?></td>
+                <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
+                <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
+            </tr>
+            <!-- // remove IM fields for now, move to plugin in a few days
+            <tr>
+                <td class=widget_label_right><?php echo _("AOL Name"); ?></td>
+                <td class=widget_content_form_element><input type=text name=aol_name value='<?php echo $aol_name; ?>' size=25></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Yahoo Name"); ?></td>
+                <td class=widget_content_form_element><input type=text name=yahoo_name value='<?php echo $yahoo_name; ?>' size=25></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("MSN Name"); ?></td>
+                <td class=widget_content_form_element><input type=text name=msn_name value='<?php echo $msn_name; ?>' size=25></td>
+            </tr>
+            // end IM commented fields -->
+            <!-- accounting plugin -->
             <tr>
                 <td class=widget_label_right><?php echo _("Gender"); ?></td>
                 <td class=widget_content_form_element>
@@ -218,61 +266,16 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
                 <td class=widget_content_form_element><input type=text name=tax_id value="<?php echo $tax_id; ?>" size=32></td>
             </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Summary"); ?></td>
-                <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Title"); ?></td>
-                <td class=widget_content_form_element><input type=text name=title value="<?php echo $title; ?>" size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Description"); ?></td>
-                <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
-                <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
-                <td class=widget_content_form_element><input type=text name=work_phone value='<?php echo $work_phone; ?>' size=30>&nbsp;
-                <?php echo _("x"); ?>&nbsp;<input type=text name=work_phone_ext size=5 value='<?php if ($work_phone_ext) {echo $work_phone_ext; } ?>'></td>
-           </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Cell Phone"); ?></td>
-                <td class=widget_content_form_element><input type=text name=cell_phone value='<?php echo $cell_phone; ?>' size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Home Phone"); ?></td>
-                <td class=widget_content_form_element><input type=text name=home_phone value='<?php echo $home_phone; ?>' size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Fax"); ?></td>
-                <td class=widget_content_form_element><input type=text name=fax value='<?php echo $fax; ?>' size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("AOL Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=aol_name value='<?php echo $aol_name; ?>' size=25></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Yahoo Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=yahoo_name value='<?php echo $yahoo_name; ?>' size=25></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("MSN Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=msn_name value='<?php echo $msn_name; ?>' size=25></td>
-            </tr>
-            <!-- accounting plugin -->
-            <?php echo $accounting_rows; ?>
 
-            <?php echo $contact_custom_rows; ?>
+            <?php echo $accounting_rows; ?>
 
             <tr>
                 <td class=widget_label_right><?php echo _("Interests"); ?></td>
                 <td class=widget_content_form_element><input type=text name=interests size=35 value='<?php echo $interests; ?>'></td>
             </tr>
+
+            <?php echo $contact_custom_rows; ?>
+
             <tr>
                 <td class=widget_label_right><?php echo $contact_custom1_label; ?></td>
                 <td class=widget_content_form_element><input type=text name=custom1 size=35 value="<?php echo $custom1; ?>"></td>
@@ -329,6 +332,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.40  2005/08/15 19:01:11  braverock
+ * - rearrange order of fields to speed entry in a phone environment
+ * - comment IM fields pending moving them to a plugin
+ *
  * Revision 1.39  2005/07/07 23:16:12  vanmer
  * - changed front end to simply identify which button is pressed in order to submit changes to contact before
  * changing address
