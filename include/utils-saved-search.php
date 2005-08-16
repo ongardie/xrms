@@ -2,7 +2,7 @@
 /**
  * Common saved action functions file.
  *
- * $Id: utils-saved-search.php,v 1.1 2005/08/05 01:21:58 vanmer Exp $
+ * $Id: utils-saved-search.php,v 1.2 2005/08/16 00:53:48 vanmer Exp $
  */
 
 /**
@@ -30,7 +30,7 @@ function add_saved_search_item($con, $saved_title, $group_item, $on_what_table, 
     $rec['on_what_table'] =$on_what_table;
     $rec['saved_action'] = $saved_action;
     $rec['user_id'] = $user_id;
-    $rec['saved_data'] = addslashes(serialize($saved_data));
+    $rec['saved_data'] = addslashes(urlencode(serialize($saved_data)));
     
     if ($prev AND !$prev->EOF) {
         $upd = $con->GetUpdateSQL($prev, $rec, false, get_magic_quotes_gpc());
@@ -127,7 +127,9 @@ function load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved) 
             }
             else {
                 //load over POST
-                $_POST = unserialize($rst->fields['saved_data']);
+                $saved_data=unserialize(urldecode($rst->fields['saved_data']));
+                if (!$saved_data) $saved_data=unserialize($rst->fields['saved_data']);
+                $_POST = $saved_data;
                 $day_diff = $_POST['day_diff'];
             }
         }
@@ -136,6 +138,11 @@ function load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved) 
 
 /**
    * $Log: utils-saved-search.php,v $
+   * Revision 1.2  2005/08/16 00:53:48  vanmer
+   * - added urlencode to saved serialized data, to deal with \r\n vs \r issue with windows/unix on unserialize
+   * - added urldecode to unserialize of saved search data (if that fails, try just unserializing to maintain backward
+   * compatibility)
+   *
    * Revision 1.1  2005/08/05 01:21:58  vanmer
    * - Initial revision of centralized functions for saved searches
    *
