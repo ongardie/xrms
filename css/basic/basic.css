@@ -1,0 +1,331 @@
+/**
+ * Basic XRMS theme
+ *
+ * This style sheet overlays the default XRMS sheets:
+ *    rmsstyle.css, rmsstyle-ie.css (if IE), and rmsstyle-screen.css
+ *
+ * It is used with screen media only.
+ */
+/** ----------
+ * LAYOUT ADJUSTMENTS - to accomodate new font dimentions
+ */
+#loginbar {
+    top: 4px;
+    right: 4px;
+}
+#Main #Sidebar {
+    margin: 0px;
+}
+/** ----------
+ * ADDITION AND PLACEMENT OF LOGO
+ */
+#page_header {
+    background-image: url(../../img/xrmslogo-dark.png);
+    background-repeat: no-repeat;
+    background-position:4px 4px; 
+}
+/** ----------
+ * FOREGROUND COLORS - black by default (body)
+ */
+#navline, 
+#navline a {
+    color: #e1e1e1;
+    font-weight: bold;
+}
+#navline a:hover {
+    color: rgb(240,184,47);
+}
+/**
+ * default font settings for entire document
+ */
+body {
+    margin: 4px; /* Takes the pressure off the sides, easier on the eyes with some margin */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+/** ----------
+ * FOREGROUND COLORS - black by default (body)
+ */
+body {
+    color: #000;
+}
+table.widget td {
+    color: #999;
+}
+table.widget .sublabel {
+    color: #999;
+}
+#loginbar,
+#loginbar a {
+    color: gray;
+}
+#page_header,
+table.widget .widget_header,
+/*table.widget .overdue_activity,*/
+table.widget .non_uploaded_file  {
+  color: #000;
+}
+table.widget .widget_content_graph {
+  color: #fff;
+}
+/** -------
+ * FONT/TEXT SETTINGS
+ */
+
+/**
+ * Override XRMS font, margin, and padding adjustments for
+ * better display on screen
+ */
+#page_header {
+    font-size: 12px;
+    color: #073771;
+}
+#loginbar {
+    font-size: 12px;
+}
+#msg,
+#loginbar,
+#navline,
+input,
+input.button,
+select,
+tetarea,
+ul.mktree li,
+ul.mktree li ul li,
+table.widget .small,
+table.widget .open_activity,
+table.widget .closed_activity,
+table.widget .overdue_activity,
+table.widget .scheduled_activity,
+table.widget .widget_label,
+table.widget .widget_label_right,
+table.widget .widget_label_center,
+table.widget .widget_content,
+table.widget .widget_content_alt,
+table.widget .widget_content_alt2,
+table.widget .widget_content_form_element,
+table.widget .widget_content_form_element_center,
+table.widget input.button {
+    font-size: 11px;
+}
+#navline, {
+    color: #fff;
+}
+#Sidebar table.widget {
+    font-size: 10px;
+}
+/* reset to medium, they're covered by #Sidebar table.widget */
+#Sidebar table.widget .widget_header {
+    font-size: 11px;
+}
+#Sidebar input,
+#Sidebar input.button,
+ul.mktree li ul li ul li,
+ul.mktree li ul li ul li ul li,
+ul.mktree li ul li ul li ul li ul li,
+#Sidebar table.widget .small,
+#Sidebar table.widget .widget_label,
+#Sidebar table.widget .widget_label_right,
+#Sidebar table.widget .widget_label_center,
+#Sidebar table.widget .widget_content_form_element,
+#Sidebar table.widget .widget_content_form_element_center {
+    font-size: 10px;
+}
+
+input.button {
+    color: #073771;
+    font-size: 9px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+input.button:hover {
+    color: rgb(240,184,47);
+}
+table.widget td {
+    color: #333;
+}
+
+/** Trident specific bolding of top li in an mktree view **/
+ul.mktree li {
+    font-weight: bold;
+}
+li a.liSelected {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(240,184,47);
+}
+ul.mktree li.liOpen    .bullet { background: url(minus.png)  center left no-repeat; }
+ul.mktree li.liClosed  .bullet { background: url(plus.png)   center left no-repeat; }
+ul.mktree li.liBullet  .bullet { background: url(bullet.png) center left no-repeat; }
+
+/** --------
+ * ANCHOR TAGS - colors/decorations
+ */
+a {
+    text-decoration: underline;
+    color: #073771;
+}
+a:hover {
+    text-decoration: underline;
+    color: rgb(240,184,47);
+}
+a:link {
+    text-decoration: underline;
+}
+
+
+/** --------
+ * BACKGROUND COLORS - light gray by default (body)
+ */
+body {
+    background-color: #ffffff;
+}
+table.widget {
+    background-color: #e1e1e1; /* Affects lines in tables */
+}
+input.button {
+    background-color: #e2e2e2;
+}
+table.widget th,
+table.widget td {
+    background-color: #f1f1f1; /* Affects cell color across tables */
+}
+table.widget .widget_content_alt, .widget_content_graph,
+table.widget .widget_content_market2 {
+    background-color: #fff;
+    color: #000;
+}
+table.widget .widget_content {
+    background-color: #f1f1f1;
+    color: #000;
+}
+table.widget .widget_content_alt {
+    background-color: #fff;
+    color: #000;
+}
+table.widget .widget_content_alt2 {
+    background-color: #fff;
+    color: #000;
+}
+table.widget .closed_activity {
+    color: #666;
+}
+table.widget .scheduled_activity {
+/*     background-color: #eef; */
+}
+table.widget  {
+    background-color: #bbb;
+}
+table.widget .non_uploaded_file,
+table.widget .overdue_activity {
+    color: #990000;  /* text color for identifying overdue items */
+                     /* #900; is dark red */
+}
+table.widget .widget_header,
+table.widget .widget_label {
+    background-color: #e8e8e8; /* Principal color setting */
+}
+/** -------
+ * BACKGROUND/BORDER SETTINGS
+ * Specified URIs are relative to the stylesheet, not the loaded page
+ */
+#navline {
+    background-color: #073771; /* Principal color setting */
+    border-bottom: 1px solid #999;
+    border-top: 1px solid #999;
+}
+#page_header {
+    border: none;
+    background-color: #fff;
+    line-height: 36px;
+}
+#msg {
+    background-color: #ffff99;
+    border: 1px solid #ddd;
+}
+input.button {
+    border-top: 1px solid #cccccc;
+    border-left: 1px solid #cccccc;
+    border-bottom: 1px solid #666666;
+    border-right: 1px solid #666666;
+}
+table.widget {
+/*     border: 1px solid #ddd; */
+}
+
+/**
+ * PADDING and MARGINS
+ */
+table.widget td {
+    padding: 3px; /* use whitespace as separator */
+}
+#page_header {
+    padding-top: 55px;
+    padding-left: 8px;
+    margin: 0px;
+}
+table.widget .widget_header {
+    padding: 3px;
+}
+table.widget .widget_label {
+    text-align: center;
+    padding: 1px 1px 1px 1px;
+}
+input.button {
+    margin: 3px 2px;
+    padding: 1px;
+}
+#navline {
+    padding: 8px 8px 8px 8px;
+    margin: 0px 0px 6px 0px; /* space below nav bar */
+}
+form,
+img,
+input,
+select,
+tetarea {
+    margin: 3px;
+}
+table.widget_content {
+    margin: 2px;
+}
+table.widget .widget_content_graph table {
+    margin: 4px auto 4px auto;
+}
+table.widget .sublabel {
+    padding-right: 4px;
+}
+#msg {
+    padding: 6px 4px;
+    margin: 4px;
+}
+#Main,
+#Sidebar {
+    padding-top: 4px;
+}
+
+
+
+
+.overdue_activity a { 
+    color: #990000; /* should match the color for overdue_activity above */
+}
+.closed_activity a {
+    color: #666; /* grey links for closed activities, matches closed_activity above */
+}
+.overdue_activity a:hover, .closed_activity a:hover {
+    color: rgb(240,184,47); /* grey links for closed activities, matches closed_activity above */
+}
+
+#PagerRestore {
+    padding: 8px 0 0 0;
+    background-image: url(../../img/pagerRestoreDark.png);
+}
+#PagerMaximize {
+    padding: 8px 0 0 0;
+    background-image: url(../../img/pagerMaximizeDark.png);
+}
+#PagerRefresh {
+    padding: 8px 0 0 0;
+    background-image: url(../../img/pagerRefreshDark.png);
+}
