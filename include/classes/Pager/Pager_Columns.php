@@ -26,7 +26,7 @@
  *
  * @example Pager_Columns.doc.1.php check out 
  *
- * $Id: Pager_Columns.php,v 1.8 2005/06/28 18:43:34 daturaarutad Exp $
+ * $Id: Pager_Columns.php,v 1.9 2005/08/16 00:34:57 vanmer Exp $
  */
 
 class Pager_Columns {
@@ -186,7 +186,7 @@ class Pager_Columns {
 		
 
 		<!-- the hidden div -->
-		<div id="{$this->pager_name}_widget">
+		<div class="PagerSelectableColumns" id="{$this->pager_name}_widget">
 		<a name="{$this->pager_name}_select_columns"/> 
         <table class=widget cellspacing=1>
     		<tr>
@@ -258,6 +258,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.9  2005/08/16 00:34:57  vanmer
+ * - added class for div of selectable columns widget
+ *
  * Revision 1.8  2005/06/28 18:43:34  daturaarutad
  * fixed reset button issue
  *
