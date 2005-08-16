@@ -1,0 +1,24 @@
+/**
+ * Classic XRMS theme with left sidebar
+ * Imports the classic theme, and then modifies layout attributes
+ * to move sidebar to the left side
+ *  (URIs are always relative to the stylesheet)
+ */
+@import url("../classic/classic.css");
+@import url(../../js/jscalendar/calendar-blue.css);
+/**
+ * Change margin/width for sidebar on the left
+ */
+#Main #Content {
+    /** Match sidebar width for right (by default) margin */
+    margin: 0em 0em 0em 30.2%;
+    width: auto;
+}
+#Main #Sidebar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    /** Width needs to match right margin in #Main #Content */
+    width: 30%;
+}

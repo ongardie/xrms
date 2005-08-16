@@ -1,0 +1,211 @@
+/**
+ * Classic XRMS theme
+ *
+ * This style sheet overlays the default XRMS sheets:
+ *    xrmsstyle.css, xrmsstyle-ie.css (if IE), and xrmsstyle-screen.css
+ *
+ * It is used with screen media only.
+ */
+/** ----------
+ * FOREGROUND COLORS - black by default (body)
+ */
+@import url(../../js/jscalendar/calendar-blue.css);
+
+body {
+    color: #000;
+}
+table.widget td {
+    color: #333;
+}
+table.widget .sublabel {
+    color: #999;
+}
+#loginbar,
+#loginbar a,
+#page_header,
+table.widget .widget_header,
+table.widget .widget_content_graph,
+table.widget .overdue_activity,
+table.widget .non_uploaded_file  {
+  color: white;
+}
+
+/** --------
+ * ANCHOR TAGS - colors/decorations
+ */
+a {
+    color: #33f;
+}
+a:hover {
+    text-decoration: none;
+}
+/** --------
+ * BACKGROUND COLORS - light gray by default (body)
+ */
+body {
+    background-color: #eee;
+}
+table.widget {
+    background-color: #ddd;
+}
+input.button {
+    background-color: #fc9;
+}
+#navline,
+table.widget th,
+table.widget td {
+    background-color: #fff;
+}
+#msg {
+    background-color: #fee;
+}
+table.widget .widget_content_alt,
+table.widget .widget_content_market2 {
+    background-color: #ffe;
+}
+table.widget .widget_content_alt2 {
+    background-color: #eef;
+}
+table.widget .widget_content_graph {
+    background-color: #fff;
+}
+table.widget .closed_activity {
+    background-color: #dcdcdc ! important;
+}
+table.widget .scheduled_activity {
+    background-color: #eef ! important;
+}
+table.widget .non_uploaded_file,
+table.widget .overdue_activity {
+    background-color: #f77 ! important;
+}
+#page_header,
+table.widget .widget_header,
+table.widget .widget_label {
+    background-color: rgb(20%,40%,60%);
+}
+/** -------
+ * BACKGROUND/BORDER SETTINGS
+ * Specified URIs are relative to the stylesheet, not the loaded page
+ */
+#page_header {
+    border: 1px solid Gainsboro;
+    line-height: 40px;   /* set line height for image */
+}
+#msg {
+    background-image: url(../../img/msg_background.gif);
+    border: 1px solid #ccc;
+}
+input.button {
+    border: 1px solid #999;
+}
+table.widget {
+    border: 1px solid Gainsboro;
+}
+table.widget .widget_label {
+    background-image: url(../../img/widget_label_background.gif);
+}
+table.widget .widget_header {
+    background-image: url(../../img/widget_header_background.gif);
+}
+table.widget .widget_label_center {
+    background-image: url(../../img/widget_label_background.gif);
+}
+table.widget .widget_label_right {
+    background-image: url(../../img/widget_label_right_background.gif);
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+table.widget .widget_label_right_91px {
+    background-image: url("img/widget_label_91px.gif");
+}
+table.widget .widget_label_right_166px {
+    background-image: url("img/widget_label_background_large.gif");
+    background-repeat: no-repeat;
+    background-position: top right;
+}
+
+#xrms_calendar .calendar_user1, 
+#xrms_calendar_legend .calendar_user1   {
+    background-color:   #fffba4;
+    vertical-align:     top;
+    border :            1px solid #cc6600;
+}
+
+#xrms_calendar .calendar_user2, 
+#xrms_calendar_legend .calendar_user2   {
+    background-color:   #f8d049;
+    vertical-align:     top;
+    border :            1px solid #cc3300;
+}
+
+#xrms_calendar .calendar_user3, 
+#xrms_calendar_legend .calendar_user3   {
+    background-color:   #cfe5f6;
+    vertical-align:     top;
+    border :            1px solid #336699;
+}
+
+#xrms_calendar .calendar_user4, 
+#xrms_calendar_legend .calendar_user4   {
+    background-color:   #84a8d7;
+    vertical-align:     top;
+    border :            1px solid #333366;
+}
+
+#xrms_calendar .calendar_user5, 
+#xrms_calendar_legend .calendar_user5   {
+    background-color:   #d8f0b8;
+    vertical-align:     top;
+    border :            1px solid #669900;
+}
+
+#xrms_calendar .calendar_user6, 
+#xrms_calendar_legend .calendar_user6   {
+    background-color:   #86c860;
+    vertical-align:     top;
+    border :            1px solid #336600;
+}
+
+#xrms_calendar .calendar_user7, 
+#xrms_calendar_legend .calendar_user7   {
+    background-color:   #d8b8f0;
+    vertical-align:     top;
+    border :            1px solid #660099;
+}
+
+#xrms_calendar .calendar_user8, 
+#xrms_calendar_legend .calendar_user8   {
+    background-color:   #8660c8;
+    vertical-align:     top;
+    border :            1px solid #330066;
+}
+
+#xrms_calendar .calendar_user9, 
+#xrms_calendar_legend .calendar_user9   {
+    background-color:   #f6cfe5;
+    vertical-align:     top;
+    border :            1px solid #993366;
+}
+
+#xrms_calendar .calendar_user10, 
+#xrms_calendar_legend .calendar_user10   {
+    background-color:   #d784a8;
+    vertical-align:     top;
+    border :            1px solid #663333;
+}
+
+/**
+ * PADDING
+ */
+#page_header,
+table.widget .widget_header {
+    padding: 4px;
+}
+table.widget .widget_label_center {
+    padding: 0em 0.5em 0em 0.5em;
+}
+input.button {
+    margin: 2px 1px;
+}
+
