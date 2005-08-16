@@ -22,12 +22,12 @@
 #page_header {
     background-image: url(../../img/xrmslogo-dark.png);
     background-repeat: no-repeat;
-    background-position:4px 4px; 
+    background-position: 80%;
 }
 /** ----------
  * FOREGROUND COLORS - black by default (body)
  */
-#navline, 
+#navline,
 #navline a {
     color: #e1e1e1;
     font-weight: bold;
@@ -237,7 +237,7 @@ table.widget .widget_label {
 #page_header {
     border: none;
     background-color: #fff;
-    line-height: 36px;
+    /* line-height: 15px; */
 }
 #msg {
     background-color: #ffff99;
@@ -307,7 +307,7 @@ table.widget .sublabel {
 
 
 
-.overdue_activity a { 
+.overdue_activity a {
     color: #990000; /* should match the color for overdue_activity above */
 }
 .closed_activity a {
