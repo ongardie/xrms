@@ -4,7 +4,7 @@
  *
  * This is the main way of locating companies in XRMS
  *
- * $Id: some.php,v 1.75 2005/08/13 22:57:01 vanmer Exp $
+ * $Id: some.php,v 1.76 2005/08/16 00:15:21 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -176,35 +176,39 @@ if ( $legal_name ) {
 
 if ( $phone ) {
     $criteria_count++;
+    $sql_phone=preg_replace("/[^\d]/", '', $phone);
     $sql .= ', c.phone ';
-    $where .= " and c.phone like " . $con->qstr($phone, get_magic_quotes_gpc())." \n";
+    $where .= " and c.phone like " . $con->qstr('%'.$sql_phone.'%', get_magic_quotes_gpc())." \n";
     $extra_defaults[]='phone';
     $advanced_search_columns[] = array('name' => _("Phone"), 'index_sql' => 'phone');
 }
 
 if ( $phone2 ) {
+    $sql_phone2=preg_replace("/[^\d]/", '', $phone2);
     $criteria_count++;
     $sql .= ', c.phone2 ';
-    $where .= " and c.phone2 like " . $con->qstr($phone2, get_magic_quotes_gpc())." \n";
+    $where .= " and c.phone2 like " . $con->qstr('%'.$sql_phone2.'%', get_magic_quotes_gpc())." \n";
     $extra_defaults[]='phone2';
     $advanced_search_columns[] = array('name' => _("Phone 2"), 'index_sql' => 'phone2');
 }
 
 if ( $fax ) {
+    $sql_fax=preg_replace("/[^\d]/", '', $fax);
     $criteria_count++;
     $sql .= ', c.fax ';
-    $where .= " and c.fax like " . $con->qstr($fax, get_magic_quotes_gpc())." \n";
+    $where .= " and c.fax like " . $con->qstr('%'.$sql_fax.'%', get_magic_quotes_gpc())." \n";
     $extra_defaults[]='fax';
     $advanced_search_columns[] = array('name' => _("Fax"), 'index_sql' => 'fax');
 }
 
 $phone_fields=array('phone'=>_("Phone"),'phone2'=>_("Phone 2"),'fax'=>_("Fax"));
 if ($phone_search) {
+    $sql_phone_search=preg_replace("/[^\d]/", '', $phone_search);
     $phonewhere=array();
     foreach ($phone_fields as $phonefield => $phonelabel) {
         $criteria_count++;
         $sql .= ", $phonefield ";
-        $phonewhere[] = "($phonefield LIKE " . $con->qstr($phone_search.'%'). ")";
+        $phonewhere[] = "($phonefield LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
         $extra_defaults[]=$phonefield;
         $advanced_search_columns[] = array('name' => $phonelabel, 'index_sql' => $phonefield);
     }
@@ -864,6 +868,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.76  2005/08/16 00:15:21  vanmer
+ * - changed all phone searches to be contains instead of starts with
+ * - added code to strip all formatting off phone searches
+ * - added work extension to fields searched on a contact
+ *
  * Revision 1.75  2005/08/13 22:57:01  vanmer
  * - altered to hide custom company fields unless their labels have been changed in vars.php
  *

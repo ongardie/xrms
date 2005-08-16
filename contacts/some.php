@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.62 2005/08/15 18:13:00 vanmer Exp $
+ * $Id: some.php,v 1.63 2005/08/16 00:15:21 vanmer Exp $
  */
 
 //include the standard files
@@ -124,13 +124,14 @@ if (strlen($user_id) > 0) {
     $where .= " and c.user_id = $user_id";
 }
 
-$phone_fields=array('work_phone'=>_("Work Phone"),'cell_phone'=>_("Cell Phone"),'home_phone'=>_("Home Phone"));
+$phone_fields=array('work_phone'=>_("Work Phone"),'cell_phone'=>_("Cell Phone"),'home_phone'=>_("Home Phone"), 'work_phone_ext'=>_("Work Phone Ext"));
 if ($phone_search) {
+    $sql_phone_search=preg_replace("/[^\d]/", '', $phone_search);
     $phonewhere=array();
     foreach ($phone_fields as $phonefield => $phonelabel) {
         $criteria_count++;
         $sql .= ", $phonefield ";
-        $phonewhere[] = "($phonefield LIKE " . $con->qstr($phone_search.'%'). ")";
+        $phonewhere[] = "($phonefield LIKE " . $con->qstr('%'.$sql_phone_search.'%'). ")";
         $extra_defaults[]=$phonefield;
         $advanced_search_columns[] = array('name' => $phonelabel, 'index_sql' => $phonefield);
     }
@@ -482,6 +483,11 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.63  2005/08/16 00:15:21  vanmer
+ * - changed all phone searches to be contains instead of starts with
+ * - added code to strip all formatting off phone searches
+ * - added work extension to fields searched on a contact
+ *
  * Revision 1.62  2005/08/15 18:13:00  vanmer
  * - added phone to contacts search
  * - added ability to show extra columns when searching on those fields
