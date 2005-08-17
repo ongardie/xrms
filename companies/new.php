@@ -6,7 +6,7 @@
  *
  * @todo Add ability to ctreate a Sales Opportunity for a new company
  *
- * $Id: new.php,v 1.16 2005/05/06 22:08:10 vanmer Exp $
+ * $Id: new.php,v 1.17 2005/08/17 20:06:28 ycreddy Exp $
  */
 
 /* Include required files */
@@ -278,7 +278,7 @@ start_page($page_title, true, $msg);
 
 function initialize() {
     document.forms[0].company_name.select();
-    // document.forms[0].company_name.focus();
+    document.forms[0].company_name.focus();
 }
 
 function validate() {
@@ -310,6 +310,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.17  2005/08/17 20:06:28  ycreddy
+ * set the focus on company name explicitly
+ *
  * Revision 1.16  2005/05/06 22:08:10  vanmer
  * - added more fields for adding a new contact when creating a company
  *
