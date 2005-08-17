@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.35 2005/08/04 21:02:56 vanmer Exp $
+ * $Id: new.php,v 1.36 2005/08/17 20:33:12 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -165,64 +165,58 @@ start_page($page_title, true, $msg);
                 <td class=widget_header colspan=2><?php echo _("Contact Information"); ?></td>
             </tr>
             <tr>
+                <td class=widget_label_right><?php echo _("Salutation"); ?></td>
+                <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("First Names"); ?></td>
+                <td class=widget_content_form_element><input type=text name=first_names value="<?php echo $first_names; ?>" size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
+                <td class=widget_content_form_element><input type=text name=last_name value="<?php echo $last_name; ?>" size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Title"); ?></td>
+                <td class=widget_content_form_element><input type=text name=title value="<?php echo $title; ?>" size=30></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Company"); ?></td>
+                <td class=widget_content_form_element><a href="../companies/one.php?company_id=<?php echo $company_id; ?>"><?php echo $company_name; ?></a></td>
+            </tr>
+            <tr>
                 <td class=widget_label_right><?php echo _("Division"); ?></td>
                 <td class=widget_content_form_element><?php echo $division_menu; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Business Address"); ?></td>
                 <td class=widget_content_form_element>
-                    <?php
-                            echo $address_menu."\n";
-                            echo '&nbsp;'._("Enter New or Edit Existing Address")."\n";
-                    ?>
-                    <input type=checkbox name=edit_address>
+                    <?php echo $address; ?>
+                    <input type=hidden name=address_return_url value="<?php echo $address_return_url; ?>">
+                    <input type=hidden name=address_id value="<?php echo $address_id; ?>">
+                    <br />
+                        <input type=submit name=btChangeAddress value="<?php echo _("Choose New Address") ?>" class=button>
+                        <?php if ($edit_address) { ?>&nbsp;<?php echo _("OR"); ?>&nbsp;
+                            <input class=button type=submit name=btEditBusinessAddress value="<?php echo _("Edit Address"); ?>">
+                        <?php } ?>
+
                 </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php echo _("Salutation"); ?></td>
-                <td class=widget_content_form_element><?php echo $salutation_menu; ?></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("First Names"); ?></td>
-                <td class=widget_content_form_element><input type=text name=first_names size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Last Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=last_name size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Gender"); ?></td>
+                <td class=widget_label_right><?php echo _("Home Address"); ?></td>
                 <td class=widget_content_form_element>
-                <select name="gender">
-                    <option value="u" <?php if (($gender == "u") or ($gender == '')) {print " selected ";} ?>><?php echo _("Unknown"); ?>
-                    <option value="m" <?php if ($gender == "m") {print " selected ";} ?>><?php echo _("Male"); ?>
-                    <option value="f" <?php if ($gender == "f") {print " selected ";} ?>><?php echo _("Female"); ?>
-                </select>
+                    <?php echo $home_address; ?>
+                    <br />
+                    <input type=hidden name=home_address_id value="<?php echo $home_address_id; ?>">
+                    <input class=button type=submit name="btNewHomeAddress"  value="<?php echo _("Add New Address"); ?>">
+                    <?php if ($edit_home_address) { ?>&nbsp;<?php echo  _("OR")?>&nbsp;
+                        <input class=button type=submit name="btEditHomeAddress" value="<?php echo _("Edit Address"); ?>">
+                    <?php } ?>
                 </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Date of Birth"); ?></td>
-                <td class=widget_content_form_element><input type=text name=date_of_birth size=12></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
-                <td class=widget_content_form_element><input type=text name=tax_id size=35></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Summary"); ?></td>
-                <td class=widget_content_form_element><input type=text name=summary size=35></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Title"); ?></td>
-                <td class=widget_content_form_element><input type=text name=title size=35></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Description"); ?></td>
-                <td class=widget_content_form_element><input type=text name=description size=35></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
-                <td class=widget_content_form_element><input type=text name=email size=30></td>
+                <td class=widget_content_form_element><input type=text name=email value='<?php echo $email; ?>' size=30></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Work Phone"); ?></td>
@@ -241,6 +235,17 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Fax"); ?></td>
                 <td class=widget_content_form_element><input type=text name=fax size=30 value="<?php  echo $fax; ?>"></td>
             </tr>
+
+            <tr>
+                <td class=widget_label_right><?php echo _("Summary"); ?></td>
+                <td class=widget_content_form_element><input type=text name=summary value="<?php echo $summary; ?>" size=35></td>
+            </tr>
+            <tr>
+                <td class=widget_label_right><?php echo _("Description"); ?></td>
+                <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
+            </tr>
+
+    	    <!-- // remove IM fields for now, move to plugin in a few days
             <tr>
                 <td class=widget_label_right><?php echo _("AOL Name"); ?></td>
                 <td class=widget_content_form_element><input type=text name=aol_name size=30></td>
@@ -257,22 +262,57 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Interests"); ?></td>
                 <td class=widget_content_form_element><input type=text name=interests size=35></td>
             </tr>
+	 // end IM commented fields -->
+
             <tr>
-                <td class=widget_label_right><?php  echo $contact_custom1_label; ?></td>
-                <td class=widget_content_form_element><input type=text name=custom1 size=35></td>
+                <td class=widget_label_right><?php echo _("Gender"); ?></td>
+                <td class=widget_content_form_element>
+                <select name="gender">
+                    <option value="u" <?php if (($gender == "u") or ($gender == '')) {print " selected ";} ?>><?php echo _("Unknown"); ?>
+                    <option value="m" <?php if ($gender == "m") {print " selected ";} ?>><?php echo _("Male"); ?>
+                    <option value="f" <?php if ($gender == "f") {print " selected ";} ?>><?php echo _("Female"); ?>
+                </select>
+                </td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php  echo $contact_custom2_label; ?></td>
-                <td class=widget_content_form_element><input type=text name=custom2 size=35></td>
+                <td class=widget_label_right><?php echo _("Date of Birth"); ?></td>
+                <td class=widget_content_form_element><input type=text name=date_of_birth value="<?php echo $date_of_birth; ?>" size=10></td>
             </tr>
             <tr>
-                <td class=widget_label_right><?php  echo $contact_custom3_label; ?></td>
-                <td class=widget_content_form_element><input type=text name=custom3 size=35></td>
+                <td class=widget_label_right><?php echo _("Tax ID"); ?></td>
+                <td class=widget_content_form_element><input type=text name=tax_id value="<?php echo $tax_id; ?>" size=32></td>
             </tr>
+
+            <?php echo $accounting_rows; ?>
+
             <tr>
-                <td class=widget_label_right><?php  echo $contact_custom4_label; ?></td>
-                <td class=widget_content_form_element><input type=text name=custom4 size=35></td>
+                <td class=widget_label_right><?php echo _("Interests"); ?></td>
+                <td class=widget_content_form_element><input type=text name=interests size=35 value='<?php echo $interests; ?>'></td>
             </tr>
+
+
+        <?php if ($contact_custom1_label!='(Custom 1)') { ?>
+            <tr>
+                <td class=widget_label_right><?php echo $contact_custom1_label; ?></td>
+                <td class=widget_content_form_element><input type=text name=custom1 size=35 value="<?php echo $custom1; ?>"></td>
+            </tr>
+        <?php } if ($contact_custom2_label!='(Custom 2)') { ?>
+            <tr>
+                <td class=widget_label_right><?php echo $contact_custom2_label; ?></td>
+                <td class=widget_content_form_element><input type=text name=custom2 size=35 value="<?php echo $custom2; ?>"></td>
+            </tr>
+        <?php } if ($contact_custom3_label!='(Custom 3)') { ?>
+            <tr>
+                <td class=widget_label_right><?php echo $contact_custom3_label; ?></td>
+                <td class=widget_content_form_element><input type=text name=custom3 size=35 value="<?php echo $custom3; ?>"></td>
+            </tr>
+        <?php } if ($contact_custom4_label!='(Custom 4)') { ?>
+            <tr>
+                <td class=widget_label_right><?php echo $contact_custom4_label; ?></td>
+                <td class=widget_content_form_element><input type=text name=custom4 size=35 value="<?php  echo $custom4; ?>"></td>
+            </tr>
+        <?php } //end custom field processing ?>
+
             <tr>
                 <td class=widget_label_right><?php echo _("Profile"); ?></td>
                 <td class=widget_content_form_element><textarea rows=8 cols=42 name=profile></textarea></td>
@@ -342,6 +382,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.36  2005/08/17 20:33:12  ycreddy
+ * New page made consistent with Edit Page for order of fields, how IM and custom fields are shown
+ *
  * Revision 1.35  2005/08/04 21:02:56  vanmer
  * - added passthrough for return_url through new.php
  *
