@@ -3,7 +3,7 @@
   *
   * Email.
   *
-  * $Id: snailmail-2.php,v 1.1 2005/06/21 19:10:48 niclowe Exp $
+  * $Id: snailmail-2.php,v 1.2 2005/08/17 21:14:20 ycreddy Exp $
   */
 
   require_once('include-locations-location.inc');
@@ -44,7 +44,9 @@ $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 //$con->debug = 1;
 
-$sql = "select cont.contact_id, cont.salutation , cont.first_names, cont.last_name, concat(cont.first_names, ' ',cont.last_name) as contact_name, cont.summary , cont.title, cont.description, c.company_name, addr.address_body, addr.line1, addr.line2,addr.city,addr.province,addr.postal_code,u.username as owner
+$sql = "select cont.contact_id, cont.salutation , cont.first_names, cont.last_name, " .
+$con->concat("cont.first_names", "' '","cont.last_name") . 
+" as contact_name, cont.summary , cont.title, cont.description, c.company_name, addr.address_body, addr.line1, addr.line2,addr.city,addr.province,addr.postal_code,u.username as owner
 from contacts cont, companies c, users u, addresses addr
 where c.company_id = cont.company_id
 and c.user_id = u.user_id
