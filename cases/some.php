@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.36 2005/08/11 21:46:07 ycreddy Exp $
+ * $Id: some.php,v 1.37 2005/08/17 18:47:20 ycreddy Exp $
  */
 
 require_once('../include-locations.inc');
@@ -90,7 +90,7 @@ if (strlen($case_title) > 0) {
 
 if (strlen($company_name) > 0) {
     $criteria_count++;
-    $where .= " and c.company_name = " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc());
+    $where .= " and c.company_name like " . $con->qstr(company_search_string($company_name), get_magic_quotes_gpc());
 }
 
 if (strlen($user_id) > 0) {
@@ -412,6 +412,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.37  2005/08/17 18:47:20  ycreddy
+ * Fix for company search - used like instead of =
+ *
  * Revision 1.36  2005/08/11 21:46:07  ycreddy
  * Fixed the GROUP BY query issues in the Cases Pager for SQL Server
  *
