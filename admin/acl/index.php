@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: index.php,v 1.3 2005/05/10 13:28:14 braverock Exp $
+ * $Id: index.php,v 1.4 2005/08/17 02:43:23 vanmer Exp $
  *
  * @todo write dashboard
  */
@@ -25,6 +25,7 @@ $session_user_id = session_check();
 $msg = $_GET['msg'];
 
 //connect to the database
+$con = get_acl_dbconnection();
 /*********************************/
 /*** Include the sidebar boxes ***/
 
@@ -42,10 +43,10 @@ $msg = $_GET['msg'];
 
 //close the database connection, as we are done with it.
 global $css_theme;
+getGlobalVar($acl_datasource_name, 'acl_datasource_name');
 $page_title = _("ACL Management");
 $css_theme="basic-left";
 start_page($page_title,true, $msg);
-
 ?>
 <div id="Main">
     <?php include("xrms_acl_nav.php"); ?>
@@ -54,7 +55,10 @@ start_page($page_title,true, $msg);
         <tr><td class=widget_header><?php echo _("Dashboard");?></td></tr>
             <tr>
                 <td class=widget_content width="75%" valign=top>
-          <?php echo _("This is the Access Control List system for XRMS"); ?>.<p>  <?php echo _("Please select a section to manage from the sidebar") ?>.
+          <?php echo _("This is the Access Control List system for datasource:") . ' ' . $acl_datasource_name ?>.<p>  <?php echo _("Please select a section to manage from the sidebar") ?>.
+	  <?php if ($acl_datasource_name!='' AND $acl_datasource_name!='XRMS' AND $acl_datasource_name!='default') { ?>
+	  	<?php echo "<p><a href=\"index.php?acl_datasource_name=XRMS\">"._("Manage XRMS ACL")."</a>"; ?>
+	  <?php } ?>
                 </td>
             </tr>
         </table>
@@ -66,6 +70,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.4  2005/08/17 02:43:23  vanmer
+ * - added new db connection to allow ACL datasource variable to get reset.
+ * - added link to manage XRMS if managing another datasource
+ *
  * Revision 1.3  2005/05/10 13:28:14  braverock
  * - localized strings patches provided by Alan Baghumian (alanbach)
  *
