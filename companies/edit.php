@@ -2,7 +2,7 @@
 /**
  * Edit company details
  *
- * $Id: edit.php,v 1.18 2005/08/13 22:57:00 vanmer Exp $
+ * $Id: edit.php,v 1.19 2005/08/17 20:02:23 ycreddy Exp $
  */
 
 require_once('../include-locations.inc');
@@ -59,7 +59,7 @@ if ($rst) {
     $rst->close();
 }
 
-$user_menu = get_user_menu($con, $user_id);
+$user_menu = get_user_menu($con, $user_id, false, 'user_id', false);
 
 $sql2 = "select crm_status_pretty_name, crm_status_id from crm_statuses where crm_status_record_status = 'a' order by crm_status_id";
 $rst = $con->execute($sql2);
@@ -231,6 +231,9 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.19  2005/08/17 20:02:23  ycreddy
+ * Expanded the Owner field
+ *
  * Revision 1.18  2005/08/13 22:57:00  vanmer
  * - altered to hide custom company fields unless their labels have been changed in vars.php
  *
