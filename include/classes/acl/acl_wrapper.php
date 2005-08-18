@@ -34,6 +34,17 @@ function get_acl_group_member_criteria($con=false, $GroupMember_id) {
     return $ret;
 }
 
+function get_group_list($con=false, $fieldname='Group_id', $group=false, $id='', $blank_first=false, $attributes='', $size=0) {
+    if(!$con) $con=get_acl_dbconnection();
+    $sql = "SELECT Group_name, Group_id FROM Groups";
+    $rst = $con->execute($sql);
+    $attr='';
+    if ($id) $attr="id=\"$id\"";
+    if ($attributes) $attr.=" $attributes";
+    $menu = $rst->getMenu2($fieldname, $group, $blank_first, false, $size, $attr); 
+    return $menu;
+}
+
 function remove_group_member_criteria($con=false, $GroupMemberCriteria_id) {
     global $acl_options;
     if (!$GroupMemberCriteria_id) return false;
