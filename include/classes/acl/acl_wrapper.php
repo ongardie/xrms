@@ -34,7 +34,20 @@ function get_acl_group_member_criteria($con=false, $GroupMember_id) {
     return $ret;
 }
 
-function get_group_list($con=false, $fieldname='Group_id', $group=false, $id='', $blank_first=false, $attributes='', $size=0) {
+function get_group_list($con=false) {
+   if (!$con) $con=get_acl_dbconnection();
+   $sql = "SELECT Group_name, Group_id FROM Groups";
+   $rst = $con->execute($sql);
+   if (!$rst) { db_error_handler($con, $sql); return false; }
+   if ($rst->EOF) return false;
+   while (!$rst->EOF) {
+	$group_list[$rst->fields['Group_id']]=$rst->fields['Group_name'];
+	$rst->movenext();
+   }
+   return $group_list;
+}
+
+function get_group_select($con=false, $fieldname='Group_id', $group=false, $id='', $blank_first=false, $attributes='', $size=0) {
     if(!$con) $con=get_acl_dbconnection();
     $sql = "SELECT Group_name, Group_id FROM Groups";
     $rst = $con->execute($sql);
