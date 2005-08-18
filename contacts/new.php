@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.36 2005/08/17 20:33:12 ycreddy Exp $
+ * $Id: new.php,v 1.37 2005/08/18 22:41:02 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -36,6 +36,20 @@ if ($clone_id > 0) {
         $company_id     = $rst->fields['company_id'];
         $division_id    = $rst->fields['division_id'];
         $address_id     = $rst->fields['address_id'];
+        $home_address_id     = $rst->fields['home_address_id'];
+
+	if ( $address_id ) {
+  	   $address = get_formatted_address($con, $address_id);
+	} else {
+  	   $address = '';
+	}
+
+	if ( $home_address_id ) {
+  	   $home_address = get_formatted_address($con, $home_address_id);
+	} else {
+	   $home_address .= '';
+	}
+
       } else {
         // no - data not found
         $company_id     = '';
@@ -114,23 +128,6 @@ if ( !isset($salutation) ) {
 }
 $salutation_menu = build_salutation_menu($con, $salutation);
 
-// build address menu
-if ( isset($company_id) ) {
-  $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
-  $rst = $con->execute($sql);
-  if ($rst) {
-    if ( !$rst->EOF ) {
-      $address_id = $rst->fields['address_id'];
-    } else {
-      $address_id = '';
-    }
-    $address_menu = $rst->getmenu2('address_id', $address_id, true);
-    $rst->close();
-  }
-}
-if ( !isset($address_menu) ) {
-  $address_menu = '';
-}
 
 // TBD - BUG - $gender should be set from database
 if ( !isset($gender) ) {
@@ -382,6 +379,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.37  2005/08/18 22:41:02  ycreddy
+ * Fixes for Clone Contact - populating Business and Home Address and removing old and unused address menu code
+ *
  * Revision 1.36  2005/08/17 20:33:12  ycreddy
  * New page made consistent with Edit Page for order of fields, how IM and custom fields are shown
  *
