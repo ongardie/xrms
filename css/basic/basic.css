@@ -154,9 +154,9 @@ li a.liSelected {
     font-weight: bold;
     color: rgb(240,184,47);
 }
-ul.mktree li.liOpen    .bullet { background: url(minus.png)  center left no-repeat; }
-ul.mktree li.liClosed  .bullet { background: url(plus.png)   center left no-repeat; }
-ul.mktree li.liBullet  .bullet { background: url(bullet.png) center left no-repeat; }
+ul.mktree li.liOpen    .bullet { background: url(../../img/minus-basic.png)  center left no-repeat; }
+ul.mktree li.liClosed  .bullet { background: url(../../img/plus-basic.png)   center left no-repeat; }
+ul.mktree li.liBullet  .bullet { background: url(../../img/bullet-basic.png) center left no-repeat; }
 
 /** --------
  * ANCHOR TAGS - colors/decorations
