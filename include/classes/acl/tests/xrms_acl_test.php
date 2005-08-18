@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.10 2005/07/30 01:31:04 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.11 2005/08/18 19:49:43 vanmer Exp $
  */
 
 require_once('../../../../include-locations.inc');
@@ -1237,6 +1237,11 @@ Class ACLTest extends PHPUnit_TestCase {
         $this->assertTrue(count($callbacks)==0, "Found more callback options than passed in");
         unset($test_acl);
     }
+
+    function test_get_group_list() {
+	$grouplist=get_group_list($this->con);
+	$this->assertTrue($grouplist, "Failed to get a group list from wrapper function");
+    }
     
  }
 $suite = new PHPUnit_TestSuite( "ACLTest" );
@@ -1261,6 +1266,9 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.11  2005/08/18 19:49:43  vanmer
+ * - added test for group list
+ *
  * Revision 1.10  2005/07/30 01:31:04  vanmer
  * - added test for list of groups on group member criteria search
  *
