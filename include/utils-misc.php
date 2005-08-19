@@ -8,10 +8,12 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.143 2005/08/02 22:25:24 ycreddy Exp $
+ * $Id: utils-misc.php,v 1.144 2005/08/19 02:00:23 daturaarutad Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
+
+require_once($include_directory.'vars.php');
 
 if ( !defined('IN_XRMS') )
 {
@@ -35,6 +37,8 @@ function session_startup () {
   $sessid = session_id();
   if ( empty( $sessid ) ) {
     // only call session_start once
+    global $xrms_system_id;
+    session_name($xrms_system_id);
     session_start();
   }
 }
@@ -1776,6 +1780,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.144  2005/08/19 02:00:23  daturaarutad
+ * call session_name() before session_start() so as to not klobber xrms session on logout
+ *
  * Revision 1.143  2005/08/02 22:25:24  ycreddy
  * added code to use the default_country_id if the country_id is not available in get_formatted_phone
  *
