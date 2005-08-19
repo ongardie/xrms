@@ -12,7 +12,7 @@
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version $Revision: 1.1 $
+   * @version $Revision: 1.2 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -351,14 +351,7 @@ Class SMTPs_Test
         return $this->SMTPs->_msgContent;
     }
 
-};
-
-
-
-
-
-
-
+}
 
 
 // ***********************************************************************
@@ -1024,6 +1017,47 @@ Class SMTPsFailuresTest extends PHPUnit_TestCase {
 //        $_mainTest = new SMTPsPropertiesTest ();
         $this->SMTPs = new SMTPs();
         $this->SMTPsTest = new SMTPs_Test();
+
+        $this->ini_path = '../SMTPs.ini.php';
+        $this->sender = '<test_sender@test.com>';
+        $this->sender_array = array('org'=>'<test_sender@test.com>', 'addr'=>'<test_sender@test.com>', 'host'=>'test.com', 'user'=>'test_sender');
+        $this->sender_host = 'test.com';
+        $this->sender_user = 'test_sender';
+        $this->to_full_address = '"send to" <to@test.com>';
+        $this->to_address = 'to@test.com';
+        $this->to_address_array = array('org'=>'"send to" <to@test.com>', 'real'=>"send to", 'addr'=>'<to@test.com>', 'host'=>'test.com', 'user'=>'to');
+        $this->to_array = array('test.com'=>array('to'=>array('to'=>'send to')));
+        $this->cc_full_address = '"send cc" <cc@test.com>';
+        $this->cc_address = 'cc@test.com';
+        $this->cc_array = array('test.com'=>array('cc'=>array('cc'=>'send cc')));
+        $this->bcc_full_address = '"send bcc" <bcc@test.com>';
+        $this->bcc_address = 'bcc@test.com';
+        $this->bcc_array = array('test.com'=>array('bcc'=>array('bcc'=>'send bcc')));
+        $this->to_user = 'to';
+        $this->cc_user = 'cc';
+        $this->bcc_user = 'bcc';
+        $this->to_domain = 'test.com';
+        $this->rcpt_array = array($this->to_address, $this->cc_address, $this->bcc_address);
+        $this->subject = "Test Subject";
+        $this->msgSensitivity = 1;
+        $this->msgSensitivityResults = 'Personal';
+        $this->msgPriority = 2;
+        $this->msgPriorityResults = "Importance: High\r\nPriority: High\r\nX-Priority: 2 (High)\r\n";
+        $this->transportType = 0;
+        $this->host = 'localhost';
+        $this->port = 21;
+        $this->id = 'tester';
+        $this->pw = 'testing';
+        $this->charSet = 'iso-8859-1';
+        $this->transEncode = '7bit' ;
+        $this->xheader = 'X-test: test';
+        $this->content = 'This is test message';
+        $this->contentType = 'plain';
+        $this->contentRawArray = array('plain'=>array('mimeType'=>'text/plain', 'data'=>'This is test message'));
+        $this->contentMsg = "Content-Type: text/plain; charset=\"iso-8859-1\"\r\nContent-Transfer-Encoding: 7bit\r\nContent-Disposition: inline\r\nContent-Description:  message\r\n\r\nThis is test message\r\n";
+        $this->fileName = 'test.doc';
+        $this->mimeType = 'application/msword';
+        $this->attachArray = array('attachment'=>array('test.doc'=>array('mimeType'=>'application/msword', 'fileName'=>'test.doc', 'data'=>'VGhpcyBpcyB0ZXN0IG1lc3NhZ2U=')));
     }
 
    /*
@@ -1040,17 +1074,197 @@ Class SMTPsFailuresTest extends PHPUnit_TestCase {
         $_type = 5;
 
         // Call to "parent" class for processing
-        $_returned = $this->SMTPsTest->set_Transport_Type($_type);
+        $_returned = $this->SMTPsTest->get_Transport_Type($_type);
 
         // Determine if we received what we think we should have
         $this->assertFalse(($_type == $_returned), "Set Transport Type: ");
     }
 
-    function test_set_Port() {
-        SMTPsPropertiesTest::test_set_Port( 'port');
+    function test_set_Transport_Type__set_to_string()
+    {
+        // Define value as a string.
+        $_type = 'transport';
+
+        // Call to "parent" class for processing
+        $_returned = $this->SMTPsTest->get_Transport_Type($_type);
+
+        // Determine if we received what we think we should have
+        $this->assertFalse(($_type === $_returned), "Set Transport Type: ");
     }
 
+    function test_set_Host__invalid_IP()
+    {
+        $_host = '123456';
 
+        $_returned = $this->SMTPsTest->get_Host( $_host );
+
+        // Determine if we received what we think we should have
+        $this->assertFalse( ($_host == $_returned), "Set Host: ");
+    }
+
+    function test_set_Host__invalid_Domain()
+    {
+        $_host = 'bad*name';
+
+        $_returned = $this->SMTPsTest->get_Host( $_host );
+
+        // Determine if we received what we think we should have
+        $this->assertFalse( ($_host == $_returned), "Set Host: ");
+    }
+
+    function test_set_Port__out_of_bounds()
+    {
+        $_port = '123456';
+
+        $_returned = $this->SMTPsTest->get_Port( $_port );
+
+        // Determine if we received what we think we should have
+        $this->assertFalse( ($_port == $_returned), "Set Port: ");
+    }
+
+    function test_set_Port__set_to_string()
+    {
+        $_port = 'port';
+
+        $_returned = $this->SMTPsTest->get_Port( $_port );
+
+        // Determine if we received what we think we should have
+        $this->assertFalse( ($_port == $_returned), "Set Port: ");
+    }
+
+    function test_set_Trans_Encode__invalid_string()
+    {
+        $_encodeType = '9bit';
+
+        $_retValue = $this->SMTPsTest->get_Trans_Encode($_encodeType);
+
+        $this->assertFalse(($_encodeType == $_retValue), "Set Content Transfer Encoding: ");
+
+        return ( $_retValue == $_encode );
+    }
+
+   /*
+    * Message Content Sensitivity
+    * Message Sensitivity values:
+    *   - [0] None - default
+    *   - [1] Personal
+    *   - [2] Private
+    *   - [3] Company Confidential
+    */
+    function test_set_Sensitivity__out_of_bounds()
+    {
+        $_sensitivity = 5;
+
+        $_retValue = $this->SMTPsTest->set_Sensitivity($_sensitivity);
+
+        $this->assertFalse(($_sensitivity == $_retValue), "Set Message Sensitivity: ");
+    }
+
+   /*
+    * Message Content Priority
+    * Message Priority values:
+    *  - [0] 'Bulk'
+    *  - [1] 'Highest'
+    *  - [2] 'High'
+    *  - [3] 'Normal' - default
+    *  - [4] 'Low'
+    *  - [5] 'Lowest
+    */
+    function test_set_Priority__out_of_bounds( $_priority = false )
+    {
+        $_priority = 6;
+
+        $_retValue = $this->SMTPsTest->set_Priority($_priority);
+
+        $this->assertFalse(($_priority == $_retValue), "Set Message Priority: ");
+    }
+
+    function test_set_From__bad_address()
+    {
+        $_sender = 'bad-address';
+
+        $_retValue = $this->SMTPsTest->get_From_Address($_sender);
+
+        $this->assertEquals($_sender, $_retValue, "Set FROM Address: ");
+    }
+
+    function test_set_TO_Email__bad_address()
+    {
+        $_addr = 'bad-address';
+
+        $_retValue = $this->SMTPsTest->get_Email_List_TO($_addr);
+
+        $this->assertEquals($_addr, $_retValue, "Set TO Email Address: ");
+    }
+
+    function test_set_CC_Email__bad_address()
+    {
+        $_addr = 'bad-address';
+
+        $_retValue = $this->SMTPsTest->get_Email_List_CC($_addr);
+
+        $this->assertEquals($_addr, $_retValue, "Set CC Email Address: ");
+    }
+
+    function test_set_BCC_Email__bad_address()
+    {
+        $_addr = 'bad-address';
+
+        $_retValue = $this->SMTPsTest->get_Email_List_BCC($_addr);
+
+        $this->assertEquals($_addr, $_retValue, "Set BCC Email Address: ");
+    }
+
+    function xx_test_get_RCPT_List__no_address()
+    {
+        $_addr = '';
+
+        $_retValue = $this->SMTPsTest->get_RCPT_List( $_to_addr, $_cc_addr, $_bcc_addr );
+
+        $this->assertEquals($_retValue, $_retValue, "Recieptent List: ");
+    }
+
+    function test_Strip_Email_bad_address()
+    {
+        $_addr = 'bad-address';
+
+        $_retValue = $this->SMTPsTest->Strip_Email($_addr);
+
+do_print_r ( $_retValue );
+
+        $this->assertEquals($_addr, $_retValue, "Strip Email: ");
+    }
+
+    function test_get_Body_Content()
+    {
+        $_retValue = $this->SMTPsTest->get_Body_Content($this->content, $this->contentType);
+
+do_print_r ( $_retValue );
+
+        $this->assertEquals($this->contentMsg, $_retValue, "Get Body Content: ");
+    }
+
+    function test_set_Attachment( )
+    {
+        if ( $_strContent === false )
+            $_strContent = $this->content;
+
+        if ( $_strFileName === false )
+            $_strFileName = $this->fileName;
+
+        if ( $_strMimeType === false )
+            $_strMimeType = $this->mimeType;
+
+        if ( $_attachArray === false )
+            $_attachArray = $this->attachArray;
+
+        $_retValue = $this->SMTPsTest->set_Attachment($this->content, $this->fileName, $this->mimeType);
+
+do_print_r ( $_retValue );
+
+        $this->assertEquals($this->attachArray, $_retValue, "Set_Attachment: ");
+
+    }
 };
 
 
@@ -1059,7 +1273,7 @@ Class SMTPsFailuresTest extends PHPUnit_TestCase {
 
 // Define Test Classes
 $propertiesSuite = new PHPUnit_TestSuite( "SMTPsPropertiesTest" );
-$boundariesSuite = new PHPUnit_TestSuite( "SMTPsBoundariesTest" );
+// $boundariesSuite = new PHPUnit_TestSuite( "SMTPsBoundariesTest" );
 $failuresSuite   = new PHPUnit_TestSuite( "SMTPsFailuresTest" );
 
 // Insert Suites into Test Harness
@@ -1076,13 +1290,16 @@ $display->show();
 
  /**
   * $Log: SMTPs_test.php,v $
-  * Revision 1.1  2005/08/18 16:03:16  jswalter
-  *   - initial commit
-  *   - full property access
-  *   - complete property testing
-  *   - shell for 'boundary' testing
-  *   - shell for 'failure' testing
+  * Revision 1.2  2005/08/19 00:21:04  jswalter
+  *  - commented 'boundaries' suite until it is further defined
+  *  - completed prelim 'failures' suite
   *
+  * Revision 1.1  2005/08/18 15:59:20  walter
+  *  - initial commit
+  *  - full property access
+  *  - complete property testing
+  *  - shell for 'boundary' testing
+  *  - shell for 'failure' testing
   *
   *
   */
