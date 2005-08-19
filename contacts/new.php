@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.37 2005/08/18 22:41:02 ycreddy Exp $
+ * $Id: new.php,v 1.38 2005/08/19 00:11:29 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -36,20 +36,6 @@ if ($clone_id > 0) {
         $company_id     = $rst->fields['company_id'];
         $division_id    = $rst->fields['division_id'];
         $address_id     = $rst->fields['address_id'];
-        $home_address_id     = $rst->fields['home_address_id'];
-
-	if ( $address_id ) {
-  	   $address = get_formatted_address($con, $address_id);
-	} else {
-  	   $address = '';
-	}
-
-	if ( $home_address_id ) {
-  	   $home_address = get_formatted_address($con, $home_address_id);
-	} else {
-	   $home_address .= '';
-	}
-
       } else {
         // no - data not found
         $company_id     = '';
@@ -122,6 +108,22 @@ if ( !isset($division_menu) ) {
   $division_menu = '';
 }
 
+// build address menu
+if ( isset($company_id) ) {
+   $sql = "select address_name, address_id from addresses where company_id = $company_id and address_record_status = 'a' order by address_name";
+   $rst = $con->execute($sql);
+   if ($rst) {
+     if ( !$rst->EOF AND !$address_id ) {
+       $address_id = $rst->fields['address_id'];
+     }
+     $address_menu = $rst->getmenu2('address_id', $address_id, true);
+     $rst->close();
+   }
+}
+if ( !isset($address_menu) ) {
+   $address_menu = '';
+}
+
 // build salutation menu
 if ( !isset($salutation) ) {
   $salutation = '';
@@ -187,29 +189,13 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Business Address"); ?></td>
-                <td class=widget_content_form_element>
-                    <?php echo $address; ?>
-                    <input type=hidden name=address_return_url value="<?php echo $address_return_url; ?>">
-                    <input type=hidden name=address_id value="<?php echo $address_id; ?>">
-                    <br />
-                        <input type=submit name=btChangeAddress value="<?php echo _("Choose New Address") ?>" class=button>
-                        <?php if ($edit_address) { ?>&nbsp;<?php echo _("OR"); ?>&nbsp;
-                            <input class=button type=submit name=btEditBusinessAddress value="<?php echo _("Edit Address"); ?>">
-                        <?php } ?>
-
-                </td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Home Address"); ?></td>
-                <td class=widget_content_form_element>
-                    <?php echo $home_address; ?>
-                    <br />
-                    <input type=hidden name=home_address_id value="<?php echo $home_address_id; ?>">
-                    <input class=button type=submit name="btNewHomeAddress"  value="<?php echo _("Add New Address"); ?>">
-                    <?php if ($edit_home_address) { ?>&nbsp;<?php echo  _("OR")?>&nbsp;
-                        <input class=button type=submit name="btEditHomeAddress" value="<?php echo _("Edit Address"); ?>">
-                    <?php } ?>
-                </td>
+ 				<td class=widget_content_form_element>
+				<?php
+			 		echo $address_menu."\n";
+                    echo '&nbsp;'._("Enter New or Edit Existing Address")."\n";
+                ?>
+                <input type=checkbox name=edit_address>
+				</td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
@@ -379,6 +365,9 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.38  2005/08/19 00:11:29  ycreddy
+ * Setting default address id to cloned address id if one is present. Also removed Home address and added address_menu
+ *
  * Revision 1.37  2005/08/18 22:41:02  ycreddy
  * Fixes for Clone Contact - populating Business and Home Address and removing old and unused address menu code
  *
