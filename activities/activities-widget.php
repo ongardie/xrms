@@ -255,11 +255,11 @@ $offset_sql = '';
 if(isset($search_terms['day_diff']) and $search_terms['day_diff']) {
     $search_terms['search_date'] = date('Y-m-d', time() + ($search_terms['day_diff'] * 86400));
 } else {
-    if ( !$search_terms['search_date'] ) {
-        $search_terms['search_date'] = date('Y-m-d', time());
+    if($search_terms['search_date'] ) {
+        $search_terms['day_diff'] = round((strtotime($search_terms['search_date']) - strtotime(date('Y-m-d', time()))) / 86400);
     }
-    $search_terms['day_diff'] = round((strtotime($search_terms['search_date']) - strtotime(date('Y-m-d', time()))) / 86400);
 }
+
 
 
 // first set up $offset_sql for before/after search_terms['search_date']
@@ -793,6 +793,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.35  2005/08/19 18:59:58  daturaarutad
+* no longer set search_date if it is not set (old code that should have been deleted) to fix date filtering bug
+*
 * Revision 1.34  2005/08/15 21:35:12  daturaarutad
 * removed if ($search_terms["day_diff"]) conditional around date filter handling
 *
