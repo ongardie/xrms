@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.126 2005/08/13 22:57:00 vanmer Exp $
+ * $Id: one.php,v 1.127 2005/08/19 19:27:09 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -24,7 +24,6 @@ require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once('../activities/activities-widget.php');
 
 
-global $company_id;
 $company_id = $_GET['company_id'];
 if (isset($_GET['division_id'])) {
     $division_id = $_GET['division_id'];
@@ -38,9 +37,8 @@ if ($division_id AND !$company_id) {
 
 if (!$company_id) { echo _("Failed to provide a company identifier, failing"); exit; }
 
-global $on_what_id;
 $on_what_id=$company_id;
-global $session_user_id;
+
 $session_user_id = session_check();
 
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
@@ -731,6 +729,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.127  2005/08/19 19:27:09  braverock
+ * - take out insecure use of 'global'
+ *
  * Revision 1.126  2005/08/13 22:57:00  vanmer
  * - altered to hide custom company fields unless their labels have been changed in vars.php
  *
