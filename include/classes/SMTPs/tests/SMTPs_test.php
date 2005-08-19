@@ -7,19 +7,17 @@
    *  - test property assignments
    *  - test "boundary" results
    *  - test "failure" senarios
+   *  - test server connections based upon ini configuration
    *
    * @package SMTPs_Test
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version $Revision: 1.4 $
+   * @version $Revision: 1.5 $
    * @copyright copyright information
    * @license URL name of license
    *
    **/
-
-
-require_once("../../debug.php");
 
 
 require_once("PHPUnit.php");
@@ -1268,7 +1266,7 @@ do_print_r ( $_retValue );
 };
 
 // ***********************************************************************
-// Test Class Method Properties
+// Test Message Content Construction
 
 Class SMTPsMessageContentDisplay extends PHPUnit_TestCase {
 
@@ -1351,6 +1349,106 @@ Class SMTPsMessageContentDisplay extends PHPUnit_TestCase {
 
 
 // ***********************************************************************
+// Test Message Content Construction
+
+Class SMTPsServerAuthentication extends PHPUnit_TestCase {
+
+    function SMTPsFailuresTest( $name = "SMTPsServerAuthentication" ) {
+        $this->PHPUnit_TestCase( $name );
+    }
+
+    function setUp() {
+//        $_mainTest = new SMTPsPropertiesTest ();
+        $this->SMTPs = new SMTPs();
+        $this->SMTPsTest = new SMTPs_Test();
+
+        $this->ini_path = '../SMTPs.ini.php';
+    }
+
+    function xx_test_Server_Connectivity()
+    {
+       /**
+        * Default return value
+        *
+        * Returns constructed SELECT Object string or boolean upon failure
+        * Default value is set at FALSE
+        *
+        * @var mixed $_retVal Indicates if Object was created or not
+        * @access private
+        * @static
+        */
+        $_retVal = false;
+
+        if ( $this->SMTPs->setConfig($this->ini_path) )
+        {
+            if ( ! $this->SMTPs->server_connect() )
+            {
+                $this->fail ( $this->SMTPs->getErrors() );
+                $_retVal = true;
+            }
+        }
+        else
+        {
+            $this->fail ( 'INI File could not be read.');
+        }
+
+        return $_retVal;
+
+//        $_retValue = $this->SMTPsTest->get_Body_Content($this->contentHTML, 'html');
+
+//do_print_r (  $this->SMTPs );
+
+    }
+
+    function test_Server_Authentication()
+    {
+       /**
+        * Default return value
+        *
+        * Returns constructed SELECT Object string or boolean upon failure
+        * Default value is set at FALSE
+        *
+        * @var mixed $_retVal Indicates if Object was created or not
+        * @access private
+        * @static
+        */
+        $_retVal = false;
+
+        if ( $this->SMTPs->setConfig($this->ini_path) )
+        {
+            if ($this->SMTPs->_server_connect() )
+            {
+                if ( $this->SMTPs->_server_authenticate() )
+                {
+                    $_retVal = true;
+                }
+                else
+                {
+                    $this->fail ( $this->SMTPs->getErrors());
+                }
+            }
+            else
+            {
+                $this->fail ( $this->SMTPs->getErrors() );
+            }
+        }
+        else
+        {
+            $this->fail ( 'INI File could not be read.');
+        }
+
+        return $_retVal;
+
+//        $_retValue = $this->SMTPsTest->get_Body_Content($this->contentHTML, 'html');
+
+//do_print_r (  $this->SMTPs );
+
+    }
+
+};
+
+
+// ***********************************************************************
 // ***********************************************************************
 
 // $this->fail ( 'failed' );
@@ -1361,12 +1459,14 @@ $propertiesSuite = new PHPUnit_TestSuite( "SMTPsPropertiesTest" );
 // $boundariesSuite = new PHPUnit_TestSuite( "SMTPsBoundariesTest" );
 $failuresSuite   = new PHPUnit_TestSuite( "SMTPsFailuresTest" );
 $contentSuite    = new PHPUnit_TestSuite( "SMTPsMessageContentDisplay" );
+$authSuite       = new PHPUnit_TestSuite( "SMTPsServerAuthentication" );
 
 // Insert Suites into Test Harness
 $display = new PHPUnit_GUI_HTML(array( $propertiesSuite,
                                   //     $boundariesSuite,
                                        $failuresSuite,
-                                       $contentSuite ) );
+                                       $contentSuite,
+                                       $authSuite ) );
 
 // Display Test Harness
 $display->show();
@@ -1377,6 +1477,9 @@ $display->show();
 
  /**
   * $Log: SMTPs_test.php,v $
+  * Revision 1.5  2005/08/19 20:42:39  jswalter
+  *  - added 'SMTPsServerAuthentication' to test server connection and authentication
+  *
   * Revision 1.4  2005/08/19 15:19:40  jswalter
   *  - added 'SMTPsMessageContentDisplay' to display message content construction
   *
