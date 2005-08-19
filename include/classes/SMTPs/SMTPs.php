@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.8 2005/06/24 21:00:20 jswalter Exp $
+// $Id: SMTPs.php,v 1.9 2005/08/19 15:40:18 jswalter Exp $
 
   /**
    * Class SMTPs
@@ -19,8 +19,8 @@
    *  - multi-part message
    *    - plain text
    *    - HTML
-   *    - inline attachements
-   *    - attachements
+   *    - inline attachments
+   *    - attachments
    *  - GPG access
    *
    * This Class is based off of 'SMTP PHP MAIL'
@@ -37,7 +37,7 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.8 $
+   * @version $Revision: 1.9 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -342,6 +342,27 @@ class SMTPs
     var $_smtpsCharSet = 'iso-8859-1';
 
    /**
+    * Property private string var $_smtpsTransEncodeTypes
+    *
+    * @property private string Character set
+    * @name var $_smtpsTransEncodeTypes
+    *
+    * Content-Transfer-Encoding
+    *
+    * @access private
+    * @static
+    * @since 1.0
+    *
+    */
+    var $_smtpsTransEncodeTypes = array('7bit',               // Simple 7-bit ASCII
+                                        '8bit',               // 8-bit coding with line termination characters
+                                        'base64',             // 3 octets encoded into 4 sextets with offset
+                                        'binary',             // Arbitrary binary stream
+                                        'mac-binhex40',       // Macintosh binary to hex encoding
+                                        'quoted-printable',   // Mostly 7-bit, with 8-bit characters encoded as "=HH"
+                                        'uuencode' );         // UUENCODE encoding
+
+   /**
     * Property private string var $_smtpsTransEncode
     *
     * @property private string Character set
@@ -460,7 +481,7 @@ class SMTPs
    /**
     * Method public void buildRCPTlist( void )
     *
-    * Now send the message
+    * build RECIPIENT List, all addresses who will recieve this message
     *
     * @name buildRCPTlist()
     *
@@ -471,6 +492,8 @@ class SMTPs
     *
     * @param void
     * @return void
+    *
+    * @TODO
     *
     */
     function buildRCPTlist()
@@ -492,11 +515,19 @@ class SMTPs
     *
     * @since 1.0
     *
-    * @param void
-    * @return void
+    * @param  boolean $_bolTestMsg  whether to run this method in 'Test' mode.
+    * @param  boolean $_bolDebug    whether to log all communication between this Class and the Mail Server.
+    * @return mixed   void
+    *                 $_strMsg     If this is run in 'Test' mode, the actaul message structure will be returned
+    *
+    * @TODO
+    * Modify method to return message structure without actually sending the message
+    *
+    * @TODO
+    * Modify method to generate log of Class to Mail Server communication
     *
     */
-    function sendMsg ( )
+    function sendMsg ( $_bolTestMsg = false, $_bolDebug = false )
     {
         // We have to make sure the HOST given is valid
         // I do this here because '@fsockopen' will not give me this
@@ -534,7 +565,7 @@ class SMTPs
         if( !empty($this->_smtpsID) && !empty($this->_smtpsPW) )
         {
             // Send the RFC2554 specified EHLO.
-            // This improvment as provided by SirSir to
+            // This improvment as provided by 'SirSir' to
             // accomodate both SMTP AND ESMTP capable servers
             $this->socket_send_str('EHLO ' . $this->getHost(), '250');
 
@@ -628,16 +659,36 @@ class SMTPs
     */
     function setConfig ( $_strConfigPath = null )
     {
+       /**
+        * Default return value
+        *
+        * Returns constructed SELECT Object string or boolean upon failure
+        * Default value is set at TRUE
+        *
+        * @var mixed $_retVal Indicates if Object was created or not
+        * @access private
+        * @static
+        */
+        $_retVal = true;
+
         // if we have a path...
         if ( ! empty ($_strConfigPath) )
-            include ( $_strConfigPath );
+        {
+            // If the path is not valid, this will NOT generate an error,
+            // it will simply return FALSE.
+            if ( ! @include ( $_strConfigPath ) )
+            {
+                $this->_setErr ( 110, '"' . $_strConfigPath . '" is not a valid path.' );
+                $_retVal = false;
+            }
+        }
 
         // Read the Systems php.ini file
         else
         {
             // Set these properties ONLY if they are set in the php.ini file.
             // Otherwise the default values will be used.
-            if ( $_host = ini_get ('SMTP') )
+            if ( $_host = ini_get ('SMTPs') )
                 $this->setHost ( $_host );
 
             if ( $_port = ini_get ('smtp_port') )
@@ -646,12 +697,15 @@ class SMTPs
             if ( $_from = ini_get ('sendmail_from') )
                 $this->setFrom ( $_from );
         }
+
+        // Send back what we have
+        return $_retVal;
     }
 
    /**
     * Method public void setTransportType( int )
     *
-    * Determines the method inwhich the message are to be sent.
+    * Determines the method inwhich the messages are to be sent.
     * - 'sockets' [0] - conect via network to SMTP server
     * - 'pipe     [1] - use UNIX path to EXE
     * - 'phpmail  [2] - use the PHP built-in mail function
@@ -666,16 +720,17 @@ class SMTPs
     *
     * @since 1.8
     *
-    * @param int $_strHost Host Name or IP of the Mail Server to use
+    * @param int $_type  Interger value representing Mail Transport Type
     * @return void
     *
+    * @TODO
+    * This feature is not yet implemented
+    *
     */
-    function setTransportType ( $_type )
+    function setTransportType ( $_type = 0 )
     {
-        // This feature is not yet implemented
-        return true;
-
-        if ( $_type )
+        if ( ( is_numeric ($_type) ) &&
+           ( ( $_type >= 0 ) && ( $_type <= 3 ) ) )
             $this->_transportType = $_type;
     }
 
@@ -804,10 +859,11 @@ class SMTPs
     * @return void
     *
     */
-    function setPort ( $_strPort )
+    function setPort ( $_intPort )
     {
-        if ( $_strPort )
-            $this->_smtpsPort = $_strPort;
+        if ( ( is_numeric ($_intPort) ) &&
+           ( ( $_intPort >= 1 ) && ( $_intPort <= 65536 ) ) )
+            $this->_smtpsPort = $_intPort;
     }
 
    /**
@@ -974,6 +1030,15 @@ class SMTPs
     * Content-Transfer-Encoding, Defaulted to '7bit'
     * This can be changed for 2byte characers sets
     *
+    * Known Encode Types
+    *  - 7bit               Simple 7-bit ASCII
+    *  - 8bit               8-bit coding with line termination characters
+    *  - base64             3 octets encoded into 4 sextets with offset
+    *  - binary             Arbitrary binary stream
+    *  - mac-binhex40       Macintosh binary to hex encoding
+    *  - quoted-printable   Mostly 7-bit, with 8-bit characters encoded as "=HH"
+    *  - uuencode           UUENCODE encoding
+    *
     * @name setTransEncode()
     *
     * @uses Class property $_smtpsTransEncode
@@ -988,7 +1053,7 @@ class SMTPs
     */
     function setTransEncode ( $_strTransEncode )
     {
-        if ( $_strTransEncode )
+        if ( array_search ( $_strTransEncode, $this->_smtpsTransEncodeTypes ) )
             $this->_smtpsTransEncode = $_strTransEncode;
     }
 
@@ -1072,7 +1137,7 @@ class SMTPs
    /**
     * Method private array _buildAddrList( void )
     *
-    * Inserts given addresses into structured format
+    * Inserts given addresses into structured format.
     * This method takes a list of given addresses, via an array
     * or a COMMA delimted string, and inserts them into a highly
     * structured array. This array is designed to remove duplicate
@@ -1112,7 +1177,7 @@ class SMTPs
                     $_addrList = array($_addrList);
             }
 
-            // take the array of address and split them further
+            // take the array of addresses and split them further
             foreach ( $_addrList as $_strAddr )
             {
                 // Strip off the end '>'
@@ -1281,32 +1346,49 @@ class SMTPs
     * @return array $_RCPT_list Array of emaill address
     *
     */
-    function get_email_list( $_which )
+    function get_email_list( $_which = null )
     {
-        // walk down Recipients array and pull just email addresses
-        foreach ( $this->_msgRecipients as $_host => $_list )
+        // We need to know which address segment to pull
+        if ( $_which )
         {
-            if ( $this->_msgRecipients[$_host][$_which] )
-
-                foreach ( $this->_msgRecipients[$_host][$_which] as $_addr => $_realName )
+            // Make sure we have addresses to process
+            if ( $this->_msgRecipients )
+            {
+                // walk down Recipients array and pull just email addresses
+                foreach ( $this->_msgRecipients as $_host => $_list )
                 {
+                    if ( $this->_msgRecipients[$_host][$_which] )
+                    {
+                        foreach ( $this->_msgRecipients[$_host][$_which] as $_addr => $_realName )
+                        {
+                            if ( $_realName )
+                                $_realName = '"' . $_realName . '"';
 
-                    if ( $_realName )
-                        $_realName = '"' . $_realName . '"';
-
-                    $_RCPT_list[] = $_realName . ' <' . $_addr . '@' . $_host . '>';
+                            $_RCPT_list[] = $_realName . ' <' . $_addr . '@' . $_host . '>';
+                        }
+                    }
                 }
 
+                return implode(', ', $_RCPT_list);
+            }
+            else
+            {
+                $this->_setErr ( 101, 'No eMail Address for message to be sent to.' );
+                return false;
+            }
+        }
+        else
+        {
+            $this->_setErr ( 102, 'eMail type not defined.' );
+            return false;
         }
 
-        if ( $_RCPT_list )
-            return implode(', ', $_RCPT_list);
     }
 
    /**
     * Method public void setTO( string )
     *
-    * TO Address[es] inwhich to sent mail to
+    * TO Address[es] inwhich to send mail to
     *
     * @name setTO()
     *
@@ -1316,7 +1398,7 @@ class SMTPs
     *
     * @since 1.0
     *
-    * @param mixed $_addrTo TO Address[es] inwhich to sent mail to
+    * @param mixed $_addrTo TO Address[es] inwhich to send mail to
     * @return void
     *
     */
@@ -1329,7 +1411,7 @@ class SMTPs
    /**
     * Method public string getTo( void )
     *
-    * Retrieves the TO Address[es] inwhich to sent mail to
+    * Retrieves the TO Address[es] inwhich to send mail to
     *
     * @name getTo()
     *
@@ -1340,7 +1422,7 @@ class SMTPs
     * @since 1.0
     *
     * @param  void
-    * @return string $_msgRecipients TO Address[es] inwhich to sent mail to
+    * @return string $_msgRecipients TO Address[es] inwhich to send mail to
     *
     */
     function getTo ()
@@ -1351,7 +1433,7 @@ class SMTPs
    /**
     * Method public void setCC( string )
     *
-    * CC Address[es] inwhich to sent mail to
+    * CC Address[es] inwhich to send mail to
     *
     * @name setCC()
     *
@@ -1361,7 +1443,7 @@ class SMTPs
     *
     * @since 1.0
     *
-    * @param string $_msgRecipients CC Address[es] inwhich to sent mail to
+    * @param string $_msgRecipients CC Address[es] inwhich to send mail to
     * @return void
     *
     */
@@ -1374,7 +1456,7 @@ class SMTPs
    /**
     * Method public string getCC( void )
     *
-    * Retrieves the CC Address[es] inwhich to sent mail to
+    * Retrieves the CC Address[es] inwhich to send mail to
     *
     * @name getCC()
     *
@@ -1385,7 +1467,7 @@ class SMTPs
     * @since 1.0
     *
     * @param  void
-    * @return string $_msgRecipients CC Address[es] inwhich to sent mail to
+    * @return string $_msgRecipients CC Address[es] inwhich to send mail to
     *
     */
     function getCC ()
@@ -1396,7 +1478,7 @@ class SMTPs
    /**
     * Method public void setBCC( string )
     *
-    * BCC Address[es] inwhich to sent mail to
+    * BCC Address[es] inwhich to send mail to
     *
     * @name setBCC()
     *
@@ -1406,7 +1488,7 @@ class SMTPs
     *
     * @since 1.0
     *
-    * @param string $_msgRecipients BCC Address[es] inwhich to sent mail to
+    * @param string $_msgRecipients BCC Address[es] inwhich to send mail to
     * @return void
     *
     */
@@ -1419,7 +1501,7 @@ class SMTPs
    /**
     * Method public string getBCC( void )
     *
-    * Retrieves the BCC Address[es] inwhich to sent mail to
+    * Retrieves the BCC Address[es] inwhich to send mail to
     *
     * @name getBCC()
     *
@@ -1430,7 +1512,7 @@ class SMTPs
     * @since 1.0
     *
     * @param  void
-    * @return string $_msgRecipients BCC Address[es] inwhich to sent mail to
+    * @return string $_msgRecipients BCC Address[es] inwhich to send mail to
     *
     */
     function getBCC ()
@@ -1455,10 +1537,32 @@ class SMTPs
     * @return void
     *
     */
-    function setSubject ( $_strSubject )
+    function setSubject ( $_strSubject = '' )
     {
         if ( $_strSubject )
             $this->_msgSubject = $_strSubject;
+    }
+
+   /**
+    * Method public string getSubject( void )
+    *
+    * Retrieves the Message Subject
+    *
+    * @name getSubject()
+    *
+    * @uses Class property $_msgSubject
+    * @final
+    * @access public
+    *
+    * @since 1.0
+    *
+    * @param  void
+    * @return string $_msgSubject Message Subject
+    *
+    */
+    function getSubject ()
+    {
+        return $this->_msgSubject;
     }
 
    /**
@@ -1512,28 +1616,6 @@ class SMTPs
                  .  'Mime-Version: 1.0'                            . "\r\n";
 
         return $_header;
-    }
-
-   /**
-    * Method public string getSubject( void )
-    *
-    * Retrieves the Message Subject
-    *
-    * @name getSubject()
-    *
-    * @uses Class property $_msgSubject
-    * @final
-    * @access public
-    *
-    * @since 1.0
-    *
-    * @param  void
-    * @return string $_msgSubject Message Subject
-    *
-    */
-    function getSubject ()
-    {
-        return $this->_msgSubject;
     }
 
    /**
@@ -1633,9 +1715,9 @@ class SMTPs
             // Loop through message content array
             foreach ($this->_msgContent as $type => $_content )
             {
-                if ( $type == 'attachement' )
+                if ( $type == 'attachment' )
                 {
-                    // loop through all attachements
+                    // loop through all attachments
                     foreach ( $_content as $_file => $_data )
                     {
 
@@ -1673,10 +1755,10 @@ class SMTPs
     }
 
    /**
-    * Method public void setAttachement( string, string, string )
+    * Method public void setAttachment( string, string, string )
     *
-    * File attachements are added to the content array as sub-arrays,
-    * allowing for multiple attachements for each outbound email
+    * File attachments are added to the content array as sub-arrays,
+    * allowing for multiple attachments for each outbound email
     *
     * @name setBodyContent()
     *
@@ -1691,17 +1773,16 @@ class SMTPs
     * @return void
     *
     */
-    function setAttachement ( $strContent, $strFileName = 'unknown', $strMimeType = 'unknown' )
+    function setAttachment ( $strContent, $strFileName = 'unknown', $strMimeType = 'unknown' )
     {
         if ( $strContent )
         {
             $strContent = rtrim(chunk_split(base64_encode($strContent), 76, "\r\n"));
 
-            $this->_msgContent['attachement'][$strFileName]['mimeType'] = $strMimeType;
-            $this->_msgContent['attachement'][$strFileName]['fileName'] = $strFileName;
-            $this->_msgContent['attachement'][$strFileName]['data']     = $strContent;
+            $this->_msgContent['attachment'][$strFileName]['mimeType'] = $strMimeType;
+            $this->_msgContent['attachment'][$strFileName]['fileName'] = $strFileName;
+            $this->_msgContent['attachment'][$strFileName]['data']     = $strContent;
         }
-
     }
 
    /**
@@ -1728,7 +1809,9 @@ class SMTPs
     */
     function setSensitivity ( $_value = 0 )
     {
-        $this->_msgSensitivity = $_value;
+        if ( ( is_numeric ($_value) ) &&
+           ( ( $_value >= 0 ) && ( $_value <= 3 ) ) )
+            $this->_msgSensitivity = $_value;
     }
 
    /**
@@ -1785,7 +1868,9 @@ class SMTPs
     */
     function setPriority ( $_value = 3 )
     {
-        $this->_msgPriority = $_value;
+        if ( ( is_numeric ($_value) ) &&
+           ( ( $_value >= 0 ) && ( $_value <= 5 ) ) )
+            $this->_msgPriority = $_value;
     }
 
    /**
@@ -1825,6 +1910,8 @@ class SMTPs
     * Method public void setXheader( string )
     *
     * Message X-Header Content
+    * This is a simple "insert". Whatever is given will be placed
+    * "as is" into the Xheader array.
     *
     * @name setXheader()
     *
@@ -2016,6 +2103,20 @@ function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.9  2005/08/19 15:40:18  jswalter
+  *  - IMPORTANT: 'setAttachement()' is now spelled correctly: 'setAttachment()'
+  *  - added additional comment to several methods
+  *  - added '$_smtpsTransEncodeTypes' array to limit encode types
+  *  - added parameters to 'sendMsg()' for future development around debugging and logging
+  *  - added error code within 'setConfig()' if the given path is not found
+  *  - 'setTransportType()' now has parameter validation
+  *     [this still is not implemented]
+  *  - 'setPort()' now does parameter validation
+  *  - 'setTransEncode()' now has parameter validation against '$_smtpsTransEncodeTypes'
+  *  - modified 'get_email_list()' to handle error handling
+  *  - 'setSensitivity()' now has parameter validation
+  *  - 'setPriority()' now has parameter validation
+  *
   * Revision 1.8  2005/06/24 21:00:20  jswalter
   *   - corrected comments
   *   - corrected the defualt value for 'setPriority()'
