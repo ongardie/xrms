@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.27 2005/08/12 01:18:05 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.28 2005/08/19 03:18:03 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -2056,7 +2056,9 @@ class xrms_acl {
                 if ($recurse) {
 //                    echo "Results: <pre>"; print_r($recurse); echo "</pre>";
                     //if we found any objects, get IDs
-                    $ParentIDs = $recurse['controlled_objects'];
+                    if (array_key_exists('controlled_objects',$recurse)) $ParentIDs = $recurse['controlled_objects'];
+		    else $ParentIDs=false;
+
                     //check if relationship is singular (is only a child on one of its possible relationships)
                     if ($Relationship['singular']==1) {
                         $on_what_child_field='on_what_id';
@@ -2543,6 +2545,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.28  2005/08/19 03:18:03  vanmer
+ * - changed to not assume array key exists for parent IDs
+ *
  * Revision 1.27  2005/08/12 01:18:05  vanmer
  * - added case to ensure that id is not overwritten if not set
  *
