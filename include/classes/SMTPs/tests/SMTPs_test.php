@@ -12,7 +12,7 @@
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version $Revision: 1.3 $
+   * @version $Revision: 1.4 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -1267,6 +1267,91 @@ do_print_r ( $_retValue );
     }
 };
 
+// ***********************************************************************
+// Test Class Method Properties
+
+Class SMTPsMessageContentDisplay extends PHPUnit_TestCase {
+
+    function SMTPsFailuresTest( $name = "SMTPsMessageContentDisplay" ) {
+        $this->PHPUnit_TestCase( $name );
+    }
+
+    function setUp() {
+//        $_mainTest = new SMTPsPropertiesTest ();
+        $this->SMTPs = new SMTPs();
+        $this->SMTPsTest = new SMTPs_Test();
+
+        $this->ini_path = '../SMTPs.ini.php';
+        $this->sender = '<test_sender@test.com>';
+        $this->sender_array = array('org'=>'<test_sender@test.com>', 'addr'=>'<test_sender@test.com>', 'host'=>'test.com', 'user'=>'test_sender');
+        $this->sender_host = 'test.com';
+        $this->sender_user = 'test_sender';
+        $this->to_full_address = '"send to" <to@test.com>';
+        $this->to_address = 'to@test.com';
+        $this->to_address_array = array('org'=>'"send to" <to@test.com>', 'real'=>"send to", 'addr'=>'<to@test.com>', 'host'=>'test.com', 'user'=>'to');
+        $this->to_array = array('test.com'=>array('to'=>array('to'=>'send to')));
+        $this->cc_full_address = '"send cc" <cc@test.com>';
+        $this->cc_address = 'cc@test.com';
+        $this->cc_array = array('test.com'=>array('cc'=>array('cc'=>'send cc')));
+        $this->bcc_full_address = '"send bcc" <bcc@test.com>';
+        $this->bcc_address = 'bcc@test.com';
+        $this->bcc_array = array('test.com'=>array('bcc'=>array('bcc'=>'send bcc')));
+        $this->to_user = 'to';
+        $this->cc_user = 'cc';
+        $this->bcc_user = 'bcc';
+        $this->to_domain = 'test.com';
+        $this->rcpt_array = array($this->to_address, $this->cc_address, $this->bcc_address);
+        $this->subject = "Test Subject";
+        $this->msgSensitivity = 1;
+        $this->msgSensitivityResults = 'Personal';
+        $this->msgPriority = 2;
+        $this->msgPriorityResults = "Importance: High\r\nPriority: High\r\nX-Priority: 2 (High)\r\n";
+        $this->transportType = 0;
+        $this->host = 'localhost';
+        $this->port = 21;
+        $this->id = 'tester';
+        $this->pw = 'testing';
+        $this->charSet = 'iso-8859-1';
+        $this->transEncode = '7bit' ;
+        $this->xheader = 'X-test: test';
+        $this->contentHTML = '<b>This</b> is <i>test</i> message';
+        $this->content = 'This is test message';
+        $this->contentType = 'plain';
+        $this->contentRawArray = array('plain'=>array('mimeType'=>'text/plain', 'data'=>'This is test message'));
+        $this->contentMsg = "Content-Type: text/plain; charset=\"iso-8859-1\"\r\nContent-Transfer-Encoding: 7bit\r\nContent-Disposition: inline\r\nContent-Description:  message\r\n\r\nThis is test message\r\n";
+        $this->fileName = 'test.doc';
+        $this->mimeType = 'application/msword';
+        $this->attachArray = array('attachment'=>array('test.doc'=>array('mimeType'=>'application/msword', 'fileName'=>'test.doc', 'data'=>'VGhpcyBpcyB0ZXN0IG1lc3NhZ2U=')));
+    }
+
+    function test_Body_Content()
+    {
+        $_retValue = $this->SMTPsTest->get_Body_Content($this->content, $this->contentType);
+
+        $this->fail ( $_retValue);
+    }
+
+    function test_Body_HTML_Content()
+    {
+        $_retValue = $this->SMTPsTest->get_Body_Content($this->contentHTML, 'html');
+
+        $this->fail ( $_retValue);
+    }
+
+    function test_Attachment( )
+    {
+        $_retValue = $this->SMTPs->setBodyContent($this->content, $this->contentType);
+        $_retValue = $this->SMTPs->setBodyContent($this->contentHTML, 'html');
+        $_retValue = $this->SMTPs->setAttachment($this->content, $this->fileName, $this->mimeType);
+        $_retValue = $this->SMTPs->getBodyContent($this->content, $this->contentType);
+
+        $this->fail ( $_retValue);
+    }
+};
+
+
+// ***********************************************************************
+// ***********************************************************************
 
 // $this->fail ( 'failed' );
 
@@ -1275,11 +1360,13 @@ do_print_r ( $_retValue );
 $propertiesSuite = new PHPUnit_TestSuite( "SMTPsPropertiesTest" );
 // $boundariesSuite = new PHPUnit_TestSuite( "SMTPsBoundariesTest" );
 $failuresSuite   = new PHPUnit_TestSuite( "SMTPsFailuresTest" );
+$contentSuite    = new PHPUnit_TestSuite( "SMTPsMessageContentDisplay" );
 
 // Insert Suites into Test Harness
 $display = new PHPUnit_GUI_HTML(array( $propertiesSuite,
-                                    //   $boundariesSuite,
-                                       $failuresSuite ) );
+                                  //     $boundariesSuite,
+                                       $failuresSuite,
+                                       $contentSuite ) );
 
 // Display Test Harness
 $display->show();
@@ -1290,7 +1377,10 @@ $display->show();
 
  /**
   * $Log: SMTPs_test.php,v $
-  * Revision 1.3  2005/08/19 15:17:23  jswalter
+  * Revision 1.4  2005/08/19 15:19:40  jswalter
+  *  - added 'SMTPsMessageContentDisplay' to display message content construction
+  *
+  * Revision 1.3  2005/08/19 15:17:00  walter
   *  - corrected 'SMTPsBoundariesTest' comment error
   *
   * Revision 1.2  2005/08/19 00:21:04  jswalter
