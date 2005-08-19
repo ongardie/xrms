@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.9 2005/08/19 15:40:18 jswalter Exp $
+// $Id: SMTPs.php,v 1.10 2005/08/19 20:39:32 jswalter Exp $
 
   /**
    * Class SMTPs
@@ -37,7 +37,7 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.9 $
+   * @version $Revision: 1.10 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -500,7 +500,124 @@ class SMTPs
     {
         // Pull TO list
         $_aryToList = $this->getTO();
+    }
 
+   /**
+    * Method private bool _server_connect( void )
+    *
+    * Attempt a connection to mail server
+    *
+    * @name _server_connect()
+    *
+    * @final
+    * @access private
+    *
+    * @since 1.14
+    *
+    * @param  void
+    * @return mixed  $_retVal   Boolean indicating success or failure on connection
+    *
+    * @TODO
+    * Modify method to generate log of Class to Mail Server communication
+    *
+    */
+    function _server_connect()
+    {
+       /**
+        * Default return value
+        *
+        * Returns constructed SELECT Object string or boolean upon failure
+        * Default value is set at TRUE
+        *
+        * @var mixed $_retVal Indicates if Object was created or not
+        * @access private
+        * @static
+        */
+        $_retVal = true;
+
+        // We have to make sure the HOST given is valid
+        // I do this here because '@fsockopen' will not give me this
+        // information if it failes to connect because it can't find the HOST
+        if ( (gethostbyname ( $this->getHost() )) == $this->getHost() )
+        {
+            $this->_setErr ( 99, $this->getHost() . ' is either offline or is an invalid host name' );
+            $_retVal = false;
+        }
+        else
+        {
+            //See if we can connect to the SMTP server
+            if ( $this->socket = @fsockopen($this->getHost(),       // Host to 'hit', IP or domain
+                                            $this->getPort(),       // which Port number to use
+                                            $this->errno,           // actual system level error
+                                            $this->errstr,          // and any text that goes with the error
+                                            $this->_smtpTimeout) )  // timeout for reading/writing data over the socket
+            {
+                // Fix from PHP SMTP class by 'Chris Ryan'
+                // Sometimes the SMTP server takes a little longer to respond
+                // so we will give it a longer timeout for the first read
+                // Windows still does not have support for this timeout function
+                if( function_exists('socket_set_timeout') )
+                    socket_set_timeout($this->socket, $this->_smtpTimeout, 0);
+
+                // Check response from Server
+                if ( $_retVal = $this->server_parse($this->socket, "220") )
+                    $_retVal = $this->socket;
+            }
+            // This connection attempt failed.
+            else
+            {
+                $this->_setErr ( $this->errno, $this->errstr );
+                $_retVal = false;
+            }
+        }
+
+        return $_retVal;
+    }
+
+   /**
+    * Method private bool _server_authenticate( void )
+    *
+    * Attempt mail server authentication for a secure connection
+    *
+    * @name _server_authenticate()
+    *
+    * @final
+    * @access private
+    *
+    * @since 1.14
+    *
+    * @param  void
+    * @return mixed  $_retVal   Boolean indicating success or failure of authentication
+    *
+    * @TODO
+    * Modify method to generate log of Class to Mail Server communication
+    *
+    */
+    function _server_authenticate()
+    {
+        // Send the RFC2554 specified EHLO.
+        // This improvment as provided by 'SirSir' to
+        // accomodate both SMTP AND ESMTP capable servers
+        if ( $_retVal = $this->socket_send_str('EHLO ' . $this->getHost(), '250') )
+        {
+            // Send Authentication to Server
+            // Check for errors along the way
+            $this->socket_send_str('AUTH LOGIN', '334');
+
+            // User name will not return any error, server will take anything we give it.
+            $this->socket_send_str(base64_encode($this->_smtpsID), '334');
+
+            // The error here just means the ID/password combo doesn't work.
+            // we will not way to find out which is the problem
+            if ( ! $_retVal = $this->socket_send_str(base64_encode($this->_smtpsPW), '235') )
+                $this->_setErr ( 130, 'Invalid Authentication Credentials.' );
+        }
+        else
+        {
+            $this->_setErr ( 126, '"' . $this->getHost() . '" does not support secure connections.' );
+        }
+
+        return $_retVal;
     }
 
    /**
@@ -518,103 +635,83 @@ class SMTPs
     * @param  boolean $_bolTestMsg  whether to run this method in 'Test' mode.
     * @param  boolean $_bolDebug    whether to log all communication between this Class and the Mail Server.
     * @return mixed   void
-    *                 $_strMsg     If this is run in 'Test' mode, the actaul message structure will be returned
-    *
-    * @TODO
-    * Modify method to return message structure without actually sending the message
+    *                 $_strMsg     If this is run in 'Test' mode, the actual message structure will be returned
     *
     * @TODO
     * Modify method to generate log of Class to Mail Server communication
+    * Impliment use of new parameters
     *
     */
     function sendMsg ( $_bolTestMsg = false, $_bolDebug = false )
     {
-        // We have to make sure the HOST given is valid
-        // I do this here because '@fsockopen' will not give me this
-        // information if it failes to connect because it can't find the HOST
-        if ( (gethostbyname ( $this->getHost() )) == $this->getHost() )
+       /**
+        * Default return value
+        *
+        * Returns constructed SELECT Object string or boolean upon failure
+        * Default value is set at TRUE
+        *
+        * @var mixed $_retVal Indicates if Object was created or not
+        * @access private
+        * @static
+        */
+        $_retVal = false;
+
+        // Connect to Server
+        if ( $this->socket = $this->_server_connect() )
         {
-            $this->_setErr ( 99, $this->getHost() . ' is either offline or is an invalid host name' );
-            return false;
+            // If a User ID *and* a password is given, assume Authentication is desired
+            if( !empty($this->_smtpsID) && !empty($this->_smtpsPW) )
+            {
+                $_retVal = $this->_server_authenticate();
+            }
+
+            // This is a "normal" SMTP Server "handshack"
+            else
+            {
+                // Send the RFC821 specified HELO.
+                $_retVal = $this->socket_send_str('HELO ' . $this->getHost(), '250');
+            }
+
+            // Well, did we get to the server?
+            if ( $_retVal )
+            {
+                // From this point onward most server response codes should be 250
+                // Specify who the mail is from....
+                // This has to be the raw email address, strip the "name" off
+                $this->socket_send_str('MAIL FROM: ' . $this->getFrom( 'addr' ), '250');
+
+                // 'RCPT TO:' must be given a single address, so this has to loop
+                // through the list of addresses, regardless of TO, CC or BCC
+                // and send it out "single file"
+                foreach ( $this->get_RCPT_list() as $_address )
+                {
+                   /*
+                    * @TODO
+                    * After each 'RCPT TO:' is sent, we need to make sure it was kosher,
+                    * if not, the whole message will fail
+                    * If any email address fails, we will need to RESET the connection,
+                    * mark the last address as "bad" and start the address loop over again.
+                    * If any address fails, the entire message fails.
+                    */
+                    $this->socket_send_str('RCPT TO: <' . $_address . '>', '250');
+                }
+
+                // Ok, now we tell the server we are ready to start sending data
+                // with any custom headers...
+                // This is the last response code we look for until the end of the message.
+                $this->socket_send_str('DATA' . "\r\n" . $this->getHeader(), '354', '');
+
+                // Now we are ready for the message...
+                // Ok, all the ingredients are mixed in let's cook this puppy...
+                $this->socket_send_str($this->getBodyContent() . "\r\n" . '.', '250');
+
+                // Now tell the server we are done and close the socket...
+                fputs($this->socket, 'QUIT');
+                fclose($this->socket );
+            }
         }
 
-        //See if we can connect to the SMTP server
-        $this->socket = @fsockopen($this->getHost(),      // Host to 'hit', IP or domain
-                                   $this->getPort(),      // which Port number to use
-                                   $this->errno,          // actual system level error
-                                   $this->errstr,         // and any text that goes with the error
-                                   $this->_smtpTimeout);  // timeout for reading/writing data over the socket
-
-        if( ! $this->socket )
-        {
-            $this->_setErr ( $this->errno, $this->errstr  );
-            return false;
-        }
-
-        // Fix from PHP SMTP class by Chris Ryan
-        // Sometimes the SMTP server takes a little longer to respond
-        // so we will give it a longer timeout for the first read
-        // Windows still does not have support for this timeout function
-        if( function_exists('socket_set_timeout') )
-            socket_set_timeout($this->socket, $this->_smtpTimeout, 0);
-
-        // Check response from Server
-        $this->server_parse($this->socket, "220");
-
-        // If a User ID (with or without password) is given, assume Authentication is needed
-        if( !empty($this->_smtpsID) && !empty($this->_smtpsPW) )
-        {
-            // Send the RFC2554 specified EHLO.
-            // This improvment as provided by 'SirSir' to
-            // accomodate both SMTP AND ESMTP capable servers
-            $this->socket_send_str('EHLO ' . $this->getHost(), '250');
-
-            // Send Authentication to Server
-            // Check for errors along the way
-            $this->socket_send_str('AUTH LOGIN', '334');
-            $this->socket_send_str(base64_encode($this->_smtpsID), '334');
-            $this->socket_send_str(base64_encode($this->_smtpsPW), '235');
-        }
-
-        // This is a "normal" SMTP Server "handshack"
-        else
-        {
-            // Send the RFC821 specified HELO.
-            $this->socket_send_str('HELO ' . $this->getHost(), '250');
-        }
-
-        // From this point onward most server response codes should be 250
-        // Specify who the mail is from....
-        // This has to be the raw email address, strip the "name" off
-        $this->socket_send_str('MAIL FROM: ' . $this->getFrom( 'addr' ), '250');
-
-        // 'RCPT TO:' must be given a single address, so this has to loop
-        // through the list of addresses, regardless of TO, CC or BCC
-        // and send it out "single file"
-        foreach ( $this->get_RCPT_list() as $_address )
-        {
-            // After each 'RCPT TO:' is sent, we need to make sure it was kosher,
-            // if not, the whole message will fail
-            // If any email address fails, we will need to RESET the connection,
-            // mark the last address as "bad" and start the address loop over again.
-            // If any address fails, the entire message fails.
-            $this->socket_send_str('RCPT TO: <' . $_address . '>', '250');
-        }
-
-        // Ok, now we tell the server we are ready to start sending data
-        // with any custom headers...
-        // This is the last response code we look for until the end of the message.
-        $this->socket_send_str('DATA' . "\r\n" . $this->getHeader(), '354', '');
-
-        // Now we are ready for the message...
-        // Ok, all the ingredients are mixed in let's cook this puppy...
-        $this->socket_send_str($this->getBodyContent() . "\r\n" . '.', '250');
-
-        // Now tell the server we are done and close the socket...
-        fputs($this->socket, 'QUIT');
-        fclose($this->socket );
-
-        return true;
+        return $_retVal;
     }
 
 // =============================================================
@@ -674,6 +771,13 @@ class SMTPs
         // if we have a path...
         if ( ! empty ($_strConfigPath) )
         {
+           /*
+            * @TODO The error supression around the INCLUDE has to be replaced with
+            *       a 'real' file validation sequence.
+            *       If there is anything wrong with the 'code' in the INI file
+            *       the app will fail right here without any indication of the issue.
+            *
+            */
             // If the path is not valid, this will NOT generate an error,
             // it will simply return FALSE.
             if ( ! @include ( $_strConfigPath ) )
@@ -1999,39 +2103,52 @@ class SMTPs
 
 
 
+    // This function has been modified as provided
+    // by SirSir to allow multiline responses when
+    // using SMTP Extensions
+    //
+    function server_parse($socket, $response)
+    {
+       /**
+        * Default return value
+        *
+        * Returns constructed SELECT Object string or boolean upon failure
+        * Default value is set at TRUE
+        *
+        * @var mixed $_retVal Indicates if Object was created or not
+        * @access private
+        * @static
+        */
+        $_retVal = true;
 
-//
-// This function has been modified as provided
-// by SirSir to allow multiline responses when
-// using SMTP Extensions
-//
-function server_parse($socket, $response)
-{
+        $server_response = '';
 
-   $server_response = '';
+        while ( substr($server_response,3,1) != ' ' )
+        {
+            if( !( $server_response = fgets($socket, 256) ) )
+            {
+                $this->_setErr ( 121, "Couldn't get mail server response codes" );
+                $_retVal = false;
+            }
+        }
 
-   while ( substr($server_response,3,1) != ' ' )
-   {
-      if( !( $server_response = fgets($socket, 256) ) )
-      {
-         die("Couldn't get mail server response codes");
-      }
-   }
+        if( !( substr($server_response, 0, 3) == $response ) )
+        {
+            $this->_setErr ( 120, "Ran into problems sending Mail.\r\nResponse: $server_response" );
+            $_retVal = false;
+        }
 
-   if( !( substr($server_response, 0, 3) == $response ) )
-   {
-      die("Ran into problems sending Mail. Response: $server_response");
-   }
-}
+        return $_retVal;
+    }
 
 
-function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
-{
-    fputs($this->socket, $_strSend . $CRLF);
+    function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
+    {
+        fputs($this->socket, $_strSend . $CRLF);
 
-    if ( $_returnCode )
-        $this->server_parse($this->socket, $_returnCode);
-}
+        if ( $_returnCode )
+            return $this->server_parse($this->socket, $_returnCode);
+    }
 
 // =============================================================
 // ** Error handling methods
@@ -2079,14 +2196,15 @@ function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
     */
     function getErrors()
     {
-        $_errMsg = '';
+        $_errMsg = 'No Errors Generated.';
 
         if ( $this->_smtpsErrors )
         {
+            $_errMsg = '';
+
             foreach ( $this->_smtpsErrors as $_err => $_info )
             {
-                $this->_smtpsErrors[] = array( 'num' => $_errNum,
-                                               'msg' => $_errMsg );
+                $_errMsg .= 'Error [' . $_info['num'] .']: '. $_info['msg'];
             }
         }
 
@@ -2103,6 +2221,12 @@ function socket_send_str ( $_strSend, $_returnCode = null, $CRLF = "\r\n" )
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.10  2005/08/19 20:39:32  jswalter
+  *  - added _server_connect()' as a seperate method to handle server connectivity.
+  *  - added '_server_authenticate()' as a seperate method to handle server authentication.
+  *  - 'sendMsg()' now uses the new methods to handle server communication.
+  *  - modified 'server_parse()' and 'socket_send_str()' to give error codes and messages.
+  *
   * Revision 1.9  2005/08/19 15:40:18  jswalter
   *  - IMPORTANT: 'setAttachement()' is now spelled correctly: 'setAttachment()'
   *  - added additional comment to several methods
