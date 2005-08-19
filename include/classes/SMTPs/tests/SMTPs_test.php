@@ -12,7 +12,7 @@
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version $Revision: 1.2 $
+   * @version $Revision: 1.3 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -1278,7 +1278,7 @@ $failuresSuite   = new PHPUnit_TestSuite( "SMTPsFailuresTest" );
 
 // Insert Suites into Test Harness
 $display = new PHPUnit_GUI_HTML(array( $propertiesSuite,
-                                       $boundariesSuite,
+                                    //   $boundariesSuite,
                                        $failuresSuite ) );
 
 // Display Test Harness
@@ -1290,6 +1290,9 @@ $display->show();
 
  /**
   * $Log: SMTPs_test.php,v $
+  * Revision 1.3  2005/08/19 15:17:23  jswalter
+  *  - corrected 'SMTPsBoundariesTest' comment error
+  *
   * Revision 1.2  2005/08/19 00:21:04  jswalter
   *  - commented 'boundaries' suite until it is further defined
   *  - completed prelim 'failures' suite
