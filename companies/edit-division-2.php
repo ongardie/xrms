@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.11 2005/08/10 19:47:00 jswalter Exp $
+ * $Id: edit-division-2.php,v 1.12 2005/08/20 23:43:05 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,15 +27,11 @@ $description = $_POST['description'];
 
 $use_pretty_address = ($use_pretty_address == 'on') ? "'t'" : "'f'";
 
-if ( $_POST['add_fund'] == 'on' )
-{
-    do_hook_function('new_division_process', $rec);
-}
 
     $con = &adonewconnection($xrms_db_dbtype);
     $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
 
-    $con->debug=1;
+//    $con->debug=1;
 
     $sql = "SELECT * FROM company_division WHERE division_id = $division_id";
     $rst = $con->execute($sql);
@@ -52,7 +48,7 @@ if ( $_POST['add_fund'] == 'on' )
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
     $con->execute($upd);
 
-//    do_hook_function('edit_division_process', $rec);
+    do_hook_function('edit_division_process', $rec);
 
 if (!$return_url) {
     $return_url="divisions.php?company_id=$company_id&msg=saved";
@@ -62,6 +58,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.12  2005/08/20 23:43:05  vanmer
+ * - changed to use edit-division-process hook again instead of incorrectly added new-division process
+ *
  * Revision 1.11  2005/08/10 19:47:00  jswalter
  *  - added 'add_fund' conditional to handle attempts to 'add' an existing fund
  * Bug 386
