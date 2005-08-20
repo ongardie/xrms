@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: SMTPs.php,v 1.10 2005/08/19 20:39:32 jswalter Exp $
+// $Id: SMTPs.php,v 1.11 2005/08/20 11:49:48 braverock Exp $
 
   /**
    * Class SMTPs
@@ -37,7 +37,7 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.10 $
+   * @version $Revision: 1.11 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -379,19 +379,19 @@ class SMTPs
     var $_smtpsTransEncode = '7bit';
 
    /**
-    * Property private string var $_smtpsBoundry
+    * Property private string var $_smtpsBoundary
     *
-    * @property private string Boundry String for MIME seperation
-    * @name var $_smtpsBoundry
+    * @property private string Boundary String for MIME seperation
+    * @name var $_smtpsBoundary
     *
-    * Boundry String for MIME seperation
+    * Boundary String for MIME seperation
     *
     * @access private
     * @static
     * @since 1.0
     *
     */
-    var $_smtpsBoundry = null;
+    var $_smtpsBoundary = null;
 
    /**
     * Property private int var $_transportType
@@ -1779,8 +1779,8 @@ class SMTPs
     */
     function getBodyContent ()
     {
-        // Generate a new boundry string
-        $this->_setBoundry();
+        // Generate a new boundary string
+        $this->_setBoundary();
 
         // What type[s] of content do we have
         $_types = array_keys ( $this->_msgContent );
@@ -1810,9 +1810,9 @@ class SMTPs
         else if( $keyCount > 1 )
         {
             // Since this is an actual multi-part message
-            // We need to define a content message boundry
+            // We need to define a content message boundary
             $content = 'Content-Type: multipart/alternative;' . "\r\n"
-                     . '   boundary="' . $this->_getBoundry() . '"'   . "\r\n"
+                     . '   boundary="' . $this->_getBoundary() . '"'   . "\r\n"
                      . "\r\n"
                      . 'This is a multi-part message in MIME format.' . "\r\n";
 
@@ -1825,7 +1825,7 @@ class SMTPs
                     foreach ( $_content as $_file => $_data )
                     {
 
-                        $content .= "\r\n--" . $this->_getBoundry() . "\r\n"
+                        $content .= "\r\n--" . $this->_getBoundary() . "\r\n"
                                  .  'Content-Disposition: attachment; filename="' . $_data['fileName'] . '"' . "\r\n"
                                  .  'Content-Type: ' . $_data['mimeType'] . '; name="' . $_data['fileName'] . '"' . "\r\n"
                                  .  'Content-Transfer-Encoding: base64' . "\r\n"
@@ -1836,7 +1836,7 @@ class SMTPs
                 }
                 else
                 {
-                    $content .= "\r\n--" . $this->_getBoundry() . "\r\n"
+                    $content .= "\r\n--" . $this->_getBoundary() . "\r\n"
                              . 'Content-Type: ' . $_content['mimeType'] . '; '
                              . 'charset="' . $this->getCharSet() . '"';
                     $content .= ( $type == 'html') ? '; name="HTML Part"' : '';
@@ -1852,7 +1852,7 @@ class SMTPs
             }
 
             // Close message boundries
-            $content .= "\r\n--" ;//. $this->_getBoundry() . "\r\n";
+            $content .= "\r\n--" ;//. $this->_getBoundary() . "\r\n";
         }
 
         return $content;
@@ -2058,13 +2058,13 @@ class SMTPs
     }
 
    /**
-    * Method private void _setBoundry( string )
+    * Method private void _setBoundary( string )
     *
-    * Generates Random string for MIME message Boundry
+    * Generates Random string for MIME message Boundary
     *
-    * @name _setBoundry()
+    * @name _setBoundary()
     *
-    * @uses Class property $_smtpsBoundry
+    * @uses Class property $_smtpsBoundary
     * @final
     * @access private
     *
@@ -2074,31 +2074,31 @@ class SMTPs
     * @return void
     *
     */
-    function _setBoundry()
+    function _setBoundary()
     {
-        $this->_smtpsBoundry = "==multipart_x{" . md5(time()) . "}x_boundary==";
+        $this->_smtpsBoundary = "-----.==multipart_x." . time() . ".x_boundary==";
     }
 
    /**
-    * Method private string _getBoundry( void )
+    * Method private string _getBoundary( void )
     *
-    * Retrieves the MIME message Boundry
+    * Retrieves the MIME message Boundray
     *
-    * @name _getBoundry()
+    * @name _getBoundary()
     *
-    * @uses Class property $_smtpsBoundry
+    * @uses Class property $_smtpsBoundary
     * @final
     * @access private
     *
     * @since 1.0
     *
     * @param  void
-    * @return string $_smtpsBoundry MIME message Boundry
+    * @return string $_smtpsBoundary MIME message Boundary
     *
     */
-    function _getBoundry()
+    function _getBoundary()
     {
-        return $this->_smtpsBoundry;
+        return $this->_smtpsBoundary;
     }
 
 
@@ -2221,6 +2221,10 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.11  2005/08/20 11:49:48  braverock
+  * - fix typos in boundary
+  * - remove potentially illegal characters from boundary
+  *
   * Revision 1.10  2005/08/19 20:39:32  jswalter
   *  - added _server_connect()' as a seperate method to handle server connectivity.
   *  - added '_server_authenticate()' as a seperate method to handle server authentication.
@@ -2301,7 +2305,7 @@ class SMTPs
   * Revision 1.5  2005/03/14 22:25:27  walter
   *  - added references
   *  - added Message sensitivity as a property with Getter/Setter methods
-  *  - boundry is now a property with Getter/Setter methods
+  *  - boundary is now a property with Getter/Setter methods
   *  - added 'builtRCPTlist()'
   *  - 'sendMsg()' now uses Object properties and methods to build message
   *  - 'setConfig()' to load external file
