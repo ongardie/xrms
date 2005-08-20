@@ -1,9 +1,4 @@
 <?php
-
-// =============================================================
-// CVS Id Info
-// $Id: SMTPs.php,v 1.11 2005/08/20 11:49:48 braverock Exp $
-
   /**
    * Class SMTPs
    *
@@ -37,21 +32,16 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.11 $
+   * @version $Revision: 1.12 $
    * @copyright copyright information
-   * @license URL name of license
+   * @license GNU General Public Licence
+   *
+   * $Id: SMTPs.php,v 1.12 2005/08/20 12:04:30 braverock Exp $
    *
    **/
 
 // =============================================================
 // ** Class Constants
-
-   /**
-    * Version number of Class
-    * @const SMTPs_VER
-    *
-    */
-    define('SMTPs_VER', '1.10', false);
 
    /**
     * SMTPs Success value
@@ -1704,9 +1694,11 @@ class SMTPs
         if ( $this->getBCC() )
             $_header .= 'Bcc: ' . $this->getBCC()  . "\r\n";
 
+
+        //NOTE: Message-ID should probably contain the username of the user who sent the msg
         $_header .= 'Subject: '    . $this->getSubject()     . "\r\n"
                  .  'Date: '       . date("r")               . "\r\n"
-                 .  'Message-ID: <' . MD5( time() ) . '.SMPTs@' . $this->_siteDomain . ">\r\n";
+                 .  'Message-ID: <' . time() . '.SMTPs@' . $this->getHost() . ">\r\n";
 //                 . 'Read-Receipt-To: '   . $this->getFrom( 'org' ) . "\r\n"
 //                 . 'Return-Receipt-To: ' . $this->getFrom( 'org' ) . "\r\n";
 
@@ -2221,6 +2213,11 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.12  2005/08/20 12:04:30  braverock
+  * - remove potentially binary characters from Message-ID
+  * - add getHost to get the hostname of the mailserver
+  * - @todo add username to Message-ID header
+  *
   * Revision 1.11  2005/08/20 11:49:48  braverock
   * - fix typos in boundary
   * - remove potentially illegal characters from boundary
