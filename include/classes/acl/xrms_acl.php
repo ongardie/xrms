@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.28 2005/08/19 03:18:03 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.29 2005/08/20 00:45:54 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -1080,7 +1080,7 @@ class xrms_acl {
        *
        */
     function add_group_object($Group_id, $ControlledObject_id, $on_what_id) {
-        return add_group_member($Group_id, $ControlledObject_id, $on_what_id);
+        return $this->add_group_member($Group_id, $ControlledObject_id, $on_what_id);
     }
     
      /*****************************************************************************/
@@ -2545,6 +2545,9 @@ class xrms_acl {
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.29  2005/08/20 00:45:54  vanmer
+ * - changed to call internal function, instead of incorrectly calling global function
+ *
  * Revision 1.28  2005/08/19 03:18:03  vanmer
  * - changed to not assume array key exists for parent IDs
  *
