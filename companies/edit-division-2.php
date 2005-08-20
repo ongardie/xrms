@@ -2,7 +2,7 @@
 /**
  * Save changes to divisions
  *
- * $Id: edit-division-2.php,v 1.12 2005/08/20 23:43:05 vanmer Exp $
+ * $Id: edit-division-2.php,v 1.13 2005/08/20 23:56:12 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -58,12 +58,14 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-division-2.php,v $
+ * Revision 1.13  2005/08/20 23:56:12  braverock
+ * - back out incorrect comments from 1.11 commit
+ *
  * Revision 1.12  2005/08/20 23:43:05  vanmer
  * - changed to use edit-division-process hook again instead of incorrectly added new-division process
  *
  * Revision 1.11  2005/08/10 19:47:00  jswalter
- *  - added 'add_fund' conditional to handle attempts to 'add' an existing fund
- * Bug 386
+ * !!!incorrect changes backed out!!!
  *
  * Revision 1.10  2005/08/04 19:30:24  vanmer
  * - changed to use return_url for return
