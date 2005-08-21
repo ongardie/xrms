@@ -32,11 +32,11 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.12 $
+   * @version $Revision: 1.13 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.12 2005/08/20 12:04:30 braverock Exp $
+   * $Id: SMTPs.php,v 1.13 2005/08/21 01:57:30 vanmer Exp $
    *
    **/
 
@@ -1448,6 +1448,7 @@ class SMTPs
             // Make sure we have addresses to process
             if ( $this->_msgRecipients )
             {
+	    	$_RCPT_list=array();
                 // walk down Recipients array and pull just email addresses
                 foreach ( $this->_msgRecipients as $_host => $_list )
                 {
@@ -2213,6 +2214,9 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.13  2005/08/21 01:57:30  vanmer
+  * - added initialization for array if no recipients exist
+  *
   * Revision 1.12  2005/08/20 12:04:30  braverock
   * - remove potentially binary characters from Message-ID
   * - add getHost to get the hostname of the mailserver
