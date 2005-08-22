@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.24 2005/06/05 17:21:37 braverock Exp $
+ * $Id: new-2.php,v 1.25 2005/08/22 16:03:07 braverock Exp $
  */
 require_once('../include-locations.inc');
 
@@ -33,10 +33,11 @@ $url = $_POST['url'];
 $employees = $_POST['employees'];
 $revenue = $_POST['revenue'];
 $profile = $_POST['profile'];
-$custom1 = $_POST['custom1'];
-$custom2 = $_POST['custom2'];
-$custom3 = $_POST['custom3'];
-$custom4 = $_POST['custom4'];
+//avoid nulls on the custom1-4 fields
+$custom1 = array_key_exists('custom1',$_POST) ? $_POST['custom1'] : "";
+$custom2 = array_key_exists('custom2',$_POST) ? $_POST['custom2'] : "";
+$custom3 = array_key_exists('custom3',$_POST) ? $_POST['custom3'] : "";
+$custom4 = array_key_exists('custom4',$_POST) ? $_POST['custom4'] : "";
 $account_status_id = 1;
 $rating_id = 1;
 
@@ -247,6 +248,10 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.25  2005/08/22 16:03:07  braverock
+ * - set custom1-4 even if they aren't posted from new.php
+ * - applies patch from Keith Edmunds
+ *
  * Revision 1.24  2005/06/05 17:21:37  braverock
  * - add standard new/edit hooks
  *
