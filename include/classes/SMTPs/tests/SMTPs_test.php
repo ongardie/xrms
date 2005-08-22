@@ -1,5 +1,4 @@
 <?php
-
   /**
    * Test harness for the SMTPs Class
    *
@@ -13,7 +12,7 @@
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version $Revision: 1.5 $
+   * @version $Revision: 1.6 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -1228,16 +1227,12 @@ Class SMTPsFailuresTest extends PHPUnit_TestCase {
 
         $_retValue = $this->SMTPsTest->Strip_Email($_addr);
 
-do_print_r ( $_retValue );
-
         $this->assertEquals($_addr, $_retValue, "Strip Email: ");
     }
 
     function test_get_Body_Content()
     {
         $_retValue = $this->SMTPsTest->get_Body_Content($this->content, $this->contentType);
-
-do_print_r ( $_retValue );
 
         $this->assertEquals($this->contentMsg, $_retValue, "Get Body Content: ");
     }
@@ -1257,8 +1252,6 @@ do_print_r ( $_retValue );
             $_attachArray = $this->attachArray;
 
         $_retValue = $this->SMTPsTest->set_Attachment($this->content, $this->fileName, $this->mimeType);
-
-do_print_r ( $_retValue );
 
         $this->assertEquals($this->attachArray, $_retValue, "Set_Attachment: ");
 
@@ -1396,8 +1389,6 @@ Class SMTPsServerAuthentication extends PHPUnit_TestCase {
 
 //        $_retValue = $this->SMTPsTest->get_Body_Content($this->contentHTML, 'html');
 
-//do_print_r (  $this->SMTPs );
-
     }
 
     function test_Server_Authentication()
@@ -1441,8 +1432,6 @@ Class SMTPsServerAuthentication extends PHPUnit_TestCase {
 
 //        $_retValue = $this->SMTPsTest->get_Body_Content($this->contentHTML, 'html');
 
-//do_print_r (  $this->SMTPs );
-
     }
 
 };
@@ -1473,10 +1462,13 @@ $display->show();
 
 // =============================================================
 // =============================================================
-// ** CSV Version Control Info
+// ** CVS Version Control Info
 
  /**
   * $Log: SMTPs_test.php,v $
+  * Revision 1.6  2005/08/22 15:57:37  braverock
+  * - remove debug code
+  *
   * Revision 1.5  2005/08/19 20:42:39  jswalter
   *  - added 'SMTPsServerAuthentication' to test server connection and authentication
   *
