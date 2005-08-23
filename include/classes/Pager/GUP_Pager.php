@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.34 2005/08/15 00:46:37 daturaarutad Exp $
+ * $Id: GUP_Pager.php,v 1.35 2005/08/23 18:01:34 daturaarutad Exp $
  */
 
 
@@ -992,7 +992,7 @@ END;
 			$cache_indicator = "";
 		}
 
-		if(!$this->group_mode_paging) {
+		if($this->group_mode && !$this->group_mode_paging) {
 			$size_buttons = '';
 		} else {
 			if($this->maximize) {
@@ -1164,6 +1164,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.35  2005/08/23 18:01:34  daturaarutad
+ * fix but with size_buttons not showing (check for group_mode first)
+ *
  * Revision 1.34  2005/08/15 00:46:37  daturaarutad
  * added group_mode_paging parameter to constructor to allow paging in group mode; see examples/ for an example
  *
