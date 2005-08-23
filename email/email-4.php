@@ -3,7 +3,7 @@
 *
 * Show email messages not sent.
 *
-* $Id: email-4.php,v 1.25 2005/07/20 22:15:30 jswalter Exp $
+* $Id: email-4.php,v 1.26 2005/08/23 16:51:05 braverock Exp $
 */
 
 require_once('include-locations-location.inc');
@@ -139,7 +139,7 @@ if ( $_SESSION['email_sent'] === false )
                 foreach ( $_fileData as $_file => $_data )
                 {
                     // Add the attachments
-                    $objSMTP->setAttachement ( $_data['content'], $_file, $_data['mime'] );
+                    $objSMTP->setAttachment ( $_data['content'], $_file, $_data['mime'] );
                 }
             }
 
@@ -331,6 +331,9 @@ function getFile($file_to_open)
 
 /**
 * $Log: email-4.php,v $
+* Revision 1.26  2005/08/23 16:51:05  braverock
+* - fix typo in SetAttachment() call
+*
 * Revision 1.25  2005/07/20 22:15:30  jswalter
 *  - corrected issue around an empty "$attachment_list'
 *
