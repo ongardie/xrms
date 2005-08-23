@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: attachment_sidebar.php,v 1.1 2005/08/11 02:32:22 vanmer Exp $
+ * $Id: attachment_sidebar.php,v 1.2 2005/08/23 16:42:14 braverock Exp $
  */
 
 if ($on_what_table) {
@@ -33,16 +33,36 @@ $rst = $con->execute($sql);
 
 if ($rst) {
     $attached_to_name = $rst->fields['attached_to_name'];
-    $attached_to_link .= $attached_to_name . "</a>";
+    $attached_to_link .= $attached_to_name . "</a>\n";
     $rst->close();
-    $related_block.='<div id=related><table class=widget cellspacing=1><tr><td class=widget_header>'._("Attached To") . ' ' ._(ucfirst($singular)).'</td></tr>';
-    $related_block.="<tr><td class=widget_content>$attached_to_link</td></tr>\n";
-    $related_block.="<tr><td class=widget_content_form_element><input type=button class=button name=change_attachment onclick=\"changeAttachment()\"  value=\""._("Change Attachment")."\"></td></tr>";
-    $related_block.="</table></div>";
+    if ($attached_to_name <> NULL) {
+       $related_block.="\n".'<div id=related>
+                            <table class=widget cellspacing=1>
+                                <tr>
+                                    <td class=widget_header>'._("Attached To") .' ' ._(ucfirst($singular)).'</td>
+                                </tr>'."\n";
+    }else {
+       $related_block.='<div id=related>
+                            <table class=widget cellspacing=1>
+                                <tr>
+                                    <td class=widget_header>'._("Attached To") . ' ' .'</td>
+                                </tr>'."\n";
+    }
+    $related_block.="\n<tr>\n\t<td class=widget_content>$attached_to_link</td>\n</tr>\n";
+    $related_block.="\n<tr>
+        <td class=widget_content_form_element>
+            <input type=button class=button name=change_attachment onclick=\"changeAttachment()\"  value=\""._("Change Attachment")."\">
+        </td>
+    </tr>\n";
+    $related_block.="\n\t</table>\n</div>\n";
 }
 
 /**
   * $Log: attachment_sidebar.php,v $
+  * Revision 1.2  2005/08/23 16:42:14  braverock
+  * - apply patch for localization problem when activity not attached
+  *   - patch supplied by Daniele Baudone (SF: dbaudone)
+  *
   * Revision 1.1  2005/08/11 02:32:22  vanmer
   * -Initial revision of a sidebar to display and control association of an activity
   *
