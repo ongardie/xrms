@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.26 2005/08/04 21:03:38 vanmer Exp $
+ * $Id: new-2.php,v 1.27 2005/08/24 11:14:35 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -36,15 +36,8 @@ $arr_vars = array ( // local var name             // session variable name, flag
            'cell_phone' => array ( 'cell_phone' , arr_vars_SESSION ),
            'home_phone' => array ( 'home_phone' , arr_vars_SESSION ),
            'fax' => array ( 'fax' , arr_vars_SESSION ),
-           'aol_name' => array ( 'aol_name' , arr_vars_SESSION ),
-           'yahoo_name' => array ( 'yahoo_name' , arr_vars_SESSION ),
-           'msn_name' => array ( 'msn_name' , arr_vars_SESSION ),
            'interests' => array ( 'interests' , arr_vars_SESSION ),
            'profile' => array ( 'profile' , arr_vars_SESSION ),
-           'custom1' => array ( 'custom1' , arr_vars_SESSION ),
-           'custom2' => array ( 'custom2' , arr_vars_SESSION ),
-           'custom3' => array ( 'custom3' , arr_vars_SESSION ),
-           'custom4' => array ( 'custom4' , arr_vars_SESSION ),
            'edit_address' => array ( 'edit_address' , arr_vars_SESSION ),
            'return_url' => array ( 'return_url' , arr_vars_SESSION ),
            );
@@ -52,6 +45,16 @@ $arr_vars = array ( // local var name             // session variable name, flag
 // get all posted in variables
 arr_vars_get_all ( $arr_vars , true);
 
+//avoid nulls on the custom1-4 fields
+$custom1 = array_key_exists('custom1',$_POST) ? $_POST['custom1'] : "";
+$custom2 = array_key_exists('custom2',$_POST) ? $_POST['custom2'] : "";
+$custom3 = array_key_exists('custom3',$_POST) ? $_POST['custom3'] : "";
+$custom4 = array_key_exists('custom4',$_POST) ? $_POST['custom4'] : "";
+
+//avoid nulls on the IM fields, although these should be moved to a plugin
+$aol_name   = array_key_exists('aol_name',$_POST) ? $_POST['aol_name'] : "";
+$yahoo_name = array_key_exists('yahoo_name',$_POST) ? $_POST['yahoo_name'] : "";
+$msn_name   = array_key_exists('msn_name',$_POST) ? $_POST['msn_name'] : "";
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -172,6 +175,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.27  2005/08/24 11:14:35  braverock
+ * - avoid nulls on the custom and IM fields
+ *
  * Revision 1.26  2005/08/04 21:03:38  vanmer
  * - uses return_url, if provided
  * - added replacement in return_url to allow new contact_id to be inserted, if XXX-contact_id-XXX is provided in the
