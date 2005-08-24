@@ -15,7 +15,7 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: attachment_sidebar.php,v 1.2 2005/08/23 16:42:14 braverock Exp $
+ * $Id: attachment_sidebar.php,v 1.3 2005/08/24 11:03:09 braverock Exp $
  */
 
 if ($on_what_table) {
@@ -36,18 +36,18 @@ if ($rst) {
     $attached_to_link .= $attached_to_name . "</a>\n";
     $rst->close();
     if ($attached_to_name <> NULL) {
-       $related_block.="\n".'<div id=related>
-                            <table class=widget cellspacing=1>
-                                <tr>
-                                    <td class=widget_header>'._("Attached To") .' ' ._(ucfirst($singular)).'</td>
-                                </tr>'."\n";
-    }else {
-       $related_block.='<div id=related>
-                            <table class=widget cellspacing=1>
-                                <tr>
-                                    <td class=widget_header>'._("Attached To") . ' ' .'</td>
-                                </tr>'."\n";
-    }
+       $related_block .= "\n" . '<div id="related">
+                        <table class="widget" cellspacing="1">
+                            <tr>
+                                <td class="widget_header">' . _("Attached To") . ' ' . _(ucfirst($singular)) .'</td>
+                            </tr>' . "\n";
+  } else {
+       $related_block.='<div id="related">
+                        <table class="widget" cellspacing="1">
+                            <tr>
+                                <td class="widget_header">'._("Attached To") . ' ' .'</td>
+                            </tr>'."\n";
+  }
     $related_block.="\n<tr>\n\t<td class=widget_content>$attached_to_link</td>\n</tr>\n";
     $related_block.="\n<tr>
         <td class=widget_content_form_element>
@@ -59,6 +59,10 @@ if ($rst) {
 
 /**
   * $Log: attachment_sidebar.php,v $
+  * Revision 1.3  2005/08/24 11:03:09  braverock
+  * - remove non-printable characters causing parse error from attached to link
+  * - quote properties of tags
+  *
   * Revision 1.2  2005/08/23 16:42:14  braverock
   * - apply patch for localization problem when activity not attached
   *   - patch supplied by Daniele Baudone (SF: dbaudone)
