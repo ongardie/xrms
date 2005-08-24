@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.27 2005/08/24 11:14:35 braverock Exp $
+ * $Id: new-2.php,v 1.28 2005/08/24 11:25:32 braverock Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -58,6 +58,9 @@ $msn_name   = array_key_exists('msn_name',$_POST) ? $_POST['msn_name'] : "";
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
+
+// uncomment the following line to turn on debugging
+//$con->debug=1;
 
 getGlobalVar($home_address_id, 'home_address_id');
 if (!$home_address_id) {
@@ -149,17 +152,20 @@ $rec['home_address_id']=$home_address_id;
 
 $tbl = 'contacts';
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
-$con->execute($ins);
+$rst = $con->execute($ins);
+if ($rst) {
+    $contact_id = $con->Insert_ID();
+    $rec['contact_id']=$contact_id;
 
-$contact_id = $con->Insert_ID();
-$rec['contact_id']=$contact_id;
+    add_audit_item($con, $session_user_id, 'created', 'contacts', $contact_id, 1);
 
-add_audit_item($con, $session_user_id, 'created', 'contacts', $contact_id, 1);
+    //add to recently viewed list
+    update_recent_items($con, $session_user_id, "contacts", $contact_id);
 
-//add to recently viewed list
-update_recent_items($con, $session_user_id, "contacts", $contact_id);
-
-do_hook_function('contact_new_2', $rec);
+    do_hook_function('contact_new_2', $rec);
+} else {
+    db_error_handler($con, $ins);
+}
 
 $con->close();
 
@@ -175,6 +181,10 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.28  2005/08/24 11:25:32  braverock
+ * - check for successful insert and add db_error_handler to provide feedback
+ * - add commented debug line for use in debugging
+ *
  * Revision 1.27  2005/08/24 11:14:35  braverock
  * - avoid nulls on the custom and IM fields
  *
