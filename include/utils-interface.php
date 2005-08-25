@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.88 2005/08/05 19:55:52 vanmer Exp $
+ * $Id: utils-interface.php,v 1.89 2005/08/25 22:44:12 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -141,7 +141,7 @@ function css_link($url, $name = null, $alt = true, $mtype = 'screen') {
 
     if ( empty($name) ) {
         $title = '';
-        $rel   = 'rel="stylesheet"';
+        $rel   = 'rel="stylesheet" ';
     } else {
         $title =  empty($name) ? '' : 'title="'.$name.'" ';
         $rel   = 'rel="'.( $alt ? 'alternate ' : '' ).'stylesheet" ';
@@ -856,7 +856,7 @@ function render_tree_widget($list_data, $tree_id, $selected=false, $show_button=
             var btControl;
             btControl=document.getElementById('bt_{$tree_id}_TreeControl');
             btControl.value='$treewidget_collapse';
-            btControl.onclick={$tree_id}_collapseWidget; 
+            btControl.onclick={$tree_id}_collapseWidget;
             expandTree('$tree_id');
         }
         function {$tree_id}_collapseWidget() {
@@ -864,7 +864,7 @@ function render_tree_widget($list_data, $tree_id, $selected=false, $show_button=
             btControl=document.getElementById('bt_{$tree_id}_TreeControl');
             btControl.value='$treewidget_expand';
             btControl.onclick={$tree_id}_expandWidget;
-            collapseTree('$tree_id');            
+            collapseTree('$tree_id');
         {$tree_id}_widgetDefaults();
         }
         function {$tree_id}_widgetDefaults() {
@@ -872,7 +872,7 @@ function render_tree_widget($list_data, $tree_id, $selected=false, $show_button=
         }
         addEvent(window,"load",{$tree_id}_widgetDefaults);
         //-->
-        </script>        
+        </script>
 TILLEND;
     $treewidget_rows.=render_tree_list($list_data, 'mktree', $tree_id);
     if ($show_button) {
@@ -932,6 +932,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.89  2005/08/25 22:44:12  braverock
+ * - patch for HTML parsing compliance on IE
+ *
  * Revision 1.88  2005/08/05 19:55:52  vanmer
  * - added parameter to control if widget should include mktree javascript and stylesheet links
  *
