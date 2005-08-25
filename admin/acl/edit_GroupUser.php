@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit_GroupUser.php,v 1.1 2005/06/07 20:20:25 vanmer Exp $
+ * $Id: edit_GroupUser.php,v 1.2 2005/08/25 04:33:52 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -39,7 +39,7 @@ switch ($userAction) {
             } else {
                 $msg="Failed to delete role $role_id for user $edit_user_id in group $group";
             }
-            if (!$return_url) { $return_url="one.php?edit_user_id=$edit_user_id&msg=$msg"; }
+            if (!$return_url) { $return_url="{$http_site_root}/admin/users/one.php?edit_user_id=$edit_user_id&msg=$msg"; }
             Header("Location: $return_url");
             exit();       
     break;
@@ -56,18 +56,21 @@ switch ($userAction) {
             } else {
                 $msg = _("Added user to role in group successfully");
             }
-            if (!$return_url) { $return_url="one.php?edit_user_id=$edit_user_id&msg=$msg"; }
+            if (!$return_url) { $return_url="{$http_site_root}/admin/users/one.php?edit_user_id=$edit_user_id&msg=$msg"; }
             Header("Location: $return_url");
             exit();       
     default:
             $msg="No Action Selected";
-            if (!$return_url) { $return_url="one.php?edit_user_id=$edit_user_id&msg=$msg"; }
+            if (!$return_url) { $return_url="{$http_site_root}/admin/users/one.php?edit_user_id=$edit_user_id&msg=$msg"; }
             Header("Location: $return_url");
             exit();       
     break;
 }
 /**
   * $Log: edit_GroupUser.php,v $
+  * Revision 1.2  2005/08/25 04:33:52  vanmer
+  * - changed to use full URLS when returning
+  *
   * Revision 1.1  2005/06/07 20:20:25  vanmer
   * - added new interface to GroupUsers, splitting out child groups
   * - added new interface for adding child groups/managing them
