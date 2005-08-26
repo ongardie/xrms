@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.89 2005/08/25 22:44:12 braverock Exp $
+ * $Id: utils-interface.php,v 1.90 2005/08/26 22:47:15 braverock Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -340,23 +340,28 @@ function render_nav_line() {
   </div>
   <div id="navline">
 
-      <?php echo http_root_href('/private/home.php',       _("Home")); ?> &bull;
+      <?php
 
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'activities')) echo http_root_href('/activities/some.php',    _("Activities")). ' &bull; '; ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'companies')) echo http_root_href('/companies/some.php',     _("Companies")).' &bull; '; ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'contacts')) echo http_root_href('/contacts/some.php',      _("Contacts")).' &bull; '; ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'campaigns')) echo http_root_href('/campaigns/some.php',     _("Campaigns")).' &bull; '; ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'opportunities')) echo http_root_href('/opportunities/some.php', _("Opportunities")).' &bull; '; ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'cases')) echo http_root_href('/cases/some.php',         _("Cases")).' &bull; '; ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'files')) echo http_root_href('/files/some.php',         _("Files")).' &bull; '; ?>
+            //need a ACL check here
+            echo http_root_href('/private/home.php',       _("Home")). ' &bull; ';
 
-<?php
-    //place the menu_line hook before Reports and Adminstration link
-    do_hook ('menuline');
-?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], 'Reports',  'Read')) echo http_root_href('/reports/index.php',      _("Reports")) . ' &bull; '; ?>
-      <?php if (check_object_permission_bool($_SESSION['session_user_id'], 'Administration', 'Read' )) echo http_root_href('/admin/routing.php',      _("Administration")). ' &bull; '; ?>
-      <?php echo http_root_href('/admin/users/self.php', _("Preferences")); ?>
+            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'activities')) echo http_root_href('/activities/some.php',    _("Activities")). ' &bull; ';
+
+            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'companies')) echo http_root_href('/companies/some.php',     _("Companies")).' &bull; ';
+            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'contacts')) echo http_root_href('/contacts/some.php',      _("Contacts")).' &bull; ';
+            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'campaigns')) echo http_root_href('/campaigns/some.php',     _("Campaigns")).' &bull; ';
+            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'opportunities')) echo http_root_href('/opportunities/some.php', _("Opportunities")).' &bull; ';
+            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'cases')) echo http_root_href('/cases/some.php',         _("Cases")).' &bull; ';
+            if (check_object_permission_bool($_SESSION['session_user_id'], false, 'Read', 'files')) echo http_root_href('/files/some.php',         _("Files")).' &bull; ';
+
+            //place the menu_line hook before Reports and Adminstration link
+            do_hook ('menuline');
+
+            if (check_object_permission_bool($_SESSION['session_user_id'], 'Reports',  'Read')) echo http_root_href('/reports/index.php',      _("Reports")) . ' &bull; ';
+            if (check_object_permission_bool($_SESSION['session_user_id'], 'Administration', 'Read' )) echo http_root_href('/admin/routing.php',      _("Administration")). ' &bull; ';
+            echo http_root_href('/admin/users/self.php', _("Preferences"));
+      ?>
+
   </div><!-- end of navline -->
 <?php
 
@@ -932,6 +937,10 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.90  2005/08/26 22:47:15  braverock
+ * - add more ACL wrapping around menu items
+ * - consolidate code blocks
+ *
  * Revision 1.89  2005/08/25 22:44:12  braverock
  * - patch for HTML parsing compliance on IE
  *
