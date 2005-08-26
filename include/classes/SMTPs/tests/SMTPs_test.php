@@ -12,7 +12,7 @@
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version $Revision: 1.6 $
+   * @version $Revision: 1.7 $
    * @copyright copyright information
    * @license URL name of license
    *
@@ -216,18 +216,18 @@ Class SMTPs_Test
         return $this->SMTPs->getSubject();
     }
 
-    function set_Msg_Boundry()
+    function set_Msg_Boundary()
     {
-        $this->SMTPs->_setBoundry();
+        $this->SMTPs->_setBoundary();
 
-        return $this->SMTPs->_smtpsBoundry;
+        return $this->SMTPs->_smtpsBoundary;
     }
 
-    function get_Msg_Boundry()
+    function get_Msg_Boundary()
     {
-        $this->SMTPs->_setBoundry();
+        $this->SMTPs->_setBoundary();
 
-        return $this->SMTPs->_getBoundry();
+        return $this->SMTPs->_getBoundary();
     }
 
     function get_Msg_Header()
@@ -367,48 +367,8 @@ Class SMTPsPropertiesTest extends PHPUnit_TestCase
         $this->SMTPs = new SMTPs();
         $this->SMTPsTest = new SMTPs_Test();
 
-        $this->ini_path = '../SMTPs.ini.php';
-        $this->sender = '<test_sender@test.com>';
-        $this->sender_array = array('org'=>'<test_sender@test.com>', 'addr'=>'<test_sender@test.com>', 'host'=>'test.com', 'user'=>'test_sender');
-        $this->sender_host = 'test.com';
-        $this->sender_user = 'test_sender';
-        $this->to_full_address = '"send to" <to@test.com>';
-        $this->to_address = 'to@test.com';
-        $this->to_address_array = array('org'=>'"send to" <to@test.com>', 'real'=>"send to", 'addr'=>'<to@test.com>', 'host'=>'test.com', 'user'=>'to');
-        $this->to_array = array('test.com'=>array('to'=>array('to'=>'send to')));
-        $this->cc_full_address = '"send cc" <cc@test.com>';
-        $this->cc_address = 'cc@test.com';
-        $this->cc_array = array('test.com'=>array('cc'=>array('cc'=>'send cc')));
-        $this->bcc_full_address = '"send bcc" <bcc@test.com>';
-        $this->bcc_address = 'bcc@test.com';
-        $this->bcc_array = array('test.com'=>array('bcc'=>array('bcc'=>'send bcc')));
-        $this->to_user = 'to';
-        $this->cc_user = 'cc';
-        $this->bcc_user = 'bcc';
-        $this->to_domain = 'test.com';
-        $this->rcpt_array = array($this->to_address, $this->cc_address, $this->bcc_address);
-        $this->subject = "Test Subject";
-        $this->msgSensitivity = 1;
-        $this->msgSensitivityResults = 'Personal';
-        $this->msgPriority = 2;
-        $this->msgPriorityResults = "Importance: High\r\nPriority: High\r\nX-Priority: 2 (High)\r\n";
-        $this->transportType = 0;
-        $this->host = 'localhost';
-        $this->port = 21;
-        $this->id = 'tester';
-        $this->pw = 'testing';
-        $this->charSet = 'iso-8859-1';
-        $this->transEncode = '7bit' ;
-        $this->xheader = 'X-test: test';
-        $this->content = 'This is test message';
-        $this->contentType = 'plain';
-        $this->contentRawArray = array('plain'=>array('mimeType'=>'text/plain', 'data'=>'This is test message'));
-        $this->contentMsg = "Content-Type: text/plain; charset=\"iso-8859-1\"\r\nContent-Transfer-Encoding: 7bit\r\nContent-Disposition: inline\r\nContent-Description:  message\r\n\r\nThis is test message\r\n";
-        $this->fileName = 'test.doc';
-        $this->mimeType = 'application/msword';
-        $this->attachArray = array('attachment'=>array('test.doc'=>array('mimeType'=>'application/msword', 'fileName'=>'test.doc', 'data'=>'VGhpcyBpcyB0ZXN0IG1lc3NhZ2U=')));
-    }
-
+        include ( 'SMTPs_test_config.php' );
+   }
 
 
    function teardown()
@@ -719,22 +679,22 @@ Class SMTPsPropertiesTest extends PHPUnit_TestCase
         return ( $_retValue == $_subject );
     }
 
-    function test_set_Msg_Boundry()
+    function test_set_Msg_Boundary()
     {
-        $_retValue = $this->SMTPsTest->set_Msg_Boundry();
+        $_retValue = $this->SMTPsTest->set_Msg_Boundary();
         $_retValue = (! empty ( $_retValue ) );
 
-        $this->assertTrue($_retValue, "Set Message Boundry: ");
+        $this->assertTrue($_retValue, "Set Message Boundary: ");
 
        return $_retValue;
     }
 
-    function test_get_Msg_Boundry()
+    function test_get_Msg_Boundary()
     {
-        $_retValue = $this->SMTPsTest->get_Msg_Boundry();
+        $_retValue = $this->SMTPsTest->get_Msg_Boundary();
         $_retValue = empty ( $_retValue );
 
-        $this->assertFalse($_retValue, "Get Message Boundry: ");
+        $this->assertFalse($_retValue, "Get Message Boundary: ");
 
        return $_retValue;
     }
@@ -1015,46 +975,7 @@ Class SMTPsFailuresTest extends PHPUnit_TestCase {
         $this->SMTPs = new SMTPs();
         $this->SMTPsTest = new SMTPs_Test();
 
-        $this->ini_path = '../SMTPs.ini.php';
-        $this->sender = '<test_sender@test.com>';
-        $this->sender_array = array('org'=>'<test_sender@test.com>', 'addr'=>'<test_sender@test.com>', 'host'=>'test.com', 'user'=>'test_sender');
-        $this->sender_host = 'test.com';
-        $this->sender_user = 'test_sender';
-        $this->to_full_address = '"send to" <to@test.com>';
-        $this->to_address = 'to@test.com';
-        $this->to_address_array = array('org'=>'"send to" <to@test.com>', 'real'=>"send to", 'addr'=>'<to@test.com>', 'host'=>'test.com', 'user'=>'to');
-        $this->to_array = array('test.com'=>array('to'=>array('to'=>'send to')));
-        $this->cc_full_address = '"send cc" <cc@test.com>';
-        $this->cc_address = 'cc@test.com';
-        $this->cc_array = array('test.com'=>array('cc'=>array('cc'=>'send cc')));
-        $this->bcc_full_address = '"send bcc" <bcc@test.com>';
-        $this->bcc_address = 'bcc@test.com';
-        $this->bcc_array = array('test.com'=>array('bcc'=>array('bcc'=>'send bcc')));
-        $this->to_user = 'to';
-        $this->cc_user = 'cc';
-        $this->bcc_user = 'bcc';
-        $this->to_domain = 'test.com';
-        $this->rcpt_array = array($this->to_address, $this->cc_address, $this->bcc_address);
-        $this->subject = "Test Subject";
-        $this->msgSensitivity = 1;
-        $this->msgSensitivityResults = 'Personal';
-        $this->msgPriority = 2;
-        $this->msgPriorityResults = "Importance: High\r\nPriority: High\r\nX-Priority: 2 (High)\r\n";
-        $this->transportType = 0;
-        $this->host = 'localhost';
-        $this->port = 21;
-        $this->id = 'tester';
-        $this->pw = 'testing';
-        $this->charSet = 'iso-8859-1';
-        $this->transEncode = '7bit' ;
-        $this->xheader = 'X-test: test';
-        $this->content = 'This is test message';
-        $this->contentType = 'plain';
-        $this->contentRawArray = array('plain'=>array('mimeType'=>'text/plain', 'data'=>'This is test message'));
-        $this->contentMsg = "Content-Type: text/plain; charset=\"iso-8859-1\"\r\nContent-Transfer-Encoding: 7bit\r\nContent-Disposition: inline\r\nContent-Description:  message\r\n\r\nThis is test message\r\n";
-        $this->fileName = 'test.doc';
-        $this->mimeType = 'application/msword';
-        $this->attachArray = array('attachment'=>array('test.doc'=>array('mimeType'=>'application/msword', 'fileName'=>'test.doc', 'data'=>'VGhpcyBpcyB0ZXN0IG1lc3NhZ2U=')));
+        include ( 'SMTPs_test_config.php' );
     }
 
    /*
@@ -1272,47 +1193,7 @@ Class SMTPsMessageContentDisplay extends PHPUnit_TestCase {
         $this->SMTPs = new SMTPs();
         $this->SMTPsTest = new SMTPs_Test();
 
-        $this->ini_path = '../SMTPs.ini.php';
-        $this->sender = '<test_sender@test.com>';
-        $this->sender_array = array('org'=>'<test_sender@test.com>', 'addr'=>'<test_sender@test.com>', 'host'=>'test.com', 'user'=>'test_sender');
-        $this->sender_host = 'test.com';
-        $this->sender_user = 'test_sender';
-        $this->to_full_address = '"send to" <to@test.com>';
-        $this->to_address = 'to@test.com';
-        $this->to_address_array = array('org'=>'"send to" <to@test.com>', 'real'=>"send to", 'addr'=>'<to@test.com>', 'host'=>'test.com', 'user'=>'to');
-        $this->to_array = array('test.com'=>array('to'=>array('to'=>'send to')));
-        $this->cc_full_address = '"send cc" <cc@test.com>';
-        $this->cc_address = 'cc@test.com';
-        $this->cc_array = array('test.com'=>array('cc'=>array('cc'=>'send cc')));
-        $this->bcc_full_address = '"send bcc" <bcc@test.com>';
-        $this->bcc_address = 'bcc@test.com';
-        $this->bcc_array = array('test.com'=>array('bcc'=>array('bcc'=>'send bcc')));
-        $this->to_user = 'to';
-        $this->cc_user = 'cc';
-        $this->bcc_user = 'bcc';
-        $this->to_domain = 'test.com';
-        $this->rcpt_array = array($this->to_address, $this->cc_address, $this->bcc_address);
-        $this->subject = "Test Subject";
-        $this->msgSensitivity = 1;
-        $this->msgSensitivityResults = 'Personal';
-        $this->msgPriority = 2;
-        $this->msgPriorityResults = "Importance: High\r\nPriority: High\r\nX-Priority: 2 (High)\r\n";
-        $this->transportType = 0;
-        $this->host = 'localhost';
-        $this->port = 21;
-        $this->id = 'tester';
-        $this->pw = 'testing';
-        $this->charSet = 'iso-8859-1';
-        $this->transEncode = '7bit' ;
-        $this->xheader = 'X-test: test';
-        $this->contentHTML = '<b>This</b> is <i>test</i> message';
-        $this->content = 'This is test message';
-        $this->contentType = 'plain';
-        $this->contentRawArray = array('plain'=>array('mimeType'=>'text/plain', 'data'=>'This is test message'));
-        $this->contentMsg = "Content-Type: text/plain; charset=\"iso-8859-1\"\r\nContent-Transfer-Encoding: 7bit\r\nContent-Disposition: inline\r\nContent-Description:  message\r\n\r\nThis is test message\r\n";
-        $this->fileName = 'test.doc';
-        $this->mimeType = 'application/msword';
-        $this->attachArray = array('attachment'=>array('test.doc'=>array('mimeType'=>'application/msword', 'fileName'=>'test.doc', 'data'=>'VGhpcyBpcyB0ZXN0IG1lc3NhZ2U=')));
+        include ( 'SMTPs_test_config.php' );
     }
 
     function test_Body_Content()
@@ -1351,11 +1232,10 @@ Class SMTPsServerAuthentication extends PHPUnit_TestCase {
     }
 
     function setUp() {
-//        $_mainTest = new SMTPsPropertiesTest ();
         $this->SMTPs = new SMTPs();
         $this->SMTPsTest = new SMTPs_Test();
 
-        $this->ini_path = '../SMTPs.ini.php';
+        include ( 'SMTPs_test_config.php' );
     }
 
     function xx_test_Server_Connectivity()
@@ -1386,9 +1266,6 @@ Class SMTPsServerAuthentication extends PHPUnit_TestCase {
         }
 
         return $_retVal;
-
-//        $_retValue = $this->SMTPsTest->get_Body_Content($this->contentHTML, 'html');
-
     }
 
     function test_Server_Authentication()
@@ -1429,9 +1306,6 @@ Class SMTPsServerAuthentication extends PHPUnit_TestCase {
         }
 
         return $_retVal;
-
-//        $_retValue = $this->SMTPsTest->get_Body_Content($this->contentHTML, 'html');
-
     }
 
 };
@@ -1466,6 +1340,9 @@ $display->show();
 
  /**
   * $Log: SMTPs_test.php,v $
+  * Revision 1.7  2005/08/26 19:38:01  jswalter
+  *  - pulled config data into an external file
+  *
   * Revision 1.6  2005/08/22 15:57:37  braverock
   * - remove debug code
   *
