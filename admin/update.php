@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.97 2005/08/10 22:42:48 vanmer Exp $
+ * $Id: update.php,v 1.98 2005/08/26 11:58:46 braverock Exp $
  */
 
 // where do we include from
@@ -4745,7 +4745,7 @@ $con->execute($sql);
                     INDEX ( activity_id ),
                     INDEX ( contact_id ),
                     INDEX ( activity_participant_position_id )
-                    ); ";
+                    ) ";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -4771,7 +4771,7 @@ $con->execute($sql);
                     global_flag TINYINT UNSIGNED DEFAULT '0' NOT NULL,
                     PRIMARY KEY ( activity_participant_position_id ) ,
                     INDEX ( activity_type_id )
-                    ); ";
+                    ) ";
         //execute
         $rst = $con->execute($sql);
         if (!$rst) {
@@ -4917,7 +4917,7 @@ $con->execute($sql);
             }
         }
     }
-    
+
     $sql="ALTER TABLE `opportunities` ADD `opportunity_type_id` INT DEFAULT '1' NOT NULL AFTER `opportunity_id`";
     $rst = $con->execute($sql);
     if (!$rst) {
@@ -4927,7 +4927,7 @@ $con->execute($sql);
         $msg .= _("Successfully added opportunity type to opportunity table.").'<BR><BR>';
     }
 
-    
+
    if (!in_array('contact_former_companies',$table_list)) {
     $sql ="CREATE TABLE contact_former_companies (
     cfc_id INT unsigned NOT NULL auto_increment,
@@ -4939,8 +4939,8 @@ $con->execute($sql);
     KEY (former_company_id)
     )";
     $rst=$con->execute($sql);
-   }  
-    
+   }
+
 install_upgrade_acl($con);
 
 $sql = "ALTER TABLE user_preferences ADD user_id INT( 11 ) UNSIGNED NOT NULL";
@@ -5015,7 +5015,7 @@ $con->execute($sql);
        $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Complete' , 'Completed', 5)";
         $rst = $con->execute($sql);
       $sql = " insert into activity_resolution_types (resolution_short_name, resolution_pretty_name, sort_order) values ( 'Duplicate' , 'Closed/Duplicate', 2)";
-	$rst = $con->execute($sql);
+    $rst = $con->execute($sql);
         if ($rst) $msg .= _("Successfully added activity resolution types to activity resolution types table.").'<BR><BR>';
         if (!$rst) {
             db_error_handler ($con, $sql);
@@ -5031,8 +5031,8 @@ $rst = $con->execute($sql);
 //add needed sort_order field to make campaigns better able to handle workflow (eventually)
 $sql = "ALTER TABLE `campaign_statuses` ADD `sort_order` TINYINT DEFAULT '1' NOT NULL ";
 $rst = $con->execute($sql);
-    
-    
+
+
 $count=upgrade_system_parameter_user_preferences($con);
 if ($count) {
     $msg.=_("Successfully converted $count system parameters into system preferences.").'<BR>';
@@ -5062,6 +5062,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.98  2005/08/26 11:58:46  braverock
+ * - remove unnecessary semicolons from create table commands,
+ *   as they are reported to cause problems in some installations
+ *
  * Revision 1.97  2005/08/10 22:42:48  vanmer
  * - moved opportunity type addition outside of conditionals
  *
