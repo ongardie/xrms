@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.19 2005/08/15 23:55:05 vanmer Exp $
+ * $Id: sidebar.php,v 1.20 2005/08/28 15:42:45 braverock Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -10,10 +10,13 @@ if ( !defined('IN_XRMS') )
   exit;
 }
 
+//uncomment the debug line to see what's going on with the query
+//$con->debug=1;
+
 require_once($include_directory . 'classes/Pager/GUP_Pager.php');
 require_once($include_directory . 'classes/Pager/Pager_Columns.php');
 
-/*  // Commented until ACL system is fully implemented    
+/*  // Commented until ACL system is fully implemented
     $caseList=get_list($session_user_id, 'Read', false, 'cases');
     if (!$caseList) {
         $case_rows=''; return false;
@@ -51,7 +54,7 @@ $cases_sql_where="WHERE cases.case_priority_id = case_priorities.case_priority_i
                 $case_limit_sql";
 
 $cases_sql="$cases_sql_select $cases_sql_from $cases_sql_where";
- 
+
 $owner_query_list = "select " . $con->Concat("users.username", "' ('", "count(users.user_id)", "')'") . ", users.user_id $cases_sql_from $cases_sql_where group by users.username order by users.username";
 
 $owner_query_select = $cases_sql . ' AND users.user_id = XXX-value-XXX';
@@ -116,9 +119,9 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
                           ORDER BY case_type_pretty_name";
         $type_rst=$con->execute($case_type_sql);
         $new_case_types=$type_rst->getmenu2('case_type_id', '', false);
-        $new_case_button=$new_case_types.$new_case_button; 
+        $new_case_button=$new_case_types.$new_case_button;
     }
-    
+
     $endrows = "
             <tr>
                 <td class=widget_content_form_element colspan=$colspan>
@@ -126,7 +129,6 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
                     $new_case_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/cases/some.php';\" value='" . _("Search") . "'>
                 </td>
-                </form>
             </tr>\n";
 } else {
     $endrows ="
@@ -142,48 +144,16 @@ $pager->AddEndRows($endrows);
 
 $case_rows.=$pager->Render($cases_sidebar_rows_per_page);
 
-/*
-        <table class=widget cellspacing=1 width=\"100%\">
-            <tr>
-                <td class=widget_header colspan=5>" .  . "</td>
-            </tr>
-            <tr>
-                <td class=widget_label>" . _("Name") . "</td>
-                <td class=widget_label>" . _("Owner") . "</td>
-                <td class=widget_label>" . _("Priority") . "</td>
-                <td class=widget_label>" . _("Due") . "</td>
-            </tr>\n";
-
-*/
-//uncomment the debug line to see what's going on with the query
-//$con->debug=1;
-
-//execute our query
-/*
-$rst = $con->SelectLimit($cases_sql, 5, 0);
-
-if (strlen($rst->fields['username'])>0) {
-    while (!$rst->EOF) {
-        $case_rows .= '<tr>';
-        $case_rows .= "<td class=widget_content><a href='$http_site_root/cases/one.php?case_id=" . $rst->fields['case_id'] . "'>" . $rst->fields['case_title'] . '</a></td>';
-        $case_rows .= '<td class=widget_content>' . $rst->fields['username'] . '</td>';
-        $case_rows .= '<td class=widget_content>' . _($rst->fields['case_priority_pretty_name']) . '</td>';
-        $case_rows .= '<td class=widget_content>' . $con->userdate($rst->fields['due_at']) . '</td>';
-        $case_rows .= '</tr>';
-        $rst->movenext();
-    }
-    $rst->close();
-} else {
-    $case_rows .= "            <tr> <td class=widget_content colspan=5> " . _("No open cases") . " </td> </tr>\n";
-}
-*/
-
-
 //now close the table, we're done
 $case_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.20  2005/08/28 15:42:45  braverock
+ * - remove spurious second closing of form tag, confused some browsers
+ * - remove commented obsolete non-pager sidebar code
+ * - @todo make the case list ACL compliant
+ *
  * Revision 1.19  2005/08/15 23:55:05  vanmer
  * - changed column variables to be unique within the sidebar
  * - fixes problem when included before output on page where other pager column selects use same variables
