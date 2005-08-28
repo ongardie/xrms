@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.129 2005/08/28 15:47:13 braverock Exp $
+ * $Id: one.php,v 1.130 2005/08/28 15:51:20 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -518,7 +518,7 @@ function markComplete() {
                                 <?php if ($division_select) { ?>
                                 <tr>
                                     <td class=sublabel><?php echo _("Restrict by Division"); ?></td>
-                                    <td class=clear><?php echo $division_select; ?>
+                                    <td class=clear><?php echo $division_select; ?></td>
                                 </tr>
                                 <?php }; ?>
                                 </table>
@@ -729,6 +729,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.130  2005/08/28 15:51:20  braverock
+ * - add missing td tag for compliant HTML
+ *
  * Revision 1.129  2005/08/28 15:47:13  braverock
  * - quote onchange property
  *
