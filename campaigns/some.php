@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Campaigns in XRMS
  *
- * $Id: some.php,v 1.32 2005/08/05 01:54:06 vanmer Exp $
+ * $Id: some.php,v 1.33 2005/08/28 16:15:35 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -30,7 +30,7 @@ getGlobalVar($saved_id, 'saved_id');
 getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
-    
+
 
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
@@ -58,8 +58,8 @@ arr_vars_session_set ( $arr_vars );
 $starts_at = $con->SQLDate('Y-m-d', 'cam.starts_at');
 $ends_at = $con->SQLDate('Y-m-d', 'cam.ends_at');
 
-$sql = "SELECT " . 
-$con->Concat($con->qstr('<a id="'), 'cam.campaign_title', $con->qstr('" href="one.php?campaign_id='), "cam.campaign_id",  $con->qstr('">'), "cam.campaign_title", $con->qstr('</a>')) . " AS campaign, " . 
+$sql = "SELECT " .
+$con->Concat($con->qstr('<a id="'), 'cam.campaign_title', $con->qstr('" href="one.php?campaign_id='), "cam.campaign_id",  $con->qstr('">'), "cam.campaign_title", $con->qstr('</a>')) . " AS campaign, " .
 "camt.campaign_type_pretty_name AS type, cams.campaign_status_pretty_name AS status, u.username AS owner, $starts_at AS starts, $ends_at AS ends ";
 
 if ($campaign_category_id > 0) {
@@ -119,7 +119,7 @@ $sql .= $from . $where;
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
     $saved_data["day_diff"] = $day_diff;
-    
+
     if(!$saved_title) {
         $saved_title = "Current";
         $group_item = 0;
@@ -128,7 +128,7 @@ $sql .= $from . $where;
 //        echo "adding saved search";
         $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
 //        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
-    }    
+    }
 
 //get saved searches
 $rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
@@ -168,7 +168,7 @@ if ($rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed campaigns") . '</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=3>' . _("No recently viewed campaigns") . '</td></tr>';
 }
 
 $user_menu = get_user_menu($con, $user_id, true);
@@ -274,7 +274,7 @@ start_page($page_title, true, $msg);
 
 <?php
 
-//Campaign 	Type	Status	Owner	Starts	Ends
+//Campaign  Type    Status  Owner   Starts  Ends
 
 $columns = array();
 $columns[] = array('name' => _('Campaign'), 'index_sql' => 'campaign', 'type' => 'url');
@@ -303,7 +303,7 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'CampaignForm', 'C
 
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             $pager_columns_button
-			" . $pager->GetAndUseExportButton() .  "
+            " . $pager->GetAndUseExportButton() .  "
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
 
 $pager->AddEndRows($endrows);
@@ -318,7 +318,7 @@ $pager->Render($system_rows_per_page);
     <div id="Sidebar">
 
         <!-- new campaign //-->
-		<div class="noprint">
+        <div class="noprint">
         <table class=widget cellspacing=1 width="100%">
             <tr>
                 <td class=widget_header colspan=2><?php echo _("Options"); ?></td>
@@ -327,12 +327,12 @@ $pager->Render($system_rows_per_page);
                 <td class=widget_content><a href="new.php"><?php echo _("Add New Campaign"); ?></a></td>
             </tr>
         </table>
-		</div>
+        </div>
 
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Recently Viewed"); ?></td>
+                <td class=widget_header colspan=3><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Campaign"); ?></td>
@@ -384,6 +384,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.33  2005/08/28 16:15:35  braverock
+ * - fix incorrect  colspan entries
+ *
  * Revision 1.32  2005/08/05 01:54:06  vanmer
  * - added saved search capabilities to campaigns
  *
