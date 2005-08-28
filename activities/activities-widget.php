@@ -113,7 +113,7 @@ $widget = '';
 
 // build the query based upon $search_terms
 $is_overdue_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN 1 ELSE 0 END)";
-$is_overdue_text_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN ".$con->qstr(_("Yes"))." ELSE " . $con->qstr(_(""))." END)";
+$is_overdue_text_field="(CASE WHEN (activity_status = 'o') AND (a.ends_at < " . $con->DBTimeStamp(time()) . ") THEN ".$con->qstr(_("Yes"))." ELSE " . $con->qstr("")." END)";
 $select = "SELECT $is_overdue_field AS is_overdue, "
   ." at.activity_type_pretty_name AS type, "
   . $con->Concat("'<a id=\"'", "cont.last_name", "'_'" ,"cont.first_names","'\" href=\"../contacts/one.php?contact_id='", "cont.contact_id", "'\">'", "cont.first_names", "' '", "cont.last_name", "'</a>'") . " AS contact, "
@@ -126,9 +126,9 @@ $select = "SELECT $is_overdue_field AS is_overdue, "
   // these fields are pulled in to speed up the pager sorting (using sql_sort_column)
   . "cont.last_name, cont.first_names, activity_title, a.scheduled_at, a.ends_at, cp.case_priority_pretty_name, rt.resolution_short_name ";
 
-  
+
 $select .= ', ' . $con->Concat("'<a id=\"'", "c.company_name", "'\" href=\"../companies/one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS company, c.company_name ";
-  
+
 $from = array('activities a');
 
 $joins = "
@@ -171,7 +171,7 @@ if (strlen($search_terms['company']) > 0 || strlen($search_terms['company_id']) 
 
     //$extra_group_by = ", c.company_name,c.company_id";
     array_unshift($from, 'addresses addr');
-    
+
     $where .= " AND c.default_primary_address=addr.address_id ";
 
 }
@@ -210,7 +210,7 @@ if (strlen($search_terms['user_id']) > 0) {
 
 if (strlen($search_terms['owner']) > 0) {
     $criteria_count++;
-    $where .= " and a.user_id = {$search_terms['owner']} ";    
+    $where .= " and a.user_id = {$search_terms['owner']} ";
 }
 
 if (strlen($search_terms['activity_type_id']) > 0) {
@@ -414,35 +414,35 @@ if('list' != $activities_widget_type) {
     $thread_query_list = "select activity_title, activity_id from activities where thread_id is not null group by thread_id order by activity_id";
 
     $thread_query_select = "$select FROM $from_list $joins $where " . ' AND thread_id = XXX-value-XXX ' . $group_by;
-    
+
     $overdue_query_list = "select DISTINCT $is_overdue_text_field AS is_overdue, $is_overdue_field FROM $from_list $joins $where $group_by";
-    
+
     $overdue_query_select = "$select FROM $from_list $joins $where $group_by HAVING $is_overdue_field = XXX-value-XXX";
-    
+
     $type_query_list = "SELECT DISTINCT at.activity_type_pretty_name, a.activity_type_id FROM $from_list $joins $where $group_by ORDER BY at.sort_order, at.activity_type_pretty_name";
 
     $type_query_select = "$select FROM $from_list $joins $where " . ' AND a.activity_type_id = XXX-value-XXX ' . $group_by;
 
     $resolution_query_list = "SELECT DISTINCT rt.resolution_short_name, a.activity_resolution_type_id FROM $from_list $joins $where $group_by ORDER BY rt.sort_order, rt.resolution_short_name";
 
-    $resolution_query_select = "$select FROM $from_list $joins $where " . ' AND a.activity_resolution_type_id = XXX-value-XXX ' . $group_by;    
-    
+    $resolution_query_select = "$select FROM $from_list $joins $where " . ' AND a.activity_resolution_type_id = XXX-value-XXX ' . $group_by;
+
     $owner_query_list = "SELECT DISTINCT ". $con->Concat('u.last_name',"', '",'u.first_names') . ", a.user_id FROM $from_list $joins $where $group_by ORDER BY u.last_name, u.first_names";
-    
+
     $owner_query_select = "$select FROM $from_list $joins $where " . ' AND a.user_id = XXX-value-XXX ' . $group_by;
-    
+
     $contact_query_list = "SELECT DISTINCT ". $con->Concat('part_cont.first_names',"' '",'part_cont.last_name') . ", part_cont.contact_id FROM $from_list $joins $where ORDER BY part_cont.last_name, part_cont.first_names";
-    
+
     $contact_query_select = "$select FROM $from_list $joins $where " . ' AND ( cont.contact_id = XXX-value-XXX OR part_cont.contact_id = XXX-value-XXX) ' . $group_by;
-    
+
     $priority_query_list = "SELECT DISTINCT cp.case_priority_pretty_name, a.activity_priority_id FROM $from_list $joins $where $group_by";
-    
+
     $priority_query_select = "$select FROM $from_list $joins $where " . ' AND ( a.activity_priority_id = XXX-value-XXX ) ' . $group_by;
-    
+
     $company_query_list = "SELECT DISTINCT c.company_name, a.company_id FROM $from_list $joins $where $group_by ORDER BY c.company_name";
-    
+
     $company_query_select = "$select FROM $from_list $joins $where " . ' AND ( a.company_id = XXX-value-XXX ) ' . $group_by;
-    
+
     $columns = array();
     $columns[] = array('name' => _("Overdue"), 'index_sql' => 'is_overdue', 'group_query_list'=>$overdue_query_list, 'group_query_select'=>$overdue_query_select);
     $columns[] = array('name' => _("Type"), 'index_sql' => 'type', 'group_query_list'=>$type_query_list, 'group_query_select'=>$type_query_select);
@@ -646,10 +646,10 @@ function markComplete() {
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
-                <td class=widget_content_form_element size=10>$user_menu</td>
-                <td class=widget_content_form_element size=10 >$activity_type_menu</td>" .
-                ($contact_menu ? "<td class=widget_content_form_element size=10>$contact_menu</td>" : "") ."
-                <td colspan=2 class=widget_content_form_element size=20>
+                <td class=widget_content_form_element>$user_menu</td>
+                <td class=widget_content_form_element>$activity_type_menu</td>" .
+                ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
+                <td colspan=2 class=widget_content_form_element>
                     <input type=text ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d H:i:s') . "\">
                     <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" .
                     render_create_button(_("Add")) .
@@ -705,12 +705,12 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
         $start_end      = $search_terms['start_end'];
         $before_after   = $search_terms['before_after'];
         $search_date    = $search_terms['search_date'];
-        
+
     }
     if (!$con) $con=get_xrms_dbconnection();
     $activity_type_menu=get_activity_type_menu($con, $type, $widget_name.'_activity_type',true);
     $activity_owner_menu = get_user_menu($con, $owner, true, $widget_name.'_activity_owner');
-    
+
     $ret =
     "<div id=$widget_name>
 
@@ -743,7 +743,7 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
                     <input type=text ID=\"f_date_{$widget_name}_search_date\" name={$widget_name}_search_date value=\"$search_date\">
                     <img ID=\"f_trigger_{$widget_name}_search_date\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">
-                </td>                
+                </td>
             </tr>
             <tr>
                 <td class=widget_label>" . _("Type") . "</td>
@@ -793,6 +793,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.36  2005/08/28 15:33:15  braverock
+* - remove size attribute from td tags, as this is not a valid attribute for td
+*
 * Revision 1.35  2005/08/19 18:59:58  daturaarutad
 * no longer set search_date if it is not set (old code that should have been deleted) to fix date filtering bug
 *
