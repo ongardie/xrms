@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Cases
  *
- * $Id: sidebar.php,v 1.20 2005/08/28 15:42:45 braverock Exp $
+ * $Id: sidebar.php,v 1.21 2005/08/28 16:18:52 braverock Exp $
  */
 if ( !defined('IN_XRMS') )
 {
@@ -101,14 +101,6 @@ $case_rows.= $case_pager_columns_selects;
 // caching is disabled for this pager (since it's all sql)
 $pager = new GUP_Pager($con, $cases_sql, null,$case_sidebar_header, $case_sidebar_form_id, 'CasesSidebarPager', $columns, false, true);
 
-// set up the bottom row of buttons
-/*
-$endrows = "<tr><td class=widget_content_form_element colspan=10>
-            $pager_columns_button
-            " . $pager->GetAndUseExportButton() .  "
-            <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\"" . _('Mail Merge') . "\"></td></tr>";
-*/
-
 //put in the new and search buttons
 if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) && (strlen($contact_id) > 0))) {
     $new_case_button=render_create_button("New",'button',"javascript:location.href='$http_site_root/cases/new.php?company_id=$company_id&division_id=$division_id&contact_id=$contact_id&case_type_id=' + document.$case_sidebar_form_id.case_type_id.value;", false, false, 'cases');
@@ -149,6 +141,9 @@ $case_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.21  2005/08/28 16:18:52  braverock
+ * - remove commented export code, non-relevant for this page
+ *
  * Revision 1.20  2005/08/28 15:42:45  braverock
  * - remove spurious second closing of form tag, confused some browsers
  * - remove commented obsolete non-pager sidebar code
