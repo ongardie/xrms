@@ -642,14 +642,14 @@ function markComplete() {
                 <td class=widget_label>" . _("User") . "</td>
                 <td class=widget_label>" . _("Type") . "</td> ".
                 ($contact_menu ? "<td class=widget_label>" . _("Contact") . "</td>" : "") ."
-                <td colspan=2 class=widget_label>" . _("Scheduled End") . "</td>
+                <td class=widget_label>" . _("Scheduled End") . "</td>
             </tr>
             <tr>
                 <td class=widget_content_form_element><input type=text name=activity_title></td>
                 <td class=widget_content_form_element>$user_menu</td>
                 <td class=widget_content_form_element>$activity_type_menu</td>" .
                 ($contact_menu ? "<td class=widget_content_form_element>$contact_menu</td>" : "") ."
-                <td colspan=2 class=widget_content_form_element>
+                <td class=widget_content_form_element>
                     <input type=text ID=\"f_date_new_activity\" name=ends_at value=\"" . date('Y-m-d H:i:s') . "\">
                     <img ID=\"f_trigger_new_activity\" style=\"CURSOR: hand\" border=0 src=\"../img/cal.gif\">" .
                     render_create_button(_("Add")) .
@@ -793,6 +793,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.37  2005/08/28 15:56:44  braverock
+* - remove unneccessary colspan
+*
 * Revision 1.36  2005/08/28 15:33:15  braverock
 * - remove size attribute from td tags, as this is not a valid attribute for td
 *
