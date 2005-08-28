@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: some.php,v 1.63 2005/08/16 00:15:21 vanmer Exp $
+ * $Id: some.php,v 1.64 2005/08/28 16:35:06 braverock Exp $
  */
 
 //include the standard files
@@ -33,7 +33,7 @@ getGlobalVar($saved_id, 'saved_id');
 getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
-    
+
 
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
@@ -208,7 +208,7 @@ if ($rst) {
 }
 
 if ( !$recently_viewed_table_rows ) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed contacts") . '</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=3>' . _("No recently viewed contacts") . '</td></tr>';
 }
 
 $user_menu = get_user_menu($con, $user_id, true);
@@ -234,7 +234,7 @@ $page_title = _("Contacts");
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
     $saved_data["day_diff"] = $day_diff;
-    
+
     if(!$saved_title) {
         $saved_title = "Current";
         $group_item = 0;
@@ -243,7 +243,7 @@ $page_title = _("Contacts");
 //        echo "adding saved search";
         $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
 //        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
-    }    
+    }
 
 //get saved searches
 $rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
@@ -422,7 +422,7 @@ $con->close();
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Recently Viewed"); ?></td>
+                <td class=widget_header colspan=3><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Contact"); ?></td>
@@ -483,6 +483,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.64  2005/08/28 16:35:06  braverock
+ * - fix colspan on Recently Viewed table
+ *
  * Revision 1.63  2005/08/16 00:15:21  vanmer
  * - changed all phone searches to be contains instead of starts with
  * - added code to strip all formatting off phone searches
