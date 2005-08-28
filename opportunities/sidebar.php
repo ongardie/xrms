@@ -1,17 +1,18 @@
 <?php
+/**
+ * Sidebar box for Opportunities
+ *
+ * $Id: sidebar.php,v 1.19 2005/08/28 15:45:09 braverock Exp $
+ */
 
 if ( !defined('IN_XRMS') )
 {
   die('Hacking attempt');
   exit;
 }
-/**
- * Sidebar box for Opportunities
- *
- * $Id: sidebar.php,v 1.18 2005/08/15 23:55:05 vanmer Exp $
- */
+
 /*
-Commented until ACL system is implemented
+Commented until ACL system is fully implemented
 $opList=acl_get_list($session_user_id, 'Read', false, 'opportunities');
 if (!$opList) { $opportunity_rows=''; return false; }
 else { $opList=implode(",",$opList); $opportunity_limit_sql.=" AND opportunities.opportunity_id IN ($opList) "; }
@@ -116,10 +117,10 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
                           ORDER BY opportunity_type_pretty_name";
         $type_rst=$con->execute($opp_type_sql);
         $new_opp_types=$type_rst->getmenu2('opportunity_type_id', '', false);
-        $new_opp_button=$new_opp_types.$new_opp_button; 
+        $new_opp_button=$new_opp_types.$new_opp_button;
     }
-    
-    
+
+
     $endrows = "
             <tr>
                 <td class=widget_content_form_element colspan=$colspan>
@@ -127,7 +128,6 @@ if ( (isset($company_id) && (strlen($company_id) > 0))  or (isset($contact_id) &
                     $new_opp_button
                     <input type=button class=button onclick=\"javascript:location.href='".$http_site_root."/opportunities/some.php';\" value='" . _("Search") . "'>
                 </td>
-                </form>
             </tr>\n";
 } else {
     $endrows ="
@@ -149,6 +149,9 @@ $opportunity_rows .= "</form></div>";
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.19  2005/08/28 15:45:09  braverock
+ * - remove unnecessary second form close tag, it confuses some browsers
+ *
  * Revision 1.18  2005/08/15 23:55:05  vanmer
  * - changed column variables to be unique within the sidebar
  * - fixes problem when included before output on page where other pager column selects use same variables
