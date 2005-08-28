@@ -27,7 +27,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.12 2005/08/28 15:15:36 braverock Exp $
+ * $Id: Pager_Columns.php,v 1.13 2005/08/28 18:06:04 braverock Exp $
  */
 
 class Pager_Columns {
@@ -206,7 +206,7 @@ class Pager_Columns {
                 <td class="widget_content" colspan=2 align="center">
                     <b>Available Columns</b>
                 </td>
-                <td class="widget_content" colspan=2 align="center">
+                <td class="widget_content" align="center">
                     <b>Layouts</b>
                 </td>
             </tr>
@@ -263,6 +263,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.13  2005/08/28 18:06:04  braverock
+ * - romove colspan from Layouts tag
+ *
  * Revision 1.12  2005/08/28 15:15:36  braverock
  * - add htmlspecialchars to localized buttons
  *
