@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.59 2005/08/05 21:53:54 vanmer Exp $
+ * $Id: some.php,v 1.60 2005/08/28 18:08:18 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -31,7 +31,7 @@ getGlobalVar($saved_id, 'saved_id');
 getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
-    
+
 
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
@@ -138,7 +138,7 @@ if (strlen($industry_id) > 0) {
     if ($search_date) {
         $field='close_at';
         $day_diff = round((strtotime($search_date) - strtotime(date('Y-m-d', time()))) / 86400);
-    
+
         if (!$before_after) {
             // before
             $offset_end = $con->OffsetDate($day_diff);
@@ -154,7 +154,7 @@ if (strlen($industry_id) > 0) {
             // midnight to midnight
             $offset_sql .= " and opp.$field > $offset_start and opp.$field < $offset_end";
         }
-    
+
         $where .= $offset_sql;
     }
 
@@ -182,7 +182,7 @@ $sql .= $from . $where;
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
     $saved_data["day_diff"] = $day_diff;
-    
+
     if(!$saved_title) {
         $saved_title = "Current";
         $group_item = 0;
@@ -191,7 +191,7 @@ $sql .= $from . $where;
 //        echo "adding saved search";
         $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
 //        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
-    }    
+    }
 
 //get saved searches
 $rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
@@ -254,7 +254,7 @@ if (!$rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed opportunities") . '</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=4>' . _("No recently viewed opportunities") . '</td></tr>';
 }
 
 $user_menu = get_user_menu($con, $user_id, true);
@@ -361,7 +361,7 @@ start_page($page_title, true, $msg);
                         }
                     ?>
                 </td>
-            </tr>            
+            </tr>
             <tr>
                 <td class=widget_content_form_element colspan=6><input class=button type=submit value="<?php echo _("Search"); ?>"> <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>"> </td>
             </tr>
@@ -495,6 +495,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.60  2005/08/28 18:08:18  braverock
+ * - fix colspan for recently viewed items
+ *
  * Revision 1.59  2005/08/05 21:53:54  vanmer
  * - changed to use centralized company search
  *
