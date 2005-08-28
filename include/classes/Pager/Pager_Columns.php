@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Pager_Columns class
  *
@@ -7,18 +6,20 @@
  *
  * How it works:
  *
- *  -user loads script including pager
- *  -script creates Pager_Columns object
- *  -Pager_Columns object checks to see if new columns have been selected by checking for a CGI var Portfolio1_New_Columns_View, adding them to session
- *  -pager_columns checks to see if there is a column list in the session (for Portfolio1)
- *  -if there is, it does the thing to drop teh columns
- *  -if not, it does the same, but with the default list
- *  -page renders
+ *  - user loads script including pager
+ *  - script creates Pager_Columns object
+ *  - Pager_Columns object checks to see if new columns have been selected by checking for a CGI var Portfolio1_New_Columns_View,
+ *    adding them to session
+ *  - pager_columns checks to see if there is a column list in the session (for Portfolio1)
+ *  - if there is, it does the thing to drop teh columns
+ *  - if not, it does the same, but with the default list
+ *  - page renders
  *
- *  -user clicks 'display selectable columns'
- *  -div hidden toggles and changes text to 'hide selectable columns'
- *  -user clicks around and at some point is happy with their columns list and clicks 'update column view for this session' button which triggers a javascript function
- *  -javascript packs the column list into a variable along with the pager name, submits form
+ *  - user clicks 'display selectable columns'
+ *  - div hidden toggles and changes text to 'hide selectable columns'
+ *  - user clicks around and at some point is happy with their columns list and
+ *    clicks 'update column view for this session' button which triggers a javascript function
+ *  - javascript packs the column list into a variable along with the pager name, submits form
  *
  * Click the link below to run the example code (you may need to modify the URL of this link)
  *
@@ -26,7 +27,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.10 2005/08/25 22:38:43 braverock Exp $
+ * $Id: Pager_Columns.php,v 1.11 2005/08/28 15:12:14 braverock Exp $
  */
 
 class Pager_Columns {
@@ -109,7 +110,7 @@ class Pager_Columns {
 
     function GetSelectableColumnsButton() {
 
-        return '<input type="button" class="button" onclick="document.getElementById(\'' . $this->pager_name . '_widget\').style.display=\'block\'; location.href=\'#' . $this->pager_name . '_select_columns\';" value="' . _('Select Column Layouts') . '">';
+        return '<input type="button" class="button" onclick="document.getElementById(\'' . $this->pager_name . '_widget\').style.display=\'block\'; location.href=\'#' . $this->pager_name . '_select_columns\';" value="' . _("Select Column Layouts") . '">';
     }
     function GetSelectableColumnsWidget() {
 
@@ -258,6 +259,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.11  2005/08/28 15:12:14  braverock
+ * - localized selectable columns widget header and move buttons
+ *
  * Revision 1.10  2005/08/25 22:38:43  braverock
  * - fix HTML compliance for IE parsing
  *   - patch provided by "Holger G. Hahn" <hghahn [at] daybyday [dot] de>
