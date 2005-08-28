@@ -2,7 +2,7 @@
 /**
  * Common user interface functions file.
  *
- * $Id: utils-interface.php,v 1.90 2005/08/26 22:47:15 braverock Exp $
+ * $Id: utils-interface.php,v 1.91 2005/08/28 17:45:17 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -911,7 +911,7 @@ function render_tree_list($data, $topclass='', $id=false) {
     if ($id) { $id="id=\"$id\""; } else $id='';
     $ret="<ul $class$id>";
     foreach ($data as $element) {
-        if ($element['class']) { $liextra="class={$element['class']}"; }
+        if ($element['class']) { $liextra="class=\"{$element['class']}\""; }
         else {$liextra=''; }
         if ($element['id']) { $liextra.=' id="'.$element['id'].'"'; }
         $ret.="<li $liextra>";
@@ -937,6 +937,9 @@ function render_tree_list($data, $topclass='', $id=false) {
 
 /**
  * $Log: utils-interface.php,v $
+ * Revision 1.91  2005/08/28 17:45:17  daturaarutad
+ * put css class in quotes in render_tree_widget
+ *
  * Revision 1.90  2005/08/26 22:47:15  braverock
  * - add more ACL wrapping around menu items
  * - consolidate code blocks
