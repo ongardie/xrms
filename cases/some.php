@@ -2,7 +2,7 @@
 /**
  * This file allows the searching of cases
  *
- * $Id: some.php,v 1.37 2005/08/17 18:47:20 ycreddy Exp $
+ * $Id: some.php,v 1.38 2005/08/28 16:22:20 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -28,7 +28,6 @@ getGlobalVar($saved_id, 'saved_id');
 getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
-    
 
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
@@ -133,7 +132,7 @@ $sql .= $from . $where;
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
     $saved_data["day_diff"] = $day_diff;
-    
+
     if(!$saved_title) {
         $saved_title = "Current";
         $group_item = 0;
@@ -142,7 +141,7 @@ $sql .= $from . $where;
 //        echo "adding saved search";
         $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
 //        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
-    }    
+    }
 
 //get saved searches
 $rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
@@ -366,7 +365,7 @@ $con->close();
         <!-- recently viewed support items //-->
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Recently Viewed"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Recently Viewed"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Case"); ?></td>
@@ -412,6 +411,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.38  2005/08/28 16:22:20  braverock
+ * - fix incorrect colspan
+ *
  * Revision 1.37  2005/08/17 18:47:20  ycreddy
  * Fix for company search - used like instead of =
  *
