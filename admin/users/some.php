@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.17 2005/05/18 05:47:45 vanmer Exp $
+ * $Id: some.php,v 1.18 2005/08/28 16:11:03 braverock Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -33,7 +33,7 @@ if ($rst) {
         $table_rows .= '<td class=widget_content>' . $enabled . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['last_name'] . ', ' . $rst->fields['first_names'] . '</td>';
         $table_rows .= '<td class=widget_content>' . $rst->fields['email'] . '</td>';
-        $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';        
+        $table_rows .= '<td class=widget_content><a href="one.php?edit_user_id=' . $rst->fields['user_id'] . '">' . $rst->fields['username'] . '</a></td>';
         $table_rows .= '</tr>';
         $rst->movenext();
     }
@@ -59,7 +59,7 @@ start_page($page_title, true, $msg);
 
         <table class=widget cellspacing=1 width="100%">
             <tr>
-                <td class=widget_header colspan=5><?php echo _("Users"); ?></td>
+                <td class=widget_header colspan=4><?php echo _("Users"); ?></td>
             </tr>
             <tr>
                 <td class=widget_label><?php echo _("Enabled"); ?></td>
@@ -165,6 +165,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.18  2005/08/28 16:11:03  braverock
+ * - fix incorrect colspan
+ *
  * Revision 1.17  2005/05/18 05:47:45  vanmer
  * - added handling for msg parameter
  * - removed role table join for roles
