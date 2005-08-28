@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Categories
  *
- * $Id: categories-sidebar.php,v 1.2 2005/01/11 13:03:32 braverock Exp $
+ * $Id: categories-sidebar.php,v 1.3 2005/08/28 16:39:37 braverock Exp $
  */
 
  if ( !defined('IN_XRMS') )
@@ -15,11 +15,11 @@
 $category_rows = "<div id='category_sidebar'>
         <table class=widget cellspacing=1 width=\"100%\">
             <tr>
-                <td class=widget_header colspan=5>" . _("Categories") . "</td>
+                <td class=widget_header>" . _("Categories") . "</td>
             </tr>\n";
 
 //build the categories sql query
-$categories_sql = "select category_pretty_name 
+$categories_sql = "select category_pretty_name
 from categories c, category_scopes cs, category_category_scope_map ccsm, entity_category_map ecm
 where ecm.on_what_table = '$on_what_table'
 and ecm.on_what_id = '$on_what_id'
@@ -64,6 +64,9 @@ $category_rows .= "
 
 /**
  * $Log: categories-sidebar.php,v $
+ * Revision 1.3  2005/08/28 16:39:37  braverock
+ * - remove unnecessary colspan
+ *
  * Revision 1.2  2005/01/11 13:03:32  braverock
  * - removed on_what_string hack, changed to use standard make_singular function
  *
