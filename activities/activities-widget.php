@@ -718,7 +718,7 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
         <table class=widget cellspacing=1>
             <tr>
-                <td class=widget_header colspan=5>". _("Filter Activities") . "</td>
+                <td class=widget_header colspan=3>". _("Filter Activities") . "</td>
             </tr>
             <tr>
                 <td class=widget_label>" . _("Summary") . "</td>
@@ -756,7 +756,7 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
                 <td class=widget_content_form_element><input type=text size=12 name={$widget_name}_activity_company value=\"$company\"></td>
             </tr>
             <tr>
-                <td class=widget_content_form_element colspan=5>
+                <td class=widget_content_form_element colspan=3>
                     <input type=button class=button onclick=\"document.$form_name.{$widget_name}_status.value='enable'; document.$form_name.submit();\" value=\"" . _('Filter Activities') . "\">
                     <input type=button class=button onclick=\"ClearActivitiesFilter()\" value=\"" . _('Clear Filter') . "\">
                 </td>
@@ -793,6 +793,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.38  2005/08/28 16:31:24  braverock
+* - fix incorrect colspan entries
+*
 * Revision 1.37  2005/08/28 15:56:44  braverock
 * - remove unneccessary colspan
 *
