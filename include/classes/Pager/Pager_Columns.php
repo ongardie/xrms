@@ -27,7 +27,7 @@
  *
  * @example Pager_Columns.doc.1.php check out
  *
- * $Id: Pager_Columns.php,v 1.11 2005/08/28 15:12:14 braverock Exp $
+ * $Id: Pager_Columns.php,v 1.12 2005/08/28 15:15:36 braverock Exp $
  */
 
 class Pager_Columns {
@@ -128,6 +128,10 @@ class Pager_Columns {
 
         $widget_name = $this->pager_name . '_widget';
 
+        // create localized strings for move buttons
+        $moveone = htmlspecialchars(_("one"));
+        $moveall = htmlspecialchars(_("move all"));
+
         // add currently displayed columns
         foreach($user_columns as $user_column) {
             if(isset($user_column)) {
@@ -220,12 +224,12 @@ class Pager_Columns {
                             onChange="setDisplay(this)">
             $display_columns_options
             </select>
-<input type="button" class="button" onClick="moveListItemAll( '{$this->pager_name}_displayColumns', '{$this->pager_name}_availColumns' )" value="move all ->">
+<input type="button" class="button" onClick="moveListItemAll( '{$this->pager_name}_displayColumns', '{$this->pager_name}_availColumns' )" value="$moveall ->">
 
         </td>
 
         <td class="widget_content">
-            <input type="button" class="button" onClick="moveListItem( '{$this->pager_name}_availColumns', '{$this->pager_name}_displayColumns' )" value="<- one"><br/><input type="button" class="button" onClick="moveListItem( '{$this->pager_name}_displayColumns', '{$this->pager_name}_availColumns' )" value="one ->"><br/>        </td>
+            <input type="button" class="button" onClick="moveListItem( '{$this->pager_name}_availColumns', '{$this->pager_name}_displayColumns' )" value="<- $moveone"><br/><input type="button" class="button" onClick="moveListItem( '{$this->pager_name}_displayColumns', '{$this->pager_name}_availColumns' )" value="$moveone ->"><br/>        </td>
 
         <td class="widget_content">
             <select name="{$this->pager_name}_availColumns"
@@ -236,7 +240,7 @@ class Pager_Columns {
                     onChange="setDisplay(this)">
             $avail_columns_options
             </select>
-<input type="button" class="button" onClick="moveListItemAll( '{$this->pager_name}_availColumns', '{$this->pager_name}_displayColumns' )" value="<- move all">
+<input type="button" class="button" onClick="moveListItemAll( '{$this->pager_name}_availColumns', '{$this->pager_name}_displayColumns' )" value="<- $moveall">
         </td>
 
         <td class="widget_content_center">
@@ -259,6 +263,9 @@ END;
 }
 /**
  * $Log: Pager_Columns.php,v $
+ * Revision 1.12  2005/08/28 15:15:36  braverock
+ * - add htmlspecialchars to localized buttons
+ *
  * Revision 1.11  2005/08/28 15:12:14  braverock
  * - localized selectable columns widget header and move buttons
  *
