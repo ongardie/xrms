@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: companies_one.php,v 1.2 2005/03/21 13:40:57 maulani Exp $
+ * $Id: companies_one.php,v 1.3 2005/08/28 15:28:02 braverock Exp $
  *
  * @todo create a categories sidebar and centralize the category handling
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
@@ -140,7 +140,7 @@ $current_credit_limit = fetch_current_customer_credit_limit($extref1);
 $address_to_display = get_formatted_address($con, $address_id);
 
 if (strlen($url) > 0) {
-    $url = "<a target='_new' href='" . $url . "'>$url</a>";
+    $url = "<a target='_blank' href='" . $url . "'>$url</a>";
 }
 
 //
@@ -476,7 +476,7 @@ function openNewsWindow() {
                                     <td class=clear><?php  echo $legal_name; ?></td>
                                 </tr>-->
                                 <!--<?php  echo $former_name_rows; ?>-->
-                                
+
                                 <!--<tr>
                                     <td class=sublabel><?php echo _("Code"); ?></td>
                                 </tr>
@@ -764,6 +764,9 @@ end_page();
 
 /**
  * $Log: companies_one.php,v $
+ * Revision 1.3  2005/08/28 15:28:02  braverock
+ * - change _new to _blank for broader browser compatibility
+ *
  * Revision 1.2  2005/03/21 13:40:57  maulani
  * - Remove redundant code by centralizing common user menu call
  *

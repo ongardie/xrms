@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.127 2005/08/19 19:27:09 braverock Exp $
+ * $Id: one.php,v 1.128 2005/08/28 15:25:43 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -169,7 +169,7 @@ $current_credit_limit = fetch_current_customer_credit_limit($extref1);
 
 
 if (strlen($url) > 0) {
-    $url = "<a target='_new' href='" . $url . "'>$url</a>";
+    $url = "<a target='_blank' href='" . $url . "'>$url</a>";
 }
 
 //if division_id is specified, look up the name
@@ -729,6 +729,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.128  2005/08/28 15:25:43  braverock
+ * - change _new to _blank for broader browser compatibility
+ *
  * Revision 1.127  2005/08/19 19:27:09  braverock
  * - take out insecure use of 'global'
  *
