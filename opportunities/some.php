@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.60 2005/08/28 18:08:18 braverock Exp $
+ * $Id: some.php,v 1.61 2005/08/28 18:09:10 braverock Exp $
  */
 
 require_once('../include-locations.inc');
@@ -495,6 +495,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.61  2005/08/28 18:09:10  braverock
+ * - remove trailing whitespace
+ *
  * Revision 1.60  2005/08/28 18:08:18  braverock
  * - fix colspan for recently viewed items
  *
