@@ -4,7 +4,7 @@
  *
  * This is the main interface for locating Contacts in XRMS
  *
- * $Id: index.php,v 1.3 2005/08/05 21:59:19 vanmer Exp $
+ * $Id: index.php,v 1.4 2005/08/28 18:12:43 braverock Exp $
  */
 
 //include the standard files
@@ -131,7 +131,7 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 
 $sql = "SELECT " . $con->Concat("'<a href=\"contacts_one.php?contact_id='", "cont.contact_id", "'\">'", "cont.last_name", "', '", "cont.first_names", "'</a>'") . " AS 'Name', "
-       . $con->Concat("'<a href=\"companies_one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',  
+       . $con->Concat("'<a href=\"companies_one.php?company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'") . " AS 'Company',
          cont.work_phone AS 'Phone' ";
    //    company_code AS 'Code',
     //   title AS 'Title',
@@ -222,14 +222,14 @@ if ($rst) {
         $recently_viewed_table_rows .= '<td class=widget_content><a href="one.php?contact_id=' . $rst->fields['contact_id'] . '">' . $rst->fields['first_names'] . ' ' . $rst->fields['last_name'] . '</a></td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['company_name'] . '</td>';
         $recently_viewed_table_rows .= '<td class=widget_content>' . $rst->fields['work_phone'] . '</td>';
-        $recently_viewed_table_rows .= '</tr>';
+        $recently_viewed_table_rows .= '</tr>'."\n";
         $rst->movenext();
     }
     $rst->close();
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>No recently viewed contacts</td></tr>';
+    $recently_viewed_table_rows = "\n".'<tr><td class=widget_content colspan=4>'._("No recently viewed contacts").'</td></tr>'."\n";
 }
 
 $user_menu = get_user_menu($con, $user_id, true);
@@ -273,57 +273,57 @@ $page_title = 'Contacts';
             </tr>
             <tr>
                 <td class=widget_label>Last Name</td>
-	    </tr>
-	    <tr>
-		<td class=widget_content_form_element><input type=text name="last_name" size=18 maxlength=100 value="<?php  echo $last_name; ?>"></td>
-	    </tr>
-	    <tr>
+        </tr>
+        <tr>
+        <td class=widget_content_form_element><input type=text name="last_name" size=18 maxlength=100 value="<?php  echo $last_name; ?>"></td>
+        </tr>
+        <tr>
                 <td class=widget_label>First Names</td>
-	    </tr>
-	    <tr>
-          	<td class=widget_content_form_element><input type=text name="first_names" size=12 maxlength=100 value="<?php  echo $first_names; ?>"></td>
-	    </tr>
-	    <!--<tr>
+        </tr>
+        <tr>
+            <td class=widget_content_form_element><input type=text name="first_names" size=12 maxlength=100 value="<?php  echo $first_names; ?>"></td>
+        </tr>
+        <!--<tr>
                 <td class=widget_label>Title</td>
-	    </tr>
-	    <tr>
-          	<td class=widget_content_form_element><input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>"></td>
-	    </tr>-->
-	    <tr>
+        </tr>
+        <tr>
+            <td class=widget_content_form_element><input type=text name="title" size=12 maxlength=100 value="<?php  echo $title; ?>"></td>
+        </tr>-->
+        <tr>
                 <td class=widget_label>Company</td>
-	    </tr>
-	    <tr>
-          	<td class=widget_content_form_element><input type=text name="company_name" size=18 maxlength=100 value="<?php  echo $company_name; ?>"></td>
+        </tr>
+        <tr>
+            <td class=widget_content_form_element><input type=text name="company_name" size=18 maxlength=100 value="<?php  echo $company_name; ?>"></td>
         </tr>
 <!--        <tr>
                 <td class=widget_label>Code</td>
-	    </tr>
-	    <tr>
-          	<td width="25%" class=widget_content_form_element>
+        </tr>
+        <tr>
+            <td width="25%" class=widget_content_form_element>
 <input type=text name="company_code" size=4 maxlength=10 value="<?php  echo $company_code; ?>"></td>
-	</tr>-->
-	<!--<tr>
+    </tr>-->
+    <!--<tr>
                 <td class=widget_label>Description</td>
-	    </tr>
-	    <tr>
-          	<td width="25%" class=widget_content_form_element>
+        </tr>
+        <tr>
+            <td width="25%" class=widget_content_form_element>
 <input type=text name="description" size=12 maxlength=100 value="<?php  echo $description; ?>"></td>
-	</tr>-->
-	<tr>
+    </tr>-->
+    <tr>
                 <td class=widget_label>Category</td>
-	    </tr>
-	    <tr>
-          	<td width="25%" class=widget_content_form_element>
-            	<?php  echo $contact_category_menu; ?>
-          	</td>
-	</tr>
-	<!--<tr>
+        </tr>
+        <tr>
+            <td width="25%" class=widget_content_form_element>
+                <?php  echo $contact_category_menu; ?>
+            </td>
+    </tr>
+    <!--<tr>
                 <td class=widget_label>Owner</td>
-	    </tr>
-	    <tr>
-          	<td width="25%" class=widget_content_form_element>
-            	<?php  echo $user_menu; ?>
-          	</td>
+        </tr>
+        <tr>
+            <td width="25%" class=widget_content_form_element>
+                <?php  echo $user_menu; ?>
+            </td>
         </tr>-->
         <tr>
           <td class=widget_content_form_element colspan=4><input name="submit" type=submit class=button value="Search">
@@ -390,6 +390,10 @@ end_page();
 
 /**
  * $Log: index.php,v $
+ * Revision 1.4  2005/08/28 18:12:43  braverock
+ * - fix localization
+ * - fix colspan on recently viewed
+ *
  * Revision 1.3  2005/08/05 21:59:19  vanmer
  * - added search string function for companies search
  *
