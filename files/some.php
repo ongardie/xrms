@@ -2,7 +2,7 @@
 /**
  * Search for and display a summary of multiple files
  *
- * $Id: some.php,v 1.37 2005/08/05 21:48:17 vanmer Exp $
+ * $Id: some.php,v 1.38 2005/08/28 16:37:25 braverock Exp $
  */
 
 //include required files
@@ -31,7 +31,7 @@ getGlobalVar($saved_id, 'saved_id');
 getGlobalVar($saved_title, 'saved_title');
 getGlobalVar($group_item, 'group_item');
 getGlobalVar($delete_saved, 'delete_saved');
-    
+
 
 /*********** SAVED SEARCH BEGIN **********************/
 load_saved_search_vars($con, $on_what_table, $saved_id, $delete_saved);
@@ -60,11 +60,11 @@ arr_vars_session_set ( $arr_vars );
 
 // $con->execute("update users set last_hit = " . $con->dbtimestamp(mktime()) . " where user_id = $session_user_id");
 
-$f_contact 		= false;
-$f_campaign 	= false;
-$f_company 		= false;
-$f_opportunity 	= false;
-$f_case 		= false;
+$f_contact      = false;
+$f_campaign     = false;
+$f_company      = false;
+$f_opportunity  = false;
+$f_case         = false;
 
 $sql = "SELECT "
       . $con->Concat($con->qstr('<a id="'), 'file_pretty_name', $con->qstr('" href="' . $http_site_root . '/files/one.php?return_url=/private/home.php&amp;file_id='), 'file_id', $con->qstr('">'), "file_pretty_name", "'</a>'")
@@ -76,8 +76,8 @@ switch ($file_on_what) {
               . " AS contact,"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS company,";
-		$f_contact = true;
-		$f_company = true;
+        $f_contact = true;
+        $f_company = true;
         break;
     }
     case "contacts_of_companies" : {
@@ -85,20 +85,20 @@ switch ($file_on_what) {
               . " AS contact,"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS company,";
-		$f_contact = true;
-		$f_company = true;
+        $f_contact = true;
+        $f_company = true;
         break;
     }
     case "companies" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS company,";
-		$f_company = true;
+        $f_company = true;
         break;
     }
     case "campaigns" : {
         $sql .= $con->Concat("'<a href=\"$http_site_root/campaigns/one.php?return_url=/private/home.php&amp;campaign_id='", "camp.campaign_id", "'\">'", "camp.campaign_title", "'</a>'")
               . " AS campaign,";
-		$f_campaign = true;
+        $f_campaign = true;
         break;
     }
     case "opportunities" : {
@@ -106,8 +106,8 @@ switch ($file_on_what) {
               . " AS opportunity,"
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS company,";
-		$f_opportunity	= true;
-		$f_company 		= true;
+        $f_opportunity  = true;
+        $f_company      = true;
         break;
     }
     case "cases" : {
@@ -115,8 +115,8 @@ switch ($file_on_what) {
               . " AS case_name, "
               . $con->Concat("'<a href=\"$http_site_root/companies/one.php?return_url=/private/home.php&amp;company_id='", "c.company_id", "'\">'", "c.company_name", "'</a>'")
               . " AS company, ";
-		$f_case		= true;
-		$f_company 	= true;
+        $f_case     = true;
+        $f_company  = true;
         break;
     }
     default : {
@@ -233,7 +233,7 @@ $sql .= $from . $where;
     $saved_data = $_POST;
     $saved_data["sql"] = $sql;
     $saved_data["day_diff"] = $day_diff;
-    
+
     if(!$saved_title) {
         $saved_title = "Current";
         $group_item = 0;
@@ -242,7 +242,7 @@ $sql .= $from . $where;
 //        echo "adding saved search";
         $saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);
 //        echo "$saved_id=add_saved_search_item($con, $saved_title, $group_item, $on_what_table, $saved_data);";
-    }    
+    }
 
 //get saved searches
 $rst=get_saved_search_item($con, $on_what_table, $session_user_id, false,  false, true,'search', true);
@@ -282,7 +282,7 @@ if ($rst) {
 }
 
 if (strlen($recently_viewed_table_rows) == 0) {
-    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=5>' . _("No recently viewed file") . '</td></tr>';
+    $recently_viewed_table_rows = '<tr><td class=widget_content colspan=4>' . _("No recently viewed file") . '</td></tr>';
 }
 
 $user_menu = get_user_menu($con, $user_id, true);
@@ -339,7 +339,7 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
                 <td class=widget_content_form_element><input type=text name="file_date" size=8 value="<?php echo $file_date; ?>"></td>
                 <td class=widget_content_form_element><?php echo $user_menu; ?></td>
         </tr>
-      	<?php echo $plugin_search_rows; ?>
+        <?php echo $plugin_search_rows; ?>
         <tr>
             <td class=widget_label colspan="2"><?php echo _("Saved Searches"); ?></td>
             <td class=widget_label colspan="2"><?php echo _("Search Title"); ?></td>
@@ -363,7 +363,7 @@ $plugin_search_rows = concat_hook_function('file_get_search_fields_html');
                     <input class=button type=button onclick="javascript: clearSearchCriteria();" value="<?php echo _("Clear Search"); ?>">
           </td>
         </tr>
-	  </table>
+      </table>
         <p>
 <?php
 
@@ -388,7 +388,7 @@ if($f_company) $columns[] = array('name' => _("Company"), 'index_sql' => 'compan
 
 $columns[] = array('name' => _("Date"), 'index_sql' => 'date');
 $columns[] = array('name' => _("ID"), 'index_sql' => 'ID');
-    
+
 $endrows = "<tr><td class=widget_content_form_element colspan=10>
             <input type=button class=button onclick=\"javascript: exportIt();\" value="._("Export").">
             <input type=button class=button onclick=\"javascript: bulkEmail();\" value=\""._("Mail Merge")."\"></td></tr>";
@@ -397,9 +397,9 @@ $pager = new GUP_Pager($con, $sql, null, _('Search Results'), 'FileForm', 'FileP
 
 
 function FileDataCallback($rows) {
-	$params = array($rows);
-	do_hook_function('file_search_files', $params);
-	return $params[0];
+    $params = array($rows);
+    do_hook_function('file_search_files', $params);
+    return $params[0];
 }
 
 $pager->AddModifyDataCallback('FileDataCallback');
@@ -479,6 +479,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.38  2005/08/28 16:37:25  braverock
+ * - fix colspan on recently viewed table
+ *
  * Revision 1.37  2005/08/05 21:48:17  vanmer
  * - changed files to use centralized company name search function
  *
