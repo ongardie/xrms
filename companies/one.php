@@ -5,7 +5,7 @@
  * Usually called from companies/some.php, but also linked to from many
  * other places in the XRMS UI.
  *
- * $Id: one.php,v 1.128 2005/08/28 15:25:43 braverock Exp $
+ * $Id: one.php,v 1.129 2005/08/28 15:47:13 braverock Exp $
  *
  * @todo create a centralized left-pane handler for activities (in companies, contacts,cases, opportunities, campaigns)
  */
@@ -209,7 +209,7 @@ elseif ($division_rst->numRows()>0) {
     </script>
 TILLEND;
 
-    $division_select.=$division_rst->getmenu2('division_id',$division_id, true, false, 1, "id=division_id onchange=javascript:restrictByDivision();");
+    $division_select.=$division_rst->getmenu2('division_id',$division_id, true, false, 1, "id=division_id onchange=\"javascript:restrictByDivision();\"");
     if ($division_id) {
         $div_return_url=urlencode("one.php?company_id=$company_id&division_id=$division_id");
         $division_select.="&nbsp; <input class=button type=button value=\"". _("Administer Division")."\" onclick=\"javascript:location.href='".$http_site_root."/companies/edit-division.php?company_id=$company_id&division_id=$division_id&return_url=$div_return_url';\">";
@@ -729,6 +729,9 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.129  2005/08/28 15:47:13  braverock
+ * - quote onchange property
+ *
  * Revision 1.128  2005/08/28 15:25:43  braverock
  * - change _new to _blank for broader browser compatibility
  *
