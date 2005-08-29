@@ -32,16 +32,23 @@
    *
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    *
-   * @version $Revision: 1.13 $
+   * @version $Revision: 1.14 $
    * @copyright copyright information
    * @license GNU General Public Licence
    *
-   * $Id: SMTPs.php,v 1.13 2005/08/21 01:57:30 vanmer Exp $
+   * $Id: SMTPs.php,v 1.14 2005/08/29 16:22:10 jswalter Exp $
    *
    **/
 
 // =============================================================
 // ** Class Constants
+
+   /**
+    * Version number of Class
+    * @const SMTPs_VER
+    *
+    */
+    define('SMTPs_VER', '1.15', false);
 
    /**
     * SMTPs Success value
@@ -1448,7 +1455,7 @@ class SMTPs
             // Make sure we have addresses to process
             if ( $this->_msgRecipients )
             {
-	    	$_RCPT_list=array();
+            $_RCPT_list=array();
                 // walk down Recipients array and pull just email addresses
                 foreach ( $this->_msgRecipients as $_host => $_list )
                 {
@@ -1695,7 +1702,6 @@ class SMTPs
         if ( $this->getBCC() )
             $_header .= 'Bcc: ' . $this->getBCC()  . "\r\n";
 
-
         //NOTE: Message-ID should probably contain the username of the user who sent the msg
         $_header .= 'Subject: '    . $this->getSubject()     . "\r\n"
                  .  'Date: '       . date("r")               . "\r\n"
@@ -1772,7 +1778,7 @@ class SMTPs
     */
     function getBodyContent ()
     {
-        // Generate a new boundary string
+        // Generate a new Boundary string
         $this->_setBoundary();
 
         // What type[s] of content do we have
@@ -1803,8 +1809,13 @@ class SMTPs
         else if( $keyCount > 1 )
         {
             // Since this is an actual multi-part message
-            // We need to define a content message boundary
-            $content = 'Content-Type: multipart/alternative;' . "\r\n"
+            // We need to define a content message Boundary
+            // NOTE: This was 'multipart/alternative', but Windows based
+            //       mail servers have issues with this.
+           /*
+            * @TODO  Investigate "nested" boundary message parts
+            */
+            $content = 'Content-Type: multipart/mixed;' . "\r\n"
                      . '   boundary="' . $this->_getBoundary() . '"'   . "\r\n"
                      . "\r\n"
                      . 'This is a multi-part message in MIME format.' . "\r\n";
@@ -2075,7 +2086,7 @@ class SMTPs
    /**
     * Method private string _getBoundary( void )
     *
-    * Retrieves the MIME message Boundray
+    * Retrieves the MIME message Boundary
     *
     * @name _getBoundary()
     *
@@ -2214,6 +2225,10 @@ class SMTPs
 
  /**
   * $Log: SMTPs.php,v $
+  * Revision 1.14  2005/08/29 16:22:10  jswalter
+  *  - change 'multipart/alternative' to 'multipart/mixed', but Windows based mail servers have issues with this.
+  * Bug 594
+  *
   * Revision 1.13  2005/08/21 01:57:30  vanmer
   * - added initialization for array if no recipients exist
   *
