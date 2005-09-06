@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.27 2005/07/14 21:06:08 daturaarutad Exp $
+ * $Id: edit-2.php,v 1.28 2005/09/06 17:31:22 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -99,9 +99,9 @@ $rec['description'] = $description;
 $rec['email'] = $email;
 $rec['work_phone'] = preg_replace("/[^\d]/", '', $work_phone);
 $rec['work_phone_ext'] = preg_replace("/[^\d]/", '', $work_phone_ext);
-$rec['cell_phone'] = $cell_phone;
-$rec['home_phone'] = $home_phone;
-$rec['fax'] = $fax;
+$rec['cell_phone'] = preg_replace("/[^\d]/", '', $cell_phone);
+$rec['home_phone'] = preg_replace("/[^\d]/", '', $home_phone);
+$rec['fax'] = preg_replace("/[^\d]/", '', $fax);
 $rec['aol_name'] = $aol_name;
 $rec['yahoo_name'] = $yahoo_name;
 $rec['msn_name'] = $msn_name;
@@ -138,6 +138,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.28  2005/09/06 17:31:22  ycreddy
+ * Added code to Strip off non digit characters from Cell, Home Phones and Fax
+ *
  * Revision 1.27  2005/07/14 21:06:08  daturaarutad
  * add contact_id to btnEditHomeAddress handler
  *

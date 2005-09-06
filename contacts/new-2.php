@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.28 2005/08/24 11:25:32 braverock Exp $
+ * $Id: new-2.php,v 1.29 2005/09/06 17:29:56 ycreddy Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -128,9 +128,9 @@ $rec['description'] = $description;
 $rec['email'] = $email;
 $rec['work_phone'] = preg_replace("/[^\d]/", '', $work_phone);
 $rec['work_phone_ext'] = preg_replace("/[^\d]/", '', $work_phone_ext);
-$rec['cell_phone'] = $cell_phone;
-$rec['home_phone'] = $home_phone;
-$rec['fax'] = $fax;
+$rec['cell_phone'] = preg_replace("/[^\d]/", '', $cell_phone);
+$rec['home_phone'] = preg_replace("/[^\d]/", '', $home_phone);
+$rec['fax'] = preg_replace("/[^\d]/", '', $fax);
 $rec['aol_name'] = $aol_name;
 $rec['yahoo_name'] = $yahoo_name;
 $rec['msn_name'] = $msn_name;
@@ -181,6 +181,9 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.29  2005/09/06 17:29:56  ycreddy
+ * Added code to Strip off non digit characters from Cell, Home Phones and Fax
+ *
  * Revision 1.28  2005/08/24 11:25:32  braverock
  * - check for successful insert and add db_error_handler to provide feedback
  * - add commented debug line for use in debugging
