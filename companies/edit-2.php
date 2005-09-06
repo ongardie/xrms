@@ -2,7 +2,7 @@
 /**
  * Insert company details into the database
  *
- * $Id: edit-2.php,v 1.18 2005/07/24 20:37:55 maulani Exp $
+ * $Id: edit-2.php,v 1.19 2005/09/06 17:33:34 ycreddy Exp $
  */
 require_once('../include-locations.inc');
 
@@ -28,7 +28,7 @@ $rating_id = $_POST['rating_id'];
 $user_id = $_POST['user_id'];
 $phone = preg_replace("/[^\d]/", '', $_POST['phone']);
 $phone2 = preg_replace("/[^\d]/", '',$_POST['phone2']);
-$fax = $_POST['fax'];
+$fax = preg_replace("/[^\d]/", '',$_POST['fax']);
 $url = $_POST['url'];
 $employees = $_POST['employees'];
 $revenue = $_POST['revenue'];
@@ -91,6 +91,9 @@ header("Location: one.php?msg=saved&company_id=$company_id");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.19  2005/09/06 17:33:34  ycreddy
+ * Added code to Strip off non digit characters from Fax
+ *
  * Revision 1.18  2005/07/24 20:37:55  maulani
  * - Add db_error_handler call after database call
  *

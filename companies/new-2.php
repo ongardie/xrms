@@ -6,7 +6,7 @@
  *
  * @todo add more error handling and feedback here
  *
- * $Id: new-2.php,v 1.25 2005/08/22 16:03:07 braverock Exp $
+ * $Id: new-2.php,v 1.26 2005/09/06 17:32:44 ycreddy Exp $
  */
 require_once('../include-locations.inc');
 
@@ -28,7 +28,7 @@ $company_source_id = $_POST['company_source_id'];
 $industry_id = $_POST['industry_id'];
 $phone = preg_replace("/[^\d]/", '', $_POST['phone']);
 $phone2 = preg_replace("/[^\d]/", '', $_POST['phone2']);
-$fax = $_POST['fax'];
+$fax = preg_replace("/[^\d]/", '', $_POST['fax']);
 $url = $_POST['url'];
 $employees = $_POST['employees'];
 $revenue = $_POST['revenue'];
@@ -248,6 +248,9 @@ header("Location: one.php?msg=company_added&company_id=$company_id");
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.26  2005/09/06 17:32:44  ycreddy
+ * Added code to Strip off non digit characters from Fax
+ *
  * Revision 1.25  2005/08/22 16:03:07  braverock
  * - set custom1-4 even if they aren't posted from new.php
  * - applies patch from Keith Edmunds
