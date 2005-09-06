@@ -5,7 +5,7 @@
  * @author Fontain Consulting Group (France)
  * @author Brian Peterson (modified to only export company info and address)
  *
- * $Id: export-company-address.php,v 1.1 2004/07/27 13:09:08 braverock Exp $
+ * $Id: export-company-address.php,v 1.2 2005/09/06 16:04:39 braverock Exp $
  */
 
 //include required files
@@ -16,6 +16,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/toexport.inc.php');
 require_once($include_directory . 'adodb-params.php');
+
+$session_user_id = session_check( 'Admin' );
 
 $sql = " SELECT
   c.company_name AS 'company_name',
@@ -63,6 +65,10 @@ header("Location: {$http_site_root}/tmp/company-address-export.csv");
 
 /**
  * $Log: export-company-address.php,v $
+ * Revision 1.2  2005/09/06 16:04:39  braverock
+ * - add Admin ACL restriction to export functions.
+ *   credit Bert (SF:camel2004) for the patch
+ *
  * Revision 1.1  2004/07/27 13:09:08  braverock
  * - Initial Revision of Company & Address Export requested by Jack Iu
  *

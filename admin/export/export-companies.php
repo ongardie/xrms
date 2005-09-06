@@ -16,6 +16,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/toexport.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+$session_user_id = session_check( 'Admin' );
+
 $sql = " SELECT
   cont.salutation AS 'Salutation',
   cont.last_name AS 'Last Name',
@@ -62,7 +64,7 @@ $sql = " SELECT
   a.address_body AS 'Address Body',
   a.line1 AS 'Address Line 1',
   a.line2 AS 'Address Line 2',
- 	a.city AS 'City',
+    a.city AS 'City',
   a.province AS 'Province',
   a.postal_code AS 'Postal Code',
   a.use_pretty_address AS 'Use Pretty Address',
@@ -107,6 +109,10 @@ header("Location: {$http_site_root}/tmp/contacts-export.csv");
 
 /**
  * $Log: export-companies.php,v $
+ * Revision 1.7  2005/09/06 16:04:39  braverock
+ * - add Admin ACL restriction to export functions.
+ *   credit Bert (SF:camel2004) for the patch
+ *
  * Revision 1.6  2005/03/30 03:47:34  niclowe
  * renamed ambiguous contact and company 'profile' field to 'contact profile' and 'company profile' as it caused abberant behaviour on import of field data (second profile data record not recorded)
  *

@@ -16,6 +16,8 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb/toexport.inc.php');
 require_once($include_directory . 'adodb-params.php');
 
+$session_user_id = session_check( 'Admin' );
+
 $sql = " SELECT
   cont.salutation AS 'Salutation',
   cont.last_name AS 'Last Name',
@@ -95,53 +97,53 @@ if (($fp)) {
     fwrite($fp,"version 1\n\n");
     $companies = array();
     while (!$rst->EOF) {
-	$string = "";
-	$company = preg_replace("/,/","",trim($rst->fields['Company']));
-	
-	if ($companies[$company] != true) {
-    	  $string .= "dn: ou=$company," . $xrms_ldap["reference_context"] . "\n";
-	  $string .= "ou: $company\n";
-	  $cphone = trim($rst->fields["Company Phone"]);
-	  if (!empty($cphone)) {
-	    $string .= "telephoneNumber: $cphone\n";
-	  }
-	  $string .= "objectClass: top\n";
-	  $string .= "objectClass: organizationalUnit\n\n";
-	  $companies[$company] = true;
-	}
-	
-	$fname = $rst->fields["First Names"];
-	$lname = $rst->fields["Last Name"];
-	$dnname = preg_replace("/,/","",trim($fname . " " . $lname));
-	$string .= "dn: cn=$dnname, ou=$company," . $xrms_ldap["reference_context"] . "\n";
-	$string .= "objectClass: officePerson\n";
-	$string .= "cn: $dnname\n";
-	$string .= "sn: $lname\n";
-	$string .= "givenName: $fname\n";
-	$email = $rst->fields['Email'];
-	if (!empty($email)) {
-	  $string .= "mail: $email\n";
-	 }
-	$fax = trim($rst->fields['Fax']);
-	if (!empty($fax)) {
-	  $string .= "facsimileTelephoneNumber: $fax\n";
-	}
-	$phone = trim($rst->fields["Work Phone"]);
-	if (!empty($phone)) {
-	  $string .= "telephoneNumber: $phone\n";
-	}
-	$mphone = trim($rst->fields["Cell Phone"]);
-	if (!empty($mphone)) {
-	  $string .= "mobile: $mphone\n";
-	}
-	$hphone = trim($rst->fields["Home Phone"]);
-	if (!empty($hphone)) {
-	  $string .= "homePhone: $hphone\n";
-	}
-	$string .= "o: $company\n";
-	$string .= "\n";
-	$rst->MoveNext();
-    	fwrite($fp,$string);
+    $string = "";
+    $company = preg_replace("/,/","",trim($rst->fields['Company']));
+
+    if ($companies[$company] != true) {
+          $string .= "dn: ou=$company," . $xrms_ldap["reference_context"] . "\n";
+      $string .= "ou: $company\n";
+      $cphone = trim($rst->fields["Company Phone"]);
+      if (!empty($cphone)) {
+        $string .= "telephoneNumber: $cphone\n";
+      }
+      $string .= "objectClass: top\n";
+      $string .= "objectClass: organizationalUnit\n\n";
+      $companies[$company] = true;
+    }
+
+    $fname = $rst->fields["First Names"];
+    $lname = $rst->fields["Last Name"];
+    $dnname = preg_replace("/,/","",trim($fname . " " . $lname));
+    $string .= "dn: cn=$dnname, ou=$company," . $xrms_ldap["reference_context"] . "\n";
+    $string .= "objectClass: officePerson\n";
+    $string .= "cn: $dnname\n";
+    $string .= "sn: $lname\n";
+    $string .= "givenName: $fname\n";
+    $email = $rst->fields['Email'];
+    if (!empty($email)) {
+      $string .= "mail: $email\n";
+     }
+    $fax = trim($rst->fields['Fax']);
+    if (!empty($fax)) {
+      $string .= "facsimileTelephoneNumber: $fax\n";
+    }
+    $phone = trim($rst->fields["Work Phone"]);
+    if (!empty($phone)) {
+      $string .= "telephoneNumber: $phone\n";
+    }
+    $mphone = trim($rst->fields["Cell Phone"]);
+    if (!empty($mphone)) {
+      $string .= "mobile: $mphone\n";
+    }
+    $hphone = trim($rst->fields["Home Phone"]);
+    if (!empty($hphone)) {
+      $string .= "homePhone: $hphone\n";
+    }
+    $string .= "o: $company\n";
+    $string .= "\n";
+    $rst->MoveNext();
+        fwrite($fp,$string);
     }
     $rst->close();
     fclose($fp);
@@ -165,6 +167,10 @@ fclose($fp2);
 
 /**
  * $Log: export-companies-ldap.php,v $
+ * Revision 1.3  2005/09/06 16:04:39  braverock
+ * - add Admin ACL restriction to export functions.
+ *   credit Bert (SF:camel2004) for the patch
+ *
  * Revision 1.2  2004/07/16 13:51:58  braverock
  * - localize strings for i18n translation support
  *   - applies modified patches from Sebastian Becker (hyperpac)
