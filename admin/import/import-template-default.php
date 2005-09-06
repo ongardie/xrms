@@ -41,7 +41,7 @@
     $company_fax         = $row['company_fax'];
 
     //contact info
-    $contact_first_names   = $row['first_name'];
+    $contact_first_names   = $row['first_names'];
     $contact_last_name     = $row['last_name'];
     $contact_email         = htmlspecialchars($row['email']);
     $contact_work_phone    = $row['work_phone'];
@@ -84,6 +84,10 @@
 
 /**
  * $Log: import-template-default.php,v $
+ * Revision 1.4  2005/09/06 16:00:46  braverock
+ * - patch typo in first_names.
+ *   credit Bert (SF:camel2004) for the patch
+ *
  * Revision 1.3  2005/04/12 13:13:47  niclowe
  * Fixed  bug[ 1180292 ] import of fax fails (ambiguous company and contact fax fields)
  *
