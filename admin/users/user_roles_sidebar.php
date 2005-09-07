@@ -2,7 +2,7 @@
 /**
  * Roles sidebar, used to display/edit roles for a user
  *
- * $Id: user_roles_sidebar.php,v 1.4 2005/08/25 04:35:24 vanmer Exp $
+ * $Id: user_roles_sidebar.php,v 1.5 2005/09/07 23:42:18 vanmer Exp $
 **/
 if (!$edit_user_id) {
     $edit_user_id=$session_user_id;
@@ -10,6 +10,7 @@ if (!$edit_user_id) {
 } else $action='edit';
 if (!$user_roles_con) $user_roles_con=$con;
 if (!$user_roles_handler) $user_roles_handler='/admin/acl/edit_GroupUser.php';
+if (!$acl_datasource_name) $acl_datasource_name='default';
 
 if (!$acl) $acl=get_acl_object($acl_options);
 //hack to show ACL roles
@@ -25,7 +26,7 @@ $role_rows=<<<TILLEND
 <script language=javascript>
 <!---
     function deleteRole(GroupUser_id) {
-        location.href='{$http_site_root}$user_roles_handler?return_url=$return_url&edit_user_id=$edit_user_id&userAction=deleteRole&GroupUser_id='+GroupUser_id;
+        location.href='{$http_site_root}$user_roles_handler?acl_datasource_name=$acl_datasource_name&return_url=$return_url&edit_user_id=$edit_user_id&userAction=deleteRole&GroupUser_id='+GroupUser_id;
     };
 </script>
 TILLEND;
@@ -50,6 +51,7 @@ $role_rows.="<tr><td>$group_menu</td><td>$role_menu</td><td><input type=submit c
 $user_role_sidebar=<<<TILLEND
     <form method=POST action='{$http_site_root}$user_roles_handler'>
         <input type=hidden name=userAction value=addRole>
+        <input type=hidden name=acl_datasource_name value="$acl_datasource_name">
         <input type=hidden name=edit_user_id value=$edit_user_id>
 TILLEND;
 }
@@ -66,6 +68,10 @@ $user_role_sidebar.=<<<TILLEND
 TILLEND;
 /**
  * $Log: user_roles_sidebar.php,v $
+ * Revision 1.5  2005/09/07 23:42:18  vanmer
+ * - added parameter for acl datasource name into sidebar, to allow datasource to be set properly when adding/deleting
+ * users roles
+ *
  * Revision 1.4  2005/08/25 04:35:24  vanmer
  * - changed sidebar to allow inclusion from multiple places, providing a db connection and ACL object and handler
  * - changed paths to use full xrms path for all actions
