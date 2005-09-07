@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit_GroupUser.php,v 1.2 2005/08/25 04:33:52 vanmer Exp $
+ * $Id: edit_GroupUser.php,v 1.3 2005/09/07 23:41:42 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -25,16 +25,20 @@ $role_id         = $_POST['role_id'];
 getGlobalVar($userAction, 'userAction');
 if (!$userAction) { $userAction='editUser'; }
 
+$con = get_acl_dbconnection();
+
+$acl = get_acl_object($acl_options, $con);
+
 switch ($userAction) {
     case 'deleteRole':
         getGlobalVar($edit_user_id, 'edit_user_id');
         getGlobalVar($GroupUser_id,'GroupUser_id');
         $role_id=$_GET['role_id'];
         getGlobalVar($group, 'group');
-            if (!$group) {
+            if (!$group AND !$GroupUser_id) {
                 $group="Users";
             }
-            if (delete_user_group(false, $GroupUser_id, $group, $edit_user_id, $role_id)) {
+            if (delete_user_group($acl, $GroupUser_id, $group, $edit_user_id, $role_id)) {
                 $msg="Deleted role $role_id for user $edit_user_id in group $group successfully";
             } else {
                 $msg="Failed to delete role $role_id for user $edit_user_id in group $group";
@@ -50,7 +54,7 @@ switch ($userAction) {
             if (!$group) {
                 $group="Users";
             }
-            $ret=add_user_group(false, $group, $edit_user_id, $role_id);
+            $ret=add_user_group($acl, $group, $edit_user_id, $role_id);
             if (!is_array($ret)) { 
                 $msg= _("Failed to add user to role in group.");
             } else {
@@ -68,6 +72,10 @@ switch ($userAction) {
 }
 /**
   * $Log: edit_GroupUser.php,v $
+  * Revision 1.3  2005/09/07 23:41:42  vanmer
+  * - changed to only set default group if GroupUser is not already set
+  * - changed to use acl object and acl db connection like results page
+  *
   * Revision 1.2  2005/08/25 04:33:52  vanmer
   * - changed to use full URLS when returning
   *
