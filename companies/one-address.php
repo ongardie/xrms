@@ -2,7 +2,7 @@
 /**
  * Edit address for a company
  *
- * $Id: one-address.php,v 1.9 2005/08/02 22:41:32 ycreddy Exp $
+ * $Id: one-address.php,v 1.10 2005/09/07 17:32:40 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -27,6 +27,8 @@ getGlobalVar($company_id, 'company_id');
 getGlobalVar($contact_id, 'contact_id');
 getGlobalVar($address_type, 'address_type');
 getGlobalVar($use_pretty_address, 'use_pretty_address');
+getGlobalVar($msg, 'msg');
+
 
 $company_name = fetch_company_name($con, $company_id);
 
@@ -59,61 +61,91 @@ $company_name = fetch_company_name($con, $company_id);
     }
 
 
-  $model = new ADOdb_QuickForm_Model();
-  $model->ReadSchemaFromDB($con, 'addresses');
-  $model->SetPrimaryKeyName('address_id');
+    if(false !== render_delete_button("Delete",'button',"", false, false, 'addresses',$address_id)) {
+        $delete_enabled = true;
+    }
+
+
+    // Model
+    $model = new ADOdb_QuickForm_Model();
+    $model->ReadSchemaFromDB($con, 'addresses');
+    $model->SetPrimaryKeyName('address_id');
 
 	$model->SetDisplayNames(array('address_name' => _("Address Name"), 
-                                                                                                                'line1' => _("Line 1"),
-                                                                                                                'line2' => _("Line 2"), 
-                                                                                                                'city' => _("City"),
-                                                                                                                'province' => _("State/Province"), 
-                                                                                                                'postal_code' => _("Postal Code"),
-                                                                                                                'country_id' => _("Country"),
-                                                                                                                'company_id' => _("Company"),
-                                                                                                                'address_type' => _("Address Type"),
-                                                                                                                'address_body' => _("Non-Standard Address"),
-                                                                                                                'use_pretty_address' => _("Use Non-Standard Address"),
-                                                                                                                'sort_order' => _("Sort Order")));
-        $display_order=array('company_id','address_name','line1','line2','city','province','postal_code','country_id','address_type', 'use_pretty_address','address_body');
+                                  'line1' => _("Line 1"),
+                                  'line2' => _("Line 2"), 
+                                  'city' => _("City"),
+                                  'province' => _("State/Province"), 
+                                  'postal_code' => _("Postal Code"),
+                                  'country_id' => _("Country"),
+                                  'company_id' => _("Company"),
+                                  'address_type' => _("Address Type"),
+                                  'address_body' => _("Non-Standard Address"),
+                                  'use_pretty_address' => _("Use Non-Standard Address"),
+                                  'sort_order' => _("Sort Order")));
+
+    $display_order=array('company_id','address_name','line1','line2','city','province','postal_code','country_id','address_type', 'use_pretty_address','address_body');
         
-        $model->SetDisplayOrders($display_order);
-	
-        $model->SetForeignKeyField('country_id', _("Country"), 'countries', 'country_id', 'country_name', $con, null, 'country_name');
+    $model->SetDisplayOrders($display_order);
+
+    $model->SetForeignKeyField('country_id', _("Country"), 'countries', 'country_id', 'country_name', $con, null, 'country_name');
 	$model->SetForeignKeyField('address_type', _("Address Type"), 'address_types', 'address_type', 'address_type', $con, null, 'address_type_sort_value');
         
-        $model->SetFieldType('address_record_status', 'db_only');
-        $model->SetFieldType('offset', 'db_only');
-        $model->SetFieldType('daylight_savings_id', 'db_only');
+    $model->SetFieldType('address_record_status', 'db_only');
+    $model->SetFieldType('offset', 'db_only');
+    $model->SetFieldType('daylight_savings_id', 'db_only');
         
-        $model->SetCheckboxField('use_pretty_address', 't','f');
-        if ($company_id) {
-            $model->SetHiddenLinkField('company_id', "$http_site_root/companies/one.php?company_id=$company_id",$company_name, $company_id);
-        } else {
-            $model->SetFieldType('company_id','hidden');
-            $model->SetFieldValue('company_id',0);
-        }
-        $model->SetFieldType('address_body', 'textarea','cols=50 rows=10');
+    $model->SetCheckboxField('use_pretty_address', 't','f');
+    if ($company_id) {
+        $model->SetHiddenLinkField('company_id', "$http_site_root/companies/one.php?company_id=$company_id",$company_name, $company_id);
+    } else {
+        $model->SetFieldType('company_id','hidden');
+        $model->SetFieldValue('company_id',0);
+    }
+    $model->SetFieldType('address_body', 'textarea','cols=50 rows=10');
 
 	global $default_country_id;
 	$model->SetFieldValue('country_id', $default_country_id);
 
-        if ($contact_id) {
-            $model->AddField("<input type=hidden name=contact_id value=$contact_id>", 'html',0);
-        }
-        $fields=$model->GetFields();
-        $sorter = new array_sorter($fields, 'displayOrder', false);
-        $model->DBStructure['fields']=$sorter->sortit();
-        $fields=$model->GetFields();
-        
-  $view = new ADOdb_QuickForm_View($con, $page_title, 'post');
-  $view->SetReturnButton('Return to List', $return_url);
-  $view->SetReturnAfterUpdate($return_url);
-  $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
-  $template_form_html = $controller->ProcessAndRenderForm();
-    if (!$template_form_html) return false;
+    if ($contact_id) {
+        $model->AddField("<input type=hidden name=contact_id value=$contact_id>", 'html',0);
+    }
 
-start_page($page_title);
+    // delete button
+    if($delete_enabled) {
+        $model->SetLogicalDeleteParams('address_record_status');
+    }
+
+    
+
+    // View    
+    $view = new ADOdb_QuickForm_View($con, $page_title, 'post');
+
+    $view->SetReturnButton('Return to List', $return_url);
+    $view->SetReturnAfterUpdate($return_url);
+
+    // delete button
+    if($delete_enabled) {
+        $view->EnableDeleteButton();
+    }
+
+    // Controller
+    $controller = new ADOdb_QuickForm_Controller(array(&$model), &$view);
+
+    $template_form_html = $controller->ProcessAndRenderForm();
+
+    $msg        .= $controller->GetStatusMessage();
+
+    // this may not work always...
+    if(!strchr($return_url,'?')) {
+        $return_url .= "?msg=$msg";
+    } else {
+        $return_url .= "&msg=$msg";
+    }
+
+    if (!$template_form_html) header("Location: $return_url&msg=$msg");
+
+    start_page($page_title, true, $msg);
 ?>
 
 <div id="Main">
@@ -182,6 +214,9 @@ end_page();
 
 /**
  * $Log: one-address.php,v $
+ * Revision 1.10  2005/09/07 17:32:40  daturaarutad
+ * fixed formatting; enabled delete button in quickform; remove old form sort code
+ *
  * Revision 1.9  2005/08/02 22:41:32  ycreddy
  * Defaulted the country to the default_address_id defined in vars.php
  *
