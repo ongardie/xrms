@@ -1,0 +1,6 @@
+This is a test file.
+
+It should be set to:
+   OWNER - READ-WRITE
+   GROUP - READ ONLY
+   WORLD - NONE
