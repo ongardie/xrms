@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.121 2005/08/11 02:36:52 vanmer Exp $
+ * $Id: one.php,v 1.122 2005/09/08 21:30:43 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -17,7 +17,6 @@ require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
 require_once($include_directory . 'confgoto.php');
 require_once('../activities/activities-widget.php');
-
 
 getGlobalVar($activity_id, 'activity_id');
 getGlobalVar($msg, 'msg');
@@ -613,7 +612,7 @@ function logTime() {
                 <td class=widget_content_form_element colspan=2>
                     <?php
 
-                        echo render_edit_button(_("Save Changes"),'submit',false,'save');
+                        echo render_edit_button(_("Save Changes"),'submit',false,'save', false,'activities',$activity_id);
 
                         if($save_and_next) {
                             echo '<input class=button type=submit name="saveandnext" value="'._("Save and Next").'"';
@@ -732,6 +731,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.122  2005/09/08 21:30:43  vanmer
+ * - changed to have edit button reference correctly the activity rather than whatever $on_what_table and $on_what_id
+ * happen to be
+ *
  * Revision 1.121  2005/08/11 02:36:52  vanmer
  * - Added sidebar to control activity association
  * - moved button from main form to sidebar
