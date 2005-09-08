@@ -256,6 +256,11 @@ table.widget {
 /**
  * PADDING and MARGINS
  */
+table {
+    padding: 0px;
+    margin: 0px;
+    border-spacing: 1px;
+}   
 table.widget td {
     padding: 3px; /* use whitespace as separator */
 }
