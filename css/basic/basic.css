@@ -257,8 +257,6 @@ table.widget {
  * PADDING and MARGINS
  */
 table {
-    padding: 0px;
-    margin: 0px;
     border-spacing: 1px;
 }   
 table.widget td {
