@@ -9,7 +9,7 @@
  * @author Justin Cooper <justin@braverock.com>
  * @todo
  *
- * $Id: ADOdb_QuickForm.php,v 1.17 2005/08/01 15:22:49 daturaarutad Exp $
+ * $Id: ADOdb_QuickForm.php,v 1.18 2005/09/08 20:29:10 daturaarutad Exp $
  */
 
 
@@ -106,7 +106,7 @@
 
 		$this->form_template	= "\n<form{attributes}>\n<table border=\"0\" class=\"widget\"><tr><td colspan=\"2\" class=\"widget_header\">" . $this->DisplayTitle . "</td> </tr>\n{content}\n</table>\n</form>";
 
-		$this->element_template = "\n\t<tr>\n\t\t<td align=\"right\" valign=\"top\" class=\"widget_content\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required --><b>{label}</b></td>\n\t\t<td valign=\"top\" align=\"left\" class=\"widget_content_form_element\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td>\n\t</tr>";
+		$this->element_template = "\n\t<tr>\n\t\t<td class=\"widget_content widget_label_right\"><!-- BEGIN required --><span style=\"color: #ff0000\">*</span><!-- END required -->{label}</td>\n\t\t<td valign=\"top\" align=\"left\" class=\"widget_content_form_element\"><!-- BEGIN error --><span style=\"color: #ff0000\">{error}</span><br /><!-- END error -->\t{element}</td>\n\t</tr>";
 
 		$this->form_method = $form_method;
 
@@ -691,6 +691,9 @@ END;
 
 /**
 * $Log: ADOdb_QuickForm.php,v $
+* Revision 1.18  2005/09/08 20:29:10  daturaarutad
+* change element_template, removing align and valign
+*
 * Revision 1.17  2005/08/01 15:22:49  daturaarutad
 * added SetButtonText function for overwriting Create, Update, Delete text
 *
