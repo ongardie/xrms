@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.19 2005/07/20 22:20:17 jswalter Exp $
+ * $Id: utils-activities.php,v 1.20 2005/09/09 00:40:53 vanmer Exp $
 
  */
 
@@ -568,7 +568,41 @@ function get_activity_type($con, $short_name=false, $pretty_name=false, $type_id
     return false;
 }
 
+function add_activity_type($con, $short_name, $pretty_name, $pretty_plural, $display_html, $score_adjustment=0, $sort_order=1, $user_editable=true) {
+    if (!$con) return false;
+    if (!$short_name) return false;
+    $type = get_activity_type($con, $short_name);
+    //if there's an existing record, use it
+    if ($type) return $type['activity_type_id'];
 
+    $rec=array();
+    $rec['activity_type_short_name']=$short_name;
+    $rec['activity_type_record_status']='a';
+
+    if ($user_editable) $rec['user_editable_flag']=1;
+    else $rec['user_editable_flag']=0;
+
+    if (!$sort_order) $sort_order=1;
+    $rec['sort_order']=$sort_order;
+
+    if (!$pretty_name) $pretty_name=$short_name;
+    if (!$pretty_plural) $pretty_plural=$pretty_name;
+    if (!$display_html) $display_html = $pretty_name;
+
+    $rec['activity_type_pretty_name']=$pretty_name;
+    $rec['activity_type_pretty_plural']=$pretty_plural;
+    $rec['activity_type_score_adjustment']=$score_adjustment;
+    $rec['activity_type_display_html']=$display_html;
+
+    $table="activity_types";
+    $ins = $con->getInsertSQL($table, $rec);
+    if ($ins) {
+        $rst=$con->execute($ins);
+        if (!$rst) { db_error_handler($con, $ins); }
+        $activity_type_id=$con->Insert_ID();
+        return $activity_type_id;
+    }
+}
 
 function install_default_activity_participant_positions($con) {
     //set these variables in order to allow localization of these strings.  New positions should also be added in this manner
@@ -636,6 +670,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.20  2005/09/09 00:40:53  vanmer
+  * - added function for adding activity types to XRMS
+  *
   * Revision 1.19  2005/07/20 22:20:17  jswalter
   *  - seems that the "GetInsertSQL" was not behaving properly. It nw handles quotes properly
   *
