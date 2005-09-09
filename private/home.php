@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.62 2005/07/28 15:50:32 vanmer Exp $
+ * $Id: home.php,v 1.63 2005/09/09 22:38:51 daturaarutad Exp $
  */
 
 // include the common files
@@ -89,7 +89,7 @@ $search_terms = array('activity_status'                 => "'o'");
 $default_columns = array('title', 'type', 'contact', 'activity_about', 'scheduled', 'due');
 
     
-$activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Search Results'), $session_user_id, $return_url, $extra_where, null, $default_columns);
+$activities_widget =  GetActivitiesWidget($con, $search_terms, $form_name, _('Search Results'), $session_user_id, $return_url, $extra_where, null, $default_columns, true, array('due' => 'asc'));
 
 
 
@@ -443,6 +443,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.63  2005/09/09 22:38:51  daturaarutad
+ * set default sort due=>asc in pager/widget
+ *
  * Revision 1.62  2005/07/28 15:50:32  vanmer
  * - changed to show the company in the cases sidebar by default
  *
