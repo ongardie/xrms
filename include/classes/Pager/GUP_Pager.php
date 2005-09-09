@@ -40,7 +40,7 @@
  *  
  * @example GUP_Pager.doc.7.php Another pager example showing Caching 
  *  
- * $Id: GUP_Pager.php,v 1.36 2005/08/28 14:58:09 braverock Exp $
+ * $Id: GUP_Pager.php,v 1.37 2005/09/09 22:38:16 daturaarutad Exp $
  */
 
 
@@ -102,6 +102,7 @@ class GUP_Pager {
 	var $modify_data_functions = array();
 	var $debug					= false;
 	var $count_sql				= '';
+	var $order_by				= '';
 
 
     /**
@@ -183,40 +184,6 @@ class GUP_Pager {
 		if(!is_numeric($this->group_mode)) { unset($this->group_mode); }
 		if(isset($this->group_mode) && !$this->group_mode_paging) { $this->maximize = true; }
 
-		// begin sort stuff
-        if (!strlen($this->sort_column) > 0) {
-			for($i=0; $i<count($this->column_info); $i++) {
-				if($this->column_info[$i]['default_sort']) {
-            		$this->sort_column = $i+1;
-            		$this->sort_order = $this->column_info[$i]['default_sort'];
-				}
-			}
-			if (!strlen($this->sort_column) > 0) {
-            	$this->sort_column = 1;
-            	$this->sort_order = "asc";
-			}
-            $this->current_sort_column = $this->sort_column;
-        }
-
-        if (!($this->sort_column == $this->current_sort_column)) {
-            $this->sort_order = "asc";
-        }
-
-        $opposite_sort_order = ($this->sort_order == "asc") ? "desc" : "asc";
-        $this->sort_order = (($this->resort) && ($this->current_sort_column == $this->sort_column)) ? $opposite_sort_order : $this->sort_order;
-
-        $ascending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">';
-        $descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
-        $this->pretty_sort_order = ($this->sort_order == "asc") ? $ascending_order_image : $descending_order_image;
-
-		// here we add the ORDER BY clause to the SQL query.
-		// this is done seperately for grouping later because we don't know enough yet to construct the query for grouping
-		if($this->column_info[$this->sort_column-1]['index_sql']) {
-			$this->SetUpSQLOrderByClause();
-		}
-
-		//echo $this->sql;
-		// end sort stuff
 
 		// this is so that we can refer to all columns by ['index'] later when it doesn't concern us if they are sql/calc/data
 		foreach($this->column_info as $k => $column) {
@@ -224,17 +191,6 @@ class GUP_Pager {
 			if(isset($column['index_calc'])) $this->column_info[$k]['index'] = $column['index_calc'];
 			if(isset($column['index_data'])) $this->column_info[$k]['index'] = $column['index_data'];
 		}
-
-
-        // store current page in session
-        if (isset($this->next_page)) {
-            $_SESSION[$pager_id . '_' . $curr_page] = $this->next_page;
-        }
-        if (empty($_SESSION[$pager_id . '_' . $curr_page])) $_SESSION[$pager_id . '_' . $curr_page] = 1; ## at first page
-
-        $this->curr_page = $_SESSION[$pager_id . '_' . $curr_page];
-        // end sorted columns stuff
-
 
         // Init the Subtotal and Total column arrays
         foreach($this->column_info as $k => $column_header) {
@@ -253,11 +209,87 @@ class GUP_Pager {
 
 
     /**
+	* private method to determine the proper sort column and set up the SQL ORDER BY clause
+	*
+    * @param boolean Whether or not this is the first call
+	*/
+	function PrepareSort() {
+	    global $http_site_root;
+	
+			// begin sort stuff
+	        if (!(strlen($this->sort_column) > 0)) {
+				for($i=0; $i<count($this->column_info); $i++) {
+					if($this->column_info[$i]['default_sort']) {
+	            		$this->sort_column = $i+1;
+	            		$this->sort_order = $this->column_info[$i]['default_sort'];
+					}
+				}
+				if (!strlen($this->sort_column) > 0) {
+	            	$this->sort_column = 1;
+	            	$this->sort_order = "asc";
+				}
+	            $this->current_sort_column = $this->sort_column;
+	        }
+	
+	        if (!($this->sort_column == $this->current_sort_column)) {
+	            $this->sort_order = "asc";
+	        }
+
+	
+            $opposite_sort_order = ($this->sort_order == "asc") ? "desc" : "asc";
+            $this->sort_order = (($this->resort) && ($this->current_sort_column == $this->sort_column)) ? $opposite_sort_order : $this->sort_order;
+	
+	        $ascending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/asc.gif" alt="">';
+	        $descending_order_image = ' <img border=0 height=10 width=10 src="' . $http_site_root . '/img/desc.gif" alt="">';
+	        $this->pretty_sort_order = ($this->sort_order == "asc") ? $ascending_order_image : $descending_order_image;
+	
+			// here we add the ORDER BY clause to the SQL query.
+			// this is done seperately for grouping later because we don't know enough yet to construct the query for grouping
+			if($this->column_info[$this->sort_column-1]['index_sql']) {
+				$this->SetUpSQLOrderByClause();
+			}
+	
+			//echo $this->sql;
+			// end sort stuff
+	
+	        // store current page in session
+	        if (isset($this->next_page)) {
+	            $_SESSION[$pager_id . '_' . $curr_page] = $this->next_page;
+	        }
+	        if (empty($_SESSION[$pager_id . '_' . $curr_page])) $_SESSION[$pager_id . '_' . $curr_page] = 1; ## at first page
+	
+	        $this->curr_page = $_SESSION[$pager_id . '_' . $curr_page];
+	        // end sorted columns stuff
+	}
+
+    /**
+    * Override the default_sort field passed in via $columns
+    *
+    * @param array Key is the name of the field you wish to set as default_sort, Value is either asc or desc
+    */
+    function SetDefaultSortColumn($sort_info) {
+
+        $key = key($sort_info);
+
+		foreach($this->column_info as $k => $column) {
+            unset($this->column_info[$k]['default_sort']);
+
+            if($this->column_info[$k]['index'] == $key) {
+                $this->column_info[$k]['default_sort'] = $sort_info[$key];
+            }
+        }
+    }
+
+
+    /**
 	* public method called by user to render the pager
 	*
 	* @param integer number of rows to display in this pager
 	*/
 	function Render($rows=10) {
+
+        // sort must come before Render_JS()
+        $this->PrepareSort();
 
 		if($this->buffer_output) {
 			ob_start();
@@ -276,6 +308,7 @@ class GUP_Pager {
         } else {
             $this->rows = $rows;
         }
+
 
 
 		$this->GetData();
@@ -335,6 +368,10 @@ class GUP_Pager {
 		Once you have a cached dataset, you always work from that, even if the sort column is of type sql.
 	
 		*/
+
+        // finalize the order_by (it could be changed by PrepareSort prior to this moment)
+        $this->sql .= $this->order_by;
+
 		$cache_name = $this->pager_id . '_data';
 
 		if(isset($this->group_mode)) {
@@ -1130,14 +1167,13 @@ END;
 				$columns[] = $column . " " . $this->sort_order;
 			}
 			
-			$order_by = " order by " . implode(', ', $columns);
+			$this->order_by = " order by " . implode(', ', $columns);
 
 		} else {
 
-			$order_by = " order by " . $this->column_info[$this->sort_column-1]['index_sql'] . " " . $this->sort_order;
+			$this->order_by = " order by " . $this->column_info[$this->sort_column-1]['index_sql'] . " " . $this->sort_order;
 		} 
 
-		$this->sql .= " $order_by";
 		if(!$this->do_export) {
 			$this->get_only_visible = true;
 		}
@@ -1164,6 +1200,9 @@ END;
 
 /**
  * $Log: GUP_Pager.php,v $
+ * Revision 1.37  2005/09/09 22:38:16  daturaarutad
+ * Add SetDefaultSortColumn(), which allows override of default_sort field.  Moved sort code into PrepareSort, which is called at beginning of Render().
+ *
  * Revision 1.36  2005/08/28 14:58:09  braverock
  * - fixed quoting of "records found" string for i18n
  *
