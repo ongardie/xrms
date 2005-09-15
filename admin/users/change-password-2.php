@@ -5,7 +5,7 @@
  * Check that new password entries are identical
  * Then save in the database.
  *
- * $Id: change-password-2.php,v 1.11 2005/07/22 15:45:24 braverock Exp $
+ * $Id: change-password-2.php,v 1.12 2005/09/15 16:08:38 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,7 +21,7 @@ $session_user_id = session_check();
 // become Admin aware - Don't accept the user to edit from the URL
 // or from POST for non-Admin types.
 //
-if (check_user_role(false, $session_user_id, 'Administrator')) {
+if (check_user_role(false, $session_user_id, 'Administrator') AND array_key_exists('edit_user_id',$_POST) AND $_POST['edit_user_id']) {
   $edit_user_id = $_POST['edit_user_id'];
 } else {
   $edit_user_id = $session_user_id;
@@ -72,6 +72,9 @@ if ($password == $confirm_password) {
 
 /**
  *$Log: change-password-2.php,v $
+ *Revision 1.12  2005/09/15 16:08:38  vanmer
+ *- added code to ensure that even if user is an administrator, they can still change their own password as well
+ *
  *Revision 1.11  2005/07/22 15:45:24  braverock
  *- add additional result set error handling and more informative error msgs
  *- remove trailing whitespace
