@@ -5,7 +5,7 @@
  * Copyright (c) 2004 Explorer Fund Advisors, LLC
  * All Rights Reserved.
  *
- * $Id: acl_results.php,v 1.10 2005/08/11 23:12:42 vanmer Exp $
+ * $Id: acl_results.php,v 1.11 2005/09/15 21:40:45 vanmer Exp $
  *
  * @author Aaron van Meerten
  */
@@ -94,7 +94,7 @@ echo<<<TILLEND
             <tr><td class=widget_content>Please select a controlled object to search for permissions on:<br>
 TILLEND;
         
-        display_object_list($acl, $object, false, true);
+        display_object_list($acl, $object, false, true, $con);
         echo "</td></tr>";
         echo "<tr><td class=widget_content><input class=button type=submit onclick=\"javascript:this.form.aclAction.value='$nextAction';\" value=\"Calculate Permissions\"></td></tr>";
         echo "</table></form>";
@@ -132,7 +132,7 @@ echo <<<TILLEND
             <input type=hidden name=aclAction value="$aclAction">
             <input type=hidden name=Permission value="$Permission">
 TILLEND;
-            display_object_list($acl, $object, $controlled_objects);
+            display_object_list($acl, $object, $controlled_objects, false, $con);
             }
         }
 
@@ -152,7 +152,7 @@ echo '<table class=widget>
 echo "</div></div>";
 end_page();
  
-function display_object_list($acl, $object, $ids=false, $extrafield=false) {
+function display_object_list($acl, $object, $ids=false, $extrafield=false, $con) {
 //            echo "BLAH"; exit;
         global $http_site_root;
             if ($ids OR $extrafield) {
@@ -200,7 +200,7 @@ function display_object_list($acl, $object, $ids=false, $extrafield=false) {
                 $sql .= " order by $order_by";
             }
             if ($extrafield) {
-                $radiofield=$ret['con']->CONCAT($ret['con']->qstr("<input type=radio name=on_what_id value=\""),$on_what_field,$ret['con']->qstr("\">")) ." as select_on_what_id";
+                $radiofield=$con->CONCAT($con->qstr("<input type=radio name=on_what_id value=\""),$on_what_field,$con->qstr("\">")) ." as select_on_what_id";
                 if(preg_match("|SELECT([^\e]*)FROM([^\e]*)|", $sql, $matched)) {
                     $fields = trim($matched[1]);
                     if ($fields=='*') {
@@ -238,11 +238,14 @@ function resort(sortColumn) {
             <input type=hidden name=current_sort_order value="$sort_order">
             <input type=hidden name=sort_order value="$sort_order">
 TILLEND;
-        $pager = new ADODB_Pager($ret['con'], $sql, 'Results', false, $sort_column-1, $pretty_sort_order);
+        $pager = new ADODB_Pager($con, $sql, 'Results', false, $sort_column-1, $pretty_sort_order);
         $pager->Render();
 }
  /*
   * $Log: acl_results.php,v $
+  * Revision 1.11  2005/09/15 21:40:45  vanmer
+  * - changed to use the correct dbconnection when querying with the ACL query tool
+  *
   * Revision 1.10  2005/08/11 23:12:42  vanmer
   * - changed to user users table from ACL db connection
   *
