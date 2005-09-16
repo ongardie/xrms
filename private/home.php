@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.63 2005/09/09 22:38:51 daturaarutad Exp $
+ * $Id: home.php,v 1.64 2005/09/16 21:42:04 ycreddy Exp $
  */
 
 // include the common files
@@ -80,8 +80,11 @@ $sidebar_rows = do_hook_function('private_sidebar_bottom', $sidebar_rows);
 
 $user_contact_id= $_SESSION['user_contact_id'];
 
-
-$extra_where = "AND ((a.user_id = $session_user_id) OR (activity_participants.contact_id=$user_contact_id))";
+if ($user_contact_id) {
+	$extra_where = "AND ((a.user_id = $session_user_id) OR (activity_participants.contact_id=$user_contact_id))";
+} else {
+	$extra_where = "AND (a.user_id = $session_user_id) ";
+}
 $form_name = 'ActivitiesView';
 
 $search_terms = array('activity_status'                 => "'o'");
@@ -443,6 +446,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.64  2005/09/16 21:42:04  ycreddy
+ * Adding user_contact_id to the where clause only if it non 0 - significantly increases the performance of the Query for large activity data set
+ *
  * Revision 1.63  2005/09/09 22:38:51  daturaarutad
  * set default sort due=>asc in pager/widget
  *
