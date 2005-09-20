@@ -3,7 +3,7 @@
  *
  * Confirm email recipients.
  *
- * $Id: email-3.php,v 1.17 2005/07/08 19:56:16 jswalter Exp $
+ * $Id: email-3.php,v 1.18 2005/09/20 14:37:06 ycreddy Exp $
  */
 
 
@@ -27,7 +27,7 @@ $msg = $_GET['msg'];
 // see if a file was sent "piggy-back"
 if ( $_FILES['attach']['error'] == 0 )
 {
-    require_once 'File/file_upload.php';
+    require_once $include_directory . 'classes/File/file_upload.php';
 
     // Create new Class
     $objUpFile = new file_upload( 'attach' );
@@ -159,6 +159,9 @@ end_page();
 
 /**
  * $Log: email-3.php,v $
+ * Revision 1.18  2005/09/20 14:37:06  ycreddy
+ * Fix to how file_upload.php is included
+ *
  * Revision 1.17  2005/07/08 19:56:16  jswalter
  *  - added 'email_sent' flag to stop users for sending messages multiple times
  *
