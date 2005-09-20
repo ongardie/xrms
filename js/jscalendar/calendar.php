@@ -25,6 +25,12 @@ class DHTML_Calendar {
                             $lang              = 'en',
                             $theme             = 'calendar-win2k-1',
                             $stripped          = true) {
+
+        global $xrms_language;
+        if (strlen($xrms_language)){
+           $lang = substr($xrms_language,0,2);
+        }
+
         if ($stripped) {
             $this->calendar_file = 'calendar_stripped.js';
             $this->calendar_setup_file = 'calendar-setup_stripped.js';
