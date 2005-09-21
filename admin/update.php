@@ -7,7 +7,7 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.98 2005/08/26 11:58:46 braverock Exp $
+ * $Id: update.php,v 1.99 2005/09/21 20:39:05 vanmer Exp $
  */
 
 // where do we include from
@@ -703,6 +703,10 @@ $rst = $con->execute($sql);
 //make activity_description a nullable field
 $sql="ALTER TABLE `activities` CHANGE `activity_description` `activity_description` TEXT";
 $con->execute($sql);
+
+//add address_id to activities to track location of activities
+$sql = "ALTER TABLE `activities` ADD `address_id` INT UNSIGNED";
+$rst = $con->execute($sql);
 
 //add activity_recurrence_id to activities
 $sql = "alter table activities add activity_recurrence_id int default 0";
@@ -5062,6 +5066,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.99  2005/09/21 20:39:05  vanmer
+ * - added address_id to activity, to track activity location
+ *
  * Revision 1.98  2005/08/26 11:58:46  braverock
  * - remove unnecessary semicolons from create table commands,
  *   as they are reported to cause problems in some installations
