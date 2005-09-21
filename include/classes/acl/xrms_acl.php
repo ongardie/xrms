@@ -7,7 +7,7 @@
  *
  * @todo
  * @package ACL
- * $Id: xrms_acl.php,v 1.29 2005/08/20 00:45:54 vanmer Exp $
+ * $Id: xrms_acl.php,v 1.30 2005/09/21 21:11:41 vanmer Exp $
  */
 
 /*****************************************************************************/
@@ -31,6 +31,9 @@ class xrms_acl {
      * Constructor for the xrms_acl
      *
      * @param array with options for DB connection
+    * @param adodbconnection $con with database connection with primary ACL tables
+    * @param array $authCallbacks with array of function names to use for database connection or auth information for external datasources
+    * @param string $context_data_source_name with name of datasource to use as the default datasource when no datasource is provided for an object
      * @return Object of type xrms_acl
      *
      **/
@@ -146,33 +149,6 @@ class xrms_acl {
         }
     }
     
-    
-    /*****************************************************************************/
-    /** function get_group_data
-     *
-     * Returns information about a group, including possible children, parents and accessible objects
-     *
-     * @param integer Group_id identifying group for which to retrieve data
-     * @return Array containing elements describing details of a group
-     *
-     **/
-    function get_group_data($Group_id) {
-    
-    }
-
-    /*****************************************************************************/
-    /** function get_group_children
-     *
-     * Returns a list of children that are contained in a group
-     *
-     * @param integer Group_id identifying group for which to retrieve a list of children
-     * @return Array containing a list of groups which are the children to the referenced group
-     *
-     **/
-    function get_group_children($Group_id) {
-        
-    }
-
     /*****************************************************************************/
     /** function get_group_objects
      *
@@ -204,34 +180,41 @@ class xrms_acl {
         if ($wherestr) {
             $sql .= " WHERE $wherestr";
         }
+        //get list of group objects by controll object, Group_id or individual object ID
         $rs = $con->execute($sql);
         
         if (!$rs) { db_error_handler($con, $sql); return false; }
         if ($rs->numRows()>0) {
             while (!$rs->EOF) {
+                //if there is an explicit ID set, add this entry to the list
                 if ($rs->fields['on_what_id']) {
                     $objectList[$rs->fields['GroupMember_id']]=$rs->fields;
                 } else {
+                    //otherwisie check if there is criteria available for this GroupMember entry
                     $criteria_objects=$this->get_group_members_by_criteria($rs->fields['GroupMember_id'],$rs->fields);
                     if ($criteria_objects) {
+                        //use objects provided by criteria for group member
                         $objectList=array_merge($objectList, $criteria_objects);
                     }
                 }
                 $rs->movenext();
             }
         }
-        //now search in parent groups
+        //now search in child groups
         if ($Group_id) {
             $groupList = $this->get_group_user($Group_id);
             if ($groupList and is_array($groupList)) {
                 foreach ($groupList as $groupInfo) {
                     if ($groupInfo['ChildGroup_id']) {
+                        //get the list of objects within each child group
                         $result = $this->get_group_objects($groupInfo['ChildGroup_id'], $ControlledObject_id);
+                        //add provided list to group member entries
                         if ($result) { $objectList = array_merge($objectList, $result); }
-                    }
-                }
-            }
-        }
+                    } //end ChildGroup check
+                } //end foreach on grouplist
+            } // end grouplist check
+        } //end group check
+
         if ($ControlledObject_id) {
             //now search in parent objects
             $Relationships = $this->get_controlled_object_relationship(false, $ControlledObject_id, false, true);
@@ -267,23 +250,21 @@ class xrms_acl {
                             }
                             $fieldRestriction[$on_what_child_field]=$parentIDs;
                             $ParentList=$this->get_field_list($ControlledObject_id, $fieldRestriction, $find_field, $on_what_table);
-    //                        echo "$ParentList=get_field_list($ControlledObject_id, $fieldRestriction, $find_field, $on_what_table)";
-    //                        echo "<pre>"; print_r($ParentList);
+
                             if ($ParentList) {
                                 foreach ($ParentList as $result) {
                                     $ret = array(array("ControlledObject_id"=>$ControlledObject_id, "on_what_id"=>$result));
-    //                                print_r($ret); print_r($objectList);
                                     $objectList = array_merge($objectList, $ret);
-    //                                print_r($objectList);
-                                }
-                            }
-    //                        echo "</pre>";
+                                } //end parent list foreach
+                            } //end check for parent list
     
-                        }
-                    }
-                }
-            }
-        }
+                        } //end check for group result
+                    } //end parent check
+                } //end relationship foreach
+            } //end relationship check
+        } //end controlled object check
+
+        //if we found any objects at all, return them
         if (count($objectList)>0) {
             return $objectList;
         }
@@ -1796,58 +1777,6 @@ class xrms_acl {
         if (!$rs) { db_error_handler($con, $sql); return false; }
         else return true;         
     }    
-        
-    /*****************************************************************************/
-    /** function get_controlled_object_children
-     *
-     * Returns a list of children that are contained in a controlled object
-     *
-     * @param integer ControlledObject_id identifying group for which to retrieve a list of children
-     * @return Array containing a list of ControlledObjects which are the children to the referenced object
-     *
-     **/
-    function get_controlled_object_children($ControlledObject_id) {    
-    
-    }
-
-    /*****************************************************************************/
-    /** function get_controlled_object_parents
-     *
-     * Returns a list of parents that contain a ControlledObject
-     *
-     * @param integer ControlledObject_id identifying group for which to retrieve a list of parents
-     * @return Array containing a list of ControlledObjects to which the referenced object belongs
-     *
-     **/
-    function get_controlled_object_parents($ControlledObject_id) {
-    
-    }
-
-    /*****************************************************************************/
-    /** function get_controlled_object_relationship_parent
-     *
-     * Returns the parent in a ControlledObjectRelationship
-     *
-     * @param integer CORelationship_id identifying group for which to retrieve the parent
-     * @return integer ParentControlledObject_id which is the parent in the specified relationship
-     *
-     **/
-    function get_controlled_object_relationship_parent($CORelationship_id) {
-    
-    }
-
-    /*****************************************************************************/
-    /** function get_controlled_object_relationship_child
-     *
-     * Returns the child in a ControlledObjectRelationship
-     *
-     * @param integer CORelationship_id identifying the ControlledObject for which to retrieve the child
-     * @return integer ChildControlledObject_id which is the child in the specified relationship
-     *
-     **/
-    function get_controlled_object_relationship_child($CORelationship_id) {
-    
-    }
 
     /*****************************************************************************/
     /** function get_field_list
@@ -2431,16 +2360,28 @@ class xrms_acl {
     }
     
     /*****************************************************************************/
-    /** function get_permissions_list
+    /**
      *
      * Returns the possible permissions
      *
-     * @param void
      * @return array of possible permissions
      *
      **/
     function get_permissions_list() {
-        return array (1,2,3,4,5);
+        if ($this->PermissionList) return $this->PermissionList;
+
+        $sql = "SELECT Permission_id FROM Permission";
+        $rst = $this->DBConnection->execute($sql);
+        if (!$rst) { db_error_handler($this->DBConnection, $sql); return false; }
+        $perms=array();
+        while (!$rst->EOF) {
+            $perms[]=$rst->fields['Permission_id'];
+            $rst->movenext();
+        }
+        $this->PermissionList=$perms;
+        return $perms;
+
+//        return array (1,2,3,4,5);
     }
     
     /*****************************************************************************/
@@ -2474,19 +2415,6 @@ class xrms_acl {
         }
         return false;
      }
-
-    /*****************************************************************************/
-    /** function get_group_list
-     *
-     * Returns the current list of group
-     *
-     * @param void
-     * @return array of groups
-     *
-     **/
-    function get_groups_list() {
-        
-    }
 
     /*****************************************************************************/
     /** function get_role_list
@@ -2526,25 +2454,15 @@ class xrms_acl {
     function get_scope_list() {
         return array ( 'World', 'Group', 'User');
     }
-
-    /*****************************************************************************/
-    /** function get_controlled_object_list
-     *
-     * Returns the possible controlled objects
-     *
-     * @param void
-     * @return array of controlled objects
-     *
-     **/
-    function get_controlled_object_list() {
-        return true;
-    }
-    
-    
 }  
 
 /*
  * $Log: xrms_acl.php,v $
+ * Revision 1.30  2005/09/21 21:11:41  vanmer
+ * - removed blank stub functions (unneeded)
+ * - ensured that all functions have php docblocks, and they are rational
+ * - changed permission list to actually return correct permission ids
+ *
  * Revision 1.29  2005/08/20 00:45:54  vanmer
  * - changed to call internal function, instead of incorrectly calling global function
  *
