@@ -11,7 +11,7 @@
  * Recently changed to use the getGlobalVar utility funtion so that $_GET parameters
  * could be used with mailto links.
  *
- * $Id: new-2.php,v 1.43 2005/06/30 04:38:57 vanmer Exp $
+ * $Id: new-2.php,v 1.44 2005/09/21 20:07:23 vanmer Exp $
  */
 
 //where do we include from
@@ -51,6 +51,7 @@ $arr_vars = array ( // local var name       // session variable name
                    'followup_from_id' => array ( 'followup_from_id' , arr_vars_REQUEST_SESSION ),
                    'thread_id'        => array ( 'thread_id' , arr_vars_REQUEST_SESSION ),
                    'opportunity_status_id'  => array ( 'opportunity_status_id' , arr_vars_REQUEST_SESSION ),
+                   'address_id'  => array ( 'address_id' , arr_vars_REQUEST_SESSION ),
                    );
 
 // get all passed in variables
@@ -164,6 +165,7 @@ $rec['ends_at']          = $ends_at;
 $rec['opportunity_status_id'] = $opportunity_status_id;
 if($thread_id) $rec['thread_id']         = $thread_id;
 if($followup_from_id) $rec['followup_from_id'] = $followup_from_id;
+if($address_id) $rec['address_id']         = $address_id;
 
 if(empty($opportunity_status_id)) {
     $rec['activity_type_id'] = ($activity_type_id > 0) ? $activity_type_id : 0;
@@ -235,6 +237,9 @@ if ($activity_status == 'c') {
 
 /**
  *$Log: new-2.php,v $
+ *Revision 1.44  2005/09/21 20:07:23  vanmer
+ *- added address_id to allow location to be set or edited for an activity
+ *
  *Revision 1.43  2005/06/30 04:38:57  vanmer
  *- added needed fields for resolution, and priority for activities
  *- removed participant handling, API handles all participant calls

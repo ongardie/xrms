@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.71 2005/07/15 22:49:58 vanmer Exp $
+ * $Id: edit-2.php,v 1.72 2005/09/21 20:07:23 vanmer Exp $
  */
 
 //include required files
@@ -44,6 +44,7 @@ $arr_vars = array (
                    'table_name' => arr_vars_POST ,
                    'table_status_id' => arr_vars_POST ,
                    'thread_id' => arr_vars_POST ,
+                   'address_id' => arr_vars_POST ,
                    'followup_from_id' => arr_vars_POST ,
 
                    // optionally posted data
@@ -129,7 +130,7 @@ if (!$contact_id OR $contact_id==0) {
 
 // if it's closed but wasn't before, update the closed_at timestamp
 $completed_at = ($activity_status == 'c') && ($current_activity_status != 'c') ? time() : 'NULL';
-$completed_by= ($activity_status == 'c') && ($current_activity_status != 'c') ? $_SESSION['session_user_id'] : 'NULL';
+$completed_by= ($activity_status == 'c') && ($current_activity_status != 'c') ? $session_user_id : 'NULL';
 
 //check to see if we need to associate with an opportunity or case
 if ($associate_activities == true ) {
@@ -234,6 +235,7 @@ $rec['on_what_table']        = $on_what_table;
 $rec['on_what_id']           = $on_what_id;
 $rec['completed_by']         = $completed_by;
 $rec['thread_id']            = $thread_id;
+$rec['address_id']            = $address_id;
 $rec['followup_from_id']     = $followup_from_id;
 $rec['activity_priority_id'] = $activity_priority_id;
 $rec['resolution_description'] = trim($resolution_description);
@@ -538,6 +540,9 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.72  2005/09/21 20:07:23  vanmer
+ * - added address_id to allow location to be set or edited for an activity
+ *
  * Revision 1.71  2005/07/15 22:49:58  vanmer
  * - changed to allow activities without a company_id to be saved
  *
