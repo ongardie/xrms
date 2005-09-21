@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.144 2005/08/19 02:00:23 daturaarutad Exp $
+ * $Id: utils-misc.php,v 1.145 2005/09/21 20:02:08 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -840,6 +840,53 @@ function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
             return $phone_to_display;
         }
     }
+}
+
+
+/**
+ * This function returns an HTML select widget with the addresses available for a company 
+ *
+ * @param handle $con handle to the database connection
+ * @param int $company_id specify company to retrieve addresses for company
+ * @param int $address_id with address currently selected
+ * @param string $fieldname with HTML form fieldname, defaults to 'address_id'
+ * @param string $extra_html_elements optionally providing extra attributes to the HTML select
+ * @param boolean $show_blank_first indicating with a blank element should be provided, defaults to true
+ * @return string $html_ret with HTML for select box with addresses for company
+**/
+function get_company_address_select($con, $company_id, $address_id=false, $fieldname='address_id', $extra_html_elements='', $show_blank_first=true) {
+    if (!$company_id) return false;
+    $ret=array();
+    $addresses=get_company_addresses($con, $company_id);
+    if (!$addresses) return false;
+
+    foreach ($addresses as $c_address_id) {
+        $ret[$c_address_id]= get_formatted_address ($con,$c_address_id, $company_id, true);
+    }
+    $html_ret=create_select_from_array($ret, $fieldname, $address_id, $extra_html_elements, $show_blank_first);
+    return $html_ret;
+}
+
+/**
+ * function get_formatted_address : get the address and format it
+ *
+ * @param handle $con handle to the database connection
+ * @param int $company_id specify company to retrieve addresses for company
+ * @return array $addresses with address_id of each address associated with company
+**/
+function get_company_addresses($con, $company_id=false) {
+    if (!$company_id) return false;
+    $company_addresses=array();
+
+    $sql = "SELECT address_id FROM addresses WHERE company_id=$company_id AND address_record_status='a'";
+    $rst = $con->execute($sql);
+    if (!$rst) { db_error_handler($con, $sql); return false; }
+    while (!$rst->EOF) {
+        $company_addresses[]=$rst->fields['address_id'];
+        $rst->movenext();
+    }
+    if (count($company_addresses)>0) return $company_addresses;
+    else return false;
 }
 
 /**
@@ -1780,6 +1827,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.145  2005/09/21 20:02:08  vanmer
+ * - added function to list addresses by company_id
+ * - added function to retrieve formatted address and create an html select widget for a company's addresses
+ *
  * Revision 1.144  2005/08/19 02:00:23  daturaarutad
  * call session_name() before session_start() so as to not klobber xrms session on logout
  *
