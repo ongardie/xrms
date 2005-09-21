@@ -12,18 +12,18 @@
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version   $Id: files_test.php,v 1.1 2005/09/08 17:09:58 jswalter Exp $
-   * @date      $Date: 2005/09/08 17:09:58 $
+   * @version   $Id: files_test.php,v 1.2 2005/09/21 22:58:50 vanmer Exp $
+   * @date      $Date: 2005/09/21 22:58:50 $
    *
    * @copyright (c) 2004 Walter Torres
    * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
    *            OSI Certified Open Source Software
    *
-   * $Id: files_test.php,v 1.1 2005/09/08 17:09:58 jswalter Exp $
+   * $Id: files_test.php,v 1.2 2005/09/21 22:58:50 vanmer Exp $
    *
    **/
 
-
+require_once('../../../../include-locations.inc');
 require_once("PHPUnit.php");
 require_once("PHPUnit/GUI/HTML.php");
 
@@ -1148,6 +1148,9 @@ $display->show();
 
  /**
   * $Log: files_test.php,v $
+  * Revision 1.2  2005/09/21 22:58:50  vanmer
+  * - added include directory required file and global declaration for files.php and files_test.php
+  *
   * Revision 1.1  2005/09/08 17:09:58  jswalter
   *  - initial commit
   *  - tests properties, static results and failures

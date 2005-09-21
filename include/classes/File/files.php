@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: files.php,v 1.6 2005/09/08 17:05:38 jswalter Exp $
+// $Id: files.php,v 1.7 2005/09/21 22:58:50 vanmer Exp $
 
   /**
    * Files Class - Part of the PHP Yacs Library
@@ -28,8 +28,8 @@
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    * @contributor Aaron Van Meerten
    *
-   * @version   $Id: files.php,v 1.6 2005/09/08 17:05:38 jswalter Exp $
-   * @date      $Date: 2005/09/08 17:05:38 $
+   * @version   $Id: files.php,v 1.7 2005/09/21 22:58:50 vanmer Exp $
+   * @date      $Date: 2005/09/21 22:58:50 $
    *
    * @copyright (c) 2004 Walter Torres
    * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -39,7 +39,7 @@
    *
    * @filesource
    *
-   * $Id: files.php,v 1.6 2005/09/08 17:05:38 jswalter Exp $
+   * $Id: files.php,v 1.7 2005/09/21 22:58:50 vanmer Exp $
    *
    **/
 
@@ -308,7 +308,7 @@
  *
  * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
  *
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  *
  */
 class File
@@ -1021,6 +1021,7 @@ class File
     */
     function _setFileMimeType($_fileMime = false)
     {
+    	global $include_directory;
         if ( $_fileMime )
             $this->_fileMime = $_fileMime;
 
@@ -2390,11 +2391,14 @@ class File
 
 /**
  * $RCSfile: files.php,v $
- * $Revision: 1.6 $
- * $Date: 2005/09/08 17:05:38 $
- * $Author: jswalter $
+ * $Revision: 1.7 $
+ * $Date: 2005/09/21 22:58:50 $
+ * $Author: vanmer $
  *
  * $Log: files.php,v $
+ * Revision 1.7  2005/09/21 22:58:50  vanmer
+ * - added include directory required file and global declaration for files.php and files_test.php
+ *
  * Revision 1.6  2005/09/08 17:05:38  jswalter
  *  - overhaul of Class
  *  - new methods, many revamped mathods
