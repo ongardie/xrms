@@ -8,7 +8,7 @@
  *
  * @author Aaron van Meerten
  *
- * $Id: utils-activities.php,v 1.20 2005/09/09 00:40:53 vanmer Exp $
+ * $Id: utils-activities.php,v 1.21 2005/09/21 19:59:57 vanmer Exp $
 
  */
 
@@ -118,6 +118,7 @@ function add_activity($con, $activity_data, $participants=false)
     if ($on_what_id > 0)       { $rec['on_what_id']           = $on_what_id; }
     if ($company_id > 0)       { $rec['company_id']           = $company_id; }
     if ($contact_id > 0)       { $rec['contact_id']           = $contact_id; }
+    if ($address_id > 0)       { $rec['address_id']           = $address_id; }
     if ($activity_recurrence_id > 0) { $rec['activity_recurrence_id']           = $activity_recurrence_id; }
     if ($activity_resolution_type_id > 0) { $rec['activity_resolution_type_id'] = $activity_resolution_type_id; }
     if ($activity_priority_id > 0) { $rec['activity_priority_id']           = $activity_priority_id; }
@@ -670,6 +671,9 @@ function get_least_busy_user_in_role($con, $role_id, $due_date=false) {
 
  /**
   * $Log: utils-activities.php,v $
+  * Revision 1.21  2005/09/21 19:59:57  vanmer
+  * - added address_id to add_activity function, to allow location to be set on an activity
+  *
   * Revision 1.20  2005/09/09 00:40:53  vanmer
   * - added function for adding activity types to XRMS
   *
