@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.122 2005/09/08 21:30:43 vanmer Exp $
+ * $Id: one.php,v 1.123 2005/09/21 20:08:34 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -31,6 +31,7 @@ if(!isset($activity_id)){
     header("Location: " . $http_site_root . $return_url.'?msg='.urlencode(_("Error: No Activity ID Specified")));
 };
 
+
 $save_and_next = isset($_GET['save_and_next']) ? true : false;
 
 $con = &adonewconnection($xrms_db_dbtype);
@@ -40,8 +41,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 update_recent_items($con, $session_user_id, "activities", $activity_id);
 update_daylight_savings($con);
 
-$sql = "select a.*, addr.*, c.company_id, c.company_name, cont.first_names, cont.last_name
-from activities a left join companies c on a.company_id=c.company_id left join addresses addr ON c.default_primary_address=addr.address_id
+$sql = "select a.*, c.company_id, c.company_name, cont.first_names, cont.last_name
+from activities a left join companies c on a.company_id=c.company_id
 left join contacts cont on a.contact_id = cont.contact_id
 where activity_id = $activity_id
 and activity_record_status='a'";
@@ -67,6 +68,7 @@ if ($activity_rst) {
     $on_what_table = $activity_rst->fields['on_what_table'];
     $current_on_what_table = $activity_rst->fields['on_what_table'];
     $on_what_id = $activity_rst->fields['on_what_id'];
+    $address_id = $activity_rst->fields['address_id'];
     $scheduled_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['scheduled_at']));
     $ends_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['ends_at']));
     $local_time = calculate_time_zone_time($con, $activity_rst->fields['daylight_savings_id'], $rst->fields['offset']);
@@ -217,6 +219,7 @@ if (!$rst) { db_error_handler($con, $sql); }
 $activity_resolution_type_menu = $rst->getmenu2('activity_resolution_type_id', $activity_resolution_type_id, true, false, 0, 'id=activity_resolution_type_id');
 $rst->close();
 
+
 if ($company_id) {
     //get contact name menu
     $sql = "
@@ -233,6 +236,9 @@ if ($company_id) {
     } else {
         db_error_handler ($con, $sql);
     }
+
+    //get activity location menu
+    $location_menu=get_company_address_select($con, $company_id, $address_id);
 }
 
 add_audit_item($con, $session_user_id, 'viewed', 'activities', $activity_id, 3);
@@ -544,6 +550,15 @@ function logTime() {
                     <?php do_hook('opportunity_notes_buttons'); ?>
                 </td>
             </tr>
+            <?php } if($location_menu) { ?>
+            <tr>
+                <td class=widget_label_right><?php echo _("Location"); ?></td>
+                <td class=widget_content_form_element>
+                    <?php
+                        echo $location_menu;
+                    ?>
+                </td>
+            </tr>
             <?php } if($local_time) { ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Local Time"); ?></td>
@@ -731,6 +746,10 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.123  2005/09/21 20:08:34  vanmer
+ * - added menu for location of activity
+ * - removed address table from query on activity, unused and overrides activity address_id
+ *
  * Revision 1.122  2005/09/08 21:30:43  vanmer
  * - changed to have edit button reference correctly the activity rather than whatever $on_what_table and $on_what_id
  * happen to be
