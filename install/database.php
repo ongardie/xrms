@@ -10,7 +10,7 @@
  * checked for proper variable and path setup, and that a database connection exists.
  *
  * @author Beth Macknik
- * $Id: database.php,v 1.53 2005/08/10 22:44:55 vanmer Exp $
+ * $Id: database.php,v 1.54 2005/09/21 20:56:48 vanmer Exp $
  */
 
 /**
@@ -1180,6 +1180,7 @@ function activity_db_tables($con, $table_list) {
                user_id                         int not null default 0,
                company_id                      int not null default 0,
                contact_id                      int not null default 0,
+               address_id                    int unsigned,
                on_what_table                   varchar(100) not null default '',
                on_what_id                      int not null default 0,
                on_what_status                  int not null default 0,
@@ -1306,6 +1307,9 @@ function create_db_tables($con) {
 
 /**
  * $Log: database.php,v $
+ * Revision 1.54  2005/09/21 20:56:48  vanmer
+ * - added address_id to activity table, to allow tracking of location of an activity
+ *
  * Revision 1.53  2005/08/10 22:44:55  vanmer
  * - added opportunity type id as default field in opportunity table
  *
