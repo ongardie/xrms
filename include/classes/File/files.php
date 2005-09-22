@@ -2,7 +2,7 @@
 
 // =============================================================
 // CVS Id Info
-// $Id: files.php,v 1.7 2005/09/21 22:58:50 vanmer Exp $
+// $Id: files.php,v 1.8 2005/09/22 03:13:29 jswalter Exp $
 
   /**
    * Files Class - Part of the PHP Yacs Library
@@ -28,8 +28,8 @@
    * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
    * @contributor Aaron Van Meerten
    *
-   * @version   $Id: files.php,v 1.7 2005/09/21 22:58:50 vanmer Exp $
-   * @date      $Date: 2005/09/21 22:58:50 $
+   * @version   $Id: files.php,v 1.8 2005/09/22 03:13:29 jswalter Exp $
+   * @date      $Date: 2005/09/22 03:13:29 $
    *
    * @copyright (c) 2004 Walter Torres
    * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
@@ -39,7 +39,7 @@
    *
    * @filesource
    *
-   * $Id: files.php,v 1.7 2005/09/21 22:58:50 vanmer Exp $
+   * $Id: files.php,v 1.8 2005/09/22 03:13:29 jswalter Exp $
    *
    **/
 
@@ -51,7 +51,7 @@
     * @constant FILE_VER
     *
     */
-    define('FILE_VER', '1.6', false);
+    define('FILE_VER', '1.8', false);
 
 
 // ===========================================================
@@ -308,7 +308,7 @@
  *
  * @author Walter Torres <walter@torres.ws> [with a *lot* of help!]
  *
- * @version $Revision: 1.7 $
+ * @version $Revision: 1.8 $
  *
  */
 class File
@@ -1021,7 +1021,8 @@ class File
     */
     function _setFileMimeType($_fileMime = false)
     {
-    	global $include_directory;
+        global $include_directory;
+
         if ( $_fileMime )
             $this->_fileMime = $_fileMime;
 
@@ -2055,14 +2056,14 @@ class File
                      // Just make sure the target directory is not the same as the current one
                      ( $this->getFileFullPath() != $this->getDestDir() ) )
                 {
-                    $newFileName = $this->getFileName;
+                    $newFileName = $this->getFileName();
                 }
 
                 // If everything is fine so far, we can complete the procedure!
                 if ( $this->getSuccess() )
                 {
                     $_orgFile = $this->getFileFullPath();
-                    $_newFile = $this->getDestDir() . $newFileName;
+                    $_newFile = $this->getDestDir() . '/' . $newFileName;
 
                     // Now see if the file path we are to renamed to exists
                     if ( ( File::fileExists( $_newFile ) ) && ( ! $this->getFileOverWrite() ) )
@@ -2083,6 +2084,9 @@ class File
                             $this->_flagError ( FILE_UNKNOWN );
                             $_retValue = false;
                         }
+
+                        // Now modify the file name property
+                        $this->_setFileName( $_newFile );
                     }
                     else
                     {
@@ -2391,11 +2395,14 @@ class File
 
 /**
  * $RCSfile: files.php,v $
- * $Revision: 1.7 $
- * $Date: 2005/09/21 22:58:50 $
- * $Author: vanmer $
+ * $Revision: 1.8 $
+ * $Date: 2005/09/22 03:13:29 $
+ * $Author: jswalter $
  *
  * $Log: files.php,v $
+ * Revision 1.8  2005/09/22 03:13:29  jswalter
+ *  - slight change to 'fileRename()' to update file name property
+ *
  * Revision 1.7  2005/09/21 22:58:50  vanmer
  * - added include directory required file and global declaration for files.php and files_test.php
  *
