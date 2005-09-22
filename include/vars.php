@@ -12,7 +12,7 @@ if ( !defined('IN_XRMS') )
  * You will need to review the variables in this file and
  * make changes as necessary for your environment.
  *
- * $Id: vars.php,v 1.37 2005/06/20 12:53:40 braverock Exp $
+ * $Id: vars.php,v 1.38 2005/09/22 13:09:18 braverock Exp $
  */
 
 /**
@@ -292,4 +292,4 @@ $use_php_iconv = false;
  */
 $use_self_contacts = false;
 
-?>
+//?>

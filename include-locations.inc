@@ -18,7 +18,7 @@
  * If you are debugging a really thorny problem, you may want to uncomment the second
  * error_reporting line and sort through the Notices.
  *
- * $Id: include-locations.inc,v 1.18 2005/06/21 15:47:09 vanmer Exp $
+ * $Id: include-locations.inc,v 1.19 2005/09/22 13:09:18 braverock Exp $
  */
 
 //
@@ -41,6 +41,11 @@ error_reporting(E_ALL ^E_NOTICE);
 
 /**
  * $Log: include-locations.inc,v $
+ * Revision 1.19  2005/09/22 13:09:18  braverock
+ * - remove trailing ?> from vars.php and include-locations.inc
+ *   *trailing text on vars and include-locations file will now be parsed as php
+ * - remove whitespace check from install, it causes too many problems
+ *
  * Revision 1.18  2005/06/21 15:47:09  vanmer
  * - rolling back another errant commit
  *
@@ -76,4 +81,4 @@ error_reporting(E_ALL ^E_NOTICE);
  * - set error_reporting level
  * - add phpdoc and instructions to docblock
  */
-?>
+//?>

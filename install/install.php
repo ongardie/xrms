@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.16 2005/05/23 19:45:41 vanmer Exp $
+ * $Id: install.php,v 1.17 2005/09/22 13:09:18 braverock Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -20,7 +20,7 @@ require_once('database.php');
 require_once('data.php');
 
 // make sure that the file does not end with whitespace
-check_extra_whitespace("../", "include-locations.inc");
+// check_extra_whitespace("../", "include-locations.inc");
 
 // where do we include from
 require_once('../include-locations.inc');
@@ -90,7 +90,7 @@ if (!file_exists ($include_directory . 'vars.php') ) {
 // vars.php sets all of the installation-specific variables
 
 // make sure that the file does not end with whitespace
-check_extra_whitespace($include_directory, "vars.php");
+// check_extra_whitespace($include_directory, "vars.php");
 
 require_once($include_directory . 'vars.php');
 
@@ -306,6 +306,11 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.17  2005/09/22 13:09:18  braverock
+ *- remove trailing ?> from vars.php and include-locations.inc
+ *  *trailing text on vars and include-locations file will now be parsed as php
+ *- remove whitespace check from install, it causes too many problems
+ *
  *Revision 1.16  2005/05/23 19:45:41  vanmer
  *- moved create database data to after ACL tables are installed
  *
