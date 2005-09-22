@@ -3,30 +3,24 @@
   /**
    * Test harness for the Files Upload Class
    *
-   * Goals:
-   *  - test property assignments
-   *  - test "STATIC" method results
-   *  - test "failure" senarios
-   *
    * @package Files_Test
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version   $Id: upload_test.php,v 1.1 2005/09/22 03:14:34 jswalter Exp $
-   * @date      $Date: 2005/09/22 03:14:34 $
+   * @version   $Id: upload_test.php,v 1.2 2005/09/22 03:17:05 jswalter Exp $
+   * @date      $Date: 2005/09/22 03:17:05 $
    *
    * @copyright (c) 2004 Walter Torres
    * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
    *            OSI Certified Open Source Software
    *
-   * $Id: upload_test.php,v 1.1 2005/09/22 03:14:34 jswalter Exp $
+   * $Id: upload_test.php,v 1.2 2005/09/22 03:17:05 jswalter Exp $
    *
    **/
 
 
 require_once("../file_upload.php");
 
-require_once '../../debug.php';
 
 // =============================================================
 
@@ -127,6 +121,9 @@ Select a File:
 
  /**
   * $Log: upload_test.php,v $
+  * Revision 1.2  2005/09/22 03:17:05  jswalter
+  *  - removed debug include
+  *
   * Revision 1.1  2005/09/22 03:14:34  jswalter
   *  - initial commit
   *  - simple upload file test
