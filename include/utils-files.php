@@ -7,7 +7,7 @@
  *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.6 2005/07/22 18:09:51 braverock Exp $
+ * $Id: utils-files.php,v 1.7 2005/09/22 02:42:04 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -42,7 +42,7 @@ function rename_file ( $_orgName = null, $_newName = null )
     {
         $_objFile = new File($GLOBALS['file_storage_directory'] . $_orgName);
 
-        $_objFile->renameFile( $GLOBALS['file_storage_directory'] . $_newName );
+        $_objFile->fileRename( $GLOBALS['file_storage_directory'] . $_newName );
     }
 };
 
@@ -594,6 +594,9 @@ function get_file_records( $con, $files_data )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.7  2005/09/22 02:42:04  jswalter
+ *  - modified 'rename_file()' to reflect changes in File Class
+ *
  * Revision 1.6  2005/07/22 18:09:51  braverock
  * - remove $class_directory and replace with $include_directory
  *
