@@ -8,7 +8,7 @@
  *
  * $RCSfile: file_upload.php,v $
  * $Author: jswalter $
- * $Date: 2005/07/06 18:12:39 $
+ * $Date: 2005/09/22 02:57:53 $
  *
  * @package    File_Handling
  * @subpackage Processng
@@ -17,14 +17,14 @@
  * @author      Walter Torres <walter@torres.ws>
  * @contributor Aaron Van Meerten
  *
- * @version   $Revision: 1.1 $
+ * @version   $Revision: 1.2 $
  * @copyright (c) 2004 Walter Torres
  * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
  *            OSI Certified Open Source Software
  *
  * @todo Complete phpDoc-ing this file
  *
- * @ID $Id: file_upload.php,v 1.1 2005/07/06 18:12:39 jswalter Exp $
+ * @ID $Id: file_upload.php,v 1.2 2005/09/22 02:57:53 jswalter Exp $
  */
 
 include_once(dirname(__FILE__) . '/files.php');
@@ -97,7 +97,7 @@ include_once(dirname(__FILE__) . '/files.php');
     * @constant UPLOAD_VER
     *
     */
-    define('UPLOAD_VER', '1.00', false);
+    define('UPLOAD_VER', '1.2', false);
 
 
   // ===========================================================
@@ -137,7 +137,7 @@ include_once(dirname(__FILE__) . '/files.php');
     * @example url://path/to/example.php description
     *
     * @author Walter Torres <walter@torres.ws>
-    * @version $Revision: 1.1 $
+    * @version $Revision: 1.2 $
     *
     * @copyright copyright information
     * @license URL name of license
@@ -237,10 +237,10 @@ class file_upload extends File
             $this->File ( $_FILES[$this->_postVar]['tmp_name'] );
 
             // What is the actual name of the file
-            $this->_setActualFileName($_FILES[$this->_postVar]['name']);
+            $this->_setActualFileName();
 
             // Do we "think" anything was sent up?
-            if ( $this->_setFileSize() )
+            if ( $this->getFileSize() )
             {
                 // What size do we think was sent up
                // $this->_flagError ( UPLOAD_NOT_SENT );
@@ -253,7 +253,7 @@ class file_upload extends File
         }   // if ( $_FILES[$this->_postVar]['name'] == '' )
 
         // Pull Mime Type
-        $this->setFileMimeType ( $_FILES[$this->_postVar]['type'] );
+        $this->_setFileMimeType ( $_FILES[$this->_postVar]['type'] );
 
        /**
         * Last security issue
@@ -274,7 +274,7 @@ class file_upload extends File
         // Parent Class 'moveFile()' will perform this check.
         // If a duplicate is found, the file will not be moved
         // and an error will be thrown
-        $this->moveFile ( $this->getFileFullPath(), $this->getOverWriteFile() );
+        $this->fileMove ( $this->getActualFileName(), $this->getFileOverWrite() );
     }
     // }}}
     // {{{ getMimeType
@@ -336,11 +336,13 @@ class file_upload extends File
     // {{{ _setActualFileName
     function _setActualFileName ( $_actualName = null )
     {
-        if ( $_actualName )
-        {
-            $this->_actualFileName = $_actualName;
-            $this->setFileName( $_actualName );
-        }
+        $this->_actualFileName = $_FILES[$this->_postVar]['name'];
+    }
+    // }}}
+    // {{{ getActualFileName
+    function getActualFileName ( $_actualName = null )
+    {
+        return $this->getDestDir() . '/' . $this->_actualFileName;
     }
     // }}}
     // {{{ setFileName
@@ -348,7 +350,7 @@ class file_upload extends File
     {
         if ( $_newName )
             // This is just a pass through to the parent class
-            File::setFileName ( $_newName );
+            File::_setFileName ( $_newName );
     }
     // }}}
 
@@ -387,11 +389,14 @@ class file_upload extends File
 
 /**
  * $RCSfile: file_upload.php,v $
- * $Revision: 1.1 $
- * $Date: 2005/07/06 18:12:39 $
+ * $Revision: 1.2 $
+ * $Date: 2005/09/22 02:57:53 $
  * $Author: jswalter $
  *
  * $Log: file_upload.php,v $
+ * Revision 1.2  2005/09/22 02:57:53  jswalter
+ *  - modifed a few methods to reflect updates to File Class
+ *
  * Revision 1.1  2005/07/06 18:12:39  jswalter
  *  - initial commit to sourceforge
  *  - these files come from php-yacs.org
