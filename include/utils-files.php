@@ -7,7 +7,7 @@
  *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.7 2005/09/22 02:42:04 jswalter Exp $
+ * $Id: utils-files.php,v 1.8 2005/09/23 21:00:46 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -480,11 +480,8 @@ function modify_file_record( $con, $files_data )
   * Retrieves Found Files records
   * This will return a recordset or a FALSE.
   *
-  * These 'files' table fields are required.
-  * This method will fail without them.
+  * At least one field must be defined in file_data
   * - file_name              - Orignal File Name from users system
-  *
-  * These fields are conditionally required
   * - entered_at             - when was record created, this must be defined if 'on_what_table' is not
   * - on_what_table          - what the file is attached or related to, must define 'on_what_id'
   * - on_what_id             - which ID to use for this relationship
@@ -510,7 +507,7 @@ function modify_file_record( $con, $files_data )
   * @final
   *
   * @param adodbconnection $con handle to the database
-  * @param  array  $files_data  with associative array defining file data (extract()'d inside function)
+  * @param  array  $files_data  with associative array defining file data
   * @param  string $file_array  name of $_FILES sub-array to use
   * @return mixed  $_results    recordset Found Records
   *                             boolean   Indicating success or failure
@@ -534,34 +531,29 @@ function get_file_records( $con, $files_data )
     */
     $_results = false;
 
-    // Turn activity_data array into variables
-    extract($files_data);
 
     // We need one or the other to run this
-    if ( ($entered_by)  ||  ($on_what_table) )
+    //if ( ($files_data['entered_by'])  ||  ($files_data['on_what_table']) )
+    if (count($files_data)) 
     {
-        // Find files by table type
-        if (strlen($on_what_table) > 0)
-        {
-            $var_sql = "WHERE on_what_table = '$on_what_table'
-                        AND on_what_id = '$on_what_id' ";
+        // build where clause from files_data
+        foreach($files_data as $field => $value) {
+            $where_clause[] = "$field = '$value'";
         }
-        // or find files by user ID
-        else
-        {
-            $var_sql = "WHERE files.entered_by = '$entered_by' ";
-        }
+
+        $where_sql = 'WHERE ' . join(" AND ", $where_clause);
 
         // Define SQL
         $file_sql = "SELECT * from files, users
-                            $var_sql
+                            $where_sql
                         AND files.entered_by = users.user_id
                         AND file_record_status = 'a'
                         $file_limit_sql
                 ORDER BY entered_at";
 
+// change this?
         // return all found files for this table type
-        if (strlen($on_what_table) > 0)
+        if (strlen($files_data['on_what_table']) > 0)
         {
             $_results = $con->execute($file_sql);
         }
@@ -594,6 +586,9 @@ function get_file_records( $con, $files_data )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.8  2005/09/23 21:00:46  daturaarutad
+ * update get_file_records so that any field can be passed in as search criteria
+ *
  * Revision 1.7  2005/09/22 02:42:04  jswalter
  *  - modified 'rename_file()' to reflect changes in File Class
  *
