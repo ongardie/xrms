@@ -32,7 +32,8 @@ function xrms_plugin_init_owl() {
     $xrms_plugin_hooks['menuline']['owl'] = 'owl_menu';
     $xrms_plugin_hooks['file_add_file']['owl'] = 'fn_add_file';
     $xrms_plugin_hooks['file_add_folder']['owl'] = 'fn_add_folder';
-    $xrms_plugin_hooks['file_get_file_info']['owl'] = 'fn_get_file_info';
+    $xrms_plugin_hooks['file_get_file']['owl'] = 'fn_get_file';
+    $xrms_plugin_hooks['file_get_xrms_file_id']['owl'] = 'fn_get_xrms_file_id';
     $xrms_plugin_hooks['file_browse_files']['owl'] = 'fn_browse_files';
     $xrms_plugin_hooks['file_search_files']['owl'] = 'fn_search_files';
     $xrms_plugin_hooks['file_get_search_fields_html']['owl'] = 'fn_get_search_fields_html';
@@ -48,10 +49,29 @@ function owl_menu() {
 }
 
 
+function fn_get_xrms_file_id(&$params) { 
+	global $owl_location; 
+
+    require_once('../include-locations.inc');
+    global $include_directory;
+    require_once($include_directory . 'vars.php');
+    require_once($include_directory . 'utils-database.php');
+    require_once($include_directory . 'utils-files.php');
+
+
+    $xcon = get_xrms_dbconnection();
+
+    $rst = get_file_records($xcon, array('external_id' => $params['external_id']));
+
+    if($rst) {
+        $row = $rst->GetRows();
+        $params['file_id'] = $row[0]['file_id'];
+    }
+}
+
 function fn_add_file(&$params) {
 	global $owl_location;
 	require_once($owl_location . 'OWL_API.php');
-
 
 	if(is_array($params) && count($params) == 2) {
 		$file_field_name = $params[0];
@@ -89,10 +109,15 @@ function fn_add_folder(&$params) {
 	}
 	$params =  OWL_Add_Folder($folder_info);
 }
-function fn_get_file_info(&$params) { 
+
+
+
+function fn_get_file(&$params) { 
 	global $owl_location; 
 	require_once($owl_location . 'OWL_API.php'); 
-	$params =  OWL_Get_File_Info($params);
+
+
+	$params =  OWL_Get_File($params['file_id']);
 }
 
 function fn_browse_files(&$params) {
@@ -108,7 +133,7 @@ function fn_browse_files(&$params) {
 
 		if(!$owl_parent_id) $owl_parent_id = 0;
 
-		$owl_data =  OWL_Browse_Files($owl_parent_id, $file_data);
+		$owl_data = OWL_Browse_Files($owl_parent_id, $file_data);
 
 		global $http_site_root;
 		global $on_what_table;
@@ -118,6 +143,7 @@ function fn_browse_files(&$params) {
 		// manipulate the $data so that buttons get pushed into a single row, etc.
 		// $data['owl_actions'] = $data['button1'] . $data['button2'] . etc;
 
+        // add a parent folder ID to navigate upwards...
 		if($owl_parent_id) {
 			$row = array();
 			$row['name'] = '.. (folder)';
@@ -144,7 +170,7 @@ function fn_browse_files(&$params) {
 			} else {
 
 				$owl_data[$k]['file_size'] = pretty_filesize($owl_row['file_size']);
-				$owl_data[$k]['file_pretty_name'] = "<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['file_id']}&return_url=". current_page() ."'>" . $owl_data[$k]['file_pretty_name'] . '</a>';
+				$owl_data[$k]['file_pretty_name'] = "<a href='$http_site_root/files/one.php?file_id={$owl_data[$k]['id']}&return_url=". current_page() ."'>" . $owl_data[$k]['name'] . '</a>';
 			}
 		}
 
@@ -191,22 +217,20 @@ function fn_browse_files(&$params) {
 
         $endrows =  "
                 <tr>
-                <form action='".$http_site_root."/files/new.php' method='post'>
-                    <td class=widget_content_form_element>
+                    <td colspan=4 class=widget_content_form_element>
+                        <form action='".$http_site_root."/files/new.php' method='post'>
                             <input type=hidden name=on_what_table value='$on_what_table'>
                             <input type=hidden name=on_what_id value='$on_what_id'>
                             <input type=hidden name=return_url value='$return_url'>
                             $new_file_button
-                    </td>
-                </form>
-                <form action='".$http_site_root."/plugins/owl/new_folder.php' method='post'>
-                    <td class=widget_content_form_element>
+                        </form>
+                        <form action='".$http_site_root."/plugins/owl/new_folder.php' method='post'>
                             <input type=hidden name=on_what_table value='$on_what_table'>
                             <input type=hidden name=on_what_id value='$on_what_id'>
                             <input type=hidden name=return_url value='$return_url'>
                             $new_folder_button
+                        </form>
                     </td>
-                </form>
 				</tr> ";
 
 
@@ -283,6 +307,9 @@ function fn_template() {
 
 /**
  * $Log: setup.php,v $
+ * Revision 1.3  2005/09/23 20:35:17  daturaarutad
+ * add new hooks and fix old ones
+ *
  * Revision 1.2  2005/04/28 18:49:07  daturaarutad
  * small tweak for search files
  *
