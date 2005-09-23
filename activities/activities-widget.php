@@ -32,9 +32,12 @@ require_once('../calendar/Calendar_View.php');
 * @param string return_url for links
 * @param string End rows to add to the bottom of the pager eg "<tr><td colspan=23><input type=button></td></tr>\n";
 * @param array List of default columns (used as default for selectable columns)
+* @param boolean Whether or not to show the mini-search mini-widget
+* @param array field_name => asc/desc description of the default sort column
+*
 * @return string The pager widget.  must be placed inside a form to be active!
 */
-function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null, $show_mini_search = true) {
+function GetActivitiesWidget($con, $search_terms, $form_name, $caption, $session_user_id, $return_url, $extra_where='', $end_rows='', $default_columns = null, $show_mini_search = true, $default_sort = null) {
 
 global $http_site_root;
 
@@ -483,6 +486,10 @@ if('list' != $activities_widget_type) {
                 </tr>\n";
 
     $pager = new GUP_Pager($con, $activity_sql, 'GetActivitiesPagerData', $caption, $form_name, 'ActivitiesPager', $columns, false, true, true);
+    if(is_array($default_sort)) {
+        $pager->SetDefaultSortColumn($default_sort);
+
+    }
     $pager->AddEndRows($endrows);
     $pager->SetCountSQL($count_sql);
     $widget['content'] =  $pager_columns_selects .  $pager->Render($system_rows_per_page);
@@ -793,6 +800,9 @@ function GetMiniSearchWidget($widget_name, $search_terms, $search_enabled, $form
 
 /**
 * $Log: activities-widget.php,v $
+* Revision 1.39  2005/09/23 16:07:36  daturaarutad
+* add default sort parameter to GetActivitiesWidget()
+*
 * Revision 1.38  2005/08/28 16:31:24  braverock
 * - fix incorrect colspan entries
 *
