@@ -4,7 +4,7 @@
  *
  *
  *
- * $Id: some.php,v 1.61 2005/08/28 18:09:10 braverock Exp $
+ * $Id: some.php,v 1.62 2005/09/23 21:07:27 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -233,6 +233,9 @@ if ($rst) {
 
 $sql2 = "select opportunity_type_pretty_name, opportunity_type_id from opportunity_types where opportunity_type_record_status = 'a' order by opportunity_type_pretty_name";
 $rst = $con->execute($sql2);
+if(!$rst) {
+	db_error_handler($con, $sql2);
+}
 $opportunity_type_menu = $rst->getmenu2('opportunity_type_id', $opportunity_type_id, true);
 $rst->close();
 
@@ -495,6 +498,9 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.62  2005/09/23 21:07:27  daturaarutad
+ * add db_error_handler()
+ *
  * Revision 1.61  2005/08/28 18:09:10  braverock
  * - remove trailing whitespace
  *
