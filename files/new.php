@@ -2,7 +2,7 @@
 /**
  * Form for creating a new file
  *
- * $Id: new.php,v 1.18 2005/07/12 17:47:25 braverock Exp $
+ * $Id: new.php,v 1.19 2005/09/23 19:42:10 daturaarutad Exp $
  */
 
 require_once('../include-locations.inc');
@@ -41,21 +41,22 @@ if ( $_POST['act'] == 'up' )
     }
 
     // Process Uploaded File
-    else if ( $objUpFile = getFileUpLoad ( 'file1' ) )
+    else
     {
-        // Pull File info
+         // Pull File info
         $file_pretty_name = (strlen(trim($_POST['file_pretty_name'])) > 0) ? $_POST['file_pretty_name'] : $file_name;
-        $file_name        = $objUpFile->getFilename();
-        $file_type        = $objUpFile->getFileMimeType();
-        $file_size        = $objUpFile->getFileSize();
+        $file_name        = $_FILES['file1']['name'];
+        $file_type        = $_FILES['file1']['type'];
+        $file_size        = $_FILES['file1']['size'];
+        
 
         //save to database
         $rec = array();
         $rec['file_pretty_name']     = $file_pretty_name;
         $rec['file_description']     = $_POST['file_description'];
         $rec['file_name']            = $file_name;
-        $rec['file_size']            = $objUpFile->getFileSize();
-        $rec['file_type']            = $objUpFile->getFileMimeType();
+        $rec['file_size']            = $file_size;
+        $rec['file_type']            = $file_type;
         $rec['on_what_table']        = $_POST['on_what_table'];
         $rec['on_what_id']           = $_POST['on_what_id'];
         $rec['entered_at']           = time();
@@ -66,11 +67,17 @@ if ( $_POST['act'] == 'up' )
         // files plugin hook allows external storage of files.  see plugins/owl/README for example
         // params: (file_field_name, record associative array)
         $file_plugin_params = array('file1', $rec);
+
+
         do_hook_function('file_add_file', &$file_plugin_params);
 
+        // external_id gets set by the hook
         if($file_plugin_params['external_id']) {
             $rec['external_id'] = $file_plugin_params['external_id'];
         }
+       
+
+
 
         // Make DB connection
         $con = &adonewconnection($xrms_db_dbtype);
@@ -85,22 +92,29 @@ if ( $_POST['act'] == 'up' )
         // What ID where we given
         $file_id = $con->insert_id();
 
-        // Now we need to UPDATE that same record
-        // update the file record
-        $sql = "SELECT * FROM files WHERE file_id = $file_id";
-        $rst = $con->execute($sql);
+        // If the file was not stored by a plugin...
+        if(!$file_plugin_params['file_stored']) {
 
-        // We need to RENAME the 'file_filesystem_name' name with the record ID
-        $rec = array();
-        $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
+            if ( $objUpFile = getFileUpLoad ( 'file1' ) ) {
 
-        $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
-        $con->execute($upd);
-        $con->close();
+                // Now we need to UPDATE that same record
+                // update the file record
+                $sql = "SELECT * FROM files WHERE file_id = $file_id";
+                $rst = $con->execute($sql);
 
-        // The file needs to be renamed to add the record index to it
-        rename_file ( $file_name, $rec['file_filesystem_name'] );
-    }   // if ( $objUpFile = getFileUpLoad ( 'file1' ) )
+                // We need to RENAME the 'file_filesystem_name' name with the record ID
+                $rec = array();
+                $rec['file_filesystem_name'] = $file_id . '_' . $file_name;
+
+                $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+                $con->execute($upd);
+                $con->close();
+
+                // The file needs to be renamed to add the record index to it
+                rename_file ( $file_name, $rec['file_filesystem_name'] );
+            }
+        }
+    }
 
     if (! $msg)
     {
@@ -194,6 +208,9 @@ if ( $_POST['act'] == 'up' )
 
 /**
  * $Log: new.php,v $
+ * Revision 1.19  2005/09/23 19:42:10  daturaarutad
+ * updated for file plugin (owl support)
+ *
  * Revision 1.18  2005/07/12 17:47:25  braverock
  * - add include for custom mime fn to replace php std fn
  *

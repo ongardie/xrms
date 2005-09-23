@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.20 2005/07/07 16:55:28 jswalter Exp $
+ * $Id: sidebar.php,v 1.21 2005/09/23 19:49:27 daturaarutad Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -25,7 +25,7 @@ else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN
 $file_limit_sql = '';
 
     // Build data setup
-    $files_data['file_limit_sql']   = $file_limit_sql;
+    //$files_data['file_limit_sql']   = $file_limit_sql;
     $files_data['entered_by']       = $session_user_id;
     $files_data['on_what_table']    = $on_what_table;
     $files_data['on_what_id']       = $on_what_id;
@@ -33,10 +33,13 @@ $file_limit_sql = '';
     $file_sidebar_rst = get_file_records( $con, $files_data );
 
 
+
 // files plugin hook
 $plugin_params = array($file_sidebar_rst);
 do_hook_function('file_browse_files', $plugin_params);
 $file_rows = $plugin_params['file_rows'];
+
+
 if(!$file_rows) {
     if (!$file_sidebar_label) {
         $file_sidebar_label=_("Files");
@@ -109,6 +112,9 @@ if(!$file_rows) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.21  2005/09/23 19:49:27  daturaarutad
+ * updated for file plugin (owl support)
+ *
  * Revision 1.20  2005/07/07 16:55:28  jswalter
  *  - added 'ultils-files.php' to use new FILES API
  *  - removed file retrieval SQL

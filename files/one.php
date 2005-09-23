@@ -2,7 +2,7 @@
 /**
  * Show the details for a single file
  *
- * $Id: one.php,v 1.17 2005/06/24 23:27:00 vanmer Exp $
+ * $Id: one.php,v 1.18 2005/09/23 19:47:03 daturaarutad Exp $
  */
 
 //include required files
@@ -34,9 +34,19 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 
 update_recent_items($con, $session_user_id, "files", $file_id);
 
+// files plugin hook
+$plugin_params = array('external_id' => $file_id);
+do_hook_function('file_get_xrms_file_id', $plugin_params);
+if($plugin_params['file_id']) {
+    $file_id = $plugin_params['file_id'];
+}
+
+
 $sql = "select * from files, users where files.entered_by = users.user_id and file_id = $file_id";
 
 $rst = $con->execute($sql);
+
+//echo $sql;
 
 if ($rst) {
     $file_pretty_name = $rst->fields['file_pretty_name'];
@@ -161,6 +171,9 @@ end_page();
 
 /**
  *$Log: one.php,v $
+ *Revision 1.18  2005/09/23 19:47:03  daturaarutad
+ *updated for file plugin (owl support)
+ *
  *Revision 1.17  2005/06/24 23:27:00  vanmer
  *- return url is now accepted from either post or get
  *- return url is now urlencoded when passed to delete
