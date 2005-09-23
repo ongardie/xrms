@@ -5,7 +5,7 @@
  *
  * @author Justin Cooper <daturaarutad@sourceforge.net>
  *
- * $Id: Calendar_View.php,v 1.8 2005/07/23 00:16:11 vanmer Exp $
+ * $Id: Calendar_View.php,v 1.9 2005/09/23 20:57:48 daturaarutad Exp $
  */
 
 global $include_directory;
@@ -127,16 +127,6 @@ class CalendarView {
 */
 function Render($activity_data) {
 
-/*
-	New calendar code follows
-
-	@todo
-		-Make starting day a parameter (currently set to Monday)
-		-Add tooltips
-		-Create multi-user 'icon mode' and return legend
-		-nicen up the display with custom CSS
-
-*/
 	global $http_site_root;
 
 	$events = $this->BuildDailyEvents($activity_data);
@@ -214,7 +204,8 @@ function Render($activity_data) {
 						foreach(($events[$day_of_month-$days_offset]) as $event) {
 
 							if('text' == $this->display_mode) {
-								$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\">" .
+								//$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\">" .
+								$event_link = "<a href=\"$http_site_root/activities/one.php?activity_id={$event['activity_id']}&return_url=" . current_page() . "\"onmouseover=\"return escape('" . addslashes("{$event['description_brief']}") . "')\">" .
 										 	' ' . $event['activity_title'] .
 											"</a><br>" .  date('h:iA', strtotime($event['scheduled_at'])) . ' - ' . date('h:iA', strtotime($event['ends_at'])) ;
 							} else {
@@ -687,6 +678,9 @@ function GetCalendarSQLOffset() {
 }
 /**
 * $Log: Calendar_View.php,v $
+* Revision 1.9  2005/09/23 20:57:48  daturaarutad
+* add tooltip for calendar events
+*
 * Revision 1.8  2005/07/23 00:16:11  vanmer
 * - ensure activity data is available before adding anything to the event list
 *
