@@ -1,33 +1,3 @@
-
-
-Please Note that this OWL plugin is not yet finished and should not be used at all!
-
-
-This document is currently where I'm keeping my notes on the pieces left to be finished.
-
-
-
-Search:
-XRMS has certain search abilities such as searching on fields that are only stored in the XRMS files table.
-
-OWL also has certain search capabilities such as searching the contents of files.
-
-Since the search terms are always ANDed together, we can perform the two searches independantly and return the union of the sets.
-
-
-
-
-Things to think about: 
-
-	How will the files get downloaded
-
-	What does files/one.php need added?
-
-
-
-
-Table changes
-
 ALTER TABLE files add external_id int default 0;
 
 CREATE TABLE owl_folders (
@@ -41,6 +11,61 @@ CREATE TABLE owl_folders (
                file_record_status                      char(1) default 'a');
 
 
+
+
+
+I'll give a rundown of the files involved first, as a high level overview:
+
+
+xrms/plugins/owl/README
+This file.  
+
+xrms/plugins/owl/setup.php
+This file defines the hooks which are then called in various places in XRMS.
+Generally the functions defined in this file prepare the parameters that will be passed to the various
+OWL_API functions.  Since OWL does not do any UI creation, it also often renders the data returned from 
+the API to HTML.
+
+fn_browse_files()
+
+xrms/files/sidebar.php returns a pager widget containing a list of files in the system which are often attached
+to an xrms object such as company/activity/etc.
+
+First, sidebar.php calls get_file_records() in include/utils-file.php, which retrieves the files from XRMS's db.
+In the case of OWL, the actual contents will be stored in OWL's db, but we still have a record for each file in XRMS'
+as well, with an external_id that points to the record in OWL.
+
+Then it passes that result set to fn_browse_files in plugins/owl/setup.php.
+fn_browse_files passes the result set (as an array) to OWL_Browse_Files().
+OWL_Browse_Files() then queries the OWL database for all folders and files.
+
+Folders: "select * from folders where parent=$parent_id"
+Files: "select * from files where id={$row['external_id']} and parent=$parent_id"
+
+As you can see, it expects external_id to be set.
+Steve will no doubt change these simple queries of mine to be calls to internal libraries.
+
+Regarding the ACL, since XRMS created the list of files that were passed in to OWL_Browse_Files, there is no need for
+filtering that list.  However, this is probably not going to be the case for other API users.  So, I would recommend
+or original plan of passing in pointers to functions (or the PHP equiv) for our own authentication functions to replace
+those in owl/security_lib.php, such as check_auth().  For XRMS this function will most likely always return "authorized",
+as the files have been pre-selected.
+
+OWL_Browse_Files() returns the data from it's DB to fn_browse_files(), which then creates a HTML widget(pager) from
+this data.  Sidebar sees that the hook created a widget and so skips the creation step and displays the widget.
+
+
+
+
+
+
+
+
+owl/intranet/OWL_API.php
+The PHP external interface to OWL.
+
+Notes:
+Even though XRMS isn't using OWL's ACL, I think the API should allow for it, since that's probably what most API users will wish to do.  I think this is mostly just a matter of passing in a user_id to most functions, which OWL will most likely need to find the 'xrms files' anyway.
 
 
 
