@@ -2,7 +2,7 @@
 /**
  * owl/new_folder-2.php - This file adds new folders to the system
  *
- * $Id: new_folder-2.php,v 1.1 2005/04/28 15:47:10 daturaarutad Exp $
+ * $Id: new_folder-2.php,v 1.2 2005/09/23 20:42:06 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -65,55 +65,11 @@ header("Location: " . $http_site_root . $return_url);
 
 /**
  * $Log: new_folder-2.php,v $
+ * Revision 1.2  2005/09/23 20:42:06  daturaarutad
+ * tidy up comments
+ *
  * Revision 1.1  2005/04/28 15:47:10  daturaarutad
  * new files
  *
- * Revision 1.15  2005/04/10 16:19:02  maulani
- * - remove errant test code
- *
- * Revision 1.14  2005/04/10 11:44:22  maulani
- * - Retain file type if not found in lookup table
- *
- * Revision 1.13  2005/01/13 18:51:23  vanmer
- * - Basic ACL changes to allow create/delete/update functionality to be restricted
- *
- * Revision 1.12  2004/08/03 18:05:56  cpsource
- * - Set mime type when database entry is created
- *
- * Revision 1.11  2004/07/30 12:59:19  cpsource
- * - Handle $msg in the standard way
- *   Fix problem with Date field displaying garbage because
- *     date was undefined, and if E_ALL is turned on.
- *
- * Revision 1.10  2004/07/10 13:37:43  braverock
- * - fixed timestamp on new file attach
- *
- * Revision 1.9  2004/07/07 22:06:16  introspectshun
- * - Now passes a table name instead of a recordset into GetInsertSQL
- *
- * Revision 1.8  2004/06/15 14:26:56  gpowers
- * - correct time formats
- *
- * Revision 1.7  2004/06/12 07:20:40  introspectshun
- * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
- *
- * Revision 1.6  2004/06/03 16:23:48  braverock
- * - fixed typo
- *
- * Revision 1.5  2004/03/26 23:52:47  maulani
- * - bug fix 923755 === unbalanced parenthesis
- *   fix submitted by anonymous
- *
- * Revision 1.4  2004/03/22 03:16:55  braverock
- * - added check for error codes on file upload
- *   - fixes SF bug 839574
- *
- * Revision 1.3  2004/03/04 00:05:13  maulani
- * *** empty log message ***
- *
- * Revision 1.2  2004/03/03 23:53:42  maulani
- * - changed to record file type (mime)
- * - Usestype when downloading file
- * - add phpdoc
  */
 ?>

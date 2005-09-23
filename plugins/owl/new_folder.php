@@ -2,7 +2,7 @@
 /**
  * Form for creating a new folder
  *
- * $Id: new_folder.php,v 1.1 2005/04/28 15:47:10 daturaarutad Exp $
+ * $Id: new_folder.php,v 1.2 2005/09/23 20:41:51 daturaarutad Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -140,47 +140,11 @@ end_page();
 
 /**
  * $Log: new_folder.php,v $
+ * Revision 1.2  2005/09/23 20:41:51  daturaarutad
+ * tidy up comments
+ *
  * Revision 1.1  2005/04/28 15:47:10  daturaarutad
  * new files
- *
- * Revision 1.13  2005/01/13 18:51:23  vanmer
- * - Basic ACL changes to allow create/delete/update functionality to be restricted
- *
- * Revision 1.12  2004/08/03 18:05:56  cpsource
- * - Set mime type when database entry is created
- *
- * Revision 1.11  2004/07/30 12:59:19  cpsource
- * - Handle $msg in the standard way
- *   Fix problem with Date field displaying garbage because
- *     date was undefined, and if E_ALL is turned on.
- *
- * Revision 1.10  2004/07/25 16:40:31  johnfawcett
- * - added gettext calls
- *
- * Revision 1.9  2004/06/15 14:24:44  gpowers
- * - placed calendar setup code inside <script> tag
- *
- * Revision 1.8  2004/06/12 07:20:40  introspectshun
- * - Now use ADODB GetInsertSQL, GetUpdateSQL, date and Concat functions.
- *
- * Revision 1.7  2004/06/04 17:28:03  gpowers
- * Applied Patch [ 965012 ] Calendar replacement By: miguel Gonçves - mig77
- * w/minor changes: changed includes to function, used complete php tags
- *
- * Revision 1.6  2004/04/17 16:04:30  maulani
- * - Add CSS2 positioning
- *
- * Revision 1.5  2004/04/16 22:22:06  maulani
- * - Add CSS2 positioning
- *
- * Revision 1.4  2004/04/08 17:00:11  maulani
- * - Update javascript declaration
- * - Add phpdoc
- *
- * Revision 1.3  2004/03/24 12:28:01  braverock
- * - allow editing of more file proprerties
- * - updated code provided by Olivier Colonna of Fontaine Consulting
- * - add phpdoc
  *
  */
 ?>
