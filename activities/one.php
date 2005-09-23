@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.123 2005/09/21 20:08:34 vanmer Exp $
+ * $Id: one.php,v 1.124 2005/09/23 20:55:40 daturaarutad Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -347,7 +347,7 @@ if($on_what_table && $on_what_id) {
     }
 }
 if($thread_id) {
-    $ra_extra_where[] = "a.thread_id = $thread_id";
+    $ra_extra_where[] = "a.thread_id = $thread_id ";
 }
 
 if(count($ra_extra_where)) {
@@ -746,6 +746,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.124  2005/09/23 20:55:40  daturaarutad
+ * add space after thread_id clause in extra_where
+ *
  * Revision 1.123  2005/09/21 20:08:34  vanmer
  * - added menu for location of activity
  * - removed address table from query on activity, unused and overrides activity address_id
