@@ -2,7 +2,7 @@
 /**
  * Create a new contact for a company.
  *
- * $Id: new.php,v 1.38 2005/08/19 00:11:29 ycreddy Exp $
+ * $Id: new.php,v 1.39 2005/09/25 05:42:06 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -147,6 +147,8 @@ $rst->close();
 $address_type='residential';
 $address_type_menu = build_address_type_menu($con, $address_type);
 
+$contact_custom_rows = do_hook_function('contact_custom_inline_new_display', $contact_custom_rows);
+
 $con->close();
 
 $page_title = _("New Contact for") . ' ' . $company_name;
@@ -227,25 +229,10 @@ start_page($page_title, true, $msg);
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
             </tr>
-
-    	    <!-- // remove IM fields for now, move to plugin in a few days
-            <tr>
-                <td class=widget_label_right><?php echo _("AOL Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=aol_name size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Yahoo Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=yahoo_name size=30></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("MSN Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=msn_name size=30></td>
-            </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Interests"); ?></td>
                 <td class=widget_content_form_element><input type=text name=interests size=35></td>
             </tr>
-	 // end IM commented fields -->
 
             <tr>
                 <td class=widget_label_right><?php echo _("Gender"); ?></td>
@@ -273,6 +260,7 @@ start_page($page_title, true, $msg);
                 <td class=widget_content_form_element><input type=text name=interests size=35 value='<?php echo $interests; ?>'></td>
             </tr>
 
+            <?php echo $contact_custom_rows; ?>
 
         <?php if ($contact_custom1_label!='(Custom 1)') { ?>
             <tr>
@@ -365,6 +353,10 @@ end_page();
 
 /**
  * $Log: new.php,v $
+ * Revision 1.39  2005/09/25 05:42:06  vanmer
+ * - removed IM field references from all contact pages (now handled by plugin)
+ * - added custom field hook for contacts new.php
+ *
  * Revision 1.38  2005/08/19 00:11:29  ycreddy
  * Setting default address id to cloned address id if one is present. Also removed Home address and added address_menu
  *

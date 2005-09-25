@@ -2,7 +2,7 @@
 /**
  * Insert changes to a contact into the database.
  *
- * $Id: edit-2.php,v 1.28 2005/09/06 17:31:22 ycreddy Exp $
+ * $Id: edit-2.php,v 1.29 2005/09/25 05:42:06 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -38,9 +38,12 @@ $work_phone_ext = $_POST['work_phone_ext'];
 $cell_phone = $_POST['cell_phone'];
 $home_phone = $_POST['home_phone'];
 $fax = $_POST['fax'];
+/*
+IM fields, now handled through plugin
 $aol_name = $_POST['aol_name'];
 $yahoo_name = $_POST['yahoo_name'];
 $msn_name = $_POST['msn_name'];
+*/
 $interests = $_POST['interests'];
 $profile = $_POST['profile'];
 $custom1 = $_POST['custom1'];
@@ -88,6 +91,7 @@ if ($validationsPassed) {
 }
 
 $rec = array();
+$rec['contact_id']=$contact_id;
 $rec['address_id'] = $address_id;
 $rec['home_address_id'] = $home_address_id;
 $rec['division_id'] = $division_id;
@@ -102,9 +106,12 @@ $rec['work_phone_ext'] = preg_replace("/[^\d]/", '', $work_phone_ext);
 $rec['cell_phone'] = preg_replace("/[^\d]/", '', $cell_phone);
 $rec['home_phone'] = preg_replace("/[^\d]/", '', $home_phone);
 $rec['fax'] = preg_replace("/[^\d]/", '', $fax);
+/*
+IM fields, now handled through plugin
 $rec['aol_name'] = $aol_name;
 $rec['yahoo_name'] = $yahoo_name;
 $rec['msn_name'] = $msn_name;
+*/
 $rec['interests'] = $interests;
 $rec['gender'] = $gender;
 $rec['date_of_birth'] = $date_of_birth;
@@ -138,6 +145,10 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.29  2005/09/25 05:42:06  vanmer
+ * - removed IM field references from all contact pages (now handled by plugin)
+ * - added custom field hook for contacts new.php
+ *
  * Revision 1.28  2005/09/06 17:31:22  ycreddy
  * Added code to Strip off non digit characters from Cell, Home Phones and Fax
  *

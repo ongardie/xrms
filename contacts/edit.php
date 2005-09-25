@@ -4,7 +4,7 @@
  *
  * This screen allows the user to edit all the details of a contact.
  *
- * $Id: edit.php,v 1.41 2005/08/15 19:10:51 braverock Exp $
+ * $Id: edit.php,v 1.42 2005/09/25 05:42:06 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -84,9 +84,6 @@ if ($rst) {
     $home_phone = get_formatted_phone($con, $rst->fields['home_address_id'],$rst->fields['home_phone']);
     $profile = $rst->fields['profile'];
     $fax = get_formatted_phone($con, $rst->fields['address_id'],$rst->fields['fax']);
-    $aol_name = $rst->fields['aol_name'];
-    $yahoo_name = $rst->fields['yahoo_name'];
-    $msn_name = $rst->fields['msn_name'];
     $interests = $rst->fields['interests'];
     $custom1 = $rst->fields['custom1'];
     $custom2 = $rst->fields['custom2'];
@@ -233,20 +230,6 @@ confGoTo_includes();
                 <td class=widget_label_right><?php echo _("Description"); ?></td>
                 <td class=widget_content_form_element><input type=text name=description value='<?php echo $description; ?>' size=30></td>
             </tr>
-            <!-- // remove IM fields for now, move to plugin in a few days
-            <tr>
-                <td class=widget_label_right><?php echo _("AOL Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=aol_name value='<?php echo $aol_name; ?>' size=25></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("Yahoo Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=yahoo_name value='<?php echo $yahoo_name; ?>' size=25></td>
-            </tr>
-            <tr>
-                <td class=widget_label_right><?php echo _("MSN Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=msn_name value='<?php echo $msn_name; ?>' size=25></td>
-            </tr>
-            // end IM commented fields -->
             <!-- accounting plugin -->
             <tr>
                 <td class=widget_label_right><?php echo _("Gender"); ?></td>
@@ -337,6 +320,10 @@ end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.42  2005/09/25 05:42:06  vanmer
+ * - removed IM field references from all contact pages (now handled by plugin)
+ * - added custom field hook for contacts new.php
+ *
  * Revision 1.41  2005/08/15 19:10:51  braverock
  * - don't show custom1-4 if the labels haven't changed in vars.php
  *

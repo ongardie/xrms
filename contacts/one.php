@@ -7,7 +7,7 @@
  * @todo break the parts of the contact details qey into seperate queries
  *       to make the entire process more resilient.
  *
- * $Id: one.php,v 1.95 2005/08/15 19:58:15 braverock Exp $
+ * $Id: one.php,v 1.96 2005/09/25 05:42:06 vanmer Exp $
  */
 require_once('include-locations-location.inc');
 
@@ -341,34 +341,8 @@ function openMsnSession(strIMAddress) {
                                 </tr>
                                 <?php
                                       }; //end if interests
-                                      if (trim($yahoo_name)) {
                                 ?>
-                                <tr>
-                                    <td class=sublabel><?php echo _("Yahoo! IM"); ?></td>
-                                    <td class=clear>
-                                    <?php if (strlen($yahoo_name) > 0) {echo("<a href='ymsgr:sendim?$yahoo_name'><img border=0 src='http://opi.yahoo.com/online?u=$yahoo_name&m=g&t=3'></a>");}; ?>
-                                    </td>
-                                </tr>
-                                <?php
-                                      }; //end if yahoo_name
-                                      if (trim($msn_name)) {
-                                ?>
-                                <tr>
-                                    <td class=sublabel><?php echo _("MSN IM"); ?></td>
-                                    <td class=clear>
-                                    <?php if (strlen($msn_name) > 0) {echo("<a href=\"javascript: openMsnSession('$msn_name');\">$msn_name</a>");}; ?></td>
-                                </tr>
-                                <?php
-                                      }; // end if msn_name
-                                      if (trim($aol_name)) {
-                                ?>
-                                <tr>
-                                    <td class=sublabel><?php echo _("AOL IM"); ?></td>
-                                    <td class=clear>
-                                    <?php if (strlen($aol_name) > 0) {echo("<a href='aim:goim?screenname=$aol_name'>$aol_name</a>");}; ?>
-                                    </td>
-                                </tr>
-                                <?php }; // end if aol_name ?>
+
                                 <?php do_hook('one_contact_left'); ?>
                                 </table>
                             </td>
@@ -540,6 +514,10 @@ end_page();
 
 /**
  * $Log: one.php,v $
+ * Revision 1.96  2005/09/25 05:42:06  vanmer
+ * - removed IM field references from all contact pages (now handled by plugin)
+ * - added custom field hook for contacts new.php
+ *
  * Revision 1.95  2005/08/15 19:58:15  braverock
  * - clean up minor whitespace issues
  *

@@ -2,7 +2,7 @@
 /**
  * Insert a new contact into the database
  *
- * $Id: new-2.php,v 1.29 2005/09/06 17:29:56 ycreddy Exp $
+ * $Id: new-2.php,v 1.30 2005/09/25 05:42:06 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -131,9 +131,12 @@ $rec['work_phone_ext'] = preg_replace("/[^\d]/", '', $work_phone_ext);
 $rec['cell_phone'] = preg_replace("/[^\d]/", '', $cell_phone);
 $rec['home_phone'] = preg_replace("/[^\d]/", '', $home_phone);
 $rec['fax'] = preg_replace("/[^\d]/", '', $fax);
+/*
+ignore IM fields, now done through plugin
 $rec['aol_name'] = $aol_name;
 $rec['yahoo_name'] = $yahoo_name;
 $rec['msn_name'] = $msn_name;
+*/
 $rec['interests'] = $interests;
 $rec['salutation'] = $salutation;
 $rec['gender'] = $gender;
@@ -181,6 +184,10 @@ if ($edit_address == "on") {
 
 /**
  * $Log: new-2.php,v $
+ * Revision 1.30  2005/09/25 05:42:06  vanmer
+ * - removed IM field references from all contact pages (now handled by plugin)
+ * - added custom field hook for contacts new.php
+ *
  * Revision 1.29  2005/09/06 17:29:56  ycreddy
  * Added code to Strip off non digit characters from Cell, Home Phones and Fax
  *
