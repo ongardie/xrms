@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.124 2005/09/23 20:55:40 daturaarutad Exp $
+ * $Id: one.php,v 1.125 2005/09/25 04:12:23 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -426,9 +426,14 @@ confGoTo_includes();
 
 <script language="JavaScript" type="text/javascript">
 
-function changeAttachment() {
-   document.forms[0].change_attachment.value='true';
-   document.forms[0].submit();
+function changeAttachment(attachAction) {
+   if (!attachAction) {
+      document.forms[0].change_attachment.value='true';
+      document.forms[0].submit();
+   } else if (attachAction=='detach') {
+      document.forms[0].change_attachment.value='detach';
+      document.forms[0].submit();
+   }
 }
 
 function logTime() {
@@ -746,6 +751,11 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.125  2005/09/25 04:12:23  vanmer
+ * - added ability to detach an activity from an on_what_table/on_what_id relationship using Detach button
+ * - added case to check for $on_what_id before attempting to query for activity attachmetn
+ * - added error handling on sql errors when querying for a name of the activity's attached entity
+ *
  * Revision 1.124  2005/09/23 20:55:40  daturaarutad
  * add space after thread_id clause in extra_where
  *

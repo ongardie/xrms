@@ -15,21 +15,23 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: attachment_sidebar.php,v 1.3 2005/08/24 11:03:09 braverock Exp $
+ * $Id: attachment_sidebar.php,v 1.4 2005/09/25 04:12:23 vanmer Exp $
  */
 
-if ($on_what_table) {
+if ($on_what_table AND $on_what_id) {
     $attached_to_link = "<a href='$http_site_root" . table_one_url($on_what_table, $on_what_id) . "'>";
     $singular=make_singular($on_what_table);
     $name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
     $on_what_field=$singular.'_id';
     $sql = "select $name_field as attached_to_name from $on_what_table WHERE $on_what_field = $on_what_id";
+    $detach_button='<input type=button class=button value="'._("Detach") . '" onclick=changeAttachment(\'detach\')>';
 } else {
+    $detach_button='';
     $attached_to_link = "N/A";
     $sql = "select * from companies where 1 = 2";
 }
 
-$rst = $con->execute($sql);
+$rst = $con->execute($sql); 
 
 if ($rst) {
     $attached_to_name = $rst->fields['attached_to_name'];
@@ -51,14 +53,19 @@ if ($rst) {
     $related_block.="\n<tr>\n\t<td class=widget_content>$attached_to_link</td>\n</tr>\n";
     $related_block.="\n<tr>
         <td class=widget_content_form_element>
-            <input type=button class=button name=change_attachment onclick=\"changeAttachment()\"  value=\""._("Change Attachment")."\">
+            <input type=button class=button name=change_attachment onclick=\"changeAttachment()\"  value=\""._("Change Attachment")."\">$detach_button
         </td>
     </tr>\n";
     $related_block.="\n\t</table>\n</div>\n";
-}
+} else { db_error_handler($con, $sql); }
 
 /**
   * $Log: attachment_sidebar.php,v $
+  * Revision 1.4  2005/09/25 04:12:23  vanmer
+  * - added ability to detach an activity from an on_what_table/on_what_id relationship using Detach button
+  * - added case to check for $on_what_id before attempting to query for activity attachmetn
+  * - added error handling on sql errors when querying for a name of the activity's attached entity
+  *
   * Revision 1.3  2005/08/24 11:03:09  braverock
   * - remove non-printable characters causing parse error from attached to link
   * - quote properties of tags

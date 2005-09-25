@@ -6,7 +6,7 @@
  *        should eventually do a select to get the variables if we are going
  *        to post a followup
  *
- * $Id: edit-2.php,v 1.72 2005/09/21 20:07:23 vanmer Exp $
+ * $Id: edit-2.php,v 1.73 2005/09/25 04:12:23 vanmer Exp $
  */
 
 //include required files
@@ -76,7 +76,14 @@ if (!$return_url) {
 }
 
 if ($change_attachment) {
-    $return_url="/activities/activity-reconnect.php?activity_id=$activity_id";
+    if ($change_attachment=='true') {
+        $return_url="/activities/activity-reconnect.php?activity_id=$activity_id";
+    } elseif ($change_attachment=='detach') {
+    	$return_msg=_("Successfully detached activity");
+    	$return_url="/activities/one.php?activity_id=$activity_id&msg=".urlencode($return_msg);
+    	$on_what_id=0;
+	$on_what_table=NULL;
+    }
 }
 // set the correct activity status flag
 if ($activity_status == 'on') {
@@ -540,6 +547,11 @@ if ($followup) {
 
 /**
  * $Log: edit-2.php,v $
+ * Revision 1.73  2005/09/25 04:12:23  vanmer
+ * - added ability to detach an activity from an on_what_table/on_what_id relationship using Detach button
+ * - added case to check for $on_what_id before attempting to query for activity attachmetn
+ * - added error handling on sql errors when querying for a name of the activity's attached entity
+ *
  * Revision 1.72  2005/09/21 20:07:23  vanmer
  * - added address_id to allow location to be set or edited for an activity
  *
