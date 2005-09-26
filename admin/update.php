@@ -7,7 +7,9 @@
  * must be made.
  *
  * @author Beth Macknik
- * $Id: update.php,v 1.99 2005/09/21 20:39:05 vanmer Exp $
+ * @author XRMS Development Team
+ *
+ * $Id: update.php,v 1.100 2005/09/26 12:29:59 braverock Exp $
  */
 
 // where do we include from
@@ -21,7 +23,8 @@ require_once($include_directory . 'utils-misc.php');
 require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 require_once($include_directory . 'adodb-params.php');
-require_once($include_directory . '../install/data.php');
+//this file isn't in the $include_directory, so navigate to it directly
+require_once('../install/data.php');
 
 
 $session_user_id = session_check( 'Admin' );
@@ -4679,6 +4682,10 @@ $con->execute($sql);
 $sql="ALTER TABLE `contacts` ADD `home_address_id` INT UNSIGNED AFTER `address_id`";
 $con->execute($sql);
 
+//make home_address_id nullable
+$sql= "ALTER TABLE `contacts` CHANGE `home_address_id` `home_address_id` INT UNSIGNED NULL DEFAULT NULL";
+$con->execute($sql);
+
     $table_list = list_db_tables($con);
     if (!in_array('user_preference_types',$table_list)) {
         $sql="CREATE TABLE `user_preference_types` (
@@ -5066,6 +5073,12 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.100  2005/09/26 12:29:59  braverock
+ * - don't use $include_directory on include of install/data.php
+ *   - corrects problem where include_directory has been moved outside the webroot
+ *   - credit SF user Markos151 with the patch
+ *   https://sourceforge.net/tracker/?func=detail&atid=588128&aid=1304777&group_id=88850
+ *
  * Revision 1.99  2005/09/21 20:39:05  vanmer
  * - added address_id to activity, to track activity location
  *
