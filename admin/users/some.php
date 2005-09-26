@@ -4,7 +4,7 @@
  *
  * List system users.
  *
- * $Id: some.php,v 1.18 2005/08/28 16:11:03 braverock Exp $
+ * $Id: some.php,v 1.19 2005/09/26 01:20:02 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -17,6 +17,12 @@ require_once($include_directory . 'adodb-params.php');
 $session_user_id = session_check( 'Admin' );
 
 getGlobalVar($msg, 'msg');
+getGlobalVar($new_username, 'new_username');
+getGlobalVar($role_id, 'role_id');
+getGlobalVar($first_names, 'first_names');
+getGlobalVar($last_name, 'last_name');
+getGlobalVar($gmt_offset, 'gmt_offset');
+getGlobalVar($email, 'email');
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -44,9 +50,12 @@ if ($rst) {
 }
 
 //hack to show ACL roles, no initlal element in the menu
-$role_menu=get_role_list(false, true, 'role_id', false, false);
+$role_menu=get_role_list(false, true, 'role_id',$role_id, false);
 
-$default_gst = get_system_parameter($con, 'Default GST Offset');
+if (!$gmt_offset) {
+    //if offset has not been passed in, use default offset
+    $gmt_offset = get_system_parameter($con, 'Default GST Offset');
+}
 $con->close();
 
 $page_title = _("Manage Users");
@@ -86,15 +95,15 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Last Name"); ?></td>
-                <td class=widget_content_form_element><input type=text name=last_name> <?php echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type=text name=last_name value="<?php echo $last_name; ?>"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("First Names"); ?></td>
-                <td class=widget_content_form_element><input type=text name=first_names></td>
+                <td class=widget_content_form_element><input type=text name=first_names value="<?php echo $first_names; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Username"); ?></td>
-                <td class=widget_content_form_element><input type=text name=new_username> <?php echo $required_indicator; ?></td>
+                <td class=widget_content_form_element><input type=text name=new_username value="<?php echo $new_username; ?>"> <?php echo $required_indicator; ?></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Password"); ?></td>
@@ -102,7 +111,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("E-Mail"); ?></td>
-                <td class=widget_content_form_element><input type=text name=email></td>
+                <td class=widget_content_form_element><input type=text name=email value="<?php echo $email; ?>"></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Language"); ?></td>
@@ -110,7 +119,7 @@ start_page($page_title, true, $msg);
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("GMT Offset"); ?></td>
-                <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value=<?php  echo $default_gst; ?>></td>
+                <td class=widget_content_form_element><input type=text size=5 name=gmt_offset value=<?php  echo $gmt_offset; ?>></td>
             </tr>
             <tr>
                 <td class=widget_label_right><?php echo _("Enabled"); ?></td>
@@ -165,6 +174,10 @@ end_page();
 
 /**
  * $Log: some.php,v $
+ * Revision 1.19  2005/09/26 01:20:02  vanmer
+ * - added parameters to inputs for new user in some.php, so that passed in values will be displayed
+ * - added passback of entered parameters from add-2.php if error occurs when adding the user
+ *
  * Revision 1.18  2005/08/28 16:11:03  braverock
  * - fix incorrect colspan
  *

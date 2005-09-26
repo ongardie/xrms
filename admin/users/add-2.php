@@ -2,7 +2,7 @@
 /**
  * commit a new user to the Database
  *
- * $Id: add-2.php,v 1.11 2005/05/18 05:51:24 vanmer Exp $
+ * $Id: add-2.php,v 1.12 2005/09/26 01:20:03 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -32,7 +32,7 @@ $user_id=add_xrms_user($con, $new_username, $password, $role_id, $first_names, $
 $con->close();
 if (!$user_id) {
     $msg="Failed to add user: $error_msg.";
-    header("Location: some.php?msg=$msg");
+    header("Location: some.php?msg=$msg&role_id=$role_id&new_username=$new_username&last_name=$last_name&first_names=$first_names&email=$email&gmt_offset=$gmt_offset&allowed_p=$enabled");
     exit;
 }
 
@@ -40,6 +40,10 @@ header("Location: some.php");
 
 /**
  * $Log: add-2.php,v $
+ * Revision 1.12  2005/09/26 01:20:03  vanmer
+ * - added parameters to inputs for new user in some.php, so that passed in values will be displayed
+ * - added passback of entered parameters from add-2.php if error occurs when adding the user
+ *
  * Revision 1.11  2005/05/18 05:51:24  vanmer
  * - changed to call add user function with silent parameter, error message variable
  *
