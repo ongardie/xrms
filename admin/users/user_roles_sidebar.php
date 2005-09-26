@@ -2,7 +2,7 @@
 /**
  * Roles sidebar, used to display/edit roles for a user
  *
- * $Id: user_roles_sidebar.php,v 1.5 2005/09/07 23:42:18 vanmer Exp $
+ * $Id: user_roles_sidebar.php,v 1.6 2005/09/26 01:40:57 vanmer Exp $
 **/
 if (!$edit_user_id) {
     $edit_user_id=$session_user_id;
@@ -11,13 +11,15 @@ if (!$edit_user_id) {
 if (!$user_roles_con) $user_roles_con=$con;
 if (!$user_roles_handler) $user_roles_handler='/admin/acl/edit_GroupUser.php';
 if (!$acl_datasource_name) $acl_datasource_name='default';
+if (!$user_roles_returnvar) $user_roles_returnvar='return_url';
+if (!$user_roles_returnform) $user_roles_returnform="document.forms[0]";
 
 if (!$acl) $acl=get_acl_object($acl_options);
 //hack to show ACL roles
 $role_menu=get_role_list($acl, true, 'role_id', $role_id); 
 
 $user_roles=get_user_roles_with_groups($acl, $edit_user_id);
-$return_url=$http_site_root.current_page();
+$this_return_url=urlencode($http_site_root.current_page());
 
 $group_menu=get_group_select($user_roles_con, 'group', 1, '', false, $attributes='style="font-size: x-small; border: outset; width: 80px;"', 0);
 
@@ -26,7 +28,16 @@ $role_rows=<<<TILLEND
 <script language=javascript>
 <!---
     function deleteRole(GroupUser_id) {
-        location.href='{$http_site_root}$user_roles_handler?acl_datasource_name=$acl_datasource_name&return_url=$return_url&edit_user_id=$edit_user_id&userAction=deleteRole&GroupUser_id='+GroupUser_id;
+        $user_roles_returnform.$user_roles_returnvar.value='{$http_site_root}$user_roles_handler?acl_datasource_name=$acl_datasource_name&edit_user_id=$edit_user_id&userAction=deleteRole&GroupUser_id='+GroupUser_id + '&return_url=$this_return_url';
+        $user_roles_returnform.submit();
+    };
+    function addRole() {
+        var Role_id=document.user_role_sidebar_form.role_id.value;
+        var Group_id=document.user_role_sidebar_form.group.value;
+        var return_url='{$http_site_root}$user_roles_handler?acl_datasource_name=$acl_datasource_name&edit_user_id=$edit_user_id&userAction=addRole&role_id='+Role_id+'&group='+Group_id+'&return_url=$this_return_url';
+        //alert(return_url);
+        $user_roles_returnform.$user_roles_returnvar.value=return_url;
+        $user_roles_returnform.submit();
     };
 </script>
 TILLEND;
@@ -47,9 +58,9 @@ if ($user_roles) {
     }
 }
 if ($action=='edit') {
-$role_rows.="<tr><td>$group_menu</td><td>$role_menu</td><td><input type=submit class=button name=btAddRole value=\""._("Add Role") . "\"></td></tr>";
+$role_rows.="<tr><td>$group_menu</td><td>$role_menu</td><td><input type=button onclick=\"addRole()\" class=button name=btAddRole value=\""._("Add Role") . "\"></td></tr>";
 $user_role_sidebar=<<<TILLEND
-    <form method=POST action='{$http_site_root}$user_roles_handler'>
+    <form method=POST name=user_role_sidebar_form action='{$http_site_root}$user_roles_handler'>
         <input type=hidden name=userAction value=addRole>
         <input type=hidden name=acl_datasource_name value="$acl_datasource_name">
         <input type=hidden name=edit_user_id value=$edit_user_id>
@@ -68,6 +79,11 @@ $user_role_sidebar.=<<<TILLEND
 TILLEND;
 /**
  * $Log: user_roles_sidebar.php,v $
+ * Revision 1.6  2005/09/26 01:40:57  vanmer
+ * - changed user roles sidebar to submit form on page for which sidebar is attached.
+ * - changed return_url to allow form to save its data and then redirect to the user roles action
+ * - returns back to current page once user roles action is complete
+ *
  * Revision 1.5  2005/09/07 23:42:18  vanmer
  * - added parameter for acl datasource name into sidebar, to allow datasource to be set properly when adding/deleting
  * users roles
