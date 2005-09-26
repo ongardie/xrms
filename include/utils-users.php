@@ -2,7 +2,7 @@
 /**
  * Utility functions for manipulating users
  *
- * $Id: utils-users.php,v 1.2 2005/05/18 05:46:47 vanmer Exp $
+ * $Id: utils-users.php,v 1.3 2005/09/26 01:17:17 vanmer Exp $
  */
 
 /**
@@ -24,6 +24,10 @@
  */
 function add_xrms_user($con, $new_username, $password, $role_id, $first_names, $last_name, $email, $gmt_offset, $user_enabled=true, $user_id=false, &$error_msg) {
     if (!$new_username) { $error_msg=_("No username specified"); return false; }
+    $current_user=get_xrms_user($con, $new_username);
+    if ($current_user) { $error_msg=_("User") . ' ' . $new_username . ' ' . _("already exists in the system, please choose a different username"); return false; }
+    if (!$password) { $error_msg=_("You must enter a password"); return false; }
+    if (!$last_name) { $error_msg=_("You must enter a last name"); return false; }
     $gmt_offset = ($gmt_offset < 0) || ($gmt_offset > 0) ? $gmt_offset : 0;
     $password = md5($password);
     $user_record_status = ($user_enabled) ? 'a' : 'd';    
@@ -85,6 +89,9 @@ function get_xrms_user($con, $username=false, $user_id=false) {
 
 /**
  * $Log: utils-users.php,v $
+ * Revision 1.3  2005/09/26 01:17:17  vanmer
+ * - added more errors if user already exists, if password or last name are not specified
+ *
  * Revision 1.2  2005/05/18 05:46:47  vanmer
  * - removed role id from user table on add_xrms_user
  * - made role an optional field, in case of adding a user with no role
