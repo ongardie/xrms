@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.146 2005/09/29 14:52:54 vanmer Exp $
+ * $Id: utils-misc.php,v 1.147 2005/09/29 16:02:22 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -1799,8 +1799,8 @@ function add_workflow_history($con, $on_what_table, $on_what_id, $old_status, $n
     $ins['on_what_id']=$on_what_id;
     $ins['old_status']=$old_status;
     $ins['new_status']=$new_status;
-    $ins['status_changed_by']=$_SESSION['session_user_id'];
-    $ins['status_changed_timestamp']=time();
+    $ins['status_change_by']=$_SESSION['session_user_id'];
+    $ins['status_change_timestamp']=time();
 
     $table='workflow_history';
 
@@ -1928,6 +1928,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.147  2005/09/29 16:02:22  vanmer
+ * - fixed typo in insert record for workflow history, now correctly tracks time and user for status change
+ *
  * Revision 1.146  2005/09/29 14:52:54  vanmer
  * - added function to instantiate a new entity from an activity template of type "process"
  * - adds activities attached to both the new and old entity pointing to the other entity
