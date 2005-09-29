@@ -2,7 +2,7 @@
 /**
  * Edit the details for a single Activity
  *
- * $Id: one.php,v 1.125 2005/09/25 04:12:23 vanmer Exp $
+ * $Id: one.php,v 1.126 2005/09/29 14:49:10 vanmer Exp $
  *
  * @todo Fix fields to use CSS instead of absolute positioning
  */
@@ -67,6 +67,7 @@ if ($activity_rst) {
     $contact_id = $activity_rst->fields['contact_id'];
     $on_what_table = $activity_rst->fields['on_what_table'];
     $current_on_what_table = $activity_rst->fields['on_what_table'];
+    $activity_template_id=$activity_rst->fields['activity_template_id'];
     $on_what_id = $activity_rst->fields['on_what_id'];
     $address_id = $activity_rst->fields['address_id'];
     $scheduled_at = date('Y-m-d H:i:s', strtotime($activity_rst->fields['scheduled_at']));
@@ -751,6 +752,9 @@ function logTime() {
 
 /**
  * $Log: one.php,v $
+ * Revision 1.126  2005/09/29 14:49:10  vanmer
+ * - added lookup of activity template id, to provide to attachment sidebar
+ *
  * Revision 1.125  2005/09/25 04:12:23  vanmer
  * - added ability to detach an activity from an on_what_table/on_what_id relationship using Detach button
  * - added case to check for $on_what_id before attempting to query for activity attachmetn
