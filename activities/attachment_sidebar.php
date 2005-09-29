@@ -15,18 +15,20 @@ if ( !defined('IN_XRMS') )
  *
  * @author Aaron van Meerten
  *
- * $Id: attachment_sidebar.php,v 1.4 2005/09/25 04:12:23 vanmer Exp $
+ * $Id: attachment_sidebar.php,v 1.5 2005/09/29 14:48:40 vanmer Exp $
  */
 
+$buttons="<input type=button class=button name=change_attachment onclick=\"changeAttachment()\"  value=\""._("Change Attachment")."\">";
 if ($on_what_table AND $on_what_id) {
     $attached_to_link = "<a href='$http_site_root" . table_one_url($on_what_table, $on_what_id) . "'>";
     $singular=make_singular($on_what_table);
     $name_field=$con->Concat(implode(", ' ' , ", table_name($on_what_table)));
     $on_what_field=$singular.'_id';
     $sql = "select $name_field as attached_to_name from $on_what_table WHERE $on_what_field = $on_what_id";
-    $detach_button='<input type=button class=button value="'._("Detach") . '" onclick=changeAttachment(\'detach\')>';
+    if (!$activity_template_id) {
+        $buttons.='<input type=button class=button value="'._("Detach") . '" onclick=changeAttachment(\'detach\')>';
+    } else { $buttons=''; }
 } else {
-    $detach_button='';
     $attached_to_link = "N/A";
     $sql = "select * from companies where 1 = 2";
 }
@@ -53,7 +55,7 @@ if ($rst) {
     $related_block.="\n<tr>\n\t<td class=widget_content>$attached_to_link</td>\n</tr>\n";
     $related_block.="\n<tr>
         <td class=widget_content_form_element>
-            <input type=button class=button name=change_attachment onclick=\"changeAttachment()\"  value=\""._("Change Attachment")."\">$detach_button
+            $buttons
         </td>
     </tr>\n";
     $related_block.="\n\t</table>\n</div>\n";
@@ -61,6 +63,10 @@ if ($rst) {
 
 /**
   * $Log: attachment_sidebar.php,v $
+  * Revision 1.5  2005/09/29 14:48:40  vanmer
+  * - changed to allow detach of activity from association with another entity
+  * - changed to only allow change/detach of activity if activity is not part of a workflow (is a template activity)
+  *
   * Revision 1.4  2005/09/25 04:12:23  vanmer
   * - added ability to detach an activity from an on_what_table/on_what_id relationship using Detach button
   * - added case to check for $on_what_id before attempting to query for activity attachmetn
