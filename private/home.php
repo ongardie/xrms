@@ -6,7 +6,7 @@
  *       to create a 'personal dashboard'
  *
  *
- * $Id: home.php,v 1.64 2005/09/16 21:42:04 ycreddy Exp $
+ * $Id: home.php,v 1.65 2005/09/29 20:53:37 niclowe Exp $
  */
 
 // include the common files
@@ -71,6 +71,15 @@ if ( !isset($sidebar_rows) ) {
   $sidebar_rows = '';
 }
 $sidebar_rows = do_hook_function('private_sidebar_bottom', $sidebar_rows);
+
+/** End of the sidebar includes **/
+/*********************************/
+
+//call the FRONT SPLASH hook
+if ( !isset($front_splash) ) {
+  $front_splash = '';
+}
+$front_splash = do_hook_function('private_front_splash', $front_splash);
 
 /** End of the sidebar includes **/
 /*********************************/
@@ -395,6 +404,7 @@ start_page($page_title,true,$msg);
 
 <div id="Main">
     <div id="Content">
+        <? echo $front_splash;?>
 		<!-- Display Type -->
 		<form action="home.php" method="POST" name="<?php echo $form_name; ?>">
 		<!-- List or Calendar View -->
@@ -446,6 +456,9 @@ end_page();
 
 /**
  * $Log: home.php,v $
+ * Revision 1.65  2005/09/29 20:53:37  niclowe
+ * added teamnotice plugin
+ *
  * Revision 1.64  2005/09/16 21:42:04  ycreddy
  * Adding user_contact_id to the where clause only if it non 0 - significantly increases the performance of the Query for large activity data set
  *
