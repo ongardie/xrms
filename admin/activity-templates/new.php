@@ -4,7 +4,7 @@
  *
  * @author Brad Marshall
  *
- * $Id: new.php,v 1.6 2005/07/08 17:16:07 braverock Exp $
+ * $Id: new.php,v 1.7 2005/09/29 14:58:36 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -60,16 +60,33 @@ $tbl = "activity_templates";
 $ins = $con->GetInsertSQL($tbl, $rec, get_magic_quotes_gpc());
 $con->execute($ins);
 
-$con->close();
+$activity_template_id=$con->Insert_ID();
 
 $on_what_table = str_replace("_", "-", $on_what_table);
 $table_name = substr($on_what_table, 0, strpos($on_what_table, "-"));
 
+$return_url="/admin/$on_what_table/one.php?{$table_name}_status_id=$on_what_id";
+
+$sql = "SELECT activity_type_short_name FROM activity_types WHERE activity_type_id=$activity_type_id";
+$rst=$con->execute($sql);
+
+if (!$rst) { db_error_handler($con, $sql); }
+
+$con->close();
+
+if ((!$rst->EOF) AND ($rst->fields['activity_type_short_name']=='PRO')) {
+    $return_url=urlencode($return_url);
+    $msg=urlencode(_("Please select a workflow entity and workflow entity type for the new activity template"));
+    $return_url="/admin/activity-templates/edit.php?on_what_table=$on_what_table&on_what_id=$on_what_d&activity_template_id=$activity_template_id&msg=$msg&return_url=$return_url";
+} 
 //go back to the status edit page after updating
-header("Location: ".$http_site_root.'/admin/'.$on_what_table.'/one.php?'.$table_name.'_status_id='.$on_what_id);
+header("Location: $http_site_root$return_url");
 
 /**
  * $Log: new.php,v $
+ * Revision 1.7  2005/09/29 14:58:36  vanmer
+ * - changed to redirect to edit page if process activity type is selected for the new activity template
+ *
  * Revision 1.6  2005/07/08 17:16:07  braverock
  * - add sort_order and role_id
  *
