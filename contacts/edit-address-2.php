@@ -2,7 +2,7 @@
 /**
  * Database updates for Edit address for a contact
  *
- * $Id: edit-address-2.php,v 1.12 2005/07/06 02:07:29 vanmer Exp $
+ * $Id: edit-address-2.php,v 1.13 2005/09/29 15:01:40 vanmer Exp $
  */
 
 require_once('include-locations-location.inc');
@@ -35,6 +35,7 @@ $arr_vars = array ( // local var name             // session variable name, flag
 		   'use_pretty_address' => array ( 'use_pretty_address' , arr_vars_SESSION ),
 		   'new' => array ( 'new' , arr_vars_SESSION ),
 		   'alt_address' => array ( 'alt_address' , arr_vars_SESSION ),
+		   'home_address' => array ( 'home_address' , arr_vars_SESSION ),
 
 		   );
 
@@ -55,9 +56,21 @@ if ($alt_address) {
     $rec['address_id'] = $alt_address;
 
     $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    
     $con->execute($upd);
 
     add_audit_item($con, $session_user_id, 'changed address', 'contacts', $contact_id, 1);
+} elseif ($home_address) {
+    $sql = "SELECT * FROM contacts WHERE contact_id = $contact_id";
+    $rst = $con->execute($sql);
+
+    $rec = array();
+    $rec['home_address_id'] = $home_address;
+
+    $upd = $con->GetUpdateSQL($rst, $rec, false, get_magic_quotes_gpc());
+    $con->execute($upd);
+
+    add_audit_item($con, $session_user_id, 'changed home address', 'contacts', $contact_id, 1);
 } elseif ($address_id && !$new) {
     $sql = "SELECT * FROM addresses WHERE address_id = $address_id";
     $rst = $con->execute($sql);
@@ -148,6 +161,9 @@ header("Location: $return_url");
 
 /**
  * $Log: edit-address-2.php,v $
+ * Revision 1.13  2005/09/29 15:01:40  vanmer
+ * - added code to allow change of home address for contact
+ *
  * Revision 1.12  2005/07/06 02:07:29  vanmer
  * - changed to handle arbitrary return_url
  *
@@ -182,7 +198,7 @@ header("Location: $return_url");
  * - added processing for "Use Alternate Address" section
  *
  * Revision 1.2  2004/06/09 17:36:09  gpowers
- * - added $Id: edit-address-2.php,v 1.12 2005/07/06 02:07:29 vanmer Exp $Log: tags.
+ * - added $Id: edit-address-2.php,v 1.13 2005/09/29 15:01:40 vanmer Exp $Log: tags.
  *
  * Revision 1.1  2004/06/09 16:52:14  gpowers
  * - Contact Address Editing
