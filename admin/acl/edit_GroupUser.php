@@ -4,7 +4,7 @@
  *
  * Admin changes a user
  *
- * $Id: edit_GroupUser.php,v 1.3 2005/09/07 23:41:42 vanmer Exp $
+ * $Id: edit_GroupUser.php,v 1.4 2005/09/29 14:53:45 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -49,7 +49,7 @@ switch ($userAction) {
     break;
     case 'addRole':
             getGlobalVar($edit_user_id, 'edit_user_id');
-            $role_id=$_POST['role_id'];
+            $role_id=$_POST['role_id']; if (!$role_id) $role_id=$_GET['role_id'];
             getGlobalVar($group, 'group');
             if (!$group) {
                 $group="Users";
@@ -72,6 +72,9 @@ switch ($userAction) {
 }
 /**
   * $Log: edit_GroupUser.php,v $
+  * Revision 1.4  2005/09/29 14:53:45  vanmer
+  * - changed to pull role id from any of GET or POST
+  *
   * Revision 1.3  2005/09/07 23:41:42  vanmer
   * - changed to only set default group if GroupUser is not already set
   * - changed to use acl object and acl db connection like results page
