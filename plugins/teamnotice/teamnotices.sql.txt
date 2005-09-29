@@ -1,0 +1,31 @@
+-- phpMyAdmin SQL Dump
+-- version 2.6.1
+-- http://www.phpmyadmin.net
+-- 
+-- Host: localhost
+-- Generation Time: Sep 30, 2005 at 05:28 AM
+-- Server version: 4.1.9
+-- PHP Version: 4.3.10
+-- 
+-- 
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `teamnotices`
+-- 
+
+CREATE TABLE `teamnotices` (
+  `teamnotice_id` int(11) NOT NULL auto_increment,
+  `notice_heading` text NOT NULL,
+  `notice_text` longtext NOT NULL,
+  `status` enum('a','d') NOT NULL default 'a',
+  PRIMARY KEY  (`teamnotice_id`)
+);
+
+-- 
+-- Dumping data for table `teamnotices`
+-- 
+
+INSERT INTO `teamnotices` VALUES (1, 'Test of Team Notice Header', 'Test of Team Notice Text:\r\nYou might put in here:\r\nSALESPEOPLE PLEASE WORK HARDER!', 'a');
+INSERT INTO `teamnotices` VALUES (2, 'Where to Find Team Notices', '<a href="../plugins/teamnotice/teamnotice_list.php">Create or Delete your team notices here</a> ', 'a');
