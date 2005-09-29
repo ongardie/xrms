@@ -6,7 +6,7 @@
  * @author Brad Marshall
  * @author Brian Peterson
  *
- * $Id: workflow-activities.php,v 1.14 2005/07/08 02:36:18 vanmer Exp $
+ * $Id: workflow-activities.php,v 1.15 2005/09/29 14:51:52 vanmer Exp $
  *
  * @todo To extend and internationalize activity template substitution,
  *       we would need to add a table to the database that would hold
@@ -40,6 +40,7 @@ if ($rst) {
     while (!$rst->EOF) {
     
         //get the field values from the next record in the query
+        $template_info=$rst->fields;
         $activity_template_id = $rst->fields['activity_template_id'];
         $activity_type_id = $rst->fields['activity_type_id'];
         $activity_title = $rst->fields['activity_title'];
@@ -48,26 +49,6 @@ if ($rst) {
         $duration = $rst->fields['duration'];
         $activity_template_role_id = $rst->fields['role_id'];
         
-        $activity_type_data=get_activity_type($con, false, false, $activity_type_id);
-        if ($activity_type_data) {
-            $activity_type_name=$activity_type_data['activity_type_short_name'];
-            switch ($activity_type_name) {
-                //handle internal activity type
-                case 'INT':
-                break;
-                
-                //handle process activity type (instantiate new entity)
-                case 'PRO':
-                break;
-                
-                //process system activities here
-                case 'SYS':
-                break;
-                
-                default:
-                break;
-            }
-        }
         
         //calculate ends_at, based on duration and current date
         if ( is_numeric("$duration") ) {
@@ -107,6 +88,31 @@ if ($rst) {
             }
         }
         
+        $activity_type_data=get_activity_type($con, false, false, $activity_type_id);
+        if ($activity_type_data) {
+            $activity_type_name=$activity_type_data['activity_type_short_name'];
+            switch ($activity_type_name) {
+                //handle internal activity type
+                case 'INT':
+                break;
+                
+                //handle process activity type (instantiate new entity)
+                case 'PRO':
+                    $entity=$rst->fields['workflow_entity'];
+                    $entity_type=$rst->fields['workflow_entity_type'];
+                    $ret=add_process_entity($con, $entity, $entity_type, $activity_title, $activity_description, $company_id, $contact_id, $on_what_table, $on_what_id);
+                break;
+                
+                //process system activities here
+                case 'SYS':
+                    $ret=do_hook_function('workflow_system', $template_info);
+                break;
+                
+                default:
+                break;
+            }
+        }
+
         $user_id=get_least_busy_user_in_role($con, $activity_template_role_id, strtotime($ends_at));
         if (!$user_id) $user_id=$session_user_id;
         //save to database
@@ -147,6 +153,11 @@ if ($rst) {
 
 /**
  * $Log: workflow-activities.php,v $
+ * Revision 1.15  2005/09/29 14:51:52  vanmer
+ * - moved template-specific handling of activity types to below other processing of activity title and description
+ * - added hook for system template activities
+ * - added code to create a new workflow for process activity templates, to allow forking of workflow
+ *
  * Revision 1.14  2005/07/08 02:36:18  vanmer
  * - changed to use session_user_id if no user_id was found through least busy method
  *
