@@ -5,7 +5,7 @@
  * The installation files should insure that items are setup
  * and guide users on how to change items that are needed.
  *
- * $Id: install.php,v 1.17 2005/09/22 13:09:18 braverock Exp $
+ * $Id: install.php,v 1.18 2005/09/29 14:42:39 vanmer Exp $
  */
 
 if (!defined('IN_XRMS')) {
@@ -228,6 +228,7 @@ if ($rg) {
 // get required common files
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
+require_once($include_directory . 'utils-activities.php');
 require_once($include_directory . 'adodb/adodb.inc.php');
 
 
@@ -275,6 +276,9 @@ install_upgrade_acl($con);
 // create the database data
 create_db_data($con);
 
+// install activity participant positions
+install_default_activity_participant_positions($con);
+
 //run plugin installation, pass adodb database connection
 do_hook_function('xrms_install', $con);
 
@@ -306,6 +310,9 @@ end_page();
 
 /**
  *$Log: install.php,v $
+ *Revision 1.18  2005/09/29 14:42:39  vanmer
+ *- changed to install default partipant positions on install
+ *
  *Revision 1.17  2005/09/22 13:09:18  braverock
  *- remove trailing ?> from vars.php and include-locations.inc
  *  *trailing text on vars and include-locations file will now be parsed as php
