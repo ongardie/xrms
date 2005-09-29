@@ -2,7 +2,7 @@
 /**
  * save an updated an activity template to database after editing it.
  *
- * $Id: edit-2.php,v 1.6 2005/07/08 02:32:59 vanmer Exp $
+ * $Id: edit-2.php,v 1.7 2005/09/29 14:59:02 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -21,6 +21,8 @@ $default_text = $_POST['default_text'];
 $activity_title = $_POST['activity_title'];
 $role_id = $_POST['role_id'];
 $duration = $_POST['duration'];
+$workflow_entity=$_POST['workflow_entity'];
+$workflow_entity_type=$_POST['workflow_entity_type'];
 $sort_order = $_POST['sort_order'];
 $return_url = $_POST['return_url'];
 
@@ -35,6 +37,8 @@ $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_db
 $sql = "SELECT * FROM activity_templates WHERE activity_template_id = $activity_template_id";
 $rst = $con->execute($sql);
 
+if (!$workflow_entity OR !$workflow_entity_type) { $workflow_entity=NULL; $workflow_entity_type=NULL; }
+
 $rec = array();
 $rec['activity_type_id'] = $activity_type_id;
 $rec['activity_description'] = $activity_description;
@@ -43,6 +47,8 @@ $rec['activity_title'] = $activity_title;
 $rec['role_id'] = $role_id;
 $rec['sort_order'] = $sort_order;
 $rec['duration'] = $duration;
+$rec['workflow_entity']=$workflow_entity;
+$rec['workflow_entity_type']=$workflow_entity_type;
 
 $upd = $con->GetUpdateSQL($rst, $rec, false, $magicq=get_magic_quotes_gpc());
 $con->execute($upd);
