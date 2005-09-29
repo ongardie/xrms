@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.100 2005/09/26 12:29:59 braverock Exp $
+ * $Id: update.php,v 1.101 2005/09/29 14:55:11 vanmer Exp $
  */
 
 // where do we include from
@@ -4994,6 +4994,14 @@ $con->execute($sql);
 
 install_default_activity_participant_positions($con);
 
+$sql = "SELECT activity_type_id FROM activity_types WHERE activity_type_short_name='SYS'";
+$rst=$con->execute($sql);
+if ($rst->EOF) { 
+    $sql = "INSERT INTO activity_types( activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order, user_editable_flag ) values ('SYS', 'system', 'system', 'system',11,0)"; 
+    $rst=$con->execute($sql); 
+    if (!$rst) {db_error_handler($con, $sql); } 
+}
+
 $sql = "UPDATE activity_types SET user_editable_flag=0 WHERE ((activity_type_short_name='CTO') OR (activity_type_short_name='CFR') OR (activity_type_short_name='ETO') OR (activity_type_short_name='EFR') OR (activity_type_short_name='PRO') OR (activity_type_short_name='INT') OR (activity_type_short_name='SYS') OR (activity_type_short_name='FFR') OR (activity_type_short_name='FTO') OR (activity_type_short_name='LTT') OR (activity_type_short_name='LTF') OR (activity_type_short_name='MTG'))";
 $con->execute($sql);
 
@@ -5049,6 +5057,17 @@ if ($count) {
     $msg.=_("Successfully converted $count system parameters into system preferences.").'<BR>';
 }
 
+//add needed workflow_entity and workflow_entity_type to store entity and entity type for process workflows
+$sql = "SELECT * FROM activity_templates";
+$rst = $con->SelectLimit($sql, 1);
+if (!$rst) { db_error_handler($con, $sql); }
+else {
+    if ($rst->EOF OR (!array_key_exists('workflow_entity',$rst->fields))) {
+        $sql = "ALTER TABLE `activity_templates` ADD `workflow_entity` VARCHAR( 32 ) , ADD `workflow_entity_type` INT";
+        $rst = $con->execute($sql);
+    }
+}
+
 do_hook_function('xrms_update', $con);
 
 //close the database connection, because we don't need it anymore
@@ -5073,6 +5092,10 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.101  2005/09/29 14:55:11  vanmer
+ * - added system activity type if it does not exist (since install was broken)
+ * - added workflow entity and type fields for activity templates, to control new process entity creation
+ *
  * Revision 1.100  2005/09/26 12:29:59  braverock
  * - don't use $include_directory on include of install/data.php
  *   - corrects problem where include_directory has been moved outside the webroot
