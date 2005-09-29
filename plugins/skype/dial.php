@@ -92,6 +92,8 @@ if ($rst) {
 
 // $sipCID = lookupCID($session_username);
 //Skype dialer
+//HERE IS A PROBLEM I CANNOT EASILY FIX - YOU CANT PASS TWO HEADERS!!! (ONE CALLS SKYPE, THE OTHER ADDS THE ACTIVITY)
+//Nic Lowe October 2005
 header("Location: callto://+".$phone);
 exit;
 //sleep(5); 
