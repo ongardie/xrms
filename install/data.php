@@ -10,7 +10,7 @@
  * and that all of the tables exist.
  *
  * @author Beth Macknik
- * $Id: data.php,v 1.32 2005/08/05 21:35:50 vanmer Exp $
+ * $Id: data.php,v 1.33 2005/09/29 14:37:18 vanmer Exp $
  */
 
 /**
@@ -2850,7 +2850,7 @@ function activity_db_data($con) {
         $rst = $con->execute($sql);
         $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('PRO', 'process', 'process', 'process',10,0)";
         $rst = $con->execute($sql);
-        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('SYS', 'system, 'system', 'system',11,0)";
+        $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('SYS', 'system', 'system', 'system',11,0)";
         $rst = $con->execute($sql);
         $sql ="insert into activity_types (activity_type_short_name, activity_type_pretty_name, activity_type_pretty_plural, activity_type_display_html, sort_order,user_editable_flag) values ('MTG', 'meeting, 'meetings', 'meeting',12,0)";
         $rst = $con->execute($sql);
@@ -2953,6 +2953,9 @@ function create_db_data($con) {
 
 /**
  * $Log: data.php,v $
+ * Revision 1.33  2005/09/29 14:37:18  vanmer
+ * - requoted system activity properly
+ *
  * Revision 1.32  2005/08/05 21:35:50  vanmer
  * - added translations for options text
  * - changed default search to contains instead of matches
