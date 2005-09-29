@@ -2,7 +2,7 @@
 /**
  * Manage activity templates
  *
- * $Id: edit.php,v 1.9 2005/07/08 17:17:12 braverock Exp $
+ * $Id: edit.php,v 1.10 2005/09/29 15:00:07 vanmer Exp $
  */
 
 require_once('../../include-locations.inc');
@@ -18,6 +18,7 @@ $activity_template_id = $_GET['activity_template_id'];
 $on_what_table = $_GET['on_what_table'];
 $on_what_id = $_GET['on_what_id'];
 $return_url = $_GET['return_url'];
+getGlobalVar($msg, 'msg');
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
@@ -35,30 +36,47 @@ if ($rst) {
     $duration = $rst->fields['duration'];
     $role_id = $rst->fields['role_id'];
     $sort_order = $rst->fields['sort_order'];
+    $workflow_entity = $rst->fields['workflow_entity'];
+    $workflow_entity_type = $rst->fields['workflow_entity_type'];
 
     $rst->close();
 }
 
+//lookup which activity type is the Process type, to use for special handling
+$sql = "select activity_type_id FROM activity_types WHERE activity_type_short_name='PRO'";
+$rst = $con->execute($sql);
+if ($rst) $process_activity_type=$rst->fields['activity_type_id'];
+
 //get activity type menu
 $sql = "select activity_type_pretty_name, activity_type_id from activity_types where activity_type_record_status = 'a'";
 $rst = $con->execute($sql);
-$activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false);
+$activity_type_menu = $rst->getmenu2('activity_type_id', $activity_type_id, false, false, 0, 'onchange="changeActivityType(this)"');
 $rst->close();
 $role_menu = get_role_list(false, true, 'role_id', $role_id, true);
 
+
+$workflow_entity_array=array( 'opportunities'=>_("Opportunities"), 'cases'=>_("Cases"));
+$workflow_entity_menu=create_select_from_array($workflow_entity_array, 'workflow_entity', $workflow_entity, ' onchange="changeWorkflowEntity(this)"');
+foreach ($workflow_entity_array as $entity=>$entity_name) {
+    $entity_singular=make_singular($entity);
+    $sql = "SELECT {$entity_singular}_type_pretty_name, {$entity_singular}_type_id FROM {$entity_singular}_types";
+    $rst = $con->execute($sql);
+    $workflow_entity_type_menus[$entity]= $rst->getmenu2('workflow_entity_type_'.$entity, $workflow_entity_type, false, false, 0, "onchange=\"changeEntityType(this)\" id=workflow_entity_type_$entity");
+    $rst->close();
+
+}
+$workflow_entity_type_hidden="<input type=hidden name=workflow_entity_type value=\"$workflow_entity_type\">";
+
 $con->close();
 
-
-
 $page_title = _("Activity Template Details") .': ' .ucwords($activity_title);
-start_page($page_title);
+start_page($page_title, true, $msg);
 
 ?>
-
 <div id="Main">
     <div id="Content">
 
-        <form action=edit-2.php method=post>
+        <form action=edit-2.php method=post name=activity_template_form>
         <input type=hidden name=activity_template_id value="<?php  echo $activity_template_id; ?>">
         <input type=hidden name=return_url value="<?php echo $return_url; ?>">
         <table class=widget cellspacing=1>
@@ -77,6 +95,16 @@ start_page($page_title);
                 <td class=widget_label_right><?php echo _("Type"); ?></td>
                 <td class=widget_content_form_element><?php echo $activity_type_menu; ?></td>
             </tr>
+            <tr id=entity_selection>
+                <td class=widget_label_right><?php echo _("Workflow Entity"); ?></td>
+                <td class=widget_content_form_element><?php echo $workflow_entity_menu.$workflow_entity_type_hidden; ?></td>
+            </tr>
+<?php foreach ($workflow_entity_type_menus as $type_entity => $type_menu) { ?>
+            <tr id=entity_type_selection_<?php echo $type_entity; ?>>
+                <td class=widget_label_right><?php echo _("Workflow Entity Type"); ?></td>
+                <td class=widget_content_form_element><?php echo $type_menu; ?></td>
+            </tr>
+<?php } ?>
             <tr>
                 <td class=widget_label_right><?php echo _("Role"); ?></td>
                 <td class=widget_content_form_element><?php echo $role_menu; ?></td>
@@ -129,12 +157,81 @@ start_page($page_title);
     </div>
 </div>
 
+
+<script language=javascript>
+<!--
+function changeActivityType(typeSel) {
+    var type=typeSel.options[typeSel.selectedIndex].value;
+    if (type==<?php echo $process_activity_type; ?>) {
+        showWorkflowEntity();
+    } else {
+        hideWorkflowEntity(typeSel.form);
+        unsetWorkflowEntityTypes();
+    }
+    hideAllTypes();
+}
+function changeWorkflowEntity(entitySel) {
+    var entity=entitySel.options[entitySel.selectedIndex].value;
+    hideAllTypes();
+    var obj=document.getElementById('entity_type_selection_'+entity);
+    if (!obj) return false;
+    obj.style.display='';
+    document.getElementById('workflow_entity_type_'+entity).selectedIndex=0;
+}
+
+function hideAllTypes() {
+<?php foreach ($workflow_entity_type_menus as $js_entity=>$menu) { ?>
+    document.getElementById('entity_type_selection_<?php echo $js_entity; ?>').style.display='none';
+<?php } ?>
+}
+
+function unsetWorkflowEntityTypes() {
+<?php foreach ($workflow_entity_type_menus as $js_entity=>$menu) { ?>
+    document.getElementById('workflow_entity_type_<?php echo $js_entity; ?>').selectedIndex=0;
+<?php } ?>
+}
+
+function hideWorkflowEntity(objForm) {
+    if (objForm) {
+        objForm.workflow_entity.value='';
+        objForm.workflow_entity_type.value='';
+    }
+    document.getElementById('entity_selection').style.display='none';
+}
+
+function showWorkflowEntity() {
+    document.getElementById('entity_selection').style.display='';
+}
+
+function changeEntityType(objType) {
+    objType.form.workflow_entity_type.value=objType.options[objType.selectedIndex].value;
+}
+
+hideAllTypes();
+hideWorkflowEntity();
+
+<?php if ($workflow_entity AND $workflow_entity_type) { ?>
+document.getElementById('entity_selection').style.display='';
+document.getElementById('entity_type_selection_<?php echo $workflow_entity; ?>').style.display='';
+document.getElementById('entity_type_selection_<?php echo $workflow_entity; ?>').selectedIndex=<?php echo $workflow_entity_type; ?>;
+<?php } ?>
+
+//-->
+</script>
+
+
+
 <?php
 
 end_page();
 
 /**
  * $Log: edit.php,v $
+ * Revision 1.10  2005/09/29 15:00:07  vanmer
+ * - added workflow entity and type menus to activity template page
+ * - added javascript to only display entity when activity type is process
+ * - added javascript to only display proper entity type menu based on which entity is selected
+ *
  * Revision 1.9  2005/07/08 17:17:12  braverock
  * - clean up formatting
  *
