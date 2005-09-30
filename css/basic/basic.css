@@ -6,6 +6,10 @@
  *
  * It is used with screen media only.
  */
+
+/** Include the Calendar widget CSS **/
+@import url(../../js/jscalendar/calendar-blue.css);
+
 /** ----------
  * LAYOUT ADJUSTMENTS - to accomodate new font dimentions
  */
@@ -258,7 +262,7 @@ table.widget {
  */
 table {
     border-spacing: 1px;
-}   
+}
 table.widget td {
     padding: 3px; /* use whitespace as separator */
 }
