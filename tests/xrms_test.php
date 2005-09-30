@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test.php,v 1.4 2005/05/18 21:49:29 vanmer Exp $
+ * $Id: xrms_test.php,v 1.5 2005/09/30 22:11:04 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -182,7 +182,9 @@ Class XRMSTest extends PHPUnit_TestCase {
 }
 
 $suite= new PHPUnit_TestSuite( "XRMSTest" );
-$display = new PHPUnit_GUI_HTML($suite);
+$suite_array=array ($suite);
+$ret=do_hook_function('xrms_test_suite', $suite_array);
+$display = new PHPUnit_GUI_HTML($suite_array);
 $display->show();
 //$suite = new PHPUnit_TestSuite( "get_object_groups_object_inherit");
 /*
@@ -202,6 +204,9 @@ $display->show();
  */
 /*
  * $Log: xrms_test.php,v $
+ * Revision 1.5  2005/09/30 22:11:04  vanmer
+ * - added hook to allow XRMS to run any tests that are provided by a plugin
+ *
  * Revision 1.4  2005/05/18 21:49:29  vanmer
  * - added test for adding workflow history
  *
