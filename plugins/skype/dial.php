@@ -18,6 +18,22 @@
  *
  */
 
+include_once "config.php";
+
+
+#######################################
+# DO NOT EDIT ANYTHING BELOW HERE     #
+#######################################
+
+function fix_number($number){
+				 if ($drop_leading_zero=true){
+				 		if (strpos($number,0)==0){
+								$number=substr($number,1,strlen($number));
+						}
+				 }
+				 return $number;
+} 
+ 
 function lookupCID($thelookupCID) {
 
         $lookupCID_sip_array = parse_ini_file("/etc/asterisk/sip.conf", true);
@@ -48,7 +64,7 @@ require_once($include_directory . 'adodb-params.php');
 
 $con = &adonewconnection($xrms_db_dbtype);
 $con->connect($xrms_db_server, $xrms_db_username, $xrms_db_password, $xrms_db_dbname);
-// $con->debug = 1;
+//$con->debug = 1;
 
 $session_user_id = session_check(); 
 $session_username = $_SESSION['username'];
@@ -61,9 +77,8 @@ $phone_dial_prefix = "1";
 
 $msg = urlencode(_("Dialing Phone Number: ") . $phone);
 
-// Get contact name 
-
-$sql = "SELECT first_names,last_name from contacts
+// Get contact data 
+$sql = "SELECT first_names,last_name, address_id from contacts
         WHERE contact_id = " . $contact_id . " LIMIT 1";
 $rst = $con->execute($sql);
 
@@ -71,8 +86,21 @@ if ($rst) {
     if (!$rst->EOF) {
         $contact_name = urlencode($rst->fields['first_names'] . " "
               . $rst->fields['last_name']);
+				$address_id=$rst->fields['address_id'];
     }
 }
+
+// Get company data 
+$sql = "SELECT  default_primary_address  from companies
+        WHERE company_id = " . $company_id . " LIMIT 1";
+$rst = $con->execute($sql);
+
+if ($rst) {
+    if (!$rst->EOF) {
+				$address_id=$rst->fields['default_primary_address'];
+    }
+}
+
 
 // Get variables from the custom fields of the user's contact id.
 
@@ -91,31 +119,107 @@ if ($rst) {
 }
 
 // $sipCID = lookupCID($session_username);
+
+//Get country code to precede the sype dial?
+$sql = "SELECT country_id from addresses  
+WHERE address_id = " . $address_id . " LIMIT 1";
+$rst = $con->execute($sql);
+
+if ($rst) {
+    if (!$rst->EOF) {
+        $country_id= $rst->fields['country_id']; 
+    }
+}
+
+
+$sql = "SELECT telephone_code from countries 
+WHERE country_id = " . $country_id . " LIMIT 1";
+$rst = $con->execute($sql);
+
+if ($rst) {
+    if (!$rst->EOF) {
+        $telephone_code= $rst->fields['telephone_code']; 
+    }
+}
+
+//if the telephone code is not there, use the default one as used in the vars.php file
+if ($telephone_code==""){
+	 $sql = "SELECT telephone_code from countries 
+    WHERE country_id = " . $default_country_id . " LIMIT 1";
+    $rst = $con->execute($sql);
+    
+    if ($rst) {
+        if (!$rst->EOF) {
+            $telephone_code= $rst->fields['telephone_code']; 
+        }
+    }
+}
+
 //Skype dialer
 //HERE IS A PROBLEM I CANNOT EASILY FIX - YOU CANT PASS TWO HEADERS!!! (ONE CALLS SKYPE, THE OTHER ADDS THE ACTIVITY)
 //Nic Lowe October 2005
-header("Location: callto://+".$phone);
-exit;
-//sleep(5); 
+$dial=1;
 
-//exit;
-// Create an Activity on Dial
-if ($contact_id!=""){
-$header_loc="../../activities/new-2.php?user_id=" . $session_user_id
-    . "&activity_status=o&activity_type_id=1&contact_id="
-    . $contact_id . "&company_id=" . $company_id . "&activity_title="
-    . _("Call%20To%20") . $contact_name
-    . "&return_url=/contacts/one.php?contact_id=" . $contact_id;
-}else{
-$header_loc="../../activities/new-2.php?user_id=" . $session_user_id
-    . "&activity_status=o&activity_type_id=1&company_id=" . $company_id . "&activity_title="
-    . _("Call%20To%20") . _("Switchboard")
-    . "&return_url=/companies/one.php?company_id=" . $company_id;
+//create the number
+$skype_number=fix_number($phone);
+$skype_number=$telephone_code.$skype_number;
+
+if($dial){
+					if($update){
+											//update the record from where you got the number
+											
+					}
+
+        	header("Location: callto://+".$skype_number);
+        	exit;
+        	
+        	//sleep(5); 
+        	
+        	//exit;
+        	// Create an Activity on Dial
+        	if ($contact_id!=""){
+        	$header_loc="../../activities/new-2.php?user_id=" . $session_user_id
+        		. "&activity_status=o&activity_type_id=1&contact_id="
+        		. $contact_id . "&company_id=" . $company_id . "&activity_title="
+        		. _("Call%20To%20") . $contact_name
+        		. "&return_url=/contacts/one.php?contact_id=" . $contact_id;
+        	}else{
+        	$header_loc="../../activities/new-2.php?user_id=" . $session_user_id
+        		. "&activity_status=o&activity_type_id=1&company_id=" . $company_id . "&activity_title="
+        		. _("Call%20To%20") . _("Switchboard")
+        		. "&return_url=/companies/one.php?company_id=" . $company_id;
+        	}
+        	header("Location: ".$header_loc);
 }
-header("Location: ".$header_loc);
-
 //Skype dialer
 //header("Location: callto://+".$phone);
 // if you don't want to create an activity on dial, use this instead:
 // header("Location: $http_site_root/contacts/one.php?contact_id=$contact_id&msg=$msg");
+?>
+
+<?
+
+/*
+
+This code is here so that later you can easily update the number if you get a bum number 
+I havent finished it yet - Nic
+   
+<table width="34%" border="0">
+  <tr>
+      
+    <td width="83%"> 
+      <form name="form1" method="post" action=<? echo "dial.php?dial=1&update=1&".$_SERVER['QUERY_STRING'] ?>> 
+        <input type="text" name="textfield" value="<? echo "+".$telephone_code.$phone?> ">
+        <input type="submit" name="Submit2" value="Dial and Update Number">
+      </form>
+      </td>
+      
+    <td width="17%"> 
+      <form name="form1" method="post" action=<? echo "dial.php?dial=1&".$_SERVER['QUERY_STRING'] ?>> 
+	  <input type="submit" name="Submit" value="Just Dial It">
+	  </form>
+    </td>
+    </tr>
+  </table>
+*/
 ?>

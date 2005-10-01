@@ -35,7 +35,7 @@ function phone_link_to_display($phone, $phone_to_display) {
         global $company_id;
         global $contact_id;
         $url_phone = urlencode($phone);
-        return "<a href=\"" . $http_site_root . "/plugins/skype/dial.php?company_id=" . $company_id . "&contact_id=" . $contact_id . "&phone=" . $url_phone . "\">" . $phone_to_display . "</a>";
+        return "<a href=\"" . $http_site_root . "/plugins/skype/dial.php?company_id=" . $company_id . "&contact_id=" . $contact_id . "&phone=" . $url_phone . "\" target=_blank>" . $phone_to_display . " </a>";
     }
 }
 
