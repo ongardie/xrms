@@ -7,14 +7,14 @@
    *
    * @author Walter Torres <walter@torres.ws>
    *
-   * @version   $Id: file_test_config.php,v 1.1 2005/09/08 17:08:28 jswalter Exp $
-   * @date      $Date: 2005/09/08 17:08:28 $
+   * @version   $Id: file_test_config.php,v 1.2 2005/10/01 08:23:48 vanmer Exp $
+   * @date      $Date: 2005/10/01 08:23:48 $
    *
    * @copyright (c) 2004 Walter Torres
    * @license   Licensed under the GNU GPL. For full terms see the file COPYING.
    *            OSI Certified Open Source Software
    *
-   * $Id: file_test_config.php,v 1.1 2005/09/08 17:08:28 jswalter Exp $
+   * $Id: file_test_config.php,v 1.2 2005/10/01 08:23:48 vanmer Exp $
    *
    **/
 
@@ -35,14 +35,17 @@
     $this->file_read_write     = $this->test_path . 'read_write_file.txt';
     $this->file_read_only      = $this->test_path . 'read_only_file.txt';
     $this->file_read_denied    = $this->test_path . 'read_denied_file.txt';
-
     $this->file_name           = 'read_only_file.txt';
     $this->file_full_path      = $this->test_path . $this->file_name;
-    $this->file_relative_path  = './testing/' . $this->file_name;
+
+    if (basename($_SERVER['PHP_SELF'])=='files_test.php')
+        $this->file_relative_path  = './testing/' . $this->file_name;
+    if (basename($_SERVER['PHP_SELF'])=='xrms_test.php')
+        $this->file_relative_path  = '../include/classes/File/tests/testing/' . $this->file_name;
     $this->file_size           = 102;
     $this->file_ext            = 'txt';
     $this->file_mime           = 'text/plain';
-    $this->file_perm           = '-rw-rw-r--';
+    $this->file_perm           = '-rw-r--r--';
     $this->file_octal          = '0644';
 
     $this->do_overwrite        = true;
@@ -72,6 +75,10 @@
 
  /**
   * $Log: file_test_config.php,v $
+  * Revision 1.2  2005/10/01 08:23:48  vanmer
+  * - changed to arrange relative paths based on where the tests are called from
+  * - changed permissions to reflect the actual permissions on the test files
+  *
   * Revision 1.1  2005/09/08 17:08:28  jswalter
   * - initial commit
   * - defined various test data info
