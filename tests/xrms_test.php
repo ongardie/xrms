@@ -6,7 +6,7 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_test.php,v 1.5 2005/09/30 22:11:04 vanmer Exp $
+ * $Id: xrms_test.php,v 1.6 2005/10/01 08:24:41 vanmer Exp $
  */
 
 require_once('../include-locations.inc');
@@ -20,6 +20,13 @@ require_once($include_directory . 'adodb-params.php');
 require_once("PHPUnit.php");
 require_once("PHPUnit/GUI/HTML.php");
 
+require_once($include_directory.'classes/acl/tests/xrms_acl_test.php');
+require_once($include_directory.'classes/File/tests/files_test_class.php');
+
+
+//global $options;
+//$options=array();
+
 $options['xrms_db_dbtype'] = $xrms_db_dbtype;
 $options['xrms_db_server'] = $xrms_db_server;
 $options['xrms_db_username'] = $xrms_db_username;
@@ -32,12 +39,15 @@ Class XRMSTest extends PHPUnit_TestCase {
         $this->PHPUnit_TestCase( $name );
     }
    function setUp() {   
-       global $options;
+       global $con;
+       if (!$con) $this->con=get_xrms_dbconnection();
+       else $this->con=$con;
+/*
        $this->options = $options;
        $this->con = &adonewconnection($options['xrms_db_dbtype']);
        //connect to the xrms database
        $this->con->nconnect($options['xrms_db_server'], $options['xrms_db_username'], $options['xrms_db_password'], $options['xrms_db_dbname']);
-
+*/
     }
 
    function teardown() {
@@ -182,10 +192,25 @@ Class XRMSTest extends PHPUnit_TestCase {
 }
 
 $suite= new PHPUnit_TestSuite( "XRMSTest" );
+
+//add XRMS tests to the list of suites to run
 $suite_array=array ($suite);
+
+//add ACL tests to the list of suites to run
+$suite_array[]= new PHPUnit_TestSuite( "ACLTest" );
+$suite_array[] = new PHPUnit_TestSuite( "FilesStaticTest" );
+$suite_array[] = new PHPUnit_TestSuite( "FilesPropertiesTest" );
+$suite_array[] = new PHPUnit_TestSuite( "FilesFailuresTest" );
+$suite_array[] = new PHPUnit_TestSuite( "FilesObjectDisplay" );
+$suite_array[] = new PHPUnit_TestSuite( "FilesManipulationTest" );
+
+
 $ret=do_hook_function('xrms_test_suite', $suite_array);
+
 $display = new PHPUnit_GUI_HTML($suite_array);
 $display->show();
+
+
 //$suite = new PHPUnit_TestSuite( "get_object_groups_object_inherit");
 /*
 $test = new ACLTest( "test_get_object_groups_object_inherit");
@@ -204,6 +229,10 @@ $display->show();
  */
 /*
  * $Log: xrms_test.php,v $
+ * Revision 1.6  2005/10/01 08:24:41  vanmer
+ * - changed to instantiate a new dbconnection for tests
+ * - added ACL and file tests to list of tests
+ *
  * Revision 1.5  2005/09/30 22:11:04  vanmer
  * - added hook to allow XRMS to run any tests that are provided by a plugin
  *
