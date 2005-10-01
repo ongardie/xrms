@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.147 2005/09/29 16:02:22 vanmer Exp $
+ * $Id: utils-misc.php,v 1.148 2005/10/01 22:49:24 braverock Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -470,17 +470,16 @@ function fetch_company_id($con, $company_name) {
  * @return integer $address_id found ID or 1 if no match
  */
 function fetch_default_address($con, $company_id) {
-
-    $sql_fetch_address_id = "select default_primary_address from companies where company_id = $company_id";
-    $rst_address_id = $con->execute($sql_fetch_address_id);
-    if ($rst_address_id) {
-        $address_id = $rst_address_id->fields['default_primary_address'];
-        $rst_address_id->close();
-    } else {
-        $address_id = 1;
-    }
-
-    return $address_id;
+    $sql_fetch_address_id = "select default_primary_address from companies where company_id = $company_id";
+    if ($rst_address_id = $con->execute($sql_fetch_address_id)) {
+        // no SQL error
+        if($rst_address_id->NumRows()) {
+            // record found in in table
+            $address_id = $rst_address_id->fields['default_primary_address'];
+            $rst_address_id->close();
+        } else { $address_id = 1; }
+    } else { db_error_handler ($con,$sql_fetch_address_id);} // SQL error
+    return $address_id;
 }
 
 /**
@@ -494,21 +493,18 @@ function fetch_default_address($con, $company_id) {
  * @return integer $division_id found ID or 0 (ZERO) if no match
  */
 function fetch_division_id($con, $division_name, $company_id) {
-
-    $sql_fetch_division_id = 'select division_id from company_division where
-                             division_name = ' . $con->qstr($company_name, get_magic_quotes_gpc()) . "
-                             and company_id = $company_id";
-
-    $rst_division_id = $con->execute($sql_fetch_division_id);
-
-    if ($rst_division_id) {
-        $division_id = $rst_division_id->fields['division_id'];
-        $rst_division_id->close();
-    } else {
-        $division_id = 0;
-    }
-
-    return $division_id;
+    $sql_fetch_division_id = "select division_id from company_division
+                              where division_name = '". addslashes($division_name). "'
+                              and company_id = $company_id";
+    if ($rst_division_id = $con->execute($sql_fetch_division_id)) {
+        // no SQL error
+        if($rst_division_id->NumRows()) {
+            // record found in in table
+            $division_id = $rst_division_id->fields['division_id'];
+            $rst_division_id->close();
+        } else { $division_id = 0; }
+    } else { db_error_handler ($con,$sql_fetch_division_id);} // SQL error
+    return $division_id;
 }
 
 /**
@@ -783,13 +779,13 @@ function get_country_from_address($con, $address_id) {
 function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
     global $company_id;
     global $contact_id;
-    global $default_country_id;   
+    global $default_country_id;
 
     if (!$country_id) {
         $country_id=get_country_from_address($con, $address_id);
     }
     if (!$country_id) {
-	$country_id = $default_country_id;
+    $country_id = $default_country_id;
     }
 
     $expression=get_phone_format_from_country($con, $country_id);
@@ -844,7 +840,7 @@ function get_formatted_phone ($con, $address_id, $phone, $country_id=false) {
 
 
 /**
- * This function returns an HTML select widget with the addresses available for a company 
+ * This function returns an HTML select widget with the addresses available for a company
  *
  * @param handle $con handle to the database connection
  * @param int $company_id specify company to retrieve addresses for company
@@ -1848,15 +1844,15 @@ function add_process_entity($con, $entity, $entity_type, $title, $description, $
             $entity_data['case_priority_id']=1;
         break;
     }
-    
+
 //    $type_info="SELECT * FROM {$singular_entity}_types WHERE {$singular_entity}_type_id=$entity_type";
     $ins = $con->getInsertSQL($entity, $entity_data);
-    if ($ins) { 
+    if ($ins) {
         $rst=$con->execute($ins);
         if (!$rst) { db_error_handler($con, $ins); return false; }
         $entity_id=$con->Insert_ID();
     }
-    
+
     //look up INTERNAL activity type
     $sql = "SELECT activity_type_id FROM activity_types WHERE activity_type_short_name=" . $con->qstr('INT', get_magic_quotes_gpc());
     $rst = $con->execute($sql);
@@ -1879,7 +1875,7 @@ function add_process_entity($con, $entity, $entity_type, $title, $description, $
     $activity_detail['last_modified_at'] = time();
     $activity_detail['last_modified_by'] = $user_id;
 
-    
+
     //create activity on old entity linking to newly created entity
     $entity_url = "<a href=\"$http_site_root" . table_one_url($entity, $entity_id) . "\">"._("New workflow process") ."</a>";
 
@@ -1928,6 +1924,10 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.148  2005/10/01 22:49:24  braverock
+ * - add checks for rows returned in fetch_primary_address and fetch_division_id fns
+ *   - patch credit to Holger G. Hahn
+ *
  * Revision 1.147  2005/09/29 16:02:22  vanmer
  * - fixed typo in insert record for workflow history, now correctly tracks time and user for status change
  *
