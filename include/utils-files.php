@@ -7,7 +7,7 @@
  *
  * @author Walter Torres
  *
- * $Id: utils-files.php,v 1.8 2005/09/23 21:00:46 daturaarutad Exp $
+ * $Id: utils-files.php,v 1.9 2005/10/01 05:12:23 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -534,7 +534,7 @@ function get_file_records( $con, $files_data )
 
     // We need one or the other to run this
     //if ( ($files_data['entered_by'])  ||  ($files_data['on_what_table']) )
-    if (count($files_data)) 
+    if (count($files_data))
     {
         // build where clause from files_data
         foreach($files_data as $field => $value) {
@@ -548,7 +548,6 @@ function get_file_records( $con, $files_data )
                             $where_sql
                         AND files.entered_by = users.user_id
                         AND file_record_status = 'a'
-                        $file_limit_sql
                 ORDER BY entered_at";
 
 // change this?
@@ -586,6 +585,9 @@ function get_file_records( $con, $files_data )
 
 /**
  * $Log: utils-files.php,v $
+ * Revision 1.9  2005/10/01 05:12:23  jswalter
+ *  - removed legacy code 'file_limit_sql'
+ *
  * Revision 1.8  2005/09/23 21:00:46  daturaarutad
  * update get_file_records so that any field can be passed in as search criteria
  *

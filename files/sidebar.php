@@ -2,7 +2,7 @@
 /**
  * Sidebar box for Files
  *
- * $Id: sidebar.php,v 1.21 2005/09/23 19:49:27 daturaarutad Exp $
+ * $Id: sidebar.php,v 1.22 2005/10/01 05:11:33 jswalter Exp $
  */
 
 if ( !defined('IN_XRMS') )
@@ -25,7 +25,6 @@ else { $fileList=implode(",",$fileList); $file_limit_sql.=" AND files.file_id IN
 $file_limit_sql = '';
 
     // Build data setup
-    //$files_data['file_limit_sql']   = $file_limit_sql;
     $files_data['entered_by']       = $session_user_id;
     $files_data['on_what_table']    = $on_what_table;
     $files_data['on_what_id']       = $on_what_id;
@@ -112,6 +111,9 @@ if(!$file_rows) {
 
 /**
  * $Log: sidebar.php,v $
+ * Revision 1.22  2005/10/01 05:11:33  jswalter
+ *  - removed legacy code 'file_limit_sql'
+ *
  * Revision 1.21  2005/09/23 19:49:27  daturaarutad
  * updated for file plugin (owl support)
  *
