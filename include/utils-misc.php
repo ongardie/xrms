@@ -8,7 +8,7 @@
  * @author Chris Woofter
  * @author Brian Peterson
  *
- * $Id: utils-misc.php,v 1.148 2005/10/01 22:49:24 braverock Exp $
+ * $Id: utils-misc.php,v 1.149 2005/10/03 02:32:49 vanmer Exp $
  */
 require_once($include_directory.'classes/acl/acl_wrapper.php');
 require_once($include_directory.'utils-preferences.php');
@@ -470,16 +470,16 @@ function fetch_company_id($con, $company_name) {
  * @return integer $address_id found ID or 1 if no match
  */
 function fetch_default_address($con, $company_id) {
-    $sql_fetch_address_id = "select default_primary_address from companies where company_id = $company_id";
-    if ($rst_address_id = $con->execute($sql_fetch_address_id)) {
-        // no SQL error
-        if($rst_address_id->NumRows()) {
-            // record found in in table
-            $address_id = $rst_address_id->fields['default_primary_address'];
-            $rst_address_id->close();
-        } else { $address_id = 1; }
-    } else { db_error_handler ($con,$sql_fetch_address_id);} // SQL error
-    return $address_id;
+    $sql_fetch_address_id = "select default_primary_address from companies where company_id = $company_id";
+    if ($rst_address_id = $con->execute($sql_fetch_address_id)) {
+       // no SQL error
+       if($rst_address_id->NumRows()) {
+          // record found in in table
+          $address_id = $rst_address_id->fields['default_primary_address'];
+          $rst_address_id->close();
+      } else { $address_id = 1; }
+    } else { db_error_handler ($con,$sql_fetch_address_id);} // SQL error
+    return $address_id;
 }
 
 /**
@@ -493,18 +493,18 @@ function fetch_default_address($con, $company_id) {
  * @return integer $division_id found ID or 0 (ZERO) if no match
  */
 function fetch_division_id($con, $division_name, $company_id) {
-    $sql_fetch_division_id = "select division_id from company_division
-                              where division_name = '". addslashes($division_name). "'
-                              and company_id = $company_id";
-    if ($rst_division_id = $con->execute($sql_fetch_division_id)) {
-        // no SQL error
-        if($rst_division_id->NumRows()) {
-            // record found in in table
-            $division_id = $rst_division_id->fields['division_id'];
-            $rst_division_id->close();
-        } else { $division_id = 0; }
-    } else { db_error_handler ($con,$sql_fetch_division_id);} // SQL error
-    return $division_id;
+    $sql_fetch_division_id = "select division_id from company_division
+                           where division_name = '". addslashes($division_name). "'
+                           and company_id = $company_id";
+    if ($rst_division_id = $con->execute($sql_fetch_division_id)) {
+         // no SQL error
+        if($rst_division_id->NumRows()) {
+           // record found in in table
+           $division_id = $rst_division_id->fields['division_id'];
+           $rst_division_id->close();
+        } else { $division_id = 0; }
+    } else { db_error_handler ($con,$sql_fetch_division_id);} // SQL error
+    return $division_id;
 }
 
 /**
@@ -1924,6 +1924,9 @@ require_once($include_directory . 'utils-database.php');
 
 /**
  * $Log: utils-misc.php,v $
+ * Revision 1.149  2005/10/03 02:32:49  vanmer
+ * - changed to use proper whitespace characters so that PHP does not break
+ *
  * Revision 1.148  2005/10/01 22:49:24  braverock
  * - add checks for rows returned in fetch_primary_address and fetch_division_id fns
  *   - patch credit to Holger G. Hahn
