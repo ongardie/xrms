@@ -9,7 +9,7 @@
  * @author Beth Macknik
  * @author XRMS Development Team
  *
- * $Id: update.php,v 1.101 2005/09/29 14:55:11 vanmer Exp $
+ * $Id: update.php,v 1.102 2005/10/03 21:20:43 vanmer Exp $
  */
 
 // where do we include from
@@ -5068,6 +5068,15 @@ else {
     }
 }
 
+//change from mysql-specific timestamp field to datetime field
+$sql = "ALTER TABLE `email_template_type` CHANGE `modified_on` `modified_on` DATETIME,
+CHANGE `created_on` `created_on` DATETIME";
+$rst = $con->execute($sql);
+
+$sql = "ALTER TABLE `email_templates` CHANGE `modified_on` `modified_on` DATETIME,
+CHANGE `created_on` `created_on` DATETIME";
+$rst = $con->execute($sql);
+
 do_hook_function('xrms_update', $con);
 
 //close the database connection, because we don't need it anymore
@@ -5092,6 +5101,9 @@ end_page();
 
 /**
  * $Log: update.php,v $
+ * Revision 1.102  2005/10/03 21:20:43  vanmer
+ * - added upgrade lines to change timestamp field into a datetime field
+ *
  * Revision 1.101  2005/09/29 14:55:11  vanmer
  * - added system activity type if it does not exist (since install was broken)
  * - added workflow entity and type fields for activity templates, to control new process entity creation
