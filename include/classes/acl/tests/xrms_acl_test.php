@@ -6,10 +6,10 @@
  * All Rights Reserved.
  *
  * @todo
- * $Id: xrms_acl_test.php,v 1.11 2005/08/18 19:49:43 vanmer Exp $
+ * $Id: xrms_acl_test.php,v 1.12 2005/10/03 18:25:45 vanmer Exp $
  */
 
-require_once('../../../../include-locations.inc');
+if (!$include_directory) require_once('../../../../include-locations.inc');
 require_once($include_directory . 'vars.php');
 require_once($include_directory . 'utils-interface.php');
 require_once($include_directory . 'utils-misc.php');
@@ -18,7 +18,7 @@ require_once($include_directory . 'adodb-params.php');
 
 require_once("PHPUnit.php");
 require_once("PHPUnit/GUI/HTML.php");
-require_once("../xrms_acl_config.php");
+require_once($include_directory."classes/acl/xrms_acl_config.php");
 //require_once("../xrms_acl.php");
 
 
@@ -28,8 +28,8 @@ Class ACLTest extends PHPUnit_TestCase {
         $this->PHPUnit_TestCase( $name );
     }
    function setUp() {
-       global $options;
-       $this->options = $options;
+       //global $options;
+       //$this->options = $options;
 //       $this->acl = new xrms_acl ($this->options );
         $this->acl = new xrms_acl (false, false, 'xrms_acl_auth_callback' );
         $this->user = 1;
@@ -1244,9 +1244,6 @@ Class ACLTest extends PHPUnit_TestCase {
     }
     
  }
-$suite = new PHPUnit_TestSuite( "ACLTest" );
-$display = new PHPUnit_GUI_HTML($suite);
-$display->show();
 
 //$suite = new PHPUnit_TestSuite( "get_object_groups_object_inherit");
 /*
@@ -1266,6 +1263,9 @@ $display->show();
  */
 /*
  * $Log: xrms_acl_test.php,v $
+ * Revision 1.12  2005/10/03 18:25:45  vanmer
+ * - changed to only call ACL test from central xrms tests
+ *
  * Revision 1.11  2005/08/18 19:49:43  vanmer
  * - added test for group list
  *
